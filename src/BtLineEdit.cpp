@@ -1,0 +1,329 @@
+/*
+ * BtLineEdit.cpp is part of Brewtarget and was written by Mik Firestone
+ * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
+ * (rocketman768@gmail.com), 2009-2013.
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "BtLineEdit.h"
+#include "brewtarget.h"
+#include "BeerXMLElement.h"
+#include "UnitSystems.h"
+#include "UnitSystem.h"
+#include "unit.h"
+#include "Algorithms.h"
+#include <QSettings>
+#include <QDebug>
+
+BtLineEdit::BtLineEdit(QWidget *parent, FieldType type)
+{
+   btParent = parent;
+   _type = type;
+
+   switch( _type )
+   {
+      case MASS:
+         // I don't ... oh bugger
+         _units = Units::grams;
+         break;
+      case VOLUME:
+         _units = Units::liters;
+         break;
+      case TEMPERATURE:
+         _units = Units::celsius;
+         break;
+      case TIME:
+         _units = Units::minutes;
+         break;
+      case COLOR:
+         _units = Units::srm;
+         break;
+      case DENSITY:
+         _units = Units::sp_grav;
+         break;
+      case MIXED:
+         _units = Units::grams;
+         break;
+      case GENERIC:
+      case STRING:
+         _units = 0;
+         break;
+   }
+
+   connect(this,SIGNAL(editingFinished()),this,SLOT(lineChanged()));
+}
+
+void BtLineEdit::lineChanged()
+{
+   lineChanged(noUnit,noScale);
+}
+
+// Dynamic properties need to be evaluated late, so we do it this way
+void BtLineEdit::initializeProperty()
+{
+   _property = property("editField").toString();
+}
+
+void BtLineEdit::initializeSection()
+{
+
+   if ( property("configSection").isValid() )
+      _section = property("configSection").toString();
+   else if ( btParent->property("configSection").isValid() )
+      _section = btParent->property("configSection").toString();
+   else
+      _section = btParent->objectName();
+
+}
+
+void BtLineEdit::lineChanged(unitDisplay oldUnit, unitScale oldScale)
+{
+   // This is where it gets hard
+   double val;
+   QString amt;
+   bool force = false;
+
+   // editingFinished happens on focus being lost, regardless of anything
+   // being changed. I am hoping this short circuits properly and we do
+   // nothing if nothing changed.
+   if ( sender() == this && ! isModified() )
+   {
+      return;
+   }
+
+   // If we are here because somebody else sent the signal (ie, a label) or we
+   // generated the signal but nothing has changed then don't try to guess the
+   // units.
+   if ( sender() != this )
+   {
+      force = true;
+   }
+
+   if ( _section.isEmpty() )
+      initializeSection();
+
+   if ( _property.isEmpty() )
+      initializeProperty();
+
+
+   // The idea here is we need to first translate the field into a known
+   // amount (aka to SI) and then into the unit we want.
+   switch( _type )
+   {
+      case MASS:
+      case VOLUME:
+      case TEMPERATURE:
+      case TIME:
+         val = toSI(oldUnit,oldScale,force);
+         amt = displayAmount(val,3);
+         break;
+      case DENSITY:
+      case COLOR:
+         val = toSI(oldUnit,oldScale,force);
+         amt = displayAmount(val,0);
+         break;
+      case STRING:
+         val = -1.0;
+         amt = text();
+         break;
+      case GENERIC:
+      default:
+         val = text().toDouble();
+         amt = displayAmount(val);
+   }
+   QLineEdit::setText(amt);
+
+   if ( ! force )
+   {
+      emit textModified();
+   }
+}
+
+double BtLineEdit::toSI(unitDisplay oldUnit,unitScale oldScale,bool force)
+{
+   UnitSystem* temp;
+   Unit*       works;
+   unitDisplay dspUnit  = oldUnit;
+   unitScale   dspScale = oldScale;
+
+   if ( _section.isEmpty() )
+      initializeSection();
+   if ( _property.isEmpty() )
+      initializeProperty();
+
+   // If force is set, just use what is provided in the call. If we are
+   // not forcing the unit & scale, we need to read the configured properties
+   if ( ! force )
+   {
+      dspUnit   = (unitDisplay)Brewtarget::option(_property, noUnit, _section, Brewtarget::UNIT).toInt();
+      dspScale  = (unitScale)Brewtarget::option(_property, noUnit, _section, Brewtarget::SCALE).toInt();
+   }
+
+   // Find the unit system containing dspUnit
+   temp = Brewtarget::findUnitSystem(_units,dspUnit);
+   if ( temp )
+   {
+      // If we found it, find the unit referred by dspScale
+      works = temp->scaleUnit(dspScale);
+      if (! works )
+         // If we didn't find the unit, default to the UnitSystem's default
+         // unit
+         works = temp->unit();
+
+      // get the qstringToSI() from the unit system, using the found unit.
+      // Force the issue in qstringToSI() unless dspScale is noScale.
+      return temp->qstringToSI(text(), works, dspScale != noScale);
+   }
+   else if ( _type == STRING )
+      return 0.0;
+
+   // If all else fails, simply try to force the contents of the field to a
+   // double. This doesn't seem advisable?
+   return text().toDouble();
+}
+
+QString BtLineEdit::displayAmount( double amount, int precision)
+{
+   unitDisplay unitDsp;
+   unitScale scale;
+
+   if ( _section.isEmpty() )
+      initializeSection();
+   if ( _property.isEmpty() )
+      initializeProperty();
+
+   unitDsp  = (unitDisplay)Brewtarget::option(_property, noUnit, _section, Brewtarget::UNIT).toInt();
+   scale = (unitScale)Brewtarget::option(_property, noScale, _section, Brewtarget::SCALE).toInt();
+
+   // I find this a nice level of abstraction. This lets all of the setText()
+   // methods make a single call w/o having to do the logic for finding the
+   // unit and scale.
+   return Brewtarget::displayAmount(amount, _units, precision, unitDsp, scale);
+}
+
+void BtLineEdit::setText( double amount, int precision)
+{
+   QLineEdit::setText( displayAmount(amount,precision) );
+}
+
+void BtLineEdit::setText( BeerXMLElement* element, int precision )
+{
+   double amount = 0.0;
+   QString display;
+
+   if ( _section.isEmpty() )
+      initializeSection();
+   if ( _property.isEmpty() )
+      initializeProperty();
+
+   if ( _type == STRING )
+      display = element->property(_property.toLatin1().constData()).toString();
+   else if ( element->property(_property.toLatin1().constData()).canConvert(QVariant::Double) )
+   {
+      // Get the amount
+      amount = element->property(_property.toLatin1().constData()).toDouble();
+      display = displayAmount(amount, precision);
+   }
+   else
+   {
+      display = "?";
+   }
+
+   QLineEdit::setText(display);
+}
+
+void BtLineEdit::setText( QString amount, int precision)
+{
+   if ( _type == STRING )
+      QLineEdit::setText(amount);
+   else
+      QLineEdit::setText(displayAmount(amount.toDouble(), precision));
+}
+
+void BtLineEdit::setText( QVariant amount, int precision)
+{
+   if ( _type == STRING )
+      QLineEdit::setText(amount.toString());
+   else
+      QLineEdit::setText(displayAmount(amount.toDouble(), precision));
+}
+
+BtGenericEdit::BtGenericEdit(QWidget *parent)
+   : BtLineEdit(parent,GENERIC)
+{
+}
+
+BtMassEdit::BtMassEdit(QWidget *parent)
+   : BtLineEdit(parent,MASS)
+{
+}
+
+BtVolumeEdit::BtVolumeEdit(QWidget *parent)
+   : BtLineEdit(parent,VOLUME)
+{
+}
+
+BtTemperatureEdit::BtTemperatureEdit(QWidget *parent)
+   : BtLineEdit(parent,TEMPERATURE)
+{
+}
+
+BtTimeEdit::BtTimeEdit(QWidget *parent)
+   : BtLineEdit(parent,TIME)
+{
+}
+
+BtDensityEdit::BtDensityEdit(QWidget *parent)
+   : BtLineEdit(parent,DENSITY)
+{
+}
+
+BtColorEdit::BtColorEdit(QWidget *parent)
+   : BtLineEdit(parent,COLOR)
+{
+}
+
+BtStringEdit::BtStringEdit(QWidget *parent)
+   : BtLineEdit(parent,STRING)
+{
+}
+
+BtMixedEdit::BtMixedEdit(QWidget *parent)
+   : BtLineEdit(parent,MIXED)
+{
+   // This is probably pure evil I will later regret
+   _type = VOLUME;
+   _units = Units::liters;
+}
+
+void BtMixedEdit::setIsWeight(bool state)
+{
+   // But you have to admit, this is clever
+   if (state)
+   {
+      _type = MASS;
+      _units = Units::grams;
+   }
+   else
+   {
+      _type = VOLUME;
+      _units = Units::liters;
+   }
+
+   // maybe? My head hurts now
+   lineChanged();
+
+}
+

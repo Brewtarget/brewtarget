@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>668</width>
-    <height>288</height>
+    <width>741</width>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,6 +19,9 @@
      <property name="title">
       <string>Input</string>
      </property>
+     <property name="configSection" stdset="0">
+      <string notr="true">pitchRateCalc</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QFormLayout" name="formLayout">
@@ -29,14 +32,20 @@
          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
         </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="label">
+         <widget class="BtVolumeLabel" name="label_vol">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="text">
            <string>Wort Volume</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_vol</cstring>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_vol">
+         <widget class="BtVolumeEdit" name="lineEdit_vol">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -48,18 +57,30 @@
             <width>100</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>Volume of wort</string>
+          </property>
+          <property name="editField" stdset="0">
+           <string notr="true">wortVol</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
+         <widget class="BtDensityLabel" name="label_og">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="text">
            <string>OG</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_OG</cstring>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_OG">
+         <widget class="BtDensityEdit" name="lineEdit_OG">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -71,6 +92,12 @@
             <width>100</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>Starting gravity of the wort</string>
+          </property>
+          <property name="editField" stdset="0">
+           <string notr="true">og</string>
           </property>
          </widget>
         </item>
@@ -92,7 +119,7 @@
          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
         </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="label_pitchRate_2">
           <property name="toolTip">
            <string>For ales, 0.75-1. For lagers, 1.5-2.</string>
           </property>
@@ -102,21 +129,27 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_11">
+         <widget class="QLabel" name="label_aerationMethod">
           <property name="text">
            <string>Aeration Method</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QLabel" name="label_5">
+         <widget class="BtDateLabel" name="label_productionDate">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="text">
            <string>Yeast Production Date</string>
+          </property>
+          <property name="buddy">
+           <cstring>dateEdit_ProductionDate</cstring>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QLabel" name="label_10">
+         <widget class="QLabel" name="label_viability">
           <property name="text">
            <string>Yeast Viability</string>
           </property>
@@ -126,6 +159,9 @@
          <widget class="QComboBox" name="comboBox_AerationMethod">
           <property name="acceptDrops">
            <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Aeration method</string>
           </property>
           <property name="editable">
            <bool>false</bool>
@@ -149,6 +185,9 @@
         </item>
         <item row="3" column="1">
          <widget class="QDateEdit" name="dateEdit_ProductionDate">
+          <property name="toolTip">
+           <string>Production date (Best By date less three months)</string>
+          </property>
           <property name="currentSection">
            <enum>QDateTimeEdit::MonthSection</enum>
           </property>
@@ -161,6 +200,9 @@
           <property name="currentSectionIndex">
            <number>0</number>
           </property>
+          <property name="editField" stdset="0">
+           <string notr="true">productionDate</string>
+          </property>
          </widget>
         </item>
         <item row="4" column="1">
@@ -169,6 +211,9 @@
            <widget class="QSpinBox" name="spinBox_Viability">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="toolTip">
+             <string>Estimated viability of the yeast</string>
             </property>
             <property name="readOnly">
              <bool>false</bool>
@@ -206,6 +251,9 @@
               <height>0</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Desired pitch rate</string>
+            </property>
             <property name="maximum">
              <number>100</number>
             </property>
@@ -234,7 +282,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="label_vialsPitched">
           <property name="text">
            <string># Vials/Smack Packs Pitched</string>
           </property>
@@ -242,6 +290,9 @@
         </item>
         <item row="1" column="1">
          <widget class="QSpinBox" name="spinBox_VialsPitched">
+          <property name="toolTip">
+           <string>Number of vials/smack packs added to starter</string>
+          </property>
           <property name="minimum">
            <number>1</number>
           </property>
@@ -260,6 +311,9 @@
      <property name="title">
       <string>Output</string>
      </property>
+     <property name="configSection" stdset="0">
+      <string notr="true">pitchRateCalc</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QFormLayout" name="formLayout_2">
@@ -270,19 +324,25 @@
          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
         </property>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_9">
+         <widget class="QLabel" name="label_cells">
           <property name="text">
            <string>Billions of Yeast Cells Required</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_cells</cstring>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_cells">
+         <widget class="BtGenericEdit" name="lineEdit_cells">
           <property name="minimumSize">
            <size>
             <width>100</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>How much yeast you will need</string>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -290,19 +350,25 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_6">
+         <widget class="QLabel" name="label_vials">
           <property name="text">
            <string># Vials/Smack Packs w/o Starter</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_vials</cstring>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_vials">
+         <widget class="BtGenericEdit" name="lineEdit_vials">
           <property name="minimumSize">
            <size>
             <width>100</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>How many smack packs or vials required to reach pitch rate</string>
           </property>
           <property name="readOnly">
            <bool>true</bool>
@@ -310,42 +376,66 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_7">
+         <widget class="BtMassLabel" name="label_yeast">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="text">
            <string>Dry Yeast</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_yeast</cstring>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit_yeast">
+         <widget class="BtMassEdit" name="lineEdit_yeast">
           <property name="minimumSize">
            <size>
             <width>100</width>
             <height>0</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Amount of dry yeast needed to reach pitch rate</string>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
+          </property>
+          <property name="editField" stdset="0">
+           <string notr="true">yeast</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QLabel" name="label_8">
+         <widget class="BtVolumeLabel" name="label_starterVol">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="text">
            <string>Starter Volume</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_starterVol</cstring>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="lineEdit_starterVol">
+         <widget class="BtVolumeEdit" name="lineEdit_starterVol">
           <property name="minimumSize">
            <size>
             <width>100</width>
             <height>0</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Starter size to reach pitch rate</string>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
+          </property>
+          <property name="editField" stdset="0">
+           <string notr="true">starterVol</string>
           </property>
          </widget>
         </item>
@@ -356,6 +446,69 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDateLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtMassLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <slot>popContextMenu(QPoint)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtMassEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <signal>textModified()</signal>
+    <slot>lineChanged()</slot>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>lineEdit_vol</tabstop>
   <tabstop>lineEdit_OG</tabstop>
@@ -371,5 +524,70 @@
   <tabstop>lineEdit_starterVol</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>label_vol</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_vol</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>178</x>
+     <y>44</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>44</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_og</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_OG</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>203</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>70</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_starterVol</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_starterVol</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>464</x>
+     <y>122</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_yeast</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_yeast</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>478</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

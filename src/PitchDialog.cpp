@@ -34,8 +34,8 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
    dateEdit_ProductionDate->setDate(QDate::currentDate());
    updateViabilityFromDate(QDate::currentDate());
 
-   connect( lineEdit_vol, SIGNAL(editingFinished()), this, SLOT(calculate()));
-   connect( lineEdit_OG, SIGNAL(editingFinished()), this, SLOT(calculate()));
+   connect( lineEdit_vol, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect( lineEdit_OG, SIGNAL(textModified()), this, SLOT(calculate()));
    connect( slider_pitchRate, SIGNAL(valueChanged(int)), this, SLOT(calculate()) );
    connect( slider_pitchRate, SIGNAL(valueChanged(int)), this, SLOT(updateShownPitchRate(int)) );
    connect( spinBox_Viability, SIGNAL(valueChanged(int)), this, SLOT(calculate()));
@@ -43,7 +43,10 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
    connect( comboBox_AerationMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(calculate()));
    connect( dateEdit_ProductionDate, SIGNAL(dateChanged(QDate)), this, SLOT(updateViabilityFromDate(QDate)));
    connect( checkBox_CalculateViability, SIGNAL(stateChanged(int)), this, SLOT(toggleViabilityFromDate(int)));
- 
+
+   // Dates are a little more cranky
+   connect(label_productionDate,SIGNAL(labelChanged(unitDisplay,unitScale)),this,SLOT(updateProductionDate(unitDisplay,unitScale)));
+   updateProductionDate(noUnit,noScale);
    updateShownPitchRate(0);
 }
 
@@ -51,30 +54,50 @@ PitchDialog::~PitchDialog()
 {
 }
 
-void PitchDialog::setWortVolume_l(double volume)
+void PitchDialog::updateProductionDate(unitDisplay dsp, unitScale scl)
 {
-   lineEdit_vol->setText(Brewtarget::displayAmount(volume, Units::liters));
+   QString format;
+   // I need the new unit, not the old
+   unitDisplay unitDsp = (unitDisplay)Brewtarget::option("productionDate", Brewtarget::getDateFormat(), "pitchRateCalc", Brewtarget::UNIT).toInt();
+
+   switch(unitDsp)
+   {
+      case displayUS:
+         format = "MM-dd-yyyy";
+         break;
+      case displayImp:
+         format = "dd-MM-yyyy";
+         break;
+      case displaySI:
+      default:
+         format = "yyyy-MM-dd";
+   }
+   dateEdit_ProductionDate->setDisplayFormat(format);
 }
 
-void PitchDialog::setWortGravity(double sg)
+void PitchDialog::setWortVolume_l(double volume)
 {
-   //lineEdit_OG->setText(Brewtarget::displayOG(sg));
-   lineEdit_OG->setText(QString::number(sg,'f',3));
+   lineEdit_vol->setText(volume);
+}
+
+void PitchDialog::setWortDensity(double sg)
+{
+   lineEdit_OG->setText(sg);
 }
 
 void PitchDialog::calculate()
 {
-   bool ok;
 
    // Allow selection of 0.75 to 2 million cells per mL per degree P.
    double rate_MpermLP = (2-0.75) * ((double)slider_pitchRate->value()) / 100.0 + 0.75;
-   double og = lineEdit_OG->text().toDouble(&ok);
-   double vol_l = Brewtarget::volQStringToSI(lineEdit_vol->text());
-   //ok &= tmp;
-   double plato = Algorithms::SG_20C20C_toPlato(og);
 
-   if( !ok )
-      return;
+   // This isn't right.
+   double og = lineEdit_OG->toSI();
+   double vol_l = lineEdit_vol->toSI();
+
+   // I somewhat aribtrarily defined "SI" for density to be specific gravity.
+   // Since these calcs need plato, convert
+   double plato = Algorithms::SG_20C20C_toPlato(og);
 
    double cells = (rate_MpermLP * 1e6) * (vol_l * 1e3) * plato;
    double vials = cells / (spinBox_Viability->value() * 1e9); // ~100 billion cells per vial/pack, taking viability into account.
@@ -105,10 +128,10 @@ void PitchDialog::calculate()
    double inoculationRate = pow((12.522 / growthRate), 2.18);
    double starterVol_l = totalCellsPitched / (inoculationRate * aerationFactor);
 
-   lineEdit_cells->setText(QString("%L1").arg(cells/1e9, 1, 'f', 0, QChar('0')));
-   lineEdit_starterVol->setText(Brewtarget::displayAmount(starterVol_l, Units::liters));
-   lineEdit_yeast->setText(Brewtarget::displayAmount(dry_g, Units::grams));
-   lineEdit_vials->setText(QString("%L1").arg(vials, 1, 'f', 1, QChar('0')));
+   lineEdit_cells->setText(cells/1e9, 1);
+   lineEdit_starterVol->setText(starterVol_l);
+   lineEdit_yeast->setText(dry_g);
+   lineEdit_vials->setText(vials,0);
 }
 
 void PitchDialog::updateShownPitchRate(int percent)
@@ -116,6 +139,7 @@ void PitchDialog::updateShownPitchRate(int percent)
    // Allow selection of 0.75 to 2 million cells per mL per degree P.
    double rate_MpermLP = (2-0.75) * ((double)percent) / 100.0 + 0.75;
 
+   // NOTE: We are changing the LABEL here, not the LineEdit. Leave it be
    label_pitchRate->setText( QString("%L1").arg(rate_MpermLP, 1, 'f', 2, QChar('0')) );
 }
 

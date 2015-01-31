@@ -83,6 +83,8 @@ public slots:
    void moveStepDown(int i);
    void mashChanged();
    void mashStepChanged(QMetaProperty,QVariant);
+
+   void contextMenu(const QPoint &point);
    
 private:
    Mash* mashObs;

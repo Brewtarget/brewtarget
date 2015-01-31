@@ -37,16 +37,17 @@ bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left,
 {
     QVariant leftFermentable = sourceModel()->data(left);
     QVariant rightFermentable = sourceModel()->data(right);
+    Unit* unit = Units::kilograms;
 
    switch( left.column() )
    {
       case FERMAMOUNTCOL:
          // This is a bit twisted. If the numbers are equal, reset the left
          // and right to the names and let it hit the default
-         if (Brewtarget::weightQStringToSI(leftFermentable.toString()) == Brewtarget::weightQStringToSI(rightFermentable.toString()))
+         if (Brewtarget::qStringToSI(leftFermentable.toString(), unit) == Brewtarget::qStringToSI(rightFermentable.toString(),unit))
             return getName(right) < getName(left);
          else
-            return Brewtarget::weightQStringToSI(leftFermentable.toString()) < Brewtarget::weightQStringToSI(rightFermentable.toString());
+            return Brewtarget::qStringToSI(leftFermentable.toString(),unit) < Brewtarget::qStringToSI(rightFermentable.toString(),unit);
       case FERMYIELDCOL:
          if (leftFermentable.toDouble() == rightFermentable.toDouble() )
             return getName(right) < getName(left);

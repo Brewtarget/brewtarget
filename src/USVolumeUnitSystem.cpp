@@ -38,10 +38,21 @@ void USVolumeUnitSystem::loadMap()
    scaleToUnit.insert(scaleHuge,Units::us_barrels);
 }
 
+void USVolumeUnitSystem::loadUnitmap()
+{
+   qstringToUnit.insert("tsp",Units::us_teaspoons);
+   qstringToUnit.insert("tbs",Units::us_tablespoons);
+   qstringToUnit.insert("cup",Units::us_cups);
+   qstringToUnit.insert("qt",Units::us_quarts);
+   qstringToUnit.insert("gal",Units::us_gallons);
+   qstringToUnit.insert("bbl",Units::us_barrels);
+}
+
 Unit* USVolumeUnitSystem::thicknessUnit()
 {
    return Units::us_quarts;
 }
 
 Unit* USVolumeUnitSystem::unit() { return Units::us_gallons; };
+
 QString USVolumeUnitSystem::unitType() { return "USCustomary"; }

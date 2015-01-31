@@ -32,10 +32,13 @@
 
 class BtLabel;
 class BtColorLabel;
-class BtGravityLabel;
+class BtDensityLabel;
 class BtMassLabel;
 class BtTemperatureLabel;
 class BtVolumeLabel;
+class BtTimeLabel;
+class BtMixedLabel;
+class BtDateLabel;
 
 /*!
  * \class BtLabel
@@ -51,27 +54,39 @@ class BtLabel : public QLabel
 
 public:
    //! What kinds of units are available for labels
-   enum LabelType{ NONE, COLOR, GRAVITY, MASS, TEMPERATURE, VOLUME };
+   enum LabelType{
+      NONE,
+      COLOR,
+      DENSITY,
+      MASS,
+      TEMPERATURE,
+      VOLUME,
+      TIME,
+      MIXED,
+      DATE
+   };
 
    BtLabel(QWidget* parent = 0, LabelType lType = NONE);
 
 public slots:
    void popContextMenu(const QPoint &point);
 
-   //! I need to stop using this trick?
-   friend class BtColorLabel;
-   friend class BtGravityLabel;
-   friend class BtMassLabel;
-   friend class BtTemperatureLabel;
-   friend class BtVolumeLabel;
 
 signals:
-   void labelChanged(QString field);
+   void labelChanged(unitDisplay oldUnit, unitScale oldScale);
 
-private:
+// Using protected instead of private allows me to not use the friends
+// declaration
+protected:
    LabelType whatAmI;
    QString propertyName;
+   QString _section;
    QWidget *btParent;
+   QMenu* _menu;
+
+   void initializeSection();
+   void initializeProperty();
+   void initializeMenu();
 
 };
 
@@ -82,11 +97,11 @@ public:
    BtColorLabel(QWidget* parent = 0);
 };
 
-class BtGravityLabel : public BtLabel
+class BtDensityLabel : public BtLabel
 {
    Q_OBJECT
 public:
-   BtGravityLabel(QWidget* parent = 0);
+   BtDensityLabel(QWidget* parent = 0);
 };
 
 class BtMassLabel : public BtLabel
@@ -108,6 +123,27 @@ class BtVolumeLabel : public BtLabel
    Q_OBJECT
 public:
    BtVolumeLabel(QWidget* parent = 0);
+};
+
+class BtTimeLabel : public BtLabel
+{
+   Q_OBJECT
+public:
+   BtTimeLabel(QWidget* parent = 0);
+};
+
+class BtMixedLabel : public BtLabel
+{
+   Q_OBJECT
+public:
+   BtMixedLabel(QWidget* parent = 0);
+};
+
+class BtDateLabel : public BtLabel
+{
+   Q_OBJECT
+public:
+   BtDateLabel(QWidget* parent = 0);
 };
 
 #endif

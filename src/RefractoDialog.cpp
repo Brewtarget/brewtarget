@@ -63,13 +63,13 @@ void RefractoDialog::calculate()
 
    if( (!haveOG) && haveOP )
    {
-         inputOG = Algorithms::PlatoToSG_20C20C( originalPlato );
-         lineEdit_inputOG->setText(Brewtarget::displayAmount(inputOG));
+      inputOG = Algorithms::PlatoToSG_20C20C( originalPlato );
+      lineEdit_inputOG->setText(inputOG);
    }
    else if( (!haveOP) && haveOG )
    {
       originalPlato = Algorithms::SG_20C20C_toPlato( inputOG );
-      lineEdit_op->setText(Brewtarget::displayAmount(originalPlato));
+      lineEdit_op->setText(originalPlato);
    }
    else if( (!haveOP) && (!haveOG) )
       return; // Can't do much if we don't have OG or OP.
@@ -88,11 +88,11 @@ void RefractoDialog::calculate()
       QMessageBox::warning(this, tr("OG Mismatch"),
                            tr("Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.").arg(og,0,'f',3).arg(inputOG,0,'f',3));
 
-   lineEdit_og->setText(Brewtarget::displayAmount(og));
-   lineEdit_sg->setText(Brewtarget::displayAmount(sg));
-   lineEdit_re->setText(Brewtarget::displayAmount(re));
-   lineEdit_abv->setText(Brewtarget::displayAmount(abv));
-   lineEdit_abw->setText(Brewtarget::displayAmount(abw));
+   lineEdit_og->setText(og);
+   lineEdit_sg->setText(sg);
+   lineEdit_re->setText(re);
+   lineEdit_abv->setText(abv);
+   lineEdit_abw->setText(abw);
 }
 
 void RefractoDialog::clearOutputFields()

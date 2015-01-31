@@ -102,6 +102,8 @@ public slots:
    //! \brief Remove a misc from the model.
    bool removeMisc(Misc* misc);
 
+   void contextMenu(const QPoint &point);
+
 private slots:
    //! \brief Catch changes to Recipe, Database, and Misc.
    void changed(QMetaProperty, QVariant);

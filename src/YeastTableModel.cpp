@@ -30,8 +30,9 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QString>
-
 #include <QVector>
+#include <QHeaderView>
+
 #include "database.h"
 #include "yeast.h"
 #include "YeastTableModel.h"
@@ -40,9 +41,18 @@
 #include "recipe.h"
 
 YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
-: QAbstractTableModel(parent), editable(editable), _inventoryEditable(false), parentTableWidget(parent), recObs(0)
+   : QAbstractTableModel(parent),
+     editable(editable),
+     _inventoryEditable(false),
+     parentTableWidget(parent),
+     recObs(0)
 {
    yeastObs.clear();
+   setObjectName("yeastTableModel");
+
+   QHeaderView* headerView = parentTableWidget->horizontalHeader();
+   headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
 }
 
 void YeastTableModel::addYeast(Yeast* yeast)
@@ -65,7 +75,7 @@ void YeastTableModel::addYeast(Yeast* yeast)
    connect( yeast, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
-   
+
    if(parentTableWidget)
    {
       parentTableWidget->resizeColumnsToContents();
@@ -80,7 +90,7 @@ void YeastTableModel::observeRecipe(Recipe* rec)
       disconnect( recObs, 0, this, 0 );
       removeAll();
    }
-   
+
    recObs = rec;
    if( recObs )
    {
@@ -94,7 +104,7 @@ void YeastTableModel::observeDatabase(bool val)
    if( val )
    {
       observeRecipe(0);
-      
+
       removeAll();
       connect( &(Database::instance()), SIGNAL(newYeastSignal(Yeast*)), this, SLOT(addYeast(Yeast*)) );
       connect( &(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)), this, SLOT(removeYeast(Yeast*)) );
@@ -111,22 +121,22 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
 {
    QList<Yeast*>::iterator i;
    QList<Yeast*> tmp;
-   
+
    for( i = yeasts.begin(); i != yeasts.end(); i++ )
    {
       if( !yeastObs.contains(*i) )
          tmp.append(*i);
    }
-   
+
    int size = yeastObs.size();
    if (size+tmp.size())
    {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       yeastObs.append(tmp);
-      
+
       for( i = tmp.begin(); i != tmp.end(); i++ )
          connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-      
+
       endInsertRows();
    }
 
@@ -135,7 +145,7 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-   
+
 }
 
 void YeastTableModel::removeYeast(Yeast* yeast)
@@ -149,7 +159,7 @@ void YeastTableModel::removeYeast(Yeast* yeast)
       yeastObs.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
-      
+
       if(parentTableWidget)
       {
          parentTableWidget->resizeColumnsToContents();
@@ -182,12 +192,12 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
       i = yeastObs.indexOf(yeastSender);
       if( i < 0 )
          return;
-      
+
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, YEASTNUMCOLS-1));
       return;
    }
-   
+
    // See if sender is our recipe.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
    if( recSender && recSender == recObs )
@@ -230,55 +240,55 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
    switch( index.column() )
    {
       case YEASTNAMECOL:
-      if( role == Qt::DisplayRole )
+         if( role != Qt::DisplayRole )
+            return QVariant();
+
          return QVariant(row->name());
-      else
-         return QVariant();
       case YEASTTYPECOL:
-      if( role == Qt::DisplayRole )
-         return QVariant(row->typeStringTr());
-      else if( role == Qt::UserRole )
-         return QVariant(row->type());
-      else
-         return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant(row->typeStringTr());
+         else if( role == Qt::UserRole )
+            return QVariant(row->type());
+         else
+            return QVariant();
       case YEASTLABCOL:
-      if( role == Qt::DisplayRole )
-         return QVariant(row->laboratory());
-      else
-         return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant(row->laboratory());
+         else
+            return QVariant();
       case YEASTPRODIDCOL:
-      if( role == Qt::DisplayRole )
-         return QVariant(row->productID());
-      else
-         return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant(row->productID());
+         else
+            return QVariant();
       case YEASTFORMCOL:
-      if( role == Qt::DisplayRole )
-         return QVariant(row->formStringTr());
-      else if( role == Qt::UserRole )
-         return QVariant(row->form());
-      else
-         return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant(row->formStringTr());
+         else if( role == Qt::UserRole )
+            return QVariant(row->form());
+         else
+            return QVariant();
       case YEASTINVENTORYCOL:
-      if( role != Qt::DisplayRole )
-         return QVariant();
+         if( role != Qt::DisplayRole )
+            return QVariant();
 
-      unit  = displayUnit(index.column());
+         unit  = displayUnit(index.column());
 
-      return QVariant( row->inventory() );
-      case YEASTAMOUNTCOL:
-      if( role != Qt::DisplayRole )
-         return QVariant();
+         return QVariant( row->inventory() );
+         case YEASTAMOUNTCOL:
+         if( role != Qt::DisplayRole )
+            return QVariant();
 
-      unit  = displayUnit(index.column());
+         unit  = displayUnit(index.column());
 
-      return QVariant( 
-                        Brewtarget::displayAmount( row->amount(), 
-                                                   row->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters, 
-                                                   3, 
-                                                   unit, 
-                                                   noScale 
-                                                 ) 
-                     );
+         return QVariant(
+                           Brewtarget::displayAmount( row->amount(),
+                                                      row->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters,
+                                                      3,
+                                                      unit,
+                                                      noScale
+                                                   )
+                        );
 
       default :
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
@@ -333,7 +343,8 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
 bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Yeast *row;
-   unitDisplay unit;
+   unitDisplay dispUnit;
+   Unit* unit;
 
    if( index.row() >= (int)yeastObs.size() || role != Qt::EditRole )
       return false;
@@ -343,69 +354,50 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
    switch( index.column() )
    {
       case YEASTNAMECOL:
-         if( value.canConvert(QVariant::String))
-         {
-            row->setName(value.toString());
-            return true;
-         }
-         else
+         if( ! value.canConvert(QVariant::String))
             return false;
+         row->setName(value.toString());
+         break;
       case YEASTLABCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            row->setLaboratory(value.toString());
-            return true;
-         }
-         else
+         if( ! value.canConvert(QVariant::String) )
             return false;
+         row->setLaboratory(value.toString());
+         break;
       case YEASTPRODIDCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            row->setProductID(value.toString());
-            return true;
-         }
-         else
+         if( ! value.canConvert(QVariant::String) )
             return false;
+         row->setProductID(value.toString());
+         break;
       case YEASTTYPECOL:
-         if( value.canConvert(QVariant::Int) )
-         {
-            row->setType(static_cast<Yeast::Type>(value.toInt()));
-            return true;
-         }
-         else
+         if( ! value.canConvert(QVariant::Int) )
             return false;
+         row->setType(static_cast<Yeast::Type>(value.toInt()));
+         break;
       case YEASTFORMCOL:
-         if( value.canConvert(QVariant::Int) )
-         {
-            row->setForm(static_cast<Yeast::Form>(value.toInt()));
-            return true;
-         }
-         else
+         if( ! value.canConvert(QVariant::Int) )
             return false;
+         row->setForm(static_cast<Yeast::Form>(value.toInt()));
+         break;
       case YEASTINVENTORYCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            unit = displayUnit(YEASTINVENTORYCOL);
-            row->setInventoryQuanta( value.toInt() );
-            return true;
-         }
-         else
+         if( ! value.canConvert(QVariant::Int) )
             return false;
+         row->setInventoryQuanta( value.toInt() );
+         break;
       case YEASTAMOUNTCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            unit = displayUnit(YEASTAMOUNTCOL);
-            row->setAmount( row->amountIsWeight() ? 
-                            Brewtarget::weightQStringToSI(value.toString(),unit) : 
-                            Brewtarget::volQStringToSI(value.toString(),unit) );
-            return true;
-         }
-         else
+         if( ! value.canConvert(QVariant::String) )
             return false;
+
+         dispUnit = displayUnit(YEASTAMOUNTCOL);
+         unit = row->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
+
+         row->setAmount(Brewtarget::qStringToSI(value.toString(),unit,dispUnit));
+         break;
+
       default:
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return false;
    }
+   return true;
 }
 
 Yeast* YeastTableModel::getYeast(unsigned int i)
@@ -414,30 +406,30 @@ Yeast* YeastTableModel::getYeast(unsigned int i)
 }
 
 unitDisplay YeastTableModel::displayUnit(int column) const
-{ 
+{
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
       return noUnit;
 
-   return (unitDisplay)Brewtarget::option(attribute, QVariant(-1), this, Brewtarget::UNIT).toInt();
+   return (unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
 }
 
 unitScale YeastTableModel::displayScale(int column) const
-{ 
+{
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
       return noScale;
 
-   return (unitScale)Brewtarget::option(attribute, QVariant(-1), this, Brewtarget::SCALE).toInt();
+   return (unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
 }
 
 // We need to:
 //   o clear the custom scale if set
 //   o clear any custom unit from the rows
 //      o which should have the side effect of clearing any scale
-void YeastTableModel::setDisplayUnit(int column, unitDisplay displayUnit) 
+void YeastTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
 {
    // Yeast* row; // disabled per-cell magic
    QString attribute = generateName(column);
@@ -445,8 +437,8 @@ void YeastTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayUnit,this,Brewtarget::UNIT); 
-   Brewtarget::setOption(attribute,noScale,this,Brewtarget::SCALE);
+   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
+   Brewtarget::setOption(attribute,noScale,this->objectName(),Brewtarget::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -458,8 +450,8 @@ void YeastTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
 }
 
 // Setting the scale should clear any cell-level scaling options
-void YeastTableModel::setDisplayScale(int column, unitScale displayScale) 
-{ 
+void YeastTableModel::setDisplayScale(int column, unitScale displayScale)
+{
    // Yeast* row; //disabled per-cell magic
 
    QString attribute = generateName(column);
@@ -467,7 +459,7 @@ void YeastTableModel::setDisplayScale(int column, unitScale displayScale)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayScale,this,Brewtarget::SCALE); 
+   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
 
    /* disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -492,6 +484,38 @@ QString YeastTableModel::generateName(int column) const
    }
    return attribute;
 }
+
+void YeastTableModel::contextMenu(const QPoint &point)
+{
+   QObject* calledBy = sender();
+   QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
+
+   int selected = hView->logicalIndexAt(point);
+   unitDisplay currentUnit;
+   unitScale  currentScale;
+
+   currentUnit  = displayUnit(selected);
+   currentScale = displayScale(selected);
+
+   QMenu* menu;
+   QAction* invoked;
+
+   switch(selected)
+   {
+      case YEASTAMOUNTCOL:
+         menu = Brewtarget::setupMassMenu(parentTableWidget,currentUnit, currentScale, false);
+         break;
+      default:
+         return;
+   }
+
+   invoked = menu->exec(hView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+}
+
 
 //==========================CLASS YeastItemDelegate===============================
 
@@ -568,7 +592,7 @@ void YeastItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
    else
    {
       QLineEdit* line = (QLineEdit*)editor;
-      
+
       if ( line->isModified() )
          model->setData(index, line->text(), Qt::EditRole);
    }

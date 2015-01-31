@@ -623,9 +623,10 @@ void Recipe::generateInstructions()
       timeRemaining = equipment()->boilTime_min();
    else
    {
-      timeRemaining = Brewtarget::timeQStringToSI(QInputDialog::getText(0,
+      timeRemaining = Brewtarget::qStringToSI(QInputDialog::getText(0,
                                         tr("Boil time"),
-                                        tr("You did not configure an equipment (which you really should), so tell me the boil time.")));
+                                        tr("You did not configure an equipment (which you really should), so tell me the boil time.")),
+                                        Units::minutes);
    }
    
    str = tr("Bring the wort to a boil and hold for %1.").arg(Brewtarget::displayAmount( timeRemaining, Units::minutes));

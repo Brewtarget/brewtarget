@@ -33,6 +33,11 @@ void CelsiusTempUnitSystem::loadMap()
    scaleToUnit.insert(scaleWithout,Units::celsius);
 }
 
+void CelsiusTempUnitSystem::loadUnitmap()
+{
+   qstringToUnit.insert("C",Units::celsius);
+}
+
 Unit* CelsiusTempUnitSystem::unit() { return Units::celsius; };
 
 QString CelsiusTempUnitSystem::unitType() { return "SI"; }

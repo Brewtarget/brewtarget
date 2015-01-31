@@ -59,7 +59,6 @@ public slots:
    void styleSelected( const QString& text );
    void changed(QMetaProperty,QVariant);
 
-   void updateField();
 private:
    Style* obsStyle;
    StyleListModel* styleListModel;

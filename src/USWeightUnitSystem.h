@@ -32,6 +32,8 @@ public:
    QString unitType();
 
    void loadMap();
+   void loadUnitmap();
+
    Unit* unit();
 };
 

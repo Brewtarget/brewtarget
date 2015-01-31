@@ -36,6 +36,12 @@ void SIWeightUnitSystem::loadMap()
    scaleToUnit.insert(scaleMedium, Units::kilograms);
 }
 
+void SIWeightUnitSystem::loadUnitmap()
+{
+   qstringToUnit.insert("mg", Units::milligrams);
+   qstringToUnit.insert( "g", Units::grams);
+   qstringToUnit.insert("kg", Units::kilograms);
+}
 Unit* SIWeightUnitSystem::thicknessUnit()
 {
    return Units::kilograms;

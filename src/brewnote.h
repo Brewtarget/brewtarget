@@ -174,16 +174,6 @@ public:
    double projFermPoints() const;
    double projAtten() const;
    
-   /*! Convert a string that may be either "1.040" or "10 P" for example.
-    * If the user has appended a "P" (case insensitive, with or without a space),
-    * the gravity reading will be assumed to be in plato/brix.
-    * If there is no unit, and the value is < 2.0, it will be assumed to be a
-    * specific gravity.
-    * If there is no unit and the value is greater than 2.0, it will be assumed
-    * to be a plato/brix
-    */
-   static double translateSG(QString qstr);
-
 signals:
    void brewDateChanged(const QDateTime&);
 

@@ -31,9 +31,14 @@ USWeightUnitSystem::USWeightUnitSystem()
 
 void USWeightUnitSystem::loadMap()
 {
-
    scaleToUnit.insert(scaleExtraSmall,Units::ounces);
    scaleToUnit.insert(scaleSmall,Units::pounds);
+}
+
+void USWeightUnitSystem::loadUnitmap()
+{
+   qstringToUnit.insert("oz",Units::ounces);
+   qstringToUnit.insert("lb",Units::pounds);
 }
 
 Unit* USWeightUnitSystem::thicknessUnit()

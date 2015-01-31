@@ -28,6 +28,9 @@
         <height>358</height>
        </rect>
       </property>
+      <property name="configSection" stdset="0">
+       <string notr="true">recipeExtras</string>
+      </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
         <layout class="QFormLayout" name="formLayout">
@@ -35,14 +38,17 @@
           <enum>QFormLayout::ExpandingFieldsGrow</enum>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="label_brewer">
            <property name="text">
             <string>Brewer</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_brewer</cstring>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLineEdit" name="lineEdit_brewer">
+          <widget class="BtStringEdit" name="lineEdit_brewer">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -61,19 +67,28 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="editField" stdset="0">
+            <string notr="true">brewer</string>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="label_asstBrewer">
            <property name="text">
             <string>Asst. Brewer</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_asstBrewer</cstring>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="label_tasteRating">
            <property name="text">
             <string>Taste Rating</string>
+           </property>
+           <property name="buddy">
+            <cstring>spinBox_tasteRating</cstring>
            </property>
           </widget>
          </item>
@@ -94,7 +109,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_asstBrewer">
+          <widget class="BtStringEdit" name="lineEdit_asstBrewer">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -112,18 +127,27 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">asstBrewer</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="label_4">
+          <widget class="BtTimeLabel" name="label_primaryAge">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Primary Age (days)</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_primaryAge</cstring>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QLineEdit" name="lineEdit_primaryAge">
+          <widget class="BtTimeEdit" name="lineEdit_primaryAge">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -141,18 +165,27 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">primaryAge_days</string>
            </property>
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label_5">
+          <widget class="BtTemperatureLabel" name="label_primaryTemp">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Primary Temp</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_primaryTemp</cstring>
            </property>
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QLineEdit" name="lineEdit_primaryTemp">
+          <widget class="BtTemperatureEdit" name="lineEdit_primaryTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -170,18 +203,27 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">primaryTemp_c</string>
            </property>
           </widget>
          </item>
          <item row="5" column="0">
-          <widget class="QLabel" name="label_6">
+          <widget class="BtTimeLabel" name="label_secAge">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Secondary Age (days)</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_secAge</cstring>
            </property>
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QLineEdit" name="lineEdit_secAge">
+          <widget class="BtTimeEdit" name="lineEdit_secAge">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -199,18 +241,27 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">secondaryAge_days</string>
            </property>
           </widget>
          </item>
          <item row="6" column="0">
-          <widget class="QLabel" name="label_7">
+          <widget class="BtTemperatureLabel" name="label_secTemp">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Secondary Temp</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_secTemp</cstring>
            </property>
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QLineEdit" name="lineEdit_secTemp">
+          <widget class="BtTemperatureEdit" name="lineEdit_secTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -228,18 +279,27 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">secondaryTemp_c</string>
            </property>
           </widget>
          </item>
          <item row="7" column="0">
-          <widget class="QLabel" name="label_8">
+          <widget class="BtTimeLabel" name="label_tertAge">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Tertiary Age (days)</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_tertAge</cstring>
            </property>
           </widget>
          </item>
          <item row="7" column="1">
-          <widget class="QLineEdit" name="lineEdit_tertAge">
+          <widget class="BtTimeEdit" name="lineEdit_tertAge">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -257,18 +317,27 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">tertiaryAge_days</string>
            </property>
           </widget>
          </item>
          <item row="8" column="0">
-          <widget class="QLabel" name="label_9">
+          <widget class="BtTemperatureLabel" name="label_tertTemp">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Tertiary Temp</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_tertTemp</cstring>
            </property>
           </widget>
          </item>
          <item row="8" column="1">
-          <widget class="QLineEdit" name="lineEdit_tertTemp">
+          <widget class="BtTemperatureEdit" name="lineEdit_tertTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -286,18 +355,27 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">tertiaryTemp_c</string>
            </property>
           </widget>
          </item>
          <item row="9" column="0">
-          <widget class="QLabel" name="label_10">
+          <widget class="BtTimeLabel" name="label_age">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Bottle/Keg Age (days)</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_age</cstring>
            </property>
           </widget>
          </item>
          <item row="9" column="1">
-          <widget class="QLineEdit" name="lineEdit_age">
+          <widget class="BtTimeEdit" name="lineEdit_age">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -315,18 +393,27 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">age</string>
            </property>
           </widget>
          </item>
          <item row="10" column="0">
-          <widget class="QLabel" name="label_11">
+          <widget class="BtTemperatureLabel" name="label_ageTemp">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Bottle/Keg Temp</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_ageTemp</cstring>
            </property>
           </widget>
          </item>
          <item row="10" column="1">
-          <widget class="QLineEdit" name="lineEdit_ageTemp">
+          <widget class="BtTemperatureEdit" name="lineEdit_ageTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -345,12 +432,18 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="editField" stdset="0">
+            <string notr="true">ageTemp_c</string>
+           </property>
           </widget>
          </item>
          <item row="11" column="0">
-          <widget class="QLabel" name="label_12">
+          <widget class="QLabel" name="label_date">
            <property name="text">
             <string>Date First Brewed</string>
+           </property>
+           <property name="buddy">
+            <cstring>dateEdit_date</cstring>
            </property>
           </widget>
          </item>
@@ -381,14 +474,17 @@
           </widget>
          </item>
          <item row="12" column="0">
-          <widget class="QLabel" name="label_13">
+          <widget class="QLabel" name="labe_carbVols">
            <property name="text">
             <string>Carbonation Volumes</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_carbVols</cstring>
            </property>
           </widget>
          </item>
          <item row="12" column="1">
-          <widget class="QLineEdit" name="lineEdit_carbVols">
+          <widget class="BtGenericEdit" name="lineEdit_carbVols">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -406,6 +502,12 @@
              <width>256</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="mouseTracking">
+            <bool>true</bool>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">carbonation_vols</string>
            </property>
           </widget>
          </item>
@@ -464,9 +566,51 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtTimeEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTimeLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTemperatureLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTemperatureEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
    <class>BtTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>BtTextEdit.h</header>
+   <header location="global">BtTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtStringEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">BtLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -489,5 +633,134 @@
   <tabstop>btTextEdit_notes</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>label_ageTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_ageTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>92</x>
+     <y>293</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>236</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_secTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_secTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>96</x>
+     <y>189</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>236</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_tertTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_tertTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>101</x>
+     <y>241</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>236</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_primaryTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_primaryTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>55</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>137</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_secAge</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_secAge</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>90</x>
+     <y>150</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>144</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_tertAge</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_tertAge</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>103</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>151</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_age</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_age</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>257</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>209</x>
+     <y>255</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_primaryAge</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_primaryAge</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>172</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

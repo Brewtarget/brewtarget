@@ -34,13 +34,6 @@ MashStepEditor::MashStepEditor(QWidget* parent)
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT(close()) );
    connect( comboBox_type, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(grayOutStuff(const QString &)) );
 
-   connect( lineEdit_stepTemp,        SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_infuseTemp,      SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_endTemp,         SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_infuseAmount,    SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_decoctionAmount, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_stepTime,        SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_rampTime,        SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void MashStepEditor::showChanges(QMetaProperty* metaProp)
@@ -67,13 +60,13 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
    {
       lineEdit_name->setText(obs->name());
       comboBox_type->setCurrentIndex(obs->type());
-      lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->infuseAmount_l(), Units::liters));
-      lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->infuseTemp_c(), Units::celsius));
-      lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->decoctionAmount_l(), Units::liters));
-      lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->stepTemp_c(), Units::celsius));
-      lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->stepTime_min(), Units::minutes));
-      lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->rampTime_min(), Units::minutes));
-      lineEdit_endTemp->setText(Brewtarget::displayAmount(obs->endTemp_c(), Units::celsius));
+      lineEdit_infuseAmount->setText(obs);
+      lineEdit_infuseTemp->setText(obs);
+      lineEdit_decoctionAmount->setText(obs);
+      lineEdit_stepTemp->setText(obs);
+      lineEdit_stepTime->setText(obs);
+      lineEdit_rampTime->setText(obs);
+      lineEdit_endTemp->setText(obs);
    }
 
    else if( propName == "name" ) 
@@ -81,32 +74,32 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
    else if( propName == "type" ) 
       comboBox_type->setCurrentIndex(obs->type());
    else if( propName == "infuseAmount_l" ) 
-      lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->infuseAmount_l(), Units::liters));
+      lineEdit_infuseAmount->setText(obs);
    else if( propName == "infuseTemp_c" ) 
-      lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->infuseTemp_c(), Units::celsius));
+      lineEdit_infuseTemp->setText(obs);
    else if( propName == "decoctionAmount_l" ) 
-      lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->decoctionAmount_l(), Units::liters));
+      lineEdit_decoctionAmount->setText(obs);
    else if( propName == "stepTemp_c" ) 
-      lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->stepTemp_c(), Units::celsius));
+      lineEdit_stepTemp->setText(obs);
    else if( propName == "stepTime_min" ) 
-      lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->stepTime_min(), Units::minutes));
+      lineEdit_stepTime->setText(obs);
    else if( propName == "rampTime_min" ) 
-      lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->rampTime_min(), Units::minutes));
+      lineEdit_rampTime->setText(obs);
    else if( propName == "endTemp_c" ) 
-      lineEdit_endTemp->setText(Brewtarget::displayAmount(obs->endTemp_c(), Units::celsius));
+      lineEdit_endTemp->setText(obs);
 }
 
 void MashStepEditor::clear()
 {
-   lineEdit_name->setText("");
+   lineEdit_name->setText(QString(""));
    comboBox_type->setCurrentIndex(0);
-   lineEdit_infuseAmount->setText("");
-   lineEdit_infuseTemp->setText("");
-   lineEdit_decoctionAmount->setText("");
-   lineEdit_stepTemp->setText("");
-   lineEdit_stepTime->setText("");
-   lineEdit_rampTime->setText("");
-   lineEdit_endTemp->setText("");
+   lineEdit_infuseAmount->setText(QString(""));
+   lineEdit_infuseTemp->setText(QString(""));
+   lineEdit_decoctionAmount->setText(QString(""));
+   lineEdit_stepTemp->setText(QString(""));
+   lineEdit_stepTime->setText(QString(""));
+   lineEdit_rampTime->setText(QString(""));
+   lineEdit_endTemp->setText(QString(""));
 }
 
 void MashStepEditor::close()
@@ -137,51 +130,17 @@ void MashStepEditor::setMashStep(MashStep* step)
 
 void MashStepEditor::saveAndClose()
 {
-   // TODO: check this out with 1.2.5.
-   // Need to disable notification since every "set" method will cause a "showChanges" that
-   // will revert any changes made.
-   //obs->disableNotification();
-
    obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
-   obs->setInfuseAmount_l(Brewtarget::volQStringToSI(lineEdit_infuseAmount->text()));
-   obs->setInfuseTemp_c(Brewtarget::tempQStringToSI(lineEdit_infuseTemp->text()));
-   obs->setDecoctionAmount_l(Brewtarget::volQStringToSI(lineEdit_decoctionAmount->text()));
-   obs->setStepTemp_c(Brewtarget::tempQStringToSI(lineEdit_stepTemp->text()));
-   obs->setStepTime_min(Brewtarget::timeQStringToSI(lineEdit_stepTime->text()));
-   obs->setRampTime_min(Brewtarget::timeQStringToSI(lineEdit_rampTime->text()));
-   obs->setEndTemp_c(Brewtarget::tempQStringToSI(lineEdit_endTemp->text()));
-
-   //obs->reenableNotification();
-   //obs->forceNotify();
+   obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI());
+   obs->setInfuseTemp_c(lineEdit_infuseTemp->toSI());
+   obs->setDecoctionAmount_l(lineEdit_decoctionAmount->toSI());
+   obs->setStepTemp_c(lineEdit_stepTemp->toSI());
+   obs->setStepTime_min(lineEdit_stepTime->toSI());
+   obs->setRampTime_min(lineEdit_rampTime->toSI());
+   obs->setEndTemp_c(lineEdit_endTemp->toSI());
 
    setVisible(false);
-}
-
-void MashStepEditor::updateField()
-{
-
-   QObject* selection = sender();
-   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
-   double val;
- 
-   if ( field == lineEdit_infuseAmount || field == lineEdit_decoctionAmount )
-   {
-      val = Brewtarget::volQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount( val, Units::liters));
-   }
-   else if ( field == lineEdit_stepTime || field == lineEdit_rampTime ) 
-   {
-      val = Brewtarget::timeQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount( val, Units::minutes));
-   }
-   else 
-   {
-      //Everything else is a temp
-      val = Brewtarget::tempQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount(val, Units::celsius));
-   }
-
 }
 
 void MashStepEditor::grayOutStuff(const QString& text)

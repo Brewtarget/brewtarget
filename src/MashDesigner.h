@@ -63,7 +63,6 @@ private slots:
    void saveAndClose();
    void typeChanged(int t);
 
-   void updateField();
 private:
    bool nextStep(int step);
    void saveStep();

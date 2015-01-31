@@ -100,6 +100,8 @@ public slots:
    void addFermentable(Fermentable* ferm);
    //! \returns true if "ferm" is successfully found and removed.
    bool removeFermentable(Fermentable* ferm);
+   //! \brief pops the context menu for changing units and scales
+   void contextMenu(const QPoint &point);
 
 private slots:
    //! \brief Catch changes to Recipe, Database, and Fermentable.

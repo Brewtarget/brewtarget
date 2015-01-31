@@ -52,7 +52,6 @@ public slots:
    void save();
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
-   void updateField();
    
 private:
    Yeast* obsYeast;

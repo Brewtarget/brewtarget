@@ -33,6 +33,7 @@ public:
    Unit* thicknessUnit(){ return 0; }
    QString unitType();
    void loadMap();
+   void loadUnitmap();
    Unit* unit();
 };
 

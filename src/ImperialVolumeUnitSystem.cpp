@@ -39,6 +39,16 @@ void ImperialVolumeUnitSystem::loadMap()
    scaleToUnit.insert(scaleHuge,Units::imperial_barrels);
 }
 
+void ImperialVolumeUnitSystem::loadUnitmap()
+{
+   qstringToUnit.insert("tsp",Units::imperial_teaspoons);
+   qstringToUnit.insert("tbs",Units::imperial_tablespoons);
+   qstringToUnit.insert("cup",Units::imperial_cups);
+   qstringToUnit.insert("qt",Units::imperial_quarts);
+   qstringToUnit.insert("gal",Units::imperial_gallons);
+   qstringToUnit.insert("bbl",Units::imperial_barrels);
+}
+
 Unit* ImperialVolumeUnitSystem::thicknessUnit()
 {
    return Units::imperial_quarts;

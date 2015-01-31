@@ -102,7 +102,9 @@ public slots:
    void addHop(Hop* hop);
    //! \returns true if "hop" is successfully found and removed.
    bool removeHop(Hop* hop);
-   
+
+   void contextMenu(const QPoint &point);
+
 private:
    QVector<Qt::ItemFlags> colFlags;
    bool _inventoryEditable;

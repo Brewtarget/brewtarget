@@ -72,10 +72,7 @@ void ScaleRecipeTool::show()
 {
    // Set the batch size display to the current batch size.
    if( recObs != 0 )
-   {
-      double batchSize = recObs->batchSize_l();
-      lineEdit_newBatchSize->setText(Brewtarget::displayAmount(batchSize, Units::liters));
-   }
+      lineEdit_newBatchSize->setText(recObs);
    
    setVisible(true);
 }
@@ -98,7 +95,7 @@ void ScaleRecipeTool::scaleByEfficiency()
    int i, size;
 
    double oldEfficiency = recObs->efficiency_pct();
-   double newEfficiency = (lineEdit_newEfficiency->text()).toDouble();
+   double newEfficiency = lineEdit_newEfficiency->toSI();
 
    double ratio = oldEfficiency / newEfficiency;
 
@@ -148,7 +145,7 @@ void ScaleRecipeTool::scaleByVolume()
    int i, size;
    
    double currentBatchSize_l = recObs->batchSize_l();
-   double newBatchSize_l = Brewtarget::volQStringToSI(lineEdit_newBatchSize->text());
+   double newBatchSize_l = lineEdit_newBatchSize->toSI();
    
    double ratio = newBatchSize_l / currentBatchSize_l;
    

@@ -108,7 +108,7 @@ void BrewNote::populateNote(Recipe* parent)
    // Since we have the recipe, lets set some defaults The order in which
    // these are done is very specific. Please do not modify them without some
    // serious testing.
-   
+
    // Everything needs volumes of one type or another. But the individual
    // volumes are fairly independent of anything. Do them all first.
    setProjVolIntoBK_l( parent->boilSize_l() );
@@ -218,41 +218,13 @@ void BrewNote::setNotes(QString const& var, bool notify)
    set("notes", "notes", var, notify);
 }
 
-double BrewNote::translateSG(QString qstr)
-{
-   double var;
-   QString unit;
-   QRegExp numUnit;
-
-   // Try to make some guesses about what is there.
-   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
-   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
-
-   numUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
-   numUnit.setCaseSensitivity(Qt::CaseInsensitive);
-
-   if ( qstr.contains(numUnit) )
-   {
-      var  = numUnit.capturedTexts()[1].toDouble();
-      unit = numUnit.capturedTexts()[2];
-   }
-   else 
-      var = qstr.toDouble();
-
-
-   if ( unit.contains("p", Qt::CaseInsensitive) || var > 1.2)
-      return Algorithms::PlatoToSG_20C20C(var);
-
-   return var;
-}
-
 void BrewNote::setLoading(bool flag) { loading = flag; }
 
 // These five items cause the calculated fields to change. I should do this
 // with signals/slots, likely, but the *only* slot for the signal will be
 // the brewnote.
 void BrewNote::setSg(double var)
-{ 
+{
    set("sg", "sg", var);
 
    if ( loading )
@@ -263,7 +235,7 @@ void BrewNote::setSg(double var)
 }
 
 void BrewNote::setVolumeIntoBK_l(double var)
-{ 
+{
    set("volumeIntoBK_l", "volume_into_bk", var);
 
    if ( loading )
@@ -275,7 +247,7 @@ void BrewNote::setVolumeIntoBK_l(double var)
 }
 
 void BrewNote::setOg(double var)
-{ 
+{
    set("og", "og", var);
 
    if ( loading )
@@ -287,7 +259,7 @@ void BrewNote::setOg(double var)
 }
 
 void BrewNote::setVolumeIntoFerm_l(double var)
-{ 
+{
    set("volumeIntoFerm_l", "volume_into_fermenter", var);
 
    if ( loading )
@@ -297,7 +269,7 @@ void BrewNote::setVolumeIntoFerm_l(double var)
 }
 
 void BrewNote::setFg(double var)
-{ 
+{
    set("fg", "fg", var);
 
    if ( loading )
@@ -307,39 +279,39 @@ void BrewNote::setFg(double var)
 }
 
 // This one is a bit of an odd ball. We need to convert to pure glucose points
-// before we store it in the database. 
+// before we store it in the database.
 void BrewNote::setProjPoints(double var)
-{ 
+{
    double convertPnts;
    double plato, total_g;
 
    if ( loading )
       convertPnts = var;
    else
-   { 
+   {
       plato = Algorithms::getPlato(var, projVolIntoBK_l());
       total_g = Algorithms::PlatoToSG_20C20C( plato );
       convertPnts = (total_g - 1.0 ) * 1000;
    }
 
-   set("projPoints", "projected_points", convertPnts); 
+   set("projPoints", "projected_points", convertPnts);
 }
 
 void BrewNote::setProjFermPoints(double var)
-{ 
+{
    double convertPnts;
    double plato, total_g;
 
    if ( loading )
       convertPnts = var;
    else
-   { 
+   {
       plato = Algorithms::getPlato(var, projVolIntoFerm_l());
       total_g = Algorithms::PlatoToSG_20C20C( plato );
       convertPnts = (total_g - 1.0 ) * 1000;
    }
 
-   set("projPoints", "projected_ferm_points", convertPnts); 
+   set("projPoints", "projected_ferm_points", convertPnts);
 }
 
 void BrewNote::setABV(double var)               { set("abv", "abv", var); }
@@ -365,11 +337,27 @@ void BrewNote::setBoilOff_l(double var)         { set("boilOff_l", "boil_off", v
 // Getters
 QDateTime BrewNote::brewDate()      const { return QDateTime::fromString(get("brewDate").toString(),Qt::ISODate); }
 QString BrewNote::brewDate_str()    const { return get("brewDate").toString(); }
-QString BrewNote::brewDate_short()  const { return brewDate().toString("yyyy-MM-dd"); }
 QDateTime BrewNote::fermentDate()   const { return QDateTime::fromString(get("fermentDate").toString(),Qt::ISODate); }
 QString BrewNote::fermentDate_str() const { return get("fermentDate").toString(); }
 QString BrewNote::fermentDate_short() const { return fermentDate().toString("yyyy-MM-dd"); }
 QString BrewNote::notes()           const { return get("notes").toString(); }
+QString BrewNote::brewDate_short()  const
+{
+  QString format;
+  switch (Brewtarget::getDateFormat())
+  {
+     case displayUS:
+        format = "MM-dd-yyyy";
+        break;
+     case displayImp:
+        format = "dd-MM-yyyy";
+        break;
+     default:
+        format = "yyyy-MM-dd";
+  }
+
+  return brewDate().toString(format);
+}
 
 double BrewNote::sg() const              { return get("sg").toDouble(); }
 double BrewNote::abv() const               { return get("abv").toDouble(); }
@@ -421,7 +409,7 @@ double BrewNote::calculateEffIntoBK_pct()
 
    effIntoBK = actualPoints/maxPoints * 100;
    setEffIntoBK_pct(effIntoBK);
-   
+
    return effIntoBK;
 }
 
@@ -429,7 +417,7 @@ double BrewNote::calculateEffIntoBK_pct()
 // will be.
 double BrewNote::calculateOg()
 {
-   double cOG; 
+   double cOG;
    double points, expectedVol, actualVol;
 
    points = (sg()-1) * 1000;
@@ -442,7 +430,7 @@ double BrewNote::calculateOg()
       return 0.0;
    }
 
-   cOG = 1+ ((points * actualVol / expectedVol) / 1000); 
+   cOG = 1+ ((points * actualVol / expectedVol) / 1000);
    setProjOg(cOG);
 
    return cOG;
@@ -471,7 +459,7 @@ double BrewNote::calculateABV_pct()
    double estFg;
 
    // This looks weird, but the math works. (Yes, I am showing my work)
-   // 1 + [(og-1) * 1000 * (1.0 - %/100)] / 1000  = 
+   // 1 + [(og-1) * 1000 * (1.0 - %/100)] / 1000  =
    // 1 + [(og - 1) * (1.0 - %/100)]
    estFg = 1 + ((og()-1.0)*(1.0 - atten_pct/100.0));
 
@@ -487,7 +475,7 @@ double BrewNote::calculateActualABV_pct()
 
    abv = (og() - fg()) * 130;
    setABV(abv);
-   
+
    return abv;
 }
 

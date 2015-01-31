@@ -28,6 +28,10 @@ class SIVolumeUnitSystem;
 class CelsiusTempUnitSystem;
 class FahrenheitTempUnitSystem;
 class TimeUnitSystem;
+class EbcColorUnitSystem;
+class SrmColorUnitSystem;
+class SgDensityUnitSystem;
+class PlatoDensityUnitSystem;
 
 class UnitSystems
 {
@@ -43,6 +47,13 @@ public:
    static FahrenheitTempUnitSystem* fahrenheitTempUnitSystem();
 
    static TimeUnitSystem* timeUnitSystem();
+
+   // You know? I badly want to rewrite this stuff. It is painful
+   static SrmColorUnitSystem* srmColorUnitSystem();
+   static EbcColorUnitSystem* ebcColorUnitSystem();
+
+   static SgDensityUnitSystem* sgDensityUnitSystem();
+   static PlatoDensityUnitSystem* platoDensityUnitSystem();
 };
 
 #endif /*UNITSYSTEMS_H*/

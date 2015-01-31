@@ -30,12 +30,12 @@
 
 #include "NamedMashEditor.h"
 
-NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool singleMashEditor) 
+NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool singleMashEditor)
    : QDialog(parent), mashObs(0)
 {
    setupUi(this);
 
-   if ( singleMashEditor ) 
+   if ( singleMashEditor )
    {
       for (int i = 0; i < horizontalLayout_mashs->count(); ++i)
       {
@@ -45,7 +45,7 @@ NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool s
       }
       // pushButton_new->setVisible(false);
    }
-   
+
    //! Create the list model and assign it to the combo box
    mashListModel = new MashListModel(mashComboBox);
    mashComboBox->setModel( mashListModel );
@@ -74,43 +74,8 @@ NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool s
    // finally, the combo box and the remove mash button
    connect(mashComboBox, SIGNAL(activated(const QString&)), this, SLOT(mashSelected(const QString&)));
    connect(pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMash()));
-   
+
    setMash(mashListModel->at(mashComboBox->currentIndex()));
-
-   connect( lineEdit_grainTemp,  SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_spargeTemp, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_tunTemp,    SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_tunMass,    SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_spargePh,   SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_tunSpHeat,  SIGNAL(editingFinished()), this, SLOT(updateField()));
-
-}
-
-void NamedMashEditor::updateField()
-{
-
-   QObject* selection = sender();
-   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
-   double val;
- 
-   // temps first 
-   if ( field == lineEdit_grainTemp || field == lineEdit_spargeTemp || field == lineEdit_tunTemp )
-   {
-      val = Brewtarget::tempQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount( val, Units::celsius));
-   }
-   else if ( field == lineEdit_tunMass ) 
-   {
-      // odd ball
-      val = Brewtarget::weightQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount( val, Units::kilograms));
-   }
-   else 
-   {
-      //just format everything else nicely
-      val = field->text().toDouble();
-      field->setText(Brewtarget::displayAmount(val));
-   }
 
 }
 
@@ -129,29 +94,25 @@ void NamedMashEditor::saveAndClose()
 {
    if( mashObs == 0 )
       return;
-   
-   //mash->disableNotification(); // If we don't do this, the notification will propagate to a showChanges() and we'll lose any info we want saved.
+
    mashObs->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
 
    mashObs->setName( lineEdit_name->text() );
-   mashObs->setGrainTemp_c(Brewtarget::tempQStringToSI(lineEdit_grainTemp->text()));
-   mashObs->setSpargeTemp_c(Brewtarget::tempQStringToSI(lineEdit_spargeTemp->text()));
+   mashObs->setGrainTemp_c(lineEdit_grainTemp->toSI());
+   mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toSI());
    mashObs->setPh(lineEdit_spargePh->text().toDouble());
-   mashObs->setTunTemp_c(Brewtarget::tempQStringToSI(lineEdit_tunTemp->text()));
-   mashObs->setTunWeight_kg(Brewtarget::weightQStringToSI(lineEdit_tunMass->text()));
-   mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->text().toDouble() );
+   mashObs->setTunTemp_c(lineEdit_tunTemp->toSI());
+   mashObs->setTunWeight_kg(lineEdit_tunMass->toSI());
+   mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toSI());
 
    mashObs->setNotes( textEdit_notes->toPlainText() );
-   
-   //mash->reenableNotification();
-   //mash->forceNotify();
 }
 
 void NamedMashEditor::setMash(Mash* mash)
 {
    if( mashObs )
       disconnect( mashObs, 0, this, 0 );
-   
+
    mashObs = mash;
    mashStepTableModel->setMash(mashObs);
 
@@ -190,32 +151,32 @@ void NamedMashEditor::showChanges(QMetaProperty* prop)
          return;
    }
    if( propName == "grainTemp_c" || updateAll ) {
-      lineEdit_grainTemp->setText(Brewtarget::displayAmount(mashObs->grainTemp_c(), Units::celsius));
+      lineEdit_grainTemp->setText(mashObs);
       if( ! updateAll )
          return;
    }
    if( propName == "spargeTemp_c" || updateAll ) {
-      lineEdit_spargeTemp->setText(Brewtarget::displayAmount(mashObs->spargeTemp_c(), Units::celsius));
+      lineEdit_spargeTemp->setText(mashObs);
       if( ! updateAll )
          return;
    }
    if( propName == "ph" || updateAll ) {
-      lineEdit_spargePh->setText(Brewtarget::displayAmount(mashObs->ph()));
+      lineEdit_spargePh->setText(mashObs);
       if( ! updateAll )
          return;
    }
    if( propName == "tunTemp_c" || updateAll ) {
-      lineEdit_tunTemp->setText(Brewtarget::displayAmount(mashObs->tunTemp_c(), Units::celsius));
+      lineEdit_tunTemp->setText(mashObs);
       if( ! updateAll )
          return;
    }
    if( propName == "tunMass_kg" || updateAll ) {
-      lineEdit_tunMass->setText(Brewtarget::displayAmount(mashObs->tunWeight_kg(), Units::kilograms));
+      lineEdit_tunMass->setText(mashObs);
       if( ! updateAll )
          return;
    }
    if( propName == "tunSpecificHeat_calGC" || updateAll ) {
-      lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(mashObs->tunSpecificHeat_calGC()));
+      lineEdit_tunSpHeat->setText(mashObs);
       if( ! updateAll )
          return;
    }
@@ -228,19 +189,19 @@ void NamedMashEditor::showChanges(QMetaProperty* prop)
 
 void NamedMashEditor::clear()
 {
-   lineEdit_name->setText("");
-   lineEdit_grainTemp->setText("");
-   lineEdit_spargeTemp->setText("");
-   lineEdit_spargePh->setText("");
-   lineEdit_tunTemp->setText("");
-   lineEdit_tunMass->setText("");
-   lineEdit_tunSpHeat->setText("");
+   lineEdit_name->setText(QString(""));
+   lineEdit_grainTemp->setText(QString(""));
+   lineEdit_spargeTemp->setText(QString(""));
+   lineEdit_spargePh->setText(QString(""));
+   lineEdit_tunTemp->setText(QString(""));
+   lineEdit_tunMass->setText(QString(""));
+   lineEdit_tunSpHeat->setText(QString(""));
 
    textEdit_notes->setPlainText("");
 
 }
 
-void NamedMashEditor::addMashStep() 
+void NamedMashEditor::addMashStep()
 {
    if ( ! mashObs )
       return;
@@ -321,8 +282,8 @@ void NamedMashEditor::fromEquipment(const QString& name)
 
    if ( selected )
    {
-      lineEdit_tunMass->setText(Brewtarget::displayAmount(selected->tunWeight_kg(), Units::kilograms));
-      lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(selected->tunSpecificHeat_calGC()));
+      lineEdit_tunMass->setText(selected);
+      lineEdit_tunSpHeat->setText(selected);
    }
 }
 
@@ -330,7 +291,7 @@ void NamedMashEditor::removeMash()
 {
    if ( ! mashObs )
       return;
-   
+
    int newMash = mashComboBox->currentIndex() - 1;
 
    // I *think* we want to disconnect the mash first?

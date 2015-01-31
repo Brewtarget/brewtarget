@@ -26,51 +26,58 @@
 // to compensate for the lost to the tun even if the tun is pre-heaten
 const double StrikeWaterDialog::specificHeatBarley = 0.41;
 
-StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
+StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent)
+{
    setupUi(this);
    connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
 }
 
 StrikeWaterDialog::~StrikeWaterDialog() {}
 
-void StrikeWaterDialog::calculate() {
+void StrikeWaterDialog::calculate()
+{
   double initial = computeInitialInfusion();
   double mash = computeMashInfusion();
-  initialResultTxt->setText(Algorithms::isNan(initial) 
-    ? tr("N/A") : Brewtarget::displayAmount(initial, Units::celsius));
-  mashResultTxt->setText(Algorithms::isNan(mash) 
-    ? tr("N/A") : Brewtarget::displayAmount(mash, Units::liters));
+
+  initialResultTxt->setText(initial);
+  mashResultTxt->setText(mash);
 }
 
-double StrikeWaterDialog::computeInitialInfusion() {
-  double grainTemp = Brewtarget::tempQStringToSI(grainTempVal->text());
-  double targetMash = Brewtarget::tempQStringToSI(targetMashVal->text());
-  double waterVolume = Brewtarget::volQStringToSI(waterVolumeVal->text());
-  double grainWeight = Brewtarget::weightQStringToSI(grainWeightInitVal->text());
+double StrikeWaterDialog::computeInitialInfusion()
+{
+  double grainTemp   = grainTempVal->toSI();
+  double targetMash  = targetMashVal->toSI();
+  double waterVolume = waterVolumeVal->toSI();
+  double grainWeight = grainWeightInitVal->toSI();
 
-  return initialInfusionSi(
-    grainTemp, 
-    targetMash, 
-    waterVolume / grainWeight
-  );
+  if ( grainWeight == 0.0 )
+     return 0.0;
+
+  return initialInfusionSi( grainTemp, targetMash, waterVolume / grainWeight);
 }
 
-double StrikeWaterDialog::computeMashInfusion() {
-  double mashVol = Brewtarget::volQStringToSI(mashVolVal->text());
-  double grainWeight = Brewtarget::weightQStringToSI(grainWeightVal->text());
-  double actualMash = Brewtarget::tempQStringToSI(actualMashVal->text());
-  double targetMashInf = Brewtarget::tempQStringToSI(targetMashInfVal->text());
-  double infusionWater = Brewtarget::tempQStringToSI(infusionWaterVal->text());
+double StrikeWaterDialog::computeMashInfusion()
+{
+  double mashVol       = mashVolVal->toSI();
+  double grainWeight   = grainWeightVal->toSI();
+  double actualMash    = actualMashVal->toSI();
+  double targetMashInf = targetMashInfVal->toSI();
+  double infusionWater = infusionWaterVal->toSI();
+
   return mashInfusionSi(actualMash, targetMashInf, grainWeight, infusionWater, mashVol);
 }
 
-double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp,
-        double waterToGrain) {
-  return (specificHeatBarley / waterToGrain) * (targetTemp - grainTemp) + targetTemp;
+double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp, double waterToGrain)
+{
+   if ( waterToGrain == 0.0 )
+      return 0.0;
+   return (specificHeatBarley / waterToGrain) * (targetTemp - grainTemp) + targetTemp;
 }
-double StrikeWaterDialog::mashInfusionSi(double initialTemp, double targetTemp,
-        double grainWeight, double infusionWater, double mashVolume) {
-  return ((targetTemp - initialTemp) * (specificHeatBarley * grainWeight + mashVolume)) 
-      / (infusionWater - targetTemp);
+double StrikeWaterDialog::mashInfusionSi(double initialTemp, double targetTemp, double grainWeight, double infusionWater, double mashVolume)
+{
+   if ( infusionWater - targetTemp == 0.0 )
+      return 0.0;
+
+  return ((targetTemp - initialTemp) * (specificHeatBarley * grainWeight + mashVolume)) / (infusionWater - targetTemp);
 }
 

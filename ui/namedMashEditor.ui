@@ -13,11 +13,14 @@
   <property name="windowTitle">
    <string>Named Mash Editor</string>
   </property>
+  <property name="configSection" stdset="0">
+   <string notr="true">namedMashEditor</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_mashs">
      <item>
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="label_mash">
        <property name="text">
         <string>Mash</string>
        </property>
@@ -78,7 +81,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="label_name">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -87,6 +90,9 @@
            </property>
            <property name="text">
             <string>Name</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_name</cstring>
            </property>
           </widget>
          </item>
@@ -114,20 +120,26 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="BtTemperatureLabel" name="label_grainTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Initial grain temp</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_grainTemp</cstring>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_grainTemp">
+          <widget class="BtTemperatureEdit" name="lineEdit_grainTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -143,6 +155,9 @@
            <property name="toolTip">
             <string>Initial grain temp</string>
            </property>
+           <property name="editField" stdset="0">
+            <string notr="true">grainTemp_c</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -150,20 +165,26 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="label_4">
+          <widget class="BtTemperatureLabel" name="label_spargeTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
            <property name="text">
             <string>Sparge temp</string>
+           </property>
+           <property name="buddy">
+            <cstring>lineEdit_spargeTemp</cstring>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_spargeTemp">
+          <widget class="BtTemperatureEdit" name="lineEdit_spargeTemp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -179,6 +200,9 @@
            <property name="toolTip">
             <string>Sparge temp target</string>
            </property>
+           <property name="editField" stdset="0">
+            <string notr="true">spargeTemp_c</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -186,7 +210,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="label_spargePh">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -196,10 +220,13 @@
            <property name="text">
             <string>Sparge pH</string>
            </property>
+           <property name="buddy">
+            <cstring>lineEdit_spargePh</cstring>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_spargePh">
+          <widget class="BtGenericEdit" name="lineEdit_spargePh">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -214,6 +241,9 @@
            </property>
            <property name="toolTip">
             <string>Sparge pH</string>
+           </property>
+           <property name="editField" stdset="0">
+            <string notr="true">ph</string>
            </property>
           </widget>
          </item>
@@ -255,6 +285,9 @@
          <property name="title">
           <string>Tun</string>
          </property>
+         <property name="configSection" stdset="0">
+          <string notr="true">namedMashEditor</string>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="spacing">
            <number>2</number>
@@ -262,20 +295,26 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QLabel" name="label_3">
+             <widget class="BtTemperatureLabel" name="label_tunTemp">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
               <property name="text">
                <string>Initial tun temp</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_tunTemp</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_tunTemp">
+             <widget class="BtTemperatureEdit" name="lineEdit_tunTemp">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -291,6 +330,9 @@
               <property name="toolTip">
                <string>Initial tun temp</string>
               </property>
+              <property name="editField" stdset="0">
+               <string notr="true">tunTemp_c</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -298,9 +340,12 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_11">
             <item>
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="label_equipment">
               <property name="text">
                <string>From Equipment</string>
+              </property>
+              <property name="buddy">
+               <cstring>equipmentComboBox</cstring>
               </property>
              </widget>
             </item>
@@ -338,20 +383,26 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <widget class="QLabel" name="label_6">
+             <widget class="BtMassLabel" name="label_tunMass">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
               <property name="text">
                <string>Tun mass</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_tunMass</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_tunMass">
+             <widget class="BtMassEdit" name="lineEdit_tunMass">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -367,6 +418,9 @@
               <property name="toolTip">
                <string>Tun mass</string>
               </property>
+              <property name="editField" stdset="0">
+               <string notr="true">tunWeight_kg</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -374,7 +428,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_7">
             <item>
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="label_tunSpHeat">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -384,10 +438,13 @@
               <property name="text">
                <string>Tun sp. heat</string>
               </property>
+              <property name="buddy">
+               <cstring>lineEdit_tunSpHeat</cstring>
+              </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_tunSpHeat">
+             <widget class="BtGenericEdit" name="lineEdit_tunSpHeat">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -402,6 +459,9 @@
               </property>
               <property name="toolTip">
                <string>Tun specific heat (cal/(g*K))</string>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">tunSpecificHeat_calGC</string>
               </property>
              </widget>
             </item>
@@ -548,6 +608,46 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtTemperatureEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTemperatureLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtMassLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <slot>popContextMenu(QPoint)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtMassEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <signal>textModified()</signal>
+    <slot>lineChanged()</slot>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>CustomComboBox</class>
    <extends>QComboBox</extends>
    <header>CustomComboBox.h</header>
@@ -556,5 +656,70 @@
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>label_grainTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_grainTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>90</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>259</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_spargeTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_spargeTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>53</x>
+     <y>102</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>105</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_tunTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_tunTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>437</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>593</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_tunMass</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_tunMass</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>387</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>633</x>
+     <y>133</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

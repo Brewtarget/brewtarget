@@ -49,12 +49,20 @@ public:
    QString displayAmount( double amount, Unit* units, unitScale scale = noScale );
 
    /*!
+    * amountDisplay() should return the double representing the appropriate
+    * unit and scale. Similar in nature to displayAmount(), but just returning
+    * raw doubles.
+    */
+   double amountDisplay( double amount, Unit* units, unitScale scale = noScale );
+
+   /*!
     * qstringToSI() should convert 'qstr' (consisting of a decimal amount,
     * followed by a unit string) to the appropriate SI amount under this
     * UnitSystem.
     */
    double qstringToSI(QString qstr, Unit* defUnit = 0, bool force = false);
 
+   Unit* scaleUnit(unitScale scale);
    /*!
     * Returns the unit associated with thickness. If this unit system is
     * US weight, it would return lb. If it were US volume, it would return
@@ -63,10 +71,10 @@ public:
    virtual Unit* thicknessUnit() = 0;
    virtual Unit* unit() = 0;
    virtual void  loadMap() = 0;
+   virtual void  loadUnitmap() = 0;
 
    // \brief Returns the name of the unit
    virtual QString unitType() = 0;
-
 
 protected:
    static const int fieldWidth;
@@ -77,6 +85,7 @@ protected:
    QRegExp amtUnit;
 
    QMap<unitScale, Unit*> scaleToUnit;
+   QMap<QString, Unit*> qstringToUnit;
 
 };
 

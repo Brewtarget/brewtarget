@@ -26,6 +26,7 @@
 #include <QDebug>
 #include "unit.h"
 #include "brewtarget.h"
+#include "Algorithms.h"
 
 QMultiMap<QString, Unit*> Unit::nameToUnit;
 bool Unit::isMapSetup = false;
@@ -66,6 +67,9 @@ KelvinUnit* Units::kelvin = new KelvinUnit();
 // === Color ===
 SRMUnit* Units::srm = new SRMUnit();
 EBCUnit* Units::ebc = new EBCUnit();
+// == density ===
+SgUnit* Units::sp_grav = new SgUnit();
+PlatoUnit* Units::plato = new PlatoUnit();
 
 QString Unit::unitFromString(QString qstr)
 {
@@ -112,7 +116,7 @@ double Unit::valueFromString(QString qstr)
    // Locale
    amt = QLocale().toDouble(amtUnit.cap(1), &convOk);
 
-   // If that fails, attemp to convert it as a C locale
+   // If that fails, attempt to convert it as a C locale
    if( !convOk )
       amt = QLocale::c().toDouble(amtUnit.cap(1));
 
@@ -122,112 +126,78 @@ double Unit::valueFromString(QString qstr)
 // Return a
 QString Unit::convert(QString qstr, QString toUnit)
 {
+   QString fName;
+   double amt,si;
+   Unit *f, *u;
+
    if( ! Unit::isMapSetup )
       Unit::setupMap();
 
-   // Force the unit to be what I say
-   QString fName = unitFromString(qstr);
-   Unit* f = getUnit(fName);
-   double si = qstringToSI( qstr, f, false );
-   Unit* u = getUnit(toUnit, false);
+   fName = unitFromString(qstr);
+   amt = valueFromString(qstr);
+   f = getUnit(fName);
 
+   if ( f )
+      si = f->toSI(amt);
+   else
+      si = 0.0;
+
+   u = getUnit(toUnit, false);
+
+   // If we couldn't find either unit, or the two units don't match (eg, you
+   // cannot convert L to lb)
    if( u == 0 || f == 0 || u->getUnitType() != f->getUnitType() )
       return QString("%1 ?").arg(Brewtarget::displayAmount(si));
    else
       return QString("%1 %2").arg(Brewtarget::displayAmount(u->fromSI(si))).arg(toUnit);
 }
 
-// Translates something like "5.0 gal" into the appropriate SI units.
-double Unit::qstringToSI( QString qstr, Unit* defUnit, bool force )
-{
-   double amt = 0.0;
-   Unit* u = defUnit;
-
-   if( ! Unit::isMapSetup )
-      Unit::setupMap();
-
-   amt = valueFromString(qstr);
-   QString unit = unitFromString(qstr);
-
-   // If we haven't decided to force the issue,
-   //       and we were able to get the unit from the string
-   //       and we can find that unit in the nameToUnit map
-   // then get that unit
-   if ( ! force && unit.size() > 0 && getUnit(unit) )
-      u = getUnit(unit);
-
-   return u->toSI(amt);
-}
-
-// Gets the unit with the appropriate name. Select the one consistent
-// with the current system (like Brewtarget::getWeightUnitSystem())
-// if possible. Otherwise, get a unit of type USCustomary or Any.
+// This mostly gets called when the unit entered in the field does not match
+// what the field has been set to. For example, if you displaying in Liters,
+// but enter "20 qt". Since the SIVolumeUnitSystem doesn't know what "qt" is,
+// we go searching for it.
 Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
 {
    Unit* u;
+   Unit* defUnit = 0;
+
 
    if( ! Unit::isMapSetup )
       Unit::setupMap();
 
+   // Under most circumstances, there is a one-to-one relationship between
+   // unit string and Unit. C will only map to Unit::Celsius, for example. If
+   // there's only one match, just return it.
+   if ( nameToUnit.count(name) == 1 )
+      return nameToUnit.value(name);
+
+   // That solved something like 99% of the use cases. Now we have to handle
+   // those pesky volumes.
    QMap<QString, Unit*>::iterator i = nameToUnit.find(name);
 
-   // First, try to find a unit consistent with the measurement system.
-   // For example, if you enter "5 gal" and the default volume system is
-   // "British Imperial", we will find Units::imperial_gallons instead of
-   // Units::us_gallons
+   // Loop through the found Units, like Unit::us_quart and
+   // Unit::imperial_quart, and try to find one that matches the global
+   // default.
    for( ; i != nameToUnit.end() && i.key() == name; ++i )
    {
       u = i.value();
       if( u == 0 )
          continue;
 
-      int type = u->getUnitType();
       int system = u->getUnitOrTempSystem();
 
-      if( type == Temp && system == Brewtarget::getTemperatureScale() )
-         return u;
-      else if( type == Mass )
-      {
-         if( system == Any || system == Brewtarget::getWeightUnitSystem() )
-            return u;
+      // Save this for later if we need it
+      if( system == USCustomary )
+         defUnit = u;
 
-         if( (Brewtarget::getWeightUnitSystem() == USCustomary || Brewtarget::getWeightUnitSystem() == Imperial)
-            && system == ImperialAndUS)
-            return u;
-      }
-      else if( type == Volume )
-      {
-         if( system == Any || system == Brewtarget::getVolumeUnitSystem() )
-            return u;
-
-         if( (Brewtarget::getVolumeUnitSystem() == USCustomary || Brewtarget::getVolumeUnitSystem() == Imperial)
-            && system == ImperialAndUS )
-            return u;
-      }
-      else if( type == Time )
+      if( Brewtarget::thingToUnitSystem.value(Volume|system) == Brewtarget::thingToUnitSystem.value(Volume) )
          return u;
    }
 
-   // If we got here, we either couldn't find anything specific. In that case,
-   // reset the iterator and just try to find the best USCustomer or Any
-   // match.
-   i = nameToUnit.find(name);
-
-   // Now, just try to find a unit with the USCustomary or Any system.
-   for( ; i != nameToUnit.end() && i.key() == name; ++i )
-   {
-      u = i.value();
-
-      if( u == 0 )
-         continue;
-
-      int system = u->getUnitOrTempSystem();
-
-      if( system == Any || system == USCustomary || system == ImperialAndUS || matchCurrentSystem == false )
-         return u;
-   }
-
-   return 0;
+   // If we got here, we couldn't find a match. Unless something weird has
+   // happened, that means you entered "qt" into a field and the system
+   // default is SI. At that point, just use the USCustomary
+   return defUnit;
 }
 
 void Unit::setupMap()
@@ -266,6 +236,9 @@ void Unit::setupMap()
    Unit::nameToUnit.insert(Units::srm->getUnitName(), Units::srm);
    Unit::nameToUnit.insert(Units::ebc->getUnitName(), Units::ebc);
 
+   Unit::nameToUnit.insert(Units::sp_grav->getUnitName(), Units::sp_grav);
+   Unit::nameToUnit.insert(Units::plato->getUnitName(), Units::plato);
+
    Unit::isMapSetup = true;
 }
 
@@ -274,6 +247,8 @@ KilogramUnit::KilogramUnit()
 {
    unitName = "kg";
    SIUnitName = "kg";
+   _type = Mass;
+   _unitSystem = SI;
 }
 
 double KilogramUnit::toSI( double amt ) const
@@ -291,6 +266,8 @@ GramUnit::GramUnit()
 {
    unitName = "g";
    SIUnitName = "kg";
+   _type = Mass;
+   _unitSystem = SI;
 }
 
 double GramUnit::toSI( double amt ) const
@@ -308,6 +285,8 @@ MilligramUnit::MilligramUnit()
 {
    unitName = "mg";
    SIUnitName = "kg";
+   _type = Mass;
+   _unitSystem = SI;
 }
 
 double MilligramUnit::toSI( double amt ) const
@@ -325,6 +304,8 @@ PoundUnit::PoundUnit()
 {
    unitName = "lb";
    SIUnitName = "kg";
+   _type = Mass;
+   _unitSystem = USCustomary;
 }
 
 double PoundUnit::toSI( double amt ) const
@@ -342,6 +323,8 @@ OunceUnit::OunceUnit()
 {
    unitName = "oz";
    SIUnitName = "kg";
+   _type = Mass;
+   _unitSystem = USCustomary;
 }
 
 double OunceUnit::toSI( double amt ) const
@@ -359,6 +342,8 @@ LiterUnit::LiterUnit()
 {
    unitName = "L";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = SI;
 }
 
 double LiterUnit::toSI( double amt ) const
@@ -376,6 +361,8 @@ MilliliterUnit::MilliliterUnit()
 {
    unitName = "mL";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = SI;
 }
 
 double MilliliterUnit::toSI( double amt ) const
@@ -394,6 +381,8 @@ USBarrelUnit::USBarrelUnit()
 {
    unitName = "bbl";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = USCustomary;
 }
 
 double USBarrelUnit::toSI( double amt ) const
@@ -411,6 +400,8 @@ USGallonUnit::USGallonUnit()
 {
    unitName = "gal";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = USCustomary;
 }
 
 double USGallonUnit::toSI( double amt ) const
@@ -428,6 +419,8 @@ USQuartUnit::USQuartUnit()
 {
    unitName = "qt";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = USCustomary;
 }
 
 double USQuartUnit::toSI( double amt ) const
@@ -445,6 +438,8 @@ USCupUnit::USCupUnit()
 {
    unitName = "cup";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = USCustomary;
 }
 
 double USCupUnit::toSI( double amt ) const
@@ -457,81 +452,13 @@ double USCupUnit::fromSI( double amt ) const
    return amt / 0.236588236;
 }
 
-// === Imperial Beer Barrel ===
-
-ImperialBarrelUnit::ImperialBarrelUnit()
-{
-   unitName = "bbl";
-   SIUnitName = "L";
-}
-
-double ImperialBarrelUnit::toSI( double amt ) const
-{
-   return amt * 163.659;
-}
-
-double ImperialBarrelUnit::fromSI( double amt ) const
-{
-   return amt / 163.659;
-}
-
-// === ImperialGallons ===
-ImperialGallonUnit::ImperialGallonUnit()
-{
-   unitName = "gal";
-   SIUnitName = "L";
-}
-
-double ImperialGallonUnit::toSI( double amt ) const
-{
-   return amt * 4.54609;
-}
-
-double ImperialGallonUnit::fromSI( double amt ) const
-{
-   return amt / 4.54609;
-}
-
-// === ImperialQuarts ===
-ImperialQuartUnit::ImperialQuartUnit()
-{
-   unitName = "qt";
-   SIUnitName = "L";
-}
-
-double ImperialQuartUnit::toSI( double amt ) const
-{
-   return amt * 1.1365225;
-}
-
-double ImperialQuartUnit::fromSI( double amt ) const
-{
-   return amt / 1.1365225;
-}
-
-// === ImperialCups ===
-ImperialCupUnit::ImperialCupUnit()
-{
-   unitName = "cup";
-   SIUnitName = "L";
-}
-
-double ImperialCupUnit::toSI( double amt ) const
-{
-   return amt * 0.284130625;
-}
-
-double ImperialCupUnit::fromSI( double amt ) const
-{
-   return amt / 0.284130625;
-}
-
-
 // === US Tablepoons ===
 USTablespoonUnit::USTablespoonUnit()
 {
    unitName = "tbsp";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = USCustomary;
 }
 
 double USTablespoonUnit::toSI( double amt ) const
@@ -549,6 +476,8 @@ USTeaspoonUnit::USTeaspoonUnit()
 {
    unitName = "tsp";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = USCustomary;
 }
 
 double USTeaspoonUnit::toSI( double amt ) const
@@ -561,11 +490,91 @@ double USTeaspoonUnit::fromSI( double amt ) const
    return amt / 0.00492892159;
 }
 
+// === Imperial Beer Barrel ===
+
+ImperialBarrelUnit::ImperialBarrelUnit()
+{
+   unitName = "bbl";
+   SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = Imperial;
+}
+
+double ImperialBarrelUnit::toSI( double amt ) const
+{
+   return amt * 163.659;
+}
+
+double ImperialBarrelUnit::fromSI( double amt ) const
+{
+   return amt / 163.659;
+}
+
+// === ImperialGallons ===
+ImperialGallonUnit::ImperialGallonUnit()
+{
+   unitName = "gal";
+   SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = Imperial;
+}
+
+double ImperialGallonUnit::toSI( double amt ) const
+{
+   return amt * 4.54609;
+}
+
+double ImperialGallonUnit::fromSI( double amt ) const
+{
+   return amt / 4.54609;
+}
+
+// === ImperialQuarts ===
+ImperialQuartUnit::ImperialQuartUnit()
+{
+   unitName = "qt";
+   SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = Imperial;
+}
+
+double ImperialQuartUnit::toSI( double amt ) const
+{
+   return amt * 1.1365225;
+}
+
+double ImperialQuartUnit::fromSI( double amt ) const
+{
+   return amt / 1.1365225;
+}
+
+// === ImperialCups ===
+ImperialCupUnit::ImperialCupUnit()
+{
+   unitName = "cup";
+   SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = Imperial;
+}
+
+double ImperialCupUnit::toSI( double amt ) const
+{
+   return amt * 0.284130625;
+}
+
+double ImperialCupUnit::fromSI( double amt ) const
+{
+   return amt / 0.284130625;
+}
+
+
 // === Imperial Tablepoons ===
 ImperialTablespoonUnit::ImperialTablespoonUnit()
 {
    unitName = "tbsp";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = Imperial;
 }
 
 double ImperialTablespoonUnit::toSI( double amt ) const
@@ -583,6 +592,8 @@ ImperialTeaspoonUnit::ImperialTeaspoonUnit()
 {
    unitName = "tsp";
    SIUnitName = "L";
+   _type = Volume;
+   _unitSystem = Imperial;
 }
 
 double ImperialTeaspoonUnit::toSI( double amt ) const
@@ -599,7 +610,9 @@ double ImperialTeaspoonUnit::fromSI( double amt ) const
 SecondUnit::SecondUnit()
 {
    unitName = "s";
-   SIUnitName = "min"; // Pretend the SI unit is minutes for the sake of BeerXML.
+   SIUnitName = "min";
+   _type = Time;
+   _unitSystem = Any;
 }
 
 double SecondUnit::toSI( double amt ) const
@@ -616,7 +629,9 @@ double SecondUnit::fromSI( double amt ) const
 MinuteUnit::MinuteUnit()
 {
    unitName = "min";
-   SIUnitName = "min"; // Pretend the SI unit is minutes for the sake of BeerXML.
+   SIUnitName = "min";
+   _type = Time;
+   _unitSystem = Any;
 }
 
 double MinuteUnit::toSI( double amt ) const
@@ -633,7 +648,9 @@ double MinuteUnit::fromSI( double amt ) const
 HourUnit::HourUnit()
 {
    unitName = "hr";
-   SIUnitName = "min"; // Pretend the SI unit is minutes for the sake of BeerXML.
+   SIUnitName = "min";
+   _type = Time;
+   _unitSystem = Any;
 }
 
 double HourUnit::toSI( double amt ) const
@@ -650,7 +667,9 @@ double HourUnit::fromSI( double amt ) const
 DayUnit::DayUnit()
 {
    unitName = "day";
-   SIUnitName = "min"; // Pretend the SI unit is minutes for the sake of BeerXML.
+   SIUnitName = "min";
+   _type = Time;
+   _unitSystem = Any;
 }
 
 double DayUnit::toSI( double amt ) const
@@ -668,6 +687,8 @@ CelsiusUnit::CelsiusUnit()
 {
    unitName = "C";
    SIUnitName = "C";
+   _type = Temp;
+   _unitSystem = SI;
 }
 
 double CelsiusUnit::toSI( double amt ) const
@@ -680,11 +701,13 @@ double CelsiusUnit::fromSI( double amt ) const
    return amt;
 }
 
-// === Celsius ===
+// === Fahrenheit ===
 FahrenheitUnit::FahrenheitUnit()
 {
    unitName = "F";
    SIUnitName = "C";
+   _type = Temp;
+   _unitSystem = USCustomary;
 }
 
 double FahrenheitUnit::toSI( double amt ) const
@@ -702,6 +725,8 @@ KelvinUnit::KelvinUnit()
 {
    unitName = "K";
    SIUnitName = "K";
+   _type = Temp;
+   _unitSystem = SI;
 }
 
 double KelvinUnit::toSI( double amt ) const
@@ -719,6 +744,8 @@ SRMUnit::SRMUnit()
 {
    unitName = "srm";
    SIUnitName = "srm";
+   _type = Color;
+   _unitSystem = Any;
 }
 
 double SRMUnit::toSI( double amt ) const
@@ -736,6 +763,8 @@ EBCUnit::EBCUnit()
 {
    unitName = "ebc";
    SIUnitName = "srm";
+   _type = Color;
+   _unitSystem = Any;
 }
 
 double EBCUnit::toSI( double amt ) const
@@ -747,3 +776,35 @@ double EBCUnit::fromSI( double amt ) const
 {
    return amt * 25.0/12.7;
 }
+
+// === Density ===
+SgUnit::SgUnit()
+{
+   unitName   = "sg";
+   SIUnitName = "sg";
+   _type = Density;
+   _unitSystem = Any;
+}
+
+double SgUnit::toSI( double amt ) const { return amt; }
+
+double SgUnit::fromSI( double amt ) const { return amt; }
+
+PlatoUnit::PlatoUnit()
+{
+   unitName = "P";
+   SIUnitName = "sg";
+   _type = Density;
+   _unitSystem = Any;
+}
+
+double PlatoUnit::toSI( double amt ) const
+{
+   return Algorithms::PlatoToSG_20C20C( amt );
+}
+
+double PlatoUnit::fromSI(double amt) const
+{
+   return Algorithms::SG_20C20C_toPlato(amt);
+}
+

@@ -70,12 +70,11 @@ public slots:
    //! Edit the equipment currently selected in our combobox.
    void equipmentSelected();
    //! If state==Qt::Checked, set the "calculate boil volume" checkbox. Otherwise, unset.
-   void updateCheckboxRecord(int state);
+   void updateCheckboxRecord();
    //! \brief set the default equipment, or unset the current equipment as the default
    void updateDefaultEquipment(int state);
-   
+
    void changed(QMetaProperty,QVariant);
-   void updateField();
 
 protected:
    //! User closed the dialog
@@ -85,7 +84,7 @@ private:
    Equipment* obsEquip;
    EquipmentListModel* equipmentListModel;
    BeerXMLSortProxyModel* equipmentSortProxyModel;
-   
+
    void showChanges();
 };
 

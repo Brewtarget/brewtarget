@@ -56,20 +56,6 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    connect( styleComboBox, SIGNAL(activated( const QString& )), this, SLOT( styleSelected(const QString&) ) );
 
    setStyle( styleListModel->at(styleComboBox->currentIndex()));
-
-   connect( lineEdit_ogMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_fgMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_ibuMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_colorMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_carbMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_abvMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
-
-   connect( lineEdit_ogMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_fgMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_ibuMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_colorMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_carbMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_abvMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void StyleEditor::setStyle( Style* s )
@@ -117,18 +103,18 @@ void StyleEditor::save()
    s->setStyleLetter( lineEdit_styleLetter->text() );
    s->setStyleGuide( lineEdit_styleGuide->text() );
    s->setType( static_cast<Style::Type>(comboBox_type->currentIndex()) );
-   s->setOgMin( lineEdit_ogMin->text().toDouble() );
-   s->setOgMax( lineEdit_ogMax->text().toDouble() );
-   s->setFgMin( lineEdit_fgMin->text().toDouble() );
-   s->setFgMax( lineEdit_fgMax->text().toDouble() );
-   s->setIbuMin( lineEdit_ibuMin->text().toDouble() );
-   s->setIbuMax( lineEdit_ibuMax->text().toDouble() );
-   s->setColorMin_srm( lineEdit_colorMin->text().toDouble() );
-   s->setColorMax_srm( lineEdit_colorMax->text().toDouble() );
-   s->setCarbMin_vol( lineEdit_carbMin->text().toDouble() );
-   s->setCarbMax_vol( lineEdit_carbMax->text().toDouble() );
-   s->setAbvMin_pct( lineEdit_abvMin->text().toDouble() );
-   s->setAbvMax_pct( lineEdit_abvMax->text().toDouble() );
+   s->setOgMin( lineEdit_ogMin->toSI() );
+   s->setOgMax( lineEdit_ogMax->toSI() );
+   s->setFgMin( lineEdit_fgMin->toSI() );
+   s->setFgMax( lineEdit_fgMax->toSI() );
+   s->setIbuMin( lineEdit_ibuMin->toSI() );
+   s->setIbuMax( lineEdit_ibuMax->toSI() );
+   s->setColorMin_srm( lineEdit_colorMin->toSI() );
+   s->setColorMax_srm( lineEdit_colorMax->toSI() );
+   s->setCarbMin_vol( lineEdit_carbMin->toSI() );
+   s->setCarbMax_vol( lineEdit_carbMax->toSI() );
+   s->setAbvMin_pct( lineEdit_abvMin->toSI() );
+   s->setAbvMax_pct( lineEdit_abvMax->toSI() );
    s->setProfile( textEdit_profile->toPlainText() );
    s->setIngredients( textEdit_ingredients->toPlainText() );
    s->setExamples( textEdit_examples->toPlainText() );
@@ -186,33 +172,6 @@ void StyleEditor::clear()
    textEdit_notes->setText(QString(""));
 }
 
-void StyleEditor::updateField()
-{
-
-   QObject* selection = sender();
-   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
-   double val;
-
-   if ( field == lineEdit_ogMin || field == lineEdit_fgMin ||
-        field == lineEdit_ogMax || field == lineEdit_fgMax  )
-   {
-      val = Brewtarget::densityQStringToSI(field->text());
-      field->setText(Brewtarget::displayOG( val, noUnit, true));
-   }
-   else if ( field == lineEdit_colorMin || field == lineEdit_colorMax )
-   {
-      val = field->text().toDouble();
-      field->setText(Brewtarget::displayColor(val, noUnit, false));
-   }
-   else 
-   {
-      //Everything else is a number, so just format nicely
-      val = field->text().toDouble();
-      field->setText(Brewtarget::displayAmount(val));
-   }
-
-}
-
 void StyleEditor::showChanges(QMetaProperty* metaProp)
 {
    bool updateAll = false;
@@ -233,13 +192,6 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       val = metaProp->read(s);
    }
 
-   //styleComboBox->setIndexByStyle(s);
-   // Update the color label text.
-   if (Brewtarget::getColorUnit() == displaySrm)
-      label_10->setText(QString("Color (Lovibond)"));
-   else
-      label_10->setText(QString("Color (EBC)"));
-
    if( updateAll )
    {
       lineEdit_name->setText(s->name());
@@ -248,18 +200,18 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_styleLetter->setText(s->styleLetter());
       lineEdit_styleGuide->setText(s->styleGuide());
       comboBox_type->setCurrentIndex(s->type());
-      lineEdit_ogMin->setText(Brewtarget::displayOG(s->ogMin(),noUnit,true));
-      lineEdit_ogMax->setText(Brewtarget::displayOG(s->ogMax(),noUnit,true));
-      lineEdit_fgMin->setText(Brewtarget::displayFG(s->fgMin(),s->ogMin(),noUnit,true));
-      lineEdit_fgMax->setText(Brewtarget::displayFG(s->fgMax(),s->ogMax(),noUnit,true));
-      lineEdit_ibuMin->setText(Brewtarget::displayAmount(s->ibuMin(), 0));
-      lineEdit_ibuMax->setText(Brewtarget::displayAmount(s->ibuMax(), 0));
-      lineEdit_colorMin->setText(Brewtarget::displayColor(s->colorMin_srm(),noUnit,false));
-      lineEdit_colorMax->setText(Brewtarget::displayColor(s->colorMax_srm(),noUnit,false));
-      lineEdit_carbMin->setText(Brewtarget::displayAmount(s->carbMin_vol(), 0));
-      lineEdit_carbMax->setText(Brewtarget::displayAmount(s->carbMax_vol(), 0));
-      lineEdit_abvMin->setText(Brewtarget::displayAmount(s->abvMin_pct(), 0));
-      lineEdit_abvMax->setText(Brewtarget::displayAmount(s->abvMax_pct(), 0));
+      lineEdit_ogMin->setText(s);
+      lineEdit_ogMax->setText(s);
+      lineEdit_fgMin->setText(s);
+      lineEdit_fgMax->setText(s);
+      lineEdit_ibuMin->setText(s);
+      lineEdit_ibuMax->setText(s);
+      lineEdit_colorMin->setText(s);
+      lineEdit_colorMax->setText(s);
+      lineEdit_carbMin->setText(s);
+      lineEdit_carbMax->setText(s);
+      lineEdit_abvMin->setText(s);
+      lineEdit_abvMax->setText(s);
       textEdit_profile->setText(s->profile());
       textEdit_ingredients->setText(s->ingredients());
       textEdit_examples->setText(s->examples());
@@ -281,29 +233,29 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
    else if( propName == "type" )
       comboBox_type->setCurrentIndex(val.toInt());
    else if( propName == "ogMin" )
-      lineEdit_ogMin->setText(Brewtarget::displayOG(val.toDouble(),noUnit,true));
+      lineEdit_ogMin->setText(val);
    else if( propName == "ogMax" )
-      lineEdit_ogMax->setText(Brewtarget::displayOG(val.toDouble(),noUnit,true));
+      lineEdit_ogMax->setText(val);
    else if( propName == "fgMin" )
-      lineEdit_fgMin->setText(Brewtarget::displayFG(val.toDouble(),s->ogMin(), noUnit,true));
+      lineEdit_fgMin->setText(val);
    else if( propName == "fgMax" )
-      lineEdit_fgMax->setText(Brewtarget::displayFG(val.toDouble(),s->ogMax(), noUnit,true));
+      lineEdit_fgMax->setText(val);
    else if( propName == "ibuMin" )
-      lineEdit_ibuMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_ibuMin->setText(val);
    else if( propName == "ibuMax" )
-      lineEdit_ibuMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_ibuMax->setText(val);
    else if( propName == "colorMin_srm" )
-      lineEdit_colorMin->setText(Brewtarget::displayColor(val.toDouble(),noUnit,false));
+      lineEdit_colorMin->setText(val);
    else if( propName == "colorMax_srm" )
-      lineEdit_colorMax->setText(Brewtarget::displayColor(val.toDouble(),noUnit,false));
+      lineEdit_colorMax->setText(val);
    else if( propName == "carbMin_vol" )
-      lineEdit_carbMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_carbMin->setText(val);
    else if( propName == "carbMax_vol" )
-      lineEdit_carbMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_carbMax->setText(val);
    else if( propName == "abvMin_pct" )
-      lineEdit_abvMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_abvMin->setText(val);
    else if( propName == "abvMax_pct" )
-      lineEdit_abvMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_abvMax->setText(val);
    else if( propName == "profile" )
       textEdit_profile->setText(val.toString());
    else if( propName == "ingredients" )

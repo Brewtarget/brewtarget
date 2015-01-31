@@ -233,8 +233,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>645</width>
-           <height>403</height>
+           <width>604</width>
+           <height>373</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -253,6 +253,9 @@
              <property name="acceptDrops">
               <bool>true</bool>
              </property>
+             <property name="configSection" stdset="0">
+              <string>tab_recipe</string>
+             </property>
              <attribute name="title">
               <string>Recipe</string>
              </attribute>
@@ -269,6 +272,9 @@
                   </property>
                   <property name="text">
                    <string>Name</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>lineEdit_name</cstring>
                   </property>
                  </widget>
                 </item>
@@ -309,7 +315,7 @@
                   <item>
                    <layout class="QGridLayout" name="gridLayout_2">
                     <item row="6" column="0">
-                     <widget class="BtVolumeLabel" name="targetBoilSizeLabel">
+                     <widget class="BtVolumeLabel" name="label_targetBoilSize">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -322,8 +328,8 @@
                       <property name="text">
                        <string>Target Boil Size</string>
                       </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">boilSize_l</string>
+                      <property name="buddy">
+                       <cstring>lineEdit_boilSize</cstring>
                       </property>
                      </widget>
                     </item>
@@ -366,18 +372,8 @@
                       </item>
                      </layout>
                     </item>
-                    <item row="7" column="1">
-                     <widget class="QLabel" name="label_calcBoilSize">
-                      <property name="text">
-                       <string>5 gal</string>
-                      </property>
-                      <property name="unit" stdset="0">
-                       <string notr="true">volume</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="6" column="1">
-                     <widget class="QLineEdit" name="lineEdit_boilSize">
+                     <widget class="BtVolumeEdit" name="lineEdit_boilSize">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -402,8 +398,8 @@
                       <property name="alignment">
                        <set>Qt::AlignJustify|Qt::AlignVCenter</set>
                       </property>
-                      <property name="unit" stdset="0">
-                       <string notr="true">volume</string>
+                      <property name="editField" stdset="0">
+                       <string notr="true">boilSize_l</string>
                       </property>
                      </widget>
                     </item>
@@ -418,10 +414,13 @@
                       <property name="text">
                        <string>Efficiency (%)</string>
                       </property>
+                      <property name="buddy">
+                       <cstring>lineEdit_efficiency</cstring>
+                      </property>
                      </widget>
                     </item>
                     <item row="7" column="0">
-                     <widget class="BtVolumeLabel" name="calculatedBoilSizeLabel">
+                     <widget class="BtVolumeLabel" name="label_calcBoilSize">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -434,13 +433,13 @@
                       <property name="text">
                        <string>Calculated Boil Size</string>
                       </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">boilVolume_l</string>
+                      <property name="buddy">
+                       <cstring>lineEdit_calcBoilSize</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="5" column="0">
-                     <widget class="BtVolumeLabel" name="calculatedBatchSizeLabel">
+                     <widget class="BtVolumeLabel" name="label_calcBatchSize">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -453,13 +452,13 @@
                       <property name="text">
                        <string>Calculated Batch Size</string>
                       </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">finalVolume_l</string>
+                      <property name="buddy">
+                       <cstring>lineEdit_calcBatchSize</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="8" column="1">
-                     <widget class="QLineEdit" name="lineEdit_efficiency">
+                     <widget class="BtGenericEdit" name="lineEdit_efficiency">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -478,21 +477,17 @@
                         <height>16777215</height>
                        </size>
                       </property>
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::DefaultContextMenu</enum>
+                      </property>
                       <property name="toolTip">
                        <string>The extraction efficiency you expect</string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                       </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="1">
-                     <widget class="QLabel" name="label_calcBatchSize">
-                      <property name="text">
-                       <string>5 gal</string>
-                      </property>
-                      <property name="unit" stdset="0">
-                       <string notr="true">volume</string>
+                      <property name="editField" stdset="0">
+                       <string notr="true">efficiency_pct</string>
                       </property>
                      </widget>
                     </item>
@@ -507,23 +502,32 @@
                       <property name="text">
                        <string>Style</string>
                       </property>
+                      <property name="buddy">
+                       <cstring>styleButton</cstring>
+                      </property>
                      </widget>
                     </item>
                     <item row="9" column="0">
-                     <widget class="QLabel" name="label_boiltime">
+                     <widget class="BtTimeLabel" name="label_boiltime">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::CustomContextMenu</enum>
+                      </property>
                       <property name="text">
                        <string>Boil Time</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>lineEdit_boilTime</cstring>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="1">
-                     <widget class="QLineEdit" name="lineEdit_batchSize">
+                     <widget class="BtVolumeEdit" name="lineEdit_batchSize">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -548,10 +552,29 @@
                       <property name="alignment">
                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                       </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">batchSize_l</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="equipmentLabel">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Equipment</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>equipmentButton</cstring>
+                      </property>
                      </widget>
                     </item>
                     <item row="9" column="1">
-                     <widget class="QLineEdit" name="lineEdit_boilTime">
+                     <widget class="BtTimeEdit" name="lineEdit_boilTime">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                         <horstretch>0</horstretch>
@@ -570,13 +593,19 @@
                         <height>16777215</height>
                        </size>
                       </property>
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::DefaultContextMenu</enum>
+                      </property>
                       <property name="alignment">
                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">boilTime_min</string>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="0">
-                     <widget class="BtVolumeLabel" name="targetBatchSizeLabel">
+                     <widget class="BtVolumeLabel" name="label_targetBatchSize">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -589,21 +618,15 @@
                       <property name="text">
                        <string>Target Batch Size</string>
                       </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">batchSize_l</string>
+                      <property name="buddy">
+                       <cstring>lineEdit_batchSize</cstring>
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="equipmentLabel">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
+                    <item row="11" column="0">
+                     <widget class="QLabel" name="label_caloriesperoz">
                       <property name="text">
-                       <string>Equipment</string>
+                       <string>Calories/12oz</string>
                       </property>
                      </widget>
                     </item>
@@ -653,38 +676,15 @@
                      </layout>
                     </item>
                     <item row="10" column="0">
-                     <widget class="BtGravityLabel" name="boilSgLabel">
+                     <widget class="BtDensityLabel" name="label_boilSg">
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
                       <property name="text">
                        <string>Boil SG</string>
                       </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">boilGrav</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="11" column="0">
-                     <widget class="QLabel" name="label_5">
-                      <property name="text">
-                       <string>Calories/12oz</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="10" column="1">
-                     <widget class="QLabel" name="label_boilSG">
-                      <property name="font">
-                       <font>
-                        <family>Sans Serif</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                        <kerning>true</kerning>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>1.0</string>
+                      <property name="buddy">
+                       <cstring>lineEdit_boilSg</cstring>
                       </property>
                      </widget>
                     </item>
@@ -701,6 +701,111 @@
                       </property>
                       <property name="text">
                        <string>1.0</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="BtVolumeEdit" name="lineEdit_calcBatchSize">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="mouseTracking">
+                       <bool>false</bool>
+                      </property>
+                      <property name="acceptDrops">
+                       <bool>false</bool>
+                      </property>
+                      <property name="autoFillBackground">
+                       <bool>true</bool>
+                      </property>
+                      <property name="frame">
+                       <bool>false</bool>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">finalVolume_l</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="1">
+                     <widget class="BtVolumeEdit" name="lineEdit_calcBoilSize">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="mouseTracking">
+                       <bool>false</bool>
+                      </property>
+                      <property name="acceptDrops">
+                       <bool>false</bool>
+                      </property>
+                      <property name="frame">
+                       <bool>false</bool>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">boilVolume_l</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="10" column="1">
+                     <widget class="BtDensityEdit" name="lineEdit_boilSg">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777214</height>
+                       </size>
+                      </property>
+                      <property name="mouseTracking">
+                       <bool>false</bool>
+                      </property>
+                      <property name="acceptDrops">
+                       <bool>false</bool>
+                      </property>
+                      <property name="frame">
+                       <bool>false</bool>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">boilGrav</string>
                       </property>
                      </widget>
                     </item>
@@ -732,14 +837,14 @@
                  <layout class="QVBoxLayout" name="verticalLayout_lcd">
                   <item>
                    <layout class="QGridLayout" name="gridLayout">
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <property name="horizontalSpacing">
                      <number>4</number>
                     </property>
                     <property name="verticalSpacing">
                      <number>5</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
                     </property>
                     <item row="4" column="1">
                      <widget class="StyleRangeWidget" name="styleRangeWidget_srm" native="true">
@@ -813,7 +918,7 @@
                      </widget>
                     </item>
                     <item row="0" column="0">
-                     <widget class="BtGravityLabel" name="oGLabel">
+                     <widget class="BtDensityLabel" name="oGLabel">
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
@@ -826,7 +931,7 @@
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="BtGravityLabel" name="fGLabel">
+                     <widget class="BtDensityLabel" name="fGLabel">
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
@@ -839,7 +944,7 @@
                      </widget>
                     </item>
                     <item row="5" column="0">
-                     <widget class="QLabel" name="label_4">
+                     <widget class="QLabel" name="label_ibugu">
                       <property name="text">
                        <string>IBU/GU</string>
                       </property>
@@ -991,8 +1096,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>645</width>
-           <height>334</height>
+           <width>604</width>
+           <height>362</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1544,7 +1649,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>20</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2089,6 +2194,69 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtTimeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTimeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtColorLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CustomComboBox</class>
+   <extends>QComboBox</extends>
+   <header>CustomComboBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>IbuGuSlider</class>
    <extends>QWidget</extends>
    <header>IbuGuSlider.h</header>
@@ -2107,21 +2275,6 @@
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
    <header>RecipeExtrasWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtGravityLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>CustomComboBox</class>
-   <extends>QComboBox</extends>
-   <header>CustomComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>EquipmentButton</class>
@@ -2157,11 +2310,6 @@
    <class>YeastTreeView</class>
    <extends>QTreeView</extends>
    <header>BtTreeView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtColorLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
   </customwidget>
   <customwidget>
    <class>StyleButton</class>
@@ -2240,5 +2388,102 @@
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>label_targetBatchSize</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_batchSize</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>536</x>
+     <y>199</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_targetBoilSize</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_boilSize</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>536</x>
+     <y>245</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_calcBatchSize</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_calcBatchSize</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>536</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_calcBoilSize</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_calcBoilSize</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>536</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>265</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_boilSg</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_boilSg</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>536</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_boiltime</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_boilTime</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>455</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>588</x>
+     <y>306</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

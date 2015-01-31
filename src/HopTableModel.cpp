@@ -30,6 +30,7 @@
 #include <QStyleOptionViewItem>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QHeaderView>
 
 #include "database.h"
 #include "hop.h"
@@ -41,11 +42,16 @@
 #include "brewtarget.h"
 
 HopTableModel::HopTableModel(QTableView* parent, bool editable)
-   : QAbstractTableModel(parent), colFlags(HOPNUMCOLS), _inventoryEditable(false), recObs(0), parentTableWidget(parent), showIBUs(false)
+   : QAbstractTableModel(parent),
+     colFlags(HOPNUMCOLS),
+     _inventoryEditable(false),
+     recObs(0),
+     parentTableWidget(parent),
+     showIBUs(false)
 {
    hopObs.clear();
    setObjectName("hopTable");
-   
+
    int i;
    for( i = 0; i < HOPNUMCOLS; ++i )
    {
@@ -57,6 +63,10 @@ HopTableModel::HopTableModel(QTableView* parent, bool editable)
          colFlags[i] = Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
             Qt::ItemIsEnabled;
    }
+
+   QHeaderView* headerView = parentTableWidget->horizontalHeader();
+   headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
 }
 
 HopTableModel::~HopTableModel()
@@ -71,7 +81,7 @@ void HopTableModel::observeRecipe(Recipe* rec)
       disconnect( recObs, 0, this, 0 );
       removeAll();
    }
-   
+
    recObs = rec;
    if( recObs )
    {
@@ -112,14 +122,14 @@ void HopTableModel::addHop(Hop* hop)
       )
    )
       return;
-   
+
    int size = hopObs.size();
    beginInsertRows( QModelIndex(), size, size );
    hopObs.append(hop);
    connect( hop, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
-   
+
    if( parentTableWidget )
    {
       parentTableWidget->resizeColumnsToContents();
@@ -131,19 +141,19 @@ void HopTableModel::addHops(QList<Hop*> hops)
 {
    QList<Hop*>::iterator i;
    QList<Hop*> tmp;
-   
+
    for( i = hops.begin(); i != hops.end(); i++ )
    {
       if( !hopObs.contains(*i) )
          tmp.append(*i);
    }
-   
+
    int size = hopObs.size();
    if (size+tmp.size())
    {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       hopObs.append(tmp);
-      
+
       for( i = tmp.begin(); i != tmp.end(); i++ )
          connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
@@ -155,7 +165,7 @@ void HopTableModel::addHops(QList<Hop*> hops)
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-   
+
 }
 
 bool HopTableModel::removeHop(Hop* hop)
@@ -178,7 +188,7 @@ bool HopTableModel::removeHop(Hop* hop)
 
       return true;
    }
-      
+
    return false;
 }
 
@@ -203,7 +213,7 @@ void HopTableModel::removeAll()
 void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
-   
+
    // Find the notifier in the list
    Hop* hopSender = qobject_cast<Hop*>(sender());
    if( hopSender )
@@ -211,13 +221,13 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
       i = hopObs.indexOf(hopSender);
       if( i < 0 )
          return;
-      
+
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, HOPNUMCOLS-1));
       emit headerDataChanged( Qt::Vertical, i, i );
       return;
    }
-   
+
    // See if sender is our recipe.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
    if( recSender && recSender == recObs )
@@ -249,7 +259,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
    int col = index.column();
    unitScale scale;
    unitDisplay unit;
-   
+
    // Ensure the row is ok.
    if( index.row() >= (int)hopObs.size() )
    {
@@ -295,10 +305,12 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
          else
             return QVariant();
       case HOPTIMECOL:
-         if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->time_min(), Units::minutes) );
-         else
+         if( role != Qt::DisplayRole )
             return QVariant();
+
+         scale = displayScale(col);
+
+         return QVariant( Brewtarget::displayAmount(row->time_min(), Units::minutes, 0, noUnit, scale) );
       case HOPFORMCOL:
         if ( role == Qt::DisplayRole )
           return QVariant( row->formStringTr() );
@@ -322,7 +334,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
             return QVariant(tr("Name"));
          case HOPALPHACOL:
             return QVariant(tr("Alpha %"));
-       case HOPINVENTORYCOL:
+         case HOPINVENTORYCOL:
             return QVariant(tr("Inventory"));
          case HOPAMOUNTCOL:
             return QVariant(tr("Amount"));
@@ -350,122 +362,93 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
 Qt::ItemFlags HopTableModel::flags(const QModelIndex& index ) const
 {
    int col = index.column();
-   
+
    return colFlags[col];
 }
 
 bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Hop *row;
-   QString val;
-   
+   bool retVal = false;
+
    if( index.row() >= (int)hopObs.size() || role != Qt::EditRole )
       return false;
-   else
-      row = hopObs[index.row()];
-   
+
+   row = hopObs[index.row()];
+
    switch( index.column() )
    {
       case HOPNAMECOL:
-         if( value.canConvert(QVariant::String))
-         {
+         retVal = value.canConvert(QVariant::String);
+         if( retVal )
             row->setName(value.toString());
-            return true;
-         }
-         else
-            return false;
+         break;
       case HOPALPHACOL:
-         if( value.canConvert(QVariant::Double) )
-         {
+         retVal = value.canConvert(QVariant::Double);
+         if( retVal )
             row->setAlpha_pct( value.toDouble() );
-            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
-            return true;
-         }
-         else
-            return false;
+         break;
+
       case HOPINVENTORYCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            val = value.toString();
-            if (!Brewtarget::hasUnits(val))
-               val = QString("%1%2").arg(val).arg( Brewtarget::getWeightUnitSystem() == SI ? "g" : "oz");
-
-            row->setInventoryAmount( Brewtarget::weightQStringToSI(val));
-            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
-            return true;
-         }
-         else
-            return false;
+         retVal = value.canConvert(QVariant::String);
+         if( retVal )
+            row->setInventoryAmount( Brewtarget::qStringToSI(value.toString(),Units::kilograms, displayUnit(HOPINVENTORYCOL)));
+         break;
       case HOPAMOUNTCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            val = value.toString();
-            if (!Brewtarget::hasUnits(val))
-               val = QString("%1%2").arg(val).arg( Brewtarget::getWeightUnitSystem() == SI ? "g" : "oz");
-
-            row->setAmount_kg( Brewtarget::weightQStringToSI(val));
-            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
-            return true;
-         }
-         else
-            return false;
+         retVal = value.canConvert(QVariant::String);
+         if( retVal )
+            row->setAmount_kg( Brewtarget::qStringToSI(value.toString(), Units::kilograms, displayUnit(HOPAMOUNTCOL)));
+         break;
       case HOPUSECOL:
-         if( value.canConvert(QVariant::Int) )
-         {
+         retVal = value.canConvert(QVariant::Int);
+         if( retVal )
             row->setUse(static_cast<Hop::Use>(value.toInt()));
-            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
-            return true;
-         }
-         else
-            return false;
+         break;
       case HOPFORMCOL:
-         if( value.canConvert(QVariant::Int))
-         {
+         retVal = value.canConvert(QVariant::Int);
+         if( retVal )
             row->setForm(static_cast<Hop::Form>(value.toInt()));
-            headerDataChanged( Qt::Vertical, index.row(), index.row() );
-            return true;
-         }
+         break;
       case HOPTIMECOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            double min = Brewtarget::timeQStringToSI(value.toString());
-            row->setTime_min( min );
-            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
-            return true;
-         }
-         else
-            return false;
+         retVal = value.canConvert(QVariant::String);
+         if( retVal )
+            row->setTime_min( Brewtarget::qStringToSI(value.toString(),Units::minutes));
+         break;
       default:
          Brewtarget::logW(QString("HopTableModel::setdata Bad column: %1").arg(index.column()));
          return false;
    }
+   if ( retVal )
+      headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
+
+   return retVal;
 }
 
 unitDisplay HopTableModel::displayUnit(int column) const
-{ 
+{
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
       return noUnit;
 
-   return (unitDisplay)Brewtarget::option(attribute, QVariant(-1), this, Brewtarget::UNIT).toInt();
+   return (unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
 }
 
 unitScale HopTableModel::displayScale(int column) const
-{ 
+{
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
       return noScale;
 
-   return (unitScale)Brewtarget::option(attribute, QVariant(-1), this, Brewtarget::SCALE).toInt();
+   return (unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
 }
 
 // We need to:
 //   o clear the custom scale if set
 //   o clear any custom unit from the rows
 //      o which should have the side effect of clearing any scale
-void HopTableModel::setDisplayUnit(int column, unitDisplay displayUnit) 
+void HopTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
 {
    // Hop* row; // disabled per-cell magic
    QString attribute = generateName(column);
@@ -473,8 +456,8 @@ void HopTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayUnit,this,Brewtarget::UNIT); 
-   Brewtarget::setOption(attribute,noScale,this,Brewtarget::SCALE);
+   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
+   Brewtarget::setOption(attribute,noScale,this->objectName(),Brewtarget::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -486,8 +469,8 @@ void HopTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
 }
 
 // Setting the scale should clear any cell-level scaling options
-void HopTableModel::setDisplayScale(int column, unitScale displayScale) 
-{ 
+void HopTableModel::setDisplayScale(int column, unitScale displayScale)
+{
    // Fermentable* row; //disabled per-cell magic
 
    QString attribute = generateName(column);
@@ -495,7 +478,7 @@ void HopTableModel::setDisplayScale(int column, unitScale displayScale)
    if ( attribute.isEmpty() )
       return;
 
-   Brewtarget::setOption(attribute,displayScale,this,Brewtarget::SCALE); 
+   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
 
    /* disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
@@ -513,15 +496,60 @@ QString HopTableModel::generateName(int column) const
    switch(column)
    {
       case HOPINVENTORYCOL:
-         attribute = "amount_kg";
+         attribute = "inventory_kg";
          break;
       case HOPAMOUNTCOL:
          attribute = "amount_kg";
+         break;
+      case HOPTIMECOL:
+         attribute = "time_min";
          break;
       default:
          attribute = "";
    }
    return attribute;
+}
+
+void HopTableModel::contextMenu(const QPoint &point)
+{
+   QObject* calledBy = sender();
+   QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
+
+   int selected = hView->logicalIndexAt(point);
+   unitDisplay currentUnit;
+   unitScale  currentScale;
+
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
+   currentUnit  = displayUnit(selected);
+   currentScale = displayScale(selected);
+
+   QMenu* menu;
+   QAction* invoked;
+
+   switch(selected)
+   {
+      case HOPINVENTORYCOL:
+      case HOPAMOUNTCOL:
+         menu = Brewtarget::setupMassMenu(parentTableWidget,currentUnit, currentScale);
+         break;
+      case HOPTIMECOL:
+         menu = Brewtarget::setupTimeMenu(parentTableWidget,currentScale);
+         break;
+      default:
+         return;
+   }
+
+   invoked = menu->exec(hView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   QWidget* pMenu = invoked->parentWidget();
+   if ( selected != HOPTIMECOL && pMenu == menu )
+      setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+   else
+      setDisplayScale(selected,(unitScale)invoked->data().toInt());
+
 }
 
 // Returns null on failure.
@@ -542,7 +570,7 @@ HopItemDelegate::HopItemDelegate(QObject* parent)
         : QItemDelegate(parent)
 {
 }
-        
+
 QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex &index) const
 {
    if ( index.column() == HOPUSECOL )

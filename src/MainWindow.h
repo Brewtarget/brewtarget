@@ -114,10 +114,10 @@ public:
    void setBrewNote(BrewNote* bNote);
 
 public slots:
-   
+
    //! \brief Accepts Recipe changes, and takes appropriate action to show the changes.
    void changed(QMetaProperty,QVariant);
-   
+
    void treeActivated(const QModelIndex &index);
    //! \brief Set recipe given an QModelIndex
    void setRecipe(const QModelIndex &index);
@@ -152,7 +152,7 @@ public slots:
 
    //! \brief Show the pitch dialog.
    void showPitchDialog();
-   
+
    //! \brief Add given Hop to the Recipe.
    void addHopToRecipe(Hop *hop);
    //! \brief Remove selected Hop from the Recipe.
@@ -199,7 +199,7 @@ public slots:
    void importFiles();
    //! \brief Create a duplicate of the current recipe.
    void copyRecipe();
-  
+
    //! \brief Create a new folder
    void newFolder();
    void renameFolder();
@@ -240,11 +240,11 @@ public slots:
 
    //! \brief Merges two database files.
    void updateDatabase();
-  
+
    //! \brief Catches a QNetworkReply signal and gets info about any new version available.
    void finishCheckingVersion();
 
-   void redisplayLabel(QString field);
+   void redisplayLabel(unitDisplay oldUnit, unitScale oldScale);
 
    void showEquipmentEditor();
    void showStyleEditor();
@@ -263,32 +263,21 @@ protected:
 private slots:
    /*!
     * \brief Make the widgets in the window update changes.
-    * 
+    *
     * Updates all the widgets with info about the currently
     * selected Recipe, except for the tables.
-    * 
+    *
     * \param prop Not yet used. Will indicate which Recipe property has changed.
     */
    void showChanges(QMetaProperty* prop = 0);
-   
-   //! \brief Displays custom Fermentable context menu.
-   void fermentableContextMenu(const QPoint& point);
-   //! \brief Displays custom Hop context menu.
-   void hopContextMenu(const QPoint& point);
-   //! \brief Displays custom MashStep context menu.
-   void mashStepContextMenu(const QPoint& point);
-   //! \brief Displays custom Misc context menu.
-   void miscContextMenu(const QPoint& point);
-   //! \brief Displays custom Yeast context menu.
-   void yeastContextMenu(const QPoint& point);
-   
+
 private:
    Recipe* recipeObs;
    Style* recStyle;
    Equipment* recEquip;
-   
-   QPalette numPalette_old, numPalette_tooLow, numPalette_good, numPalette_tooHigh;
-   
+
+   QString highSS, lowSS, goodSS, boldSS; // Palette replacements
+
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
    QFileDialog* fileSaver;
@@ -335,7 +324,7 @@ private:
    MashListModel* mashListModel;
    StyleListModel* styleListModel;
    StyleSortFilterProxyModel* styleProxyModel;
-  
+
    NamedMashEditor* namedMashEditor;
    NamedMashEditor* singleNamedMashEditor;
 
@@ -362,7 +351,7 @@ private:
    //! \brief Set the context menus.
    void setupContextMenu();
 
-   void updateGravitySlider(QString attribute, RangedSlider* slider, double max);
+   void updateDensitySlider(QString attribute, RangedSlider* slider, double max);
    void updateColorSlider(QString attribute, RangedSlider* slider);
    // Copy methods used by copySelected()
    void copyThis(Recipe *rec);
@@ -373,7 +362,7 @@ private:
    void copyThis(Style *style);
    void copyThis(Yeast *yeast);
 
-   void convertedMsg(); 
+   void convertedMsg();
    void importMsg();
 };
 

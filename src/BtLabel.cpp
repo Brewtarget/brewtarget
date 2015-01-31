@@ -35,9 +35,96 @@ BtLabel::BtLabel(QWidget *parent, LabelType lType)
 {
    whatAmI = lType;
    btParent = parent;
+   _menu = 0;
 
    connect(this,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(popContextMenu(const QPoint&)));
 
+}
+
+void BtLabel::initializeSection()
+{
+   QWidget* mybuddy;
+
+   if ( ! _section.isEmpty() )
+      return;
+
+   // as much as I dislike it, dynamic properties can't be referenced on
+   // initialization.
+   mybuddy = buddy();
+   // If the label has the configSection defined, use it
+   // otherwise, if the paired field has a configSection, use it
+   // otherwise, if the parent object has a configSection, use it
+   // if all else fails, get the parent's object name
+   if ( property("configSection").isValid() )
+      _section = property("configSection").toString();
+   else if ( mybuddy && mybuddy->property("configSection").isValid() )
+      _section = mybuddy->property("configSection").toString();
+   else if ( btParent->property("configSection").isValid() )
+      _section = btParent->property("configSection").toString();
+   else 
+   {
+      qDebug() << "this failed" << this;
+      _section = btParent->objectName();
+   }
+}
+
+void BtLabel::initializeProperty()
+{
+   QWidget* mybuddy;
+
+   if ( ! propertyName.isEmpty() )
+      return;
+
+   mybuddy = buddy();
+   if ( property("editField").isValid() )
+      propertyName = property("editField").toString();
+   else if ( mybuddy && mybuddy->property("editField").isValid() )
+      propertyName = mybuddy->property("editField").toString();
+   else
+      qDebug() << "That failed miserably";
+}
+
+void BtLabel::initializeMenu()
+{
+   unitDisplay unit;
+   unitScale scale;
+
+   if ( _menu )
+      return;
+
+   unit  = (unitDisplay)Brewtarget::option(propertyName, noUnit, _section, Brewtarget::UNIT).toInt();
+   scale = (unitScale)Brewtarget::option(propertyName, noScale, _section, Brewtarget::SCALE).toInt();
+
+   switch( whatAmI )
+   {
+      case COLOR:
+         _menu = Brewtarget::setupColorMenu(btParent,unit);
+         break;
+      case DENSITY:
+         _menu = Brewtarget::setupDensityMenu(btParent,unit);
+         break;
+      case MASS:
+         _menu = Brewtarget::setupMassMenu(btParent,unit,scale);
+         break;
+      case MIXED:
+         // This looks weird, but it works.
+         _menu = Brewtarget::setupVolumeMenu(btParent,unit,scale,false); // no scale menu
+         break;
+      case TEMPERATURE:
+         _menu = Brewtarget::setupTemperatureMenu(btParent,unit);
+         break;
+      case VOLUME:
+         _menu = Brewtarget::setupVolumeMenu(btParent,unit,scale);
+         break;
+      case TIME:
+         _menu = Brewtarget::setupTimeMenu(btParent,scale); //scale menu only
+         break;
+      case DATE:
+         _menu = Brewtarget::setupDateMenu(btParent,unit); // unit only
+         break;
+      default:
+         return;
+   }
 }
 
 void BtLabel::popContextMenu(const QPoint& point)
@@ -45,9 +132,6 @@ void BtLabel::popContextMenu(const QPoint& point)
    QObject* calledBy = sender();
    QWidget* widgie;
    QAction *invoked;
-   QMenu* menu;
-   unitDisplay unit;
-   unitScale scale;
 
    if ( calledBy == 0 )
       return;
@@ -56,63 +140,56 @@ void BtLabel::popContextMenu(const QPoint& point)
    if ( widgie == 0 )
       return;
 
-   propertyName = property("editField").toString();
-   unit  = (unitDisplay)Brewtarget::option(propertyName, noUnit, btParent, Brewtarget::UNIT).toInt();
-   scale = (unitScale)Brewtarget::option(propertyName, noScale, btParent, Brewtarget::SCALE).toInt();
+   initializeProperty();
+   initializeSection();
+   initializeMenu();
 
-   switch( whatAmI )
-   {
-      case COLOR:
-         menu = Brewtarget::setupColorMenu(btParent,unit);
-         break;
-      case GRAVITY:
-         menu = Brewtarget::setupGravityMenu(btParent,unit);
-         break;
-      case MASS:
-         menu = Brewtarget::setupMassMenu(btParent,unit,scale);
-         break;
-      case TEMPERATURE:
-         menu = Brewtarget::setupTemperatureMenu(btParent,unit);
-         break;
-      case VOLUME:
-         menu = Brewtarget::setupVolumeMenu(btParent,unit,scale);
-         break;
-      default:
-         return;
-   }
+   invoked = _menu->exec(widgie->mapToGlobal(point));
+   unitDisplay unit = (unitDisplay)Brewtarget::option(propertyName, noUnit, _section, Brewtarget::UNIT).toInt();
+   unitScale scale  = (unitScale)Brewtarget::option(propertyName, noUnit, _section, Brewtarget::SCALE).toInt();
 
-   invoked = menu->exec(widgie->mapToGlobal(point));
    if ( invoked == 0 )
       return;
 
    QWidget* pMenu = invoked->parentWidget();
-   if ( pMenu == menu )
+   if ( pMenu == _menu )
    {
-      Brewtarget::setOption(propertyName, invoked->data(), btParent, Brewtarget::UNIT);
-      if ( Brewtarget::hasOption(propertyName, btParent, Brewtarget::SCALE) )
-         Brewtarget::setOption(propertyName, noScale, btParent, Brewtarget::SCALE);
+      Brewtarget::setOption(propertyName, invoked->data(), _section, Brewtarget::UNIT);
+      // reset the scale if required
+      if ( Brewtarget::hasOption(propertyName, _section, Brewtarget::SCALE) )
+         Brewtarget::setOption(propertyName, noScale, _section, Brewtarget::SCALE);
    }
    else
-      Brewtarget::setOption(propertyName, invoked->data(), btParent, Brewtarget::SCALE);
+      Brewtarget::setOption(propertyName, invoked->data(), _section, Brewtarget::SCALE);
 
    // To make this all work, I need to set ogMin and ogMax when og is set.
    if ( propertyName == "og" )
    {
-      Brewtarget::setOption("ogMin", invoked->data(),btParent, Brewtarget::UNIT);
-      Brewtarget::setOption("ogMax", invoked->data(),btParent, Brewtarget::UNIT);
+      Brewtarget::setOption("ogMin", invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption("ogMax", invoked->data(),_section, Brewtarget::UNIT);
    }
    else if ( propertyName == "fg" )
    {
-      Brewtarget::setOption("fgMin", invoked->data(),btParent, Brewtarget::UNIT);
-      Brewtarget::setOption("fgMax", invoked->data(),btParent, Brewtarget::UNIT);
+      Brewtarget::setOption("fgMin", invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption("fgMax", invoked->data(),_section, Brewtarget::UNIT);
    }
    else if ( propertyName == "color_srm" )
    {
-      Brewtarget::setOption("colorMin_srm", invoked->data(),btParent, Brewtarget::UNIT);
-      Brewtarget::setOption("colorMax_srm", invoked->data(),btParent, Brewtarget::UNIT);
+      Brewtarget::setOption("colorMin_srm", invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption("colorMax_srm", invoked->data(),_section, Brewtarget::UNIT);
    }
-  
-   emit labelChanged(propertyName);
+
+   // Hmm. For the color fields, I want to include the ecb or srm in the label
+   // text here.
+   if ( whatAmI == COLOR )
+   {
+      unitDisplay disp = (unitDisplay)invoked->data().toInt();
+      setText( tr("Color (%1)").arg(Brewtarget::colorUnitName(disp)));
+   }
+
+   // Remember, we need the original unit, not the new one.
+
+   emit labelChanged(unit,scale);
 
 }
 
@@ -121,8 +198,13 @@ BtColorLabel::BtColorLabel(QWidget *parent)
 {
 }
 
-BtVolumeLabel::BtVolumeLabel(QWidget *parent)
-   : BtLabel(parent,VOLUME)
+BtDateLabel::BtDateLabel(QWidget *parent)
+   : BtLabel(parent,DATE)
+{
+}
+
+BtDensityLabel::BtDensityLabel(QWidget *parent)
+   : BtLabel(parent,DENSITY)
 {
 }
 
@@ -131,12 +213,22 @@ BtMassLabel::BtMassLabel(QWidget *parent)
 {
 }
 
-BtGravityLabel::BtGravityLabel(QWidget *parent)
-   : BtLabel(parent,GRAVITY)
+BtMixedLabel::BtMixedLabel(QWidget *parent)
+   : BtLabel(parent,MIXED)
 {
 }
 
 BtTemperatureLabel::BtTemperatureLabel(QWidget *parent)
    : BtLabel(parent,TEMPERATURE)
+{
+}
+
+BtTimeLabel::BtTimeLabel(QWidget *parent)
+   : BtLabel(parent,TIME)
+{
+}
+
+BtVolumeLabel::BtVolumeLabel(QWidget *parent)
+   : BtLabel(parent,VOLUME)
 {
 }

@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>optionsDialog</class>
  <widget class="QDialog" name="optionsDialog">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>533</width>
-    <height>283</height>
+    <width>584</width>
+    <height>294</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -147,6 +150,36 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_12">
          <item>
+          <widget class="QGroupBox" name="groupBox_6">
+           <property name="title">
+            <string>Date</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_15">
+            <item>
+             <widget class="QRadioButton" name="radioButton_usDate">
+              <property name="text">
+               <string>mm-dd-YYYY</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButton_euDate">
+              <property name="text">
+               <string>dd-mm-YYYY</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButton_isoDate">
+              <property name="text">
+               <string>YYYY-dd-mm</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
           <spacer name="verticalSpacer_3">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -282,28 +315,28 @@
            </property>
            <layout class="QFormLayout" name="formLayout">
             <item row="1" column="1">
-             <widget class="QLineEdit" name="lineEdit_mashHop">
+             <widget class="BtGenericEdit" name="lineEdit_mashHop">
               <property name="toolTip">
                <string>% IBU adjustment</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QLineEdit" name="lineEdit_firstWort">
+             <widget class="BtGenericEdit" name="lineEdit_firstWort">
               <property name="toolTip">
                <string>% IBU adjustment</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="label_mashHop">
               <property name="text">
                <string>Mash Hop</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="label_firstWort">
               <property name="text">
                <string>First Wort</string>
               </property>
@@ -477,6 +510,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>weight_si</tabstop>

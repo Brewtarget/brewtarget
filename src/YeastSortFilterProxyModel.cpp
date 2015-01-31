@@ -35,6 +35,7 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
 {
     QVariant leftYeast = sourceModel()->data(left);
     QVariant rightYeast = sourceModel()->data(right);
+    Unit* unit = Units::liters;
 
     switch( left.column() )
     {
@@ -42,7 +43,7 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
        // and then figure some reasonable way to compare weights to volumes.
        // Maybe lying isn't such a bad idea
     case YEASTAMOUNTCOL:
-      return Brewtarget::volQStringToSI(leftYeast.toString()) < Brewtarget::volQStringToSI(rightYeast.toString());
+      return Brewtarget::qStringToSI(leftYeast.toString(),unit) < Brewtarget::qStringToSI(rightYeast.toString(),unit);
     case YEASTPRODIDCOL:
       return leftYeast.toDouble() < rightYeast.toDouble();
     default:

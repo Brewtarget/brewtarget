@@ -34,11 +34,6 @@ YeastEditor::YeastEditor( QWidget* parent )
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
-
-   connect( lineEdit_amount, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_minTemperature, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_maxTemperature, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_attenuation, SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void YeastEditor::setYeast( Yeast* y )
@@ -64,33 +59,25 @@ void YeastEditor::save()
       return;
    }
 
-   // TODO: check this out with 1.2.5
-   // Need to disable notification since every "set" method will cause a "showChanges" that
-   // will revert any changes made.
-   //y->disableNotification();
-
    y->setName(lineEdit_name->text());
    y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
-   y->setAmount( y->amountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()) );
+   y->setAmount( lineEdit_amount->toSI());
    y->setInventoryQuanta( lineEdit_inventory->text().toInt() );
 
 
    y->setLaboratory( lineEdit_laboratory->text() );
    y->setProductID( lineEdit_productID->text() );
-   y->setMinTemperature_c( Brewtarget::tempQStringToSI(lineEdit_minTemperature->text()) );
-   y->setMaxTemperature_c( Brewtarget::tempQStringToSI(lineEdit_maxTemperature->text()) );
+   y->setMinTemperature_c( lineEdit_minTemperature->toSI());
+   y->setMaxTemperature_c( lineEdit_maxTemperature->toSI());
    y->setFlocculation( static_cast<Yeast::Flocculation>(comboBox_flocculation->currentIndex()) );
-   y->setAttenuation_pct(lineEdit_attenuation->text().toDouble());
+   y->setAttenuation_pct(lineEdit_attenuation->toSI());
    y->setTimesCultured(lineEdit_timesCultured->text().toInt());
    y->setMaxReuse(lineEdit_maxReuse->text().toInt());
    y->setAddToSecondary( (checkBox_addToSecondary->checkState() == Qt::Checked)? true : false );
    y->setBestFor(textEdit_bestFor->toPlainText());
    y->setNotes(textEdit_notes->toPlainText()); 
-
-   //y->reenableNotification();
-   //y->forceNotify();
 
    setVisible(false);
 }
@@ -105,42 +92,6 @@ void YeastEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
    if( sender() == obsYeast )
       showChanges(&prop);
-}
-
-void YeastEditor::updateField()
-{
-
-   QObject* selection = sender();
-   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
-   double val;
-  
-   if ( field == lineEdit_amount )
-   {
-      // this is a bit harder, since we have to do something different based
-      // on teh "Amount is weight" box
-      if ( checkBox_amountIsWeight->checkState() == Qt::Checked ) 
-      {
-         val = Brewtarget::weightQStringToSI(field->text());
-         field->setText(Brewtarget::displayAmount( val, Units::kilograms));
-      }
-      else 
-      {
-         val = Brewtarget::volQStringToSI(field->text());
-         field->setText(Brewtarget::displayAmount( val, Units::liters));
-      }
-   }
-   else if ( field == lineEdit_minTemperature ||  field == lineEdit_maxTemperature )
-   {
-      val = Brewtarget::tempQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount( val, Units::celsius));
-   }
-   else 
-   {
-      //Everything else is a %, so just format nicely
-      val = field->text().toDouble();
-      field->setText(Brewtarget::displayAmount(val));
-   }
-
 }
 
 void YeastEditor::showChanges(QMetaProperty* metaProp)
@@ -178,7 +129,7 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == "amount" || updateAll ) {
-      lineEdit_amount->setText( Brewtarget::displayAmount(obsYeast->amount(), (obsYeast->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+      lineEdit_amount->setText( obsYeast );
       if( ! updateAll )
          return;
    }
@@ -205,12 +156,12 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == "minTemperature_c" || updateAll ) {
-      lineEdit_minTemperature->setText(Brewtarget::displayAmount(obsYeast->minTemperature_c(), Units::celsius));
+      lineEdit_minTemperature->setText(obsYeast);
       if( ! updateAll )
          return;
    }
    if( propName == "maxTemperature_c" || updateAll ) {
-      lineEdit_maxTemperature->setText(Brewtarget::displayAmount(obsYeast->maxTemperature_c(), Units::celsius));
+      lineEdit_maxTemperature->setText(obsYeast);
       if( ! updateAll )
          return;
    }
@@ -219,8 +170,8 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "attenutation_pc" || updateAll ) {
-      lineEdit_attenuation->setText( Brewtarget::displayAmount(obsYeast->attenuation_pct(), 0));
+   if( propName == "attenuation_pct" || updateAll ) {
+      lineEdit_attenuation->setText( obsYeast);
       if( ! updateAll )
          return;
    }

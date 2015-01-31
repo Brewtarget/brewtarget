@@ -29,6 +29,10 @@
 #include "USVolumeUnitSystem.h"
 #include "SIVolumeUnitSystem.h"
 #include "FahrenheitTempUnitSystem.h"
+#include "EbcColorUnitSystem.h"
+#include "SrmColorUnitSystem.h"
+#include "PlatoDensityUnitSystem.h"
+#include "SgDensityUnitSystem.h"
 #include "CelsiusTempUnitSystem.h"
 #include <QButtonGroup>
 #include <QMessageBox>
@@ -52,6 +56,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    tempGroup = new QButtonGroup(this);
    gravGroup = new QButtonGroup(this);
    colorUnitGroup = new QButtonGroup(this);
+   dateFormatGroup = new QButtonGroup(this);
 
    ndxToLangCode <<
       "ca" <<
@@ -67,7 +72,7 @@ OptionDialog::OptionDialog(QWidget* parent)
       "pt" <<
       "ru" <<
       "zh";
-   
+
    // Do this just to have model indices to set icons.
    comboBox_lang->addItems(ndxToLangCode);
    // MUST correspond to ndxToLangCode.
@@ -88,10 +93,10 @@ OptionDialog::OptionDialog(QWidget* parent)
    // Set icons.
    for( i = 0; i < langIcons.size(); ++i )
       comboBox_lang->setItemIcon(i, langIcons[i]);
-   
+
    // Call this here to set up translatable strings.
    retranslate();
-   
+
    // Want you to only be able to select exactly one in each group.
    colorGroup->setExclusive(true);
    ibuGroup->setExclusive(true);
@@ -100,6 +105,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    tempGroup->setExclusive(true);
    gravGroup->setExclusive(true);
    colorUnitGroup->setExclusive(true);
+   dateFormatGroup->setExclusive(true);
 
    // Set up the buttons in the colorGroup
    colorGroup->addButton(checkBox_mosher);
@@ -124,14 +130,19 @@ OptionDialog::OptionDialog(QWidget* parent)
    tempGroup->addButton(celsius);
    tempGroup->addButton(fahrenheit);
 
-   // Gravity
+   // Density
    gravGroup->addButton(radioButton_sg);
    gravGroup->addButton(radioButton_plato);
 
    // Color Unit
    colorUnitGroup->addButton(radioButton_srm);
    colorUnitGroup->addButton(radioButton_ebc);
-   
+
+   // date formats
+   dateFormatGroup->addButton(radioButton_usDate);
+   dateFormatGroup->addButton(radioButton_euDate);
+   dateFormatGroup->addButton(radioButton_isoDate);
+
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( saveAndClose() ) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
    connect( pushButton_dbDirBrowse, SIGNAL( clicked() ), this, SLOT( setDataDir() ) );
@@ -215,63 +226,81 @@ void OptionDialog::saveAndClose()
    // Get gravity setting.
    button = gravGroup->checkedButton();
    if( button == radioButton_sg )
-      Brewtarget::usePlato = false;
+   {
+      Brewtarget::densityUnit = Brewtarget::SG;
+      Brewtarget::thingToUnitSystem.insert(Density, UnitSystems::sgDensityUnitSystem());
+   }
    else
-      Brewtarget::usePlato = true;
+   {
+      Brewtarget::densityUnit = Brewtarget::PLATO;
+      Brewtarget::thingToUnitSystem.insert(Density, UnitSystems::platoDensityUnitSystem());
+   }
 
    button = weightGroup->checkedButton();
    if( button == weight_imperial )
    {
       weightUnitSystem = Imperial;
-      Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem();
+      Brewtarget::thingToUnitSystem.insert(Mass, UnitSystems::usWeightUnitSystem());
    }
    else if( button == weight_us)
    {
       weightUnitSystem = USCustomary;
-      Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem();
+      Brewtarget::thingToUnitSystem.insert(Mass, UnitSystems::usWeightUnitSystem());
    }
    else
    {
       weightUnitSystem = SI;
-      Brewtarget::weightSystem = UnitSystems::siWeightUnitSystem();
+      Brewtarget::thingToUnitSystem.insert(Mass, UnitSystems::siWeightUnitSystem());
    }
-   
+
    button = volumeGroup->checkedButton();
    if( button == volume_imperial )
    {
       volumeUnitSystem = Imperial;
-      Brewtarget::volumeSystem = UnitSystems::imperialVolumeUnitSystem();
+      Brewtarget::thingToUnitSystem.insert(Volume,UnitSystems::imperialVolumeUnitSystem());
    }
    else if( button == volume_us )
    {
       volumeUnitSystem = USCustomary;
-      Brewtarget::volumeSystem = UnitSystems::usVolumeUnitSystem();
+      Brewtarget::thingToUnitSystem.insert(Volume,UnitSystems::usVolumeUnitSystem());
    }
    else
    {
       volumeUnitSystem = SI;
-      Brewtarget::volumeSystem = UnitSystems::siVolumeUnitSystem();
+      Brewtarget::thingToUnitSystem.insert(Volume,UnitSystems::siVolumeUnitSystem());
    }
-   
+
    button = tempGroup->checkedButton();
    if( button == fahrenheit )
    {
       temperatureScale = Fahrenheit;
-      Brewtarget::tempSystem = UnitSystems::fahrenheitTempUnitSystem();
+      Brewtarget::thingToUnitSystem.insert(Temp,UnitSystems::fahrenheitTempUnitSystem());
    }
    else
    {
       temperatureScale = Celsius;
-      Brewtarget::tempSystem = UnitSystems::celsiusTempUnitSystem();
+      Brewtarget::thingToUnitSystem.insert(Temp,UnitSystems::celsiusTempUnitSystem());
    }
    
    button = colorUnitGroup->checkedButton();
    if( button == radioButton_ebc )
    {
+      Brewtarget::thingToUnitSystem.insert(Color,UnitSystems::ebcColorUnitSystem());
       colorUnit = Brewtarget::EBC;
    }
    else
+   {
+      Brewtarget::thingToUnitSystem.insert(Color,UnitSystems::srmColorUnitSystem());
       colorUnit = Brewtarget::SRM;
+   }
+
+   button = dateFormatGroup->checkedButton();
+   if ( button == radioButton_usDate )
+      Brewtarget::dateFormat = displayUS;
+   else if ( button == radioButton_euDate )
+      Brewtarget::dateFormat = displayImp;
+   else
+      Brewtarget::dateFormat = displaySI;
 
    Brewtarget::ibuFormula = iformula;
    Brewtarget::colorFormula = cformula;
@@ -282,7 +311,7 @@ void OptionDialog::saveAndClose()
 
    // Set the right language.
    Brewtarget::setLanguage( ndxToLangCode[ comboBox_lang->currentIndex() ] );
-   
+
    // Check the new userDataDir.
    newUserDataDir = lineEdit_dbDir->text();
 
@@ -316,8 +345,8 @@ void OptionDialog::saveAndClose()
       );
    }
 
-   Brewtarget::setOption("mashHopAdjustment", lineEdit_mashHop->text().toDouble() / 100);
-   Brewtarget::setOption("firstWortHopAdjustment", lineEdit_firstWort->text().toDouble() / 100);
+   Brewtarget::setOption("mashHopAdjustment", lineEdit_mashHop->toSI() / 100);
+   Brewtarget::setOption("firstWortHopAdjustment", lineEdit_firstWort->toSI() / 100);
    // Make sure the main window updates.
    if( Brewtarget::mainWindow() )
       Brewtarget::mainWindow()->showChanges();
@@ -391,7 +420,7 @@ void OptionDialog::showChanges()
    }
 
    // Check gravity.
-   if( Brewtarget::usePlato )
+   if( Brewtarget::densityUnit == Brewtarget::PLATO )
       radioButton_plato->setChecked(true);
    else
       radioButton_sg->setChecked(true);
@@ -419,12 +448,25 @@ void OptionDialog::showChanges()
       radioButton_srm->setChecked(true);
    }
 
+   switch(Brewtarget::dateFormat)
+   {
+      case displayImp:
+         radioButton_euDate->setChecked(true);
+         break;
+      case displayUS:
+         radioButton_usDate->setChecked(true);
+         break;
+      case displaySI:
+      default:
+         radioButton_isoDate->setChecked(true);
+   }
+
    // Data directory
    lineEdit_dbDir->setText(Brewtarget::getUserDataDir());
 
    // The IBU modifications. These will all be calculated from a 60 min boil. This is gonna get confusing.
-   lineEdit_mashHop->setText( Brewtarget::displayAmount(Brewtarget::option("mashHopAdjustment",0).toDouble()*100,0,0) );
-   lineEdit_firstWort->setText( Brewtarget::displayAmount(Brewtarget::option("firstWortHopAdjustment", 1.10).toDouble()*100,0,0) );
+   lineEdit_mashHop->setText(Brewtarget::option("mashHopAdjustment",100).toDouble()*100);
+   lineEdit_firstWort->setText(Brewtarget::option("firstWortHopAdjustment", 1.10).toDouble()*100);
 
 }
 

@@ -57,19 +57,19 @@ void WaterEditor::showChanges(QMetaProperty* prop)
    }
    
    if( propName == "calcium_ppm" || updateAll )
-      lineEdit_ca->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+      lineEdit_ca->setText(val);
    else if( propName == "magnesium_ppm" || updateAll )
-      lineEdit_mg->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+      lineEdit_mg->setText(val);
    else if( propName == "sulfate_ppm" || updateAll )
-      lineEdit_so4->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+      lineEdit_so4->setText(val);
    else if( propName == "sodium_ppm" || updateAll )
-      lineEdit_na->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+      lineEdit_na->setText(val);
    else if( propName == "chloride_ppm" || updateAll )
-      lineEdit_cl->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+      lineEdit_cl->setText(val);
    else if( propName == "bicarbonate_ppm" || updateAll )
-      lineEdit_alk->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+      lineEdit_alk->setText(val);
    else if( propName == "ph" || updateAll )
-      lineEdit_ph->setText(Brewtarget::displayAmount(val.toDouble(),0,1));
+      lineEdit_ph->setText(val);
 
    // Make sure the combo box is showing bicarbonate.
    comboBox_alk->setCurrentIndex( comboBox_alk->findText("HCO3") );
@@ -86,18 +86,18 @@ void WaterEditor::saveAndClose()
    if( obs == 0 )
       return;
 
-   obs->setCalcium_ppm( lineEdit_ca->text().toDouble() );
-   obs->setMagnesium_ppm( lineEdit_mg->text().toDouble() );
-   obs->setSulfate_ppm( lineEdit_so4->text().toDouble() );
-   obs->setSodium_ppm( lineEdit_na->text().toDouble() );
-   obs->setChloride_ppm( lineEdit_cl->text().toDouble() );
-   obs->setPh( lineEdit_ph->text().toDouble() );
+   obs->setCalcium_ppm( lineEdit_ca->toSI() );
+   obs->setMagnesium_ppm( lineEdit_mg->toSI() );
+   obs->setSulfate_ppm( lineEdit_so4->toSI() );
+   obs->setSodium_ppm( lineEdit_na->toSI() );
+   obs->setChloride_ppm( lineEdit_cl->toSI() );
+   obs->setPh( lineEdit_ph->toSI() );
 
    // Might need to convert alkalinity as CaCO3 to HCO3
    if( comboBox_alk->currentText() == QString("CaCO3") )
-      obs->setBicarbonate_ppm(1.22 * lineEdit_alk->text().toDouble());
+      obs->setBicarbonate_ppm(1.22 * lineEdit_alk->toSI() );
    else
-      obs->setBicarbonate_ppm(lineEdit_alk->text().toDouble());
+      obs->setBicarbonate_ppm(lineEdit_alk->toSI() );
 
    setVisible(false);
 }

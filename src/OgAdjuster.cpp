@@ -68,11 +68,11 @@ void OgAdjuster::calculate()
    bool gotSG = false;
 
    // Get inputs.
-   sg = lineEdit_sg->text().toDouble();
-   temp_c = Brewtarget::tempQStringToSI( lineEdit_temp->text() );
-   plato = lineEdit_plato->text().toDouble();
-   wort_l = Brewtarget::volQStringToSI( lineEdit_volume->text() );
-   hydroTemp_c = Brewtarget::tempQStringToSI( lineEdit_calTemp->text() );
+   sg          = lineEdit_sg->toSI();
+   plato       = lineEdit_plato->toSI();
+   temp_c      = lineEdit_temp->toSI();
+   hydroTemp_c = lineEdit_calTemp->toSI();
+   wort_l      = lineEdit_volume->toSI();
 
    // Make sure we got enough info.
    gotSG = sg != 0 && temp_c != 0 && hydroTemp_c != 0;
@@ -95,7 +95,7 @@ void OgAdjuster::calculate()
       sg_20C = sg_15C * Algorithms::getWaterDensity_kgL(15)/Algorithms::getWaterDensity_kgL(20);
 
       plato = Algorithms::SG_20C20C_toPlato( sg_20C );
-      lineEdit_plato->setText( Brewtarget::displayAmount(plato) );
+      lineEdit_plato->setText(plato);
    }
    else
    {
@@ -131,7 +131,7 @@ void OgAdjuster::calculate()
    finalVolume_l += waterToAdd_l;
 
    // Display output.
-   lineEdit_og->setText( Brewtarget::displayAmount(finalUncorrectedSg_20C) );
-   lineEdit_add->setText( Brewtarget::displayAmount(waterToAdd_l, Units::liters) );
-   lineEdit_batchSize->setText( Brewtarget::displayAmount(finalVolume_l, Units::liters) );
+   lineEdit_og->setText(finalUncorrectedSg_20C);
+   lineEdit_add->setText(waterToAdd_l);
+   lineEdit_batchSize->setText(finalVolume_l);
 }

@@ -79,8 +79,6 @@ public slots:
    void removeMash();
    //! Our standard changed slot
    void changed(QMetaProperty,QVariant);
-   //! The standard field formatter
-   void updateField();
 
 private:
    //! The mash we are watching

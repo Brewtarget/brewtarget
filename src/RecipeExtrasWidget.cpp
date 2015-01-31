@@ -20,10 +20,13 @@
  */
 
 #include <QDate>
+#include <QWidget>
+#include <QDebug>
 #include "RecipeExtrasWidget.h"
 #include "unit.h"
 #include "brewtarget.h"
 #include "recipe.h"
+#include "BtLabel.h"
 
 RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
    : QWidget(parent), recipe(0)
@@ -32,17 +35,17 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
 
    ratingChanged = false;
 
-   connect( lineEdit_age, SIGNAL(editingFinished()), this, SLOT(updateAge()));
-   connect( lineEdit_ageTemp, SIGNAL(editingFinished()), this, SLOT(updateAgeTemp()));
-   connect( lineEdit_asstBrewer, SIGNAL(editingFinished()), this, SLOT(updateBrewerAsst()) );
-   connect( lineEdit_brewer, SIGNAL(editingFinished()), this, SLOT(updateBrewer()) );
-   connect( lineEdit_carbVols, SIGNAL(editingFinished()), this, SLOT(updateCarbonation()) );
-   connect( lineEdit_primaryAge, SIGNAL(editingFinished()), this, SLOT(updatePrimaryAge()) );
-   connect( lineEdit_primaryTemp, SIGNAL(editingFinished()), this, SLOT(updatePrimaryTemp()) );
-   connect( lineEdit_secAge, SIGNAL(editingFinished()), this, SLOT(updateSecondaryAge()) );
-   connect( lineEdit_secTemp, SIGNAL(editingFinished()), this, SLOT(updateSecondaryTemp()) );
-   connect( lineEdit_tertAge, SIGNAL(editingFinished()), this, SLOT(updateTertiaryAge()) );
-   connect( lineEdit_tertTemp, SIGNAL(editingFinished()), this, SLOT(updateTertiaryTemp()) );
+   connect( lineEdit_age,        SIGNAL(textModified()), this, SLOT(updateAge()));
+   connect( lineEdit_ageTemp,    SIGNAL(textModified()), this, SLOT(updateAgeTemp()));
+   connect( lineEdit_asstBrewer, SIGNAL(textModified()), this, SLOT(updateBrewerAsst()) );
+   connect( lineEdit_brewer,     SIGNAL(textModified()), this, SLOT(updateBrewer()) );
+   connect( lineEdit_carbVols,   SIGNAL(textModified()), this, SLOT(updateCarbonation()) );
+   connect( lineEdit_primaryAge, SIGNAL(textModified()), this, SLOT(updatePrimaryAge()) );
+   connect( lineEdit_primaryTemp,SIGNAL(textModified()), this, SLOT(updatePrimaryTemp()) );
+   connect( lineEdit_secAge,     SIGNAL(textModified()), this, SLOT(updateSecondaryAge()) );
+   connect( lineEdit_secTemp,    SIGNAL(textModified()), this, SLOT(updateSecondaryTemp()) );
+   connect( lineEdit_tertAge,    SIGNAL(textModified()), this, SLOT(updateTertiaryAge()) );
+   connect( lineEdit_tertTemp,   SIGNAL(textModified()), this, SLOT(updateTertiaryTemp()) );
 
    connect( spinBox_tasteRating, SIGNAL(valueChanged(int)), this, SLOT(changeRatings(int)) );
    connect( spinBox_tasteRating, SIGNAL(editingFinished()), this, SLOT(updateTasteRating()) );
@@ -51,6 +54,7 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
 
    connect(btTextEdit_notes, SIGNAL(textModified()), this, SLOT(updateNotes()));
    connect(btTextEdit_tasteNotes, SIGNAL(textModified()), this, SLOT(updateTasteNotes()));
+
 }
 
 void RecipeExtrasWidget::setRecipe(Recipe* rec)
@@ -71,8 +75,7 @@ void RecipeExtrasWidget::updateBrewer()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_brewer->isModified() )
-      recipe->setBrewer(lineEdit_brewer->text());
+   recipe->setBrewer(lineEdit_brewer->text());
 }
 
 void RecipeExtrasWidget::updateBrewerAsst()
@@ -103,8 +106,7 @@ void RecipeExtrasWidget::updatePrimaryAge()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_primaryAge->isModified() )
-      recipe->setPrimaryAge_days( lineEdit_primaryAge->text().toDouble() );
+   recipe->setPrimaryAge_days( lineEdit_primaryAge->toSI() );
 }
 
 void RecipeExtrasWidget::updatePrimaryTemp()
@@ -112,8 +114,7 @@ void RecipeExtrasWidget::updatePrimaryTemp()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_primaryTemp->isModified() )
-      recipe->setPrimaryTemp_c( Brewtarget::tempQStringToSI(lineEdit_primaryTemp->text()) );
+   recipe->setPrimaryTemp_c( lineEdit_primaryTemp->toSI() );
 }
 
 void RecipeExtrasWidget::updateSecondaryAge()
@@ -121,8 +122,7 @@ void RecipeExtrasWidget::updateSecondaryAge()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_secAge->isModified() )
-      recipe->setSecondaryAge_days( lineEdit_secAge->text().toDouble() );
+   recipe->setSecondaryAge_days( lineEdit_secAge->toSI() );
 }
 
 void RecipeExtrasWidget::updateSecondaryTemp()
@@ -130,8 +130,7 @@ void RecipeExtrasWidget::updateSecondaryTemp()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_secTemp->isModified() )
-      recipe->setSecondaryTemp_c( Brewtarget::tempQStringToSI(lineEdit_secTemp->text()) );
+   recipe->setSecondaryTemp_c( lineEdit_secTemp->toSI() );
 }
 
 void RecipeExtrasWidget::updateTertiaryAge()
@@ -139,8 +138,7 @@ void RecipeExtrasWidget::updateTertiaryAge()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_tertAge->isModified() )
-      recipe->setTertiaryAge_days( lineEdit_tertAge->text().toDouble() );
+   recipe->setTertiaryAge_days( lineEdit_tertAge->toSI() );
 }
 
 void RecipeExtrasWidget::updateTertiaryTemp()
@@ -148,8 +146,7 @@ void RecipeExtrasWidget::updateTertiaryTemp()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_tertTemp->isModified() )
-      recipe->setTertiaryTemp_c( Brewtarget::tempQStringToSI( lineEdit_tertTemp->text() ) );
+   recipe->setTertiaryTemp_c( lineEdit_tertTemp->toSI() );
 }
 
 void RecipeExtrasWidget::updateAge()
@@ -157,8 +154,7 @@ void RecipeExtrasWidget::updateAge()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_age->isModified() )
-      recipe->setAge_days( lineEdit_age->text().toDouble() );
+   recipe->setAge_days( lineEdit_age->toSI() );
 }
 
 void RecipeExtrasWidget::updateAgeTemp()
@@ -166,8 +162,7 @@ void RecipeExtrasWidget::updateAgeTemp()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_ageTemp->isModified() )
-      recipe->setAgeTemp_c( Brewtarget::tempQStringToSI( lineEdit_ageTemp->text() ) );
+   recipe->setAgeTemp_c( lineEdit_ageTemp->toSI() );
 }
 
 void RecipeExtrasWidget::updateDate(const QDate& date)
@@ -186,8 +181,7 @@ void RecipeExtrasWidget::updateCarbonation()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_carbVols->isModified() )
-      recipe->setCarbonation_vols( lineEdit_carbVols->text().toDouble() );
+   recipe->setCarbonation_vols( lineEdit_carbVols->toSI() );
 }
 
 void RecipeExtrasWidget::updateTasteNotes()
@@ -253,49 +247,55 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
    
    if( ! recipe )
       return;
- 
+
+   // I think we may be going circular here? LineEdit says "change is made",
+   // which signals the widget which changes the db, which signals "change is
+   // made" which signals the widget, which changes the LineEdit, which says
+   // "change is made" ... rinse, lather, repeat
    // Unlike other editors, this one needs to read from recipe when it gets an
    // updateAll
    if ( updateAll )
    {
-      lineEdit_age->setText(         Brewtarget::displayAmount(recipe->age_days(),          Units::days)    );
-      lineEdit_ageTemp->setText(     Brewtarget::displayAmount(recipe->ageTemp_c(),         Units::celsius) );
-      lineEdit_asstBrewer->setText(                            recipe->asstBrewer()                         );
-      lineEdit_brewer->setText(                                recipe->brewer()                             );
-      lineEdit_carbVols->setText(    Brewtarget::displayAmount(recipe->carbonation_vols())                  );
-      lineEdit_primaryAge->setText(  Brewtarget::displayAmount(recipe->primaryAge_days(),   Units::days)    );
-      lineEdit_primaryTemp->setText( Brewtarget::displayAmount(recipe->primaryTemp_c(),     Units::celsius) );
-      lineEdit_secAge->setText(      Brewtarget::displayAmount(recipe->secondaryAge_days(), Units::days)    );
-      lineEdit_secTemp->setText(     Brewtarget::displayAmount(recipe->secondaryTemp_c(),   Units::celsius) );
-      lineEdit_tertAge->setText(     Brewtarget::displayAmount(recipe->tertiaryAge_days(),  Units::days)    );
-      lineEdit_tertTemp->setText(    Brewtarget::displayAmount(recipe->tertiaryTemp_c(),    Units::celsius) );
-      spinBox_tasteRating->setValue(                     (int)(recipe->tasteRating())                       );
-      dateEdit_date->setDate(                                  recipe->date()                               );
-      btTextEdit_notes->setPlainText(                          recipe->notes()                              );
-      btTextEdit_tasteNotes->setPlainText(                     recipe->tasteNotes()                         );
+
+      lineEdit_age->setText(recipe);
+      lineEdit_ageTemp->setText(recipe);
+      lineEdit_asstBrewer->setText(recipe);
+      lineEdit_brewer->setText(recipe);
+      lineEdit_carbVols->setText(recipe);
+      lineEdit_primaryAge->setText(recipe);
+      lineEdit_primaryTemp->setText(recipe);
+
+      lineEdit_secAge->setText(recipe);
+      lineEdit_secTemp->setText(recipe);
+      lineEdit_tertAge->setText(recipe);
+      lineEdit_tertTemp->setText(recipe);
+      spinBox_tasteRating->setValue((int)(recipe->tasteRating()));
+      dateEdit_date->setDate(recipe->date());
+      btTextEdit_notes->setPlainText(recipe->notes());
+      btTextEdit_tasteNotes->setPlainText(recipe->tasteNotes());
    }
    else if( propName == "age_days" )
-      lineEdit_age->setText( Brewtarget::displayAmount(val.toDouble()) );
+      lineEdit_age->setText(recipe);
    else if( propName == "ageTemp_c" )
-      lineEdit_ageTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+      lineEdit_ageTemp->setText(recipe);
    else if( propName == "asstBrewer" )
-      lineEdit_asstBrewer->setText( val.toString() );
+      lineEdit_asstBrewer->setText(recipe);
    else if( propName == "brewer" )
-      lineEdit_brewer->setText( val.toString() );
+      lineEdit_brewer->setText(recipe);
    else if( propName == "carbonation_vols" )
-      lineEdit_carbVols->setText( Brewtarget::displayAmount(val.toDouble()) );
+      lineEdit_carbVols->setText(recipe);
    else if( propName == "primaryAge_days" )
-      lineEdit_primaryAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+      lineEdit_primaryAge->setText(recipe);
    else if( propName == "primaryTemp_c" )
-      lineEdit_primaryTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+      lineEdit_primaryTemp->setText(recipe);
    else if( propName == "secondaryAge_days" )
-      lineEdit_secAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+      lineEdit_secAge->setText(recipe);
    else if( propName == "secondaryTemp_c" )
-      lineEdit_secTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+      lineEdit_secTemp->setText(recipe);
    else if( propName == "tertiaryAge_days" )
-      lineEdit_tertAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+      lineEdit_tertAge->setText(recipe);
    else if( propName == "tertiaryTemp_c" )
-      lineEdit_tertTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+      lineEdit_tertTemp->setText(recipe);
    else if( propName == "tasteRating" )
       spinBox_tasteRating->setValue( (int)(val.toDouble()) );
    else if( propName == "date" )

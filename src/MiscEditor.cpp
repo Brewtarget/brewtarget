@@ -36,8 +36,6 @@ MiscEditor::MiscEditor( QWidget* parent )
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
 
-   connect( lineEdit_time, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_amount, SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void MiscEditor::setMisc( Misc* m )
@@ -63,24 +61,15 @@ void MiscEditor::save()
       return;
    }
    
-   // TODO: check this out with 1.2.5.
-   // Need to disable notification since every "set" method will cause a "showChanges" that
-   // will revert any changes made.
-   //m->disableNotification();
-
    m->setName(lineEdit_name->text());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
    m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
    // TODO: fill in the rest of the "set" methods.
-   m->setTime(Brewtarget::timeQStringToSI(lineEdit_time->text()));
+   m->setTime(lineEdit_time->toSI());
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
-   m->setAmount( m->amountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()));
-   m->setInventoryAmount( m->amountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_inventory->text()) : Brewtarget::volQStringToSI(lineEdit_inventory->text()));
+   m->setAmount( lineEdit_amount->toSI());
    m->setUseFor(textEdit_useFor->toPlainText());
    m->setNotes( textEdit_notes->toPlainText() );
-
-   //m->reenableNotification();
-   //m->forceNotify();
 
    setVisible(false);
 }
@@ -95,36 +84,6 @@ void MiscEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
    if( sender() == obsMisc ) 
       showChanges(&prop);
-}
-
-void MiscEditor::updateField()
-{
-
-   QObject* selection = sender();
-   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
-   double val;
-  
-   if ( field == lineEdit_amount )
-   {
-      // this is a bit harder, since we have to do something different based
-      // on teh "Amount is weight" box
-      if ( checkBox_isWeight->checkState() == Qt::Checked ) 
-      {
-         val = Brewtarget::weightQStringToSI(field->text());
-         field->setText(Brewtarget::displayAmount( val, Units::kilograms));
-      }
-      else 
-      {
-         val = Brewtarget::volQStringToSI(field->text());
-         field->setText(Brewtarget::displayAmount( val, Units::liters));
-      }
-   }
-   else if ( field == lineEdit_time ) 
-   {
-      val = Brewtarget::timeQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount( val, Units::minutes));
-   }
-
 }
 
 void MiscEditor::showChanges(QMetaProperty* metaProp)
@@ -164,13 +123,13 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
    }
    if( propName == "time" || updateAll )
    {
-      lineEdit_time->setText(Brewtarget::displayAmount(obsMisc->time(), Units::minutes));
+      lineEdit_time->setText(obsMisc);
       if( ! updateAll )
          return;
    }
    if( propName == "amount" || updateAll )
    {
-      lineEdit_amount->setText(Brewtarget::displayAmount(obsMisc->amount(), (obsMisc->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
+      lineEdit_amount->setText(obsMisc);
       if( ! updateAll )
          return;
    }
@@ -182,7 +141,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
    }
    if( propName == "inventory" || updateAll )
    {
-      lineEdit_inventory->setText(Brewtarget::displayAmount(obsMisc->inventory(), (obsMisc->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
+      lineEdit_inventory->setText(obsMisc);
       if( ! updateAll )
          return;
    }

@@ -22,6 +22,7 @@
 #include "HopSortFilterProxyModel.h"
 #include "HopTableModel.h"
 #include "hop.h"
+#include "unit.h"
 #include <iostream>
 
 HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent, bool filt) 
@@ -38,13 +39,14 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
     QStringList uses = QStringList() << "Dry Hop" << "Aroma" << "Boil" << "First Wort" << "Mash";
     QModelIndex lSibling, rSibling;
     int lUse, rUse;
+    Unit* unit = Units::kilograms;
 
    switch( left.column() )
    {
       case HOPALPHACOL:
          return leftHop.toDouble() < rightHop.toDouble();
       case HOPAMOUNTCOL:
-         return Brewtarget::weightQStringToSI(leftHop.toString()) < Brewtarget::weightQStringToSI(rightHop.toString());
+         return Brewtarget::qStringToSI(leftHop.toString(),unit) < Brewtarget::qStringToSI(rightHop.toString(),unit);
       case HOPTIMECOL:
         // Get the indexes of the Use column
         lSibling = left.sibling(left.row(), HOPUSECOL);
@@ -56,7 +58,7 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
         rUse = uses.indexOf( (sourceModel()->data(rSibling)).toString() );
 
         if ( lUse == rUse )
-            return Brewtarget::weightQStringToSI(leftHop.toString()) < Brewtarget::weightQStringToSI(rightHop.toString());
+            return Brewtarget::qStringToSI(leftHop.toString(),unit) < Brewtarget::qStringToSI(rightHop.toString(),unit);
 
         return lUse < rUse;
     }

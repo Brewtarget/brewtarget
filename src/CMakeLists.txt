@@ -69,6 +69,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtDatePopup.cpp
     ${SRCDIR}/BtFolder.cpp
     ${SRCDIR}/BtLabel.cpp
+    ${SRCDIR}/BtLineEdit.cpp
     ${SRCDIR}/BtTextEdit.cpp
     ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/BtSplashScreen.cpp
@@ -79,6 +80,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/database.cpp
     ${SRCDIR}/DatabaseSchemaHelper.cpp
     ${SRCDIR}/equipment.cpp
+    ${SRCDIR}/EbcColorUnitSystem.cpp
     ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentListModel.cpp
     ${SRCDIR}/EquipmentEditor.cpp
@@ -118,6 +120,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/NamedMashEditor.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
+    ${SRCDIR}/PlatoDensityUnitSystem.cpp
     ${SRCDIR}/PreInstruction.cpp
     ${SRCDIR}/PrimingDialog.cpp
     ${SRCDIR}/QueuedMethod.cpp
@@ -125,11 +128,13 @@ SET( brewtarget_SRCS
     ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeFormatter.cpp
     ${SRCDIR}/RefractoDialog.cpp
+    ${SRCDIR}/ScaleRecipeTool.cpp
+    ${SRCDIR}/SgDensityUnitSystem.cpp
     ${SRCDIR}/SetterCommand.cpp
     ${SRCDIR}/SetterCommandStack.cpp
-    ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
+    ${SRCDIR}/SrmColorUnitSystem.cpp
     ${SRCDIR}/StrikeWaterDialog.cpp
     ${SRCDIR}/style.cpp
     ${SRCDIR}/StyleButton.cpp
@@ -154,7 +159,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/YeastEditor.cpp
     ${SRCDIR}/YeastTableModel.cpp
     ${SRCDIR}/YeastSortFilterProxyModel.cpp
-    ${SRCDIR}/RecipeExtrasDialog.cpp
     ${SRCDIR}/MashDesigner.cpp
     ${SRCDIR}/BtDigitWidget.cpp
     ${SRCDIR}/PitchDialog.cpp
@@ -188,7 +192,6 @@ SET( brewtarget_UIS
     ${UIDIR}/ogAdjuster.ui
     ${UIDIR}/optionsDialog.ui
     ${UIDIR}/primingDialog.ui
-    ${UIDIR}/recipeExtrasDialog.ui
     ${UIDIR}/refractoDialog.ui
     ${UIDIR}/scaleRecipeTool.ui
     ${UIDIR}/strikeWaterDialog.ui
@@ -223,6 +226,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtDatePopup.h
     ${SRCDIR}/BtFolder.h
     ${SRCDIR}/BtLabel.h
+    ${SRCDIR}/BtLineEdit.h
     ${SRCDIR}/BtTextEdit.h
     ${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/ConverterTool.h
@@ -261,7 +265,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/QueuedMethod.h
     ${SRCDIR}/RangedSlider.h
-    ${SRCDIR}/RecipeExtrasDialog.h
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h
     ${SRCDIR}/RefractoDialog.h

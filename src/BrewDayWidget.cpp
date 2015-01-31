@@ -181,13 +181,13 @@ QString BrewDayWidget::buildTitleTable()
            .arg(tr("Boil Volume"))
            .arg(Brewtarget::displayAmount(recObs->boilSize_l(),Units::liters,2))
            .arg(tr("Preboil Gravity"))
-           .arg(Brewtarget::displayOG(recObs->boilGrav()));
+           .arg(Brewtarget::displayAmount(recObs->boilGrav(), Units::sp_grav,0));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Final Volume"))
            .arg(Brewtarget::displayAmount(recObs->batchSize_l(), Units::liters,2))
            .arg(tr("Starting Gravity"))
-           .arg(Brewtarget::displayOG(recObs->og()));
+           .arg(Brewtarget::displayAmount(recObs->og(), Units::sp_grav, 0));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Boil Time"))

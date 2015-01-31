@@ -100,6 +100,7 @@ public slots:
    //! \brief Remove a \c yeast from the model.
    void removeYeast(Yeast* yeast);
 
+   void contextMenu(const QPoint &point);
 private slots:
    //! \brief Catch changes to Recipe, Database, and Yeast.
    void changed(QMetaProperty, QVariant);

@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>brewNote</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../brewtarget.qrc">
+    <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -30,6 +34,9 @@
         <width>626</width>
         <height>438</height>
        </rect>
+      </property>
+      <property name="configSection" stdset="0">
+       <string notr="true">page_preboil</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
@@ -54,6 +61,9 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="mouseTracking">
+            <bool>false</bool>
+           </property>
            <property name="currentIndex">
             <number>0</number>
            </property>
@@ -63,15 +73,18 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>340</height>
+              <height>349</height>
              </rect>
+            </property>
+            <property name="configSection" stdset="0">
+             <string notr="true">page_preboil</string>
             </property>
             <attribute name="label">
              <string>Preboil</string>
             </attribute>
             <layout class="QFormLayout" name="formLayout_2">
              <item row="0" column="0">
-              <widget class="BtGravityLabel" name="btLabel_Sg">
+              <widget class="BtDensityLabel" name="btLabel_Sg">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -81,13 +94,13 @@
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">sg</string>
+               <property name="buddy">
+                <cstring>lineEdit_SG</cstring>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEdit_SG">
+              <widget class="BtDensityEdit" name="lineEdit_SG">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -112,6 +125,9 @@
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">sg</string>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
@@ -125,13 +141,13 @@
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">volumeIntoBK_l</string>
+               <property name="buddy">
+                <cstring>lineEdit_volIntoBK</cstring>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEdit_volIntoBK">
+              <widget class="BtVolumeEdit" name="lineEdit_volIntoBK">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -153,6 +169,9 @@
                <property name="toolTip">
                 <string>Volume of wort collected</string>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">volumeIntoBK_l</string>
+               </property>
               </widget>
              </item>
              <item row="2" column="0">
@@ -166,13 +185,13 @@
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">strikeTemp_c</string>
+               <property name="buddy">
+                <cstring>lineEdit_strikeTemp</cstring>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLineEdit" name="lineEdit_strikeTemp">
+              <widget class="BtTemperatureEdit" name="lineEdit_strikeTemp">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -194,6 +213,9 @@
                <property name="toolTip">
                 <string>Temperature of mash after dough in</string>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">strikeTemp_c</string>
+               </property>
               </widget>
              </item>
              <item row="3" column="0">
@@ -207,13 +229,13 @@
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">mashFinTemp_c</string>
+               <property name="buddy">
+                <cstring>lineEdit_mashFinTemp</cstring>
                </property>
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="QLineEdit" name="lineEdit_mashFinTemp">
+              <widget class="BtTemperatureEdit" name="lineEdit_mashFinTemp">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -235,6 +257,9 @@
                <property name="toolTip">
                 <string>Temperature of mash before mash out</string>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">mashFinTemp_c</string>
+               </property>
               </widget>
              </item>
             </layout>
@@ -245,15 +270,18 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>340</height>
+              <height>349</height>
              </rect>
+            </property>
+            <property name="configSection" stdset="0">
+             <string notr="true">page_postboil</string>
             </property>
             <attribute name="label">
              <string>Postboil</string>
             </attribute>
             <layout class="QFormLayout" name="formLayout">
              <item row="0" column="0">
-              <widget class="BtGravityLabel" name="btLabel_Og">
+              <widget class="BtDensityLabel" name="btLabel_Og">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -263,13 +291,13 @@
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">og</string>
+               <property name="buddy">
+                <cstring>lineEdit_OG</cstring>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEdit_OG">
+              <widget class="BtDensityEdit" name="lineEdit_OG">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -291,6 +319,9 @@
                <property name="toolTip">
                 <string>Post boil gravity</string>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">og</string>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
@@ -310,13 +341,13 @@
                <property name="wordWrap">
                 <bool>true</bool>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">postBoilVolume_l</string>
+               <property name="buddy">
+                <cstring>lineEdit_postBoilVol</cstring>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEdit_postBoilVol">
+              <widget class="BtVolumeEdit" name="lineEdit_postBoilVol">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -338,6 +369,9 @@
                <property name="toolTip">
                 <string>Volume of wort in BK after boil</string>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">postBoilVolume_l</string>
+               </property>
               </widget>
              </item>
              <item row="2" column="0">
@@ -357,13 +391,13 @@
                <property name="wordWrap">
                 <bool>true</bool>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">volumeIntoFerm_l</string>
+               <property name="buddy">
+                <cstring>lineEdit_volIntoFerm</cstring>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLineEdit" name="lineEdit_volIntoFerm">
+              <widget class="BtVolumeEdit" name="lineEdit_volIntoFerm">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -382,6 +416,9 @@
                  <height>16777215</height>
                 </size>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">volumeIntoFerm_l</string>
+               </property>
               </widget>
              </item>
              <item row="3" column="0">
@@ -398,13 +435,13 @@
                <property name="wordWrap">
                 <bool>true</bool>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">pitchTemp_c</string>
+               <property name="buddy">
+                <cstring>lineEdit_pitchTemp</cstring>
                </property>
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="QLineEdit" name="lineEdit_pitchTemp">
+              <widget class="BtTemperatureEdit" name="lineEdit_pitchTemp">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -426,6 +463,9 @@
                <property name="toolTip">
                 <string>Temperature of wort when yeast is pitched</string>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">pitchTemp_c</string>
+               </property>
               </widget>
              </item>
             </layout>
@@ -436,28 +476,31 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>340</height>
+              <height>349</height>
              </rect>
+            </property>
+            <property name="configSection" stdset="0">
+             <string notr="true">page_postferment</string>
             </property>
             <attribute name="label">
              <string>Postferment</string>
             </attribute>
             <layout class="QFormLayout" name="formLayout_5">
              <item row="0" column="0">
-              <widget class="BtGravityLabel" name="btLabel_postFermentFg">
+              <widget class="BtDensityLabel" name="btLabel_postFermentFg">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
                <property name="text">
                 <string notr="true">FG</string>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">fg</string>
+               <property name="buddy">
+                <cstring>lineEdit_FG</cstring>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEdit_FG">
+              <widget class="BtDensityEdit" name="lineEdit_FG">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -479,6 +522,9 @@
                <property name="toolTip">
                 <string>Final gravity</string>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">fg</string>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
@@ -489,13 +535,13 @@
                <property name="text">
                 <string notr="true">Volume</string>
                </property>
-               <property name="editField" stdset="0">
-                <string notr="true">finalVolume_l</string>
+               <property name="buddy">
+                <cstring>lineEdit_finalVol</cstring>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEdit_finalVol">
+              <widget class="BtVolumeEdit" name="lineEdit_finalVol">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -517,37 +563,41 @@
                <property name="toolTip">
                 <string>Volume of beer into serving keg/bottles</string>
                </property>
+               <property name="editField" stdset="0">
+                <string notr="true">finalVolume_l</string>
+               </property>
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="btLabel_fermentDate">
+              <widget class="BtDateLabel" name="btLabel_fermentDate">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string notr="true">Date</string>
+               </property>
+               <property name="buddy">
+                <cstring>lineEdit_fermentDate</cstring>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLineEdit" name="lineEdit_fermentDate">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+              <widget class="QDateTimeEdit" name="lineEdit_fermentDate">
+               <property name="date">
+                <date>
+                 <year>2014</year>
+                 <month>10</month>
+                 <day>8</day>
+                </date>
                </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
+               <property name="displayFormat">
+                <string>yyyy-dd-MM</string>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
+               <property name="calendarPopup">
+                <bool>true</bool>
                </property>
-               <property name="toolTip">
-                <string>Date when the yeast fermented out</string>
+               <property name="editField" stdset="0">
+                <string notr="true">fermentDate</string>
                </property>
               </widget>
              </item>
@@ -580,7 +630,7 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="BtGravityLabel" name="btLabel_projectedOg">
+              <widget class="BtDensityLabel" name="btLabel_projectedOg">
                <property name="contextMenuPolicy">
                 <enum>Qt::CustomContextMenu</enum>
                </property>
@@ -592,6 +642,9 @@
                </property>
                <property name="editField" stdset="0">
                 <string notr="true">projOg</string>
+               </property>
+               <property name="configSection" stdset="0">
+                <string notr="true">page_preboil</string>
                </property>
               </widget>
              </item>
@@ -690,33 +743,234 @@
  <layoutdefault spacing="4" margin="4"/>
  <customwidgets>
   <customwidget>
-   <class>BtDigitWidget</class>
-   <extends>QLabel</extends>
-   <header>BtDigitWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtGravityLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
+   <class>BtTemperatureEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
   </customwidget>
   <customwidget>
    <class>BtTemperatureLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
   </customwidget>
   <customwidget>
    <class>BtTextEdit</class>
    <extends>QPlainTextEdit</extends>
    <header location="global">BtTextEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDigitWidget</class>
+   <extends>QLabel</extends>
+   <header>BtDigitWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtDateLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
  </customwidgets>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../brewtarget.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>btLabel_Sg</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_SG</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>131</x>
+     <y>55</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_volIntoBk</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_volIntoBK</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>131</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_strikeTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_strikeTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>48</x>
+     <y>107</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>131</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_mashFinTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_mashFinTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>131</x>
+     <y>133</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_Og</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_OG</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_postBoilVol</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_postBoilVol</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>92</x>
+     <y>107</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_volIntoFerm</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_volIntoFerm</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>76</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>133</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_pitchTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_pitchTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_postFermentFg</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_FG</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>50</x>
+     <y>107</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>111</x>
+     <y>107</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btLabel_finalVolume</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_finalVol</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>111</x>
+     <y>133</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <designerdata>
   <property name="gridDeltaX">
    <number>10</number>

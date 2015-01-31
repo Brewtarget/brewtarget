@@ -56,7 +56,7 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    connect( horizontalSlider_amount, SIGNAL(valueChanged(int)), this, SLOT(updateAmt()) );
    connect( horizontalSlider_temp, SIGNAL(valueChanged(int)), this, SLOT(updateTemp()) );
    // Save the target temp whenever it's changed.
-   connect( lineEdit_temp, SIGNAL(editingFinished()), this, SLOT(saveTargetTemp()) );
+   connect( lineEdit_temp, SIGNAL(textModified()), this, SLOT(saveTargetTemp()) );
    // Move to next step.
    connect( pushButton_next, SIGNAL(clicked()), this, SLOT(proceed()) );
    // Do correct calcs when the mash step type is selected.
@@ -65,7 +65,6 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
    connect( pushButton_finish, SIGNAL(clicked()), this, SLOT(saveAndClose()) );
 
-   connect( lineEdit_time, SIGNAL(editingFinished()), this, SLOT( updateField()));
 }
 
 void MashDesigner::proceed()
@@ -149,8 +148,8 @@ void MashDesigner::saveStep()
    //mashStep->disableNotification();
    mashStep->setName( lineEdit_name->text() );
    mashStep->setType( type );
-   mashStep->setStepTemp_c( Brewtarget::tempQStringToSI(lineEdit_temp->text()) );
-   mashStep->setStepTime_min( Brewtarget::timeQStringToSI(lineEdit_time->text()) );
+   mashStep->setStepTemp_c(   Brewtarget::qStringToSI(lineEdit_temp->text(), Units::celsius) );
+   mashStep->setStepTime_min( Brewtarget::qStringToSI(lineEdit_time->text(), Units::minutes) );
 
    if( type == MashStep::Infusion)
    {
@@ -300,7 +299,7 @@ bool MashDesigner::initializeMash()
       return false;
    
    //otherwise continue - get the text and keep going
-   mash->setTunTemp_c( Brewtarget::tempQStringToSI( dialogText ) );
+   mash->setTunTemp_c( Brewtarget::qStringToSI( dialogText, Units::celsius ) );
 
    mash->removeAllMashSteps();
    curStep = 0;
@@ -490,10 +489,10 @@ void MashDesigner::updateTemp()
 
 void MashDesigner::saveTargetTemp()
 {
-   double temp = Brewtarget::tempQStringToSI(lineEdit_temp->text());
+   double temp = lineEdit_temp->toSI();
 
    // be nice and reset the field so it displays in proper units
-   lineEdit_temp->setText( Brewtarget::displayAmount(temp, Units::celsius));
+   lineEdit_temp->setText(temp);
    if( mashStep != 0 )
       mashStep->setStepTemp_c(temp);
 
@@ -584,21 +583,5 @@ void MashDesigner::typeChanged(int t)
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);
    }
-}
-
-void MashDesigner::updateField()
-{
-
-   QObject* selection = sender();
-   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
-   double val;
-
-   // Only the time gets abused, but I'm being consistent  
-   if ( field == lineEdit_time ) 
-   {
-      val = Brewtarget::timeQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount( val, Units::minutes));
-   }
-
 }
 

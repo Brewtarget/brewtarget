@@ -19,6 +19,9 @@
      <property name="title">
       <string>Input</string>
      </property>
+     <property name="configSection" stdset="0">
+      <string notr="true">ogAdjuster</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout_6">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -27,7 +30,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="label_sg">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -37,10 +40,13 @@
               <property name="text">
                <string>SG</string>
               </property>
+              <property name="buddy">
+               <cstring>lineEdit_sg</cstring>
+              </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_sg">
+             <widget class="BtDensityEdit" name="lineEdit_sg">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -69,20 +75,26 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="QLabel" name="label_2">
+             <widget class="BtTemperatureLabel" name="label_temp">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
               <property name="text">
                <string>Temp</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_temp</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_temp">
+             <widget class="BtTemperatureEdit" name="lineEdit_temp">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -104,6 +116,9 @@
               <property name="toolTip">
                <string>Temperature of SG reading</string>
               </property>
+              <property name="editField" stdset="0">
+               <string notr="true">temperature</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -111,14 +126,20 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QLabel" name="label_9">
+             <widget class="BtTemperatureLabel" name="label_calTemp">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
               <property name="text">
                <string>Calibration Temp</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_calTemp</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_calTemp">
+             <widget class="BtTemperatureEdit" name="lineEdit_calTemp">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -133,6 +154,9 @@
               </property>
               <property name="toolTip">
                <string>Temp to which the hydrometer is calibrated</string>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">calTemp</string>
               </property>
              </widget>
             </item>
@@ -195,7 +219,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="label_plato">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -208,7 +232,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_plato">
+             <widget class="BtDensityEdit" name="lineEdit_plato">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -229,6 +253,9 @@
               </property>
               <property name="toolTip">
                <string>Plato (percent by mass of equivalent sucrose)</string>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">plato</string>
               </property>
              </widget>
             </item>
@@ -267,14 +294,20 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="label_8">
+         <widget class="BtVolumeLabel" name="label_volume">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="text">
            <string>Pre-Boil Volume</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_volume</cstring>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_volume">
+         <widget class="BtVolumeEdit" name="lineEdit_volume">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -296,6 +329,9 @@
           <property name="toolTip">
            <string>Measured pre-boil volume</string>
           </property>
+          <property name="editField" stdset="0">
+           <string notr="true">volume</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -314,7 +350,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
-           <widget class="QLabel" name="label_5">
+           <widget class="QLabel" name="label_og">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -327,7 +363,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_og">
+           <widget class="BtDensityEdit" name="lineEdit_og">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -359,20 +395,26 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QLabel" name="label_6">
+           <widget class="BtVolumeLabel" name="label_add">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>Add to Boil</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_add</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_add">
+           <widget class="BtVolumeEdit" name="lineEdit_add">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -397,6 +439,9 @@
             <property name="readOnly">
              <bool>true</bool>
             </property>
+            <property name="editField" stdset="0">
+             <string notr="true">add</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -404,20 +449,26 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
           <item>
-           <widget class="QLabel" name="label_7">
+           <widget class="BtVolumeLabel" name="label_batchsize">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>Final Batch Size</string>
+            </property>
+            <property name="buddy">
+             <cstring>lineEdit_batchSize</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_batchSize">
+           <widget class="BtVolumeEdit" name="lineEdit_batchSize">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -441,6 +492,9 @@
             </property>
             <property name="readOnly">
              <bool>true</bool>
+            </property>
+            <property name="editField" stdset="0">
+             <string notr="true">batchsize</string>
             </property>
            </widget>
           </item>
@@ -512,6 +566,129 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtTemperatureEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTemperatureLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(unitDisplay,unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(unitDisplay,unitScale)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>label_temp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_temp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>101</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_calTemp</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_calTemp</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>55</x>
+     <y>121</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>126</x>
+     <y>121</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_batchsize</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_batchSize</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>411</x>
+     <y>101</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_add</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_add</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>411</x>
+     <y>73</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>537</x>
+     <y>73</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_volume</sender>
+   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <receiver>lineEdit_volume</receiver>
+   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>174</x>
+     <y>155</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>155</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

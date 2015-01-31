@@ -54,9 +54,6 @@ public slots:
    void setMash(Mash* mash);
    void setEquipment(Equipment* e);
 
-   //! reformat the display as required
-   void updateField();
-   
    void changed(QMetaProperty,QVariant);
 private:
    void showChanges(QMetaProperty* prop = 0);

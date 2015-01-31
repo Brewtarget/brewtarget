@@ -297,7 +297,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case WATERAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_l( Brewtarget::volQStringToSI(value.toString()) );
+            row->setAmount_l( Brewtarget::qStringToSI(value.toString(), Units::liters) );
             return true;
          }
          else

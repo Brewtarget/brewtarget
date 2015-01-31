@@ -65,13 +65,16 @@ public slots:
 
    void updateFG();
    void updateFinalVolume_l();
-   void updateFermentDate();
+   void updateFermentDate(const QDateTime& datetime);
+   void updateDateFormat(unitDisplay display,unitScale scale);
 
    void updateNotes();
-   void saveAll();
+//   void saveAll();
 
    void changed(QMetaProperty,QVariant);
    void showChanges(QString field = "");
+
+   void updateProjOg(unitDisplay oldUnit, unitScale oldScale);
 
 
 private:

@@ -35,20 +35,14 @@ FermentableEditor::FermentableEditor( QWidget* parent )
 
    connect( this, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( this, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
-   connect( lineEdit_amount, SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_yield,  SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_color,  SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_coarseFineDiff,  SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_moisture,  SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_protein,  SIGNAL(editingFinished()), this, SLOT(updateField()));
-   connect( lineEdit_maxInBatch,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+
 }
 
 void FermentableEditor::setFermentable( Fermentable* f )
 {
    if( obsFerm )
       disconnect( obsFerm, 0, this, 0 );
-   
+
    obsFerm = f;
    if( obsFerm )
    {
@@ -65,35 +59,27 @@ void FermentableEditor::save()
       return;
    }
 
-   // TODO: check this out with 1.2.5.
-   // Need to disable notification since every "set" method will cause a "showChanges" that
-   // will revert any changes made.
-   //obsFerm->disableNotification();
-
    obsFerm->setName(lineEdit_name->text());
-   //obsFerm->setType(comboBox_type->currentText());
+
    // NOTE: the following assumes that Fermentable::Type is enumerated in the same
    // order as the combobox.
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
-   obsFerm->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
-   obsFerm->setInventoryAmount(Brewtarget::weightQStringToSI(lineEdit_inventory->text()));
-   obsFerm->setYield_pct(lineEdit_yield->text().toDouble());
-   obsFerm->setColor_srm(Brewtarget::colorQStringToSI(lineEdit_color->text()));
+   obsFerm->setAmount_kg(lineEdit_amount->toSI());
+   obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
+   obsFerm->setYield_pct(lineEdit_yield->toSI());
+   obsFerm->setColor_srm(lineEdit_color->toSI());
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
    obsFerm->setOrigin( lineEdit_origin->text() );
    obsFerm->setSupplier( lineEdit_supplier->text() );
-   obsFerm->setCoarseFineDiff_pct( lineEdit_coarseFineDiff->text().toDouble() );
-   obsFerm->setMoisture_pct( lineEdit_moisture->text().toDouble() );
-   obsFerm->setDiastaticPower_lintner( lineEdit_diastaticPower->text().toDouble() );
-   obsFerm->setProtein_pct( lineEdit_protein->text().toDouble() );
-   obsFerm->setMaxInBatch_pct( lineEdit_maxInBatch->text().toDouble() );
+   obsFerm->setCoarseFineDiff_pct( lineEdit_coarseFineDiff->toSI() );
+   obsFerm->setMoisture_pct( lineEdit_moisture->toSI() );
+   obsFerm->setDiastaticPower_lintner( lineEdit_diastaticPower->toSI() );
+   obsFerm->setProtein_pct( lineEdit_protein->toSI() );
+   obsFerm->setMaxInBatch_pct( lineEdit_maxInBatch->toSI() );
    obsFerm->setRecommendMash( (checkBox_recommendMash->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
-   obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->text().toDouble() );
+   obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->toSI() );
    obsFerm->setNotes( textEdit_notes->toPlainText() );
-
-   //obsFerm->reenableNotification();
-   //obsFerm->forceNotify();
 
    setVisible(false);
 }
@@ -110,31 +96,6 @@ void FermentableEditor::changed(QMetaProperty prop, QVariant /*val*/)
       showChanges(&prop);
 }
 
-void FermentableEditor::updateField()
-{
-
-   QObject* selection = sender();
-   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
-   double val;
-  
-   if ( field == lineEdit_amount )
-   {
-      val = Brewtarget::weightQStringToSI(field->text());
-      field->setText(Brewtarget::displayAmount( val, Units::kilograms));
-   }
-   else if ( field == lineEdit_color ) 
-   {
-      val = field->text().toDouble();
-      field->setText(Brewtarget::displayColor(val, noUnit, false));
-   }
-   else 
-   {
-      //Everything else is a %, so just format nicely
-      val = field->text().toDouble();
-      field->setText(Brewtarget::displayAmount(val));
-   }
-}
-
 void FermentableEditor::showChanges(QMetaProperty* metaProp)
 {
    if( obsFerm == 0 )
@@ -148,12 +109,6 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
    {
       propName = metaProp->name();
    }
-   
-   // Update the color label text.
-   if (Brewtarget::getColorUnit() == displaySrm)
-      label_5->setText(QString("Color (Lovibond)"));
-   else
-      label_5->setText(QString("Color (EBC)"));
 
    if( propName == "name" || updateAll )
    {
@@ -169,22 +124,23 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == "amount_kg" || updateAll) {
-      lineEdit_amount->setText(Brewtarget::displayAmount(obsFerm->amount_kg(), Units::kilograms));
+      lineEdit_amount->setText(obsFerm);
       if( ! updateAll )
          return;
    }
+
    if( propName == "inventory" || updateAll) {
-      lineEdit_inventory->setText(Brewtarget::displayAmount(obsFerm->inventory(), Units::kilograms));
+      lineEdit_inventory->setText(obsFerm);
       if( ! updateAll )
          return;
    }
    if( propName == "yield_pct" || updateAll) {
-      lineEdit_yield->setText(Brewtarget::displayAmount(obsFerm->yield_pct(), 0));
+      lineEdit_yield->setText(obsFerm);
       if( ! updateAll )
          return;
    }
    if( propName == "color_srm" || updateAll) {
-      lineEdit_color->setText(Brewtarget::displayColor(obsFerm->color_srm(), noUnit, false));
+      lineEdit_color->setText(obsFerm);
        if( ! updateAll )
          return;
    }
@@ -208,27 +164,27 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == "coarseFineDiff_pct" || updateAll) {
-      lineEdit_coarseFineDiff->setText(Brewtarget::displayAmount(obsFerm->coarseFineDiff_pct(), 0));
+      lineEdit_coarseFineDiff->setText(obsFerm);
       if( ! updateAll )
          return;
    }
    if( propName == "moisture_pct" || updateAll) {
-      lineEdit_moisture->setText(Brewtarget::displayAmount(obsFerm->moisture_pct(), 0));
+      lineEdit_moisture->setText(obsFerm);
       if( ! updateAll )
          return;
    }
    if( propName == "diastaticPower_lintner" || updateAll) {
-      lineEdit_diastaticPower->setText(Brewtarget::displayAmount(obsFerm->diastaticPower_lintner(), 0));
+      lineEdit_diastaticPower->setText(obsFerm);
       if( ! updateAll )
          return;
    }
    if( propName == "protein_pct" || updateAll) {
-      lineEdit_protein->setText(Brewtarget::displayAmount(obsFerm->protein_pct(), 0));
+      lineEdit_protein->setText(obsFerm);
       if( ! updateAll )
          return;
    }
    if( propName == "maxInBatch_pct" || updateAll) {
-      lineEdit_maxInBatch->setText(Brewtarget::displayAmount(obsFerm->maxInBatch_pct(), 0));
+      lineEdit_maxInBatch->setText(obsFerm);
       if( ! updateAll )
          return;
    }
@@ -243,7 +199,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == "ibuGalPerLb" || updateAll) {
-      lineEdit_ibuGalPerLb->setText(Brewtarget::displayAmount(obsFerm->ibuGalPerLb(), 0));
+      lineEdit_ibuGalPerLb->setText(obsFerm);
       if( ! updateAll )
          return;
    }

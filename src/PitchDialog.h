@@ -44,13 +44,15 @@ public:
    //! \brief Set the wort volume in liters.
    void setWortVolume_l(double volume);
    //! \brief Set the wort gravity in 20C/20C SG.
-   void setWortGravity(double sg);
+   void setWortDensity(double sg);
    
 public slots:
    void calculate();
    void updateShownPitchRate(int percent);
    void toggleViabilityFromDate(int state);
    void updateViabilityFromDate(QDate date);
+
+   void updateProductionDate(unitDisplay dsp, unitScale scl);
 
 private:
 

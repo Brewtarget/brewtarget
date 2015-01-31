@@ -26,6 +26,10 @@
 #include "CelsiusTempUnitSystem.h"
 #include "FahrenheitTempUnitSystem.h"
 #include "TimeUnitSystem.h"
+#include "EbcColorUnitSystem.h"
+#include "SrmColorUnitSystem.h"
+#include "SgDensityUnitSystem.h"
+#include "PlatoDensityUnitSystem.h"
 #include "unit.h"
 #include <QDebug>
 
@@ -75,5 +79,29 @@ TimeUnitSystem* UnitSystems::timeUnitSystem()
 {
    static TimeUnitSystem* t = new TimeUnitSystem();
    return t;
+}
+
+EbcColorUnitSystem* UnitSystems::ebcColorUnitSystem()
+{
+   static EbcColorUnitSystem* e = new EbcColorUnitSystem();
+   return e;
+}
+
+SrmColorUnitSystem* UnitSystems::srmColorUnitSystem()
+{
+   static SrmColorUnitSystem* s = new SrmColorUnitSystem();
+   return s;
+}
+
+SgDensityUnitSystem* UnitSystems::sgDensityUnitSystem()
+{
+   static SgDensityUnitSystem* sg = new SgDensityUnitSystem();
+   return sg;
+}
+
+PlatoDensityUnitSystem* UnitSystems::platoDensityUnitSystem()
+{
+   static PlatoDensityUnitSystem* p = new PlatoDensityUnitSystem();
+   return p;
 }
 

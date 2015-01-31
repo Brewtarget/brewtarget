@@ -21,7 +21,6 @@
 #include "SIVolumeUnitSystem.h"
 #include <QStringList>
 #include <cmath>
-#include "unit.h"
 
 SIVolumeUnitSystem::SIVolumeUnitSystem()
    : UnitSystem()
@@ -33,6 +32,12 @@ void SIVolumeUnitSystem::loadMap()
 {
    scaleToUnit.insert(scaleExtraSmall, Units::milliliters);
    scaleToUnit.insert(scaleSmall, Units::liters);
+}
+
+void SIVolumeUnitSystem::loadUnitmap()
+{
+   qstringToUnit.insert("mL", Units::milliliters);
+   qstringToUnit.insert("L", Units::liters);
 }
 
 Unit* SIVolumeUnitSystem::thicknessUnit()

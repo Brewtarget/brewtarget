@@ -55,6 +55,7 @@
 #include "fermentable.h"
 #include "UnitSystem.h"
 #include "UnitSystems.h"
+#include "unit.h"
 #include "USWeightUnitSystem.h"
 #include "USVolumeUnitSystem.h"
 #include "FahrenheitTempUnitSystem.h"
@@ -63,6 +64,12 @@
 #include "SIVolumeUnitSystem.h"
 #include "CelsiusTempUnitSystem.h"
 #include "ImperialVolumeUnitSystem.h"
+
+#include "EbcColorUnitSystem.h"
+#include "SrmColorUnitSystem.h"
+#include "SgDensityUnitSystem.h"
+#include "PlatoDensityUnitSystem.h"
+
 #include "BtSplashScreen.h"
 #include "MainWindow.h"
 #include "mash.h"
@@ -87,17 +94,15 @@ bool Brewtarget::checkVersion = true;
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
 
-UnitSystem* Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem();
-UnitSystem* Brewtarget::volumeSystem = UnitSystems::usVolumeUnitSystem();
-UnitSystem* Brewtarget::tempSystem = UnitSystems::fahrenheitTempUnitSystem();
-UnitSystem* Brewtarget::timeSystem = UnitSystems::timeUnitSystem();
-
 TempScale Brewtarget::tempScale = Celsius;
+unitDisplay Brewtarget::dateFormat = displaySI;
+
 Brewtarget::ColorType Brewtarget::colorFormula = Brewtarget::MOREY;
 Brewtarget::IbuType Brewtarget::ibuFormula = Brewtarget::TINSETH;
 Brewtarget::ColorUnitType Brewtarget::colorUnit = Brewtarget::SRM;
+Brewtarget::DensityUnitType Brewtarget::densityUnit = Brewtarget::SG;
 
-bool Brewtarget::usePlato = false;
+QHash<int, UnitSystem*> Brewtarget::thingToUnitSystem;
 
 bool Brewtarget::ensureDirectoriesExist()
 {
@@ -106,7 +111,7 @@ bool Brewtarget::ensureDirectoriesExist()
 
    QString errTitle(QObject::tr("Directory Problem"));
    QString errText(QObject::tr("\"%1\" cannot be read."));
-   
+
    // Check data dir
    dir.setPath(getDataDir());
    if( ! dir.exists() || ! dir.isReadable() )
@@ -154,7 +159,7 @@ bool Brewtarget::ensureDirectoriesExist()
       );
       return false;
    }
-   
+
    return true;
 }
 
@@ -162,7 +167,7 @@ void Brewtarget::checkForNewVersion(MainWindow* mw)
 {
 
    // Don't do anything if the checkVersion flag was set false
-   if ( checkVersion == false ) 
+   if ( checkVersion == false )
       return;
 
    QNetworkAccessManager manager;
@@ -187,7 +192,7 @@ bool Brewtarget::ensureDataFilesExist()
 {
    QString logFileName;
    bool success = true;
-   
+
    logFile = new QFile();
 
    // Log file
@@ -269,6 +274,19 @@ unitDisplay Brewtarget::getColorUnit()
    return displayEbc;
 }
 
+unitDisplay Brewtarget::getDateFormat()
+{
+   return dateFormat;
+}
+
+unitDisplay Brewtarget::getDensityUnit()
+{
+   if ( densityUnit == Brewtarget::SG )
+      return displaySg;
+
+   return displayPlato;
+}
+
 TempScale Brewtarget::getTemperatureScale()
 {
    return tempScale;
@@ -280,7 +298,7 @@ QString Brewtarget::getDataDir()
 #if defined(Q_OS_LINUX) // Linux OS.
 
    dir = QString(CONFIGDATADIR);
-   
+
 #elif defined(Q_OS_MAC) // MAC OS.
 
    // We should be inside an app bundle.
@@ -359,7 +377,7 @@ QString Brewtarget::getConfigDir(bool *success)
                *success = false;
             return "";
          }
-         
+
          // chmod 755 ~/.config
          QFile::setPermissions( dir.absolutePath() + "/.config", sevenFiveFive );
       }
@@ -387,7 +405,7 @@ QString Brewtarget::getConfigDir(bool *success)
             *success = false;
          return "";
       }
-      
+
       // chmod 755 ~/.config/brewtarget
       QFile::setPermissions( dir.absolutePath() + "/brewtarget", sevenFiveFive );
    }
@@ -446,7 +464,7 @@ bool Brewtarget::initialize()
    qRegisterMetaType< QList<Misc*> >();
    qRegisterMetaType< QList<Yeast*> >();
    qRegisterMetaType< QList<Water*> >();
-   
+
    // In Unix, make sure the user isn't running 2 copies.
 #if defined(Q_OS_LINUX)
    pidFile.setFileName(QString("%1.pid").arg(getUserDataDir()));
@@ -460,7 +478,7 @@ bool Brewtarget::initialize()
          pidStream >> pid;
       }
       pidFile.close();
-      
+
       // If the pid is in the proc filesystem, another instance is running.
       // Have to check /proc, because perhaps the last instance crashed without
       // cleaning up after itself.
@@ -471,7 +489,7 @@ bool Brewtarget::initialize()
          return false;
       }
    }
-   
+
    // Open the pidFile, erasing any contents, and write our pid.
    pidFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
    {
@@ -481,14 +499,15 @@ bool Brewtarget::initialize()
    pidFile.close();
 #endif
    userDataDir = getConfigDir();
-   
+
    // If the old options file exists, convert it. Otherwise, just get the
    // system options. I *think* this will work. The installer copies the old
    // one into the new place on Windows.
    if ( option("hadOldConfig", false).toBool() )
-      convertPersistentOptions(); 
+      convertPersistentOptions();
 
    readSystemOptions();
+   loadMap();
 
    // Make sure all the necessary directories and files we need exist before starting.
    bool success;
@@ -501,14 +520,14 @@ bool Brewtarget::initialize()
 #if defined(Q_OS_MAC)
    qt_set_sequence_auto_mnemonic(TRUE); // turns on Mac Keyboard shortcuts
 #endif
-  
+
    // Check if the database was successfully loaded before
    // loading the main window.
    if (Database::instance().loadSuccessful())
    {
       if ( ! QSettings().contains("converted") )
          Database::instance().convertFromXml();
-      
+
       return true;
    }
    else
@@ -530,12 +549,12 @@ void Brewtarget::cleanup()
       delete logFile;
       logFile = 0;
    }
-   
+
    // Should I do qApp->removeTranslator() first?
    delete defaultTrans;
    delete btTrans;
    delete _mainWindow;
-   
+
    Database::dropInstance();
 #if defined(Q_OS_LINUX)
    pidFile.remove();
@@ -546,7 +565,7 @@ void Brewtarget::cleanup()
 int Brewtarget::run()
 {
    int ret = 0;
-   
+
    BtSplashScreen splashScreen;
    splashScreen.show();
    qApp->processEvents();
@@ -555,7 +574,7 @@ int Brewtarget::run()
       cleanup();
       return 1;
    }
-   
+
    _mainWindow = new MainWindow();
    _mainWindow->setVisible(true);
    splashScreen.finish(_mainWindow);
@@ -564,196 +583,10 @@ int Brewtarget::run()
    do {
       ret = qApp->exec();
    } while (ret == 1000);
-   
+
    cleanup();
 
    return ret;
-}
-
-void Brewtarget::log(LogType lt, QString message)
-{
-   QString m;
-   
-   if( lt == LogType_WARNING )
-      m = QString("WARNING: %1").arg(message);
-   else if( lt == LogType_ERROR )
-      m = QString("ERROR: %1").arg(message);
-   else
-      m = message;
-   
-   // First, write out to stderr.
-   std::cerr << m.toUtf8().constData() << std::endl;
-   // Then display it in the GUI's status bar.
-   if( _mainWindow && _mainWindow->statusBar() )
-      _mainWindow->statusBar()->showMessage(m, 3000);
-
-   // Now, write it to the log file if there is one.
-   if( logStream != 0 )
-      *logStream << m << "\n";
-}
-
-void Brewtarget::logE( QString message )
-{
-   log( LogType_ERROR, message );
-}
-
-void Brewtarget::logW( QString message )
-{
-   log( LogType_WARNING, message );
-}
-
-// Displays "amount" of units "units" in the proper format.
-// If "units" is null, just return the amount.
-QString Brewtarget::displayAmount( double amount, Unit* units, int precision, unitDisplay displayUnits, unitScale displayScale)
-{
-   int fieldWidth = 0;
-   char format = 'f';
-   UnitSystem* temp;
-
-   // Check for insane values.
-   if( Algorithms::isNan(amount) || Algorithms::isInf(amount) )
-      return "-";
-   
-   // Special case.
-   if( units == 0 )
-      return QString("%L1").arg(amount, fieldWidth, format, precision);
-
-   QString SIUnitName = units->getSIUnitName();
-   double SIAmount = units->toSI( amount );
-   QString ret;
-
-   // convert to the current unit system (s).
-
-   if(SIUnitName.compare("kg") == 0) // Dealing with mass.
-   {
-      temp = findMassUnitSystem(displayUnits);
-      ret = temp->displayAmount( amount, units, displayScale );
-   }
-   else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
-   {
-      temp = findVolumeUnitSystem(displayUnits);
-      ret = temp->displayAmount(amount,units,displayScale);
-   }
-   else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
-   {
-      temp = findTemperatureSystem(displayUnits);
-      ret = temp->displayAmount( amount, units );
-   }
-   else if( SIUnitName.compare("min") == 0 ) // Time
-      ret = timeSystem->displayAmount( amount, units );
-   else // If we don't deal with it above, just use the SI amount.
-      ret = QString("%L1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
-
-   return ret;
-}
-
-QString Brewtarget::displayAmount(BeerXMLElement* element, QObject* object, QString attribute, Unit* units, int precision )
-{
-   double amount = 0.0;
-   unitScale dispScale;
-   unitDisplay dispUnit;
-
-   if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
-   {
-      // Get the amount
-      amount = element->property(attribute.toLatin1().constData()).toDouble();
-      // Get the display units and scale
-      dispUnit  = (unitDisplay)option(attribute, noUnit,  object, UNIT).toInt();
-      dispScale = (unitScale)option(  attribute, noScale, object, SCALE).toInt();
-      
-      return displayAmount(amount, units, precision, dispUnit, dispScale);
-   }
-   else
-      return "?";
-
-}
-
-UnitSystem* Brewtarget::findVolumeUnitSystem( unitDisplay system )
-{
-   if ( system == noUnit ) 
-      return volumeSystem;
-
-   if ( system == displayUS )
-      return UnitSystems::usVolumeUnitSystem();
-   else if ( system == displayImp )
-      return UnitSystems::imperialVolumeUnitSystem();
-   else 
-      return UnitSystems::siVolumeUnitSystem();
-}
-
-UnitSystem* Brewtarget::findMassUnitSystem( unitDisplay system )
-{
-   if ( system == noUnit ) 
-      return weightSystem;
-
-   // Both imperial and US are the same. So I cheat.
-   if ( system == displaySI )
-      return UnitSystems::siWeightUnitSystem();
-   else 
-      return UnitSystems::usWeightUnitSystem();
-}
-
-UnitSystem* Brewtarget::findTemperatureSystem( unitDisplay system )
-{
-   if ( system == noUnit )
-      return tempSystem;
-
-   // Not sure how to handle Kelvin, but it will have to be upstream.
-   if ( system == displayUS )
-      return UnitSystems::fahrenheitTempUnitSystem();
-   else 
-      return UnitSystems::celsiusTempUnitSystem();
-}
-
-void Brewtarget::getThicknessUnits( Unit** volumeUnit, Unit** weightUnit )
-{
-   *volumeUnit = volumeSystem->thicknessUnit();
-   *weightUnit = weightSystem->thicknessUnit();
-}
-
-QString Brewtarget::displayThickness( double thick_lkg, bool showUnits )
-{
-   int fieldWidth = 0;
-   char format = 'f';
-   int precision = 2;
-
-   Unit* volUnit = volumeSystem->thicknessUnit();
-   Unit* weightUnit = weightSystem->thicknessUnit();
-
-   double num = volUnit->fromSI(thick_lkg);
-   double den = weightUnit->fromSI(1.0);
-
-   if( showUnits )
-      return QString("%L1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
-   else
-      return QString("%L1").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
-}
-
-QString Brewtarget::getOptionValue(const QDomDocument& optionsDoc, const QString& option, bool* hasOption)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QDomNodeList list;
-
-   list = optionsDoc.elementsByTagName(option);
-   if(list.length() <= 0)
-   {
-      Brewtarget::logW(QString("Could not find the <%1> tag in the option file.").arg(option));
-      if( hasOption != 0 )
-         *hasOption = false;
-      return "";
-   }
-   else
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-
-      if( hasOption != 0 )
-         *hasOption = true;
-
-      return textNode.nodeValue();
-   }
 }
 
 // Read the old options.xml file one more time, then move it out of the way.
@@ -807,17 +640,17 @@ void Brewtarget::convertPersistentOptions()
       if( text == "Imperial" )
       {
          weightUnitSystem = Imperial;
-         weightSystem = UnitSystems::usWeightUnitSystem();
+         thingToUnitSystem.insert(Mass,UnitSystems::usWeightUnitSystem());
       }
       else if (text == "USCustomary")
       {
          weightUnitSystem = USCustomary;
-         weightSystem = UnitSystems::usWeightUnitSystem();
+         thingToUnitSystem.insert(Mass,UnitSystems::usWeightUnitSystem());
       }
       else
       {
          weightUnitSystem = SI;
-         weightSystem = UnitSystems::siWeightUnitSystem();
+         thingToUnitSystem.insert(Mass,UnitSystems::siWeightUnitSystem());
       }
    }
 
@@ -828,17 +661,17 @@ void Brewtarget::convertPersistentOptions()
       if( text == "Imperial" )
       {
          volumeUnitSystem = Imperial;
-         volumeSystem = UnitSystems::imperialVolumeUnitSystem();
+         thingToUnitSystem.insert(Volume,UnitSystems::imperialVolumeUnitSystem());
       }
       else if (text == "USCustomary")
       {
          volumeUnitSystem = USCustomary;
-         volumeSystem = UnitSystems::usVolumeUnitSystem();
+         thingToUnitSystem.insert(Volume,UnitSystems::usVolumeUnitSystem());
       }
       else
       {
          volumeUnitSystem = SI;
-         volumeSystem = UnitSystems::siVolumeUnitSystem();
+         thingToUnitSystem.insert(Volume,UnitSystems::siVolumeUnitSystem());
       }
    }
 
@@ -849,18 +682,18 @@ void Brewtarget::convertPersistentOptions()
       if( text == "Fahrenheit" )
       {
          tempScale = Fahrenheit;
-         tempSystem = UnitSystems::fahrenheitTempUnitSystem();
+         thingToUnitSystem.insert(Temp,UnitSystems::fahrenheitTempUnitSystem());
       }
       else
       {
          tempScale = Celsius;
-         tempSystem = UnitSystems::celsiusTempUnitSystem();
+         thingToUnitSystem.insert(Temp,UnitSystems::celsiusTempUnitSystem());
       }
    }
 
    //======================Time======================
    // Set the one and only time system.
-   timeSystem = UnitSystems::timeUnitSystem();
+   thingToUnitSystem.insert(Time,UnitSystems::timeUnitSystem());
 
    //===================IBU===================
    text = getOptionValue(*optionsDoc, "ibu_formula", &hasOption);
@@ -892,14 +725,20 @@ void Brewtarget::convertPersistentOptions()
       }
    }
 
-   //========================Gravity==================
+   //========================Density==================
    text = getOptionValue(*optionsDoc, "use_plato", &hasOption);
    if( hasOption )
    {
       if( text == "true" )
-         usePlato = true;
+      {
+         densityUnit = PLATO;
+         thingToUnitSystem.insert(Density,UnitSystems::platoDensityUnitSystem());
+      }
       else if( text == "false" )
-         usePlato = false;
+      {
+         densityUnit = SG;
+         thingToUnitSystem.insert(Density,UnitSystems::sgDensityUnitSystem());
+      }
       else
       {
          Brewtarget::logW(QString("Bad use_plato type: %1").arg(text));
@@ -911,9 +750,15 @@ void Brewtarget::convertPersistentOptions()
    if( hasOption )
    {
       if( text == "srm" )
+      {
          colorUnit = SRM;
+         thingToUnitSystem.insert(Color,UnitSystems::srmColorUnitSystem());
+      }
       else if( text == "ebc" )
+      {
          colorUnit = EBC;
+         thingToUnitSystem.insert(Color,UnitSystems::ebcColorUnitSystem());
+      }
       else
          Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
    }
@@ -937,6 +782,33 @@ void Brewtarget::convertPersistentOptions()
 #endif
    // And remove the flag
    QSettings().remove("hadOldConfig");
+}
+
+QString Brewtarget::getOptionValue(const QDomDocument& optionsDoc, const QString& option, bool* hasOption)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QDomNodeList list;
+
+   list = optionsDoc.elementsByTagName(option);
+   if(list.length() <= 0)
+   {
+      Brewtarget::logW(QString("Could not find the <%1> tag in the option file.").arg(option));
+      if( hasOption != 0 )
+         *hasOption = false;
+      return "";
+   }
+   else
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+
+      if( hasOption != 0 )
+         *hasOption = true;
+
+      return textNode.nodeValue();
+   }
 }
 
 void Brewtarget::readSystemOptions()
@@ -963,17 +835,17 @@ void Brewtarget::readSystemOptions()
    if( text == "Imperial" )
    {
       weightUnitSystem = Imperial;
-      weightSystem = UnitSystems::usWeightUnitSystem();
+      thingToUnitSystem.insert(Mass,UnitSystems::usWeightUnitSystem());
    }
    else if (text == "USCustomary")
    {
       weightUnitSystem = USCustomary;
-      weightSystem = UnitSystems::usWeightUnitSystem();
+      thingToUnitSystem.insert(Mass,UnitSystems::usWeightUnitSystem());
    }
    else
    {
       weightUnitSystem = SI;
-      weightSystem = UnitSystems::siWeightUnitSystem();
+      thingToUnitSystem.insert(Mass,UnitSystems::siWeightUnitSystem());
    }
 
    //===========================Volume=======================
@@ -981,17 +853,17 @@ void Brewtarget::readSystemOptions()
    if( text == "Imperial" )
    {
       volumeUnitSystem = Imperial;
-      volumeSystem = UnitSystems::imperialVolumeUnitSystem();
+      thingToUnitSystem.insert(Volume,UnitSystems::imperialVolumeUnitSystem());
    }
    else if (text == "USCustomary")
    {
       volumeUnitSystem = USCustomary;
-      volumeSystem = UnitSystems::usVolumeUnitSystem();
+      thingToUnitSystem.insert(Volume,UnitSystems::usVolumeUnitSystem());
    }
    else
    {
       volumeUnitSystem = SI;
-      volumeSystem = UnitSystems::siVolumeUnitSystem();
+      thingToUnitSystem.insert(Volume,UnitSystems::siVolumeUnitSystem());
    }
 
    //=======================Temp======================
@@ -999,17 +871,17 @@ void Brewtarget::readSystemOptions()
    if( text == "Fahrenheit" )
    {
       tempScale = Fahrenheit;
-      tempSystem = UnitSystems::fahrenheitTempUnitSystem();
+      thingToUnitSystem.insert(Temp,UnitSystems::fahrenheitTempUnitSystem());
    }
    else
    {
       tempScale = Celsius;
-      tempSystem = UnitSystems::celsiusTempUnitSystem();
+      thingToUnitSystem.insert(Temp,UnitSystems::celsiusTempUnitSystem());
    }
 
    //======================Time======================
    // Set the one and only time system.
-   timeSystem = UnitSystems::timeUnitSystem();
+   thingToUnitSystem.insert(Time,UnitSystems::timeUnitSystem());
 
    //===================IBU===================
    text = option("ibu_formula", "tinseth").toString();
@@ -1022,7 +894,7 @@ void Brewtarget::readSystemOptions()
       Brewtarget::logE(QString("Bad ibu_formula type: %1").arg(text));
    }
 
-   //========================Color======================
+   //========================Color Formula======================
    text = option("color_formula", "morey").toString();
    if( text == "morey" )
       colorFormula = MOREY;
@@ -1035,43 +907,63 @@ void Brewtarget::readSystemOptions()
       Brewtarget::logE(QString("Bad color_formula type: %1").arg(text));
    }
 
-   //========================Gravity==================
-   usePlato = option("use_plato", false).toBool();
+   //========================Density==================
+
+   if ( option("use_plato", false).toBool() )
+   {
+      densityUnit = PLATO;
+      thingToUnitSystem.insert(Density,UnitSystems::platoDensityUnitSystem());
+   }
+   else
+   {
+      densityUnit = SG;
+      thingToUnitSystem.insert(Density,UnitSystems::sgDensityUnitSystem());
+   }
 
    //=======================Color unit===================
    text = option("color_unit", "srm").toString();
    if( text == "srm" )
+   {
       colorUnit = SRM;
+      thingToUnitSystem.insert(Color,UnitSystems::srmColorUnitSystem());
+   }
    else if( text == "ebc" )
+   {
       colorUnit = EBC;
+      thingToUnitSystem.insert(Color,UnitSystems::ebcColorUnitSystem());
+   }
    else
       Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
+
+   //=======================Date format===================
+   dateFormat = (unitDisplay)option("date_format",displaySI).toInt();
 }
 
 void Brewtarget::saveSystemOptions()
 {
    QString text;
 
-   setOption("check_version", checkVersion); 
+   setOption("check_version", checkVersion);
    setOption("last_db_merge_req", lastDbMergeRequest.toString(Qt::ISODate));
    setOption("language", getCurrentLanguage());
    setOption("user_data_dir", userDataDir);
-   setOption("weight_unit_system", weightSystem->unitType());
-   setOption("volume_unit_system",volumeSystem->unitType()); 
-   setOption("temperature_scale", tempSystem->unitType());
-   setOption("use_plato", usePlato);
+   setOption("weight_unit_system", thingToUnitSystem.value(Mass)->unitType());
+   setOption("volume_unit_system",thingToUnitSystem.value(Volume)->unitType());
+   setOption("temperature_scale", thingToUnitSystem.value(Temp)->unitType());
+   setOption("use_plato", densityUnit == PLATO);
+   setOption("date_format", dateFormat);
 
    switch(ibuFormula)
    {
       case TINSETH:
          setOption("ibu_formula", "tinseth");
-         break; 
+         break;
       case RAGER:
          setOption("ibu_formula", "rager");
-         break; 
+         break;
    }
 
-   switch(colorFormula) 
+   switch(colorFormula)
    {
       case MOREY:
          setOption("color_formula", "morey");
@@ -1084,77 +976,223 @@ void Brewtarget::saveSystemOptions()
          break;
    }
 
-   switch(colorUnit) 
+   switch(colorUnit)
    {
       case SRM:
          setOption("color_unit", "srm");
-         break; 
+         break;
       case EBC:
          setOption("color_unit", "ebc");
-         break; 
+         break;
    }
 }
 
-double Brewtarget::weightQStringToSI(QString qstr, unitDisplay dispUnit, bool force)
+// the defaults come from readSystemOptions. This just fleshes out the hash
+// for later use.
+void Brewtarget::loadMap()
 {
-   UnitSystem* temp = findMassUnitSystem(dispUnit);
-   return temp->qstringToSI(qstr, temp->unit(),force);
+   // ==== mass ====
+   thingToUnitSystem.insert(Mass | displaySI, UnitSystems::siWeightUnitSystem() );
+   thingToUnitSystem.insert(Mass | displayUS, UnitSystems::usWeightUnitSystem() );
+   thingToUnitSystem.insert(Mass | displayImp,UnitSystems::usWeightUnitSystem() );
+
+   // ==== volume ====
+   thingToUnitSystem.insert(Volume | displaySI, UnitSystems::siVolumeUnitSystem() );
+   thingToUnitSystem.insert(Volume | displayUS, UnitSystems::usVolumeUnitSystem() );
+   thingToUnitSystem.insert(Volume | displayImp,UnitSystems::imperialVolumeUnitSystem() );
+
+   // ==== time is empty ==== (this zen moment was free)
+
+   // ==== temp ====
+   thingToUnitSystem.insert(Temp | displaySI,UnitSystems::celsiusTempUnitSystem() );
+   thingToUnitSystem.insert(Temp | displayUS,UnitSystems::fahrenheitTempUnitSystem() );
+
+   // ==== color ====
+   thingToUnitSystem.insert(Color | displaySrm,UnitSystems::srmColorUnitSystem() );
+   thingToUnitSystem.insert(Color | displayEbc,UnitSystems::ebcColorUnitSystem() );
+
+   // ==== density ====
+   thingToUnitSystem.insert(Density | displaySg,   UnitSystems::sgDensityUnitSystem() );
+   thingToUnitSystem.insert(Density | displayPlato,UnitSystems::platoDensityUnitSystem() );
 }
 
-double Brewtarget::volQStringToSI(QString qstr, unitDisplay dispUnit, bool force)
+void Brewtarget::log(LogType lt, QString message)
 {
-   UnitSystem* temp = findVolumeUnitSystem(dispUnit);
-   return temp->qstringToSI(qstr,temp->unit(), force);
-}
+   QString m;
 
-double Brewtarget::tempQStringToSI(QString qstr, unitDisplay dispUnit,bool force)
-{
-   UnitSystem* temp = findTemperatureSystem(dispUnit);
-   return temp->qstringToSI(qstr, temp->unit(),force);
-}
-
-double Brewtarget::colorQStringToSI(QString qstr)
-{
-   if ( colorUnit == SRM )
-      return qstr.toDouble();
+   if( lt == LogType_WARNING )
+      m = QString("WARNING: %1").arg(message);
+   else if( lt == LogType_ERROR )
+      m = QString("ERROR: %1").arg(message);
    else
-      return qstr.toDouble() * 12.7/25.0;
+      m = message;
+
+   // First, write out to stderr.
+   std::cerr << m.toUtf8().constData() << std::endl;
+   // Then display it in the GUI's status bar.
+   if( _mainWindow && _mainWindow->statusBar() )
+      _mainWindow->statusBar()->showMessage(m, 3000);
+
+   // Now, write it to the log file if there is one.
+   if( logStream != 0 )
+      *logStream << m << "\n";
 }
 
-double Brewtarget::timeQStringToSI(QString qstr)
+void Brewtarget::logE( QString message )
 {
-   return timeSystem->qstringToSI(qstr, timeSystem->unit());
+   log( LogType_ERROR, message );
 }
 
-// This won't be clean like the others because we don't do density as a unit.
-// I suppose I should, but the Unit system gives me a wicked nasty headache
-double Brewtarget::densityQStringToSI(QString qstr)
-{   
-   double var;
-   QString unit;
-   QRegExp numUnit;
+void Brewtarget::logW( QString message )
+{
+   log( LogType_WARNING, message );
+}
 
-   // Try to make some guesses about what is there.
-   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
-   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+// Displays "amount" of units "units" in the proper format.
+// If "units" is null, just return the amount.
+QString Brewtarget::displayAmount( double amount, Unit* units, int precision, unitDisplay displayUnits, unitScale displayScale)
+{
+   int fieldWidth = 0;
+   char format = 'f';
+   UnitSystem* temp;
 
-   numUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
-   numUnit.setCaseSensitivity(Qt::CaseInsensitive);
+   // Check for insane values.
+   if( Algorithms::isNan(amount) || Algorithms::isInf(amount) )
+      return "-";
 
-   if ( qstr.contains(numUnit) )
+   // Special case.
+   if( units == 0 )
+      return QString("%L1").arg(amount, fieldWidth, format, precision);
+
+   QString SIUnitName = units->getSIUnitName();
+   double SIAmount = units->toSI( amount );
+   QString ret;
+
+   // convert to the current unit system (s).
+   temp = findUnitSystem(units, displayUnits);
+   // If we cannot find a unit system
+   if ( temp == 0 )
+      ret = QString("%L1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
+
+   ret = temp->displayAmount( amount, units, displayScale );
+
+   return ret;
+}
+
+QString Brewtarget::displayAmount(BeerXMLElement* element, QObject* object, QString attribute, Unit* units, int precision )
+{
+   double amount = 0.0;
+   unitScale dispScale;
+   unitDisplay dispUnit;
+
+   if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
    {
-      var  = numUnit.capturedTexts()[1].toDouble();
-      unit = numUnit.capturedTexts()[2];
+      // Get the amount
+      amount = element->property(attribute.toLatin1().constData()).toDouble();
+      // Get the display units and scale
+      dispUnit  = (unitDisplay)option(attribute, noUnit,  object->objectName(), UNIT).toInt();
+      dispScale = (unitScale)option(  attribute, noScale, object->objectName(), SCALE).toInt();
+
+      return displayAmount(amount, units, precision, dispUnit, dispScale);
    }
-   else 
-      var = qstr.toDouble();
+   else
+      return "?";
 
+}
 
-   if ( unit.contains("p", Qt::CaseInsensitive) || var > 1.2)
-      return Algorithms::PlatoToSG_20C20C(var);
+double Brewtarget::amountDisplay( double amount, Unit* units, int precision, unitDisplay displayUnits, unitScale displayScale)
+{
+   UnitSystem* temp;
 
-   return var;
- 
+   // Check for insane values.
+   if( Algorithms::isNan(amount) || Algorithms::isInf(amount) )
+      return -1.0;
+
+   // Special case.
+   if( units == 0 )
+      return amount;
+
+   QString SIUnitName = units->getSIUnitName();
+   double SIAmount = units->toSI( amount );
+   double ret;
+
+   // convert to the current unit system (s).
+   temp = findUnitSystem(units, displayUnits);
+   // If we cannot find a unit system
+   if ( temp == 0 )
+      ret = SIAmount;
+   else
+      ret = temp->amountDisplay( amount, units, displayScale );
+
+   return ret;
+}
+
+double Brewtarget::amountDisplay(BeerXMLElement* element, QObject* object, QString attribute, Unit* units, int precision )
+{
+   double amount = 0.0;
+   unitScale dispScale;
+   unitDisplay dispUnit;
+
+   if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
+   {
+      // Get the amount
+      amount = element->property(attribute.toLatin1().constData()).toDouble();
+      // Get the display units and scale
+      dispUnit  = (unitDisplay)option(attribute, noUnit,  object->objectName(), UNIT).toInt();
+      dispScale = (unitScale)option(  attribute, noScale, object->objectName(), SCALE).toInt();
+
+      return amountDisplay(amount, units, precision, dispUnit, dispScale);
+   }
+   else
+      return -1.0;
+}
+
+UnitSystem* Brewtarget::findUnitSystem(Unit* unit, unitDisplay display)
+{
+   if ( ! unit )
+      return 0;
+
+   int key = unit->getUnitType();
+
+   // noUnit means get the default UnitSystem. Through little planning on my
+   // part, it happens that is equivalent to just the unitType
+   if ( display != noUnit )
+      key |= display;
+
+   if ( thingToUnitSystem.contains( key ) )
+      return thingToUnitSystem.value(key);
+
+   return 0;
+}
+
+void Brewtarget::getThicknessUnits( Unit** volumeUnit, Unit** weightUnit )
+{
+   *volumeUnit = thingToUnitSystem.value(Volume | displayDef)->thicknessUnit();
+   *weightUnit = thingToUnitSystem.value(Mass   | displayDef)->thicknessUnit();
+}
+
+QString Brewtarget::displayThickness( double thick_lkg, bool showUnits )
+{
+   int fieldWidth = 0;
+   char format = 'f';
+   int precision = 2;
+
+   Unit* volUnit    = thingToUnitSystem.value(Volume | displayDef)->thicknessUnit();
+   Unit* weightUnit = thingToUnitSystem.value(Mass   | displayDef)->thicknessUnit();
+
+   double num = volUnit->fromSI(thick_lkg);
+   double den = weightUnit->fromSI(1.0);
+
+   if( showUnits )
+      return QString("%L1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
+   else
+      return QString("%L1").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
+}
+
+double Brewtarget::qStringToSI(QString qstr, Unit* unit, unitDisplay dispUnit, bool force)
+{
+   UnitSystem* temp = findUnitSystem(unit, dispUnit);
+   return temp->qstringToSI(qstr,temp->unit(),force);
 }
 
 QString Brewtarget::ibuFormulaName()
@@ -1184,6 +1222,17 @@ QString Brewtarget::colorFormulaName()
    return tr("Unknown");
 }
 
+QString Brewtarget::colorUnitName(unitDisplay display)
+{
+   if ( display == noUnit )
+      display = getColorUnit();
+
+   if ( display == displaySrm )
+      return QString("SRM");
+   else
+      return QString("EBC");
+}
+
 bool Brewtarget::hasUnits(QString qstr)
 {
    // accepts X,XXX.YZ (or X.XXX,YZ for EU users) as well as .YZ (or ,YZ) followed by
@@ -1207,15 +1256,15 @@ QPair<double,double> Brewtarget::displayRange(BeerXMLElement* element, QObject *
       range.first  = 0.0;
       range.second = 100.0;
    }
-   else if ( _type == GRAVITY )
+   else if ( _type != DENSITY )
    {
-      range.first  = displayOG(element, object, minName, false).toDouble();
-      range.second = displayOG(element, object, maxName, false).toDouble();
+      range.first  = amountDisplay(element, object, "colorMin_srm", Units::srm,0);
+      range.second = amountDisplay(element, object, "colorMax_srm", Units::srm,0);
    }
-   else 
+   else
    {
-      range.first = displayColor(element, object, "colorMin_srm", false).toDouble();
-      range.second = displayColor(element, object, "colorMax_srm", false).toDouble();
+      range.first  = amountDisplay(element, object, minName, Units::sp_grav,0);
+      range.second = amountDisplay(element, object, maxName, Units::sp_grav,0);
    }
 
    return range;
@@ -1226,167 +1275,20 @@ QPair<double,double> Brewtarget::displayRange(QObject *object, QString attribute
    QPair<double,double> range;
    unitDisplay displayUnit;
 
-   displayUnit = (unitDisplay)option(attribute, noUnit, object, UNIT).toInt();
+   displayUnit = (unitDisplay)option(attribute, noUnit, object->objectName(), UNIT).toInt();
 
-   if ( _type == GRAVITY )
+   if ( _type == DENSITY )
    {
-      range.first = displayOG(min, displayUnit, false).toDouble();
-      range.second = displayOG(max, displayUnit, false).toDouble();
+      range.first  = amountDisplay(min, Units::sp_grav, 0, displayUnit );
+      range.second = amountDisplay(max, Units::sp_grav, 0, displayUnit );
    }
    else
    {
-      range.first = displayColor(min, displayUnit, false).toDouble();
-      range.second = displayColor(max, displayUnit, false).toDouble();
+      range.first  = amountDisplay(min, Units::srm, 0, displayUnit );
+      range.second = amountDisplay(max, Units::srm, 0, displayUnit );
    }
 
    return range;
-}
-
-QString Brewtarget::displayOG( double og, unitDisplay displayUnit, bool showUnits)
-{
-   QString ret;
-
-   if( Algorithms::isNan(og) || Algorithms::isInf(og) )
-      return "-";
-   
-   // Field settings override defaults
-   if ( displayUnit == noUnit ) 
-      displayUnit = usePlato ? displayPlato : displaySg;
-
-   QString tmp = "%L1";
-   if ( showUnits && displayUnit == displayPlato )
-      tmp = "%L1 %2";
-
-   if( displayUnit == displaySg )
-      ret = tmp.arg(og, 0, 'f', 3);
-   else // Using Plato...
-   {
-      if( og >= 1.000 ) // Make sure OG is sane.
-         ret = tmp.arg(Algorithms::SG_20C20C_toPlato(og), 0, 'f', 1);
-      else
-         ret = tmp.arg(0);
-   }
-
-   if( showUnits && displayUnit == displayPlato )
-      ret = ret.arg("P");
-
-   return ret;
-}
-
-QString Brewtarget::displayOG( BeerXMLElement* element, QObject* object, QString attribute, bool showUnits)
-{
-   double og;
-   unitDisplay displayUnit;
-
-   if ( ! element )
-      return "0.0";
-
-   if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
-   {
-      displayUnit = (unitDisplay)option(attribute, noUnit, object, UNIT).toInt();
-      og = element->property(attribute.toLatin1().constData()).toDouble();
-      return displayOG(og, displayUnit, showUnits);
-   }
-   else
-      return "?";
-}
-
-QString Brewtarget::displayFG( double fg, double og, unitDisplay displayUnit, bool showUnits  )
-{
-   QString ret = "%L1";
-
-   if( Algorithms::isNan(fg) || Algorithms::isInf(fg) ||
-       Algorithms::isNan(og) || Algorithms::isInf(og)
-   )
-      return "-";
-   
-   if ( displayUnit == noUnit )
-      displayUnit = usePlato ? displayPlato : displaySg;
-
-   if ( showUnits && displayUnit == displayPlato ) 
-      ret = "%L1 %2";
-
-   if( displayUnit == displaySg )
-      ret = ret.arg(fg, 0, 'f', 3);
-   else
-   {
-      double plato;
-      if( og < fg || og < 1.000 || fg < 0.001 )
-         plato = 0; // Strange input, so just say 0.
-      else
-      {
-         // The following shows Plato as it would be on a
-         // hydrometer.
-         //plato = Algorithms::ogFgToPlato( og, fg );
-
-         // The following shows ACTUAL Plato
-         plato = Algorithms::SG_20C20C_toPlato(fg);
-      }
-      ret = ret.arg( plato, 0, 'f', 1 );
-   }
-
-   if( showUnits && displayUnit == displayPlato)
-      ret = ret.arg("P");
-
-   return ret;
-}
-
-// Damn. That is pretty. I actually got the bloody displayFG to look right.
-QString Brewtarget::displayFG(QPair<QString, BeerXMLElement*> fg, QPair<QString, BeerXMLElement*> og, QObject* object, bool showUnits)
-{
-   QString fgAttr = fg.first;
-   BeerXMLElement* fgElem = fg.second;
-
-   QString ogAttr = og.first;
-   BeerXMLElement* ogElem = og.second;
-   unitDisplay displayUnit;
-
-   if ( fgElem->property(fgAttr.toLatin1().constData()).canConvert(QVariant::Double) &&
-        ogElem->property(ogAttr.toLatin1().constData()).canConvert(QVariant::Double) )
-   {
-      // Note: it is the setting for the FG attribute that drives what unit is
-      //       displayed
-      displayUnit = (unitDisplay)option(fgAttr, noUnit, object, UNIT).toInt();
-      return displayFG(fgElem->property(fgAttr.toLatin1().constData()).toDouble(),
-                       ogElem->property(ogAttr.toLatin1().constData()).toDouble(),
-                       displayUnit,
-                       showUnits);
-   }
-
-   return "?";
-}
-
-QString Brewtarget::displayColor( double srm, unitDisplay displayUnit, bool showUnits )
-{
-   QString ret;
-
-   if ( displayUnit == noUnit ) 
-      displayUnit = colorUnit == Brewtarget::SRM ? displaySrm : displayEbc;
-   if ( displayUnit == displaySrm )
-      ret = showUnits ? QString("%L1 %2").arg(srm,0,'f',1).arg(Units::srm->getUnitName()) : QString("%L1").arg(srm,0,'f',1);
-   else
-   {
-      double ebc = Units::ebc->fromSI(srm);
-      ret = showUnits ? QString("%L1 %2").arg(ebc,0,'f',1).arg(Units::ebc->getUnitName()) : QString("%L1").arg(ebc,0,'f',1);
-   }
-
-   return ret;
-}
-
-QString Brewtarget::displayColor( BeerXMLElement* element, QObject* object, QString attribute, bool showUnits )
-{
-   double srm;
-   unitDisplay displayUnit;
-
-   if ( element->property( attribute.toLatin1().constData()).canConvert(QVariant::Double)) 
-   {
-      srm = element->property(attribute.toLatin1().constData()).toDouble();
-      displayUnit = (unitDisplay)option(attribute, noUnit, object, UNIT).toInt();
-
-      return displayColor(srm, displayUnit, showUnits);
-   }
-
-   return "?";
 }
 
 QString Brewtarget::displayDate(QDate const& date )
@@ -1395,38 +1297,39 @@ QString Brewtarget::displayDate(QDate const& date )
    return date.toString(loc.dateFormat(QLocale::ShortFormat));
 }
 
-bool Brewtarget::hasOption(QString attribute, const QObject* object, iUnitOps ops)
+bool Brewtarget::hasOption(QString attribute, const QString section, iUnitOps ops)
 {
    QString name;
 
-   if ( object )
-      name = generateName(attribute,object,ops);
-   else
+   if ( section.isNull() )
       name = attribute;
+   else
+      name = generateName(attribute,section,ops);
 
    return QSettings().contains(name);
 }
 
-void Brewtarget::setOption(QString attribute, QVariant value, const QObject* object, iUnitOps ops)
+void Brewtarget::setOption(QString attribute, QVariant value, const QString section, iUnitOps ops)
 {
    QString name;
 
-   if ( object )
-      name = generateName(attribute,object,ops);
-   else
+   if ( section.isNull() )
       name = attribute;
+   else
+      name = generateName(attribute,section,ops);
+
 
    QSettings().setValue(name,value);
 }
 
-QVariant Brewtarget::option(QString attribute, QVariant default_value, const QObject* object, iUnitOps ops)
+QVariant Brewtarget::option(QString attribute, QVariant default_value, QString section, iUnitOps ops)
 {
    QString name;
 
-   if ( object )
-      name = generateName(attribute,object,ops);
-   else
+   if ( section.isNull() )
       name = attribute;
+   else
+      name = generateName(attribute,section,ops);
 
    return QSettings().value(name,default_value);
 }
@@ -1437,9 +1340,9 @@ void Brewtarget::removeOption(QString attribute)
         QSettings().remove(attribute);
 }
 
-QString Brewtarget::generateName(QString attribute, const QObject* object, iUnitOps ops)
+QString Brewtarget::generateName(QString attribute, const QString section, iUnitOps ops)
 {
-   QString ret = QString("%1/%2").arg(object->objectName()).arg(attribute);
+   QString ret = QString("%1/%2").arg(section).arg(attribute);
 
    if ( ops != NOOP )
       ret += ops == UNIT ? "_unit" : "_scale";
@@ -1449,24 +1352,41 @@ QString Brewtarget::generateName(QString attribute, const QObject* object, iUnit
 
 // These are used in at least two places. I hate cut'n'paste coding so I am
 // putting them here.
+// I use a QActionGroup to make sure only one button is ever selected at once.
+// It allows me to cache the menus later and speeds the response time up.
 QMenu* Brewtarget::setupColorMenu(QWidget* parent, unitDisplay unit)
 {
    QMenu* menu = new QMenu(parent);
+   QActionGroup* qgrp = new QActionGroup(parent);
 
-   generateAction(menu, tr("Default"), noUnit, unit);
-   generateAction(menu, tr("EBC"), displayEbc, unit);
-   generateAction(menu, tr("SRM"), displaySrm, unit);
+   generateAction(menu, tr("Default"), noUnit, unit, qgrp);
+   generateAction(menu, tr("EBC"), displayEbc, unit, qgrp);
+   generateAction(menu, tr("SRM"), displaySrm, unit, qgrp);
 
    return menu;
 }
 
-QMenu* Brewtarget::setupGravityMenu(QWidget* parent, unitDisplay unit)
+QMenu* Brewtarget::setupDateMenu(QWidget* parent, unitDisplay unit)
 {
    QMenu* menu = new QMenu(parent);
+   QActionGroup* qgrp = new QActionGroup(parent);
 
-   generateAction(menu, tr("Default"), noUnit, unit);
-   generateAction(menu, tr("Plato"), displayPlato, unit);
-   generateAction(menu, tr("Specific Gravity"), displaySg, unit);
+   generateAction(menu, tr("Default"),    noUnit,     unit, qgrp);
+   generateAction(menu, tr("YYYY-mm-dd"), displaySI,  unit, qgrp);
+   generateAction(menu, tr("dd-mm-YYYY"), displayImp, unit, qgrp);
+   generateAction(menu, tr("mm-dd-YYYY"), displayUS,  unit, qgrp);
+
+   return menu;
+}
+
+QMenu* Brewtarget::setupDensityMenu(QWidget* parent, unitDisplay unit)
+{
+   QMenu* menu = new QMenu(parent);
+   QActionGroup* qgrp = new QActionGroup(parent);
+
+   generateAction(menu, tr("Default"), noUnit, unit, qgrp);
+   generateAction(menu, tr("Plato"), displayPlato, unit, qgrp);
+   generateAction(menu, tr("Specific Gravity"), displaySg, unit, qgrp);
 
    return menu;
 }
@@ -1475,10 +1395,11 @@ QMenu* Brewtarget::setupMassMenu(QWidget* parent, unitDisplay unit, unitScale sc
 {
    QMenu* menu = new QMenu(parent);
    QMenu* sMenu;
+   QActionGroup* qgrp = new QActionGroup(parent);
 
-   generateAction(menu, tr("Default"), noUnit, unit);
-   generateAction(menu, tr("SI"), displaySI, unit);
-   generateAction(menu, tr("US Customary"), displayUS, unit);
+   generateAction(menu, tr("Default"), noUnit, unit, qgrp);
+   generateAction(menu, tr("SI"), displaySI, unit, qgrp);
+   generateAction(menu, tr("US Customary"), displayUS, unit, qgrp);
 
    // Some places can't do scale -- like yeast tables and misc tables because
    // they can be mixed. It doesn't stop the unit selection from working, but
@@ -1488,17 +1409,14 @@ QMenu* Brewtarget::setupMassMenu(QWidget* parent, unitDisplay unit, unitScale sc
 
    if ( unit == noUnit )
    {
-      switch(Brewtarget::getWeightUnitSystem())
-      {
-         case USCustomary:
-            unit = displayUS;
-            break;
-         default:
-            unit = displaySI;
-      }
+      if ( thingToUnitSystem.value(Mass) == UnitSystems::usWeightUnitSystem() )
+         unit = displayUS;
+      else
+         unit = displaySI;
    }
 
    sMenu = new QMenu(menu);
+   QActionGroup* qsgrp = new QActionGroup(menu);
    switch(unit)
    {
       case displaySI:
@@ -1522,10 +1440,30 @@ QMenu* Brewtarget::setupMassMenu(QWidget* parent, unitDisplay unit, unitScale sc
 QMenu* Brewtarget::setupTemperatureMenu(QWidget* parent, unitDisplay unit)
 {
    QMenu* menu = new QMenu(parent);
+   QActionGroup* qgrp = new QActionGroup(parent);
 
-   generateAction(menu, tr("Default"), noUnit, unit);
-   generateAction(menu, tr("Celsius"), displaySI, unit);
-   generateAction(menu, tr("Fahrenheit"), displayUS, unit);
+   generateAction(menu, tr("Default"), noUnit, unit, qgrp);
+   generateAction(menu, tr("Celsius"), displaySI, unit, qgrp);
+   generateAction(menu, tr("Fahrenheit"), displayUS, unit, qgrp);
+
+   return menu;
+}
+
+// Time menus only have scale
+QMenu* Brewtarget::setupTimeMenu(QWidget* parent, unitScale scale)
+{
+   QMenu* menu = new QMenu(parent);
+   QMenu* sMenu = new QMenu(menu);
+   QActionGroup* qgrp = new QActionGroup(parent);
+
+   generateAction(sMenu, tr("Default"), noScale, scale, qgrp);
+   generateAction(sMenu, tr("Seconds"), scaleExtraSmall, scale, qgrp);
+   generateAction(sMenu, tr("Minutes"), scaleSmall, scale, qgrp);
+   generateAction(sMenu, tr("Hours"),   scaleMedium, scale, qgrp);
+   generateAction(sMenu, tr("Days"),    scaleLarge, scale, qgrp);
+
+   sMenu->setTitle("Scale");
+   menu->addMenu(sMenu);
 
    return menu;
 }
@@ -1533,33 +1471,30 @@ QMenu* Brewtarget::setupTemperatureMenu(QWidget* parent, unitDisplay unit)
 QMenu* Brewtarget::setupVolumeMenu(QWidget* parent, unitDisplay unit, unitScale scale, bool generateScale)
 {
    QMenu* menu = new QMenu(parent);
+   QActionGroup* qgrp = new QActionGroup(parent);
    QMenu* sMenu;
 
-   generateAction(menu, tr("Default"), noUnit, unit);
-   generateAction(menu, tr("SI"), displaySI, unit);
-   generateAction(menu, tr("US Customary"), displayUS, unit);
-   generateAction(menu, tr("British Imperial"), displayImp, unit);
+   generateAction(menu, tr("Default"), noUnit, unit, qgrp);
+   generateAction(menu, tr("SI"), displaySI, unit, qgrp);
+   generateAction(menu, tr("US Customary"), displayUS, unit, qgrp);
+   generateAction(menu, tr("British Imperial"), displayImp, unit, qgrp);
 
    if ( generateScale == false )
       return menu;
 
    if ( unit == noUnit )
    {
-      switch(Brewtarget::getVolumeUnitSystem())
-      {
-         case USCustomary:
-            unit = displayUS;
-            break;
-         case Imperial:
-            unit = displayImp;
-            break;
-         default:
-            unit = displaySI;
-      }
+      if ( thingToUnitSystem.value(Volume) == UnitSystems::usVolumeUnitSystem() )
+         unit = displayUS;
+      else if ( thingToUnitSystem.value(Volume) == UnitSystems::imperialVolumeUnitSystem() )
+         unit = displayImp;
+      else
+         unit = displaySI;
    }
 
 
    sMenu = new QMenu(menu);
+   QActionGroup* qsgrp = new QActionGroup(menu);
    switch(unit)
    {
       case displaySI:
@@ -1584,7 +1519,7 @@ QMenu* Brewtarget::setupVolumeMenu(QWidget* parent, unitDisplay unit, unitScale 
    return menu;
 }
 
-void Brewtarget::generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal)
+void Brewtarget::generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp)
 {
    QAction* action = new QAction(menu);
 
@@ -1592,6 +1527,8 @@ void Brewtarget::generateAction(QMenu* menu, QString text, QVariant data, QVaria
    action->setData(data);
    action->setCheckable(true);
    action->setChecked(currentVal == data);;
+   if ( qgrp )
+      qgrp->addAction(action);
 
   menu->addAction(action);
 }

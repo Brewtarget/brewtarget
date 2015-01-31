@@ -33,5 +33,10 @@ void FahrenheitTempUnitSystem::loadMap()
    scaleToUnit.insert(scaleWithout,Units::fahrenheit);
 }
 
+void FahrenheitTempUnitSystem::loadUnitmap()
+{
+   qstringToUnit.insert("F",Units::fahrenheit);
+}
+
 Unit* FahrenheitTempUnitSystem::unit() { return Units::fahrenheit; };
 QString FahrenheitTempUnitSystem::unitType() { return "Fahrenheit"; }

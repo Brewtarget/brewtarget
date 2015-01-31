@@ -58,9 +58,9 @@ void PrimingDialog::calculate()
    double sugar_mol;
    double sugar_g;
    
-   beer_l = Brewtarget::volQStringToSI( lineEdit_beerVol->text() );
-   temp_c = Brewtarget::tempQStringToSI( lineEdit_temp->text() );
-   desiredVols = lineEdit_vols->text().toDouble();
+   beer_l = lineEdit_beerVol->toSI();
+   temp_c = lineEdit_temp->toSI();
+   desiredVols = lineEdit_vols->toSI();
    
    residualVols = 1.57 * pow( 0.97, temp_c ); // Amount of CO2 still in suspension.
    addedVols = desiredVols - residualVols;
@@ -92,5 +92,5 @@ void PrimingDialog::calculate()
    else
       sugar_g = 0;
    
-   lineEdit_output->setText( Brewtarget::displayAmount( sugar_g, Units::grams ) );
+   lineEdit_output->setText( sugar_g );
 }
