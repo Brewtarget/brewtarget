@@ -1190,15 +1190,34 @@ Yeast* MainWindow::selectedYeast()
    return y;
 }
 
+
 void MainWindow::removeSelectedFermentable()
 {
-   Fermentable* f = selectedFermentable();
-   if( f == 0 )
-      return;
+    QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
+    QModelIndex viewIndex, modelIndex;
+    QList<Fermentable *> itemsToRemove;
+    int size, i;
 
-   fermTableModel->removeFermentable(f);
-   recipeObs->removeFermentable(f);
+    size = selected.size();
+
+    if( size == 0 )
+       return;
+
+    for(int i = 0; i < size; i++)
+    {
+        viewIndex = selected.at(i);
+        modelIndex = fermTableProxy->mapToSource(viewIndex);
+
+        itemsToRemove.append(fermTableModel->getFermentable(modelIndex.row()));
+    }
+
+    for(i = 0; i < itemsToRemove.size(); i++)
+    {
+        fermTableModel->removeFermentable(itemsToRemove.at(i));
+        recipeObs->removeFermentable(itemsToRemove.at(i));
+    }
 }
+
 
 void MainWindow::editSelectedFermentable()
 {
@@ -1242,32 +1261,85 @@ void MainWindow::editSelectedYeast()
 
 void MainWindow::removeSelectedHop()
 {
-   Hop* hop = selectedHop();
-   if( hop == 0 )
-      return;
+    QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
+    QModelIndex modelIndex, viewIndex;
+    QList<Hop *> itemsToRemove;
+    int size, i;
 
-   hopTableModel->removeHop(hop);
-   recipeObs->removeHop(hop);
+    size = selected.size();
+
+    if( size == 0 )
+       return;
+
+    for(int i = 0; i < size; i++)
+    {
+        viewIndex = selected.at(i);
+        modelIndex = hopTableProxy->mapToSource(viewIndex);
+
+        itemsToRemove.append(hopTableModel->getHop(modelIndex.row()));
+    }
+
+    for(i = 0; i < itemsToRemove.size(); i++)
+    {
+        hopTableModel->removeHop(itemsToRemove.at(i));
+        recipeObs->removeHop(itemsToRemove.at(i));
+    }
+
 }
+
 
 void MainWindow::removeSelectedMisc()
 {
-   Misc* misc = selectedMisc();
-   if( misc == 0 )
-      return;
+    QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
+    QModelIndex modelIndex, viewIndex;
+    QList<Misc *> itemsToRemove;
+    int size, i;
 
-   miscTableModel->removeMisc(misc);
-   recipeObs->removeMisc(misc);
+    size = selected.size();
+
+    if( size == 0 )
+       return;
+
+    for(int i = 0; i < size; i++)
+    {
+        viewIndex = selected.at(i);
+        modelIndex = miscTableProxy->mapToSource(viewIndex);
+
+        itemsToRemove.append(miscTableModel->getMisc(modelIndex.row()));
+    }
+
+    for(i = 0; i < itemsToRemove.size(); i++)
+    {
+       miscTableModel->removeMisc(itemsToRemove.at(i));
+       recipeObs->removeMisc(itemsToRemove.at(i));
+    }
 }
 
 void MainWindow::removeSelectedYeast()
 {
-   Yeast* yeast = selectedYeast();
-   if( yeast == 0 )
-      return;
+    QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
+    QModelIndex modelIndex, viewIndex;
+    QList<Yeast *> itemsToRemove;
+    int size, i;
 
-   yeastTableModel->removeYeast(yeast);
-   recipeObs->removeYeast(yeast);
+    size = selected.size();
+
+    if( size == 0 )
+       return;
+
+    for(int i = 0; i < size; i++)
+    {
+        viewIndex = selected.at(i);
+        modelIndex = yeastTableProxy->mapToSource(viewIndex);
+
+        itemsToRemove.append(yeastTableModel->getYeast(modelIndex.row()));
+    }
+
+    for(i = 0; i < itemsToRemove.size(); i++)
+    {
+       yeastTableModel->removeYeast(itemsToRemove.at(i));
+       recipeObs->removeYeast(itemsToRemove.at(i));
+    }
 }
 
 void MainWindow::newRecipe()

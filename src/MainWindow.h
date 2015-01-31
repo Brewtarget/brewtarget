@@ -1,4 +1,4 @@
-/*
+ /*
  * MainWindow.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
  * - Dan Cavanagh <dan@dancavanagh.com>
@@ -145,7 +145,7 @@ public slots:
    void closeBrewNote(BrewNote*);
    //! \brief Add given Fermentable to the Recipe.
    void addFermentableToRecipe(Fermentable* ferm);
-   //! \brief Remove selected Fermentable from the Recipe.
+   //! \brief Remove selected Fermentable(s) from the Recipe.
    void removeSelectedFermentable();
    //! \brief Edit selected Fermentable.
    void editSelectedFermentable();
@@ -155,21 +155,21 @@ public slots:
 
    //! \brief Add given Hop to the Recipe.
    void addHopToRecipe(Hop *hop);
-   //! \brief Remove selected Hop from the Recipe.
+   //! \brief Remove selected Hop(s) from the Recipe.
    void removeSelectedHop();
    //! \brief Edit selected Hop.
    void editSelectedHop();
 
    //! \brief Add given Misc to the Recipe.
    void addMiscToRecipe(Misc* misc);
-   //! \brief Remove selected Misc from the Recipe.
+   //! \brief Remove selected Misc(s) from the Recipe.
    void removeSelectedMisc();
    //! \brief Edit selected Misc.
    void editSelectedMisc();
 
    //! \brief Add given Yeast to the Recipe.
    void addYeastToRecipe(Yeast* yeast);
-   //! \brief Remove selected Yeast from the Recipe.
+   //! \brief Remove selected Yeast(s) from the Recipe.
    void removeSelectedYeast();
    //! \brief Edit selected Yeast
    void editSelectedYeast();
