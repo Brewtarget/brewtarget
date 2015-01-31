@@ -182,7 +182,6 @@ SET( brewtarget_UIS
     ${UIDIR}/equipmentEditor.ui
     ${UIDIR}/hopDialog.ui
     ${UIDIR}/hopEditor.ui
-    ${UIDIR}/htmlViewer.ui
     ${UIDIR}/instructionWidget.ui
     ${UIDIR}/mashEditor.ui
     ${UIDIR}/namedMashEditor.ui
@@ -196,7 +195,6 @@ SET( brewtarget_UIS
     ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerListDialog.ui
-    ${UIDIR}/timerWidget.ui
     ${UIDIR}/waterEditor.ui
     ${UIDIR}/yeastDialog.ui
     ${UIDIR}/yeastEditor.ui

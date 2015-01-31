@@ -1,6 +1,6 @@
 /*
  * TimerWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Julein <j2bweb@gmail.com>
  * - Maxime Lavigne (malavv) <duguigne@gmail.com>
  * - mik firestone <mikfire@gmail.com>
@@ -28,7 +28,9 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QUrl>
-#include <iostream>
+#include <QSpacerItem>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "brewtarget.h"
 
 TimerWidget::TimerWidget(QWidget* parent)
@@ -45,14 +47,11 @@ TimerWidget::TimerWidget(QWidget* parent)
      playlist(new QMediaPlaylist(mediaPlayer)),
      oldColors(true)
 {
-   setupUi(this);
+   doLayout();
 
    // One second between timeouts.
    timer->setInterval(1000);
    flashTimer->setInterval(500);
-
-   // PlaceholderText only exists in Qt 4.7 or greater.
-   //lineEdit->setPlaceholderText( tr("HH:MM:SS") );
 
    playlist->setPlaybackMode(QMediaPlaylist::Loop);
    mediaPlayer->setVolume(100);
@@ -78,6 +77,77 @@ TimerWidget::~TimerWidget()
 {
    mediaPlayer->stop();
    playlist->clear();
+}
+
+void TimerWidget::doLayout()
+{
+   QHBoxLayout* hLayout = new QHBoxLayout(this);
+      QFrame* frame = new QFrame(this);
+         frame->setFrameShape(QFrame::StyledPanel);
+         frame->setFrameShadow(QFrame::Raised);
+         QVBoxLayout* vLayout = new QVBoxLayout(frame);
+            QHBoxLayout* hLayout1 = new QHBoxLayout();
+               QSpacerItem* hSpacer1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+               pushButton_set = new QPushButton(frame);
+                  pushButton_set->setMinimumSize(QSize(0, 0));
+                  pushButton_set->setAutoDefault(true);
+                  pushButton_set->setDefault(false);
+               lineEdit = new QLineEdit(frame);
+               QSpacerItem* hSpacer2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+               hLayout1->addItem(hSpacer1);
+               hLayout1->addWidget(pushButton_set);
+               hLayout1->addWidget(lineEdit);
+               hLayout1->addItem(hSpacer2);
+            QHBoxLayout* hLayout2 = new QHBoxLayout();
+               QSpacerItem* hSpacer3 = new QSpacerItem(17, 20, QSizePolicy::Ignored, QSizePolicy::Minimum);
+               lcdNumber = new QLCDNumber(frame);
+                  QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+                  sizePolicy.setHorizontalStretch(0);
+                  sizePolicy.setVerticalStretch(0);
+                  sizePolicy.setHeightForWidth(lcdNumber->sizePolicy().hasHeightForWidth());
+                  lcdNumber->setSizePolicy(sizePolicy);
+                  lcdNumber->setMinimumSize(QSize(170, 40));
+                  lcdNumber->setFrameShape(QFrame::WinPanel);
+                  lcdNumber->setFrameShadow(QFrame::Raised);
+                  lcdNumber->setDigitCount(8);
+                  lcdNumber->setSegmentStyle(QLCDNumber::Flat);
+               QSpacerItem* hSpacer4 = new QSpacerItem(17, 20, QSizePolicy::Ignored, QSizePolicy::Minimum);
+               hLayout2->addItem(hSpacer3);
+               hLayout2->addWidget(lcdNumber);
+               hLayout2->addItem(hSpacer4);
+            QHBoxLayout* hLayout3 = new QHBoxLayout();
+               QSpacerItem* hSpacer5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+               pushButton_startStop = new QPushButton(frame);
+                  pushButton_startStop->setMinimumSize(QSize(0, 0));
+               pushButton_sound = new QPushButton(frame);
+                  pushButton_sound->setMinimumSize(QSize(0, 0));
+               QSpacerItem* hSpacer6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+               hLayout3->addItem(hSpacer5);
+               hLayout3->addWidget(pushButton_startStop);
+               hLayout3->addWidget(pushButton_sound);
+               hLayout3->addItem(hSpacer6);
+         vLayout->addLayout(hLayout1);
+         vLayout->addLayout(hLayout2);
+         vLayout->addLayout(hLayout3);
+      hLayout->addWidget(frame);
+
+   retranslateUi();
+}
+
+void TimerWidget::retranslateUi()
+{
+#ifndef QT_NO_TOOLTIP
+   pushButton_set->setToolTip(tr("Set the timer to the specified value"));
+   lineEdit->setToolTip(tr("HH:MM:SS"));
+   pushButton_startStop->setToolTip(tr("Start/Stop timer"));
+   pushButton_sound->setToolTip(tr("Set a sound as the alarm"));
+#endif // QT_NO_TOOLTIP
+
+   pushButton_set->setText(tr("Set"));
+   pushButton_startStop->setText(tr("Start"));
+   pushButton_sound->setText(tr("Sound"));
+
+   lineEdit->setPlaceholderText(tr("HH:MM:SS"));
 }
 
 void TimerWidget::getSound()

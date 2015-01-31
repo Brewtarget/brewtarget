@@ -1,6 +1,6 @@
 /*
  * TimerWidget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Eric Tamme <etamme@gmail.com>
  * - Julein <j2bweb@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -22,13 +22,16 @@
 #ifndef _TIMERWIDGET_H
 #define _TIMERWIDGET_H
 
-#include "ui_timerWidget.h"
 #include <QWidget>
 #include <QTimer>
 #include <QString>
 #include <QPalette>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QLCDNumber>
+#include <QEvent>
 
 /*!
  * \class TimerWidget
@@ -36,7 +39,7 @@
  *
  * \brief Countdown timer that plays sounds and flashes when done.
  */
-class TimerWidget : public QWidget, public Ui::timerWidget
+class TimerWidget : public QWidget
 {
    Q_OBJECT
 public:
@@ -45,6 +48,15 @@ public:
 
    //! \returns text version of the timer display.
    QString getTimerValue();
+
+   //! \name Public UI Variables
+   //! @{
+   QPushButton* pushButton_set;
+   QLineEdit* lineEdit;
+   QLCDNumber* lcdNumber;
+   QPushButton* pushButton_startStop;
+   QPushButton* pushButton_sound;
+   //! @}
 
 public slots:
    void setTimer(QString text);
@@ -60,9 +72,21 @@ signals:
    void timerDone();
    void timerSet(QString text);
 
+protected:
+
+   virtual void changeEvent(QEvent* event)
+   {
+      if(event->type() == QEvent::LanguageChange)
+         retranslateUi();
+      QWidget::changeEvent(event);
+   }
+
 private:
    void subtractOneMinute();
    void stopFlashing();
+
+   void doLayout();
+   void retranslateUi();
 
    unsigned int hours;
    unsigned int minutes;
