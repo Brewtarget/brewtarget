@@ -64,8 +64,6 @@ public:
       MIXED // ick, but I have to figure this out.
    };
 
-   friend BtMixedEdit;
-
    /*! \brief Initialize the BtLineEdit with the parent and do some things with the type
    * \param parent - QWidget* to the parent object
    * \param lType - the type of label: none, gravity, mass or volume
@@ -92,7 +90,7 @@ public slots:
 signals:
    void textModified();
 
-private:
+protected:
    QWidget *btParent;
    QString _section, _property;
    FieldType _type;

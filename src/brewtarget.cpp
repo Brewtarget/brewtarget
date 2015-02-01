@@ -1420,15 +1420,15 @@ QMenu* Brewtarget::setupMassMenu(QWidget* parent, unitDisplay unit, unitScale sc
    switch(unit)
    {
       case displaySI:
-         generateAction(sMenu, tr("Default"), noScale, scale);
-         generateAction(sMenu, tr("Milligrams"), scaleExtraSmall, scale);
-         generateAction(sMenu, tr("Grams"), scaleSmall, scale);
-         generateAction(sMenu, tr("Kilograms"), scaleMedium, scale);
+         generateAction(sMenu, tr("Default"), noScale, scale,qsgrp);
+         generateAction(sMenu, tr("Milligrams"), scaleExtraSmall, scale,qsgrp);
+         generateAction(sMenu, tr("Grams"), scaleSmall, scale,qsgrp);
+         generateAction(sMenu, tr("Kilograms"), scaleMedium, scale,qsgrp);
          break;
       default:
-         generateAction(sMenu, tr("Default"), noScale, scale);
-         generateAction(sMenu, tr("Ounces"), scaleExtraSmall, scale);
-         generateAction(sMenu, tr("Pounds"), scaleSmall, scale);
+         generateAction(sMenu, tr("Default"), noScale, scale,qsgrp);
+         generateAction(sMenu, tr("Ounces"), scaleExtraSmall, scale,qsgrp);
+         generateAction(sMenu, tr("Pounds"), scaleSmall, scale,qsgrp);
          break;
    }
    sMenu->setTitle("Scale");
@@ -1498,19 +1498,19 @@ QMenu* Brewtarget::setupVolumeMenu(QWidget* parent, unitDisplay unit, unitScale 
    switch(unit)
    {
       case displaySI:
-         generateAction(sMenu, tr("Default"), noScale, scale);
-         generateAction(sMenu, tr("MilliLiters"), scaleExtraSmall, scale);
-         generateAction(sMenu, tr("Liters"), scaleSmall, scale);
+         generateAction(sMenu, tr("Default"), noScale, scale,qsgrp);
+         generateAction(sMenu, tr("MilliLiters"), scaleExtraSmall, scale,qsgrp);
+         generateAction(sMenu, tr("Liters"), scaleSmall, scale,qsgrp);
          break;
         // I can cheat because Imperial and US use the same names
       default:
-         generateAction(sMenu, tr("Default"), noScale, scale);
-         generateAction(sMenu, tr("Teaspoons"), scaleExtraSmall, scale);
-         generateAction(sMenu, tr("Tablespoons"), scaleSmall, scale);
-         generateAction(sMenu, tr("Cups"), scaleMedium, scale);
-         generateAction(sMenu, tr("Quarts"), scaleLarge, scale);
-         generateAction(sMenu, tr("Gallons"), scaleExtraLarge, scale);
-         generateAction(sMenu, tr("Barrels"), scaleHuge, scale);
+         generateAction(sMenu, tr("Default"), noScale, scale,qsgrp);
+         generateAction(sMenu, tr("Teaspoons"), scaleExtraSmall, scale,qsgrp);
+         generateAction(sMenu, tr("Tablespoons"), scaleSmall, scale,qsgrp);
+         generateAction(sMenu, tr("Cups"), scaleMedium, scale,qsgrp);
+         generateAction(sMenu, tr("Quarts"), scaleLarge, scale,qsgrp);
+         generateAction(sMenu, tr("Gallons"), scaleExtraLarge, scale,qsgrp);
+         generateAction(sMenu, tr("Barrels"), scaleHuge, scale,qsgrp);
          break;
    }
    sMenu->setTitle("Scale");
