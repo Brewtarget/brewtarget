@@ -1,6 +1,6 @@
 /*
  * BtSplashScreen.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -20,13 +20,10 @@
 #ifndef _BTSPLASHSCREEN_H
 #define _BTSPLASHSCREEN_H
 
-class BtSplashScreen;
-
 #include <QWidget>
 #include <QSplashScreen>
 #include <QString>
-#include <QColor>
-#include "ui_btSplashScreen.h"
+#include <QLabel>
 
 /*!
  * \class BtSplashScreen
@@ -34,19 +31,14 @@ class BtSplashScreen;
  *
  * \brief A class for showing the brewtarget splash screen on startup.
  */
-class BtSplashScreen : public QSplashScreen, public Ui::btSplashScreen
+class BtSplashScreen : public QSplashScreen
 {
    Q_OBJECT
 
 public:
    BtSplashScreen(QWidget* parent=0);
-   
-   //! Overloaded from \b QSplashScreen
-   void showMessage( const QString& message,
-                     int alignment = Qt::AlignLeft,
-                     const QColor& color = Qt::black );
-   //! Overloaded from \b QSplashScreen
-   void clearMessage();
+
+   void showMessage(QString const& message);
 };
 
 #endif /*_BTSPLASHSCREEN_H*/

@@ -1,6 +1,6 @@
 /*
  * BtSplashScreen.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,23 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QPixmap>
 #include "BtSplashScreen.h"
 
-BtSplashScreen::BtSplashScreen(QWidget* parent) : QSplashScreen(parent)
+BtSplashScreen::BtSplashScreen(QWidget* parent) :
+   QSplashScreen(parent, QPixmap(":/images/brewtarget.svg"))
 {
-   setupUi(this);
+   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+   showMessage(tr("Loading..."));
 }
 
-void BtSplashScreen::showMessage( const QString& message,
-                  int alignment,
-                  const QColor& color )
+void BtSplashScreen::showMessage(QString const& message)
 {
-   labelStatus->setText(message);
-   repaint();
-}
-
-void BtSplashScreen::clearMessage()
-{
-   labelStatus->setText("");
-   repaint();
+   QSplashScreen::showMessage(message, Qt::AlignLeft, Qt::white);
 }

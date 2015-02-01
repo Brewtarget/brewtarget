@@ -172,7 +172,6 @@ SET( brewtarget_UIS
     ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/brewNoteWidget.ui
-    ${UIDIR}/btSplashScreen.ui
     ${UIDIR}/converterTool.ui
     ${UIDIR}/mainWindow.ui
     ${UIDIR}/mashStepEditor.ui
