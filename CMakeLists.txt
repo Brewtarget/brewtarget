@@ -211,7 +211,8 @@ ELSEIF( WIN32 )
   # the prefix needs to be empty. Also, seems that the .exe
   # needs to be in bin/. Fucking piece of shit CPack...
   # Can anybody shed some light on this situation?
-  SET( CMAKE_INSTALL_PREFIX "" )
+  #SET( CMAKE_INSTALL_PREFIX "" )
+  SET( CPACK_INSTALL_PREFIX "" )
   SET( DATAPATH "data" )
   SET( TARGETPATH "bin" )
   SET( DOCPATH "doc" )
@@ -334,25 +335,40 @@ SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 #==========================Find dlls for Win32=================================
 
 IF( WIN32 )
-   GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION)
-   GET_TARGET_PROPERTY(QtWidgets_location Qt5::Widgets LOCATION)
-   GET_TARGET_PROPERTY(QtNetwork_location Qt5::Network LOCATION)
-   GET_TARGET_PROPERTY(QtPrintSupport_location Qt5::PrintSupport LOCATION)
-   GET_TARGET_PROPERTY(QtQml_location Qt5::Qml LOCATION)
-   GET_TARGET_PROPERTY(QtSql_location Qt5::Sql LOCATION)
-   GET_TARGET_PROPERTY(QtXml_location Qt5::Xml LOCATION)
-   GET_TARGET_PROPERTY(QtWebKit_location Qt5::WebKit LOCATION)
 
-   GET_TARGET_PROPERTY(QtSqliteDriver_location Qt5::QSQLiteDriverPlugin LOCATION)
+   FIND_PACKAGE(Qt5MultimediaWidgets REQUIRED)
+   FIND_PACKAGE(Qt5OpenGL REQUIRED)
+   FIND_PACKAGE(Qt5Sensors REQUIRED)
+   FIND_PACKAGE(Qt5Quick REQUIRED)
+   FIND_PACKAGE(Qt5Positioning REQUIRED)
 
-   GET_TARGET_PROPERTY(QtQgif_location Qt5::QGifPlugin LOCATION)
-   GET_TARGET_PROPERTY(QtQico_location Qt5::QICOPlugin LOCATION)
-   GET_TARGET_PROPERTY(QtQjpeg_location Qt5::QJpegPlugin LOCATION)
-   GET_TARGET_PROPERTY(QtQmng_location Qt5::QMngPlugin LOCATION)
-   GET_TARGET_PROPERTY(QtQsvg_location Qt5::QSvgPlugin LOCATION)
-   GET_TARGET_PROPERTY(QtQtiff_location Qt5::QTiffPlugin LOCATION)
+   GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtGui_location Qt5::Gui LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtMultimedia_location Qt5::Multimedia LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtMultimediaWidgets_location Qt5::MultimediaWidgets LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtNetwork_location Qt5::Network LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtOpenGL_location Qt5::OpenGL LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtPositioning_location Qt5::Positioning LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtPrintSupport_location Qt5::PrintSupport LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtQml_location Qt5::Qml LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtQuick_location Qt5::Quick LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtSensors_location Qt5::Sensors LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtSql_location Qt5::Sql LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtWebKit_location Qt5::WebKit LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtWebKitWidgets_location Qt5::WebKitWidgets LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtWidgets_location Qt5::Widgets LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtXml_location Qt5::Xml LOCATION_${CMAKE_BUILD_TYPE})
 
-   GET_TARGET_PROPERTY(QtQsvgIcon_location Qt5::QSvgIconPlugin LOCATION)
+   GET_TARGET_PROPERTY(QtSqliteDriver_location Qt5::QSQLiteDriverPlugin LOCATION_${CMAKE_BUILD_TYPE})
+
+   GET_TARGET_PROPERTY(QtQgif_location Qt5::QGifPlugin LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtQico_location Qt5::QICOPlugin LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtQjpeg_location Qt5::QJpegPlugin LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtQmng_location Qt5::QMngPlugin LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtQsvg_location Qt5::QSvgPlugin LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtQtiff_location Qt5::QTiffPlugin LOCATION_${CMAKE_BUILD_TYPE})
+
+   GET_TARGET_PROPERTY(QtQsvgIcon_location Qt5::QSvgIconPlugin LOCATION_${CMAKE_BUILD_TYPE})
 
    SET( Qt_DLLs
         ${QtCore_location}
@@ -363,7 +379,20 @@ IF( WIN32 )
         ${QtSql_location}
         ${QtXml_location}
         ${QtWebKit_location}
+        ${QtGui_location}
+        ${QtMultimedia_location}
+        ${QtMultimediaWidgets_location}
+        ${QtWebKitWidgets_location}
+        ${QtOpenGL_location}
+        ${QtSensors_location}
+        ${QtQuick_location}
+        ${QtPositioning_location}
    )
+   IF (${Qt5Core_VERSION_STRING} VERSION_GREATER "5.3.0")
+      FIND_PACKAGE(Qt5WebChannel REQUIRED)
+      GET_TARGET_PROPERTY(QtWebChannel_location Qt5::WebChannel LOCATION_${CMAKE_BUILD_TYPE})
+      list(APPEND Qt_DLLs ${QtWebChannel_location})
+   ENDIF()
    SET( SQL_Drivers_DLLs
         ${QtSqliteDriver_location}
    )
@@ -378,20 +407,22 @@ IF( WIN32 )
    SET( Icon_Engines_DLLs
         ${QtQsvgIcon_location}
    )
+   FILE( GLOB IcuDlls ${CMAKE_PREFIX_PATH}/bin/ic*.dll )
+
    # Find extra MinGW-specific dlls.
    IF( MINGW )
       IF( NOT MINGW_BIN_DIR )
          FIND_PATH(MINGW_BIN_DIR "mingw32-make.exe")
       ENDIF()
-     
      IF( NOT EXISTS ${MINGW_BIN_DIR} )
         MESSAGE( FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw" )
      ELSE()
         SET( Qt_DLLs
              ${Qt_DLLs}
-             ${MINGW_BIN_DIR}/libgcc_s_dw2-1.dll
-             ${MINGW_BIN_DIR}/libstdc++-6.dll
-             ${MINGW_BIN_DIR}/libwinpthread-1.dll
+             ${IcuDlls}
+             ${MINGW_BIN_DIR}/bin/libgcc_s_dw2-1.dll
+             ${MINGW_BIN_DIR}/bin/libstdc++-6.dll
+             ${MINGW_BIN_DIR}/bin/libwinpthread-1.dll
         )
      ENDIF()
    ENDIF()
