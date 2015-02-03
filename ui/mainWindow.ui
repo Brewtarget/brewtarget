@@ -233,8 +233,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>604</width>
-           <height>373</height>
+           <width>561</width>
+           <height>371</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -624,7 +624,7 @@
                      </widget>
                     </item>
                     <item row="11" column="0">
-                     <widget class="QLabel" name="label_caloriesperoz">
+                     <widget class="QLabel" name="label_caloriesper">
                       <property name="text">
                        <string>Calories/12oz</string>
                       </property>
@@ -1096,8 +1096,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>604</width>
-           <height>362</height>
+           <width>561</width>
+           <height>371</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1649,7 +1649,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>17</height>
+     <height>15</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">

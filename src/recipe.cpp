@@ -1752,6 +1752,9 @@ void Recipe::recalcCalories()
    // Alcohol by weight?
    abw = (startPlato-RE)/(2.0665 - (0.010665 * startPlato));
 
+   // The final results of this formular are calories per 100 ml. 
+   // The 3.55 puts it in terms of 12 oz. I really should have stored it
+   // without that adjust.
    tmp = ((6.9*abw) + 4.0 * (RE-0.1)) * ffg * 3.55;
 
    //! If there are no fermentables in the recipe, if there is no mash, etc.,

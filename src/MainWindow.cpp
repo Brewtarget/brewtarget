@@ -835,7 +835,22 @@ void MainWindow::showChanges(QMetaProperty* prop)
    styleRangeWidget_srm->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"color_srm",Units::srm,0));
 
    ibuGuSlider->setValue(recipeObs->IBU()/((recipeObs->og()-1)*1000));
-   label_calories->setText( QString("%1").arg(recipeObs->calories(),0,'f',0) );
+
+   // Do some work for the calories per ??
+   // The hard part is that we store it as calories per 12oz. The adjust
+   // roughly converts between 12 oz and 33cL
+   double adjust;
+   if ( Brewtarget::volumeUnitSystem == SI ) 
+   {
+      adjust = 3.3/3.55;
+      label_caloriesper->setText(tr("calories/33cL"));
+   }
+   else
+   {
+      adjust = 1;
+      label_caloriesper->setText(tr("calories/12oz"));
+   }
+   label_calories->setText( QString("%1").arg(recipeObs->calories() * adjust,0,'f',0) );
 
    // See if we need to change the mash in the table.
    if( (updateAll && recipeObs->mash()) ||
