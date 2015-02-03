@@ -357,6 +357,11 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
 
    QModelIndex child = model->index(source_row, 0, source_parent);
 
+   // We shouldn't get here, but if we cannot find the row in the parent,
+   // don't display the item.
+   if ( ! child.isValid() )
+      return false;
+
    if ( model->isFolder(child) ) 
       return true;
 

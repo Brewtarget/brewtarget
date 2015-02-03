@@ -207,8 +207,11 @@ void BtTreeView::mousePressEvent(QMouseEvent *event)
 
 void BtTreeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
+
    if (event->button() == Qt::LeftButton)
       doubleClick = true;
+   else
+      doubleClick = false;
 
    // Send the event on its way up to the parent
    QTreeView::mouseDoubleClickEvent(event);

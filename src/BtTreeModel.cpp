@@ -183,7 +183,7 @@ QModelIndex BtTreeModel::index( int row, int column, const QModelIndex &parent) 
 {
    BtTreeItem *pItem, *cItem;
 
-   if ( parent.isValid() && parent.column() != 0)
+   if ( parent.isValid() && parent.column() >= columnCount(parent) )
       return QModelIndex();
 
    pItem = item(parent);
