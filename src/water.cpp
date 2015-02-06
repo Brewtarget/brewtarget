@@ -127,52 +127,14 @@ void Water::setNotes( const QString &var )
 }
 
 //=========================="GET" METHODS=======================================
-QString Water::name() const
-{
-   return get("name").toString();
-}
+QString Water::name() const { return get("name").toString(); }
+QString Water::notes() const { return get("notes").toString(); }
 
-double Water::sulfate_ppm() const
-{
-   return get("sulfate").toDouble();
-}
-
-double Water::amount_l() const
-{
-   return get("amount").toDouble();
-}
-
-double Water::calcium_ppm() const
-{
-   return get("calcium").toDouble();
-}
-
-double Water::bicarbonate_ppm() const
-{
-   return get("bicarbonate").toDouble();
-}
-
-double Water::chloride_ppm() const
-{
-   return get("chloride").toDouble();
-}
-
-double Water::sodium_ppm() const
-{
-   return get("sodium").toDouble();
-}
-
-double Water::magnesium_ppm() const
-{
-   return get("magnesium").toDouble();
-}
-
-double Water::ph() const
-{
-   return get("ph").toDouble();
-}
-
-QString Water::notes() const
-{
-   return get("notes").toString();
-}
+double Water::sulfate_ppm() const { return Brewtarget::toDouble(get("sulfate").toString(), "Water::sulfate_ppm()"); }
+double Water::amount_l() const { return Brewtarget::toDouble(get("amount").toString(), "Water::amount_l()"); }
+double Water::calcium_ppm() const { return Brewtarget::toDouble(get("calcium").toString(), "Water::calcium_ppm()"); }
+double Water::bicarbonate_ppm() const { return Brewtarget::toDouble(get("bicarbonate").toString(), "Water::bicarbonate_ppm()"); }
+double Water::chloride_ppm() const { return Brewtarget::toDouble(get("chloride").toString(), "Water::chloride_ppm()"); }
+double Water::sodium_ppm() const { return Brewtarget::toDouble(get("sodium").toString(), "Water::sodium_ppm()"); }
+double Water::magnesium_ppm() const { return Brewtarget::toDouble(get("magnesium").toString(), "Water::magnesium_ppm()"); }
+double Water::ph() const { return Brewtarget::toDouble(get("ph").toString(), "Water::ph()"); }

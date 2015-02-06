@@ -76,7 +76,8 @@ double BeerXMLElement::getDouble(const QDomText& textNode)
 
    QString text = textNode.nodeValue();
 
-   ret = text.toDouble(&ok);
+   // ret = text.toDouble(&ok);
+   ret = Brewtarget::toDouble(text,&ok);
    if( !ok )
       Brewtarget::logE(QString("BeerXMLElement::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber()) );
 

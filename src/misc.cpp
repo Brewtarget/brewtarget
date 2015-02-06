@@ -95,34 +95,21 @@ const QString Misc::useStringTr() const
    return usesTr.at(use());
 }
 
-double Misc::amount() const
-{
-   return get("amount").toDouble();
-}
+double Misc::amount()    const { return Brewtarget::toDouble(get("amount").toString(), "Misc::amount()"); }
+double Misc::time()      const { return Brewtarget::toDouble(get("time").toString(), "Misc::time()"); }
 
-double Misc::inventory() const
-{
-   return getInventory("amount").toDouble();
-}
+bool Misc::amountIsWeight() const { return get("amount_is_weight").toBool(); }
 
-double Misc::time() const
-{
-   return get("time").toDouble();
-}
+QString Misc::useFor() const { return get("use_for").toString(); }
+QString Misc::notes() const { return get("notes").toString(); }
 
-bool Misc::amountIsWeight() const
-{
-   return get("amount_is_weight").toBool();
-}
+double Misc::inventory() const 
+{ 
+   QString amount = getInventory("amount").toString();
 
-QString Misc::useFor() const
-{
-   return get("use_for").toString();
-}
+   double amt = Brewtarget::toDouble( amount, "Misc::getInventory" ); 
 
-QString Misc::notes() const
-{
-   return get("notes").toString();
+   return amt;
 }
 
 //============================"SET" METHODS=====================================

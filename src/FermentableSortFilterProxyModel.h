@@ -47,6 +47,7 @@ private:
    bool filter;
 
    QString getName( const QModelIndex &index ) const;
+   double toDouble(QVariant side) const;
 };
 
 #endif

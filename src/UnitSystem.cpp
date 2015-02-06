@@ -20,6 +20,7 @@
  */
 
 #include "UnitSystem.h"
+#include "brewtarget.h"
 #include <QRegExp>
 #include <QString>
 #include <QLocale>
@@ -44,7 +45,6 @@ UnitSystem::UnitSystem()
 
 double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
 {
-   bool convOk = true;
    double amt = 0.0;
    Unit* u = defUnit;
    Unit* found = 0;
@@ -62,16 +62,7 @@ double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
       return 0.0;
    }
 
-   // Attempt to a locale-specific conversion. This should handle 1,250 in the
-   // states and 1.250 in Germany
-   amt = QLocale().toDouble(amtUnit.cap(1), &convOk);
-
-   // If that didn't work, try just a C locale conversion. This will NOT
-   // handle 1.250 like 1,250
-   if( !convOk )
-   {
-      amt = QLocale::c().toDouble(amtUnit.cap(1));
-   }
+   amt = Brewtarget::toDouble( amtUnit.cap(1), "UnitSystem::qstringToSI()");
 
    QString unit = amtUnit.cap(2);
 

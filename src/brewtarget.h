@@ -160,6 +160,11 @@ public:
    static QString getUserDataDir();
    //! \brief Blocking call that starts the application.
    static int run();
+
+   static double toDouble(QString text, bool* ok = 0);
+   static double toDouble(const BeerXMLElement* element, QString attribute, QString caller);
+   static double toDouble(QString text, QString caller);
+
    //! \brief Log a message.
    static void log( LogType lt, QString message );
    //! \brief Log an error message.

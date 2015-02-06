@@ -117,6 +117,7 @@ private:
    MashStep( MashStep const& other );
    
    bool isValidType( const QString &str ) const;
+
    static QStringList types;
    static QStringList typesTr;
    

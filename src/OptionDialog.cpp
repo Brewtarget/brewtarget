@@ -465,8 +465,11 @@ void OptionDialog::showChanges()
    lineEdit_dbDir->setText(Brewtarget::getUserDataDir());
 
    // The IBU modifications. These will all be calculated from a 60 min boil. This is gonna get confusing.
-   lineEdit_mashHop->setText(Brewtarget::option("mashHopAdjustment",100).toDouble()*100);
-   lineEdit_firstWort->setText(Brewtarget::option("firstWortHopAdjustment", 1.10).toDouble()*100);
+   double amt = Brewtarget::toDouble(Brewtarget::option("mashHopAdjustment",100).toString(), "OptionDialog::showChanges()");
+   lineEdit_mashHop->setText(amt*100);
+
+   amt = Brewtarget::toDouble(Brewtarget::option("firstWortHopAdjustment",100).toString(), "OptionDialog::showChanges()");
+   lineEdit_firstWort->setText(amt*100);
 
 }
 

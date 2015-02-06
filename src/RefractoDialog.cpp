@@ -42,9 +42,9 @@ void RefractoDialog::calculate()
    bool haveOP = true;
    bool haveOG = true;
 
-   double originalPlato = lineEdit_op->text().toDouble(&haveOP);
-   double inputOG = lineEdit_inputOG->text().toDouble(&haveOG);
-   double currentPlato = lineEdit_cp->text().toDouble(&haveCP);
+   double originalPlato = Brewtarget::toDouble(lineEdit_op->text(),      &haveOP);
+   double inputOG       = Brewtarget::toDouble(lineEdit_inputOG->text(), &haveOG);
+   double currentPlato  = Brewtarget::toDouble(lineEdit_cp->text(),      &haveCP);
    double ri = 0;
    double og = 0;
    double sg = 0;

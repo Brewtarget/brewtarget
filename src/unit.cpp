@@ -95,9 +95,7 @@ QString Unit::unitFromString(QString qstr)
 
 double Unit::valueFromString(QString qstr)
 {
-   bool convOk = true;
    QRegExp amtUnit;
-   double amt;
 
    // Make sure we get the right decimal point (. or ,) and the right grouping
    // separator (, or .). Some locales write 1.000,10 and other write
@@ -112,15 +110,7 @@ double Unit::valueFromString(QString qstr)
    if (amtUnit.indexIn(qstr) == -1)
       return 0.0;
 
-   // Attempt to translate the first capture to a double using the current
-   // Locale
-   amt = QLocale().toDouble(amtUnit.cap(1), &convOk);
-
-   // If that fails, attempt to convert it as a C locale
-   if( !convOk )
-      amt = QLocale::c().toDouble(amtUnit.cap(1));
-
-   return amt;
+   return Brewtarget::toDouble(amtUnit.cap(1), "Unit::valueFromString()");
 }
 
 // Return a

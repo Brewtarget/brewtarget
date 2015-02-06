@@ -36,6 +36,7 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
     QVariant leftYeast = sourceModel()->data(left);
     QVariant rightYeast = sourceModel()->data(right);
     Unit* unit = Units::liters;
+    double lAmt, rAmt;
 
     switch( left.column() )
     {
@@ -45,7 +46,9 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
     case YEASTAMOUNTCOL:
       return Brewtarget::qStringToSI(leftYeast.toString(),unit) < Brewtarget::qStringToSI(rightYeast.toString(),unit);
     case YEASTPRODIDCOL:
-      return leftYeast.toDouble() < rightYeast.toDouble();
+      lAmt = Brewtarget::toDouble( leftYeast.toString(), "YeastSortFilterProxyModel::lessThan");
+      rAmt = Brewtarget::toDouble( rightYeast.toString(), "YeastSortFilterProxyModel::lessThan");
+      return lAmt < rAmt;
     default:
       return leftYeast.toString() < rightYeast.toString();
     }

@@ -94,6 +94,7 @@ void BtLineEdit::lineChanged(unitDisplay oldUnit, unitScale oldScale)
    double val;
    QString amt;
    bool force = false;
+   bool ok = false;
 
    // editingFinished happens on focus being lost, regardless of anything
    // being changed. I am hoping this short circuits properly and we do
@@ -140,7 +141,9 @@ void BtLineEdit::lineChanged(unitDisplay oldUnit, unitScale oldScale)
          break;
       case GENERIC:
       default:
-         val = text().toDouble();
+         val = Brewtarget::toDouble(text(),&ok);
+         if ( ! ok )
+            Brewtarget::logW( QString("BtLineEdit::lineChanged: failed to convert %1 toDouble").arg(text()) );
          amt = displayAmount(val);
    }
    QLineEdit::setText(amt);
@@ -191,7 +194,11 @@ double BtLineEdit::toSI(unitDisplay oldUnit,unitScale oldScale,bool force)
 
    // If all else fails, simply try to force the contents of the field to a
    // double. This doesn't seem advisable?
-   return text().toDouble();
+   bool ok = false;
+   double amt = Brewtarget::toDouble(text(), &ok);
+   if ( ! ok )
+      Brewtarget::logW( QString("BtLineEdit::toSI : could not convert %1 to double").arg(text()) );
+   return amt;
 }
 
 QString BtLineEdit::displayAmount( double amount, int precision)
@@ -233,7 +240,12 @@ void BtLineEdit::setText( BeerXMLElement* element, int precision )
    else if ( element->property(_property.toLatin1().constData()).canConvert(QVariant::Double) )
    {
       // Get the amount
-      amount = element->property(_property.toLatin1().constData()).toDouble();
+      bool ok = false;
+      QString tmp = element->property(_property.toLatin1().constData()).toString();
+      amount = Brewtarget::toDouble( tmp, &ok);
+      if ( !ok )
+         Brewtarget::logW( QString("BtLineEdit::setText(BeerXMLElement*,int) could not convert %1 to double").arg(tmp) );
+
       display = displayAmount(amount, precision);
    }
    else
@@ -246,18 +258,23 @@ void BtLineEdit::setText( BeerXMLElement* element, int precision )
 
 void BtLineEdit::setText( QString amount, int precision)
 {
+   double amt;
+   bool ok = false;
+
    if ( _type == STRING )
       QLineEdit::setText(amount);
    else
-      QLineEdit::setText(displayAmount(amount.toDouble(), precision));
+   {
+      amt = Brewtarget::toDouble(amount,&ok);
+      if ( !ok )
+         Brewtarget::logW( QString("BtLineEdit::setText(QString,int) could not conver %1 to double").arg(amount) );
+      QLineEdit::setText(displayAmount(amt, precision));
+   }
 }
 
 void BtLineEdit::setText( QVariant amount, int precision)
 {
-   if ( _type == STRING )
-      QLineEdit::setText(amount.toString());
-   else
-      QLineEdit::setText(displayAmount(amount.toDouble(), precision));
+   setText(amount.toString(), precision);
 }
 
 BtGenericEdit::BtGenericEdit(QWidget *parent)

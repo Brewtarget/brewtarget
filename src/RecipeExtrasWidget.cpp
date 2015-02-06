@@ -297,7 +297,7 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
    else if( propName == "tertiaryTemp_c" )
       lineEdit_tertTemp->setText(recipe);
    else if( propName == "tasteRating" )
-      spinBox_tasteRating->setValue( (int)(val.toDouble()) );
+      spinBox_tasteRating->setValue( val.toInt() );
    else if( propName == "date" )
       dateEdit_date->setDate( val.toDate() );
    else if( propName == "notes" )

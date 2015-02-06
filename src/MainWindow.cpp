@@ -125,6 +125,15 @@ MainWindow::MainWindow(QWidget* parent)
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
 
+   /* PLEASE DO NOT REMOVE. 
+    This code is left here, commented out, intentionally. The only way I can
+    test internationalization is by forcing the locale manually. I am tired
+    of having to figure this out every time I need to test. 
+    PLEASE DO NOT REMOVE.
+   QLocale german(QLocale::German,QLocale::Germany);
+   QLocale::setDefault(german);
+   */
+
    QDesktopWidget *desktop = QApplication::desktop();
 
    // Ensure database initializes.
@@ -2249,6 +2258,7 @@ void MainWindow::exportSelected()
    QFile* outFile;
    QDomElement root,dbase,recipe;
    bool didRecipe = false;
+
 
    if ( active == 0 )
       return;

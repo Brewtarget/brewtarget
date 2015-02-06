@@ -284,60 +284,42 @@ void Hop::setMyrcene_pct( double num )
 
 //============================="GET" METHODS====================================
 
-const QString Hop::name() const
-{
-   return get("name").toString();
-}
+const QString Hop::name() const { return get("name").toString(); }
+Hop::Use Hop::use() const { return static_cast<Hop::Use>(uses.indexOf(get("use").toString())); }
+const QString Hop::useString() const { return get("use").toString(); }
+Hop::Form Hop::form() const { return static_cast<Hop::Form>(forms.indexOf(get("form").toString())); }
+const QString Hop::notes() const { return get("notes").toString(); }
+Hop::Type Hop::type() const { return static_cast<Hop::Type>(types.indexOf(get("htype").toString())); }
+const QString Hop::typeString() const { return get("htype").toString(); }
+const QString Hop::formString() const { return get("form").toString(); }
+const QString Hop::origin() const { return get("origin").toString(); }
+const QString Hop::substitutes() const { return get("substitutes").toString(); }
 
-double Hop::alpha_pct() const
-{
-   return get("alpha").toDouble();
-}
+double Hop::alpha_pct()          const { return Brewtarget::toDouble(get("alpha").toString(), "Hop::alpha_pct()"); }
+double Hop::amount_kg()          const { return Brewtarget::toDouble(get("amount").toString(), "Hop::amount_kg()"); }
+double Hop::time_min()           const { return Brewtarget::toDouble(get("time").toString(), "Hop::time_min()"); }
+double Hop::beta_pct()           const { return Brewtarget::toDouble(get("beta").toString(), "Hop::beta_pct()"); }
+double Hop::hsi_pct()            const { return Brewtarget::toDouble(get("hsi").toString(), "Hop::hsi_pct()"); }
+double Hop::humulene_pct()       const { return Brewtarget::toDouble(get("humulene").toString(), "Hop::humulene_pct()"); }
+double Hop::caryophyllene_pct()  const { return Brewtarget::toDouble(get("caryophyllene").toString(), "Hop::caryophyllene_pct()"); }
+double Hop::cohumulone_pct()     const { return Brewtarget::toDouble(get("cohumulone").toString(), "Hop::cohumulone_pct()"); }
+double Hop::myrcene_pct()        const { return Brewtarget::toDouble(get("myrcene").toString(), "Hop::myrcene_pct()"); }
 
-double Hop::amount_kg() const
-{
-   return get("amount").toDouble();
-}
-
+// inventory still must be handled separately, and I'm still annoyed.
 double Hop::inventory() const
-{
-   return getInventory("amount").toDouble();
-}
+{ 
+   QString amount = getInventory("amount").toString();
 
-Hop::Use Hop::use() const
-{
-   return static_cast<Hop::Use>(uses.indexOf(get("use").toString()));
-}
+   double amt = Brewtarget::toDouble( amount, "Hop::getInventory()");
 
-const QString Hop::useString() const
-{
-   return get("use").toString();
+   return amt;
 }
+ 
 
 const QString Hop::useStringTr() const
 {
    static QStringList usesTr = QStringList() << tr("Mash") << tr("First Wort") << tr("Boil") << tr("Aroma") << tr("Dry Hop") ;
    return usesTr.at(use());
-}
-
-double Hop::time_min() const
-{
-   return get("time").toDouble();
-}
-
-const QString Hop::notes() const
-{
-   return get("notes").toString();
-}
-
-Hop::Type Hop::type() const
-{
-   return static_cast<Hop::Type>(types.indexOf(get("htype").toString()));
-}
-
-const QString Hop::typeString() const
-{
-   return get("htype").toString();
 }
 
 const QString Hop::typeStringTr() const
@@ -346,58 +328,9 @@ const QString Hop::typeStringTr() const
    return typesTr.at(type());
 }
 
-Hop::Form Hop::form() const
-{
-   return static_cast<Hop::Form>(forms.indexOf(get("form").toString()));
-}
-
-const QString Hop::formString() const
-{
-   return get("form").toString();
-}
-
 const QString Hop::formStringTr() const
 {
    static QStringList formsTr = QStringList() << tr("Leaf") << tr("Pellet") << tr("Plug");
    return formsTr.at(form());
 }
 
-double Hop::beta_pct() const
-{
-   return get("beta").toDouble();
-}
-
-double Hop::hsi_pct() const
-{
-   return get("hsi").toDouble();
-}
-
-const QString Hop::origin() const
-{
-   return get("origin").toString();
-}
-
-const QString Hop::substitutes() const
-{
-   return get("substitutes").toString();
-}
-
-double Hop::humulene_pct() const
-{
-   return get("humulene").toDouble();
-}
-
-double Hop::caryophyllene_pct() const
-{
-   return get("caryophyllene").toDouble();
-}
-
-double Hop::cohumulone_pct() const
-{
-   return get("cohumulone").toDouble();
-}
-
-double Hop::myrcene_pct() const
-{
-   return get("myrcene").toDouble();
-}

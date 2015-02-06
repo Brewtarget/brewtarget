@@ -18,6 +18,7 @@
  */
 
 #include "BtDigitWidget.h"
+#include "brewtarget.h"
 #include <QFrame>
 #include <iostream>
 #include <QLocale>
@@ -45,13 +46,17 @@ BtDigitWidget::BtDigitWidget(QWidget *parent) : QLabel(parent)
 void BtDigitWidget::display(QString str)
 {
    static bool converted;
-   
-   lastNum = str.toDouble(&converted);
+  
+
+   lastNum = Brewtarget::toDouble(str,&converted);
    lastPrec = str.length() - str.lastIndexOf(QLocale().decimalPoint()) - 1;
    if( converted )
       display(lastNum,lastPrec);
    else
+   {
+      Brewtarget::logW( QString( "BtDigitWidget::display(QString) could not convert %1 to double").arg(str));
       setText("-");
+   }
 }
 
 void BtDigitWidget::display(double num, int prec)

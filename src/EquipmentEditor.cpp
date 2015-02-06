@@ -163,7 +163,13 @@ void EquipmentEditor::save()
    Unit* weightUnit = 0;
    Unit* volumeUnit = 0;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
-   double ga_LKg = lineEdit_grainAbsorption->text().toDouble() * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
+   bool ok = false;
+
+   double grainAbs = Brewtarget::toDouble( lineEdit_grainAbsorption->text(), &ok );
+   if ( ! ok )
+      Brewtarget::logW( QString("EquipmentEditor::save() could not convert %1 to double").arg(lineEdit_grainAbsorption->text()));
+
+   double ga_LKg = grainAbs * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
 
    // Do some prewarning things. I would prefer to do this only on change, but
    // we need to be worried about new equipment too.

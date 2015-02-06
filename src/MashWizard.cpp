@@ -83,6 +83,8 @@ void MashWizard::wizardry()
    double absorption_LKg;
    double boilingPoint_c; 
 
+   bool ok = false;
+
    // If we have an equipment, utilize the custom absorption and boiling temp.
    if( recObs->equipment() != 0 )
    {
@@ -95,7 +97,10 @@ void MashWizard::wizardry()
       boilingPoint_c = 100.0;
    }
 
-   thickNum = lineEdit_mashThickness->text().toDouble();
+   thickNum = Brewtarget::toDouble(lineEdit_mashThickness->text(), &ok);
+   if ( ! ok ) 
+      Brewtarget::logW( QString("MashWizard::wizardry() could not convert %1 to double").arg(lineEdit_mashThickness->text()));
+
    thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
 
    if( thickness_LKg <= 0.0 )

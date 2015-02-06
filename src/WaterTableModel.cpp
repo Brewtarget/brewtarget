@@ -278,82 +278,49 @@ Qt::ItemFlags WaterTableModel::flags(const QModelIndex& index ) const
 bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Water *row;
+   bool retval = false;
 
    if( index.row() >= (int)waterObs.size() || role != Qt::EditRole )
       return false;
    else
       row = waterObs[index.row()];
 
+   retval = value.canConvert(QVariant::String);
+   if ( ! retval )
+      return retval;
+
    switch( index.column() )
    {
       case WATERNAMECOL:
-         if( value.canConvert(QVariant::String))
-         {
-            row->setName(value.toString());
-            return true;
-         }
-         else
-            return false;
+         row->setName(value.toString());
+         break;
       case WATERAMOUNTCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            row->setAmount_l( Brewtarget::qStringToSI(value.toString(), Units::liters) );
-            return true;
-         }
-         else
-            return false;
+         row->setAmount_l( Brewtarget::qStringToSI(value.toString(), Units::liters) );
+         break;
       case WATERCALCIUMCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            row->setCalcium_ppm( value.toString().toDouble() );
-            return true;
-         }
-         else
-            return false;
+         row->setCalcium_ppm( Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));
+         break;
       case WATERBICARBONATECOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            row->setBicarbonate_ppm( value.toString().toDouble() );
-            return true;
-         }
-         else
-            return false;
+         row->setBicarbonate_ppm(Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));
+         break;
       case WATERSULFATECOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            row->setSulfate_ppm( value.toString().toDouble() );
-            return true;
-         }
-         else
-            return false;
+         row->setSulfate_ppm( Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));
+         break;
       case WATERCHLORIDECOL:
-         if( value.canConvert(QVariant::String))
-         {
-            row->setChloride_ppm( value.toString().toDouble() );
-            return true;
-         }
-         else
-            return false;
+         row->setChloride_ppm( Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));
+         break;
       case WATERSODIUMCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            row->setSodium_ppm( value.toString().toDouble() );
-            return true;
-         }
-         else
-            return false;
+         row->setSodium_ppm( Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));
+         break;
       case WATERMAGNESIUMCOL:
-         if( value.canConvert(QVariant::String) )
-         {
-            row->setMagnesium_ppm( value.toString().toDouble() );
-            return true;
-         }
-         else
-            return false;
+         row->setMagnesium_ppm( Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));
+         break;
       default:
+         retval = false;
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
-         return false;
    }
+
+   return retval;
 }
 
 //==========================CLASS HopItemDelegate===============================

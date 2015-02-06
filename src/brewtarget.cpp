@@ -1048,6 +1048,64 @@ void Brewtarget::logW( QString message )
    log( LogType_WARNING, message );
 }
 
+/* Qt5 changed how QString::toDouble() works in that it will always convert
+   in the C locale. We are instructed to use QLocale::toDouble instead, except
+   that will never fall back to the C locale. This doesn't really work for us,
+   so I am writing a convenience function that emulates the old behavior.
+*/
+double Brewtarget::toDouble(QString text, bool* ok)
+{
+   double ret = 0.0;
+   bool success = false;
+   QLocale sysDefault = QLocale();
+
+   ret = sysDefault.toDouble(text,&success);
+
+   // If we failed, try C conversion
+   if ( ! success ) 
+      ret = text.toDouble(&success);
+
+   // If we were asked to return the success, return it here.
+   if ( ok != NULL )
+      *ok = success;
+
+   // Whatever we got, we return it
+   return ret;
+}
+
+// And a few convenience methods, just for that sweet, sweet syntatic sugar
+double Brewtarget::toDouble(const BeerXMLElement* element, QString attribute, QString caller)
+{
+   double amount = 0.0;
+   QString value;
+   bool ok = false;
+
+   if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::String) )
+   {
+      // Get the amount
+      value = element->property(attribute.toLatin1().constData()).toString();
+      amount = toDouble( value, &ok );
+      if ( ! ok )
+         logW( QString("%1 could not convert %2 to double").arg(caller).arg(value));
+      // Get the display units and scale
+   }
+   return amount;
+}
+
+double Brewtarget::toDouble(QString text, QString caller)
+{
+   double ret = 0.0;
+   bool success = false;
+
+   ret = toDouble(text,&success);
+
+   if ( ! success ) 
+      logW( QString("%1 could not convert %2 to double").arg(caller).arg(text));
+
+   return ret;
+}
+
+
 // Displays "amount" of units "units" in the proper format.
 // If "units" is null, just return the amount.
 QString Brewtarget::displayAmount( double amount, Unit* units, int precision, unitDisplay displayUnits, unitScale displayScale)
@@ -1082,13 +1140,18 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, un
 QString Brewtarget::displayAmount(BeerXMLElement* element, QObject* object, QString attribute, Unit* units, int precision )
 {
    double amount = 0.0;
+   QString value;
+   bool ok = false;
    unitScale dispScale;
    unitDisplay dispUnit;
 
    if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
    {
       // Get the amount
-      amount = element->property(attribute.toLatin1().constData()).toDouble();
+      value = element->property(attribute.toLatin1().constData()).toString();
+      amount = toDouble( value, &ok );
+      if ( ! ok )
+         logW( QString("Brewtarget::displayAmount(BeerXMLElement*,QObject*,QString,Unit*,int) could not convert %1 to double").arg(value));
       // Get the display units and scale
       dispUnit  = (unitDisplay)option(attribute, noUnit,  object->objectName(), UNIT).toInt();
       dispScale = (unitScale)option(  attribute, noScale, object->objectName(), SCALE).toInt();
@@ -1130,13 +1193,18 @@ double Brewtarget::amountDisplay( double amount, Unit* units, int precision, uni
 double Brewtarget::amountDisplay(BeerXMLElement* element, QObject* object, QString attribute, Unit* units, int precision )
 {
    double amount = 0.0;
+   QString value;
+   bool ok = false;
    unitScale dispScale;
    unitDisplay dispUnit;
 
    if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
    {
       // Get the amount
-      amount = element->property(attribute.toLatin1().constData()).toDouble();
+      value = element->property(attribute.toLatin1().constData()).toString();
+      amount = toDouble( value, &ok );
+      if ( ! ok )
+         logW( QString("Brewtarget::amountDisplay(BeerXMLElement*,QObject*,QString,Unit*,int) could not convert %1 to double").arg(value));
       // Get the display units and scale
       dispUnit  = (unitDisplay)option(attribute, noUnit,  object->objectName(), UNIT).toInt();
       dispScale = (unitScale)option(  attribute, noScale, object->objectName(), SCALE).toInt();

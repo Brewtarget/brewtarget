@@ -370,6 +370,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
 {
    Hop *row;
    bool retVal = false;
+   double amt;
 
    if( index.row() >= (int)hopObs.size() || role != Qt::EditRole )
       return false;
@@ -386,7 +387,12 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
       case HOPALPHACOL:
          retVal = value.canConvert(QVariant::Double);
          if( retVal )
-            row->setAlpha_pct( value.toDouble() );
+         {
+            amt = Brewtarget::toDouble( value.toString(), &retVal );
+            if ( ! retVal )
+               Brewtarget::logW( QString("HopTableModel::setData() could not convert %1 to double").arg(value.toString()));
+            row->setAlpha_pct( amt );
+         }
          break;
 
       case HOPINVENTORYCOL:
