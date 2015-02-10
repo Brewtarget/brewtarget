@@ -314,30 +314,30 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
    // second row:  boil time and efficiency.  
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Time"))
-            .arg(Brewtarget::displayAmount(recObs->equipment()->boilTime_min(),Units::minutes))
+            .arg(Brewtarget::displayAmount(recObs->equipment()->boilTime_min(), "tab_recipe", "boilTime_min", Units::minutes))
             .arg(tr("Efficiency"))
             .arg(Brewtarget::displayAmount(recObs->efficiency_pct(),0,0));
 
    // third row: pre-Boil Volume and Preboil Gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Volume"))
-            .arg(Brewtarget::displayAmount(recObs->boilVolume_l(),Units::liters,2))
+            .arg(Brewtarget::displayAmount(recObs->boilVolume_l(), "tab_recipe", "boilVolume_l", Units::liters,2))
             .arg(tr("Preboil Gravity"))
-            .arg(Brewtarget::displayAmount(recObs->boilGrav(),Units::sp_grav,0));
+            .arg(Brewtarget::displayAmount(recObs->boilGrav(), "tab_recipe", "og", Units::sp_grav,0));
 
    // fourth row: Final volume and starting gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Final Volume"))
-            .arg(Brewtarget::displayAmount(recObs->finalVolume_l(), Units::liters,2))
+            .arg(Brewtarget::displayAmount(recObs->finalVolume_l(), "tab_recipe", "finalVolume_l", Units::liters,2))
             .arg(tr("Starting Gravity"))
-            .arg(Brewtarget::displayAmount(recObs->og(), Units::sp_grav, 0));
+            .arg(Brewtarget::displayAmount(recObs->og(), "tab_recipe", "og", Units::sp_grav, 0));
 
    // fifth row: IBU and Final gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
             .arg(tr("IBU"))
             .arg( Brewtarget::displayAmount(recObs->IBU(),0,1))
             .arg(tr("Final Gravity"))
-            .arg(Brewtarget::displayAmount(recObs->fg(), Units::sp_grav, 0));
+            .arg(Brewtarget::displayAmount(recObs->fg(), "tab_recipe", "fg", Units::sp_grav, 0));
 
    // sixth row: ABV and estimate calories
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")

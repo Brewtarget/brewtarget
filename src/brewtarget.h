@@ -178,6 +178,8 @@ public:
     *  \param amount the amount to display
     *  \param units the units that \c amount is in
     *  \param precision how many decimal places
+    *  \param unitDisplay which unit system to use, defaulting to "noUnit" which means use the system default
+    *  \param unitScale which scale to use, defaulting to noScale which means use the largest scale that generates a value > 1
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3,
                                  unitDisplay displayUnit = noUnit, unitScale displayScale = noScale );
@@ -185,10 +187,23 @@ public:
     * \brief Displays an amount in the appropriate units.
     *
     * \param element Element whose amount we wish to display
-    * \param attribute the \c QObject::property of \c element that returns the
-    *        amount we wish to display
+    * \param object the GUI object doing the display, used to access configured unit&scale
+    * \param attribute the name of the attribute to display
+    * \param units which unit system it is in
+    * \param precision how many decimal places to use, defaulting to 3
     */
    static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
+
+   /*!
+    * \brief Displays an amount in the appropriate units.
+    *
+    * \param amount the amount to display
+    * \param section the name of the object to reference to get units&scales from the config file
+    * \param attribute the attribute name to complete the lookup for units&scales
+    * \param units which unit system it is in
+    * \param precision how many decimal places to use, defaulting to 3
+    */
+   static QString displayAmount( double amount, QString section, QString attribute, Unit* units=0, int precision = 3);
 
    /*!
     *  \brief Displays an amount in the appropriate units.

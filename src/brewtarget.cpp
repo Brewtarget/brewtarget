@@ -1163,6 +1163,19 @@ QString Brewtarget::displayAmount(BeerXMLElement* element, QObject* object, QStr
 
 }
 
+QString Brewtarget::displayAmount(double amt, QString section, QString attribute, Unit* units, int precision )
+{
+   unitScale dispScale;
+   unitDisplay dispUnit;
+
+   // Get the display units and scale
+   dispUnit  = (unitDisplay)Brewtarget::option(attribute, noUnit,  section, UNIT).toInt();
+   dispScale = (unitScale)Brewtarget::option(  attribute, noScale, section, SCALE).toInt();
+
+   return displayAmount(amt, units, precision, dispUnit, dispScale);
+
+}
+
 double Brewtarget::amountDisplay( double amount, Unit* units, int precision, unitDisplay displayUnits, unitScale displayScale)
 {
    UnitSystem* temp;
