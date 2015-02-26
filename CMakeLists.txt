@@ -583,6 +583,7 @@ IF( APPLE )
 
    # make addframeworks should copy the Qt libraries to the app.
    # May have to add a WORKING_DIRECTORY.
+   SET(QT_BINARY_DIR "${_qt5Core_install_prefix}/bin")
    ADD_CUSTOM_TARGET( addframeworks ALL
                       COMMAND ${QT_BINARY_DIR}/macdeployqt ${BT_BUNDLE_DIR} )
 ENDIF()

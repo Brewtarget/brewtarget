@@ -518,7 +518,7 @@ bool Brewtarget::initialize()
    loadTranslations(); // Do internationalization.
 
 #if defined(Q_OS_MAC)
-   qt_set_sequence_auto_mnemonic(TRUE); // turns on Mac Keyboard shortcuts
+   qt_set_sequence_auto_mnemonic(true); // turns on Mac Keyboard shortcuts
 #endif
 
    // Check if the database was successfully loaded before
