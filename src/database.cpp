@@ -3808,6 +3808,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
 MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
 {
    QDomNode n;
+   QString str;
    bool blocked = signalsBlocked();
 
    if (! blocked )
@@ -3824,12 +3825,18 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    n = node.firstChildElement("TYPE");
    if ( n.firstChild().isNull() )
       ret->invalidate();
-   else
+   else {
+      //Try to make sure incoming format matches
+      //e.g. convert INFUSION to Infusion 
+      str = n.firstChild().toText().nodeValue();
+      str = str.toLower();
+      str[0] = str.at(0).toTitleCase();
       ret->setType( static_cast<MashStep::Type>(
                        MashStep::types.indexOf(
-                          n.firstChild().toText().nodeValue()
+                          str
                        )
                     ) );
+   }
   
    ret->blockSignals(false);
    if (! blocked )
@@ -4225,12 +4232,17 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    n = node.firstChildElement("FLOCCULATION");
    if ( n.firstChild().isNull() )
       ret->invalidate();
-   else
-      ret->setFlocculation( static_cast<Yeast::Flocculation>(
+   else if (
+            Yeast::flocculations.indexOf(
+               n.firstChild().toText().nodeValue()
+            ) != -1
+      ) {
+         ret->setFlocculation( static_cast<Yeast::Flocculation>(
                                Yeast::flocculations.indexOf(
                                   n.firstChild().toText().nodeValue()
                                )
                             ) );
+      }
 
    if ( ! ret->isValid() )
    {
