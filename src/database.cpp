@@ -4212,12 +4212,17 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    n = node.firstChildElement("TYPE");
    if ( n.firstChild().isNull() )
       ret->invalidate();
-   else
+   else if (
+               Yeast::types.indexOf(
+                  n.firstChild().toText().nodeValue()
+               ) != -1
+   ) {
       ret->setType( static_cast<Yeast::Type>(
                        Yeast::types.indexOf(
                           n.firstChild().toText().nodeValue()
                        )
                     ) );
+   }
    // Handle enums separately.
    n = node.firstChildElement("FORM");
    if ( n.firstChild().isNull() )
