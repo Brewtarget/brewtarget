@@ -56,6 +56,11 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
 
          return lAlpha < rAlpha;
 
+      case HOPINVENTORYCOL:
+         if (Brewtarget::qStringToSI(leftHop.toString(), unit) == 0.0 && this->sortOrder() == Qt::AscendingOrder)
+            return false;
+         else
+            return Brewtarget::qStringToSI(leftHop.toString(),unit) < Brewtarget::qStringToSI(rightHop.toString(),unit);
       case HOPAMOUNTCOL:
          return Brewtarget::qStringToSI(leftHop.toString(),unit) < Brewtarget::qStringToSI(rightHop.toString(),unit);
       case HOPTIMECOL:

@@ -40,6 +40,11 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
 
     switch( left.column() )
     {
+    case YEASTINVENTORYCOL:
+      if (Brewtarget::qStringToSI(leftYeast.toString(),unit) == 0.0 && this->sortOrder() == Qt::AscendingOrder)
+         return false;
+      else
+         return Brewtarget::qStringToSI(leftYeast.toString(),unit) < Brewtarget::qStringToSI(rightYeast.toString(),unit);
        // This is a lie. I need to figure out if they are weights or volumes.
        // and then figure some reasonable way to compare weights to volumes.
        // Maybe lying isn't such a bad idea

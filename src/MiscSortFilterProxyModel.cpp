@@ -44,6 +44,11 @@ bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
 
    switch( left.column() )
    {
+   case MISCINVENTORYCOL:
+         if (Brewtarget::qStringToSI(leftMisc.toString(), Units::kilograms) == 0.0 && this->sortOrder() == Qt::AscendingOrder)
+            return false;
+         else
+            return Brewtarget::qStringToSI(leftMisc.toString(), Units::kilograms) < Brewtarget::qStringToSI(rightMisc.toString(), Units::kilograms);
    case MISCAMOUNTCOL:
          return Brewtarget::qStringToSI(leftMisc.toString(), Units::kilograms) < Brewtarget::qStringToSI(rightMisc.toString(), Units::kilograms);
    case MISCTIMECOL:

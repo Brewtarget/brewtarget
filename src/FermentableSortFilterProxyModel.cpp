@@ -43,6 +43,15 @@ bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left,
 
    switch( left.column() )
    {
+      case FERMINVENTORYCOL:
+         // If the numbers are equal, compare the names and be done with it
+         if (Brewtarget::qStringToSI(leftFermentable.toString(), unit) == Brewtarget::qStringToSI(rightFermentable.toString(),unit))
+            return getName(right) < getName(left);
+         // Show non-zero entries first.
+         else if (Brewtarget::qStringToSI(leftFermentable.toString(), unit) == 0.0 && this->sortOrder() == Qt::AscendingOrder)
+            return false;
+         else
+            return Brewtarget::qStringToSI(leftFermentable.toString(),unit) < Brewtarget::qStringToSI(rightFermentable.toString(),unit);
       case FERMAMOUNTCOL:
          // If the numbers are equal, compare the names and be done with it
          if (Brewtarget::qStringToSI(leftFermentable.toString(), unit) == Brewtarget::qStringToSI(rightFermentable.toString(),unit))
