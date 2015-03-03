@@ -1024,7 +1024,7 @@ void MainWindow::updateRecipeBoilTime()
    double boilTime = 0.0;
    Equipment* kit;
 
-   if( recipeObs == 0 || ! lineEdit_boilTime->isModified() )
+   if( recipeObs == 0 )
       return;
 
    kit = recipeObs->equipment();
@@ -1042,7 +1042,7 @@ void MainWindow::updateRecipeBoilTime()
 
 void MainWindow::updateRecipeEfficiency()
 {
-   if( recipeObs == 0 || ! lineEdit_efficiency->isModified() )
+   if( recipeObs == 0 )
       return;
 
    recipeObs->setEfficiency_pct( lineEdit_efficiency->toSI() );
