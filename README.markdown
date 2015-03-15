@@ -38,13 +38,19 @@ Author list created with:
 
 ## Websites
 
+### For Users
+
 * [Main website](http://www.brewtarget.org)
-* [Google group](https://groups.google.com/forum/?fromgroups=#!forum/brewtarget-help)
-* [Source code repository](http://www.gitorious.org/brewtarget)
-* [Project development page](https://launchpad.net/brewtarget)
-* [Bug tracker](https://bugs.launchpad.net/brewtarget)
+* [Help group](https://groups.google.com/forum/?fromgroups=#!forum/brewtarget-help)
+* [Brewtarget PPA](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget-releases)
+* [Bug tracker](https://github.com/Brewtarget/brewtarget/issues)
+
+### For Developers
+
+* [Source code repository](https://github.com/Brewtarget/brewtarget)
+* [Daily builds](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget)
 * [Developers team](https://launchpad.net/~brewtarget-devs)
-* [Developers Wiki](https://gitorious.org/brewtarget/pages/Home)
+* [Developers wiki](https://github.com/Brewtarget/brewtarget/wiki)
 
 ## Compiling and Installing
 
