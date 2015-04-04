@@ -421,8 +421,12 @@ QT5_USE_MODULES(
 )
 
 ADD_TEST(
-   NAME test
-   COMMAND brewtarget_tests
+   NAME pstdintTest
+   COMMAND brewtarget_tests pstdintTest
+)
+ADD_TEST(
+   NAME recipeCalcTest_allGrain
+   COMMAND brewtarget_tests recipeCalcTest_allGrain
 )
 
 #=================================Installs=====================================
