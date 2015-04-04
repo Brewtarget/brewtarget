@@ -172,20 +172,15 @@ SET( brewtarget_UIS
     ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/brewNoteWidget.ui
-    ${UIDIR}/converterTool.ui
     ${UIDIR}/mainWindow.ui
     ${UIDIR}/mashStepEditor.ui
     ${UIDIR}/miscEditor.ui
     ${UIDIR}/fermentableEditor.ui
-    ${UIDIR}/fermentableDialog.ui
-    ${UIDIR}/equipmentEditor.ui
-    ${UIDIR}/hopDialog.ui
     ${UIDIR}/hopEditor.ui
     ${UIDIR}/instructionWidget.ui
     ${UIDIR}/mashEditor.ui
     ${UIDIR}/namedMashEditor.ui
     ${UIDIR}/mashWizard.ui
-    ${UIDIR}/miscDialog.ui
     ${UIDIR}/ogAdjuster.ui
     ${UIDIR}/optionsDialog.ui
     ${UIDIR}/primingDialog.ui
@@ -195,7 +190,6 @@ SET( brewtarget_UIS
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerListDialog.ui
     ${UIDIR}/waterEditor.ui
-    ${UIDIR}/yeastDialog.ui
     ${UIDIR}/yeastEditor.ui
     ${UIDIR}/mashDesigner.ui
     ${UIDIR}/pitchDialog.ui

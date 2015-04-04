@@ -1,6 +1,6 @@
 /*
  * HopDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -19,16 +19,16 @@
  */
 
 #ifndef _HOPDIALOG_H
-#define   _HOPDIALOG_H
-
-class HopDialog;
+#define _HOPDIALOG_H
 
 #include <QWidget>
 #include <QDialog>
-#include <QVariant>
-#include <QMetaProperty>
-#include "ui_hopDialog.h"
-#include "database.h"
+#include <QEvent>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QTableView>
+#include <QSpacerItem>
+#include <QPushButton>
 
 // Forward declarations.
 class MainWindow;
@@ -42,13 +42,25 @@ class HopSortFilterProxyModel;
  *
  * \brief View/controller class for showing/editing the list of hops in the database.
  */
-class HopDialog : public QDialog, public Ui::hopDialog
+class HopDialog : public QDialog
 {
    Q_OBJECT
 
 public:
    HopDialog(MainWindow* parent);
    virtual ~HopDialog() {}
+
+   //! \name Public UI Variables
+   //! @{
+   QVBoxLayout *verticalLayout;
+   QTableView *tableWidget;
+   QHBoxLayout *horizontalLayout;
+   QSpacerItem *horizontalSpacer;
+   QPushButton *pushButton_addToRecipe;
+   QPushButton *pushButton_new;
+   QPushButton *pushButton_edit;
+   QPushButton *pushButton_remove;
+   //! @}
 
 public slots:
    //! Add selected hop to current recipe.
@@ -60,12 +72,24 @@ public slots:
    //! Create a new hop.
    void newHop();
 
+protected:
+
+   virtual void changeEvent(QEvent* event)
+   {
+      if(event->type() == QEvent::LanguageChange)
+         retranslateUi();
+      QDialog::changeEvent(event);
+   }
+
 private:
    MainWindow* mainWindow;
    HopEditor* hopEditor;
    HopTableModel* hopTableModel;
    HopSortFilterProxyModel* hopTableProxy;
    int numHops;
+
+   void doLayout();
+   void retranslateUi();
 };
 
 #endif   /* _HOPDIALOG_H */

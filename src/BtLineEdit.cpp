@@ -27,7 +27,8 @@
 #include <QSettings>
 #include <QDebug>
 
-BtLineEdit::BtLineEdit(QWidget *parent, FieldType type)
+BtLineEdit::BtLineEdit(QWidget *parent, FieldType type) :
+   QLineEdit(parent)
 {
    btParent = parent;
    _type = type;

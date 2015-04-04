@@ -1,6 +1,6 @@
 /*
  * MiscDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -32,32 +32,88 @@
 #include "MiscTableModel.h"
 #include "MiscSortFilterProxyModel.h"
 
-MiscDialog::MiscDialog(MainWindow* parent)
-        : QDialog(parent), mainWindow(parent), numMiscs(0), miscEdit(new MiscEditor(this))
+MiscDialog::MiscDialog(MainWindow* parent) :
+   QDialog(parent),
+   mainWindow(parent),
+   numMiscs(0),
+   miscEdit(new MiscEditor(this))
 {
-   setupUi(this);
+   doLayout();
 
-   miscTableModel = new MiscTableModel(miscTableWidget, false);
+   miscTableModel = new MiscTableModel(tableWidget, false);
    miscTableModel->setInventoryEditable(true);
-   miscTableProxy = new MiscSortFilterProxyModel(miscTableWidget);
+   miscTableProxy = new MiscSortFilterProxyModel(tableWidget);
    miscTableProxy->setSourceModel(miscTableModel);
-   miscTableWidget->setModel(miscTableProxy);
-   miscTableWidget->setSortingEnabled(true);
-   miscTableWidget->sortByColumn( MISCNAMECOL, Qt::AscendingOrder );
+   tableWidget->setModel(miscTableProxy);
+   tableWidget->setSortingEnabled(true);
+   tableWidget->sortByColumn( MISCNAMECOL, Qt::AscendingOrder );
    miscTableProxy->setDynamicSortFilter(true);
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
    connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMisc()) );
-   connect( miscTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addMisc(const QModelIndex&) ) );
+   connect( tableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addMisc(const QModelIndex&) ) );
    
    miscTableModel->observeDatabase(true);
 }
 
+void MiscDialog::doLayout()
+{
+   resize(800, 300);
+   verticalLayout = new QVBoxLayout(this);
+      tableWidget = new QTableView(this);
+      horizontalLayout = new QHBoxLayout();
+         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+         pushButton_addToRecipe = new QPushButton(this);
+            pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
+            pushButton_addToRecipe->setAutoDefault(false);
+            pushButton_addToRecipe->setDefault(true);
+         pushButton_new = new QPushButton(this);
+            pushButton_new->setObjectName(QStringLiteral("pushButton_new"));
+            pushButton_new->setAutoDefault(false);
+         pushButton_edit = new QPushButton(this);
+            pushButton_edit->setObjectName(QStringLiteral("pushButton_edit"));
+            QIcon icon;
+            icon.addFile(QStringLiteral(":/images/edit.svg"), QSize(), QIcon::Normal, QIcon::Off);
+            pushButton_edit->setIcon(icon);
+            pushButton_edit->setAutoDefault(false);
+         pushButton_remove = new QPushButton(this);
+            pushButton_remove->setObjectName(QStringLiteral("pushButton_remove"));
+            QIcon icon1;
+            icon1.addFile(QStringLiteral(":/images/smallMinus.svg"), QSize(), QIcon::Normal, QIcon::Off);
+            pushButton_remove->setIcon(icon1);
+            pushButton_remove->setAutoDefault(false);
+         horizontalLayout->addItem(horizontalSpacer);
+         horizontalLayout->addWidget(pushButton_addToRecipe);
+         horizontalLayout->addWidget(pushButton_new);
+         horizontalLayout->addWidget(pushButton_edit);
+         horizontalLayout->addWidget(pushButton_remove);
+      verticalLayout->addWidget(tableWidget);
+      verticalLayout->addLayout(horizontalLayout);
+
+   retranslateUi();
+   QMetaObject::connectSlotsByName(this);
+}
+
+void MiscDialog::retranslateUi()
+{
+   setWindowTitle(tr("Misc Database"));
+   pushButton_addToRecipe->setText(tr("Add to Recipe"));
+   pushButton_new->setText(tr("New"));
+   pushButton_edit->setText(QString());
+   pushButton_remove->setText(QString());
+#ifndef QT_NO_TOOLTIP
+   pushButton_addToRecipe->setToolTip(tr("Add selected ingredient to recipe"));
+   pushButton_new->setToolTip(tr("Create new ingredient"));
+   pushButton_edit->setToolTip(tr("Edit selected ingredient"));
+   pushButton_remove->setToolTip(tr("Remove selected ingredient"));
+#endif // QT_NO_TOOLTIP
+}
+
 void MiscDialog::removeMisc()
 {
-   QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
+   QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();
@@ -82,7 +138,7 @@ void MiscDialog::addMisc(const QModelIndex& index)
    
    if( !index.isValid() )
    {
-      QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
+      QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
@@ -118,7 +174,7 @@ void MiscDialog::addMisc(const QModelIndex& index)
 
 void MiscDialog::editSelected()
 {
-   QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
+   QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();

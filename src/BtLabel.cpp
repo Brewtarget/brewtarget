@@ -31,7 +31,8 @@
  *       Not sure how to signal the parent to redisplay
  */
  
-BtLabel::BtLabel(QWidget *parent, LabelType lType)
+BtLabel::BtLabel(QWidget *parent, LabelType lType) :
+   QLabel(parent)
 {
    whatAmI = lType;
    btParent = parent;
