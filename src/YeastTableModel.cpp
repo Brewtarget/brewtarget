@@ -271,11 +271,8 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
       case YEASTINVENTORYCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
-
-         unit  = displayUnit(index.column());
-
          return QVariant( row->inventory() );
-         case YEASTAMOUNTCOL:
+      case YEASTAMOUNTCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
 
