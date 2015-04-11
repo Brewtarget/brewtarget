@@ -1828,7 +1828,7 @@ void MainWindow::moveSelectedMashStepDown()
 
 void MainWindow::editSelectedMashStep()
 {
-   if( ! ( recipeObs || recipeObs->mash() ) )
+   if( !recipeObs || !recipeObs->mash() )
       return;
 
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
