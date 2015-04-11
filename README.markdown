@@ -56,38 +56,27 @@ Author list created with:
 
 ### Dependencies
 
-Most of these can be satisfied by installing qt and a compiler.
+On Debian systems like Ubuntu, the packages for dependencies are:
 
-* libc6 (>= 2.14)
-* libgcc1 (>= 1:4.1.1)
-* libphonon4 (>= 4:4.2.0)
-* libqt4-network (>= 4:4.5.3)
-* libqt4-sql (>= 4:4.5.3)
-* libqt4-svg (>= 4:4.5.3)
-* libqt4-xml (>= 4:4.5.3)
-* libqt4-xmlpatterns (>= 4:4.5.3)
-* libqtcore4 (>= 4:4.8.0)
-* libqtgui4 (>= 4:4.8.0)
-* libqtwebkit4 (>= 2.2~2011week36)
-* libstdc++6 (>= 4.4.0)
-* phonon
-* libqt4-sql-sqlite
-
-### Build Dependencies
-
-* cmake (>= 2.8)
-* autotools-dev
-* libqt4-dev
-* qt4-qmake
-* libphonon-dev
-* libqtwebkit-dev
-* sqlite3
+* cmake (>= 2.8.11)
+* git
+* qtbase5-dev
+* qttools5-dev
+* qtmultimedia5-dev
+* libqt5webkit5-dev
+* libqt5sql5-sqlite
+* libqt5svg5
+* libqt5multimedia5-plugins
+* doxygen (optional, for source documentation)
 
 ### Compiling
 
-    $ mkdir /tmp/brewtarget-build
-    $ cd /tmp/brewtarget-build
-    $ cmake /path/to/brewtarget
+We do not do any in-source builds. You will create a separate directory
+for the build.
+
+    $ mkdir brewtarget-build
+    $ cd brewtarget-build
+    $ cmake /path/to/brewtarget-src
     $ make
 
 ### Installing
@@ -114,14 +103,11 @@ that may be executed to finish the installation.
 ### Make targets
 
 * `make package`
-  Makes .deb, .rpm, and .tar.bz2 binary packages.
+  Makes .deb, .rpm, NSIS Installer, and .tar.bz2 binary packages.
 * `make package_source`
   Makes a .tar.bz2 source package.
 * `make source_doc`
   Makes html documentation of the source in doc/html.
-* `make translations`
-  If the cmake option `UPDATE_TRANSLATIONS` is set, updates the `*.ts` files
-  and creates .qm files. Otherwise, just creates .qm files from `*.ts` files.
 
 ### Cmake options
 
@@ -136,9 +122,5 @@ example:
   plugins instead of brewtarget.
 * `DO_RELEASE_BUILD` - `OFF` by default. If `ON`, will do a release build.
   Otherwise, debug build.
-* `ENABLE_PROFILING` - `OFF` by default. If `ON`, builds with 
-  profiling compiler flags.
-* `NO_PHONON` - `OFF` by default. If `ON`, does not build any Phonon code.
 * `NO_MESSING_WITH_FLAGS` - `OFF` by default. `ON` means do not add any build
    flags whatsoever. May override other options.
-
