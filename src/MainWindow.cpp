@@ -1828,7 +1828,11 @@ void MainWindow::moveSelectedMashStepDown()
 
 void MainWindow::editSelectedMashStep()
 {
-   if( ! ( recipeObs || recipeObs->mash() ) )
+   // This check must be done first to avoid null dereference in
+   // the following check
+   if( recipeObs == 0 )
+      return;
+   if( recipeObs->mash() == 0 )
       return;
 
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
