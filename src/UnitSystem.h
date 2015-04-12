@@ -1,6 +1,6 @@
 /*
  * UnitSystem.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -70,8 +70,18 @@ public:
     */
    virtual Unit* thicknessUnit() = 0;
    virtual Unit* unit() = 0;
-   virtual void  loadMap() = 0;
-   virtual void  loadUnitmap() = 0;
+
+   /*!
+    * \brief Map from a \c unitScale to a concrete \c Unit
+    *
+    * \note The implementing subclass is required to create
+    *    the map such that the units are inserted from smallest
+    *    to largest.
+    */
+   virtual QMap<unitScale, Unit*> const& scaleToUnit() = 0;
+
+   //! \brief Map from SI abbreviation to a concrete \c Unit
+   virtual QMap<QString, Unit*> const& qstringToUnit() = 0;
 
    // \brief Returns the name of the unit
    virtual QString unitType() = 0;
@@ -83,10 +93,6 @@ protected:
 
    UnitType _type;
    QRegExp amtUnit;
-
-   QMap<unitScale, Unit*> scaleToUnit;
-   QMap<QString, Unit*> qstringToUnit;
-
 };
 
 #endif /*_UNITSYSTEM_H*/

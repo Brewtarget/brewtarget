@@ -1,6 +1,6 @@
 /*
  * USWeightUnitSystem.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -29,16 +29,28 @@ USWeightUnitSystem::USWeightUnitSystem()
    _type = Mass;
 }
 
-void USWeightUnitSystem::loadMap()
+QMap<unitScale, Unit*> const& USWeightUnitSystem::scaleToUnit()
 {
-   scaleToUnit.insert(scaleExtraSmall,Units::ounces);
-   scaleToUnit.insert(scaleSmall,Units::pounds);
+   static QMap<unitScale, Unit*> _scaleToUnit;
+   if( _scaleToUnit.empty() )
+   {
+      _scaleToUnit.insert(scaleExtraSmall,Units::ounces);
+      _scaleToUnit.insert(scaleSmall,Units::pounds);
+   }
+
+   return _scaleToUnit;
 }
 
-void USWeightUnitSystem::loadUnitmap()
+QMap<QString, Unit*> const& USWeightUnitSystem::qstringToUnit()
 {
-   qstringToUnit.insert("oz",Units::ounces);
-   qstringToUnit.insert("lb",Units::pounds);
+   static QMap<QString, Unit*> _qstringToUnit;
+   if( _qstringToUnit.empty() )
+   {
+      _qstringToUnit.insert("oz",Units::ounces);
+      _qstringToUnit.insert("lb",Units::pounds);
+   }
+
+   return _qstringToUnit;
 }
 
 Unit* USWeightUnitSystem::thicknessUnit()

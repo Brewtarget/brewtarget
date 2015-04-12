@@ -1,6 +1,6 @@
 /*
  * USVolumeUnitSystem.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -33,8 +33,8 @@ public:
    Unit* thicknessUnit(); /* Inherited from UnitSystem */
    QString unitType();
 
-   void loadMap();
-   void loadUnitmap();
+   QMap<unitScale, Unit*> const& scaleToUnit();
+   QMap<QString, Unit*> const& qstringToUnit();
 
    Unit* unit();
 };

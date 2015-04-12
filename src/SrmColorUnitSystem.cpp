@@ -1,6 +1,6 @@
 /*
  * SrmColorUnitSystem.cpp is part of Brewtarget, and was written by Mik
- * Firestone (mikfire@gmail.com), copyright 2014-2019
+ * Firestone (mikfire@gmail.com), copyright 2014-2015
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,27 @@ SrmColorUnitSystem::SrmColorUnitSystem()
    _type = Color;
 }
 
-void SrmColorUnitSystem::loadMap() { scaleToUnit.insert(scaleWithout,Units::srm); }
-void SrmColorUnitSystem::loadUnitmap() { qstringToUnit.insert("srm",Units::srm); }
+QMap<unitScale, Unit*> const& SrmColorUnitSystem::scaleToUnit()
+{
+   static QMap<unitScale, Unit*> _scaleToUnit;
+   if( _scaleToUnit.empty() )
+   {
+      _scaleToUnit.insert(scaleWithout,Units::srm);
+   }
+
+   return _scaleToUnit;
+}
+
+QMap<QString, Unit*> const& SrmColorUnitSystem::qstringToUnit()
+{
+   static QMap<QString, Unit*> _qstringToUnit;
+   if( _qstringToUnit.empty() )
+   {
+      _qstringToUnit.insert("srm",Units::srm);
+   }
+
+   return _qstringToUnit;
+}
+
 QString SrmColorUnitSystem::unitType() { return "Color"; }
 Unit* SrmColorUnitSystem::unit() { return Units::srm; }

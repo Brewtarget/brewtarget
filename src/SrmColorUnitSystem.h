@@ -2,7 +2,7 @@
  * SrmColorUnitSystem.h is part of Brewtarget, and was written by Mik
  * Firestone (mikfire@gmail.com). This work is licensed under the Creative
  * Commons Attribution 4.0 International License.
- * (rocketman768@gmail.com), 2009-2013.
+ * (rocketman768@gmail.com), 2009-2015.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ public:
    SrmColorUnitSystem();
    Unit* thicknessUnit(){ return 0; }
 
-   void loadMap();
-   void loadUnitmap();
+   QMap<unitScale, Unit*> const& scaleToUnit();
+   QMap<QString, Unit*> const& qstringToUnit();
 
    QString unitType();
    Unit* unit();
