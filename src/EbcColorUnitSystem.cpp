@@ -1,6 +1,6 @@
 /*
  * EbcColorUnitSystem.cpp is part of Brewtarget, and was written by Mik
- * Firestone (mikfire@gmail.com), copyright 2014-2019
+ * Firestone (mikfire@gmail.com), copyright 2014-2015
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,27 @@ EbcColorUnitSystem::EbcColorUnitSystem()
    _type = Color;
 }
 
-void EbcColorUnitSystem::loadMap() { scaleToUnit.insert(scaleWithout, Units::ebc); }
-void EbcColorUnitSystem::loadUnitmap() { qstringToUnit.insert("ebc", Units::ebc); }
+QMap<unitScale, Unit*> const& EbcColorUnitSystem::scaleToUnit()
+{
+   static QMap<unitScale, Unit*> _scaleToUnit;
+   if( _scaleToUnit.empty() )
+   {
+      _scaleToUnit.insert(scaleWithout, Units::ebc);
+   }
+
+   return _scaleToUnit;
+}
+
+QMap<QString, Unit*> const& EbcColorUnitSystem::qstringToUnit()
+{
+   static QMap<QString, Unit*> _qstringToUnit;
+   if( _qstringToUnit.empty() )
+   {
+      _qstringToUnit.insert("ebc", Units::ebc);
+   }
+
+   return _qstringToUnit;
+}
+
 QString EbcColorUnitSystem::unitType() { return "Color"; }
 Unit* EbcColorUnitSystem::unit() { return Units::ebc; }

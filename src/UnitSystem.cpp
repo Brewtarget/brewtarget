@@ -1,6 +1,6 @@
 /*
  * UnitSystem.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -49,13 +49,6 @@ double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
    Unit* u = defUnit;
    Unit* found = 0;
 
-   // Make sure all the maps are loaded
-   if ( scaleToUnit.empty() )
-      loadMap();
-
-   if ( qstringToUnit.empty() )
-      loadUnitmap();
-
    // make sure we can parse the string
    if (amtUnit.indexIn(qstr) == -1)
    {
@@ -72,7 +65,7 @@ double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
    // qts, 3.6 US qts, 3.41L. If you enter 3L, you get 2.64 imperial qts,
    // 3.17 US qt. If you mean 3 US qt, you are SOL unless you mark the field
    // as US Customary.
-   found = qstringToUnit.value(unit);
+   found = qstringToUnit().value(unit);
    if ( ! found )
       found = Unit::getUnit(unit,false);
 
@@ -107,28 +100,24 @@ QString UnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
    double absSIAmount = qAbs(SIAmount);
    Unit* last = 0;
 
-   QString ret;
-
-   if ( scaleToUnit.empty() )
-      loadMap();
-
    // Don't loop if the 'without' key is defined
-   if ( scaleToUnit.contains(scaleWithout) )
+   if ( scaleToUnit().contains(scaleWithout) )
       scale = scaleWithout;
 
    // If a specific scale is provided, just use that and don't loop.
-   if ( scaleToUnit.contains(scale) )
+   if ( scaleToUnit().contains(scale) )
    {
-      Unit* bob = scaleToUnit.value(scale);
+      Unit* bob = scaleToUnit().value(scale);
       return QString("%L1 %2").arg(bob->fromSI(SIAmount), fieldWidth, format, precision).arg(bob->getUnitName());
    }
 
-   // scaleToUnit is a QMap which means we loop in the  order in which the
+   // scaleToUnit() is a QMap which means we loop in the  order in which the
    // items were inserted. Order counts, and this map has to be
    // created from smallest to largest scale (e.g., mg, g, kg).
-   foreach( unitScale key, scaleToUnit.keys() )
+   QMap<unitScale, Unit*>::const_iterator it;
+   for( it = scaleToUnit().begin(); it != scaleToUnit().end(); ++it)
    {
-      Unit* bob = scaleToUnit.value(key);
+      Unit* bob = it.value();
       double boundary = bob->boundary();
 
       // This is a nice bit of work, if I may say so myself. If we've been
@@ -141,8 +130,12 @@ QString UnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
       // available
       last = bob;
    }
+
    // If we get here, use the largest unit available
-   return QString("%L1 %2").arg(last->fromSI(SIAmount), fieldWidth, format, precision).arg(last->getUnitName());
+   if( last )
+      return QString("%L1 %2").arg(last->fromSI(SIAmount), fieldWidth, format, precision).arg(last->getUnitName());
+   else
+      return QString("nounit"); // Should never happen, so be obvious if it does
 
 }
 
@@ -153,30 +146,24 @@ double UnitSystem::amountDisplay( double amount, Unit* units, unitScale scale )
    if( units == 0 || units->getUnitType() != _type)
       return amount;
 
-
    double SIAmount = units->toSI( amount );
    double absSIAmount = qAbs(SIAmount);
    Unit* last = 0;
 
-   QString ret;
-
-
-   if ( scaleToUnit.empty() )
-      loadMap();
-
    // Short circuit if the 'without' key is defined
-   if ( scaleToUnit.contains(scaleWithout) )
+   if ( scaleToUnit().contains(scaleWithout) )
       scale = scaleWithout;
 
-   if ( scaleToUnit.contains(scale) )
+   if ( scaleToUnit().contains(scale) )
    {
-      Unit* bob = scaleToUnit.value(scale);
+      Unit* bob = scaleToUnit().value(scale);
       return bob->fromSI(SIAmount);
    }
 
-   foreach( unitScale key, scaleToUnit.keys() )
+   QMap<unitScale, Unit*>::const_iterator it;
+   for( it = scaleToUnit().begin(); it != scaleToUnit().end(); ++it)
    {
-      Unit* bob = scaleToUnit.value(key);
+      Unit* bob = it.value();
       double boundary = bob->boundary();
 
       if ( last && absSIAmount < bob->toSI(boundary) )
@@ -185,8 +172,11 @@ double UnitSystem::amountDisplay( double amount, Unit* units, unitScale scale )
       last = bob;
    }
    // If we get here, use the largest unit available
-   return last->fromSI(SIAmount);
+   if( last )
+      return last->fromSI(SIAmount);
+   else
+      return -42.42; // Should never happen, so be obvious if it does
 
 }
 
-Unit* UnitSystem::scaleUnit(unitScale scale) { return scaleToUnit.contains(scale) ?  scaleToUnit.value(scale) : 0; }
+Unit* UnitSystem::scaleUnit(unitScale scale) { return scaleToUnit().contains(scale) ?  scaleToUnit().value(scale) : 0; }

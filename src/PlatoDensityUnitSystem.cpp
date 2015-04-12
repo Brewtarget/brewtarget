@@ -1,6 +1,6 @@
 /*
  * PlatoDensityUnitSystem.cpp is part of Brewtarget, and was written by Mik
- * Firestone (mikfire@gmail.com), copyright 2014-2019
+ * Firestone (mikfire@gmail.com), copyright 2014-2015
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,15 +26,28 @@ PlatoDensityUnitSystem::PlatoDensityUnitSystem()
    _type = Density;
 }
 
-void PlatoDensityUnitSystem::loadMap()
+QMap<unitScale, Unit*> const& PlatoDensityUnitSystem::scaleToUnit()
 {
-   scaleToUnit.insert(scaleWithout, Units::plato);
+   static QMap<unitScale, Unit*> _scaleToUnit;
+   if( _scaleToUnit.empty() )
+   {
+      _scaleToUnit.insert(scaleWithout, Units::plato);
+   }
+
+   return _scaleToUnit;
 }
 
-void PlatoDensityUnitSystem::loadUnitmap()
+QMap<QString, Unit*> const& PlatoDensityUnitSystem::qstringToUnit()
 {
-   qstringToUnit.insert("P", Units::plato);
+   static QMap<QString, Unit*> _qstringToUnit;
+   if( _qstringToUnit.empty() )
+   {
+      _qstringToUnit.insert("P", Units::plato);
+   }
+
+   return _qstringToUnit;
 }
+
 
 QString PlatoDensityUnitSystem::unitType() { return "Density"; }
 Unit* PlatoDensityUnitSystem::unit() { return Units::plato; }

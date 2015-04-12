@@ -1,6 +1,6 @@
 /*
  * SgDensityUnitSystem.cpp part of Brewtarget, and was written by Mik
- * Firestone (mikfire@gmail.com), copyright 2014-2019
+ * Firestone (mikfire@gmail.com), copyright 2014-2015
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,27 @@ SgDensityUnitSystem::SgDensityUnitSystem()
    _type = Density;
 }
 
-void SgDensityUnitSystem::loadMap() { scaleToUnit.insert(scaleWithout,Units::sp_grav); }
-void SgDensityUnitSystem::loadUnitmap() { qstringToUnit.insert("sg",Units::sp_grav); }
+QMap<unitScale, Unit*> const& SgDensityUnitSystem::scaleToUnit()
+{
+   static QMap<unitScale, Unit*> _scaleToUnit;
+   if( _scaleToUnit.empty() )
+   {
+      _scaleToUnit.insert(scaleWithout,Units::sp_grav);
+   }
+
+   return _scaleToUnit;
+}
+
+QMap<QString, Unit*> const& SgDensityUnitSystem::qstringToUnit()
+{
+   static QMap<QString, Unit*> _qstringToUnit;
+   if( _qstringToUnit.empty() )
+   {
+      _qstringToUnit.insert("sg",Units::sp_grav);
+   }
+
+   return _qstringToUnit;
+}
 
 QString SgDensityUnitSystem::unitType() { return "Density"; }
 Unit* SgDensityUnitSystem::unit() { return Units::sp_grav; }

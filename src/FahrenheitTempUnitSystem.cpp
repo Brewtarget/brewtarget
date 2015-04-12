@@ -1,6 +1,6 @@
 /*
  * FahrenheitTempUnitSystem.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -28,14 +28,26 @@ FahrenheitTempUnitSystem::FahrenheitTempUnitSystem()
    _type = Temp;
 }
 
-void FahrenheitTempUnitSystem::loadMap()
+QMap<unitScale, Unit*> const& FahrenheitTempUnitSystem::scaleToUnit()
 {
-   scaleToUnit.insert(scaleWithout,Units::fahrenheit);
+   static QMap<unitScale, Unit*> _scaleToUnit;
+   if( _scaleToUnit.empty() )
+   {
+      _scaleToUnit.insert(scaleWithout,Units::fahrenheit);
+   }
+
+   return _scaleToUnit;
 }
 
-void FahrenheitTempUnitSystem::loadUnitmap()
+QMap<QString, Unit*> const& FahrenheitTempUnitSystem::qstringToUnit()
 {
-   qstringToUnit.insert("F",Units::fahrenheit);
+   static QMap<QString, Unit*> _qstringToUnit;
+   if( _qstringToUnit.empty() )
+   {
+      _qstringToUnit.insert("F",Units::fahrenheit);
+   }
+
+   return _qstringToUnit;
 }
 
 Unit* FahrenheitTempUnitSystem::unit() { return Units::fahrenheit; };

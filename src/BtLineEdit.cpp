@@ -92,7 +92,7 @@ void BtLineEdit::initializeSection()
 void BtLineEdit::lineChanged(unitDisplay oldUnit, unitScale oldScale)
 {
    // This is where it gets hard
-   double val;
+   double val = -1.0;
    QString amt;
    bool force = false;
    bool ok = false;
@@ -137,7 +137,6 @@ void BtLineEdit::lineChanged(unitDisplay oldUnit, unitScale oldScale)
          amt = displayAmount(val,0);
          break;
       case STRING:
-         val = -1.0;
          amt = text();
          break;
       case GENERIC:

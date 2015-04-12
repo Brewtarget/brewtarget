@@ -1,6 +1,6 @@
 /*
  * TimeUnitSystem.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -28,20 +28,32 @@ TimeUnitSystem::TimeUnitSystem()
    _type = Time;
 }
 
-void TimeUnitSystem::loadMap()
+QMap<unitScale, Unit*> const& TimeUnitSystem::scaleToUnit()
 {
-   scaleToUnit.insert(scaleExtraSmall,Units::seconds);
-   scaleToUnit.insert(scaleSmall,Units::minutes);
-   scaleToUnit.insert(scaleMedium,Units::hours);
-   scaleToUnit.insert(scaleLarge,Units::days);
+   static QMap<unitScale, Unit*> _scaleToUnit;
+   if( _scaleToUnit.empty() )
+   {
+      _scaleToUnit.insert(scaleExtraSmall,Units::seconds);
+      _scaleToUnit.insert(scaleSmall,Units::minutes);
+      _scaleToUnit.insert(scaleMedium,Units::hours);
+      _scaleToUnit.insert(scaleLarge,Units::days);
+   }
+
+   return _scaleToUnit;
 }
 
-void TimeUnitSystem::loadUnitmap()
+QMap<QString, Unit*> const& TimeUnitSystem::qstringToUnit()
 {
-   qstringToUnit.insert("s", Units::seconds);
-   qstringToUnit.insert("m", Units::minutes);
-   qstringToUnit.insert("h", Units::hours);
-   qstringToUnit.insert("d", Units::days);
+   static QMap<QString, Unit*> _qstringToUnit;
+   if( _qstringToUnit.empty() )
+   {
+      _qstringToUnit.insert("s", Units::seconds);
+      _qstringToUnit.insert("m", Units::minutes);
+      _qstringToUnit.insert("h", Units::hours);
+      _qstringToUnit.insert("d", Units::days);
+   }
+
+   return _qstringToUnit;
 }
 
 Unit* TimeUnitSystem::unit() { return Units::minutes; };

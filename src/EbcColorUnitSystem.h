@@ -1,6 +1,6 @@
 /*
  * EbcColorUnitSystem.h is part of Brewtarget, and was written by Mik
- * Firestone (mikfire@gmail.com), copyright 2014-2019
+ * Firestone (mikfire@gmail.com), copyright 2014-2015
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ public:
    Unit* thicknessUnit() { return 0; }
    QString unitType();
 
-   void loadMap();
-   void loadUnitmap();
+   QMap<unitScale, Unit*> const& scaleToUnit();
+   QMap<QString, Unit*> const& qstringToUnit();
    Unit* unit();
 
 };

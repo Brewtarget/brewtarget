@@ -1,6 +1,6 @@
 /*
  * BtTreeModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -592,7 +592,7 @@ void BtTreeModel::loadTreeModel()
    int i;
 
    QModelIndex ndxLocal;
-   BtTreeItem* local = rootItem->child(0);
+   BtTreeItem* local = 0;
    QList<BeerXMLElement*> elems = elements();
 
    foreach( BeerXMLElement* elem, elems )
@@ -976,13 +976,13 @@ bool BtTreeModel::removeFolder(QModelIndex ndx)
    if ( ! ndx.isValid() )
       return false;
 
+   int i = -1;
    QModelIndex pInd = parent(ndx);
 
    if ( ! pInd.isValid() )
       return false;
 
    BtTreeItem* start = item(ndx);
-   int i = start->childNumber();
 
    // Remove the victim. 
    i = start->childNumber();
