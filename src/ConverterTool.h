@@ -1,6 +1,6 @@
 /*
  * ConverterTool.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -24,25 +24,49 @@ class ConverterTool;
 
 #include <QDialog>
 #include <QWidget>
-#include "ui_converterTool.h"
+#include <QPushButton>
+#include <QLineEdit>
+#include <QLabel>
+#include <QEvent>
 
 /*!
- * \class ConverterTool
- * \author Philip G. Lee
- *
  * \brief Dialog to convert units.
+ * \author Philip G. Lee
  */
-class ConverterTool : public QDialog, public Ui::converterTool
+class ConverterTool : public QDialog
 {
    Q_OBJECT
 public:
+
    ConverterTool(QWidget* parent=0);
+
+   //! \name Public UI Variables
+   //! @{
+   QPushButton* pushButton_convert;
+   QLabel* inputLabel;
+   QLineEdit* inputLineEdit;
+   QLabel* outputLabel;
+   QLineEdit* outputLineEdit;
+   QLabel* outputUnitsLabel;
+   QLineEdit* outputUnitsLineEdit;
+   //! @}
 
 public slots:
    void convert();
-   
+
+protected:
+
+   virtual void changeEvent(QEvent* event)
+   {
+      if(event->type() == QEvent::LanguageChange)
+         retranslateUi();
+      QDialog::changeEvent(event);
+   }
+
 private:
-   
+
+   void doLayout();
+   void retranslateUi();
 };
 
 #endif

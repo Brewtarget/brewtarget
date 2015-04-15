@@ -1,6 +1,6 @@
 /*
  * YeastDialog.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -19,15 +19,16 @@
  */
 
 #ifndef _YEASTDIALOG_H
-#define   _YEASTDIALOG_H
-
-class YeastDialog;
+#define _YEASTDIALOG_H
 
 #include <QWidget>
 #include <QDialog>
-#include <QVariant>
-#include <QMetaProperty>
-#include "ui_yeastDialog.h"
+#include <QEvent>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QTableView>
+#include <QSpacerItem>
+#include <QPushButton>
 
 // Forward declarations.
 class MainWindow;
@@ -42,7 +43,7 @@ class YeastSortFilterProxyModel;
  *
  * \brief View/controller dialog for displaying all the yeasts in the database.
  */
-class YeastDialog : public QDialog, public Ui::yeastDialog
+class YeastDialog : public QDialog
 {
    Q_OBJECT
 
@@ -50,11 +51,32 @@ public:
    YeastDialog(MainWindow* parent);
    virtual ~YeastDialog() {}
 
+   //! \name Public UI Variables
+   //! @{
+   QVBoxLayout *verticalLayout;
+   QTableView *tableWidget;
+   QHBoxLayout *horizontalLayout;
+   QSpacerItem *horizontalSpacer;
+   QPushButton *pushButton_addToRecipe;
+   QPushButton *pushButton_new;
+   QPushButton *pushButton_edit;
+   QPushButton *pushButton_remove;
+   //! @}
+
 public slots:
    void addYeast(const QModelIndex& = QModelIndex());
    void removeYeast();
    void editSelected();
    void newYeast();
+
+protected:
+
+   virtual void changeEvent(QEvent* event)
+   {
+      if(event->type() == QEvent::LanguageChange)
+         retranslateUi();
+      QDialog::changeEvent(event);
+   }
 
 private:
    MainWindow* mainWindow;
@@ -62,6 +84,9 @@ private:
    YeastSortFilterProxyModel* yeastTableProxy;
    YeastEditor* yeastEditor;
    int numYeasts;
+
+   void doLayout();
+   void retranslateUi();
 };
 
 #endif   /* _YEASTDIALOG_H */

@@ -1,6 +1,6 @@
 /*
  * HopDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Luke Vincent <luke.r.vincent@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -34,33 +34,89 @@
 #include "HopTableModel.h"
 #include "HopSortFilterProxyModel.h"
 
-HopDialog::HopDialog(MainWindow* parent)
-        : QDialog(parent), mainWindow(parent), hopEditor(new HopEditor(this)), numHops(0)
+HopDialog::HopDialog(MainWindow* parent) :
+   QDialog(parent),
+   mainWindow(parent),
+   hopEditor(new HopEditor(this)),
+   numHops(0)
 {
-   setupUi(this);
+   doLayout();
 
-   hopTableModel = new HopTableModel(hopTableWidget, false);
+   hopTableModel = new HopTableModel(tableWidget, false);
    hopTableModel->setInventoryEditable(true);
-   hopTableProxy = new HopSortFilterProxyModel(hopTableWidget);
+   hopTableProxy = new HopSortFilterProxyModel(tableWidget);
    hopTableProxy->setSourceModel(hopTableModel);
-   hopTableWidget->setModel(hopTableProxy);
-   hopTableWidget->setSortingEnabled(true);
-   hopTableWidget->sortByColumn( HOPNAMECOL, Qt::AscendingOrder );
+   tableWidget->setModel(hopTableProxy);
+   tableWidget->setSortingEnabled(true);
+   tableWidget->sortByColumn( HOPNAMECOL, Qt::AscendingOrder );
    hopTableProxy->setDynamicSortFilter(true);
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addHop() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
-   connect( hopTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
+   connect( tableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
    
    hopTableModel->observeDatabase(true);
+}
+
+void HopDialog::doLayout()
+{
+   resize(800, 300);
+   verticalLayout = new QVBoxLayout(this);
+      tableWidget = new QTableView(this);
+      horizontalLayout = new QHBoxLayout();
+         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+         pushButton_addToRecipe = new QPushButton(this);
+            pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
+            pushButton_addToRecipe->setAutoDefault(false);
+            pushButton_addToRecipe->setDefault(true);
+         pushButton_new = new QPushButton(this);
+            pushButton_new->setObjectName(QStringLiteral("pushButton_new"));
+            pushButton_new->setAutoDefault(false);
+         pushButton_edit = new QPushButton(this);
+            pushButton_edit->setObjectName(QStringLiteral("pushButton_edit"));
+            QIcon icon;
+            icon.addFile(QStringLiteral(":/images/edit.svg"), QSize(), QIcon::Normal, QIcon::Off);
+            pushButton_edit->setIcon(icon);
+            pushButton_edit->setAutoDefault(false);
+         pushButton_remove = new QPushButton(this);
+            pushButton_remove->setObjectName(QStringLiteral("pushButton_remove"));
+            QIcon icon1;
+            icon1.addFile(QStringLiteral(":/images/smallMinus.svg"), QSize(), QIcon::Normal, QIcon::Off);
+            pushButton_remove->setIcon(icon1);
+            pushButton_remove->setAutoDefault(false);
+         horizontalLayout->addItem(horizontalSpacer);
+         horizontalLayout->addWidget(pushButton_addToRecipe);
+         horizontalLayout->addWidget(pushButton_new);
+         horizontalLayout->addWidget(pushButton_edit);
+         horizontalLayout->addWidget(pushButton_remove);
+      verticalLayout->addWidget(tableWidget);
+      verticalLayout->addLayout(horizontalLayout);
+
+   retranslateUi();
+   QMetaObject::connectSlotsByName(this);
+}
+
+void HopDialog::retranslateUi()
+{
+   setWindowTitle(tr("Hop Database"));
+   pushButton_addToRecipe->setText(tr("Add to Recipe"));
+   pushButton_new->setText(tr("New"));
+   pushButton_edit->setText(QString());
+   pushButton_remove->setText(QString());
+#ifndef QT_NO_TOOLTIP
+   pushButton_addToRecipe->setToolTip(tr("Add selected ingredient to recipe"));
+   pushButton_new->setToolTip(tr("Create new ingredient"));
+   pushButton_edit->setToolTip(tr("Edit selected ingredient"));
+   pushButton_remove->setToolTip(tr("Remove selected ingredient"));
+#endif // QT_NO_TOOLTIP
 }
 
 void HopDialog::removeHop()
 {
    QModelIndex modelIndex, viewIndex;
-   QModelIndexList selected = hopTableWidget->selectionModel()->selectedIndexes();
+   QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();
@@ -85,7 +141,7 @@ void HopDialog::addHop(const QModelIndex& index)
    QModelIndex translated;
    if( !index.isValid() )
    {
-      QModelIndexList selected = hopTableWidget->selectionModel()->selectedIndexes();
+      QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
@@ -120,7 +176,7 @@ void HopDialog::addHop(const QModelIndex& index)
 
 void HopDialog::editSelected()
 {
-   QModelIndexList selected = hopTableWidget->selectionModel()->selectedIndexes();
+   QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
    QModelIndex translated;
    int row, size, i;
 
