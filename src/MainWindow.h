@@ -353,14 +353,6 @@ private:
 
    void updateDensitySlider(QString attribute, RangedSlider* slider, double max);
    void updateColorSlider(QString attribute, RangedSlider* slider);
-   // Copy methods used by copySelected()
-   void copyThis(Recipe *rec);
-   void copyThis(Equipment *kit);
-   void copyThis(Fermentable *ferm);
-   void copyThis(Hop *hop);
-   void copyThis(Misc *misc);
-   void copyThis(Style *style);
-   void copyThis(Yeast *yeast);
 
    void convertedMsg();
    void importMsg();

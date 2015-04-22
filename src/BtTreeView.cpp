@@ -25,6 +25,8 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QMimeData>
+#include <QInputDialog>
+
 #include "BtTreeView.h"
 #include "BtTreeModel.h"
 #include "BtTreeFilterProxyModel.h"
@@ -390,6 +392,87 @@ QMenu* BtTreeView::contextMenu(QModelIndex selected)
    return _contextMenu;
 }
 
+QString BtTreeView::verifyCopy(QString tag, QString name, bool *abort)
+{
+   QInputDialog askEm;
+
+   // Gotta build this hard, so we can say "cancel all"
+   askEm.setCancelButtonText( tr("Cancel All") );
+   askEm.setWindowTitle( tr("Copy %1").arg(tag) );
+   askEm.setLabelText(tr("Enter a unique name for the copy of %1.").arg(name));
+   askEm.setToolTip(tr("An empty name will skip copying this %1.").arg(tag));
+
+   if ( askEm.exec() == QDialog::Accepted )
+   {
+      if ( abort )
+         *abort = false;
+
+      name = askEm.textValue();
+   }
+   else 
+   {
+      if ( abort )
+         *abort = true;
+   }
+
+   return name;
+}
+
+void BtTreeView::copySelected(QModelIndexList selected)
+{
+   QList< QPair<QModelIndex, QString> > names;
+   QString newName;
+   QModelIndexList translated;
+   bool abort = false;
+
+   // Time to lay down the boogie 
+   foreach( QModelIndex at, selected )
+   {
+      // If somebody said cancel, bug out
+      if ( abort == true )
+         return;
+
+      // First, we should translate from proxy to model, because I need this index a lot.
+      QModelIndex trans = filter->mapToSource(at);
+
+      // You can't delete the root element
+      if ( trans == findElement(0) )
+         continue;
+
+      // Otherwise prompt
+      switch(_model->type(trans))
+      {
+         case BtTreeItem::EQUIPMENT:
+            newName = verifyCopy(tr("Equipment"),_model->name(trans), &abort);
+            break;
+         case BtTreeItem::FERMENTABLE:
+            newName = verifyCopy(tr("Fermentable"),_model->name(trans), &abort);
+            break;
+         case BtTreeItem::HOP:
+            newName = verifyCopy(tr("Hop"),_model->name(trans), &abort);
+            break;
+         case BtTreeItem::MISC:
+            newName = verifyCopy(tr("Misc"),_model->name(trans), &abort);
+            break;
+         case BtTreeItem::RECIPE:
+            newName = verifyCopy(tr("Recipe"),_model->name(trans), &abort);
+            break;
+         case BtTreeItem::STYLE:
+            newName = verifyCopy(tr("Style"),_model->name(trans), &abort);
+            break;
+         case BtTreeItem::YEAST:
+            newName = verifyCopy(tr("Yeast"),_model->name(trans), &abort);
+            break;
+         default:
+            Brewtarget::logW( QString("BtTreeView::copySelected Unknown type: %1").arg(_model->type(trans)));
+      }
+      if ( !abort && !newName.isEmpty() )
+         names.append(qMakePair(trans,newName));
+   }
+   // If we get here, call the model to do the copy
+   _model->copySelected(names);
+}
+
 int BtTreeView::verifyDelete(int confirmDelete, QString tag, QString name)
 {
    if ( confirmDelete == QMessageBox::YesToAll )
@@ -463,7 +546,7 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
             confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(trans));
             break;
          default:
-            Brewtarget::logW( QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(trans)));
+            Brewtarget::logW( QString("BtTreeView::deleteSelected Unknown type: %1").arg(_model->type(trans)));
       }
       // If they selected "Yes" or "Yes To All", push and loop
       if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
