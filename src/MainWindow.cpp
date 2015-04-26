@@ -895,7 +895,7 @@ void MainWindow::updateRecipeStyle()
 
       styleRangeWidget_abv->setPreferredRange(selected->abvMin_pct(), selected->abvMax_pct());
       styleRangeWidget_ibu->setPreferredRange(selected->ibuMin(), selected->ibuMax());
-      styleRangeWidget_srm->setPreferredRange(selected->colorMin_srm(), selected->colorMax_srm());
+      styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(selected, tab_recipe, "color_srm", Brewtarget::COLOR));
    }
 }
 
