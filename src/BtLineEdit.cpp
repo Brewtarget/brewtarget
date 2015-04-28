@@ -37,7 +37,7 @@ BtLineEdit::BtLineEdit(QWidget *parent, FieldType type) :
    {
       case MASS:
          // I don't ... oh bugger
-         _units = Units::grams;
+         _units = Units::kilograms;
          break;
       case VOLUME:
          _units = Units::liters;
@@ -55,7 +55,7 @@ BtLineEdit::BtLineEdit(QWidget *parent, FieldType type) :
          _units = Units::sp_grav;
          break;
       case MIXED:
-         _units = Units::grams;
+         _units = Units::kilograms;
          break;
       case GENERIC:
       case STRING:
@@ -331,7 +331,7 @@ void BtMixedEdit::setIsWeight(bool state)
    if (state)
    {
       _type = MASS;
-      _units = Units::grams;
+      _units = Units::kilograms;
    }
    else
    {
