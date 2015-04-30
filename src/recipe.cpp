@@ -2031,6 +2031,16 @@ void Recipe::acceptHopChange(Hop* hop)
    recalcIBU();
 }
 
+void Recipe::acceptYeastChange(QMetaProperty prop, QVariant val)
+{
+   recalcOgFg();
+}
+
+void Recipe::acceptYeastChange(Yeast* yeast)
+{
+   recalcOgFg();
+}
+
 void Recipe::acceptMashChange(QMetaProperty prop, QVariant val)
 {
    Mash* mashSend = qobject_cast<Mash*>(sender());
