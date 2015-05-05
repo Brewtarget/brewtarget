@@ -40,7 +40,7 @@ ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) : QDialog(parent)
 
    checkBox_batchSize->setCheckState( Qt::Checked );
    lineEdit_newEfficiency->setDisabled(true);
-   
+
    connect(&scaleGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(scaleGroupButtonPressed(QAbstractButton*)));
    connect(buttonBox, SIGNAL(accepted()), this, SLOT(scale()) );
    connect(buttonBox, SIGNAL(rejected()), this, SLOT(close()) );
@@ -73,7 +73,7 @@ void ScaleRecipeTool::show()
    // Set the batch size display to the current batch size.
    if( recObs != 0 )
       lineEdit_newBatchSize->setText(recObs);
-   
+
    setVisible(true);
 }
 
@@ -110,7 +110,10 @@ void ScaleRecipeTool::scaleByEfficiency()
       if( ferm == 0 )
          continue;
 
-      ferm->setAmount_kg(ferm->amount_kg() * ratio);
+      if( !ferm->isSugar() && !ferm->isExtract() )
+      {
+         ferm->setAmount_kg(ferm->amount_kg() * ratio);
+      }
    }
 
    Mash* mash = recObs->mash();
@@ -141,19 +144,19 @@ void ScaleRecipeTool::scaleByVolume()
 {
    if( recObs == 0 )
       return;
-   
+
    int i, size;
-   
+
    double currentBatchSize_l = recObs->batchSize_l();
    double newBatchSize_l = lineEdit_newBatchSize->toSI();
-   
+
    double ratio = newBatchSize_l / currentBatchSize_l;
-   
+
    // I think you want the equipment to be clean.
    //recObs->setEquipment(new Equipment());
    recObs->setBatchSize_l(newBatchSize_l);
    recObs->setBoilSize_l(newBatchSize_l);
-   
+
    QList<Fermentable*> ferms = recObs->fermentables();
    size = ferms.size();
    for( i = 0; i < size; ++i )
@@ -162,10 +165,10 @@ void ScaleRecipeTool::scaleByVolume()
       // NOTE: why the hell do we need this?
       if( ferm == 0 )
          continue;
-      
+
       ferm->setAmount_kg(ferm->amount_kg() * ratio);
    }
-   
+
    QList<Hop*> hops = recObs->hops();
    size = hops.size();
    for( i = 0; i < size; ++i )
@@ -174,10 +177,10 @@ void ScaleRecipeTool::scaleByVolume()
       // NOTE: why the hell do we need this?
       if( hop == 0 )
          continue;
-      
+
       hop->setAmount_kg(hop->amount_kg() * ratio);
    }
-   
+
    QList<Misc*> miscs = recObs->miscs();
    size = miscs.size();
    for( i = 0; i < size; ++i )
@@ -186,10 +189,10 @@ void ScaleRecipeTool::scaleByVolume()
       // NOTE: why the hell do we need this?
       if( misc == 0 )
          continue;
-      
+
       misc->setAmount( misc->amount() * ratio );
    }
-   
+
    QList<Water*> waters = recObs->waters();
    size = waters.size();
    for( i = 0; i < size; ++i )
@@ -198,14 +201,14 @@ void ScaleRecipeTool::scaleByVolume()
       // NOTE: why the hell do we need this?
       if( water == 0 )
          continue;
-      
+
       water->setAmount_l(water->amount_l() * ratio);
    }
-   
+
    Mash* mash = recObs->mash();
    if( mash == 0 )
       return;
-   
+
    QList<MashStep*> mashSteps = mash->mashSteps();
    size = mashSteps.size();
    for( i = 0; i < size; ++i )
@@ -214,15 +217,15 @@ void ScaleRecipeTool::scaleByVolume()
       // NOTE: why the hell do we need this?
       if( step == 0 )
          continue;
-      
+
       // Reset all these to zero so that the user
       // will know to re-run the mash wizard.
       step->setDecoctionAmount_l(0);
       step->setInfuseAmount_l(0);
    }
-   
+
    // I don't think I should scale the yeasts.
-   
+
    // Let the user know what happened.
    QMessageBox::information(this, tr("Recipe Scaled"),
              tr("The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.") );
