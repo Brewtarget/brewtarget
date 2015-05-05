@@ -317,10 +317,12 @@ public slots:
    void acceptEquipChange(QMetaProperty prop, QVariant val);
    void acceptFermChange(QMetaProperty prop, QVariant val);
    void acceptHopChange(QMetaProperty prop, QVariant val);
+   void acceptYeastChange(QMetaProperty prop, QVariant val);
    void acceptMashChange(QMetaProperty prop, QVariant val);
 
    void acceptFermChange(Fermentable* ferm);
    void acceptHopChange(Hop* hop);
+   void acceptYeastChange(Yeast* yeast);
    void acceptMashChange(Mash* mash);
 
    // Setters
