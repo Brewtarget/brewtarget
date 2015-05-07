@@ -857,6 +857,66 @@ int BtTreeModel::mask()
    return treeMask;
 }
 
+void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
+{
+   Recipe       *copyRec,  *oldRec;
+   Equipment    *copyKit,  *oldKit;
+   Fermentable  *copyFerm, *oldFerm;
+   Hop          *copyHop,  *oldHop;
+   Misc         *copyMisc, *oldMisc;
+   Style        *copyStyle, *oldStyle;
+   Yeast        *copyYeast, *oldYeast;
+
+   while ( ! toBeCopied.isEmpty() ) 
+   {
+      QPair<QModelIndex,QString> thisPair = toBeCopied.takeFirst();
+      QModelIndex ndx = thisPair.first;
+      QString name    = thisPair.second;
+
+      switch ( type(ndx) ) 
+      {
+         case BtTreeItem::EQUIPMENT:
+            oldKit = equipment(ndx);
+            copyKit = Database::instance().newEquipment(oldKit); // Create a deep copy.
+            copyKit->setName(name);
+            break;
+         case BtTreeItem::FERMENTABLE:
+            oldFerm = fermentable(ndx);
+            copyFerm = Database::instance().newFermentable(oldFerm); // Create a deep copy.
+            copyFerm->setName(name);
+            break;
+         case BtTreeItem::HOP:
+            oldHop = hop(ndx);
+            copyHop = Database::instance().newHop(oldHop); // Create a deep copy.
+            copyHop->setName(name);
+            break;
+         case BtTreeItem::MISC:
+            oldMisc = misc(ndx);
+            copyMisc = Database::instance().newMisc(oldMisc); // Create a deep copy.
+            copyMisc->setName(name);
+            break;
+         case BtTreeItem::RECIPE:
+            oldRec = recipe(ndx);
+            copyRec = Database::instance().newRecipe(oldRec); // Create a deep copy.
+            copyRec->setName(name);
+            break;
+         case BtTreeItem::STYLE:
+            oldStyle = style(ndx);
+            copyStyle = Database::instance().newStyle(oldStyle); // Create a deep copy.
+            copyStyle->setName(name);
+            break;
+         case BtTreeItem::YEAST:
+            oldYeast = yeast(ndx);
+            copyYeast = Database::instance().newYeast(oldYeast); // Create a deep copy.
+            copyYeast->setName(name);
+            
+            break;
+         default:
+            Brewtarget::logW(QString("deleteSelected:: unknown type %1").arg(type(ndx)));
+      }
+   }
+}
+
 void BtTreeModel::deleteSelected(QModelIndexList victims)
 {
    QModelIndexList toBeDeleted = victims; // trust me

@@ -142,6 +142,7 @@ public:
    //! \brief delete things from the tree/db
    void deleteSelected(QModelIndexList victims);
 
+   void copySelected(QList< QPair<QModelIndex, QString> > toBeCopied);
    //! \brief Get Recipe at \c index.
    Recipe* recipe(const QModelIndex &index) const;
    //! \brief Get Equipment at \c index.

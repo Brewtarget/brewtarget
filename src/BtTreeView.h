@@ -117,6 +117,7 @@ public:
    void setupContextMenu(QWidget* top, QWidget* editor );
 
    void deleteSelected(QModelIndexList selected);
+   void copySelected(QModelIndexList selected);
    // Friend classes. For the most part, the children don't do much beyond
    // contructors and context menus. So far :/
    friend class RecipeTreeView;
@@ -140,6 +141,7 @@ private:
    bool doubleClick;
 
    int verifyDelete(int confirmDelete, QString tag, QString name);
+   QString verifyCopy(QString tag, QString name, bool *abort);
    QMimeData *mimeData(QModelIndexList indexes);
 };
 
