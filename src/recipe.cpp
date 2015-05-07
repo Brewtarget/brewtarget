@@ -1730,7 +1730,7 @@ void Recipe::recalcBoilGrav()
    sugars = calcTotalPoints();
    sugar_kg = sugars.value("sugar_kg");
    sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
-   lateAddition_kg = sugars.value("ateAddition_kg");
+   lateAddition_kg = sugars.value("lateAddition_kg");
    lateAddition_kg_ignoreEff = sugars.value("lateAddition_kg_ignoreEff");
    
    // Since the efficiency refers to how much sugar we get into the fermenter,
