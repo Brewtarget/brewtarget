@@ -62,6 +62,7 @@ On Debian systems like Ubuntu, the packages for dependencies are:
 * git
 * qtbase5-dev
 * qttools5-dev
+* qttools5-dev-tools
 * qtmultimedia5-dev
 * libqt5webkit5-dev
 * libqt5sql5-sqlite
