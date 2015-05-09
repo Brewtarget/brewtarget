@@ -271,8 +271,9 @@ bool Database::load()
    QHash<int,Recipe*>::iterator i;
    QList<Fermentable*>::iterator j;
    QList<Hop*>::iterator k;
-   QList<Mash*>::iterator l;
-   QList<MashStep*>::iterator m;
+   QList<Yeast*>::iterator l;
+   QList<Mash*>::iterator m;
+   QList<MashStep*>::iterator n;
 
 
    for( i = allRecipes.begin(); i != allRecipes.end(); i++ )
@@ -286,22 +287,26 @@ bool Database::load()
       }
       
       QList<Fermentable*> tmpF = fermentables(*i);
-      for( j = tmpF.begin(); j != tmpF.end(); j++ )
+      for( j = tmpF.begin(); j != tmpF.end(); ++j )
          connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
       
       QList<Hop*> tmpH = hops(*i);
       for( k = tmpH.begin(); k != tmpH.end(); ++k )
          connect( *k, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptHopChange(QMetaProperty,QVariant)) );
       
+      QList<Yeast*> tmpY = yeasts(*i);
+      for( l = tmpY.begin(); l != tmpY.end(); ++l )
+         connect( *l, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptYeastChange(QMetaProperty,QVariant)) );
+
       connect( mash(*i), SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
    }
    
    QList<Mash*> tmpM = mashs();
-   for( l = tmpM.begin(); l != tmpM.end(); ++l)
+   for( m = tmpM.begin(); m != tmpM.end(); ++m )
    {
-      QList<MashStep*> tmpMS = mashSteps(*l);
-      for( m=tmpMS.begin(); m != tmpMS.end(); ++m)
-         connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *l, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
+      QList<MashStep*> tmpMS = mashSteps(*m);
+      for( n=tmpMS.begin(); n != tmpMS.end(); ++n)
+         connect( *n, SIGNAL(changed(QMetaProperty,QVariant)), *m, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
 
    // The database MUST be saved if we created from scratch.
