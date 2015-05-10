@@ -44,6 +44,13 @@ public:
 private:
    static double tinseth(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
    static double rager(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
+
+   /*!
+    * \author Daniel Pettersson (pettson81@gmail.com)
+    *
+    * \brief Calculates the IBU by Greg Noonans formula
+    */
+   static double noonan(double AARating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
 };
 
 #endif

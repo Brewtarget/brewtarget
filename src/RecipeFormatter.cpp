@@ -114,6 +114,9 @@ QString RecipeFormatter::getTextFormat()
       case Brewtarget::RAGER:
          bitternessString = bitternessString.arg("Rager");
          break;
+      case Brewtarget::NOONAN:
+         bitternessString = bitternessString.arg("Noonan");
+         break;
    }
    ret += bitternessString;
    colorString = QObject::tr("Color: %1 SRM (%2)\n").arg( Brewtarget::displayAmount(rec->color_srm(), 0, 0) );

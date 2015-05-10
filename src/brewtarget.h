@@ -88,7 +88,7 @@ public:
    //! \brief Units for density
    enum DensityUnitType {SG,PLATO};
    //! \brief The formula used to get IBUs.
-   enum IbuType {TINSETH, RAGER};
+   enum IbuType {TINSETH, RAGER, NOONAN};
    //! \brief Controls how units and scales are stored in the options file
    enum iUnitOps {
       NOOP = -1 ,

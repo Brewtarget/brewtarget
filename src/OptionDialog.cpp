@@ -115,6 +115,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    // Same for ibuGroup.
    ibuGroup->addButton(checkBox_tinseth);
    ibuGroup->addButton(checkBox_rager);
+   ibuGroup->addButton(checkBox_noonan);
 
    // Weight
    weightGroup->addButton(weight_si);
@@ -220,6 +221,8 @@ void OptionDialog::saveAndClose()
       iformula = Brewtarget::TINSETH;
    else if( button == checkBox_rager )
       iformula = Brewtarget::RAGER;
+   else if( button == checkBox_noonan )
+      iformula = Brewtarget::NOONAN;
    else
       iformula = Brewtarget::TINSETH; // Should never get here, but you never know.
    
@@ -388,6 +391,9 @@ void OptionDialog::showChanges()
          break;
       case Brewtarget::RAGER:
          checkBox_rager->setCheckState(Qt::Checked);
+         break;
+      case Brewtarget::NOONAN:
+         checkBox_noonan->setCheckState(Qt::Checked);
          break;
    }
 
