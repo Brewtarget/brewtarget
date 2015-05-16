@@ -703,6 +703,8 @@ void Brewtarget::convertPersistentOptions()
          ibuFormula = TINSETH;
       else if( text == "rager" )
          ibuFormula = RAGER;
+      else if( text == "noonan")
+         ibuFormula = NOONAN;
       else
       {
          Brewtarget::logE(QString("Bad ibu_formula type: %1").arg(text));
@@ -889,6 +891,8 @@ void Brewtarget::readSystemOptions()
       ibuFormula = TINSETH;
    else if( text == "rager" )
       ibuFormula = RAGER;
+   else if( text == "noonan" )
+       ibuFormula = NOONAN;
    else
    {
       Brewtarget::logE(QString("Bad ibu_formula type: %1").arg(text));
@@ -960,6 +964,9 @@ void Brewtarget::saveSystemOptions()
          break;
       case RAGER:
          setOption("ibu_formula", "rager");
+         break;
+      case NOONAN:
+         setOption("ibu_formula", "noonan");
          break;
    }
 
@@ -1284,6 +1291,8 @@ QString Brewtarget::ibuFormulaName()
          return "Tinseth";
       case Brewtarget::RAGER:
          return "Rager";
+      case Brewtarget::NOONAN:
+         return "Noonan";
    }
   return tr("Unknown");
 }
