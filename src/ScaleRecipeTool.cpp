@@ -110,7 +110,10 @@ void ScaleRecipeTool::scaleByEfficiency()
       if( ferm == 0 )
          continue;
 
-      ferm->setAmount_kg(ferm->amount_kg() * ratio);
+      if( !ferm->isSugar() && !ferm->isExtract() )
+      {
+         ferm->setAmount_kg(ferm->amount_kg() * ratio);
+      }
    }
 
    Mash* mash = recObs->mash();
