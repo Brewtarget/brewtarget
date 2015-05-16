@@ -2071,7 +2071,6 @@ void MainWindow::copySelected()
 
 QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 {
-   const char* filename;
    QFile* outFile = new QFile();
 
    fileSaver->setNameFilter( filterStr );
@@ -2079,7 +2078,7 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 
    if( fileSaver->exec() )
    {
-      filename = fileSaver->selectedFiles()[0].toLatin1();
+      QString filename = fileSaver->selectedFiles()[0];
       outFile->setFileName(filename);
 
       if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )
