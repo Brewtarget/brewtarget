@@ -422,7 +422,10 @@ ADD_TEST(
    NAME recipeCalcTest_allGrain
    COMMAND brewtarget_tests recipeCalcTest_allGrain
 )
-
+ADD_TEST(
+   NAME postBoilLossOgTest
+   COMMAND brewtarget_tests postBoilLossOgTest
+)
 #=================================Installs=====================================
 
 # Install executable.

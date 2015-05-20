@@ -25,6 +25,7 @@
 #include <QSettings>
 #include <QString>
 #include <QDir>
+#include <QDebug>
 
 class Equipment;
 class Hop;
@@ -48,7 +49,10 @@ public:
    //! \brief True iff. b-tol <= a <= b+tol
    static bool fuzzyComp( double a, double b, double tol )
    {
-      return inRange( a, b-tol, b+tol );
+      bool ret = inRange( a, b-tol, b+tol );
+      if( !ret )
+         qDebug() << QString("a: %1, b: %2, tol: %3").arg(a).arg(b).arg(tol);
+      return ret;
    }
 
 private:
@@ -99,6 +103,9 @@ private slots:
 
    //! \brief Verify standard all-grain recipe calculates properly
    void recipeCalcTest_allGrain();
+
+   //! \brief Verify post-boil losses do not affect OG
+   void postBoilLossOgTest();
 };
 
 #endif /*TESTING_H*/

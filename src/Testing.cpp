@@ -161,3 +161,73 @@ void Testing::recipeCalcTest_allGrain()
    QVERIFY2( fuzzyComp(rec->IBU(),           ibus,               5.0),     "Wrong IBU calculation" );
    QVERIFY2( fuzzyComp(rec->color_srm(),     srm,                srm*0.1), "Wrong color calculation" );
 }
+
+void Testing::postBoilLossOgTest()
+{
+   double const grain_kg = 5.0;
+   Recipe* recNoLoss = Database::instance().newRecipe();
+   Recipe* recLoss = Database::instance().newRecipe();
+   Equipment* eNoLoss = equipFiveGalNoLoss;
+   Equipment* eLoss = Database::instance().newEquipment(eNoLoss);
+
+   // Only difference between the recipes:
+   // - 2 L of post-boil loss
+   // - 2 L extra of boil size (to hit the same batch size)
+   eLoss->setTrubChillerLoss_l(2.0);
+   eLoss->setBoilSize_l(eNoLoss->boilSize_l() + eLoss->trubChillerLoss_l());
+
+   // Basic recipe parameters
+   recNoLoss->setName("TestRecipe_noLoss");
+   recNoLoss->setBatchSize_l(eNoLoss->batchSize_l());
+   recNoLoss->setBoilSize_l(eNoLoss->boilSize_l());
+   recNoLoss->setEfficiency_pct(70.0);
+
+   recLoss->setName("TestRecipe_loss");
+   recLoss->setBatchSize_l(eLoss->batchSize_l());
+   recLoss->setBoilSize_l(eLoss->boilSize_l());
+   recLoss->setEfficiency_pct(70.0);
+
+   double mashWaterNoLoss_l = recNoLoss->boilSize_l()
+      + eNoLoss->grainAbsorption_LKg() * grain_kg
+   ;
+   double mashWaterLoss_l = recLoss->boilSize_l()
+      + eLoss->grainAbsorption_LKg() * grain_kg
+   ;
+
+   // Add equipment
+   Database::instance().addToRecipe(recNoLoss, eNoLoss);
+   Database::instance().addToRecipe(recLoss, eLoss);
+
+   // Add grain
+   twoRow->setAmount_kg(grain_kg);
+   Database::instance().addToRecipe(recNoLoss, twoRow);
+   Database::instance().addToRecipe(recLoss, twoRow);
+
+   // Single conversion, no sparge
+   Mash* singleConversion = Database::instance().newMash();
+   singleConversion->setName("Single Conversion");
+   singleConversion->setGrainTemp_c(20.0);
+   singleConversion->setSpargeTemp_c(80.0);
+
+   MashStep* singleConversion_convert = Database::instance().newMashStep(singleConversion);
+   singleConversion_convert->setName("Conversion");
+   singleConversion_convert->setType(MashStep::Infusion);
+
+   // Infusion for recNoLoss
+   singleConversion_convert->setInfuseAmount_l(mashWaterNoLoss_l);
+   Database::instance().addToRecipe(recNoLoss, singleConversion);
+
+   // Infusion for recLoss
+   singleConversion_convert->setInfuseAmount_l(mashWaterLoss_l);
+   Database::instance().addToRecipe(recLoss, singleConversion);
+
+   // Verify we hit the right boil/final volumes (that the test is sane)
+   QVERIFY2( fuzzyComp(recNoLoss->boilVolume_l(),  recNoLoss->boilSize_l(),  0.1),     "Wrong boil volume calculation (recNoLoss)" );
+   QVERIFY2( fuzzyComp(recLoss->boilVolume_l(),    recLoss->boilSize_l(),    0.1),     "Wrong boil volume calculation (recLoss)" );
+   QVERIFY2( fuzzyComp(recNoLoss->finalVolume_l(), recNoLoss->batchSize_l(), 0.1),     "Wrong final volume calculation (recNoLoss)" );
+   QVERIFY2( fuzzyComp(recLoss->finalVolume_l(),   recLoss->batchSize_l(),   0.1),     "Wrong final volume calculation (recLoss)" );
+
+   // The OG calc itself is verified in recipeCalcTest_*(), so just verify that
+   // the two OGs are the same
+   QVERIFY2( fuzzyComp(recLoss->og(), recNoLoss->og(), 0.002), "OG of recipe with post-boil loss is different from no-loss recipe" );
+}
