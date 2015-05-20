@@ -173,7 +173,7 @@ QString BeerXMLElement::text(bool val)
 
 QString BeerXMLElement::text(double val)
 {
-   return QString("%1").arg(val, 0, 'e', 5);
+   return QString("%1").arg(val, 0, 'f', 8);
 }
 
 QString BeerXMLElement::text(int val)
