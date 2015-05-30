@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="pt">
+<TS version="2.1" language="pt">
+<context>
+    <name>AboutDialog</name>
+    <message>
+        <source>About Brewtarget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donate</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
@@ -293,6 +304,38 @@
         <source>Unknown</source>
         <translation>Desconhecido</translation>
     </message>
+    <message>
+        <source>YYYY-mm-dd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Barrels</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
@@ -307,6 +350,20 @@
     <message>
         <source>Too high for style.</source>
         <translation>Muito Alto para o Estilo.</translation>
+    </message>
+</context>
+<context>
+    <name>BtLabel</name>
+    <message>
+        <source>Color (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BtSplashScreen</name>
+    <message>
+        <source>Loading...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -361,7 +418,7 @@
     </message>
     <message>
         <source>PATH</source>
-        <translation type="unfinished"></translation>
+        <translation>CAMINHO</translation>
     </message>
     <message>
         <source>FULLPATH</source>
@@ -392,7 +449,7 @@
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished"></translation>
+        <translation>Recalcular Eficiência</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -448,7 +505,58 @@
     </message>
     <message>
         <source>BrewNote</source>
+        <translation>BrewNote</translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">Copiar %1</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">Insira um nome único para a cópia de %1.</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ConverterTool</name>
+    <message>
+        <source>Converter Tool</source>
+        <translation type="unfinished">Ferramenta de Conversão</translation>
+    </message>
+    <message>
+        <source>Input</source>
+        <translation type="unfinished">Entrada</translation>
+    </message>
+    <message>
+        <source>Output Units</source>
+        <translation type="unfinished">Unidades de Saída</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">Saída</translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <translation type="unfinished">Converter</translation>
+    </message>
+    <message>
+        <source>Amount and units to convert</source>
+        <translation type="unfinished">Quantidades e unidades para conversão</translation>
+    </message>
+    <message>
+        <source>Unit you want to convert to</source>
+        <translation type="unfinished">Unidade desejada a ser convertida</translation>
+    </message>
+    <message>
+        <source>Output conversion</source>
+        <translation type="unfinished">Conversão de saída</translation>
     </message>
 </context>
 <context>
@@ -500,6 +608,138 @@
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
         <translation>A porcentagem de utilização de lúpulo que você inseriu é 0. Isto pode causar problemas</translation>
     </message>
+    <message>
+        <source>Equipment Editor</source>
+        <translation type="unfinished">Editor de Equipamentos</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Equipamento</translation>
+    </message>
+    <message>
+        <source>Set as Default</source>
+        <translation type="unfinished">Configurar como Padrão</translation>
+    </message>
+    <message>
+        <source>Required Fields</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
+    </message>
+    <message>
+        <source>Pre-boil volume</source>
+        <translation type="unfinished">Volume para Pré-fervura</translation>
+    </message>
+    <message>
+        <source>Calculate pre-boil volume</source>
+        <translation type="unfinished">Calcular volume pré-fervura</translation>
+    </message>
+    <message>
+        <source>Batch size</source>
+        <translation type="unfinished">Volume do lote</translation>
+    </message>
+    <message>
+        <source>Boiling &amp;&amp; Water</source>
+        <translation type="unfinished">Fervura &amp;&amp; Água</translation>
+    </message>
+    <message>
+        <source>Boil time</source>
+        <translation type="unfinished">Tempo de Fervura</translation>
+    </message>
+    <message>
+        <source>Evaporation rate (per hr)</source>
+        <translation type="unfinished">Taxa de evaporação por hora</translation>
+    </message>
+    <message>
+        <source>Kettle top-up water</source>
+        <translation type="unfinished">Água adicionada à panela</translation>
+    </message>
+    <message>
+        <source>Final top-up water</source>
+        <translation type="unfinished">Água para encher até o fim</translation>
+    </message>
+    <message>
+        <source>Grain Absorption (L/kg)</source>
+        <translation type="unfinished">Absorção dos Grãos (L/kg)</translation>
+    </message>
+    <message>
+        <source>Default Absorption</source>
+        <translation type="unfinished">Absorção padrão</translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation type="unfinished">Utilização de Lúpulo </translation>
+    </message>
+    <message>
+        <source>Boiling Point of Water</source>
+        <translation type="unfinished">Ponto de Ebolição da Água</translation>
+    </message>
+    <message>
+        <source>Mash Tun</source>
+        <translation type="unfinished">Panela de Mosturação</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Volume</translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation type="unfinished">Massa</translation>
+    </message>
+    <message>
+        <source>Remove equipment</source>
+        <translation type="unfinished">Remover equipamento</translation>
+    </message>
+    <message>
+        <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
+        <translation type="unfinished">Se marcado, vamos calcular seu volume pré-fervura baseado no volume desejado do lote, tempo de fervura, taxa de evaporação, perdas, etc.</translation>
+    </message>
+    <message>
+        <source>Automatically fill in pre-boil volume</source>
+        <translation type="unfinished">Preencha automaticamente o volume pré-fervura</translation>
+    </message>
+    <message>
+        <source>How much water boils off per hour</source>
+        <translation type="unfinished">Quantidade de águar fervida por hora</translation>
+    </message>
+    <message>
+        <source>How much water is added to kettle immediately pre-boil</source>
+        <translation type="unfinished">Quantidade de água adicionada à panela imediatamente antes da fervura</translation>
+    </message>
+    <message>
+        <source>Water added to fermenter</source>
+        <translation type="unfinished">Água adicionada ao fermentador</translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation type="unfinished">Volume da panela de mosturação</translation>
+    </message>
+    <message>
+        <source>Mass or weight of mash tun</source>
+        <translation type="unfinished">Massa ou peso da panela de mostura</translation>
+    </message>
+    <message>
+        <source>Wort lost between kettle and fermenter</source>
+        <translation type="unfinished">Perda de mosto entre panela e fermentador</translation>
+    </message>
+    <message>
+        <source>Volume of wort lost to lauter deadspace</source>
+        <translation type="unfinished">Volume do mosto perdido para o espaço morto do tanque de filtração</translation>
+    </message>
+    <message>
+        <source>New equipment</source>
+        <translation type="unfinished">Novo Equipamento</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Salvar</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -510,6 +750,34 @@
     <message>
         <source>Fermentable name:</source>
         <translation>Nome do Fermentável</translation>
+    </message>
+    <message>
+        <source>Fermentable Database</source>
+        <translation type="unfinished">Banco de Dados de Fermentáveis</translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Novo</translation>
+    </message>
+    <message>
+        <source>Add selected ingredient to recipe</source>
+        <translation type="unfinished">Adicionar ingrediente selecionado à receita</translation>
+    </message>
+    <message>
+        <source>Create new ingredient</source>
+        <translation type="unfinished">Criar novo ingrediente</translation>
+    </message>
+    <message>
+        <source>Edit selected ingredient</source>
+        <translation type="unfinished">Editar ingrediente selecionado</translation>
+    </message>
+    <message>
+        <source>Remove selected ingredient</source>
+        <translation type="unfinished">Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
@@ -586,16 +854,12 @@
         <translation>Rendimento %</translation>
     </message>
     <message>
-        <source>Color (SRM)</source>
-        <translation>Cor (SRM)</translation>
-    </message>
-    <message>
-        <source>Color (EBC)</source>
-        <translation>Cor (EBC)</translation>
-    </message>
-    <message>
         <source>Inventory</source>
         <translation>Inventário</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Cor</translation>
     </message>
 </context>
 <context>
@@ -650,6 +914,34 @@
     <message>
         <source>Hop name:</source>
         <translation>Nome do Lúpulo:</translation>
+    </message>
+    <message>
+        <source>Hop Database</source>
+        <translation type="unfinished">Banco de Dados de Lúpulo</translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Novo</translation>
+    </message>
+    <message>
+        <source>Add selected ingredient to recipe</source>
+        <translation type="unfinished">Adicionar ingrediente selecionado à receita</translation>
+    </message>
+    <message>
+        <source>Create new ingredient</source>
+        <translation type="unfinished">Criar novo ingrediente</translation>
+    </message>
+    <message>
+        <source>Edit selected ingredient</source>
+        <translation type="unfinished">Editar ingrediente selecionado</translation>
+    </message>
+    <message>
+        <source>Remove selected ingredient</source>
+        <translation type="unfinished">Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
@@ -726,7 +1018,7 @@
     </message>
     <message>
         <source>Extra Malty</source>
-        <translation type="unfinished"></translation>
+        <translation>Muito Maltado</translation>
     </message>
     <message>
         <source>Slightly Malty</source>
@@ -738,15 +1030,15 @@
     </message>
     <message>
         <source>Slightly Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation>Lupulagem moderada</translation>
     </message>
     <message>
         <source>Extra Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation>Lupulagem extra</translation>
     </message>
     <message>
         <source>Way Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation>Lupulagem extrema</translation>
     </message>
 </context>
 <context>
@@ -774,34 +1066,6 @@
     <message>
         <source>HTML files (*.html)</source>
         <translation>Arquivos HTML (*.html)</translation>
-    </message>
-    <message>
-        <source>Copy %1</source>
-        <translation>Copiar %1</translation>
-    </message>
-    <message>
-        <source>Enter a unique name for the copy of %1.</source>
-        <translation>Insira um nome único para a cópia de %1.</translation>
-    </message>
-    <message>
-        <source>Copy Equipment</source>
-        <translation>Copiar Equipamento</translation>
-    </message>
-    <message>
-        <source>Copy Fermentable</source>
-        <translation>Copiar Fermentável</translation>
-    </message>
-    <message>
-        <source>Copy Hop</source>
-        <translation>Copiar Lúpulo</translation>
-    </message>
-    <message>
-        <source>Copy Miscellaneous</source>
-        <translation>Copiar Adjunto</translation>
-    </message>
-    <message>
-        <source>Copy Yeast</source>
-        <translation>Copiar Levedura</translation>
     </message>
     <message>
         <source>Database Update</source>
@@ -908,10 +1172,6 @@
         <translation>SQLite</translation>
     </message>
     <message>
-        <source>Copy Style</source>
-        <translation>Copiar Estilo</translation>
-    </message>
-    <message>
         <source>The database has been converted/upgraded.</source>
         <translation>O banco de dados foi convertido/atualizado.</translation>
     </message>
@@ -921,7 +1181,7 @@
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
-        <translation type="unfinished"></translation>
+        <translation>A importação contém arquivo beerXML inválido. O processo foi efetuado, porém verifique se o mesmo foi bem sucedido.</translation>
     </message>
     <message>
         <source>Folder name</source>
@@ -942,6 +1202,14 @@
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>O nome da pasta deve possuir pelo menos um caractere diferente de /</translation>
+    </message>
+    <message>
+        <source>calories/33cL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>calories/12oz</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1086,6 +1354,34 @@
     <message>
         <source>Misc name:</source>
         <translation>Nome do Adjunto</translation>
+    </message>
+    <message>
+        <source>Misc Database</source>
+        <translation type="unfinished">Banco de Dados de Adjuntos</translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Novo</translation>
+    </message>
+    <message>
+        <source>Add selected ingredient to recipe</source>
+        <translation type="unfinished">Adicionar ingrediente selecionado à receita</translation>
+    </message>
+    <message>
+        <source>Create new ingredient</source>
+        <translation type="unfinished">Criar novo ingrediente</translation>
+    </message>
+    <message>
+        <source>Edit selected ingredient</source>
+        <translation type="unfinished">Editar ingrediente selecionado</translation>
+    </message>
+    <message>
+        <source>Remove selected ingredient</source>
+        <translation type="unfinished">Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
@@ -2177,13 +2473,6 @@ O volume final do fermentador primário é %1.</translation>
     </message>
 </context>
 <context>
-    <name>StrikeWaterDialog</name>
-    <message>
-        <source>N/A</source>
-        <translation>N/A</translation>
-    </message>
-</context>
-<context>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
@@ -2211,6 +2500,30 @@ O volume final do fermentador primário é %1.</translation>
     <message>
         <source>Start</source>
         <translation>Iniciar</translation>
+    </message>
+    <message>
+        <source>Set the timer to the specified value</source>
+        <translation type="unfinished">Estabelecer um valor especificado para o temporizador</translation>
+    </message>
+    <message>
+        <source>HH:MM:SS</source>
+        <translation type="unfinished">HH:MM:SS</translation>
+    </message>
+    <message>
+        <source>Start/Stop timer</source>
+        <translation type="unfinished">Iniciar/Para temporizador</translation>
+    </message>
+    <message>
+        <source>Set a sound as the alarm</source>
+        <translation type="unfinished">Estabelecer o som como alarme</translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished">Estabelecer</translation>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation type="unfinished">Som</translation>
     </message>
 </context>
 <context>
@@ -2265,6 +2578,34 @@ O volume final do fermentador primário é %1.</translation>
     <message>
         <source>Yeast name:</source>
         <translation>Nome da levedura:</translation>
+    </message>
+    <message>
+        <source>Yeast Database</source>
+        <translation type="unfinished">Banco de Dados de Levedura</translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Novo</translation>
+    </message>
+    <message>
+        <source>Add selected ingredient to recipe</source>
+        <translation type="unfinished">Adicionar ingrediente selecionado à receita</translation>
+    </message>
+    <message>
+        <source>Create new ingredient</source>
+        <translation type="unfinished">Criar novo ingrediente</translation>
+    </message>
+    <message>
+        <source>Edit selected ingredient</source>
+        <translation type="unfinished">Editar ingrediente selecionado</translation>
+    </message>
+    <message>
+        <source>Remove selected ingredient</source>
+        <translation type="unfinished">Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
@@ -2343,65 +2684,6 @@ O volume final do fermentador primário é %1.</translation>
     <message>
         <source>Inventory</source>
         <translation>Inventário</translation>
-    </message>
-</context>
-<context>
-    <name>aboutDialog</name>
-    <message>
-        <source>About Brewtarget</source>
-        <translation>Sobre o Brewtarget</translation>
-    </message>
-    <message>
-        <source>Donate</source>
-        <translation>Contribuir</translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget: for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2014 by the following developers.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Developers&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt; - Lead developer&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Mik Firestone &amp;lt;mikfire@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dan Cavanagh &amp;lt;dan@dancavanagh.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rob Taylor &amp;lt;robtaylor@floopily.org&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Kregg K &amp;lt;gigatropolis@yahoo.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;A.J. Drobnich &amp;lt;aj.drobnich@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ted Wright &amp;lt;tedwright@users.sourceforge.net&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Charles Fourneau (plut0nium) &amp;lt;charles.fourneau@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Peter Buelow &amp;lt;goballstate@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Maxime Lavigne &amp;lt;duguigne@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;David Grundberg &amp;lt;individ@acc.umu.se&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Tim Payne &amp;lt;swstim@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Luke Vincent &amp;lt;luke.r.vincent@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Eric Tamme &amp;lt;etamme@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Julein &amp;lt;j2bweb@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Jeff Bailey &amp;lt;skydvr38@verizon.net&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Piotr Przybyla (przybysh) &amp;lt;przybysh@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Chris Hamilton &amp;lt;marker5a@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;https://www.gitorious.org/brewtarget&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;www.gitorious.org/brewtarget&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2521,10 +2803,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>brewNoteWidget</name>
     <message>
-        <source>Form</source>
-        <translation>Formulário</translation>
-    </message>
-    <message>
         <source>Preboil</source>
         <translation>Pré-fervura</translation>
     </message>
@@ -2609,10 +2887,6 @@ p, li { white-space: pre-wrap; }
         <translation>Volume de cerveja pronto em barril/garrafas</translation>
     </message>
     <message>
-        <source>Date when the yeast fermented out</source>
-        <translation>Data do final da fermentação</translation>
-    </message>
-    <message>
         <source>percent efficiency into boil kettle</source>
         <translation>percentual de eficiência na panela de fervura</translation>
     </message>
@@ -2656,163 +2930,17 @@ p, li { white-space: pre-wrap; }
         <source>Notes</source>
         <translation>Notas</translation>
     </message>
-</context>
-<context>
-    <name>btSplashScreen</name>
     <message>
-        <source>Form</source>
-        <translation>Formulário</translation>
-    </message>
-</context>
-<context>
-    <name>converterTool</name>
-    <message>
-        <source>Converter Tool</source>
-        <translation>Ferramenta de Conversão</translation>
+        <source>brewNote</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input</source>
-        <translation>Entrada</translation>
-    </message>
-    <message>
-        <source>Amount and units to convert</source>
-        <translation>Quantidades e unidades para conversão</translation>
-    </message>
-    <message>
-        <source>Output Units</source>
-        <translation>Unidades de Saída</translation>
-    </message>
-    <message>
-        <source>Unit you want to convert to</source>
-        <translation>Unidade desejada a ser convertida</translation>
-    </message>
-    <message>
-        <source>Output</source>
-        <translation>Saída</translation>
-    </message>
-    <message>
-        <source>Output conversion</source>
-        <translation>Conversão de saída</translation>
-    </message>
-    <message>
-        <source>Convert</source>
-        <translation>Converter</translation>
+        <source>yyyy-dd-MM</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>equipmentEditor</name>
-    <message>
-        <source>Equipment Editor</source>
-        <translation>Editor de Equipamentos</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>Equipamento</translation>
-    </message>
-    <message>
-        <source>Remove equipment</source>
-        <translation>Remover equipamento</translation>
-    </message>
-    <message>
-        <source>Set as Default</source>
-        <translation>Configurar como Padrão</translation>
-    </message>
-    <message>
-        <source>Required Fields</source>
-        <translation>Campos obrigatórios</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Nome</translation>
-    </message>
-    <message>
-        <source>Pre-boil volume</source>
-        <translation>Volume para Pré-fervura</translation>
-    </message>
-    <message>
-        <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation>Se marcado, vamos calcular seu volume pré-fervura baseado no volume desejado do lote, tempo de fervura, taxa de evaporação, perdas, etc.</translation>
-    </message>
-    <message>
-        <source>Calculate pre-boil volume</source>
-        <translation>Calcular volume pré-fervura</translation>
-    </message>
-    <message>
-        <source>Automatically fill in pre-boil volume</source>
-        <translation>Preencha automaticamente o volume pré-fervura</translation>
-    </message>
-    <message>
-        <source>Batch size</source>
-        <translation>Volume do lote</translation>
-    </message>
-    <message>
-        <source>Boiling &amp;&amp; Water</source>
-        <translation>Fervura &amp;&amp; Água</translation>
-    </message>
-    <message>
-        <source>Boil time</source>
-        <translation>Tempo de Fervura</translation>
-    </message>
-    <message>
-        <source>Evaporation rate (per hr)</source>
-        <translation>Taxa de evaporação por hora</translation>
-    </message>
-    <message>
-        <source>How much water boils off per hour</source>
-        <translation>Quantidade de águar fervida por hora</translation>
-    </message>
-    <message>
-        <source>Kettle top-up water</source>
-        <translation>Água adicionada à panela</translation>
-    </message>
-    <message>
-        <source>How much water is added to kettle immediately pre-boil</source>
-        <translation>Quantidade de água adicionada à panela imediatamente antes da fervura</translation>
-    </message>
-    <message>
-        <source>Final top-up water</source>
-        <translation>Água para encher até o fim</translation>
-    </message>
-    <message>
-        <source>Water added to fermenter</source>
-        <translation>Água adicionada ao fermentador</translation>
-    </message>
-    <message>
-        <source>Grain Absorption (L/kg)</source>
-        <translation>Absorção dos Grãos (L/kg)</translation>
-    </message>
-    <message>
-        <source>Default Absorption</source>
-        <translation>Absorção padrão</translation>
-    </message>
-    <message>
-        <source>Boiling Point of Water</source>
-        <translation>Ponto de Ebolição da Água</translation>
-    </message>
-    <message>
-        <source>Hop Utilization </source>
-        <translation>Utilização de Lúpulo </translation>
-    </message>
-    <message>
-        <source>Mash Tun</source>
-        <translation>Panela de Mosturação</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Volume</translation>
-    </message>
-    <message>
-        <source>Volume of mash tun</source>
-        <translation>Volume da panela de mosturação</translation>
-    </message>
-    <message>
-        <source>Mass</source>
-        <translation>Massa</translation>
-    </message>
-    <message>
-        <source>Mass or weight of mash tun</source>
-        <translation>Massa ou peso da panela de mostura</translation>
-    </message>
     <message>
         <source>Specific heat (cal/(g*K))</source>
         <translation>Calor específico</translation>
@@ -2826,63 +2954,12 @@ p, li { white-space: pre-wrap; }
         <translation>Panela de fervura para o fermentador</translation>
     </message>
     <message>
-        <source>Wort lost between kettle and fermenter</source>
-        <translation>Perda de mosto entre panela e fermentador</translation>
-    </message>
-    <message>
         <source>Lauter deadspace</source>
         <translation>Volume morto do tanque de filtração</translation>
     </message>
     <message>
-        <source>Volume of wort lost to lauter deadspace</source>
-        <translation>Volume do mosto perdido para o espaço morto do tanque de filtração</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>Notas</translation>
-    </message>
-    <message>
-        <source>New equipment</source>
-        <translation>Novo Equipamento</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation>Salvar</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Cancelar</translation>
-    </message>
-</context>
-<context>
-    <name>fermentableDialog</name>
-    <message>
-        <source>Fermentable Database</source>
-        <translation>Banco de Dados de Fermentáveis</translation>
-    </message>
-    <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation>Adicionar ingrediente selecionado à receita</translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation>Adicionar à receita</translation>
-    </message>
-    <message>
-        <source>Create new ingredient</source>
-        <translation>Criar novo ingrediente</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Novo</translation>
-    </message>
-    <message>
-        <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente selecionado</translation>
-    </message>
-    <message>
-        <source>Remove selected ingredient</source>
-        <translation>Remover ingrediente selecionado</translation>
+        <source>equipmentEditor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2934,10 +3011,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Yield as compared to glucose</source>
         <translation>Rendimento quando comparado a glicose</translation>
-    </message>
-    <message>
-        <source>Lovibond</source>
-        <translation>Lovibond</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
@@ -3039,36 +3112,13 @@ p, li { white-space: pre-wrap; }
         <source>Amount in inventory</source>
         <translation>Quantidade no inventário</translation>
     </message>
-</context>
-<context>
-    <name>hopDialog</name>
     <message>
-        <source>Hop Database</source>
-        <translation>Banco de Dados de Lúpulo</translation>
+        <source>fermentableEditor</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation>Adicionar ingrediente selecionado à receita</translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation>Adicionar à Receita</translation>
-    </message>
-    <message>
-        <source>New hop</source>
-        <translation>Novo lúpulo</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Novo</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation>Editar</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>Remover</translation>
+        <source>Color</source>
+        <translation type="unfinished">Cor</translation>
     </message>
 </context>
 <context>
@@ -3227,17 +3277,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>htmlViewer</name>
-    <message>
-        <source>Html Viewer</source>
-        <translation>Visualizador Html</translation>
-    </message>
-    <message>
-        <source>about:blank</source>
-        <translation>sobre:vazio</translation>
-    </message>
-</context>
-<context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
@@ -3297,10 +3336,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Name of recipe</source>
         <translation>Nome de receita</translation>
-    </message>
-    <message>
-        <source>5 gal</source>
-        <translation>5 galões</translation>
     </message>
     <message>
         <source>Target boil size</source>
@@ -3740,10 +3775,14 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>application/x-brewtarget-ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>application/x-brewtarget-ingredient</translation>
     </message>
     <message>
         <source>Strike Water Calculator</source>
+        <translation>Calculador de água inicial</translation>
+    </message>
+    <message>
+        <source>tab_recipe</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3880,6 +3919,10 @@ p, li { white-space: pre-wrap; }
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Calor específico da tina (cal/(g*K))</translation>
     </message>
+    <message>
+        <source>mashEditor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashStepEditor</name>
@@ -3977,37 +4020,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Mash thickness (do not enter any units)</source>
         <translation>Densidade da mostura (não entre com nenhuma unidade)</translation>
-    </message>
-</context>
-<context>
-    <name>miscDialog</name>
-    <message>
-        <source>Misc Database</source>
-        <translation>Banco de Dados de Adjuntos</translation>
-    </message>
-    <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation>Adicionar ingrediente selecionado à receita</translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation>Adicionar à Receita</translation>
-    </message>
-    <message>
-        <source>Create a new ingredient</source>
-        <translation>Criar um novo ingrediente</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Novo</translation>
-    </message>
-    <message>
-        <source>Edit selected ingredient</source>
-        <translation>Editar ingrediente selecionado</translation>
-    </message>
-    <message>
-        <source>Remove selected ingredient</source>
-        <translation>Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
@@ -4429,6 +4441,26 @@ p, li { white-space: pre-wrap; }
   disponibilize uma tradução&lt;/a&gt; para que seus amigos possam usar o Brewtarget!
 &lt;/qt&gt;</translation>
     </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">Data</translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YYYY-dd-mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noonan&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4520,6 +4552,50 @@ p, li { white-space: pre-wrap; }
         <source>Starter Volume</source>
         <translation>Volume de Starter</translation>
     </message>
+    <message>
+        <source>Volume of wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starting gravity of the wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aeration method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Production date (Best By date less three months)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated viability of the yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desired pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of vials/smack packs added to starter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How much yeast you will need</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How many smack packs or vials required to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of dry yeast needed to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starter size to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>primingDialog</name>
@@ -4586,81 +4662,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Calculate</source>
         <translation>Calcular</translation>
-    </message>
-</context>
-<context>
-    <name>recipeExtrasDialog</name>
-    <message>
-        <source>Recipe Extras</source>
-        <translation>Receitas Extras</translation>
-    </message>
-    <message>
-        <source>Brewer</source>
-        <translation>Cervejeiro</translation>
-    </message>
-    <message>
-        <source>Asst. Brewer</source>
-        <translation>Assistente Cervejeiro</translation>
-    </message>
-    <message>
-        <source>Taste Rating</source>
-        <translation>Avaliação de Sabor</translation>
-    </message>
-    <message>
-        <source>Primary Age (days)</source>
-        <translation>Maturação primária (dias)</translation>
-    </message>
-    <message>
-        <source>Primary Temp</source>
-        <translation>Temp. no Primário</translation>
-    </message>
-    <message>
-        <source>Secondary Age (days)</source>
-        <translation>Idade de Secundário (dias)</translation>
-    </message>
-    <message>
-        <source>Secondary Temp</source>
-        <translation>Temperatura de Secundário</translation>
-    </message>
-    <message>
-        <source>Tertiary Age (days)</source>
-        <translation>Idade de Terciário (dias)</translation>
-    </message>
-    <message>
-        <source>Tertiary Temp</source>
-        <translation>Temperatura de Terciário</translation>
-    </message>
-    <message>
-        <source>Bottle/Keg Age (days)</source>
-        <translation>Idade de Garrafa/Barril (dias)</translation>
-    </message>
-    <message>
-        <source>Bottle/Keg Temp</source>
-        <translation>Temperatura de Garrafa/Barril</translation>
-    </message>
-    <message>
-        <source>Date First Brewed</source>
-        <translation>Primeira Data de Cerveja Produzida</translation>
-    </message>
-    <message>
-        <source>dd MMM yyyy</source>
-        <translation>dd MM yyyy</translation>
-    </message>
-    <message>
-        <source>Carbonation Volumes</source>
-        <translation>Volume de Carbonação</translation>
-    </message>
-    <message>
-        <source>Taste Notes</source>
-        <translation>Provar Notas</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>Notas</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -4788,6 +4789,18 @@ p, li { white-space: pre-wrap; }
         <source>OG (20C)</source>
         <translation>OG (20C)</translation>
     </message>
+    <message>
+        <source>Measured original plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured original gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>
@@ -4800,15 +4813,19 @@ p, li { white-space: pre-wrap; }
         <translation>Novo tamanho de fornada</translation>
     </message>
     <message>
-        <source>New efficiency (pct)</source>
-        <translation>Nova eficiência (pct)</translation>
+        <source>New Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Efficiency</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculador de água inicial</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
@@ -4856,7 +4873,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura da água inicial</translation>
     </message>
     <message>
         <source>Volume to add</source>
@@ -4864,7 +4881,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nota: esse cálculo assume um tonel de mosto pré-aquecido</translation>
     </message>
 </context>
 <context>
@@ -5010,41 +5027,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>timerWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulário</translation>
-    </message>
-    <message>
-        <source>Set the timer to the specified value</source>
-        <translation>Estabelecer um valor especificado para o temporizador</translation>
-    </message>
-    <message>
-        <source>Set</source>
-        <translation>Estabelecer</translation>
-    </message>
-    <message>
-        <source>HH:MM:SS</source>
-        <translation>HH:MM:SS</translation>
-    </message>
-    <message>
-        <source>Start/Stop timer</source>
-        <translation>Iniciar/Para temporizador</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation>Iniciar</translation>
-    </message>
-    <message>
-        <source>Set a sound as the alarm</source>
-        <translation>Estabelecer o som como alarme</translation>
-    </message>
-    <message>
-        <source>Sound</source>
-        <translation>Som</translation>
-    </message>
-</context>
-<context>
     <name>waterEditor</name>
     <message>
         <source>Dialog</source>
@@ -5057,37 +5039,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Notes</source>
         <translation>Notas</translation>
-    </message>
-</context>
-<context>
-    <name>yeastDialog</name>
-    <message>
-        <source>Yeast Database</source>
-        <translation>Banco de Dados de Levedura</translation>
-    </message>
-    <message>
-        <source>Add selected yeast to recipe</source>
-        <translation>Adicionar a levedura selecionada à receita</translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation>Adicionar à Receita</translation>
-    </message>
-    <message>
-        <source>Create new yeast</source>
-        <translation>Criar nova levedura</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Novo</translation>
-    </message>
-    <message>
-        <source>Edit selected yeast</source>
-        <translation>Editar levedura selecionada</translation>
-    </message>
-    <message>
-        <source>Remove selected yeast</source>
-        <translation>Remover levedura selecionada</translation>
     </message>
 </context>
 <context>

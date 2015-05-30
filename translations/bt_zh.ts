@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="zh">
+<TS version="2.1" language="zh">
+<context>
+    <name>AboutDialog</name>
+    <message>
+        <source>About Brewtarget</source>
+        <translation type="unfinished">关于BrewtargetAbout Brewtarget</translation>
+    </message>
+    <message>
+        <source>Donate</source>
+        <translation type="unfinished">捐赠Donate</translation>
+    </message>
+</context>
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
@@ -291,7 +302,39 @@
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">未知</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YYYY-mm-dd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Barrels</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -307,6 +350,20 @@
     <message>
         <source>Too high for style.</source>
         <translation>过高的风格。</translation>
+    </message>
+</context>
+<context>
+    <name>BtLabel</name>
+    <message>
+        <source>Color (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BtSplashScreen</name>
+    <message>
+        <source>Loading...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -349,15 +406,15 @@
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">编号</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished">Letter信</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">指南</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PATH</source>
@@ -380,23 +437,23 @@
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">酿造它!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">再次酿造</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">更改日期</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">重新计算EFF</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">删除</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -404,11 +461,11 @@
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">发酵Fermentable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">跳Hop</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Misc</source>
@@ -428,27 +485,78 @@
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">复制</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">出口</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">进口</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">删除Delete %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">删除Delete %1 %2?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BrewNote</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">复制Copy %1</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">输入一个唯一的名称为％1副本。Enter a unique name for the copy of %1.</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ConverterTool</name>
+    <message>
+        <source>Converter Tool</source>
+        <translation type="unfinished">转换器工具Converter Tool</translation>
+    </message>
+    <message>
+        <source>Input</source>
+        <translation type="unfinished">输入Input</translation>
+    </message>
+    <message>
+        <source>Output Units</source>
+        <translation type="unfinished">输出单元Output Units</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">产量Output</translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <translation type="unfinished">兑换Convert</translation>
+    </message>
+    <message>
+        <source>Amount and units to convert</source>
+        <translation type="unfinished">金额和单位转换Amount and units to convert</translation>
+    </message>
+    <message>
+        <source>Unit you want to convert to</source>
+        <translation type="unfinished">你要转换的单位Unit you want to convert to</translation>
+    </message>
+    <message>
+        <source>Output conversion</source>
+        <translation type="unfinished">输出转换Output conversion</translation>
     </message>
 </context>
 <context>
@@ -500,6 +608,138 @@
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
         <translation>您输入的酒花利用率为0。这可能导致问题</translation>
     </message>
+    <message>
+        <source>Equipment Editor</source>
+        <translation type="unfinished">设备编辑器Equipment Editor</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">设备Equipment</translation>
+    </message>
+    <message>
+        <source>Set as Default</source>
+        <translation type="unfinished">设置为默认Set as Default</translation>
+    </message>
+    <message>
+        <source>Required Fields</source>
+        <translation type="unfinished">必填项Required Fields</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pre-boil volume</source>
+        <translation type="unfinished">煮沸前音量Pre-boil volume</translation>
+    </message>
+    <message>
+        <source>Calculate pre-boil volume</source>
+        <translation type="unfinished">计算预熬音量Calculate pre-boil volume</translation>
+    </message>
+    <message>
+        <source>Batch size</source>
+        <translation type="unfinished">批量大小</translation>
+    </message>
+    <message>
+        <source>Boiling &amp;&amp; Water</source>
+        <translation type="unfinished">水沸腾&amp;&amp;Boiling &amp;&amp; Water</translation>
+    </message>
+    <message>
+        <source>Boil time</source>
+        <translation type="unfinished">煮沸时间Boil time</translation>
+    </message>
+    <message>
+        <source>Evaporation rate (per hr)</source>
+        <translation type="unfinished">蒸发率（每小时）Evaporation rate (per hr)</translation>
+    </message>
+    <message>
+        <source>Kettle top-up water</source>
+        <translation type="unfinished">水壶补足水Kettle top-up water</translation>
+    </message>
+    <message>
+        <source>Final top-up water</source>
+        <translation type="unfinished">最终补足水Final top-up water</translation>
+    </message>
+    <message>
+        <source>Grain Absorption (L/kg)</source>
+        <translation type="unfinished">谷物吸收（L /公斤）</translation>
+    </message>
+    <message>
+        <source>Default Absorption</source>
+        <translation type="unfinished">默认吸收</translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation type="unfinished">合利用 Hop Utilization </translation>
+    </message>
+    <message>
+        <source>Boiling Point of Water</source>
+        <translation type="unfinished">水的沸点</translation>
+    </message>
+    <message>
+        <source>Mash Tun</source>
+        <translation type="unfinished">醪屯Mash Tun</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation type="unfinished">块Mass</translation>
+    </message>
+    <message>
+        <source>Remove equipment</source>
+        <translation type="unfinished">删除设备Remove equipment</translation>
+    </message>
+    <message>
+        <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
+        <translation type="unfinished">如果选中，我们将计算你的预熬根据您所需的批处理大小，熬时间，蒸发率，损失等体积</translation>
+    </message>
+    <message>
+        <source>Automatically fill in pre-boil volume</source>
+        <translation type="unfinished">自动填写预熬货量Automatically fill in pre-boil volume</translation>
+    </message>
+    <message>
+        <source>How much water boils off per hour</source>
+        <translation type="unfinished">关闭每小时多少水沸腾How much water boils off per hour</translation>
+    </message>
+    <message>
+        <source>How much water is added to kettle immediately pre-boil</source>
+        <translation type="unfinished">有多少水立即添加到釜中煮沸前How much water is added to kettle immediately pre-boil</translation>
+    </message>
+    <message>
+        <source>Water added to fermenter</source>
+        <translation type="unfinished">水加入到发酵罐Water added to fermenter</translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation type="unfinished">糖化桶体积</translation>
+    </message>
+    <message>
+        <source>Mass or weight of mash tun</source>
+        <translation type="unfinished">糖化桶的质量或重量Mass or weight of mash tun</translation>
+    </message>
+    <message>
+        <source>Wort lost between kettle and fermenter</source>
+        <translation type="unfinished">麦汁之间失去水壶和发酵Wort lost between kettle and fermenter</translation>
+    </message>
+    <message>
+        <source>Volume of wort lost to lauter deadspace</source>
+        <translation type="unfinished">体积的麦芽汁输给了纯净的死亡Volume of wort lost to lauter deadspace</translation>
+    </message>
+    <message>
+        <source>New equipment</source>
+        <translation type="unfinished">新设备New equipment</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">节省Save</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">取消</translation>
+    </message>
 </context>
 <context>
     <name>FermentableDialog</name>
@@ -510,6 +750,34 @@
     <message>
         <source>Fermentable name:</source>
         <translation>可发酵的名称:</translation>
+    </message>
+    <message>
+        <source>Fermentable Database</source>
+        <translation type="unfinished">可发酵的数据库Fermentable Database</translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished">添加到配方Add to Recipe</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">新New</translation>
+    </message>
+    <message>
+        <source>Add selected ingredient to recipe</source>
+        <translation type="unfinished">选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
+    </message>
+    <message>
+        <source>Create new ingredient</source>
+        <translation type="unfinished">创建新的成分Create new ingredient</translation>
+    </message>
+    <message>
+        <source>Edit selected ingredient</source>
+        <translation type="unfinished">编辑选定的成分Edit selected ingredient</translation>
+    </message>
+    <message>
+        <source>Remove selected ingredient</source>
+        <translation type="unfinished">删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
@@ -586,16 +854,12 @@
         <translation>率％</translation>
     </message>
     <message>
-        <source>Color (SRM)</source>
-        <translation>颜色（SR​​ M）</translation>
-    </message>
-    <message>
-        <source>Color (EBC)</source>
-        <translation>颜色（EBC）</translation>
-    </message>
-    <message>
         <source>Inventory</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">颜色Color</translation>
     </message>
 </context>
 <context>
@@ -650,6 +914,34 @@
     <message>
         <source>Hop name:</source>
         <translation>合名称合名</translation>
+    </message>
+    <message>
+        <source>Hop Database</source>
+        <translation type="unfinished">合数据库</translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished">添加到配方Add to Recipe</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">新New</translation>
+    </message>
+    <message>
+        <source>Add selected ingredient to recipe</source>
+        <translation type="unfinished">选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
+    </message>
+    <message>
+        <source>Create new ingredient</source>
+        <translation type="unfinished">创建新的成分Create new ingredient</translation>
+    </message>
+    <message>
+        <source>Edit selected ingredient</source>
+        <translation type="unfinished">编辑选定的成分Edit selected ingredient</translation>
+    </message>
+    <message>
+        <source>Remove selected ingredient</source>
+        <translation type="unfinished">删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
@@ -776,34 +1068,6 @@
         <translation>HTML文件HTML files (*.html)</translation>
     </message>
     <message>
-        <source>Copy %1</source>
-        <translation>复制Copy %1</translation>
-    </message>
-    <message>
-        <source>Enter a unique name for the copy of %1.</source>
-        <translation>输入一个唯一的名称为％1副本。Enter a unique name for the copy of %1.</translation>
-    </message>
-    <message>
-        <source>Copy Equipment</source>
-        <translation>复制设备Copy Equipment</translation>
-    </message>
-    <message>
-        <source>Copy Fermentable</source>
-        <translation>复制发酵Copy Fermentable</translation>
-    </message>
-    <message>
-        <source>Copy Hop</source>
-        <translation>复制合Copy Hop</translation>
-    </message>
-    <message>
-        <source>Copy Miscellaneous</source>
-        <translation>复制杂项Copy Miscellaneous</translation>
-    </message>
-    <message>
-        <source>Copy Yeast</source>
-        <translation>复制酵母Copy Yeast</translation>
-    </message>
-    <message>
         <source>Database Update</source>
         <translation>数据库更新原文 Database Update</translation>
     </message>
@@ -908,10 +1172,6 @@
         <translation>数据库SQLite (*.sqlite)</translation>
     </message>
     <message>
-        <source>Copy Style</source>
-        <translation>复制风格</translation>
-    </message>
-    <message>
         <source>The database has been converted/upgraded.</source>
         <translation>这个数据库已经转换/升级。</translation>
     </message>
@@ -941,6 +1201,14 @@
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>calories/33cL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>calories/12oz</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1087,6 +1355,34 @@
         <source>Misc name:</source>
         <translation>其他名称：</translation>
     </message>
+    <message>
+        <source>Misc Database</source>
+        <translation type="unfinished">Misc数据库Misc Database</translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished">添加到配方Add to Recipe</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">新New</translation>
+    </message>
+    <message>
+        <source>Add selected ingredient to recipe</source>
+        <translation type="unfinished">选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
+    </message>
+    <message>
+        <source>Create new ingredient</source>
+        <translation type="unfinished">创建新的成分Create new ingredient</translation>
+    </message>
+    <message>
+        <source>Edit selected ingredient</source>
+        <translation type="unfinished">编辑选定的成分Edit selected ingredient</translation>
+    </message>
+    <message>
+        <source>Remove selected ingredient</source>
+        <translation type="unfinished">删除选定的成分Remove selected ingredient</translation>
+    </message>
 </context>
 <context>
     <name>MiscItemDelegate</name>
@@ -1198,19 +1494,19 @@
     </message>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished">加泰罗尼亚Catalan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished">捷克语Czech</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished">德国人德国</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">英语</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Greek</source>
@@ -1218,31 +1514,31 @@
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished">西班牙语</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished">法语</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished">意大利的Italian</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished">荷兰人Dutch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished">波兰语Polish</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished">葡萄牙Portuguese</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished">俄语</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Chinese</source>
@@ -2125,7 +2421,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">指南</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BoilTime</source>
@@ -2179,13 +2475,6 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
-    <name>StrikeWaterDialog</name>
-    <message>
-        <source>N/A</source>
-        <translation type="unfinished">N / A</translation>
-    </message>
-</context>
-<context>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
@@ -2213,6 +2502,30 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Start</source>
         <translation>开始</translation>
+    </message>
+    <message>
+        <source>Set the timer to the specified value</source>
+        <translation type="unfinished">设置定时器为指定的值Set the timer to the specified value</translation>
+    </message>
+    <message>
+        <source>HH:MM:SS</source>
+        <translation type="unfinished">HH:MM:SS</translation>
+    </message>
+    <message>
+        <source>Start/Stop timer</source>
+        <translation type="unfinished">启动/停止计时器Start/Stop timer</translation>
+    </message>
+    <message>
+        <source>Set a sound as the alarm</source>
+        <translation type="unfinished">设置一个声音警报Set a sound as the alarm</translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished">沒</translation>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation type="unfinished">声音Sound</translation>
     </message>
 </context>
 <context>
@@ -2267,6 +2580,34 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Yeast name:</source>
         <translation>酵母的名字:Yeast name:</translation>
+    </message>
+    <message>
+        <source>Yeast Database</source>
+        <translation type="unfinished">酵母数据库Yeast Database</translation>
+    </message>
+    <message>
+        <source>Add to Recipe</source>
+        <translation type="unfinished">添加到配方Add to Recipe</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">新New</translation>
+    </message>
+    <message>
+        <source>Add selected ingredient to recipe</source>
+        <translation type="unfinished">选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
+    </message>
+    <message>
+        <source>Create new ingredient</source>
+        <translation type="unfinished">创建新的成分Create new ingredient</translation>
+    </message>
+    <message>
+        <source>Edit selected ingredient</source>
+        <translation type="unfinished">编辑选定的成分Edit selected ingredient</translation>
+    </message>
+    <message>
+        <source>Remove selected ingredient</source>
+        <translation type="unfinished">删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
@@ -2344,65 +2685,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>aboutDialog</name>
-    <message>
-        <source>About Brewtarget</source>
-        <translation>关于BrewtargetAbout Brewtarget</translation>
-    </message>
-    <message>
-        <source>Donate</source>
-        <translation>捐赠Donate</translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget: for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2014 by the following developers.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Developers&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt; - Lead developer&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Mik Firestone &amp;lt;mikfire@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dan Cavanagh &amp;lt;dan@dancavanagh.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rob Taylor &amp;lt;robtaylor@floopily.org&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Kregg K &amp;lt;gigatropolis@yahoo.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;A.J. Drobnich &amp;lt;aj.drobnich@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ted Wright &amp;lt;tedwright@users.sourceforge.net&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Charles Fourneau (plut0nium) &amp;lt;charles.fourneau@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Peter Buelow &amp;lt;goballstate@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Maxime Lavigne &amp;lt;duguigne@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;David Grundberg &amp;lt;individ@acc.umu.se&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Tim Payne &amp;lt;swstim@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Luke Vincent &amp;lt;luke.r.vincent@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Eric Tamme &amp;lt;etamme@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Julein &amp;lt;j2bweb@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Jeff Bailey &amp;lt;skydvr38@verizon.net&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Piotr Przybyla (przybysh) &amp;lt;przybysh@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Chris Hamilton &amp;lt;marker5a@gmail.com&amp;gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;https://www.gitorious.org/brewtarget&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;www.gitorious.org/brewtarget&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2523,10 +2805,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>brewNoteWidget</name>
     <message>
-        <source>Form</source>
-        <translation>形式Form</translation>
-    </message>
-    <message>
         <source>Preboil</source>
         <translation>Preboil</translation>
     </message>
@@ -2611,10 +2889,6 @@ p, li { white-space: pre-wrap; }
         <translation>服成桶/瓶啤酒量</translation>
     </message>
     <message>
-        <source>Date when the yeast fermented out</source>
-        <translation>酵母发酵时的日期</translation>
-    </message>
-    <message>
         <source>percent efficiency into boil kettle</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2658,163 +2932,17 @@ p, li { white-space: pre-wrap; }
         <source>Notes</source>
         <translation>说明Notes</translation>
     </message>
-</context>
-<context>
-    <name>btSplashScreen</name>
     <message>
-        <source>Form</source>
-        <translation>形式Form</translation>
-    </message>
-</context>
-<context>
-    <name>converterTool</name>
-    <message>
-        <source>Converter Tool</source>
-        <translation>转换器工具Converter Tool</translation>
+        <source>brewNote</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Input</source>
-        <translation>输入Input</translation>
-    </message>
-    <message>
-        <source>Amount and units to convert</source>
-        <translation>金额和单位转换Amount and units to convert</translation>
-    </message>
-    <message>
-        <source>Output Units</source>
-        <translation>输出单元Output Units</translation>
-    </message>
-    <message>
-        <source>Unit you want to convert to</source>
-        <translation>你要转换的单位Unit you want to convert to</translation>
-    </message>
-    <message>
-        <source>Output</source>
-        <translation>产量Output</translation>
-    </message>
-    <message>
-        <source>Output conversion</source>
-        <translation>输出转换Output conversion</translation>
-    </message>
-    <message>
-        <source>Convert</source>
-        <translation>兑换Convert</translation>
+        <source>yyyy-dd-MM</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>equipmentEditor</name>
-    <message>
-        <source>Equipment Editor</source>
-        <translation>设备编辑器Equipment Editor</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>设备Equipment</translation>
-    </message>
-    <message>
-        <source>Remove equipment</source>
-        <translation>删除设备Remove equipment</translation>
-    </message>
-    <message>
-        <source>Set as Default</source>
-        <translation>设置为默认Set as Default</translation>
-    </message>
-    <message>
-        <source>Required Fields</source>
-        <translation>必填项Required Fields</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>名Name</translation>
-    </message>
-    <message>
-        <source>Pre-boil volume</source>
-        <translation>煮沸前音量Pre-boil volume</translation>
-    </message>
-    <message>
-        <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation>如果选中，我们将计算你的预熬根据您所需的批处理大小，熬时间，蒸发率，损失等体积</translation>
-    </message>
-    <message>
-        <source>Calculate pre-boil volume</source>
-        <translation>计算预熬音量Calculate pre-boil volume</translation>
-    </message>
-    <message>
-        <source>Automatically fill in pre-boil volume</source>
-        <translation>自动填写预熬货量Automatically fill in pre-boil volume</translation>
-    </message>
-    <message>
-        <source>Batch size</source>
-        <translation>批量大小</translation>
-    </message>
-    <message>
-        <source>Boiling &amp;&amp; Water</source>
-        <translation>水沸腾&amp;&amp;Boiling &amp;&amp; Water</translation>
-    </message>
-    <message>
-        <source>Boil time</source>
-        <translation>煮沸时间Boil time</translation>
-    </message>
-    <message>
-        <source>Evaporation rate (per hr)</source>
-        <translation>蒸发率（每小时）Evaporation rate (per hr)</translation>
-    </message>
-    <message>
-        <source>How much water boils off per hour</source>
-        <translation>关闭每小时多少水沸腾How much water boils off per hour</translation>
-    </message>
-    <message>
-        <source>Kettle top-up water</source>
-        <translation>水壶补足水Kettle top-up water</translation>
-    </message>
-    <message>
-        <source>How much water is added to kettle immediately pre-boil</source>
-        <translation>有多少水立即添加到釜中煮沸前How much water is added to kettle immediately pre-boil</translation>
-    </message>
-    <message>
-        <source>Final top-up water</source>
-        <translation>最终补足水Final top-up water</translation>
-    </message>
-    <message>
-        <source>Water added to fermenter</source>
-        <translation>水加入到发酵罐Water added to fermenter</translation>
-    </message>
-    <message>
-        <source>Grain Absorption (L/kg)</source>
-        <translation>谷物吸收（L /公斤）</translation>
-    </message>
-    <message>
-        <source>Default Absorption</source>
-        <translation>默认吸收</translation>
-    </message>
-    <message>
-        <source>Boiling Point of Water</source>
-        <translation>水的沸点</translation>
-    </message>
-    <message>
-        <source>Hop Utilization </source>
-        <translation>合利用 Hop Utilization </translation>
-    </message>
-    <message>
-        <source>Mash Tun</source>
-        <translation>醪屯Mash Tun</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>量体积体积Volume</translation>
-    </message>
-    <message>
-        <source>Volume of mash tun</source>
-        <translation>糖化桶体积</translation>
-    </message>
-    <message>
-        <source>Mass</source>
-        <translation>块Mass</translation>
-    </message>
-    <message>
-        <source>Mass or weight of mash tun</source>
-        <translation>糖化桶的质量或重量Mass or weight of mash tun</translation>
-    </message>
     <message>
         <source>Specific heat (cal/(g*K))</source>
         <translation>比热（千卡/（G* K））Specific heat (cal/(g*K))</translation>
@@ -2828,63 +2956,12 @@ p, li { white-space: pre-wrap; }
         <translation>水壶发酵Kettle to fermenter</translation>
     </message>
     <message>
-        <source>Wort lost between kettle and fermenter</source>
-        <translation>麦汁之间失去水壶和发酵Wort lost between kettle and fermenter</translation>
-    </message>
-    <message>
         <source>Lauter deadspace</source>
         <translation>纯净的死亡空间Lauter deadspace</translation>
     </message>
     <message>
-        <source>Volume of wort lost to lauter deadspace</source>
-        <translation>体积的麦芽汁输给了纯净的死亡Volume of wort lost to lauter deadspace</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>说明Notes</translation>
-    </message>
-    <message>
-        <source>New equipment</source>
-        <translation>新设备New equipment</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation>节省Save</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-</context>
-<context>
-    <name>fermentableDialog</name>
-    <message>
-        <source>Fermentable Database</source>
-        <translation>可发酵的数据库Fermentable Database</translation>
-    </message>
-    <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation>添加到配方Add to Recipe</translation>
-    </message>
-    <message>
-        <source>Create new ingredient</source>
-        <translation>创建新的成分Create new ingredient</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>新New</translation>
-    </message>
-    <message>
-        <source>Edit selected ingredient</source>
-        <translation>编辑选定的成分Edit selected ingredient</translation>
-    </message>
-    <message>
-        <source>Remove selected ingredient</source>
-        <translation>删除选定的成分Remove selected ingredient</translation>
+        <source>equipmentEditor</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2936,10 +3013,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Yield as compared to glucose</source>
         <translation>良品率相比为葡萄糖Yield as compared to glucose</translation>
-    </message>
-    <message>
-        <source>Lovibond</source>
-        <translation>罗维朋Lovibond</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
@@ -3041,36 +3114,13 @@ p, li { white-space: pre-wrap; }
         <source>Amount in inventory</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>hopDialog</name>
     <message>
-        <source>Hop Database</source>
-        <translation>合数据库</translation>
+        <source>fermentableEditor</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation>添加到配方Add to Recipe</translation>
-    </message>
-    <message>
-        <source>New hop</source>
-        <translation>新一跳New hop</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>新New</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation>编辑Edit</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>消除Remove</translation>
+        <source>Color</source>
+        <translation type="unfinished">颜色Color</translation>
     </message>
 </context>
 <context>
@@ -3229,17 +3279,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>htmlViewer</name>
-    <message>
-        <source>Html Viewer</source>
-        <translation>HTML浏览器Html Viewer</translation>
-    </message>
-    <message>
-        <source>about:blank</source>
-        <translation>关于:空白about:blank</translation>
-    </message>
-</context>
-<context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
@@ -3299,10 +3338,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Name of recipe</source>
         <translation>配方名称Name of recipe</translation>
-    </message>
-    <message>
-        <source>5 gal</source>
-        <translation>5 gal5加仑</translation>
     </message>
     <message>
         <source>Target boil size</source>
@@ -3748,6 +3783,10 @@ p, li { white-space: pre-wrap; }
         <source>Strike Water Calculator</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -3882,6 +3921,10 @@ p, li { white-space: pre-wrap; }
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>桶比热(cal /(g * K))Tun specific heat (cal/(g*K))</translation>
     </message>
+    <message>
+        <source>mashEditor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashStepEditor</name>
@@ -3979,37 +4022,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Mash thickness (do not enter any units)</source>
         <translation>麦芽浆厚度(不输入任何单位)Mash thickness (do not enter any units)</translation>
-    </message>
-</context>
-<context>
-    <name>miscDialog</name>
-    <message>
-        <source>Misc Database</source>
-        <translation>Misc数据库Misc Database</translation>
-    </message>
-    <message>
-        <source>Add selected ingredient to recipe</source>
-        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation>添加到配方Add to Recipe</translation>
-    </message>
-    <message>
-        <source>Create a new ingredient</source>
-        <translation>创建一个新的成分Create a new ingredient</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>新New</translation>
-    </message>
-    <message>
-        <source>Edit selected ingredient</source>
-        <translation>编辑选定的成分Edit selected ingredient</translation>
-    </message>
-    <message>
-        <source>Remove selected ingredient</source>
-        <translation>删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
@@ -4431,6 +4443,26 @@ p, li { white-space: pre-wrap; }
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</translation>
     </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">日期</translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YYYY-dd-mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noonan&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4522,6 +4554,50 @@ p, li { white-space: pre-wrap; }
         <source>Starter Volume</source>
         <translation>起动器体积Starter Volume</translation>
     </message>
+    <message>
+        <source>Volume of wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starting gravity of the wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aeration method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Production date (Best By date less three months)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated viability of the yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desired pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of vials/smack packs added to starter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How much yeast you will need</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How many smack packs or vials required to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of dry yeast needed to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starter size to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>primingDialog</name>
@@ -4588,81 +4664,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Calculate</source>
         <translation>计算Calculate</translation>
-    </message>
-</context>
-<context>
-    <name>recipeExtrasDialog</name>
-    <message>
-        <source>Recipe Extras</source>
-        <translation>配方附加Recipe Extras</translation>
-    </message>
-    <message>
-        <source>Brewer</source>
-        <translation>布鲁尔Brewer</translation>
-    </message>
-    <message>
-        <source>Asst. Brewer</source>
-        <translation>助理。布鲁尔Asst. Brewer</translation>
-    </message>
-    <message>
-        <source>Taste Rating</source>
-        <translation>味道等级Taste Rating</translation>
-    </message>
-    <message>
-        <source>Primary Age (days)</source>
-        <translation>小学年龄（天）Primary Age (days)</translation>
-    </message>
-    <message>
-        <source>Primary Temp</source>
-        <translation>初级温度Primary Temp</translation>
-    </message>
-    <message>
-        <source>Secondary Age (days)</source>
-        <translation>中学时代（天）Secondary Age (days)</translation>
-    </message>
-    <message>
-        <source>Secondary Temp</source>
-        <translation>二次温度Secondary Temp</translation>
-    </message>
-    <message>
-        <source>Tertiary Age (days)</source>
-        <translation>第三纪（天）Tertiary Age (days)</translation>
-    </message>
-    <message>
-        <source>Tertiary Temp</source>
-        <translation>第三温度Tertiary Temp</translation>
-    </message>
-    <message>
-        <source>Bottle/Keg Age (days)</source>
-        <translation>瓶/桶年龄（天）Bottle/Keg Age (days)</translation>
-    </message>
-    <message>
-        <source>Bottle/Keg Temp</source>
-        <translation>瓶/桶温度Bottle/Keg Temp</translation>
-    </message>
-    <message>
-        <source>Date First Brewed</source>
-        <translation>首先酿造的日期Date First Brewed</translation>
-    </message>
-    <message>
-        <source>dd MMM yyyy</source>
-        <translation type="unfinished">dd MMM yyyy</translation>
-    </message>
-    <message>
-        <source>Carbonation Volumes</source>
-        <translation>碳化卷Carbonation Volumes</translation>
-    </message>
-    <message>
-        <source>Taste Notes</source>
-        <translation>味道注意事项Taste Notes</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>说明Notes</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
     </message>
 </context>
 <context>
@@ -4790,6 +4791,18 @@ p, li { white-space: pre-wrap; }
         <source>OG (20C)</source>
         <translation>OG (20C)</translation>
     </message>
+    <message>
+        <source>Measured original plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured original gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>
@@ -4802,8 +4815,12 @@ p, li { white-space: pre-wrap; }
         <translation>新批次大小</translation>
     </message>
     <message>
-        <source>New efficiency (pct)</source>
-        <translation>新效率（PCT）</translation>
+        <source>New Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Efficiency</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5012,41 +5029,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>timerWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>形式Form</translation>
-    </message>
-    <message>
-        <source>Set the timer to the specified value</source>
-        <translation>设置定时器为指定的值Set the timer to the specified value</translation>
-    </message>
-    <message>
-        <source>Set</source>
-        <translation>沒</translation>
-    </message>
-    <message>
-        <source>HH:MM:SS</source>
-        <translation>HH:MM:SS</translation>
-    </message>
-    <message>
-        <source>Start/Stop timer</source>
-        <translation>启动/停止计时器Start/Stop timer</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation>开始</translation>
-    </message>
-    <message>
-        <source>Set a sound as the alarm</source>
-        <translation>设置一个声音警报Set a sound as the alarm</translation>
-    </message>
-    <message>
-        <source>Sound</source>
-        <translation>声音Sound</translation>
-    </message>
-</context>
-<context>
     <name>waterEditor</name>
     <message>
         <source>Dialog</source>
@@ -5059,37 +5041,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Notes</source>
         <translation>说明Notes</translation>
-    </message>
-</context>
-<context>
-    <name>yeastDialog</name>
-    <message>
-        <source>Yeast Database</source>
-        <translation>酵母数据库Yeast Database</translation>
-    </message>
-    <message>
-        <source>Add selected yeast to recipe</source>
-        <translation>添加选定的酵母配方Add selected yeast to recipe</translation>
-    </message>
-    <message>
-        <source>Add to Recipe</source>
-        <translation>添加到配方Add to Recipe</translation>
-    </message>
-    <message>
-        <source>Create new yeast</source>
-        <translation>创建新的酵母Create new yeast</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>新New</translation>
-    </message>
-    <message>
-        <source>Edit selected yeast</source>
-        <translation>编辑选择的酵母Edit selected yeast</translation>
-    </message>
-    <message>
-        <source>Remove selected yeast</source>
-        <translation>删除选定的酵母Remove selected yeast</translation>
     </message>
 </context>
 <context>
