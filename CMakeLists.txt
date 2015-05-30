@@ -281,15 +281,21 @@ SET( TRANSLATIONS_FILES
      ${TRANSLATIONSDIR}/bt_en.ts # English
      ${TRANSLATIONSDIR}/bt_el.ts # Greek
      ${TRANSLATIONSDIR}/bt_es.ts # Spanish
+     ${TRANSLATIONSDIR}/bt_et.ts # Estonian
+     ${TRANSLATIONSDIR}/bt_eu.ts # Basque
      ${TRANSLATIONSDIR}/bt_fr.ts # French
+     ${TRANSLATIONSDIR}/bt_gl.ts # Galician
      ${TRANSLATIONSDIR}/bt_nb.ts # Norwegian Bokmal
      ${TRANSLATIONSDIR}/bt_it.ts # Italian
+     ${TRANSLATIONSDIR}/bt_lv.ts # Latvian
      ${TRANSLATIONSDIR}/bt_nl.ts # Dutch
      ${TRANSLATIONSDIR}/bt_pl.ts # Polish
      ${TRANSLATIONSDIR}/bt_pt.ts # Portuguese
      ${TRANSLATIONSDIR}/bt_hu.ts # Hungarian
      ${TRANSLATIONSDIR}/bt_ru.ts # Russian
+     ${TRANSLATIONSDIR}/bt_sr.ts # Serbian
      ${TRANSLATIONSDIR}/bt_sv.ts # Swedish
+     ${TRANSLATIONSDIR}/bt_tr.ts # Turkish
      ${TRANSLATIONSDIR}/bt_zh.ts # Chinese
 )
 
