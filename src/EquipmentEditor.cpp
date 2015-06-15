@@ -330,6 +330,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_tunSpecificHeat->setSizePolicy(sizePolicy2);
                      lineEdit_tunSpecificHeat->setMinimumSize(QSize(100, 0));
                      lineEdit_tunSpecificHeat->setMaximumSize(QSize(100, 16777215));
+                     lineEdit_tunSpecificHeat->setProperty("editField", QVariant(QStringLiteral("tunSpecificHeat_calGC")));
                   formLayout_mashTun->setWidget(0, QFormLayout::LabelRole, label_tunVolume);
                   formLayout_mashTun->setWidget(0, QFormLayout::FieldRole, lineEdit_tunVolume);
                   formLayout_mashTun->setWidget(1, QFormLayout::LabelRole, label_tunWeight);
