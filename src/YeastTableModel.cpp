@@ -226,7 +226,7 @@ int YeastTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
 {
    Yeast* row;
-   unitDisplay unit;
+   Unit::unitDisplay unit;
 
    // Ensure the row is ok.
    if( index.row() >= (int)yeastObs.size() )
@@ -283,7 +283,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
                                                       row->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters,
                                                       3,
                                                       unit,
-                                                      noScale
+                                                      Unit::noScale
                                                    )
                         );
 
@@ -340,7 +340,7 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
 bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Yeast *row;
-   unitDisplay dispUnit;
+   Unit::unitDisplay dispUnit;
    Unit* unit;
 
    if( index.row() >= (int)yeastObs.size() || role != Qt::EditRole )
@@ -402,31 +402,31 @@ Yeast* YeastTableModel::getYeast(unsigned int i)
    return yeastObs[i];
 }
 
-unitDisplay YeastTableModel::displayUnit(int column) const
+Unit::unitDisplay YeastTableModel::displayUnit(int column) const
 {
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
-      return noUnit;
+      return Unit::noUnit;
 
-   return (unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
+   return (Unit::unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
 }
 
-unitScale YeastTableModel::displayScale(int column) const
+Unit::unitScale YeastTableModel::displayScale(int column) const
 {
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
-      return noScale;
+      return Unit::noScale;
 
-   return (unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
+   return (Unit::unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
 }
 
 // We need to:
 //   o clear the custom scale if set
 //   o clear any custom unit from the rows
 //      o which should have the side effect of clearing any scale
-void YeastTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
+void YeastTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
 {
    // Yeast* row; // disabled per-cell magic
    QString attribute = generateName(column);
@@ -435,19 +435,19 @@ void YeastTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
       return;
 
    Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,noScale,this->objectName(),Brewtarget::SCALE);
+   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
    {
       row = getYeast(i);
-      row->setDisplayUnit(noUnit);
+      row->setDisplayUnit(Unit::noUnit);
    }
    */
 }
 
 // Setting the scale should clear any cell-level scaling options
-void YeastTableModel::setDisplayScale(int column, unitScale displayScale)
+void YeastTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
 {
    // Yeast* row; //disabled per-cell magic
 
@@ -462,7 +462,7 @@ void YeastTableModel::setDisplayScale(int column, unitScale displayScale)
    for (int i = 0; i < rowCount(); ++i )
    {
       row = getYeast(i);
-      row->setDisplayScale(noScale);
+      row->setDisplayScale(Unit::noScale);
    }
    */
 }
@@ -488,8 +488,8 @@ void YeastTableModel::contextMenu(const QPoint &point)
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
 
    int selected = hView->logicalIndexAt(point);
-   unitDisplay currentUnit;
-   unitScale  currentScale;
+   Unit::unitDisplay currentUnit;
+   Unit::unitScale  currentScale;
 
    currentUnit  = displayUnit(selected);
    currentScale = displayScale(selected);
@@ -510,7 +510,7 @@ void YeastTableModel::contextMenu(const QPoint &point)
    if ( invoked == 0 )
       return;
 
-   setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+   setDisplayUnit(selected,(Unit::unitDisplay)invoked->data().toInt());
 }
 
 

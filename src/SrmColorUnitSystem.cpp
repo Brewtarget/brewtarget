@@ -22,15 +22,15 @@
 SrmColorUnitSystem::SrmColorUnitSystem()
    : UnitSystem()
 {
-   _type = Color;
+   _type = Unit::Color;
 }
 
-QMap<unitScale, Unit*> const& SrmColorUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& SrmColorUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleWithout,Units::srm);
+      _scaleToUnit.insert(Unit::scaleWithout,Units::srm);
    }
 
    return _scaleToUnit;

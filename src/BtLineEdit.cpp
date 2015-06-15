@@ -68,13 +68,28 @@ BtLineEdit::BtLineEdit(QWidget *parent, FieldType type) :
 
 void BtLineEdit::lineChanged()
 {
-   lineChanged(noUnit,noScale);
+   lineChanged(Unit::noUnit,Unit::noScale);
 }
 
 // Dynamic properties need to be evaluated late, so we do it this way
-void BtLineEdit::initializeProperty()
+void BtLineEdit::initializeProperties()
 {
+   QVariant unitName = property("forcedUnit");
    _property = property("editField").toString();
+
+
+   if ( unitName.isValid() ) 
+   {
+      const QMetaObject &mo = Unit::staticMetaObject;
+      int index = mo.indexOfEnumerator("unitDisplay");
+      QMetaEnum unitEnum = mo.enumerator(index);
+
+      _forceUnit = (Unit::unitDisplay)unitEnum.keyToValue(unitName.toString().toStdString().c_str());
+   }
+   else 
+   {
+      _forceUnit = Unit::noUnit;
+   }
 }
 
 void BtLineEdit::initializeSection()
@@ -89,7 +104,7 @@ void BtLineEdit::initializeSection()
 
 }
 
-void BtLineEdit::lineChanged(unitDisplay oldUnit, unitScale oldScale)
+void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale)
 {
    // This is where it gets hard
    double val = -1.0;
@@ -117,7 +132,7 @@ void BtLineEdit::lineChanged(unitDisplay oldUnit, unitScale oldScale)
       initializeSection();
 
    if ( _property.isEmpty() )
-      initializeProperty();
+      initializeProperties();
 
 
    // The idea here is we need to first translate the field into a known
@@ -154,24 +169,24 @@ void BtLineEdit::lineChanged(unitDisplay oldUnit, unitScale oldScale)
    }
 }
 
-double BtLineEdit::toSI(unitDisplay oldUnit,unitScale oldScale,bool force)
+double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool force)
 {
    UnitSystem* temp;
    Unit*       works;
-   unitDisplay dspUnit  = oldUnit;
-   unitScale   dspScale = oldScale;
+   Unit::unitDisplay dspUnit  = oldUnit;
+   Unit::unitScale   dspScale = oldScale;
 
    if ( _section.isEmpty() )
       initializeSection();
    if ( _property.isEmpty() )
-      initializeProperty();
+      initializeProperties();
 
    // If force is set, just use what is provided in the call. If we are
    // not forcing the unit & scale, we need to read the configured properties
    if ( ! force )
    {
-      dspUnit   = (unitDisplay)Brewtarget::option(_property, noUnit, _section, Brewtarget::UNIT).toInt();
-      dspScale  = (unitScale)Brewtarget::option(_property, noUnit, _section, Brewtarget::SCALE).toInt();
+      dspUnit   = (Unit::unitDisplay)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
+      dspScale  = (Unit::unitScale)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::SCALE).toInt();
    }
 
    // Find the unit system containing dspUnit
@@ -186,8 +201,8 @@ double BtLineEdit::toSI(unitDisplay oldUnit,unitScale oldScale,bool force)
          works = temp->unit();
 
       // get the qstringToSI() from the unit system, using the found unit.
-      // Force the issue in qstringToSI() unless dspScale is noScale.
-      return temp->qstringToSI(text(), works, dspScale != noScale);
+      // Force the issue in qstringToSI() unless dspScale is Unit::noScale.
+      return temp->qstringToSI(text(), works, dspScale != Unit::noScale);
    }
    else if ( _type == STRING )
       return 0.0;
@@ -203,21 +218,51 @@ double BtLineEdit::toSI(unitDisplay oldUnit,unitScale oldScale,bool force)
 
 QString BtLineEdit::displayAmount( double amount, int precision)
 {
-   unitDisplay unitDsp;
-   unitScale scale;
+   Unit::unitDisplay unitDsp;
+   Unit::unitScale scale;
 
    if ( _section.isEmpty() )
       initializeSection();
    if ( _property.isEmpty() )
-      initializeProperty();
+      initializeProperties();
 
-   unitDsp  = (unitDisplay)Brewtarget::option(_property, noUnit, _section, Brewtarget::UNIT).toInt();
-   scale = (unitScale)Brewtarget::option(_property, noScale, _section, Brewtarget::SCALE).toInt();
+   if ( _forceUnit != Unit::noUnit )
+      unitDsp = _forceUnit;
+   else
+      unitDsp  = (Unit::unitDisplay)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
+
+   scale    = (Unit::unitScale)Brewtarget::option(_property, Unit::noScale, _section, Brewtarget::SCALE).toInt();
 
    // I find this a nice level of abstraction. This lets all of the setText()
    // methods make a single call w/o having to do the logic for finding the
    // unit and scale.
    return Brewtarget::displayAmount(amount, _units, precision, unitDsp, scale);
+}
+
+double BtLineEdit::toDouble(bool* ok)
+{
+   QRegExp amtUnit;
+
+   if ( ok ) 
+      *ok = true;
+   // Make sure we get the right decimal point (. or ,) and the right grouping
+   // separator (, or .). Some locales write 1.000,10 and other write
+   // 1,000.10. We need to catch both
+   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
+   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+
+   amtUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
+   amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
+
+   // if the regex dies, return 0.0
+   if (amtUnit.indexIn(text()) == -1)
+   {
+      if ( ok )
+         *ok = false;
+      return 0.0;
+   }
+
+   return Brewtarget::toDouble(amtUnit.cap(1), "BtLineEdit::toDouble()");
 }
 
 void BtLineEdit::setText( double amount, int precision)
@@ -233,7 +278,7 @@ void BtLineEdit::setText( BeerXMLElement* element, int precision )
    if ( _section.isEmpty() )
       initializeSection();
    if ( _property.isEmpty() )
-      initializeProperty();
+      initializeProperties();
 
    if ( _type == STRING )
       display = element->property(_property.toLatin1().constData()).toString();
@@ -242,7 +287,7 @@ void BtLineEdit::setText( BeerXMLElement* element, int precision )
       // Get the amount
       bool ok = false;
       QString tmp = element->property(_property.toLatin1().constData()).toString();
-      amount = Brewtarget::toDouble( tmp, &ok);
+      amount = Brewtarget::toDouble(tmp, &ok);
       if ( !ok )
          Brewtarget::logW( QString("BtLineEdit::setText(BeerXMLElement*,int) could not convert %1 to double").arg(tmp) );
 

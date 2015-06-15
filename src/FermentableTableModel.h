@@ -75,10 +75,10 @@ public:
     */
    void setInventoryEditable( bool var ) { _inventoryEditable = var; }
    
-   unitDisplay displayUnit(int column) const;
-   unitScale displayScale(int column) const;
-   void setDisplayUnit(int column, unitDisplay displayUnit);
-   void setDisplayScale(int column, unitScale displayScale);
+   Unit::unitDisplay displayUnit(int column) const;
+   Unit::unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
+   void setDisplayScale(int column, Unit::unitScale displayScale);
 
    //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;

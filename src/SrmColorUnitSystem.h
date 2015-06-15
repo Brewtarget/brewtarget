@@ -32,7 +32,7 @@ public:
    SrmColorUnitSystem();
    Unit* thicknessUnit(){ return 0; }
 
-   QMap<unitScale, Unit*> const& scaleToUnit();
+   QMap<Unit::unitScale, Unit*> const& scaleToUnit();
    QMap<QString, Unit*> const& qstringToUnit();
 
    QString unitType();

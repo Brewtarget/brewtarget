@@ -73,7 +73,7 @@ public slots:
 
 
 signals:
-   void labelChanged(unitDisplay oldUnit, unitScale oldScale);
+   void labelChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
 
 // Using protected instead of private allows me to not use the friends
 // declaration

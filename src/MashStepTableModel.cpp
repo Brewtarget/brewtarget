@@ -131,8 +131,8 @@ int MashStepTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
 {
    MashStep* row;
-   unitDisplay unit;
-   unitScale scale;
+   Unit::unitDisplay unit;
+   Unit::unitScale scale;
    int col = index.column();
 
    if( mashObs == 0 )
@@ -169,13 +169,13 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
          unit = displayUnit(col);
          return (row->type() == MashStep::Decoction)
                 ? QVariant("---")
-                : QVariant( Brewtarget::displayAmount(row->infuseTemp_c(), Units::celsius, 3, unit, noScale) );
+                : QVariant( Brewtarget::displayAmount(row->infuseTemp_c(), Units::celsius, 3, unit, Unit::noScale) );
       case MASHSTEPTARGETTEMPCOL:
          unit = displayUnit(col);
-         return QVariant( Brewtarget::displayAmount(row->stepTemp_c(), Units::celsius,3, unit, noScale) );
+         return QVariant( Brewtarget::displayAmount(row->stepTemp_c(), Units::celsius,3, unit, Unit::noScale) );
       case MASHSTEPTIMECOL:
          scale = displayScale(col);
-         return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes,0,noUnit,scale) );
+         return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes,0,Unit::noUnit,scale) );
       default :
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -224,7 +224,7 @@ Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& index ) const
 bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    MashStep *row;
-   unitDisplay unit;
+   Unit::unitDisplay unit;
 
    if( mashObs == 0 )
       return false;
@@ -312,31 +312,31 @@ void MashStepTableModel::moveStepDown(int i)
    Database::instance().swapMashStepOrder( steps[i], steps[i+1] );
 }
 
-unitDisplay MashStepTableModel::displayUnit(int column) const
+Unit::unitDisplay MashStepTableModel::displayUnit(int column) const
 {
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
-      return noUnit;
+      return Unit::noUnit;
 
-   return (unitDisplay)Brewtarget::option(attribute, noUnit, this->objectName(), Brewtarget::UNIT).toInt();
+   return (Unit::unitDisplay)Brewtarget::option(attribute, Unit::noUnit, this->objectName(), Brewtarget::UNIT).toInt();
 }
 
-unitScale MashStepTableModel::displayScale(int column) const
+Unit::unitScale MashStepTableModel::displayScale(int column) const
 {
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
-      return noScale;
+      return Unit::noScale;
 
-   return (unitScale)Brewtarget::option(attribute, noScale, this->objectName(), Brewtarget::SCALE).toInt();
+   return (Unit::unitScale)Brewtarget::option(attribute, Unit::noScale, this->objectName(), Brewtarget::SCALE).toInt();
 }
 
 // We need to:
 //   o clear the custom scale if set
 //   o clear any custom unit from the rows
 //      o which should have the side effect of clearing any scale
-void MashStepTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
+void MashStepTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
 {
    // MashStep* row; // disabled per-cell magic
    QString attribute = generateName(column);
@@ -345,19 +345,19 @@ void MashStepTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
       return;
 
    Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,noScale,this->objectName(),Brewtarget::SCALE);
+   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
    {
       row = getMashStep(i);
-      row->setDisplayUnit(noUnit);
+      row->setDisplayUnit(Unit::noUnit);
    }
    */
 }
 
 // Setting the scale should clear any cell-level scaling options
-void MashStepTableModel::setDisplayScale(int column, unitScale displayScale)
+void MashStepTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
 {
    // MashStep* row; //disabled per-cell magic
 
@@ -372,7 +372,7 @@ void MashStepTableModel::setDisplayScale(int column, unitScale displayScale)
    for (int i = 0; i < rowCount(); ++i )
    {
       row = getMashStep(i);
-      row->setDisplayScale(noScale);
+      row->setDisplayScale(Unit::noScale);
    }
    */
 }
@@ -407,8 +407,8 @@ void MashStepTableModel::contextMenu(const QPoint &point)
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
 
    int selected = hView->logicalIndexAt(point);
-   unitDisplay currentUnit;
-   unitScale  currentScale;
+   Unit::unitDisplay currentUnit;
+   Unit::unitScale  currentScale;
 
    // Since we need to call generateVolumeMenu() two different ways, we need
    // to figure out the currentUnit and Scale here
@@ -441,9 +441,9 @@ void MashStepTableModel::contextMenu(const QPoint &point)
 
    QWidget* pMenu = invoked->parentWidget();
    if ( pMenu == menu )
-      setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+      setDisplayUnit(selected,(Unit::unitDisplay)invoked->data().toInt());
    else
-      setDisplayScale(selected,(unitScale)invoked->data().toInt());
+      setDisplayScale(selected,(Unit::unitScale)invoked->data().toInt());
 }
 
 //==========================CLASS MashStepItemDelegate===============================

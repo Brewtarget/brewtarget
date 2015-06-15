@@ -50,30 +50,30 @@ BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent)
 
    // A few labels on this page need special handling, so I connect them here
    // instead of how we would normally do this.
-   connect(btLabel_projectedOg, SIGNAL(labelChanged(unitDisplay,unitScale)), this, SLOT(updateProjOg(unitDisplay,unitScale)));
-   connect(btLabel_fermentDate, SIGNAL(labelChanged(unitDisplay,unitScale)), this, SLOT(updateDateFormat(unitDisplay,unitScale)));
+   connect(btLabel_projectedOg, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(updateProjOg(Unit::unitDisplay,Unit::unitScale)));
+   connect(btLabel_fermentDate, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(updateDateFormat(Unit::unitDisplay,Unit::unitScale)));
 
    // I think this might work
-   updateDateFormat(noUnit, noScale);
+   updateDateFormat(Unit::noUnit, Unit::noScale);
 }
 
 // I should really do this better, but I really cannot bring myself to do
 // another UnitSystem for one input field.
-void BrewNoteWidget::updateDateFormat(unitDisplay display,unitScale scale)
+void BrewNoteWidget::updateDateFormat(Unit::unitDisplay display,Unit::unitScale scale)
 {
    QString format;
    // I need the new unit, not the old
-   unitDisplay unitDsp = (unitDisplay)Brewtarget::option("fermentDate", Brewtarget::getDateFormat(), "page_postferment", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option("fermentDate", Brewtarget::getDateFormat(), "page_postferment", Brewtarget::UNIT).toInt();
 
    switch(unitDsp)
    {
-      case displayUS:
+      case Unit::displayUS:
          format = "MM-dd-yyyy";
          break;
-      case displayImp:
+      case Unit::displayImp:
          format = "dd-MM-yyyy";
          break;
-      case displaySI:
+      case Unit::displaySI:
       default:
          format = "yyyy-MM-dd";
    }
@@ -81,7 +81,7 @@ void BrewNoteWidget::updateDateFormat(unitDisplay display,unitScale scale)
 }
 
 
-void BrewNoteWidget::updateProjOg(unitDisplay oldUnit, unitScale oldScale)
+void BrewNoteWidget::updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale oldScale)
 {
    double low  = 0.95;
    double high = 1.05;
@@ -89,13 +89,13 @@ void BrewNoteWidget::updateProjOg(unitDisplay oldUnit, unitScale oldScale)
    int precision = 3;
 
    // I don't think we care about the old unit or scale, just the new ones
-   unitDisplay unitDsp = (unitDisplay)Brewtarget::option("projOg", noUnit, "page_preboil", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option("projOg", Unit::noUnit, "page_preboil", Brewtarget::UNIT).toInt();
 
 
-   if ( unitDsp == noUnit )
+   if ( unitDsp == Unit::noUnit )
       unitDsp = Brewtarget::getDensityUnit();
 
-   if ( unitDsp == displayPlato )
+   if ( unitDsp == Unit::displayPlato )
       precision = 0;
 
    quant = Brewtarget::amountDisplay(bNoteObs, page_preboil, "projOg",Units::sp_grav);
@@ -294,7 +294,7 @@ void BrewNoteWidget::showChanges(QString field)
    lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
 
    // Need to think about these? Maybe use the bubbles?
-   updateProjOg(noUnit,noScale); // this requires more work, but updateProj does it
+   updateProjOg(Unit::noUnit,Unit::noScale); // this requires more work, but updateProj does it
 
    lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);

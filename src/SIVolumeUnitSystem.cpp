@@ -25,7 +25,7 @@
 SIVolumeUnitSystem::SIVolumeUnitSystem()
    : UnitSystem()
 {
-   _type = Volume;
+   _type = Unit::Volume;
 }
 
 Unit* SIVolumeUnitSystem::thicknessUnit()
@@ -33,13 +33,13 @@ Unit* SIVolumeUnitSystem::thicknessUnit()
    return Units::liters;
 }
 
-QMap<unitScale, Unit*> const& SIVolumeUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& SIVolumeUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleExtraSmall, Units::milliliters);
-      _scaleToUnit.insert(scaleSmall, Units::liters);
+      _scaleToUnit.insert(Unit::scaleExtraSmall, Units::milliliters);
+      _scaleToUnit.insert(Unit::scaleSmall, Units::liters);
    }
 
    return _scaleToUnit;
@@ -57,5 +57,5 @@ QMap<QString, Unit*> const& SIVolumeUnitSystem::qstringToUnit()
    return _qstringToUnit;
 }
 
-Unit* SIVolumeUnitSystem::unit() { return Units::liters; };
+Unit* SIVolumeUnitSystem::unit() { return Units::liters; }
 QString SIVolumeUnitSystem::unitType() { return "SI"; }

@@ -179,10 +179,10 @@ public:
     *  \param units the units that \c amount is in
     *  \param precision how many decimal places
     *  \param unitDisplay which unit system to use, defaulting to "noUnit" which means use the system default
-    *  \param unitScale which scale to use, defaulting to noScale which means use the largest scale that generates a value > 1
+    *  \param Unit::Unit::unitScale which scale to use, defaulting to Unit::Unit::noScale which means use the largest scale that generates a value > 1
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3,
-                                 unitDisplay displayUnit = noUnit, unitScale displayScale = noScale );
+                                 Unit::unitDisplay displayUnit = Unit::noUnit, Unit::Unit::unitScale displayScale = Unit::Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
     *
@@ -213,7 +213,7 @@ public:
     *  \param precision how many decimal places
     */
    static double amountDisplay( double amount, Unit* units=0, int precision=3,
-                                 unitDisplay displayUnit = noUnit, unitScale displayScale = noScale );
+                                 Unit::unitDisplay displayUnit = Unit::noUnit, Unit::Unit::unitScale displayScale = Unit::Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
     *
@@ -234,7 +234,7 @@ public:
    static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
 
    //! \return SI amount for the string
-   static double qStringToSI( QString qstr, Unit* unit, unitDisplay dispUnit = noUnit, bool force = false);
+   static double qStringToSI( QString qstr, Unit* unit, Unit::unitDisplay dispUnit = Unit::noUnit, bool force = false);
 
    //! \brief return the bitterness formula's name
    static QString ibuFormulaName();
@@ -242,17 +242,17 @@ public:
    static QString colorFormulaName();
 
    // One method to rule them all, and in darkness bind them
-   static UnitSystem* findUnitSystem(Unit* unit, unitDisplay display);
-   static QString colorUnitName(unitDisplay display);
+   static UnitSystem* findUnitSystem(Unit* unit, Unit::unitDisplay display);
+   static QString colorUnitName(Unit::unitDisplay display);
 
    //! \return true iff the string has a valid unit substring at the end.
    static bool hasUnits(QString qstr);
 
    // You do know I will have to kill these too?
    //! \return the density units
-   static unitDisplay getDensityUnit();
+   static Unit::unitDisplay getDensityUnit();
    //! \return the date format
-   static unitDisplay getDateFormat();
+   static Unit::unitDisplay getDateFormat();
 
    //! \brief Read options from file. This is deprecated, but we need it
    // around for the conversion
@@ -291,13 +291,13 @@ public:
    static QString generateName(QString attribute, const QString section, iUnitOps ops);
 
    // Grr. Shortcuts never, ever pay  off
-   static QMenu* setupColorMenu(QWidget* parent, unitDisplay unit);
-   static QMenu* setupDateMenu(QWidget* parent, unitDisplay unit);
-   static QMenu* setupDensityMenu(QWidget* parent, unitDisplay unit);
-   static QMenu* setupMassMenu(QWidget* parent, unitDisplay unit, unitScale scale = noScale, bool generateScale = true);
-   static QMenu* setupTemperatureMenu(QWidget* parent, unitDisplay unit);
-   static QMenu* setupVolumeMenu(QWidget* parent, unitDisplay unit, unitScale scale = noScale, bool generateScale = true);
-   static QMenu* setupTimeMenu(QWidget* parent, unitScale scale);
+   static QMenu* setupColorMenu(QWidget* parent, Unit::unitDisplay unit);
+   static QMenu* setupDateMenu(QWidget* parent, Unit::unitDisplay unit);
+   static QMenu* setupDensityMenu(QWidget* parent, Unit::unitDisplay unit);
+   static QMenu* setupMassMenu(QWidget* parent, Unit::unitDisplay unit, Unit::Unit::unitScale scale = Unit::Unit::noScale, bool generateScale = true);
+   static QMenu* setupTemperatureMenu(QWidget* parent, Unit::unitDisplay unit);
+   static QMenu* setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit::Unit::unitScale scale = Unit::Unit::noScale, bool generateScale = true);
+   static QMenu* setupTimeMenu(QWidget* parent, Unit::Unit::unitScale scale);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
 
    //! \return the main window.
@@ -342,7 +342,7 @@ private:
    static ColorUnitType colorUnit;
    static DensityUnitType densityUnit;
    static IbuType ibuFormula;
-   static unitDisplay dateFormat;
+   static Unit::unitDisplay dateFormat;
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    /*!
@@ -394,7 +394,7 @@ private:
    //! \return the temperature scale
    static TempScale getTemperatureScale();
    //! \return the color units
-   static unitDisplay getColorUnit();
+   static Unit::unitDisplay getColorUnit();
 };
 
 Q_DECLARE_METATYPE( Brewtarget::DBTable )
