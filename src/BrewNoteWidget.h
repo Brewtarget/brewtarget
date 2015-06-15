@@ -66,7 +66,7 @@ public slots:
    void updateFG();
    void updateFinalVolume_l();
    void updateFermentDate(const QDateTime& datetime);
-   void updateDateFormat(unitDisplay display,unitScale scale);
+   void updateDateFormat(Unit::unitDisplay display,Unit::unitScale scale);
 
    void updateNotes();
 //   void saveAll();
@@ -74,7 +74,7 @@ public slots:
    void changed(QMetaProperty,QVariant);
    void showChanges(QString field = "");
 
-   void updateProjOg(unitDisplay oldUnit, unitScale oldScale);
+   void updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
 
 
 private:

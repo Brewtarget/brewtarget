@@ -25,15 +25,15 @@
 CelsiusTempUnitSystem::CelsiusTempUnitSystem() :
    UnitSystem()
 {
-   _type = Temp;
+   _type = Unit::Temp;
 }
 
-QMap<unitScale, Unit*> const& CelsiusTempUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& CelsiusTempUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleWithout,Units::celsius);
+      _scaleToUnit.insert(Unit::scaleWithout,Units::celsius);
    }
 
    return _scaleToUnit;
@@ -50,6 +50,6 @@ QMap<QString, Unit*> const& CelsiusTempUnitSystem::qstringToUnit()
    return _qstringToUnit;
 }
 
-Unit* CelsiusTempUnitSystem::unit() { return Units::celsius; };
+Unit* CelsiusTempUnitSystem::unit() { return Units::celsius; }
 
 QString CelsiusTempUnitSystem::unitType() { return "SI"; }

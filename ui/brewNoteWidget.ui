@@ -747,7 +747,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -755,7 +755,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -768,7 +768,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -776,7 +776,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -784,7 +784,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -792,7 +792,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -812,9 +812,9 @@
  <connections>
   <connection>
    <sender>btLabel_Sg</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_SG</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>70</x>
@@ -828,9 +828,9 @@
   </connection>
   <connection>
    <sender>btLabel_volIntoBk</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_volIntoBK</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>58</x>
@@ -844,9 +844,9 @@
   </connection>
   <connection>
    <sender>btLabel_strikeTemp</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_strikeTemp</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>48</x>
@@ -860,9 +860,9 @@
   </connection>
   <connection>
    <sender>btLabel_mashFinTemp</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_mashFinTemp</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>51</x>
@@ -876,9 +876,9 @@
   </connection>
   <connection>
    <sender>btLabel_Og</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_OG</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>125</x>
@@ -892,9 +892,9 @@
   </connection>
   <connection>
    <sender>btLabel_postBoilVol</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_postBoilVol</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>92</x>
@@ -908,9 +908,9 @@
   </connection>
   <connection>
    <sender>btLabel_volIntoFerm</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_volIntoFerm</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>76</x>
@@ -924,9 +924,9 @@
   </connection>
   <connection>
    <sender>btLabel_pitchTemp</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_pitchTemp</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>105</x>
@@ -940,9 +940,9 @@
   </connection>
   <connection>
    <sender>btLabel_postFermentFg</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_FG</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>50</x>
@@ -956,9 +956,9 @@
   </connection>
   <connection>
    <sender>btLabel_finalVolume</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_finalVol</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>38</x>

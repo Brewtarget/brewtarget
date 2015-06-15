@@ -739,7 +739,7 @@
    <slots>
     <signal>textModified()</signal>
     <slot>lineChanged()</slot>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -747,7 +747,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -755,7 +755,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
     <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
@@ -764,7 +764,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -825,9 +825,9 @@
   </connection>
   <connection>
    <sender>label_amount</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_amount</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>65</x>
@@ -841,9 +841,9 @@
   </connection>
   <connection>
    <sender>label_inventory</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_inventory</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>66</x>
@@ -857,9 +857,9 @@
   </connection>
   <connection>
    <sender>label_color</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_color</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>67</x>

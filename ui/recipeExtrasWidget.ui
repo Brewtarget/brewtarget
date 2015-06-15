@@ -575,7 +575,7 @@
    <extends>QLineEdit</extends>
    <header location="global">BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -583,7 +583,7 @@
    <extends>QLabel</extends>
    <header location="global">BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -591,7 +591,7 @@
    <extends>QLabel</extends>
    <header location="global">BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -599,7 +599,7 @@
    <extends>QLineEdit</extends>
    <header location="global">BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -636,9 +636,9 @@
  <connections>
   <connection>
    <sender>label_ageTemp</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_ageTemp</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>92</x>
@@ -652,9 +652,9 @@
   </connection>
   <connection>
    <sender>label_secTemp</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_secTemp</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>96</x>
@@ -668,9 +668,9 @@
   </connection>
   <connection>
    <sender>label_tertTemp</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_tertTemp</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
@@ -684,9 +684,9 @@
   </connection>
   <connection>
    <sender>label_primaryTemp</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_primaryTemp</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>55</x>
@@ -700,9 +700,9 @@
   </connection>
   <connection>
    <sender>label_secAge</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_secAge</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>90</x>
@@ -716,9 +716,9 @@
   </connection>
   <connection>
    <sender>label_tertAge</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_tertAge</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>103</x>
@@ -732,9 +732,9 @@
   </connection>
   <connection>
    <sender>label_age</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_age</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>107</x>
@@ -748,9 +748,9 @@
   </connection>
   <connection>
    <sender>label_primaryAge</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_primaryAge</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>93</x>

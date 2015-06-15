@@ -408,9 +408,9 @@ MainWindow::MainWindow(QWidget* parent)
    // BWAHAHAHAHAHAHAHA. I did, I did find a better way to do it.
 
    // These are the sliders. I need to consider these harder, but small steps
-   connect(oGLabel, SIGNAL(labelChanged(unitDisplay,unitScale)), this, SLOT(redisplayLabel(unitDisplay,unitScale)));
-   connect(fGLabel, SIGNAL(labelChanged(unitDisplay,unitScale)), this, SLOT(redisplayLabel(unitDisplay,unitScale)));
-   connect(colorSRMLabel,SIGNAL(labelChanged(unitDisplay,unitScale)), this, SLOT(redisplayLabel(unitDisplay,unitScale)));
+   connect(oGLabel, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
+   connect(fGLabel, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
+   connect(colorSRMLabel,SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
 
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
 
@@ -751,15 +751,15 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
 
 void MainWindow::updateDensitySlider(QString attribute, RangedSlider* slider, double max)
 {
-   unitDisplay dispUnit = (unitDisplay)Brewtarget::option(attribute, noUnit, "tab_recipe", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay dispUnit = (Unit::unitDisplay)Brewtarget::option(attribute, Unit::noUnit, "tab_recipe", Brewtarget::UNIT).toInt();
 
-   if ( dispUnit == noUnit )
-      dispUnit = Brewtarget::densityUnit == Brewtarget::PLATO ? displayPlato : displaySg;
+   if ( dispUnit == Unit::noUnit )
+      dispUnit = Brewtarget::densityUnit == Brewtarget::PLATO ? Unit::displayPlato : Unit::displaySg;
 
    slider->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, attribute, Brewtarget::DENSITY));
    slider->setRange(         Brewtarget::displayRange(tab_recipe, attribute, 1.000, max, Brewtarget::DENSITY ));
 
-   if ( dispUnit == displayPlato )
+   if ( dispUnit == Unit::displayPlato )
    {
       slider->setPrecision(1);
       slider->setTickMarks(2,5);
@@ -773,14 +773,14 @@ void MainWindow::updateDensitySlider(QString attribute, RangedSlider* slider, do
 
 void MainWindow::updateColorSlider(QString attribute, RangedSlider* slider)
 {
-   unitDisplay dispUnit = (unitDisplay)Brewtarget::option(attribute, noUnit, "tab_recipe", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay dispUnit = (Unit::unitDisplay)Brewtarget::option(attribute, Unit::noUnit, "tab_recipe", Brewtarget::UNIT).toInt();
 
-   if ( dispUnit == noUnit )
-      dispUnit = Brewtarget::colorUnit == Brewtarget::SRM ? displaySrm : displayEbc;
+   if ( dispUnit == Unit::noUnit )
+      dispUnit = Brewtarget::colorUnit == Brewtarget::SRM ? Unit::displaySrm : Unit::displayEbc;
 
    slider->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, attribute,Brewtarget::COLOR));
    slider->setRange(Brewtarget::displayRange(tab_recipe, attribute, 1, 44, Brewtarget::COLOR) );
-   slider->setTickMarks( dispUnit == displaySrm ? 10 : 40, 2);
+   slider->setTickMarks( dispUnit == Unit::displaySrm ? 10 : 40, 2);
 
 }
 
@@ -2406,7 +2406,7 @@ void MainWindow::finishCheckingVersion()
    }
 }
 
-void MainWindow::redisplayLabel(unitDisplay oldUnit, unitScale oldScale)
+void MainWindow::redisplayLabel(Unit::unitDisplay oldUnit, Unit::unitScale oldScale)
 {
    // There is a lot of magic going on in the showChanges(). I can either
    // duplicate that magic or I can just call showChanges().

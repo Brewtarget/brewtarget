@@ -228,79 +228,79 @@ void OptionDialog::saveAndClose()
    if( button == radioButton_sg )
    {
       Brewtarget::densityUnit = Brewtarget::SG;
-      Brewtarget::thingToUnitSystem.insert(Density, UnitSystems::sgDensityUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Density, UnitSystems::sgDensityUnitSystem());
    }
    else
    {
       Brewtarget::densityUnit = Brewtarget::PLATO;
-      Brewtarget::thingToUnitSystem.insert(Density, UnitSystems::platoDensityUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Density, UnitSystems::platoDensityUnitSystem());
    }
 
    button = weightGroup->checkedButton();
    if( button == weight_imperial )
    {
       weightUnitSystem = Imperial;
-      Brewtarget::thingToUnitSystem.insert(Mass, UnitSystems::usWeightUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Mass, UnitSystems::usWeightUnitSystem());
    }
    else if( button == weight_us)
    {
       weightUnitSystem = USCustomary;
-      Brewtarget::thingToUnitSystem.insert(Mass, UnitSystems::usWeightUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Mass, UnitSystems::usWeightUnitSystem());
    }
    else
    {
       weightUnitSystem = SI;
-      Brewtarget::thingToUnitSystem.insert(Mass, UnitSystems::siWeightUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Mass, UnitSystems::siWeightUnitSystem());
    }
 
    button = volumeGroup->checkedButton();
    if( button == volume_imperial )
    {
       volumeUnitSystem = Imperial;
-      Brewtarget::thingToUnitSystem.insert(Volume,UnitSystems::imperialVolumeUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Volume,UnitSystems::imperialVolumeUnitSystem());
    }
    else if( button == volume_us )
    {
       volumeUnitSystem = USCustomary;
-      Brewtarget::thingToUnitSystem.insert(Volume,UnitSystems::usVolumeUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Volume,UnitSystems::usVolumeUnitSystem());
    }
    else
    {
       volumeUnitSystem = SI;
-      Brewtarget::thingToUnitSystem.insert(Volume,UnitSystems::siVolumeUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Volume,UnitSystems::siVolumeUnitSystem());
    }
 
    button = tempGroup->checkedButton();
    if( button == fahrenheit )
    {
       temperatureScale = Fahrenheit;
-      Brewtarget::thingToUnitSystem.insert(Temp,UnitSystems::fahrenheitTempUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Temp,UnitSystems::fahrenheitTempUnitSystem());
    }
    else
    {
       temperatureScale = Celsius;
-      Brewtarget::thingToUnitSystem.insert(Temp,UnitSystems::celsiusTempUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Temp,UnitSystems::celsiusTempUnitSystem());
    }
    
    button = colorUnitGroup->checkedButton();
    if( button == radioButton_ebc )
    {
-      Brewtarget::thingToUnitSystem.insert(Color,UnitSystems::ebcColorUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Color,UnitSystems::ebcColorUnitSystem());
       colorUnit = Brewtarget::EBC;
    }
    else
    {
-      Brewtarget::thingToUnitSystem.insert(Color,UnitSystems::srmColorUnitSystem());
+      Brewtarget::thingToUnitSystem.insert(Unit::Color,UnitSystems::srmColorUnitSystem());
       colorUnit = Brewtarget::SRM;
    }
 
    button = dateFormatGroup->checkedButton();
    if ( button == radioButton_usDate )
-      Brewtarget::dateFormat = displayUS;
+      Brewtarget::dateFormat = Unit::displayUS;
    else if ( button == radioButton_euDate )
-      Brewtarget::dateFormat = displayImp;
+      Brewtarget::dateFormat = Unit::displayImp;
    else
-      Brewtarget::dateFormat = displaySI;
+      Brewtarget::dateFormat = Unit::displaySI;
 
    Brewtarget::ibuFormula = iformula;
    Brewtarget::colorFormula = cformula;
@@ -450,13 +450,13 @@ void OptionDialog::showChanges()
 
    switch(Brewtarget::dateFormat)
    {
-      case displayImp:
+      case Unit::displayImp:
          radioButton_euDate->setChecked(true);
          break;
-      case displayUS:
+      case Unit::displayUS:
          radioButton_usDate->setChecked(true);
          break;
-      case displaySI:
+      case Unit::displaySI:
       default:
          radioButton_isoDate->setChecked(true);
    }

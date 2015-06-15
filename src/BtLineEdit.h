@@ -73,7 +73,7 @@ public:
    */
 
    BtLineEdit(QWidget* parent = 0, FieldType type = GENERIC);
-   double toSI(unitDisplay oldUnit = noUnit, unitScale oldScale = noScale, bool force = false);
+   double toSI(Unit::unitDisplay oldUnit = Unit::noUnit, Unit::unitScale oldScale = Unit::noScale, bool force = false);
    // Use this when you want to do something with the returned QString
    QString displayAmount( double amount, int precision = 3);
 
@@ -83,9 +83,13 @@ public:
    void    setText( QString amount, int precision=3 );
    void    setText( QVariant amount, int precision=3 );
 
+   // Too many places still use getDouble, which just hoses me down. We're
+   // gonna fix this.
+   double  toDouble(bool* ok);
+
 public slots:
    void lineChanged();
-   void lineChanged(unitDisplay oldUnit, unitScale oldScale);
+   void lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
 
 signals:
    void textModified();
@@ -94,9 +98,10 @@ protected:
    QWidget *btParent;
    QString _section, _property;
    FieldType _type;
+   Unit::unitDisplay _forceUnit;
    Unit* _units;
 
-   void initializeProperty();
+   void initializeProperties();
    void initializeSection();
 
 };

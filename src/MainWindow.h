@@ -244,7 +244,7 @@ public slots:
    //! \brief Catches a QNetworkReply signal and gets info about any new version available.
    void finishCheckingVersion();
 
-   void redisplayLabel(unitDisplay oldUnit, unitScale oldScale);
+   void redisplayLabel(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
 
    void showEquipmentEditor();
    void showStyleEditor();

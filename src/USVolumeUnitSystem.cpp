@@ -25,20 +25,20 @@
 
 USVolumeUnitSystem::USVolumeUnitSystem()
 {
-   _type = Volume;
+   _type = Unit::Volume;
 }
 
-QMap<unitScale, Unit*> const& USVolumeUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& USVolumeUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleExtraSmall,Units::us_teaspoons);
-      _scaleToUnit.insert(scaleSmall,Units::us_tablespoons);
-      _scaleToUnit.insert(scaleMedium,Units::us_cups);
-      _scaleToUnit.insert(scaleLarge,Units::us_quarts);
-      _scaleToUnit.insert(scaleExtraLarge,Units::us_gallons);
-      _scaleToUnit.insert(scaleHuge,Units::us_barrels);
+      _scaleToUnit.insert(Unit::scaleExtraSmall,Units::us_teaspoons);
+      _scaleToUnit.insert(Unit::scaleSmall,Units::us_tablespoons);
+      _scaleToUnit.insert(Unit::scaleMedium,Units::us_cups);
+      _scaleToUnit.insert(Unit::scaleLarge,Units::us_quarts);
+      _scaleToUnit.insert(Unit::scaleExtraLarge,Units::us_gallons);
+      _scaleToUnit.insert(Unit::scaleHuge,Units::us_barrels);
    }
 
    return _scaleToUnit;
@@ -65,6 +65,6 @@ Unit* USVolumeUnitSystem::thicknessUnit()
    return Units::us_quarts;
 }
 
-Unit* USVolumeUnitSystem::unit() { return Units::us_gallons; };
+Unit* USVolumeUnitSystem::unit() { return Units::us_gallons; }
 
 QString USVolumeUnitSystem::unitType() { return "USCustomary"; }

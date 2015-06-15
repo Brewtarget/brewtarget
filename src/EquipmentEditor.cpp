@@ -89,17 +89,17 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(checkBox_defaultEquipment, SIGNAL(stateChanged(int)), this, SLOT(updateDefaultEquipment(int)));
 
    // Labels
-   connect(label_boilSize, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_boilSize, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_batchSize, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_batchSize, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_evaporationRate, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_evaporationRate, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_topUpWater, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_topUpWater, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_boilingPoint, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_boilingPoint, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_tunVolume, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_tunVolume, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_tunWeight, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_tunWeight, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_lauterDeadspace, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_lauterDeadspace, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_trubChillerLoss, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_trubChillerLoss, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_topUpKettle, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_topUpKettle, SLOT(lineChanged(unitDisplay,unitScale)));
-   connect(label_boilTime, SIGNAL(labelChanged(unitDisplay,unitScale)), lineEdit_boilTime, SLOT(lineChanged(unitDisplay,unitScale)));
+   connect(label_boilSize, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_boilSize, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_batchSize, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_batchSize, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_evaporationRate, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_evaporationRate, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_topUpWater, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_topUpWater, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_boilingPoint, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_boilingPoint, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_tunVolume, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_tunVolume, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_tunWeight, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_tunWeight, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_lauterDeadspace, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_lauterDeadspace, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_trubChillerLoss, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_trubChillerLoss, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_topUpKettle, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_topUpKettle, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_boilTime, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_boilTime, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
 
    QMetaObject::connectSlotsByName(this);
 

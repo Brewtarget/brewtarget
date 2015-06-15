@@ -191,8 +191,8 @@ int MiscTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
 {
    Misc* row;
-   unitDisplay unit;
-   unitScale scale;
+   Unit::unitDisplay unit;
+   Unit::unitScale scale;
 
    // Ensure the row is ok.
    if( index.row() >= (int)miscObs.size() )
@@ -231,19 +231,19 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
 
          scale = displayScale(MISCTIMECOL);
 
-         return QVariant( Brewtarget::displayAmount(row->time(), Units::minutes, 0, noUnit, scale) );
+         return QVariant( Brewtarget::displayAmount(row->time(), Units::minutes, 0, Unit::noUnit, scale) );
       case MISCINVENTORYCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
 
          unit = displayUnit(index.column());
-         return QVariant( Brewtarget::displayAmount(row->inventory(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters, 3, unit, noScale ) );
+         return QVariant( Brewtarget::displayAmount(row->inventory(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters, 3, unit, Unit::noScale ) );
       case MISCAMOUNTCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
 
          unit = displayUnit(index.column());
-         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters, 3, unit, noScale ) );
+         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters, 3, unit, Unit::noScale ) );
 
       case MISCISWEIGHT:
          if ( role == Qt::CheckStateRole )
@@ -308,7 +308,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    Misc *row;
    int col;
    QString tmpStr;
-   unitDisplay dispUnit;
+   Unit::unitDisplay dispUnit;
    Unit* unit;
 
    if( index.row() >= (int)miscObs.size() )
@@ -419,31 +419,31 @@ Misc* MiscTableModel::getMisc(unsigned int i)
    return miscObs[i];
 }
 
-unitDisplay MiscTableModel::displayUnit(int column) const
+Unit::unitDisplay MiscTableModel::displayUnit(int column) const
 {
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
-      return noUnit;
+      return Unit::noUnit;
 
-   return (unitDisplay)Brewtarget::option(attribute, noUnit, this->objectName(), Brewtarget::UNIT).toInt();
+   return (Unit::unitDisplay)Brewtarget::option(attribute, Unit::noUnit, this->objectName(), Brewtarget::UNIT).toInt();
 }
 
-unitScale MiscTableModel::displayScale(int column) const
+Unit::unitScale MiscTableModel::displayScale(int column) const
 {
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
-      return noScale;
+      return Unit::noScale;
 
-   return (unitScale)Brewtarget::option(attribute, noScale, this->objectName(), Brewtarget::SCALE).toInt();
+   return (Unit::unitScale)Brewtarget::option(attribute, Unit::noScale, this->objectName(), Brewtarget::SCALE).toInt();
 }
 
 // We need to:
 //   o clear the custom scale if set
 //   o clear any custom unit from the rows
 //      o which should have the side effect of clearing any scale
-void MiscTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
+void MiscTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
 {
    // Misc* row; // disabled per-cell magic
    QString attribute = generateName(column);
@@ -452,19 +452,19 @@ void MiscTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
       return;
 
    Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,noScale,this->objectName(),Brewtarget::SCALE);
+   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
    {
       row = getMisc(i);
-      row->setDisplayUnit(noUnit);
+      row->setDisplayUnit(Unit::noUnit);
    }
    */
 }
 
 // Setting the scale should clear any cell-level scaling options
-void MiscTableModel::setDisplayScale(int column, unitScale displayScale)
+void MiscTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
 {
    // Misc* row; //disabled per-cell magic
 
@@ -479,7 +479,7 @@ void MiscTableModel::setDisplayScale(int column, unitScale displayScale)
    for (int i = 0; i < rowCount(); ++i )
    {
       row = getMisc(i);
-      row->setDisplayScale(noScale);
+      row->setDisplayScale(Unit::noScale);
    }
    */
 }
@@ -511,8 +511,8 @@ void MiscTableModel::contextMenu(const QPoint &point)
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
 
    int selected = hView->logicalIndexAt(point);
-   unitDisplay currentUnit;
-   unitScale  currentScale;
+   Unit::unitDisplay currentUnit;
+   Unit::unitScale  currentScale;
 
    // Since we need to call generateVolumeMenu() two different ways, we need
    // to figure out the currentUnit and Scale here
@@ -541,9 +541,9 @@ void MiscTableModel::contextMenu(const QPoint &point)
       return;
 
    if ( selected == MISCTIMECOL )
-      setDisplayScale(selected,(unitScale)invoked->data().toInt());
+      setDisplayScale(selected,(Unit::unitScale)invoked->data().toInt());
    else
-      setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+      setDisplayUnit(selected,(Unit::unitDisplay)invoked->data().toInt());
 }
 
 //======================CLASS MiscItemDelegate===========================

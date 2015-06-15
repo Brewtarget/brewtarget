@@ -87,14 +87,14 @@ void BtLabel::initializeProperty()
 
 void BtLabel::initializeMenu()
 {
-   unitDisplay unit;
-   unitScale scale;
+   Unit::unitDisplay unit;
+   Unit::unitScale scale;
 
    if ( _menu )
       return;
 
-   unit  = (unitDisplay)Brewtarget::option(propertyName, noUnit, _section, Brewtarget::UNIT).toInt();
-   scale = (unitScale)Brewtarget::option(propertyName, noScale, _section, Brewtarget::SCALE).toInt();
+   unit  = (Unit::unitDisplay)Brewtarget::option(propertyName, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
+   scale = (Unit::unitScale)Brewtarget::option(propertyName, Unit::noScale, _section, Brewtarget::SCALE).toInt();
 
    switch( whatAmI )
    {
@@ -146,8 +146,8 @@ void BtLabel::popContextMenu(const QPoint& point)
    initializeMenu();
 
    invoked = _menu->exec(widgie->mapToGlobal(point));
-   unitDisplay unit = (unitDisplay)Brewtarget::option(propertyName, noUnit, _section, Brewtarget::UNIT).toInt();
-   unitScale scale  = (unitScale)Brewtarget::option(propertyName, noUnit, _section, Brewtarget::SCALE).toInt();
+   Unit::unitDisplay unit = (Unit::unitDisplay)Brewtarget::option(propertyName, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
+   Unit::unitScale scale  = (Unit::unitScale)Brewtarget::option(propertyName, Unit::noUnit, _section, Brewtarget::SCALE).toInt();
 
    if ( invoked == 0 )
       return;
@@ -158,7 +158,7 @@ void BtLabel::popContextMenu(const QPoint& point)
       Brewtarget::setOption(propertyName, invoked->data(), _section, Brewtarget::UNIT);
       // reset the scale if required
       if ( Brewtarget::hasOption(propertyName, _section, Brewtarget::SCALE) )
-         Brewtarget::setOption(propertyName, noScale, _section, Brewtarget::SCALE);
+         Brewtarget::setOption(propertyName, Unit::noScale, _section, Brewtarget::SCALE);
    }
    else
       Brewtarget::setOption(propertyName, invoked->data(), _section, Brewtarget::SCALE);
@@ -184,7 +184,7 @@ void BtLabel::popContextMenu(const QPoint& point)
    // text here.
    if ( whatAmI == COLOR )
    {
-      unitDisplay disp = (unitDisplay)invoked->data().toInt();
+      Unit::unitDisplay disp = (Unit::unitDisplay)invoked->data().toInt();
       setText( tr("Color (%1)").arg(Brewtarget::colorUnitName(disp)));
    }
 

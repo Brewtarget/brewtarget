@@ -158,7 +158,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -166,7 +166,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>

@@ -45,8 +45,8 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
    connect( checkBox_CalculateViability, SIGNAL(stateChanged(int)), this, SLOT(toggleViabilityFromDate(int)));
 
    // Dates are a little more cranky
-   connect(label_productionDate,SIGNAL(labelChanged(unitDisplay,unitScale)),this,SLOT(updateProductionDate(unitDisplay,unitScale)));
-   updateProductionDate(noUnit,noScale);
+   connect(label_productionDate,SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)),this,SLOT(updateProductionDate(Unit::unitDisplay,Unit::unitScale)));
+   updateProductionDate(Unit::noUnit,Unit::noScale);
    updateShownPitchRate(0);
 }
 
@@ -54,21 +54,21 @@ PitchDialog::~PitchDialog()
 {
 }
 
-void PitchDialog::updateProductionDate(unitDisplay dsp, unitScale scl)
+void PitchDialog::updateProductionDate(Unit::unitDisplay dsp, Unit::unitScale scl)
 {
    QString format;
    // I need the new unit, not the old
-   unitDisplay unitDsp = (unitDisplay)Brewtarget::option("productionDate", Brewtarget::getDateFormat(), "pitchRateCalc", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option("productionDate", Brewtarget::getDateFormat(), "pitchRateCalc", Brewtarget::UNIT).toInt();
 
    switch(unitDsp)
    {
-      case displayUS:
+      case Unit::displayUS:
          format = "MM-dd-yyyy";
          break;
-      case displayImp:
+      case Unit::displayImp:
          format = "dd-MM-yyyy";
          break;
-      case displaySI:
+      case Unit::displaySI:
       default:
          format = "yyyy-MM-dd";
    }

@@ -26,17 +26,17 @@
 SIWeightUnitSystem::SIWeightUnitSystem()
    : UnitSystem()
 {
-   _type = Mass;
+   _type = Unit::Mass;
 }
 
-QMap<unitScale, Unit*> const& SIWeightUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& SIWeightUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleExtraSmall,Units::milligrams);
-      _scaleToUnit.insert(scaleSmall, Units::grams);
-      _scaleToUnit.insert(scaleMedium, Units::kilograms);
+      _scaleToUnit.insert(Unit::scaleExtraSmall,Units::milligrams);
+      _scaleToUnit.insert(Unit::scaleSmall, Units::grams);
+      _scaleToUnit.insert(Unit::scaleMedium, Units::kilograms);
    }
 
    return _scaleToUnit;
@@ -60,5 +60,5 @@ Unit* SIWeightUnitSystem::thicknessUnit()
    return Units::kilograms;
 }
 
-Unit* SIWeightUnitSystem::unit() { return Units::grams; };
+Unit* SIWeightUnitSystem::unit() { return Units::grams; }
 QString SIWeightUnitSystem::unitType() { return "SI"; }

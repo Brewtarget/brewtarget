@@ -23,15 +23,15 @@
 EbcColorUnitSystem::EbcColorUnitSystem()
    : UnitSystem()
 {
-   _type = Color;
+   _type = Unit::Color;
 }
 
-QMap<unitScale, Unit*> const& EbcColorUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& EbcColorUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleWithout, Units::ebc);
+      _scaleToUnit.insert(Unit::scaleWithout, Units::ebc);
    }
 
    return _scaleToUnit;

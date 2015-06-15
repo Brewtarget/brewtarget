@@ -947,7 +947,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -955,7 +955,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -968,7 +968,7 @@
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
-    <signal>labelChanged(unitDisplay,unitScale)</signal>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -976,7 +976,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -986,9 +986,9 @@
  <connections>
   <connection>
    <sender>label_og</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_ogMin</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>43</x>
@@ -1002,9 +1002,9 @@
   </connection>
   <connection>
    <sender>label_og</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_ogMax</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>43</x>
@@ -1018,9 +1018,9 @@
   </connection>
   <connection>
    <sender>label_fg</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_fgMin</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>43</x>
@@ -1034,9 +1034,9 @@
   </connection>
   <connection>
    <sender>label_fg</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_fgMax</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>43</x>
@@ -1050,9 +1050,9 @@
   </connection>
   <connection>
    <sender>label_color</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_colorMin</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>43</x>
@@ -1066,9 +1066,9 @@
   </connection>
   <connection>
    <sender>label_color</sender>
-   <signal>labelChanged(unitDisplay,unitScale)</signal>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_colorMax</receiver>
-   <slot>lineChanged(unitDisplay,unitScale)</slot>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>43</x>

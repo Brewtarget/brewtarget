@@ -90,10 +90,10 @@ public:
    //! \brief Reimplemented from QAbstractTableModel
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
-   unitDisplay displayUnit(int column) const;
-   unitScale displayScale(int column) const;
-   void setDisplayUnit(int column, unitDisplay displayUnit);
-   void setDisplayScale(int column, unitScale displayScale);
+   Unit::unitDisplay displayUnit(int column) const;
+   Unit::unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
+   void setDisplayScale(int column, Unit::unitScale displayScale);
    QString generateName(int column) const;
 
 public slots:
