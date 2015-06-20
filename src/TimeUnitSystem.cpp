@@ -25,18 +25,18 @@
 
 TimeUnitSystem::TimeUnitSystem()
 {
-   _type = Time;
+   _type = Unit::Time;
 }
 
-QMap<unitScale, Unit*> const& TimeUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& TimeUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleExtraSmall,Units::seconds);
-      _scaleToUnit.insert(scaleSmall,Units::minutes);
-      _scaleToUnit.insert(scaleMedium,Units::hours);
-      _scaleToUnit.insert(scaleLarge,Units::days);
+      _scaleToUnit.insert(Unit::scaleExtraSmall,Units::seconds);
+      _scaleToUnit.insert(Unit::scaleSmall,Units::minutes);
+      _scaleToUnit.insert(Unit::scaleMedium,Units::hours);
+      _scaleToUnit.insert(Unit::scaleLarge,Units::days);
    }
 
    return _scaleToUnit;
@@ -56,5 +56,5 @@ QMap<QString, Unit*> const& TimeUnitSystem::qstringToUnit()
    return _qstringToUnit;
 }
 
-Unit* TimeUnitSystem::unit() { return Units::minutes; };
+Unit* TimeUnitSystem::unit() { return Units::minutes; }
 QString TimeUnitSystem::unitType() { return "entropy"; }

@@ -257,8 +257,8 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
 {
    Hop* row;
    int col = index.column();
-   unitScale scale;
-   unitDisplay unit;
+   Unit::unitScale scale;
+   Unit::unitDisplay unit;
 
    // Ensure the row is ok.
    if( index.row() >= (int)hopObs.size() )
@@ -310,7 +310,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
 
          scale = displayScale(col);
 
-         return QVariant( Brewtarget::displayAmount(row->time_min(), Units::minutes, 0, noUnit, scale) );
+         return QVariant( Brewtarget::displayAmount(row->time_min(), Units::minutes, 0, Unit::noUnit, scale) );
       case HOPFORMCOL:
         if ( role == Qt::DisplayRole )
           return QVariant( row->formStringTr() );
@@ -430,31 +430,31 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
    return retVal;
 }
 
-unitDisplay HopTableModel::displayUnit(int column) const
+Unit::unitDisplay HopTableModel::displayUnit(int column) const
 {
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
-      return noUnit;
+      return Unit::noUnit;
 
-   return (unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
+   return (Unit::unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
 }
 
-unitScale HopTableModel::displayScale(int column) const
+Unit::unitScale HopTableModel::displayScale(int column) const
 {
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
-      return noScale;
+      return Unit::noScale;
 
-   return (unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
+   return (Unit::unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
 }
 
 // We need to:
 //   o clear the custom scale if set
 //   o clear any custom unit from the rows
 //      o which should have the side effect of clearing any scale
-void HopTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
+void HopTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
 {
    // Hop* row; // disabled per-cell magic
    QString attribute = generateName(column);
@@ -463,19 +463,19 @@ void HopTableModel::setDisplayUnit(int column, unitDisplay displayUnit)
       return;
 
    Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
-   Brewtarget::setOption(attribute,noScale,this->objectName(),Brewtarget::SCALE);
+   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
 
    /* Disabled cell-specific code
    for (int i = 0; i < rowCount(); ++i )
    {
       row = getHop(i);
-      row->setDisplayUnit(noUnit);
+      row->setDisplayUnit(Unit::noUnit);
    }
    */
 }
 
 // Setting the scale should clear any cell-level scaling options
-void HopTableModel::setDisplayScale(int column, unitScale displayScale)
+void HopTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
 {
    // Fermentable* row; //disabled per-cell magic
 
@@ -490,7 +490,7 @@ void HopTableModel::setDisplayScale(int column, unitScale displayScale)
    for (int i = 0; i < rowCount(); ++i )
    {
       row = getHop(i);
-      row->setDisplayScale(noScale);
+      row->setDisplayScale(Unit::noScale);
    }
    */
 }
@@ -522,8 +522,8 @@ void HopTableModel::contextMenu(const QPoint &point)
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
 
    int selected = hView->logicalIndexAt(point);
-   unitDisplay currentUnit;
-   unitScale  currentScale;
+   Unit::unitDisplay currentUnit;
+   Unit::unitScale  currentScale;
 
    // Since we need to call generateVolumeMenu() two different ways, we need
    // to figure out the currentUnit and Scale here
@@ -552,9 +552,9 @@ void HopTableModel::contextMenu(const QPoint &point)
 
    QWidget* pMenu = invoked->parentWidget();
    if ( selected != HOPTIMECOL && pMenu == menu )
-      setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+      setDisplayUnit(selected,(Unit::unitDisplay)invoked->data().toInt());
    else
-      setDisplayScale(selected,(unitScale)invoked->data().toInt());
+      setDisplayScale(selected,(Unit::unitScale)invoked->data().toInt());
 
 }
 

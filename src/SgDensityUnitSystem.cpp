@@ -23,15 +23,15 @@
 SgDensityUnitSystem::SgDensityUnitSystem()
    : UnitSystem()
 {
-   _type = Density;
+   _type = Unit::Density;
 }
 
-QMap<unitScale, Unit*> const& SgDensityUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& SgDensityUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleWithout,Units::sp_grav);
+      _scaleToUnit.insert(Unit::scaleWithout,Units::sp_grav);
    }
 
    return _scaleToUnit;

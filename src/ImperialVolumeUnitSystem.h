@@ -33,7 +33,7 @@ public:
    Unit* thicknessUnit(); /* Inherited from UnitSystem */
    QString unitType();
 
-   QMap<unitScale, Unit*> const& scaleToUnit();
+   QMap<Unit::unitScale, Unit*> const& scaleToUnit();
    QMap<QString, Unit*> const& qstringToUnit();
    Unit* unit();
 };

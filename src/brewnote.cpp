@@ -346,10 +346,10 @@ QString BrewNote::brewDate_short()  const
   QString format;
   switch (Brewtarget::getDateFormat())
   {
-     case displayUS:
+     case Unit::displayUS:
         format = "MM-dd-yyyy";
         break;
-     case displayImp:
+     case Unit::displayImp:
         format = "dd-MM-yyyy";
         break;
      default:

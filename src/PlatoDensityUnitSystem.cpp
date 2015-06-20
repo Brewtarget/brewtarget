@@ -23,15 +23,15 @@
 PlatoDensityUnitSystem::PlatoDensityUnitSystem()
    : UnitSystem()
 {
-   _type = Density;
+   _type = Unit::Density;
 }
 
-QMap<unitScale, Unit*> const& PlatoDensityUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& PlatoDensityUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleWithout, Units::plato);
+      _scaleToUnit.insert(Unit::scaleWithout, Units::plato);
    }
 
    return _scaleToUnit;

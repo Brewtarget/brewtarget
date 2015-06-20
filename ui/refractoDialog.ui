@@ -57,6 +57,9 @@
             <property name="editField" stdset="0">
              <string notr="true">origPlato</string>
             </property>
+            <property name="forcedUnit" stdset="0">
+             <string notr="true">displayPlato</string>
+            </property>
            </widget>
           </item>
           <item row="1" column="0">
@@ -88,6 +91,9 @@
             </property>
             <property name="editField" stdset="0">
              <string notr="true">inputOG</string>
+            </property>
+            <property name="forcedUnit" stdset="0">
+             <string>displaySg</string>
             </property>
            </widget>
           </item>
@@ -131,6 +137,9 @@
             </property>
             <property name="editField" stdset="0">
              <string notr="true">curP</string>
+            </property>
+            <property name="forcedUnit" stdset="0">
+             <string>displayPlato</string>
             </property>
            </widget>
           </item>
@@ -229,6 +238,9 @@
         <property name="readOnly">
          <bool>true</bool>
         </property>
+        <property name="forcedUnit" stdset="0">
+         <string>displaySg</string>
+        </property>
        </widget>
       </item>
       <item row="5" column="0">
@@ -326,6 +338,9 @@
         <property name="readOnly">
          <bool>true</bool>
         </property>
+        <property name="forcedUnit" stdset="0">
+         <string>displayPlato</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -355,6 +370,9 @@
         <property name="readOnly">
          <bool>true</bool>
         </property>
+        <property name="forcedUnit" stdset="0">
+         <string>displaySg</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -368,7 +386,7 @@
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
-    <slot>lineChanged(unitDisplay,unitScale)</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>

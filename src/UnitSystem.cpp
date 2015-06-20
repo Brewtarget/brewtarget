@@ -86,7 +86,7 @@ double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
    return u->toSI(amt);
 }
 
-QString UnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
+QString UnitSystem::displayAmount( double amount, Unit* units, Unit::unitScale scale )
 {
 
    // Special cases. Make sure the unit isn't null and that we're
@@ -101,8 +101,8 @@ QString UnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
    Unit* last = 0;
 
    // Don't loop if the 'without' key is defined
-   if ( scaleToUnit().contains(scaleWithout) )
-      scale = scaleWithout;
+   if ( scaleToUnit().contains(Unit::scaleWithout) )
+      scale = Unit::scaleWithout;
 
    // If a specific scale is provided, just use that and don't loop.
    if ( scaleToUnit().contains(scale) )
@@ -114,7 +114,7 @@ QString UnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
    // scaleToUnit() is a QMap which means we loop in the  order in which the
    // items were inserted. Order counts, and this map has to be
    // created from smallest to largest scale (e.g., mg, g, kg).
-   QMap<unitScale, Unit*>::const_iterator it;
+   QMap<Unit::unitScale, Unit*>::const_iterator it;
    for( it = scaleToUnit().begin(); it != scaleToUnit().end(); ++it)
    {
       Unit* bob = it.value();
@@ -139,7 +139,7 @@ QString UnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
 
 }
 
-double UnitSystem::amountDisplay( double amount, Unit* units, unitScale scale )
+double UnitSystem::amountDisplay( double amount, Unit* units, Unit::unitScale scale )
 {
    // Special cases. Make sure the unit isn't null and that we're
    // dealing with volume.
@@ -151,8 +151,8 @@ double UnitSystem::amountDisplay( double amount, Unit* units, unitScale scale )
    Unit* last = 0;
 
    // Short circuit if the 'without' key is defined
-   if ( scaleToUnit().contains(scaleWithout) )
-      scale = scaleWithout;
+   if ( scaleToUnit().contains(Unit::scaleWithout) )
+      scale = Unit::scaleWithout;
 
    if ( scaleToUnit().contains(scale) )
    {
@@ -160,7 +160,7 @@ double UnitSystem::amountDisplay( double amount, Unit* units, unitScale scale )
       return bob->fromSI(SIAmount);
    }
 
-   QMap<unitScale, Unit*>::const_iterator it;
+   QMap<Unit::unitScale, Unit*>::const_iterator it;
    for( it = scaleToUnit().begin(); it != scaleToUnit().end(); ++it)
    {
       Unit* bob = it.value();
@@ -179,4 +179,4 @@ double UnitSystem::amountDisplay( double amount, Unit* units, unitScale scale )
 
 }
 
-Unit* UnitSystem::scaleUnit(unitScale scale) { return scaleToUnit().contains(scale) ?  scaleToUnit().value(scale) : 0; }
+Unit* UnitSystem::scaleUnit(Unit::unitScale scale) { return scaleToUnit().contains(scale) ?  scaleToUnit().value(scale) : 0; }

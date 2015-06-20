@@ -26,16 +26,16 @@
 
 USWeightUnitSystem::USWeightUnitSystem()
 {
-   _type = Mass;
+   _type = Unit::Mass;
 }
 
-QMap<unitScale, Unit*> const& USWeightUnitSystem::scaleToUnit()
+QMap<Unit::unitScale, Unit*> const& USWeightUnitSystem::scaleToUnit()
 {
-   static QMap<unitScale, Unit*> _scaleToUnit;
+   static QMap<Unit::unitScale, Unit*> _scaleToUnit;
    if( _scaleToUnit.empty() )
    {
-      _scaleToUnit.insert(scaleExtraSmall,Units::ounces);
-      _scaleToUnit.insert(scaleSmall,Units::pounds);
+      _scaleToUnit.insert(Unit::scaleExtraSmall,Units::ounces);
+      _scaleToUnit.insert(Unit::scaleSmall,Units::pounds);
    }
 
    return _scaleToUnit;
@@ -58,5 +58,5 @@ Unit* USWeightUnitSystem::thicknessUnit()
    return Units::pounds;
 }
 
-Unit* USWeightUnitSystem::unit() { return Units::pounds; };
+Unit* USWeightUnitSystem::unit() { return Units::pounds; }
 QString USWeightUnitSystem::unitType() { return "USCustomary"; }

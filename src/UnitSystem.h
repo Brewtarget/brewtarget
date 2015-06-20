@@ -46,14 +46,14 @@ public:
     * 'amount' of type 'units' in this UnitSystem. This string should also
     * be recognized by qstringToSI()
     */
-   QString displayAmount( double amount, Unit* units, unitScale scale = noScale );
+   QString displayAmount( double amount, Unit* units, Unit::unitScale scale = Unit::noScale );
 
    /*!
     * amountDisplay() should return the double representing the appropriate
     * unit and scale. Similar in nature to displayAmount(), but just returning
     * raw doubles.
     */
-   double amountDisplay( double amount, Unit* units, unitScale scale = noScale );
+   double amountDisplay( double amount, Unit* units, Unit::unitScale scale = Unit::noScale );
 
    /*!
     * qstringToSI() should convert 'qstr' (consisting of a decimal amount,
@@ -62,7 +62,7 @@ public:
     */
    double qstringToSI(QString qstr, Unit* defUnit = 0, bool force = false);
 
-   Unit* scaleUnit(unitScale scale);
+   Unit* scaleUnit(Unit::unitScale scale);
    /*!
     * Returns the unit associated with thickness. If this unit system is
     * US weight, it would return lb. If it were US volume, it would return
@@ -72,13 +72,13 @@ public:
    virtual Unit* unit() = 0;
 
    /*!
-    * \brief Map from a \c unitScale to a concrete \c Unit
+    * \brief Map from a \c Unit::unitScale to a concrete \c Unit
     *
     * \note The implementing subclass is required to create
     *    the map such that the units are inserted from smallest
     *    to largest.
     */
-   virtual QMap<unitScale, Unit*> const& scaleToUnit() = 0;
+   virtual QMap<Unit::unitScale, Unit*> const& scaleToUnit() = 0;
 
    //! \brief Map from SI abbreviation to a concrete \c Unit
    virtual QMap<QString, Unit*> const& qstringToUnit() = 0;
@@ -91,7 +91,7 @@ protected:
    static const char format;
    static const int precision;
 
-   UnitType _type;
+   Unit::UnitType _type;
    QRegExp amtUnit;
 };
 

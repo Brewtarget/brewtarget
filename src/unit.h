@@ -59,17 +59,6 @@ class SgUnit;
 #include <QMultiMap>
 #include <QRegExp>
 
-enum UnitType
-{
-   Mass     = 0x100000,
-   Volume   = 0x200000,
-   Time     = 0x300000,
-   Temp     = 0x400000,
-   Color    = 0x500000,
-   Density  = 0x600000,
-   None     = 0x000000
-};
-
 enum iUnitSystem
 {
     SI = 0,
@@ -86,33 +75,6 @@ enum TempScale
     Kelvin
 };
 
-// DO NOT change noscale's value. Lots of assumptions are made based on this
-// value, both in the code and (more importantly) in the database.
-enum unitScale
-{
-   noScale = -1,
-   scaleExtraSmall = 0,
-   scaleSmall = 1,
-   scaleMedium = 2,
-   scaleLarge = 3,
-   scaleExtraLarge = 4,
-   scaleHuge = 5,
-   scaleWithout=1000
-};
-
-enum unitDisplay
-{
-   noUnit       = -1,
-   displayDef   = 0x000,
-   displaySI    = 0x100,
-   displayUS    = 0x101,
-   displayImp   = 0x102,
-   displaySrm   = 0x200,
-   displayEbc   = 0x201,
-   displaySg    = 0x300,
-   displayPlato = 0x301
-};
-
 // TODO: implement ppm, percent, diastatic power, ibuGalPerLb,
 
 /*!
@@ -124,11 +86,50 @@ enum unitDisplay
 class Unit : public QObject
 {
    Q_OBJECT
+
    Q_ENUMS(unitDisplay)
    Q_ENUMS(unitScale)
    Q_ENUMS(UnitType)
 
    public:
+      // Did you know you need these to be *INSIDE* the class definition for
+      // Qt to see them?
+      enum unitDisplay
+      {
+         noUnit       = -1,
+         displayDef   = 0x000,
+         displaySI    = 0x100,
+         displayUS    = 0x101,
+         displayImp   = 0x102,
+         displaySrm   = 0x200,
+         displayEbc   = 0x201,
+         displaySg    = 0x300,
+         displayPlato = 0x301
+      };
+
+      enum unitScale
+      {
+         noScale = -1,
+         scaleExtraSmall = 0,
+         scaleSmall = 1,
+         scaleMedium = 2,
+         scaleLarge = 3,
+         scaleExtraLarge = 4,
+         scaleHuge = 5,
+         scaleWithout=1000
+      };
+
+      enum UnitType
+      {
+         Mass     = 0x100000,
+         Volume   = 0x200000,
+         Time     = 0x300000,
+         Temp     = 0x400000,
+         Color    = 0x500000,
+         Density  = 0x600000,
+         None     = 0x000000
+      };
+
       virtual ~Unit() {}
       virtual double toSI( double amt ) const =0;// { return amt; }
       virtual double fromSI( double amt ) const =0;// { return amt; }
@@ -137,13 +138,14 @@ class Unit : public QObject
       const QString getUnitName() const { return unitName; }
       const QString getSIUnitName() const { return SIUnitName; }
 
-      const UnitType getUnitType() const { return _type; };
+      const Unit::UnitType getUnitType() const { return _type; };
       const int getUnitOrTempSystem() const { return _unitSystem; };
 
       const double boundary() const { return 1.0; };
 
       static Unit* getUnit(QString& name, bool matchCurrentSystem = true);
       static QString convert(QString qstr, QString toUnit);
+
 
    protected:
       UnitType _type;
@@ -158,7 +160,6 @@ class Unit : public QObject
       static void setupMap();
       static QString unitFromString(QString qstr);
       static double valueFromString(QString qstr);
-
 
 };
 

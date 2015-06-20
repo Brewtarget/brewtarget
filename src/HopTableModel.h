@@ -89,10 +89,10 @@ public:
    // Stuff for setting display units and scales -- per cell first, then by
    // column
 
-   unitDisplay displayUnit(int column) const;
-   unitScale displayScale(int column) const;
-   void setDisplayUnit(int column, unitDisplay displayUnit);
-   void setDisplayScale(int column, unitScale displayScale);
+   Unit::unitDisplay displayUnit(int column) const;
+   Unit::unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
+   void setDisplayScale(int column, Unit::unitScale displayScale);
 
 
    QString generateName(int column) const;
