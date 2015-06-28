@@ -134,33 +134,40 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
    if ( _property.isEmpty() )
       initializeProperties();
 
-
-   // The idea here is we need to first translate the field into a known
-   // amount (aka to SI) and then into the unit we want.
-   switch( _type )
+   if ( text().isEmpty() )
    {
-      case MASS:
-      case VOLUME:
-      case TEMPERATURE:
-      case TIME:
-         val = toSI(oldUnit,oldScale,force);
-         amt = displayAmount(val,3);
-         break;
-      case DENSITY:
-      case COLOR:
-         val = toSI(oldUnit,oldScale,force);
-         amt = displayAmount(val,0);
-         break;
-      case STRING:
-         amt = text();
-         break;
-      case GENERIC:
-      default:
-         val = Brewtarget::toDouble(text(),&ok);
-         if ( ! ok )
-            Brewtarget::logW( QString("BtLineEdit::lineChanged: failed to convert %1 toDouble").arg(text()) );
-         amt = displayAmount(val);
+      amt = "";
    }
+   else
+   {
+      // The idea here is we need to first translate the field into a known
+      // amount (aka to SI) and then into the unit we want.
+      switch( _type )
+      {
+         case MASS:
+         case VOLUME:
+         case TEMPERATURE:
+         case TIME:
+            val = toSI(oldUnit,oldScale,force);
+            amt = displayAmount(val,3);
+            break;
+         case DENSITY:
+         case COLOR:
+            val = toSI(oldUnit,oldScale,force);
+            amt = displayAmount(val,0);
+            break;
+         case STRING:
+            amt = text();
+            break;
+         case GENERIC:
+         default:
+            val = Brewtarget::toDouble(text(),&ok);
+            if ( ! ok )
+               Brewtarget::logW( QString("BtLineEdit::lineChanged: failed to convert %1 toDouble").arg(text()) );
+            amt = displayAmount(val);
+      }
+   }
+
    QLineEdit::setText(amt);
 
    if ( ! force )
@@ -185,7 +192,12 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
    // not forcing the unit & scale, we need to read the configured properties
    if ( ! force )
    {
-      dspUnit   = (Unit::unitDisplay)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
+      // If the display unit is forced, use this unit the default one.
+      if ( _forceUnit != Unit::noUnit )
+         dspUnit = _forceUnit;
+      else
+         dspUnit   = (Unit::unitDisplay)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
+
       dspScale  = (Unit::unitScale)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::SCALE).toInt();
    }
 
