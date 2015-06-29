@@ -95,7 +95,7 @@ void OgAdjuster::calculate()
       sg_20C = sg_15C * Algorithms::getWaterDensity_kgL(15)/Algorithms::getWaterDensity_kgL(20);
 
       plato = Algorithms::SG_20C20C_toPlato( sg_20C );
-      lineEdit_plato->setText(plato);
+      lineEdit_plato->setText( sg_20C ); //Event if the display is in Plato, we must send it in default unit
    }
    else
    {
