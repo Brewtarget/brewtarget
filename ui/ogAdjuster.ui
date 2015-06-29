@@ -257,6 +257,9 @@
               <property name="editField" stdset="0">
                <string notr="true">plato</string>
               </property>
+              <property name="forcedUnit" stdset="0">
+               <string notr="true">displayPlato</string>
+              </property>
              </widget>
             </item>
            </layout>

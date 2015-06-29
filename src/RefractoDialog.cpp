@@ -97,7 +97,9 @@ void RefractoDialog::calculate()
 
    lineEdit_og->setText(og);
    lineEdit_sg->setText(sg);
-   lineEdit_re->setText(re);
+   //Even if the real extract if display in Plato, it must be given in system unit.
+   //Conversion is made by BtLineEdit
+   lineEdit_re->setText(Algorithms::PlatoToSG_20C20C(re));
    lineEdit_abv->setText(abv);
    lineEdit_abw->setText(abw);
 }
