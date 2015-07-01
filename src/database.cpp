@@ -1845,10 +1845,18 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
 // Why no connect here?
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
 {
-   addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", "yeast_children", noCopy, &allYeasts );
-
+   Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, y,
+                                         "yeasts",
+                                         "yeast_in_recipe",
+                                         "yeast_id",
+                                         "yeast_children",
+                                         noCopy, &allYeasts );
+   connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
    if ( ! noCopy )
+   {
       rec->recalcOgFg();
+      rec->recalcABV_pct();
+   }
 }
 
 void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
@@ -1858,11 +1866,17 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
 
    foreach (Yeast* yeast, yeasts )
    {
-      addIngredientToRecipe<Yeast>( rec, yeast,
-                                    "yeasts", "yeast_in_recipe",
-                                    "yeast_id", "yeast_children", false, &allYeasts );
+      Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, yeast,
+                                                   "yeasts",
+                                                   "yeast_in_recipe",
+                                                   "yeast_id",
+                                                   "yeast_children",
+                                                   false, &allYeasts );
+
+      connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
    }
    rec->recalcOgFg();
+   rec->recalcABV_pct();
 }
 
 

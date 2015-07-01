@@ -2034,11 +2034,13 @@ void Recipe::acceptHopChange(Hop* hop)
 void Recipe::acceptYeastChange(QMetaProperty prop, QVariant val)
 {
    recalcOgFg();
+   recalcABV_pct();
 }
 
 void Recipe::acceptYeastChange(Yeast* yeast)
 {
    recalcOgFg();
+   recalcABV_pct();
 }
 
 void Recipe::acceptMashChange(QMetaProperty prop, QVariant val)
