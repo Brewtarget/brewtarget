@@ -14,7 +14,7 @@
    <string>Fermentable Editor</string>
   </property>
   <property name="configSection" stdset="0">
-   <string>fermentableEditor</string>
+   <string notr="true">fermentableEditor</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_18">
    <item>
@@ -28,7 +28,7 @@
         <string>Required Fields</string>
        </property>
        <property name="configSection" stdset="0">
-        <string>fermentableEditor</string>
+        <string notr="true">fermentableEditor</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
