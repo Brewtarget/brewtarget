@@ -108,14 +108,14 @@ OptionDialog::OptionDialog(QWidget* parent)
    dateFormatGroup->setExclusive(true);
 
    // Set up the buttons in the colorGroup
-   colorGroup->addButton(checkBox_mosher);
-   colorGroup->addButton(checkBox_daniel);
-   colorGroup->addButton(checkBox_morey);
+   colorGroup->addButton(radioButton_mosher);
+   colorGroup->addButton(radioButton_daniel);
+   colorGroup->addButton(radioButton_morey);
 
    // Same for ibuGroup.
-   ibuGroup->addButton(checkBox_tinseth);
-   ibuGroup->addButton(checkBox_rager);
-   ibuGroup->addButton(checkBox_noonan);
+   ibuGroup->addButton(radioButton_tinseth);
+   ibuGroup->addButton(radioButton_rager);
+   ibuGroup->addButton(radioButton_noonan);
 
    // Weight
    weightGroup->addButton(weight_si);
@@ -207,21 +207,21 @@ void OptionDialog::saveAndClose()
    QString newUserDataDir;
 
    button = colorGroup->checkedButton();
-   if( button == checkBox_mosher )
+   if( button == radioButton_mosher )
       cformula = Brewtarget::MOSHER;
-   else if( button == checkBox_daniel )
+   else if( button == radioButton_daniel )
       cformula = Brewtarget::DANIEL;
-   else if( button == checkBox_morey )
+   else if( button == radioButton_morey )
       cformula = Brewtarget::MOREY;
    else
       cformula = Brewtarget::MOREY; // Should never get here, but you never know.
    
    button = ibuGroup->checkedButton();
-   if( button == checkBox_tinseth )
+   if( button == radioButton_tinseth )
       iformula = Brewtarget::TINSETH;
-   else if( button == checkBox_rager )
+   else if( button == radioButton_rager )
       iformula = Brewtarget::RAGER;
-   else if( button == checkBox_noonan )
+   else if( button == radioButton_noonan )
       iformula = Brewtarget::NOONAN;
    else
       iformula = Brewtarget::TINSETH; // Should never get here, but you never know.
@@ -373,13 +373,13 @@ void OptionDialog::showChanges()
    switch( Brewtarget::colorFormula )
    {
       case Brewtarget::MOREY:
-         checkBox_morey->setCheckState(Qt::Checked);
+         radioButton_morey->setChecked(true);
          break;
       case Brewtarget::DANIEL:
-         checkBox_daniel->setCheckState(Qt::Checked);
+         radioButton_daniel->setChecked(true);
          break;
       case Brewtarget::MOSHER:
-         checkBox_mosher->setCheckState(Qt::Checked);
+         radioButton_mosher->setChecked(true);
          break;
    }
 
@@ -387,13 +387,13 @@ void OptionDialog::showChanges()
    switch( Brewtarget::ibuFormula )
    {
       case Brewtarget::TINSETH:
-         checkBox_tinseth->setCheckState(Qt::Checked);
+         radioButton_tinseth->setChecked(true);
          break;
       case Brewtarget::RAGER:
-         checkBox_rager->setCheckState(Qt::Checked);
+         radioButton_rager->setChecked(true);
          break;
       case Brewtarget::NOONAN:
-         checkBox_noonan->setCheckState(Qt::Checked);
+         radioButton_noonan->setChecked(true);
          break;
    }
 
