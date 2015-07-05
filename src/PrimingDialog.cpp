@@ -91,6 +91,8 @@ void PrimingDialog::calculate()
    }
    else
       sugar_g = 0;
-   
-   lineEdit_output->setText( sugar_g );
+
+   //The amount have to be set in default unit to BtLineEdit.
+   //We should find a better solution, but until it is not, we must do it this way.
+   lineEdit_output->setText( sugar_g/1000 );
 }

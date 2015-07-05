@@ -130,7 +130,7 @@ void PitchDialog::calculate()
 
    lineEdit_cells->setText(cells/1e9, 1);
    lineEdit_starterVol->setText(starterVol_l);
-   lineEdit_yeast->setText(dry_g);
+   lineEdit_yeast->setText(dry_g/1000); //Needs to be converted into default unit (kg)
    lineEdit_vials->setText(vials,0);
 }
 
