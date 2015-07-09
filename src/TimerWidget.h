@@ -26,8 +26,10 @@
 #include <QTimer>
 #include <QString>
 #include <QPalette>
+#ifndef NO_QTMULTIMEDIA
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#endif
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLCDNumber>
@@ -95,8 +97,10 @@ private:
    QTimer* timer;
    QTimer* flashTimer;
    QPalette paletteOld, paletteNew;
+#ifndef NO_QTMULTIMEDIA
    QMediaPlayer* mediaPlayer;
    QMediaPlaylist* playlist;
+#endif
    bool oldColors;
 };
 
