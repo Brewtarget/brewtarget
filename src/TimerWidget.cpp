@@ -43,8 +43,10 @@ TimerWidget::TimerWidget(QWidget* parent)
      flashTimer(new QTimer(this)),
      paletteOld(),
      paletteNew(),
+#ifndef NO_QTMULTIMEDIA
      mediaPlayer(new QMediaPlayer(this)),
      playlist(new QMediaPlaylist(mediaPlayer)),
+#endif
      oldColors(true)
 {
    doLayout();
@@ -53,9 +55,11 @@ TimerWidget::TimerWidget(QWidget* parent)
    timer->setInterval(1000);
    flashTimer->setInterval(500);
 
+#ifndef NO_QTMULTIMEDIA
    playlist->setPlaybackMode(QMediaPlaylist::Loop);
    mediaPlayer->setVolume(100);
    mediaPlayer->setPlaylist(playlist);
+#endif
 
    paletteOld = lcdNumber->palette();
    paletteNew = QPalette(paletteOld);
@@ -75,8 +79,10 @@ TimerWidget::TimerWidget(QWidget* parent)
 
 TimerWidget::~TimerWidget()
 {
+#ifndef NO_QTMULTIMEDIA
    mediaPlayer->stop();
    playlist->clear();
+#endif
 }
 
 void TimerWidget::doLayout()
@@ -160,13 +166,13 @@ void TimerWidget::getSound()
       Brewtarget::logW("Null sound file.");
       return;
    }
-
+#ifndef NO_QTMULTIMEDIA
    if( !playlist->clear() )
       Brewtarget::logW(playlist->errorString());
    if( !playlist->addMedia(QUrl::fromLocalFile(soundFile)) )
       Brewtarget::logW(playlist->errorString());
    playlist->setCurrentIndex(0);
-
+#endif
    // Indicate a sound is loaded
    pushButton_sound->setCheckable(true);
    pushButton_sound->setChecked(true);
@@ -191,7 +197,9 @@ void TimerWidget::flash()
 
 void TimerWidget::setTimer()
 {
+#ifndef NO_QTMULTIMEDIA
    mediaPlayer->stop();
+#endif
    stopFlashing();
 
    setTimer(lineEdit->text());
@@ -210,7 +218,9 @@ void TimerWidget::endTimer()
    timer->stop();
    flashTimer->start();
 
+#ifndef NO_QTMULTIMEDIA
    mediaPlayer->play();
+#endif
 }
 
 void TimerWidget::setTimer(QString text)
@@ -280,7 +290,9 @@ void TimerWidget::startStop()
    else
    {
       timer->stop();
+#ifndef NO_QTMULTIMEDIA
       mediaPlayer->stop();
+#endif
       stopFlashing();
       pushButton_startStop->setText(tr("Start"));
       start = true;

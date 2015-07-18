@@ -25,6 +25,9 @@ OPTION( DO_RELEASE_BUILD
 OPTION( NO_MESSING_WITH_FLAGS
         "On means do not add any build flags whatsoever. May override other options."
         OFF )
+OPTION( NO_QTMULTIMEDIA
+        "On means QtMultimedia won't be linked to the final binary and related functionalities will be disabled."
+        OFF )
 
 # Do this right off the bat
 ENABLE_TESTING()
@@ -41,6 +44,10 @@ IF( NOT ${NO_MESSING_WITH_FLAGS} )
       SET( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe" )
       SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pipe" )
    ENDIF()
+ENDIF()
+
+IF( ${NO_QTMULTIMEDIA} )
+   ADD_DEFINITIONS( -DNO_QTMULTIMEDIA )
 ENDIF()
 
 IF( ${DO_RELEASE_BUILD} )
@@ -114,8 +121,10 @@ INCLUDE_DIRECTORIES(${Qt5WebKitWidgets_INCLUDE_DIRS})
 FIND_PACKAGE(Qt5Xml REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Xml_INCLUDE_DIRS})
 
+IF( NOT ${NO_QTMULTIMEDIA} )
 FIND_PACKAGE(Qt5Multimedia REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
+ENDIF()
 
 FIND_PACKAGE(Qt5Test REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Test_INCLUDE_DIRS})
@@ -341,8 +350,9 @@ SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 #==========================Find dlls for Win32=================================
 
 IF( WIN32 )
-
+   IF( NOT ${NO_QTMULTIMEDIA} )
    FIND_PACKAGE(Qt5MultimediaWidgets REQUIRED)
+   ENDIF()
    FIND_PACKAGE(Qt5OpenGL REQUIRED)
    FIND_PACKAGE(Qt5Sensors REQUIRED)
    FIND_PACKAGE(Qt5Quick REQUIRED)
@@ -350,8 +360,10 @@ IF( WIN32 )
 
    GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtGui_location Qt5::Gui LOCATION_${CMAKE_BUILD_TYPE})
+   IF( NOT ${NO_QTMULTIMEDIA} )
    GET_TARGET_PROPERTY(QtMultimedia_location Qt5::Multimedia LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtMultimediaWidgets_location Qt5::MultimediaWidgets LOCATION_${CMAKE_BUILD_TYPE})
+   ENDIF()
    GET_TARGET_PROPERTY(QtNetwork_location Qt5::Network LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtOpenGL_location Qt5::OpenGL LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtPositioning_location Qt5::Positioning LOCATION_${CMAKE_BUILD_TYPE})
@@ -386,14 +398,19 @@ IF( WIN32 )
         ${QtXml_location}
         ${QtWebKit_location}
         ${QtGui_location}
-        ${QtMultimedia_location}
-        ${QtMultimediaWidgets_location}
         ${QtWebKitWidgets_location}
         ${QtOpenGL_location}
         ${QtSensors_location}
         ${QtQuick_location}
         ${QtPositioning_location}
    )
+   IF( NOT ${NO_QTMULTIMEDIA})
+      SET( Qt_DLLs,
+        ${Qt_DLLs}
+        ${QtMultimedia_location}
+        ${QtMultimediaWidgets_location}
+   )
+   ENDIF()
    IF (${Qt5Core_VERSION_STRING} VERSION_GREATER "5.3.0")
       FIND_PACKAGE(Qt5WebChannel REQUIRED)
       GET_TARGET_PROPERTY(QtWebChannel_location Qt5::WebChannel LOCATION_${CMAKE_BUILD_TYPE})

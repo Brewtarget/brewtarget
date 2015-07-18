@@ -378,9 +378,9 @@ IF( WIN32 AND MINGW )
    SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-Wl,-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows")
 ENDIF()
 
-QT5_USE_MODULES( ${brewtarget_EXECUTABLE}
+SET( QT5_USE_MODULES_LIST
+   ${brewtarget_EXECUTABLE}
    Widgets
-   Multimedia
    Network
    PrintSupport
    Qml
@@ -388,7 +388,13 @@ QT5_USE_MODULES( ${brewtarget_EXECUTABLE}
    Xml
    WebKit
    WebKitWidgets
-)
+   )
+
+IF( NOT ${NO_QTMULTIMEDIA})
+SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Multimedia)
+ENDIF()
+
+QT5_USE_MODULES( ${QT5_USE_MODULES_LIST})
 
 #=================================Tests========================================
 
@@ -400,10 +406,9 @@ ADD_EXECUTABLE(
    $<TARGET_OBJECTS:btobjlib>
 )
 
-QT5_USE_MODULES(
+SET( QT5_USE_MODULES_LIST
    brewtarget_tests
    Widgets
-   Multimedia
    Network
    PrintSupport
    Qml
@@ -412,7 +417,13 @@ QT5_USE_MODULES(
    WebKit
    WebKitWidgets
    Test
-)
+   )
+
+IF( NOT ${NO_QTMULTIMEDIA})
+SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Multimedia)
+ENDIF()
+
+QT5_USE_MODULES(${QT5_USE_MODULES_LIST})
 
 ADD_TEST(
    NAME pstdintTest
