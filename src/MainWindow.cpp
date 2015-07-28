@@ -400,6 +400,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionRecipePreview, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionRecipeHTML, SIGNAL(triggered()), this, SLOT(print()));
+   connect( actionRecipeBBCode, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
@@ -849,21 +850,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    ibuGuSlider->setValue(recipeObs->IBU()/((recipeObs->og()-1)*1000));
 
-   // Do some work for the calories per ??
-   // The hard part is that we store it as calories per 12oz. The adjust
-   // roughly converts between 12 oz and 33cL
-   double adjust;
-   if ( Brewtarget::volumeUnitSystem == SI ) 
-   {
-      adjust = 3.3/3.55;
-      label_caloriesper->setText(tr("calories/33cL"));
-   }
-   else
-   {
-      adjust = 1;
-      label_caloriesper->setText(tr("calories/12oz"));
-   }
-   label_calories->setText( QString("%1").arg(recipeObs->calories() * adjust,0,'f',0) );
+   label_calories->setText( QString("%1").arg( Brewtarget::getVolumeUnitSystem() == SI ? recipeObs->calories33cl() : recipeObs->calories12oz(),0,'f',0) );
 
    // See if we need to change the mash in the table.
    if( (updateAll && recipeObs->mash()) ||
@@ -1997,6 +1984,10 @@ void MainWindow::print()
       selection == actionRecipeHTML ? recipeFormatter->print(printer, 0, RecipeFormatter::HTML, outfile) :
                                       brewDayScrollWidget->print(printer, 0, BrewDayScrollWidget::HTML, outfile);
       delete outfile;
+   }
+   else if ( selection == actionRecipeBBCode )
+   {
+      QApplication::clipboard()->setText(recipeFormatter->getBBCodeFormat());
    }
 }
 

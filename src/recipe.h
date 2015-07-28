@@ -164,7 +164,7 @@ public:
    //! \brief The calculated final volume into the primary in liters.
    Q_PROPERTY( double finalVolume_l READ finalVolume_l /*WRITE*/ /*NOTIFY changed*/ /*changedEstimateFinalVolume_l*/ STORED false)
    //! \brief The calculated Calories per 12 oz. (kcal).
-   Q_PROPERTY( double calories READ calories /*WRITE*/ /*NOTIFY changed*/ /*changedEstimateCalories*/ STORED false)
+   Q_PROPERTY( double calories READ calories12oz /*WRITE*/ /*NOTIFY changed*/ /*changedEstimateCalories*/ STORED false)
    //! \brief The amount of grains in the mash in kg.
    Q_PROPERTY( double grainsInMash_kg READ grainsInMash_kg /*WRITE*/ /*NOTIFY changed*/ /*changedGrainsInMash_kg*/ STORED false)
    //! \brief The total amount of grains in the recipe in kg.
@@ -272,7 +272,8 @@ public:
    double boilVolume_l();
    double postBoilVolume_l();
    double finalVolume_l();
-   double calories();
+   double calories12oz();
+   double calories33cl();
    double grainsInMash_kg();
    double grains_kg();
    QList<double> IBUs();

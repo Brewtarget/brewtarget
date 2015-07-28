@@ -181,13 +181,13 @@ QString BrewDayWidget::buildTitleTable()
            .arg(tr("Boil Volume"))
            .arg(Brewtarget::displayAmount(recObs->boilSize_l(),Units::liters,2))
            .arg(tr("Preboil Gravity"))
-           .arg(Brewtarget::displayAmount(recObs->boilGrav(), Units::sp_grav,0));
+           .arg(Brewtarget::displayAmount(recObs->boilGrav(), Units::sp_grav, 3));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Final Volume"))
            .arg(Brewtarget::displayAmount(recObs->batchSize_l(), Units::liters,2))
            .arg(tr("Starting Gravity"))
-           .arg(Brewtarget::displayAmount(recObs->og(), Units::sp_grav, 0));
+           .arg(Brewtarget::displayAmount(recObs->og(), Units::sp_grav, 3));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Boil Time"))
@@ -198,8 +198,8 @@ QString BrewDayWidget::buildTitleTable()
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
            .arg(tr("Predicted Efficiency"))
            .arg(Brewtarget::displayAmount(recObs->efficiency_pct(),0,0))
-           .arg(tr("Estimated calories (per 12 oz)"))
-           .arg(Brewtarget::displayAmount(recObs->calories(),0,0));
+           .arg(Brewtarget::getVolumeUnitSystem() == SI ? tr("Estimated calories (per 33 cl)") : tr("Estimated calories (per 12 oz)"))
+           .arg(Brewtarget::displayAmount(Brewtarget::getVolumeUnitSystem() == SI ? recObs->calories33cl() : recObs->calories12oz(),0,0));
 
    body += "</table>";
 

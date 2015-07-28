@@ -253,6 +253,8 @@ public:
    static Unit::unitDisplay getDensityUnit();
    //! \return the date format
    static Unit::unitDisplay getDateFormat();
+   //! \return the volume system
+   static iUnitSystem getVolumeUnitSystem();
 
    //! \brief Read options from file. This is deprecated, but we need it
    // around for the conversion
@@ -389,8 +391,6 @@ private:
 
    //! \return the weight system
    static iUnitSystem getWeightUnitSystem();
-   //! \return the volume system
-   static iUnitSystem getVolumeUnitSystem();
    //! \return the temperature scale
    static TempScale getTemperatureScale();
    //! \return the color units

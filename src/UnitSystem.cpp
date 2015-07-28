@@ -86,8 +86,13 @@ double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
    return u->toSI(amt);
 }
 
-QString UnitSystem::displayAmount( double amount, Unit* units, Unit::unitScale scale )
+QString UnitSystem::displayAmount( double amount, Unit* units, int precision, Unit::unitScale scale )
 {
+   // If the precision is not specified, we take the default one
+   if( precision < 0)
+   {
+      precision = this->precision;
+   }
 
    // Special cases. Make sure the unit isn't null and that we're
    // dealing with volume.

@@ -694,7 +694,7 @@ void Recipe::generateInstructions()
    addPreinstructions(miscSteps(Misc::Primary));
 
    str = tr("Let ferment until FG is %1.")
-         .arg(Brewtarget::displayAmount(fg(), "tab_recipe", "fg", Units::sp_grav));
+         .arg(Brewtarget::displayAmount(fg(), "tab_recipe", "fg", Units::sp_grav, 3));
    ins = Database::instance().newInstruction(this);
    ins->setName(tr("Ferment"));
    ins->setDirections(str);
@@ -1189,11 +1189,18 @@ double Recipe::boilGrav()
    return _boilGrav;
 }
 
-double Recipe::calories()
+double Recipe::calories12oz()
 {
    if( _uninitializedCalcs )
       recalcAll();
    return _calories;
+}
+
+double Recipe::calories33cl()
+{
+   if( _uninitializedCalcs )
+      recalcAll();
+   return _calories*3.3/3.55;
 }
 
 double Recipe::wortFromMash_l()

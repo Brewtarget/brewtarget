@@ -67,9 +67,11 @@ public:
    //! Get the maximum number of characters in a list of strings.
    unsigned int getMaxLength( QStringList* list );
    //! Prepend a string with spaces until its final length is the given length.
-   QString padToLength( QString str, unsigned int length );
+   QString padToLength( const QString &str, unsigned int length );
    //! Same as \b padToLength but with multiple strings.
-   void padAllToMaxLength( QStringList* list );
+   void padAllToMaxLength( QStringList* list, unsigned int padding=2 );
+   //! Return the text wrapped with the given length
+   QString wrapText( const QString &text, int wrapLength );
    
    //! Send a printable version to the printer.
    void print(QPrinter *mainPrinter, QPrintDialog* dialog, int action = PRINT, QFile* outFile=0);
@@ -81,15 +83,23 @@ public slots:
 private:
    QString getTextSeparator();
 
-   QString buildTitleTable();
-   QString buildFermentableTable();
-   QString buildHopsTable();
-   QString buildYeastTable();
-   QString buildMashTable();
-   QString buildMiscTable();
-   QString buildNotes();
-   QString buildInstructionTable();
-   QString buildBrewNotes();
+   QString buildStatTableHtml();
+   QString buildStatTableTxt();
+   QString buildFermentableTableHtml();
+   QString buildFermentableTableTxt();
+   QString buildHopsTableHtml();
+   QString buildHopsTableTxt();
+   QString buildYeastTableHtml();
+   QString buildYeastTableTxt();
+   QString buildMashTableHtml();
+   QString buildMashTableTxt();
+   QString buildMiscTableHtml();
+   QString buildMiscTableTxt();
+   QString buildNotesHtml();
+   QString buildInstructionTableHtml();
+   QString buildInstructionTableTxt();
+   QString buildBrewNotesHtml();
+   QString buildBrewNotesTxt();
    QString getCSS();
 
    QList<Hop*> sortHopsByTime(Recipe* rec);

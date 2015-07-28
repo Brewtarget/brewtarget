@@ -1139,7 +1139,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, Un
    if ( temp == 0 )
       ret = QString("%L1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
 
-   ret = temp->displayAmount( amount, units, displayScale );
+   ret = temp->displayAmount( amount, units, precision, displayScale );
 
    return ret;
 }
