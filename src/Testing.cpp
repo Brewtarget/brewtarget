@@ -66,7 +66,7 @@ void Testing::initTestCase()
    cascade_4pct->setUse(Hop::Boil);
    cascade_4pct->setTime_min(60);
    cascade_4pct->setType(Hop::Both);
-   cascade_4pct->setForm(Hop::Pellet);
+   cascade_4pct->setForm(Hop::Leaf);
 
    // 70% yield, no moisture, 2 SRM
    twoRow = Database::instance().newFermentable();
