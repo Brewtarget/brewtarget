@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
-    <height>250</height>
+    <width>569</width>
+    <height>260</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>80</width>
+            <width>128</width>
             <height>16777215</height>
            </size>
           </property>
@@ -80,7 +80,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>80</width>
+            <width>128</width>
             <height>16777215</height>
            </size>
           </property>
@@ -112,7 +112,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>80</width>
+            <width>128</width>
             <height>16777215</height>
            </size>
           </property>
@@ -201,7 +201,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>120</width>
+            <width>128</width>
             <height>16777215</height>
            </size>
           </property>
@@ -254,6 +254,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>BtTemperatureEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
@@ -303,11 +308,6 @@
     <slot>lineChanged()</slot>
     <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
