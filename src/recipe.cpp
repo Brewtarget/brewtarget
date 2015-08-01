@@ -1,6 +1,6 @@
 /*
  * recipe.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Kregg K <gigatropolis@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -1906,11 +1906,23 @@ double Recipe::ibuFromHop(Hop const* hop)
    else if( hop->use() == Hop::Mash && mashHopAdjust > 0.0 )
       ibus = mashHopAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime );
 
-   // Adjust for hop form.
-   if( hop->form() == Hop::Leaf )
-      ibus *= 0.90;
-   else if( hop->form() == Hop::Plug )
-      ibus *= 0.92;
+   // Adjust for hop form. Tinseth's table was created from whole cone data,
+   // and it seems other formulae are optimized that way as well. So, the
+   // utilization is considered unadjusted for whole cones, and adjusted
+   // up for plugs and pellets.
+   //
+   // - http://www.realbeer.com/hops/FAQ.html
+   // - https://groups.google.com/forum/#!topic/brewtarget-help/mv2qvWBC4sU
+   switch( hop->form() ) {
+   case Hop::Plug:
+      hopUtilization *= 1.02;
+      break;
+   case Hop::Pellet:
+      hopUtilization *= 1.10;
+      break;
+   default:
+      break;
+   }
 
    // Adjust for hop utilization. 
    ibus *= hopUtilization;
