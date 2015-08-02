@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>383</width>
-    <height>223</height>
+    <width>434</width>
+    <height>256</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,15 +36,9 @@
           </item>
           <item row="0" column="1">
            <widget class="BtDensityEdit" name="lineEdit_op">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>0</height>
-             </size>
-            </property>
             <property name="maximumSize">
              <size>
-              <width>64</width>
+              <width>128</width>
               <height>16777215</height>
              </size>
             </property>
@@ -74,15 +68,9 @@
           </item>
           <item row="1" column="1">
            <widget class="BtDensityEdit" name="lineEdit_inputOG">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>0</height>
-             </size>
-            </property>
             <property name="maximumSize">
              <size>
-              <width>64</width>
+              <width>128</width>
               <height>16777215</height>
              </size>
             </property>
@@ -120,15 +108,9 @@
           </item>
           <item row="0" column="1">
            <widget class="BtDensityEdit" name="lineEdit_cp">
-            <property name="minimumSize">
-             <size>
-              <width>60</width>
-              <height>0</height>
-             </size>
-            </property>
             <property name="maximumSize">
              <size>
-              <width>64</width>
+              <width>128</width>
               <height>16777215</height>
              </size>
             </property>
@@ -194,15 +176,9 @@
      <layout class="QFormLayout" name="formLayout_2">
       <item row="1" column="1">
        <widget class="BtGenericEdit" name="lineEdit_ri">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="maximumSize">
          <size>
-          <width>64</width>
+          <width>128</width>
           <height>16777215</height>
          </size>
         </property>
@@ -223,15 +199,9 @@
       </item>
       <item row="3" column="1">
        <widget class="BtDensityEdit" name="lineEdit_sg">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="maximumSize">
          <size>
-          <width>64</width>
+          <width>128</width>
           <height>16777215</height>
          </size>
         </property>
@@ -255,15 +225,9 @@
       </item>
       <item row="5" column="1">
        <widget class="BtGenericEdit" name="lineEdit_abv">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="maximumSize">
          <size>
-          <width>64</width>
+          <width>128</width>
           <height>16777215</height>
          </size>
         </property>
@@ -284,15 +248,9 @@
       </item>
       <item row="6" column="1">
        <widget class="BtGenericEdit" name="lineEdit_abw">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="maximumSize">
          <size>
-          <width>64</width>
+          <width>128</width>
           <height>16777215</height>
          </size>
         </property>
@@ -323,15 +281,9 @@
       </item>
       <item row="4" column="1">
        <widget class="BtDensityEdit" name="lineEdit_re">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="maximumSize">
          <size>
-          <width>64</width>
+          <width>128</width>
           <height>16777215</height>
          </size>
         </property>
@@ -355,15 +307,9 @@
       </item>
       <item row="2" column="1">
        <widget class="BtDensityEdit" name="lineEdit_og">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="maximumSize">
          <size>
-          <width>64</width>
+          <width>128</width>
           <height>16777215</height>
          </size>
         </property>
