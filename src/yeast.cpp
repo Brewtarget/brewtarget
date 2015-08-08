@@ -86,10 +86,10 @@ const QString Yeast::typeString() const { return types.at(type()); }
 const QString Yeast::formString() const { return forms.at(form()); }
 const QString Yeast::flocculationString() const { return flocculations.at(flocculation()); }
 
-double Yeast::amount() const { return Brewtarget::toDouble(get("amount").toString(), "Yeast::amount()"); }
-double Yeast::minTemperature_c() const { return Brewtarget::toDouble(get("min_temperature").toString(), "Yeast::minTemperature_c()"); }
-double Yeast::maxTemperature_c() const { return Brewtarget::toDouble(get("max_temperature").toString(), "Yeast::maxTemperature_c()"); }
-double Yeast::attenuation_pct() const { return Brewtarget::toDouble(get("attenuation").toString(), "Yeast::attenuation_pct()"); }
+double Yeast::amount() const { return get("amount").toDouble(); }
+double Yeast::minTemperature_c() const { return get("min_temperature").toDouble(); }
+double Yeast::maxTemperature_c() const { return get("max_temperature").toDouble(); }
+double Yeast::attenuation_pct() const { return get("attenuation").toDouble(); }
 
 int Yeast::inventory() const { return getInventory("quanta").toInt(); }
 int Yeast::timesCultured() const { return get("times_cultured").toInt(); }

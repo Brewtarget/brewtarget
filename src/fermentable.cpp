@@ -222,24 +222,20 @@ const QString Fermentable::typeStringTr() const
    return typesTr.at(type());
 }
 
-double Fermentable::amount_kg()              const { return Brewtarget::toDouble(get("amount").toString(), "Fermentable::amount_kg()"); }
-double Fermentable::yield_pct()              const { return Brewtarget::toDouble(get("yield").toString(), "Fermentable::yield_pct()"); }
-double Fermentable::color_srm()              const { return Brewtarget::toDouble(get("color").toString(), "Fermentable::color_srm()"); }
-double Fermentable::coarseFineDiff_pct()     const { return Brewtarget::toDouble(get("coarse_fine_diff").toString(), "Fermentable::coarseFineDiff_pct()"); }
-double Fermentable::moisture_pct()           const { return Brewtarget::toDouble(get("moisture").toString(), "Fermentable::moisture_pct()"); }
-double Fermentable::diastaticPower_lintner() const { return Brewtarget::toDouble(get("diastatic_power").toString(), "Fermentable::diastaticPower_lintner()"); }
-double Fermentable::protein_pct()            const { return Brewtarget::toDouble(get("protein").toString(), "Fermentable::protein_pct()"); }
-double Fermentable::maxInBatch_pct()         const { return Brewtarget::toDouble(get("max_in_batch").toString(), "Fermentable::maxInBatch_pct()"); }
-double Fermentable::ibuGalPerLb()            const { return Brewtarget::toDouble(get("ibu_gal_per_lb").toString(), "Fermentable::ibuGalPerLb()"); }
+double Fermentable::amount_kg()              const { return get("amount").toDouble(); }
+double Fermentable::yield_pct()              const { return get("yield").toDouble(); }
+double Fermentable::color_srm()              const { return get("color").toDouble(); }
+double Fermentable::coarseFineDiff_pct()     const { return get("coarse_fine_diff").toDouble(); }
+double Fermentable::moisture_pct()           const { return get("moisture").toDouble(); }
+double Fermentable::diastaticPower_lintner() const { return get("diastatic_power").toDouble(); }
+double Fermentable::protein_pct()            const { return get("protein").toDouble(); }
+double Fermentable::maxInBatch_pct()         const { return get("max_in_batch").toDouble(); }
+double Fermentable::ibuGalPerLb()            const { return get("ibu_gal_per_lb").toDouble(); }
 
 // inventory must be handled separately, to my great annoyance
 double Fermentable::inventory() const 
 { 
-   QString amount = getInventory("amount").toString();
-
-   double amt = Brewtarget::toDouble( amount, "Fermentable::getInventory()");
-
-   return amt;
+   return getInventory("amount").toDouble();
 }
 
 bool Fermentable::addAfterBoil() const { return get("add_after_boil").toBool(); }
