@@ -295,24 +295,20 @@ const QString Hop::formString() const { return get("form").toString(); }
 const QString Hop::origin() const { return get("origin").toString(); }
 const QString Hop::substitutes() const { return get("substitutes").toString(); }
 
-double Hop::alpha_pct()          const { return Brewtarget::toDouble(get("alpha").toString(), "Hop::alpha_pct()"); }
-double Hop::amount_kg()          const { return Brewtarget::toDouble(get("amount").toString(), "Hop::amount_kg()"); }
-double Hop::time_min()           const { return Brewtarget::toDouble(get("time").toString(), "Hop::time_min()"); }
-double Hop::beta_pct()           const { return Brewtarget::toDouble(get("beta").toString(), "Hop::beta_pct()"); }
-double Hop::hsi_pct()            const { return Brewtarget::toDouble(get("hsi").toString(), "Hop::hsi_pct()"); }
-double Hop::humulene_pct()       const { return Brewtarget::toDouble(get("humulene").toString(), "Hop::humulene_pct()"); }
-double Hop::caryophyllene_pct()  const { return Brewtarget::toDouble(get("caryophyllene").toString(), "Hop::caryophyllene_pct()"); }
-double Hop::cohumulone_pct()     const { return Brewtarget::toDouble(get("cohumulone").toString(), "Hop::cohumulone_pct()"); }
-double Hop::myrcene_pct()        const { return Brewtarget::toDouble(get("myrcene").toString(), "Hop::myrcene_pct()"); }
+double Hop::alpha_pct()          const { return get("alpha").toDouble(); }
+double Hop::amount_kg()          const { return get("amount").toDouble(); }
+double Hop::time_min()           const { return get("time").toDouble(); }
+double Hop::beta_pct()           const { return get("beta").toDouble(); }
+double Hop::hsi_pct()            const { return get("hsi").toDouble(); }
+double Hop::humulene_pct()       const { return get("humulene").toDouble(); }
+double Hop::caryophyllene_pct()  const { return get("caryophyllene").toDouble(); }
+double Hop::cohumulone_pct()     const { return get("cohumulone").toDouble(); }
+double Hop::myrcene_pct()        const { return get("myrcene").toDouble(); }
 
 // inventory still must be handled separately, and I'm still annoyed.
 double Hop::inventory() const
-{ 
-   QString amount = getInventory("amount").toString();
-
-   double amt = Brewtarget::toDouble( amount, "Hop::getInventory()");
-
-   return amt;
+{
+   return getInventory("amount").toDouble();
 }
  
 
