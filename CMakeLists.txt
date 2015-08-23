@@ -135,6 +135,7 @@ INCLUDE_DIRECTORIES(${Qt5LinguistTools_INCLUDE_DIRS})
 # Need to find SVG component to locate svg dlls later
 IF(WIN32)
    FIND_PACKAGE(Qt5Svg REQUIRED)
+   INCLUDE_DIRECTORIES(${Qt5Svg_INCLUDE_DIRS})
 ENDIF()
 
 # Fuckin Qt5 requires -fPIC if Qt5 itself was built with -fPIC
@@ -372,6 +373,7 @@ IF( WIN32 )
    GET_TARGET_PROPERTY(QtQuick_location Qt5::Quick LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtSensors_location Qt5::Sensors LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtSql_location Qt5::Sql LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtSvg_location Qt5::Svg LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtWebKit_location Qt5::WebKit LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtWebKitWidgets_location Qt5::WebKitWidgets LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtWidgets_location Qt5::Widgets LOCATION_${CMAKE_BUILD_TYPE})
@@ -395,6 +397,7 @@ IF( WIN32 )
         ${QtPrintSupport_location}
         ${QtQml_location}
         ${QtSql_location}
+        ${QtSvg_location}
         ${QtXml_location}
         ${QtWebKit_location}
         ${QtGui_location}
@@ -405,7 +408,7 @@ IF( WIN32 )
         ${QtPositioning_location}
    )
    IF( NOT ${NO_QTMULTIMEDIA})
-      SET( Qt_DLLs,
+      SET( Qt_DLLs
         ${Qt_DLLs}
         ${QtMultimedia_location}
         ${QtMultimediaWidgets_location}
@@ -438,14 +441,14 @@ IF( WIN32 )
          FIND_PATH(MINGW_BIN_DIR "mingw32-make.exe")
       ENDIF()
      IF( NOT EXISTS ${MINGW_BIN_DIR} )
-        MESSAGE( FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw" )
+        MESSAGE( FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw/bin" )
      ELSE()
         SET( Qt_DLLs
              ${Qt_DLLs}
              ${IcuDlls}
-             ${MINGW_BIN_DIR}/bin/libgcc_s_dw2-1.dll
-             ${MINGW_BIN_DIR}/bin/libstdc++-6.dll
-             ${MINGW_BIN_DIR}/bin/libwinpthread-1.dll
+             ${MINGW_BIN_DIR}/libgcc_s_dw2-1.dll
+             ${MINGW_BIN_DIR}/libstdc++-6.dll
+             ${MINGW_BIN_DIR}/libwinpthread-1.dll
         )
      ENDIF()
    ENDIF()
