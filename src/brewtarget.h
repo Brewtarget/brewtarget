@@ -179,10 +179,10 @@ public:
     *  \param units the units that \c amount is in
     *  \param precision how many decimal places
     *  \param unitDisplay which unit system to use, defaulting to "noUnit" which means use the system default
-    *  \param Unit::Unit::unitScale which scale to use, defaulting to Unit::Unit::noScale which means use the largest scale that generates a value > 1
+    *  \param Unit::unitScale which scale to use, defaulting to Unit::noScale which means use the largest scale that generates a value > 1
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3,
-                                 Unit::unitDisplay displayUnit = Unit::noUnit, Unit::Unit::unitScale displayScale = Unit::Unit::noScale );
+                                 Unit::unitDisplay displayUnit = Unit::noUnit, Unit::unitScale displayScale = Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
     *
@@ -213,7 +213,7 @@ public:
     *  \param precision how many decimal places
     */
    static double amountDisplay( double amount, Unit* units=0, int precision=3,
-                                 Unit::unitDisplay displayUnit = Unit::noUnit, Unit::Unit::unitScale displayScale = Unit::Unit::noScale );
+                                 Unit::unitDisplay displayUnit = Unit::noUnit, Unit::unitScale displayScale = Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
     *
@@ -294,10 +294,10 @@ public:
    static QMenu* setupColorMenu(QWidget* parent, Unit::unitDisplay unit);
    static QMenu* setupDateMenu(QWidget* parent, Unit::unitDisplay unit);
    static QMenu* setupDensityMenu(QWidget* parent, Unit::unitDisplay unit);
-   static QMenu* setupMassMenu(QWidget* parent, Unit::unitDisplay unit, Unit::Unit::unitScale scale = Unit::Unit::noScale, bool generateScale = true);
+   static QMenu* setupMassMenu(QWidget* parent, Unit::unitDisplay unit, Unit::unitScale scale = Unit::noScale, bool generateScale = true);
    static QMenu* setupTemperatureMenu(QWidget* parent, Unit::unitDisplay unit);
-   static QMenu* setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit::Unit::unitScale scale = Unit::Unit::noScale, bool generateScale = true);
-   static QMenu* setupTimeMenu(QWidget* parent, Unit::Unit::unitScale scale);
+   static QMenu* setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit::unitScale scale = Unit::noScale, bool generateScale = true);
+   static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
 
    //! \return the main window.
