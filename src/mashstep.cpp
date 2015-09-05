@@ -245,13 +245,13 @@ MashStep::Type MashStep::type()        const { return static_cast<MashStep::Type
 const QString MashStep::typeString()   const { return get("mstype").toString(); }
 const QString MashStep::typeStringTr() const { return typesTr.at(type()); }
 
-double MashStep::infuseTemp_c()        const { return Brewtarget::toDouble(get("infuse_temp").toString(), "MashStep::infuseTemp_c()"); }
-double MashStep::infuseAmount_l()      const { return Brewtarget::toDouble(get("infuse_amount").toString(), "MashStep::infuseAmount_l()"); }
-double MashStep::stepTemp_c()          const { return Brewtarget::toDouble(get("step_temp").toString(), "MashStep::stepTemp_c()"); }
-double MashStep::stepTime_min()        const { return Brewtarget::toDouble(get("step_time").toString(), "MashStep::stepTime_min()"); }
-double MashStep::rampTime_min()        const { return Brewtarget::toDouble(get("ramp_time").toString(), "MashStep::rampTime_min()"); }
-double MashStep::endTemp_c()           const { return Brewtarget::toDouble(get("end_temp").toString(), "MashStep::endTemp_c()"); }
-double MashStep::decoctionAmount_l()   const { return Brewtarget::toDouble(get("decoction_amount").toString(), "MashStep::decoctionAmount_l()"); }
+double MashStep::infuseTemp_c()        const { return get("infuse_temp").toDouble(); }
+double MashStep::infuseAmount_l()      const { return get("infuse_amount").toDouble(); }
+double MashStep::stepTemp_c()          const { return get("step_temp").toDouble(); }
+double MashStep::stepTime_min()        const { return get("step_time").toDouble(); }
+double MashStep::rampTime_min()        const { return get("ramp_time").toDouble(); }
+double MashStep::endTemp_c()           const { return get("end_temp").toDouble(); }
+double MashStep::decoctionAmount_l()   const { return get("decoction_amount").toDouble(); }
 
 int MashStep::stepNumber()             const { return get("step_number").toInt(); }
 

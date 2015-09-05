@@ -359,32 +359,32 @@ QString BrewNote::brewDate_short()  const
   return brewDate().toString(format);
 }
 
-double BrewNote::sg() const                { return Brewtarget::toDouble(get("sg").toString(), "BrewNote::sg()"); }
-double BrewNote::abv() const               { return Brewtarget::toDouble(get("abv").toString(), "BrewNote::abv()"); }
-double BrewNote::volumeIntoBK_l() const    { return Brewtarget::toDouble(get("volume_into_bk").toString(), "BrewNote::volume_into_bk()"); }
-double BrewNote::effIntoBK_pct() const     { return Brewtarget::toDouble(get("eff_into_bk").toString(), "BrewNote::effIntoBK_pct()"); }
-double BrewNote::brewhouseEff_pct() const  { return Brewtarget::toDouble(get("brewhouse_eff").toString(), "BrewNote::brewhouseEff_pct()"); }
-double BrewNote::strikeTemp_c() const      { return Brewtarget::toDouble(get("strike_temp").toString(), "BrewNote::strikeTemp_c()"); }
-double BrewNote::mashFinTemp_c() const     { return Brewtarget::toDouble(get("mash_final_temp").toString(), "BrewNote::mashFinTemp_c()"); }
-double BrewNote::og() const                { return Brewtarget::toDouble(get("og").toString(), "BrewNote::og()"); }
-double BrewNote::volumeIntoFerm_l() const  { return Brewtarget::toDouble(get("volume_into_fermenter").toString(), "BrewNote::volumeIntoFerm_l()"); }
-double BrewNote::postBoilVolume_l() const  { return Brewtarget::toDouble(get("post_boil_volume").toString(), "BrewNote::postBoilVolume_l()"); }
-double BrewNote::pitchTemp_c() const       { return Brewtarget::toDouble(get("pitch_temp").toString(), "BrewNote::pitchTemp_c()"); }
-double BrewNote::fg() const                { return Brewtarget::toDouble(get("fg").toString(), "BrewNote::fg()"); }
-double BrewNote::finalVolume_l() const     { return Brewtarget::toDouble(get("final_volume").toString(), "BrewNote::finalVolume_l()"); }
-double BrewNote::projBoilGrav() const      { return Brewtarget::toDouble(get("projected_boil_grav").toString(), "BrewNote::projBoilGrav()"); }
-double BrewNote::projVolIntoBK_l() const   { return Brewtarget::toDouble(get("projected_vol_into_bk").toString(), "BrewNote::projVolIntoBK_l()"); }
-double BrewNote::projStrikeTemp_c() const  { return Brewtarget::toDouble(get("projected_strike_temp").toString(), "BrewNote::projStrikeTemp_c()"); }
-double BrewNote::projMashFinTemp_c() const { return Brewtarget::toDouble(get("projected_mash_fin_temp").toString(), "BrewNote::projMashFinTemp_c()"); }
-double BrewNote::projOg() const            { return Brewtarget::toDouble(get("projected_og").toString(), "BrewNote::projOg()"); }
-double BrewNote::projVolIntoFerm_l() const { return Brewtarget::toDouble(get("projected_vol_into_ferm").toString(), "BrewNote::projVolIntoFerm_l()"); }
-double BrewNote::projFg() const            { return Brewtarget::toDouble(get("projected_fg").toString(), "BrewNote::projFg()"); }
-double BrewNote::projEff_pct() const       { return Brewtarget::toDouble(get("projected_eff").toString(), "BrewNote::projEff_pct()"); }
-double BrewNote::projABV_pct() const       { return Brewtarget::toDouble(get("projected_abv").toString(), "BrewNote::projABV_pct()"); }
-double BrewNote::projPoints() const        { return Brewtarget::toDouble(get("projected_points").toString(), "BrewNote::projPoints()"); }
-double BrewNote::projFermPoints() const    { return Brewtarget::toDouble(get("projected_ferm_points").toString(), "BrewNote::projFermPoints()"); }
-double BrewNote::projAtten() const         { return Brewtarget::toDouble(get("projected_atten").toString(), "BrewNote::projAtten()"); }
-double BrewNote::boilOff_l() const         { return Brewtarget::toDouble(get("boil_off").toString(), "BrewNote::boilOff_l()"); }
+double BrewNote::sg() const                { return get("sg").toDouble(); }
+double BrewNote::abv() const               { return get("abv").toDouble(); }
+double BrewNote::volumeIntoBK_l() const    { return get("volume_into_bk").toDouble(); }
+double BrewNote::effIntoBK_pct() const     { return get("eff_into_bk").toDouble(); }
+double BrewNote::brewhouseEff_pct() const  { return get("brewhouse_eff").toDouble(); }
+double BrewNote::strikeTemp_c() const      { return get("strike_temp").toDouble(); }
+double BrewNote::mashFinTemp_c() const     { return get("mash_final_temp").toDouble(); }
+double BrewNote::og() const                { return get("og").toDouble(); }
+double BrewNote::volumeIntoFerm_l() const  { return get("volume_into_fermenter").toDouble(); }
+double BrewNote::postBoilVolume_l() const  { return get("post_boil_volume").toDouble(); }
+double BrewNote::pitchTemp_c() const       { return get("pitch_temp").toDouble(); }
+double BrewNote::fg() const                { return get("fg").toDouble(); }
+double BrewNote::finalVolume_l() const     { return get("final_volume").toDouble(); }
+double BrewNote::projBoilGrav() const      { return get("projected_boil_grav").toDouble(); }
+double BrewNote::projVolIntoBK_l() const   { return get("projected_vol_into_bk").toDouble(); }
+double BrewNote::projStrikeTemp_c() const  { return get("projected_strike_temp").toDouble(); }
+double BrewNote::projMashFinTemp_c() const { return get("projected_mash_fin_temp").toDouble(); }
+double BrewNote::projOg() const            { return get("projected_og").toDouble(); }
+double BrewNote::projVolIntoFerm_l() const { return get("projected_vol_into_ferm").toDouble(); }
+double BrewNote::projFg() const            { return get("projected_fg").toDouble(); }
+double BrewNote::projEff_pct() const       { return get("projected_eff").toDouble(); }
+double BrewNote::projABV_pct() const       { return get("projected_abv").toDouble(); }
+double BrewNote::projPoints() const        { return get("projected_points").toDouble(); }
+double BrewNote::projFermPoints() const    { return get("projected_ferm_points").toDouble(); }
+double BrewNote::projAtten() const         { return get("projected_atten").toDouble(); }
+double BrewNote::boilOff_l() const         { return get("boil_off").toDouble(); }
 
 int BrewNote::key() const                  { return _key; }
 
