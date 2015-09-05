@@ -2,3 +2,5 @@
 build/*
 !build/dummyfile
 
+# Kate project
+.kateproject.d/
