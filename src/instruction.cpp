@@ -122,7 +122,7 @@ QList<QString> Instruction::reagents()
 
 double Instruction::interval() 
 {
-   return Brewtarget::toDouble(get("interval").toString(),"Instruction::interval()");
+   return get("interval").toDouble();
 }
 
 int Instruction::instructionNumber() const
