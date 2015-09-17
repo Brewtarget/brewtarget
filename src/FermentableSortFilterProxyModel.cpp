@@ -99,5 +99,11 @@ QString FermentableSortFilterProxyModel::getName( const QModelIndex &index ) con
 bool FermentableSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
 {
    FermentableTableModel* model = qobject_cast<FermentableTableModel*>(sourceModel());
-   return ! filter || model->getFermentable(source_row)->display();
+   QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+
+   return !filter
+          ||
+            ( sourceModel()->data(index).toString().contains(filterRegExp())
+              && model->getFermentable(source_row)->display()
+            );
 }

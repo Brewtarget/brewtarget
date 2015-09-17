@@ -45,14 +45,17 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
    fermentableTableWidget->setModel(fermTableProxy);
    fermentableTableWidget->setSortingEnabled(true);
    fermentableTableWidget->sortByColumn( FERMNAMECOL, Qt::AscendingOrder );
+   fermentableTableWidget->verticalHeader()->setDefaultSectionSize(20);
    fermTableProxy->setDynamicSortFilter(true);
+   fermTableProxy->setFilterKeyColumn(1);
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addFermentable() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeFermentable() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newFermentable() ) );
    connect( fermentableTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT(addFermentable(const QModelIndex&)) );
-   
+   connect( qlineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterFermentables(QString)));
+
    // Let me see if this works
    fermTableModel->observeDatabase(true);
 }
@@ -155,4 +158,11 @@ void FermentableDialog::newFermentable()
    ferm->setName(name);
    fermEdit->setFermentable(ferm);
    fermEdit->show();
+}
+
+void FermentableDialog::filterFermentables(QString searchExpression)
+{
+    //fermTableProxy->setFilterFixedString(searchExpression);
+    fermTableProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    fermTableProxy->setFilterRegExp(searchExpression);
 }

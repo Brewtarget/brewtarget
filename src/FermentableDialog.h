@@ -57,6 +57,7 @@ public slots:
    void removeFermentable();
    void editSelected();
    void newFermentable();
+   void filterFermentables(QString searchExpression);
    //void changed(QMetaProperty,QVariant);
 
 private:
