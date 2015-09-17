@@ -55,6 +55,7 @@ public:
    QVBoxLayout *verticalLayout;
    QTableView *tableWidget;
    QHBoxLayout *horizontalLayout;
+   QLineEdit *qLineEdit_searchBox;
    QSpacerItem *horizontalSpacer;
    QPushButton *pushButton_addToRecipe;
    QPushButton *pushButton_new;
@@ -71,6 +72,8 @@ public slots:
    void editSelected();
    //! Add a new misc to the database.
    void newMisc();
+   //! Filter out the matching miscs.
+   void filterMisc(QString searchExpression);
 
 protected:
 

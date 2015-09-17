@@ -43,6 +43,10 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   parentTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+   parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    parentTableWidget->setWordWrap(false);
+
    connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
 }
 
@@ -100,12 +104,6 @@ void MiscTableModel::addMisc(Misc* misc)
    connect( misc, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
-
-   if( parentTableWidget )
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
 }
 
 void MiscTableModel::addMiscs(QList<Misc*> miscs)
@@ -130,13 +128,6 @@ void MiscTableModel::addMiscs(QList<Misc*> miscs)
 
       endInsertRows();
    }
-
-   if( parentTableWidget )
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
-
 }
 
 // Returns true when misc is successfully found and removed.
@@ -152,12 +143,6 @@ bool MiscTableModel::removeMisc(Misc* misc)
       miscObs.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
-
-      if(parentTableWidget)
-      {
-         parentTableWidget->resizeColumnsToContents();
-         parentTableWidget->resizeRowsToContents();
-      }
 
       return true;
    }

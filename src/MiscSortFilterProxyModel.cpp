@@ -62,5 +62,11 @@ bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
 bool MiscSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
 {
    MiscTableModel* model = qobject_cast<MiscTableModel*>(sourceModel());
-   return ! filter || model->getMisc(source_row)->display();
+   QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+
+   return !filter
+          ||
+          (  sourceModel()->data(index).toString().contains(filterRegExp())
+             && model->getMisc(source_row)->display()
+          );
 }

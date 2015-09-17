@@ -50,13 +50,15 @@ HopDialog::HopDialog(MainWindow* parent) :
    tableWidget->setSortingEnabled(true);
    tableWidget->sortByColumn( HOPNAMECOL, Qt::AscendingOrder );
    hopTableProxy->setDynamicSortFilter(true);
-   
+   hopTableProxy->setFilterKeyColumn(1);
+
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addHop() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
    connect( tableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
-   
+   connect( qLineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterHops(QString)));
+
    hopTableModel->observeDatabase(true);
 }
 
@@ -66,6 +68,9 @@ void HopDialog::doLayout()
    verticalLayout = new QVBoxLayout(this);
       tableWidget = new QTableView(this);
       horizontalLayout = new QHBoxLayout();
+      qLineEdit_searchBox = new QLineEdit();
+      qLineEdit_searchBox->setMaxLength(30);
+      qLineEdit_searchBox->setPlaceholderText("Enter filter");
          horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
          pushButton_addToRecipe = new QPushButton(this);
             pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
@@ -86,6 +91,7 @@ void HopDialog::doLayout()
             icon1.addFile(QStringLiteral(":/images/smallMinus.svg"), QSize(), QIcon::Normal, QIcon::Off);
             pushButton_remove->setIcon(icon1);
             pushButton_remove->setAutoDefault(false);
+         horizontalLayout->addWidget(qLineEdit_searchBox);
          horizontalLayout->addItem(horizontalSpacer);
          horizontalLayout->addWidget(pushButton_addToRecipe);
          horizontalLayout->addWidget(pushButton_new);
@@ -209,4 +215,10 @@ void HopDialog::newHop()
    hop->setName(name);
    hopEditor->setHop(hop);
    hopEditor->show();
+}
+
+void HopDialog::filterHops(QString searchExpression)
+{
+    hopTableProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    hopTableProxy->setFilterFixedString(searchExpression);
 }

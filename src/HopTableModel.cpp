@@ -66,6 +66,10 @@ HopTableModel::HopTableModel(QTableView* parent, bool editable)
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   parentTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+   parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+   parentTableWidget->setWordWrap(false);
+
    connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
 }
 
@@ -129,12 +133,6 @@ void HopTableModel::addHop(Hop* hop)
    connect( hop, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
-
-   if( parentTableWidget )
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
 }
 
 void HopTableModel::addHops(QList<Hop*> hops)
@@ -159,13 +157,6 @@ void HopTableModel::addHops(QList<Hop*> hops)
 
       endInsertRows();
    }
-
-   if( parentTableWidget )
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
-
 }
 
 bool HopTableModel::removeHop(Hop* hop)
@@ -179,12 +170,6 @@ bool HopTableModel::removeHop(Hop* hop)
       hopObs.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
-
-      if(parentTableWidget)
-      {
-         parentTableWidget->resizeColumnsToContents();
-         parentTableWidget->resizeRowsToContents();
-      }
 
       return true;
    }

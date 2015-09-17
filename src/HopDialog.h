@@ -60,6 +60,7 @@ public:
    QPushButton *pushButton_new;
    QPushButton *pushButton_edit;
    QPushButton *pushButton_remove;
+   QLineEdit *qLineEdit_searchBox;
    //! @}
 
 public slots:
@@ -71,6 +72,8 @@ public slots:
    void editSelected();
    //! Create a new hop.
    void newHop();
+   //! FIlters the shown hops
+   void filterHops(QString searchExpression);
 
 protected:
 
