@@ -549,6 +549,7 @@ QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
       box->addItem(tr("Herb"));
       box->addItem(tr("Flavor"));
       box->addItem(tr("Other"));
+      box->setMinimumWidth(box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
    }
@@ -561,6 +562,7 @@ QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
       box->addItem(tr("Primary"));
       box->addItem(tr("Secondary"));
       box->addItem(tr("Bottling"));
+      box->setMinimumWidth(box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
    }
