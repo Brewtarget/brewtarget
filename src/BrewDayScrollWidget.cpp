@@ -74,6 +74,9 @@ void BrewDayScrollWidget::generateInstructions()
    if( recObs == 0 )
       return;
 
+   if(!btTextEdit->isEnabled())
+      btTextEdit->setEnabled(true);
+
    recObs->generateInstructions();
 }
 
@@ -91,6 +94,12 @@ void BrewDayScrollWidget::removeSelectedInstruction()
    if( row < 0 )
       return;
    Database::instance().removeFromRecipe(recObs, recIns[row]);
+
+   if(recIns.isEmpty())
+   {
+      btTextEdit->clear();
+      btTextEdit->setEnabled(false);
+   }
 }
 
 void BrewDayScrollWidget::pushInstructionUp()
@@ -113,7 +122,7 @@ void BrewDayScrollWidget::pushInstructionDown()
    
    int row = listWidget->currentRow();
 
-   if( row >= listWidget->count() || row < 0 )
+   if( row >= listWidget->count() - 1 || row < 0 )
       return;
    
    recObs->swapInstructions(recIns[row], recIns[row+1]);
@@ -182,6 +191,12 @@ void BrewDayScrollWidget::setRecipe(Recipe* rec)
    foreach( Instruction* ins, recIns )
          connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptInsChanges(QMetaProperty,QVariant)) );
    
+   btTextEdit->clear();
+   if(recIns.isEmpty())
+      btTextEdit->setEnabled(false);
+   else
+      btTextEdit->setEnabled(true);
+
    showChanges();
 }
 
@@ -190,12 +205,23 @@ void BrewDayScrollWidget::insertInstruction()
    if( recObs == 0 )
       return;
 
-   int pos = lineEdit_step->text().toInt();
+   if(!btTextEdit->isEnabled())
+      btTextEdit->setEnabled(true);
+
+   int pos = 0;
+   if(lineEdit_step->text().isEmpty())
+      pos = listWidget->count() + 1;
+   else
+   {
+      pos = lineEdit_step->text().toInt();
+      lineEdit_step->clear();
+   }
    Instruction* ins = Database::instance().newInstruction(recObs);
 
    pos = qBound(1, pos, recIns.size());
 
    ins->setName(lineEdit_name->text());
+   lineEdit_name->clear();
 
    recObs->insertInstruction( ins, pos );
    listWidget->setCurrentRow(pos-1);
