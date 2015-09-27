@@ -1,4 +1,6 @@
 language: c++
+os:
+  - osx
 branches:
   only:
     - travis-osx

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/xor-gate/brewtarget.svg?branch=travis-osx)](https://travis-ci.org/xor-gate/brewtarget)
+
 # Brewtarget
 
 Brewtarget is free open-source brewing software, and a beer recipe creation
