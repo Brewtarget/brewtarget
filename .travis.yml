@@ -6,7 +6,6 @@ branches:
 before_install:
   - brew update
 install:
-  - brew install cmake
   - brew install qt5
 script:
   - ./configure -v
