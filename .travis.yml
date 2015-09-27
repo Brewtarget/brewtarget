@@ -4,6 +4,7 @@ branches:
   only:
     - travis-osx
 before_install:
+  - export PATH=/usr/local/opt/qt5/bin:$PATH
   - brew update
 install:
   - brew install qt5
