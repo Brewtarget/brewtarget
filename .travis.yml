@@ -1,9 +1,9 @@
 language: c++
-os:
-  - osx
+os: osx
 branches:
   only:
     - travis-osx
 before_install:
   - brew update
-install: true
+install:
+  - brew install cmake
