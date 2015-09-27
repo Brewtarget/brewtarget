@@ -7,7 +7,8 @@ before_install:
   - brew update
 install:
   - brew install qt5
-script:
-  - ./configure -v
+before_script:
+  - mkdir build
   - cd build
-  - make
+  - cmake ..
+script: make
