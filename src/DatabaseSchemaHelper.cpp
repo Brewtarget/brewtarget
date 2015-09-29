@@ -27,7 +27,7 @@
 #include <QDebug>
 #include <QSqlError>
 
-const int DatabaseSchemaHelper::dbVersion = 4;
+const int DatabaseSchemaHelper::dbVersion = 5;
 
 // Commands and keywords
 QString DatabaseSchemaHelper::CREATETABLE("CREATE TABLE");
@@ -885,7 +885,7 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       "CREATE TRIGGER dec_ins_num AFTER DELETE ON instruction_in_recipe " +
       "BEGIN "
          "UPDATE instruction_in_recipe SET instruction_number = instruction_number - 1 " +
-            "WHERE recipe_id = old.recipe_id AND instruction_id > old.instruction_id; " +
+            "WHERE recipe_id = old.recipe_id AND instruction_number > old.instruction_number; " +
       "END"
    );
    
@@ -1272,6 +1272,25 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
          );
          
          break;
+      
+      case 4:
+         
+         // Drop the previous bugged TRIGGER
+         ret &= q.exec( QString() +
+            "DROP TRIGGER dec_ins_num"
+         );
+         
+         // Create the good trigger
+         ret &= q.exec( QString() +
+            "CREATE TRIGGER dec_ins_num AFTER DELETE ON instruction_in_recipe " +
+            "BEGIN "
+              "UPDATE instruction_in_recipe SET instruction_number = instruction_number - 1 " +
+                "WHERE recipe_id = old.recipe_id AND instruction_number > old.instruction_number; " +
+            "END"
+         );
+         
+         break;
+         
          
       default:
          Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
@@ -1283,7 +1302,7 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
    {
       ret &= q.exec(
          UPDATE + SEP + tableSettings +
-         " SET " + colSettingsVersion + "=" + (oldVersion+1) + " WHERE id=1"
+         " SET " + colSettingsVersion + "=" + QString::number(oldVersion+1) + " WHERE id=1"
       );
    }
    
