@@ -134,6 +134,10 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
    if ( _property.isEmpty() )
       initializeProperties();
 
+   if (text().isEmpty())
+   {
+      return;
+   }
 
    // The idea here is we need to first translate the field into a known
    // amount (aka to SI) and then into the unit we want.
