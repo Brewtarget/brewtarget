@@ -66,10 +66,11 @@ void OgAdjuster::calculate()
    double waterToAdd_l = 0.0;
 
    bool gotSG = false;
+   bool okPlato = true;
 
    // Get inputs.
    sg          = lineEdit_sg->toSI();
-   plato       = lineEdit_plato->toSI();
+   plato       = lineEdit_plato->toDouble(&okPlato);
    temp_c      = lineEdit_temp->toSI();
    hydroTemp_c = lineEdit_calTemp->toSI();
    wort_l      = lineEdit_volume->toSI();
@@ -79,7 +80,7 @@ void OgAdjuster::calculate()
 
    if( wort_l == 0 )
       return;
-   if( ! gotSG && plato == 0 )
+   if( ! gotSG && ! okPlato )
       return;
 
    if( recObs == 0 || recObs->equipment() == 0 )
