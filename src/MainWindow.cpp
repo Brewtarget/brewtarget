@@ -478,6 +478,10 @@ void MainWindow::deleteSelected()
    QModelIndexList selected;
    BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
+   // This happens after startup when nothing is selected
+   if (!active)
+      return;
+
    active->deleteSelected(active->selectionModel()->selectedRows());
 
    // This should be fixed to find the first nonfolder object in the tree
