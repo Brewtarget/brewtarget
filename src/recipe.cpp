@@ -1315,23 +1315,23 @@ QString Recipe::primingSugarName() const { return get("priming_sugar_name").toSt
 
 bool Recipe::forcedCarbonation()   const { return get("forced_carb").toBool(); }
 
-double Recipe::batchSize_l()       const { return Brewtarget::toDouble(get("batch_size").toString(), "Recipe::batchSize_l()"); }
-double Recipe::boilSize_l()        const { return Brewtarget::toDouble(get("boil_size").toString(), "Recipe::boilSize_l()"); }
-double Recipe::boilTime_min()      const { return Brewtarget::toDouble(get("boil_time").toString(), "Recipe::boilTime_min()"); }
-double Recipe::efficiency_pct()    const { return Brewtarget::toDouble(get("efficiency").toString(), "Recipe::efficiency_pct()"); }
-double Recipe::tasteRating()       const { return Brewtarget::toDouble(get("taste_rating").toString(), "Recipe::tasteRating()"); }
-double Recipe::primaryAge_days()   const { return Brewtarget::toDouble(get("primary_age").toString(), "Recipe::primaryAge_days()"); }
-double Recipe::primaryTemp_c()     const { return Brewtarget::toDouble(get("primary_temp").toString(), "Recipe::primaryTemp_c()"); }
-double Recipe::secondaryAge_days() const { return Brewtarget::toDouble(get("secondary_age").toString(), "Recipe::secondaryAge_days()"); }
-double Recipe::secondaryTemp_c()   const { return Brewtarget::toDouble(get("secondary_temp").toString(), "Recipe::secondaryTemp_c()"); }
-double Recipe::tertiaryAge_days()  const { return Brewtarget::toDouble(get("tertiary_age").toString(), "Recipe::tertiaryAge_days()"); }
-double Recipe::tertiaryTemp_c()    const { return Brewtarget::toDouble(get("tertiary_temp").toString(), "Recipe::tertiaryTemp_c()"); }
-double Recipe::age_days()          const { return Brewtarget::toDouble(get("age").toString(), "Recipe::age_days()"); }
-double Recipe::ageTemp_c()         const { return Brewtarget::toDouble(get("age_temp").toString(), "Recipe::ageTemp_c()"); }
-double Recipe::carbonation_vols()  const { return Brewtarget::toDouble(get("carb_volume").toString(), "Recipe::carbonation_vols()"); }
-double Recipe::carbonationTemp_c() const { return Brewtarget::toDouble(get("carbonationTemp_c").toString(), "Recipe::carbonationTemp_c()"); }
-double Recipe::primingSugarEquiv() const { return Brewtarget::toDouble(get("priming_sugar_equiv").toString(), "Recipe::primingSugarEquiv()"); }
-double Recipe::kegPrimingFactor()  const { return Brewtarget::toDouble(get("keg_priming_factor").toString(), "Recipe::kegPrimingFactor()"); }
+double Recipe::batchSize_l()       const { return get("batch_size").toDouble(); }
+double Recipe::boilSize_l()        const { return get("boil_size").toDouble(); }
+double Recipe::boilTime_min()      const { return get("boil_time").toDouble(); }
+double Recipe::efficiency_pct()    const { return get("efficiency").toDouble(); }
+double Recipe::tasteRating()       const { return get("taste_rating").toDouble(); }
+double Recipe::primaryAge_days()   const { return get("primary_age").toDouble(); }
+double Recipe::primaryTemp_c()     const { return get("primary_temp").toDouble(); }
+double Recipe::secondaryAge_days() const { return get("secondary_age").toDouble(); }
+double Recipe::secondaryTemp_c()   const { return get("secondary_temp").toDouble(); }
+double Recipe::tertiaryAge_days()  const { return get("tertiary_age").toDouble(); }
+double Recipe::tertiaryTemp_c()    const { return get("tertiary_temp").toDouble(); }
+double Recipe::age_days()          const { return get("age").toDouble(); }
+double Recipe::ageTemp_c()         const { return get("age_temp").toDouble(); }
+double Recipe::carbonation_vols()  const { return get("carb_volume").toDouble(); }
+double Recipe::carbonationTemp_c() const { return get("carbonationTemp_c").toDouble(); }
+double Recipe::primingSugarEquiv() const { return get("priming_sugar_equiv").toDouble(); }
+double Recipe::kegPrimingFactor()  const { return get("keg_priming_factor").toDouble(); }
 
 int Recipe::fermentationStages()   const { return get("fermentation_stages").toInt(); }
 QDate Recipe::date()               const { return QDate::fromString( get("date").toString(), "d/M/yyyy"); }

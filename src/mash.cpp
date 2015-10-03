@@ -146,12 +146,12 @@ void Mash::removeAllMashSteps()
 QString Mash::name()                 const { return get("name").toString(); }
 QString Mash::notes()                const { return get("notes").toString(); }
 
-double Mash::grainTemp_c()           const { return Brewtarget::toDouble(get("grain_temp").toString(), "Mash::grainTemp_c()"); }
-double Mash::tunTemp_c()             const { return Brewtarget::toDouble(get("tun_temp").toString(), "Mash::tunTemp_c()"); }
-double Mash::spargeTemp_c()          const { return Brewtarget::toDouble(get("sparge_temp").toString(), "Mash::spargeTemp_c()"); }
-double Mash::ph()                    const { return Brewtarget::toDouble(get("ph").toString(), "Mash::ph()"); }
-double Mash::tunWeight_kg()          const { return Brewtarget::toDouble(get("tun_weight").toString(), "Mash::tunWeight_kg()"); }
-double Mash::tunSpecificHeat_calGC() const { return Brewtarget::toDouble(get("tun_specific_heat").toString(), "Mash::tunSpecificHeat_calGC()"); }
+double Mash::grainTemp_c()           const { return get("grain_temp").toDouble(); }
+double Mash::tunTemp_c()             const { return get("tun_temp").toDouble(); }
+double Mash::spargeTemp_c()          const { return get("sparge_temp").toDouble(); }
+double Mash::ph()                    const { return get("ph").toDouble(); }
+double Mash::tunWeight_kg()          const { return get("tun_weight").toDouble(); }
+double Mash::tunSpecificHeat_calGC() const { return get("tun_specific_heat").toDouble(); }
 
 bool Mash::equipAdjust()             const { return get("equip_adjust").toBool(); }
 
