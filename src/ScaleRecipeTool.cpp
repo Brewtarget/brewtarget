@@ -29,6 +29,7 @@
 #include "misc.h"
 #include "yeast.h"
 #include "water.h"
+#include "database.h"
 
 ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) : QDialog(parent)
 {
@@ -152,8 +153,8 @@ void ScaleRecipeTool::scaleByVolume()
    
    double ratio = newBatchSize_l / currentBatchSize_l;
    
-   // I think you want the equipment to be clean.
-   //recObs->setEquipment(new Equipment());
+   // The equipment has to be reset, since none of the volumes will match
+   Database::instance().addToRecipe(recObs, Database::instance().newEquipment(), true);
    recObs->setBatchSize_l(newBatchSize_l);
    recObs->setBoilSize_l(newBatchSize_l);
    
