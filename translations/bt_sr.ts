@@ -16,217 +16,217 @@
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Штампај документ</translation>
+        <translation>Штампај документ</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">Корак %1: %2</translation>
+        <translation>Корак %1: %2</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стил</translation>
+        <translation>Стил</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Датум</translation>
+        <translation>Датум</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Дужина кључања</translation>
+        <translation>Дужина кључања</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Ефикасност</translation>
+        <translation>Ефикасност</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Запремина кључања</translation>
+        <translation>Запремина кључања</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Специфична тежина пре кључања</translation>
+        <translation>Специфична тежина пре кључања</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished">Крајња запремина</translation>
+        <translation>Крајња запремина</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Почетна спцифична тежина</translation>
+        <translation>Почетна спцифична тежина</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Final Gravity</source>
-        <translation type="unfinished">Крајња специфична тежина</translation>
+        <translation>Крајња специфична тежина</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Estimated calories(per 12 oz)</source>
-        <translation type="unfinished">Процењено калорија (на 330мл)</translation>
+        <translation>Процењено калорија (на 330мл)</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Упутства</translation>
+        <translation>Упутства</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Завршено</translation>
+        <translation>Завршено</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Корак</translation>
+        <translation>Корак</translation>
     </message>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Додај житарице</translation>
+        <translation>Додај житарице</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Загреј воду</translation>
+        <translation>Загреј воду</translation>
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
-        <translation type="unfinished">Стварна запремина пре кључања</translation>
+        <translation>Стварна запремина пре кључања</translation>
     </message>
     <message>
         <source>Actual PreBoil Gravity</source>
-        <translation type="unfinished">Стварна специфична тежина пре кључања</translation>
+        <translation>Стварна специфична тежина пре кључања</translation>
     </message>
     <message>
         <source>PostBoil Volume</source>
-        <translation type="unfinished">Запремина после кључања</translation>
+        <translation>Запремина после кључања</translation>
     </message>
     <message>
         <source>PostBoil Gravity</source>
-        <translation type="unfinished">Специфична тежина после кључања</translation>
+        <translation>Специфична тежина после кључања</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="unfinished">Запремина која је ушла у ферментор</translation>
+        <translation>Запремина која је ушла у ферментор</translation>
     </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стил</translation>
+        <translation>Стил</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Датум</translation>
+        <translation>Датум</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Запремина кључања</translation>
+        <translation>Запремина кључања</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Специфична тежина пре кључања</translation>
+        <translation>Специфична тежина пре кључања</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished">Крајња запремина</translation>
+        <translation>Крајња запремина</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Почетна спцифична тежина</translation>
+        <translation>Почетна спцифична тежина</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Дужина кључања</translation>
+        <translation>Дужина кључања</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Predicted Efficiency</source>
-        <translation type="unfinished">Предвиђена ефикасност</translation>
+        <translation>Предвиђена ефикасност</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Процењено калорија (на 330мл)</translation>
+        <translation>Процењено калорија (на 330мл)</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Упутства</translation>
+        <translation>Упутства</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Завршено</translation>
+        <translation>Завршено</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Корак</translation>
+        <translation>Корак</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
-        <translation type="unfinished">Стварна запремина пре кључања:</translation>
+        <translation>Стварна запремина пре кључања:</translation>
     </message>
     <message>
         <source>Actual Pre-boil Gravity:</source>
-        <translation type="unfinished">Стварна специфична тежина пре кључања:</translation>
+        <translation>Стварна специфична тежина пре кључања:</translation>
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation type="unfinished">Запремина после кључања:</translation>
+        <translation>Запремина после кључања:</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation type="unfinished">Специфична тежина после кључања:</translation>
+        <translation>Специфична тежина после кључања:</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation type="unfinished">Запремина која је ушла у ферментор:</translation>
+        <translation>Запремина која је ушла у ферментор:</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Штампај документ</translation>
+        <translation>Штампај документ</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">Корак %1: %2</translation>
+        <translation>Корак %1: %2</translation>
     </message>
 </context>
 <context>
     <name>Brewtarget</name>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Непознато</translation>
+        <translation>Непознато</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Подразумевано</translation>
+        <translation>Подразумевано</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished">EBC</translation>
+        <translation>EBC</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished">SRM</translation>
+        <translation>SRM</translation>
     </message>
     <message>
         <source>YYYY-mm-dd</source>
@@ -242,47 +242,47 @@
     </message>
     <message>
         <source>Plato</source>
-        <translation type="unfinished">Plato</translation>
+        <translation>Plato</translation>
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation type="unfinished">Специфична тежина</translation>
+        <translation>Специфична тежина</translation>
     </message>
     <message>
         <source>SI</source>
-        <translation type="unfinished">SI</translation>
+        <translation>SI</translation>
     </message>
     <message>
         <source>US Customary</source>
-        <translation type="unfinished">САД стандард</translation>
+        <translation>САД стандард</translation>
     </message>
     <message>
         <source>Milligrams</source>
-        <translation type="unfinished">Милиграми</translation>
+        <translation>Милиграми</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation type="unfinished">Грами</translation>
+        <translation>Грами</translation>
     </message>
     <message>
         <source>Kilograms</source>
-        <translation type="unfinished">Килограми</translation>
+        <translation>Килограми</translation>
     </message>
     <message>
         <source>Ounces</source>
-        <translation type="unfinished">Унце</translation>
+        <translation>Унце</translation>
     </message>
     <message>
         <source>Pounds</source>
-        <translation type="unfinished">Фунте</translation>
+        <translation>Фунте</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Целзијус</translation>
+        <translation>Целзијус</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Фаренхајт</translation>
+        <translation>Фаренхајт</translation>
     </message>
     <message>
         <source>Seconds</source>
@@ -302,35 +302,35 @@
     </message>
     <message>
         <source>British Imperial</source>
-        <translation type="unfinished">Британски империјални</translation>
+        <translation>Британски империјални</translation>
     </message>
     <message>
         <source>MilliLiters</source>
-        <translation type="unfinished">Милилитри</translation>
+        <translation>Милилитри</translation>
     </message>
     <message>
         <source>Liters</source>
-        <translation type="unfinished">Литри</translation>
+        <translation>Литри</translation>
     </message>
     <message>
         <source>Teaspoons</source>
-        <translation type="unfinished">Кафених кашика</translation>
+        <translation>Кафених кашика</translation>
     </message>
     <message>
         <source>Tablespoons</source>
-        <translation type="unfinished">Супених кашика</translation>
+        <translation>Супених кашика</translation>
     </message>
     <message>
         <source>Cups</source>
-        <translation type="unfinished">Шоља</translation>
+        <translation>Шоља</translation>
     </message>
     <message>
         <source>Quarts</source>
-        <translation type="unfinished">Кварти</translation>
+        <translation>Кварти</translation>
     </message>
     <message>
         <source>Gallons</source>
-        <translation type="unfinished">Галони</translation>
+        <translation>Галони</translation>
     </message>
     <message>
         <source>Barrels</source>
@@ -341,15 +341,15 @@
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation type="unfinished">Первише ниско за изабрани стил.</translation>
+        <translation>Первише ниско за изабрани стил.</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation type="unfinished">Унутар граница за изабрани стил.</translation>
+        <translation>Унутар граница за изабрани стил.</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation type="unfinished">Превише високо за изабрани стил.</translation>
+        <translation>Превише високо за изабрани стил.</translation>
     </message>
 </context>
 <context>
@@ -370,130 +370,130 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Датум кувања</translation>
+        <translation>Датум кувања</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стил</translation>
+        <translation>Стил</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Дужина кључања</translation>
+        <translation>Дужина кључања</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Боја</translation>
+        <translation>Боја</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Користи</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Врста</translation>
+        <translation>Врста</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Број</translation>
+        <translation>Број</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished">Писмо</translation>
+        <translation>Писмо</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Упутства</translation>
+        <translation>Упутства</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation type="unfinished">ПУТАЊА</translation>
+        <translation>ПУТАЊА</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation type="unfinished">ЦЕЛА ПУТАЊА</translation>
+        <translation>ЦЕЛА ПУТАЊА</translation>
     </message>
 </context>
 <context>
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нов</translation>
+        <translation>Нов</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Рецепт</translation>
+        <translation>Рецепт</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Скувај!</translation>
+        <translation>Скувај!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Скувај опет</translation>
+        <translation>Скувај опет</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Промени датум</translation>
+        <translation>Промени датум</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Прерачунај ефик</translation>
+        <translation>Прерачунај ефик</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Обриши</translation>
+        <translation>Обриши</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Опрема</translation>
+        <translation>Опрема</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Слад</translation>
+        <translation>Слад</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Хмељ</translation>
+        <translation>Хмељ</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Разно</translation>
+        <translation>Разно</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стил</translation>
+        <translation>Стил</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Квасац</translation>
+        <translation>Квасац</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished">Фасцикла</translation>
+        <translation>Фасцикла</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Копирај</translation>
+        <translation>Копирај</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Извези</translation>
+        <translation>Извези</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Увези</translation>
+        <translation>Увези</translation>
     </message>
     <message>
         <source>Cancel All</source>
@@ -501,11 +501,11 @@
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Копирај %1</translation>
+        <translation>Копирај %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Унесите јединствено име за копију %1</translation>
+        <translation>Унесите јединствено име за копију %1</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
@@ -513,15 +513,15 @@
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Обриши %1</translation>
+        <translation>Обриши %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Обриши %1 %2?</translation>
+        <translation>Обриши %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
-        <translation type="unfinished">Белешка о кувању</translation>
+        <translation>Белешка о кувању</translation>
     </message>
 </context>
 <context>
@@ -563,18 +563,18 @@
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation type="unfinished">Споји базе података</translation>
+        <translation>Споји базе података</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="unfinished">Могуће је да су доступни нови састојци и рецепти. Да ли желите да их додате у вашу базу?</translation>
+        <translation>Могуће је да су доступни нови састојци и рецепти. Да ли желите да их додате у вашу базу?</translation>
     </message>
 </context>
 <context>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation type="unfinished">Упијање житарица (%1/%2)</translation>
+        <translation>Упијање житарица (%1/%2)</translation>
     </message>
     <message>
         <source>Equipment Editor</source>
@@ -582,7 +582,7 @@
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Опрема</translation>
+        <translation>Опрема</translation>
     </message>
     <message>
         <source>Set as Default</source>
@@ -594,7 +594,7 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
@@ -650,7 +650,7 @@
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Запремина</translation>
+        <translation>Запремина</translation>
     </message>
     <message>
         <source>Mass</source>
@@ -702,7 +702,7 @@
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Сачувај</translation>
+        <translation>Сачувај</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -710,35 +710,35 @@
     </message>
     <message>
         <source>Tun Volume Warning</source>
-        <translation type="unfinished">Упозорење око запремине котла</translation>
+        <translation>Упозорење око запремине котла</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished">Унели сте 0 за запремину котла. Ово може изазвати проблеме.</translation>
+        <translation>Унели сте 0 за запремину котла. Ово може изазвати проблеме.</translation>
     </message>
     <message>
         <source>Batch Size Warning</source>
-        <translation type="unfinished">Упозорење око запремине кувања</translation>
+        <translation>Упозорење око запремине кувања</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished">Унели сте 0 за запремину кувања. Ово може изазвати проблеме.</translation>
+        <translation>Унели сте 0 за запремину кувања. Ово може изазвати проблеме.</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished">Упозорење око искоришћености хмеља</translation>
+        <translation>Упозорење око искоришћености хмеља</translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished">Унелисте 0 за % искоришћености хмеља. Ово може изазвати проблеме.</translation>
+        <translation>Унелисте 0 за % искоришћености хмеља. Ово може изазвати проблеме.</translation>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation type="unfinished">Назив опреме</translation>
+        <translation>Назив опреме</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation type="unfinished">Назив опреме:</translation>
+        <translation>Назив опреме:</translation>
     </message>
 </context>
 <context>
@@ -753,7 +753,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нов</translation>
+        <translation>Нов</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -773,136 +773,136 @@
     </message>
     <message>
         <source>Fermentable name</source>
-        <translation type="unfinished">Назив житарице</translation>
+        <translation>Назив житарице</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation type="unfinished">Назив житарице:</translation>
+        <translation>Назив житарице:</translation>
     </message>
 </context>
 <context>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation type="unfinished">Житарица</translation>
+        <translation>Житарица</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="unfinished">Шећер</translation>
+        <translation>Шећер</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished">Екстракт</translation>
+        <translation>Екстракт</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="unfinished">Суви екстракт</translation>
+        <translation>Суви екстракт</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="unfinished">Прилог</translation>
+        <translation>Прилог</translation>
     </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Bad model index. row = %1</translation>
+        <translation>Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">За комљење</translation>
+        <translation>За комљење</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Постепено додаван</translation>
+        <translation>Постепено додаван</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Није укомљен</translation>
+        <translation>Није укомљен</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Касно</translation>
+        <translation>Касно</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Уобичајено</translation>
+        <translation>Уобичајено</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation type="unfinished">Лоша колона: %1</translation>
+        <translation>Лоша колона: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентар</translation>
+        <translation>Инвентар</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Late Addition</source>
-        <translation type="unfinished">Додати касније</translation>
+        <translation>Додати касније</translation>
     </message>
     <message>
         <source>Yield %</source>
-        <translation type="unfinished">Принос %</translation>
+        <translation>Принос %</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Боја</translation>
+        <translation>Боја</translation>
     </message>
 </context>
 <context>
     <name>Hop</name>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Прва сладовина</translation>
+        <translation>Прва сладовина</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Кључање</translation>
+        <translation>Кључање</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Арома</translation>
+        <translation>Арома</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Суво хмељње</translation>
+        <translation>Суво хмељње</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Горчина</translation>
+        <translation>Горчина</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="unfinished">Обе</translation>
+        <translation>Обе</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Лист</translation>
+        <translation>Лист</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Грануле</translation>
+        <translation>Грануле</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Чеп</translation>
+        <translation>Чеп</translation>
     </message>
 </context>
 <context>
@@ -917,7 +917,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нов</translation>
+        <translation>Нов</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -937,123 +937,123 @@
     </message>
     <message>
         <source>Hop name</source>
-        <translation type="unfinished">Назив хмеља</translation>
+        <translation>Назив хмеља</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation type="unfinished">Назив хмеља:</translation>
+        <translation>Назив хмеља:</translation>
     </message>
 </context>
 <context>
     <name>HopItemDelegate</name>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Прва сладовина</translation>
+        <translation>Прва сладовина</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Кључање</translation>
+        <translation>Кључање</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Арома</translation>
+        <translation>Арома</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Суво хмељње</translation>
+        <translation>Суво хмељње</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Лист</translation>
+        <translation>Лист</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Грануле</translation>
+        <translation>Грануле</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Чеп</translation>
+        <translation>Чеп</translation>
     </message>
 </context>
 <context>
     <name>HopTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation type="unfinished">Алфа %</translation>
+        <translation>Алфа %</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентар</translation>
+        <translation>Инвентар</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Користи</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
 </context>
 <context>
     <name>IbuGuSlider</name>
     <message>
         <source>Cloying</source>
-        <translation type="unfinished">Превише сладовинасто</translation>
+        <translation>Превише сладовинасто</translation>
     </message>
     <message>
         <source>Extra Malty</source>
-        <translation type="unfinished">Сладовинасто</translation>
+        <translation>Сладовинасто</translation>
     </message>
     <message>
         <source>Slightly Malty</source>
-        <translation type="unfinished">Благо сладовинасто</translation>
+        <translation>Благо сладовинасто</translation>
     </message>
     <message>
         <source>Balanced</source>
-        <translation type="unfinished">Балансирано</translation>
+        <translation>Балансирано</translation>
     </message>
     <message>
         <source>Slightly Hoppy</source>
-        <translation type="unfinished">Благо хмељасто</translation>
+        <translation>Благо хмељасто</translation>
     </message>
     <message>
         <source>Extra Hoppy</source>
-        <translation type="unfinished">Хмељасто</translation>
+        <translation>Хмељасто</translation>
     </message>
     <message>
         <source>Way Hoppy</source>
-        <translation type="unfinished">Превише хмељасто</translation>
+        <translation>Превише хмељасто</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished">Отвори</translation>
+        <translation>Отвори</translation>
     </message>
     <message>
         <source>BeerXML files (*.xml)</source>
-        <translation type="unfinished">BeerXML датотеке (*.xml)</translation>
+        <translation>BeerXML датотеке (*.xml)</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Сачувај</translation>
+        <translation>Сачувај</translation>
     </message>
     <message>
         <source>calories/33cL</source>
@@ -1065,35 +1065,35 @@
     </message>
     <message>
         <source>Equipment request</source>
-        <translation type="unfinished">Захтев за опрему</translation>
+        <translation>Захтев за опрему</translation>
     </message>
     <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
-        <translation type="unfinished">Да ли желите да подесите запремину кувања, запремину кључања и време кувања које подразумева ова опрема?</translation>
+        <translation>Да ли желите да подесите запремину кувања, запремину кључања и време кувања које подразумева ова опрема?</translation>
     </message>
     <message>
         <source>Recipe name</source>
-        <translation type="unfinished">Назив рецепта</translation>
+        <translation>Назив рецепта</translation>
     </message>
     <message>
         <source>Recipe name:</source>
-        <translation type="unfinished">Назив рецепта:</translation>
+        <translation>Назив рецепта:</translation>
     </message>
     <message>
         <source>Folder name</source>
-        <translation type="unfinished">Назив фасцикле</translation>
+        <translation>Назив фасцикле</translation>
     </message>
     <message>
         <source>Folder name:</source>
-        <translation type="unfinished">Назив фасцикле:</translation>
+        <translation>Назив фасцикле:</translation>
     </message>
     <message>
         <source>Bad Name</source>
-        <translation type="unfinished">Лош назив</translation>
+        <translation>Лош назив</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation type="unfinished">Назив фасцикле мора да садржи барем један не-празан карактер.</translation>
+        <translation>Назив фасцикле мора да садржи барем један не-празан карактер.</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
@@ -1101,248 +1101,248 @@
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="unfinished">Направи сигурносну копију базе</translation>
+        <translation>Направи сигурносну копију базе</translation>
     </message>
     <message>
         <source>Oops!</source>
-        <translation type="unfinished">Упс!</translation>
+        <translation>Упс!</translation>
     </message>
     <message>
         <source>Could not copy the files for some reason.</source>
-        <translation type="unfinished">Датотека није ископирана из неког разлога.</translation>
+        <translation>Датотека није ископирана из неког разлога.</translation>
     </message>
     <message>
         <source>A Warning</source>
-        <translation type="unfinished">Упозорење</translation>
+        <translation>Упозорење</translation>
     </message>
     <message>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
-        <translation type="unfinished">Ово ће уништити све рецепте и састојке. Да ли желите да наставите?</translation>
+        <translation>Ово ће уништити све рецепте и састојке. Да ли желите да наставите?</translation>
     </message>
     <message>
         <source>Choose File</source>
-        <translation type="unfinished">Изаберите датотеку</translation>
+        <translation>Изаберите датотеку</translation>
     </message>
     <message>
         <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished">SQLite (*.sqlite)</translation>
+        <translation>SQLite (*.sqlite)</translation>
     </message>
     <message>
         <source>For some reason, the operation failed.</source>
-        <translation type="unfinished">Из неког ралога није успело.</translation>
+        <translation>Из неког ралога није успело.</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished">Покрени поново</translation>
+        <translation>Покрени поново</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
-        <translation type="unfinished"></translation>
+        <translation>Молимо, покрените Brewtarget поново.</translation>
     </message>
     <message>
         <source>Import %1?</source>
-        <translation type="unfinished">Увези %1?</translation>
+        <translation>Увези %1?</translation>
     </message>
     <message>
         <source>No mash</source>
-        <translation type="unfinished">Без укомљавања</translation>
+        <translation>Без укомљавања</translation>
     </message>
     <message>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
-        <translation type="unfinished">Покушавате да додате корак за укомљавање, а само укомљавање не постоји. Морате направити укомљавање прво.</translation>
+        <translation>Покушавате да додате корак за укомљавање, а само укомљавање не постоји. Морате направити укомљавање прво.</translation>
     </message>
     <message>
         <source>Copy Recipe</source>
-        <translation type="unfinished">Копирај рецепт</translation>
+        <translation>Копирај рецепт</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy.</source>
-        <translation type="unfinished">Унеси јединствено име за копију.</translation>
+        <translation>Унеси јединствено име за копију.</translation>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation type="unfinished">Дајте неко име укомљавању пре него покушате да сачувате.</translation>
+        <translation>Дајте неко име укомљавању пре него покушате да сачувате.</translation>
     </message>
     <message>
         <source>HTML files (*.html)</source>
-        <translation type="unfinished">HTML датотеке (*.html)</translation>
+        <translation>HTML датотеке (*.html)</translation>
     </message>
     <message>
         <source>Database Update</source>
-        <translation type="unfinished">Ажурирај базу података</translation>
+        <translation>Ажурирај базу података</translation>
     </message>
     <message>
         <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation type="unfinished">Управоћете ажурирати базу новом. Ово може направити измене (али неће обрисати) неке састојке и рецепте. Да ли желите да наставите?</translation>
+        <translation>Управоћете ажурирати базу новом. Ово може направити измене (али неће обрисати) неке састојке и рецепте. Да ли желите да наставите?</translation>
     </message>
     <message>
         <source>Select Database File</source>
-        <translation type="unfinished">Изабери датотеку</translation>
+        <translation>Изабери датотеку</translation>
     </message>
     <message>
         <source>Brewtarget Database (*.sqlite)</source>
-        <translation type="unfinished">Brewtarget база (*.sqlite)</translation>
+        <translation>Brewtarget база (*.sqlite)</translation>
     </message>
     <message>
         <source>No equipment</source>
-        <translation type="unfinished">Нема опреме</translation>
+        <translation>Нема опреме</translation>
     </message>
     <message>
         <source>You must select or define an equipment profile first.</source>
-        <translation type="unfinished">Прво морате изабрати или дефинисати профил опреме.</translation>
+        <translation>Прво морате изабрати или дефинисати профил опреме.</translation>
     </message>
     <message>
         <source>No style</source>
-        <translation type="unfinished">Нема стила</translation>
+        <translation>Нема стила</translation>
     </message>
     <message>
         <source>You must select a style first.</source>
-        <translation type="unfinished">Морате изабрати стил.</translation>
+        <translation>Морате изабрати стил.</translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
-        <translation type="unfinished">База података је конвертована/ажурирана.</translation>
+        <translation>База података је конвертована/ажурирана.</translation>
     </message>
     <message>
         <source>The original XML files can be found in </source>
-        <translation type="unfinished">Оригиналне XML датотеке можете наћи </translation>
+        <translation>Оригиналне XML датотеке можете наћи </translation>
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
-        <translation type="unfinished">Увоз beerXML је имао проблема, па проверите да има смисла.</translation>
+        <translation>Увоз beerXML је имао проблема, па проверите да има смисла.</translation>
     </message>
 </context>
 <context>
     <name>MashDesigner</name>
     <message>
         <source>No Fermentables</source>
-        <translation type="unfinished">Без слада</translation>
+        <translation>Без слада</translation>
     </message>
     <message>
         <source>Your recipe must have fermentables to design a mash.</source>
-        <translation type="unfinished">Рецепт мора да садржи слад да би направили укомљавање.</translation>
+        <translation>Рецепт мора да садржи слад да би направили укомљавање.</translation>
     </message>
     <message>
         <source>No Equipment</source>
-        <translation type="unfinished">Нема опреме</translation>
+        <translation>Нема опреме</translation>
     </message>
     <message>
         <source>You have not set an equipment for this recipe. We really cannot continue without one.</source>
-        <translation type="unfinished">Нисте изабрали опрему за овај рецепт, а без ње се не може даље.</translation>
+        <translation>Нисте изабрали опрему за овај рецепт, а без ње се не може даље.</translation>
     </message>
     <message>
         <source>Tun Temp</source>
-        <translation type="unfinished">Температура котла</translation>
+        <translation>Температура котла</translation>
     </message>
     <message>
         <source>Enter the temperature of the tun before your first infusion.</source>
-        <translation type="unfinished">Унесите температуру котла пре прве инфузије.</translation>
+        <translation>Унесите температуру котла пре прве инфузије.</translation>
     </message>
     <message>
         <source>Decoction error</source>
-        <translation type="unfinished">Грешка у добијању есенције (Decoction)</translation>
+        <translation>Грешка у добијању есенције (Decoction)</translation>
     </message>
     <message>
         <source>The first mash step cannot be a decoction.</source>
-        <translation type="unfinished">Први корак укомљавања не може бити добијање есенције (Decoction).</translation>
+        <translation>Први корак укомљавања не може бити добијање есенције (Decoction).</translation>
     </message>
 </context>
 <context>
     <name>MashStepTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Bad model index. row = %1</translation>
+        <translation>Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation type="unfinished">Лоша колона: %1</translation>
+        <translation>Лоша колона: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation type="unfinished">Температура инфузије</translation>
+        <translation>Температура инфузије</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation type="unfinished">Циљна температура</translation>
+        <translation>Циљна температура</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
 </context>
 <context>
     <name>MashWizard</name>
     <message>
         <source>No steps</source>
-        <translation type="unfinished">Нема корака</translation>
+        <translation>Нема корака</translation>
     </message>
     <message>
         <source>There must be at least one mash step to run the wizard.</source>
-        <translation type="unfinished">Мора постојати барем један корак да би се покренуо чаробњак.</translation>
+        <translation>Мора постојати барем један корак да би се покренуо чаробњак.</translation>
     </message>
     <message>
         <source>Mash thickness (%1/%2)</source>
-        <translation type="unfinished">Густина комине (%1/%2)</translation>
+        <translation>Густина комине (%1/%2)</translation>
     </message>
     <message>
         <source>Bad thickness</source>
-        <translation type="unfinished">Лоша густина</translation>
+        <translation>Лоша густина</translation>
     </message>
     <message>
         <source>You must have a positive mash thickness.</source>
-        <translation type="unfinished">Густина укомљавања мора бити позитивна.</translation>
+        <translation>Густина укомљавања мора бити позитивна.</translation>
     </message>
     <message>
         <source>First step</source>
-        <translation type="unfinished">Први корак</translation>
+        <translation>Први корак</translation>
     </message>
     <message>
         <source>Your first mash step must be an infusion.</source>
-        <translation type="unfinished">Први корак мора бити инфузија.</translation>
+        <translation>Први корак мора бити инфузија.</translation>
     </message>
     <message>
         <source>Mash too thick</source>
-        <translation type="unfinished">Укомљавање је превише густо</translation>
+        <translation>Укомљавање је превише густо</translation>
     </message>
     <message>
         <source>Your mash is too thick for desired temp. at first step.</source>
-        <translation type="unfinished">Укомљавање је превише густо за жељену температуру за први корак.</translation>
+        <translation>Укомљавање је превише густо за жељену температуру за први корак.</translation>
     </message>
     <message>
         <source>Decoction error</source>
-        <translation type="unfinished">Грешка у добијању есенције (Decoction)</translation>
+        <translation>Грешка у добијању есенције (Decoction)</translation>
     </message>
     <message>
         <source>Something went wrong in decoction calculation.</source>
-        <translation type="unfinished">Нешто је лоше пошле у израчунавању добијања есенције (decoction).</translation>
+        <translation>Нешто је лоше пошле у израчунавању добијања есенције (decoction).</translation>
     </message>
     <message>
         <source>Sparge temp.</source>
-        <translation type="unfinished">Температура спирања</translation>
+        <translation>Температура спирања</translation>
     </message>
     <message>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
-        <translation type="unfinished">Да би постигли циљану температуру испирања, вода мора бити изнад тачке кључања. Или смањите температуру или узмите више воде.</translation>
+        <translation>Да би постигли циљану температуру испирања, вода мора бити изнад тачке кључања. Или смањите температуру или узмите више воде.</translation>
     </message>
     <message>
         <source>Too much wort</source>
-        <translation type="unfinished">Превише комине</translation>
+        <translation>Превише комине</translation>
     </message>
     <message>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
-        <translation type="unfinished">Имате превише сладовине за корак кључања. Или повећајте запремину кључања, или продужите време кључања или смањите густину сладовине.</translation>
+        <translation>Имате превише сладовине за корак кључања. Или повећајте запремину кључања, или продужите време кључања или смањите густину сладовине.</translation>
     </message>
 </context>
 <context>
@@ -1357,7 +1357,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нов</translation>
+        <translation>Нов</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -1377,227 +1377,227 @@
     </message>
     <message>
         <source>Misc name</source>
-        <translation type="unfinished">Назив разног</translation>
+        <translation>Назив разног</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished">Назив разног:</translation>
+        <translation>Назив разног:</translation>
     </message>
 </context>
 <context>
     <name>MiscItemDelegate</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Зачин</translation>
+        <translation>Зачин</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Додатак</translation>
+        <translation>Додатак</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Третирање воде</translation>
+        <translation>Третирање воде</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished">Биљни зачин</translation>
+        <translation>Биљни зачин</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Укус</translation>
+        <translation>Укус</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Друго</translation>
+        <translation>Друго</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Кључање</translation>
+        <translation>Кључање</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Примарна</translation>
+        <translation>Примарна</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Секундарна</translation>
+        <translation>Секундарна</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Флаширање</translation>
+        <translation>Флаширање</translation>
     </message>
 </context>
 <context>
     <name>MiscTableModel</name>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Тежина</translation>
+        <translation>Тежина</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Запремина</translation>
+        <translation>Запремина</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Користи</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентар</translation>
+        <translation>Инвентар</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Тип количине</translation>
+        <translation>Тип количине</translation>
     </message>
 </context>
 <context>
     <name>OptionDialog</name>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished">Каталонски</translation>
+        <translation>Каталонски</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished">Чешки</translation>
+        <translation>Чешки</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished">Немачки</translation>
+        <translation>Немачки</translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Енглески</translation>
+        <translation>Енглески</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation type="unfinished">Грчки</translation>
+        <translation>Грчки</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished">Шпански</translation>
+        <translation>Шпански</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished">Француски</translation>
+        <translation>Француски</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished">Италијански</translation>
+        <translation>Италијански</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished">Холандски</translation>
+        <translation>Холандски</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished">Пољски</translation>
+        <translation>Пољски</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished">Португалски</translation>
+        <translation>Португалски</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished">Руски</translation>
+        <translation>Руски</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation type="unfinished">Кинески</translation>
+        <translation>Кинески</translation>
     </message>
     <message>
         <source>Open Directory</source>
-        <translation type="unfinished">Отвори фасциклу</translation>
+        <translation>Отвори фасциклу</translation>
     </message>
     <message>
         <source>Copy Data</source>
-        <translation type="unfinished">Копирај податке</translation>
+        <translation>Копирај податке</translation>
     </message>
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation type="unfinished">Изгледа да не постоје датотеке у овој фасцикли, па ћемо ископирати ваше старе податке овде.</translation>
+        <translation>Изгледа да не постоје датотеке у овој фасцикли, па ћемо ископирати ваше старе податке овде.</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished">Покрени поново</translation>
+        <translation>Покрени поново</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
-        <translation type="unfinished"></translation>
+        <translation>Молимо, покрените Brewtarget поново.</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Directory Problem</source>
-        <translation type="unfinished">Проблем са фасцкилом.</translation>
+        <translation>Проблем са фасцкилом.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished">&quot;%1&quot; се не може прочитати.</translation>
+        <translation>&quot;%1&quot; се не може прочитати.</translation>
     </message>
     <message>
         <source>Recipes</source>
-        <translation type="unfinished">Рецепти</translation>
+        <translation>Рецепти</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Опрема</translation>
+        <translation>Опрема</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished">Слад</translation>
+        <translation>Слад</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished">Хмељ</translation>
+        <translation>Хмељ</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Разно</translation>
+        <translation>Разно</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Квасац</translation>
+        <translation>Квасац</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стил</translation>
+        <translation>Стил</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished">Фасцикла</translation>
+        <translation>Фасцикла</translation>
     </message>
     <message>
         <source>Invalid color formula type: %1</source>
-        <translation type="unfinished">Invalid color formula type: %1</translation>
+        <translation>Invalid color formula type: %1</translation>
     </message>
     <message>
         <source>Database Failure</source>
-        <translation type="unfinished">Грешка у бази података</translation>
+        <translation>Грешка у бази података</translation>
     </message>
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
-        <translation type="unfinished">Нисам успео да отворим &apos;%1&apos;.</translation>
+        <translation>Нисам успео да отворим &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Failed to update the database</source>
@@ -1605,19 +1605,19 @@
     </message>
     <message>
         <source>Multiple Databases Found</source>
-        <translation type="unfinished">Нађено је више база података</translation>
+        <translation>Нађено је више база података</translation>
     </message>
     <message>
         <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
-        <translation type="unfinished">Више база података је пронашено. Да ли желите да вратите измене које сте направили последњи или претпоследњи пут?</translation>
+        <translation>Више база података је пронашено. Да ли желите да вратите измене које сте направили последњи или претпоследњи пут?</translation>
     </message>
     <message>
         <source>Restore</source>
-        <translation type="unfinished">Последњи пут</translation>
+        <translation>Последњи пут</translation>
     </message>
     <message>
         <source>Rollback</source>
-        <translation type="unfinished">Претпоследњи пут</translation>
+        <translation>Претпоследњи пут</translation>
     </message>
     <message>
         <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
@@ -1637,103 +1637,103 @@
     </message>
     <message>
         <source>Grain</source>
-        <translation type="unfinished">Житарица</translation>
+        <translation>Житарица</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="unfinished">Шећер</translation>
+        <translation>Шећер</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished">Екстракт</translation>
+        <translation>Екстракт</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="unfinished">Суви екстракт</translation>
+        <translation>Суви екстракт</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="unfinished">Прилог</translation>
+        <translation>Прилог</translation>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation type="unfinished">Unrecognized IBU formula type. %1</translation>
+        <translation>Unrecognized IBU formula type. %1</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
-        <translation type="unfinished">Сачувај промене у бази</translation>
+        <translation>Сачувај промене у бази</translation>
     </message>
     <message>
         <source>Would you like to save the changes you made?</source>
-        <translation type="unfinished">Да ли желите да сачувате промене?</translation>
+        <translation>Да ли желите да сачувате промене?</translation>
     </message>
     <message>
         <source>New Version</source>
-        <translation type="unfinished">Нова верзија</translation>
+        <translation>Нова верзија</translation>
     </message>
     <message>
         <source>Version %1 is now available. Download it?</source>
-        <translation type="unfinished">Верзија %1 је доступна. Преузети је?</translation>
+        <translation>Верзија %1 је доступна. Преузети је?</translation>
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished">Престани да ме обавештаваш о новим верзијама?</translation>
+        <translation>Престани да ме обавештаваш о новим верзијама?</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation type="unfinished">Инфузија</translation>
+        <translation>Инфузија</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished">Температура</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation type="unfinished">Добијање есенције</translation>
+        <translation>Добијање есенције</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Зачин</translation>
+        <translation>Зачин</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Додатак</translation>
+        <translation>Додатак</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Третирање воде</translation>
+        <translation>Третирање воде</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished">Биљни зачин</translation>
+        <translation>Биљни зачин</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Укус</translation>
+        <translation>Укус</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Друго</translation>
+        <translation>Друго</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Кључање</translation>
+        <translation>Кључање</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Примарна</translation>
+        <translation>Примарна</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Секундарна</translation>
+        <translation>Секундарна</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Флаширање</translation>
+        <translation>Флаширање</translation>
     </message>
     <message>
         <source>Batch Size: %1
@@ -1797,39 +1797,39 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">За комљење</translation>
+        <translation>За комљење</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Касно</translation>
+        <translation>Касно</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation type="unfinished">Принос</translation>
+        <translation>Принос</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Боја</translation>
+        <translation>Боја</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished">Да</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished">Не</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <source>Total grain: %1
@@ -1845,23 +1845,23 @@
     </message>
     <message>
         <source>Alpha</source>
-        <translation type="unfinished">Алфа</translation>
+        <translation>Алфа</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Користи</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Misc
@@ -1877,7 +1877,7 @@
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Етапа</translation>
+        <translation>Етапа</translation>
     </message>
     <message>
         <source>Mash
@@ -1887,11 +1887,11 @@
     </message>
     <message>
         <source>Temp</source>
-        <translation type="unfinished">Температура</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Циљно</translation>
+        <translation>Циљно</translation>
     </message>
     <message>
         <source>Notes
@@ -1907,146 +1907,146 @@
     </message>
     <message>
         <source>Ale</source>
-        <translation type="unfinished">Ејл</translation>
+        <translation>Ејл</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="unfinished">Лагер</translation>
+        <translation>Лагер</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation type="unfinished">Пшеница</translation>
+        <translation>Пшеница</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation type="unfinished">Вино</translation>
+        <translation>Вино</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation type="unfinished">Шампањац</translation>
+        <translation>Шампањац</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation type="unfinished">Течност</translation>
+        <translation>Течност</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation type="unfinished">Суво</translation>
+        <translation>Суво</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation type="unfinished">Искошено</translation>
+        <translation>Искошено</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation type="unfinished">Култура</translation>
+        <translation>Култура</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished">Ниско</translation>
+        <translation>Ниско</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished">Средње</translation>
+        <translation>Средње</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished">Високо</translation>
+        <translation>Високо</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation type="unfinished">Врло високо</translation>
+        <translation>Врло високо</translation>
     </message>
 </context>
 <context>
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Додај житарице</translation>
+        <translation>Додај житарице</translation>
     </message>
     <message>
         <source>Add </source>
-        <translation type="unfinished">Додај </translation>
+        <translation>Додај </translation>
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation type="unfinished">у котао.</translation>
+        <translation>у котао.</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Загреј воду</translation>
+        <translation>Загреј воду</translation>
     </message>
     <message>
         <source>Bring </source>
-        <translation type="unfinished">Доведи </translation>
+        <translation>Доведи </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
-        <translation type="unfinished">за надолазећу инфузију.</translation>
+        <translation>за надолазећу инфузију.</translation>
     </message>
     <message>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation type="unfinished">Додај %1 воде на %2 у комину да би достигла %3.</translation>
+        <translation>Додај %1 воде на %2 у комину да би достигла %3.</translation>
     </message>
     <message>
         <source>Heat mash to %1.</source>
-        <translation type="unfinished">Загреј комину на %1.</translation>
+        <translation>Загреј комину на %1.</translation>
     </message>
     <message>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation type="unfinished">Доведи %1 комине до кључања и врати у котао да би достигао %2.</translation>
+        <translation>Доведи %1 комине до кључања и врати у котао да би достигао %2.</translation>
     </message>
     <message>
         <source> Hold for %1.</source>
-        <translation type="unfinished"> Задржи %1.</translation>
+        <translation> Задржи %1.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation type="unfinished">Стави %1 %2 за време кључања на %3.</translation>
+        <translation>Стави %1 %2 за време кључања на %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation type="unfinished">Стави %1 %2 у ферментор на %3.</translation>
+        <translation>Стави %1 %2 у ферментор на %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation type="unfinished">Стави %1 %2 у прву сладовину на %3.</translation>
+        <translation>Стави %1 %2 у прву сладовину на %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation type="unfinished">Стави %1 %2 за време укомљавања на %3.</translation>
+        <translation>Стави %1 %2 за време укомљавања на %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation type="unfinished">Придаодај %1 %2 у сладовину на %3.</translation>
+        <translation>Придаодај %1 %2 у сладовину на %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
-        <translation type="unfinished">Користи %1 %2 на %3.</translation>
+        <translation>Користи %1 %2 на %3.</translation>
     </message>
     <message>
         <source>Hop addition</source>
-        <translation type="unfinished">Додати хмељ</translation>
+        <translation>Додати хмељ</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation type="unfinished">Употреби %1 %2 приликом флаширања на %3.</translation>
+        <translation>Употреби %1 %2 приликом флаширања на %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation type="unfinished">Стави %1 %2 у примарни на %3.</translation>
+        <translation>Стави %1 %2 у примарни на %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation type="unfinished">Стави %1 %2 у секундарни на %3.</translation>
+        <translation>Стави %1 %2 у секундарни на %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation type="unfinished">Корсити %1 %2 на %3.</translation>
+        <translation>Корсити %1 %2 на %3.</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation type="unfinished">Додај разно</translation>
+        <translation>Додај разно</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
@@ -2177,7 +2177,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation type="unfinished">%1 воде на %2, </translation>
+        <translation>%1 воде на %2, </translation>
     </message>
     <message>
         <source>%1 water to %2 </source>
@@ -2204,15 +2204,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Боја</translation>
+        <translation>Боја</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Врста</translation>
+        <translation>Врста</translation>
     </message>
     <message>
         <source>Code</source>
@@ -2220,11 +2220,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Упутства</translation>
+        <translation>Упутства</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Preboil</source>
@@ -2236,23 +2236,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">За комљење</translation>
+        <translation>За комљење</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished">Да</translation>
+        <translation>Да</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished">Не</translation>
+        <translation>Не</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation type="unfinished">Принос</translation>
+        <translation>Принос</translation>
     </message>
     <message>
         <source>Alpha</source>
-        <translation type="unfinished">Алфа</translation>
+        <translation>Алфа</translation>
     </message>
     <message>
         <source>Beta</source>
@@ -2260,11 +2260,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Користи</translation>
     </message>
     <message>
         <source>Lab</source>
@@ -2288,7 +2288,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Датум</translation>
+        <translation>Датум</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -2300,15 +2300,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Дужина кључања</translation>
+        <translation>Дужина кључања</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Ефикасност</translation>
+        <translation>Ефикасност</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Calories (per 12 oz.)</source>
@@ -2316,7 +2316,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished">Слад</translation>
+        <translation>Слад</translation>
     </message>
     <message>
         <source>Total grain:</source>
@@ -2324,67 +2324,67 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Касно</translation>
+        <translation>Касно</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished">Хмељ</translation>
+        <translation>Хмељ</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Разно</translation>
+        <translation>Разно</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Квасац</translation>
+        <translation>Квасац</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Етапа</translation>
+        <translation>Етапа</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Секундарна</translation>
+        <translation>Секундарна</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Примарна</translation>
+        <translation>Примарна</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation type="unfinished">Температура</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation type="unfinished">Циљна температура</translation>
+        <translation>Циљна температура</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Упутства</translation>
+        <translation>Упутства</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Датум кувања</translation>
+        <translation>Датум кувања</translation>
     </message>
     <message>
         <source>SG</source>
@@ -2436,11 +2436,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Запремина</translation>
+        <translation>Запремина</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Штампај документ</translation>
+        <translation>Штампај документ</translation>
     </message>
 </context>
 <context>
@@ -2527,19 +2527,19 @@ The final volume in the primary is %1.</source>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Bad model index. row = %1</translation>
+        <translation>Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation type="unfinished">Лоша колона: %1</translation>
+        <translation>Лоша колона: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Calcium (ppm)</source>
@@ -2578,7 +2578,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нов</translation>
+        <translation>Нов</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -2609,70 +2609,70 @@ The final volume in the primary is %1.</source>
     <name>YeastItemDelegate</name>
     <message>
         <source>Ale</source>
-        <translation type="unfinished">Ејл</translation>
+        <translation>Ејл</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="unfinished">Лагер</translation>
+        <translation>Лагер</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation type="unfinished">Пшеница</translation>
+        <translation>Пшеница</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation type="unfinished">Вино</translation>
+        <translation>Вино</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation type="unfinished">Шампањац</translation>
+        <translation>Шампањац</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation type="unfinished">Течност</translation>
+        <translation>Течност</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation type="unfinished">Суво</translation>
+        <translation>Суво</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation type="unfinished">Искошено</translation>
+        <translation>Искошено</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation type="unfinished">Култура</translation>
+        <translation>Култура</translation>
     </message>
 </context>
 <context>
     <name>YeastTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Bad model index. row = %1</translation>
+        <translation>Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation type="unfinished">Лоша колона: %1</translation>
+        <translation>Лоша колона: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished">Инвентар</translation>
+        <translation>Инвентар</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Laboratory</source>
@@ -2687,7 +2687,7 @@ The final volume in the primary is %1.</source>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
@@ -2699,7 +2699,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -2742,7 +2742,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Упутства</translation>
+        <translation>Упутства</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
@@ -2774,7 +2774,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -2817,7 +2817,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Запремина</translation>
+        <translation>Запремина</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
@@ -2865,7 +2865,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="unfinished">Запремина која је ушла у ферментор</translation>
+        <translation>Запремина која је ушла у ферментор</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
@@ -2929,11 +2929,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
 </context>
 <context>
@@ -2975,31 +2975,31 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation type="unfinished">Житарица</translation>
+        <translation>Житарица</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="unfinished">Шећер</translation>
+        <translation>Шећер</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished">Екстракт</translation>
+        <translation>Екстракт</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="unfinished">Суви екстракт</translation>
+        <translation>Суви екстракт</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="unfinished">Прилог</translation>
+        <translation>Прилог</translation>
     </message>
     <message>
         <source>Default Amount</source>
@@ -3007,7 +3007,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Yield (%)</source>
@@ -3019,7 +3019,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Боја</translation>
+        <translation>Боја</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
@@ -3130,7 +3130,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
@@ -3146,35 +3146,35 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Користи</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Прва сладовина</translation>
+        <translation>Прва сладовина</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Кључање</translation>
+        <translation>Кључање</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Арома</translation>
+        <translation>Арома</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Суво хмељње</translation>
+        <translation>Суво хмељње</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
@@ -3186,31 +3186,31 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Горчина</translation>
+        <translation>Горчина</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="unfinished">Обе</translation>
+        <translation>Обе</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Лист</translation>
+        <translation>Лист</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Грануле</translation>
+        <translation>Грануле</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Чеп</translation>
+        <translation>Чеп</translation>
     </message>
     <message>
         <source>Beta (%)</source>
@@ -3277,7 +3277,7 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>Show a timer</source>
@@ -3300,7 +3300,7 @@ The final volume in the primary is %1.</source>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
-        <translation type="unfinished">Рецепти</translation>
+        <translation>Рецепти</translation>
     </message>
     <message>
         <source>Styles</source>
@@ -3308,11 +3308,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished">Слад</translation>
+        <translation>Слад</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished">Хмељ</translation>
+        <translation>Хмељ</translation>
     </message>
     <message>
         <source>Miscs</source>
@@ -3328,11 +3328,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Рецепт</translation>
+        <translation>Рецепт</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Name of recipe</source>
@@ -3364,11 +3364,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стил</translation>
+        <translation>Стил</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Дужина кључања</translation>
+        <translation>Дужина кључања</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -3376,7 +3376,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Опрема</translation>
+        <translation>Опрема</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
@@ -3396,11 +3396,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Боја</translation>
+        <translation>Боја</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
@@ -3456,7 +3456,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Разно</translation>
+        <translation>Разно</translation>
     </message>
     <message>
         <source>Add misc</source>
@@ -3472,7 +3472,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Квасац</translation>
+        <translation>Квасац</translation>
     </message>
     <message>
         <source>Add yeast</source>
@@ -3488,7 +3488,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>Add mash step</source>
@@ -3672,7 +3672,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="unfinished">Направи сигурносну копију базе</translation>
+        <translation>Направи сигурносну копију базе</translation>
     </message>
     <message>
         <source>Restore Database</source>
@@ -3756,7 +3756,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Сачувај</translation>
+        <translation>Сачувај</translation>
     </message>
     <message>
         <source>Delete selected</source>
@@ -3791,11 +3791,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Target temp.</source>
@@ -3803,7 +3803,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -3835,7 +3835,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation type="unfinished">Температура инфузије</translation>
+        <translation>Температура инфузије</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
@@ -3870,7 +3870,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -3890,7 +3890,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -3929,23 +3929,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation type="unfinished">Инфузија</translation>
+        <translation>Инфузија</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished">Температура</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation type="unfinished">Добијање есенције</translation>
+        <translation>Добијање есенције</translation>
     </message>
     <message>
         <source>Target temp.</source>
@@ -3981,7 +3981,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
@@ -4027,63 +4027,63 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Зачин</translation>
+        <translation>Зачин</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Додатак</translation>
+        <translation>Додатак</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Третирање воде</translation>
+        <translation>Третирање воде</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished">Биљни зачин</translation>
+        <translation>Биљни зачин</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Укус</translation>
+        <translation>Укус</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Друго</translation>
+        <translation>Друго</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Користи</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Кључање</translation>
+        <translation>Кључање</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Примарна</translation>
+        <translation>Примарна</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Секундарна</translation>
+        <translation>Секундарна</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Флаширање</translation>
+        <translation>Флаширање</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Трајање</translation>
+        <translation>Трајање</translation>
     </message>
     <message>
         <source>Default Amount</source>
@@ -4091,7 +4091,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -4130,7 +4130,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Укомљавање</translation>
+        <translation>Укомљавање</translation>
     </message>
     <message>
         <source>Delete selected style</source>
@@ -4138,7 +4138,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -4158,7 +4158,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -4221,7 +4221,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Temp</source>
-        <translation type="unfinished">Температура</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
@@ -4241,7 +4241,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Plato</source>
-        <translation type="unfinished">Plato</translation>
+        <translation>Plato</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
@@ -4300,7 +4300,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Тежина</translation>
+        <translation>Тежина</translation>
     </message>
     <message>
         <source>Use SI units</source>
@@ -4316,19 +4316,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished">Температура</translation>
+        <translation>Температура</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Целзијус</translation>
+        <translation>Целзијус</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Фаренхајт</translation>
+        <translation>Фаренхајт</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Запремина</translation>
+        <translation>Запремина</translation>
     </message>
     <message>
         <source>Gravity</source>
@@ -4344,7 +4344,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Датум</translation>
+        <translation>Датум</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4360,7 +4360,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Боја</translation>
+        <translation>Боја</translation>
     </message>
     <message>
         <source>Use SRM</source>
@@ -4388,7 +4388,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -4416,7 +4416,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Прва сладовина</translation>
+        <translation>Прва сладовина</translation>
     </message>
     <message>
         <source>Directories</source>
@@ -4436,7 +4436,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Подразумевано</translation>
+        <translation>Подразумевано</translation>
     </message>
     <message>
         <source>Language</source>
@@ -4659,7 +4659,7 @@ The final volume in the primary is %1.</source>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>Brewer</source>
@@ -4723,7 +4723,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
 </context>
 <context>
@@ -4774,7 +4774,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>ABW</source>
@@ -4790,6 +4790,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG (20C)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4883,7 +4891,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стил</translation>
+        <translation>Стил</translation>
     </message>
     <message>
         <source>Delete selected style</source>
@@ -4895,11 +4903,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Врста</translation>
+        <translation>Врста</translation>
     </message>
     <message>
         <source>Category number</source>
@@ -4915,7 +4923,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Type of beverage</source>
@@ -4923,11 +4931,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="unfinished">Лагер</translation>
+        <translation>Лагер</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation type="unfinished">Ејл</translation>
+        <translation>Ејл</translation>
     </message>
     <message>
         <source>Mead</source>
@@ -4935,7 +4943,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Wheat</source>
-        <translation type="unfinished">Пшеница</translation>
+        <translation>Пшеница</translation>
     </message>
     <message>
         <source>Mixed</source>
@@ -4971,7 +4979,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation type="unfinished">Боја (SRM)</translation>
+        <translation>Боја (SRM)</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
@@ -4995,15 +5003,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Нов</translation>
+        <translation>Нов</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Сачувај</translation>
+        <translation>Сачувај</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -5025,11 +5033,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Белешке</translation>
+        <translation>Белешке</translation>
     </message>
 </context>
 <context>
@@ -5044,51 +5052,51 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Назив</translation>
+        <translation>Назив</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation type="unfinished">Ејл</translation>
+        <translation>Ејл</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation type="unfinished">Лагер</translation>
+        <translation>Лагер</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation type="unfinished">Пшеница</translation>
+        <translation>Пшеница</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation type="unfinished">Вино</translation>
+        <translation>Вино</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation type="unfinished">Шампањац</translation>
+        <translation>Шампањац</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Облик</translation>
+        <translation>Облик</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation type="unfinished">Течност</translation>
+        <translation>Течност</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation type="unfinished">Суво</translation>
+        <translation>Суво</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation type="unfinished">Искошено</translation>
+        <translation>Искошено</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation type="unfinished">Култура</translation>
+        <translation>Култура</translation>
     </message>
     <message>
         <source>Default Amount</source>
@@ -5096,7 +5104,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Количина</translation>
+        <translation>Количина</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
@@ -5148,19 +5156,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished">Ниско</translation>
+        <translation>Ниско</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished">Средње</translation>
+        <translation>Средње</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished">Високо</translation>
+        <translation>Високо</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation type="unfinished">Врло високо</translation>
+        <translation>Врло високо</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>

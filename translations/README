@@ -39,7 +39,22 @@ and extract them here in a subdirectory (we will assume lpad/).
   - First, need to 'approve' bt.pot in the upload queue and wait for it to
     properly upload. Then, for each .po file, select the 'bt' template and
     correct language before 'approving'.
+
 5. Clean up.
 
         $ rm -rf lpad *.po *.pot bt.tar.gz
+
+## Merging
+
+If for some reason you MUST merge translations (please avoid this), first
+remove untranslated entries from the launchpad translations, or otherwise you
+will obliterate current translations with empty strings.
+
+    $ msgattrib --translated lpad/bt-ca.po -o lpad/bt-ca.po
+
+Then, you can either use lconvert to convert the launchpad translation into a
+.qph phrasebook and use 'Batch Translate' from linguist, or try to directly
+merge via linguist.
+
+    $ lconvert bt_ca.ts lpad/bt-ca.po -o bt_ca.ts
 

@@ -370,7 +370,7 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -378,11 +378,11 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilart</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kogetid</translation>
+        <translation>Kogetid</translation>
     </message>
     <message>
         <source>Color</source>
@@ -390,15 +390,15 @@
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Brug</translation>
+        <translation>Brug</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Category</source>
@@ -473,7 +473,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilart</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -513,11 +513,11 @@
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Kopier %1</translation>
+        <translation>Kopier %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Indtast et unikt navn for kopien af %1</translation>
+        <translation>Indtast et unikt navn for kopien af %1</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
@@ -626,7 +626,7 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
@@ -734,7 +734,7 @@
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Gem</translation>
+        <translation>Gem</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1322,7 +1322,7 @@
     </message>
     <message>
         <source>Decoction error</source>
-        <translation type="unfinished">Indkognings fejl</translation>
+        <translation>Indkognings fejl</translation>
     </message>
     <message>
         <source>Something went wrong in decoction calculation.</source>
@@ -1412,11 +1412,11 @@
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kog</translation>
+        <translation>Kog</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mæsk</translation>
+        <translation>Mæsk</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -1435,23 +1435,23 @@
     <name>MiscTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Brug</translation>
+        <translation>Brug</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Weight</source>
@@ -1486,11 +1486,11 @@
     </message>
     <message>
         <source>Restart</source>
-        <translation type="unfinished">Start igen</translation>
+        <translation>Start igen</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
-        <translation type="unfinished">Genstart Brewtarget</translation>
+        <translation>Genstart Brewtarget</translation>
     </message>
     <message>
         <source>Catalan</source>
@@ -1597,23 +1597,23 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Mæsket</translation>
+        <translation>Mæsket</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Forsinket</translation>
+        <translation>Forsinket</translation>
     </message>
     <message>
         <source>Yield</source>
@@ -1647,15 +1647,15 @@
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Brug</translation>
+        <translation>Brug</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Misc
@@ -1669,7 +1669,7 @@
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -1776,31 +1776,31 @@
     </message>
     <message>
         <source>Grain</source>
-        <translation type="unfinished">Urt</translation>
+        <translation>Urt</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="unfinished">Sukker</translation>
+        <translation>Sukker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished">Ekstrakt</translation>
+        <translation>Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="unfinished">Tør ekstrakt</translation>
+        <translation>Tør ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="unfinished">Adjunk</translation>
+        <translation>Adjunk</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kog</translation>
+        <translation>Kog</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mæsk</translation>
+        <translation>Mæsk</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -1930,7 +1930,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilart</translation>
     </message>
     <message>
         <source>Folder</source>
@@ -1945,7 +1945,7 @@
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Tilføj korn</translation>
+        <translation>Tilføj korn</translation>
     </message>
     <message>
         <source>Add </source>
@@ -1957,7 +1957,7 @@
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Opvarm vand</translation>
+        <translation>Opvarm vand</translation>
     </message>
     <message>
         <source>Bring </source>
@@ -2183,7 +2183,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Dato</translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -2195,11 +2195,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kogetid</translation>
+        <translation>Kogetid</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Effektivitet</translation>
+        <translation>Effektivitet</translation>
     </message>
     <message>
         <source>OG</source>
@@ -2211,7 +2211,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">Alkohol per volumen</translation>
+        <translation>Alkohol per volumen</translation>
     </message>
     <message>
         <source>Color</source>
@@ -2231,23 +2231,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Mæsket</translation>
+        <translation>Mæsket</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Forsinket</translation>
+        <translation>Forsinket</translation>
     </message>
     <message>
         <source>Yield</source>
@@ -2271,19 +2271,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Brug</translation>
+        <translation>Brug</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2307,7 +2307,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mæsk</translation>
+        <translation>Mæsk</translation>
     </message>
     <message>
         <source>Temp</source>
@@ -2315,15 +2315,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation type="unfinished">Temperatur mål</translation>
+        <translation>Temperatur mål</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Bemærkninger</translation>
+        <translation>Bemærkninger</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instruktioner</translation>
+        <translation>Instruktioner</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -2387,7 +2387,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Udskriv dokument</translation>
+        <translation>Udskriv dokument</translation>
     </message>
     <message>
         <source>Category</source>
@@ -2510,19 +2510,19 @@ The final volume in the primary is %1.</source>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Forkert model index. række = %1</translation>
+        <translation>Forkert model index. række = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation type="unfinished">Forkert kolonne: %1</translation>
+        <translation>Forkert kolonne: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Calcium (ppm)</source>
@@ -2631,27 +2631,27 @@ The final volume in the primary is %1.</source>
     <name>YeastTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Forkert model index. række = %1</translation>
+        <translation>Forkert model index. række = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation type="unfinished">Forkert kolonne: %1</translation>
+        <translation>Forkert kolonne: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Laboratory</source>
@@ -2670,7 +2670,7 @@ The final volume in the primary is %1.</source>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
@@ -2682,7 +2682,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -2725,7 +2725,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instruktioner</translation>
+        <translation>Instruktioner</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
@@ -2757,7 +2757,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -2844,7 +2844,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="unfinished">Volume i gæringskar</translation>
+        <translation>Volume i gæringskar</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
@@ -2904,11 +2904,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">Alkohol per volumen</translation>
+        <translation>Alkohol per volumen</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Bemærkninger</translation>
+        <translation>Bemærkninger</translation>
     </message>
     <message>
         <source>brewNote</source>
@@ -2954,35 +2954,35 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation type="unfinished">Urt</translation>
+        <translation>Urt</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="unfinished">Sukker</translation>
+        <translation>Sukker</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished">Ekstrakt</translation>
+        <translation>Ekstrakt</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="unfinished">Tør ekstrakt</translation>
+        <translation>Tør ekstrakt</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="unfinished">Adjunk</translation>
+        <translation>Adjunk</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Yield (%)</source>
@@ -3113,7 +3113,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
@@ -3125,59 +3125,59 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Brug</translation>
+        <translation>Brug</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mæsk</translation>
+        <translation>Mæsk</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Første vørter</translation>
+        <translation>Første vørter</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kog</translation>
+        <translation>Kog</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma humle</translation>
+        <translation>Aroma humle</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Tør humle</translation>
+        <translation>Tør humle</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Bitter humle</translation>
+        <translation>Bitter humle</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="unfinished">Begge</translation>
+        <translation>Begge</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished"></translation>
+        <translation>Løv</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pille</translation>
+        <translation>Pille</translation>
     </message>
     <message>
         <source>Plug</source>
@@ -3260,7 +3260,7 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Show a timer</source>
@@ -3311,7 +3311,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Name of recipe</source>
@@ -3339,11 +3339,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilart</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kogetid</translation>
+        <translation>Kogetid</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -3375,7 +3375,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">Alkohol per volumen</translation>
+        <translation>Alkohol per volumen</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
@@ -3459,7 +3459,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mæsk</translation>
+        <translation>Mæsk</translation>
     </message>
     <message>
         <source>Add mash step</source>
@@ -3643,7 +3643,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="unfinished">Sikkerhedskopier database</translation>
+        <translation>Sikkerhedskopier database</translation>
     </message>
     <message>
         <source>Restore Database</source>
@@ -3727,7 +3727,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Gem</translation>
+        <translation>Gem</translation>
     </message>
     <message>
         <source>Delete selected</source>
@@ -3774,11 +3774,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Target temp.</source>
@@ -3786,7 +3786,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -3818,7 +3818,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation type="unfinished">Infusions temp.</translation>
+        <translation>Infusions temp.</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
@@ -3849,7 +3849,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -3869,7 +3869,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Bemærkninger</translation>
+        <translation>Bemærkninger</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -3912,11 +3912,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3964,7 +3964,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
@@ -4010,11 +4010,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Spice</source>
@@ -4042,15 +4042,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Brug</translation>
+        <translation>Brug</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kog</translation>
+        <translation>Kog</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mæsk</translation>
+        <translation>Mæsk</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -4066,11 +4066,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Varighed</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
@@ -4113,7 +4113,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mæsk</translation>
+        <translation>Mæsk</translation>
     </message>
     <message>
         <source>Delete selected style</source>
@@ -4121,7 +4121,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -4141,7 +4141,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Bemærkninger</translation>
+        <translation>Bemærkninger</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -4224,7 +4224,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Plato</source>
-        <translation type="unfinished">Plato</translation>
+        <translation>Plato</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
@@ -4303,11 +4303,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Celsius</translation>
+        <translation>Celsius</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Fahrenheit</translation>
+        <translation>Fahrenheit</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -4355,7 +4355,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -4379,7 +4379,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Første vørter</translation>
+        <translation>Første vørter</translation>
     </message>
     <message>
         <source>Directories</source>
@@ -4399,7 +4399,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Forvalg</translation>
+        <translation>Forvalg</translation>
     </message>
     <message>
         <source>Language</source>
@@ -4417,7 +4417,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Dato</translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4642,7 +4642,7 @@ The final volume in the primary is %1.</source>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Brewer</source>
@@ -4706,7 +4706,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Bemærkninger</translation>
+        <translation>Bemærkninger</translation>
     </message>
 </context>
 <context>
@@ -4745,7 +4745,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">Alkohol per volumen</translation>
+        <translation>Alkohol per volumen</translation>
     </message>
     <message>
         <source>ABW</source>
@@ -4773,6 +4773,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4866,7 +4874,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilart</translation>
     </message>
     <message>
         <source>Delete selected style</source>
@@ -4878,7 +4886,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Category</source>
@@ -4898,7 +4906,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Type of beverage</source>
@@ -4954,7 +4962,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation type="unfinished">Farve (SRM)</translation>
+        <translation>Farve (SRM)</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
@@ -4978,7 +4986,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Bemærkninger</translation>
+        <translation>Bemærkninger</translation>
     </message>
     <message>
         <source>New</source>
@@ -4986,7 +4994,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Gem</translation>
+        <translation>Gem</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -5008,11 +5016,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Bemærkninger</translation>
+        <translation>Bemærkninger</translation>
     </message>
 </context>
 <context>
@@ -5027,11 +5035,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -5055,7 +5063,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Liquid</source>
@@ -5075,7 +5083,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mængde</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>

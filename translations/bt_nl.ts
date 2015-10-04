@@ -5,11 +5,11 @@
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished">Over Brewtarget</translation>
+        <translation>Over Brewtarget</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation type="unfinished">Donatie</translation>
+        <translation>Donatie</translation>
     </message>
 </context>
 <context>
@@ -370,7 +370,7 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -378,31 +378,31 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stijl</translation>
+        <translation>Stijl</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Kooktijd</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Kleur</translation>
+        <translation>Kleur</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Gebruik</translation>
+        <translation>Gebruik</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Vorm</translation>
+        <translation>Vorm</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Categorie</translation>
+        <translation>Categorie</translation>
     </message>
     <message>
         <source>Number</source>
@@ -429,11 +429,11 @@
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nieuw</translation>
+        <translation>Nieuw</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Recept</translation>
+        <translation>Recept</translation>
     </message>
     <message>
         <source>Brew It!</source>
@@ -457,7 +457,7 @@
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Apparatuur</translation>
+        <translation>Apparatuur</translation>
     </message>
     <message>
         <source>Fermentable</source>
@@ -469,15 +469,15 @@
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Diversen</translation>
+        <translation>Diversen</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stijl</translation>
+        <translation>Stijl</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Gist</translation>
+        <translation>Gist</translation>
     </message>
     <message>
         <source>Folder</source>
@@ -528,35 +528,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation type="unfinished">Conversie Gereedschap</translation>
+        <translation>Conversie Gereedschap</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Invoer</translation>
+        <translation>Invoer</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation type="unfinished">Uitvoer Eenheden</translation>
+        <translation>Uitvoer Eenheden</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Uitvoer</translation>
+        <translation>Uitvoer</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Conversie</translation>
+        <translation>Conversie</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation type="unfinished">Hoeveelheden en Eenheden om te converteren</translation>
+        <translation>Hoeveelheden en Eenheden om te converteren</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation type="unfinished">Eenheid waar u naar toe wilt converteren</translation>
+        <translation>Eenheid waar u naar toe wilt converteren</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation type="unfinished">Uitvoer conversie</translation>
+        <translation>Uitvoer conversie</translation>
     </message>
 </context>
 <context>
@@ -610,11 +610,11 @@
     </message>
     <message>
         <source>Equipment Editor</source>
-        <translation type="unfinished">Apparatuur Editor</translation>
+        <translation>Apparatuur Editor</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Apparatuur</translation>
+        <translation>Apparatuur</translation>
     </message>
     <message>
         <source>Set as Default</source>
@@ -622,51 +622,51 @@
     </message>
     <message>
         <source>Required Fields</source>
-        <translation type="unfinished">Vereiste Velden</translation>
+        <translation>Vereiste Velden</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation type="unfinished">Volume voor het koken</translation>
+        <translation>Volume voor het koken</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished">Bereken volume voor het koken</translation>
+        <translation>Bereken volume voor het koken</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation type="unfinished">Batch grootte</translation>
+        <translation>Batch grootte</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation type="unfinished">Koken &amp;&amp; Water</translation>
+        <translation>Koken &amp;&amp; Water</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation type="unfinished">Kook tijd</translation>
+        <translation>Kook tijd</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation type="unfinished">Verdampingssnelheid (per uur)</translation>
+        <translation>Verdampingssnelheid (per uur)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation type="unfinished">Ketel top-up water</translation>
+        <translation>Ketel top-up water</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation type="unfinished">Uiteindelijk top-up water</translation>
+        <translation>Uiteindelijk top-up water</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation type="unfinished">Graan absorbtie</translation>
+        <translation>Graan absorbtie</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation type="unfinished">Staindaard Absorbtie</translation>
+        <translation>Staindaard Absorbtie</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
@@ -678,67 +678,67 @@
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation type="unfinished">Maisch Vat</translation>
+        <translation>Maisch Vat</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation>Gewicht</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation type="unfinished">Verwijder apparatuur</translation>
+        <translation>Verwijder apparatuur</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation type="unfinished">Indien aangevinkt wordt het volume voor het koken berekend, gebaseerd op uw gewenste batch grootte, kook tijd, verdampingssnelheid rate, verliezen, enz.</translation>
+        <translation>Indien aangevinkt wordt het volume voor het koken berekend, gebaseerd op uw gewenste batch grootte, kook tijd, verdampingssnelheid rate, verliezen, enz.</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation type="unfinished">Vul automatisch het volume voor het koken in</translation>
+        <translation>Vul automatisch het volume voor het koken in</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation type="unfinished">Hoeveel water verdampt er per uur</translation>
+        <translation>Hoeveel water verdampt er per uur</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation type="unfinished">Hoeveel water wordt toegevoegd vlak voor het koken</translation>
+        <translation>Hoeveel water wordt toegevoegd vlak voor het koken</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation type="unfinished">Water toegevoegd aan vergistingsvat</translation>
+        <translation>Water toegevoegd aan vergistingsvat</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation type="unfinished">Volume van het maisch vat</translation>
+        <translation>Volume van het maisch vat</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation type="unfinished">Massa of gewicht van het Maisch Vat</translation>
+        <translation>Massa of gewicht van het Maisch Vat</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation type="unfinished">Wort verlies tussen ketel en Vergistingsvat</translation>
+        <translation>Wort verlies tussen ketel en Vergistingsvat</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation type="unfinished">Verloren wortvolume door dode ruimten de klaringskuip</translation>
+        <translation>Verloren wortvolume door dode ruimten de klaringskuip</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation type="unfinished">Nieuwe apparatuur</translation>
+        <translation>Nieuwe apparatuur</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Opslaan</translation>
+        <translation>Opslaan</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annuleren</translation>
+        <translation>Annuleren</translation>
     </message>
 </context>
 <context>
@@ -753,7 +753,7 @@
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation type="unfinished">Database met vergistbaren</translation>
+        <translation>Database met vergistbaren</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
@@ -761,7 +761,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nieuw</translation>
+        <translation>Nieuw</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -769,15 +769,15 @@
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Creëer nieuw ingrediënt</translation>
+        <translation>Creëer nieuw ingrediënt</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Edit geselecteerde ingrediënt</translation>
+        <translation>Edit geselecteerde ingrediënt</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Verwijder geselecteerde ingrediënt</translation>
+        <translation>Verwijder geselecteerde ingrediënt</translation>
     </message>
 </context>
 <context>
@@ -859,7 +859,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Kleur</translation>
+        <translation>Kleur</translation>
     </message>
 </context>
 <context>
@@ -917,7 +917,7 @@
     </message>
     <message>
         <source>Hop Database</source>
-        <translation type="unfinished">Hop Database</translation>
+        <translation>Hop Database</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
@@ -925,7 +925,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nieuw</translation>
+        <translation>Nieuw</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -933,15 +933,15 @@
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Creëer nieuw ingrediënt</translation>
+        <translation>Creëer nieuw ingrediënt</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Edit geselecteerde ingrediënt</translation>
+        <translation>Edit geselecteerde ingrediënt</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Verwijder geselecteerde ingrediënt</translation>
+        <translation>Verwijder geselecteerde ingrediënt</translation>
     </message>
 </context>
 <context>
@@ -1357,7 +1357,7 @@
     </message>
     <message>
         <source>Misc Database</source>
-        <translation type="unfinished">Database Diversen</translation>
+        <translation>Database Diversen</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
@@ -1365,7 +1365,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nieuw</translation>
+        <translation>Nieuw</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -1373,15 +1373,15 @@
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Creëer nieuw ingrediënt</translation>
+        <translation>Creëer nieuw ingrediënt</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Edit geselecteerde ingrediënt</translation>
+        <translation>Edit geselecteerde ingrediënt</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Verwijder geselecteerde ingrediënt</translation>
+        <translation>Verwijder geselecteerde ingrediënt</translation>
     </message>
 </context>
 <context>
@@ -1455,11 +1455,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation>Gewicht</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -1944,7 +1944,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stijl</translation>
+        <translation>Stijl</translation>
     </message>
     <message>
         <source>Folder</source>
@@ -2408,7 +2408,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Categorie</translation>
+        <translation>Categorie</translation>
     </message>
     <message>
         <source>Code</source>
@@ -2428,7 +2428,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation type="unfinished">Lab</translation>
+        <translation>Lab</translation>
     </message>
     <message>
         <source>Attenuation</source>
@@ -2440,7 +2440,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation type="unfinished">Flocculatie</translation>
+        <translation>Flocculatie</translation>
     </message>
 </context>
 <context>
@@ -2500,7 +2500,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation type="unfinished">Zet de timer op de gespecificeerde waarde</translation>
+        <translation>Zet de timer op de gespecificeerde waarde</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
@@ -2508,19 +2508,19 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation type="unfinished">Start/Stop timer</translation>
+        <translation>Start/Stop timer</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation type="unfinished">Zet een geluid als alarm</translation>
+        <translation>Zet een geluid als alarm</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished">Instellen</translation>
+        <translation>Instellen</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished">Geluid</translation>
+        <translation>Geluid</translation>
     </message>
 </context>
 <context>
@@ -2578,7 +2578,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation type="unfinished">Gist Databank</translation>
+        <translation>Gist Databank</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
@@ -2586,7 +2586,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nieuw</translation>
+        <translation>Nieuw</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -2594,15 +2594,15 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Creëer nieuw ingrediënt</translation>
+        <translation>Creëer nieuw ingrediënt</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Edit geselecteerde ingrediënt</translation>
+        <translation>Edit geselecteerde ingrediënt</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Verwijder geselecteerde ingrediënt</translation>
+        <translation>Verwijder geselecteerde ingrediënt</translation>
     </message>
 </context>
 <context>
@@ -2841,7 +2841,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation>Oorspronkelijk SG</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
@@ -3115,7 +3115,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Kleur</translation>
+        <translation>Kleur</translation>
     </message>
 </context>
 <context>
@@ -3360,7 +3360,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Kooktijd</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -3768,7 +3768,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>1.0</source>
-        <translation type="unfinished">1.0</translation>
+        <translation>1.0</translation>
     </message>
     <message>
         <source>application/x-brewtarget-ingredient</source>
@@ -4130,75 +4130,75 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Maisch</translation>
+        <translation>Maisch</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished">Verwijder geselecteerde stijl</translation>
+        <translation>Verwijder geselecteerde stijl</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="unfinished">Initiële graan temp</translation>
+        <translation>Initiële graan temp</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished">Spoel temp</translation>
+        <translation>Spoel temp</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished">Beoogde Spoel temp</translation>
+        <translation>Beoogde Spoel temp</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished">Spoel pH</translation>
+        <translation>Spoel pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Aantekeningen</translation>
+        <translation>Aantekeningen</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="unfinished">Vat</translation>
+        <translation>Vat</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished">Initiële vat temp</translation>
+        <translation>Initiële vat temp</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Van Apparatuur</translation>
+        <translation>Van Apparatuur</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished">Vat massa</translation>
+        <translation>Vat massa</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="unfinished">Vat spec. hitte</translation>
+        <translation>Vat spec. hitte</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished">Vat specifieke hitte (cal/g*K)</translation>
+        <translation>Vat specifieke hitte (cal/g*K)</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="unfinished">Voeg maisch stap toe</translation>
+        <translation>Voeg maisch stap toe</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished">Verwijder geselecteerde maisch stap</translation>
+        <translation>Verwijder geselecteerde maisch stap</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="unfinished">Maisch stap omhoog</translation>
+        <translation>Maisch stap omhoog</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="unfinished">Maisch stap omlaag</translation>
+        <translation>Maisch stap omlaag</translation>
     </message>
 </context>
 <context>
@@ -4396,7 +4396,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Eerste Wort</translation>
+        <translation>Eerste Wort</translation>
     </message>
     <message>
         <source>Directories</source>
@@ -4440,7 +4440,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4798,6 +4798,14 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <source>Current measured plato</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>
@@ -4866,7 +4874,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Bereken</translation>
+        <translation>Bereken</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
@@ -4965,11 +4973,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation>Oorspronkelijk SG</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation type="unfinished"></translation>
+        <translation>eind SG</translation>
     </message>
     <message>
         <source>IBUs</source>

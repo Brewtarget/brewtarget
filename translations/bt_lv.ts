@@ -16,15 +16,15 @@
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Drukāt dokumentu</translation>
+        <translation>Drukāt dokumentu</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Piezīmes&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Piezīmes&lt;/h2&gt;</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">Solis %1: %2</translation>
+        <translation>Solis %1: %2</translation>
     </message>
     <message>
         <source>Style</source>
@@ -32,7 +32,7 @@
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datums</translation>
+        <translation>Datums</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -76,19 +76,19 @@
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrukcijas</translation>
+        <translation>Instrukcijas</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Pabeigts</translation>
+        <translation>Pabeigts</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Solis</translation>
+        <translation>Solis</translation>
     </message>
     <message>
         <source>Add grains</source>
@@ -127,7 +127,7 @@
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datums</translation>
+        <translation>Datums</translation>
     </message>
     <message>
         <source>Boil Volume</source>
@@ -163,19 +163,19 @@
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrukcijas</translation>
+        <translation>Instrukcijas</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Pabeigts</translation>
+        <translation>Pabeigts</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Solis</translation>
+        <translation>Solis</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
@@ -199,26 +199,26 @@
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Drukāt dokumentu</translation>
+        <translation>Drukāt dokumentu</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Piezīmes</translation>
+        <translation>Piezīmes</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">Solis %1: %2</translation>
+        <translation>Solis %1: %2</translation>
     </message>
 </context>
 <context>
     <name>Brewtarget</name>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Nezināms</translation>
+        <translation>Nezināms</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Noklusējuma</translation>
+        <translation>Noklusējuma</translation>
     </message>
     <message>
         <source>EBC</source>
@@ -258,31 +258,31 @@
     </message>
     <message>
         <source>Milligrams</source>
-        <translation type="unfinished">Miligrami</translation>
+        <translation>Miligrami</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation type="unfinished">Grami</translation>
+        <translation>Grami</translation>
     </message>
     <message>
         <source>Kilograms</source>
-        <translation type="unfinished">Kilogrami</translation>
+        <translation>Kilogrami</translation>
     </message>
     <message>
         <source>Ounces</source>
-        <translation type="unfinished">Unces</translation>
+        <translation>Unces</translation>
     </message>
     <message>
         <source>Pounds</source>
-        <translation type="unfinished">Mārciņas</translation>
+        <translation>Mārciņas</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Celsija</translation>
+        <translation>Celsija</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Fārenheita</translation>
+        <translation>Fārenheita</translation>
     </message>
     <message>
         <source>Seconds</source>
@@ -306,31 +306,31 @@
     </message>
     <message>
         <source>MilliLiters</source>
-        <translation type="unfinished">Mililitri</translation>
+        <translation>Mililitri</translation>
     </message>
     <message>
         <source>Liters</source>
-        <translation type="unfinished">Litri</translation>
+        <translation>Litri</translation>
     </message>
     <message>
         <source>Teaspoons</source>
-        <translation type="unfinished">Tējkarotes</translation>
+        <translation>Tējkarotes</translation>
     </message>
     <message>
         <source>Tablespoons</source>
-        <translation type="unfinished">Ēdamkarotes</translation>
+        <translation>Ēdamkarotes</translation>
     </message>
     <message>
         <source>Cups</source>
-        <translation type="unfinished">Krūzes</translation>
+        <translation>Krūzes</translation>
     </message>
     <message>
         <source>Quarts</source>
-        <translation type="unfinished">Kvarti</translation>
+        <translation>Kvarti</translation>
     </message>
     <message>
         <source>Gallons</source>
-        <translation type="unfinished">Galoni</translation>
+        <translation>Galoni</translation>
     </message>
     <message>
         <source>Barrels</source>
@@ -370,11 +370,11 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Brūvēšanas datums</translation>
+        <translation>Brūvēšanas datums</translation>
     </message>
     <message>
         <source>Style</source>
@@ -386,15 +386,15 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Krāsa</translation>
+        <translation>Krāsa</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Lietot</translation>
+        <translation>Lietot</translation>
     </message>
     <message>
         <source>Form</source>
@@ -402,11 +402,11 @@
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategorija</translation>
+        <translation>Kategorija</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Numurs</translation>
+        <translation>Numurs</translation>
     </message>
     <message>
         <source>Letter</source>
@@ -418,34 +418,34 @@
     </message>
     <message>
         <source>PATH</source>
-        <translation type="unfinished">Ceļš</translation>
+        <translation>Ceļš</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation type="unfinished">Pilns ceļš</translation>
+        <translation>Pilns ceļš</translation>
     </message>
 </context>
 <context>
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Jauns</translation>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Recepte</translation>
+        <translation>Recepte</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Brūvē!</translation>
+        <translation>Brūvē!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Brūvēt velreiz</translation>
+        <translation>Brūvēt velreiz</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Mainīt datumu</translation>
+        <translation>Mainīt datumu</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
@@ -453,11 +453,11 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Dzēst</translation>
+        <translation>Dzēst</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Iekārtas</translation>
+        <translation>Iekārtas</translation>
     </message>
     <message>
         <source>Fermentable</source>
@@ -582,7 +582,7 @@
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Iekārtas</translation>
+        <translation>Iekārtas</translation>
     </message>
     <message>
         <source>Set as Default</source>
@@ -594,7 +594,7 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
@@ -753,7 +753,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Jauns</translation>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -835,11 +835,11 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Inventory</source>
@@ -859,7 +859,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Krāsa</translation>
+        <translation>Krāsa</translation>
     </message>
 </context>
 <context>
@@ -917,7 +917,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Jauns</translation>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -983,7 +983,7 @@
     <name>HopTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Alpha %</source>
@@ -999,11 +999,11 @@
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Lietot</translation>
+        <translation>Lietot</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1259,11 +1259,11 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -1279,7 +1279,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
 </context>
 <context>
@@ -1357,7 +1357,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Jauns</translation>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -1443,19 +1443,19 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Lietot</translation>
+        <translation>Lietot</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Inventory</source>
@@ -1561,7 +1561,7 @@
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Iekārtas</translation>
+        <translation>Iekārtas</translation>
     </message>
     <message>
         <source>Fermentables</source>
@@ -1787,11 +1787,11 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -1811,7 +1811,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Krāsa</translation>
+        <translation>Krāsa</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -1837,11 +1837,11 @@
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Lietot</translation>
+        <translation>Lietot</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Form</source>
@@ -2187,7 +2187,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Krāsa</translation>
+        <translation>Krāsa</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -2195,7 +2195,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategorija</translation>
+        <translation>Kategorija</translation>
     </message>
     <message>
         <source>Code</source>
@@ -2207,7 +2207,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Preboil</source>
@@ -2247,7 +2247,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Lietot</translation>
+        <translation>Lietot</translation>
     </message>
     <message>
         <source>Lab</source>
@@ -2271,7 +2271,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datums</translation>
+        <translation>Datums</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -2307,7 +2307,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2323,7 +2323,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2359,15 +2359,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Piezīmes</translation>
+        <translation>Piezīmes</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrukcijas</translation>
+        <translation>Instrukcijas</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Brūvēšanas datums</translation>
+        <translation>Brūvēšanas datums</translation>
     </message>
     <message>
         <source>SG</source>
@@ -2423,7 +2423,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Drukāt dokumentu</translation>
+        <translation>Drukāt dokumentu</translation>
     </message>
 </context>
 <context>
@@ -2518,7 +2518,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2561,7 +2561,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Jauns</translation>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -2639,11 +2639,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Form</source>
@@ -2682,7 +2682,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -2725,7 +2725,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrukcijas</translation>
+        <translation>Instrukcijas</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
@@ -2757,7 +2757,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -2916,7 +2916,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Piezīmes</translation>
+        <translation>Piezīmes</translation>
     </message>
 </context>
 <context>
@@ -2958,11 +2958,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Grain</source>
@@ -2986,7 +2986,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished">Noklusējuma daudzums</translation>
+        <translation>Noklusējuma daudzums</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3002,7 +3002,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Krāsa</translation>
+        <translation>Krāsa</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
@@ -3098,7 +3098,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes:</source>
-        <translation type="unfinished">Piezīmes:</translation>
+        <translation>Piezīmes:</translation>
     </message>
 </context>
 <context>
@@ -3113,7 +3113,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
@@ -3133,7 +3133,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Lietot</translation>
+        <translation>Lietot</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -3157,7 +3157,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
@@ -3169,7 +3169,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Bittering</source>
@@ -3253,7 +3253,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes:</source>
-        <translation type="unfinished">Piezīmes:</translation>
+        <translation>Piezīmes:</translation>
     </message>
 </context>
 <context>
@@ -3311,11 +3311,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Recepte</translation>
+        <translation>Recepte</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Name of recipe</source>
@@ -3359,7 +3359,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Iekārtas</translation>
+        <translation>Iekārtas</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
@@ -3383,7 +3383,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Krāsa</translation>
+        <translation>Krāsa</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
@@ -3774,11 +3774,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Target temp.</source>
@@ -3786,7 +3786,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -3853,7 +3853,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -3873,7 +3873,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Piezīmes</translation>
+        <translation>Piezīmes</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -3912,11 +3912,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3964,7 +3964,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
@@ -4010,11 +4010,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Spice</source>
@@ -4042,7 +4042,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Lietot</translation>
+        <translation>Lietot</translation>
     </message>
     <message>
         <source>Boil</source>
@@ -4066,11 +4066,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Laiks</translation>
+        <translation>Laiks</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished">Noklusējuma daudzums</translation>
+        <translation>Noklusējuma daudzums</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -4102,7 +4102,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes:</source>
-        <translation type="unfinished">Piezīmes:</translation>
+        <translation>Piezīmes:</translation>
     </message>
 </context>
 <context>
@@ -4121,7 +4121,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -4141,7 +4141,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Piezīmes</translation>
+        <translation>Piezīmes</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -4303,11 +4303,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Celsija</translation>
+        <translation>Celsija</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Fārenheita</translation>
+        <translation>Fārenheita</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -4327,7 +4327,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datums</translation>
+        <translation>Datums</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4343,7 +4343,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Krāsa</translation>
+        <translation>Krāsa</translation>
     </message>
     <message>
         <source>Use SRM</source>
@@ -4419,7 +4419,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Noklusējuma</translation>
+        <translation>Noklusējuma</translation>
     </message>
     <message>
         <source>Language</source>
@@ -4706,7 +4706,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Piezīmes</translation>
+        <translation>Piezīmes</translation>
     </message>
 </context>
 <context>
@@ -4773,6 +4773,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG (20C)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4878,11 +4886,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategorija</translation>
+        <translation>Kategorija</translation>
     </message>
     <message>
         <source>Category number</source>
@@ -4898,7 +4906,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Type of beverage</source>
@@ -4978,11 +4986,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Piezīmes</translation>
+        <translation>Piezīmes</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Jauns</translation>
+        <translation>Jauns</translation>
     </message>
     <message>
         <source>Save</source>
@@ -5008,11 +5016,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Piezīmes</translation>
+        <translation>Piezīmes</translation>
     </message>
 </context>
 <context>
@@ -5027,11 +5035,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nosaukums</translation>
+        <translation>Nosaukums</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Veids</translation>
+        <translation>Veids</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -5075,7 +5083,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished">Noklusējuma daudzums</translation>
+        <translation>Noklusējuma daudzums</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -5183,7 +5191,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes:</source>
-        <translation type="unfinished">Piezīmes:</translation>
+        <translation>Piezīmes:</translation>
     </message>
 </context>
 </TS>

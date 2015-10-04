@@ -5,11 +5,11 @@
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished">Über Brewtarget</translation>
+        <translation>Über Brewtarget</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation type="unfinished">Spenden</translation>
+        <translation>Spenden</translation>
     </message>
 </context>
 <context>
@@ -318,19 +318,19 @@
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekunden</translation>
     </message>
     <message>
         <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Minuten</translation>
     </message>
     <message>
         <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Stunden</translation>
     </message>
     <message>
         <source>Days</source>
-        <translation type="unfinished"></translation>
+        <translation>Tage</translation>
     </message>
     <message>
         <source>Barrels</source>
@@ -356,14 +356,14 @@
     <name>BtLabel</name>
     <message>
         <source>Color (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbe (%1)</translation>
     </message>
 </context>
 <context>
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>Wird geladen …</translation>
     </message>
 </context>
 <context>
@@ -513,11 +513,11 @@
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">%1 kopieren</translation>
+        <translation>%1 kopieren</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Geben Sie einen eindeutigen Namen für die Kopie von %1 an.</translation>
+        <translation>Geben Sie einen eindeutigen Namen für die Kopie von %1 an.</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
@@ -528,35 +528,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation type="unfinished">Einheitenrechner</translation>
+        <translation>Einheitenrechner</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Eingabe</translation>
+        <translation>Eingabe</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation type="unfinished">Ausgabeeinheiten</translation>
+        <translation>Ausgabeeinheiten</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Ausgabe</translation>
+        <translation>Ausgabe</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Umwandeln</translation>
+        <translation>Umwandeln</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation type="unfinished">Zahl und Einheit zur Umrechnung</translation>
+        <translation>Zahl und Einheit zur Umrechnung</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation type="unfinished">Zu dieser Einheit konvertieren</translation>
+        <translation>Zu dieser Einheit konvertieren</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation type="unfinished">Umgerechnete Zahl und Einheit</translation>
+        <translation>Umgerechnete Zahl und Einheit</translation>
     </message>
 </context>
 <context>
@@ -610,47 +610,47 @@
     </message>
     <message>
         <source>Equipment Editor</source>
-        <translation type="unfinished">Ausstattungs-Editor</translation>
+        <translation>Ausstattungs-Editor</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Ausstattung</translation>
+        <translation>Ausstattung</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished">Als Standard setzen</translation>
+        <translation>Als Standard setzen</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation type="unfinished">Pflichtfelder</translation>
+        <translation>Pflichtfelder</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation type="unfinished">Vorkochvolumen</translation>
+        <translation>Vorkochvolumen</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished">Berechne Pfannevollwürzekonzentration</translation>
+        <translation>Berechne Pfannevollwürzekonzentration</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation type="unfinished">Ausschlagmenge</translation>
+        <translation>Ausschlagmenge</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation type="unfinished">Kochen &amp;&amp; Wasser</translation>
+        <translation>Kochen &amp;&amp; Wasser</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation type="unfinished">Kochzeit</translation>
+        <translation>Kochzeit</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation type="unfinished">Verdampfungsrate (pro Stunde)</translation>
+        <translation>Verdampfungsrate (pro Stunde)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
@@ -662,83 +662,83 @@
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation type="unfinished">Kornabsorption (L/kg)</translation>
+        <translation>Kornabsorption (L/kg)</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation type="unfinished">Standardabsorption</translation>
+        <translation>Standardabsorption</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation type="unfinished">Hopfenausnutzung </translation>
+        <translation>Hopfenausnutzung </translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation type="unfinished">Siedepunkt von Wasser</translation>
+        <translation>Siedepunkt von Wasser</translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation type="unfinished">Maischbottich</translation>
+        <translation>Maischbottich</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volumen</translation>
+        <translation>Volumen</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation type="unfinished">Masse</translation>
+        <translation>Masse</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation type="unfinished">Ausstattung entfernen</translation>
+        <translation>Ausstattung entfernen</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation type="unfinished">Wenn angehakt wird das Pfannevollwürzevolumen basierend auf der gewünschten Ausschlagmenge, Kochzeit, Verdunstungsrate, Verlusten, etc. berechnet.</translation>
+        <translation>Wenn angehakt wird das Pfannevollwürzevolumen basierend auf der gewünschten Ausschlagmenge, Kochzeit, Verdunstungsrate, Verlusten, etc. berechnet.</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation type="unfinished">Automatisch Pfannevollwürzevolumen ausfüllen</translation>
+        <translation>Automatisch Pfannevollwürzevolumen ausfüllen</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation type="unfinished">Wie viel Wasser dampft beim Kochen pro Stunde ab</translation>
+        <translation>Wie viel Wasser dampft beim Kochen pro Stunde ab</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation type="unfinished">Wie viel Wasser wird dem Kessel unmittelbar vor dem Kochen hinzugefügt</translation>
+        <translation>Wie viel Wasser wird dem Kessel unmittelbar vor dem Kochen hinzugefügt</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation type="unfinished">Zum Fermenter zugegebenes Wasser</translation>
+        <translation>Zum Fermenter zugegebenes Wasser</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation type="unfinished">Volumen des Maischbottichs</translation>
+        <translation>Volumen des Maischbottichs</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation type="unfinished">Masse des Maischbottichs</translation>
+        <translation>Masse des Maischbottichs</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation type="unfinished">Würzeverlust von Sudpfanne zu Gärbehälter</translation>
+        <translation>Würzeverlust von Sudpfanne zu Gärbehälter</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation type="unfinished">Würzeverlust durch Torraum beim Läutern</translation>
+        <translation>Würzeverlust durch Torraum beim Läutern</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation type="unfinished">Neue Ausstattung</translation>
+        <translation>Neue Ausstattung</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Abbruch</translation>
+        <translation>Abbruch</translation>
     </message>
 </context>
 <context>
@@ -753,27 +753,27 @@
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation type="unfinished">Gärgutdatenbank</translation>
+        <translation>Gärgutdatenbank</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Zum Rezept hinzufügen</translation>
+        <translation>Zum Rezept hinzufügen</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Füge ausgewählte Zutaten dem Rezept hinzu</translation>
+        <translation>Füge ausgewählte Zutaten dem Rezept hinzu</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Erstelle neue Zutat</translation>
+        <translation>Erstelle neue Zutat</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Bearbeite ausgewählte Zutat</translation>
+        <translation>Bearbeite ausgewählte Zutat</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
@@ -859,7 +859,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Farbe</translation>
+        <translation>Farbe</translation>
     </message>
 </context>
 <context>
@@ -917,27 +917,27 @@
     </message>
     <message>
         <source>Hop Database</source>
-        <translation type="unfinished">Hopfendatenbank</translation>
+        <translation>Hopfendatenbank</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Zum Rezept hinzufügen</translation>
+        <translation>Zum Rezept hinzufügen</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Füge ausgewählte Zutaten dem Rezept hinzu</translation>
+        <translation>Füge ausgewählte Zutaten dem Rezept hinzu</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Erstelle neue Zutat</translation>
+        <translation>Erstelle neue Zutat</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Bearbeite ausgewählte Zutat</translation>
+        <translation>Bearbeite ausgewählte Zutat</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
@@ -1357,27 +1357,27 @@
     </message>
     <message>
         <source>Misc Database</source>
-        <translation type="unfinished">Sonstiges Datenbank</translation>
+        <translation>Sonstiges Datenbank</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Zum Rezept hinzufügen</translation>
+        <translation>Zum Rezept hinzufügen</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Füge ausgewählte Zutaten dem Rezept hinzu</translation>
+        <translation>Füge ausgewählte Zutaten dem Rezept hinzu</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Erstelle neue Zutat</translation>
+        <translation>Erstelle neue Zutat</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Bearbeite ausgewählte Zutat</translation>
+        <translation>Bearbeite ausgewählte Zutat</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
@@ -2431,7 +2431,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation type="unfinished">Labor</translation>
+        <translation>Labor</translation>
     </message>
     <message>
         <source>Attenuation</source>
@@ -2503,34 +2503,34 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation type="unfinished">Die Eieruhr auf den gesetzten Wert einstellen</translation>
+        <translation>Die Eieruhr auf den gesetzten Wert einstellen</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
-        <translation type="unfinished">HH:MM:SS</translation>
+        <translation>HH:MM:SS</translation>
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation type="unfinished">Starte/Stoppe die Eieruhr</translation>
+        <translation>Starte/Stoppe die Eieruhr</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation type="unfinished">Einen Alarmton einstellen</translation>
+        <translation>Einen Alarmton einstellen</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished">Einstellen</translation>
+        <translation>Einstellen</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished">Geräusch</translation>
+        <translation>Geräusch</translation>
     </message>
 </context>
 <context>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Fehlerhafter »model index«. Zeile = %1</translation>
+        <translation>Fehlerhafter »model index«. Zeile = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -2581,27 +2581,27 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation type="unfinished">Hefedatenbank</translation>
+        <translation>Hefedatenbank</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Zum Rezept hinzufügen</translation>
+        <translation>Zum Rezept hinzufügen</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Füge ausgewählte Zutaten dem Rezept hinzu</translation>
+        <translation>Füge ausgewählte Zutaten dem Rezept hinzu</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Erstelle neue Zutat</translation>
+        <translation>Erstelle neue Zutat</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Bearbeite ausgewählte Zutat</translation>
+        <translation>Bearbeite ausgewählte Zutat</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
@@ -2651,7 +2651,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <name>YeastTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Fehlerhafter »model index«. Zeile = %1</translation>
+        <translation>Fehlerhafter »model index«. Zeile = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -3118,7 +3118,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Farbe</translation>
+        <translation>Farbe</translation>
     </message>
 </context>
 <context>
@@ -4443,7 +4443,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Datum</translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4799,6 +4799,14 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
