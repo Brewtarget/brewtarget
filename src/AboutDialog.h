@@ -41,8 +41,7 @@ class AboutDialog : public QDialog
 public:
    AboutDialog(QWidget* parent=0)
            : QDialog(parent),
-             label(0),
-             pushButton_donate(0)
+             label(0)
    {
       setObjectName("aboutDialog");
       doLayout();
@@ -125,7 +124,6 @@ public:
    //! \name Public UI Variables
    //! @{
    QLabel* label;
-   QPushButton* pushButton_donate;
    //! @}
 
 private:
@@ -139,13 +137,7 @@ private:
             scrollArea->setWidget(label);
          QHBoxLayout* horizontalLayout = new QHBoxLayout;
             QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-            pushButton_donate = new QPushButton(this);
-               pushButton_donate->setObjectName("pushButton_donate");
-               QIcon icon;
-               icon.addFile(":/images/donate.svg", QSize(), QIcon::Normal, QIcon::Off);
-               pushButton_donate->setIcon(icon);
             horizontalLayout->addItem(horizontalSpacer);
-            horizontalLayout->addWidget(pushButton_donate);
          verticalLayout->addWidget(scrollArea);
          verticalLayout->addLayout(horizontalLayout);
       retranslateUi();
@@ -154,7 +146,6 @@ private:
    void retranslateUi()
    {
       setWindowTitle(tr("About Brewtarget"));
-      pushButton_donate->setText(tr("Donate"));
    }
 };
 

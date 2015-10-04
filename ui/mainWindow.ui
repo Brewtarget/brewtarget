@@ -1659,7 +1659,6 @@
     <addaction name="actionManual"/>
     <addaction name="separator"/>
     <addaction name="actionAbout_BrewTarget"/>
-    <addaction name="actionDonate"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -1776,7 +1775,6 @@
    <addaction name="actionPitch_Rate_Calculator"/>
    <addaction name="actionRefractometer_Tools"/>
    <addaction name="separator"/>
-   <addaction name="actionDonate"/>
   </widget>
   <action name="actionAbout_BrewTarget">
    <property name="icon">
@@ -2163,15 +2161,6 @@
    </property>
    <property name="toolTip">
     <string>Delete recipe</string>
-   </property>
-  </action>
-  <action name="actionDonate">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/donate.svg</normaloff>:/images/donate.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Donate</string>
    </property>
   </action>
   <action name="actionMashs">
