@@ -5,11 +5,11 @@
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished">Om Brewtarget</translation>
+        <translation>Om Brewtarget</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation type="unfinished">Doner</translation>
+        <translation>Doner</translation>
     </message>
 </context>
 <context>
@@ -513,11 +513,11 @@
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Kopier %1</translation>
+        <translation>Kopier %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Skriv inn et unikt navn for kopien av %1.</translation>
+        <translation>Skriv inn et unikt navn for kopien av %1.</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
@@ -528,35 +528,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation type="unfinished">Konverteringsverktøy</translation>
+        <translation>Konverteringsverktøy</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Inndata</translation>
+        <translation>Inndata</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation type="unfinished">Utdata enheter</translation>
+        <translation>Utdata enheter</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Utdata</translation>
+        <translation>Utdata</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Konverter</translation>
+        <translation>Konverter</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation type="unfinished">Mengder og enheter å konvertere</translation>
+        <translation>Mengder og enheter å konvertere</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation type="unfinished">Enhet du ønsker å konvertere til</translation>
+        <translation>Enhet du ønsker å konvertere til</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation type="unfinished">Utdata konvertering</translation>
+        <translation>Utdata konvertering</translation>
     </message>
 </context>
 <context>
@@ -610,135 +610,135 @@
     </message>
     <message>
         <source>Equipment Editor</source>
-        <translation type="unfinished">Utstyrsredigering</translation>
+        <translation>Utstyrsredigering</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Utstyr</translation>
+        <translation>Utstyr</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished">Sett som forvalgt</translation>
+        <translation>Sett som forvalgt</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation type="unfinished">Obligatoriske felt</translation>
+        <translation>Obligatoriske felt</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Navn</translation>
+        <translation>Navn</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation type="unfinished">Volum før koking</translation>
+        <translation>Volum før koking</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished">Kalkuler volum før koking</translation>
+        <translation>Kalkuler volum før koking</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation type="unfinished">Batch størrelse</translation>
+        <translation>Batch størrelse</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation type="unfinished">Koking &amp;&amp; Vann</translation>
+        <translation>Koking &amp;&amp; Vann</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation type="unfinished">Koketid</translation>
+        <translation>Koketid</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation type="unfinished">Frodampningsrate (pr time)</translation>
+        <translation>Frodampningsrate (pr time)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation type="unfinished">Etterfyllingsvann kjele</translation>
+        <translation>Etterfyllingsvann kjele</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation type="unfinished">Endelig etterfyllingsvann</translation>
+        <translation>Endelig etterfyllingsvann</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation type="unfinished">Maltets vannabsorpsjon (L/kg)</translation>
+        <translation>Maltets vannabsorpsjon (L/kg)</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation type="unfinished">Normalverdi absorpsjon</translation>
+        <translation>Normalverdi absorpsjon</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation type="unfinished">Humleutilisering </translation>
+        <translation>Humleutilisering </translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation type="unfinished">Kokepunkt for vann</translation>
+        <translation>Kokepunkt for vann</translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation type="unfinished">Meskekar</translation>
+        <translation>Meskekar</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volum</translation>
+        <translation>Volum</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation type="unfinished">Masse</translation>
+        <translation>Masse</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation type="unfinished">Fjern utstyr</translation>
+        <translation>Fjern utstyr</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation type="unfinished">Hvis avkrysset, vil vi kalkulere volum før koking basert på din ønskede batch størrelse, koketid, fordampningsrate, tap, etc.</translation>
+        <translation>Hvis avkrysset, vil vi kalkulere volum før koking basert på din ønskede batch størrelse, koketid, fordampningsrate, tap, etc.</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation type="unfinished">Automatisk fyll ut volum før koking</translation>
+        <translation>Automatisk fyll ut volum før koking</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation type="unfinished">Hvor mye vann koker bort pr time</translation>
+        <translation>Hvor mye vann koker bort pr time</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation type="unfinished">Hvor mye vann tilsettes rett før koking</translation>
+        <translation>Hvor mye vann tilsettes rett før koking</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation type="unfinished">Vann tilsatt gjæringskar</translation>
+        <translation>Vann tilsatt gjæringskar</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation type="unfinished">Volum på meskekar</translation>
+        <translation>Volum på meskekar</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation type="unfinished">Masse/vekt på meskekar</translation>
+        <translation>Masse/vekt på meskekar</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation type="unfinished">Vørter tapt mellom kjele og gjæringskar</translation>
+        <translation>Vørter tapt mellom kjele og gjæringskar</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation type="unfinished">Volum av tapt vørter i separasjonstankens dødrom</translation>
+        <translation>Volum av tapt vørter i separasjonstankens dødrom</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation type="unfinished">Nytt utstyr</translation>
+        <translation>Nytt utstyr</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Lagre</translation>
+        <translation>Lagre</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Avbryt</translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
@@ -753,31 +753,31 @@
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation type="unfinished">Database gjærbart</translation>
+        <translation>Database gjærbart</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Legg til oppskrift</translation>
+        <translation>Legg til oppskrift</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Ny</translation>
+        <translation>Ny</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Legg til valgt ingrediens til oppskrift</translation>
+        <translation>Legg til valgt ingrediens til oppskrift</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Opprett ny ingrediens</translation>
+        <translation>Opprett ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Rediger valgt ingrediens</translation>
+        <translation>Rediger valgt ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Fjern valgt ingrediens</translation>
+        <translation>Fjern valgt ingrediens</translation>
     </message>
 </context>
 <context>
@@ -859,7 +859,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Farge</translation>
+        <translation>Farge</translation>
     </message>
 </context>
 <context>
@@ -917,31 +917,31 @@
     </message>
     <message>
         <source>Hop Database</source>
-        <translation type="unfinished">Humledatabase</translation>
+        <translation>Humledatabase</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Legg til oppskrift</translation>
+        <translation>Legg til oppskrift</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Ny</translation>
+        <translation>Ny</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Legg til valgt ingrediens til oppskrift</translation>
+        <translation>Legg til valgt ingrediens til oppskrift</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Opprett ny ingrediens</translation>
+        <translation>Opprett ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Rediger valgt ingrediens</translation>
+        <translation>Rediger valgt ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Fjern valgt ingrediens</translation>
+        <translation>Fjern valgt ingrediens</translation>
     </message>
 </context>
 <context>
@@ -1357,31 +1357,31 @@
     </message>
     <message>
         <source>Misc Database</source>
-        <translation type="unfinished">Database diverse</translation>
+        <translation>Database diverse</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Legg til oppskrift</translation>
+        <translation>Legg til oppskrift</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Ny</translation>
+        <translation>Ny</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Legg til valgt ingrediens til oppskrift</translation>
+        <translation>Legg til valgt ingrediens til oppskrift</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Opprett ny ingrediens</translation>
+        <translation>Opprett ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Rediger valgt ingrediens</translation>
+        <translation>Rediger valgt ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Fjern valgt ingrediens</translation>
+        <translation>Fjern valgt ingrediens</translation>
     </message>
 </context>
 <context>
@@ -2503,27 +2503,27 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation type="unfinished">Sett tidtaker til spesifisert tid</translation>
+        <translation>Sett tidtaker til spesifisert tid</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
-        <translation type="unfinished">HH:MM:SS</translation>
+        <translation>HH:MM:SS</translation>
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation type="unfinished">Start/Stop tidtaker</translation>
+        <translation>Start/Stop tidtaker</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation type="unfinished">Sett en lyd som alarmlyd</translation>
+        <translation>Sett en lyd som alarmlyd</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished">Sett</translation>
+        <translation>Sett</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished">Lyd</translation>
+        <translation>Lyd</translation>
     </message>
 </context>
 <context>
@@ -2581,31 +2581,31 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation type="unfinished">Gjærdatabase</translation>
+        <translation>Gjærdatabase</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Legg til oppskrift</translation>
+        <translation>Legg til oppskrift</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Ny</translation>
+        <translation>Ny</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Legg til valgt ingrediens til oppskrift</translation>
+        <translation>Legg til valgt ingrediens til oppskrift</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Opprett ny ingrediens</translation>
+        <translation>Opprett ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Rediger valgt ingrediens</translation>
+        <translation>Rediger valgt ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Fjern valgt ingrediens</translation>
+        <translation>Fjern valgt ingrediens</translation>
     </message>
 </context>
 <context>
@@ -3118,7 +3118,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Farge</translation>
+        <translation>Farge</translation>
     </message>
 </context>
 <context>
@@ -4442,7 +4442,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Dato</translation>
+        <translation>Dato</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4798,6 +4798,14 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

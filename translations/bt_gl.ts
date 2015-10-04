@@ -16,7 +16,7 @@
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Imprimir o documento</translation>
+        <translation>Imprimir o documento</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
@@ -28,35 +28,35 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Tempo de fervura</translation>
+        <translation>Tempo de fervura</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Eficacia</translation>
+        <translation>Eficacia</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Volume da fervura</translation>
+        <translation>Volume da fervura</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Densidade da fervura</translation>
+        <translation>Densidade da fervura</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished">Volume final</translation>
+        <translation>Volume final</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Densidade inicial</translation>
+        <translation>Densidade inicial</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -64,90 +64,90 @@
     </message>
     <message>
         <source>Final Gravity</source>
-        <translation type="unfinished">Densidade final</translation>
+        <translation>Densidade final</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">APV</translation>
+        <translation>APV</translation>
     </message>
     <message>
         <source>Estimated calories(per 12 oz)</source>
-        <translation type="unfinished">Calorías estimadas (para 12oz)</translation>
+        <translation>Calorías estimadas (para 12oz)</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrucións</translation>
+        <translation>Instrucións</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Rematado</translation>
+        <translation>Rematado</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Paso</translation>
+        <translation>Paso</translation>
     </message>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Engadir os grans</translation>
+        <translation>Engadir os grans</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Auga quente</translation>
+        <translation>Auga quente</translation>
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
-        <translation type="unfinished">Volume actual antes da fervura</translation>
+        <translation>Volume actual antes da fervura</translation>
     </message>
     <message>
         <source>Actual PreBoil Gravity</source>
-        <translation type="unfinished">Densidade actual antes da fervura</translation>
+        <translation>Densidade actual antes da fervura</translation>
     </message>
     <message>
         <source>PostBoil Volume</source>
-        <translation type="unfinished">Volume despois da fervura</translation>
+        <translation>Volume despois da fervura</translation>
     </message>
     <message>
         <source>PostBoil Gravity</source>
-        <translation type="unfinished">Densidade despois da fervura</translation>
+        <translation>Densidade despois da fervura</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="unfinished">Volume no fermentador</translation>
+        <translation>Volume no fermentador</translation>
     </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Volume da fervura</translation>
+        <translation>Volume da fervura</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Densidade da fervura</translation>
+        <translation>Densidade da fervura</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished">Volume final</translation>
+        <translation>Volume final</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Densidade inicial</translation>
+        <translation>Densidade inicial</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Tempo de fervura</translation>
+        <translation>Tempo de fervura</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -155,55 +155,55 @@
     </message>
     <message>
         <source>Predicted Efficiency</source>
-        <translation type="unfinished">Eficiencia agardada</translation>
+        <translation>Eficiencia agardada</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Calorías agardadas</translation>
+        <translation>Calorías agardadas</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrucións</translation>
+        <translation>Instrucións</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Rematado</translation>
+        <translation>Rematado</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Paso</translation>
+        <translation>Paso</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
-        <translation type="unfinished">Volume actual antes da fervura</translation>
+        <translation>Volume actual antes da fervura</translation>
     </message>
     <message>
         <source>Actual Pre-boil Gravity:</source>
-        <translation type="unfinished">Densidade actual antes da fervura</translation>
+        <translation>Densidade actual antes da fervura</translation>
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation type="unfinished">Volume despois da fervura</translation>
+        <translation>Volume despois da fervura</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation type="unfinished">Densidade despois da fervura</translation>
+        <translation>Densidade despois da fervura</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation type="unfinished">Volumen no fermentador</translation>
+        <translation>Volumen no fermentador</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Imprimir o documento</translation>
+        <translation>Imprimir o documento</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anotacións</translation>
+        <translation>Anotacións</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
@@ -214,11 +214,11 @@
     <name>Brewtarget</name>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Descoñecido</translation>
+        <translation>Descoñecido</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Predeterminado</translation>
+        <translation>Predeterminado</translation>
     </message>
     <message>
         <source>EBC</source>
@@ -242,15 +242,15 @@
     </message>
     <message>
         <source>Plato</source>
-        <translation type="unfinished">Grados Plato</translation>
+        <translation>Grados Plato</translation>
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation type="unfinished">Densidade específica</translation>
+        <translation>Densidade específica</translation>
     </message>
     <message>
         <source>SI</source>
-        <translation type="unfinished">SI</translation>
+        <translation>SI</translation>
     </message>
     <message>
         <source>US Customary</source>
@@ -258,31 +258,31 @@
     </message>
     <message>
         <source>Milligrams</source>
-        <translation type="unfinished">Miligramos</translation>
+        <translation>Miligramos</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation type="unfinished">Gramos</translation>
+        <translation>Gramos</translation>
     </message>
     <message>
         <source>Kilograms</source>
-        <translation type="unfinished">Quilogramos</translation>
+        <translation>Quilogramos</translation>
     </message>
     <message>
         <source>Ounces</source>
-        <translation type="unfinished">Onzas</translation>
+        <translation>Onzas</translation>
     </message>
     <message>
         <source>Pounds</source>
-        <translation type="unfinished">Libras</translation>
+        <translation>Libras</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Centígrados</translation>
+        <translation>Centígrados</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Fahrenheit</translation>
+        <translation>Fahrenheit</translation>
     </message>
     <message>
         <source>Seconds</source>
@@ -306,31 +306,31 @@
     </message>
     <message>
         <source>MilliLiters</source>
-        <translation type="unfinished">Mililitros</translation>
+        <translation>Mililitros</translation>
     </message>
     <message>
         <source>Liters</source>
-        <translation type="unfinished">Litros</translation>
+        <translation>Litros</translation>
     </message>
     <message>
         <source>Teaspoons</source>
-        <translation type="unfinished">Cullerada pequena</translation>
+        <translation>Cullerada pequena</translation>
     </message>
     <message>
         <source>Tablespoons</source>
-        <translation type="unfinished">Cullerada grande</translation>
+        <translation>Cullerada grande</translation>
     </message>
     <message>
         <source>Cups</source>
-        <translation type="unfinished">Taza</translation>
+        <translation>Taza</translation>
     </message>
     <message>
         <source>Quarts</source>
-        <translation type="unfinished">Cuartos</translation>
+        <translation>Cuartos</translation>
     </message>
     <message>
         <source>Gallons</source>
-        <translation type="unfinished">Galóns</translation>
+        <translation>Galóns</translation>
     </message>
     <message>
         <source>Barrels</source>
@@ -341,15 +341,15 @@
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation type="unfinished">Demasiado baixo para o estilo</translation>
+        <translation>Demasiado baixo para o estilo</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation type="unfinished">Axeitado para o estilo</translation>
+        <translation>Axeitado para o estilo</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation type="unfinished">Demasiado alto para o estilo</translation>
+        <translation>Demasiado alto para o estilo</translation>
     </message>
 </context>
 <context>
@@ -370,55 +370,55 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Data de elaboración</translation>
+        <translation>Data de elaboración</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Tempo de fervura</translation>
+        <translation>Tempo de fervura</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Usar</translation>
+        <translation>Usar</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Categoría</translation>
+        <translation>Categoría</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Número</translation>
+        <translation>Número</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished">Carta</translation>
+        <translation>Carta</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Guía</translation>
+        <translation>Guía</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation type="unfinished">RUTA</translation>
+        <translation>RUTA</translation>
     </message>
     <message>
         <source>FULLPATH</source>
@@ -429,71 +429,71 @@
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Receita</translation>
+        <translation>Receita</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Faino!</translation>
+        <translation>Faino!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Faino de novo!</translation>
+        <translation>Faino de novo!</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Muda-la data</translation>
+        <translation>Muda-la data</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Volver a calcula-la receita</translation>
+        <translation>Volver a calcula-la receita</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Borrar</translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Equipo</translation>
+        <translation>Equipo</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Fermentábel</translation>
+        <translation>Fermentábel</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Lúpulo</translation>
+        <translation>Lúpulo</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Diversos</translation>
+        <translation>Diversos</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Fermento</translation>
+        <translation>Fermento</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished">Cartafol</translation>
+        <translation>Cartafol</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copiar</translation>
+        <translation>Copiar</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Exportar</translation>
+        <translation>Exportar</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importar</translation>
+        <translation>Importar</translation>
     </message>
     <message>
         <source>Cancel All</source>
@@ -513,15 +513,15 @@
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Eliminar %1</translation>
+        <translation>Eliminar %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Eliminar %1 %2?</translation>
+        <translation>Eliminar %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
-        <translation type="unfinished">Anotación</translation>
+        <translation>Anotación</translation>
     </message>
 </context>
 <context>
@@ -567,7 +567,7 @@
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="unfinished">Podería haber novos ingredientes e receitas dispoñibeis. Desexas engadilos á túa biblioteca?</translation>
+        <translation>Podería haber novos ingredientes e receitas dispoñibeis. Desexas engadilos á túa biblioteca?</translation>
     </message>
 </context>
 <context>
@@ -582,7 +582,7 @@
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Equipo</translation>
+        <translation>Equipo</translation>
     </message>
     <message>
         <source>Set as Default</source>
@@ -594,7 +594,7 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
@@ -753,7 +753,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -835,11 +835,11 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Inventory</source>
@@ -859,7 +859,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
 </context>
 <context>
@@ -917,7 +917,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -983,7 +983,7 @@
     <name>HopTableModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Alpha %</source>
@@ -999,15 +999,15 @@
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Usar</translation>
+        <translation>Usar</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
 </context>
 <context>
@@ -1259,11 +1259,11 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -1279,7 +1279,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
 </context>
 <context>
@@ -1357,7 +1357,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -1443,19 +1443,19 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Usar</translation>
+        <translation>Usar</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Inventory</source>
@@ -1561,7 +1561,7 @@
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Equipo</translation>
+        <translation>Equipo</translation>
     </message>
     <message>
         <source>Fermentables</source>
@@ -1577,15 +1577,15 @@
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Fermento</translation>
+        <translation>Fermento</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished">Cartafol</translation>
+        <translation>Cartafol</translation>
     </message>
     <message>
         <source>Invalid color formula type: %1</source>
@@ -1787,11 +1787,11 @@
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -1811,7 +1811,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -1837,15 +1837,15 @@
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Usar</translation>
+        <translation>Usar</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -1945,7 +1945,7 @@
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Engadir os grans</translation>
+        <translation>Engadir os grans</translation>
     </message>
     <message>
         <source>Add </source>
@@ -1957,7 +1957,7 @@
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Auga quente</translation>
+        <translation>Auga quente</translation>
     </message>
     <message>
         <source>Bring </source>
@@ -2187,7 +2187,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -2195,7 +2195,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Categoría</translation>
+        <translation>Categoría</translation>
     </message>
     <message>
         <source>Code</source>
@@ -2203,11 +2203,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Guía</translation>
+        <translation>Guía</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Preboil</source>
@@ -2243,11 +2243,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Usar</translation>
+        <translation>Usar</translation>
     </message>
     <message>
         <source>Lab</source>
@@ -2271,7 +2271,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -2283,15 +2283,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Tempo de fervura</translation>
+        <translation>Tempo de fervura</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Eficacia</translation>
+        <translation>Eficacia</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">APV</translation>
+        <translation>APV</translation>
     </message>
     <message>
         <source>Calories (per 12 oz.)</source>
@@ -2307,7 +2307,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2323,15 +2323,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Diversos</translation>
+        <translation>Diversos</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Fermento</translation>
+        <translation>Fermento</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -2359,15 +2359,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anotacións</translation>
+        <translation>Anotacións</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrucións</translation>
+        <translation>Instrucións</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Data de elaboración</translation>
+        <translation>Data de elaboración</translation>
     </message>
     <message>
         <source>SG</source>
@@ -2423,7 +2423,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Imprimir o documento</translation>
+        <translation>Imprimir o documento</translation>
     </message>
 </context>
 <context>
@@ -2518,7 +2518,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2561,7 +2561,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -2639,15 +2639,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Inventory</source>
@@ -2670,7 +2670,7 @@ The final volume in the primary is %1.</source>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
@@ -2682,7 +2682,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -2725,7 +2725,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrucións</translation>
+        <translation>Instrucións</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
@@ -2757,7 +2757,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -2848,7 +2848,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="unfinished">Volume no fermentador</translation>
+        <translation>Volume no fermentador</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
@@ -2912,11 +2912,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">APV</translation>
+        <translation>APV</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anotacións</translation>
+        <translation>Anotacións</translation>
     </message>
 </context>
 <context>
@@ -2958,11 +2958,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Grain</source>
@@ -3002,7 +3002,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
@@ -3113,7 +3113,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
@@ -3133,7 +3133,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Usar</translation>
+        <translation>Usar</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -3157,7 +3157,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
@@ -3169,7 +3169,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Bittering</source>
@@ -3181,7 +3181,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Leaf</source>
@@ -3260,7 +3260,7 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Show a timer</source>
@@ -3311,11 +3311,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Receita</translation>
+        <translation>Receita</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Name of recipe</source>
@@ -3347,11 +3347,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Tempo de fervura</translation>
+        <translation>Tempo de fervura</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -3359,7 +3359,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Equipo</translation>
+        <translation>Equipo</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
@@ -3379,11 +3379,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">APV</translation>
+        <translation>APV</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
@@ -3455,7 +3455,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Fermento</translation>
+        <translation>Fermento</translation>
     </message>
     <message>
         <source>Add yeast</source>
@@ -3774,11 +3774,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Target temp.</source>
@@ -3786,7 +3786,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -3853,7 +3853,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -3873,7 +3873,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anotacións</translation>
+        <translation>Anotacións</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -3912,11 +3912,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -3964,7 +3964,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
@@ -4010,11 +4010,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Spice</source>
@@ -4042,7 +4042,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Usar</translation>
+        <translation>Usar</translation>
     </message>
     <message>
         <source>Boil</source>
@@ -4066,7 +4066,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Default Amount</source>
@@ -4121,7 +4121,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -4141,7 +4141,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anotacións</translation>
+        <translation>Anotacións</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -4224,7 +4224,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Plato</source>
-        <translation type="unfinished">Grados Plato</translation>
+        <translation>Grados Plato</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
@@ -4303,11 +4303,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Centígrados</translation>
+        <translation>Centígrados</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Fahrenheit</translation>
+        <translation>Fahrenheit</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -4327,7 +4327,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4343,7 +4343,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>Use SRM</source>
@@ -4419,7 +4419,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Predeterminado</translation>
+        <translation>Predeterminado</translation>
     </message>
     <message>
         <source>Language</source>
@@ -4642,7 +4642,7 @@ The final volume in the primary is %1.</source>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Brewer</source>
@@ -4706,7 +4706,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anotacións</translation>
+        <translation>Anotacións</translation>
     </message>
 </context>
 <context>
@@ -4757,7 +4757,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">APV</translation>
+        <translation>APV</translation>
     </message>
     <message>
         <source>ABW</source>
@@ -4773,6 +4773,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG (20C)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4866,7 +4874,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Delete selected style</source>
@@ -4878,11 +4886,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Categoría</translation>
+        <translation>Categoría</translation>
     </message>
     <message>
         <source>Category number</source>
@@ -4898,7 +4906,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Type of beverage</source>
@@ -4978,11 +4986,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anotacións</translation>
+        <translation>Anotacións</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Save</source>
@@ -5008,11 +5016,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anotacións</translation>
+        <translation>Anotacións</translation>
     </message>
 </context>
 <context>
@@ -5027,11 +5035,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -5055,7 +5063,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
+        <translation>Formulario</translation>
     </message>
     <message>
         <source>Liquid</source>

@@ -4775,6 +4775,14 @@ The final volume in the primary is %1.</source>
         <source>Current measured plato</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>

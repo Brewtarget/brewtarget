@@ -16,35 +16,35 @@
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Dokumentua inprimatu</translation>
+        <translation>Dokumentua inprimatu</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Oharrak&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Oharrak&lt;/h2&gt;</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">%1. urratsa: %2</translation>
+        <translation>%1. urratsa: %2</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estiloa</translation>
+        <translation>Estiloa</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Irekite-denbora</translation>
+        <translation>Irekite-denbora</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Eraginkortasuna</translation>
+        <translation>Eraginkortasuna</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Irekite-bolumena</translation>
+        <translation>Irekite-bolumena</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
@@ -60,7 +60,7 @@
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Final Gravity</source>
@@ -72,31 +72,31 @@
     </message>
     <message>
         <source>Estimated calories(per 12 oz)</source>
-        <translation type="unfinished">Kaloria estimatuak (12 ontzekiko)</translation>
+        <translation>Kaloria estimatuak (12 ontzekiko)</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrukzioak</translation>
+        <translation>Instrukzioak</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Buruturik</translation>
+        <translation>Buruturik</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Urratsa</translation>
+        <translation>Urratsa</translation>
     </message>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Gehitu aleak</translation>
+        <translation>Gehitu aleak</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Ura berotu</translation>
+        <translation>Ura berotu</translation>
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
@@ -123,15 +123,15 @@
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estiloa</translation>
+        <translation>Estiloa</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Irekite-bolumena</translation>
+        <translation>Irekite-bolumena</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
@@ -147,11 +147,11 @@
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Irekite-denbora</translation>
+        <translation>Irekite-denbora</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Predicted Efficiency</source>
@@ -159,23 +159,23 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Kaloria estimatuak (12 ontzekiko)</translation>
+        <translation>Kaloria estimatuak (12 ontzekiko)</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrukzioak</translation>
+        <translation>Instrukzioak</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Buruturik</translation>
+        <translation>Buruturik</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Urratsa</translation>
+        <translation>Urratsa</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
@@ -187,7 +187,7 @@
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation type="unfinished">Irekite-osteko bolumena</translation>
+        <translation>Irekite-osteko bolumena</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
@@ -199,7 +199,7 @@
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Dokumentua inprimatu</translation>
+        <translation>Dokumentua inprimatu</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">%1. urratsa: %2</translation>
+        <translation>%1. urratsa: %2</translation>
     </message>
 </context>
 <context>
@@ -378,11 +378,11 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estiloa</translation>
+        <translation>Estiloa</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Irekite-denbora</translation>
+        <translation>Irekite-denbora</translation>
     </message>
     <message>
         <source>Color</source>
@@ -473,7 +473,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estiloa</translation>
+        <translation>Estiloa</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -1003,7 +1003,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1279,7 +1279,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
 </context>
 <context>
@@ -1455,7 +1455,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Inventory</source>
@@ -1581,7 +1581,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estiloa</translation>
+        <translation>Estiloa</translation>
     </message>
     <message>
         <source>Folder</source>
@@ -1841,7 +1841,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1849,7 +1849,7 @@
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Misc
@@ -1945,7 +1945,7 @@
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Gehitu aleak</translation>
+        <translation>Gehitu aleak</translation>
     </message>
     <message>
         <source>Add </source>
@@ -1957,7 +1957,7 @@
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Ura berotu</translation>
+        <translation>Ura berotu</translation>
     </message>
     <message>
         <source>Bring </source>
@@ -2191,7 +2191,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Category</source>
@@ -2271,7 +2271,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -2283,11 +2283,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Irekite-denbora</translation>
+        <translation>Irekite-denbora</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Eraginkortasuna</translation>
+        <translation>Eraginkortasuna</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -2323,7 +2323,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2363,7 +2363,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrukzioak</translation>
+        <translation>Instrukzioak</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -2423,7 +2423,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Dokumentua inprimatu</translation>
+        <translation>Dokumentua inprimatu</translation>
     </message>
 </context>
 <context>
@@ -2725,7 +2725,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instrukzioak</translation>
+        <translation>Instrukzioak</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
@@ -3157,7 +3157,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
@@ -3347,11 +3347,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estiloa</translation>
+        <translation>Estiloa</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Irekite-denbora</translation>
+        <translation>Irekite-denbora</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -3786,7 +3786,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -3964,7 +3964,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
@@ -4066,7 +4066,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Denbora</translation>
+        <translation>Denbora</translation>
     </message>
     <message>
         <source>Default Amount</source>
@@ -4327,7 +4327,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4371,7 +4371,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -4775,6 +4775,14 @@ The final volume in the primary is %1.</source>
         <source>OG (20C)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>
@@ -4866,7 +4874,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estiloa</translation>
+        <translation>Estiloa</translation>
     </message>
     <message>
         <source>Delete selected style</source>

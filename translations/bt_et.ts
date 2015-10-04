@@ -28,43 +28,43 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Õlletüüp</translation>
+        <translation>Õlletüüp</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Kuupäev</translation>
+        <translation>Kuupäev</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Keeduaeg</translation>
+        <translation>Keeduaeg</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Efektiivsus</translation>
+        <translation>Efektiivsus</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Keedukogus</translation>
+        <translation>Keedukogus</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Tihedus enne keetmist</translation>
+        <translation>Tihedus enne keetmist</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished">Lõplik kogus</translation>
+        <translation>Lõplik kogus</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Algtihedus</translation>
+        <translation>Algtihedus</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Final Gravity</source>
-        <translation type="unfinished">Lõpptihedus</translation>
+        <translation>Lõpptihedus</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -72,23 +72,23 @@
     </message>
     <message>
         <source>Estimated calories(per 12 oz)</source>
-        <translation type="unfinished">Kaloreid (hinnanguliselt 12 oz kohta)</translation>
+        <translation>Kaloreid (hinnanguliselt 12 oz kohta)</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Juhised</translation>
+        <translation>Juhised</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Lõpetatud</translation>
+        <translation>Lõpetatud</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Samm</translation>
+        <translation>Samm</translation>
     </message>
     <message>
         <source>Add grains</source>
@@ -100,19 +100,19 @@
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
-        <translation type="unfinished">Tegelik keedueelne kogus</translation>
+        <translation>Tegelik keedueelne kogus</translation>
     </message>
     <message>
         <source>Actual PreBoil Gravity</source>
-        <translation type="unfinished">Tegelik keedueelne tihedus</translation>
+        <translation>Tegelik keedueelne tihedus</translation>
     </message>
     <message>
         <source>PostBoil Volume</source>
-        <translation type="unfinished">Keedujärgne kogus</translation>
+        <translation>Keedujärgne kogus</translation>
     </message>
     <message>
         <source>PostBoil Gravity</source>
-        <translation type="unfinished">Keedujärgne tihedus</translation>
+        <translation>Keedujärgne tihedus</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
@@ -123,35 +123,35 @@
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Õlletüüp</translation>
+        <translation>Õlletüüp</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Kuupäev</translation>
+        <translation>Kuupäev</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Keedukogus</translation>
+        <translation>Keedukogus</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Tihedus enne keetmist</translation>
+        <translation>Tihedus enne keetmist</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished">Lõplik kogus</translation>
+        <translation>Lõplik kogus</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Algtihedus</translation>
+        <translation>Algtihedus</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Keeduaeg</translation>
+        <translation>Keeduaeg</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Predicted Efficiency</source>
@@ -163,19 +163,19 @@
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Juhised</translation>
+        <translation>Juhised</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Lõpetatud</translation>
+        <translation>Lõpetatud</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Samm</translation>
+        <translation>Samm</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
@@ -378,11 +378,11 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Õlletüüp</translation>
+        <translation>Õlletüüp</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Keeduaeg</translation>
+        <translation>Keeduaeg</translation>
     </message>
     <message>
         <source>Color</source>
@@ -473,7 +473,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Õlletüüp</translation>
+        <translation>Õlletüüp</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -1003,7 +1003,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1279,7 +1279,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
 </context>
 <context>
@@ -1455,7 +1455,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Inventory</source>
@@ -1581,7 +1581,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Õlletüüp</translation>
+        <translation>Õlletüüp</translation>
     </message>
     <message>
         <source>Folder</source>
@@ -1841,7 +1841,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1849,7 +1849,7 @@
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Misc
@@ -2191,7 +2191,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Category</source>
@@ -2271,7 +2271,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Kuupäev</translation>
+        <translation>Kuupäev</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -2283,11 +2283,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Keeduaeg</translation>
+        <translation>Keeduaeg</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation type="unfinished">Efektiivsus</translation>
+        <translation>Efektiivsus</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -2323,7 +2323,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2363,7 +2363,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Juhised</translation>
+        <translation>Juhised</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -2725,7 +2725,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Juhised</translation>
+        <translation>Juhised</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
@@ -3157,7 +3157,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
@@ -3347,11 +3347,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Õlletüüp</translation>
+        <translation>Õlletüüp</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Keeduaeg</translation>
+        <translation>Keeduaeg</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -3786,7 +3786,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -3964,7 +3964,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
@@ -4066,7 +4066,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Kestus</translation>
+        <translation>Kestus</translation>
     </message>
     <message>
         <source>Default Amount</source>
@@ -4327,7 +4327,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Kuupäev</translation>
+        <translation>Kuupäev</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4371,7 +4371,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -4775,6 +4775,14 @@ The final volume in the primary is %1.</source>
         <source>OG (20C)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>
@@ -4866,7 +4874,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Õlletüüp</translation>
+        <translation>Õlletüüp</translation>
     </message>
     <message>
         <source>Delete selected style</source>

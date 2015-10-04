@@ -5,11 +5,11 @@
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished">Σχετικά με το Brewtarget</translation>
+        <translation>Σχετικά με το Brewtarget</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation type="unfinished">Δωρεά</translation>
+        <translation>Δωρεά</translation>
     </message>
 </context>
 <context>
@@ -513,11 +513,11 @@
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Αντιγραφή %1</translation>
+        <translation>Αντιγραφή %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Εισάγετε ένα μοναδικό όνομα για την αντιγραφή του %1</translation>
+        <translation>Εισάγετε ένα μοναδικό όνομα για την αντιγραφή του %1</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
@@ -528,35 +528,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation type="unfinished">Εργαλείο μετατροπής</translation>
+        <translation>Εργαλείο μετατροπής</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Εισαγωγή</translation>
+        <translation>Εισαγωγή</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation type="unfinished">μετατροπή μονάδων σε</translation>
+        <translation>μετατροπή μονάδων σε</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Μετατροπή</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Μετατροπή</translation>
+        <translation>Μετατροπή</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation type="unfinished">Ποσό και μονάδες που θέλετε να μετατραπούν</translation>
+        <translation>Ποσό και μονάδες που θέλετε να μετατραπούν</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation type="unfinished">Μονάδες που θέλετε να μετατραπούν</translation>
+        <translation>Μονάδες που θέλετε να μετατραπούν</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation type="unfinished">Μετατροπή αποτελέσματος</translation>
+        <translation>Μετατροπή αποτελέσματος</translation>
     </message>
 </context>
 <context>
@@ -610,135 +610,135 @@
     </message>
     <message>
         <source>Equipment Editor</source>
-        <translation type="unfinished">Επεξεργασία εξοπλισμού</translation>
+        <translation>Επεξεργασία εξοπλισμού</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Εξοπλισμός</translation>
+        <translation>Εξοπλισμός</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished">Ορισμός ως Προεπιλογή</translation>
+        <translation>Ορισμός ως Προεπιλογή</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation type="unfinished">Υποχρεωτικά πεδία</translation>
+        <translation>Υποχρεωτικά πεδία</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation type="unfinished">Όγκος πριν το βρασμό</translation>
+        <translation>Όγκος πριν το βρασμό</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished">Υπολογισμός όγκου πριν το βρασμό</translation>
+        <translation>Υπολογισμός όγκου πριν το βρασμό</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation type="unfinished">Μέγεθος παρτίδας</translation>
+        <translation>Μέγεθος παρτίδας</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation type="unfinished">Βράσιμο &amp;&amp; Νερό</translation>
+        <translation>Βράσιμο &amp;&amp; Νερό</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation type="unfinished">Διάρκεια βρασμού</translation>
+        <translation>Διάρκεια βρασμού</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation type="unfinished">Ποσοστό εξάτμισης (ανα ώρα)</translation>
+        <translation>Ποσοστό εξάτμισης (ανα ώρα)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation type="unfinished">Συμπηρωματική ποσότητα νερού την μαρμίτα</translation>
+        <translation>Συμπηρωματική ποσότητα νερού την μαρμίτα</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation type="unfinished">τελική προσθήκη νερού</translation>
+        <translation>τελική προσθήκη νερού</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation type="unfinished">Βαθμός απορρόφησης νερού από τα  σιτηρά (L/Kg)</translation>
+        <translation>Βαθμός απορρόφησης νερού από τα  σιτηρά (L/Kg)</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation type="unfinished">Μέση απορρόφηση</translation>
+        <translation>Μέση απορρόφηση</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation type="unfinished">Χρήση λυκίσκου </translation>
+        <translation>Χρήση λυκίσκου </translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation type="unfinished">Σημείο βρασμού του νερού</translation>
+        <translation>Σημείο βρασμού του νερού</translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation type="unfinished">Σκεύος σακχαροποίησης</translation>
+        <translation>Σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Όγκος</translation>
+        <translation>Όγκος</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation type="unfinished">Μάζα</translation>
+        <translation>Μάζα</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation type="unfinished">Διαγράψτε τον εξοπλισμό</translation>
+        <translation>Διαγράψτε τον εξοπλισμό</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation type="unfinished">Εάν επιλεγεί θα υπολογίσω όγκο πριν το βρασμό με βάση το επιθυμητό μέγεθος παρτίδας, χρόνο βρασμού, ποσοστό εξάτμισης, απώλειες κλπ.</translation>
+        <translation>Εάν επιλεγεί θα υπολογίσω όγκο πριν το βρασμό με βάση το επιθυμητό μέγεθος παρτίδας, χρόνο βρασμού, ποσοστό εξάτμισης, απώλειες κλπ.</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation type="unfinished">Αυτόματη πλήρωση όγκου πριν το βρασμό</translation>
+        <translation>Αυτόματη πλήρωση όγκου πριν το βρασμό</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation type="unfinished">Πόσο νερό εξατμίζεται ανα ώρα</translation>
+        <translation>Πόσο νερό εξατμίζεται ανα ώρα</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation type="unfinished">Πόσο νερό πρέπει να προστεθεί αμέσως πριν τον βρασμό</translation>
+        <translation>Πόσο νερό πρέπει να προστεθεί αμέσως πριν τον βρασμό</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation type="unfinished">νερό που προστέθηκε στον κάδο ζύμωσης</translation>
+        <translation>νερό που προστέθηκε στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation type="unfinished">Όγκος σκεύους σακχαροποίησης</translation>
+        <translation>Όγκος σκεύους σακχαροποίησης</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation type="unfinished">Μάζα η βάρος σκεύους σακχαροποίησης</translation>
+        <translation>Μάζα η βάρος σκεύους σακχαροποίησης</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation type="unfinished">Γλεύκος που απωλέστηκε από την μαρμίτα στον κάδο ζύμωσης</translation>
+        <translation>Γλεύκος που απωλέστηκε από την μαρμίτα στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation type="unfinished">Όγκος γλεύκους που χάθηκε εξ&apos; αιτίας του νεκρού χώρου στο lauter</translation>
+        <translation>Όγκος γλεύκους που χάθηκε εξ&apos; αιτίας του νεκρού χώρου στο lauter</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation type="unfinished">Νέος εξοπλισμός</translation>
+        <translation>Νέος εξοπλισμός</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Αποθήκευση</translation>
+        <translation>Αποθήκευση</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Ακύρωση</translation>
     </message>
 </context>
 <context>
@@ -753,31 +753,31 @@
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation type="unfinished">Αρχείο ζυμώσιμων</translation>
+        <translation>Αρχείο ζυμώσιμων</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Προσθήκη στην συνταγή</translation>
+        <translation>Προσθήκη στην συνταγή</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Νέα</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
+        <translation>Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Δημιουργείστε ένα νέο συστατικό</translation>
+        <translation>Δημιουργείστε ένα νέο συστατικό</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Διόρθωση επιλεγμένου συστατικού</translation>
+        <translation>Διόρθωση επιλεγμένου συστατικού</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Διαγραφή επιλεγμένου συστατικού</translation>
+        <translation>Διαγραφή επιλεγμένου συστατικού</translation>
     </message>
 </context>
 <context>
@@ -859,7 +859,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Χρώμα</translation>
+        <translation>Χρώμα</translation>
     </message>
 </context>
 <context>
@@ -917,31 +917,31 @@
     </message>
     <message>
         <source>Hop Database</source>
-        <translation type="unfinished">Κατάλογος λυκίσκων</translation>
+        <translation>Κατάλογος λυκίσκων</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Προσθήκη στην συνταγή</translation>
+        <translation>Προσθήκη στην συνταγή</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Νέα</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
+        <translation>Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Δημιουργείστε ένα νέο συστατικό</translation>
+        <translation>Δημιουργείστε ένα νέο συστατικό</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Διόρθωση επιλεγμένου συστατικού</translation>
+        <translation>Διόρθωση επιλεγμένου συστατικού</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Διαγραφή επιλεγμένου συστατικού</translation>
+        <translation>Διαγραφή επιλεγμένου συστατικού</translation>
     </message>
 </context>
 <context>
@@ -1357,31 +1357,31 @@
     </message>
     <message>
         <source>Misc Database</source>
-        <translation type="unfinished">Βάση δεδομένων διαφόρων</translation>
+        <translation>Βάση δεδομένων διαφόρων</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Προσθήκη στην συνταγή</translation>
+        <translation>Προσθήκη στην συνταγή</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Νέα</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
+        <translation>Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Δημιουργείστε ένα νέο συστατικό</translation>
+        <translation>Δημιουργείστε ένα νέο συστατικό</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Διόρθωση επιλεγμένου συστατικού</translation>
+        <translation>Διόρθωση επιλεγμένου συστατικού</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Διαγραφή επιλεγμένου συστατικού</translation>
+        <translation>Διαγραφή επιλεγμένου συστατικού</translation>
     </message>
 </context>
 <context>
@@ -2503,27 +2503,27 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation type="unfinished">Ρύθμισε το χρονόμετρο στην επιλεγμένη τιμή</translation>
+        <translation>Ρύθμισε το χρονόμετρο στην επιλεγμένη τιμή</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
-        <translation type="unfinished">ΩΩ:ΛΛ:ΔΔ</translation>
+        <translation>ΩΩ:ΛΛ:ΔΔ</translation>
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation type="unfinished">Έναρξη/Τέλος χρονόμετρου</translation>
+        <translation>Έναρξη/Τέλος χρονόμετρου</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation type="unfinished">Όρισε ένα ήχο για ξυπνητήρι</translation>
+        <translation>Όρισε ένα ήχο για ξυπνητήρι</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished">Ορισμός</translation>
+        <translation>Ορισμός</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished">Ήχος</translation>
+        <translation>Ήχος</translation>
     </message>
 </context>
 <context>
@@ -2581,31 +2581,31 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation type="unfinished">Βάση δεδομένων μαγιάς</translation>
+        <translation>Βάση δεδομένων μαγιάς</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Προσθήκη στην συνταγή</translation>
+        <translation>Προσθήκη στην συνταγή</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Νέα</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
+        <translation>Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Δημιουργείστε ένα νέο συστατικό</translation>
+        <translation>Δημιουργείστε ένα νέο συστατικό</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Διόρθωση επιλεγμένου συστατικού</translation>
+        <translation>Διόρθωση επιλεγμένου συστατικού</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Διαγραφή επιλεγμένου συστατικού</translation>
+        <translation>Διαγραφή επιλεγμένου συστατικού</translation>
     </message>
 </context>
 <context>
@@ -3118,7 +3118,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Χρώμα</translation>
+        <translation>Χρώμα</translation>
     </message>
 </context>
 <context>
@@ -4443,7 +4443,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Ημερομηνία</translation>
+        <translation>Ημερομηνία</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4799,6 +4799,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

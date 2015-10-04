@@ -16,27 +16,27 @@
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Belgeyi Yazdır</translation>
+        <translation>Belgeyi Yazdır</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;Notlar&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Notlar&lt;/h2&gt;</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">Adım %1: %2</translation>
+        <translation>Adım %1: %2</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Biçem</translation>
+        <translation>Biçem</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Tarih</translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kaynama Süresi</translation>
+        <translation>Kaynama Süresi</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -44,19 +44,19 @@
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Kaynama Hacmi</translation>
+        <translation>Kaynama Hacmi</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Kaynama Öncesi Ağırlığı</translation>
+        <translation>Kaynama Öncesi Ağırlığı</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished">Son Hacim</translation>
+        <translation>Son Hacim</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Başlangıç Ağırlığı</translation>
+        <translation>Başlangıç Ağırlığı</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -64,7 +64,7 @@
     </message>
     <message>
         <source>Final Gravity</source>
-        <translation type="unfinished">Son Ağırlık</translation>
+        <translation>Son Ağırlık</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -80,39 +80,39 @@
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Tamamlandı</translation>
+        <translation>Tamamlandı</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Adım</translation>
+        <translation>Adım</translation>
     </message>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Tahılları ekle</translation>
+        <translation>Tahılları ekle</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Suyu ısıt</translation>
+        <translation>Suyu ısıt</translation>
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
-        <translation type="unfinished">Gerçek Kaynama Öncesi Hacim</translation>
+        <translation>Gerçek Kaynama Öncesi Hacim</translation>
     </message>
     <message>
         <source>Actual PreBoil Gravity</source>
-        <translation type="unfinished">Gerçek Kaynama Öncesi Ağırlık</translation>
+        <translation>Gerçek Kaynama Öncesi Ağırlık</translation>
     </message>
     <message>
         <source>PostBoil Volume</source>
-        <translation type="unfinished">Kaynama Sonrası Hacim</translation>
+        <translation>Kaynama Sonrası Hacim</translation>
     </message>
     <message>
         <source>PostBoil Gravity</source>
-        <translation type="unfinished">Kaynama Sonrası Ağırlık</translation>
+        <translation>Kaynama Sonrası Ağırlık</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
@@ -123,31 +123,31 @@
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Biçem</translation>
+        <translation>Biçem</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Tarih</translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished">Kaynama Hacmi</translation>
+        <translation>Kaynama Hacmi</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Kaynama Öncesi Ağırlığı</translation>
+        <translation>Kaynama Öncesi Ağırlığı</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished">Son Hacim</translation>
+        <translation>Son Hacim</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Başlangıç Ağırlığı</translation>
+        <translation>Başlangıç Ağırlığı</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kaynama Süresi</translation>
+        <translation>Kaynama Süresi</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -167,15 +167,15 @@
     </message>
     <message>
         <source>Completed</source>
-        <translation type="unfinished">Tamamlandı</translation>
+        <translation>Tamamlandı</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation type="unfinished">Adım</translation>
+        <translation>Adım</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
@@ -199,7 +199,7 @@
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Belgeyi Yazdır</translation>
+        <translation>Belgeyi Yazdır</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">Adım %1: %2</translation>
+        <translation>Adım %1: %2</translation>
     </message>
 </context>
 <context>
@@ -378,11 +378,11 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Biçem</translation>
+        <translation>Biçem</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kaynama Süresi</translation>
+        <translation>Kaynama Süresi</translation>
     </message>
     <message>
         <source>Color</source>
@@ -473,7 +473,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Biçem</translation>
+        <translation>Biçem</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -1003,7 +1003,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1279,7 +1279,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
 </context>
 <context>
@@ -1455,7 +1455,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Inventory</source>
@@ -1581,7 +1581,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Biçem</translation>
+        <translation>Biçem</translation>
     </message>
     <message>
         <source>Folder</source>
@@ -1841,7 +1841,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1945,7 +1945,7 @@
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Tahılları ekle</translation>
+        <translation>Tahılları ekle</translation>
     </message>
     <message>
         <source>Add </source>
@@ -1957,7 +1957,7 @@
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Suyu ısıt</translation>
+        <translation>Suyu ısıt</translation>
     </message>
     <message>
         <source>Bring </source>
@@ -2271,7 +2271,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Tarih</translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <source>Batch Size</source>
@@ -2283,7 +2283,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kaynama Süresi</translation>
+        <translation>Kaynama Süresi</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -2323,7 +2323,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2423,7 +2423,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Print Document</source>
-        <translation type="unfinished">Belgeyi Yazdır</translation>
+        <translation>Belgeyi Yazdır</translation>
     </message>
 </context>
 <context>
@@ -3157,7 +3157,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
@@ -3347,11 +3347,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Biçem</translation>
+        <translation>Biçem</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Kaynama Süresi</translation>
+        <translation>Kaynama Süresi</translation>
     </message>
     <message>
         <source>Target batch size</source>
@@ -3786,7 +3786,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
@@ -3964,7 +3964,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
@@ -4066,7 +4066,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Süre</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>Default Amount</source>
@@ -4327,7 +4327,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Tarih</translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4775,6 +4775,14 @@ The final volume in the primary is %1.</source>
         <source>OG (20C)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>
@@ -4866,7 +4874,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Biçem</translation>
+        <translation>Biçem</translation>
     </message>
     <message>
         <source>Delete selected style</source>

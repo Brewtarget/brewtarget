@@ -5,11 +5,11 @@
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished">Quant a Brewtarget</translation>
+        <translation>Quant a Brewtarget</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation type="unfinished">Donació</translation>
+        <translation>Donació</translation>
     </message>
 </context>
 <context>
@@ -513,11 +513,11 @@
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Copia %1</translation>
+        <translation>Copia %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Entri un nom únic per a la copia de %1.</translation>
+        <translation>Entri un nom únic per a la copia de %1.</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
@@ -528,35 +528,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation type="unfinished">Conversor</translation>
+        <translation>Conversor</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation type="unfinished">Unitat del resultat</translation>
+        <translation>Unitat del resultat</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Resultats</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Convertir</translation>
+        <translation>Convertir</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation type="unfinished">Quantitat i unitats a convertir</translation>
+        <translation>Quantitat i unitats a convertir</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation type="unfinished">Unitat a la qual vols convertir</translation>
+        <translation>Unitat a la qual vols convertir</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation type="unfinished">Conversió del resultat</translation>
+        <translation>Conversió del resultat</translation>
     </message>
 </context>
 <context>
@@ -610,135 +610,135 @@
     </message>
     <message>
         <source>Equipment Editor</source>
-        <translation type="unfinished">Editor d&apos;equip</translation>
+        <translation>Editor d&apos;equip</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Equipament</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished">Posar com Defecte</translation>
+        <translation>Posar com Defecte</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation type="unfinished">Camps obligatoris</translation>
+        <translation>Camps obligatoris</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation type="unfinished">Volum abans de l&apos;ebullició</translation>
+        <translation>Volum abans de l&apos;ebullició</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished">Càlcul volum abans de l&apos;ebullició</translation>
+        <translation>Càlcul volum abans de l&apos;ebullició</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation type="unfinished">Volum del lot</translation>
+        <translation>Volum del lot</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation type="unfinished">Ebullició i aigua</translation>
+        <translation>Ebullició i aigua</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation type="unfinished">Temps d&apos;ebullició</translation>
+        <translation>Temps d&apos;ebullició</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation type="unfinished">Tassa d&apos;evaporació (per hora)</translation>
+        <translation>Tassa d&apos;evaporació (per hora)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation type="unfinished">Aigua agregada a l&apos;olla</translation>
+        <translation>Aigua agregada a l&apos;olla</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation type="unfinished">Aigua agregada al final</translation>
+        <translation>Aigua agregada al final</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation type="unfinished">Absorció de grans (L/kg)</translation>
+        <translation>Absorció de grans (L/kg)</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation type="unfinished">Absorció per defecte</translation>
+        <translation>Absorció per defecte</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation type="unfinished">Utilització de Llúpol </translation>
+        <translation>Utilització de Llúpol </translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation type="unfinished">Punt d&apos;ebullició</translation>
+        <translation>Punt d&apos;ebullició</translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation type="unfinished">Macerador</translation>
+        <translation>Macerador</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volum</translation>
+        <translation>Volum</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation type="unfinished">Massa</translation>
+        <translation>Massa</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation type="unfinished">Esborrar equip</translation>
+        <translation>Esborrar equip</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation type="unfinished">Si està seleccionat, calcularem el volum abans de l&apos;ebullició basat en la mida del lot desitjat, temps d&apos;ebullició, tassa d&apos;evaporació, pèrdues, etc…</translation>
+        <translation>Si està seleccionat, calcularem el volum abans de l&apos;ebullició basat en la mida del lot desitjat, temps d&apos;ebullició, tassa d&apos;evaporació, pèrdues, etc…</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation type="unfinished">Automàticament calcular el volum abans de l&apos;ebullició</translation>
+        <translation>Automàticament calcular el volum abans de l&apos;ebullició</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation type="unfinished">Quantitat d&apos;aigua que s&apos;evapora per hora</translation>
+        <translation>Quantitat d&apos;aigua que s&apos;evapora per hora</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation type="unfinished">Quantitat d&apos;aigua que s&apos;agrega a la olla immediatament abans de l&apos;ebullició</translation>
+        <translation>Quantitat d&apos;aigua que s&apos;agrega a la olla immediatament abans de l&apos;ebullició</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation type="unfinished">Quantitat d&apos;aigua que s&apos;agrega al fermentador</translation>
+        <translation>Quantitat d&apos;aigua que s&apos;agrega al fermentador</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation type="unfinished">Volum del macerador</translation>
+        <translation>Volum del macerador</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation type="unfinished">La massa o el pes del macerador</translation>
+        <translation>La massa o el pes del macerador</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation type="unfinished">Most perdut entre l&apos;olla i el fermentador</translation>
+        <translation>Most perdut entre l&apos;olla i el fermentador</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation type="unfinished">Volum de most perdut degut als espais morts al filtrar</translation>
+        <translation>Volum de most perdut degut als espais morts al filtrar</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation type="unfinished">Equip nou</translation>
+        <translation>Equip nou</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Desa</translation>
+        <translation>Desa</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel·lar</translation>
     </message>
 </context>
 <context>
@@ -753,7 +753,7 @@
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation type="unfinished">Base de dades ingredients fermentables</translation>
+        <translation>Base de dades ingredients fermentables</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
@@ -761,7 +761,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nou</translation>
+        <translation>Nou</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -769,11 +769,11 @@
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Crear un ingredient nou</translation>
+        <translation>Crear un ingredient nou</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Edita ingredient seleccionat</translation>
+        <translation>Edita ingredient seleccionat</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
@@ -859,7 +859,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Color</translation>
+        <translation>Color</translation>
     </message>
 </context>
 <context>
@@ -917,7 +917,7 @@
     </message>
     <message>
         <source>Hop Database</source>
-        <translation type="unfinished">Base de dades de llúpols</translation>
+        <translation>Base de dades de llúpols</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
@@ -925,7 +925,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nou</translation>
+        <translation>Nou</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -933,11 +933,11 @@
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Crear un ingredient nou</translation>
+        <translation>Crear un ingredient nou</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Edita ingredient seleccionat</translation>
+        <translation>Edita ingredient seleccionat</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
@@ -1357,7 +1357,7 @@
     </message>
     <message>
         <source>Misc Database</source>
-        <translation type="unfinished">Base de dades d&apos;ingredients extres</translation>
+        <translation>Base de dades d&apos;ingredients extres</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
@@ -1365,7 +1365,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nou</translation>
+        <translation>Nou</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -1373,11 +1373,11 @@
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Crear un ingredient nou</translation>
+        <translation>Crear un ingredient nou</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Edita ingredient seleccionat</translation>
+        <translation>Edita ingredient seleccionat</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
@@ -2503,27 +2503,27 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation type="unfinished">Inicialitzar el temporitzador al valor indicat</translation>
+        <translation>Inicialitzar el temporitzador al valor indicat</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
-        <translation type="unfinished">HH:MM:SS</translation>
+        <translation>HH:MM:SS</translation>
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation type="unfinished">Iniciar/Aturar temporitzador</translation>
+        <translation>Iniciar/Aturar temporitzador</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation type="unfinished">Seleccionar un so d&apos;alerta</translation>
+        <translation>Seleccionar un so d&apos;alerta</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished">Inicialitzar</translation>
+        <translation>Inicialitzar</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished">So</translation>
+        <translation>So</translation>
     </message>
 </context>
 <context>
@@ -2581,7 +2581,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation type="unfinished">Base de dades de llevats</translation>
+        <translation>Base de dades de llevats</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
@@ -2589,7 +2589,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Nou</translation>
+        <translation>Nou</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -2597,11 +2597,11 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Crear un ingredient nou</translation>
+        <translation>Crear un ingredient nou</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Edita ingredient seleccionat</translation>
+        <translation>Edita ingredient seleccionat</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
@@ -3118,7 +3118,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Color</translation>
+        <translation>Color</translation>
     </message>
 </context>
 <context>
@@ -3771,7 +3771,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>1.0</source>
-        <translation type="unfinished">1.0</translation>
+        <translation>1.0</translation>
     </message>
     <message>
         <source>application/x-brewtarget-ingredient</source>
@@ -4443,7 +4443,7 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4799,6 +4799,14 @@ El volum final al primari és de %1.</translation>
     </message>
     <message>
         <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -5,11 +5,11 @@
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished"></translation>
+        <translation>О Brewtarget</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation type="unfinished">Пожертвовать</translation>
+        <translation>Пожертвовать</translation>
     </message>
 </context>
 <context>
@@ -363,14 +363,14 @@
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка…</translation>
     </message>
 </context>
 <context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -394,11 +394,11 @@
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Использование</translation>
+        <translation>Использование</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Форма</translation>
+        <translation>Форма</translation>
     </message>
     <message>
         <source>Category</source>
@@ -429,7 +429,7 @@
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Новый</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -513,11 +513,11 @@
     </message>
     <message>
         <source>Copy %1</source>
-        <translation type="unfinished">Копирование %1</translation>
+        <translation>Копирование %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished">Введите уникальное имя для копии %1.</translation>
+        <translation>Введите уникальное имя для копии %1.</translation>
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
@@ -528,35 +528,35 @@
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation type="unfinished">Преобразователь единиц измерения</translation>
+        <translation>Преобразователь единиц измерения</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Ввод</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation type="unfinished">Выходные единицы</translation>
+        <translation>Выходные единицы</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Результат</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Преобразовать</translation>
+        <translation>Преобразовать</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation type="unfinished">Входное количество и единицы измерения</translation>
+        <translation>Входное количество и единицы измерения</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation type="unfinished">Единицы измерения, в которые нужно выполнить преобразование</translation>
+        <translation>Единицы измерения, в которые нужно выполнить преобразование</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation type="unfinished">Результат преобразования</translation>
+        <translation>Результат преобразования</translation>
     </message>
 </context>
 <context>
@@ -610,135 +610,135 @@
     </message>
     <message>
         <source>Equipment Editor</source>
-        <translation type="unfinished">Редактор оборудования</translation>
+        <translation>Редактор оборудования</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Оборудование</translation>
+        <translation>Оборудование</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished">По умолчанию</translation>
+        <translation>По умолчанию</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation type="unfinished">Обязательные поля</translation>
+        <translation>Обязательные поля</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation type="unfinished">Объем до кипячения</translation>
+        <translation>Объем до кипячения</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished">Рассчитать предварочный объём</translation>
+        <translation>Рассчитать предварочный объём</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation type="unfinished">Размер затора</translation>
+        <translation>Размер затора</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation type="unfinished">Кипячение &amp;&amp; Вода</translation>
+        <translation>Кипячение &amp;&amp; Вода</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation type="unfinished">Время кипячения</translation>
+        <translation>Время кипячения</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation type="unfinished">Скорость испарения (в час)</translation>
+        <translation>Скорость испарения (в час)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation type="unfinished">Доливка воды в котёл</translation>
+        <translation>Доливка воды в котёл</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation type="unfinished">Доливаемая в сусловарник вода</translation>
+        <translation>Доливаемая в сусловарник вода</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation type="unfinished">Впитываемость солода (L/kg)</translation>
+        <translation>Впитываемость солода (L/kg)</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation type="unfinished">Впитываемость по умолчанию</translation>
+        <translation>Впитываемость по умолчанию</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation type="unfinished">Утилизация хмеля </translation>
+        <translation>Утилизация хмеля </translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation type="unfinished">Точка кипения воды</translation>
+        <translation>Точка кипения воды</translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation type="unfinished">Заторник</translation>
+        <translation>Заторник</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Объём</translation>
+        <translation>Объём</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation type="unfinished">Масса</translation>
+        <translation>Масса</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation type="unfinished">Удалить оборудование</translation>
+        <translation>Удалить оборудование</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation type="unfinished">Если опция активирована, то программа рассчитает необходимый вам объем сусла перед началом кипячения, на основании заданных параметрах желаемого конечного объема пива, времени кипячения, объемах выкипания, потерях и т.д.</translation>
+        <translation>Если опция активирована, то программа рассчитает необходимый вам объем сусла перед началом кипячения, на основании заданных параметрах желаемого конечного объема пива, времени кипячения, объемах выкипания, потерях и т.д.</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation type="unfinished">Автоматически заполнить в предварочный объём</translation>
+        <translation>Автоматически заполнить в предварочный объём</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation type="unfinished">Сколько воды испаряется за час</translation>
+        <translation>Сколько воды испаряется за час</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation type="unfinished">Вода добавленая в бродильный бак</translation>
+        <translation>Вода добавленая в бродильный бак</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation type="unfinished">Котёл к бродильному баку</translation>
+        <translation>Котёл к бродильному баку</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation type="unfinished">Объём заторника</translation>
+        <translation>Объём заторника</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation type="unfinished">Масса или вес заторника</translation>
+        <translation>Масса или вес заторника</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation type="unfinished">Вода потеряная между котлом и бродильным баком</translation>
+        <translation>Вода потеряная между котлом и бродильным баком</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation type="unfinished">Объем сусла, оставшийся в заторнике</translation>
+        <translation>Объем сусла, оставшийся в заторнике</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation type="unfinished">Новое оборудование</translation>
+        <translation>Новое оборудование</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Сохранить</translation>
+        <translation>Сохранить</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отменить</translation>
     </message>
 </context>
 <context>
@@ -753,31 +753,31 @@
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation type="unfinished">База сбраживаемых ингридиентов</translation>
+        <translation>База сбраживаемых ингридиентов</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Добавить в рецепт</translation>
+        <translation>Добавить в рецепт</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Новый</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Добавить выбранный ингредиент в рецепт</translation>
+        <translation>Добавить выбранный ингредиент в рецепт</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Создать новый ингредиент</translation>
+        <translation>Создать новый ингредиент</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Изменить выбранный ингредиент</translation>
+        <translation>Изменить выбранный ингредиент</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Удалить выбранный ингредиент</translation>
+        <translation>Удалить выбранный ингредиент</translation>
     </message>
 </context>
 <context>
@@ -859,7 +859,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Цвет</translation>
+        <translation>Цвет</translation>
     </message>
 </context>
 <context>
@@ -917,31 +917,31 @@
     </message>
     <message>
         <source>Hop Database</source>
-        <translation type="unfinished">База данных сортов хмеля</translation>
+        <translation>База данных сортов хмеля</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Добавить в рецепт</translation>
+        <translation>Добавить в рецепт</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Новый</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Добавить выбранный ингредиент в рецепт</translation>
+        <translation>Добавить выбранный ингредиент в рецепт</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Создать новый ингредиент</translation>
+        <translation>Создать новый ингредиент</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Изменить выбранный ингредиент</translation>
+        <translation>Изменить выбранный ингредиент</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Удалить выбранный ингредиент</translation>
+        <translation>Удалить выбранный ингредиент</translation>
     </message>
 </context>
 <context>
@@ -1357,31 +1357,31 @@
     </message>
     <message>
         <source>Misc Database</source>
-        <translation type="unfinished">База данных прочих ингредиентов</translation>
+        <translation>База данных прочих ингредиентов</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Добавить в рецепт</translation>
+        <translation>Добавить в рецепт</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Новый</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Добавить выбранный ингредиент в рецепт</translation>
+        <translation>Добавить выбранный ингредиент в рецепт</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Создать новый ингредиент</translation>
+        <translation>Создать новый ингредиент</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Изменить выбранный ингредиент</translation>
+        <translation>Изменить выбранный ингредиент</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Удалить выбранный ингредиент</translation>
+        <translation>Удалить выбранный ингредиент</translation>
     </message>
 </context>
 <context>
@@ -2503,27 +2503,27 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation type="unfinished">Установить значение таймера</translation>
+        <translation>Установить значение таймера</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
-        <translation type="unfinished">ЧЧ:ММ:СС</translation>
+        <translation>ЧЧ:ММ:СС</translation>
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation type="unfinished">Запустить или остановить таймер</translation>
+        <translation>Запустить или остановить таймер</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation type="unfinished">Выбрать звуковой сигнал</translation>
+        <translation>Выбрать звуковой сигнал</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished">Установить</translation>
+        <translation>Установить</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished">Звук</translation>
+        <translation>Звук</translation>
     </message>
 </context>
 <context>
@@ -2581,31 +2581,31 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation type="unfinished">База данных дрожжей</translation>
+        <translation>База данных дрожжей</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Добавить в рецепт</translation>
+        <translation>Добавить в рецепт</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Новый</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished">Добавить выбранный ингредиент в рецепт</translation>
+        <translation>Добавить выбранный ингредиент в рецепт</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished">Создать новый ингредиент</translation>
+        <translation>Создать новый ингредиент</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Изменить выбранный ингредиент</translation>
+        <translation>Изменить выбранный ингредиент</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Удалить выбранный ингредиент</translation>
+        <translation>Удалить выбранный ингредиент</translation>
     </message>
 </context>
 <context>
@@ -3118,7 +3118,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Цвет</translation>
+        <translation>Цвет</translation>
     </message>
 </context>
 <context>
@@ -3771,7 +3771,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>1.0</source>
-        <translation type="unfinished">1.0</translation>
+        <translation>1.0</translation>
     </message>
     <message>
         <source>application/x-brewtarget-ingredient</source>
@@ -4173,7 +4173,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">С Оборудования</translation>
+        <translation>С Оборудования</translation>
     </message>
     <message>
         <source>Tun mass</source>
@@ -4197,7 +4197,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="unfinished">Этап затирания выше</translation>
+        <translation>Этап затирания выше</translation>
     </message>
     <message>
         <source>Mash step down</source>
@@ -4399,7 +4399,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Первое сусло</translation>
+        <translation>Первое сусло</translation>
     </message>
     <message>
         <source>Directories</source>
@@ -4443,7 +4443,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Дата</translation>
+        <translation>Дата</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
@@ -4799,6 +4799,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Current measured plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displaySg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>displayPlato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
