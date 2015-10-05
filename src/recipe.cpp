@@ -1419,10 +1419,9 @@ void Recipe::recalcABV_pct()
 {
    double ret;
 
-   // George Fix: Brewing Science and Practice, page 686.
-   // The multiplicative factor actually varies from
-   // 125 for weak beers to 135 for strong beers.
-   ret = 130*(_og_fermentable - _fg_fermentable);
+   // The complex formula, and variations comes from Ritchie Products Ltd, (Zymurgy, Summer 1995, vol. 18, no. 2)
+   // Michael L. Hall’s article Brew by the Numbers: Add Up What’s in Your Beer, and Designing Great Beers by Daniels.
+   ret = (76.08 * (_og_fermentable - _fg_fermentable) / (1.775 - _og_fermentable)) * (_fg_fermentable / 0.794);
   
    if ( ret != _ABV_pct ) 
    {
