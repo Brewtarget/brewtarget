@@ -46,7 +46,7 @@ public:
     * 'amount' of type 'units' in this UnitSystem. This string should also
     * be recognized by qstringToSI()
     */
-   QString displayAmount( double amount, Unit* units, Unit::unitScale scale = Unit::noScale );
+   QString displayAmount( double amount, Unit* units, int precision = -1, Unit::unitScale scale = Unit::noScale );
 
    /*!
     * amountDisplay() should return the double representing the appropriate

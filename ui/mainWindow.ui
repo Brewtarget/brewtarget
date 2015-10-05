@@ -233,8 +233,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>561</width>
-           <height>371</height>
+           <width>635</width>
+           <height>499</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1096,8 +1096,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>561</width>
-           <height>371</height>
+           <width>648</width>
+           <height>296</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1649,7 +1649,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>15</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1680,6 +1680,7 @@
      <addaction name="actionRecipePreview"/>
      <addaction name="actionRecipePrint"/>
      <addaction name="actionRecipeHTML"/>
+     <addaction name="actionRecipeBBCode"/>
     </widget>
     <widget class="QMenu" name="menuDatabase">
      <property name="title">
@@ -2189,6 +2190,15 @@
   <action name="actionStrikeWater_Calculator">
    <property name="text">
     <string>Strike Water Calculator</string>
+   </property>
+  </action>
+  <action name="actionRecipeBBCode">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/clipboard.svg</normaloff>:/images/clipboard.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Export to &amp;BBCode</string>
    </property>
   </action>
  </widget>

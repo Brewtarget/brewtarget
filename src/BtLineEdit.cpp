@@ -147,10 +147,10 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
       case VOLUME:
       case TEMPERATURE:
       case TIME:
+      case DENSITY:
          val = toSI(oldUnit,oldScale,force);
          amt = displayAmount(val,3);
          break;
-      case DENSITY:
       case COLOR:
          val = toSI(oldUnit,oldScale,force);
          amt = displayAmount(val,0);
