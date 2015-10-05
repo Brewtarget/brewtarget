@@ -48,13 +48,15 @@ MiscDialog::MiscDialog(MainWindow* parent) :
    tableWidget->setSortingEnabled(true);
    tableWidget->sortByColumn( MISCNAMECOL, Qt::AscendingOrder );
    miscTableProxy->setDynamicSortFilter(true);
+   miscTableProxy->setFilterKeyColumn(1);
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
    connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMisc()) );
    connect( tableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addMisc(const QModelIndex&) ) );
-   
+   connect( qLineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterMisc(QString)));
+
    miscTableModel->observeDatabase(true);
 }
 
@@ -64,6 +66,9 @@ void MiscDialog::doLayout()
    verticalLayout = new QVBoxLayout(this);
       tableWidget = new QTableView(this);
       horizontalLayout = new QHBoxLayout();
+      qLineEdit_searchBox = new QLineEdit();
+      qLineEdit_searchBox->setMaxLength(30);
+      qLineEdit_searchBox->setPlaceholderText("Enter filter");
          horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
          pushButton_addToRecipe = new QPushButton(this);
             pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
@@ -84,6 +89,7 @@ void MiscDialog::doLayout()
             icon1.addFile(QStringLiteral(":/images/smallMinus.svg"), QSize(), QIcon::Normal, QIcon::Off);
             pushButton_remove->setIcon(icon1);
             pushButton_remove->setAutoDefault(false);
+         horizontalLayout->addWidget(qLineEdit_searchBox);
          horizontalLayout->addItem(horizontalSpacer);
          horizontalLayout->addWidget(pushButton_addToRecipe);
          horizontalLayout->addWidget(pushButton_new);
@@ -205,4 +211,10 @@ void MiscDialog::newMisc()
    m->setName(name);
    miscEdit->setMisc(m);
    miscEdit->show();
+}
+
+void MiscDialog::filterMisc(QString searchExpression)
+{
+    miscTableProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    miscTableProxy->setFilterFixedString(searchExpression);
 }

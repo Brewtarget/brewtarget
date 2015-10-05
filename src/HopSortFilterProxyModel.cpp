@@ -85,6 +85,11 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
 bool HopSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
 {
    HopTableModel* model = qobject_cast<HopTableModel*>(sourceModel());
-   //! return true if we don't want to filter or if the hop is set to display
-   return !filter || model->getHop(source_row)->display();
+   QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+
+   return !filter
+          ||
+           ( sourceModel()->data(index).toString().contains(filterRegExp())
+             && model->getHop(source_row)->display()
+           );
 }

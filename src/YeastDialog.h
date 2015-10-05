@@ -56,6 +56,7 @@ public:
    QVBoxLayout *verticalLayout;
    QTableView *tableWidget;
    QHBoxLayout *horizontalLayout;
+   QLineEdit *qLineEdit_searchBox;
    QSpacerItem *horizontalSpacer;
    QPushButton *pushButton_addToRecipe;
    QPushButton *pushButton_new;
@@ -68,6 +69,7 @@ public slots:
    void removeYeast();
    void editSelected();
    void newYeast();
+   void filterYeasts(QString searchExpression);
 
 protected:
 

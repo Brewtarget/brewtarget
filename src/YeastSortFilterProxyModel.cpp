@@ -62,5 +62,11 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
 bool YeastSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
 {
    YeastTableModel* model = qobject_cast<YeastTableModel*>(sourceModel());
-   return ! filter || model->getYeast(source_row)->display();
+   QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+
+   return !filter
+          ||
+           ( sourceModel()->data(index).toString().contains(filterRegExp())
+             && model->getYeast(source_row)->display()
+           );
 }

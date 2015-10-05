@@ -52,6 +52,10 @@ YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   parentTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+   parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+   parentTableWidget->setWordWrap(false);
+
    connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
 }
 
@@ -75,12 +79,6 @@ void YeastTableModel::addYeast(Yeast* yeast)
    connect( yeast, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
-
-   if(parentTableWidget)
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
 }
 
 void YeastTableModel::observeRecipe(Recipe* rec)
@@ -139,13 +137,6 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
 
       endInsertRows();
    }
-
-   if( parentTableWidget )
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
-
 }
 
 void YeastTableModel::removeYeast(Yeast* yeast)
@@ -159,12 +150,6 @@ void YeastTableModel::removeYeast(Yeast* yeast)
       yeastObs.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
-
-      if(parentTableWidget)
-      {
-         parentTableWidget->resizeColumnsToContents();
-         parentTableWidget->resizeRowsToContents();
-      }
    }
 }
 

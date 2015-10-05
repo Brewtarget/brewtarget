@@ -63,6 +63,9 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
    // Will this work here? Yes. Yes it will. Bwahahahahahaha
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   parentTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+   parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+   parentTableWidget->setWordWrap(false);
    connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
 }
 
@@ -124,12 +127,6 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    totalFermMass_kg += ferm->amount_kg();
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
-
-   if(parentTableWidget)
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
 }
 
 void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
@@ -157,12 +154,6 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
 
       endInsertRows();
    }
-
-   if(parentTableWidget)
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
 }
 
 bool FermentableTableModel::removeFermentable(Fermentable* ferm)
@@ -179,12 +170,6 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
       totalFermMass_kg -= ferm->amount_kg();
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
-
-      if(parentTableWidget)
-      {
-         parentTableWidget->resizeColumnsToContents();
-         parentTableWidget->resizeRowsToContents();
-      }
 
       return true;
    }

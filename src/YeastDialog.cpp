@@ -45,12 +45,14 @@ YeastDialog::YeastDialog(MainWindow* parent)
    tableWidget->setSortingEnabled(true);
    tableWidget->sortByColumn( YEASTNAMECOL, Qt::AscendingOrder );
    yeastTableProxy->setDynamicSortFilter(true);
-   
+   yeastTableProxy->setFilterKeyColumn(1);
+
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addYeast() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT( removeYeast() ) );
    connect( tableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addYeast(const QModelIndex&) ) );
+   connect( qLineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterYeasts(QString)));
 
    yeastTableModel->observeDatabase(true);
 
@@ -63,6 +65,9 @@ void YeastDialog::doLayout()
       tableWidget = new QTableView(this);
       horizontalLayout = new QHBoxLayout();
          horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+         qLineEdit_searchBox = new QLineEdit();
+         qLineEdit_searchBox->setMaxLength(30);
+         qLineEdit_searchBox->setPlaceholderText("Enter filter");
          pushButton_addToRecipe = new QPushButton(this);
             pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
             pushButton_addToRecipe->setAutoDefault(false);
@@ -82,6 +87,7 @@ void YeastDialog::doLayout()
             icon1.addFile(QStringLiteral(":/images/smallMinus.svg"), QSize(), QIcon::Normal, QIcon::Off);
             pushButton_remove->setIcon(icon1);
             pushButton_remove->setAutoDefault(false);
+         horizontalLayout->addWidget(qLineEdit_searchBox);
          horizontalLayout->addItem(horizontalSpacer);
          horizontalLayout->addWidget(pushButton_addToRecipe);
          horizontalLayout->addWidget(pushButton_new);
@@ -211,4 +217,10 @@ void YeastDialog::newYeast()
    yeastEditor->setYeast(y);
    yeastEditor->show();
    y->setDisplay(true);
+}
+
+void YeastDialog::filterYeasts(QString searchExpression)
+{
+    yeastTableProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    yeastTableProxy->setFilterFixedString(searchExpression);
 }

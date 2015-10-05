@@ -55,6 +55,7 @@ public:
    QVBoxLayout *verticalLayout;
    QTableView *tableWidget;
    QHBoxLayout *horizontalLayout;
+   QLineEdit *qLineEdit_searchBox;
    QSpacerItem *horizontalSpacer;
    QPushButton *pushButton_addToRecipe;
    QPushButton *pushButton_new;
@@ -70,6 +71,7 @@ public slots:
    void removeFermentable();
    void editSelected();
    void newFermentable();
+   void filterFermentables(QString searchExpression);
    //void changed(QMetaProperty,QVariant);
 
 protected:

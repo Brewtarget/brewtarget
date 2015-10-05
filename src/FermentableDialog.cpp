@@ -32,6 +32,8 @@
 #include "MainWindow.h"
 #include "fermentable.h"
 
+
+
 FermentableDialog::FermentableDialog(MainWindow* parent) :
    QDialog(parent),
    mainWindow(parent),
@@ -48,13 +50,14 @@ FermentableDialog::FermentableDialog(MainWindow* parent) :
    tableWidget->setSortingEnabled(true);
    tableWidget->sortByColumn( FERMNAMECOL, Qt::AscendingOrder );
    fermTableProxy->setDynamicSortFilter(true);
-   
+   fermTableProxy->setFilterKeyColumn(1);
+
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addFermentable() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeFermentable() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newFermentable() ) );
    connect( tableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT(addFermentable(const QModelIndex&)) );
-   
+   connect( qLineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterFermentables(QString)));
    // Let me see if this works
    fermTableModel->observeDatabase(true);
 }
@@ -65,6 +68,9 @@ void FermentableDialog::doLayout()
    verticalLayout = new QVBoxLayout(this);
       tableWidget = new QTableView(this);
       horizontalLayout = new QHBoxLayout();
+         qLineEdit_searchBox = new QLineEdit();
+         qLineEdit_searchBox->setMaxLength(30);
+         qLineEdit_searchBox->setPlaceholderText("Enter filter");
          horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
          pushButton_addToRecipe = new QPushButton(this);
             pushButton_addToRecipe->setObjectName(QStringLiteral("pushButton_addToRecipe"));
@@ -85,6 +91,7 @@ void FermentableDialog::doLayout()
             icon1.addFile(QStringLiteral(":/images/smallMinus.svg"), QSize(), QIcon::Normal, QIcon::Off);
             pushButton_remove->setIcon(icon1);
             pushButton_remove->setAutoDefault(false);
+         horizontalLayout->addWidget(qLineEdit_searchBox);
          horizontalLayout->addItem(horizontalSpacer);
          horizontalLayout->addWidget(pushButton_addToRecipe);
          horizontalLayout->addWidget(pushButton_new);
@@ -210,4 +217,10 @@ void FermentableDialog::newFermentable()
    ferm->setName(name);
    fermEdit->setFermentable(ferm);
    fermEdit->show();
+}
+
+void FermentableDialog::filterFermentables(QString searchExpression)
+{
+    fermTableProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    fermTableProxy->setFilterFixedString(searchExpression);
 }
