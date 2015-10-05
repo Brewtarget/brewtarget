@@ -20,61 +20,13 @@
  */
 
 #include <QApplication>
-#include <QStringList>
-#include <QHash>
+#include <QCommandLineParser>
 #include "config.h"
 #include "brewtarget.h"
 #include "database.h"
 
-// TODO: replace with real parsing (Qt5)
-void parseArgs(QApplication const& app)
-{
-   int i;
-   QStringList args(app.arguments());
-   QHash< QString, QString > optionValue;
-   
-   // Parse the args into option/value pairs
-   for( i = 0; i < args.size(); ++i )
-   {
-      QString option(args.at(i));
-      QString value;
-      
-      // All options start with '-'
-      if( !option.startsWith("-") )
-         continue;
-      
-      if( i+1 < args.size() )
-      {
-         // If the arg following the current one is not an option, it is a
-         // value.
-         if( !args.at(i+1).startsWith("-") )
-         {
-            value = args.at(i+1);
-            ++i;
-         }
-      }
-      
-      optionValue.insert(option, value);
-   }
-   
-   // --from-xml
-   if( optionValue.contains("--from-xml") )
-   {
-      Database::instance().importFromXML(optionValue["--from-xml"]);
-      Database::dropInstance();
-      // If you know enough to run --from-xml, I am going to assume you know
-      // enough to do it right
-      Brewtarget::setOption("converted", QDate().currentDate().toString());
-      exit(0);
-   }
-   
-   // --create-blank
-   if( optionValue.contains("--create-blank") )
-   {
-      Database::createBlank(optionValue["--create-blank"]);
-      exit(0);
-   }
-}
+void importFromXml(const QString & optionValue);
+void createBlankDb(const QString & optionValue);
 
 int main(int argc, char **argv)
 {  
@@ -83,7 +35,34 @@ int main(int argc, char **argv)
    app.setApplicationName("brewtarget");
    app.setApplicationVersion(VERSIONSTRING);
 
-   parseArgs(app);
+   QCommandLineParser parser;
+   parser.addHelpOption();
+   parser.addVersionOption();
+
+   const QCommandLineOption importFromXmlOption("from-xml", "Imports DB from XML", "file");
+   const QCommandLineOption createBlankDBOption("create-blank", "Creates a blank DB", "file");
+
+   parser.addOption(importFromXmlOption);
+   parser.addOption(createBlankDBOption);
+
+   parser.process(app);
+
+   if (parser.isSet(importFromXmlOption)) importFromXml(parser.value(importFromXmlOption));
+   if (parser.isSet(createBlankDBOption)) createBlankDb(parser.value(createBlankDBOption));
    
    return Brewtarget::run();
+}
+
+void importFromXml(const QString & optionValue) {
+    Database::instance().importFromXML(optionValue);
+    Database::dropInstance();
+    // If you know enough to run --from-xml, I am going to assume you know
+    // enough to do it right
+    Brewtarget::setOption("converted", QDate().currentDate().toString());
+    exit(0);
+}
+
+void createBlankDb(const QString & optionValue) {
+    Database::createBlank(optionValue);
+    exit(0);
 }
