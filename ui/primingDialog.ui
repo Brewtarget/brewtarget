@@ -124,28 +124,28 @@
        </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_glucMono">
+       <widget class="QRadioButton" name="radioButton_glucMono">
         <property name="text">
          <string>Glucose Monohydrate (corn sugar)</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_gluc">
+       <widget class="QRadioButton" name="radioButton_gluc">
         <property name="text">
          <string>Anhydrous Glucose</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_sucrose">
+       <widget class="QRadioButton" name="radioButton_sucrose">
         <property name="text">
          <string>Sucrose (table sugar)</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_dme">
+       <widget class="QRadioButton" name="radioButton_dme">
         <property name="text">
          <string>Dry Malt Extract</string>
         </property>
@@ -314,10 +314,10 @@
   <tabstop>lineEdit_beerVol</tabstop>
   <tabstop>lineEdit_temp</tabstop>
   <tabstop>lineEdit_vols</tabstop>
-  <tabstop>checkBox_glucMono</tabstop>
-  <tabstop>checkBox_gluc</tabstop>
-  <tabstop>checkBox_sucrose</tabstop>
-  <tabstop>checkBox_dme</tabstop>
+  <tabstop>radioButton_glucMono</tabstop>
+  <tabstop>radioButton_gluc</tabstop>
+  <tabstop>radioButton_sucrose</tabstop>
+  <tabstop>radioButton_dme</tabstop>
   <tabstop>lineEdit_output</tabstop>
   <tabstop>pushButton_calculate</tabstop>
  </tabstops>

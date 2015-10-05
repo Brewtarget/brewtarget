@@ -239,21 +239,21 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <widget class="QCheckBox" name="checkBox_mosher">
+             <widget class="QRadioButton" name="radioButton_mosher">
               <property name="text">
                <string>Mosher's approximation</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_daniel">
+             <widget class="QRadioButton" name="radioButton_daniel">
               <property name="text">
                <string>Daniels' approximation</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_morey">
+             <widget class="QRadioButton" name="radioButton_morey">
               <property name="text">
                <string>Morey's approximation</string>
               </property>
@@ -292,21 +292,21 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <item>
-             <widget class="QCheckBox" name="checkBox_tinseth">
+             <widget class="QRadioButton" name="radioButton_tinseth">
               <property name="text">
                <string>Tinseth's approximation</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_rager">
+             <widget class="QRadioButton" name="radioButton_rager">
               <property name="text">
                <string>Rager's approximation</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_noonan">
+             <widget class="QRadioButton" name="radioButton_noonan">
               <property name="text">
                <string>Noonan's approximation</string>
               </property>
@@ -545,11 +545,11 @@
   <tabstop>radioButton_plato</tabstop>
   <tabstop>radioButton_srm</tabstop>
   <tabstop>radioButton_ebc</tabstop>
-  <tabstop>checkBox_mosher</tabstop>
-  <tabstop>checkBox_daniel</tabstop>
-  <tabstop>checkBox_morey</tabstop>
-  <tabstop>checkBox_tinseth</tabstop>
-  <tabstop>checkBox_rager</tabstop>
+  <tabstop>radioButton_mosher</tabstop>
+  <tabstop>radioButton_daniel</tabstop>
+  <tabstop>radioButton_morey</tabstop>
+  <tabstop>radioButton_tinseth</tabstop>
+  <tabstop>radioButton_rager</tabstop>
   <tabstop>lineEdit_dbDir</tabstop>
   <tabstop>pushButton_dbDirBrowse</tabstop>
   <tabstop>pushButton_dbDirDefault</tabstop>
@@ -566,8 +566,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>426</y>
+     <x>266</x>
+     <y>298</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -582,8 +582,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>325</x>
-     <y>426</y>
+     <x>334</x>
+     <y>298</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
