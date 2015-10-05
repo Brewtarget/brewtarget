@@ -1125,7 +1125,7 @@
              <number>0</number>
             </property>
             <property name="mimeAccepted" stdset="0">
-             <string>application/x-brewtarget-ingredient</string>
+             <string notr="true">application/x-brewtarget-ingredient</string>
             </property>
             <widget class="QWidget" name="fermentableTab">
              <attribute name="title">

@@ -81,7 +81,7 @@
              <string notr="true">inputOG</string>
             </property>
             <property name="forcedUnit" stdset="0">
-             <string>displaySg</string>
+             <string notr="true">displaySg</string>
             </property>
            </widget>
           </item>
@@ -121,7 +121,7 @@
              <string notr="true">curP</string>
             </property>
             <property name="forcedUnit" stdset="0">
-             <string>displayPlato</string>
+             <string notr="true">displayPlato</string>
             </property>
            </widget>
           </item>
@@ -209,7 +209,7 @@
          <bool>true</bool>
         </property>
         <property name="forcedUnit" stdset="0">
-         <string>displaySg</string>
+         <string notr="true">displaySg</string>
         </property>
        </widget>
       </item>
@@ -291,7 +291,7 @@
          <bool>true</bool>
         </property>
         <property name="forcedUnit" stdset="0">
-         <string>displayPlato</string>
+         <string notr="true">displayPlato</string>
         </property>
        </widget>
       </item>
@@ -317,7 +317,7 @@
          <bool>true</bool>
         </property>
         <property name="forcedUnit" stdset="0">
-         <string>displaySg</string>
+         <string notr="true">displaySg</string>
         </property>
        </widget>
       </item>

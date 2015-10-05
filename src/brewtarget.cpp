@@ -1521,7 +1521,7 @@ QMenu* Brewtarget::setupMassMenu(QWidget* parent, Unit::unitDisplay unit, Unit::
          generateAction(sMenu, tr("Pounds"), Unit::scaleSmall, scale,qsgrp);
          break;
    }
-   sMenu->setTitle("Scale");
+   sMenu->setTitle(tr("Scale"));
    menu->addMenu(sMenu);
 
    return menu;
@@ -1552,7 +1552,7 @@ QMenu* Brewtarget::setupTimeMenu(QWidget* parent, Unit::unitScale scale)
    generateAction(sMenu, tr("Hours"),   Unit::scaleMedium, scale, qgrp);
    generateAction(sMenu, tr("Days"),    Unit::scaleLarge, scale, qgrp);
 
-   sMenu->setTitle("Scale");
+   sMenu->setTitle(tr("Scale"));
    menu->addMenu(sMenu);
 
    return menu;
@@ -1603,7 +1603,7 @@ QMenu* Brewtarget::setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit
          generateAction(sMenu, tr("Barrels"), Unit::scaleHuge, scale,qsgrp);
          break;
    }
-   sMenu->setTitle("Scale");
+   sMenu->setTitle(tr("Scale"));
    menu->addMenu(sMenu);
 
    return menu;
