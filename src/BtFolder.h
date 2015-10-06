@@ -22,12 +22,6 @@
 
 class BtFolder;
 
-#include <QSharedPointer>
-#include <QList>
-#include <QVariant>
-#include <QModelIndex>
-#include <QWidget>
-#include <QVector>
 #include <QObject>
 
 
