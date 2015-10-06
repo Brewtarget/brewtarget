@@ -18,6 +18,7 @@
  */
 
 #include <QString>
+#include <QWidget>
 #include <QRegExp>  // Yeah, you knew that had to happen
 #include <QDebug>
 

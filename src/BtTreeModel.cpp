@@ -480,7 +480,7 @@ bool BtTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim,
 
    bool success = true;
 
-   beginInsertRows(parent,row,row);
+   beginInsertRows(QModelIndex(),row,row);
    success = pItem->insertChildren(row,1,type);
    if ( victim && success ) 
    {
