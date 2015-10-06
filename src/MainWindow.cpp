@@ -393,7 +393,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
    connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
-   connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
@@ -412,8 +411,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect(oGLabel, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
    connect(fGLabel, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
    connect(colorSRMLabel,SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
-
-   connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
 
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
    connect( equipmentButton, SIGNAL( clicked() ), this, SLOT(showEquipmentEditor()));
@@ -1943,11 +1940,6 @@ void MainWindow::saveMash()
    newMash->setDisplay(true);
    mashButton->setMash(newMash);
 
-}
-
-void MainWindow::openDonateLink()
-{
-   QDesktopServices::openUrl(QUrl("http://sourceforge.net/project/project_donations.php?group_id=249733"));
 }
 
 void MainWindow::openManual()

@@ -232,9 +232,6 @@ public slots:
    void changeBrewDate();
    void fixBrewNote();
 
-   //! \brief Open the default browser to Brewtarget's donation page.
-   void openDonateLink();
-
    //! \brief Open the default browser to view Brewtarget manual.
     void openManual();
 
