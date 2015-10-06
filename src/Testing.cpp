@@ -32,8 +32,8 @@ QTEST_MAIN(Testing)
 void Testing::initTestCase()
 {
    // Create a different set of options to avoid clobbering real options
-   QCoreApplication::setOrganizationName("brewtarget");
-   QCoreApplication::setOrganizationDomain("brewtarget.org");
+   QCoreApplication::setOrganizationName("brewtarget-test");
+   QCoreApplication::setOrganizationDomain("brewtarget.org/test");
    QCoreApplication::setApplicationName("brewtarget-test");
 
    // Set options so that any data modification does not affect any other data
@@ -230,4 +230,12 @@ void Testing::postBoilLossOgTest()
    // The OG calc itself is verified in recipeCalcTest_*(), so just verify that
    // the two OGs are the same
    QVERIFY2( fuzzyComp(recLoss->og(), recNoLoss->og(), 0.002), "OG of recipe with post-boil loss is different from no-loss recipe" );
+}
+
+void Testing::cleanupTestCase()
+{
+   Brewtarget::cleanup();
+   // Clear all persistent properties linked with this test suite.
+   // It will clear all settings that are application specific, user-scoped, and in the brewtarget namespace.
+   QSettings().clear();
 }

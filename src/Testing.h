@@ -68,10 +68,7 @@ private slots:
    void initTestCase();
 
    // Run once after all test cases
-   void cleanupTestCase()
-   {
-      Brewtarget::cleanup();
-   }
+   void cleanupTestCase();
 
    //! \brief Verify pstdint.h is sane
    void pstdintTest()
