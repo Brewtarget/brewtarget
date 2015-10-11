@@ -78,7 +78,7 @@ void ScaleRecipeTool::scale(Equipment* equip, double newEff)
    
    Database::instance().addToRecipe(recObs, equip);
    recObs->setBatchSize_l(newBatchSize_l);
-   recObs->setBoilSize_l(newBatchSize_l);
+   recObs->setBoilSize_l(equip->boilSize_l());
    recObs->setEfficiency_pct(newEff);
    
    QList<Fermentable*> ferms = recObs->fermentables();
