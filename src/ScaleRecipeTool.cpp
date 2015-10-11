@@ -80,6 +80,7 @@ void ScaleRecipeTool::scale(Equipment* equip, double newEff)
    recObs->setBatchSize_l(newBatchSize_l);
    recObs->setBoilSize_l(equip->boilSize_l());
    recObs->setEfficiency_pct(newEff);
+   recObs->setBoilTime_min(equip->boilTime_min());
    
    QList<Fermentable*> ferms = recObs->fermentables();
    size = ferms.size();
