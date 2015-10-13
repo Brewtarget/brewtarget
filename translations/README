@@ -54,7 +54,9 @@ will obliterate current translations with empty strings.
 
 Then, you can either use lconvert to convert the launchpad translation into a
 .qph phrasebook and use 'Batch Translate' from linguist, or try to directly
-merge via linguist.
+merge via linguist. It is important that the new .po file is on the right as
+an argument, as this will make the new translations the default when doing
+the merge.
 
     $ lconvert bt_ca.ts lpad/bt-ca.po -o bt_ca.ts
 
