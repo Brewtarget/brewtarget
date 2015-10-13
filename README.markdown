@@ -1,4 +1,4 @@
-# Brewtarget
+# Brewtarget ![Build Status](https://travis-ci.org/Brewtarget/brewtarget.svg?branch=master)
 
 Brewtarget is free open-source brewing software, and a beer recipe creation
 tool available for Linux, Mac, and Windows. It automatically calculates color,
