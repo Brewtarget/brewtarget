@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# stop when sth failed
+set -e
+
 PREFIX=""
 CMAKEOPTIONS="-DDO_RELEASE_BUILD=ON"
 
@@ -58,11 +61,14 @@ fi
 
 echo "CMAKEOPTIONS: $CMAKEOPTIONS";
 
+# Create dir only if needed
+mkdir build || true
+
 # Do all the building in build/
 cd build/
 cmake $CMAKEOPTIONS ../
 
-# Tell the user what to do.
+# Tell the user what to do (if everything went well...)
 echo ""
 echo ""
 echo -e "\tNow, cd to build/ and run \"make\""
