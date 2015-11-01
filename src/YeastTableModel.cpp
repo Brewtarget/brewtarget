@@ -519,6 +519,7 @@ QWidget* YeastItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
       box->addItem(tr("Wheat"));
       box->addItem(tr("Wine"));
       box->addItem(tr("Champagne"));
+      box->setMinimumWidth(box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;
@@ -531,7 +532,8 @@ QWidget* YeastItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
       box->addItem(tr("Dry"));
       box->addItem(tr("Slant"));
       box->addItem(tr("Culture"));
-
+      box->setMinimumWidth(box->minimumSizeHint().width());
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
    }
    else

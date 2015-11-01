@@ -27,7 +27,6 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <QCheckBox>
 #include <QItemEditorFactory>
 #include <QStyle>
 #include <QRect>
@@ -37,6 +36,7 @@
 #include "brewtarget.h"
 #include <QSize>
 #include <QComboBox>
+#include <QListWidget>
 #include <QLineEdit>
 #include <QString>
 #include <QVector>
@@ -298,22 +298,17 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
 
          return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms, 3, unit, scale) );
       case FERMISMASHEDCOL:
-         if( role == Qt::CheckStateRole )
-            return QVariant( row->isMashed() ? Qt::Checked : Qt::Unchecked);
-         else if( role == Qt::DisplayRole )
-         {
-            if( row->type() == Fermentable::Grain)
-               return row->isMashed() ? tr("Mashed") : tr("Steeped");
-            else
-               return row->isMashed() ? tr("Mashed") : tr("Not mashed");
-         }
+         if( role == Qt::DisplayRole )
+            return QVariant(row->additionMethodStringTr());
+         else if( role == Qt::UserRole )
+            return QVariant(row->additionMethod());
          else
             return QVariant();
       case FERMAFTERBOIL:
-         if( role == Qt::CheckStateRole )
-            return QVariant( row->addAfterBoil() ? Qt::Checked : Qt::Unchecked );
-         else if( role == Qt::DisplayRole )
-            return row->addAfterBoil()? tr("Late") : tr("Normal");
+         if( role == Qt::DisplayRole )
+            return QVariant(row->additionTimeStringTr());
+         else if( role == Qt::UserRole )
+            return QVariant(row->additionTime());
          else
             return QVariant();
       case FERMYIELDCOL:
@@ -350,9 +345,9 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
          case FERMAMOUNTCOL:
             return QVariant(tr("Amount"));
          case FERMISMASHEDCOL:
-            return QVariant(tr("Mashed"));
+            return QVariant(tr("Method"));
          case FERMAFTERBOIL:
-            return QVariant(tr("Late Addition"));
+            return QVariant(tr("Addition"));
          case FERMYIELDCOL:
             return QVariant(tr("Yield %"));
          case FERMCOLORCOL:
@@ -384,16 +379,16 @@ Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
       case FERMISMASHEDCOL:
          // Ensure that being mashed and being a late addition are mutually exclusive.
          if( !row->addAfterBoil() )
-            return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
+            return (defaults | Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled);
          else
-            return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
+            return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled;
          break;
       case FERMAFTERBOIL:
          // Ensure that being mashed and being a late addition are mutually exclusive.
          if( !row->isMashed() )
-            return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
+            return (defaults | Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled);
          else
-            return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
+            return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled;
          break;
       case FERMNAMECOL:
          return (defaults | Qt::ItemIsSelectable);
@@ -624,14 +619,14 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          }
          break;
       case FERMISMASHEDCOL:
-         retVal = (role == Qt::CheckStateRole && value.canConvert(QVariant::Int));
+         retVal = value.canConvert(QVariant::Int);
          if( retVal )
-            row->setIsMashed( ((Qt::CheckState)value.toInt()) == Qt::Checked );
+            row->setAdditionMethod(static_cast<Fermentable::AdditionMethod>(value.toInt()));
          break;
       case FERMAFTERBOIL:
-         retVal = (role == Qt::CheckStateRole && value.canConvert(QVariant::Int));
+         retVal = value.canConvert(QVariant::Int);
          if( retVal )
-            row->setAddAfterBoil( ((Qt::CheckState)value.toInt()) == Qt::Checked );
+            row->setAdditionTime(static_cast<Fermentable::AdditionTime>(value.toInt()));
          break;
       case FERMYIELDCOL:
          retVal = value.canConvert(QVariant::Double);
@@ -673,15 +668,54 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
       box->addItem(tr("Extract"));
       box->addItem(tr("Dry Extract"));
       box->addItem(tr("Adjunct"));
+
+      box->setMinimumWidth(box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       box->setFocusPolicy(Qt::StrongFocus);
+
       return box;
    }
    else if( index.column() == FERMISMASHEDCOL )
    {
-      QCheckBox* box = new QCheckBox(parent);
+      QComboBox* box = new QComboBox(parent);
+      QListWidget* list = new QListWidget(parent);
+      list->setResizeMode(QListWidget::Adjust);
+
+      list->addItem(tr("Mashed"));
+      list->addItem(tr("Steeped"));
+      list->addItem(tr("Not mashed"));
+      box->setModel(list->model());
+      box->setView(list);
+
+      box->setMinimumWidth(box->minimumSizeHint().width());
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       box->setFocusPolicy(Qt::StrongFocus);
-      box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+      // Can we access to the data model into FermentableItemDelegate ? Yes we can !
+      int type = index.model()->index(index.row(), FERMTYPECOL).data(Qt::UserRole).toInt();
+
+      // Hide the unsuitable item keeping the same enumeration
+      if(type == Fermentable::Grain)
+      {
+         list->item(Fermentable::Not_Mashed)->setHidden(true);
+      }
+      else
+      {
+         list->item(Fermentable::Steeped)->setHidden(true);
+      }
+
+      return box;
+   }
+   else if( index.column() == FERMAFTERBOIL )
+   {
+      QComboBox* box = new QComboBox(parent);
+
+      box->addItem(tr("Normal"));
+      box->addItem(tr("Late"));
+
+      box->setMinimumWidth(box->minimumSizeHint().width());
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+      box->setFocusPolicy(Qt::StrongFocus);
 
       return box;
    }
@@ -693,19 +727,12 @@ void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
 {
    int col = index.column();
 
-   if( col == FERMTYPECOL )
+   if( col == FERMTYPECOL || col == FERMISMASHEDCOL || col == FERMAFTERBOIL)
    {
       QComboBox* box = (QComboBox*)editor;
       int ndx = index.model()->data(index, Qt::UserRole).toInt();
 
       box->setCurrentIndex(ndx);
-   }
-   else if( col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
-   {
-      QCheckBox* checkBox = (QCheckBox*)editor;
-      Qt::CheckState checkState = (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt();
-
-      checkBox->setCheckState( checkState );
    }
    else
    {
@@ -719,7 +746,7 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
 {
    int col = index.column();
 
-   if( col == FERMTYPECOL )
+   if( col == FERMTYPECOL || col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       int value = box->currentIndex();
@@ -731,10 +758,13 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
    }
    else if( col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
    {
-      QCheckBox* checkBox = qobject_cast<QCheckBox*>(editor);
-      bool checked = (checkBox->checkState() == Qt::Checked);
+      QComboBox* box = qobject_cast<QComboBox*>(editor);
+      int value = box->currentIndex();
+      int ndx = model->data(index, Qt::UserRole).toInt();
 
-      model->setData(index, checked, Qt::EditRole);
+     // Only do something when something needs to be done
+      if ( value != ndx )
+         model->setData(index, value, Qt::EditRole);
    }
    else
    {

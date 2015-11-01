@@ -573,6 +573,7 @@ QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
       box->addItem(tr("Boil"));
       box->addItem(tr("Aroma"));
       box->addItem(tr("Dry Hop"));
+      box->setMinimumWidth(box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;
@@ -584,7 +585,7 @@ QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
       box->addItem(tr("Leaf"));
       box->addItem(tr("Pellet"));
       box->addItem(tr("Plug"));
-
+      box->setMinimumWidth(box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;

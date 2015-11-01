@@ -49,8 +49,12 @@ public:
 
    //! \brief The type of Fermentable.
    enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct}; // NOTE: BeerXML expects a space for "Dry_Extract". We're screwed.
-   Q_ENUMS( TYPE )
-   
+   //! \brief The addition method.
+   enum AdditionMethod {Mashed, Steeped, Not_Mashed};
+   //! \brief The addition time.
+   enum AdditionTime {Normal, Late};
+   Q_ENUMS( Type AdditionMethod AdditionTime )
+
    virtual ~Fermentable() {}
    
    //! \brief The name.
@@ -61,6 +65,14 @@ public:
    Q_PROPERTY( QString typeString            READ typeString             /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeString*/             STORED false )
    //! \brief The translated \c Type string.
    Q_PROPERTY( QString typeStringTr          READ typeStringTr           /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeStringTr*/           STORED false )
+   //! \brief The \c addition method.
+   Q_PROPERTY( AdditionMethod additionMethod READ additionMethod         WRITE setAdditionMethod         /*NOTIFY changed*/ /*changedAdditionMethod*/         STORED false )
+   //! \brief The translated \c Method string.
+   Q_PROPERTY( QString additionMethodStringTr READ additionMethodStringTr /*WRITE*/                      /*NOTIFY changed*/ /*changedAdditionMethodStringTr*/ STORED false )
+   //! \brief The \c addition time.
+   Q_PROPERTY( AdditionTime additionTime     READ additionTime           WRITE setAdditionTime           /*NOTIFY changed*/ /*changedAdditionTime*/           STORED false )
+   //! \brief The translated \c Addition string.
+   Q_PROPERTY( QString additionTimeStringTr  READ additionTimeStringTr   /*WRITE*/                       /*NOTIFY changed*/ /*changedAdditionTimeStringTr*/   STORED false )
    //! \brief The amount in kg.
    Q_PROPERTY( double amount_kg              READ amount_kg              WRITE setAmount_kg              /*NOTIFY changed*/ /*changedAmount_kg*/ )
    //! \brief The amount in inventory in kg.
@@ -105,6 +117,12 @@ public:
    const QString typeString() const;
    //! Returns a translated type string.
    const QString typeStringTr() const;
+   const AdditionMethod additionMethod() const;
+   //! Returns a translated addition method string.
+   const QString additionMethodStringTr() const;
+   const AdditionTime additionTime() const;
+   //! Returns a translated addition time string.
+   const QString additionTimeStringTr() const;
    double amount_kg() const;
    double inventory() const;
    double yield_pct() const;
@@ -131,6 +149,8 @@ public:
 
    void setName( const QString& str );
    void setType( Type t );
+   void setAdditionMethod( AdditionMethod m );
+   void setAdditionTime( AdditionTime t );
    void setAmount_kg( double num );
    void setInventoryAmount( double num );
    void setYield_pct( double num );

@@ -212,6 +212,30 @@ void Fermentable::setDefaults()
 // Get
 const QString Fermentable::name() const { return get("name").toString(); }
 const Fermentable::Type Fermentable::type() const { return static_cast<Fermentable::Type>(types.indexOf(get("ftype").toString())); }
+const Fermentable::AdditionMethod Fermentable::additionMethod() const
+{
+   Fermentable::AdditionMethod additionMethod;
+   if(isMashed())
+      additionMethod = Fermentable::Mashed;
+   else
+   {
+      if(type() == Fermentable::Grain)
+         additionMethod = Fermentable::Steeped;
+      else
+         additionMethod = Fermentable::Not_Mashed;
+   }
+   return additionMethod;
+}
+const Fermentable::AdditionTime Fermentable::additionTime() const
+{
+   Fermentable::AdditionTime additionTime;
+   if(addAfterBoil())
+      additionTime = Fermentable::Late;
+   else
+      additionTime = Fermentable::Normal;
+
+   return additionTime;
+}
 const QString Fermentable::typeString() const
 {
    return types.at(type());
@@ -220,6 +244,34 @@ const QString Fermentable::typeStringTr() const
 {
    static QStringList typesTr = QStringList () << QObject::tr("Grain") << QObject::tr("Sugar") << QObject::tr("Extract") << QObject::tr("Dry Extract") << QObject::tr("Adjunct");
    return typesTr.at(type());
+}
+
+const QString Fermentable::additionMethodStringTr() const
+{
+    QString retString;
+
+    if(isMashed())
+       retString = tr("Mashed");
+    else
+    {
+       if(type() == Fermentable::Grain)
+          retString = tr("Steeped");
+       else
+          retString = tr("Not mashed");
+    }
+    return retString;
+}
+
+const QString Fermentable::additionTimeStringTr() const
+{
+    QString retString;
+
+    if(addAfterBoil())
+       retString = tr("Late");
+    else
+       retString = tr("Normal");
+
+    return retString;
 }
 
 double Fermentable::amount_kg()              const { return get("amount").toDouble(); }
@@ -271,9 +323,26 @@ void Fermentable::setName( const QString& str )
    set("name", "name", str);
    emit changedName(str);
 }
+
 void Fermentable::setType( Type t )
 {
    set("type", "ftype", types.at(t));
+}
+
+void Fermentable::setAdditionMethod( Fermentable::AdditionMethod m )
+{
+   if( m == Fermentable::Mashed )
+      setIsMashed(true);
+   else
+      setIsMashed(false);
+}
+
+void Fermentable::setAdditionTime( Fermentable::AdditionTime t )
+{
+   if( t == Fermentable::Late )
+      setAddAfterBoil(true);
+   else
+      setAddAfterBoil(false);
 }
 
 void Fermentable::setAmount_kg( double num )
