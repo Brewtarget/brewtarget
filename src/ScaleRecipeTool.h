@@ -1,6 +1,6 @@
 /*
  * ScaleRecipeTool.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -20,43 +20,104 @@
 #ifndef SCALE_RECIPE_TOOL_H
 #define SCALE_RECIPE_TOOL_H
 
-class ScaleRecipeTool;
-
-#include "ui_scaleRecipeTool.h"
 #include <QDialog>
 #include <QWidget>
 #include <QAbstractButton>
 #include <QButtonGroup>
+#include <QLabel>
+#include <QLayout>
+#include <QWizardPage>
+#include <QAbstractListModel>
+#include <QFormLayout>
+#include <QComboBox>
+#include <QEvent>
+#include <QLineEdit>
 
 // Forward declarations
+class BeerXMLSortProxyModel;
+class Equipment;
+class EquipmentListModel;
 class Recipe;
 
 /*!
- * \class ScaleRecipeTool
- * \author Philip G. Lee
- *
- * \brief Controller class that scales a recipe's ingredients.
+ * \brief Wizard to scale a recipe's ingredients to match a new \c Equipment
  */
-class ScaleRecipeTool : public QDialog, public Ui::scaleRecipeTool
+class ScaleRecipeTool : public QWizard
 {
    Q_OBJECT
    
 public:
    ScaleRecipeTool(QWidget* parent=0);
+   //! \brief Set the observed \c Recipe
    void setRecipe(Recipe* rec);
-   
-public slots:
-   void show();
-   
+
 private slots:
-   void scale();
-   void scaleByVolume();
-   void scaleByEfficiency();
-   void scaleGroupButtonPressed(QAbstractButton* button);
+   void accept() Q_DECL_OVERRIDE;
 
 private:
+
+   //! \brief Scale the observed recipe for the new \c equip
+   void scale(Equipment* equip, double newEff);
+
    Recipe* recObs;
    QButtonGroup scaleGroup;
+   EquipmentListModel* equipListModel;
+   BeerXMLSortProxyModel* equipSortProxyModel;
+};
+
+class ScaleRecipeIntroPage : public QWizardPage {
+
+   Q_OBJECT
+
+public:
+   ScaleRecipeIntroPage(QWidget* parent=0);
+
+public slots:
+   void doLayout();
+   void retranslateUi();
+
+protected:
+
+   virtual void changeEvent(QEvent* event)
+   {
+      if(event->type() == QEvent::LanguageChange)
+         retranslateUi();
+      QWidget::changeEvent(event);
+   }
+
+private:
+   QVBoxLayout* layout;
+   QLabel* label;
+};
+
+class ScaleRecipeEquipmentPage : public QWizardPage {
+
+   Q_OBJECT
+
+public:
+   ScaleRecipeEquipmentPage(QAbstractItemModel* listModel, QWidget* parent = 0);
+
+public slots:
+   void doLayout();
+   void retranslateUi();
+
+protected:
+
+   virtual void changeEvent(QEvent* event)
+   {
+      if(event->type() == QEvent::LanguageChange)
+         retranslateUi();
+      QWidget::changeEvent(event);
+   }
+
+private:
+
+   QFormLayout* layout;
+   QLabel* equipLabel;
+   QComboBox* equipComboBox;
+   QAbstractItemModel* equipListModel;
+   QLabel* effLabel;
+   QLineEdit* effLineEdit;
 };
 
 #endif /*SCALE_RECIPE_TOOL_H*/

@@ -185,7 +185,6 @@ SET( brewtarget_UIS
     ${UIDIR}/optionsDialog.ui
     ${UIDIR}/primingDialog.ui
     ${UIDIR}/refractoDialog.ui
-    ${UIDIR}/scaleRecipeTool.ui
     ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerListDialog.ui

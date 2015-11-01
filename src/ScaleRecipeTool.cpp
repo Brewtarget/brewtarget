@@ -1,6 +1,6 @@
 /*
  * ScaleRecipeTool.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2015
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -30,38 +30,29 @@
 #include "yeast.h"
 #include "water.h"
 #include "database.h"
+#include "equipment.h"
+#include "EquipmentListModel.h"
+#include "BeerXMLSortProxyModel.h"
 
-ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) : QDialog(parent)
+ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
+   QWizard(parent),
+   equipListModel(new EquipmentListModel(this)),
+   equipSortProxyModel(new BeerXMLSortProxyModel(equipListModel))
 {
-   setupUi(this);
-   recObs = 0;
-
-   scaleGroup.addButton(checkBox_batchSize);
-   scaleGroup.addButton(checkBox_efficiency);
-
-   checkBox_batchSize->setCheckState( Qt::Checked );
-   lineEdit_newEfficiency->setDisabled(true);
-   
-   connect(&scaleGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(scaleGroupButtonPressed(QAbstractButton*)));
-   connect(buttonBox, SIGNAL(accepted()), this, SLOT(scale()) );
-   connect(buttonBox, SIGNAL(rejected()), this, SLOT(close()) );
+   addPage(new ScaleRecipeIntroPage);
+   addPage(new ScaleRecipeEquipmentPage(equipSortProxyModel));
 }
 
-void ScaleRecipeTool::scaleGroupButtonPressed(QAbstractButton *button)
-{
-   if( button == qobject_cast<QAbstractButton*>(checkBox_batchSize) )
-   {
-      lineEdit_newBatchSize->setDisabled(false);
-      lineEdit_newEfficiency->setDisabled(true);
-      return;
-   }
+void ScaleRecipeTool::accept() {
+   int row = field("equipComboBox").toInt();
+   QModelIndex equipProxyNdx( equipSortProxyModel->index(row, 0) );
+   QModelIndex equipNdx = equipSortProxyModel->mapToSource(equipProxyNdx);
 
-   if( button == qobject_cast<QAbstractButton*>(checkBox_efficiency) )
-   {
-      lineEdit_newBatchSize->setDisabled(true);
-      lineEdit_newEfficiency->setDisabled(false);
-      return;
-   }
+   Equipment* selectedEquip = equipListModel->at(equipNdx.row());
+   double newEff = field("effLineEdit").toString().toDouble();
+   scale(selectedEquip, newEff);
+
+   QWizard::accept();
 }
 
 void ScaleRecipeTool::setRecipe(Recipe* rec)
@@ -69,94 +60,27 @@ void ScaleRecipeTool::setRecipe(Recipe* rec)
    recObs = rec;
 }
 
-void ScaleRecipeTool::show()
+void ScaleRecipeTool::scale(Equipment* equip, double newEff)
 {
-   // Set the batch size display to the current batch size.
-   if( recObs != 0 )
-      lineEdit_newBatchSize->setText(recObs);
-   
-   setVisible(true);
-}
-
-void ScaleRecipeTool::scale()
-{
-   QCheckBox* button = qobject_cast<QCheckBox*>(scaleGroup.checkedButton());
-
-   if( button == checkBox_batchSize )
-      scaleByVolume();
-   else if( button == checkBox_efficiency )
-      scaleByEfficiency();
-}
-
-void ScaleRecipeTool::scaleByEfficiency()
-{
-   if( recObs == 0 )
-      return;
-
-   int i, size;
-
-   double oldEfficiency = recObs->efficiency_pct();
-   double newEfficiency = lineEdit_newEfficiency->toSI();
-
-   double ratio = oldEfficiency / newEfficiency;
-
-   recObs->setEfficiency_pct(newEfficiency);
-
-   QList<Fermentable*> ferms = recObs->fermentables();
-   size = ferms.size();
-   for( i = 0; i < size; ++i )
-   {
-      Fermentable* ferm = ferms[i];
-      // NOTE: why the hell do we need this?
-      if( ferm == 0 )
-         continue;
-
-      if( !ferm->isSugar() && !ferm->isExtract() )
-      {
-         ferm->setAmount_kg(ferm->amount_kg() * ratio);
-      }
-   }
-
-   Mash* mash = recObs->mash();
-   if( mash == 0 )
-      return;
-
-   QList<MashStep*> mashSteps = mash->mashSteps();
-   size = mashSteps.size();
-   for( i = 0; i < size; ++i )
-   {
-      MashStep* step = mashSteps[i];
-      // NOTE: why the hell do we need this?
-      if( step == 0 )
-         continue;
-
-      // Reset all these to zero so that the user
-      // will know to re-run the mash wizard.
-      step->setDecoctionAmount_l(0);
-      step->setInfuseAmount_l(0);
-   }
-
-   // Let the user know what happened.
-   QMessageBox::information(this, tr("Recipe Scaled"),
-             tr("The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.") );
-}
-
-void ScaleRecipeTool::scaleByVolume()
-{
-   if( recObs == 0 )
+   if( recObs == 0 || equip == 0 )
       return;
    
    int i, size;
    
+   // Calculate volume ratio
    double currentBatchSize_l = recObs->batchSize_l();
-   double newBatchSize_l = lineEdit_newBatchSize->toSI();
+   double newBatchSize_l = equip->batchSize_l();
+   double volRatio = newBatchSize_l / currentBatchSize_l;
    
-   double ratio = newBatchSize_l / currentBatchSize_l;
+   // Calculate efficiency ratio
+   double oldEfficiency = recObs->efficiency_pct();
+   double effRatio = oldEfficiency / newEff;
    
-   // The equipment has to be reset, since none of the volumes will match
-   Database::instance().addToRecipe(recObs, Database::instance().newEquipment(), true);
+   Database::instance().addToRecipe(recObs, equip);
    recObs->setBatchSize_l(newBatchSize_l);
-   recObs->setBoilSize_l(newBatchSize_l);
+   recObs->setBoilSize_l(equip->boilSize_l());
+   recObs->setEfficiency_pct(newEff);
+   recObs->setBoilTime_min(equip->boilTime_min());
    
    QList<Fermentable*> ferms = recObs->fermentables();
    size = ferms.size();
@@ -167,7 +91,11 @@ void ScaleRecipeTool::scaleByVolume()
       if( ferm == 0 )
          continue;
       
-      ferm->setAmount_kg(ferm->amount_kg() * ratio);
+      if( !ferm->isSugar() && !ferm->isExtract() ) {
+         ferm->setAmount_kg(ferm->amount_kg() * effRatio * volRatio);
+      } else {
+         ferm->setAmount_kg(ferm->amount_kg() * volRatio);
+      }
    }
    
    QList<Hop*> hops = recObs->hops();
@@ -179,7 +107,7 @@ void ScaleRecipeTool::scaleByVolume()
       if( hop == 0 )
          continue;
       
-      hop->setAmount_kg(hop->amount_kg() * ratio);
+      hop->setAmount_kg(hop->amount_kg() * volRatio);
    }
    
    QList<Misc*> miscs = recObs->miscs();
@@ -191,7 +119,7 @@ void ScaleRecipeTool::scaleByVolume()
       if( misc == 0 )
          continue;
       
-      misc->setAmount( misc->amount() * ratio );
+      misc->setAmount( misc->amount() * volRatio );
    }
    
    QList<Water*> waters = recObs->waters();
@@ -203,7 +131,7 @@ void ScaleRecipeTool::scaleByVolume()
       if( water == 0 )
          continue;
       
-      water->setAmount_l(water->amount_l() * ratio);
+      water->setAmount_l(water->amount_l() * volRatio);
    }
    
    Mash* mash = recObs->mash();
@@ -230,4 +158,69 @@ void ScaleRecipeTool::scaleByVolume()
    // Let the user know what happened.
    QMessageBox::information(this, tr("Recipe Scaled"),
              tr("The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.") );
+}
+
+// ScaleRecipeIntroPage =======================================================
+
+ScaleRecipeIntroPage::ScaleRecipeIntroPage(QWidget* parent) :
+   QWizardPage(parent),
+   layout(new QVBoxLayout),
+   label(new QLabel) {
+
+   doLayout();
+   retranslateUi();
+}
+
+void ScaleRecipeIntroPage::doLayout() {
+   setPixmap(QWizard::WatermarkPixmap, QPixmap(":images/brewtarget.svg"));
+
+   layout->addWidget(label);
+      label->setWordWrap(true);
+   setLayout(layout);
+}
+
+void ScaleRecipeIntroPage::retranslateUi() {
+   setTitle(tr("Scale Recipe"));
+   label->setText(tr(
+      "This wizard will help you scale a recipe to another size or efficiency."
+      "Select another equipment with the new batch size and/or efficiency and"
+      "the wizard will scale the recipe ingredients automatically."
+   ));
+}
+
+// ScaleRecipeEquipmentPage ===================================================
+
+ScaleRecipeEquipmentPage::ScaleRecipeEquipmentPage(QAbstractItemModel* listModel, QWidget* parent) :
+   QWizardPage(parent),
+   layout(new QFormLayout),
+   equipLabel(new QLabel),
+   equipComboBox(new QComboBox),
+   equipListModel(listModel),
+   effLabel(new QLabel),
+   effLineEdit(new QLineEdit) {
+
+   doLayout();
+   retranslateUi();
+
+   registerField("equipComboBox", equipComboBox);
+   registerField("effLineEdit", effLineEdit);
+}
+
+void ScaleRecipeEquipmentPage::doLayout() {
+
+   layout->addRow(equipLabel, equipComboBox);
+      equipComboBox->setModel(equipListModel);
+   layout->addRow(effLabel, effLineEdit);
+      effLineEdit->setText("70.0");
+   setLayout(layout);
+}
+
+void ScaleRecipeEquipmentPage::retranslateUi() {
+   setTitle(tr("Select Equipment"));
+   setSubTitle(tr("The recipe will be scaled to match the batch size and "
+                  "efficiency of the selected equipment"
+   ));
+
+   equipLabel->setText(tr("New Equipment"));
+   effLabel->setText(tr("New Efficiency (%)"));
 }
