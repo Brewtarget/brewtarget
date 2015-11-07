@@ -7,7 +7,12 @@ CMAKE_POLICY( VERSION 2.8.11 )
 # will install to /foo/tmp/blah.
 
 # Where the binary goes.
-SET(brewtarget_EXECUTABLE "brewtarget")
+IF( APPLE )
+   # Use capital letters. Don't question the APPLE.
+   SET(brewtarget_EXECUTABLE "Brewtarget")
+ELSE()
+   SET(brewtarget_EXECUTABLE "brewtarget")
+ENDIF()
 
 #=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 2 )
@@ -31,6 +36,16 @@ OPTION( NO_QTMULTIMEDIA
 
 # Do this right off the bat
 ENABLE_TESTING()
+
+#==============================Bundle Settings================================
+SET( MACOSX_BUNDLE_BUNDLE_NAME "Brewtarget" )
+#SET( MACOSX_BUNDLE_GUI_IDENTIFIER )
+#SET( MACOSX_BUNDLE_INFO_STRING )
+#SET( MACOSX_BUNDLE_BUNDLE_VERSION )
+#SET( MACOSX_BUNDLE_SHORT_VERSION_STRING )
+SET( MACOSX_BUNDLE_LONG_VERSION_STRING ${brewtarget_VERSION_STRING} )
+SET( MACOSX_BUNDLE_ICON_FILE "BrewtargetIcon.icns" )
+SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 
 #==============================Compile flags===================================
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
@@ -227,9 +242,6 @@ ELSEIF( WIN32 )
   SET( TARGETPATH "bin" )
   SET( DOCPATH "doc" )
 ELSEIF( APPLE )
-  SET( CMAKE_INSTALL_PREFIX "/" )
-  SET( BT_BUNDLE "brewtarget.app" )
-  SET( BT_BUNDLE_DIR "/Applications/${BT_BUNDLE}" )
   SET( DATAPATH "${BT_BUNDLE_DIR}/Contents/Resources" )
   SET( TARGETPATH "${BT_BUNDLE_DIR}/Contents/MacOS" )
   SET( DOCPATH  "${BT_BUNDLE_DIR}/Contents/Resources/en.lproj" )
@@ -548,8 +560,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   #  SET( CPACK_BUNDLE_STARTUP_COMMAND "${brewtarget_EXECUTABLE}")
   #
   ELSEIF(APPLE)
-    SET( CPACK_GENERATOR "DragNDrop" )
-    SET( CPACK_DMG_FORMAT "UDBZ" )
+    #SET( CPACK_GENERATOR "DragNDrop" )
+    #SET( CPACK_DMG_FORMAT "UDBZ" )
   ENDIF()
 
  INCLUDE(CPack)
@@ -595,23 +607,6 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
       INSTALL( FILES ${Icon_Engines_DLLs}
                DESTINATION "bin/iconengines" )
    ENDIF()
-ENDIF()
-
-#---------Mac--------
-# http://pmarinc-tidylib.googlecode.com/hg/src/Sigil/CMakeLists.txt?r=8276c61e05bc385d5ffbcc58e1f007f84b0c52df
-IF( APPLE )
-   # Info.plist
-   INSTALL( FILES ${brewtarget_INFO_PLIST}
-            DESTINATION "${BT_BUNDLE_DIR}/Contents" )
-   # Icons
-   INSTALL( FILES ${brewtarget_MAC_ICNS}
-            DESTINATION ${DATAPATH} )
-
-   # make addframeworks should copy the Qt libraries to the app.
-   # May have to add a WORKING_DIRECTORY.
-   SET(QT_BINARY_DIR "${_qt5Core_install_prefix}/bin")
-   ADD_CUSTOM_TARGET( addframeworks ALL
-                      COMMAND ${QT_BINARY_DIR}/macdeployqt ${BT_BUNDLE_DIR} )
 ENDIF()
 
 # =====================Process other CMakeList.txt's===========================

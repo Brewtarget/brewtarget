@@ -310,19 +310,10 @@ QT5_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 QT5_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
 QT5_ADD_RESOURCES(brewtarget_cfg_QRC_CPP ${brewtarget_cfg_QRC})
 
-# Translations
-# Creates the .qm files.
-QT5_CREATE_TRANSLATION(${TRANSLATIONS_FILES} ${FILES_TO_TRANSLATE})
-
-
-# Create the moc sources from the headers.
-#QT4_WRAP_CPP(brewtarget_MOC_SRCS ${brewtarget_MOC_HEADERS})
-# Create the ui_*.h files from the *.ui files.
-#QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
-# Generate the resource .cpp from the .qrc file.
-#QT4_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
-# Creates the .qm files.
-#QT4_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
+# Translations. CREATE_TRANSLATION will update the .ts files (do not want)
+#QT5_CREATE_TRANSLATION(${TRANSLATIONS_FILES} ${FILES_TO_TRANSLATE})
+# Creates the .qm files from the .ts files
+QT5_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
 
 # Add a target for the QM_FILES so that we can add
 # the translations as a dependency for the executable later.
@@ -357,12 +348,54 @@ ADD_LIBRARY(
    ${brewtarget_UIS_H}
 )
 
-ADD_EXECUTABLE(
-   ${brewtarget_EXECUTABLE}
-   ${SRCDIR}/main.cpp
-   ${brewtarget_ICON}
-   $<TARGET_OBJECTS:btobjlib>
-)
+IF( APPLE )
+   # It seems I have to set these properties in this file, or things don't
+   # get installed
+   SET_SOURCE_FILES_PROPERTIES(
+      ${brewtarget_MAC_ICNS}
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION "Resources"
+   )
+   SET_SOURCE_FILES_PROPERTIES(
+      ${brewtarget_DATA}
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION "Resources"
+   )
+   SET_SOURCE_FILES_PROPERTIES(
+      ${brewtarget_DOCS}
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION "Resources/en.lproj"
+   )
+   SET_SOURCE_FILES_PROPERTIES(
+      ${brewtarget_SOUNDS}
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION "Resources/sounds"
+   )
+   SET_SOURCE_FILES_PROPERTIES(
+      ${QM_FILES}
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION "Resources/translations_qm"
+   )
+   ADD_EXECUTABLE(
+      ${brewtarget_EXECUTABLE}
+      MACOSX_BUNDLE
+      ${SRCDIR}/main.cpp
+      ${brewtarget_MAC_ICNS}
+      ${brewtarget_DATA}
+      ${brewtarget_DOCS}
+      ${brewtarget_SOUNDS}
+      ${QM_FILES}
+      $<TARGET_OBJECTS:btobjlib>
+   )
+ELSE()
+   ADD_EXECUTABLE(
+      ${brewtarget_EXECUTABLE}
+      ${SRCDIR}/main.cpp
+      ${brewtarget_ICON}
+      $<TARGET_OBJECTS:btobjlib>
+   )
+ENDIF()
+
 ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
 
 # Link brewtarget against appropriate libraries.
@@ -438,16 +471,22 @@ ADD_TEST(
 
 # Install executable.
 INSTALL( TARGETS ${brewtarget_EXECUTABLE}
+         BUNDLE DESTINATION .
          RUNTIME DESTINATION ${TARGETPATH} )
 
 # Install the translations.
 INSTALL(FILES ${QM_FILES}
         DESTINATION "${DATAPATH}/translations_qm")
 
+# http://pmarinc-tidylib.googlecode.com/hg/src/Sigil/CMakeLists.txt?r=8276c61e05bc385d5ffbcc58e1f007f84b0c52df
 IF( APPLE )
-   # This SHOULD run macdeployqt on the app bundle at install time.
-   # Don't know if it works. Could someone try?
-   # May have to add a WORKING_DIRECTORY.
-   INSTALL( CODE
-            "EXECUTE_PROCESS( COMMAND ${QT_BINARY_DIR}/macdeployqt ${BT_BUNDLE_DIR} )" )
+   # make addframeworks should copy the Qt libraries to the app.
+   SET(QT_BINARY_DIR "${_qt5Core_install_prefix}/bin")
+   ADD_CUSTOM_TARGET(
+      addframeworks ALL
+      COMMAND ${QT_BINARY_DIR}/macdeployqt "Brewtarget.app" -dmg
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      DEPENDS ${brewtarget_EXECUTABLE}
+   )
 ENDIF()
+
