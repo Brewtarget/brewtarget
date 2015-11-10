@@ -479,7 +479,10 @@ bool BtTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim,
 
    bool success = true;
 
-   beginInsertRows(parent,row,row);
+   if(victimType == BtTreeItem::FOLDER)
+      beginInsertRows(QModelIndex(),row,row);
+   else
+      beginInsertRows(parent,row,row);
    success = pItem->insertChildren(row,1,type);
    if ( victim && success ) 
    {
