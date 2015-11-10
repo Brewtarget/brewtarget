@@ -79,9 +79,6 @@ int BtTreeItem::type()
 
 int BtTreeItem::childCount() const
 {
-   if ( childItems.isEmpty() )
-      return 0;
-
    return childItems.count();
 }
 
@@ -163,14 +160,12 @@ QVariant BtTreeItem::data(int column)
 
 bool BtTreeItem::insertChildren(int position, int count, int _type)
 {
-   int i;
    if ( position < 0  || position > childItems.size())
       return false;
 
-   for(i=0; i < count; ++i)
-   {
-      BtTreeItem *newItem = new BtTreeItem(_type,this);
-      childItems.insert(position+i,newItem);
+   for (int row = 0; row < count; ++row) {
+      BtTreeItem *newItem = new BtTreeItem(_type, this);
+      childItems.insert(position + row, newItem);
    }
 
    return true;
@@ -182,10 +177,10 @@ bool BtTreeItem::removeChildren(int position, int count)
       return false;
 
    for (int row = 0; row < count; ++row)
-      //delete childItems.takeAt(position);
+      delete childItems.takeAt(position);
       // FIXME: memory leak here. With delete, it's a concurrency/memory
       // access error, due to the fact that these pointers are floating around.
-      childItems.takeAt(position);
+      //childItems.takeAt(position);
 
    return true;
 }
