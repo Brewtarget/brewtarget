@@ -113,26 +113,26 @@ public:
    BtTreeItem *item(const QModelIndex &index) const;
 
    //! \brief Test type at \c index.
-   bool isRecipe(const QModelIndex &index);
+   bool isRecipe(const QModelIndex &index) const;
    //! \brief Test type at \c index.
-   bool isEquipment(const QModelIndex &index);
+   bool isEquipment(const QModelIndex &index) const;
    //! \brief Test type at \c index.
-   bool isFermentable(const QModelIndex &index);
+   bool isFermentable(const QModelIndex &index) const;
    //! \brief Test type at \c index.
-   bool isHop(const QModelIndex &index);
+   bool isHop(const QModelIndex &index) const;
    //! \brief Test type at \c index.
-   bool isMisc(const QModelIndex &index);
+   bool isMisc(const QModelIndex &index) const;
    //! \brief Test type at \c index.
-   bool isYeast(const QModelIndex &index);
+   bool isYeast(const QModelIndex &index) const;
    //! \brief Test type at \c index.
-   bool isBrewNote(const QModelIndex &index);
+   bool isBrewNote(const QModelIndex &index) const;
    //! \brief Test type at \c index.
-   bool isStyle(const QModelIndex &index);
+   bool isStyle(const QModelIndex &index) const;
    //! \brief Test type at \c index.
    bool isFolder(const QModelIndex &index) const;
 
    //! \brief Gets the type of item at \c index
-   int type(const QModelIndex &index);
+   int type(const QModelIndex &index) const;
    //! \brief Return the type mask for this tree. \sa BtTreeModel::TypeMasks
    int mask();
 
