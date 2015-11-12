@@ -22,7 +22,6 @@
 
 #include <QComboBox>
 #include <QLineEdit>
-#include <QCheckBox>
 #include <QHeaderView>
 #include "database.h"
 #include "misc.h"
@@ -231,10 +230,10 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
          return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters, 3, unit, Unit::noScale ) );
 
       case MISCISWEIGHT:
-         if ( role == Qt::CheckStateRole )
-            return QVariant( row->amountIsWeight() ? Qt::Checked : Qt::Unchecked );
-         else if ( role == Qt::DisplayRole )
-            return row->amountIsWeight() ? tr("Weight") : tr("Volume");
+         if( role == Qt::DisplayRole )
+            return QVariant(row->amountTypeStringTr());
+         else if( role == Qt::UserRole )
+            return QVariant(row->amountType());
          else
             return QVariant();
       default:
@@ -279,8 +278,6 @@ Qt::ItemFlags MiscTableModel::flags(const QModelIndex& index ) const
    {
       case MISCNAMECOL:
          return defaults;
-      case MISCISWEIGHT:
-         return defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
       case MISCINVENTORYCOL:
          return (defaults | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags));
       default:
@@ -347,10 +344,10 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
          row->setAmount( Brewtarget::qStringToSI(value.toString(), unit, dispUnit ));
          break;
       case MISCISWEIGHT:
-         if ( role == Qt::CheckStateRole && value.canConvert(QVariant::Int) )
-            row->setAmountIsWeight( ((Qt::CheckState)value.toInt()) == Qt::Checked );
-         else
+         if( ! value.canConvert(QVariant::Int) )
             return false;
+
+         row->setAmountType( static_cast<Misc::AmountType>(value.toInt()) );
          break;
       default:
          return false;
@@ -568,10 +565,12 @@ QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
    }
    else if ( index.column() == MISCISWEIGHT )
    {
-      QCheckBox* box = new QCheckBox(parent);
-      box->setFocusPolicy(Qt::StrongFocus);
-      box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+      QComboBox *box = new QComboBox(parent);
 
+      box->addItem(tr("Weight"));
+      box->addItem(tr("Volume"));
+      box->setMinimumWidth(box->minimumSizeHint().width());
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
    }
    else
@@ -582,18 +581,12 @@ void MiscItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 {
    int column = index.column();
 
-   if( column == MISCTYPECOL || column == MISCUSECOL )
+   if( column == MISCTYPECOL || column == MISCUSECOL || column == MISCISWEIGHT)
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       if( box == 0 )
          return;
       box->setCurrentIndex(index.model()->data(index, Qt::UserRole).toInt());
-   }
-   else if ( column == MISCISWEIGHT )
-   {
-      QCheckBox* checkBox = (QCheckBox*)editor;
-      Qt::CheckState checkState = (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt();
-      checkBox->setCheckState( checkState );
    }
    else
    {
@@ -606,7 +599,7 @@ void MiscItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
    int column = index.column();
-   if( column == MISCTYPECOL || column == MISCUSECOL )
+   if( column == MISCTYPECOL || column == MISCUSECOL || column == MISCISWEIGHT)
    {
       QComboBox* box = (QComboBox*)editor;
       int ndx = box->currentIndex();
@@ -614,13 +607,6 @@ void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
 
       if ( curr != ndx )
          model->setData(index, ndx, Qt::EditRole);
-   }
-   else if ( column == MISCISWEIGHT )
-   {
-      QCheckBox* checkBox = qobject_cast<QCheckBox*>(editor);
-      bool checked = ( checkBox->checkState() == Qt::Checked );
-
-      model->setData( index, checked, Qt::EditRole);
    }
    else
    {

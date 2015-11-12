@@ -32,6 +32,7 @@
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
+QStringList Misc::amountTypes = QStringList() << "Weight" << "Volume";
 QHash<QString,QString> Misc::tagToProp = Misc::tagToPropHash();
 
 QHash<QString,QString> Misc::tagToPropHash()
@@ -75,7 +76,7 @@ const QString Misc::typeString() const
 
 const QString Misc::typeStringTr() const
 {
-   QStringList typesTr = QStringList() << QObject::tr("Spice") << QObject::tr("Fining") << QObject::tr("Water Agent") << QObject::tr("Herb") << QObject::tr("Flavor") << QObject::tr("Other");
+   QStringList typesTr = QStringList() << tr("Spice") << tr("Fining") << tr("Water Agent") << tr("Herb") << tr("Flavor") << tr("Other");
    return typesTr.at(type());
 }
 
@@ -91,8 +92,24 @@ const QString Misc::useString() const
 
 const QString Misc::useStringTr() const
 {
-   QStringList usesTr = QStringList() << QObject::tr("Boil") << QObject::tr("Mash") << QObject::tr("Primary") << QObject::tr("Secondary") << QObject::tr("Bottling");
+   QStringList usesTr = QStringList() << tr("Boil") << tr("Mash") << tr("Primary") << tr("Secondary") << tr("Bottling");
    return usesTr.at(use());
+}
+
+Misc::AmountType Misc::amountType() const
+{
+   return amountIsWeight() ? AmountType_Weight : AmountType_Volume;
+}
+
+const QString Misc::amountTypeString() const
+{
+   return amountTypes.at(amountType());
+}
+
+const QString Misc::amountTypeStringTr() const
+{
+   QStringList amountTypesTr = QStringList() << tr("Weight") << tr("Volume");
+   return amountTypesTr.at(amountType());
 }
 
 double Misc::amount()    const { return get("amount").toDouble(); }
@@ -123,6 +140,11 @@ void Misc::setType( Type t )
 void Misc::setUse( Use u )
 {
    set( "use", "use", uses.at(u) );
+}
+
+void Misc::setAmountType( AmountType t )
+{
+   setAmountIsWeight(t == AmountType_Weight ? true : false);
 }
 
 void Misc::setAmount( double var )

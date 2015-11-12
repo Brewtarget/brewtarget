@@ -46,7 +46,9 @@ public:
    enum Type {Spice, Fining, Water_Agent, Herb, Flavor, Other}; // NOTE: BeerXML expects "Water Agent", but we can't have white space in enums :-/.
    //! \brief Where the ingredient is used.
    enum Use { Boil, Mash, Primary, Secondary, Bottling };
-   Q_ENUMS( Type Use )
+   //! \brief What is the type of amount.
+   enum AmountType { AmountType_Weight, AmountType_Volume };
+   Q_ENUMS( Type Use AmountType )
    
    virtual ~Misc() {}
    
@@ -64,6 +66,12 @@ public:
    Q_PROPERTY( QString useString READ useString /*NOTIFY changed*/ /*changedUse*/ STORED false )
    //! \brief The translated \c Use string.
    Q_PROPERTY( QString useStringTr READ useStringTr /*NOTIFY changed*/ /*changedUse*/ STORED false )
+   //! \brief The \c Amount type.
+   Q_PROPERTY( AmountType amountType READ amountType WRITE setAmountType /*NOTIFY changed*/ /*changedAmountType*/ )
+   //! \brief The \c Amount type string.
+   Q_PROPERTY( QString amountTypeString READ amountTypeString /*NOTIFY changed*/ /*changedAmountType*/ STORED false )
+   //! \brief The translated \c Use string.
+   Q_PROPERTY( QString amountTypeStringTr READ amountTypeStringTr /*NOTIFY changed*/ /*changedAmountType*/ STORED false )
    //! \brief The time used in minutes.
    Q_PROPERTY( double time READ time WRITE setTime /*NOTIFY changed*/ /*changedTime*/ )
    //! \brief The amount in either kg or L, depending on \c amountIsWeight().
@@ -81,6 +89,7 @@ public:
    void setName( const QString &var );
    void setType( Type t );
    void setUse( Use u );
+   void setAmountType( AmountType t );
    void setAmount( double var );
    void setInventoryAmount( double var );
    void setTime( double var );
@@ -96,6 +105,9 @@ public:
    Use use() const;
    const QString useString() const;
    const QString useStringTr() const;
+   AmountType amountType() const;
+   const QString amountTypeString() const;
+   const QString amountTypeStringTr() const;
    double amount() const;
    double inventory() const;
    double time() const;
@@ -127,7 +139,8 @@ private:
    
    static QStringList types;
    static QStringList uses;
-   
+   static QStringList amountTypes;
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };
