@@ -4,3 +4,4 @@ build/*
 
 # Kate project
 .kateproject.d/
+.idea
