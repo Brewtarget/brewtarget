@@ -1387,6 +1387,22 @@ QString Brewtarget::displayDate(QDate const& date )
    return date.toString(loc.dateFormat(QLocale::ShortFormat));
 }
 
+QString Brewtarget::displayDateUserFormated(QDate const &date) {
+   QString format;
+   switch (Brewtarget::getDateFormat()) {
+      case Unit::displayUS:
+         format = "MM-dd-yyyy";
+         break;
+      case Unit::displayImp:
+         format = "dd-MM-yyyy";
+         break;
+      default:
+      case Unit::displaySI:
+         format = "yyyy-MM-dd";
+   }
+   return date.toString(format);
+}
+
 bool Brewtarget::hasOption(QString attribute, const QString section, iUnitOps ops)
 {
    QString name;

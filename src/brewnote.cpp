@@ -341,23 +341,7 @@ QDateTime BrewNote::fermentDate()   const { return QDateTime::fromString(get("fe
 QString BrewNote::fermentDate_str() const { return get("fermentDate").toString(); }
 QString BrewNote::fermentDate_short() const { return fermentDate().toString("yyyy-MM-dd"); }
 QString BrewNote::notes()           const { return get("notes").toString(); }
-QString BrewNote::brewDate_short()  const
-{
-  QString format;
-  switch (Brewtarget::getDateFormat())
-  {
-     case Unit::displayUS:
-        format = "MM-dd-yyyy";
-        break;
-     case Unit::displayImp:
-        format = "dd-MM-yyyy";
-        break;
-     default:
-        format = "yyyy-MM-dd";
-  }
-
-  return brewDate().toString(format);
-}
+QString BrewNote::brewDate_short()  const { return Brewtarget::displayDateUserFormated(brewDate().date()); }
 
 double BrewNote::sg() const                { return get("sg").toDouble(); }
 double BrewNote::abv() const               { return get("abv").toDouble(); }

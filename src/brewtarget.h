@@ -225,6 +225,8 @@ public:
 
    //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
+   //! \brief Display date formatted based on the user defined options.
+   static QString displayDateUserFormated(QDate const &date);
    //! \brief Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg, bool showUnits=true );
    //! \brief Appropriate thickness units will be placed in \c *volumeUnit and \c *weightUnit.
