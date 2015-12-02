@@ -30,6 +30,7 @@ public:
     void setNote(QString n);
     void setBoil(BoilTime* bt);
     void reset();
+    int getTime();
 
 private slots:
     void on_setSoundButton_clicked();

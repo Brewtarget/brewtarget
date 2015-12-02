@@ -23,7 +23,7 @@ TimerDialog::TimerDialog(QWidget *parent, BoilTime* bt) :
 {
     setupUi(this);
     //Default all timers to Boil time
-    time = 0;
+    time = boilTime->getTime();
     connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTime()));
     started = false;
     stopped = false;
@@ -50,14 +50,20 @@ TimerDialog::~TimerDialog()
 
 void TimerDialog::setTime(int t)
 {
-    time = t;
+    //Special case if timer auto created
+    if (setTimeBox->value() != t/60)
+        setTimeBox->setValue(t/60);
+
+    time = boilTime->getTime() - t;
+    stopped = false;
     //timer starts automatically when time is set
     started = true;
+    updateTime();
 }
 
 void TimerDialog::setNote(QString n)
 {
-    if (noteEdit->text() == "")
+    if (noteEdit->text() == "Notes..." || noteEdit->text() == "")
         noteEdit->setText(n);
     else
         noteEdit->setText(noteEdit->text() + " and " + n);
@@ -66,6 +72,11 @@ void TimerDialog::setNote(QString n)
 void TimerDialog::setBoil(BoilTime *bt)
 {
     boilTime = bt;
+}
+
+int TimerDialog::getTime()
+{
+    return boilTime->getTime() - time;
 }
 
 void TimerDialog::updateTime()
@@ -159,11 +170,7 @@ void TimerDialog::on_setTimeBox_valueChanged(int t)
         time = 0;
         started = false;
     } else {
-        time = boilTime->getTime() - (t * 60);
-        stopped = false;
-        //timer starts automatically when time is set
-        started = true;
-        updateTime();
+        setTime(t*60);
     }
 }
 

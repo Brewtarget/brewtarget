@@ -1,7 +1,7 @@
 /*
  * TimerListDialog.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
- * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Aidan Roberts <aidanr67@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,11 @@
  */
 
 #include "TimerListDialog.h"
+#include "recipe.h"
+#include "hop.h"
 
-TimerListDialog::TimerListDialog(QWidget* parent) : QDialog(parent)
+TimerListDialog::TimerListDialog(MainWindow* parent) : QDialog(parent),
+    mainWindow(parent)
 {
    setupUi(this);  
    boilTime->setBoilTime(setBoilTimeBox->value() * 60); //default 60mins
@@ -54,6 +57,7 @@ void TimerListDialog::on_stopButton_clicked()
 {
     boilTime->stopTimer();
     stopButton->setEnabled(false);
+    loadRecipesButton->setEnabled(true);
 }
 
 void TimerListDialog::on_resetButton_clicked()
@@ -64,6 +68,7 @@ void TimerListDialog::on_resetButton_clicked()
     foreach (TimerDialog* t, *timers)
         t->reset();
     resetButton->setEnabled(false);
+    loadRecipesButton->setEnabled(true);
 }
 
 void TimerListDialog::on_setBoilTimeBox_valueChanged(int t)
@@ -136,4 +141,36 @@ void TimerListDialog::on_showButton_clicked()
 void TimerListDialog::timesUp()
 {
     //Do something cool
+}
+
+void TimerListDialog::on_loadRecipesButton_clicked()
+{
+    //Load current recipes
+    enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; //For hop comparisons
+    Use boil = Boil;
+    Recipe* recipe = mainWindow->currentRecipe();
+    bool timerFound = false;
+    QList<Hop*> hops;
+    hops = recipe->hops();
+    foreach (Hop* h, hops) {
+        if (h->use() == boil) {
+            int newTime = h->time_min() * 60;
+            foreach (TimerDialog* td, *timers) {
+                if (td->getTime() == newTime){
+                    td->setNote(h->name()); //append note to existing timer
+                    timerFound = true;
+                }
+            }
+            if (!timerFound) {
+                TimerDialog * newTimer = new TimerDialog(this, boilTime);
+                newTimer->setTime(h->time_min()*60);
+                newTimer->setNote(h->name());
+                timers->append(newTimer);
+                newTimer->show();
+            }
+        timerFound = false;
+        }
+    }
+    loadRecipesButton->setEnabled(false);
+
 }

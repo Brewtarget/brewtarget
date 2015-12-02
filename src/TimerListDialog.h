@@ -28,6 +28,7 @@ class TimerListDialog;
 #include "boiltime.h"
 #include <QString>
 #include <QDebug>
+#include "MainWindow.h"
 
 /*!
  * \class TimerListDialog
@@ -40,7 +41,7 @@ class TimerListDialog : public QDialog, public Ui::timerListDialog
    Q_OBJECT
    
 public:
-      TimerListDialog(QWidget* parent=0);
+      TimerListDialog(MainWindow* parent);
       ~TimerListDialog();
 
       
@@ -55,7 +56,10 @@ private slots:
       void timesUp();
       void on_resetButton_clicked();
 
+      void on_loadRecipesButton_clicked();
+
 private:
+      MainWindow* mainWindow;
       QList<TimerDialog*> * timers;
       BoilTime* boilTime = new BoilTime(this);
 
