@@ -7,9 +7,13 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include "brewtarget.h"
+#include <QMessageBox>
 
 TimerDialog::TimerDialog(QWidget *parent, BoilTime* bt) :
     QDialog(parent),
+    paletteOld(),
+    paletteNew(),
+    oldColors(true),
     ui(new Ui::TimerDialog),
     boilTime(bt),
 #ifndef NO_QTMULTIMEDIA
@@ -18,10 +22,25 @@ TimerDialog::TimerDialog(QWidget *parent, BoilTime* bt) :
 #endif
 {
     setupUi(this);
-    time = setTimeBox->value();
+    //Default all timers to Boil time
+    time = 0;
     connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTime()));
+    started = false;
     stopped = false;
     updateTime();
+    setDefualtAlarmSound();
+    stopButton->setEnabled(false);
+    // Taken from old times
+#ifndef NO_QTMULTIMEDIA
+   playlist->setPlaybackMode(QMediaPlaylist::Loop);
+   mediaPlayer->setVolume(100);
+   mediaPlayer->setPlaylist(playlist);
+#endif
+    paletteOld = timeLCD->palette();
+    paletteNew = QPalette(paletteOld);
+    // Swap colors.
+    paletteNew.setColor(QPalette::Active, QPalette::WindowText, paletteOld.color(QPalette::Active, QPalette::Window));
+    paletteNew.setColor(QPalette::Active, QPalette::Window, paletteOld.color(QPalette::Active, QPalette::WindowText));
 }
 
 TimerDialog::~TimerDialog()
@@ -32,6 +51,8 @@ TimerDialog::~TimerDialog()
 void TimerDialog::setTime(int t)
 {
     time = t;
+    //timer starts automatically when time is set
+    started = true;
 }
 
 void TimerDialog::setNote(QString n)
@@ -85,13 +106,15 @@ QString TimerDialog::timeToString(int t)
 
 void TimerDialog::decrementTime()
 {
-    if (stopped)
-        flash();
-    if (time == 0)
-        timeOut();
-    else {
-        time = time - 1;
-        updateTime();
+    if (started) {
+        if (stopped)
+            flash();
+        else if (time == 0)
+            timesUp();
+        else {
+            time = time - 1;
+            updateTime();
+        }
     }
 }
 
@@ -106,37 +129,90 @@ void TimerDialog::on_setSoundButton_clicked()
        Brewtarget::logW("Null sound file.");
        return;
     }
- #ifndef NO_QTMULTIMEDIA
-    if( !playlist->clear() )
-       Brewtarget::logW(playlist->errorString());
-    if( !playlist->addMedia(QUrl::fromLocalFile(soundFile)) )
-       Brewtarget::logW(playlist->errorString());
-    playlist->setCurrentIndex(0);
- #endif
+    setSound(soundFile);
     // Indicate a sound is loaded
     setSoundButton->setCheckable(true);
     setSoundButton->setChecked(true);
 }
 
-void TimerDialog::on_setTimeBox_valueChanged(int t)
+void TimerDialog::setDefualtAlarmSound()
 {
-    time = boilTime->getTime() - (t * 60);
-    updateTime();
+    QString soundFile = QString("%1sounds/").arg(Brewtarget::getDataDir()) + "beep.ogg";
+    setSound(soundFile);
 }
 
-void TimerDialog::timeOut()
+void TimerDialog::setSound(QString s)
 {
-    // Do something cool
-    stopped = true;
+#ifndef NO_QTMULTIMEDIA
+   if( !playlist->clear() )
+      Brewtarget::logW(playlist->errorString());
+   if( !playlist->addMedia(QUrl::fromLocalFile(s)) )
+      Brewtarget::logW(playlist->errorString());
+   playlist->setCurrentIndex(0);
+#endif
+}
+
+void TimerDialog::on_setTimeBox_valueChanged(int t)
+{
+    if (t*60 > boilTime->getTime()) {
+        QMessageBox::warning(this, "Error", "Addition time cannot be longer than remaining boil time");
+        time = 0;
+        started = false;
+    } else {
+        time = boilTime->getTime() - (t * 60);
+        stopped = false;
+        //timer starts automatically when time is set
+        started = true;
+        updateTime();
+    }
+}
+
+void TimerDialog::timesUp()
+{
+    if (!stopped) {
+        if (this->isHidden())
+            this->show();
+        this->setFocus();
+        startAlarm();
+        stopped = true;
+    }
+    else
+        flash();
 }
 
 void TimerDialog::flash()
 {
-    //flash LCD
+    oldColors = ! oldColors;
+
+    if( oldColors )
+       timeLCD->setPalette(paletteOld);
+    else
+       timeLCD->setPalette(paletteNew);
+
+    timeLCD->repaint();
 }
 
 void TimerDialog::reset()
 {
     time = boilTime->getTime() - (setTimeBox->value() * 60);
+    if (stopped)
+        stopped = false;
+    mediaPlayer->stop();
     updateTime();
+}
+
+void TimerDialog::startAlarm()
+{
+#ifndef NO_QTMULTIMEDIA
+   mediaPlayer->play();
+#endif
+   stopButton->setEnabled(true);
+}
+
+void TimerDialog::on_stopButton_clicked()
+{
+    //stop button
+    mediaPlayer->stop();
+    stopButton->setEnabled(false);
+    started = false;
 }

@@ -9,6 +9,7 @@ class TimerDialog;
 #ifndef NO_QTMULTIMEDIA
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QPalette>
 #endif
 
 /*!
@@ -36,20 +37,28 @@ private slots:
     void decrementTime();
 
 
+    void on_stopButton_clicked();
+
 private:
     Ui::TimerDialog *ui;
     BoilTime* boilTime;
+    bool started;
     bool stopped;
     unsigned int time;
+    QPalette paletteOld, paletteNew;
+    bool oldColors;
 #ifndef NO_QTMULTIMEDIA
    QMediaPlayer* mediaPlayer;
    QMediaPlaylist* playlist;
 #endif
 
     void updateTime();
-    void timeOut();
+    void timesUp();
     QString timeToString(int t);
     void flash();
+    void startAlarm();
+    void setSound(QString s);
+    void setDefualtAlarmSound();
 
 
 };

@@ -22,22 +22,21 @@
 TimerListDialog::TimerListDialog(QWidget* parent) : QDialog(parent)
 {
    setupUi(this);  
-   timer = new QTimer();
-   connect(timer, SIGNAL(timeout()), this, SLOT(decrementTimer()));
    boilTime->setBoilTime(setBoilTimeBox->value() * 60); //default 60mins
    timers = new QList<TimerDialog*>();
+   connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTimer()));
+   connect(boilTime, SIGNAL(timesUp()), this, SLOT(timesUp()));
    updateTime();
+   stopButton->setEnabled(false);
+   resetButton->setEnabled(false);
 }
 
 TimerListDialog::~TimerListDialog()
 {
-    //foreach (TimerDialog* t, timers)
-      //  t->close();
 }
 
 void TimerListDialog::on_addTimerButton_clicked()
 {
-    //add timer button clicked
    TimerDialog* newTimer = new TimerDialog(this, boilTime);
    timers->append(newTimer);
    newTimer->show();
@@ -45,22 +44,26 @@ void TimerListDialog::on_addTimerButton_clicked()
 
 void TimerListDialog::on_startButton_clicked()
 {
-    timer->setInterval(1000);
-    boilTime->setBoilStarted(true);
-    timer->start();
+    boilTime->startTimer();
+    stopButton->setEnabled(true);
+    resetButton->setEnabled(true);
+
 }
 
 void TimerListDialog::on_stopButton_clicked()
 {
-    timer->stop();
-    boilTime->setBoilStarted(false);
+    boilTime->stopTimer();
+    stopButton->setEnabled(false);
 }
 
-void TimerListDialog::on_Reset_clicked()
+void TimerListDialog::on_resetButton_clicked()
 {
-    // Reset boil time to spinbox value
+    // Reset boil time to defined boil time
     boilTime->setBoilTime(setBoilTimeBox->value() * 60);
     updateTime();
+    foreach (TimerDialog* t, *timers)
+        t->reset();
+    resetButton->setEnabled(false);
 }
 
 void TimerListDialog::on_setBoilTimeBox_valueChanged(int t)
@@ -71,11 +74,9 @@ void TimerListDialog::on_setBoilTimeBox_valueChanged(int t)
 
 void TimerListDialog::decrementTimer()
 {
-    boilTime->decrementTime();
-    if (boilTime->getTime() == 0)
-        timer->stop();
-    else
-        updateTime();
+    if(!resetButton->isEnabled())
+        resetButton->setEnabled(true);
+    updateTime();
 }
 
 void TimerListDialog::updateTime()
@@ -115,3 +116,24 @@ QString TimerListDialog::timeToString(int t)
    return hourStr + ":" + minStr + ":" + secStr;
 }
 
+
+void TimerListDialog::on_hideButton_clicked()
+{
+    foreach (TimerDialog* t, *timers) {
+        if (!t->isHidden())
+            t->hide();
+    }
+}
+
+void TimerListDialog::on_showButton_clicked()
+{
+    foreach (TimerDialog* t, *timers) {
+        if (t->isHidden())
+            t->show();
+    }
+}
+
+void TimerListDialog::timesUp()
+{
+    //Do something cool
+}

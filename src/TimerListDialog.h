@@ -26,8 +26,6 @@ class TimerListDialog;
 #include <QWidget>
 #include "TimerDialog.h"
 #include "boiltime.h"
-#include <QTimer>
-#include <QThread>
 #include <QString>
 #include <QDebug>
 
@@ -50,14 +48,16 @@ private slots:
       void on_addTimerButton_clicked();
       void on_startButton_clicked();
       void on_stopButton_clicked();
-      void on_Reset_clicked();
       void on_setBoilTimeBox_valueChanged(int t);
       void decrementTimer();
+      void on_hideButton_clicked();
+      void on_showButton_clicked();
+      void timesUp();
+      void on_resetButton_clicked();
 
 private:
       QList<TimerDialog*> * timers;
       BoilTime* boilTime = new BoilTime(this);
-      QTimer* timer;
 
       void updateTime();
       QString timeToString(int t);
