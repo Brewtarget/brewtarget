@@ -23,7 +23,6 @@
 #define _TIMERWIDGET_H
 
 #include <QWidget>
-#include <QTimer>
 #include <QString>
 #include <QPalette>
 #ifndef NO_QTMULTIMEDIA
@@ -34,45 +33,31 @@
 #include <QLineEdit>
 #include <QLCDNumber>
 #include <QEvent>
+#include "ui_timerWidget.h"
+#include "boiltime.h"
 
 /*!
  * \class TimerWidget
- * \author Philip G. Lee
+ * \author Aidan Roberts
  *
- * \brief Countdown timer that plays sounds and flashes when done.
+ * \brief Multiple timers, generated from recipe
  */
-class TimerWidget : public QWidget
+
+class TimerWidget : public QWidget, public Ui::timerWidget
 {
    Q_OBJECT
+
 public:
    TimerWidget(QWidget* parent=0);
    ~TimerWidget();
-
-   //! \returns text version of the timer display.
-   QString getTimerValue();
-
-   //! \name Public UI Variables
-   //! @{
-   QPushButton* pushButton_set;
-   QLineEdit* lineEdit;
-   QLCDNumber* lcdNumber;
-   QPushButton* pushButton_startStop;
-   QPushButton* pushButton_sound;
-   //! @}
+   void setBoil(BoilTime* bt);
 
 public slots:
-   void setTimer(QString text);
-   void setTimer();
-   void startStop();
-   void subtractOneSecond();
-   void endTimer();
-   void showChanges();
    void flash();
    void getSound();
 
 signals:
    void timerDone();
-   void timerSet(QString text);
 
 protected:
 
@@ -83,19 +68,22 @@ protected:
       QWidget::changeEvent(event);
    }
 
+private slots:
+   void on_setAlarmSoundButton_clicked();
+   void on_setTimeBox_valueChanged(int arg1);
+
 private:
-   void subtractOneMinute();
+   BoilTime* boilTime;
+   void setTimer();
+   void endTimer();
+   QString getTimerValue();
    void stopFlashing();
-
-   void doLayout();
    void retranslateUi();
+   void updateTime();
+   QString timeToString(int t);
+   void decrementTime();
 
-   unsigned int hours;
-   unsigned int minutes;
-   unsigned int seconds;
-   bool start;
-   QTimer* timer;
-   QTimer* flashTimer;
+   unsigned int time;
    QPalette paletteOld, paletteNew;
 #ifndef NO_QTMULTIMEDIA
    QMediaPlayer* mediaPlayer;

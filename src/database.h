@@ -127,12 +127,12 @@ public:
          q.finish();
          return QVariant();
       }
-      
+
       QVariant ret( q.record().value(col_name) );
       q.finish();
       return ret;
    }
-   
+
    //! Get a table view.
    QTableView* createView( Brewtarget::DBTable table );
    

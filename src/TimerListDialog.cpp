@@ -18,21 +18,108 @@
  */
 
 #include "TimerListDialog.h"
-#include "TimerWidget.h"
 
 TimerListDialog::TimerListDialog(QWidget* parent) : QDialog(parent)
 {
-   setupUi(this);
-   
-   timer1 = new TimerWidget(this);
-   timer2 = new TimerWidget(this);
-   timer3 = new TimerWidget(this);
-   
-   verticalLayout->addWidget(timer1);
-   verticalLayout->addWidget(timer2);
-   verticalLayout->addWidget(timer3);
+   setupUi(this);  
+   timer = new QTimer();
+   connect(timer, SIGNAL(timeout()), this, SLOT(decrementTimer()));
+   boilTime->setBoilTime(setBoilTimeBox->value() * 60); //default 60mins
+   timers = new QList<TimerWidget*>();
+   updateTime();
 }
 
 TimerListDialog::~TimerListDialog()
 {
+}
+
+void TimerListDialog::on_addTimerButton_clicked()
+{
+    //add timer button clicked
+    TimerWidget* newTimer = new TimerWidget(this);
+    newTimer->setBoil(boilTime);
+    timers->append(newTimer);
+}
+
+void TimerListDialog::on_startButton_clicked()
+{
+    timer->setInterval(1000);
+    timerThread = new QThread();
+    timer->moveToThread(timerThread);
+    boilTime->setBoilStarted(true);
+    // Need to start the timer from another thread??
+    timerThread->start();
+    timer->start();
+}
+
+void TimerListDialog::on_stopButton_clicked()
+{
+    timer->stop();
+    boilTime->setBoilStarted(false);
+}
+
+void TimerListDialog::on_Reset_clicked()
+{
+    // Reset boil time to spinbox value
+    boilTime->setBoilTime(setBoilTimeBox->value() * 60);
+}
+
+void TimerListDialog::on_setBoilTimeBox_valueChanged(int t)
+{
+    boilTime->setBoilTime(t * 60);
+}
+
+void TimerListDialog::decrementTimer()
+{
+    qDebug() << "Hello";
+    boilTime->decrementTime();
+    if (boilTime->getTime() == 0)
+        timer->stop();
+    else
+        updateTime();
+}
+
+void TimerListDialog::updateTime()
+{
+   unsigned int time = boilTime->getTime();
+   timeLCD->display(timeToString(time));
+}
+
+QString TimerListDialog::timeToString(int t)
+{
+    unsigned int seconds = t;
+    unsigned int minutes = 0;
+    unsigned int hours = 0;
+   if (t == 0)
+       return "00:00:00";
+   if (t > 59){
+       seconds = t%60;
+       minutes = t/60;
+       if (minutes > 59){
+          hours = minutes/60;
+          minutes = minutes%60;
+       }
+   }
+   QString secStr, minStr, hourStr;
+   if (seconds < 10)
+       secStr = "0" + QString::number(seconds);
+   else
+       secStr = QString::number(seconds);
+   if (minutes <10)
+       minStr = "0" + QString::number(minutes);
+   else
+       minStr = QString::number(minutes);
+   if (hours < 10)
+       hourStr = "0" + QString::number(hours);
+   else
+       hourStr = QString::number(hours);
+   return hourStr + ":" + minStr + ":" + secStr;
+}
+
+void TimerListDialog::placeNewTimerWidget(TimerWidget *tw)
+{
+   //place new timer widget in dialog??
+    QHBoxLayout* newTimers = new QHBoxLayout;
+    newTimers->addWidget(tw);
+    gridLayout->addLayout(newTimers, gridLayout->rowCount(), 0);
 }

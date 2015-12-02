@@ -97,7 +97,7 @@ void InstructionWidget::setCompleted()
    }
 }
 
-void InstructionWidget::setHasTimer()
+/*void InstructionWidget::setHasTimer()
 {
    if( insObs == 0 )
       return;
@@ -118,7 +118,7 @@ void InstructionWidget::setHasTimer()
       timer->setVisible(false);
       verticalLayout->update();
    }
-}
+}*/
 
 void InstructionWidget::setTimerValue(QString value)
 {

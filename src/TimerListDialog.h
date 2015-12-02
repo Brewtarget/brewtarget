@@ -25,25 +25,44 @@ class TimerListDialog;
 #include <QDialog>
 #include <QWidget>
 #include "TimerWidget.h"
+#include "boiltime.h"
+#include <QTimer>
+#include <QThread>
+#include <QString>
+#include <QDebug>
 
 /*!
  * \class TimerListDialog
- * \author Philip G. Lee
+ * \author Aidan Roberts
  *
- * \brief A whole panel of timers.
+ * \brief Main boil timer, generate timers from recipe
  */
 class TimerListDialog : public QDialog, public Ui::timerListDialog
 {
    Q_OBJECT
    
-   public:
+public:
       TimerListDialog(QWidget* parent=0);
       ~TimerListDialog();
+
       
-   private:
-      TimerWidget* timer1;
-      TimerWidget* timer2;
-      TimerWidget* timer3;
+private slots:
+      void on_addTimerButton_clicked();
+      void on_startButton_clicked();
+      void on_stopButton_clicked();
+      void on_Reset_clicked();
+      void on_setBoilTimeBox_valueChanged(int t);
+      void decrementTimer();
+
+private:
+      QList<TimerWidget*> * timers;
+      BoilTime* boilTime = new BoilTime(this);
+      QTimer* timer;
+      QThread* timerThread;
+
+      void updateTime();
+      QString timeToString(int t);
+      void placeNewTimerWidget(TimerWidget* tw);
 };
 
 #endif

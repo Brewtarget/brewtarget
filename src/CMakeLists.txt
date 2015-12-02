@@ -56,6 +56,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/Algorithms.cpp
     ${SRCDIR}/BeerXMLElement.cpp
     ${SRCDIR}/BeerXMLSortProxyModel.cpp
+    ${SRCDIR}/boiltime.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/brewnote.cpp
@@ -188,6 +189,7 @@ SET( brewtarget_UIS
     ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerListDialog.ui
+    ${UIDIR}/timerWidget.ui
     ${UIDIR}/waterEditor.ui
     ${UIDIR}/yeastEditor.ui
     ${UIDIR}/mashDesigner.ui
@@ -202,6 +204,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/BeerXMLElement.h
     ${SRCDIR}/BeerXMLSortProxyModel.h
+    ${SRCDIR}/boiltime.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/brewnote.h
