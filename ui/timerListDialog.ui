@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>781</width>
-    <height>222</height>
+    <height>224</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -26,6 +26,9 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetNoConstraint</enum>
+    </property>
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1,1,0">
       <property name="spacing">

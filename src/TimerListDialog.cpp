@@ -25,30 +25,28 @@ TimerListDialog::TimerListDialog(QWidget* parent) : QDialog(parent)
    timer = new QTimer();
    connect(timer, SIGNAL(timeout()), this, SLOT(decrementTimer()));
    boilTime->setBoilTime(setBoilTimeBox->value() * 60); //default 60mins
-   timers = new QList<TimerWidget*>();
+   timers = new QList<TimerDialog*>();
    updateTime();
 }
 
 TimerListDialog::~TimerListDialog()
 {
+    //foreach (TimerDialog* t, timers)
+      //  t->close();
 }
 
 void TimerListDialog::on_addTimerButton_clicked()
 {
     //add timer button clicked
-    TimerWidget* newTimer = new TimerWidget(this);
-    newTimer->setBoil(boilTime);
-    timers->append(newTimer);
+   TimerDialog* newTimer = new TimerDialog(this, boilTime);
+   timers->append(newTimer);
+   newTimer->show();
 }
 
 void TimerListDialog::on_startButton_clicked()
 {
     timer->setInterval(1000);
-    timerThread = new QThread();
-    timer->moveToThread(timerThread);
     boilTime->setBoilStarted(true);
-    // Need to start the timer from another thread??
-    timerThread->start();
     timer->start();
 }
 
@@ -62,16 +60,17 @@ void TimerListDialog::on_Reset_clicked()
 {
     // Reset boil time to spinbox value
     boilTime->setBoilTime(setBoilTimeBox->value() * 60);
+    updateTime();
 }
 
 void TimerListDialog::on_setBoilTimeBox_valueChanged(int t)
 {
     boilTime->setBoilTime(t * 60);
+    updateTime();
 }
 
 void TimerListDialog::decrementTimer()
 {
-    qDebug() << "Hello";
     boilTime->decrementTime();
     if (boilTime->getTime() == 0)
         timer->stop();
@@ -116,10 +115,3 @@ QString TimerListDialog::timeToString(int t)
    return hourStr + ":" + minStr + ":" + secStr;
 }
 
-void TimerListDialog::placeNewTimerWidget(TimerWidget *tw)
-{
-   //place new timer widget in dialog??
-    QHBoxLayout* newTimers = new QHBoxLayout;
-    newTimers->addWidget(tw);
-    gridLayout->addLayout(newTimers, gridLayout->rowCount(), 0);
-}

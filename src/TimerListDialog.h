@@ -24,7 +24,7 @@ class TimerListDialog;
 #include "ui_timerListDialog.h"
 #include <QDialog>
 #include <QWidget>
-#include "TimerWidget.h"
+#include "TimerDialog.h"
 #include "boiltime.h"
 #include <QTimer>
 #include <QThread>
@@ -55,14 +55,12 @@ private slots:
       void decrementTimer();
 
 private:
-      QList<TimerWidget*> * timers;
+      QList<TimerDialog*> * timers;
       BoilTime* boilTime = new BoilTime(this);
       QTimer* timer;
-      QThread* timerThread;
 
       void updateTime();
       QString timeToString(int t);
-      void placeNewTimerWidget(TimerWidget* tw);
 };
 
 #endif
