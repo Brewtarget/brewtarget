@@ -29,6 +29,7 @@ class TimerListDialog;
 #include <QString>
 #include <QDebug>
 #include "MainWindow.h"
+#include <QStack>
 
 /*!
  * \class TimerListDialog
@@ -43,6 +44,7 @@ class TimerListDialog : public QDialog, public Ui::timerListDialog
 public:
       TimerListDialog(MainWindow* parent);
       ~TimerListDialog();
+      void removeTimer(TimerDialog* t);
 
       
 private slots:
@@ -55,16 +57,20 @@ private slots:
       void on_showButton_clicked();
       void timesUp();
       void on_resetButton_clicked();
-
       void on_loadRecipesButton_clicked();
+      void on_cancelButton_clicked();
 
 private:
       MainWindow* mainWindow;
       QList<TimerDialog*> * timers;
       BoilTime* boilTime = new BoilTime(this);
+      QStack<int>* timerPositions = new QStack<int>;
 
+      void removeAllTimers();
+      void setInitialTimerPosition();
       void updateTime();
       QString timeToString(int t);
+      void positionNewTimer(TimerDialog* t);
 };
 
 #endif

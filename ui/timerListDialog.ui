@@ -10,13 +10,25 @@
     <height>257</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>924</width>
+    <height>257</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>924</width>
+    <height>257</height>
+   </size>
+  </property>
   <property name="mouseTracking">
    <bool>false</bool>
   </property>
   <property name="windowTitle">
    <string>Main Boil Timer</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -162,6 +174,13 @@
          <widget class="QPushButton" name="showButton">
           <property name="text">
            <string>Show Timers</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="cancelButton">
+          <property name="text">
+           <string>Cancel Timers</string>
           </property>
          </widget>
         </item>

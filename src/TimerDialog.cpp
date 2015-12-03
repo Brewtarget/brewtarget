@@ -9,8 +9,9 @@
 #include "brewtarget.h"
 #include <QMessageBox>
 
-TimerDialog::TimerDialog(QWidget *parent, BoilTime* bt) :
+TimerDialog::TimerDialog(TimerListDialog *parent, BoilTime* bt) :
     QDialog(parent),
+    mainTimer(parent),
     paletteOld(),
     paletteNew(),
     oldColors(true),
@@ -24,7 +25,6 @@ TimerDialog::TimerDialog(QWidget *parent, BoilTime* bt) :
     setupUi(this);
     //Default all timers to Boil time
     time = boilTime->getTime();
-    connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTime()));
     started = false;
     stopped = false;
     updateTime();
@@ -41,6 +41,8 @@ TimerDialog::TimerDialog(QWidget *parent, BoilTime* bt) :
     // Swap colors.
     paletteNew.setColor(QPalette::Active, QPalette::WindowText, paletteOld.color(QPalette::Active, QPalette::Window));
     paletteNew.setColor(QPalette::Active, QPalette::Window, paletteOld.color(QPalette::Active, QPalette::WindowText));
+    //Connections
+    connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTime()));
 }
 
 TimerDialog::~TimerDialog()
@@ -180,6 +182,7 @@ void TimerDialog::timesUp()
         if (this->isHidden())
             this->show();
         this->setFocus();
+        this->raise();
         startAlarm();
         stopped = true;
     }
@@ -222,4 +225,26 @@ void TimerDialog::on_stopButton_clicked()
     mediaPlayer->stop();
     stopButton->setEnabled(false);
     started = false;
+}
+
+void TimerDialog::on_cancelButton_clicked()
+{
+    cancel();
+}
+
+void TimerDialog::cancel()
+{
+    mainTimer->removeTimer(this);
+}
+
+void TimerDialog::hideTimer()
+{
+    timerPosition = this->saveGeometry();
+    this->hide();
+}
+
+void TimerDialog::showTimer()
+{
+    this->restoreGeometry(timerPosition);
+    this->show();
 }

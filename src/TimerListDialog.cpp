@@ -20,6 +20,7 @@
 #include "TimerListDialog.h"
 #include "recipe.h"
 #include "hop.h"
+#include <QMessageBox>
 
 TimerListDialog::TimerListDialog(MainWindow* parent) : QDialog(parent),
     mainWindow(parent)
@@ -32,17 +33,36 @@ TimerListDialog::TimerListDialog(MainWindow* parent) : QDialog(parent),
    updateTime();
    stopButton->setEnabled(false);
    resetButton->setEnabled(false);
+   setInitialTimerPosition();
 }
 
 TimerListDialog::~TimerListDialog()
 {
 }
 
+void TimerListDialog::setInitialTimerPosition()
+{
+    //Used to cascade timer dialogs- Better way to do this?
+    timerPositions->clear();
+    timerPositions->push(50);
+    timerPositions->push(50);
+}
+
 void TimerListDialog::on_addTimerButton_clicked()
 {
    TimerDialog* newTimer = new TimerDialog(this, boilTime);
    timers->append(newTimer);
+   positionNewTimer(newTimer);
    newTimer->show();
+}
+
+void TimerListDialog::positionNewTimer(TimerDialog *t)
+{
+    int x = timerPositions->pop();
+    int y = timerPositions->pop();
+    t->move(x, y);
+    timerPositions->push(x + 50);
+    timerPositions->push(y + 50);
 }
 
 void TimerListDialog::on_startButton_clicked()
@@ -126,7 +146,7 @@ void TimerListDialog::on_hideButton_clicked()
 {
     foreach (TimerDialog* t, *timers) {
         if (!t->isHidden())
-            t->hide();
+            t->hideTimer();
     }
 }
 
@@ -134,7 +154,7 @@ void TimerListDialog::on_showButton_clicked()
 {
     foreach (TimerDialog* t, *timers) {
         if (t->isHidden())
-            t->show();
+            t->showTimer();
     }
 }
 
@@ -146,26 +166,41 @@ void TimerListDialog::timesUp()
 void TimerListDialog::on_loadRecipesButton_clicked()
 {
     //Load current recipes
+    if (!timers->isEmpty()){
+        QMessageBox mb;
+        mb.setText("Active Timers");
+        mb.setInformativeText("You currently have active timers, would you like to replace them or add to them?");
+        QAbstractButton *replace =  mb.addButton(tr("Replace"), QMessageBox::YesRole);
+        QAbstractButton *add = mb.addButton(tr("Add"), QMessageBox::NoRole);
+        mb.setIcon(QMessageBox::Question);
+        mb.exec();
+        if (mb.clickedButton() == replace)
+            removeAllTimers();
+    }
     enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; //For hop comparisons
     Use boil = Boil;
     Recipe* recipe = mainWindow->currentRecipe();
     bool timerFound = false;
     QList<Hop*> hops;
+    QString note;
     hops = recipe->hops();
     foreach (Hop* h, hops) {
         if (h->use() == boil) {
+            note = QString::number(int(h->amount_kg()*1000)) +
+                    "g of " + h->name(); // TODO - show amount in brewtarget selected units
             int newTime = h->time_min() * 60;
             foreach (TimerDialog* td, *timers) {
                 if (td->getTime() == newTime){
-                    td->setNote(h->name()); //append note to existing timer
+                    td->setNote(note); //append note to existing timer
                     timerFound = true;
                 }
             }
             if (!timerFound) {
                 TimerDialog * newTimer = new TimerDialog(this, boilTime);
                 newTimer->setTime(h->time_min()*60);
-                newTimer->setNote(h->name());
+                newTimer->setNote(note);
                 timers->append(newTimer);
+                positionNewTimer(newTimer);
                 newTimer->show();
             }
         timerFound = false;
@@ -174,3 +209,31 @@ void TimerListDialog::on_loadRecipesButton_clicked()
     loadRecipesButton->setEnabled(false);
 
 }
+
+void TimerListDialog::on_cancelButton_clicked()
+{
+    removeAllTimers();
+}
+
+void TimerListDialog::removeAllTimers()
+{
+    qDeleteAll(*timers);
+    timers->clear();
+    loadRecipesButton->setEnabled(true);
+    setInitialTimerPosition();
+
+}
+
+void TimerListDialog::removeTimer(TimerDialog *t)
+{
+    //Return position to stack
+    timerPositions->push(t->x());
+    timerPositions->push(t->y());
+    for (int i = 0; i < timers->count(); i++) {
+        if (timers->at(i) == t) {
+            delete(timers->at(i));
+            timers->removeAt(i);
+        }
+    }
+}
+

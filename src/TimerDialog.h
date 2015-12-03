@@ -6,6 +6,7 @@ class TimerDialog;
 #include <QDialog>
 #include "boiltime.h"
 #include "ui_timerDialog.h"
+#include "TimerListDialog.h"
 #ifndef NO_QTMULTIMEDIA
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
@@ -24,13 +25,16 @@ class TimerDialog : public QDialog, public Ui::TimerDialog
     Q_OBJECT
 
 public:
-    TimerDialog(QWidget *parent = 0, BoilTime* bt = 0);
+    TimerDialog(TimerListDialog *parent, BoilTime* bt = 0);
     ~TimerDialog();
     void setTime(int t);
     void setNote(QString n);
     void setBoil(BoilTime* bt);
     void reset();
     int getTime();
+    void cancel();
+    void hideTimer();
+    void showTimer();
 
 private slots:
     void on_setSoundButton_clicked();
@@ -39,6 +43,8 @@ private slots:
 
 
     void on_stopButton_clicked();
+
+    void on_cancelButton_clicked();
 
 private:
     Ui::TimerDialog *ui;
@@ -52,6 +58,7 @@ private:
    QMediaPlayer* mediaPlayer;
    QMediaPlaylist* playlist;
 #endif
+   QByteArray timerPosition;
 
     void updateTime();
     void timesUp();
@@ -60,6 +67,7 @@ private:
     void startAlarm();
     void setSound(QString s);
     void setDefualtAlarmSound();
+    TimerListDialog* mainTimer;
 
 
 };
