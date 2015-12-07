@@ -38,6 +38,7 @@ public:
     void setBoilTime(int boilTime);
     int getTime();
     bool isStarted();
+    bool isCompleted();
     void startTimer();
     void stopTimer();
 
@@ -52,6 +53,7 @@ private:
     QTimer* timer;
     unsigned int time;
     bool started;
+    bool completed;
 };
 
 #endif // BOILTIME_H

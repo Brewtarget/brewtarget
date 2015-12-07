@@ -18,22 +18,21 @@
  */
 
 #include "TimerListDialog.h"
-#include "recipe.h"
-#include "hop.h"
 #include <QMessageBox>
 
 TimerListDialog::TimerListDialog(MainWindow* parent) : QDialog(parent),
     mainWindow(parent)
 {
    setupUi(this);  
+   boilTime = new BoilTime(this);
    boilTime->setBoilTime(setBoilTimeBox->value() * 60); //default 60mins
    timers = new QList<TimerDialog*>();
+   updateTime();
+   timerPositions = new QStack<int>;
+   setInitialTimerPosition();
+   //Connections
    connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTimer()));
    connect(boilTime, SIGNAL(timesUp()), this, SLOT(timesUp()));
-   updateTime();
-   stopButton->setEnabled(false);
-   resetButton->setEnabled(false);
-   setInitialTimerPosition();
 }
 
 TimerListDialog::~TimerListDialog()
@@ -67,28 +66,29 @@ void TimerListDialog::positionNewTimer(TimerDialog *t)
 
 void TimerListDialog::on_startButton_clicked()
 {
-    boilTime->startTimer();
-    stopButton->setEnabled(true);
-    resetButton->setEnabled(true);
-
+    if (!boilTime->isStarted())
+        boilTime->startTimer();
 }
 
 void TimerListDialog::on_stopButton_clicked()
 {
-    boilTime->stopTimer();
-    stopButton->setEnabled(false);
-    loadRecipesButton->setEnabled(true);
+    if (boilTime->isStarted())
+        boilTime->stopTimer();
 }
 
 void TimerListDialog::on_resetButton_clicked()
 {
+    resetTimers();
+}
+
+void TimerListDialog::resetTimers()
+{
     // Reset boil time to defined boil time
     boilTime->setBoilTime(setBoilTimeBox->value() * 60);
     updateTime();
-    foreach (TimerDialog* t, *timers)
-        t->reset();
-    resetButton->setEnabled(false);
-    loadRecipesButton->setEnabled(true);
+    if (!timers->isEmpty())
+        foreach (TimerDialog* t, *timers)
+            t->reset();
 }
 
 void TimerListDialog::on_setBoilTimeBox_valueChanged(int t)
@@ -99,8 +99,6 @@ void TimerListDialog::on_setBoilTimeBox_valueChanged(int t)
 
 void TimerListDialog::decrementTimer()
 {
-    if(!resetButton->isEnabled())
-        resetButton->setEnabled(true);
     updateTime();
 }
 
@@ -172,26 +170,33 @@ void TimerListDialog::on_loadRecipesButton_clicked()
         mb.setInformativeText("You currently have active timers, would you like to replace them or add to them?");
         QAbstractButton *replace =  mb.addButton(tr("Replace"), QMessageBox::YesRole);
         QAbstractButton *add = mb.addButton(tr("Add"), QMessageBox::NoRole);
+        add->setFocus();
         mb.setIcon(QMessageBox::Question);
         mb.exec();
         if (mb.clickedButton() == replace)
             removeAllTimers();
     }
-    enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; //For hop comparisons
-    Use boil = Boil;
     Recipe* recipe = mainWindow->currentRecipe();
+    setBoilTimeBox->setValue(recipe->boilTime_min());
     bool timerFound = false;
+    int duplicates = 0;
+    bool duplicatesFound = false;
     QList<Hop*> hops;
     QString note;
     hops = recipe->hops();
     foreach (Hop* h, hops) {
-        if (h->use() == boil) {
+        if (h->use() == 2) { //2 = Boil addition -- Hop::Use enum
             note = QString::number(int(h->amount_kg()*1000)) +
                     "g of " + h->name(); // TODO - show amount in brewtarget selected units
             int newTime = h->time_min() * 60;
             foreach (TimerDialog* td, *timers) {
                 if (td->getTime() == newTime){
-                    td->setNote(note); //append note to existing timer
+                    if (!td->getNote().contains(note, Qt::CaseInsensitive))
+                        td->setNote(note); //append note to existing timer
+                    else {
+                        duplicates++;
+                        duplicatesFound = true;
+                    }
                     timerFound = true;
                 }
             }
@@ -206,8 +211,15 @@ void TimerListDialog::on_loadRecipesButton_clicked()
         timerFound = false;
         }
     }
-    loadRecipesButton->setEnabled(false);
+    if (duplicatesFound) {
+        QString timerText;
+        if (duplicates == 1)
+            timerText = QString("%1 hop addition is already timed and has been ignored.").arg(duplicates);
+        else
+            timerText = QString("%1 hop additions are already timed and have been ignored.").arg(duplicates);
 
+        QMessageBox::warning(this, "Duplicate Timers Ignored", timerText, QMessageBox::Ok);
+    }
 }
 
 void TimerListDialog::on_cancelButton_clicked()
@@ -219,7 +231,6 @@ void TimerListDialog::removeAllTimers()
 {
     qDeleteAll(*timers);
     timers->clear();
-    loadRecipesButton->setEnabled(true);
     setInitialTimerPosition();
 
 }
@@ -237,3 +248,14 @@ void TimerListDialog::removeTimer(TimerDialog *t)
     }
 }
 
+void TimerListDialog::reject()
+{
+    if (boilTime->isCompleted()) {
+        boilTime->stopTimer();
+        removeAllTimers();
+        resetTimers();
+        this->hide();
+    }
+    else
+       this->hide();
+}

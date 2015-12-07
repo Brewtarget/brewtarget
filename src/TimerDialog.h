@@ -32,6 +32,7 @@ public:
     void setBoil(BoilTime* bt);
     void reset();
     int getTime();
+    QString getNote();
     void cancel();
     void hideTimer();
     void showTimer();
@@ -48,12 +49,13 @@ private slots:
 
 private:
     Ui::TimerDialog *ui;
+    TimerListDialog* mainTimer;
+    QPalette paletteOld, paletteNew;
+    bool oldColors;
     BoilTime* boilTime;
     bool started;
     bool stopped;
     unsigned int time;
-    QPalette paletteOld, paletteNew;
-    bool oldColors;
 #ifndef NO_QTMULTIMEDIA
    QMediaPlayer* mediaPlayer;
    QMediaPlaylist* playlist;
@@ -67,8 +69,6 @@ private:
     void startAlarm();
     void setSound(QString s);
     void setDefualtAlarmSound();
-    TimerListDialog* mainTimer;
-
 
 };
 

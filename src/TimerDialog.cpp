@@ -11,22 +11,24 @@
 
 TimerDialog::TimerDialog(TimerListDialog *parent, BoilTime* bt) :
     QDialog(parent),
+    ui(new Ui::TimerDialog),
     mainTimer(parent),
     paletteOld(),
     paletteNew(),
     oldColors(true),
-    ui(new Ui::TimerDialog),
     boilTime(bt),
+    started(false),
+    stopped(false),
+    time(0)
 #ifndef NO_QTMULTIMEDIA
-         mediaPlayer(new QMediaPlayer(this)),
-         playlist(new QMediaPlaylist(mediaPlayer))
+         , mediaPlayer(new QMediaPlayer(this))
+         , playlist(new QMediaPlaylist(mediaPlayer))
 #endif
+  , timerPosition(0)
 {
     setupUi(this);
     //Default all timers to Boil time
     time = boilTime->getTime();
-    started = false;
-    stopped = false;
     updateTime();
     setDefualtAlarmSound();
     stopButton->setEnabled(false);
@@ -79,6 +81,11 @@ void TimerDialog::setBoil(BoilTime *bt)
 int TimerDialog::getTime()
 {
     return boilTime->getTime() - time;
+}
+
+QString TimerDialog::getNote()
+{
+    return noteEdit->text();
 }
 
 void TimerDialog::updateTime()
@@ -207,7 +214,9 @@ void TimerDialog::reset()
     time = boilTime->getTime() - (setTimeBox->value() * 60);
     if (stopped)
         stopped = false;
+#ifdef NO_QTMULTIMEDIA
     mediaPlayer->stop();
+#endif
     updateTime();
 }
 
@@ -222,7 +231,9 @@ void TimerDialog::startAlarm()
 void TimerDialog::on_stopButton_clicked()
 {
     //stop button
+#ifndef NO_QTMULTIMEDIA
     mediaPlayer->stop();
+#endif
     stopButton->setEnabled(false);
     started = false;
 }
