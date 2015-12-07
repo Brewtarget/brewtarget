@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>924</width>
-    <height>257</height>
+    <height>275</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>924</width>
-    <height>257</height>
+    <height>275</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>924</width>
-    <height>257</height>
+    <height>275</height>
    </size>
   </property>
   <property name="mouseTracking">
@@ -28,13 +28,13 @@
   <property name="windowTitle">
    <string>Main Boil Timer</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>251</height>
+     <height>274</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -185,6 +185,40 @@
          </widget>
         </item>
        </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QCheckBox" name="limitRingTimeCheckBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>2</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Limit alarm ring time </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="limitRingTimeLabel">
+        <property name="text">
+         <string>Alarm ring time (secs):</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="limitRingTimeSpinBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

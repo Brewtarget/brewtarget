@@ -21,15 +21,20 @@
 #include <QMessageBox>
 
 TimerListDialog::TimerListDialog(MainWindow* parent) : QDialog(parent),
-    mainWindow(parent)
+    mainWindow(parent),
+    stopped(false),
+    limitAlarmRing(false),
+    alarmLimit(5)
 {
-   setupUi(this);  
+   setupUi(this);
+
    boilTime = new BoilTime(this);
    boilTime->setBoilTime(setBoilTimeBox->value() * 60); //default 60mins
    timers = new QList<TimerDialog*>();
-   updateTime();
    timerPositions = new QStack<int>;
    setInitialTimerPosition();
+   updateTime();
+
    //Connections
    connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTimer()));
    connect(boilTime, SIGNAL(timesUp()), this, SLOT(timesUp()));
@@ -41,7 +46,7 @@ TimerListDialog::~TimerListDialog()
 
 void TimerListDialog::setInitialTimerPosition()
 {
-    //Used to cascade timer dialogs- Better way to do this?
+    //Used to cascade timer dialogs -- Better way to do this?
     timerPositions->clear();
     timerPositions->push(50);
     timerPositions->push(50);
@@ -49,10 +54,26 @@ void TimerListDialog::setInitialTimerPosition()
 
 void TimerListDialog::on_addTimerButton_clicked()
 {
-   TimerDialog* newTimer = new TimerDialog(this, boilTime);
-   timers->append(newTimer);
-   positionNewTimer(newTimer);
-   newTimer->show();
+    createTimer();
+}
+
+void TimerListDialog::createTimer()
+{
+    TimerDialog* newTimer = new TimerDialog(this, boilTime);
+    timers->append(newTimer);
+    positionNewTimer(newTimer);
+    newTimer->setAlarmLimits(limitAlarmRing, alarmLimit);
+    newTimer->show();
+}
+
+void TimerListDialog::createTimer(QString n)
+{
+    TimerDialog* newTimer = new TimerDialog(this, boilTime);
+    timers->append(newTimer);
+    newTimer->setNote(n);
+    positionNewTimer(newTimer);
+    newTimer->setAlarmLimits(limitAlarmRing, alarmLimit);
+    newTimer->show();
 }
 
 void TimerListDialog::positionNewTimer(TimerDialog *t)
@@ -86,6 +107,7 @@ void TimerListDialog::resetTimers()
     // Reset boil time to defined boil time
     boilTime->setBoilTime(setBoilTimeBox->value() * 60);
     updateTime();
+    // Reset all children timers
     if (!timers->isEmpty())
         foreach (TimerDialog* t, *timers)
             t->reset();
@@ -95,6 +117,7 @@ void TimerListDialog::on_setBoilTimeBox_valueChanged(int t)
 {
     boilTime->setBoilTime(t * 60);
     updateTime();
+    stopped = false;
 }
 
 void TimerListDialog::decrementTimer()
@@ -158,7 +181,20 @@ void TimerListDialog::on_showButton_clicked()
 
 void TimerListDialog::timesUp()
 {
-    //Do something cool
+    //If there are no knockout timers generate a timer for this
+    if (!stopped) {
+        bool isKnockOutTimer = false;
+        QString note = "KNOCKOUT";
+        foreach (TimerDialog* t, *timers) {
+           if (t->getTime() == 0) {
+               isKnockOutTimer = true;
+               t->setNote(note); //update existing timers note
+            }
+        }
+        if (!isKnockOutTimer)
+            createTimer(note);
+        stopped = true;
+    }
 }
 
 void TimerListDialog::on_loadRecipesButton_clicked()
@@ -258,4 +294,36 @@ void TimerListDialog::reject()
     }
     else
        this->hide();
+}
+
+void TimerListDialog::on_limitRingTimeCheckBox_clicked()
+{
+    if (limitRingTimeCheckBox->isChecked()) {
+        limitAlarmRing = true;
+        limitRingTimeSpinBox->setEnabled(true);
+    }
+    if (!limitRingTimeCheckBox->isChecked()) {
+        limitAlarmRing = false;
+        limitRingTimeSpinBox->setEnabled(false);
+    }
+    setRingLimits(limitAlarmRing, alarmLimit);
+}
+
+void TimerListDialog::on_limitRingTimeSpinBox_valueChanged(int l)
+{
+    alarmLimit = l;
+    setRingLimits(limitAlarmRing, alarmLimit);
+
+}
+
+void TimerListDialog::setRingLimits(bool l, unsigned int a)
+{
+    foreach (TimerDialog* t, *timers) {
+       t->setAlarmLimits(limitAlarmRing, alarmLimit);
+    }
+}
+
+unsigned int TimerListDialog::getAlarmLimit()
+{
+    return alarmLimit;
 }

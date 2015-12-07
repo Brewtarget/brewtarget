@@ -1,3 +1,23 @@
+/*
+ * TimerListDialog.h is part of Brewtarget, and is Copyright the following
+ * authors 2009-2014
+ * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Aidan Roberts <aidanr67@gmail.com>
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "TimerDialog.h"
 #include <QChar>
 #include <QFileDialog>
@@ -17,9 +37,11 @@ TimerDialog::TimerDialog(TimerListDialog *parent, BoilTime* bt) :
     paletteNew(),
     oldColors(true),
     boilTime(bt),
-    started(false),
+    started(true), //default is started, this means timers will start as soon as main timer is started
     stopped(false),
-    time(0)
+    time(0),
+    limitAlarmRing(false),
+    alarmRingLimit(5)
 #ifndef NO_QTMULTIMEDIA
          , mediaPlayer(new QMediaPlayer(this))
          , playlist(new QMediaPlaylist(mediaPlayer))
@@ -27,12 +49,14 @@ TimerDialog::TimerDialog(TimerListDialog *parent, BoilTime* bt) :
   , timerPosition(0)
 {
     setupUi(this);
+
     //Default all timers to Boil time
     time = boilTime->getTime();
     updateTime();
     setDefualtAlarmSound();
     stopButton->setEnabled(false);
-    // Taken from old times
+
+    // Taken from old brewtarget timers
 #ifndef NO_QTMULTIMEDIA
    playlist->setPlaybackMode(QMediaPlaylist::Loop);
    mediaPlayer->setVolume(100);
@@ -43,8 +67,10 @@ TimerDialog::TimerDialog(TimerListDialog *parent, BoilTime* bt) :
     // Swap colors.
     paletteNew.setColor(QPalette::Active, QPalette::WindowText, paletteOld.color(QPalette::Active, QPalette::Window));
     paletteNew.setColor(QPalette::Active, QPalette::Window, paletteOld.color(QPalette::Active, QPalette::WindowText));
+
     //Connections
     connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTime()));
+    connect(boilTime, SIGNAL(timesUp()), this, SLOT(decrementTime()));
 }
 
 TimerDialog::~TimerDialog()
@@ -54,19 +80,22 @@ TimerDialog::~TimerDialog()
 
 void TimerDialog::setTime(int t)
 {
-    //Special case if timer auto created
+    //Special case if timer auto created from recipe
     if (setTimeBox->value() != t/60)
         setTimeBox->setValue(t/60);
 
     time = boilTime->getTime() - t;
-    stopped = false;
-    //timer starts automatically when time is set
-    started = true;
+    //Reset timer to run again with new time
+    if (stopped)
+        stopped = false;
+    if (!started)
+        started = true;
     updateTime();
 }
 
 void TimerDialog::setNote(QString n)
 {
+    //Append if notes exist, new note if not
     if (noteEdit->text() == "Notes..." || noteEdit->text() == "")
         noteEdit->setText(n);
     else
@@ -80,6 +109,10 @@ void TimerDialog::setBoil(BoilTime *bt)
 
 int TimerDialog::getTime()
 {
+    /*invert to return addition time not time to addition.
+    getTime() and getNote() are used for timer checks when
+    generating timers from recipes
+    */
     return boilTime->getTime() - time;
 }
 
@@ -127,9 +160,7 @@ QString TimerDialog::timeToString(int t)
 void TimerDialog::decrementTime()
 {
     if (started) {
-        if (stopped)
-            flash();
-        else if (time == 0)
+        if (time == 0)
             timesUp();
         else {
             time = time - 1;
@@ -140,7 +171,7 @@ void TimerDialog::decrementTime()
 
 void TimerDialog::on_setSoundButton_clicked()
 {
-    //Taken directly form old timers
+    //Taken form old brewtarget timers
     QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
     QString soundFile = QFileDialog::getOpenFileName( qobject_cast<QWidget*>(this), tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)") );
 
@@ -163,6 +194,7 @@ void TimerDialog::setDefualtAlarmSound()
 
 void TimerDialog::setSound(QString s)
 {
+    //Taken from old brewtarget timers
 #ifndef NO_QTMULTIMEDIA
    if( !playlist->clear() )
       Brewtarget::logW(playlist->errorString());
@@ -177,7 +209,6 @@ void TimerDialog::on_setTimeBox_valueChanged(int t)
     if (t*60 > boilTime->getTime()) {
         QMessageBox::warning(this, "Error", "Addition time cannot be longer than remaining boil time");
         time = 0;
-        started = false;
     } else {
         setTime(t*60);
     }
@@ -185,6 +216,8 @@ void TimerDialog::on_setTimeBox_valueChanged(int t)
 
 void TimerDialog::timesUp()
 {
+    if (limitAlarmRing && alarmRingLimit == 0)
+        stopAlarm();
     if (!stopped) {
         if (this->isHidden())
             this->show();
@@ -195,6 +228,8 @@ void TimerDialog::timesUp()
     }
     else
         flash();
+    if (limitAlarmRing)
+        alarmRingLimit--;
 }
 
 void TimerDialog::flash()
@@ -211,6 +246,7 @@ void TimerDialog::flash()
 
 void TimerDialog::reset()
 {
+    //Resetting doesn't stop timers -- should it?
     time = boilTime->getTime() - (setTimeBox->value() * 60);
     if (stopped)
         stopped = false;
@@ -218,6 +254,7 @@ void TimerDialog::reset()
     mediaPlayer->stop();
 #endif
     updateTime();
+    alarmRingLimit = mainTimer->getAlarmLimit();
 }
 
 void TimerDialog::startAlarm()
@@ -230,11 +267,16 @@ void TimerDialog::startAlarm()
 
 void TimerDialog::on_stopButton_clicked()
 {
-    //stop button
+    stopAlarm();
+}
+
+void TimerDialog::stopAlarm()
+{
 #ifndef NO_QTMULTIMEDIA
     mediaPlayer->stop();
 #endif
     stopButton->setEnabled(false);
+    //Stop timer until new time set
     started = false;
 }
 
@@ -245,6 +287,7 @@ void TimerDialog::on_cancelButton_clicked()
 
 void TimerDialog::cancel()
 {
+    //Deletes this object and removes it from timers list
     mainTimer->removeTimer(this);
 }
 
@@ -258,4 +301,10 @@ void TimerDialog::showTimer()
 {
     this->restoreGeometry(timerPosition);
     this->show();
+}
+
+void TimerDialog::setAlarmLimits(bool l, unsigned int a)
+{
+    limitAlarmRing = l;
+    alarmRingLimit = a;
 }

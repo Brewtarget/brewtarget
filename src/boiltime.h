@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QTimer>
 /*!
- * \brief Used by boil timers
+ * \brief Used by TimerListDialog and TimerDialog
  * \author Aidan Roberts
  *
  * Makes it possible to trigger multiple timers using one QTimer
@@ -34,7 +34,6 @@ class BoilTime : public QObject
     Q_OBJECT
 public:
     BoilTime(QObject * parent);
-    BoilTime(QObject * parent, bool start, int boilTime);
     void setBoilTime(int boilTime);
     int getTime();
     bool isStarted();
