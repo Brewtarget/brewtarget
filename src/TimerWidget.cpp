@@ -220,10 +220,7 @@ void TimerWidget::timesUp()
     if (limitAlarmRing && alarmRingLimit == 0)
         stopAlarm();
     if (!stopped) {
-        if (this->isHidden())
-            this->show();
-        this->setFocus();
-        this->raise();
+        mainTimer->showTimers();
         mainTimer->setTimerVisible(this);
         startAlarm();
         stopped = true;

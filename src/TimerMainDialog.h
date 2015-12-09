@@ -52,7 +52,7 @@ public:
       unsigned int getAlarmLimit();
       void hideTimers();
       void setTimerVisible(TimerWidget* t);
-
+      void showTimers();
 private slots:
       void on_addTimerButton_clicked();
       void on_startButton_clicked();
@@ -85,7 +85,6 @@ private:
       unsigned int alarmLimit;
       QRect timerWindowGeometry;
 
-      void showTimers();
       void removeAllTimers();
       void resetTimers();
       void updateTime();
