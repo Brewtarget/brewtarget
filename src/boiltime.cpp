@@ -1,5 +1,5 @@
 /*
- * TimerListDialog.cpp is part of Brewtarget, and is Copyright the following
+ * boiltime.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
  * - Aidan Roberts <aidanr67@gmail.com>
  *

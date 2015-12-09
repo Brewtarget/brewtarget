@@ -160,7 +160,9 @@ QString TimerDialog::timeToString(int t)
 void TimerDialog::decrementTime()
 {
     if (started) {
-        if (time == 0)
+        if (time == 60 && this->isHidden()) //show timers a minute before they go off
+            this->show();
+        else if (time == 0)
             timesUp();
         else {
             time = time - 1;
@@ -250,7 +252,7 @@ void TimerDialog::reset()
     time = boilTime->getTime() - (setTimeBox->value() * 60);
     if (stopped)
         stopped = false;
-#ifdef NO_QTMULTIMEDIA
+#ifndef NO_QTMULTIMEDIA
     mediaPlayer->stop();
 #endif
     updateTime();

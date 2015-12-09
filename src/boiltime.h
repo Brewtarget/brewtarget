@@ -1,5 +1,5 @@
 /*
- * TimerListDialog.cpp is part of Brewtarget, and is Copyright the following
+ * boiltime.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
  * - Aidan Roberts <aidanr67@gmail.com>
  *
@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QTimer>
 /*!
- * \brief Used by TimerListDialog and TimerDialog
+ * \brief Used by TimerMainDialog and TimerWidget
  * \author Aidan Roberts
  *
  * Makes it possible to trigger multiple timers using one QTimer

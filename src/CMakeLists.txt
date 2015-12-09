@@ -143,8 +143,8 @@ SET( brewtarget_SRCS
     ${SRCDIR}/StyleEditor.cpp
     ${SRCDIR}/StyleRangeWidget.cpp
     ${SRCDIR}/StyleSortFilterProxyModel.cpp
-    ${SRCDIR}/TimerDialog.cpp
     ${SRCDIR}/TimerListDialog.cpp
+    ${SRCDIR}/TimerMainDialog.cpp
     ${SRCDIR}/TimerWidget.cpp
     ${SRCDIR}/TimeUnitSystem.cpp
     ${SRCDIR}/unit.cpp
@@ -189,8 +189,7 @@ SET( brewtarget_UIS
     ${UIDIR}/refractoDialog.ui
     ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
-    ${UIDIR}/timerListDialog.ui
-    ${UIDIR}/timerDialog.ui
+    ${UIDIR}/timerMainDialog.ui
     ${UIDIR}/timerWidget.ui
     ${UIDIR}/waterEditor.ui
     ${UIDIR}/yeastEditor.ui
@@ -271,7 +270,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/StyleRangeWidget.h
     ${SRCDIR}/StyleSortFilterProxyModel.h
     ${SRCDIR}/TimerListDialog.h
-    ${SRCDIR}/TimerDialog.h
+    ${SRCDIR}/TimerMainDialog.h
     ${SRCDIR}/TimerWidget.h
     ${SRCDIR}/unit.h
     ${SRCDIR}/WaterTableModel.h

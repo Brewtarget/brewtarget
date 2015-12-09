@@ -1,9 +1,8 @@
 /*
  * TimerWidget.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
- * - Eric Tamme <etamme@gmail.com>
- * - Julein <j2bweb@gmail.com>
+ * authors 2009-2014
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Aidan Roberts <aidanr67@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,78 +18,79 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _TIMERWIDGET_H
-#define _TIMERWIDGET_H
+#ifndef TIMERWIDGET_H
+#define TIMERWIDGET_H
 
-#include <QWidget>
-#include <QString>
-#include <QPalette>
+class TimerWidget;
+
+#include <QDialog>
+#include "boiltime.h"
+#include "ui_timerWidget.h"
+#include "TimerMainDialog.h"
 #ifndef NO_QTMULTIMEDIA
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QPalette>
 #endif
-#include <QPushButton>
-#include <QLineEdit>
-#include <QLCDNumber>
-#include <QEvent>
-#include "ui_timerWidget.h"
-#include "boiltime.h"
 
 /*!
  * \class TimerWidget
  * \author Aidan Roberts
  *
- * \brief Multiple timers, generated from recipe
+ * \brief Individual boil addition timers
  */
 
-class TimerWidget : public QWidget, public Ui::timerWidget
+class TimerWidget : public QDialog, public Ui::timerWidget
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   TimerWidget(QWidget* parent=0);
-   ~TimerWidget();
-   void setBoil(BoilTime* bt);
-
-public slots:
-   void flash();
-   void getSound();
-
-signals:
-   void timerDone();
-
-protected:
-
-   virtual void changeEvent(QEvent* event)
-   {
-      if(event->type() == QEvent::LanguageChange)
-         retranslateUi();
-      QWidget::changeEvent(event);
-   }
+    TimerWidget(TimerMainDialog *parent, BoilTime* bt = 0);
+    ~TimerWidget();
+    void setTime(int t);
+    void setNote(QString n);
+    void setBoil(BoilTime* bt);
+    void reset();
+    int getTime();
+    QString getNote();
+    void cancel();
+    void stopAlarm();
+    void setAlarmLimits(bool l, unsigned int a);
 
 private slots:
-   void on_setAlarmSoundButton_clicked();
-   void on_setTimeBox_valueChanged(int arg1);
+    void on_setSoundButton_clicked();
+    void on_setTimeBox_valueChanged(int t);
+    void decrementTime();
+    void on_stopButton_clicked();
+    void on_cancelButton_clicked();
 
 private:
-   BoilTime* boilTime;
-   void setTimer();
-   void endTimer();
-   QString getTimerValue();
-   void stopFlashing();
-   void retranslateUi();
-   void updateTime();
-   QString timeToString(int t);
-   void decrementTime();
-
-   unsigned int time;
-   QPalette paletteOld, paletteNew;
+    Ui::timerWidget *ui;
+    TimerMainDialog* mainTimer;
+    QPalette paletteOld, paletteNew;
+    bool oldColors;
+    BoilTime* boilTime;
+    bool started; //Used to automatically start timers if main timer is running
+    bool stopped; //Used to flash LCDNumber if time has elapsed
+    unsigned int time; /*This will be stored as time to addition, not addition time
+                         ie. 50min for a 10min addition in a 60min boil - not 10min
+                        */
+    bool limitAlarmRing;
+    unsigned int alarmRingLimit;
 #ifndef NO_QTMULTIMEDIA
    QMediaPlayer* mediaPlayer;
    QMediaPlaylist* playlist;
 #endif
-   bool oldColors;
+
+    void updateTime();
+    void timesUp();
+    QString timeToString(int t);
+    void flash();
+    void startAlarm();
+    void setSound(QString s);
+    void setDefualtAlarmSound();
+    void reject();
+
 };
 
-#endif   /* _TIMERWIDGET_H */
-
+#endif // TimerWidget_H

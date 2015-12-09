@@ -22,17 +22,11 @@
 
 class TimerListDialog;
 
-#include "ui_timerListDialog.h"
 #include <QDialog>
 #include <QWidget>
-#include "TimerDialog.h"
-#include "boiltime.h"
-#include "recipe.h"
-#include "hop.h"
-#include <QString>
+#include "TimerWidget.h"
 #include <QDebug>
 #include "MainWindow.h"
-#include <QStack>
 
 /*!
  * \class TimerListDialog
@@ -40,52 +34,20 @@ class TimerListDialog;
  *
  * \brief Main boil timer, create timers individually or generate from recipe
  */
-class TimerListDialog : public QDialog, public Ui::timerListDialog
+class TimerListDialog : public QDialog
 {
    Q_OBJECT
    
 public:
-      TimerListDialog(MainWindow* parent);
+      TimerListDialog(QWidget* parent, QList<TimerWidget*> * timers);
       ~TimerListDialog();
-      void removeTimer(TimerDialog* t);
-      unsigned int getAlarmLimit();
-      
-private slots:
-      void on_addTimerButton_clicked();
-      void on_startButton_clicked();
-      void on_stopButton_clicked();
-      void on_setBoilTimeBox_valueChanged(int t);
-      void on_hideButton_clicked();
-      void on_showButton_clicked();     
-      void on_resetButton_clicked();
-      void on_loadRecipesButton_clicked();
-      void on_cancelButton_clicked();
-      void on_limitRingTimeCheckBox_clicked();
-      void on_limitRingTimeSpinBox_valueChanged(int l);
-
-      void decrementTimer();
-      void timesUp();
-      void createTimer();
-      void createTimer(QString n);
-      //Overload QDialog::reject()
-      void reject();
+      void setTimerVisible(TimerWidget* t);
 
 private:
-      MainWindow* mainWindow; //To get currently selected recipe
-      QList<TimerDialog*> * timers;
-      BoilTime* boilTime;
-      QStack<int>* timerPositions;
-      bool stopped;
-      bool limitAlarmRing;
-      unsigned int alarmLimit;
+      QScrollArea* scrollArea;
+      QVBoxLayout* layout;
 
-      void removeAllTimers();
-      void resetTimers();
-      void setInitialTimerPosition();
-      void updateTime();
-      QString timeToString(int t);
-      void positionNewTimer(TimerDialog* t);
-      void setRingLimits(bool l, unsigned int a);
+      void setTimers(QList<TimerWidget*>* timers);
 };
 
 #endif

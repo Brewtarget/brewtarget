@@ -91,7 +91,7 @@
 #include "OptionDialog.h"
 #include "OgAdjuster.h"
 #include "ConverterTool.h"
-#include "TimerListDialog.h"
+#include "TimerMainDialog.h"
 #include "RecipeFormatter.h"
 #include "PrimingDialog.h"
 #include "StrikeWaterDialog.h"
@@ -177,7 +177,7 @@ MainWindow::MainWindow(QWidget* parent)
    recipeFormatter = new RecipeFormatter(this);
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
-   timerListDialog = new TimerListDialog(this);
+   timerMainDialog = new TimerMainDialog(this);
    primingDialog = new PrimingDialog(this);
    strikeWaterDialog = new StrikeWaterDialog(this);
    refractoDialog = new RefractoDialog(this);
@@ -390,7 +390,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), this, SLOT(showPitchDialog()));
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );
-   connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
+   connect( actionTimers, SIGNAL(triggered()), timerMainDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
    connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
 

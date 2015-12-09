@@ -39,6 +39,8 @@
 #define EXITPNG ":/images/exit.svg"
 #define SAVEPNG ":/images/filesave.svg"
 #define CLOCKPNG ":/images/clock.svg"
+#define SOUND ":/images/sound.png"
+#define STOP ":/images/alarm_stop.png"
 
 //===Things that will get configured by cmake===
 

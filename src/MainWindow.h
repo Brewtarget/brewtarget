@@ -64,7 +64,7 @@ class ScaleRecipeTool;
 class RecipeFormatter;
 class OgAdjuster;
 class ConverterTool;
-class TimerListDialog;
+class TimerMainDialog;
 class PrimingDialog;
 class StrikeWaterDialog;
 class RecipeExtrasWidget;
@@ -300,7 +300,7 @@ private:
    RecipeFormatter* recipeFormatter;
    OgAdjuster* ogAdjuster;
    ConverterTool* converterTool;
-   TimerListDialog* timerListDialog;
+   TimerMainDialog* timerMainDialog;
    PrimingDialog* primingDialog;
    StrikeWaterDialog* strikeWaterDialog;
    RefractoDialog* refractoDialog;

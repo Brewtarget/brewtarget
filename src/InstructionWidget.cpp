@@ -23,7 +23,7 @@
 #include "TimerWidget.h"
 
 InstructionWidget::InstructionWidget(QWidget* parent) :
-   QWidget(parent), insObs(0), timer(new TimerWidget(this))
+   QWidget(parent), insObs(0)
 {
    setupUi(this);
    timer->setVisible(false);
