@@ -83,7 +83,6 @@ private:
       bool stopped;
       bool limitAlarmRing;
       unsigned int alarmLimit;
-      QRect timerWindowGeometry;
 
       void removeAllTimers();
       void resetTimers();

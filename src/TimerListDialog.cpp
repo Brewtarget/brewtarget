@@ -23,10 +23,6 @@
 TimerListDialog::TimerListDialog(QWidget* parent, QList<TimerWidget*>* timers) : QDialog(parent)
 {
     this->setWindowTitle("Addition Timers");
-    this->setGeometry(0, 0, 700, 280);
-    this->setMaximumWidth(700);
-    this->setMinimumWidth(700);
-    this->setMaximumHeight(700);
 
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     this->setLayout(mainLayout);
@@ -35,11 +31,12 @@ TimerListDialog::TimerListDialog(QWidget* parent, QList<TimerWidget*>* timers) :
     mainLayout->addWidget(scrollArea);
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    QWidget* scrollWidget = new QWidget(scrollArea);
-    layout = new QVBoxLayout(scrollWidget);
-    setTimers(timers);
+    scrollArea->setWidgetResizable(true);
+    scrollWidget = new QWidget(scrollArea);
+    layout = new QVBoxLayout(scrollWidget);  
     scrollWidget->setLayout(layout);
     scrollArea->setWidget(scrollWidget);
+    setTimers(timers);
 }
 
 TimerListDialog::~TimerListDialog()
@@ -49,13 +46,19 @@ TimerListDialog::~TimerListDialog()
 
 void TimerListDialog::setTimers(QList<TimerWidget *>* timers)
 {
-    if (!timers->isEmpty())
+    if (!timers->isEmpty()) {
         foreach (TimerWidget* t, *timers) {
             layout->addWidget(t);
+        }
     }
 }
 
 void TimerListDialog::setTimerVisible(TimerWidget *t)
 {
     scrollArea->verticalScrollBar()->setValue(t->y());
+}
+
+void TimerListDialog::hideTimers()
+{
+    this->hide();
 }

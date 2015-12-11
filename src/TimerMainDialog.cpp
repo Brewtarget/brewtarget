@@ -20,6 +20,7 @@
 #include "TimerMainDialog.h"
 #include <QMessageBox>
 #include <QToolTip>
+#include "unit.h"
 
 TimerMainDialog::TimerMainDialog(MainWindow* parent) : QDialog(parent),
     mainWindow(parent),
@@ -89,12 +90,13 @@ void TimerMainDialog::showTimers()
     }
     else {
         sortTimers();
-        timerWindowGeometry = timerWindow->geometry();
+        int x = timerWindow->x();
+        int y = timerWindow->y();
         timerWindow->setAttribute(Qt::WA_DeleteOnClose);
         timerWindow->close();
 
         timerWindow = new TimerListDialog(this, timers);
-        timerWindow->setGeometry(timerWindowGeometry);
+        timerWindow->move(x, y);
         timerWindow->show();
     }
 }
@@ -239,7 +241,7 @@ void TimerMainDialog::on_loadRecipesButton_clicked()
     hops = recipe->hops();
     foreach (Hop* h, hops) {
         if (h->use() == 2) { //2 = Boil addition -- Hop::Use enum
-            note = QString::number(int(h->amount_kg()*1000)) +
+            note = QString::number(h->amount_kg()*1000) +
                     "g of " + h->name(); // TODO - show amount in brewtarget selected units
             int newTime = h->time_min() * 60;
             foreach (TimerWidget* td, *timers) {
@@ -270,7 +272,7 @@ void TimerMainDialog::on_loadRecipesButton_clicked()
 
         QMessageBox::warning(this, "Duplicate Timers Ignored", timerText, QMessageBox::Ok);
     }
-    if (timersGenerated == 0)
+    if (timersGenerated == 0 && !duplicatesFound)
         QMessageBox::warning(this, "No Addition Timers", "There are no boil addition, no timers generated.", QMessageBox::Ok);
 }
 
@@ -349,17 +351,19 @@ void TimerMainDialog::setTimerVisible(TimerWidget *t)
 
 void TimerMainDialog::sortTimers()
 {
-    QList<TimerWidget*>* sortedTimers = new QList<TimerWidget*>;
-    TimerWidget* biggest = timers->front();
-    while (!timers->isEmpty()) {
-        foreach (TimerWidget* t, *timers) {
-              if (t->getTime() > biggest->getTime())
-                  biggest = t;
+    if (!timers->isEmpty()) {
+        QList<TimerWidget*>* sortedTimers = new QList<TimerWidget*>;
+        TimerWidget* biggest = timers->front();
+        while (!timers->isEmpty()) {
+            foreach (TimerWidget* t, *timers) {
+                  if (t->getTime() > biggest->getTime())
+                      biggest = t;
+            }
+            sortedTimers->append(biggest);
+            timers->removeOne(biggest);
+            if (!timers->isEmpty())
+                biggest = timers->front();
         }
-        sortedTimers->append(biggest);
-        timers->removeOne(biggest);
-        if (!timers->isEmpty())
-            biggest = timers->front();
+        timers = sortedTimers;
     }
-    timers = sortedTimers;
 }

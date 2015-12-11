@@ -43,8 +43,12 @@ public:
       ~TimerListDialog();
       void setTimerVisible(TimerWidget* t);
 
+private slots:
+      void hideTimers();
+
 private:
       QScrollArea* scrollArea;
+      QWidget* scrollWidget;
       QVBoxLayout* layout;
 
       void setTimers(QList<TimerWidget*>* timers);
