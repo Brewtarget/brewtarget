@@ -61,6 +61,7 @@ TimerWidget* TimerMainDialog::createNewTimer()
 void TimerMainDialog::createTimer()
 {
     TimerWidget* newTimer = createNewTimer();
+    sortTimers();
     showTimers();
     timerWindow->setTimerVisible(newTimer);
 }
@@ -69,6 +70,7 @@ void TimerMainDialog::createTimer(QString n)
 {
     TimerWidget* newTimer = createNewTimer();
     newTimer->setNote(n);
+    sortTimers();
     showTimers();
     timerWindow->setTimerVisible(newTimer);
 }
@@ -78,6 +80,7 @@ void TimerMainDialog::createTimer(QString n, int t)
     TimerWidget* newTimer = createNewTimer();
     newTimer->setNote(n);
     newTimer->setTime(t);
+    sortTimers();
     showTimers();
     timerWindow->setTimerVisible(newTimer);
 }
@@ -89,7 +92,6 @@ void TimerMainDialog::showTimers()
             timerWindow->hide();
     }
     else {
-        sortTimers();
         int x = timerWindow->x();
         int y = timerWindow->y();
         timerWindow->setAttribute(Qt::WA_DeleteOnClose);
@@ -132,12 +134,16 @@ void TimerMainDialog::resetTimers()
 void TimerMainDialog::on_setBoilTimeBox_valueChanged(int t)
 {
     boilTime->setBoilTime(t * 60);
-    updateTime();
+    resetTimers();
     stopped = false;
 }
 
 void TimerMainDialog::decrementTimer()
 {
+    /*Main timer uses boilTimer which decrements then
+     * triigers this function, so there is nothing to
+     * do here but show the change.
+     */
     updateTime();
 }
 
@@ -192,9 +198,12 @@ void TimerMainDialog::hideTimers()
 
 void TimerMainDialog::on_showButton_clicked()
 {
-    if (!timers->isEmpty())
+    if (!timers->isEmpty()) {
         if (timerWindow->isHidden())
             timerWindow->show();
+    }
+    else
+            QMessageBox::warning(this, "No Timers", "There are currently no timers to show.");
 }
 
 void TimerMainDialog::timesUp()
@@ -241,8 +250,8 @@ void TimerMainDialog::on_loadRecipesButton_clicked()
     hops = recipe->hops();
     foreach (Hop* h, hops) {
         if (h->use() == 2) { //2 = Boil addition -- Hop::Use enum
-            note = QString::number(h->amount_kg()*1000) +
-                    "g of " + h->name(); // TODO - show amount in brewtarget selected units
+            note = Brewtarget::displayAmount(h->amount_kg(), "TimerNote", "hop_amount", Units::kilograms) +
+                    " of " + h->name();
             int newTime = h->time_min() * 60;
             foreach (TimerWidget* td, *timers) {
                 if (td->getTime() == newTime){
@@ -263,6 +272,7 @@ void TimerMainDialog::on_loadRecipesButton_clicked()
         timerFound = false;
         }
     }
+
     if (duplicatesFound) {
         QString timerText;
         if (duplicates == 1)

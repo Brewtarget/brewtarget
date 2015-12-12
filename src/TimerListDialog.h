@@ -32,7 +32,7 @@ class TimerListDialog;
  * \class TimerListDialog
  * \author Aidan Roberts
  *
- * \brief Main boil timer, create timers individually or generate from recipe
+ * \brief Dialog to hold addition timers
  */
 class TimerListDialog : public QDialog
 {

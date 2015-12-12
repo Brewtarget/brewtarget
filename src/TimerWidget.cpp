@@ -178,7 +178,7 @@ void TimerWidget::on_setSoundButton_clicked()
 
     if( soundFile.isNull() )
     {
-       Brewtarget::logW("Null sound file.");
+       setDefualtAlarmSound();
        return;
     }
     setSound(soundFile);
@@ -245,8 +245,10 @@ void TimerWidget::flash()
 
 void TimerWidget::reset()
 {
-    //Resetting doesn't stop timers -- should it?
-    time = boilTime->getTime() - (setTimeBox->value() * 60);
+    if (setTimeBox->value() * 60 > boilTime->getTime())
+        time = 0;
+    else
+        time = boilTime->getTime() - (setTimeBox->value() * 60);
     if (stopped)
         stopped = false;
 #ifndef NO_QTMULTIMEDIA

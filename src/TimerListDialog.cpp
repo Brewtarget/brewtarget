@@ -55,6 +55,7 @@ void TimerListDialog::setTimers(QList<TimerWidget *>* timers)
 
 void TimerListDialog::setTimerVisible(TimerWidget *t)
 {
+    //Focus scrollArea on timer t
     scrollArea->verticalScrollBar()->setValue(t->y());
 }
 
