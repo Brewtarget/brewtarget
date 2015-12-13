@@ -2352,6 +2352,11 @@ void MainWindow::fixBrewNote()
    }
 }
 
+void MainWindow::updateStatus(const QString status) {
+   if( statusBar() )
+      statusBar()->showMessage(status, 3000);
+}
+
 void MainWindow::closeBrewNote(BrewNote* b)
 {
    Recipe* parent = Database::instance().getParentRecipe(b);
