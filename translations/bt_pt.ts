@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="pt">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Henrique Brasil &lt;brasilhenrique@gmail.com&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2015-11-22 16:12+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-10-05 00:47+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 17865)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2015-12-13 20:04+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -305,6 +314,18 @@
         <translation>Desconhecido</translation>
     </message>
     <message>
+        <source>YYYY-mm-dd</source>
+        <translation>AAAA-MM-DD</translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation>DD-MM-AAAA</translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation>MM-DD-AAAA</translation>
+    </message>
+    <message>
         <source>Seconds</source>
         <translation>Segundos</translation>
     </message>
@@ -323,18 +344,6 @@
     <message>
         <source>Barrels</source>
         <translation>Barris</translation>
-    </message>
-    <message>
-        <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1205,11 +1214,11 @@
     </message>
     <message>
         <source>calories/33cL</source>
-        <translation type="unfinished"></translation>
+        <translation>calorias/330ml</translation>
     </message>
     <message>
         <source>calories/12oz</source>
-        <translation type="unfinished"></translation>
+        <translation>calorias/12oz (340,194g)</translation>
     </message>
 </context>
 <context>
@@ -2936,7 +2945,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
+        <translation>AAAA-MM-DD</translation>
     </message>
 </context>
 <context>
@@ -4446,19 +4455,19 @@ O volume final do fermentador primário é %1.</translation>
         <translation>Data</translation>
     </message>
     <message>
-        <source>YYYY-dd-mm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Noonan&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>MM-DD-AAAA</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
+        <translation>dd-mm-YYYY</translation>
+    </message>
+    <message>
+        <source>YYYY-dd-mm</source>
+        <translation>AAAA-DD-MM</translation>
+    </message>
+    <message>
+        <source>Noonan&apos;s approximation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4554,15 +4563,15 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume do mosto</translation>
     </message>
     <message>
         <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravidade inicial do mosto</translation>
     </message>
     <message>
         <source>Aeration method</source>
-        <translation type="unfinished"></translation>
+        <translation>Método de aeração</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
@@ -4582,7 +4591,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
+        <translation>Quanto de fermento (levedura) precisará</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
@@ -4795,7 +4804,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravidade original medida</translation>
     </message>
     <message>
         <source>Current measured plato</source>
@@ -4826,7 +4835,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>New Efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation>Nova Eficiência</translation>
     </message>
 </context>
 <context>

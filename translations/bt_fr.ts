@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="fr">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Theophane &lt;theophane.m@gmail.com&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2015-10-13 09:56+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-10-05 00:47+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 17865)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2015-12-13 20:04+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -305,6 +314,18 @@
         <translation>Inconnu</translation>
     </message>
     <message>
+        <source>YYYY-mm-dd</source>
+        <translation>AAAA-mm-jj</translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation>jj-mm-AAAA</translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation>mm-jj-AAAA</translation>
+    </message>
+    <message>
         <source>Seconds</source>
         <translation>Secondes</translation>
     </message>
@@ -323,18 +344,6 @@
     <message>
         <source>Barrels</source>
         <translation>Barils</translation>
-    </message>
-    <message>
-        <source>YYYY-mm-dd</source>
-        <translation>AAAA-mm-jj</translation>
-    </message>
-    <message>
-        <source>dd-mm-YYYY</source>
-        <translation>jj-mm-AAAA</translation>
-    </message>
-    <message>
-        <source>mm-dd-YYYY</source>
-        <translation>mm-jj-AAAA</translation>
     </message>
 </context>
 <context>
@@ -606,7 +615,7 @@
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation>Le pourcentagel d&apos;utilisation saisi est de 0. Cela peut causer des problèmes</translation>
+        <translation>Le pourcentage d&apos;utilisation saisi est de 0. Cela peut causer des problèmes</translation>
     </message>
     <message>
         <source>Equipment Editor</source>
@@ -694,7 +703,7 @@
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation>Si coché, le volume pré-ébullition sera calculé en fonciton de la taille de brassin souhaitée, du taux d&apos;évaporation, des pertes, etc...</translation>
+        <translation>Si coché, le volume pré-ébullition sera calculé en fonction de la taille de brassin souhaitée, du taux d&apos;évaporation, des pertes, etc...</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
@@ -722,7 +731,7 @@
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation>Volume de moût perdu dans la cuve d&apos;ébullition lors du tranfert dans le fermenteur</translation>
+        <translation>Volume de moût perdu dans la cuve d&apos;ébullition lors du transfert dans le fermenteur</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
@@ -1026,7 +1035,7 @@
     </message>
     <message>
         <source>Balanced</source>
-        <translation>Equilibré</translation>
+        <translation>Équilibré</translation>
     </message>
     <message>
         <source>Slightly Hoppy</source>
@@ -1077,7 +1086,7 @@
     </message>
     <message>
         <source>Select Database File</source>
-        <translation>Sélectrionner un fichier de base de données</translation>
+        <translation>Sélectionner un fichier de base de données</translation>
     </message>
     <message>
         <source>Brewtarget Database (*.sqlite)</source>
@@ -1137,7 +1146,7 @@
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Veuillez nommer votre profil d&apos;empâtage avant de sauvergarder.</translation>
+        <translation>Veuillez nommer votre profil d&apos;empâtage avant de sauvegarder.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -1181,7 +1190,7 @@
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
-        <translation>Le fichier d&apos;importation beerXML est invalide. Il a tout de même pu être importé, mais il est conseillé de verifier l&apos;exactitude des données chargées.</translation>
+        <translation>Le fichier d&apos;importation beerXML est invalide. Il a tout de même pu être importé, mais il est conseillé de vérifier l&apos;exactitude des données chargées.</translation>
     </message>
     <message>
         <source>Folder name</source>
@@ -1482,7 +1491,7 @@
     </message>
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation>Il ne semble pas y avoir de fichier de données dans ce répertoire, nous allons y copier les données éxistantes.</translation>
+        <translation>Il ne semble pas y avoir de fichier de données dans ce répertoire, nous allons y copier les données existantes.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -1553,7 +1562,7 @@
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation>Forumule d&apos;IBU de type non reconnu.%1</translation>
+        <translation>Formule d&apos;IBU de type non reconnu.%1</translation>
     </message>
     <message>
         <source>Batch Size: %1
@@ -2435,7 +2444,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation>Attenuation</translation>
+        <translation>Atténuation</translation>
     </message>
     <message>
         <source>Id</source>
@@ -2890,7 +2899,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
-        <translation>Pourcentage d&apos;éfficacité dans la cuve d&apos;ébullition</translation>
+        <translation>Pourcentage d&apos;efficacité dans la cuve d&apos;ébullition</translation>
     </message>
     <message>
         <source>Eff into BK</source>
@@ -3092,7 +3101,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Bitterness (IBU*gal/lb)</source>
-        <translation>Amertertume (IBU*gal/lb)</translation>
+        <translation>Amertume (IBU*gal/lb)</translation>
     </message>
     <message>
         <source>Bitterness of pre-hopped extracts</source>
@@ -3497,7 +3506,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Modifier les propriétes d&apos;empâtage</translation>
+        <translation>Modifier les paramètres d&apos;empâtage</translation>
     </message>
     <message>
         <source>Edit mash</source>
@@ -3824,7 +3833,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Infusion/Decoction Amount</source>
-        <translation>Volume d&apos;infustion/de décoction</translation>
+        <translation>Volume d&apos;infusion/de décoction</translation>
     </message>
     <message>
         <source>min</source>
@@ -3903,7 +3912,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation>Utiliser les données de l&apos;équipement defini dans la recette pour les paramètres suivants.</translation>
+        <translation>Utiliser les données de l&apos;équipement défini dans la recette pour les paramètres suivants.</translation>
     </message>
     <message>
         <source>From Equipment</source>
@@ -4337,7 +4346,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation>Desnité</translation>
+        <translation>Densité</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
@@ -4448,10 +4457,6 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
         <translation>Date</translation>
     </message>
     <message>
-        <source>Noonan&apos;s approximation</source>
-        <translation>Approximation de Noonan</translation>
-    </message>
-    <message>
         <source>mm-dd-YYYY</source>
         <translation>mm-jj-AAAA</translation>
     </message>
@@ -4462,6 +4467,10 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <message>
         <source>YYYY-dd-mm</source>
         <translation>AAAA-jj-mm</translation>
+    </message>
+    <message>
+        <source>Noonan&apos;s approximation</source>
+        <translation>Approximation de Noonan</translation>
     </message>
 </context>
 <context>
@@ -4540,7 +4549,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation>Millards de cellules requises</translation>
+        <translation>Milliards de cellules requises</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
@@ -4871,7 +4880,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation>Température d&apos;empâtage rélle</translation>
+        <translation>Température d&apos;empâtage réelle</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>

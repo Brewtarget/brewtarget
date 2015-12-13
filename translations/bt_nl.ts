@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="nl">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Tom Lemmens &lt;Unknown&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2015-10-29 08:51+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-10-05 00:47+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 17865)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2015-12-13 20:04+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -218,11 +227,11 @@
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished"></translation>
+        <translation>EBC</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished"></translation>
+        <translation>SRM</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -230,7 +239,7 @@
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Specifieke zwaartekracht</translation>
     </message>
     <message>
         <source>SI</source>
@@ -238,27 +247,27 @@
     </message>
     <message>
         <source>US Customary</source>
-        <translation type="unfinished"></translation>
+        <translation>Amerikaans maatsysteem</translation>
     </message>
     <message>
         <source>Milligrams</source>
-        <translation type="unfinished"></translation>
+        <translation>Milligram</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation type="unfinished"></translation>
+        <translation>Gram</translation>
     </message>
     <message>
         <source>Kilograms</source>
-        <translation type="unfinished"></translation>
+        <translation>Kilogram</translation>
     </message>
     <message>
         <source>Ounces</source>
-        <translation type="unfinished"></translation>
+        <translation>Ounce</translation>
     </message>
     <message>
         <source>Pounds</source>
-        <translation type="unfinished"></translation>
+        <translation>Pound</translation>
     </message>
     <message>
         <source>Celsius</source>
@@ -270,27 +279,27 @@
     </message>
     <message>
         <source>British Imperial</source>
-        <translation type="unfinished"></translation>
+        <translation>Brits maatsysteem</translation>
     </message>
     <message>
         <source>MilliLiters</source>
-        <translation type="unfinished"></translation>
+        <translation>Milliliter</translation>
     </message>
     <message>
         <source>Liters</source>
-        <translation type="unfinished"></translation>
+        <translation>Liter</translation>
     </message>
     <message>
         <source>Teaspoons</source>
-        <translation type="unfinished"></translation>
+        <translation>Theelepels</translation>
     </message>
     <message>
         <source>Tablespoons</source>
-        <translation type="unfinished"></translation>
+        <translation>Eetlepels</translation>
     </message>
     <message>
         <source>Cups</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopjes</translation>
     </message>
     <message>
         <source>Quarts</source>
@@ -298,11 +307,11 @@
     </message>
     <message>
         <source>Gallons</source>
-        <translation type="unfinished"></translation>
+        <translation>Gallons</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekend</translation>
     </message>
     <message>
         <source>YYYY-mm-dd</source>
@@ -318,23 +327,23 @@
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Seconden</translation>
     </message>
     <message>
         <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Minuten</translation>
     </message>
     <message>
         <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Uur</translation>
     </message>
     <message>
         <source>Days</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagen</translation>
     </message>
     <message>
         <source>Barrels</source>
-        <translation type="unfinished"></translation>
+        <translation>Barrels</translation>
     </message>
 </context>
 <context>
@@ -356,14 +365,14 @@
     <name>BtLabel</name>
     <message>
         <source>Color (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleur (%1)</translation>
     </message>
 </context>
 <context>
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>Laden…</translation>
     </message>
 </context>
 <context>
@@ -374,7 +383,7 @@
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Brouwdatum</translation>
     </message>
     <message>
         <source>Style</source>
@@ -437,15 +446,15 @@
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished"></translation>
+        <translation>Brouw het!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished"></translation>
+        <translation>Brouw opnieuw</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum veranderen</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
@@ -453,7 +462,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -481,27 +490,27 @@
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Map</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiëren</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporteren</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importeren</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Verwijderen</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2 Verwijderen?</translation>
     </message>
     <message>
         <source>BrewNote</source>
@@ -509,7 +518,7 @@
     </message>
     <message>
         <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles annuleren</translation>
     </message>
     <message>
         <source>Copy %1</source>

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Jonas &lt;jonas@falkens.se&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2015-10-09 07:11+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-10-05 00:47+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 17865)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2015-12-13 20:04+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -306,31 +315,31 @@
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
+        <translation>YYYY-mm-dd</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>dd-mm-YYYY</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>dd-mm-YYYY</translation>
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekunder</translation>
     </message>
     <message>
         <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>Minuter</translation>
     </message>
     <message>
         <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <translation>Timmar</translation>
     </message>
     <message>
         <source>Days</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagar</translation>
     </message>
     <message>
         <source>Barrels</source>
@@ -356,14 +365,14 @@
     <name>BtLabel</name>
     <message>
         <source>Color (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Färg (%1)</translation>
     </message>
 </context>
 <context>
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>Laddar</translation>
     </message>
 </context>
 <context>
@@ -509,7 +518,7 @@
     </message>
     <message>
         <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ångra alla</translation>
     </message>
     <message>
         <source>Copy %1</source>
@@ -532,7 +541,7 @@
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Inmatning</translation>
     </message>
     <message>
         <source>Output Units</source>
@@ -540,11 +549,11 @@
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Output</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertera</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
