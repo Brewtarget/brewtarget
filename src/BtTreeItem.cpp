@@ -198,7 +198,7 @@ QVariant BtTreeItem::dataRecipe( int column )
          break;
         case RECIPEBREWDATECOL:
          if ( recipe )
-            return QVariant(recipe->date());
+            return Brewtarget::displayDateUserFormated(recipe->date());
          break;
         case RECIPESTYLECOL:
          if ( recipe && recipe->style() )
