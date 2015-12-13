@@ -7,10 +7,6 @@
         <source>About Brewtarget</source>
         <translation>a Brewtargetről</translation>
     </message>
-    <message>
-        <source>Donate</source>
-        <translation>Adományozás</translation>
-    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -57,10 +53,6 @@
     <message>
         <source>ABV</source>
         <translation>alkoholfok (v/v%)</translation>
-    </message>
-    <message>
-        <source>Estimated calories(per 12 oz)</source>
-        <translation>kalóriatartalom (354ml)</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -117,6 +109,14 @@
     <message>
         <source>Heat water</source>
         <translation>Vízforralás</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Becsült kalóriatartalom (354ml)</translation>
     </message>
 </context>
 <context>
@@ -208,6 +208,10 @@
     <message>
         <source>Step %1: %2</source>
         <translation>Lépés %1: %2</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -335,6 +339,10 @@
     <message>
         <source>Barrels</source>
         <translation>Hordók</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -742,6 +750,29 @@
     </message>
 </context>
 <context>
+    <name>Fermentable</name>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Cefrézve</translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Áztatott</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Nem cefrézett</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Később hozzáadott</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Normál</translation>
+    </message>
+</context>
+<context>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
@@ -802,32 +833,32 @@
         <source>Adjunct</source>
         <translation>Adalék</translation>
     </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Cefrézve</translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Áztatott</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Nem cefrézett</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Normál</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Később hozzáadott</translation>
+    </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <translation>Bad model index. row = %1</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Cefrézve</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation>Áztatott</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation>Nem cefrézett</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Később hozzáadott</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation>Normál</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -846,10 +877,6 @@
         <translation>Mennyiség</translation>
     </message>
     <message>
-        <source>Late Addition</source>
-        <translation>Később adagolt</translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation>Süllyedés %</translation>
     </message>
@@ -860,6 +887,14 @@
     <message>
         <source>Color</source>
         <translation>Szín</translation>
+    </message>
+    <message>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addition</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1203,14 +1238,6 @@
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>A mappa nevének tartalmaznia kell egy számot vagy írásjelet</translation>
     </message>
-    <message>
-        <source>calories/33cL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>calories/12oz</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MashDesigner</name>
@@ -1346,6 +1373,61 @@
     </message>
 </context>
 <context>
+    <name>Misc</name>
+    <message>
+        <source>Spice</source>
+        <translation type="unfinished">Fűszer</translation>
+    </message>
+    <message>
+        <source>Fining</source>
+        <translation type="unfinished">Derítőszer</translation>
+    </message>
+    <message>
+        <source>Water Agent</source>
+        <translation type="unfinished">Vízkezelő anyag</translation>
+    </message>
+    <message>
+        <source>Herb</source>
+        <translation type="unfinished">Gyógynövény</translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished">Ízanyag</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished">Egyéb anyag</translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished">Forralás</translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished">Cefre</translation>
+    </message>
+    <message>
+        <source>Primary</source>
+        <translation type="unfinished">Elsődleges</translation>
+    </message>
+    <message>
+        <source>Secondary</source>
+        <translation type="unfinished">Másodlagos</translation>
+    </message>
+    <message>
+        <source>Bottling</source>
+        <translation type="unfinished">Palackozás</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Súly</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Mennyiség</translation>
+    </message>
+</context>
+<context>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
@@ -1430,6 +1512,14 @@
         <source>Bottling</source>
         <translation>Palackozás</translation>
     </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Súly</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Mennyiség</translation>
+    </message>
 </context>
 <context>
     <name>MiscTableModel</name>
@@ -1451,14 +1541,6 @@
     </message>
     <message>
         <source>Amount</source>
-        <translation>Mennyiség</translation>
-    </message>
-    <message>
-        <source>Weight</source>
-        <translation>Súly</translation>
-    </message>
-    <message>
-        <source>Volume</source>
         <translation>Mennyiség</translation>
     </message>
     <message>
@@ -1556,172 +1638,6 @@
         <translation>Beazonosíthatatlan keserűség formula. %1</translation>
     </message>
     <message>
-        <source>Batch Size: %1
-</source>
-        <translation>Kész sörlé mennyisége: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Size: %1
-</source>
-        <translation>Mennyiség (forraláskor): %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Time: %1
-</source>
-        <translation>Forralási idő: %1
-</translation>
-    </message>
-    <message>
-        <source>OG: %1
-</source>
-        <translation>Eredeti fajsúly (OG): %1
-</translation>
-    </message>
-    <message>
-        <source>FG: %1
-</source>
-        <translation>Végleges fajsúly (FG): %1
-</translation>
-    </message>
-    <message>
-        <source>Bitterness: %1 IBUs (%2)
-</source>
-        <translation>Keserűség: %1 IBU (%2)
-</translation>
-    </message>
-    <message>
-        <source>Color: %1 SRM (%2)
-</source>
-        <translation>Szín: %1 SRM (%2)
-</translation>
-    </message>
-    <message>
-        <source>Fermentables
-</source>
-        <translation>Erjeszthető anyag
-</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Név</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Típus</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Mennyiség</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Cefrézve</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Később hozzáadott</translation>
-    </message>
-    <message>
-        <source>Yield</source>
-        <translation>Süllyedés</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Szín</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation>Igen</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Nem</translation>
-    </message>
-    <message>
-        <source>Total grain: %1
-</source>
-        <translation>Összes gabona mennyiség: %1
-</translation>
-    </message>
-    <message>
-        <source>Hops
-</source>
-        <translation>KOmló
-</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation>Alfasav</translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation>Felhasználás</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Idõ</translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation>Keserűség (IBU)</translation>
-    </message>
-    <message>
-        <source>Misc
-</source>
-        <translation>Egyéb
-</translation>
-    </message>
-    <message>
-        <source>Yeast
-</source>
-        <translation>Élesztő
-</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation>Forma</translation>
-    </message>
-    <message>
-        <source>Stage</source>
-        <translation>Szakasz</translation>
-    </message>
-    <message>
-        <source>Secondary</source>
-        <translation>Másodlagos</translation>
-    </message>
-    <message>
-        <source>Primary</source>
-        <translation>Elsődleges</translation>
-    </message>
-    <message>
-        <source>Mash
-</source>
-        <translation>Cefre
-</translation>
-    </message>
-    <message>
-        <source>Temp</source>
-        <translation>Hőmérséklet</translation>
-    </message>
-    <message>
-        <source>Target</source>
-        <translation>Cél</translation>
-    </message>
-    <message>
-        <source>Notes
-</source>
-        <translation>Megjegyzés
-</translation>
-    </message>
-    <message>
-        <source>Instructions
-</source>
-        <translation>Útmutatás
-</translation>
-    </message>
-    <message>
         <source>Directory Problem</source>
         <translation>Mappa hiba</translation>
     </message>
@@ -1810,14 +1726,6 @@
         <translation>Adalék</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Forralás</translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation>Cefre</translation>
-    </message>
-    <message>
         <source>Infusion</source>
         <translation>Áztatás</translation>
     </message>
@@ -1828,34 +1736,6 @@
     <message>
         <source>Decoction</source>
         <translation>Dekokció</translation>
-    </message>
-    <message>
-        <source>Bottling</source>
-        <translation>Palackozás</translation>
-    </message>
-    <message>
-        <source>Spice</source>
-        <translation>Fűszer</translation>
-    </message>
-    <message>
-        <source>Fining</source>
-        <translation>Derítőszer</translation>
-    </message>
-    <message>
-        <source>Water Agent</source>
-        <translation>Vízkezelő anyag</translation>
-    </message>
-    <message>
-        <source>Herb</source>
-        <translation>Gyógynövény</translation>
-    </message>
-    <message>
-        <source>Flavor</source>
-        <translation>Ízanyag</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation>Egyéb anyag</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -1932,18 +1812,6 @@
     <message>
         <source>Yeast</source>
         <translation>Élesztőtörzs</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%
-</source>
-        <translation>Kihozatali arány: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%
-</source>
-        <translation>alkoholfok (v/v): %1%
-</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2238,10 +2106,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation>Szín</translation>
     </message>
     <message>
-        <source>Calories (per 12 oz.)</source>
-        <translation>Kalóriatartalom (345ml)</translation>
-    </message>
-    <message>
         <source>Fermentables</source>
         <translation>Erjesztető anyagok</translation>
     </message>
@@ -2445,6 +2309,30 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <source>Flocculation</source>
         <translation>ülepedés</translation>
     </message>
+    <message>
+        <source>Miscs</source>
+        <translation type="unfinished">Egyebek</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Élesztők</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Becsült kalóriatartalom (354ml)</translation>
+    </message>
+    <message>
+        <source>Bitterness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation type="unfinished">Cél</translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
@@ -2458,14 +2346,40 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
 </context>
 <context>
+    <name>ScaleRecipeEquipmentPage</name>
+    <message>
+        <source>Select Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Efficiency (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScaleRecipeIntroPage</name>
+    <message>
+        <source>Scale Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
         <translation>Arányított recept</translation>
-    </message>
-    <message>
-        <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Nem arányítható hőmérsékleti adatok. Indítsd újra a cefrézés varázslót!</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
@@ -3113,10 +3027,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation>Készleten lévő mennyiség</translation>
     </message>
     <message>
-        <source>fermentableEditor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Szín</translation>
     </message>
@@ -3758,10 +3668,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation>Recept törlése</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Adományozás</translation>
-    </message>
-    <message>
         <source>&amp;Mashs</source>
         <translation>&amp;Cefrék</translation>
     </message>
@@ -3774,15 +3680,15 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
         <translation>1.0</translation>
     </message>
     <message>
-        <source>application/x-brewtarget-ingredient</source>
-        <translation>application/x-brewtarget-ingredient</translation>
-    </message>
-    <message>
         <source>Strike Water Calculator</source>
         <translation>Felöntő víz kiszámítás</translation>
     </message>
     <message>
         <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to &amp;BBCode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3917,10 +3823,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mashEditor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4793,33 +4695,6 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displaySg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displayPlato</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>scaleRecipeTool</name>
-    <message>
-        <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New batch size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Efficiency</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

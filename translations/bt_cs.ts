@@ -7,10 +7,6 @@
         <source>About Brewtarget</source>
         <translation>O aplikaci Brewtarget</translation>
     </message>
-    <message>
-        <source>Donate</source>
-        <translation>Zaslat dar</translation>
-    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -57,10 +53,6 @@
     <message>
         <source>ABV</source>
         <translation>Obsah alkoholu</translation>
-    </message>
-    <message>
-        <source>Estimated calories(per 12 oz)</source>
-        <translation>Kalorická hodnota (na 340 g)</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -117,6 +109,14 @@
     <message>
         <source>Heat water</source>
         <translation>Ohřejte vodu</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Kalorická hodnota (na 340 g)</translation>
     </message>
 </context>
 <context>
@@ -208,6 +208,10 @@
     <message>
         <source>Step %1: %2</source>
         <translation>Krok %1: %2</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -334,6 +338,10 @@
     </message>
     <message>
         <source>Barrels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -742,6 +750,29 @@
     </message>
 </context>
 <context>
+    <name>Fermentable</name>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Máčet</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Nermutovat</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Pozdní</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Obvyklé</translation>
+    </message>
+</context>
+<context>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
@@ -802,32 +833,32 @@
         <source>Adjunct</source>
         <translation>Surogát</translation>
     </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Máčet</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Nermutovat</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Obvyklé</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Pozdní</translation>
+    </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <translation>Chybný index modelu. řádek = %1</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Rmutovat</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation>Máčet</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation>Nermutovat</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Pozdní</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation>Obvyklé</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -846,10 +877,6 @@
         <translation>Množství</translation>
     </message>
     <message>
-        <source>Late Addition</source>
-        <translation>Pozdní přidání</translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation>Vytěžnost %</translation>
     </message>
@@ -860,6 +887,14 @@
     <message>
         <source>Color</source>
         <translation>Barva</translation>
+    </message>
+    <message>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addition</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1203,14 +1238,6 @@
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>Název adresáře musí obsahovat alespoň jeden nelomítkový znak</translation>
     </message>
-    <message>
-        <source>calories/33cL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>calories/12oz</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MashDesigner</name>
@@ -1346,6 +1373,61 @@
     </message>
 </context>
 <context>
+    <name>Misc</name>
+    <message>
+        <source>Spice</source>
+        <translation type="unfinished">Koření</translation>
+    </message>
+    <message>
+        <source>Fining</source>
+        <translation type="unfinished">Čeření</translation>
+    </message>
+    <message>
+        <source>Water Agent</source>
+        <translation type="unfinished">Úprava vody</translation>
+    </message>
+    <message>
+        <source>Herb</source>
+        <translation type="unfinished">Bylina</translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished">Příchuť</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished">Jiný</translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished">Chmelovar</translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary</source>
+        <translation type="unfinished">Hlavní kvašení</translation>
+    </message>
+    <message>
+        <source>Secondary</source>
+        <translation type="unfinished">Dokvašování</translation>
+    </message>
+    <message>
+        <source>Bottling</source>
+        <translation type="unfinished">Stáčení</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Hmotnost</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Objem</translation>
+    </message>
+</context>
+<context>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
@@ -1430,6 +1512,14 @@
         <source>Bottling</source>
         <translation>Stáčení</translation>
     </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Hmotnost</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Objem</translation>
+    </message>
 </context>
 <context>
     <name>MiscTableModel</name>
@@ -1452,14 +1542,6 @@
     <message>
         <source>Amount</source>
         <translation>Množství</translation>
-    </message>
-    <message>
-        <source>Weight</source>
-        <translation>Hmotnost</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Objem</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -1556,172 +1638,6 @@
         <translation>Nerozpoznaný druh vzorce IBU: %1</translation>
     </message>
     <message>
-        <source>Batch Size: %1
-</source>
-        <translation>Objem várky: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Size: %1
-</source>
-        <translation>Původní objem: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Time: %1
-</source>
-        <translation>Čas vaření: %1
-</translation>
-    </message>
-    <message>
-        <source>OG: %1
-</source>
-        <translation>Počáteční hustota: %1
-</translation>
-    </message>
-    <message>
-        <source>FG: %1
-</source>
-        <translation>Konečná hustota: %1
-</translation>
-    </message>
-    <message>
-        <source>Bitterness: %1 IBUs (%2)
-</source>
-        <translation>Hořkost: %1 jednotek IBU (%2)
-</translation>
-    </message>
-    <message>
-        <source>Color: %1 SRM (%2)
-</source>
-        <translation>Barva: %1 SRM (%2)
-</translation>
-    </message>
-    <message>
-        <source>Fermentables
-</source>
-        <translation>Suroviny
-</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Název</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Druh</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Množství</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Šrotovaný</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Pozdní</translation>
-    </message>
-    <message>
-        <source>Yield</source>
-        <translation>Výtěžnost</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Barva</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation>Ano</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Ne</translation>
-    </message>
-    <message>
-        <source>Total grain: %1
-</source>
-        <translation>Celkem sladu: %1
-</translation>
-    </message>
-    <message>
-        <source>Hops
-</source>
-        <translation>Chmele
-</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation>Alfa</translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation>Použití</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Čas</translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation>IBU</translation>
-    </message>
-    <message>
-        <source>Misc
-</source>
-        <translation>Přípravky
-</translation>
-    </message>
-    <message>
-        <source>Yeast
-</source>
-        <translation>Kvasnice
-</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation>Forma</translation>
-    </message>
-    <message>
-        <source>Stage</source>
-        <translation>Etapa</translation>
-    </message>
-    <message>
-        <source>Secondary</source>
-        <translation>Dokvašování</translation>
-    </message>
-    <message>
-        <source>Primary</source>
-        <translation>Hlavní kvašení</translation>
-    </message>
-    <message>
-        <source>Mash
-</source>
-        <translation>Rmutování
-</translation>
-    </message>
-    <message>
-        <source>Temp</source>
-        <translation>Teplota</translation>
-    </message>
-    <message>
-        <source>Target</source>
-        <translation>Cílová teplota</translation>
-    </message>
-    <message>
-        <source>Notes
-</source>
-        <translation>Poznámky
-</translation>
-    </message>
-    <message>
-        <source>Instructions
-</source>
-        <translation>Instrukce
-</translation>
-    </message>
-    <message>
         <source>Directory Problem</source>
         <translation>Problém s adresářem</translation>
     </message>
@@ -1810,14 +1726,6 @@
         <translation>Surogát</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Chmelovar</translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation>Rmutování</translation>
-    </message>
-    <message>
         <source>Infusion</source>
         <translation>Infuze</translation>
     </message>
@@ -1828,34 +1736,6 @@
     <message>
         <source>Decoction</source>
         <translation>Dekokce</translation>
-    </message>
-    <message>
-        <source>Bottling</source>
-        <translation>Stáčení</translation>
-    </message>
-    <message>
-        <source>Spice</source>
-        <translation>Koření</translation>
-    </message>
-    <message>
-        <source>Fining</source>
-        <translation>Čeření</translation>
-    </message>
-    <message>
-        <source>Water Agent</source>
-        <translation>Úprava vody</translation>
-    </message>
-    <message>
-        <source>Herb</source>
-        <translation>Bylina</translation>
-    </message>
-    <message>
-        <source>Flavor</source>
-        <translation>Příchuť</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation>Jiný</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -1932,18 +1812,6 @@
     <message>
         <source>Yeast</source>
         <translation>Kvasnice</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%
-</source>
-        <translation>Výtěžnost: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%
-</source>
-        <translation>Obsah alkoholu: %1 %
-</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2238,10 +2106,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>Barva</translation>
     </message>
     <message>
-        <source>Calories (per 12 oz.)</source>
-        <translation>Kalorická hodnota (na 340 g)</translation>
-    </message>
-    <message>
         <source>Fermentables</source>
         <translation>Suroviny</translation>
     </message>
@@ -2445,6 +2309,30 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <source>Flocculation</source>
         <translation>Flokulace</translation>
     </message>
+    <message>
+        <source>Miscs</source>
+        <translation type="unfinished">Přípravky</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Kvasnice</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Kalorická hodnota (na 340 g)</translation>
+    </message>
+    <message>
+        <source>Bitterness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation type="unfinished">Cílová teplota</translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
@@ -2458,14 +2346,40 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
 </context>
 <context>
+    <name>ScaleRecipeEquipmentPage</name>
+    <message>
+        <source>Select Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Efficiency (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScaleRecipeIntroPage</name>
+    <message>
+        <source>Scale Recipe</source>
+        <translation type="unfinished">Změnit objem</translation>
+    </message>
+    <message>
+        <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
         <translation>Změna objemu</translation>
-    </message>
-    <message>
-        <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Rmutování bylo vymazáno jelikož se rmutovací teploty špatně škálují. Prosím, spusťte znovu průvodce rmutováním.</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
@@ -3115,10 +3029,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>Množství na skladě</translation>
     </message>
     <message>
-        <source>fermentableEditor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Barva</translation>
     </message>
@@ -3760,10 +3670,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>Odebrat recept</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Zaslat dar</translation>
-    </message>
-    <message>
         <source>&amp;Mashs</source>
         <translation>&amp;Rmutovací schémata</translation>
     </message>
@@ -3776,15 +3682,15 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>1.0</translation>
     </message>
     <message>
-        <source>application/x-brewtarget-ingredient</source>
-        <translation>application/x-brewtarget-ingredient</translation>
-    </message>
-    <message>
         <source>Strike Water Calculator</source>
         <translation>Výpočet nálevu</translation>
     </message>
     <message>
         <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to &amp;BBCode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3920,10 +3826,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Specifické teplo kádě (kalorií/(g*K))</translation>
-    </message>
-    <message>
-        <source>mashEditor</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4801,33 +4703,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displaySg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displayPlato</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>scaleRecipeTool</name>
-    <message>
-        <source>Scale Recipe</source>
-        <translation>Změnit objem</translation>
-    </message>
-    <message>
-        <source>New batch size</source>
-        <translation>Nový objem várky</translation>
-    </message>
-    <message>
-        <source>New Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Efficiency</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

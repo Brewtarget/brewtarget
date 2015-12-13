@@ -7,10 +7,6 @@
         <source>About Brewtarget</source>
         <translation>Σχετικά με το Brewtarget</translation>
     </message>
-    <message>
-        <source>Donate</source>
-        <translation>Δωρεά</translation>
-    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -57,10 +53,6 @@
     <message>
         <source>ABV</source>
         <translation>ABV</translation>
-    </message>
-    <message>
-        <source>Estimated calories(per 12 oz)</source>
-        <translation>Θερμίδες κατά προσέγγιση</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -117,6 +109,14 @@
     <message>
         <source>Heat water</source>
         <translation>Ζεστάνετε το νερό</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Θερμίδες κατά προσέγγιση</translation>
     </message>
 </context>
 <context>
@@ -208,6 +208,10 @@
     <message>
         <source>Step %1: %2</source>
         <translation>Βήμα %1: %2</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -334,6 +338,10 @@
     </message>
     <message>
         <source>Barrels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -742,6 +750,29 @@
     </message>
 </context>
 <context>
+    <name>Fermentable</name>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Steeped</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Not mashed</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Στο τέλος</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Κανονικό</translation>
+    </message>
+</context>
+<context>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
@@ -802,32 +833,32 @@
         <source>Adjunct</source>
         <translation>Πρόσθετα</translation>
     </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Steeped</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Not mashed</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Κανονικό</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Στο τέλος</translation>
+    </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <translation>Bad model index. row = %1</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Mashed</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation>Steeped</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation>Not mashed</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Στο τέλος</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation>Κανονικό</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -846,10 +877,6 @@
         <translation>Ποσότητα</translation>
     </message>
     <message>
-        <source>Late Addition</source>
-        <translation>προσθήκη στο τέλος</translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation>Απόδοση %</translation>
     </message>
@@ -860,6 +887,14 @@
     <message>
         <source>Color</source>
         <translation>Χρώμα</translation>
+    </message>
+    <message>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addition</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1203,14 +1238,6 @@
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>Ονόματα φακέλων θα πρέπει να περιέχουν τουλάχιστον ένα μή -/ χαρακτήρα</translation>
     </message>
-    <message>
-        <source>calories/33cL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>calories/12oz</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MashDesigner</name>
@@ -1346,6 +1373,61 @@
     </message>
 </context>
 <context>
+    <name>Misc</name>
+    <message>
+        <source>Spice</source>
+        <translation type="unfinished">Μπαχαρικά</translation>
+    </message>
+    <message>
+        <source>Fining</source>
+        <translation type="unfinished">Βελτιωτικά</translation>
+    </message>
+    <message>
+        <source>Water Agent</source>
+        <translation type="unfinished">Ρυθμιστής νερού</translation>
+    </message>
+    <message>
+        <source>Herb</source>
+        <translation type="unfinished">Βότανα</translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished">Άρωματικές Ύλες</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished">&apos;Αλλο</translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished">Στο Βράσιμο</translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary</source>
+        <translation type="unfinished">Κατά την πρώτη ζύμωση</translation>
+    </message>
+    <message>
+        <source>Secondary</source>
+        <translation type="unfinished">κατά την δεύτερη ζύμωση</translation>
+    </message>
+    <message>
+        <source>Bottling</source>
+        <translation type="unfinished">Κατά την εμφιάλωση</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Βάρος</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Όγκος</translation>
+    </message>
+</context>
+<context>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
@@ -1430,6 +1512,14 @@
         <source>Bottling</source>
         <translation>Κατά την εμφιάλωση</translation>
     </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Βάρος</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Όγκος</translation>
+    </message>
 </context>
 <context>
     <name>MiscTableModel</name>
@@ -1452,14 +1542,6 @@
     <message>
         <source>Amount</source>
         <translation>Ποσότητα</translation>
-    </message>
-    <message>
-        <source>Weight</source>
-        <translation>Βάρος</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Όγκος</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -1556,172 +1638,6 @@
         <translation>Μη αναγνωρίσiμος τύπος φόρμουλας IBU. %1</translation>
     </message>
     <message>
-        <source>Batch Size: %1
-</source>
-        <translation>Όγκος παρτίδας: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Size: %1
-</source>
-        <translation>Όγκος βρασμού: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Time: %1
-</source>
-        <translation>Χρόνος βρασμού: %1
-</translation>
-    </message>
-    <message>
-        <source>OG: %1
-</source>
-        <translation>OG: %1
-</translation>
-    </message>
-    <message>
-        <source>FG: %1
-</source>
-        <translation>FG: %1
-</translation>
-    </message>
-    <message>
-        <source>Bitterness: %1 IBUs (%2)
-</source>
-        <translation>Πικράδα: %1 IBUs (%2)
-</translation>
-    </message>
-    <message>
-        <source>Color: %1 SRM (%2)
-</source>
-        <translation>Χρώμα: %1 SRM (%2)
-</translation>
-    </message>
-    <message>
-        <source>Fermentables
-</source>
-        <translation>Ζυμώσιμα
-</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Όνομασία</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Είδος</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Ποσότητα</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Mashed</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Στο τέλος</translation>
-    </message>
-    <message>
-        <source>Yield</source>
-        <translation>Απόδοση</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Χρώμα</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation>Ναι</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Όχι</translation>
-    </message>
-    <message>
-        <source>Total grain: %1
-</source>
-        <translation>Ολική ποσότητα σιτηρών: %1
-</translation>
-    </message>
-    <message>
-        <source>Hops
-</source>
-        <translation>Λυκίσκος
-</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation>Alpha</translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation>Χρήση</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Χρόνος</translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation>IBU</translation>
-    </message>
-    <message>
-        <source>Misc
-</source>
-        <translation>Διαφ.
-</translation>
-    </message>
-    <message>
-        <source>Yeast
-</source>
-        <translation>Μαγιά
-</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation>Μορφή</translation>
-    </message>
-    <message>
-        <source>Stage</source>
-        <translation>Στάδιο</translation>
-    </message>
-    <message>
-        <source>Secondary</source>
-        <translation>κατά την δεύτερη ζύμωση</translation>
-    </message>
-    <message>
-        <source>Primary</source>
-        <translation>Κατά την πρώτη ζύμωση</translation>
-    </message>
-    <message>
-        <source>Mash
-</source>
-        <translation>Mash
-</translation>
-    </message>
-    <message>
-        <source>Temp</source>
-        <translation>Θερμοκρασία</translation>
-    </message>
-    <message>
-        <source>Target</source>
-        <translation>Στόχος</translation>
-    </message>
-    <message>
-        <source>Notes
-</source>
-        <translation>Σημειώσεις
-</translation>
-    </message>
-    <message>
-        <source>Instructions
-</source>
-        <translation>Οδηγίες
-</translation>
-    </message>
-    <message>
         <source>Directory Problem</source>
         <translation>Πρόβλημα με το φάκελο</translation>
     </message>
@@ -1810,14 +1726,6 @@
         <translation>Πρόσθετα</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Στο Βράσιμο</translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation>Mash</translation>
-    </message>
-    <message>
         <source>Infusion</source>
         <translation>Έγχυση</translation>
     </message>
@@ -1828,34 +1736,6 @@
     <message>
         <source>Decoction</source>
         <translation>Decoction</translation>
-    </message>
-    <message>
-        <source>Bottling</source>
-        <translation>Κατά την εμφιάλωση</translation>
-    </message>
-    <message>
-        <source>Spice</source>
-        <translation>Μπαχαρικά</translation>
-    </message>
-    <message>
-        <source>Fining</source>
-        <translation>Βελτιωτικά</translation>
-    </message>
-    <message>
-        <source>Water Agent</source>
-        <translation>Ρυθμιστής νερού</translation>
-    </message>
-    <message>
-        <source>Herb</source>
-        <translation>Βότανα</translation>
-    </message>
-    <message>
-        <source>Flavor</source>
-        <translation>Άρωματικές Ύλες</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation>&apos;Αλλο</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -1932,18 +1812,6 @@
     <message>
         <source>Yeast</source>
         <translation>Μαγιά</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%
-</source>
-        <translation>Απόδοση: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%
-</source>
-        <translation>ABV: %1%
-</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2238,10 +2106,6 @@ The final volume in the primary is %1.</source>
         <translation>Χρώμα</translation>
     </message>
     <message>
-        <source>Calories (per 12 oz.)</source>
-        <translation>Θερμίδες ( ανά 12 ουγκιές)</translation>
-    </message>
-    <message>
         <source>Fermentables</source>
         <translation>Ζυμώσιμα</translation>
     </message>
@@ -2445,6 +2309,30 @@ The final volume in the primary is %1.</source>
         <source>Flocculation</source>
         <translation>κροκίδωση</translation>
     </message>
+    <message>
+        <source>Miscs</source>
+        <translation type="unfinished">Διάφορα</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Μαγιές</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Θερμίδες κατά προσέγγιση</translation>
+    </message>
+    <message>
+        <source>Bitterness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation type="unfinished">Στόχος</translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
@@ -2458,14 +2346,40 @@ The final volume in the primary is %1.</source>
     </message>
 </context>
 <context>
+    <name>ScaleRecipeEquipmentPage</name>
+    <message>
+        <source>Select Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Efficiency (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScaleRecipeIntroPage</name>
+    <message>
+        <source>Scale Recipe</source>
+        <translation type="unfinished">Μετατροπή Συνταγής</translation>
+    </message>
+    <message>
+        <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
         <translation>Αναπροσαρμογή συνταγής</translation>
-    </message>
-    <message>
-        <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Η διαδικασία σακχαροποίησης μηδενίστηκε εξ&apos; αιτίας του γεγονότος ότι οι θερμοκρασίες κατά την σακχαροποίηση δεν αλλάζουν εύκολα.  Χρησιμοποιήστε τον οδηγό σακχαροποίησης για νέα διαδικασία.</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
@@ -3113,10 +3027,6 @@ The final volume in the primary is %1.</source>
         <translation>Ποσότητα στο ευρετήριο</translation>
     </message>
     <message>
-        <source>fermentableEditor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Χρώμα</translation>
     </message>
@@ -3758,10 +3668,6 @@ The final volume in the primary is %1.</source>
         <translation>Διαγραφή συνταγής</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Δωρεά</translation>
-    </message>
-    <message>
         <source>&amp;Mashs</source>
         <translation>&amp;Mashs</translation>
     </message>
@@ -3774,15 +3680,15 @@ The final volume in the primary is %1.</source>
         <translation>1.0</translation>
     </message>
     <message>
-        <source>application/x-brewtarget-ingredient</source>
-        <translation>application/x-brewtarget-ingredient</translation>
-    </message>
-    <message>
         <source>Strike Water Calculator</source>
         <translation>Υπολογισμός Θερμοκρασίας νερού</translation>
     </message>
     <message>
         <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to &amp;BBCode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3918,10 +3824,6 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Συγκεκριμένη θερμοκρασία σκεύους (cal/(g*K))</translation>
-    </message>
-    <message>
-        <source>mashEditor</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4799,33 +4701,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displaySg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displayPlato</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>scaleRecipeTool</name>
-    <message>
-        <source>Scale Recipe</source>
-        <translation>Μετατροπή Συνταγής</translation>
-    </message>
-    <message>
-        <source>New batch size</source>
-        <translation>Νέο μέγεθος παρτίδας</translation>
-    </message>
-    <message>
-        <source>New Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Efficiency</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
