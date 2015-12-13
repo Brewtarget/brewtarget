@@ -45,6 +45,7 @@ extern void qt_set_sequence_auto_mnemonic(bool b);
 #include <QMetaProperty>
 #include <QList>
 #include "UnitSystem.h"
+#include "Log.h"
 
 class BeerXMLElement;
 class MainWindow;
@@ -74,13 +75,6 @@ class Brewtarget : public QObject
 public:
    Brewtarget();
 
-   //! \brief The log level of a message.
-   enum LogType{
-          //! Just a warning.
-          LogType_WARNING,
-          //! Full-blown error.
-          LogType_ERROR
-   };
    //! \brief The formula used to get beer color.
    enum ColorType {MOSHER, DANIEL, MOREY};
    //! \brief The units to display color in.
@@ -165,8 +159,6 @@ public:
    static double toDouble(const BeerXMLElement* element, QString attribute, QString caller);
    static double toDouble(QString text, QString caller);
 
-   //! \brief Log a message.
-   static void log( LogType lt, QString message );
    //! \brief Log an error message.
    static void logE( QString message );
    //! \brief Log a warning message.
@@ -310,8 +302,8 @@ private:
    static QDomDocument* optionsDoc;
    static QTranslator* defaultTrans;
    static QTranslator* btTrans;
-   static QFile* logFile;
-   static QTextStream* logStream;
+   //! \brief OS-Agnostic RAII style Thread-safe Log file.
+   static Log log;
    static QString currentLanguage;
    static QSettings btSettings;
    static bool userDatabaseDidNotExist;
@@ -380,8 +372,6 @@ private:
 
    //! \brief Ensure our directories exist.
    static bool ensureDirectoriesExist();
-   //! \brief Ensure the datafiles exist.
-   static bool ensureDataFilesExist();
    //! \brief Load translation files.
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.

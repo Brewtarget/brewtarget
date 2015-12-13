@@ -101,6 +101,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
     ${SRCDIR}/InstructionWidget.cpp
+    ${SRCDIR}/Log.cpp
     ${SRCDIR}/MainWindow.cpp
     ${SRCDIR}/mash.cpp
     ${SRCDIR}/MashButton.cpp
@@ -234,6 +235,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/HopTableModel.h
     ${SRCDIR}/IbuGuSlider.h
     ${SRCDIR}/InstructionWidget.h
+    ${SRCDIR}/Log.h
     ${SRCDIR}/MainWindow.h
     ${SRCDIR}/MashButton.h
     ${SRCDIR}/MashDesigner.h

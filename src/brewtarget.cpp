@@ -80,8 +80,6 @@ MainWindow* Brewtarget::_mainWindow = 0;
 QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
-QTextStream* Brewtarget::logStream = 0;
-QFile* Brewtarget::logFile = 0;
 bool Brewtarget::userDatabaseDidNotExist = false;
 QFile Brewtarget::pidFile;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
@@ -90,6 +88,7 @@ QString Brewtarget::currentLanguage = "en";
 QString Brewtarget::userDataDir = getConfigDir();
 
 bool Brewtarget::checkVersion = true;
+Log Brewtarget::log(getUserDataDir());
 
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
@@ -184,33 +183,6 @@ bool Brewtarget::copyDataFiles(QString newPath)
    // Database files.
    dbFileName = getUserDataDir() + "database.sqlite";
    success &= QFile::copy(dbFileName, newPath + "database.sqlite");
-
-   return success;
-}
-
-bool Brewtarget::ensureDataFilesExist()
-{
-   QString logFileName;
-   bool success = true;
-
-   logFile = new QFile();
-
-   // Log file
-   logFile->setFileName(getUserDataDir() + "brewtarget_log.txt");
-   if( logFile->open(QFile::WriteOnly | QFile::Truncate) )
-      logStream = new QTextStream(logFile);
-   else
-   {
-      // Put the log in a temporary directory.
-      logFile->setFileName(QDir::tempPath() + "/brewtarget_log.txt");
-      if( logFile->open(QFile::WriteOnly | QFile::Truncate ) )
-      {
-         logW(QString("Log is in a temporary directory: %1").arg(logFile->fileName()) );
-         logStream = new QTextStream(logFile);
-      }
-      else
-         logW(QString("Could not create a log file."));
-   }
 
    return success;
 }
@@ -511,7 +483,7 @@ bool Brewtarget::initialize()
 
    // Make sure all the necessary directories and files we need exist before starting.
    bool success;
-   success = ensureDirectoriesExist() && ensureDataFilesExist();
+   success = ensureDirectoriesExist();
    if(!success)
       return false;
 
@@ -537,19 +509,6 @@ bool Brewtarget::initialize()
 
 void Brewtarget::cleanup()
 {
-   // Close log file.
-   if( logStream )
-   {
-      delete logStream;
-      logStream = 0;
-   }
-   if( logFile != 0 && logFile->isOpen() )
-   {
-      logFile->close();
-      delete logFile;
-      logFile = 0;
-   }
-
    // Should I do qApp->removeTranslator() first?
    delete defaultTrans;
    delete btTrans;
@@ -578,6 +537,7 @@ int Brewtarget::run()
    _mainWindow = new MainWindow();
    _mainWindow->setVisible(true);
    splashScreen.finish(_mainWindow);
+   QObject::connect( &log, SIGNAL(wroteEntry(const QString)), _mainWindow, SLOT(updateStatus(const QString)) );
 
    checkForNewVersion(_mainWindow);
    do {
@@ -1023,36 +983,14 @@ void Brewtarget::loadMap()
    thingToUnitSystem.insert(Unit::Density | Unit::displayPlato,UnitSystems::platoDensityUnitSystem() );
 }
 
-void Brewtarget::log(LogType lt, QString message)
-{
-   QString m;
-
-   if( lt == LogType_WARNING )
-      m = QString("WARNING: %1").arg(message);
-   else if( lt == LogType_ERROR )
-      m = QString("ERROR: %1").arg(message);
-   else
-      m = message;
-
-   // First, write out to stderr.
-   std::cerr << m.toUtf8().constData() << std::endl;
-   // Then display it in the GUI's status bar.
-   if( _mainWindow && _mainWindow->statusBar() )
-      _mainWindow->statusBar()->showMessage(m, 3000);
-
-   // Now, write it to the log file if there is one.
-   if( logStream != 0 )
-      *logStream << m << "\n";
-}
-
 void Brewtarget::logE( QString message )
 {
-   log( LogType_ERROR, message );
+   log.error(message);
 }
 
 void Brewtarget::logW( QString message )
 {
-   log( LogType_WARNING, message );
+   log.warn(message);
 }
 
 /* Qt5 changed how QString::toDouble() works in that it will always convert

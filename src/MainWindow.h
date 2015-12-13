@@ -141,6 +141,9 @@ public slots:
    //! \brief Update Recipe's mash
    void updateRecipeMash();
 
+   //! \brief Update the main windows statusbar.
+   void updateStatus(const QString status);
+
    //! \brief Close a brewnote tab if we must
    void closeBrewNote(BrewNote*);
    //! \brief Add given Fermentable to the Recipe.
