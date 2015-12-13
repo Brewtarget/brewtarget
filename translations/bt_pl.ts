@@ -7,10 +7,6 @@
         <source>About Brewtarget</source>
         <translation>O Brewtarget</translation>
     </message>
-    <message>
-        <source>Donate</source>
-        <translation>Dotacja</translation>
-    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -57,10 +53,6 @@
     <message>
         <source>ABV</source>
         <translation>Alkohol (ABV)</translation>
-    </message>
-    <message>
-        <source>Estimated calories(per 12 oz)</source>
-        <translation>Kalorie (w 340 gramach)</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -117,6 +109,14 @@
     <message>
         <source>Heat water</source>
         <translation>Podgrzej wodę</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Kalorie (w 340 gramach)</translation>
     </message>
 </context>
 <context>
@@ -208,6 +208,10 @@
     <message>
         <source>Step %1: %2</source>
         <translation>Krok %1: %2</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -334,6 +338,10 @@
     </message>
     <message>
         <source>Barrels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -742,6 +750,29 @@
     </message>
 </context>
 <context>
+    <name>Fermentable</name>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Zacierany</translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Ekstrahowany</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Niezacierany</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Standardowo</translation>
+    </message>
+</context>
+<context>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
@@ -802,32 +833,32 @@
         <source>Adjunct</source>
         <translation>Dodatek</translation>
     </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Zacierany</translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Ekstrahowany</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Niezacierany</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Standardowo</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <translation>Nieprawidłowy indeks modelu. wiersz = %1</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Zacierany</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation>Ekstrahowany</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation>Niezacierany</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Dodawany przed końcem gotowania (ekstrakt)</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation>Standardowo</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -846,10 +877,6 @@
         <translation>Ilość</translation>
     </message>
     <message>
-        <source>Late Addition</source>
-        <translation>Metoda dodawania</translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation>Ekstraktywność %</translation>
     </message>
@@ -860,6 +887,14 @@
     <message>
         <source>Color</source>
         <translation>Kolor</translation>
+    </message>
+    <message>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addition</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1203,14 +1238,6 @@
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>Nazwa folderu musi mieć co najmniej jeden znak w niebędący &quot;/&quot;</translation>
     </message>
-    <message>
-        <source>calories/33cL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>calories/12oz</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MashDesigner</name>
@@ -1346,6 +1373,61 @@
     </message>
 </context>
 <context>
+    <name>Misc</name>
+    <message>
+        <source>Spice</source>
+        <translation type="unfinished">Przyprawa</translation>
+    </message>
+    <message>
+        <source>Fining</source>
+        <translation type="unfinished">Substancja klarująca</translation>
+    </message>
+    <message>
+        <source>Water Agent</source>
+        <translation type="unfinished">Uzdatnianie wody</translation>
+    </message>
+    <message>
+        <source>Herb</source>
+        <translation type="unfinished">Zioło</translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished">Aromat</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished">Inny</translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secondary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bottling</source>
+        <translation type="unfinished">Butlekowanie</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Objętość</translation>
+    </message>
+</context>
+<context>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
@@ -1430,6 +1512,14 @@
         <source>Bottling</source>
         <translation>Butlekowanie</translation>
     </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Objętość</translation>
+    </message>
 </context>
 <context>
     <name>MiscTableModel</name>
@@ -1452,14 +1542,6 @@
     <message>
         <source>Amount</source>
         <translation>Ilość</translation>
-    </message>
-    <message>
-        <source>Weight</source>
-        <translation>Grubość</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Objętość</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -1556,172 +1638,6 @@
         <translation>Nierozpoznana formuła typu IBU. %1</translation>
     </message>
     <message>
-        <source>Batch Size: %1
-</source>
-        <translation>Wielkość warki: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Size: %1
-</source>
-        <translation>Objętość gotowania: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Time: %1
-</source>
-        <translation>Czas gotowania: %1
-</translation>
-    </message>
-    <message>
-        <source>OG: %1
-</source>
-        <translation>Gęstość początkowa: %1
-</translation>
-    </message>
-    <message>
-        <source>FG: %1
-</source>
-        <translation>Gęstość końcowa: %1
-</translation>
-    </message>
-    <message>
-        <source>Bitterness: %1 IBUs (%2)
-</source>
-        <translation>Goryczka: %1 IBU (%2)
-</translation>
-    </message>
-    <message>
-        <source>Color: %1 SRM (%2)
-</source>
-        <translation>Barwa: %1 SRM (%2)
-</translation>
-    </message>
-    <message>
-        <source>Fermentables
-</source>
-        <translation>Składniki fermentacji
-</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Nazwa</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Typ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Ilość</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Zacierany</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Dodawany późno</translation>
-    </message>
-    <message>
-        <source>Yield</source>
-        <translation>Ekstraktywność</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Barwa</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation>Tak</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Nie</translation>
-    </message>
-    <message>
-        <source>Total grain: %1
-</source>
-        <translation>Waga słodów: %1
-</translation>
-    </message>
-    <message>
-        <source>Hops
-</source>
-        <translation>Chmiele
-</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation>Alfa</translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation>Użycie</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Czas</translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation>IBU</translation>
-    </message>
-    <message>
-        <source>Misc
-</source>
-        <translation>Dodatki
-</translation>
-    </message>
-    <message>
-        <source>Yeast
-</source>
-        <translation>Drożdże
-</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation>Postać</translation>
-    </message>
-    <message>
-        <source>Stage</source>
-        <translation>Krok</translation>
-    </message>
-    <message>
-        <source>Secondary</source>
-        <translation>Cicha</translation>
-    </message>
-    <message>
-        <source>Primary</source>
-        <translation>Burzliwa</translation>
-    </message>
-    <message>
-        <source>Mash
-</source>
-        <translation>Zacieranie
-</translation>
-    </message>
-    <message>
-        <source>Temp</source>
-        <translation>Temperatura</translation>
-    </message>
-    <message>
-        <source>Target</source>
-        <translation>Cel</translation>
-    </message>
-    <message>
-        <source>Notes
-</source>
-        <translation>Notatki
-</translation>
-    </message>
-    <message>
-        <source>Instructions
-</source>
-        <translation>Instrukcje
-</translation>
-    </message>
-    <message>
         <source>Directory Problem</source>
         <translation>Problem z katalogiem</translation>
     </message>
@@ -1810,14 +1726,6 @@
         <translation>Dodatek</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Gotowanie</translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation>Zacieranie</translation>
-    </message>
-    <message>
         <source>Infusion</source>
         <translation>Infuzja</translation>
     </message>
@@ -1828,34 +1736,6 @@
     <message>
         <source>Decoction</source>
         <translation>Dekokcja</translation>
-    </message>
-    <message>
-        <source>Bottling</source>
-        <translation>Butlekowanie</translation>
-    </message>
-    <message>
-        <source>Spice</source>
-        <translation>Przyprawa</translation>
-    </message>
-    <message>
-        <source>Fining</source>
-        <translation>Substancja klarująca</translation>
-    </message>
-    <message>
-        <source>Water Agent</source>
-        <translation>Uzdatnianie wody</translation>
-    </message>
-    <message>
-        <source>Herb</source>
-        <translation>Zioło</translation>
-    </message>
-    <message>
-        <source>Flavor</source>
-        <translation>Aromat</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation>Inny</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -1932,18 +1812,6 @@
     <message>
         <source>Yeast</source>
         <translation>Drożdże</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%
-</source>
-        <translation>Wydajność: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%
-</source>
-        <translation>Zawartość alkoholu: %1%
-</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2238,10 +2106,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <translation>Barwa</translation>
     </message>
     <message>
-        <source>Calories (per 12 oz.)</source>
-        <translation>Kalorie (w 340 gramach)</translation>
-    </message>
-    <message>
         <source>Fermentables</source>
         <translation>Składniki fermentacji</translation>
     </message>
@@ -2445,6 +2309,30 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <source>Flocculation</source>
         <translation>Flokulacja</translation>
     </message>
+    <message>
+        <source>Miscs</source>
+        <translation type="unfinished">Dodatki</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Drożdze</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Kalorie (w 340 gramach)</translation>
+    </message>
+    <message>
+        <source>Bitterness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation type="unfinished">Cel</translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
@@ -2458,14 +2346,40 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
 </context>
 <context>
+    <name>ScaleRecipeEquipmentPage</name>
+    <message>
+        <source>Select Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Efficiency (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScaleRecipeIntroPage</name>
+    <message>
+        <source>Scale Recipe</source>
+        <translation type="unfinished">Skaluj recepturę</translation>
+    </message>
+    <message>
+        <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
         <translation>Receptura została przeskalowana</translation>
-    </message>
-    <message>
-        <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Schemat zacierania został zresetowany ze względu ma fakt trudnego skalowania temperatur zacierania. Uruchom kreator zacierania ponownie.</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
@@ -3113,10 +3027,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <translation>Ilość w magazynie</translation>
     </message>
     <message>
-        <source>fermentableEditor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Kolor</translation>
     </message>
@@ -3758,10 +3668,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <translation>Usuń recepturę</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Dotacja</translation>
-    </message>
-    <message>
         <source>&amp;Mashs</source>
         <translation>Schematy &amp;zacierania</translation>
     </message>
@@ -3774,15 +3680,15 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <translation>1.0</translation>
     </message>
     <message>
-        <source>application/x-brewtarget-ingredient</source>
-        <translation>application/x-brewtarget-ingredient</translation>
-    </message>
-    <message>
         <source>Strike Water Calculator</source>
         <translation>Kalkulator wody do infuzji</translation>
     </message>
     <message>
         <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to &amp;BBCode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3918,10 +3824,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Ciepło właściwe kadzi (cal/(g*K))</translation>
-    </message>
-    <message>
-        <source>mashEditor</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4799,33 +4701,6 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displaySg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displayPlato</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>scaleRecipeTool</name>
-    <message>
-        <source>Scale Recipe</source>
-        <translation>Skaluj recepturę</translation>
-    </message>
-    <message>
-        <source>New batch size</source>
-        <translation>Nowa wielkość warki</translation>
-    </message>
-    <message>
-        <source>New Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Efficiency</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

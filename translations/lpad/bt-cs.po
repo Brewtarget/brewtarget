@@ -1,27 +1,16 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 00:47+0000\n"
-"PO-Revision-Date: 2015-10-04 21:57+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-12-13 20:04+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
 "X-Language: cs_CZ\n"
 "X-Source-Language: en\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
 msgstr "O aplikaci Brewtarget"
-
-msgctxt "AboutDialog|"
-msgid "Donate"
-msgstr "Zaslat dar"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -66,10 +55,6 @@ msgstr "Konečná hustota"
 msgctxt "BrewDayScrollWidget|"
 msgid "ABV"
 msgstr "Obsah alkoholu"
-
-msgctxt "BrewDayScrollWidget|"
-msgid "Estimated calories(per 12 oz)"
-msgstr "Kalorická hodnota (na 340 g)"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Instructions"
@@ -127,6 +112,15 @@ msgstr "Přidejte slad"
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
 msgstr "Ohřejte vodu"
+
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Kalorická hodnota (na 340 g)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -216,6 +210,10 @@ msgstr "Poznámky"
 msgctxt "BrewDayWidget|"
 msgid "Step %1: %2"
 msgstr "Krok %1: %2"
+
+msgctxt "BrewDayWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -339,6 +337,10 @@ msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
+msgstr ""
+
+msgctxt "Brewtarget|"
+msgid "Scale"
 msgstr ""
 
 msgctxt "BtDigitWidget|"
@@ -737,6 +739,30 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Zrušit"
 
+msgctxt "Fermentable|"
+msgid "Mashed"
+msgstr ""
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Steeped"
+msgstr "Máčet"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Not mashed"
+msgstr "Nermutovat"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Late"
+msgstr "Pozdní"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Normal"
+msgstr "Obvyklé"
+
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
 msgstr "Název suroviny"
@@ -793,30 +819,34 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Surogát"
 
+msgctxt "FermentableItemDelegate|"
+msgid "Mashed"
+msgstr ""
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Steeped"
+msgstr "Máčet"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Not mashed"
+msgstr "Nermutovat"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Normal"
+msgstr "Obvyklé"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Late"
+msgstr "Pozdní"
+
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
 msgstr "Chybný index modelu. řádek = %1"
-
-msgctxt "FermentableTableModel|"
-msgid "Mashed"
-msgstr "Rmutovat"
-
-msgctxt "FermentableTableModel|"
-msgid "Steeped"
-msgstr "Máčet"
-
-msgctxt "FermentableTableModel|"
-msgid "Not mashed"
-msgstr "Nermutovat"
-
-msgctxt "FermentableTableModel|"
-msgid "Late"
-msgstr "Pozdní"
-
-msgctxt "FermentableTableModel|"
-msgid "Normal"
-msgstr "Obvyklé"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -836,10 +866,6 @@ msgid "Amount"
 msgstr "Množství"
 
 msgctxt "FermentableTableModel|"
-msgid "Late Addition"
-msgstr "Pozdní přidání"
-
-msgctxt "FermentableTableModel|"
 msgid "Yield %"
 msgstr "Vytěžnost %"
 
@@ -850,6 +876,14 @@ msgstr "Sklad"
 msgctxt "FermentableTableModel|"
 msgid "Color"
 msgstr "Barva"
+
+msgctxt "FermentableTableModel|"
+msgid "Method"
+msgstr ""
+
+msgctxt "FermentableTableModel|"
+msgid "Addition"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1192,14 +1226,6 @@ msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
 msgstr "Název adresáře musí obsahovat alespoň jeden nelomítkový znak"
 
-msgctxt "MainWindow|"
-msgid "calories/33cL"
-msgstr ""
-
-msgctxt "MainWindow|"
-msgid "calories/12oz"
-msgstr ""
-
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "Žádné suroviny"
@@ -1216,8 +1242,7 @@ msgctxt "MashDesigner|"
 msgid ""
 "You have not set an equipment for this recipe. We really cannot continue "
 "without one."
-msgstr ""
-"Tento recept nemá stanovné žádné vybavení. Bez něj to opravdu nepůjde."
+msgstr "Tento recept nemá stanovné žádné vybavení. Bez něj to opravdu nepůjde."
 
 msgctxt "MashDesigner|"
 msgid "Tun Temp"
@@ -1340,6 +1365,70 @@ msgstr ""
 "Doporučujeme zvýšit  odpar prodloužením času vaření nebo snížit hustotu "
 "rmutu."
 
+#, fuzzy
+msgctxt "Misc|"
+msgid "Spice"
+msgstr "Koření"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Fining"
+msgstr "Čeření"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Water Agent"
+msgstr "Úprava vody"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Herb"
+msgstr "Bylina"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Flavor"
+msgstr "Příchuť"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Other"
+msgstr "Jiný"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Boil"
+msgstr "Chmelovar"
+
+msgctxt "Misc|"
+msgid "Mash"
+msgstr ""
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Primary"
+msgstr "Hlavní kvašení"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Secondary"
+msgstr "Dokvašování"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Bottling"
+msgstr "Stáčení"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Weight"
+msgstr "Hmotnost"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Volume"
+msgstr "Objem"
+
 msgctxt "MiscDialog|"
 msgid "Misc name"
 msgstr "Název přípravku"
@@ -1420,6 +1509,16 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Stáčení"
 
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Weight"
+msgstr "Hmotnost"
+
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Volume"
+msgstr "Objem"
+
 msgctxt "MiscTableModel|"
 msgid "Name"
 msgstr "Název"
@@ -1439,14 +1538,6 @@ msgstr "Čas"
 msgctxt "MiscTableModel|"
 msgid "Amount"
 msgstr "Množství"
-
-msgctxt "MiscTableModel|"
-msgid "Weight"
-msgstr "Hmotnost"
-
-msgctxt "MiscTableModel|"
-msgid "Volume"
-msgstr "Objem"
 
 msgctxt "MiscTableModel|"
 msgid "Amount Type"
@@ -1540,150 +1631,6 @@ msgstr "Neplatný druh barevného vzorce: %1"
 msgctxt "QObject|"
 msgid "Unrecognized IBU formula type. %1"
 msgstr "Nerozpoznaný druh vzorce IBU: %1"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Batch Size: %1\n"
-msgstr "Objem várky: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Size: %1\n"
-msgstr "Původní objem: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Time: %1\n"
-msgstr "Čas vaření: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "OG: %1\n"
-msgstr "Počáteční hustota: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "FG: %1\n"
-msgstr "Konečná hustota: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Bitterness: %1 IBUs (%2)\n"
-msgstr "Hořkost: %1 jednotek IBU (%2)\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Color: %1 SRM (%2)\n"
-msgstr "Barva: %1 SRM (%2)\n"
-
-msgctxt "QObject|"
-msgid "Fermentables\n"
-msgstr "Suroviny\n"
-
-msgctxt "QObject|"
-msgid "Name"
-msgstr "Název"
-
-msgctxt "QObject|"
-msgid "Type"
-msgstr "Druh"
-
-msgctxt "QObject|"
-msgid "Amount"
-msgstr "Množství"
-
-msgctxt "QObject|"
-msgid "Mashed"
-msgstr "Šrotovaný"
-
-msgctxt "QObject|"
-msgid "Late"
-msgstr "Pozdní"
-
-msgctxt "QObject|"
-msgid "Yield"
-msgstr "Výtěžnost"
-
-msgctxt "QObject|"
-msgid "Color"
-msgstr "Barva"
-
-msgctxt "QObject|"
-msgid "Yes"
-msgstr "Ano"
-
-msgctxt "QObject|"
-msgid "No"
-msgstr "Ne"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Total grain: %1\n"
-msgstr "Celkem sladu: %1\n"
-
-msgctxt "QObject|"
-msgid "Hops\n"
-msgstr "Chmele\n"
-
-msgctxt "QObject|"
-msgid "Alpha"
-msgstr "Alfa"
-
-msgctxt "QObject|"
-msgid "Use"
-msgstr "Použití"
-
-msgctxt "QObject|"
-msgid "Time"
-msgstr "Čas"
-
-msgctxt "QObject|"
-msgid "IBU"
-msgstr "IBU"
-
-msgctxt "QObject|"
-msgid "Misc\n"
-msgstr "Přípravky\n"
-
-msgctxt "QObject|"
-msgid "Yeast\n"
-msgstr "Kvasnice\n"
-
-msgctxt "QObject|"
-msgid "Form"
-msgstr "Forma"
-
-msgctxt "QObject|"
-msgid "Stage"
-msgstr "Etapa"
-
-msgctxt "QObject|"
-msgid "Secondary"
-msgstr "Dokvašování"
-
-msgctxt "QObject|"
-msgid "Primary"
-msgstr "Hlavní kvašení"
-
-msgctxt "QObject|"
-msgid "Mash\n"
-msgstr "Rmutování\n"
-
-msgctxt "QObject|"
-msgid "Temp"
-msgstr "Teplota"
-
-msgctxt "QObject|"
-msgid "Target"
-msgstr "Cílová teplota"
-
-msgctxt "QObject|"
-msgid "Notes\n"
-msgstr "Poznámky\n"
-
-msgctxt "QObject|"
-msgid "Instructions\n"
-msgstr "Instrukce\n"
 
 msgctxt "QObject|"
 msgid "Directory Problem"
@@ -1799,14 +1746,6 @@ msgid "Adjunct"
 msgstr "Surogát"
 
 msgctxt "QObject|"
-msgid "Boil"
-msgstr "Chmelovar"
-
-msgctxt "QObject|"
-msgid "Mash"
-msgstr "Rmutování"
-
-msgctxt "QObject|"
 msgid "Infusion"
 msgstr "Infuze"
 
@@ -1817,34 +1756,6 @@ msgstr "Teplota"
 msgctxt "QObject|"
 msgid "Decoction"
 msgstr "Dekokce"
-
-msgctxt "QObject|"
-msgid "Bottling"
-msgstr "Stáčení"
-
-msgctxt "QObject|"
-msgid "Spice"
-msgstr "Koření"
-
-msgctxt "QObject|"
-msgid "Fining"
-msgstr "Čeření"
-
-msgctxt "QObject|"
-msgid "Water Agent"
-msgstr "Úprava vody"
-
-msgctxt "QObject|"
-msgid "Herb"
-msgstr "Bylina"
-
-msgctxt "QObject|"
-msgid "Flavor"
-msgstr "Příchuť"
-
-msgctxt "QObject|"
-msgid "Other"
-msgstr "Jiný"
 
 msgctxt "QObject|"
 msgid "Ale"
@@ -1921,16 +1832,6 @@ msgstr "Přípravky"
 msgctxt "QObject|"
 msgid "Yeast"
 msgstr "Kvasnice"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Efficiency: %1%\n"
-msgstr "Výtěžnost: %1%\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "ABV: %1%\n"
-msgstr "Obsah alkoholu: %1 %\n"
 
 msgctxt "QObject|"
 msgid "Style"
@@ -2258,10 +2159,6 @@ msgid "Color"
 msgstr "Barva"
 
 msgctxt "RecipeFormatter|"
-msgid "Calories (per 12 oz.)"
-msgstr "Kalorická hodnota (na 340 g)"
-
-msgctxt "RecipeFormatter|"
 msgid "Fermentables"
 msgstr "Suroviny"
 
@@ -2465,6 +2362,34 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Flokulace"
 
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Miscs"
+msgstr "Přípravky"
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Yeasts"
+msgstr "Kvasnice"
+
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Kalorická hodnota (na 340 g)"
+
+msgctxt "RecipeFormatter|"
+msgid "Bitterness"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Target"
+msgstr "Cílová teplota"
+
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
 msgstr "Neshoda počáteční hustoty"
@@ -2478,17 +2403,39 @@ msgstr ""
 "Na základě původního Plato by původní hustota měla být %1, vy jste však "
 "zadali %2. Pokračuji s vypočtenou původní hustotou."
 
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "Select Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid ""
+"The recipe will be scaled to match the batch size and efficiency of the "
+"selected equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Efficiency (%)"
+msgstr ""
+
+#, fuzzy
+msgctxt "ScaleRecipeIntroPage|"
+msgid "Scale Recipe"
+msgstr "Změnit objem"
+
+msgctxt "ScaleRecipeIntroPage|"
+msgid ""
+"This wizard will help you scale a recipe to another size or "
+"efficiency.Select another equipment with the new batch size and/or "
+"efficiency andthe wizard will scale the recipe ingredients automatically."
+msgstr ""
+
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
 msgstr "Změna objemu"
-
-msgctxt "ScaleRecipeTool|"
-msgid ""
-"The mash has been reset due to the fact that mash temperatures do not scale "
-"easily. Please re-run the mash wizard."
-msgstr ""
-"Rmutování bylo vymazáno jelikož se rmutovací teploty špatně škálují. Prosím, "
-"spusťte znovu průvodce rmutováním."
 
 msgctxt "ScaleRecipeTool|"
 msgid ""
@@ -3110,10 +3057,6 @@ msgstr "Množství na skladě"
 msgctxt "fermentableEditor|"
 msgid "Amount in inventory"
 msgstr "Množství na skladě"
-
-msgctxt "fermentableEditor|"
-msgid "fermentableEditor"
-msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Color"
@@ -3748,10 +3691,6 @@ msgid "Delete recipe"
 msgstr "Odebrat recept"
 
 msgctxt "mainWindow|"
-msgid "Donate"
-msgstr "Zaslat dar"
-
-msgctxt "mainWindow|"
 msgid "&Mashs"
 msgstr "&Rmutovací schémata"
 
@@ -3764,15 +3703,15 @@ msgid "1.0"
 msgstr "1.0"
 
 msgctxt "mainWindow|"
-msgid "application/x-brewtarget-ingredient"
-msgstr "application/x-brewtarget-ingredient"
-
-msgctxt "mainWindow|"
 msgid "Strike Water Calculator"
 msgstr "Výpočet nálevu"
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
+msgstr ""
+
+msgctxt "mainWindow|"
+msgid "Export to &BBCode"
 msgstr ""
 
 msgctxt "mashDesigner|"
@@ -3902,10 +3841,6 @@ msgstr "Spec. teplo kádě"
 msgctxt "mashEditor|"
 msgid "Tun specific heat (cal/(g*K))"
 msgstr "Specifické teplo kádě (kalorií/(g*K))"
-
-msgctxt "mashEditor|"
-msgid "mashEditor"
-msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Mash Step Editor"
@@ -4758,30 +4693,6 @@ msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displaySg"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displayPlato"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "Scale Recipe"
-msgstr "Změnit objem"
-
-msgctxt "scaleRecipeTool|"
-msgid "New batch size"
-msgstr "Nový objem várky"
-
-msgctxt "scaleRecipeTool|"
-msgid "New Batch Size"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New Efficiency"
 msgstr ""
 
 msgctxt "strikeWaterDialog|"

@@ -1,26 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 00:47+0000\n"
-"PO-Revision-Date: 2015-10-04 22:00+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-12-13 20:04+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: el\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
 msgstr "Σχετικά με το Brewtarget"
-
-msgctxt "AboutDialog|"
-msgid "Donate"
-msgstr "Δωρεά"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -65,10 +54,6 @@ msgstr "Τελική πυκνότητα"
 msgctxt "BrewDayScrollWidget|"
 msgid "ABV"
 msgstr "ABV"
-
-msgctxt "BrewDayScrollWidget|"
-msgid "Estimated calories(per 12 oz)"
-msgstr "Θερμίδες κατά προσέγγιση"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Instructions"
@@ -126,6 +111,15 @@ msgstr "Προσθέστε Σιτηρά"
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
 msgstr "Ζεστάνετε το νερό"
+
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Θερμίδες κατά προσέγγιση"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -215,6 +209,10 @@ msgstr "Σημειώσεις"
 msgctxt "BrewDayWidget|"
 msgid "Step %1: %2"
 msgstr "Βήμα %1: %2"
+
+msgctxt "BrewDayWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -338,6 +336,10 @@ msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
+msgstr ""
+
+msgctxt "Brewtarget|"
+msgid "Scale"
 msgstr ""
 
 msgctxt "BtDigitWidget|"
@@ -741,6 +743,30 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Ακύρωση"
 
+msgctxt "Fermentable|"
+msgid "Mashed"
+msgstr ""
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Steeped"
+msgstr "Steeped"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Not mashed"
+msgstr "Not mashed"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Late"
+msgstr "Στο τέλος"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Normal"
+msgstr "Κανονικό"
+
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
 msgstr "Ονομασία ζυμώσιμων"
@@ -797,30 +823,34 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Πρόσθετα"
 
+msgctxt "FermentableItemDelegate|"
+msgid "Mashed"
+msgstr ""
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Steeped"
+msgstr "Steeped"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Not mashed"
+msgstr "Not mashed"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Normal"
+msgstr "Κανονικό"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Late"
+msgstr "Στο τέλος"
+
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
 msgstr "Bad model index. row = %1"
-
-msgctxt "FermentableTableModel|"
-msgid "Mashed"
-msgstr "Mashed"
-
-msgctxt "FermentableTableModel|"
-msgid "Steeped"
-msgstr "Steeped"
-
-msgctxt "FermentableTableModel|"
-msgid "Not mashed"
-msgstr "Not mashed"
-
-msgctxt "FermentableTableModel|"
-msgid "Late"
-msgstr "Στο τέλος"
-
-msgctxt "FermentableTableModel|"
-msgid "Normal"
-msgstr "Κανονικό"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -840,10 +870,6 @@ msgid "Amount"
 msgstr "Ποσότητα"
 
 msgctxt "FermentableTableModel|"
-msgid "Late Addition"
-msgstr "προσθήκη στο τέλος"
-
-msgctxt "FermentableTableModel|"
 msgid "Yield %"
 msgstr "Απόδοση %"
 
@@ -854,6 +880,14 @@ msgstr "Ευρετήριο ειδών"
 msgctxt "FermentableTableModel|"
 msgid "Color"
 msgstr "Χρώμα"
+
+msgctxt "FermentableTableModel|"
+msgid "Method"
+msgstr ""
+
+msgctxt "FermentableTableModel|"
+msgid "Addition"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1200,16 +1234,7 @@ msgstr ""
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
-msgstr ""
-"Ονόματα φακέλων θα πρέπει να περιέχουν τουλάχιστον ένα μή -/ χαρακτήρα"
-
-msgctxt "MainWindow|"
-msgid "calories/33cL"
-msgstr ""
-
-msgctxt "MainWindow|"
-msgid "calories/12oz"
-msgstr ""
+msgstr "Ονόματα φακέλων θα πρέπει να περιέχουν τουλάχιστον ένα μή -/ χαρακτήρα"
 
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
@@ -1358,6 +1383,70 @@ msgstr ""
 "να αυξήσετε τον όγκο βρασμού με το να αυξήσετε το χρόνο βρασμού, ή να "
 "μειώσετε την πυκνότητα σακχαροποίησης"
 
+#, fuzzy
+msgctxt "Misc|"
+msgid "Spice"
+msgstr "Μπαχαρικά"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Fining"
+msgstr "Βελτιωτικά"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Water Agent"
+msgstr "Ρυθμιστής νερού"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Herb"
+msgstr "Βότανα"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Flavor"
+msgstr "Άρωματικές Ύλες"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Other"
+msgstr "'Αλλο"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Boil"
+msgstr "Στο Βράσιμο"
+
+msgctxt "Misc|"
+msgid "Mash"
+msgstr ""
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Primary"
+msgstr "Κατά την πρώτη ζύμωση"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Secondary"
+msgstr "κατά την δεύτερη ζύμωση"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Bottling"
+msgstr "Κατά την εμφιάλωση"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Weight"
+msgstr "Βάρος"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Volume"
+msgstr "Όγκος"
+
 msgctxt "MiscDialog|"
 msgid "Misc name"
 msgstr "Ονομασία είδους"
@@ -1438,6 +1527,16 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Κατά την εμφιάλωση"
 
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Weight"
+msgstr "Βάρος"
+
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Volume"
+msgstr "Όγκος"
+
 msgctxt "MiscTableModel|"
 msgid "Name"
 msgstr "Όνομασία"
@@ -1457,14 +1556,6 @@ msgstr "Χρόνος"
 msgctxt "MiscTableModel|"
 msgid "Amount"
 msgstr "Ποσότητα"
-
-msgctxt "MiscTableModel|"
-msgid "Weight"
-msgstr "Βάρος"
-
-msgctxt "MiscTableModel|"
-msgid "Volume"
-msgstr "Όγκος"
 
 msgctxt "MiscTableModel|"
 msgid "Amount Type"
@@ -1559,150 +1650,6 @@ msgstr "λανθασμένος τύπος φόρμουλας χρώματος: %
 msgctxt "QObject|"
 msgid "Unrecognized IBU formula type. %1"
 msgstr "Μη αναγνωρίσiμος τύπος φόρμουλας IBU. %1"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Batch Size: %1\n"
-msgstr "Όγκος παρτίδας: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Size: %1\n"
-msgstr "Όγκος βρασμού: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Time: %1\n"
-msgstr "Χρόνος βρασμού: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "OG: %1\n"
-msgstr "OG: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "FG: %1\n"
-msgstr "FG: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Bitterness: %1 IBUs (%2)\n"
-msgstr "Πικράδα: %1 IBUs (%2)\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Color: %1 SRM (%2)\n"
-msgstr "Χρώμα: %1 SRM (%2)\n"
-
-msgctxt "QObject|"
-msgid "Fermentables\n"
-msgstr "Ζυμώσιμα\n"
-
-msgctxt "QObject|"
-msgid "Name"
-msgstr "Όνομασία"
-
-msgctxt "QObject|"
-msgid "Type"
-msgstr "Είδος"
-
-msgctxt "QObject|"
-msgid "Amount"
-msgstr "Ποσότητα"
-
-msgctxt "QObject|"
-msgid "Mashed"
-msgstr "Mashed"
-
-msgctxt "QObject|"
-msgid "Late"
-msgstr "Στο τέλος"
-
-msgctxt "QObject|"
-msgid "Yield"
-msgstr "Απόδοση"
-
-msgctxt "QObject|"
-msgid "Color"
-msgstr "Χρώμα"
-
-msgctxt "QObject|"
-msgid "Yes"
-msgstr "Ναι"
-
-msgctxt "QObject|"
-msgid "No"
-msgstr "Όχι"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Total grain: %1\n"
-msgstr "Ολική ποσότητα σιτηρών: %1\n"
-
-msgctxt "QObject|"
-msgid "Hops\n"
-msgstr "Λυκίσκος\n"
-
-msgctxt "QObject|"
-msgid "Alpha"
-msgstr "Alpha"
-
-msgctxt "QObject|"
-msgid "Use"
-msgstr "Χρήση"
-
-msgctxt "QObject|"
-msgid "Time"
-msgstr "Χρόνος"
-
-msgctxt "QObject|"
-msgid "IBU"
-msgstr "IBU"
-
-msgctxt "QObject|"
-msgid "Misc\n"
-msgstr "Διαφ.\n"
-
-msgctxt "QObject|"
-msgid "Yeast\n"
-msgstr "Μαγιά\n"
-
-msgctxt "QObject|"
-msgid "Form"
-msgstr "Μορφή"
-
-msgctxt "QObject|"
-msgid "Stage"
-msgstr "Στάδιο"
-
-msgctxt "QObject|"
-msgid "Secondary"
-msgstr "κατά την δεύτερη ζύμωση"
-
-msgctxt "QObject|"
-msgid "Primary"
-msgstr "Κατά την πρώτη ζύμωση"
-
-msgctxt "QObject|"
-msgid "Mash\n"
-msgstr "Mash\n"
-
-msgctxt "QObject|"
-msgid "Temp"
-msgstr "Θερμοκρασία"
-
-msgctxt "QObject|"
-msgid "Target"
-msgstr "Στόχος"
-
-msgctxt "QObject|"
-msgid "Notes\n"
-msgstr "Σημειώσεις\n"
-
-msgctxt "QObject|"
-msgid "Instructions\n"
-msgstr "Οδηγίες\n"
 
 msgctxt "QObject|"
 msgid "Directory Problem"
@@ -1819,14 +1766,6 @@ msgid "Adjunct"
 msgstr "Πρόσθετα"
 
 msgctxt "QObject|"
-msgid "Boil"
-msgstr "Στο Βράσιμο"
-
-msgctxt "QObject|"
-msgid "Mash"
-msgstr "Mash"
-
-msgctxt "QObject|"
 msgid "Infusion"
 msgstr "Έγχυση"
 
@@ -1837,34 +1776,6 @@ msgstr "Θερμοκρασία"
 msgctxt "QObject|"
 msgid "Decoction"
 msgstr "Decoction"
-
-msgctxt "QObject|"
-msgid "Bottling"
-msgstr "Κατά την εμφιάλωση"
-
-msgctxt "QObject|"
-msgid "Spice"
-msgstr "Μπαχαρικά"
-
-msgctxt "QObject|"
-msgid "Fining"
-msgstr "Βελτιωτικά"
-
-msgctxt "QObject|"
-msgid "Water Agent"
-msgstr "Ρυθμιστής νερού"
-
-msgctxt "QObject|"
-msgid "Herb"
-msgstr "Βότανα"
-
-msgctxt "QObject|"
-msgid "Flavor"
-msgstr "Άρωματικές Ύλες"
-
-msgctxt "QObject|"
-msgid "Other"
-msgstr "'Αλλο"
 
 msgctxt "QObject|"
 msgid "Ale"
@@ -1941,16 +1852,6 @@ msgstr "Διάφορα"
 msgctxt "QObject|"
 msgid "Yeast"
 msgstr "Μαγιά"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Efficiency: %1%\n"
-msgstr "Απόδοση: %1%\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "ABV: %1%\n"
-msgstr "ABV: %1%\n"
 
 msgctxt "QObject|"
 msgid "Style"
@@ -2280,10 +2181,6 @@ msgid "Color"
 msgstr "Χρώμα"
 
 msgctxt "RecipeFormatter|"
-msgid "Calories (per 12 oz.)"
-msgstr "Θερμίδες ( ανά 12 ουγκιές)"
-
-msgctxt "RecipeFormatter|"
 msgid "Fermentables"
 msgstr "Ζυμώσιμα"
 
@@ -2487,6 +2384,34 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "κροκίδωση"
 
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Miscs"
+msgstr "Διάφορα"
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Yeasts"
+msgstr "Μαγιές"
+
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Θερμίδες κατά προσέγγιση"
+
+msgctxt "RecipeFormatter|"
+msgid "Bitterness"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Target"
+msgstr "Στόχος"
+
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
 msgstr "Αναντιστοιχία OG"
@@ -2501,18 +2426,39 @@ msgstr ""
 "να είναι %1, αλλά έχετε εισάγει %2.  Συνεχίζω με την υπολογισμένη αρχική "
 "πυκνότητα"
 
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "Select Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid ""
+"The recipe will be scaled to match the batch size and efficiency of the "
+"selected equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Efficiency (%)"
+msgstr ""
+
+#, fuzzy
+msgctxt "ScaleRecipeIntroPage|"
+msgid "Scale Recipe"
+msgstr "Μετατροπή Συνταγής"
+
+msgctxt "ScaleRecipeIntroPage|"
+msgid ""
+"This wizard will help you scale a recipe to another size or "
+"efficiency.Select another equipment with the new batch size and/or "
+"efficiency andthe wizard will scale the recipe ingredients automatically."
+msgstr ""
+
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
 msgstr "Αναπροσαρμογή συνταγής"
-
-msgctxt "ScaleRecipeTool|"
-msgid ""
-"The mash has been reset due to the fact that mash temperatures do not scale "
-"easily. Please re-run the mash wizard."
-msgstr ""
-"Η διαδικασία σακχαροποίησης μηδενίστηκε εξ' αιτίας του γεγονότος ότι οι "
-"θερμοκρασίες κατά την σακχαροποίηση δεν αλλάζουν εύκολα.  Χρησιμοποιήστε τον "
-"οδηγό σακχαροποίησης για νέα διαδικασία."
 
 msgctxt "ScaleRecipeTool|"
 msgid ""
@@ -3134,10 +3080,6 @@ msgstr "Ποσότητα στο ευρετήριο"
 msgctxt "fermentableEditor|"
 msgid "Amount in inventory"
 msgstr "Ποσότητα στο ευρετήριο"
-
-msgctxt "fermentableEditor|"
-msgid "fermentableEditor"
-msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Color"
@@ -3773,10 +3715,6 @@ msgid "Delete recipe"
 msgstr "Διαγραφή συνταγής"
 
 msgctxt "mainWindow|"
-msgid "Donate"
-msgstr "Δωρεά"
-
-msgctxt "mainWindow|"
 msgid "&Mashs"
 msgstr "&Mashs"
 
@@ -3789,15 +3727,15 @@ msgid "1.0"
 msgstr "1.0"
 
 msgctxt "mainWindow|"
-msgid "application/x-brewtarget-ingredient"
-msgstr "application/x-brewtarget-ingredient"
-
-msgctxt "mainWindow|"
 msgid "Strike Water Calculator"
 msgstr "Υπολογισμός Θερμοκρασίας νερού"
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
+msgstr ""
+
+msgctxt "mainWindow|"
+msgid "Export to &BBCode"
 msgstr ""
 
 msgctxt "mashDesigner|"
@@ -3927,10 +3865,6 @@ msgstr "Tun sp. heat"
 msgctxt "mashEditor|"
 msgid "Tun specific heat (cal/(g*K))"
 msgstr "Συγκεκριμένη θερμοκρασία σκεύους (cal/(g*K))"
-
-msgctxt "mashEditor|"
-msgid "mashEditor"
-msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Mash Step Editor"
@@ -4782,30 +4716,6 @@ msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displaySg"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displayPlato"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "Scale Recipe"
-msgstr "Μετατροπή Συνταγής"
-
-msgctxt "scaleRecipeTool|"
-msgid "New batch size"
-msgstr "Νέο μέγεθος παρτίδας"
-
-msgctxt "scaleRecipeTool|"
-msgid "New Batch Size"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New Efficiency"
 msgstr ""
 
 msgctxt "strikeWaterDialog|"

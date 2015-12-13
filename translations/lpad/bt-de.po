@@ -1,26 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 00:47+0000\n"
-"PO-Revision-Date: 2015-10-04 22:00+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-12-13 20:04+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: de\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
 msgstr "Über Brewtarget"
-
-msgctxt "AboutDialog|"
-msgid "Donate"
-msgstr "Spenden"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -65,10 +54,6 @@ msgstr "Restextraktgehalt"
 msgctxt "BrewDayScrollWidget|"
 msgid "ABV"
 msgstr "Alkoholgehalt"
-
-msgctxt "BrewDayScrollWidget|"
-msgid "Estimated calories(per 12 oz)"
-msgstr "Geschätzter Brennwert"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Instructions"
@@ -126,6 +111,15 @@ msgstr "Getreide hinzufügen"
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
 msgstr "Wasser erhitzen"
+
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Geschätzte Kalorien (pro 12 oz)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -215,6 +209,10 @@ msgstr "Anmerkungen"
 msgctxt "BrewDayWidget|"
 msgid "Step %1: %2"
 msgstr "Schritt %1: %2"
+
+msgctxt "BrewDayWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -338,6 +336,10 @@ msgstr "Tage"
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
+msgstr ""
+
+msgctxt "Brewtarget|"
+msgid "Scale"
 msgstr ""
 
 msgctxt "BtDigitWidget|"
@@ -708,8 +710,7 @@ msgstr "Wie viel Wasser dampft beim Kochen pro Stunde ab"
 
 msgctxt "EquipmentEditor|"
 msgid "How much water is added to kettle immediately pre-boil"
-msgstr ""
-"Wie viel Wasser wird dem Kessel unmittelbar vor dem Kochen hinzugefügt"
+msgstr "Wie viel Wasser wird dem Kessel unmittelbar vor dem Kochen hinzugefügt"
 
 msgctxt "EquipmentEditor|"
 msgid "Water added to fermenter"
@@ -742,6 +743,31 @@ msgstr "Speichern"
 msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Abbruch"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Mashed"
+msgstr "Gemaischt"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Steeped"
+msgstr "Eingeweicht"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Not mashed"
+msgstr "Nicht gemaischt"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Late"
+msgstr "Spät"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Normal"
+msgstr "Normal"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -799,30 +825,35 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Beigabe"
 
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Mashed"
+msgstr "Gemaischt"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Steeped"
+msgstr "Eingeweicht"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Not mashed"
+msgstr "Nicht gemaischt"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Normal"
+msgstr "Normal"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Late"
+msgstr "Spät"
+
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
 msgstr "Fehlerhafter »model index«. Zeile = %1"
-
-msgctxt "FermentableTableModel|"
-msgid "Mashed"
-msgstr "Gemaischt"
-
-msgctxt "FermentableTableModel|"
-msgid "Steeped"
-msgstr "Eingeweicht"
-
-msgctxt "FermentableTableModel|"
-msgid "Not mashed"
-msgstr "Nicht gemaischt"
-
-msgctxt "FermentableTableModel|"
-msgid "Late"
-msgstr "Spät"
-
-msgctxt "FermentableTableModel|"
-msgid "Normal"
-msgstr "Normal"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -842,10 +873,6 @@ msgid "Amount"
 msgstr "Menge"
 
 msgctxt "FermentableTableModel|"
-msgid "Late Addition"
-msgstr "Späte Zugabe"
-
-msgctxt "FermentableTableModel|"
 msgid "Yield %"
 msgstr "Ausbeute %"
 
@@ -856,6 +883,14 @@ msgstr "Lagerbestand"
 msgctxt "FermentableTableModel|"
 msgid "Color"
 msgstr "Farbe"
+
+msgctxt "FermentableTableModel|"
+msgid "Method"
+msgstr ""
+
+msgctxt "FermentableTableModel|"
+msgid "Addition"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1205,14 +1240,6 @@ msgid "A folder name must have at least one non-/ character in it"
 msgstr ""
 "Ein Ordnername muss mindestens ein Zeichen enthalten, welches kein \"/\" ist."
 
-msgctxt "MainWindow|"
-msgid "calories/33cL"
-msgstr ""
-
-msgctxt "MainWindow|"
-msgid "calories/12oz"
-msgstr ""
-
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "Kein Gärgut"
@@ -1357,6 +1384,68 @@ msgstr ""
 "den Ansatz indem Sie die Kochzeit erhöhen oder reduzieren Sie die "
 "Maischedichte."
 
+#, fuzzy
+msgctxt "Misc|"
+msgid "Spice"
+msgstr "Gewürz"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Fining"
+msgstr "Schönung"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Water Agent"
+msgstr "Wasserzusatzmittel"
+
+msgctxt "Misc|"
+msgid "Herb"
+msgstr ""
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Flavor"
+msgstr "Aroma"
+
+msgctxt "Misc|"
+msgid "Other"
+msgstr ""
+
+msgctxt "Misc|"
+msgid "Boil"
+msgstr ""
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Mash"
+msgstr "Maische"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Primary"
+msgstr "Hauptgärung"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Secondary"
+msgstr "Nachgärung"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Bottling"
+msgstr "Abfüllung"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Weight"
+msgstr "Gewicht"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Volume"
+msgstr "Volumen"
+
 msgctxt "MiscDialog|"
 msgid "Misc name"
 msgstr "Sonstiges Name"
@@ -1437,6 +1526,16 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Abfüllung"
 
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Weight"
+msgstr "Gewicht"
+
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Volume"
+msgstr "Volumen"
+
 msgctxt "MiscTableModel|"
 msgid "Name"
 msgstr "Name"
@@ -1456,14 +1555,6 @@ msgstr "Zeit"
 msgctxt "MiscTableModel|"
 msgid "Amount"
 msgstr "Menge"
-
-msgctxt "MiscTableModel|"
-msgid "Weight"
-msgstr "Gewicht"
-
-msgctxt "MiscTableModel|"
-msgid "Volume"
-msgstr "Volumen"
 
 msgctxt "MiscTableModel|"
 msgid "Amount Type"
@@ -1558,150 +1649,6 @@ msgstr "Falscher Farbtyp: %1"
 msgctxt "QObject|"
 msgid "Unrecognized IBU formula type. %1"
 msgstr "Unbekannter IBU-Typ. %1"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Batch Size: %1\n"
-msgstr "Ausschlagmenge: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Size: %1\n"
-msgstr "Sudmenge: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Time: %1\n"
-msgstr "Sudzeit: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "OG: %1\n"
-msgstr "Stammwürze: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "FG: %1\n"
-msgstr "FG: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Bitterness: %1 IBUs (%2)\n"
-msgstr "Bitterkeit: %1 IBU (%2)\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Color: %1 SRM (%2)\n"
-msgstr "Farbe: %1 SRM (%2)\n"
-
-msgctxt "QObject|"
-msgid "Fermentables\n"
-msgstr "Gärgut\n"
-
-msgctxt "QObject|"
-msgid "Name"
-msgstr "Name"
-
-msgctxt "QObject|"
-msgid "Type"
-msgstr "Typ"
-
-msgctxt "QObject|"
-msgid "Amount"
-msgstr "Menge"
-
-msgctxt "QObject|"
-msgid "Mashed"
-msgstr "Gemaischt"
-
-msgctxt "QObject|"
-msgid "Late"
-msgstr "Spät"
-
-msgctxt "QObject|"
-msgid "Yield"
-msgstr "Ertrag"
-
-msgctxt "QObject|"
-msgid "Color"
-msgstr "Farbe"
-
-msgctxt "QObject|"
-msgid "Yes"
-msgstr "Ja"
-
-msgctxt "QObject|"
-msgid "No"
-msgstr "Nein"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Total grain: %1\n"
-msgstr "Totale Getreidemenge: %1\n"
-
-msgctxt "QObject|"
-msgid "Hops\n"
-msgstr "Hopfen\n"
-
-msgctxt "QObject|"
-msgid "Alpha"
-msgstr "Ale"
-
-msgctxt "QObject|"
-msgid "Use"
-msgstr "Verwendung"
-
-msgctxt "QObject|"
-msgid "Time"
-msgstr "Zeit"
-
-msgctxt "QObject|"
-msgid "IBU"
-msgstr "IBU"
-
-msgctxt "QObject|"
-msgid "Misc\n"
-msgstr "Sonstiges\n"
-
-msgctxt "QObject|"
-msgid "Yeast\n"
-msgstr "Hefe\n"
-
-msgctxt "QObject|"
-msgid "Form"
-msgstr "Formular"
-
-msgctxt "QObject|"
-msgid "Stage"
-msgstr "Phase"
-
-msgctxt "QObject|"
-msgid "Secondary"
-msgstr "Nachgärung"
-
-msgctxt "QObject|"
-msgid "Primary"
-msgstr "Hauptgärung"
-
-msgctxt "QObject|"
-msgid "Mash\n"
-msgstr "Maische\n"
-
-msgctxt "QObject|"
-msgid "Temp"
-msgstr "Temp."
-
-msgctxt "QObject|"
-msgid "Target"
-msgstr "Ziel"
-
-msgctxt "QObject|"
-msgid "Notes\n"
-msgstr "Notizen\n"
-
-msgctxt "QObject|"
-msgid "Instructions\n"
-msgstr "Instruktionen\n"
 
 msgctxt "QObject|"
 msgid "Directory Problem"
@@ -1819,14 +1766,6 @@ msgid "Adjunct"
 msgstr "Zusatz"
 
 msgctxt "QObject|"
-msgid "Boil"
-msgstr "Kochen"
-
-msgctxt "QObject|"
-msgid "Mash"
-msgstr "Maische"
-
-msgctxt "QObject|"
 msgid "Infusion"
 msgstr "Aufguß"
 
@@ -1837,34 +1776,6 @@ msgstr "Temperatur"
 msgctxt "QObject|"
 msgid "Decoction"
 msgstr "Absud"
-
-msgctxt "QObject|"
-msgid "Bottling"
-msgstr "Abfüllung"
-
-msgctxt "QObject|"
-msgid "Spice"
-msgstr "Gewürz"
-
-msgctxt "QObject|"
-msgid "Fining"
-msgstr "Schönung"
-
-msgctxt "QObject|"
-msgid "Water Agent"
-msgstr "Wasserzusatzmittel"
-
-msgctxt "QObject|"
-msgid "Herb"
-msgstr "Gewürz"
-
-msgctxt "QObject|"
-msgid "Flavor"
-msgstr "Aroma"
-
-msgctxt "QObject|"
-msgid "Other"
-msgstr "Andere"
 
 msgctxt "QObject|"
 msgid "Ale"
@@ -1941,16 +1852,6 @@ msgstr "Sonstiges"
 msgctxt "QObject|"
 msgid "Yeast"
 msgstr "Hefe"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Efficiency: %1%\n"
-msgstr "Effizienz: %1%\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "ABV: %1%\n"
-msgstr "ABV: %1%\n"
 
 msgctxt "QObject|"
 msgid "Style"
@@ -2165,8 +2066,7 @@ msgstr ""
 #, qt-format
 msgctxt "Recipe|"
 msgid "Bring the wort to a boil and hold for %1."
-msgstr ""
-"Bringen Sie die Würze zum kochen und halten Sie die Temperatur für %1."
+msgstr "Bringen Sie die Würze zum kochen und halten Sie die Temperatur für %1."
 
 msgctxt "Recipe|"
 msgid "Start boil"
@@ -2281,10 +2181,6 @@ msgstr "ABV"
 msgctxt "RecipeFormatter|"
 msgid "Color"
 msgstr "Farbe"
-
-msgctxt "RecipeFormatter|"
-msgid "Calories (per 12 oz.)"
-msgstr "Kilokalorien (per 12 oz.)"
 
 msgctxt "RecipeFormatter|"
 msgid "Fermentables"
@@ -2490,6 +2386,34 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Ausflockung"
 
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Miscs"
+msgstr "Sonstiges"
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Yeasts"
+msgstr "Hefen"
+
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Geschätzte Kalorien (pro 12 oz)"
+
+msgctxt "RecipeFormatter|"
+msgid "Bitterness"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Target"
+msgstr "Ziel"
+
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
 msgstr "Stammwürze-Missverhältnis"
@@ -2504,17 +2428,39 @@ msgstr ""
 "betragen aber Sie haben %2 eingegeben. Fahre fort mit der berechneten "
 "Stammwürze-Dichte."
 
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "Select Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid ""
+"The recipe will be scaled to match the batch size and efficiency of the "
+"selected equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Efficiency (%)"
+msgstr ""
+
+#, fuzzy
+msgctxt "ScaleRecipeIntroPage|"
+msgid "Scale Recipe"
+msgstr "Rezept skalieren"
+
+msgctxt "ScaleRecipeIntroPage|"
+msgid ""
+"This wizard will help you scale a recipe to another size or "
+"efficiency.Select another equipment with the new batch size and/or "
+"efficiency andthe wizard will scale the recipe ingredients automatically."
+msgstr ""
+
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
 msgstr "Rezept skaliert"
-
-msgctxt "ScaleRecipeTool|"
-msgid ""
-"The mash has been reset due to the fact that mash temperatures do not scale "
-"easily. Please re-run the mash wizard."
-msgstr ""
-"Die Maische wurde zurückgesetzt weil die Maischtemperaturen sich nicht "
-"einfach anpassen lassen. Bitte führen Sie den Maische-Assistent erneut aus."
 
 msgctxt "ScaleRecipeTool|"
 msgid ""
@@ -3136,10 +3082,6 @@ msgstr "Menge im Lager"
 msgctxt "fermentableEditor|"
 msgid "Amount in inventory"
 msgstr "Menge im Lager"
-
-msgctxt "fermentableEditor|"
-msgid "fermentableEditor"
-msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Color"
@@ -3776,10 +3718,6 @@ msgid "Delete recipe"
 msgstr "Rezept löschen"
 
 msgctxt "mainWindow|"
-msgid "Donate"
-msgstr "Spenden"
-
-msgctxt "mainWindow|"
 msgid "&Mashs"
 msgstr "&Maischen"
 
@@ -3792,15 +3730,15 @@ msgid "1.0"
 msgstr "1.0"
 
 msgctxt "mainWindow|"
-msgid "application/x-brewtarget-ingredient"
-msgstr "application/x-brewtarget-ingredient"
-
-msgctxt "mainWindow|"
 msgid "Strike Water Calculator"
 msgstr "Einmaischwasser-Rechner"
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
+msgstr ""
+
+msgctxt "mainWindow|"
+msgid "Export to &BBCode"
 msgstr ""
 
 msgctxt "mashDesigner|"
@@ -3930,10 +3868,6 @@ msgstr "Maischbottich sp. Wärme"
 msgctxt "mashEditor|"
 msgid "Tun specific heat (cal/(g*K))"
 msgstr "Maischbottich spez. Wärme (cal/(g*K))"
-
-msgctxt "mashEditor|"
-msgid "mashEditor"
-msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Mash Step Editor"
@@ -4787,30 +4721,6 @@ msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displaySg"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displayPlato"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "Scale Recipe"
-msgstr "Rezept skalieren"
-
-msgctxt "scaleRecipeTool|"
-msgid "New batch size"
-msgstr "Neue Ausschlagmenge"
-
-msgctxt "scaleRecipeTool|"
-msgid "New Batch Size"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New Efficiency"
 msgstr ""
 
 msgctxt "strikeWaterDialog|"

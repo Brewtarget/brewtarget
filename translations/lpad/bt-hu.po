@@ -1,26 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 00:47+0000\n"
-"PO-Revision-Date: 2015-10-04 22:03+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-12-13 20:04+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: hu\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
 msgstr "a Brewtargetről"
-
-msgctxt "AboutDialog|"
-msgid "Donate"
-msgstr "Adományozás"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -65,10 +54,6 @@ msgstr "Fajsúly (végleges)"
 msgctxt "BrewDayScrollWidget|"
 msgid "ABV"
 msgstr "alkoholfok (v/v%)"
-
-msgctxt "BrewDayScrollWidget|"
-msgid "Estimated calories(per 12 oz)"
-msgstr "kalóriatartalom (354ml)"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Instructions"
@@ -126,6 +111,15 @@ msgstr "Gabona adagolás"
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
 msgstr "Vízforralás"
+
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Becsült kalóriatartalom (354ml)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -215,6 +209,10 @@ msgstr "Megjegyzések"
 msgctxt "BrewDayWidget|"
 msgid "Step %1: %2"
 msgstr "Lépés %1: %2"
+
+msgctxt "BrewDayWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -339,6 +337,10 @@ msgstr ""
 msgctxt "Brewtarget|"
 msgid "Barrels"
 msgstr "Hordók"
+
+msgctxt "Brewtarget|"
+msgid "Scale"
+msgstr ""
 
 msgctxt "BtDigitWidget|"
 msgid "Too low for style."
@@ -740,6 +742,31 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Mégsem"
 
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Mashed"
+msgstr "Cefrézve"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Steeped"
+msgstr "Áztatott"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Not mashed"
+msgstr "Nem cefrézett"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Late"
+msgstr "Később hozzáadott"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Normal"
+msgstr "Normál"
+
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
 msgstr "Erjeszthető anyag neve"
@@ -796,30 +823,35 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Adalék"
 
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Mashed"
+msgstr "Cefrézve"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Steeped"
+msgstr "Áztatott"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Not mashed"
+msgstr "Nem cefrézett"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Normal"
+msgstr "Normál"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Late"
+msgstr "Később hozzáadott"
+
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
 msgstr "Bad model index. row = %1"
-
-msgctxt "FermentableTableModel|"
-msgid "Mashed"
-msgstr "Cefrézve"
-
-msgctxt "FermentableTableModel|"
-msgid "Steeped"
-msgstr "Áztatott"
-
-msgctxt "FermentableTableModel|"
-msgid "Not mashed"
-msgstr "Nem cefrézett"
-
-msgctxt "FermentableTableModel|"
-msgid "Late"
-msgstr "Később hozzáadott"
-
-msgctxt "FermentableTableModel|"
-msgid "Normal"
-msgstr "Normál"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -839,10 +871,6 @@ msgid "Amount"
 msgstr "Mennyiség"
 
 msgctxt "FermentableTableModel|"
-msgid "Late Addition"
-msgstr "Később adagolt"
-
-msgctxt "FermentableTableModel|"
 msgid "Yield %"
 msgstr "Süllyedés %"
 
@@ -853,6 +881,14 @@ msgstr "Készlet"
 msgctxt "FermentableTableModel|"
 msgid "Color"
 msgstr "Szín"
+
+msgctxt "FermentableTableModel|"
+msgid "Method"
+msgstr ""
+
+msgctxt "FermentableTableModel|"
+msgid "Addition"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1198,14 +1234,6 @@ msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
 msgstr "A mappa nevének tartalmaznia kell egy számot vagy írásjelet"
 
-msgctxt "MainWindow|"
-msgid "calories/33cL"
-msgstr ""
-
-msgctxt "MainWindow|"
-msgid "calories/12oz"
-msgstr ""
-
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "Nincs erjeszthető anyag"
@@ -1348,6 +1376,71 @@ msgstr ""
 "Tún nagy a színlé mennyisége a várt forralási mennyiséghez képest. Vagy "
 "növeld a forralási időt, vagy csökkentsd a cefre sűrűségét."
 
+#, fuzzy
+msgctxt "Misc|"
+msgid "Spice"
+msgstr "Fűszer"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Fining"
+msgstr "Derítőszer"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Water Agent"
+msgstr "Vízkezelő anyag"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Herb"
+msgstr "Gyógynövény"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Flavor"
+msgstr "Ízanyag"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Other"
+msgstr "Egyéb anyag"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Boil"
+msgstr "Forralás"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Mash"
+msgstr "Cefre"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Primary"
+msgstr "Elsődleges"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Secondary"
+msgstr "Másodlagos"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Bottling"
+msgstr "Palackozás"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Weight"
+msgstr "Súly"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Volume"
+msgstr "Mennyiség"
+
 msgctxt "MiscDialog|"
 msgid "Misc name"
 msgstr "Egyéb név"
@@ -1428,6 +1521,16 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Palackozás"
 
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Weight"
+msgstr "Súly"
+
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Volume"
+msgstr "Mennyiség"
+
 msgctxt "MiscTableModel|"
 msgid "Name"
 msgstr "Név"
@@ -1446,14 +1549,6 @@ msgstr "Idõ"
 
 msgctxt "MiscTableModel|"
 msgid "Amount"
-msgstr "Mennyiség"
-
-msgctxt "MiscTableModel|"
-msgid "Weight"
-msgstr "Súly"
-
-msgctxt "MiscTableModel|"
-msgid "Volume"
 msgstr "Mennyiség"
 
 msgctxt "MiscTableModel|"
@@ -1547,150 +1642,6 @@ msgstr "Érvénytelen szín formula: %1"
 msgctxt "QObject|"
 msgid "Unrecognized IBU formula type. %1"
 msgstr "Beazonosíthatatlan keserűség formula. %1"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Batch Size: %1\n"
-msgstr "Kész sörlé mennyisége: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Size: %1\n"
-msgstr "Mennyiség (forraláskor): %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Time: %1\n"
-msgstr "Forralási idő: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "OG: %1\n"
-msgstr "Eredeti fajsúly (OG): %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "FG: %1\n"
-msgstr "Végleges fajsúly (FG): %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Bitterness: %1 IBUs (%2)\n"
-msgstr "Keserűség: %1 IBU (%2)\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Color: %1 SRM (%2)\n"
-msgstr "Szín: %1 SRM (%2)\n"
-
-msgctxt "QObject|"
-msgid "Fermentables\n"
-msgstr "Erjeszthető anyag\n"
-
-msgctxt "QObject|"
-msgid "Name"
-msgstr "Név"
-
-msgctxt "QObject|"
-msgid "Type"
-msgstr "Típus"
-
-msgctxt "QObject|"
-msgid "Amount"
-msgstr "Mennyiség"
-
-msgctxt "QObject|"
-msgid "Mashed"
-msgstr "Cefrézve"
-
-msgctxt "QObject|"
-msgid "Late"
-msgstr "Később hozzáadott"
-
-msgctxt "QObject|"
-msgid "Yield"
-msgstr "Süllyedés"
-
-msgctxt "QObject|"
-msgid "Color"
-msgstr "Szín"
-
-msgctxt "QObject|"
-msgid "Yes"
-msgstr "Igen"
-
-msgctxt "QObject|"
-msgid "No"
-msgstr "Nem"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Total grain: %1\n"
-msgstr "Összes gabona mennyiség: %1\n"
-
-msgctxt "QObject|"
-msgid "Hops\n"
-msgstr "KOmló\n"
-
-msgctxt "QObject|"
-msgid "Alpha"
-msgstr "Alfasav"
-
-msgctxt "QObject|"
-msgid "Use"
-msgstr "Felhasználás"
-
-msgctxt "QObject|"
-msgid "Time"
-msgstr "Idõ"
-
-msgctxt "QObject|"
-msgid "IBU"
-msgstr "Keserűség (IBU)"
-
-msgctxt "QObject|"
-msgid "Misc\n"
-msgstr "Egyéb\n"
-
-msgctxt "QObject|"
-msgid "Yeast\n"
-msgstr "Élesztő\n"
-
-msgctxt "QObject|"
-msgid "Form"
-msgstr "Forma"
-
-msgctxt "QObject|"
-msgid "Stage"
-msgstr "Szakasz"
-
-msgctxt "QObject|"
-msgid "Secondary"
-msgstr "Másodlagos"
-
-msgctxt "QObject|"
-msgid "Primary"
-msgstr "Elsődleges"
-
-msgctxt "QObject|"
-msgid "Mash\n"
-msgstr "Cefre\n"
-
-msgctxt "QObject|"
-msgid "Temp"
-msgstr "Hőmérséklet"
-
-msgctxt "QObject|"
-msgid "Target"
-msgstr "Cél"
-
-msgctxt "QObject|"
-msgid "Notes\n"
-msgstr "Megjegyzés\n"
-
-msgctxt "QObject|"
-msgid "Instructions\n"
-msgstr "Útmutatás\n"
 
 msgctxt "QObject|"
 msgid "Directory Problem"
@@ -1807,14 +1758,6 @@ msgid "Adjunct"
 msgstr "Adalék"
 
 msgctxt "QObject|"
-msgid "Boil"
-msgstr "Forralás"
-
-msgctxt "QObject|"
-msgid "Mash"
-msgstr "Cefre"
-
-msgctxt "QObject|"
 msgid "Infusion"
 msgstr "Áztatás"
 
@@ -1825,34 +1768,6 @@ msgstr "Hőmérséklet"
 msgctxt "QObject|"
 msgid "Decoction"
 msgstr "Dekokció"
-
-msgctxt "QObject|"
-msgid "Bottling"
-msgstr "Palackozás"
-
-msgctxt "QObject|"
-msgid "Spice"
-msgstr "Fűszer"
-
-msgctxt "QObject|"
-msgid "Fining"
-msgstr "Derítőszer"
-
-msgctxt "QObject|"
-msgid "Water Agent"
-msgstr "Vízkezelő anyag"
-
-msgctxt "QObject|"
-msgid "Herb"
-msgstr "Gyógynövény"
-
-msgctxt "QObject|"
-msgid "Flavor"
-msgstr "Ízanyag"
-
-msgctxt "QObject|"
-msgid "Other"
-msgstr "Egyéb anyag"
 
 msgctxt "QObject|"
 msgid "Ale"
@@ -1929,16 +1844,6 @@ msgstr "Egyebek"
 msgctxt "QObject|"
 msgid "Yeast"
 msgstr "Élesztőtörzs"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Efficiency: %1%\n"
-msgstr "Kihozatali arány: %1%\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "ABV: %1%\n"
-msgstr "alkoholfok (v/v): %1%\n"
 
 msgctxt "QObject|"
 msgid "Style"
@@ -2266,10 +2171,6 @@ msgid "Color"
 msgstr "Szín"
 
 msgctxt "RecipeFormatter|"
-msgid "Calories (per 12 oz.)"
-msgstr "Kalóriatartalom (345ml)"
-
-msgctxt "RecipeFormatter|"
 msgid "Fermentables"
 msgstr "Erjesztető anyagok"
 
@@ -2473,6 +2374,34 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "ülepedés"
 
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Miscs"
+msgstr "Egyebek"
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Yeasts"
+msgstr "Élesztők"
+
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Becsült kalóriatartalom (354ml)"
+
+msgctxt "RecipeFormatter|"
+msgid "Bitterness"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Target"
+msgstr "Cél"
+
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
 msgstr "Nem egyező kezdeti fajsúly"
@@ -2486,16 +2415,38 @@ msgstr ""
 "A megadott eredeti °B alapján a kezdeti fajsúly %1, de az általad megadott "
 "érték %2. A továbbiakban a kiszámított eredeti  fajsúlyt vesszük alapul."
 
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "Select Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid ""
+"The recipe will be scaled to match the batch size and efficiency of the "
+"selected equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Efficiency (%)"
+msgstr ""
+
+msgctxt "ScaleRecipeIntroPage|"
+msgid "Scale Recipe"
+msgstr ""
+
+msgctxt "ScaleRecipeIntroPage|"
+msgid ""
+"This wizard will help you scale a recipe to another size or "
+"efficiency.Select another equipment with the new batch size and/or "
+"efficiency andthe wizard will scale the recipe ingredients automatically."
+msgstr ""
+
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
 msgstr "Arányított recept"
-
-msgctxt "ScaleRecipeTool|"
-msgid ""
-"The mash has been reset due to the fact that mash temperatures do not scale "
-"easily. Please re-run the mash wizard."
-msgstr ""
-"Nem arányítható hőmérsékleti adatok. Indítsd újra a cefrézés varázslót!"
 
 msgctxt "ScaleRecipeTool|"
 msgid ""
@@ -3118,10 +3069,6 @@ msgid "Amount in inventory"
 msgstr "Készleten lévő mennyiség"
 
 msgctxt "fermentableEditor|"
-msgid "fermentableEditor"
-msgstr ""
-
-msgctxt "fermentableEditor|"
 msgid "Color"
 msgstr "Szín"
 
@@ -3727,8 +3674,7 @@ msgstr "&Összefésülés"
 
 msgctxt "mainWindow|"
 msgid "Merge another set of recipes, ingredients, etc. into the current set"
-msgstr ""
-"Másik recept, összetevő, stb. adathalmaz összefésülése a jelenlegivel"
+msgstr "Másik recept, összetevő, stb. adathalmaz összefésülése a jelenlegivel"
 
 msgctxt "mainWindow|"
 msgid "&New Recipe"
@@ -3755,10 +3701,6 @@ msgid "Delete recipe"
 msgstr "Recept törlése"
 
 msgctxt "mainWindow|"
-msgid "Donate"
-msgstr "Adományozás"
-
-msgctxt "mainWindow|"
 msgid "&Mashs"
 msgstr "&Cefrék"
 
@@ -3771,15 +3713,15 @@ msgid "1.0"
 msgstr "1.0"
 
 msgctxt "mainWindow|"
-msgid "application/x-brewtarget-ingredient"
-msgstr "application/x-brewtarget-ingredient"
-
-msgctxt "mainWindow|"
 msgid "Strike Water Calculator"
 msgstr "Felöntő víz kiszámítás"
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
+msgstr ""
+
+msgctxt "mainWindow|"
+msgid "Export to &BBCode"
 msgstr ""
 
 msgctxt "mashDesigner|"
@@ -3910,10 +3852,6 @@ msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Tun specific heat (cal/(g*K))"
-msgstr ""
-
-msgctxt "mashEditor|"
-msgid "mashEditor"
 msgstr ""
 
 msgctxt "mashStepEditor|"
@@ -4758,30 +4696,6 @@ msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displaySg"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displayPlato"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "Scale Recipe"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New batch size"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New Batch Size"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New Efficiency"
 msgstr ""
 
 msgctxt "strikeWaterDialog|"

@@ -7,10 +7,6 @@
         <source>About Brewtarget</source>
         <translation>Om Brewtarget</translation>
     </message>
-    <message>
-        <source>Donate</source>
-        <translation>Doner</translation>
-    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -57,10 +53,6 @@
     <message>
         <source>ABV</source>
         <translation>ABV</translation>
-    </message>
-    <message>
-        <source>Estimated calories(per 12 oz)</source>
-        <translation>Estimert kalorier</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -117,6 +109,14 @@
     <message>
         <source>Heat water</source>
         <translation>Varm opp vann</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Estimert kalorier</translation>
     </message>
 </context>
 <context>
@@ -208,6 +208,10 @@
     <message>
         <source>Step %1: %2</source>
         <translation>Trinn %1: %2</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -334,6 +338,10 @@
     </message>
     <message>
         <source>Barrels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -742,6 +750,29 @@
     </message>
 </context>
 <context>
+    <name>Fermentable</name>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Trekkes</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Meskes ikke</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Sen</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Normal</translation>
+    </message>
+</context>
+<context>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
@@ -802,32 +833,32 @@
         <source>Adjunct</source>
         <translation>Adjunkt</translation>
     </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Trekkes</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Meskes ikke</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Normal</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Sen</translation>
+    </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <translation>Dårlig modell indeks.rad = %1</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Meskes</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation>Trekkes</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation>Meskes ikke</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Sen</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation>Normal</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -846,10 +877,6 @@
         <translation>Mengde</translation>
     </message>
     <message>
-        <source>Late Addition</source>
-        <translation>Nylig tillegg</translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation>Utbytte %</translation>
     </message>
@@ -860,6 +887,14 @@
     <message>
         <source>Color</source>
         <translation>Farge</translation>
+    </message>
+    <message>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addition</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1203,14 +1238,6 @@
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>Et mappenavn må ha minst et ikke-/  tegn</translation>
     </message>
-    <message>
-        <source>calories/33cL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>calories/12oz</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MashDesigner</name>
@@ -1346,6 +1373,61 @@
     </message>
 </context>
 <context>
+    <name>Misc</name>
+    <message>
+        <source>Spice</source>
+        <translation type="unfinished">Krydder</translation>
+    </message>
+    <message>
+        <source>Fining</source>
+        <translation type="unfinished">Klaringsmiddel</translation>
+    </message>
+    <message>
+        <source>Water Agent</source>
+        <translation type="unfinished">Vannjustering</translation>
+    </message>
+    <message>
+        <source>Herb</source>
+        <translation type="unfinished">Urt</translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished">Smak</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished">Annet</translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished">Kok</translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished">Mesk</translation>
+    </message>
+    <message>
+        <source>Primary</source>
+        <translation type="unfinished">Primær</translation>
+    </message>
+    <message>
+        <source>Secondary</source>
+        <translation type="unfinished">Sekundær</translation>
+    </message>
+    <message>
+        <source>Bottling</source>
+        <translation type="unfinished">Flasking</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Vekt</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Volum</translation>
+    </message>
+</context>
+<context>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
@@ -1430,6 +1512,14 @@
         <source>Bottling</source>
         <translation>Flasking</translation>
     </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Vekt</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Volum</translation>
+    </message>
 </context>
 <context>
     <name>MiscTableModel</name>
@@ -1452,14 +1542,6 @@
     <message>
         <source>Amount</source>
         <translation>Mengde</translation>
-    </message>
-    <message>
-        <source>Weight</source>
-        <translation>Vekt</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Volum</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -1556,172 +1638,6 @@
         <translation>Ukjent IBU-formeltype. %1</translation>
     </message>
     <message>
-        <source>Batch Size: %1
-</source>
-        <translation>Bryggevolum: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Size: %1
-</source>
-        <translation>Kokevolum: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Time: %1
-</source>
-        <translation>Koketid: %1
-</translation>
-    </message>
-    <message>
-        <source>OG: %1
-</source>
-        <translation>OG: %1
-</translation>
-    </message>
-    <message>
-        <source>FG: %1
-</source>
-        <translation>FG: %1
-</translation>
-    </message>
-    <message>
-        <source>Bitterness: %1 IBUs (%2)
-</source>
-        <translation>Bitterhet: %1 IBU (%2)
-</translation>
-    </message>
-    <message>
-        <source>Color: %1 SRM (%2)
-</source>
-        <translation>Farge: %1 SRM (%2)
-</translation>
-    </message>
-    <message>
-        <source>Fermentables
-</source>
-        <translation>Gjærbare råvarer
-</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Navn</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Type</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Mengde</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Meskes</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Sen</translation>
-    </message>
-    <message>
-        <source>Yield</source>
-        <translation>Utbytte</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Farge</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation>Ja</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Nei</translation>
-    </message>
-    <message>
-        <source>Total grain: %1
-</source>
-        <translation>Totalt korn: %1
-</translation>
-    </message>
-    <message>
-        <source>Hops
-</source>
-        <translation>Humle
-</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation>Alfa</translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation>Bruk</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Tid</translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation>IBU</translation>
-    </message>
-    <message>
-        <source>Misc
-</source>
-        <translation>Diverse
-</translation>
-    </message>
-    <message>
-        <source>Yeast
-</source>
-        <translation>Gjær
-</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation>Skjema</translation>
-    </message>
-    <message>
-        <source>Stage</source>
-        <translation>Fase</translation>
-    </message>
-    <message>
-        <source>Secondary</source>
-        <translation>Sekundær</translation>
-    </message>
-    <message>
-        <source>Primary</source>
-        <translation>Primær</translation>
-    </message>
-    <message>
-        <source>Mash
-</source>
-        <translation>Mesk
-</translation>
-    </message>
-    <message>
-        <source>Temp</source>
-        <translation>Temp</translation>
-    </message>
-    <message>
-        <source>Target</source>
-        <translation>Mål</translation>
-    </message>
-    <message>
-        <source>Notes
-</source>
-        <translation>Notater
-</translation>
-    </message>
-    <message>
-        <source>Instructions
-</source>
-        <translation>Instruksjoner
-</translation>
-    </message>
-    <message>
         <source>Directory Problem</source>
         <translation>Mappeproblem</translation>
     </message>
@@ -1810,14 +1726,6 @@
         <translation>Adjunkt</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Kok</translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation>Mesk</translation>
-    </message>
-    <message>
         <source>Infusion</source>
         <translation>Infusjon</translation>
     </message>
@@ -1828,34 +1736,6 @@
     <message>
         <source>Decoction</source>
         <translation>Dekoksjon</translation>
-    </message>
-    <message>
-        <source>Bottling</source>
-        <translation>Flasking</translation>
-    </message>
-    <message>
-        <source>Spice</source>
-        <translation>Krydder</translation>
-    </message>
-    <message>
-        <source>Fining</source>
-        <translation>Klaringsmiddel</translation>
-    </message>
-    <message>
-        <source>Water Agent</source>
-        <translation>Vannjustering</translation>
-    </message>
-    <message>
-        <source>Herb</source>
-        <translation>Urt</translation>
-    </message>
-    <message>
-        <source>Flavor</source>
-        <translation>Smak</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation>Annet</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -1932,18 +1812,6 @@
     <message>
         <source>Yeast</source>
         <translation>Gjær</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%
-</source>
-        <translation>Effektivitet: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%
-</source>
-        <translation>ABV: %1%
-</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2238,10 +2106,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation>Farge</translation>
     </message>
     <message>
-        <source>Calories (per 12 oz.)</source>
-        <translation>Kalorier (i 12 oz. = 340g)</translation>
-    </message>
-    <message>
         <source>Fermentables</source>
         <translation>Gjærbare råvarer</translation>
     </message>
@@ -2445,6 +2309,30 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Flocculation</source>
         <translation>Flokkulering</translation>
     </message>
+    <message>
+        <source>Miscs</source>
+        <translation type="unfinished">Diverse</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Gjær</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Estimert kalorier</translation>
+    </message>
+    <message>
+        <source>Bitterness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation type="unfinished">Mål</translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
@@ -2458,14 +2346,40 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
 </context>
 <context>
+    <name>ScaleRecipeEquipmentPage</name>
+    <message>
+        <source>Select Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Efficiency (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScaleRecipeIntroPage</name>
+    <message>
+        <source>Scale Recipe</source>
+        <translation type="unfinished">Skaler oppskrift</translation>
+    </message>
+    <message>
+        <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
         <translation>Skalert oppskrift</translation>
-    </message>
-    <message>
-        <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Mesken har blitt resatt fordi at mesketemperatur ikke lar seg skalere så lett. Vær vennlig og kjør meskeveillederen på nytt.</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
@@ -3113,10 +3027,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation>Mengde i varebeholdning</translation>
     </message>
     <message>
-        <source>fermentableEditor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Farge</translation>
     </message>
@@ -3758,10 +3668,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation>Slett oppskrift</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Doner</translation>
-    </message>
-    <message>
         <source>&amp;Mashs</source>
         <translation>&amp;Mesk</translation>
     </message>
@@ -3774,15 +3680,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation>1.0</translation>
     </message>
     <message>
-        <source>application/x-brewtarget-ingredient</source>
-        <translation>application/x-brewtarget-ingredient</translation>
-    </message>
-    <message>
         <source>Strike Water Calculator</source>
         <translation>Meskevannkalkulator</translation>
     </message>
     <message>
         <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to &amp;BBCode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3918,10 +3824,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Karets spesifikk varme (cal/(g*K))</translation>
-    </message>
-    <message>
-        <source>mashEditor</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4798,33 +4700,6 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displaySg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displayPlato</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>scaleRecipeTool</name>
-    <message>
-        <source>Scale Recipe</source>
-        <translation>Skaler oppskrift</translation>
-    </message>
-    <message>
-        <source>New batch size</source>
-        <translation>Ny batch størrelse</translation>
-    </message>
-    <message>
-        <source>New Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Efficiency</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

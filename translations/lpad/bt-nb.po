@@ -1,26 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 00:47+0000\n"
-"PO-Revision-Date: 2015-10-04 22:03+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-12-13 20:04+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: nb\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
 msgstr "Om Brewtarget"
-
-msgctxt "AboutDialog|"
-msgid "Donate"
-msgstr "Doner"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -65,10 +54,6 @@ msgstr "Tetthet slutt"
 msgctxt "BrewDayScrollWidget|"
 msgid "ABV"
 msgstr "ABV"
-
-msgctxt "BrewDayScrollWidget|"
-msgid "Estimated calories(per 12 oz)"
-msgstr "Estimert kalorier"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Instructions"
@@ -126,6 +111,15 @@ msgstr "Legg til malt"
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
 msgstr "Varm opp vann"
+
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Estimert kalorier"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -215,6 +209,10 @@ msgstr "Notater"
 msgctxt "BrewDayWidget|"
 msgid "Step %1: %2"
 msgstr "Trinn %1: %2"
+
+msgctxt "BrewDayWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -338,6 +336,10 @@ msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
+msgstr ""
+
+msgctxt "Brewtarget|"
+msgid "Scale"
 msgstr ""
 
 msgctxt "BtDigitWidget|"
@@ -737,6 +739,30 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Avbryt"
 
+msgctxt "Fermentable|"
+msgid "Mashed"
+msgstr ""
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Steeped"
+msgstr "Trekkes"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Not mashed"
+msgstr "Meskes ikke"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Late"
+msgstr "Sen"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Normal"
+msgstr "Normal"
+
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
 msgstr "Gjærbar råvares navn"
@@ -793,30 +819,34 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Adjunkt"
 
+msgctxt "FermentableItemDelegate|"
+msgid "Mashed"
+msgstr ""
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Steeped"
+msgstr "Trekkes"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Not mashed"
+msgstr "Meskes ikke"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Normal"
+msgstr "Normal"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Late"
+msgstr "Sen"
+
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
 msgstr "Dårlig modell indeks.rad = %1"
-
-msgctxt "FermentableTableModel|"
-msgid "Mashed"
-msgstr "Meskes"
-
-msgctxt "FermentableTableModel|"
-msgid "Steeped"
-msgstr "Trekkes"
-
-msgctxt "FermentableTableModel|"
-msgid "Not mashed"
-msgstr "Meskes ikke"
-
-msgctxt "FermentableTableModel|"
-msgid "Late"
-msgstr "Sen"
-
-msgctxt "FermentableTableModel|"
-msgid "Normal"
-msgstr "Normal"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -836,10 +866,6 @@ msgid "Amount"
 msgstr "Mengde"
 
 msgctxt "FermentableTableModel|"
-msgid "Late Addition"
-msgstr "Nylig tillegg"
-
-msgctxt "FermentableTableModel|"
 msgid "Yield %"
 msgstr "Utbytte %"
 
@@ -850,6 +876,14 @@ msgstr "Lagerbeholdning"
 msgctxt "FermentableTableModel|"
 msgid "Color"
 msgstr "Farge"
+
+msgctxt "FermentableTableModel|"
+msgid "Method"
+msgstr ""
+
+msgctxt "FermentableTableModel|"
+msgid "Addition"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1195,14 +1229,6 @@ msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
 msgstr "Et mappenavn må ha minst et ikke-/  tegn"
 
-msgctxt "MainWindow|"
-msgid "calories/33cL"
-msgstr ""
-
-msgctxt "MainWindow|"
-msgid "calories/12oz"
-msgstr ""
-
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "Ingen gjærbare råvarer"
@@ -1343,6 +1369,71 @@ msgstr ""
 "Du har for mye vørter fra meskingen for kokemengden din. Jeg foreslår å øke "
 "kokemengden ved å øke koketiden eller redusere mesketykkelsen."
 
+#, fuzzy
+msgctxt "Misc|"
+msgid "Spice"
+msgstr "Krydder"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Fining"
+msgstr "Klaringsmiddel"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Water Agent"
+msgstr "Vannjustering"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Herb"
+msgstr "Urt"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Flavor"
+msgstr "Smak"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Other"
+msgstr "Annet"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Boil"
+msgstr "Kok"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Mash"
+msgstr "Mesk"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Primary"
+msgstr "Primær"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Secondary"
+msgstr "Sekundær"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Bottling"
+msgstr "Flasking"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Weight"
+msgstr "Vekt"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Volume"
+msgstr "Volum"
+
 msgctxt "MiscDialog|"
 msgid "Misc name"
 msgstr "Diverse navn"
@@ -1423,6 +1514,16 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Flasking"
 
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Weight"
+msgstr "Vekt"
+
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Volume"
+msgstr "Volum"
+
 msgctxt "MiscTableModel|"
 msgid "Name"
 msgstr "Navn"
@@ -1442,14 +1543,6 @@ msgstr "Tid"
 msgctxt "MiscTableModel|"
 msgid "Amount"
 msgstr "Mengde"
-
-msgctxt "MiscTableModel|"
-msgid "Weight"
-msgstr "Vekt"
-
-msgctxt "MiscTableModel|"
-msgid "Volume"
-msgstr "Volum"
 
 msgctxt "MiscTableModel|"
 msgid "Amount Type"
@@ -1544,150 +1637,6 @@ msgstr "Ugyldig fargeformeltype: %1"
 msgctxt "QObject|"
 msgid "Unrecognized IBU formula type. %1"
 msgstr "Ukjent IBU-formeltype. %1"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Batch Size: %1\n"
-msgstr "Bryggevolum: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Size: %1\n"
-msgstr "Kokevolum: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Time: %1\n"
-msgstr "Koketid: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "OG: %1\n"
-msgstr "OG: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "FG: %1\n"
-msgstr "FG: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Bitterness: %1 IBUs (%2)\n"
-msgstr "Bitterhet: %1 IBU (%2)\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Color: %1 SRM (%2)\n"
-msgstr "Farge: %1 SRM (%2)\n"
-
-msgctxt "QObject|"
-msgid "Fermentables\n"
-msgstr "Gjærbare råvarer\n"
-
-msgctxt "QObject|"
-msgid "Name"
-msgstr "Navn"
-
-msgctxt "QObject|"
-msgid "Type"
-msgstr "Type"
-
-msgctxt "QObject|"
-msgid "Amount"
-msgstr "Mengde"
-
-msgctxt "QObject|"
-msgid "Mashed"
-msgstr "Meskes"
-
-msgctxt "QObject|"
-msgid "Late"
-msgstr "Sen"
-
-msgctxt "QObject|"
-msgid "Yield"
-msgstr "Utbytte"
-
-msgctxt "QObject|"
-msgid "Color"
-msgstr "Farge"
-
-msgctxt "QObject|"
-msgid "Yes"
-msgstr "Ja"
-
-msgctxt "QObject|"
-msgid "No"
-msgstr "Nei"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Total grain: %1\n"
-msgstr "Totalt korn: %1\n"
-
-msgctxt "QObject|"
-msgid "Hops\n"
-msgstr "Humle\n"
-
-msgctxt "QObject|"
-msgid "Alpha"
-msgstr "Alfa"
-
-msgctxt "QObject|"
-msgid "Use"
-msgstr "Bruk"
-
-msgctxt "QObject|"
-msgid "Time"
-msgstr "Tid"
-
-msgctxt "QObject|"
-msgid "IBU"
-msgstr "IBU"
-
-msgctxt "QObject|"
-msgid "Misc\n"
-msgstr "Diverse\n"
-
-msgctxt "QObject|"
-msgid "Yeast\n"
-msgstr "Gjær\n"
-
-msgctxt "QObject|"
-msgid "Form"
-msgstr "Skjema"
-
-msgctxt "QObject|"
-msgid "Stage"
-msgstr "Fase"
-
-msgctxt "QObject|"
-msgid "Secondary"
-msgstr "Sekundær"
-
-msgctxt "QObject|"
-msgid "Primary"
-msgstr "Primær"
-
-msgctxt "QObject|"
-msgid "Mash\n"
-msgstr "Mesk\n"
-
-msgctxt "QObject|"
-msgid "Temp"
-msgstr "Temp"
-
-msgctxt "QObject|"
-msgid "Target"
-msgstr "Mål"
-
-msgctxt "QObject|"
-msgid "Notes\n"
-msgstr "Notater\n"
-
-msgctxt "QObject|"
-msgid "Instructions\n"
-msgstr "Instruksjoner\n"
 
 msgctxt "QObject|"
 msgid "Directory Problem"
@@ -1804,14 +1753,6 @@ msgid "Adjunct"
 msgstr "Adjunkt"
 
 msgctxt "QObject|"
-msgid "Boil"
-msgstr "Kok"
-
-msgctxt "QObject|"
-msgid "Mash"
-msgstr "Mesk"
-
-msgctxt "QObject|"
 msgid "Infusion"
 msgstr "Infusjon"
 
@@ -1822,34 +1763,6 @@ msgstr "Temperatur"
 msgctxt "QObject|"
 msgid "Decoction"
 msgstr "Dekoksjon"
-
-msgctxt "QObject|"
-msgid "Bottling"
-msgstr "Flasking"
-
-msgctxt "QObject|"
-msgid "Spice"
-msgstr "Krydder"
-
-msgctxt "QObject|"
-msgid "Fining"
-msgstr "Klaringsmiddel"
-
-msgctxt "QObject|"
-msgid "Water Agent"
-msgstr "Vannjustering"
-
-msgctxt "QObject|"
-msgid "Herb"
-msgstr "Urt"
-
-msgctxt "QObject|"
-msgid "Flavor"
-msgstr "Smak"
-
-msgctxt "QObject|"
-msgid "Other"
-msgstr "Annet"
 
 msgctxt "QObject|"
 msgid "Ale"
@@ -1926,16 +1839,6 @@ msgstr "Diverse"
 msgctxt "QObject|"
 msgid "Yeast"
 msgstr "Gjær"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Efficiency: %1%\n"
-msgstr "Effektivitet: %1%\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "ABV: %1%\n"
-msgstr "ABV: %1%\n"
 
 msgctxt "QObject|"
 msgid "Style"
@@ -2262,10 +2165,6 @@ msgid "Color"
 msgstr "Farge"
 
 msgctxt "RecipeFormatter|"
-msgid "Calories (per 12 oz.)"
-msgstr "Kalorier (i 12 oz. = 340g)"
-
-msgctxt "RecipeFormatter|"
 msgid "Fermentables"
 msgstr "Gjærbare råvarer"
 
@@ -2469,6 +2368,34 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Flokkulering"
 
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Miscs"
+msgstr "Diverse"
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Yeasts"
+msgstr "Gjær"
+
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Estimert kalorier"
+
+msgctxt "RecipeFormatter|"
+msgid "Bitterness"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Target"
+msgstr "Mål"
+
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
 msgstr "Uoverenstemmelse OG"
@@ -2482,17 +2409,39 @@ msgstr ""
 "Basert på given original plato, skulle OG være %1, men du har skrevet %2. "
 "Fortsetter med kalkulert OG."
 
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "Select Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid ""
+"The recipe will be scaled to match the batch size and efficiency of the "
+"selected equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Efficiency (%)"
+msgstr ""
+
+#, fuzzy
+msgctxt "ScaleRecipeIntroPage|"
+msgid "Scale Recipe"
+msgstr "Skaler oppskrift"
+
+msgctxt "ScaleRecipeIntroPage|"
+msgid ""
+"This wizard will help you scale a recipe to another size or "
+"efficiency.Select another equipment with the new batch size and/or "
+"efficiency andthe wizard will scale the recipe ingredients automatically."
+msgstr ""
+
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
 msgstr "Skalert oppskrift"
-
-msgctxt "ScaleRecipeTool|"
-msgid ""
-"The mash has been reset due to the fact that mash temperatures do not scale "
-"easily. Please re-run the mash wizard."
-msgstr ""
-"Mesken har blitt resatt fordi at mesketemperatur ikke lar seg skalere så "
-"lett. Vær vennlig og kjør meskeveillederen på nytt."
 
 msgctxt "ScaleRecipeTool|"
 msgid ""
@@ -3113,10 +3062,6 @@ msgstr "Mengde i varebeholdning"
 msgctxt "fermentableEditor|"
 msgid "Amount in inventory"
 msgstr "Mengde i varebeholdning"
-
-msgctxt "fermentableEditor|"
-msgid "fermentableEditor"
-msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Color"
@@ -3752,10 +3697,6 @@ msgid "Delete recipe"
 msgstr "Slett oppskrift"
 
 msgctxt "mainWindow|"
-msgid "Donate"
-msgstr "Doner"
-
-msgctxt "mainWindow|"
 msgid "&Mashs"
 msgstr "&Mesk"
 
@@ -3768,15 +3709,15 @@ msgid "1.0"
 msgstr "1.0"
 
 msgctxt "mainWindow|"
-msgid "application/x-brewtarget-ingredient"
-msgstr "application/x-brewtarget-ingredient"
-
-msgctxt "mainWindow|"
 msgid "Strike Water Calculator"
 msgstr "Meskevannkalkulator"
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
+msgstr ""
+
+msgctxt "mainWindow|"
+msgid "Export to &BBCode"
 msgstr ""
 
 msgctxt "mashDesigner|"
@@ -3906,10 +3847,6 @@ msgstr "Karets spesifikk varme"
 msgctxt "mashEditor|"
 msgid "Tun specific heat (cal/(g*K))"
 msgstr "Karets spesifikk varme (cal/(g*K))"
-
-msgctxt "mashEditor|"
-msgid "mashEditor"
-msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Mash Step Editor"
@@ -4762,30 +4699,6 @@ msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displaySg"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displayPlato"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "Scale Recipe"
-msgstr "Skaler oppskrift"
-
-msgctxt "scaleRecipeTool|"
-msgid "New batch size"
-msgstr "Ny batch størrelse"
-
-msgctxt "scaleRecipeTool|"
-msgid "New Batch Size"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New Efficiency"
 msgstr ""
 
 msgctxt "strikeWaterDialog|"

@@ -1,26 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 00:47+0000\n"
-"PO-Revision-Date: 2015-10-04 22:07+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-12-13 20:04+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: zh\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
 msgstr "关于BrewtargetAbout Brewtarget"
-
-msgctxt "AboutDialog|"
-msgid "Donate"
-msgstr "捐赠Donate"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -65,10 +54,6 @@ msgstr "最后比重"
 msgctxt "BrewDayScrollWidget|"
 msgid "ABV"
 msgstr "ABV"
-
-msgctxt "BrewDayScrollWidget|"
-msgid "Estimated calories(per 12 oz)"
-msgstr "估计热量（每12盎司）"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Instructions"
@@ -126,6 +111,15 @@ msgstr "添加谷物"
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
 msgstr "Heat water加热水"
+
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "估计卡路里（每12盎司）"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -215,6 +209,10 @@ msgstr "说明Notes"
 msgctxt "BrewDayWidget|"
 msgid "Step %1: %2"
 msgstr "步骤 %1: %2"
+
+msgctxt "BrewDayWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -338,6 +336,10 @@ msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
+msgstr ""
+
+msgctxt "Brewtarget|"
+msgid "Scale"
 msgstr ""
 
 msgctxt "BtDigitWidget|"
@@ -732,6 +734,31 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "取消"
 
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Mashed"
+msgstr "捣碎Mashed"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Steeped"
+msgstr "浸泡"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Not mashed"
+msgstr "未捣碎"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Late"
+msgstr "晚Late"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Normal"
+msgstr "正常"
+
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
 msgstr "可发酵的名字"
@@ -788,30 +815,35 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "附属物"
 
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Mashed"
+msgstr "捣碎Mashed"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Steeped"
+msgstr "浸泡"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Not mashed"
+msgstr "未捣碎"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Normal"
+msgstr "正常"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Late"
+msgstr "晚Late"
+
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
 msgstr "坏榜样指数。排=％1row = %1"
-
-msgctxt "FermentableTableModel|"
-msgid "Mashed"
-msgstr "捣碎Mashed"
-
-msgctxt "FermentableTableModel|"
-msgid "Steeped"
-msgstr "浸泡"
-
-msgctxt "FermentableTableModel|"
-msgid "Not mashed"
-msgstr "未捣碎"
-
-msgctxt "FermentableTableModel|"
-msgid "Late"
-msgstr "晚Late"
-
-msgctxt "FermentableTableModel|"
-msgid "Normal"
-msgstr "正常"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -831,10 +863,6 @@ msgid "Amount"
 msgstr "金额Amount"
 
 msgctxt "FermentableTableModel|"
-msgid "Late Addition"
-msgstr "Late Addition晚除了"
-
-msgctxt "FermentableTableModel|"
 msgid "Yield %"
 msgstr "率％"
 
@@ -845,6 +873,14 @@ msgstr ""
 msgctxt "FermentableTableModel|"
 msgid "Color"
 msgstr "颜色Color"
+
+msgctxt "FermentableTableModel|"
+msgid "Method"
+msgstr ""
+
+msgctxt "FermentableTableModel|"
+msgid "Addition"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1181,14 +1217,6 @@ msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
 msgstr ""
 
-msgctxt "MainWindow|"
-msgid "calories/33cL"
-msgstr ""
-
-msgctxt "MainWindow|"
-msgid "calories/12oz"
-msgstr ""
-
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "没有发酵物"
@@ -1324,6 +1352,68 @@ msgid ""
 "thickness."
 msgstr "你有太多的麦汁从熬大小醪。我建议增加熬熬时间，通过增加或减少您的醪厚度尺寸。"
 
+#, fuzzy
+msgctxt "Misc|"
+msgid "Spice"
+msgstr "香料Spice"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Fining"
+msgstr "罚款Fining"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Water Agent"
+msgstr "水剂Water Agent"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Herb"
+msgstr "草本植物Herb"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Flavor"
+msgstr "味Flavor"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Other"
+msgstr "其他"
+
+msgctxt "Misc|"
+msgid "Boil"
+msgstr ""
+
+msgctxt "Misc|"
+msgid "Mash"
+msgstr ""
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Primary"
+msgstr "主要"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Secondary"
+msgstr "次要Secondary"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Bottling"
+msgstr "装瓶"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Weight"
+msgstr "重量"
+
+msgctxt "Misc|"
+msgid "Volume"
+msgstr ""
+
 msgctxt "MiscDialog|"
 msgid "Misc name"
 msgstr "其他名称"
@@ -1404,6 +1494,15 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "装瓶"
 
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Weight"
+msgstr "重量"
+
+msgctxt "MiscItemDelegate|"
+msgid "Volume"
+msgstr ""
+
 msgctxt "MiscTableModel|"
 msgid "Name"
 msgstr "名Name"
@@ -1423,14 +1522,6 @@ msgstr "时间Time"
 msgctxt "MiscTableModel|"
 msgid "Amount"
 msgstr "量Amount"
-
-msgctxt "MiscTableModel|"
-msgid "Weight"
-msgstr "重量"
-
-msgctxt "MiscTableModel|"
-msgid "Volume"
-msgstr "量体积Volume"
 
 msgctxt "MiscTableModel|"
 msgid "Amount Type"
@@ -1524,154 +1615,6 @@ msgctxt "QObject|"
 msgid "Unrecognized IBU formula type. %1"
 msgstr "无法识别的IBU公式类型。％1Unrecognized IBU formula type. %1"
 
-#, qt-format
-msgctxt "QObject|"
-msgid "Batch Size: %1\n"
-msgstr "批次大小：％1Batch Size: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Size: %1\n"
-msgstr ""
-"煮沸大小：％1\n"
-"Boil Size: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Time: %1\n"
-msgstr "煮沸时间：％1Boil Time: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "OG: %1\n"
-msgstr "OG: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "FG: %1\n"
-msgstr "FG: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Bitterness: %1 IBUs (%2)\n"
-msgstr "苦味：％1 IBUS（％2）Bitterness: %1 IBUs (%2)\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Color: %1 SRM (%2)\n"
-msgstr ""
-"颜色：％1 SRM（％2）\n"
-"Color: %1 SRM (%2)\n"
-
-msgctxt "QObject|"
-msgid "Fermentables\n"
-msgstr "发酵物\n"
-
-msgctxt "QObject|"
-msgid "Name"
-msgstr "名Name"
-
-msgctxt "QObject|"
-msgid "Type"
-msgstr "类型Type"
-
-msgctxt "QObject|"
-msgid "Amount"
-msgstr "量Amount"
-
-msgctxt "QObject|"
-msgid "Mashed"
-msgstr "捣碎Mashed"
-
-msgctxt "QObject|"
-msgid "Late"
-msgstr "晚Late"
-
-msgctxt "QObject|"
-msgid "Yield"
-msgstr "产量Yield"
-
-msgctxt "QObject|"
-msgid "Color"
-msgstr "颜色Color"
-
-msgctxt "QObject|"
-msgid "Yes"
-msgstr "是"
-
-msgctxt "QObject|"
-msgid "No"
-msgstr "否"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Total grain: %1\n"
-msgstr "粮食总：％1Total grain: %1\n"
-
-msgctxt "QObject|"
-msgid "Hops\n"
-msgstr "酒花Hops\n"
-
-msgctxt "QObject|"
-msgid "Alpha"
-msgstr "阿尔法Alpha"
-
-msgctxt "QObject|"
-msgid "Use"
-msgstr "使用Use"
-
-msgctxt "QObject|"
-msgid "Time"
-msgstr "时间Time"
-
-msgctxt "QObject|"
-msgid "IBU"
-msgstr "IBU"
-
-msgctxt "QObject|"
-msgid "Misc\n"
-msgstr "杂项Misc\n"
-
-msgctxt "QObject|"
-msgid "Yeast\n"
-msgstr "酵母\n"
-
-msgctxt "QObject|"
-msgid "Form"
-msgstr "形式Form"
-
-msgctxt "QObject|"
-msgid "Stage"
-msgstr "舞台Stage"
-
-msgctxt "QObject|"
-msgid "Secondary"
-msgstr "次要Secondary"
-
-msgctxt "QObject|"
-msgid "Primary"
-msgstr "主要"
-
-msgctxt "QObject|"
-msgid "Mash\n"
-msgstr "捣碎\n"
-
-msgctxt "QObject|"
-msgid "Temp"
-msgstr "温度"
-
-msgctxt "QObject|"
-msgid "Target"
-msgstr "目标"
-
-msgctxt "QObject|"
-msgid "Notes\n"
-msgstr "笔记Notes\n"
-
-msgctxt "QObject|"
-msgid "Instructions\n"
-msgstr "说明\n"
-
 msgctxt "QObject|"
 msgid "Directory Problem"
 msgstr "目录问题"
@@ -1746,9 +1689,9 @@ msgid ""
 "'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
 "'database.sqlite'."
 msgstr ""
-"无法回滚到备份数据库。导航到“％1”，删除'database.sqlite'，如果它存在，命名'tempBackupDatabase.sqlite'dat"
-"abase.sqlite'。Navigate to '%1', remove 'database.sqlite' if it exists, and "
-"rename 'tempBackupDatabase.sqlite' to 'database.sqlite'."
+"无法回滚到备份数据库。导航到“％1”，删除'database.sqlite'，如果它存在，命名'tempBackupDatabase.sqlite'database.sqlite'。Navigate "
+"to '%1', remove 'database.sqlite' if it exists, and rename "
+"'tempBackupDatabase.sqlite' to 'database.sqlite'."
 
 msgctxt "QObject|"
 msgid "Database Restore Failure"
@@ -1784,14 +1727,6 @@ msgid "Adjunct"
 msgstr "附属物"
 
 msgctxt "QObject|"
-msgid "Boil"
-msgstr "熬Boil"
-
-msgctxt "QObject|"
-msgid "Mash"
-msgstr "糖化Mash"
-
-msgctxt "QObject|"
 msgid "Infusion"
 msgstr "注入Infusion"
 
@@ -1802,34 +1737,6 @@ msgstr "温度"
 msgctxt "QObject|"
 msgid "Decoction"
 msgstr "煎煮Decoction"
-
-msgctxt "QObject|"
-msgid "Bottling"
-msgstr "装瓶"
-
-msgctxt "QObject|"
-msgid "Spice"
-msgstr "香料Spice"
-
-msgctxt "QObject|"
-msgid "Fining"
-msgstr "罚款Fining"
-
-msgctxt "QObject|"
-msgid "Water Agent"
-msgstr "水剂Water Agent"
-
-msgctxt "QObject|"
-msgid "Herb"
-msgstr "草本植物Herb"
-
-msgctxt "QObject|"
-msgid "Flavor"
-msgstr "味Flavor"
-
-msgctxt "QObject|"
-msgid "Other"
-msgstr "其他"
 
 msgctxt "QObject|"
 msgid "Ale"
@@ -1906,16 +1813,6 @@ msgstr "杂项Miscellaneous"
 msgctxt "QObject|"
 msgid "Yeast"
 msgstr "酵母Yeast"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Efficiency: %1%\n"
-msgstr "效率：％1％Efficiency: %1%\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "ABV: %1%\n"
-msgstr "ABV：％1％ABV: %1%\n"
 
 msgctxt "QObject|"
 msgid "Style"
@@ -2245,10 +2142,6 @@ msgid "Color"
 msgstr "颜色Color"
 
 msgctxt "RecipeFormatter|"
-msgid "Calories (per 12 oz.)"
-msgstr "卡路里（每次12盎司。）Calories (per 12 oz.)"
-
-msgctxt "RecipeFormatter|"
 msgid "Fermentables"
 msgstr "发酵物Fermentables"
 
@@ -2452,6 +2345,34 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "絮凝Flocculation"
 
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Miscs"
+msgstr "Miscs"
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Yeasts"
+msgstr "酵母菌Yeasts"
+
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "估计卡路里（每12盎司）"
+
+msgctxt "RecipeFormatter|"
+msgid "Bitterness"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Target"
+msgstr "目标"
+
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
 msgstr "OG不匹配"
@@ -2465,15 +2386,39 @@ msgstr ""
 "根据给定的原始柏拉图，OG应该是1％，但是，你已经进入了2％。继续计算OG。Based on the given original plato, the "
 "OG should be %1, but you have entered %2."
 
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "Select Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid ""
+"The recipe will be scaled to match the batch size and efficiency of the "
+"selected equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Efficiency (%)"
+msgstr ""
+
+#, fuzzy
+msgctxt "ScaleRecipeIntroPage|"
+msgid "Scale Recipe"
+msgstr "规模配方"
+
+msgctxt "ScaleRecipeIntroPage|"
+msgid ""
+"This wizard will help you scale a recipe to another size or "
+"efficiency.Select another equipment with the new batch size and/or "
+"efficiency andthe wizard will scale the recipe ingredients automatically."
+msgstr ""
+
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
 msgstr "配方缩放"
-
-msgctxt "ScaleRecipeTool|"
-msgid ""
-"The mash has been reset due to the fact that mash temperatures do not scale "
-"easily. Please re-run the mash wizard."
-msgstr "的糊状物已被复位，因为这样的事实，醪液温度不很容易扩展。请重新运行醪向导。"
 
 msgctxt "ScaleRecipeTool|"
 msgid ""
@@ -3091,10 +3036,6 @@ msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Amount in inventory"
-msgstr ""
-
-msgctxt "fermentableEditor|"
-msgid "fermentableEditor"
 msgstr ""
 
 msgctxt "fermentableEditor|"
@@ -3732,10 +3673,6 @@ msgid "Delete recipe"
 msgstr "删除配方Delete recipe"
 
 msgctxt "mainWindow|"
-msgid "Donate"
-msgstr "捐赠Donate"
-
-msgctxt "mainWindow|"
 msgid "&Mashs"
 msgstr "&Mashs"
 
@@ -3748,15 +3685,15 @@ msgid "1.0"
 msgstr "1.0"
 
 msgctxt "mainWindow|"
-msgid "application/x-brewtarget-ingredient"
-msgstr ""
-
-msgctxt "mainWindow|"
 msgid "Strike Water Calculator"
 msgstr ""
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
+msgstr ""
+
+msgctxt "mainWindow|"
+msgid "Export to &BBCode"
 msgstr ""
 
 msgctxt "mashDesigner|"
@@ -3886,10 +3823,6 @@ msgstr "桶sp热Tun sp. heat"
 msgctxt "mashEditor|"
 msgid "Tun specific heat (cal/(g*K))"
 msgstr "桶比热(cal /(g * K))Tun specific heat (cal/(g*K))"
-
-msgctxt "mashEditor|"
-msgid "mashEditor"
-msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Mash Step Editor"
@@ -4744,30 +4677,6 @@ msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displaySg"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displayPlato"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "Scale Recipe"
-msgstr "规模配方"
-
-msgctxt "scaleRecipeTool|"
-msgid "New batch size"
-msgstr "新批次大小"
-
-msgctxt "scaleRecipeTool|"
-msgid "New Batch Size"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New Efficiency"
 msgstr ""
 
 msgctxt "strikeWaterDialog|"

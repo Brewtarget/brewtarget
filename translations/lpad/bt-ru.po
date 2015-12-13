@@ -1,26 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-05 00:47+0000\n"
-"PO-Revision-Date: 2015-10-04 22:07+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-12-13 20:04+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Language: ru\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
 msgstr "О Brewtarget"
-
-msgctxt "AboutDialog|"
-msgid "Donate"
-msgstr "Пожертвовать"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -65,10 +54,6 @@ msgstr "Конечная плотность"
 msgctxt "BrewDayScrollWidget|"
 msgid "ABV"
 msgstr "% алкоголя (об.)"
-
-msgctxt "BrewDayScrollWidget|"
-msgid "Estimated calories(per 12 oz)"
-msgstr "Примерное число калорий (на 0.33л)"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Instructions"
@@ -126,6 +111,15 @@ msgstr "Добавить солод"
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
 msgstr "Подогрев воды"
+
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "BrewDayScrollWidget|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Приблизительно калорий (на 0,33л)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -215,6 +209,10 @@ msgstr "Примечания"
 msgctxt "BrewDayWidget|"
 msgid "Step %1: %2"
 msgstr "Этап %1: %2"
+
+msgctxt "BrewDayWidget|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -338,6 +336,10 @@ msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
+msgstr ""
+
+msgctxt "Brewtarget|"
+msgid "Scale"
 msgstr ""
 
 msgctxt "BtDigitWidget|"
@@ -739,6 +741,30 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Отменить"
 
+msgctxt "Fermentable|"
+msgid "Mashed"
+msgstr ""
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Steeped"
+msgstr "Загруженое"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Not mashed"
+msgstr "Не затёртое"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Late"
+msgstr "Поздно"
+
+#, fuzzy
+msgctxt "Fermentable|"
+msgid "Normal"
+msgstr "Нормально"
+
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
 msgstr "Название сбраживаемого"
@@ -795,30 +821,34 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Дополнение"
 
+msgctxt "FermentableItemDelegate|"
+msgid "Mashed"
+msgstr ""
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Steeped"
+msgstr "Загруженое"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Not mashed"
+msgstr "Не затёртое"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Normal"
+msgstr "Нормально"
+
+#, fuzzy
+msgctxt "FermentableItemDelegate|"
+msgid "Late"
+msgstr "Поздно"
+
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
 msgstr "Неправильный индекс модели. Строка = %1"
-
-msgctxt "FermentableTableModel|"
-msgid "Mashed"
-msgstr "Затёртое"
-
-msgctxt "FermentableTableModel|"
-msgid "Steeped"
-msgstr "Загруженое"
-
-msgctxt "FermentableTableModel|"
-msgid "Not mashed"
-msgstr "Не затёртое"
-
-msgctxt "FermentableTableModel|"
-msgid "Late"
-msgstr "Поздно"
-
-msgctxt "FermentableTableModel|"
-msgid "Normal"
-msgstr "Нормально"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -838,10 +868,6 @@ msgid "Amount"
 msgstr "Количество"
 
 msgctxt "FermentableTableModel|"
-msgid "Late Addition"
-msgstr "Последнее дополнение"
-
-msgctxt "FermentableTableModel|"
 msgid "Yield %"
 msgstr "Выход %"
 
@@ -852,6 +878,14 @@ msgstr "Инвентарь"
 msgctxt "FermentableTableModel|"
 msgid "Color"
 msgstr "Цвет"
+
+msgctxt "FermentableTableModel|"
+msgid "Method"
+msgstr ""
+
+msgctxt "FermentableTableModel|"
+msgid "Addition"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1198,14 +1232,6 @@ msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
 msgstr ""
 
-msgctxt "MainWindow|"
-msgid "calories/33cL"
-msgstr ""
-
-msgctxt "MainWindow|"
-msgid "calories/12oz"
-msgstr ""
-
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "Нет сбраживаемого"
@@ -1346,6 +1372,67 @@ msgstr ""
 "У Вас слишком много сусла для кипячения. Я рекомендую изменить размер "
 "кипячения путём изменения времени кипячения. Или уменьшения толщины затора."
 
+#, fuzzy
+msgctxt "Misc|"
+msgid "Spice"
+msgstr "Специя"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Fining"
+msgstr "Очистка"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Water Agent"
+msgstr "Агент воды"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Herb"
+msgstr "Трава"
+
+msgctxt "Misc|"
+msgid "Flavor"
+msgstr ""
+
+msgctxt "Misc|"
+msgid "Other"
+msgstr ""
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Boil"
+msgstr "Кипячение"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Mash"
+msgstr "Затор"
+
+msgctxt "Misc|"
+msgid "Primary"
+msgstr ""
+
+msgctxt "Misc|"
+msgid "Secondary"
+msgstr ""
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Bottling"
+msgstr "Бутылирование"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Weight"
+msgstr "Вес"
+
+#, fuzzy
+msgctxt "Misc|"
+msgid "Volume"
+msgstr "Объём"
+
 msgctxt "MiscDialog|"
 msgid "Misc name"
 msgstr "Разное имя"
@@ -1426,6 +1513,16 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Бутылирование"
 
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Weight"
+msgstr "Вес"
+
+#, fuzzy
+msgctxt "MiscItemDelegate|"
+msgid "Volume"
+msgstr "Объём"
+
 msgctxt "MiscTableModel|"
 msgid "Name"
 msgstr "Название"
@@ -1445,14 +1542,6 @@ msgstr "Время"
 msgctxt "MiscTableModel|"
 msgid "Amount"
 msgstr "Количество"
-
-msgctxt "MiscTableModel|"
-msgid "Weight"
-msgstr "Вес"
-
-msgctxt "MiscTableModel|"
-msgid "Volume"
-msgstr "Объём"
 
 msgctxt "MiscTableModel|"
 msgid "Amount Type"
@@ -1547,150 +1636,6 @@ msgstr "Неправильный тип цвета: %1"
 msgctxt "QObject|"
 msgid "Unrecognized IBU formula type. %1"
 msgstr "Неопределённый тип IBU. %1"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Batch Size: %1\n"
-msgstr "Размер затора: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Size: %1\n"
-msgstr "Размер кипячения: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Boil Time: %1\n"
-msgstr "Время кипячения: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "OG: %1\n"
-msgstr "Начальная плотность: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "FG: %1\n"
-msgstr "Конечная плотность: %1\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Bitterness: %1 IBUs (%2)\n"
-msgstr "Горечь: %1 IBUs (%2)\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Color: %1 SRM (%2)\n"
-msgstr "Цвет: %1 SRM (%2)\n"
-
-msgctxt "QObject|"
-msgid "Fermentables\n"
-msgstr "Сбраживаемое\n"
-
-msgctxt "QObject|"
-msgid "Name"
-msgstr "Название"
-
-msgctxt "QObject|"
-msgid "Type"
-msgstr "Тип"
-
-msgctxt "QObject|"
-msgid "Amount"
-msgstr "Количество"
-
-msgctxt "QObject|"
-msgid "Mashed"
-msgstr "Затёртое"
-
-msgctxt "QObject|"
-msgid "Late"
-msgstr "Поздно"
-
-msgctxt "QObject|"
-msgid "Yield"
-msgstr "Выход"
-
-msgctxt "QObject|"
-msgid "Color"
-msgstr "Цвет"
-
-msgctxt "QObject|"
-msgid "Yes"
-msgstr "Да"
-
-msgctxt "QObject|"
-msgid "No"
-msgstr "Нет"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Total grain: %1\n"
-msgstr "Общая засыпь: %1\n"
-
-msgctxt "QObject|"
-msgid "Hops\n"
-msgstr "Хмель\n"
-
-msgctxt "QObject|"
-msgid "Alpha"
-msgstr "Альфа"
-
-msgctxt "QObject|"
-msgid "Use"
-msgstr "Использование"
-
-msgctxt "QObject|"
-msgid "Time"
-msgstr "Время"
-
-msgctxt "QObject|"
-msgid "IBU"
-msgstr "Горечь IBU"
-
-msgctxt "QObject|"
-msgid "Misc\n"
-msgstr "Разное\n"
-
-msgctxt "QObject|"
-msgid "Yeast\n"
-msgstr "Дрожжи\n"
-
-msgctxt "QObject|"
-msgid "Form"
-msgstr "Форма"
-
-msgctxt "QObject|"
-msgid "Stage"
-msgstr "Этап"
-
-msgctxt "QObject|"
-msgid "Secondary"
-msgstr "Вторичный"
-
-msgctxt "QObject|"
-msgid "Primary"
-msgstr "Первичный"
-
-msgctxt "QObject|"
-msgid "Mash\n"
-msgstr "Затор\n"
-
-msgctxt "QObject|"
-msgid "Temp"
-msgstr "Температура"
-
-msgctxt "QObject|"
-msgid "Target"
-msgstr "Цель"
-
-msgctxt "QObject|"
-msgid "Notes\n"
-msgstr "Примечания\n"
-
-msgctxt "QObject|"
-msgid "Instructions\n"
-msgstr "Инструкции\n"
 
 msgctxt "QObject|"
 msgid "Directory Problem"
@@ -1807,14 +1752,6 @@ msgid "Adjunct"
 msgstr "Дополнение"
 
 msgctxt "QObject|"
-msgid "Boil"
-msgstr "Кипячение"
-
-msgctxt "QObject|"
-msgid "Mash"
-msgstr "Затор"
-
-msgctxt "QObject|"
 msgid "Infusion"
 msgstr "Настаивание"
 
@@ -1825,34 +1762,6 @@ msgstr "Температура"
 msgctxt "QObject|"
 msgid "Decoction"
 msgstr "Отвар"
-
-msgctxt "QObject|"
-msgid "Bottling"
-msgstr "Бутылирование"
-
-msgctxt "QObject|"
-msgid "Spice"
-msgstr "Специя"
-
-msgctxt "QObject|"
-msgid "Fining"
-msgstr "Очистка"
-
-msgctxt "QObject|"
-msgid "Water Agent"
-msgstr "Агент воды"
-
-msgctxt "QObject|"
-msgid "Herb"
-msgstr "Трава"
-
-msgctxt "QObject|"
-msgid "Flavor"
-msgstr "Вкус"
-
-msgctxt "QObject|"
-msgid "Other"
-msgstr "Иное"
 
 msgctxt "QObject|"
 msgid "Ale"
@@ -1929,16 +1838,6 @@ msgstr "Прочее"
 msgctxt "QObject|"
 msgid "Yeast"
 msgstr "Дрожжи"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "Efficiency: %1%\n"
-msgstr "Эффективность: %1%\n"
-
-#, qt-format
-msgctxt "QObject|"
-msgid "ABV: %1%\n"
-msgstr "Объём алкоголя: %1%\n"
 
 msgctxt "QObject|"
 msgid "Style"
@@ -2264,10 +2163,6 @@ msgid "Color"
 msgstr "Цвет"
 
 msgctxt "RecipeFormatter|"
-msgid "Calories (per 12 oz.)"
-msgstr "Калории (на 12 унций)"
-
-msgctxt "RecipeFormatter|"
 msgid "Fermentables"
 msgstr "Сбраживаемые"
 
@@ -2471,6 +2366,34 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Флоккуляция"
 
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Miscs"
+msgstr "Прочее"
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Yeasts"
+msgstr "Дрожжи"
+
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 33 cl)"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Estimated calories (per 12 oz)"
+msgstr "Приблизительно калорий (на 0,33л)"
+
+msgctxt "RecipeFormatter|"
+msgid "Bitterness"
+msgstr ""
+
+#, fuzzy
+msgctxt "RecipeFormatter|"
+msgid "Target"
+msgstr "Цель"
+
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
 msgstr "Несовпадение начальной плотности"
@@ -2484,17 +2407,39 @@ msgstr ""
 "Основанная на данном начальном плато, начальная плотность должна быть %1, но "
 "вы ввели %2. Продолжаем с расчитаной начальной плотностью."
 
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "Select Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid ""
+"The recipe will be scaled to match the batch size and efficiency of the "
+"selected equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Equipment"
+msgstr ""
+
+msgctxt "ScaleRecipeEquipmentPage|"
+msgid "New Efficiency (%)"
+msgstr ""
+
+#, fuzzy
+msgctxt "ScaleRecipeIntroPage|"
+msgid "Scale Recipe"
+msgstr "Масштабирование рецепта"
+
+msgctxt "ScaleRecipeIntroPage|"
+msgid ""
+"This wizard will help you scale a recipe to another size or "
+"efficiency.Select another equipment with the new batch size and/or "
+"efficiency andthe wizard will scale the recipe ingredients automatically."
+msgstr ""
+
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
 msgstr "Рецепт запечатан"
-
-msgctxt "ScaleRecipeTool|"
-msgid ""
-"The mash has been reset due to the fact that mash temperatures do not scale "
-"easily. Please re-run the mash wizard."
-msgstr ""
-"Затор был сброшен т.к. температура затора не маштабируется. Пожалуйсто "
-"перезапустите визард затора."
 
 msgctxt "ScaleRecipeTool|"
 msgid ""
@@ -3115,10 +3060,6 @@ msgstr "Количество в инвентаре"
 msgctxt "fermentableEditor|"
 msgid "Amount in inventory"
 msgstr "Количество в инвентаре"
-
-msgctxt "fermentableEditor|"
-msgid "fermentableEditor"
-msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Color"
@@ -3754,10 +3695,6 @@ msgid "Delete recipe"
 msgstr "Удалить рецепт"
 
 msgctxt "mainWindow|"
-msgid "Donate"
-msgstr "Пожертвовать"
-
-msgctxt "mainWindow|"
 msgid "&Mashs"
 msgstr ""
 
@@ -3770,15 +3707,15 @@ msgid "1.0"
 msgstr "1.0"
 
 msgctxt "mainWindow|"
-msgid "application/x-brewtarget-ingredient"
-msgstr ""
-
-msgctxt "mainWindow|"
 msgid "Strike Water Calculator"
 msgstr ""
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
+msgstr ""
+
+msgctxt "mainWindow|"
+msgid "Export to &BBCode"
 msgstr ""
 
 msgctxt "mashDesigner|"
@@ -3908,10 +3845,6 @@ msgstr "Теплоемк. Заторника"
 msgctxt "mashEditor|"
 msgid "Tun specific heat (cal/(g*K))"
 msgstr "Теплоемкость Заторника (кал/(гр*С))"
-
-msgctxt "mashEditor|"
-msgid "mashEditor"
-msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Mash Step Editor"
@@ -4764,30 +4697,6 @@ msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displaySg"
-msgstr ""
-
-msgctxt "refractoDialog|"
-msgid "displayPlato"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "Scale Recipe"
-msgstr "Масштабирование рецепта"
-
-msgctxt "scaleRecipeTool|"
-msgid "New batch size"
-msgstr "Новый объем варки"
-
-msgctxt "scaleRecipeTool|"
-msgid "New Batch Size"
-msgstr ""
-
-msgctxt "scaleRecipeTool|"
-msgid "New Efficiency"
 msgstr ""
 
 msgctxt "strikeWaterDialog|"
