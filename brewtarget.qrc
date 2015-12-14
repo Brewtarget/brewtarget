@@ -14,6 +14,7 @@
         <file alias="images/edit-copy.png">images/edit-copy.png</file>
         <file alias="images/exit.svg">images/exit.svg</file>
         <file alias="images/filesave.svg">images/filesave.svg</file>
+        <file alias="images/filesavedirty.svg">images/filesavedirty.svg</file>
         <file alias="images/flagBrazil.svg">images/flagBrazil.svg</file>
         <file alias="images/flagCatalonia.svg">images/flagCatalonia.svg</file>
         <file alias="images/flagChina.svg">images/flagChina.svg</file>
