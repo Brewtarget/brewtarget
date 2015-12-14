@@ -67,6 +67,8 @@ TimerWidget::TimerWidget(TimerMainDialog *parent, BoilTime* bt) :
     paletteNew.setColor(QPalette::Active, QPalette::WindowText, paletteOld.color(QPalette::Active, QPalette::Window));
     paletteNew.setColor(QPalette::Active, QPalette::Window, paletteOld.color(QPalette::Active, QPalette::WindowText));
 
+    retranslateUi(this);
+
     //Connections
     connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTime()));
     connect(boilTime, SIGNAL(timesUp()), this, SLOT(decrementTime()));
@@ -95,10 +97,10 @@ void TimerWidget::setTime(int t)
 void TimerWidget::setNote(QString n)
 {
     //Append if notes exist, new note if not
-    if (noteEdit->text() == "Notes..." || noteEdit->text() == "")
+    if (noteEdit->text() == tr("Notes...") || noteEdit->text() == "")
         noteEdit->setText(n);
     else
-        noteEdit->setText(noteEdit->text() + " and " + n);
+        noteEdit->setText(noteEdit->text() + tr(" and ") + n);
 }
 
 void TimerWidget::setBoil(BoilTime *bt)
@@ -208,7 +210,7 @@ void TimerWidget::setSound(QString s)
 void TimerWidget::on_setTimeBox_valueChanged(int t)
 {
     if (t*60 > boilTime->getTime()) {
-        QMessageBox::warning(this, "Error", "Addition time cannot be longer than remaining boil time");
+        QMessageBox::warning(this, tr("Error"), tr("Addition time cannot be longer than remaining boil time"));
         time = 0;
     } else {
         setTime(t*60);

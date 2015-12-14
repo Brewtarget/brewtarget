@@ -22,7 +22,7 @@
 
 TimerListDialog::TimerListDialog(QWidget* parent, QList<TimerWidget*>* timers) : QDialog(parent)
 {
-    this->setWindowTitle("Addition Timers");
+    this->setWindowTitle(tr("Addition Timers"));
 
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     this->setLayout(mainLayout);

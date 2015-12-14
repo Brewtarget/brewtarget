@@ -35,6 +35,7 @@ TimerMainDialog::TimerMainDialog(MainWindow* parent) : QDialog(parent),
    timers = new QList<TimerWidget*>();
    timerWindow = new TimerListDialog(this, timers);
    updateTime();
+   retranslateUi(this);
 
    //Connections
    connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTimer()));
@@ -203,7 +204,7 @@ void TimerMainDialog::on_showButton_clicked()
             timerWindow->show();
     }
     else
-            QMessageBox::warning(this, "No Timers", "There are currently no timers to show.");
+            QMessageBox::warning(this, tr("No Timers"), tr("There are currently no timers to show."));
 }
 
 void TimerMainDialog::timesUp()
@@ -211,7 +212,7 @@ void TimerMainDialog::timesUp()
     //If there are no knockout timers generate a timer for this
     if (!stopped) {
         bool isKnockOutTimer = false;
-        QString note = "KNOCKOUT";
+        QString note = tr("KNOCKOUT");
         foreach (TimerWidget* t, *timers) {
            if (t->getTime() == 0) {
                isKnockOutTimer = true;
@@ -229,8 +230,8 @@ void TimerMainDialog::on_loadRecipesButton_clicked()
     //Load current recipes
     if (!timers->isEmpty()){
         QMessageBox mb;
-        mb.setText("Active Timers");
-        mb.setInformativeText("You currently have active timers, would you like to replace them or add to them?");
+        mb.setText(tr("Active Timers"));
+        mb.setInformativeText(tr("You currently have active timers, would you like to replace them or add to them?"));
         QAbstractButton *replace =  mb.addButton(tr("Replace"), QMessageBox::YesRole);
         QAbstractButton *add = mb.addButton(tr("Add"), QMessageBox::NoRole);
         add->setFocus();
@@ -250,8 +251,7 @@ void TimerMainDialog::on_loadRecipesButton_clicked()
     hops = recipe->hops();
     foreach (Hop* h, hops) {
         if (h->use() == 2) { //2 = Boil addition -- Hop::Use enum
-            note = Brewtarget::displayAmount(h->amount_kg(), "TimerNote", "hop_amount", Units::kilograms) +
-                    " of " + h->name();
+            note = tr("%1 of %2").arg(Brewtarget::displayAmount(h->amount_kg(), "TimerNote", "hop_amount", Units::kilograms)).arg(h->name());
             int newTime = h->time_min() * 60;
             foreach (TimerWidget* td, *timers) {
                 if (td->getTime() == newTime){
@@ -276,14 +276,14 @@ void TimerMainDialog::on_loadRecipesButton_clicked()
     if (duplicatesFound) {
         QString timerText;
         if (duplicates == 1)
-            timerText = QString("%1 hop addition is already timed and has been ignored.").arg(duplicates);
+            timerText = tr("%1 hop addition is already timed and has been ignored.").arg(duplicates);
         else
-            timerText = QString("%1 hop additions are already timed and have been ignored.").arg(duplicates);
+            timerText = tr("%1 hop additions are already timed and have been ignored.").arg(duplicates);
 
-        QMessageBox::warning(this, "Duplicate Timers Ignored", timerText, QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Duplicate Timers Ignored"), timerText, QMessageBox::Ok);
     }
     if (timersGenerated == 0 && !duplicatesFound)
-        QMessageBox::warning(this, "No Addition Timers", "There are no boil addition, no timers generated.", QMessageBox::Ok);
+        QMessageBox::warning(this, tr("No Addition Timers"), tr("There are no boil addition, no timers generated."), QMessageBox::Ok);
 }
 
 void TimerMainDialog::on_cancelButton_clicked()
@@ -377,3 +377,4 @@ void TimerMainDialog::sortTimers()
         timers = sortedTimers;
     }
 }
+
