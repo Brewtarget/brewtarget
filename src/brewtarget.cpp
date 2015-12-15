@@ -88,7 +88,7 @@ QString Brewtarget::currentLanguage = "en";
 QString Brewtarget::userDataDir = getConfigDir();
 
 bool Brewtarget::checkVersion = true;
-Log Brewtarget::log(getUserDataDir());
+Log Brewtarget::log(true);
 
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
@@ -480,6 +480,7 @@ bool Brewtarget::initialize()
 
    readSystemOptions();
    loadMap();
+   log.changeDirectory(getUserDataDir());
 
    // Make sure all the necessary directories and files we need exist before starting.
    bool success;
@@ -504,11 +505,11 @@ bool Brewtarget::initialize()
    }
    else
       return false;
-
 }
 
 void Brewtarget::cleanup()
 {
+   log.info("Brewtarget is cleaning up.");
    // Should I do qApp->removeTranslator() first?
    delete defaultTrans;
    delete btTrans;
@@ -533,7 +534,7 @@ int Brewtarget::run()
       cleanup();
       return 1;
    }
-
+   log.info("Starting Brewtarget.");
    _mainWindow = new MainWindow();
    _mainWindow->setVisible(true);
    splashScreen.finish(_mainWindow);

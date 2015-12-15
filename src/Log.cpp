@@ -26,12 +26,25 @@ const QString Log::filename = "brewtarget_log.txt";
 const QString Log::timeFormat = "hh:mm:ss.zzz";
 const QString Log::tmpl = "[%1] %2 : %3";
 
-Log::Log(const QString defaultDir, bool isLoggingToStderr)
+Log::Log(bool isLoggingToStderr)
    : errStream(stderr),
      file(),
      isLoggingToStderr(isLoggingToStderr),
      stream(NULL) {
+}
 
+Log::~Log() {
+   delete stream;
+   stream = NULL;
+   if( file.isOpen() )
+      file.close();   
+}
+
+void Log::changeDirectory(const QString defaultDir) {
+   if (stream) {
+      doLog(LogType_ERROR, "Cannot change logging directory after it is initialized.");
+      return;
+   }
    // Test default location
    file.setFileName(defaultDir + filename);
    if( file.open(QIODevice::WriteOnly | QIODevice::Truncate) ) {
@@ -50,11 +63,12 @@ Log::Log(const QString defaultDir, bool isLoggingToStderr)
    warn(QString("Could not create a log file."));
 }
 
-Log::~Log() {
-   delete stream;
-   stream = NULL;
-   if( file.isOpen() )
-      file.close();   
+void Log::debug(const QString message) {
+   doLog(LogType_DEBUG, message);
+}
+
+void Log::info(const QString message) {
+   doLog(LogType_INFO, message);
 }
 
 void Log::warn(const QString message) {
