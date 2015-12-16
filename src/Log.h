@@ -40,6 +40,10 @@ class Log : public QObject
 public:
    ~Log();
 
+   //! \brief Logs a debug message. (safe to remove on prod)
+   void debug(const QString message);
+   //! \brief Logs a informational message.
+   void info(const QString message);
    //! \brief Logs a warning message.
    void warn(const QString message);
    //! \brief Logs a severe error. This is a potential fatal error.
@@ -70,8 +74,11 @@ private:
    static const QString filename;
    static const QString timeFormat;
    static const QString tmpl;
+   Log(bool isLoggingToStderr);
 
-   Log(const QString defaultDir, bool isLoggingToStderr = true);
+   //! \brief Sets the default directory of the log file
+   //! \param defaultDir The directory which will host the log file.
+   void changeDirectory(const QString defaultDir);
    void doLog(const LogType lt, const QString message);
    QString getTypeName(const LogType type) const;
 };
