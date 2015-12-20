@@ -158,7 +158,8 @@ void TimerWidget::retranslateUi()
 
 void TimerWidget::getSound()
 {
-   QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
+   QDir soundsDir(Brewtarget::getDataDir().canonicalPath() + "/sounds");
+   //QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
    QString soundFile = QFileDialog::getOpenFileName( qobject_cast<QWidget*>(this), tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)") );
 
    if( soundFile.isNull() )

@@ -145,15 +145,19 @@ public:
    };
 
    //! \return the data directory
-   static QString getDataDir();
+   static QDir getDataDir();
    //! \return the doc directory
-   static QString getDocDir();
+   static QDir getDocDir();
    //! \return the config directory
-   static QString getConfigDir(bool* success = 0);
+   static const QDir getConfigDir(bool* success = 0);
    //! \return user-specified directory where the database files reside.
-   static QString getUserDataDir();
-   //! \brief Blocking call that starts the application.
-   static int run();
+   static QDir getUserDataDir();
+   /*!
+    * \brief Blocking call that executes the application.
+    * \param userDirectory If !isEmpty, overwrites the current settings.
+    * \return Exit code from the application.
+    */
+   static int run(const QString &userDirectory = QString());
 
    static double toDouble(QString text, bool* ok = 0);
    static double toDouble(const BeerXMLElement* element, QString attribute, QString caller);
@@ -320,7 +324,7 @@ private:
    static QDateTime lastDbMergeRequest;
 
    //! \brief Where the user says the database files are
-   static QString userDataDir;
+   static QDir userDataDir;
 
    // Options to be edited ONLY by the OptionDialog============================
    // Whether or not to display plato instead of SG.
@@ -350,7 +354,7 @@ private:
     *
     * \returns false if anything goes awry, true if it's ok to start MainWindow
     */
-   static bool initialize();
+   static bool initialize(const QString &userDirectory = QString());
    /*!
     * \brief Run after QApplication exits to clean up shit, close database, etc.
     */
@@ -370,7 +374,7 @@ private:
     *  \brief Copies the user xml files to another directory.
     *  \returns false iff the copy is unsuccessful.
     */
-   static bool copyDataFiles(QString newPath);
+   static bool copyDataFiles(const QDir newPath);
 
    //! \brief Ensure our directories exist.
    static bool ensureDirectoriesExist();
