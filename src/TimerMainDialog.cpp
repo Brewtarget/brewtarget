@@ -35,11 +35,12 @@ TimerMainDialog::TimerMainDialog(MainWindow* parent) : QDialog(parent),
    timers = new QList<TimerWidget*>();
    timerWindow = new TimerListDialog(this, timers);
    updateTime();
-   retranslateUi(this);
 
    //Connections
    connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTimer()));
    connect(boilTime, SIGNAL(timesUp()), this, SLOT(timesUp()));
+
+   retranslateUi(this);
 }
 
 TimerMainDialog::~TimerMainDialog()

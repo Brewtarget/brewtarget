@@ -69,12 +69,6 @@ private slots:
 
       void decrementTimer();
       void timesUp();
-      TimerWidget* createNewTimer();
-      void createTimer();
-      void createTimer(QString n);
-      void createTimer(QString n, int t);
-      //Overload QDialog::reject()
-      void reject();
 
 private:
       MainWindow* mainWindow; //To get currently selected recipe
@@ -91,6 +85,12 @@ private:
       QString timeToString(int t);
       void setRingLimits(bool l, unsigned int a);
       void sortTimers();
+      TimerWidget* createNewTimer();
+      void createTimer();
+      void createTimer(QString n);
+      void createTimer(QString n, int t);
+      //Overload QDialog::reject()
+      void reject();
 };
 
 #endif
