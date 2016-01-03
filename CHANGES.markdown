@@ -3,11 +3,54 @@
 This changelog is for high-level user-visible changes to Brewtarget, intended
 for consumption by the typical end-user.
 
+## v2.3.0
+
+### New Features
+
+* Clarify UI design in ingredient tables [#81](https://github.com/Brewtarget/brewtarget/issues/81)
+* Recipe scaling is a wizard and unifies batch/efficiency scaling [#108](https://github.com/Brewtarget/brewtarget/pull/108)
+* Ingredient searching [#6](https://github.com/Brewtarget/brewtarget/issues/6)
+* More accurate ABV calcs for high-gravity recipes [#48](https://github.com/Brewtarget/brewtarget/issues/48)
+* BBCode export [#66](https://github.com/Brewtarget/brewtarget/pull/66)
+
+### Bug Fixes
+
+* User date formate not used in recipe tree [#123](https://github.com/Brewtarget/brewtarget/pull/123)
+* Oddities in brewday step numbering [#97](https://github.com/Brewtarget/brewtarget/pull/97)
+* Crash in instruction editor [#86](https://github.com/Brewtarget/brewtarget/issues/86)
+
+### Incompatibilities
+
 ## v2.2.0
 
 ### New Features
 
+* Scale recipe tool removes equipment [#91](https://github.com/Brewtarget/brewtarget/issues/91)
+* Noonan IBU calculation [#7](https://github.com/Brewtarget/brewtarget/issues/7)
+* Print output uses units and scales options
+* Delete button deletes all selected ingredients
+* Add sorting for inventory columns
+* Calories per 330mL for SI units
+* Upgrade to Qt5 from Qt4
+
 ### Bug Fixes
+
+* Crash when creating new recipe folder [#98](https://github.com/Brewtarget/brewtarget/issues/98)
+* Bad localization behavior for specific heat input field [#77](https://github.com/Brewtarget/brewtarget/issues/77)
+* Bad ingredient amount behavior in non-US locales [#65](https://github.com/Brewtarget/brewtarget/issues/65)
+* Leaf/plug utilization adjustment is backwards [#64](https://github.com/Brewtarget/brewtarget/issues/64)
+* Scale by efficiency is incorrect with sugars in recipe [#29](https://github.com/Brewtarget/brewtarget/issues/29)
+* Cannot export recipe [#39](https://github.com/Brewtarget/brewtarget/issues/39)
+* Recipe does not update after yeast changes [#30](https://github.com/Brewtarget/brewtarget/issues/30)
+* Multiple dialogs when cancelling multiple actions [#25](https://github.com/Brewtarget/brewtarget/issues/25)
+* Bad color range after style change using EBC [#2](https://github.com/Brewtarget/brewtarget/issues/2)
+* Crash on yeast import
+* Crash when double-clicking recipes on brewdate
+* Crash on removing hop from hop dialog
+* Late sugar additions affect boil gravity
+* Updated product id for Ringwood Ale yeast
+* Fixes import/export of brewnotes
+* Bug 1374421 -- cannot delete brewnotes
 
 ### Incompatibilities
 
