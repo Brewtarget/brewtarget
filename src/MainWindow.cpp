@@ -1944,7 +1944,8 @@ void MainWindow::saveMash()
 
 void MainWindow::openManual()
 {
-   QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir().filePath("brewtarget-manual.html")));
+   // TODO: open language-dependent manual when we have more than the English version
+   QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir().filePath("manual-en.pdf")));
 }
 
 // One print function to rule them all. Now we just need to make the menuing
