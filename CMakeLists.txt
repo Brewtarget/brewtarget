@@ -283,7 +283,7 @@ SET( brewtarget_DATA
      ${DATADIR}/default_db.sqlite
 # Yes, I know this is 'documentation', but Debian policy suggests it should be
 # with the data (see section 12.3 of the policy manual).
-     ${ROOTDIR}/doc/brewtarget-manual.html
+     ${ROOTDIR}/doc/manual-en.pdf
 )
 
 # Desktop files to install.
