@@ -85,7 +85,7 @@ QFile Brewtarget::pidFile;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
-QString Brewtarget::userDataDir = getConfigDir();
+QDir Brewtarget::userDataDir = getConfigDir();
 
 bool Brewtarget::checkVersion = true;
 Log Brewtarget::log(true);
@@ -106,55 +106,53 @@ QHash<int, UnitSystem*> Brewtarget::thingToUnitSystem;
 bool Brewtarget::ensureDirectoriesExist()
 {
    bool success;
-   QDir dir;
-
    QString errTitle(QObject::tr("Directory Problem"));
    QString errText(QObject::tr("\"%1\" cannot be read."));
 
    // Check data dir
-   dir.setPath(getDataDir());
-   if( ! dir.exists() || ! dir.isReadable() )
+   const QDir dataDir = getDataDir();
+   if( ! dataDir.exists() || ! dataDir.isReadable() )
    {
       QMessageBox::information(
          0,
          errTitle,
-         errText.arg(dir.path())
+         errText.arg(dataDir.path())
       );
       return false;
    }
 
    // Check doc dir
-   dir.setPath(getDocDir());
-   if( ! dir.exists() || ! dir.isReadable() )
+   const QDir docDir = getDocDir();
+   if( ! docDir.exists() || ! docDir.isReadable() )
    {
       QMessageBox::information(
          0,
          errTitle,
-         errText.arg(dir.path())
+         errText.arg(docDir.path())
       );
       return false;
    }
 
    // Check config dir
-   dir.setPath(getConfigDir(&success));
-   if( !success || ! dir.exists() || ! dir.isReadable() )
+   const QDir configDir = getConfigDir(&success);
+   if( !success || ! configDir.exists() || ! configDir.isReadable() )
    {
       QMessageBox::information(
          0,
          errTitle,
-         errText.arg(dir.path())
+         errText.arg(configDir.path())
       );
       return false;
    }
 
    // Check/create user data directory
-   dir.setPath(getUserDataDir());
-   if( !dir.exists() && !dir.mkpath(".") )
+   const QDir userDataDir = getUserDataDir();
+   if( !userDataDir.exists() && !userDataDir.mkpath(".") )
    {
       QMessageBox::information(
          0,
          errTitle,
-         errText.arg(dir.path())
+         errText.arg(userDataDir.path())
       );
       return false;
    }
@@ -175,16 +173,10 @@ void Brewtarget::checkForNewVersion(MainWindow* mw)
    QObject::connect( reply, SIGNAL(finished()), mw, SLOT(finishCheckingVersion()) );
 }
 
-bool Brewtarget::copyDataFiles(QString newPath)
+bool Brewtarget::copyDataFiles(const QDir newPath)
 {
-   QString dbFileName;
-   bool success = true;
-
-   // Database files.
-   dbFileName = getUserDataDir() + "database.sqlite";
-   success &= QFile::copy(dbFileName, newPath + "database.sqlite");
-
-   return success;
+   QString dbFileName = "database.sqlite";
+   return QFile::copy(getUserDataDir().filePath(dbFileName), newPath.filePath(dbFileName));
 }
 
 const QString& Brewtarget::getSystemLanguage()
@@ -217,8 +209,9 @@ void Brewtarget::setLanguage(QString twoLetterLanguage)
    qApp->removeTranslator(btTrans);
 
    QString filename = QString("bt_%1").arg(twoLetterLanguage);
-   QString dir = QString("%1translations_qm/").arg(getDataDir());
-   if( btTrans->load( filename, dir ) )
+   QDir translations = QDir (getDataDir().canonicalPath() + "/translations_qm");
+
+   if( btTrans->load( filename, translations.canonicalPath() ) )
       qApp->installTranslator(btTrans);
 
 }
@@ -264,7 +257,7 @@ TempScale Brewtarget::getTemperatureScale()
    return tempScale;
 }
 
-QString Brewtarget::getDataDir()
+QDir Brewtarget::getDataDir()
 {
    QString dir = qApp->applicationDirPath();
 #if defined(Q_OS_LINUX) // Linux OS.
@@ -290,7 +283,7 @@ QString Brewtarget::getDataDir()
    return dir;
 }
 
-QString Brewtarget::getDocDir()
+QDir Brewtarget::getDocDir()
 {
    QString dir = qApp->applicationDirPath();
 #if defined(Q_OS_LINUX) // Linux OS.
@@ -316,7 +309,7 @@ QString Brewtarget::getDocDir()
    return dir;
 }
 
-QString Brewtarget::getConfigDir(bool *success)
+const QDir Brewtarget::getConfigDir(bool *success)
 {
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
 
@@ -347,7 +340,7 @@ QString Brewtarget::getConfigDir(bool *success)
             // Failure.
             if( success != 0 )
                *success = false;
-            return "";
+            return QDir::temp();
          }
 
          // chmod 755 ~/.config
@@ -360,7 +353,7 @@ QString Brewtarget::getConfigDir(bool *success)
          logE( QString("Could not CD to \"%1\".").arg(dir.absolutePath() + "/.config") );
          if( success != 0 )
             *success = false;
-         return "";
+         return QDir::temp();
       }
    }
 
@@ -375,7 +368,7 @@ QString Brewtarget::getConfigDir(bool *success)
          logE( QString("Could not create \"%1\"").arg(dir.absolutePath() + "/brewtarget") );
          if( success != 0 )
             *success = false;
-         return "";
+         return QDir::temp();
       }
 
       // chmod 755 ~/.config/brewtarget
@@ -387,7 +380,7 @@ QString Brewtarget::getConfigDir(bool *success)
       logE(QString("Could not CD into \"%1\"").arg(dir.absolutePath() + "/brewtarget"));
       if( success != 0 )
          *success = false;
-      return "";
+      return QDir::temp();
    }
 
    if( success != 0 )
@@ -413,15 +406,16 @@ QString Brewtarget::getConfigDir(bool *success)
 
 }
 
-QString Brewtarget::getUserDataDir()
+QDir Brewtarget::getUserDataDir()
 {
-   if( userDataDir.endsWith('/') || userDataDir.endsWith('\\') )
-      return userDataDir;
-   else
-      return userDataDir + "/";
+   return userDataDir;
+//   if( userDataDir.endsWith('/') || userDataDir.endsWith('\\') )
+//      return userDataDir;
+//   else
+//      return userDataDir + "/";
 }
 
-bool Brewtarget::initialize()
+bool Brewtarget::initialize(const QString &userDirectory)
 {
    // Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
    qRegisterMetaType<QMetaProperty>();
@@ -439,7 +433,7 @@ bool Brewtarget::initialize()
 
    // In Unix, make sure the user isn't running 2 copies.
 #if defined(Q_OS_LINUX)
-   pidFile.setFileName(QString("%1.pid").arg(getUserDataDir()));
+   pidFile.setFileName(QString("%1.pid").arg(getUserDataDir().canonicalPath()));
    if( pidFile.exists() )
    {
       // Read the pid.
@@ -470,7 +464,18 @@ bool Brewtarget::initialize()
    }
    pidFile.close();
 #endif
-   userDataDir = getConfigDir();
+
+   // Use overwride if present.
+   if (!userDirectory.isEmpty() && QDir(userDirectory).exists())
+      userDataDir = QDir(userDirectory).canonicalPath();
+   // Use directory from app settings.
+   else if (hasOption("user_data_dir"))
+      userDataDir = QDir(option("user_data_dir","").toString()).canonicalPath();
+   // Guess where to put it.
+   else {
+      userDataDir = getConfigDir();
+      setOption("user_data_dir", userDataDir.canonicalPath());
+   }
 
    // If the old options file exists, convert it. Otherwise, just get the
    // system options. I *think* this will work. The installer copies the old
@@ -522,14 +527,14 @@ void Brewtarget::cleanup()
 
 }
 
-int Brewtarget::run()
+int Brewtarget::run(const QString &userDirectory)
 {
    int ret = 0;
 
    BtSplashScreen splashScreen;
    splashScreen.show();
    qApp->processEvents();
-   if( !initialize() )
+   if( !initialize(userDirectory) )
    {
       cleanup();
       return 1;
@@ -554,7 +559,7 @@ int Brewtarget::run()
 void Brewtarget::convertPersistentOptions()
 {
    QDir cfgDir = QDir(getConfigDir());
-   QFile xmlFile(getConfigDir() + "options.xml");
+   QFile xmlFile(getConfigDir().filePath("options.xml"));
    optionsDoc = new QDomDocument();
    QDomElement root;
    QString err;
@@ -789,10 +794,6 @@ void Brewtarget::readSystemOptions()
    if( hasOption("language") )
       setLanguage(option("language","").toString());
 
-   //=======================Data Dir===========================
-   if( hasOption("user_data_dir") )
-      userDataDir = option("user_data_dir","").toString();
-
    //=======================Weight=====================
    text = option("weight_unit_system", "SI").toString();
    if( text == "Imperial" )
@@ -911,7 +912,7 @@ void Brewtarget::saveSystemOptions()
    setOption("check_version", checkVersion);
    setOption("last_db_merge_req", lastDbMergeRequest.toString(Qt::ISODate));
    setOption("language", getCurrentLanguage());
-   setOption("user_data_dir", userDataDir);
+   //setOption("user_data_dir", userDataDir);
    setOption("weight_unit_system", thingToUnitSystem.value(Unit::Mass)->unitType());
    setOption("volume_unit_system",thingToUnitSystem.value(Unit::Volume)->unitType());
    setOption("temperature_scale", thingToUnitSystem.value(Unit::Temp)->unitType());

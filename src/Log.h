@@ -20,7 +20,7 @@
 #ifndef _LOG_H
 #define _LOG_H
 
-#include <QFile>
+#include <QDir>
 #include <QObject>
 #include <QMutex>
 #include <QString>
@@ -78,7 +78,7 @@ private:
 
    //! \brief Sets the default directory of the log file
    //! \param defaultDir The directory which will host the log file.
-   void changeDirectory(const QString defaultDir);
+   void changeDirectory(const QDir defaultDir);
    void doLog(const LogType lt, const QString message);
    QString getTypeName(const LogType type) const;
 };

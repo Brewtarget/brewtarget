@@ -40,20 +40,20 @@ Log::~Log() {
       file.close();   
 }
 
-void Log::changeDirectory(const QString defaultDir) {
+void Log::changeDirectory(const QDir defaultDir) {
    if (stream) {
       doLog(LogType_ERROR, "Cannot change logging directory after it is initialized.");
       return;
    }
    // Test default location
-   file.setFileName(defaultDir + filename);
+   file.setFileName(defaultDir.filePath(filename));
    if( file.open(QIODevice::WriteOnly | QIODevice::Truncate) ) {
       stream = new QTextStream(&file);
       return;
    }
 
    // Defaults to temporary
-   file.setFileName(QDir::tempPath() + "/" + filename);
+   file.setFileName(QDir::temp().filePath(filename));
    if( file.open(QFile::WriteOnly | QFile::Truncate) ) {
       stream = new QTextStream(&file);
       warn(QString("Log is in a temporary directory: %1").arg(file.fileName()));

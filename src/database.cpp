@@ -130,9 +130,9 @@ bool Database::load()
    bool schemaUpdated=false;
    
    // Set file names.
-   dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");
-   dataDbFileName = (Brewtarget::getDataDir() + "default_db.sqlite");
-   dbTempBackupFileName = (Brewtarget::getUserDataDir() + "tempBackupDatabase.sqlite");
+   dbFileName = Brewtarget::getUserDataDir().filePath("database.sqlite");
+   dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
+   dbTempBackupFileName = Brewtarget::getUserDataDir().filePath("tempBackupDatabase.sqlite");
    
    // Set the files.
    dbFile.setFileName(dbFileName);
@@ -361,7 +361,7 @@ void Database::convertFromXml()
       QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
       for ( int i = 0; i < oldFiles.size(); ++i ) 
       {
-         QFile oldXmlFile(Brewtarget::getUserDataDir() + oldFiles[i]);
+         QFile oldXmlFile(Brewtarget::getUserDataDir().filePath(oldFiles[i]));
          // If the old file exists, import.
          if( oldXmlFile.exists() )
          {
@@ -4335,7 +4335,7 @@ bool Database::cleanupBackupDatabase()
                                      "Database Restore Failure",
                                      QString(QObject::tr("Failed to remove the temporary backup database.  "
                                                          "Navigate to '%1' and remove "
-                                                         "'tempBackupDatabase.sqlite'.")).arg(Brewtarget::getUserDataDir()));
+                                                         "'tempBackupDatabase.sqlite'.")).arg(Brewtarget::getUserDataDir().canonicalPath()));
 
                return false;
             }
@@ -4353,7 +4353,7 @@ bool Database::cleanupBackupDatabase()
                                      QString(QObject::tr("Failed to rollback to the backup database.  "
                                                          "Navigate to '%1', remove 'database.sqlite' if it exists, "
                                                          "and rename 'tempBackupDatabase.sqlite' to "
-                                                         "'database.sqlite'.")).arg(Brewtarget::getUserDataDir()));
+                                                         "'database.sqlite'.")).arg(Brewtarget::getUserDataDir().canonicalPath()));
 
                return false;
             }
@@ -4370,7 +4370,7 @@ bool Database::cleanupBackupDatabase()
                                   QObject::tr("Database Restore Failure"),
                                   QString(QObject::tr("Failed to restore the backup database. Navigate to '%1' "
                                                       "and rename 'tempBackupDatabase.sqlite' to "
-                                                      "'database.sqlite'.").arg(Brewtarget::getUserDataDir())));
+                                                      "'database.sqlite'.").arg(Brewtarget::getUserDataDir().canonicalPath())));
 
             return false;
          }

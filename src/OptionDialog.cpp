@@ -159,14 +159,14 @@ void OptionDialog::show()
 
 void OptionDialog::setDataDir()
 {
-   QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), Brewtarget::getUserDataDir(), QFileDialog::ShowDirsOnly);
+   QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), Brewtarget::getUserDataDir().canonicalPath(), QFileDialog::ShowDirsOnly);
    if( ! dir.isEmpty() )
       lineEdit_dbDir->setText( dir );
 }
 
 void OptionDialog::defaultDataDir()
 {
-   lineEdit_dbDir->setText( Brewtarget::getConfigDir() );
+   lineEdit_dbDir->setText( Brewtarget::getConfigDir().canonicalPath() );
 }
 
 void OptionDialog::saveAndClose()
@@ -273,19 +273,12 @@ void OptionDialog::saveAndClose()
    // Check the new userDataDir.
    QString newUserDataDir = lineEdit_dbDir->text();
 
-   // Make sure the dir ends with a "/" or "\"
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-   if( !newUserDataDir.endsWith("/") )
-      newUserDataDir += "/";
-#else
-   if( !newUserDataDir.endsWith("\\") && !newUserDataDir.endsWith("/") )
-      newUserDataDir += "\\";
-#endif
+   QDir userDirectory(newUserDataDir);
 
-   if( newUserDataDir != Brewtarget::getUserDataDir() )
+   if( userDirectory != Brewtarget::getUserDataDir() )
    {
       // If there are no data files present...
-      if( ! QFileInfo(newUserDataDir + "database.sqlite").exists() )
+      if( ! QFileInfo(userDirectory, "database.sqlite").exists() )
       {
          // ...tell user we will copy old data files to new location.
          QMessageBox::information(this,
@@ -296,6 +289,7 @@ void OptionDialog::saveAndClose()
       }
 
       Brewtarget::userDataDir = newUserDataDir;
+      Brewtarget::setOption("user_data_dir", newUserDataDir);
       QMessageBox::information(
          this,
          tr("Restart"),
@@ -337,7 +331,7 @@ void OptionDialog::showChanges()
    ibuFormulaComboBox->setCurrentIndex(ibuFormulaComboBox->findData(Brewtarget::colorFormula));
 
    // Data directory
-   lineEdit_dbDir->setText(Brewtarget::getUserDataDir());
+   lineEdit_dbDir->setText(Brewtarget::getUserDataDir().canonicalPath());
 
    // The IBU modifications. These will all be calculated from a 60 min boil. This is gonna get confusing.
    double amt = Brewtarget::toDouble(Brewtarget::option("mashHopAdjustment",100).toString(), "OptionDialog::showChanges()");
