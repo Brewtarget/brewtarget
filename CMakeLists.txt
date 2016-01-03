@@ -574,8 +574,6 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
    # Install the data.
    INSTALL( FILES ${brewtarget_DATA}
             DESTINATION ${DATAPATH} )
-   INSTALL( DIRECTORY ${ROOTDIR}/doc/images
-            DESTINATION ${DATAPATH} )
 
    # Install the documentation.
    INSTALL( FILES ${brewtarget_DOCS}
