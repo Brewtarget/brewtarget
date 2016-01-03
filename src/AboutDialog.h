@@ -112,7 +112,7 @@ public:
             ""
             " <h2>Source Code</h2>"
             " <p>"
-            "  Brewtarget's source code is located at <a href=\"http://www.gitorious.org/brewtarget/\">www.gitorious.org/brewtarget</a>"
+            "  Brewtarget's source code is located at <a href=\"https://github.com/Brewtarget/brewtarget\">github.com/Brewtarget/brewtarget</a>"
             " </p>"
             "</html>"
          )
