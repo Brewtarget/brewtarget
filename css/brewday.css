@@ -124,3 +124,8 @@ img
    text-align:right;
 }
 
+#customNote
+{
+   display:block;
+   white-space:pre-wrap;
+}
