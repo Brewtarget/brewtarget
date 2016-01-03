@@ -461,6 +461,7 @@ MainWindow::MainWindow(QWidget* parent)
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
    connect( &(Database::instance()), SIGNAL( deletedBrewNoteSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+   connect( &(Database::instance()), SIGNAL( isUnsavedChanged(bool)), this, SLOT( updateUnsavedStatus(bool)));
 }
 
 void MainWindow::setupShortCuts()
@@ -2354,6 +2355,17 @@ void MainWindow::fixBrewNote()
 void MainWindow::updateStatus(const QString status) {
    if( statusBar() )
       statusBar()->showMessage(status, 3000);
+}
+
+void MainWindow::updateUnsavedStatus(bool isUnsaved) {
+   if ( isUnsaved ) {
+      statusBar()->showMessage(tr("Unsaved Changes"));
+      actionSave->setIcon(QIcon(SAVEDIRTYPNG));
+   }
+   else {
+      statusBar()->clearMessage();
+      actionSave->setIcon(QIcon(SAVEPNG));
+   }
 }
 
 void MainWindow::closeBrewNote(BrewNote* b)

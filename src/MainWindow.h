@@ -143,6 +143,8 @@ public slots:
 
    //! \brief Update the main windows statusbar.
    void updateStatus(const QString status);
+   //! \brief Change unsaved status.
+   void updateUnsavedStatus(bool isUnsaved);
 
    //! \brief Close a brewnote tab if we must
    void closeBrewNote(BrewNote*);
