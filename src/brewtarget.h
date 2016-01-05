@@ -45,6 +45,7 @@ extern void qt_set_sequence_auto_mnemonic(bool b);
 #include <QMetaProperty>
 #include <QList>
 #include "UnitSystem.h"
+#include "Log.h"
 
 class BeerXMLElement;
 class MainWindow;
@@ -74,13 +75,6 @@ class Brewtarget : public QObject
 public:
    Brewtarget();
 
-   //! \brief The log level of a message.
-   enum LogType{
-          //! Just a warning.
-          LogType_WARNING,
-          //! Full-blown error.
-          LogType_ERROR
-   };
    //! \brief The formula used to get beer color.
    enum ColorType {MOSHER, DANIEL, MOREY};
    //! \brief The units to display color in.
@@ -151,22 +145,24 @@ public:
    };
 
    //! \return the data directory
-   static QString getDataDir();
+   static QDir getDataDir();
    //! \return the doc directory
-   static QString getDocDir();
+   static QDir getDocDir();
    //! \return the config directory
-   static QString getConfigDir(bool* success = 0);
+   static const QDir getConfigDir(bool* success = 0);
    //! \return user-specified directory where the database files reside.
-   static QString getUserDataDir();
-   //! \brief Blocking call that starts the application.
-   static int run();
+   static QDir getUserDataDir();
+   /*!
+    * \brief Blocking call that executes the application.
+    * \param userDirectory If !isEmpty, overwrites the current settings.
+    * \return Exit code from the application.
+    */
+   static int run(const QString &userDirectory = QString());
 
    static double toDouble(QString text, bool* ok = 0);
    static double toDouble(const BeerXMLElement* element, QString attribute, QString caller);
    static double toDouble(QString text, QString caller);
 
-   //! \brief Log a message.
-   static void log( LogType lt, QString message );
    //! \brief Log an error message.
    static void logE( QString message );
    //! \brief Log a warning message.
@@ -225,6 +221,8 @@ public:
 
    //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
+   //! \brief Display date formatted based on the user defined options.
+   static QString displayDateUserFormated(QDate const &date);
    //! \brief Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg, bool showUnits=true );
    //! \brief Appropriate thickness units will be placed in \c *volumeUnit and \c *weightUnit.
@@ -310,8 +308,8 @@ private:
    static QDomDocument* optionsDoc;
    static QTranslator* defaultTrans;
    static QTranslator* btTrans;
-   static QFile* logFile;
-   static QTextStream* logStream;
+   //! \brief OS-Agnostic RAII style Thread-safe Log file.
+   static Log log;
    static QString currentLanguage;
    static QSettings btSettings;
    static bool userDatabaseDidNotExist;
@@ -326,7 +324,7 @@ private:
    static QDateTime lastDbMergeRequest;
 
    //! \brief Where the user says the database files are
-   static QString userDataDir;
+   static QDir userDataDir;
 
    // Options to be edited ONLY by the OptionDialog============================
    // Whether or not to display plato instead of SG.
@@ -356,7 +354,7 @@ private:
     *
     * \returns false if anything goes awry, true if it's ok to start MainWindow
     */
-   static bool initialize();
+   static bool initialize(const QString &userDirectory = QString());
    /*!
     * \brief Run after QApplication exits to clean up shit, close database, etc.
     */
@@ -376,12 +374,10 @@ private:
     *  \brief Copies the user xml files to another directory.
     *  \returns false iff the copy is unsuccessful.
     */
-   static bool copyDataFiles(QString newPath);
+   static bool copyDataFiles(const QDir newPath);
 
    //! \brief Ensure our directories exist.
    static bool ensureDirectoriesExist();
-   //! \brief Ensure the datafiles exist.
-   static bool ensureDataFilesExist();
    //! \brief Load translation files.
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.

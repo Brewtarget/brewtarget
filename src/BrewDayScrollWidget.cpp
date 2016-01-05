@@ -163,7 +163,7 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
 
    pDoc += tr("<h2>Notes</h2>");
    if ( recObs->notes() != "" )
-      pDoc += QString("%1").arg(recObs->notes());
+      pDoc += QString("<div id=\"customNote\">%1</div>\n").arg(recObs->notes());
 
    pDoc += "</body></html>";
 

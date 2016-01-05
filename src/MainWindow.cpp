@@ -461,6 +461,7 @@ MainWindow::MainWindow(QWidget* parent)
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
    connect( &(Database::instance()), SIGNAL( deletedBrewNoteSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+   connect( &(Database::instance()), SIGNAL( isUnsavedChanged(bool)), this, SLOT( updateUnsavedStatus(bool)));
 }
 
 void MainWindow::setupShortCuts()
@@ -1944,7 +1945,8 @@ void MainWindow::saveMash()
 
 void MainWindow::openManual()
 {
-   QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir()+"brewtarget-manual.html"));
+   // TODO: open language-dependent manual when we have more than the English version
+   QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir().filePath("manual-en.pdf")));
 }
 
 // One print function to rule them all. Now we just need to make the menuing
@@ -2182,7 +2184,7 @@ void MainWindow::updateDatabase()
    // Select the db to merge with.
    otherDb = QFileDialog::getOpenFileName( this,
                                            tr("Select Database File"),
-                                           Brewtarget::getUserDataDir(),
+                                           Brewtarget::getUserDataDir().canonicalPath(),
                                            tr("Brewtarget Database (*.sqlite)") );
 
    // Merge.
@@ -2285,10 +2287,8 @@ void MainWindow::convertedMsg()
 {
 
    QMessageBox msgBox;
-   QDir dir(Brewtarget::getUserDataDir());
-
    msgBox.setText( tr("The database has been converted/upgraded."));
-   msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir() + "obsolete");
+   msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir().canonicalPath() + "obsolete");
    msgBox.exec();
 
 }
@@ -2349,6 +2349,22 @@ void MainWindow::fixBrewNote()
          continue;
 
       target->recalculateEff(noteParent);
+   }
+}
+
+void MainWindow::updateStatus(const QString status) {
+   if( statusBar() )
+      statusBar()->showMessage(status, 3000);
+}
+
+void MainWindow::updateUnsavedStatus(bool isUnsaved) {
+   if ( isUnsaved ) {
+      statusBar()->showMessage(tr("Unsaved Changes"));
+      actionSave->setIcon(QIcon(SAVEDIRTYPNG));
+   }
+   else {
+      statusBar()->clearMessage();
+      actionSave->setIcon(QIcon(SAVEPNG));
    }
 }
 

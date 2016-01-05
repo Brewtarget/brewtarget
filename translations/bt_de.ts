@@ -7,10 +7,6 @@
         <source>About Brewtarget</source>
         <translation>Über Brewtarget</translation>
     </message>
-    <message>
-        <source>Donate</source>
-        <translation>Spenden</translation>
-    </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
@@ -57,10 +53,6 @@
     <message>
         <source>ABV</source>
         <translation>Alkoholgehalt</translation>
-    </message>
-    <message>
-        <source>Estimated calories(per 12 oz)</source>
-        <translation>Geschätzter Brennwert</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -117,6 +109,14 @@
     <message>
         <source>Heat water</source>
         <translation>Wasser erhitzen</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Geschätzte Kalorien (pro 12 oz)</translation>
     </message>
 </context>
 <context>
@@ -208,6 +208,10 @@
     <message>
         <source>Step %1: %2</source>
         <translation>Schritt %1: %2</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -334,6 +338,10 @@
     </message>
     <message>
         <source>Barrels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -742,6 +750,29 @@
     </message>
 </context>
 <context>
+    <name>Fermentable</name>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Gemaischt</translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Eingeweicht</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Nicht gemaischt</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Spät</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Normal</translation>
+    </message>
+</context>
+<context>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
@@ -802,32 +833,32 @@
         <source>Adjunct</source>
         <translation>Beigabe</translation>
     </message>
+    <message>
+        <source>Mashed</source>
+        <translation type="unfinished">Gemaischt</translation>
+    </message>
+    <message>
+        <source>Steeped</source>
+        <translation type="unfinished">Eingeweicht</translation>
+    </message>
+    <message>
+        <source>Not mashed</source>
+        <translation type="unfinished">Nicht gemaischt</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Normal</translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Spät</translation>
+    </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <translation>Fehlerhafter »model index«. Zeile = %1</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Gemaischt</translation>
-    </message>
-    <message>
-        <source>Steeped</source>
-        <translation>Eingeweicht</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation>Nicht gemaischt</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Spät</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation>Normal</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -846,10 +877,6 @@
         <translation>Menge</translation>
     </message>
     <message>
-        <source>Late Addition</source>
-        <translation>Späte Zugabe</translation>
-    </message>
-    <message>
         <source>Yield %</source>
         <translation>Ausbeute %</translation>
     </message>
@@ -860,6 +887,14 @@
     <message>
         <source>Color</source>
         <translation>Farbe</translation>
+    </message>
+    <message>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addition</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1203,14 +1238,6 @@
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>Ein Ordnername muss mindestens ein Zeichen enthalten, welches kein &quot;/&quot; ist.</translation>
     </message>
-    <message>
-        <source>calories/33cL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>calories/12oz</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MashDesigner</name>
@@ -1346,6 +1373,61 @@
     </message>
 </context>
 <context>
+    <name>Misc</name>
+    <message>
+        <source>Spice</source>
+        <translation type="unfinished">Gewürz</translation>
+    </message>
+    <message>
+        <source>Fining</source>
+        <translation type="unfinished">Schönung</translation>
+    </message>
+    <message>
+        <source>Water Agent</source>
+        <translation type="unfinished">Wasserzusatzmittel</translation>
+    </message>
+    <message>
+        <source>Herb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished">Aroma</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation type="unfinished">Maische</translation>
+    </message>
+    <message>
+        <source>Primary</source>
+        <translation type="unfinished">Hauptgärung</translation>
+    </message>
+    <message>
+        <source>Secondary</source>
+        <translation type="unfinished">Nachgärung</translation>
+    </message>
+    <message>
+        <source>Bottling</source>
+        <translation type="unfinished">Abfüllung</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Gewicht</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Volumen</translation>
+    </message>
+</context>
+<context>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
@@ -1430,6 +1512,14 @@
         <source>Bottling</source>
         <translation>Abfüllung</translation>
     </message>
+    <message>
+        <source>Weight</source>
+        <translation type="unfinished">Gewicht</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished">Volumen</translation>
+    </message>
 </context>
 <context>
     <name>MiscTableModel</name>
@@ -1452,14 +1542,6 @@
     <message>
         <source>Amount</source>
         <translation>Menge</translation>
-    </message>
-    <message>
-        <source>Weight</source>
-        <translation>Gewicht</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Volumen</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -1556,172 +1638,6 @@
         <translation>Unbekannter IBU-Typ. %1</translation>
     </message>
     <message>
-        <source>Batch Size: %1
-</source>
-        <translation>Ausschlagmenge: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Size: %1
-</source>
-        <translation>Sudmenge: %1
-</translation>
-    </message>
-    <message>
-        <source>Boil Time: %1
-</source>
-        <translation>Sudzeit: %1
-</translation>
-    </message>
-    <message>
-        <source>OG: %1
-</source>
-        <translation>Stammwürze: %1
-</translation>
-    </message>
-    <message>
-        <source>FG: %1
-</source>
-        <translation>FG: %1
-</translation>
-    </message>
-    <message>
-        <source>Bitterness: %1 IBUs (%2)
-</source>
-        <translation>Bitterkeit: %1 IBU (%2)
-</translation>
-    </message>
-    <message>
-        <source>Color: %1 SRM (%2)
-</source>
-        <translation>Farbe: %1 SRM (%2)
-</translation>
-    </message>
-    <message>
-        <source>Fermentables
-</source>
-        <translation>Gärgut
-</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Name</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Typ</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Menge</translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation>Gemaischt</translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation>Spät</translation>
-    </message>
-    <message>
-        <source>Yield</source>
-        <translation>Ertrag</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Farbe</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation>Ja</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation>Nein</translation>
-    </message>
-    <message>
-        <source>Total grain: %1
-</source>
-        <translation>Totale Getreidemenge: %1
-</translation>
-    </message>
-    <message>
-        <source>Hops
-</source>
-        <translation>Hopfen
-</translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation>Ale</translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation>Verwendung</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Zeit</translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation>IBU</translation>
-    </message>
-    <message>
-        <source>Misc
-</source>
-        <translation>Sonstiges
-</translation>
-    </message>
-    <message>
-        <source>Yeast
-</source>
-        <translation>Hefe
-</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
-        <source>Stage</source>
-        <translation>Phase</translation>
-    </message>
-    <message>
-        <source>Secondary</source>
-        <translation>Nachgärung</translation>
-    </message>
-    <message>
-        <source>Primary</source>
-        <translation>Hauptgärung</translation>
-    </message>
-    <message>
-        <source>Mash
-</source>
-        <translation>Maische
-</translation>
-    </message>
-    <message>
-        <source>Temp</source>
-        <translation>Temp.</translation>
-    </message>
-    <message>
-        <source>Target</source>
-        <translation>Ziel</translation>
-    </message>
-    <message>
-        <source>Notes
-</source>
-        <translation>Notizen
-</translation>
-    </message>
-    <message>
-        <source>Instructions
-</source>
-        <translation>Instruktionen
-</translation>
-    </message>
-    <message>
         <source>Directory Problem</source>
         <translation>Verzeichnisproblem</translation>
     </message>
@@ -1810,14 +1726,6 @@
         <translation>Zusatz</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Kochen</translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation>Maische</translation>
-    </message>
-    <message>
         <source>Infusion</source>
         <translation>Aufguß</translation>
     </message>
@@ -1828,34 +1736,6 @@
     <message>
         <source>Decoction</source>
         <translation>Absud</translation>
-    </message>
-    <message>
-        <source>Bottling</source>
-        <translation>Abfüllung</translation>
-    </message>
-    <message>
-        <source>Spice</source>
-        <translation>Gewürz</translation>
-    </message>
-    <message>
-        <source>Fining</source>
-        <translation>Schönung</translation>
-    </message>
-    <message>
-        <source>Water Agent</source>
-        <translation>Wasserzusatzmittel</translation>
-    </message>
-    <message>
-        <source>Herb</source>
-        <translation>Gewürz</translation>
-    </message>
-    <message>
-        <source>Flavor</source>
-        <translation>Aroma</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation>Andere</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -1932,18 +1812,6 @@
     <message>
         <source>Yeast</source>
         <translation>Hefe</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%
-</source>
-        <translation>Effizienz: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%
-</source>
-        <translation>ABV: %1%
-</translation>
     </message>
     <message>
         <source>Style</source>
@@ -2238,10 +2106,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation>Farbe</translation>
     </message>
     <message>
-        <source>Calories (per 12 oz.)</source>
-        <translation>Kilokalorien (per 12 oz.)</translation>
-    </message>
-    <message>
         <source>Fermentables</source>
         <translation>Gärgüter</translation>
     </message>
@@ -2445,6 +2309,30 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <source>Flocculation</source>
         <translation>Ausflockung</translation>
     </message>
+    <message>
+        <source>Miscs</source>
+        <translation type="unfinished">Sonstiges</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation type="unfinished">Hefen</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">Geschätzte Kalorien (pro 12 oz)</translation>
+    </message>
+    <message>
+        <source>Bitterness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation type="unfinished">Ziel</translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
@@ -2458,14 +2346,40 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
 </context>
 <context>
+    <name>ScaleRecipeEquipmentPage</name>
+    <message>
+        <source>Select Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Efficiency (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ScaleRecipeIntroPage</name>
+    <message>
+        <source>Scale Recipe</source>
+        <translation type="unfinished">Rezept skalieren</translation>
+    </message>
+    <message>
+        <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
         <translation>Rezept skaliert</translation>
-    </message>
-    <message>
-        <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Die Maische wurde zurückgesetzt weil die Maischtemperaturen sich nicht einfach anpassen lassen. Bitte führen Sie den Maische-Assistent erneut aus.</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
@@ -3113,10 +3027,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation>Menge im Lager</translation>
     </message>
     <message>
-        <source>fermentableEditor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Farbe</translation>
     </message>
@@ -3758,10 +3668,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation>Rezept löschen</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Spenden</translation>
-    </message>
-    <message>
         <source>&amp;Mashs</source>
         <translation>&amp;Maischen</translation>
     </message>
@@ -3774,15 +3680,15 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
         <translation>1.0</translation>
     </message>
     <message>
-        <source>application/x-brewtarget-ingredient</source>
-        <translation>application/x-brewtarget-ingredient</translation>
-    </message>
-    <message>
         <source>Strike Water Calculator</source>
         <translation>Einmaischwasser-Rechner</translation>
     </message>
     <message>
         <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export to &amp;BBCode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3918,10 +3824,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
         <translation>Maischbottich spez. Wärme (cal/(g*K))</translation>
-    </message>
-    <message>
-        <source>mashEditor</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4799,33 +4701,6 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displaySg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>displayPlato</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>scaleRecipeTool</name>
-    <message>
-        <source>Scale Recipe</source>
-        <translation>Rezept skalieren</translation>
-    </message>
-    <message>
-        <source>New batch size</source>
-        <translation>Neue Ausschlagmenge</translation>
-    </message>
-    <message>
-        <source>New Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Efficiency</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

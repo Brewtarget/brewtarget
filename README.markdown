@@ -14,23 +14,29 @@ is your single, free, go-to tool when crafting your beer recipes.
 * Philip G. Lee <rocketman768@gmail.com> - Lead developer
 * Mik Firestone <mikfire@gmail.com>
 * Maxime Lavigne <duguigne@gmail.com>
+* Theophane Martin <theophane.m@gmail.com>
 * Dan Cavanagh <dan@dancavanagh.com>
 * Rob Taylor <robtaylor@floopily.org>
 * Kregg K <gigatropolis@yahoo.com>
 * A.J. Drobnich <aj.drobnich@gmail.com>
 * Ted Wright <tedwright@users.sourceforge.net>
 * Charles Fourneau (plut0nium) <charles.fourneau@gmail.com>
-* Maxime Lavigne (malavv) <duguigne@gmail.com>
+* Samuel Östling <MrOstling@gmail.com>
 * Peter Buelow <goballstate@gmail.com>
 * David Grundberg <individ@acc.umu.se>
+* Daniel Pettersson <pettson81@gmail.com>
 * Tim Payne <swstim@gmail.com>
-* Samuel Östling <MrOstling@gmail.com>
 * Luke Vincent <luke.r.vincent@gmail.com>
 * Eric Tamme <etamme@gmail.com>
+* Chris Pavetto <chrispavetto@gmail.com>
+* Markus Mårtensson <mackan.90@gmail.com>
 * Julein <j2bweb@gmail.com>
 * Jeff Bailey <skydvr38@verizon.net>
 * Piotr Przybyla (przybysh) <przybysh@gmail.com>
 * Chris Hamilton <marker5a@gmail.com>
+* Julian Volodia <julianvolodia@gmail.com>
+* Jerry Jacobs <jerry@xor-gate.org>
+* Greg Meess <Daedalus12@gmail.com>
 
 Author list created with:
 

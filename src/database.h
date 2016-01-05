@@ -387,6 +387,8 @@ signals:
    // MashSteps need signals too
    void newMashStepSignal(MashStep*);
    void deletedMashStepSignal(MashStep*);
+   // Emits a signal when the dirty status changes
+   void isUnsavedChanged(bool);
    
 private slots:
    //! Load database from file.
@@ -765,6 +767,11 @@ private:
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.
    bool updateSchema(bool* err = 0);
+
+   /*!
+    * \brief Register that the DB was modified.
+    */
+   void makeDirty();
 };
 
 #endif   /* _DATABASE_H */

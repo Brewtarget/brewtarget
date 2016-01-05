@@ -62,14 +62,13 @@ protected:
    
    //! \brief Reimplemented from QWidget.
    virtual void changeEvent(QEvent* e);
-   
+
 private:
    // Update UI strings according to current language.
    void retranslate();
    // Update dialog with current options.
    void showChanges();
    QButtonGroup *colorGroup, *ibuGroup;
-   QButtonGroup *weightGroup, *volumeGroup, *tempGroup, *gravGroup, *colorUnitGroup, *dateFormatGroup;
    QStringList ndxToLangCode;
    QVector<QIcon> langIcons;
 };

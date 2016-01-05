@@ -38,6 +38,7 @@
 #define SHRED ":/images/editshred.svg"
 #define EXITPNG ":/images/exit.svg"
 #define SAVEPNG ":/images/filesave.svg"
+#define SAVEDIRTYPNG ":/images/filesavedirty.svg"
 #define CLOCKPNG ":/images/clock.svg"
 #define SOUND ":/images/sound.png"
 #define STOP ":/images/alarm_stop.png"

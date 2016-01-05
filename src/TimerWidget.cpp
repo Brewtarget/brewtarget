@@ -175,7 +175,8 @@ void TimerWidget::decrementTime()
 void TimerWidget::on_setSoundButton_clicked()
 {
     //Taken form old brewtarget timers
-    QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
+    QDir soundsDir(Brewtarget::getDataDir().canonicalPath() + "/sounds");
+    //QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
     QString soundFile = QFileDialog::getOpenFileName( qobject_cast<QWidget*>(this), tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)") );
 
     if( soundFile.isNull() )
@@ -191,7 +192,8 @@ void TimerWidget::on_setSoundButton_clicked()
 
 void TimerWidget::setDefualtAlarmSound()
 {
-    QString soundFile = QString("%1sounds/").arg(Brewtarget::getDataDir()) + "beep.ogg";
+    QDir soundsDir(Brewtarget::getDataDir().canonicalPath() + "/sounds");
+    QString soundFile = soundsDir.absoluteFilePath("beep.ogg");
     setSound(soundFile);
 }
 
