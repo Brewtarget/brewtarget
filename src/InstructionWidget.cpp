@@ -23,7 +23,7 @@
 #include "TimerWidget.h"
 
 InstructionWidget::InstructionWidget(QWidget* parent) :
-   QWidget(parent), insObs(0), timer(new TimerWidget(this))
+   QWidget(parent), insObs(0)
 {
    setupUi(this);
    timer->setVisible(false);
@@ -97,7 +97,7 @@ void InstructionWidget::setCompleted()
    }
 }
 
-void InstructionWidget::setHasTimer()
+/*void InstructionWidget::setHasTimer()
 {
    if( insObs == 0 )
       return;
@@ -118,7 +118,7 @@ void InstructionWidget::setHasTimer()
       timer->setVisible(false);
       verticalLayout->update();
    }
-}
+}*/
 
 void InstructionWidget::setTimerValue(QString value)
 {

@@ -1,12 +1,8 @@
 /*
- * TimerWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
- * - Julein <j2bweb@gmail.com>
- * - Maxime Lavigne (malavv) <duguigne@gmail.com>
- * - mik firestone <mikfire@gmail.com>
+ * TimerListDialog.h is part of Brewtarget, and is Copyright the following
+ * authors 2009-2014
  * - Philip Greggory Lee <rocketman768@gmail.com>
- * - przybysh
- * - Ted Wright
+ * - Aidan Roberts <aidanr67@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +19,6 @@
  */
 
 #include "TimerWidget.h"
-#include <QStringList>
 #include <QChar>
 #include <QFileDialog>
 #include <QDir>
@@ -32,304 +27,283 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include "brewtarget.h"
+#include <QMessageBox>
 
-TimerWidget::TimerWidget(QWidget* parent)
-   : QWidget(parent),
-     hours(0),
-     minutes(0),
-     seconds(0),
-     start(true),
-     timer(new QTimer(this)),
-     flashTimer(new QTimer(this)),
-     paletteOld(),
-     paletteNew(),
+TimerWidget::TimerWidget(TimerMainDialog *parent, BoilTime* bt) :
+    QDialog(parent),
+    ui(new Ui::timerWidget),
+    mainTimer(parent),
+    paletteOld(),
+    paletteNew(),
+    oldColors(true),
+    boilTime(bt),
+    started(true), //default is started, this means timers will start as soon as main timer is started
+    stopped(false),
+    time(0),
+    limitAlarmRing(false),
+    alarmRingLimit(5)
 #ifndef NO_QTMULTIMEDIA
-     mediaPlayer(new QMediaPlayer(this)),
-     playlist(new QMediaPlaylist(mediaPlayer)),
+         , mediaPlayer(new QMediaPlayer(this))
+         , playlist(new QMediaPlaylist(mediaPlayer))
 #endif
-     oldColors(true)
 {
-   doLayout();
+    setupUi(this);
 
-   // One second between timeouts.
-   timer->setInterval(1000);
-   flashTimer->setInterval(500);
+    //Default all timers to Boil time
+    time = boilTime->getTime();
+    updateTime();
+    setDefualtAlarmSound();
+    stopButton->setEnabled(false);
 
+    // Taken from old brewtarget timers
 #ifndef NO_QTMULTIMEDIA
    playlist->setPlaybackMode(QMediaPlaylist::Loop);
    mediaPlayer->setVolume(100);
    mediaPlayer->setPlaylist(playlist);
 #endif
+    paletteOld = timeLCD->palette();
+    paletteNew = QPalette(paletteOld);
+    // Swap colors.
+    paletteNew.setColor(QPalette::Active, QPalette::WindowText, paletteOld.color(QPalette::Active, QPalette::Window));
+    paletteNew.setColor(QPalette::Active, QPalette::Window, paletteOld.color(QPalette::Active, QPalette::WindowText));
 
-   paletteOld = lcdNumber->palette();
-   paletteNew = QPalette(paletteOld);
-   // Swap colors.
-   paletteNew.setColor(QPalette::Active, QPalette::WindowText, paletteOld.color(QPalette::Active, QPalette::Window));
-   paletteNew.setColor(QPalette::Active, QPalette::Window, paletteOld.color(QPalette::Active, QPalette::WindowText));
+    retranslateUi(this);
 
-   connect( timer, SIGNAL(timeout()), this, SLOT(subtractOneSecond()) );
-   connect( flashTimer, SIGNAL(timeout()), this, SLOT(flash()) );
-   connect( this, SIGNAL(timerDone()), this, SLOT(endTimer()) );
-   connect( pushButton_set, SIGNAL(clicked()), this, SLOT(setTimer()) );
-   connect( pushButton_startStop, SIGNAL(clicked()), this, SLOT(startStop()) );
-   connect( pushButton_sound, SIGNAL(clicked()), this, SLOT(getSound()) );
-
-   showChanges();
+    //Connections
+    connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTime()));
+    connect(boilTime, SIGNAL(timesUp()), this, SLOT(decrementTime()));
 }
 
 TimerWidget::~TimerWidget()
 {
-#ifndef NO_QTMULTIMEDIA
-   mediaPlayer->stop();
-   playlist->clear();
-#endif
+    delete ui;
 }
 
-void TimerWidget::doLayout()
+void TimerWidget::setTime(int t)
 {
-   QHBoxLayout* hLayout = new QHBoxLayout(this);
-      QFrame* frame = new QFrame(this);
-         frame->setFrameShape(QFrame::StyledPanel);
-         frame->setFrameShadow(QFrame::Raised);
-         QVBoxLayout* vLayout = new QVBoxLayout(frame);
-            QHBoxLayout* hLayout1 = new QHBoxLayout();
-               QSpacerItem* hSpacer1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-               pushButton_set = new QPushButton(frame);
-                  pushButton_set->setMinimumSize(QSize(0, 0));
-                  pushButton_set->setAutoDefault(true);
-                  pushButton_set->setDefault(false);
-               lineEdit = new QLineEdit(frame);
-               QSpacerItem* hSpacer2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-               hLayout1->addItem(hSpacer1);
-               hLayout1->addWidget(pushButton_set);
-               hLayout1->addWidget(lineEdit);
-               hLayout1->addItem(hSpacer2);
-            QHBoxLayout* hLayout2 = new QHBoxLayout();
-               QSpacerItem* hSpacer3 = new QSpacerItem(17, 20, QSizePolicy::Ignored, QSizePolicy::Minimum);
-               lcdNumber = new QLCDNumber(frame);
-                  QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-                  sizePolicy.setHorizontalStretch(0);
-                  sizePolicy.setVerticalStretch(0);
-                  sizePolicy.setHeightForWidth(lcdNumber->sizePolicy().hasHeightForWidth());
-                  lcdNumber->setSizePolicy(sizePolicy);
-                  lcdNumber->setMinimumSize(QSize(170, 40));
-                  lcdNumber->setFrameShape(QFrame::WinPanel);
-                  lcdNumber->setFrameShadow(QFrame::Raised);
-                  lcdNumber->setDigitCount(8);
-                  lcdNumber->setSegmentStyle(QLCDNumber::Flat);
-               QSpacerItem* hSpacer4 = new QSpacerItem(17, 20, QSizePolicy::Ignored, QSizePolicy::Minimum);
-               hLayout2->addItem(hSpacer3);
-               hLayout2->addWidget(lcdNumber);
-               hLayout2->addItem(hSpacer4);
-            QHBoxLayout* hLayout3 = new QHBoxLayout();
-               QSpacerItem* hSpacer5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-               pushButton_startStop = new QPushButton(frame);
-                  pushButton_startStop->setMinimumSize(QSize(0, 0));
-               pushButton_sound = new QPushButton(frame);
-                  pushButton_sound->setMinimumSize(QSize(0, 0));
-               QSpacerItem* hSpacer6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-               hLayout3->addItem(hSpacer5);
-               hLayout3->addWidget(pushButton_startStop);
-               hLayout3->addWidget(pushButton_sound);
-               hLayout3->addItem(hSpacer6);
-         vLayout->addLayout(hLayout1);
-         vLayout->addLayout(hLayout2);
-         vLayout->addLayout(hLayout3);
-      hLayout->addWidget(frame);
+    //Special case if timer auto created from recipe
+    if (setTimeBox->value() != t/60)
+        setTimeBox->setValue(t/60);
 
-   retranslateUi();
+    time = boilTime->getTime() - t;
+    //Reset timer to run again with new time
+    if (stopped)
+        stopped = false;
+    if (!started)
+        started = true;
+    updateTime();
 }
 
-void TimerWidget::retranslateUi()
+void TimerWidget::setNote(QString n)
 {
-#ifndef QT_NO_TOOLTIP
-   pushButton_set->setToolTip(tr("Set the timer to the specified value"));
-   lineEdit->setToolTip(tr("HH:MM:SS"));
-   pushButton_startStop->setToolTip(tr("Start/Stop timer"));
-   pushButton_sound->setToolTip(tr("Set a sound as the alarm"));
-#endif // QT_NO_TOOLTIP
-
-   pushButton_set->setText(tr("Set"));
-   pushButton_startStop->setText(tr("Start"));
-   pushButton_sound->setText(tr("Sound"));
-
-   lineEdit->setPlaceholderText(tr("HH:MM:SS"));
+    //Append if notes exist, new note if not
+    if (noteEdit->text() == tr("Notes...") || noteEdit->text() == "")
+        noteEdit->setText(n);
+    else
+        noteEdit->setText(noteEdit->text() + tr(" and ") + n);
 }
 
-void TimerWidget::getSound()
+void TimerWidget::setBoil(BoilTime *bt)
 {
-   QDir soundsDir(Brewtarget::getDataDir().canonicalPath() + "/sounds");
-   //QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
-   QString soundFile = QFileDialog::getOpenFileName( qobject_cast<QWidget*>(this), tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)") );
+    boilTime = bt;
+}
 
-   if( soundFile.isNull() )
-   {
-      Brewtarget::logW("Null sound file.");
-      return;
+int TimerWidget::getTime()
+{
+    /*invert to return addition time not time to addition.
+    getTime() and getNote() are used for timer checks when
+    generating timers from recipes
+    */
+    return boilTime->getTime() - time;
+}
+
+QString TimerWidget::getNote()
+{
+    return noteEdit->text();
+}
+
+void TimerWidget::updateTime()
+{
+    timeLCD->display(timeToString(time));
+}
+
+QString TimerWidget::timeToString(int t)
+{
+    unsigned int seconds = t;
+    unsigned int minutes = 0;
+    unsigned int hours = 0;
+   if (t == 0)
+       return "00:00:00";
+   if (t > 59){
+       seconds = t%60;
+       minutes = t/60;
+       if (minutes > 59){
+          hours = minutes/60;
+          minutes = minutes%60;
+       }
    }
+   QString secStr, minStr, hourStr;
+   if (seconds < 10)
+       secStr = "0" + QString::number(seconds);
+   else
+       secStr = QString::number(seconds);
+   if (minutes <10)
+       minStr = "0" + QString::number(minutes);
+   else
+       minStr = QString::number(minutes);
+   if (hours < 10)
+       hourStr = "0" + QString::number(hours);
+   else
+       hourStr = QString::number(hours);
+   return hourStr + ":" + minStr + ":" + secStr;
+}
+
+void TimerWidget::decrementTime()
+{
+    if (started) {
+        if (time == 60 && this->isHidden()) //show timers a minute before they go off
+            this->show();
+        else if (time == 0)
+            timesUp();
+        else {
+            time = time - 1;
+            updateTime();
+        }
+    }
+}
+
+void TimerWidget::on_setSoundButton_clicked()
+{
+    //Taken form old brewtarget timers
+    QDir soundsDir(Brewtarget::getDataDir().canonicalPath() + "/sounds");
+    //QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
+    QString soundFile = QFileDialog::getOpenFileName( qobject_cast<QWidget*>(this), tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)") );
+
+    if( soundFile.isNull() )
+    {
+       setDefualtAlarmSound();
+       return;
+    }
+    setSound(soundFile);
+    // Indicate a sound is loaded
+    setSoundButton->setCheckable(true);
+    setSoundButton->setChecked(true);
+}
+
+void TimerWidget::setDefualtAlarmSound()
+{
+    QDir soundsDir(Brewtarget::getDataDir().canonicalPath() + "/sounds");
+    QString soundFile = soundsDir.absoluteFilePath("beep.ogg");
+    setSound(soundFile);
+}
+
+void TimerWidget::setSound(QString s)
+{
+    //Taken from old brewtarget timers
 #ifndef NO_QTMULTIMEDIA
    if( !playlist->clear() )
       Brewtarget::logW(playlist->errorString());
-   if( !playlist->addMedia(QUrl::fromLocalFile(soundFile)) )
+   if( !playlist->addMedia(QUrl::fromLocalFile(s)) )
       Brewtarget::logW(playlist->errorString());
    playlist->setCurrentIndex(0);
 #endif
-   // Indicate a sound is loaded
-   pushButton_sound->setCheckable(true);
-   pushButton_sound->setChecked(true);
 }
 
-QString TimerWidget::getTimerValue()
+void TimerWidget::on_setTimeBox_valueChanged(int t)
 {
-   return QString("%1:%2:%3").arg(hours,2,10,QChar('0')).arg(minutes,2,10,QChar('0')).arg(seconds,2,10,QChar('0'));
+    if (t*60 > boilTime->getTime()) {
+        QMessageBox::warning(this, tr("Error"), tr("Addition time cannot be longer than remaining boil time"));
+        time = 0;
+    } else {
+        setTime(t*60);
+    }
+}
+
+void TimerWidget::timesUp()
+{
+    if (limitAlarmRing && alarmRingLimit == 0)
+        stopAlarm();
+    if (!stopped) {
+        mainTimer->showTimers();
+        mainTimer->setTimerVisible(this);
+        startAlarm();
+        stopped = true;
+    }
+    else
+        flash();
+    if (limitAlarmRing)
+        alarmRingLimit--;
 }
 
 void TimerWidget::flash()
 {
-   oldColors = ! oldColors;
+    oldColors = ! oldColors;
 
-   if( oldColors )
-      lcdNumber->setPalette(paletteOld);
-   else
-      lcdNumber->setPalette(paletteNew);
+    if( oldColors )
+       timeLCD->setPalette(paletteOld);
+    else
+       timeLCD->setPalette(paletteNew);
 
-   lcdNumber->repaint();
+    timeLCD->repaint();
 }
 
-void TimerWidget::setTimer()
+void TimerWidget::reset()
 {
+    if (setTimeBox->value() * 60 > boilTime->getTime())
+        time = 0;
+    else
+        time = boilTime->getTime() - (setTimeBox->value() * 60);
+    if (stopped)
+        stopped = false;
 #ifndef NO_QTMULTIMEDIA
-   mediaPlayer->stop();
+    mediaPlayer->stop();
 #endif
-   stopFlashing();
-
-   setTimer(lineEdit->text());
-   emit timerSet(getTimerValue());
+    updateTime();
+    alarmRingLimit = mainTimer->getAlarmLimit();
 }
 
-void TimerWidget::stopFlashing()
+void TimerWidget::startAlarm()
 {
-   flashTimer->stop();
-   lcdNumber->setPalette(paletteOld);
-   lcdNumber->update();
-}
-
-void TimerWidget::endTimer()
-{
-   timer->stop();
-   flashTimer->start();
-
 #ifndef NO_QTMULTIMEDIA
    mediaPlayer->play();
 #endif
+   stopButton->setEnabled(true);
 }
 
-void TimerWidget::setTimer(QString text)
+void TimerWidget::on_stopButton_clicked()
 {
-   QStringList strList = text.split(":", QString::SkipEmptyParts);
-   bool conversionOk = true;
-
-   if( strList.size() == 1 )
-   {
-      seconds = strList[0].toUInt(&conversionOk);
-      if( ! conversionOk )
-         seconds = 0;
-
-      hours = 0;
-      minutes = 0;
-   }
-   else if( strList.size() == 2 )
-   {
-      minutes = strList[0].toUInt(&conversionOk);
-      if( ! conversionOk )
-         minutes = 0;
-      seconds = strList[1].toUInt(&conversionOk);
-      if( ! conversionOk )
-         seconds = 0;
-
-      hours = 0;
-   }
-   else if( strList.size() == 3 )
-   {
-      hours = strList[0].toUInt(&conversionOk);
-      if( ! conversionOk )
-         hours = 0;
-      minutes = strList[1].toUInt(&conversionOk);
-      if( ! conversionOk )
-         minutes = 0;
-      seconds = strList[2].toUInt(&conversionOk);
-      if( ! conversionOk )
-         seconds = 0;
-   }
-   else
-   {
-      hours = 0; minutes = 0; seconds = 0;
-   }
-
-   if( seconds >= 60 )
-   {
-      minutes += seconds/(unsigned int)60;
-      seconds = seconds % 60;
-   }
-   if( minutes >= 60 )
-   {
-      hours += minutes/(unsigned int)60;
-      minutes = minutes % 60;
-   }
-
-   showChanges();
+    stopAlarm();
 }
 
-void TimerWidget::startStop()
+void TimerWidget::stopAlarm()
 {
-   if( start )
-   {
-      timer->start();
-      pushButton_startStop->setText(tr("Stop"));
-      start = false;
-   }
-   else
-   {
-      timer->stop();
 #ifndef NO_QTMULTIMEDIA
-      mediaPlayer->stop();
+    mediaPlayer->stop();
 #endif
-      stopFlashing();
-      pushButton_startStop->setText(tr("Start"));
-      start = true;
-   }
+    stopButton->setEnabled(false);
+    //Stop timer until new time set
+    started = false;
 }
 
-void TimerWidget::subtractOneSecond()
+void TimerWidget::on_cancelButton_clicked()
 {
-   if( seconds == 0 )
-   {
-      if( minutes == 0 && hours == 0 )
-         emit timerDone();
-      else
-      {
-         subtractOneMinute();
-         seconds = 59;
-      }
-   }
-   else
-      seconds--;
-
-   showChanges();
+    cancel();
 }
 
-void TimerWidget::subtractOneMinute()
+void TimerWidget::cancel()
 {
-   if( minutes == 0 )
-   {
-      hours--;
-      minutes = 59;
-   }
-   else
-      minutes--;
+    //Deletes this object and removes it from timers list
+    mainTimer->removeTimer(this);
 }
 
-void TimerWidget::showChanges()
+void TimerWidget::setAlarmLimits(bool l, unsigned int a)
 {
-   lcdNumber->display(getTimerValue());
+    limitAlarmRing = l;
+    alarmRingLimit = a;
+}
+
+void TimerWidget::reject()
+{
+    //Escape hides timer window
+    mainTimer->hideTimers();
 }

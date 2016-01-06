@@ -61,5 +61,7 @@
         <file alias="css/brewday.css">css/brewday.css</file>
         <file alias="css/recipe.css">css/recipe.css</file>
         <file alias="css/tooltip.css">css/tooltip.css</file>
+        <file>images/alarm_stop.png</file>
+        <file>images/sound.png</file>
     </qresource>
 </RCC>

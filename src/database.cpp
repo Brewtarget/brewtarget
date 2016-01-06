@@ -721,6 +721,8 @@ QList<Fermentable*> Database::fermentables(Recipe const* parent)
    return ret;
 }
 
+// Use this to get hop IDs then line 2614 creates XML from hops - Possibly get data from there?
+// otherwise write functions to query DB from data?
 QList<Hop*> Database::hops(Recipe const* parent)
 {
    QList<Hop*> ret;

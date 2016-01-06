@@ -1,7 +1,6 @@
 /*
- * TimerListDialog.h is part of Brewtarget, and is Copyright the following
+ * boiltime.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
- * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Aidan Roberts <aidanr67@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,41 +16,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef TIMERLISTDIALOG_H
-#define TIMERLISTDIALOG_H
 
-class TimerListDialog;
+#ifndef BOILTIME_H
+#define BOILTIME_H
 
-#include <QDialog>
-#include <QWidget>
-#include "TimerWidget.h"
-#include <QDebug>
-#include "MainWindow.h"
-
+#include <QObject>
+#include <QTimer>
 /*!
- * \class TimerListDialog
+ * \brief Used by TimerMainDialog and TimerWidget
  * \author Aidan Roberts
  *
- * \brief Dialog to hold addition timers
+ * Makes it possible to trigger multiple timers using one QTimer
  */
-class TimerListDialog : public QDialog
+
+class BoilTime : public QObject
 {
-   Q_OBJECT
-   
+    Q_OBJECT
 public:
-      TimerListDialog(QWidget* parent, QList<TimerWidget*> * timers);
-      ~TimerListDialog();
-      void setTimerVisible(TimerWidget* t);
+    BoilTime(QObject * parent);
+    void setBoilTime(int boilTime);
+    int getTime();
+    bool isStarted();
+    bool isCompleted();
+    void startTimer();
+    void stopTimer();
 
 private slots:
-      void hideTimers();
+    void decrementTime();
+
+signals:
+    void BoilTimeChanged();
+    void timesUp();
 
 private:
-      QScrollArea* scrollArea;
-      QWidget* scrollWidget;
-      QVBoxLayout* layout;
-
-      void setTimers(QList<TimerWidget*>* timers);
+    QTimer* timer;
+    unsigned int time;
+    bool started;
+    bool completed;
 };
 
-#endif
+#endif // BOILTIME_H

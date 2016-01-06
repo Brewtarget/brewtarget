@@ -56,6 +56,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/Algorithms.cpp
     ${SRCDIR}/BeerXMLElement.cpp
     ${SRCDIR}/BeerXMLSortProxyModel.cpp
+    ${SRCDIR}/boiltime.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/brewnote.cpp
@@ -144,6 +145,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/StyleRangeWidget.cpp
     ${SRCDIR}/StyleSortFilterProxyModel.cpp
     ${SRCDIR}/TimerListDialog.cpp
+    ${SRCDIR}/TimerMainDialog.cpp
     ${SRCDIR}/TimerWidget.cpp
     ${SRCDIR}/TimeUnitSystem.cpp
     ${SRCDIR}/unit.cpp
@@ -188,7 +190,8 @@ SET( brewtarget_UIS
     ${UIDIR}/refractoDialog.ui
     ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
-    ${UIDIR}/timerListDialog.ui
+    ${UIDIR}/timerMainDialog.ui
+    ${UIDIR}/timerWidget.ui
     ${UIDIR}/waterEditor.ui
     ${UIDIR}/yeastEditor.ui
     ${UIDIR}/mashDesigner.ui
@@ -203,6 +206,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/BeerXMLElement.h
     ${SRCDIR}/BeerXMLSortProxyModel.h
+    ${SRCDIR}/boiltime.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/brewnote.h
@@ -268,6 +272,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/StyleRangeWidget.h
     ${SRCDIR}/StyleSortFilterProxyModel.h
     ${SRCDIR}/TimerListDialog.h
+    ${SRCDIR}/TimerMainDialog.h
     ${SRCDIR}/TimerWidget.h
     ${SRCDIR}/unit.h
     ${SRCDIR}/WaterTableModel.h

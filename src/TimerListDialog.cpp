@@ -1,7 +1,7 @@
 /*
  * TimerListDialog.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
- * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Aidan Roberts <aidanr67@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,21 +18,48 @@
  */
 
 #include "TimerListDialog.h"
-#include "TimerWidget.h"
+#include <QScrollBar>
 
-TimerListDialog::TimerListDialog(QWidget* parent) : QDialog(parent)
+TimerListDialog::TimerListDialog(QWidget* parent, QList<TimerWidget*>* timers) : QDialog(parent)
 {
-   setupUi(this);
-   
-   timer1 = new TimerWidget(this);
-   timer2 = new TimerWidget(this);
-   timer3 = new TimerWidget(this);
-   
-   verticalLayout->addWidget(timer1);
-   verticalLayout->addWidget(timer2);
-   verticalLayout->addWidget(timer3);
+    this->setWindowTitle(tr("Addition Timers"));
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    this->setLayout(mainLayout);
+
+    scrollArea = new QScrollArea(this);
+    mainLayout->addWidget(scrollArea);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setWidgetResizable(true);
+    scrollWidget = new QWidget(scrollArea);
+    layout = new QVBoxLayout(scrollWidget);  
+    scrollWidget->setLayout(layout);
+    scrollArea->setWidget(scrollWidget);
+    setTimers(timers);
 }
 
 TimerListDialog::~TimerListDialog()
 {
+
+}
+
+void TimerListDialog::setTimers(QList<TimerWidget *>* timers)
+{
+    if (!timers->isEmpty()) {
+        foreach (TimerWidget* t, *timers) {
+            layout->addWidget(t);
+        }
+    }
+}
+
+void TimerListDialog::setTimerVisible(TimerWidget *t)
+{
+    //Focus scrollArea on timer t
+    scrollArea->verticalScrollBar()->setValue(t->y());
+}
+
+void TimerListDialog::hideTimers()
+{
+    this->hide();
 }
