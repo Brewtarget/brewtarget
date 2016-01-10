@@ -112,11 +112,11 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calories estimées (pour 33 cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Calories estimées (pour 35cl)</translation>
+        <translation>Calories estimées (pour 35cl)</translation>
     </message>
 </context>
 <context>
@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calories estimées (pour 33 cl)</translation>
     </message>
 </context>
 <context>
@@ -342,7 +342,7 @@
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Échelle</translation>
     </message>
 </context>
 <context>
@@ -753,23 +753,23 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Empâté</translation>
+        <translation>Empâté</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Infusé</translation>
+        <translation>Trempé</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Non empâté</translation>
+        <translation>Trempé</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Tardif</translation>
+        <translation>Tardif</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Standard</translation>
     </message>
 </context>
 <context>
@@ -835,23 +835,23 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Empâté</translation>
+        <translation>Empâté</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Infusé</translation>
+        <translation>Trempé</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Non empâté</translation>
+        <translation>Non empâté</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Tardif</translation>
+        <translation>Tardif</translation>
     </message>
 </context>
 <context>
@@ -890,11 +890,11 @@
     </message>
     <message>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Méthode</translation>
     </message>
     <message>
         <source>Addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajout</translation>
     </message>
 </context>
 <context>
@@ -1376,55 +1376,55 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished"></translation>
+        <translation>Épice</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Clarifiant</translation>
+        <translation>Agents de collage</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Agent d&apos;eau</translation>
+        <translation>Agent d&apos;eau</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation>Herbes</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Saveur</translation>
+        <translation>Saveur</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Ébullition</translation>
+        <translation>Cuisson</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Empâtage</translation>
+        <translation>Empâtage</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Primaire</translation>
+        <translation>Primaire</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Secondaire</translation>
+        <translation>Secondaire</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Embouteillage</translation>
+        <translation>Embouteillage</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Poids</translation>
+        <translation>Poids</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
 </context>
 <context>
@@ -1514,11 +1514,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Poids</translation>
+        <translation>Poids</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
 </context>
 <context>
@@ -2311,27 +2311,27 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished">Divers</translation>
+        <translation>Divers</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished">Levures</translation>
+        <translation>Levures</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calories estimées (pour 33 cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Calories estimées (pour 35cl)</translation>
+        <translation>Calories estimées (pour 35cl)</translation>
     </message>
     <message>
         <source>Bitterness</source>
-        <translation type="unfinished"></translation>
+        <translation>Amertume</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Cible</translation>
+        <translation>Cible</translation>
     </message>
 </context>
 <context>
@@ -2349,30 +2349,30 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
         <source>Select Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner équipement</translation>
     </message>
     <message>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>La recette sera dimensionnée pour correspondre à la taille du lot et à  l&apos;efficience de l&apos;équipement sélectionné</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvel équipement</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle efficience (%)</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Ajuster la recette</translation>
+        <translation>Redimensionner la recette</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cet assistant va vous aider à redimensionner une recette pour une autre taille ou efficience .Sélectionnez un autre équipement avec la nouvelle taille du lot et / ou efficience et l&apos;assistant va redimensionner la recette automatiquement.</translation>
     </message>
 </context>
 <context>
@@ -3691,7 +3691,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter vers &amp;BBCode</translation>
     </message>
 </context>
 <context>

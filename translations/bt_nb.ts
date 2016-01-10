@@ -753,15 +753,15 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mesket</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Trekkes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Meskes ikke</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -769,7 +769,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -835,19 +835,19 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mesket</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Trekkes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Meskes ikke</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -2331,7 +2331,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Mål</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2368,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Skaler oppskrift</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

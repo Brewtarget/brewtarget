@@ -757,19 +757,19 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Ekstrahowany</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation type="unfinished">Niezacierany</translation>
-    </message>
-    <message>
-        <source>Late</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Not mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Dodawany późno</translation>
+    </message>
+    <message>
         <source>Normal</source>
-        <translation type="unfinished">Standardowo</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -839,19 +839,19 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Ekstrahowany</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Niezacierany</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Standardowo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dodawany późno</translation>
     </message>
 </context>
 <context>
@@ -1420,7 +1420,7 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Waga</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -1514,7 +1514,7 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Waga</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -2331,7 +2331,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Cel</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2368,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Skaluj recepturę</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

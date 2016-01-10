@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-12-29 03:42+0000\n"
+"Last-Translator: Carles Munoz Gorriz <carlesmu@internautas.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==11 || n/1000==11 || n/1000000==11 || n/1000000000==11) ? 1 : 2);\n"
-"X-Language: ca\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: ca\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -73,19 +80,19 @@ msgstr "Pas"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Actual PreBoil Volume"
-msgstr "Volum real desprès d'ebullició"
+msgstr "Volum real després d'ebullició"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Actual PreBoil Gravity"
-msgstr "Densitat real desprès d'ebullició"
+msgstr "Densitat real després d'ebullició"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "PostBoil Volume"
-msgstr "Volum desprès d'ebullició"
+msgstr "Volum després d'ebullició"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "PostBoil Gravity"
-msgstr "Densitat desprès d'ebullició"
+msgstr "Densitat després d'ebullició"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Volume into fermenter"
@@ -114,9 +121,8 @@ msgstr "Calenteu l'aigua"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calories estimades (per 33 cl)"
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
 msgstr "Calories estimades (per 12 oz)"
@@ -187,11 +193,11 @@ msgstr "Densitat real abans d'ebullició:"
 
 msgctxt "BrewDayWidget|"
 msgid "Post-boil Volume:"
-msgstr "Volum desprès de l'ebullició:"
+msgstr "Volum després d'ebullició:"
 
 msgctxt "BrewDayWidget|"
 msgid "Post-boil Gravity:"
-msgstr "Densitat desprès de l'ebullició:"
+msgstr "Densitat després d'ebullició:"
 
 msgctxt "BrewDayWidget|"
 msgid "Volume in fermenter:"
@@ -212,7 +218,7 @@ msgstr "Pas %1: %2"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calories estimades (per 33 cl)"
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -308,39 +314,39 @@ msgstr "Desconegut"
 
 msgctxt "Brewtarget|"
 msgid "YYYY-mm-dd"
-msgstr ""
+msgstr "AAAA-mm-dd"
 
 msgctxt "Brewtarget|"
 msgid "dd-mm-YYYY"
-msgstr ""
+msgstr "dd-mm-AAAA"
 
 msgctxt "Brewtarget|"
 msgid "mm-dd-YYYY"
-msgstr ""
+msgstr "mm-dd-AAAA"
 
 msgctxt "Brewtarget|"
 msgid "Seconds"
-msgstr ""
+msgstr "Segons"
 
 msgctxt "Brewtarget|"
 msgid "Minutes"
-msgstr ""
+msgstr "Minuts"
 
 msgctxt "Brewtarget|"
 msgid "Hours"
-msgstr ""
+msgstr "Hores"
 
 msgctxt "Brewtarget|"
 msgid "Days"
-msgstr ""
+msgstr "Dies"
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
-msgstr ""
+msgstr "Barrils"
 
 msgctxt "Brewtarget|"
 msgid "Scale"
-msgstr ""
+msgstr "Escala"
 
 msgctxt "BtDigitWidget|"
 msgid "Too low for style."
@@ -357,11 +363,11 @@ msgstr "Massa alt per l'estil."
 #, qt-format
 msgctxt "BtLabel|"
 msgid "Color (%1)"
-msgstr ""
+msgstr "Color (%1)"
 
 msgctxt "BtSplashScreen|"
 msgid "Loading..."
-msgstr ""
+msgstr "S'està carregant…"
 
 msgctxt "BtTreeModel|"
 msgid "Name"
@@ -393,7 +399,7 @@ msgstr "Ús"
 
 msgctxt "BtTreeModel|"
 msgid "Form"
-msgstr "Formulari"
+msgstr "Format"
 
 msgctxt "BtTreeModel|"
 msgid "Category"
@@ -503,7 +509,7 @@ msgstr "Notes d'elaboració"
 
 msgctxt "BtTreeView|"
 msgid "Cancel All"
-msgstr ""
+msgstr "Cancel·la-ho tot"
 
 #, qt-format
 msgctxt "BtTreeView|"
@@ -518,7 +524,7 @@ msgstr "Entri un nom únic per a la copia de %1."
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
-msgstr ""
+msgstr "Un nom en blanc farà que no es copiï «%1»."
 
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
@@ -739,27 +745,22 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Cancel·lar"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
 msgstr "Macerat"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Remullat"
+msgstr "Esglaonat"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
 msgstr "No macerat"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
 msgstr "Més tard"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
 msgstr "Normal"
@@ -778,7 +779,7 @@ msgstr "Base de dades ingredients fermentables"
 
 msgctxt "FermentableDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Afegeix a la recepta"
 
 msgctxt "FermentableDialog|"
 msgid "New"
@@ -786,7 +787,7 @@ msgstr "Nou"
 
 msgctxt "FermentableDialog|"
 msgid "Add selected ingredient to recipe"
-msgstr ""
+msgstr "Afegeix l'ingredient seleccionat a la recepta"
 
 msgctxt "FermentableDialog|"
 msgid "Create new ingredient"
@@ -798,7 +799,7 @@ msgstr "Edita ingredient seleccionat"
 
 msgctxt "FermentableDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "Borra l'ingredient seleccionat"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Grain"
@@ -820,27 +821,22 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Adjunt"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
 msgstr "Macerat"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Remullat"
+msgstr "Esglaonat"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
 msgstr "No macerat"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
 msgstr "Normal"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
 msgstr "Més tard"
@@ -881,11 +877,11 @@ msgstr "Color"
 
 msgctxt "FermentableTableModel|"
 msgid "Method"
-msgstr ""
+msgstr "Mètode"
 
 msgctxt "FermentableTableModel|"
 msgid "Addition"
-msgstr ""
+msgstr "Addició"
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -897,7 +893,7 @@ msgstr "Primer most"
 
 msgctxt "Hop|"
 msgid "Boil"
-msgstr "Bullir"
+msgstr "Bullit"
 
 msgctxt "Hop|"
 msgid "Aroma"
@@ -905,7 +901,7 @@ msgstr "Aroma"
 
 msgctxt "Hop|"
 msgid "Dry Hop"
-msgstr "Dry Hop"
+msgstr "«Dry Hop»"
 
 msgctxt "Hop|"
 msgid "Bittering"
@@ -925,7 +921,7 @@ msgstr "Pèl·let"
 
 msgctxt "Hop|"
 msgid "Plug"
-msgstr "Plug"
+msgstr "«Plug»"
 
 msgctxt "HopDialog|"
 msgid "Hop name"
@@ -941,7 +937,7 @@ msgstr "Base de dades de llúpols"
 
 msgctxt "HopDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Afegeix a la recepta"
 
 msgctxt "HopDialog|"
 msgid "New"
@@ -949,7 +945,7 @@ msgstr "Nou"
 
 msgctxt "HopDialog|"
 msgid "Add selected ingredient to recipe"
-msgstr ""
+msgstr "Afegeix l'ingredient seleccionat a la recepta"
 
 msgctxt "HopDialog|"
 msgid "Create new ingredient"
@@ -961,15 +957,15 @@ msgstr "Edita ingredient seleccionat"
 
 msgctxt "HopDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "Borra l'ingredient seleccionat"
 
 msgctxt "HopItemDelegate|"
 msgid "Boil"
-msgstr "Bullir"
+msgstr "Bullit"
 
 msgctxt "HopItemDelegate|"
 msgid "Dry Hop"
-msgstr "Llúpol sec"
+msgstr "«Dry Hop»"
 
 msgctxt "HopItemDelegate|"
 msgid "Mash"
@@ -977,7 +973,7 @@ msgstr "Maceració"
 
 msgctxt "HopItemDelegate|"
 msgid "First Wort"
-msgstr "Primera most"
+msgstr "Primer most"
 
 msgctxt "HopItemDelegate|"
 msgid "Aroma"
@@ -993,7 +989,7 @@ msgstr "Pèl·let"
 
 msgctxt "HopItemDelegate|"
 msgid "Plug"
-msgstr "Plug"
+msgstr "«Plug»"
 
 msgctxt "HopTableModel|"
 msgid "Name"
@@ -1373,62 +1369,54 @@ msgstr ""
 "l'ebullició. Pots augmentar la quantitat de liquid de la cocció augmentant "
 "el temps d'ebullició o reduint la seva viscositat."
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr "Especie"
+msgstr "Espècia"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr "Aclaridor"
+msgstr "Clarificador"
 
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr ""
+msgstr "Agent per l'aigua"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
 msgstr "Herba"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
 msgstr "Sabor"
 
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Altre"
 
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Bullit"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
 msgstr "Maceració"
 
 msgctxt "Misc|"
 msgid "Primary"
-msgstr ""
+msgstr "Primari"
 
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr ""
+msgstr "Secundari"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr "Embotellar"
+msgstr "Embotellat"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
 msgstr "Massa"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
 msgstr "Volum"
@@ -1447,7 +1435,7 @@ msgstr "Base de dades d'ingredients extres"
 
 msgctxt "MiscDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Afegeix a la recepta"
 
 msgctxt "MiscDialog|"
 msgid "New"
@@ -1455,7 +1443,7 @@ msgstr "Nou"
 
 msgctxt "MiscDialog|"
 msgid "Add selected ingredient to recipe"
-msgstr ""
+msgstr "Afegeix l'ingredient seleccionat a la recepta"
 
 msgctxt "MiscDialog|"
 msgid "Create new ingredient"
@@ -1467,7 +1455,7 @@ msgstr "Edita ingredient seleccionat"
 
 msgctxt "MiscDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "Borra l'ingredient seleccionat"
 
 msgctxt "MiscItemDelegate|"
 msgid "Spice"
@@ -1475,11 +1463,11 @@ msgstr "Especie"
 
 msgctxt "MiscItemDelegate|"
 msgid "Fining"
-msgstr "Aclaridor"
+msgstr "Clarificador"
 
 msgctxt "MiscItemDelegate|"
 msgid "Water Agent"
-msgstr "Agent per aigua"
+msgstr "Agent per l'aigua"
 
 msgctxt "MiscItemDelegate|"
 msgid "Herb"
@@ -1495,7 +1483,7 @@ msgstr "Altre"
 
 msgctxt "MiscItemDelegate|"
 msgid "Boil"
-msgstr "Bullir"
+msgstr "Bullit"
 
 msgctxt "MiscItemDelegate|"
 msgid "Mash"
@@ -1513,12 +1501,10 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Embotellar"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
 msgstr "Massa"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
 msgstr "Volum"
@@ -1849,7 +1835,7 @@ msgstr "Carpeta"
 
 msgctxt "QObject|"
 msgid "Failed to update the database"
-msgstr ""
+msgstr "No s'ha pogut actualitzar la base de dades"
 
 msgctxt "Recipe|"
 msgid "Add grains"
@@ -1986,11 +1972,11 @@ msgstr "Abans de l'ebullició"
 
 msgctxt "Recipe|"
 msgid "Boil or steep "
-msgstr "Ebullició o passos "
+msgstr "ebullició o esglaons "
 
 msgctxt "Recipe|"
 msgid "Boil/steep fermentables"
-msgstr "Ebullició/remullat de fermentables"
+msgstr "Ebullició/esglaons de fermentables"
 
 msgctxt "Recipe|"
 msgid "to the boil at knockout."
@@ -2003,7 +1989,7 @@ msgstr "Adicions finals"
 #, qt-format
 msgctxt "Recipe|"
 msgid "You should have %1 wort post-boil."
-msgstr "Hauríeu de tenir %1 de most desprès de bullir."
+msgstr "Hauríeu de tenir %1 de most després de bullir."
 
 #, qt-format
 msgctxt "Recipe|"
@@ -2034,7 +2020,7 @@ msgstr ""
 
 msgctxt "Recipe|"
 msgid "Post boil"
-msgstr "Desprès de l'ebullició"
+msgstr "Després de l'ebullició"
 
 msgctxt "Recipe|"
 msgid "Boil time"
@@ -2067,12 +2053,12 @@ msgstr "Pareu de bullir el most."
 
 msgctxt "Recipe|"
 msgid "Cool wort and pitch "
-msgstr "Refredeu el llevat i afegiu "
+msgstr "Refredeu el most i sembreu "
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "%1 %2 yeast, "
-msgstr "«%1» de llevat tipus %2 "
+msgstr "«%1», llevat tipus %2, "
 
 msgctxt "Recipe|"
 msgid "to the primary."
@@ -2080,7 +2066,7 @@ msgstr "al primari."
 
 msgctxt "Recipe|"
 msgid "Pitch yeast"
-msgstr "Afegiu el llevat"
+msgstr "Sembreu el llevat"
 
 #, qt-format
 msgctxt "Recipe|"
@@ -2243,7 +2229,7 @@ msgstr "Etapa"
 
 msgctxt "RecipeFormatter|"
 msgid "Secondary"
-msgstr "Secundària"
+msgstr "Secundari"
 
 msgctxt "RecipeFormatter|"
 msgid "Primary"
@@ -2303,11 +2289,11 @@ msgstr "DI projectada"
 
 msgctxt "RecipeFormatter|"
 msgid "Postboil"
-msgstr "Desprès de bullir"
+msgstr "Després de bullir"
 
 msgctxt "RecipeFormatter|"
 msgid "Postboil Volume"
-msgstr "Volum desprès de l'ebullició"
+msgstr "Volum després de l'ebullició"
 
 msgctxt "RecipeFormatter|"
 msgid "Volume Into Fermenter"
@@ -2369,30 +2355,26 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Floculació"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
 msgstr "Ingredients extres"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
 msgstr "Llevats"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calories estimades (per 33 cl)"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
 msgstr "Calories estimades (per 12 oz)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
-msgstr ""
+msgstr "Amargor"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
 msgstr "Objectiu"
@@ -2412,26 +2394,27 @@ msgstr ""
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "Select Equipment"
-msgstr ""
+msgstr "Seleccioneu l'equipament"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid ""
 "The recipe will be scaled to match the batch size and efficiency of the "
 "selected equipment"
 msgstr ""
+"La recepta s'adaptarà a la mida del lot i l'eficiència de l'equipament "
+"seleccionat"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Equipment"
-msgstr ""
+msgstr "Nou equipament"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
-msgstr ""
+msgstr "Nova eficiència (%)"
 
-#, fuzzy
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr "Escala la recepta"
+msgstr "Ajusta la recepta"
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""
@@ -2439,6 +2422,9 @@ msgid ""
 "efficiency.Select another equipment with the new batch size and/or "
 "efficiency andthe wizard will scale the recipe ingredients automatically."
 msgstr ""
+"Aquest giny us ajudarà a adaptar una recepta a una altra mida o eficiència. "
+"Seleccioneu un altre equipament amb la nova mida de lot i/o eficiència, el "
+"giny adaptarà els ingredients de la recepta automàticament."
 
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
@@ -2556,7 +2542,7 @@ msgstr "Base de dades de llevats"
 
 msgctxt "YeastDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Afegeix a la recepta"
 
 msgctxt "YeastDialog|"
 msgid "New"
@@ -2564,7 +2550,7 @@ msgstr "Nou"
 
 msgctxt "YeastDialog|"
 msgid "Add selected ingredient to recipe"
-msgstr ""
+msgstr "Afegeix l'ingredient seleccionat a la recepta"
 
 msgctxt "YeastDialog|"
 msgid "Create new ingredient"
@@ -2576,7 +2562,7 @@ msgstr "Edita ingredient seleccionat"
 
 msgctxt "YeastDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "Borra l'ingredient seleccionat"
 
 msgctxt "YeastItemDelegate|"
 msgid "Ale"
@@ -2762,7 +2748,7 @@ msgstr "Afegeix"
 
 msgctxt "brewNoteWidget|"
 msgid "Preboil"
-msgstr "Abans de l'ebullició"
+msgstr "Abans de bullir"
 
 msgctxt "brewNoteWidget|"
 msgid "SG"
@@ -2810,7 +2796,7 @@ msgstr "Desnsitat després de bulir"
 
 msgctxt "brewNoteWidget|"
 msgid "Postboil Volume"
-msgstr "Volum desprès de l'ebullició"
+msgstr "Volum després de l'ebullició"
 
 msgctxt "brewNoteWidget|"
 msgid "Volume of wort in BK after boil"
@@ -2826,11 +2812,11 @@ msgstr "Volum en el fermentador"
 
 msgctxt "brewNoteWidget|"
 msgid " Pitch Temp"
-msgstr " Pitch Temp"
+msgstr " Temp. Sembrat"
 
 msgctxt "brewNoteWidget|"
 msgid "Temperature of wort when yeast is pitched"
-msgstr "Temperatura del most quant el llevat s'introdueix"
+msgstr "Temperatura del most cuan s'afegeix el llevat"
 
 msgctxt "brewNoteWidget|"
 msgid "Postferment"
@@ -2894,7 +2880,7 @@ msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "yyyy-dd-MM"
-msgstr ""
+msgstr "aaaa-dd-MM"
 
 msgctxt "equipmentEditor|"
 msgid "Specific heat (cal/(g*K))"
@@ -2970,11 +2956,11 @@ msgstr "Color Lovibond"
 
 msgctxt "fermentableEditor|"
 msgid "Add After Boil"
-msgstr "Desprès d'ebullició"
+msgstr "Després d'ebullició"
 
 msgctxt "fermentableEditor|"
 msgid "This ingredient is added post boil."
-msgstr "L'ingredient s'afegeix desprès de bullir."
+msgstr "L'ingredient s'afegeix després de bullir."
 
 msgctxt "fermentableEditor|"
 msgid "Origin"
@@ -3054,11 +3040,11 @@ msgstr "Notes:"
 
 msgctxt "fermentableEditor|"
 msgid "Default Amount"
-msgstr "Quantitat per defecte"
+msgstr "Per defecte"
 
 msgctxt "fermentableEditor|"
 msgid "Amount in Inventory"
-msgstr "Quantitat en estoc"
+msgstr "Existències"
 
 msgctxt "fermentableEditor|"
 msgid "Amount in inventory"
@@ -3106,7 +3092,7 @@ msgstr "Primera most"
 
 msgctxt "hopEditor|"
 msgid "Boil"
-msgstr "Bullir"
+msgstr "Bullit"
 
 msgctxt "hopEditor|"
 msgid "Aroma"
@@ -3114,7 +3100,7 @@ msgstr "Aroma"
 
 msgctxt "hopEditor|"
 msgid "Dry Hop"
-msgstr "Dry Hop"
+msgstr "«Dry Hop»"
 
 msgctxt "hopEditor|"
 msgid "Time"
@@ -3146,7 +3132,7 @@ msgstr "Pèl·let"
 
 msgctxt "hopEditor|"
 msgid "Plug"
-msgstr "Plug"
+msgstr "«Plug»"
 
 msgctxt "hopEditor|"
 msgid "Beta (%)"
@@ -3210,11 +3196,11 @@ msgstr "Notes:"
 
 msgctxt "hopEditor|"
 msgid "Default Amount "
-msgstr "Quantitat per defecte "
+msgstr "Per defecte "
 
 msgctxt "hopEditor|"
 msgid "Amount in Inventory"
-msgstr "Quantitat en estoc"
+msgstr "Existències"
 
 msgctxt "hopEditor|"
 msgid "Amount in inventory"
@@ -3721,7 +3707,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Export to &BBCode"
-msgstr ""
+msgstr "Exporta a &BBCode"
 
 msgctxt "mashDesigner|"
 msgid "Mash Designer"
@@ -3961,7 +3947,7 @@ msgstr "Especie"
 
 msgctxt "miscEditor|"
 msgid "Fining"
-msgstr "Aclaridor"
+msgstr "Clarificador"
 
 msgctxt "miscEditor|"
 msgid "Water Agent"
@@ -3993,11 +3979,11 @@ msgstr "Maceració"
 
 msgctxt "miscEditor|"
 msgid "Primary"
-msgstr "Primaria"
+msgstr "Primari"
 
 msgctxt "miscEditor|"
 msgid "Secondary"
-msgstr "Secundaria"
+msgstr "Secundari"
 
 msgctxt "miscEditor|"
 msgid "Bottling"
@@ -4033,11 +4019,11 @@ msgstr "Notes:"
 
 msgctxt "miscEditor|"
 msgid "Default Amount"
-msgstr "Quantitat per defecte"
+msgstr "Per defecte"
 
 msgctxt "miscEditor|"
 msgid "Amount in Inventory"
-msgstr "Quantitat en estoc"
+msgstr "Existències"
 
 msgctxt "miscEditor|"
 msgid "Amount in inventory"
@@ -4200,7 +4186,7 @@ msgstr "Mida lot final"
 
 msgctxt "ogAdjuster|"
 msgid "Estimated batch size after correction"
-msgstr "Mida estimada desprès de la correcció"
+msgstr "Mida estimada després de la correcció"
 
 msgctxt "ogAdjuster|"
 msgid "Calculate"
@@ -4362,19 +4348,19 @@ msgstr "Data"
 
 msgctxt "optionsDialog|"
 msgid "mm-dd-YYYY"
-msgstr ""
+msgstr "mm-dd-AAAA"
 
 msgctxt "optionsDialog|"
 msgid "dd-mm-YYYY"
-msgstr ""
+msgstr "dd-mm-AAAA"
 
 msgctxt "optionsDialog|"
 msgid "YYYY-dd-mm"
-msgstr ""
+msgstr "AAAA-dd-mm"
 
 msgctxt "optionsDialog|"
 msgid "Noonan's approximation"
-msgstr ""
+msgstr "Aproximació de Noonan"
 
 msgctxt "pitchDialog|"
 msgid "Pitch Rate Calculator"
@@ -4398,7 +4384,7 @@ msgstr "Per a ales, 0.75-1. Pera a lagers, 1.5-2."
 
 msgctxt "pitchDialog|"
 msgid "Pitch Rate (M cells)/(mL*P)"
-msgstr "Tassa de llevat"
+msgstr "Sembra ((M cel·l.)/(mL*P)"
 
 msgctxt "pitchDialog|"
 msgid "Aeration Method"
@@ -4466,47 +4452,48 @@ msgstr "Volum del starter"
 
 msgctxt "pitchDialog|"
 msgid "Volume of wort"
-msgstr ""
+msgstr "Volum de most"
 
 msgctxt "pitchDialog|"
 msgid "Starting gravity of the wort"
-msgstr ""
+msgstr "Densitat inicial del most"
 
 msgctxt "pitchDialog|"
 msgid "Aeration method"
-msgstr ""
+msgstr "Mètode d'aeració"
 
 msgctxt "pitchDialog|"
 msgid "Production date (Best By date less three months)"
-msgstr ""
+msgstr "Data de producció (data recomanada menys 3 mesos)"
 
 msgctxt "pitchDialog|"
 msgid "Estimated viability of the yeast"
-msgstr ""
+msgstr "Viabilitat estimada del llevat"
 
 msgctxt "pitchDialog|"
 msgid "Desired pitch rate"
-msgstr ""
+msgstr "Quantitat a sembrar"
 
 msgctxt "pitchDialog|"
 msgid "Number of vials/smack packs added to starter"
-msgstr ""
+msgstr "Nombre de vials/paquets afegits a a l'estàrter"
 
 msgctxt "pitchDialog|"
 msgid "How much yeast you will need"
-msgstr ""
+msgstr "Quant llevat et caldrà"
 
 msgctxt "pitchDialog|"
 msgid "How many smack packs or vials required to reach pitch rate"
 msgstr ""
+"La quantitat de paquets o vials necessaris per assolir la quantitat a sembrar"
 
 msgctxt "pitchDialog|"
 msgid "Amount of dry yeast needed to reach pitch rate"
-msgstr ""
+msgstr "Quantitat de llevat sec per obtenir la quantitat a sembrar"
 
 msgctxt "pitchDialog|"
 msgid "Starter size to reach pitch rate"
-msgstr ""
+msgstr "Mida de l'estàrter per assolir la quantitat a sembrar"
 
 msgctxt "primingDialog|"
 msgid "Priming Calculator"
@@ -4694,15 +4681,15 @@ msgstr "DI (20C)"
 
 msgctxt "refractoDialog|"
 msgid "Measured original plato"
-msgstr ""
+msgstr "Platos inicials obtinguts"
 
 msgctxt "refractoDialog|"
 msgid "Measured original gravity"
-msgstr ""
+msgstr "Densitat inicial obtinguda"
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
+msgstr "Platos actuals obtinguts"
 
 msgctxt "strikeWaterDialog|"
 msgid "Strike Water Calculator"
@@ -4963,11 +4950,11 @@ msgstr "Sec"
 
 msgctxt "yeastEditor|"
 msgid "Slant"
-msgstr "Pendents"
+msgstr "Pendent"
 
 msgctxt "yeastEditor|"
 msgid "Culture"
-msgstr "Cultivat"
+msgstr "Cultiu"
 
 msgctxt "yeastEditor|"
 msgid "Amount"
@@ -5011,7 +4998,7 @@ msgstr "Temperatura max"
 
 msgctxt "yeastEditor|"
 msgid "Flocculation"
-msgstr "Precipitat"
+msgstr "Floculació"
 
 msgctxt "yeastEditor|"
 msgid "Low"
@@ -5055,12 +5042,12 @@ msgstr "Nombre màxim de cultius"
 
 msgctxt "yeastEditor|"
 msgid "Add to Secondary"
-msgstr "Afegir a la secundària"
+msgstr "Afegiu al secundari"
 
 msgctxt "yeastEditor|"
 msgid "Checked means add this yeast to secondary instead of primary"
 msgstr ""
-"Comprovar si cal afegir aquest llevat a la secundària en lloc de la primària"
+"Comprova si cal afegir aquest llevat al secundari en lloc del primari"
 
 msgctxt "yeastEditor|"
 msgid "Best For:"
@@ -5072,11 +5059,11 @@ msgstr "Notes:"
 
 msgctxt "yeastEditor|"
 msgid "Default Amount"
-msgstr "Quantitat per defecte"
+msgstr "Per defecte"
 
 msgctxt "yeastEditor|"
 msgid "Quanta in Inventory"
-msgstr "Quantitat en estoc"
+msgstr "Existències"
 
 msgctxt "yeastEditor|"
 msgid "Quanta in inventory"

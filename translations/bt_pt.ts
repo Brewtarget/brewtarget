@@ -112,11 +112,11 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorias estimadas (por 330ml)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Calorias Estimadas (por 12oz - 340,19g)</translation>
+        <translation>Calorias estimadas (por 355ml)</translation>
     </message>
 </context>
 <context>
@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorias estimadas (por 330ml)</translation>
     </message>
 </context>
 <context>
@@ -753,23 +753,23 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mosturação</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Mergulhado</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation type="unfinished">Não triturado</translation>
-    </message>
-    <message>
-        <source>Late</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Not mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Tarde</translation>
+    </message>
+    <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
 </context>
 <context>
@@ -835,23 +835,23 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mosturação</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Mergulhado</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Não triturado</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tarde</translation>
     </message>
 </context>
 <context>
@@ -890,11 +890,11 @@
     </message>
     <message>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Método</translation>
     </message>
     <message>
         <source>Addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Adição</translation>
     </message>
 </context>
 <context>
@@ -1376,7 +1376,7 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Tempero</translation>
+        <translation>Condimento</translation>
     </message>
     <message>
         <source>Fining</source>
@@ -1384,27 +1384,27 @@
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Corretor de água</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished">Erva</translation>
+        <translation>Erva</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation>Aroma</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Outro</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferver</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mosto</translation>
+        <translation>Mosto</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -1420,7 +1420,7 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Peso</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -1514,7 +1514,7 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Peso</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -2319,11 +2319,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorias estimadas (por 330ml)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Calorias Estimadas (por 12oz - 340,19g)</translation>
+        <translation>Calorias estimadas (por 355ml)</translation>
     </message>
     <message>
         <source>Bitterness</source>
@@ -2331,7 +2331,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Alvo</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2368,7 @@ O volume final do fermentador primário é %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Escalar Receita</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

@@ -757,11 +757,11 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Eingeweicht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Nicht gemaischt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -769,7 +769,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -839,15 +839,15 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Eingeweicht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Nicht gemaischt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -2331,7 +2331,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Ziel</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2368,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Rezept skalieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

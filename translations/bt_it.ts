@@ -769,11 +769,11 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">bagnato</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Non mashed</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -781,7 +781,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normale</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -851,15 +851,15 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">bagnato</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Non mashed</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normale</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -1432,7 +1432,7 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">peso</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -1526,7 +1526,7 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">peso</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -2343,7 +2343,7 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Obiettivo</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2380,7 +2380,7 @@ Il Volume finale del primo è %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Scala ricetta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

@@ -53,6 +53,7 @@ ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
 
 # Variable that contains all the .cpp files in this project.
 SET( brewtarget_SRCS
+    ${SRCDIR}/AboutDialog.cpp
     ${SRCDIR}/Algorithms.cpp
     ${SRCDIR}/BeerXMLElement.cpp
     ${SRCDIR}/BeerXMLSortProxyModel.cpp
@@ -203,6 +204,7 @@ SET( brewtarget_UIS
 # The list of files that need to be moc'd.
 # In other words, classes that have Q_OBJECT declarations and stuff.
 SET( brewtarget_MOC_HEADERS
+    ${SRCDIR}/AboutDialog.h
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/BeerXMLElement.h
     ${SRCDIR}/BeerXMLSortProxyModel.h

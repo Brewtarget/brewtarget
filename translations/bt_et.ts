@@ -11,18 +11,6 @@
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
-        <source>Print Document</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Step %1: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Style</source>
         <translation>Õlletüüp</translation>
     </message>
@@ -83,14 +71,6 @@
         <translation>Samm</translation>
     </message>
     <message>
-        <source>Add grains</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Heat water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Actual PreBoil Volume</source>
         <translation>Tegelik keedueelne kogus</translation>
     </message>
@@ -108,6 +88,26 @@
     </message>
     <message>
         <source>Volume into fermenter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Step %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add grains</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat water</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -217,10 +217,6 @@
 <context>
     <name>Brewtarget</name>
     <message>
-        <source>Unknown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -230,18 +226,6 @@
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mm-dd-YYYY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -289,22 +273,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>British Imperial</source>
         <translation type="unfinished"></translation>
     </message>
@@ -334,6 +302,38 @@
     </message>
     <message>
         <source>Gallons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YYYY-mm-dd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -504,6 +504,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Delete %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Cancel All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -517,18 +529,6 @@
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete %1 %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BrewNote</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -582,6 +582,38 @@
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tun Volume Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Size Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equipment name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equipment name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The tun volume you entered is 0. This may cause problems</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The batch size you entered is 0. This may cause problems</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop Utilization Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The hop utilization percentage you entered is 0. This may cause problems</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -716,38 +748,6 @@
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Tun Volume Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Batch Size Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop Utilization Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equipment name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equipment name:</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Fermentable</name>
@@ -775,6 +775,14 @@
 <context>
     <name>FermentableDialog</name>
     <message>
+        <source>Fermentable name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentable name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Fermentable Database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -800,14 +808,6 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentable name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentable name:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -873,15 +873,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Yield %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -943,6 +943,14 @@
 <context>
     <name>HopDialog</name>
     <message>
+        <source>Hop name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Hop Database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -970,17 +978,17 @@
         <source>Remove selected ingredient</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Hop name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop name:</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>HopItemDelegate</name>
+    <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Mash</source>
         <translation type="unfinished"></translation>
@@ -990,15 +998,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Aroma</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1025,10 +1025,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1042,6 +1038,10 @@
     </message>
     <message>
         <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1099,31 +1099,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>HTML files (*.html)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Database File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Recipe name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recipe name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Folder name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Folder name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1147,23 +1147,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Choose File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>For some reason, the operation failed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please restart Brewtarget.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1191,23 +1175,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>HTML files (*.html)</source>
+        <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Database Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select Database File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brewtarget Database (*.sqlite)</source>
+        <source>Please restart Brewtarget.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1227,6 +1199,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Choose File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SQLite (*.sqlite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The database has been converted/upgraded.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1236,6 +1216,26 @@
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-whitespace character in it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1312,14 +1312,6 @@
 <context>
     <name>MashWizard</name>
     <message>
-        <source>No steps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There must be at least one mash step to run the wizard.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Mash thickness (%1/%2)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1329,6 +1321,14 @@
     </message>
     <message>
         <source>You must have a positive mash thickness.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There must be at least one mash step to run the wizard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1430,6 +1430,14 @@
 <context>
     <name>MiscDialog</name>
     <message>
+        <source>Misc name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Misc Database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1455,14 +1463,6 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Misc name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Misc name:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1540,10 +1540,6 @@
         <translation>Kestus</translation>
     </message>
     <message>
-        <source>Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1551,9 +1547,33 @@
         <source>Amount Type</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
+    <message>
+        <source>Open Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Catalan</source>
         <translation type="unfinished"></translation>
@@ -1606,29 +1626,17 @@
         <source>Chinese</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Open Directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy Data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please restart Brewtarget.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QObject</name>
+    <message>
+        <source>Invalid color formula type: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unrecognized IBU formula type. %1</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Directory Problem</source>
         <translation type="unfinished"></translation>
@@ -1638,39 +1646,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Recipes</source>
+        <source>New Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Equipment</source>
+        <source>Version %1 is now available. Download it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Fermentables</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hops</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Õlletüüp</translation>
-    </message>
-    <message>
-        <source>Folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Invalid color formula type: %1</source>
+        <source>Stop bothering you about new versions?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1682,7 +1666,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to update the database</source>
+        <source>Save Database Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like to save the changes you made?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1735,30 +1723,6 @@
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unrecognized IBU formula type. %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Database Changes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Would you like to save the changes you made?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version %1 is now available. Download it?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stop bothering you about new versions?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1825,6 +1789,42 @@
         <source>Very High</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Õlletüüp</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to update the database</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -1846,6 +1846,10 @@
     </message>
     <message>
         <source>Bring </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 water to %2, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1945,14 +1949,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Raise water to boil and then remove from heat. Stir in  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Extracts to water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>to the boil at knockout.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2044,7 +2040,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 water to %2, </source>
+        <source>Raise water to boil and then remove from heat. Stir in  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Extracts to water</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2060,94 +2060,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation>IBU</translation>
-    </message>
-    <message>
-        <source>Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Preboil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BoilTime</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mashed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yield</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Alpha</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Beta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attenuation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Flocculation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2175,7 +2087,19 @@ The final volume in the primary is %1.</source>
         <translation>Efektiivsus</translation>
     </message>
     <message>
+        <source>OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>ABV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2191,7 +2115,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mashed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2199,12 +2131,40 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Yield</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Hops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Time</source>
         <translation>Kestus</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2248,6 +2208,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Brew Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preboil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2304,6 +2268,42 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Print Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BoilTime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flocculation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2397,6 +2397,22 @@ The final volume in the primary is %1.</source>
 <context>
     <name>TimerWidget</name>
     <message>
+        <source>Open Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Set the timer to the specified value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2417,23 +2433,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open Sound</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2483,6 +2483,14 @@ The final volume in the primary is %1.</source>
 <context>
     <name>YeastDialog</name>
     <message>
+        <source>Yeast name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Yeast Database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2508,14 +2516,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast name:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2581,10 +2581,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2594,6 +2590,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Product ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2714,10 +2714,6 @@ The final volume in the primary is %1.</source>
 <context>
     <name>brewNoteWidget</name>
     <message>
-        <source>brewNote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Preboil</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2802,10 +2798,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>percent efficiency into boil kettle</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2849,6 +2841,14 @@ The final volume in the primary is %1.</source>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>brewNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>equipmentEditor</name>
@@ -2861,15 +2861,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>equipmentEditor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Kettle to fermenter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>equipmentEditor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2912,10 +2912,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default Amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2928,10 +2924,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Lovibond rating</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2941,14 +2933,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount in inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3027,6 +3011,22 @@ The final volume in the primary is %1.</source>
         <source>Notes:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>hopEditor</name>
@@ -3048,10 +3048,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default Amount </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3085,14 +3081,6 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Time</source>
         <translation>Kestus</translation>
-    </message>
-    <message>
-        <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Type</source>
@@ -3182,6 +3170,18 @@ The final volume in the primary is %1.</source>
         <source>Notes:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Default Amount </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>instructionWidget</name>
@@ -3233,10 +3233,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>tab_recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Recipe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3246,10 +3242,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name of recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Target Boil Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3285,35 +3277,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Equipment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Target Batch Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Calories/12oz</source>
+        <source>Equipment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Boil SG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ABV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bitterness (IBU)</source>
+        <source>Target Boil Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3321,11 +3293,31 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Boil SG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>FG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>ABV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitterness (IBU)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>IBU/GU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calories/12oz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3681,7 +3673,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>1.0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Strike Water Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>tab_recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3988,10 +3988,6 @@ The final volume in the primary is %1.</source>
         <translation>Kestus</translation>
     </message>
     <message>
-        <source>Default Amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4008,19 +4004,23 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Use for:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notes:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4245,22 +4245,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation>Kuupäev</translation>
-    </message>
-    <message>
-        <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>YYYY-dd-mm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4301,19 +4285,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Noonan&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>IBU Adjustments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Mash Hop</source>
+        <source>% IBU adjustment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>% IBU adjustment</source>
+        <source>Mash Hop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4354,6 +4334,26 @@ The final volume in the primary is %1.</source>
 &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Date</source>
+        <translation>Kuupäev</translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YYYY-dd-mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noonan&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4370,15 +4370,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>OG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starting gravity of the wort</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4402,10 +4394,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Aeration method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4418,23 +4406,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MM/dd/yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desired pitch rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4450,10 +4426,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4462,15 +4434,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source># Vials/Smack Packs w/o Starter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>How many smack packs or vials required to reach pitch rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4478,11 +4442,47 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Amount of dry yeast needed to reach pitch rate</source>
+        <source>Starter Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Starter Volume</source>
+        <source>Volume of wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starting gravity of the wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aeration method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Production date (Best By date less three months)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estimated viability of the yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desired pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of vials/smack packs added to starter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How much yeast you will need</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How many smack packs or vials required to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount of dry yeast needed to reach pitch rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4643,23 +4643,11 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>OG (20 C)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Current Plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Current measured plato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4692,6 +4680,18 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG (20C)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured original plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measured original gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current measured plato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4974,10 +4974,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default Amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4991,14 +4987,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Quanta in Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Quanta in inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5083,6 +5071,18 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in inventory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

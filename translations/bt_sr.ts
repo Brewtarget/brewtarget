@@ -757,11 +757,11 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Постепено додаван</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Није укомљен</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -769,7 +769,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Уобичајено</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -839,15 +839,15 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Постепено додаван</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Није укомљен</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Уобичајено</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -2328,7 +2328,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Циљно</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

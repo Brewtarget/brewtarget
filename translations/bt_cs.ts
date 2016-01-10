@@ -753,15 +753,15 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Šrotovaný</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Máčet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Nermutovat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -769,7 +769,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Obvyklé</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -835,19 +835,19 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Šrotovaný</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Máčet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Nermutovat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Obvyklé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -2331,7 +2331,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Cílová teplota</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2368,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Změnit objem</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

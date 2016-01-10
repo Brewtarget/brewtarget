@@ -238,7 +238,7 @@ public:
    BrewNote*    brewNote();
    //! \brief returns the data as a style
    Style*       style();
-   //~ \brief returns data as a folder
+   //! \brief returns data as a folder
    BtFolder*   folder();
    //! \brief returns the data as a BeerXMLElement
    BeerXMLElement* thing();

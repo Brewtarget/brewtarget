@@ -757,11 +757,11 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Udtrukket</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Umæsket</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -769,7 +769,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -839,15 +839,15 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Udtrukket</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Umæsket</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>

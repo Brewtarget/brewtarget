@@ -757,11 +757,11 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Áztatott</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Nem cefrézett</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -769,7 +769,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normál</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -839,15 +839,15 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Áztatott</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Nem cefrézett</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normál</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -2331,7 +2331,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Cél</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

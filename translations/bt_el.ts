@@ -753,15 +753,15 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">στο σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Steeped</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Not mashed</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -769,7 +769,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Κανονικό</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -835,19 +835,19 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">στο σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Steeped</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Not mashed</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Κανονικό</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -2331,7 +2331,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Στόχος</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2368,7 @@ The final volume in the primary is %1.</source>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Μετατροπή Συνταγής</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

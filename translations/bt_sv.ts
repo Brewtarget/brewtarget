@@ -757,19 +757,19 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Stöpt</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation type="unfinished">Omäskat</translation>
-    </message>
-    <message>
-        <source>Late</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Not mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Sent</translation>
+    </message>
+    <message>
         <source>Normal</source>
-        <translation type="unfinished">Normalt</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -839,19 +839,19 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Stöpt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Omäskat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normalt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sent</translation>
     </message>
 </context>
 <context>
@@ -1388,7 +1388,7 @@
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Örtkrydda</translation>
     </message>
     <message>
         <source>Flavor</source>
@@ -1396,7 +1396,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Övrigt</translation>
     </message>
     <message>
         <source>Boil</source>
@@ -2329,7 +2329,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Mål</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-10-09 07:11+0000\n"
+"Last-Translator: Jonas <jonas@falkens.se>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Language: sv\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: sv\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -116,10 +123,9 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Uppskattade kalorier (per 12 oz)"
+msgstr ""
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -736,29 +742,25 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr "Mäskat"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Stöpt"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Omäskat"
+msgstr ""
 
 msgctxt "Fermentable|"
 msgid "Late"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr "Normalt"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -816,25 +818,21 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Tillsats"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr "Mäskat"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Stöpt"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr "Omäskat"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr "Normalt"
+msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
@@ -1370,68 +1368,57 @@ msgstr ""
 "föreslår en ökning av kokvolymen genom att öka koktiden eller minska "
 "mäsktjockleken."
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr "Krydda"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr "Klarningsmedel"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr "Vattenbehandling"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Herb"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr "Smak"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Other"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr "Kokning"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr "Primär"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr "Sekundär"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr "Flasktappning"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr "Vikt"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr "Volym"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1513,15 +1500,13 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Flasktappning"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr "Vikt"
+msgstr ""
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr "Volym"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -2375,19 +2360,17 @@ msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Uppskattade kalorier (per 12 oz)"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr "Mål"
+msgstr ""
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -4109,10 +4092,9 @@ msgctxt "ogAdjuster|"
 msgid "Adjust Volume to Hit OG"
 msgstr ""
 
-#, fuzzy
 msgctxt "ogAdjuster|"
 msgid "Input"
-msgstr "Inmatning"
+msgstr ""
 
 msgctxt "ogAdjuster|"
 msgid "SG"
@@ -4158,10 +4140,9 @@ msgctxt "ogAdjuster|"
 msgid "Measured pre-boil volume"
 msgstr ""
 
-#, fuzzy
 msgctxt "ogAdjuster|"
 msgid "Output"
-msgstr "Output"
+msgstr ""
 
 msgctxt "ogAdjuster|"
 msgid "OG w/o Correction"
@@ -4339,15 +4320,13 @@ msgctxt "optionsDialog|"
 msgid "Date"
 msgstr "Datum"
 
-#, fuzzy
 msgctxt "optionsDialog|"
 msgid "mm-dd-YYYY"
-msgstr "dd-mm-YYYY"
+msgstr ""
 
-#, fuzzy
 msgctxt "optionsDialog|"
 msgid "dd-mm-YYYY"
-msgstr "dd-mm-YYYY"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "YYYY-dd-mm"
@@ -4361,10 +4340,9 @@ msgctxt "pitchDialog|"
 msgid "Pitch Rate Calculator"
 msgstr ""
 
-#, fuzzy
 msgctxt "pitchDialog|"
 msgid "Input"
-msgstr "Inmatning"
+msgstr ""
 
 msgctxt "pitchDialog|"
 msgid "Wort Volume"
@@ -4426,10 +4404,9 @@ msgctxt "pitchDialog|"
 msgid "# Vials/Smack Packs Pitched"
 msgstr ""
 
-#, fuzzy
 msgctxt "pitchDialog|"
 msgid "Output"
-msgstr "Output"
+msgstr ""
 
 msgctxt "pitchDialog|"
 msgid "Billions of Yeast Cells Required"
@@ -4495,10 +4472,9 @@ msgctxt "primingDialog|"
 msgid "Priming Calculator"
 msgstr ""
 
-#, fuzzy
 msgctxt "primingDialog|"
 msgid "Input"
-msgstr "Inmatning"
+msgstr ""
 
 msgctxt "primingDialog|"
 msgid "Collected Beer Volume"
@@ -4540,10 +4516,9 @@ msgctxt "primingDialog|"
 msgid "Dry Malt Extract"
 msgstr ""
 
-#, fuzzy
 msgctxt "primingDialog|"
 msgid "Output"
-msgstr "Output"
+msgstr ""
 
 msgctxt "primingDialog|"
 msgid "Prime with"

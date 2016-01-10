@@ -757,19 +757,19 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Geweekt</translation>
-    </message>
-    <message>
-        <source>Not mashed</source>
-        <translation type="unfinished">Niet gemaischd</translation>
-    </message>
-    <message>
-        <source>Late</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Not mashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished">Late</translation>
+    </message>
+    <message>
         <source>Normal</source>
-        <translation type="unfinished">Normaal</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -839,19 +839,19 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Geweekt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Niet gemaischd</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normaal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Late</translation>
     </message>
 </context>
 <context>
@@ -2331,7 +2331,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Doel</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2368,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Schaal Recept</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

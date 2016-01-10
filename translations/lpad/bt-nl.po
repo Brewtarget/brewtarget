@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-10-29 08:51+0000\n"
+"Last-Translator: Tom Lemmens <Unknown>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Language: nl\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: nl\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -116,10 +123,9 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Geschat aantal calorieën (per 340 g)"
+msgstr ""
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -738,29 +744,25 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr "Gemaischd"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Geweekt"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Niet gemaischd"
+msgstr ""
 
 msgctxt "Fermentable|"
 msgid "Late"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr "Normaal"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -818,25 +820,21 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Aanvulling"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr "Gemaischd"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Geweekt"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr "Niet gemaischd"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr "Normaal"
+msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
@@ -1248,7 +1246,8 @@ msgstr "Vat Temperatuur"
 
 msgctxt "MashDesigner|"
 msgid "Enter the temperature of the tun before your first infusion."
-msgstr "Voer de temperatuur van het vat in voorafgaande aan uw eerste infusie"
+msgstr ""
+"Voer de temperatuur van het vat in voorafgaande aan uw eerste infusie"
 
 msgctxt "MashDesigner|"
 msgid "Decoction error"
@@ -1364,45 +1363,37 @@ msgstr ""
 "kook grootte te vergroten door de kooktijd te vergroten, of om de maisch "
 "dikte te reduceren."
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr "Specerij"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr "Fining"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr "Waterbehandeling"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr "Kruid"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr "Smaak"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Other"
-msgstr "Overig"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr "Koken"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
-msgstr "Maisch"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Primary"
@@ -1412,20 +1403,17 @@ msgctxt "Misc|"
 msgid "Secondary"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr "Bottelen"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr "Gewicht"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr "Volume"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1507,15 +1495,13 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Bottelen"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr "Gewicht"
+msgstr ""
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr "Volume"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -1825,10 +1811,9 @@ msgctxt "QObject|"
 msgid "Style"
 msgstr "Stijl"
 
-#, fuzzy
 msgctxt "QObject|"
 msgid "Folder"
-msgstr "Map"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Failed to update the database"
@@ -2253,10 +2238,9 @@ msgctxt "RecipeFormatter|"
 msgid "Instructions"
 msgstr "Instructies"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Brew Date"
-msgstr "Brouwdatum"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Preboil"
@@ -2354,33 +2338,29 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Flocculatie"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr "Diversen"
+msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr "Gist"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Geschat aantal calorieën (per 340 g)"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr "Doel"
+msgstr ""
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -2414,10 +2394,9 @@ msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr "Schaal Recept"
+msgstr ""
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""
