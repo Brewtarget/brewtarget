@@ -61,35 +61,55 @@ OptionDialog::OptionDialog(QWidget* parent)
    ndxToLangCode <<
       "ca" <<
       "cs" <<
+      "da" <<
       "de" <<
-      "en" <<
       "el" <<
+      "en" <<
       "es" <<
+      "et" <<
+      "eu" <<
       "fr" <<
+      "gl" <<
+      "hu" <<
       "it" <<
+      "lv" <<
+      "nb" <<
       "nl" <<
       "pl" <<
       "pt" <<
       "ru" <<
+      "sr" <<
+      "sv" <<
+      "tr" <<
       "zh";
 
    // Do this just to have model indices to set icons.
    comboBox_lang->addItems(ndxToLangCode);
    // MUST correspond to ndxToLangCode.
    langIcons <<
-      QIcon(":images/flagCatalonia.svg") <<
-      QIcon(":images/flagCzech.svg") <<
-      QIcon(":images/flagGermany.svg") <<
-      QIcon(":images/flagUK.svg") <<
-      QIcon(":images/flagGreece.svg") <<
-      QIcon(":images/flagSpain.svg") <<
-      QIcon(":images/flagFrance.svg") <<
-      QIcon(":images/flagItaly.svg") <<
-      QIcon(":images/flagNetherlands.svg") <<
-      QIcon(":images/flagPoland.svg") <<
-      QIcon(":images/flagBrazil.svg") <<
-      QIcon(":images/flagRussia.svg") <<
-      QIcon(":images/flagChina.svg");
+      /*ca*/ QIcon(":images/flagCatalonia.svg") <<
+      /*cs*/ QIcon(":images/flagCzech.svg") <<
+      /*da*/ QIcon() <<
+      /*de*/ QIcon(":images/flagGermany.svg") <<
+      /*el*/ QIcon(":images/flagGreece.svg") <<
+      /*en*/ QIcon(":images/flagUK.svg") <<
+      /*es*/ QIcon(":images/flagSpain.svg") <<
+      /*et*/ QIcon() <<
+      /*eu*/ QIcon() <<
+      /*fr*/ QIcon(":images/flagFrance.svg") <<
+      /*gl*/ QIcon() <<
+      /*hu*/ QIcon() <<
+      /*it*/ QIcon(":images/flagItaly.svg") <<
+      /*lv*/ QIcon() <<
+      /*nb*/ QIcon() <<
+      /*nl*/ QIcon(":images/flagNetherlands.svg") <<
+      /*pl*/ QIcon(":images/flagPoland.svg") <<
+      /*pt*/ QIcon(":images/flagBrazil.svg") <<
+      /*ru*/ QIcon(":images/flagRussia.svg") <<
+      /*sr*/ QIcon() <<
+      /*sv*/ QIcon() <<
+      /*tr*/ QIcon() <<
+      /*zh*/ QIcon(":images/flagChina.svg");
    // Set icons.
    for( i = 0; i < langIcons.size(); ++i )
       comboBox_lang->setItemIcon(i, langIcons[i]);
@@ -159,19 +179,29 @@ void OptionDialog::retranslate()
    // NOTE: the indices MUST correspond to ndxToLangCode.
    QStringList langStrings;
    langStrings <<
-      tr("Catalan") <<
-      tr("Czech") <<
-      tr("German") <<
-      tr("English") <<
-      tr("Greek") <<
-      tr("Spanish") <<
-      tr("French") <<
-      tr("Italian") <<
-      tr("Dutch") <<
-      tr("Polish") <<
-      tr("Portuguese") <<
-      tr("Russian") <<
-      tr("Chinese");
+      /*ca*/ tr("Catalan") <<
+      /*cs*/ tr("Czech") <<
+      /*da*/ tr("Danish") <<
+      /*de*/ tr("German") <<
+      /*el*/ tr("Greek") <<
+      /*en*/ tr("English") <<
+      /*es*/ tr("Spanish") <<
+      /*et*/ tr("Estonian") <<
+      /*eu*/ tr("Basque") <<
+      /*fr*/ tr("French") <<
+      /*gl*/ tr("Galician") <<
+      /*hu*/ tr("Hungarian") <<
+      /*it*/ tr("Italian") <<
+      /*lv*/ tr("Latvian") <<
+      /*nb*/ tr("Norwegian Bokmål") <<
+      /*nl*/ tr("Dutch") <<
+      /*pl*/ tr("Polish") <<
+      /*pt*/ tr("Portuguese") <<
+      /*ru*/ tr("Russian") <<
+      /*sr*/ tr("Serbian") <<
+      /*sv*/ tr("Swedish") <<
+      /*tr*/ tr("Turkish") <<
+      /*zh*/ tr("Chinese");
    int i;
    for( i = 0; i < langStrings.size(); ++i )
       comboBox_lang->setItemText(i, langStrings[i]);
