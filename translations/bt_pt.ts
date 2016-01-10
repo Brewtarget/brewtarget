@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="pt">
-    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
-    <extra-po-header-last_translator>Matheus Antonelli &lt;matheus.antonelli@gmail.com&gt;</extra-po-header-last_translator>
-    <extra-po-header-po_revision_date>2016-01-05 18:30+0000</extra-po-header-po_revision_date>
-    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
-    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
-    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
-    <extra-po-header-x_generator>Launchpad (build 17881)</extra-po-header-x_generator>
-    <extra-po-header-x_launchpad_export_date>2016-01-10 19:56+0000</extra-po-header-x_launchpad_export_date>
-    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -762,7 +753,7 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mosturação</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -774,7 +765,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tarde</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -844,7 +835,7 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mosturação</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -860,7 +851,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tarde</translation>
     </message>
 </context>
 <context>
@@ -1393,7 +1384,7 @@
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Corretor de água</translation>
     </message>
     <message>
         <source>Herb</source>
@@ -1417,23 +1408,23 @@
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Primário</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Secundário</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Engarrafamento</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volume</translation>
     </message>
 </context>
 <context>
@@ -1523,11 +1514,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volume</translation>
     </message>
 </context>
 <context>
@@ -2320,11 +2311,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Adjunto</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Leveduras</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>

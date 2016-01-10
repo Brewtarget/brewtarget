@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="it">
-    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
-    <extra-po-header-last_translator>Philip &lt;Unknown&gt;</extra-po-header-last_translator>
-    <extra-po-header-po_revision_date>2015-10-04 22:03+0000</extra-po-header-po_revision_date>
-    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
-    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
-    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
-    <extra-po-header-x_generator>Launchpad (build 17881)</extra-po-header-x_generator>
-    <extra-po-header-x_launchpad_export_date>2016-01-10 19:56+0000</extra-po-header-x_launchpad_export_date>
-    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -133,7 +124,7 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Calorie Stimate(per 340 gr circa)</translation>
     </message>
 </context>
 <context>
@@ -774,7 +765,7 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mashed</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -786,7 +777,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tardi</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -856,7 +847,7 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mashed</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -872,7 +863,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tardi</translation>
     </message>
 </context>
 <context>
@@ -1397,31 +1388,31 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spezie</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">affinamento</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agente dell&apos;acqua</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erba</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sapore</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Altro</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bollire</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -1429,23 +1420,23 @@
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Primario</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Secondario</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Imbottigliamento</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volume</translation>
     </message>
 </context>
 <context>
@@ -1535,11 +1526,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volume</translation>
     </message>
 </context>
 <context>
@@ -2332,11 +2323,11 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Miscs</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lieviti</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
@@ -2344,7 +2335,7 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Calorie Stimate(per 340 gr circa)</translation>
     </message>
     <message>
         <source>Bitterness</source>

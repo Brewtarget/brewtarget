@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="da">
-    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
-    <extra-po-header-last_translator>Philip &lt;Unknown&gt;</extra-po-header-last_translator>
-    <extra-po-header-po_revision_date>2015-10-04 21:57+0000</extra-po-header-po_revision_date>
-    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
-    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
-    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
-    <extra-po-header-x_generator>Launchpad (build 17881)</extra-po-header-x_generator>
-    <extra-po-header-x_launchpad_export_date>2016-01-10 19:56+0000</extra-po-header-x_launchpad_export_date>
-    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -125,7 +116,7 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet antal kalorier (0.33L)</translation>
     </message>
 </context>
 <context>
@@ -762,7 +753,7 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mæsket</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -774,7 +765,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forsinket</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -844,7 +835,7 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mæsket</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -860,7 +851,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forsinket</translation>
     </message>
 </context>
 <context>
@@ -1409,11 +1400,11 @@
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kog</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mæsk</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -2329,7 +2320,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forventet antal kalorier (0.33L)</translation>
     </message>
     <message>
         <source>Bitterness</source>

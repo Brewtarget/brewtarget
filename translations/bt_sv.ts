@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv">
-    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
-    <extra-po-header-last_translator>Jonas &lt;jonas@falkens.se&gt;</extra-po-header-last_translator>
-    <extra-po-header-po_revision_date>2015-10-09 07:11+0000</extra-po-header-po_revision_date>
-    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
-    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
-    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
-    <extra-po-header-x_generator>Launchpad (build 17881)</extra-po-header-x_generator>
-    <extra-po-header-x_launchpad_export_date>2016-01-10 19:56+0000</extra-po-header-x_launchpad_export_date>
-    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -125,7 +116,7 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uppskattade kalorier (per 12 oz)</translation>
     </message>
 </context>
 <context>
@@ -762,7 +753,7 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskat</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -774,7 +765,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sent</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -844,7 +835,7 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäskat</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -860,7 +851,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sent</translation>
     </message>
 </context>
 <context>
@@ -1385,55 +1376,55 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Krydda</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klarningsmedel</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vattenbehandling</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Örtkrydda</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Smak</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Övrigt</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kokning</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mäsk</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Primär</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sekundär</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Flasktappning</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vikt</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volym</translation>
     </message>
 </context>
 <context>
@@ -1523,11 +1514,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vikt</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Volym</translation>
     </message>
 </context>
 <context>
@@ -2330,7 +2321,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uppskattade kalorier (per 12 oz)</translation>
     </message>
     <message>
         <source>Bitterness</source>
@@ -4121,7 +4112,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inmatning</translation>
     </message>
     <message>
         <source>SG</source>
@@ -4169,7 +4160,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Output</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
@@ -4350,11 +4341,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">dd-mm-YYYY</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">dd-mm-YYYY</translation>
     </message>
     <message>
         <source>YYYY-dd-mm</source>
@@ -4373,7 +4364,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inmatning</translation>
     </message>
     <message>
         <source>Wort Volume</source>
@@ -4437,7 +4428,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Output</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
@@ -4508,7 +4499,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inmatning</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
@@ -4552,7 +4543,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Output</translation>
     </message>
     <message>
         <source>Prime with</source>
