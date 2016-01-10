@@ -70,7 +70,7 @@ public:
    void setPath( QString var );
    void setfullPath( QString var );
 
-   //~ \brief do some tests to see if the provided name is mine
+   //! \brief do some tests to see if the provided name is mine
    bool isFolder( QString name );
 
 private:
