@@ -20,6 +20,7 @@
 #ifndef _ABOUTDIALOG_H
 #define _ABOUTDIALOG_H
 
+#include <QEvent>
 #include <QDialog>
 #include <QWidget>
 #include <QHBoxLayout>
@@ -38,6 +39,8 @@
  */
 class AboutDialog : public QDialog
 {
+   Q_OBJECT
+
 public:
    AboutDialog(QWidget* parent=0)
            : QDialog(parent),
