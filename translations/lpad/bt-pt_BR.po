@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2016-01-05 18:30+0000\n"
+"Last-Translator: Matheus Antonelli <matheus.antonelli@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Language: pt\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: pt\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -114,12 +121,11 @@ msgstr "Aquecer Água"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calorias estimadas (por 330ml)"
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Calorias Estimadas (por 12oz - 340,19g)"
+msgstr "Calorias estimadas (por 355ml)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -212,7 +218,7 @@ msgstr "Etapa %1: %2"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calorias estimadas (por 330ml)"
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -706,7 +712,8 @@ msgstr "Quantidade de águar fervida por hora"
 
 msgctxt "EquipmentEditor|"
 msgid "How much water is added to kettle immediately pre-boil"
-msgstr "Quantidade de água adicionada à panela imediatamente antes da fervura"
+msgstr ""
+"Quantidade de água adicionada à panela imediatamente antes da fervura"
 
 msgctxt "EquipmentEditor|"
 msgid "Water added to fermenter"
@@ -744,21 +751,18 @@ msgctxt "Fermentable|"
 msgid "Mashed"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Mergulhado"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Não triturado"
+msgstr ""
 
 msgctxt "Fermentable|"
 msgid "Late"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
 msgstr "Normal"
@@ -823,17 +827,14 @@ msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
 msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Mergulhado"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr "Não triturado"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
 msgstr "Normal"
@@ -878,11 +879,11 @@ msgstr "Cor"
 
 msgctxt "FermentableTableModel|"
 msgid "Method"
-msgstr ""
+msgstr "Método"
 
 msgctxt "FermentableTableModel|"
 msgid "Addition"
-msgstr ""
+msgstr "Adição"
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1369,10 +1370,9 @@ msgstr ""
 "Você tem muito mosto para o tamanho a fervura. Eu sugiro que melhore a "
 "mostura aumentando o tempo de cozimento ou reduzindo o volume mosto."
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr "Tempero"
+msgstr "Condimento"
 
 msgctxt "Misc|"
 msgid "Fining"
@@ -1382,51 +1382,45 @@ msgctxt "Misc|"
 msgid "Water Agent"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
 msgstr "Erva"
 
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr ""
+msgstr "Aroma"
 
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Outro"
 
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Ferver"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
 msgstr "Mosto"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr "Primário"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr "Secundário"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr "Engarrafamento"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Weight"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr "Volume"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1512,10 +1506,9 @@ msgctxt "MiscItemDelegate|"
 msgid "Weight"
 msgstr ""
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr "Volume"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -2101,7 +2094,8 @@ msgstr "Adicionar %1 %2 à fervura às %3."
 
 msgctxt "Recipe|"
 msgid "Raise water to boil and then remove from heat. Stir in  "
-msgstr "Elevar a água até ferver e em seguida retirar do fogo. Agitar dentro  "
+msgstr ""
+"Elevar a água até ferver e em seguida retirar do fogo. Agitar dentro  "
 
 msgctxt "Recipe|"
 msgid "Add Extracts to water"
@@ -2364,33 +2358,29 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Floculação"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr "Adjunto"
+msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr "Leveduras"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calorias estimadas (por 330ml)"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Calorias Estimadas (por 12oz - 340,19g)"
+msgstr "Calorias estimadas (por 355ml)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr "Alvo"
+msgstr ""
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -2423,10 +2413,9 @@ msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr "Escalar Receita"
+msgstr ""
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""

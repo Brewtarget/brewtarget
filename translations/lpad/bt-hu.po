@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-10-04 22:03+0000\n"
+"Last-Translator: Philip <Unknown>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Language: hu\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: hu\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -116,10 +123,9 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Becsült kalóriatartalom (354ml)"
+msgstr ""
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -742,30 +748,25 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Mégsem"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr "Cefrézve"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Áztatott"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Nem cefrézett"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr "Később hozzáadott"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr "Normál"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -823,30 +824,25 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Adalék"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr "Cefrézve"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Áztatott"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr "Nem cefrézett"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr "Normál"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr "Később hozzáadott"
+msgstr ""
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1376,70 +1372,57 @@ msgstr ""
 "Tún nagy a színlé mennyisége a várt forralási mennyiséghez képest. Vagy "
 "növeld a forralási időt, vagy csökkentsd a cefre sűrűségét."
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr "Fűszer"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr "Derítőszer"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr "Vízkezelő anyag"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr "Gyógynövény"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr "Ízanyag"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Other"
-msgstr "Egyéb anyag"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr "Forralás"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
-msgstr "Cefre"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr "Elsődleges"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr "Másodlagos"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr "Palackozás"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr "Súly"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr "Mennyiség"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1521,15 +1504,13 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Palackozás"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr "Súly"
+msgstr ""
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr "Mennyiség"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -2374,33 +2355,29 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "ülepedés"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr "Egyebek"
+msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr "Élesztők"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Becsült kalóriatartalom (354ml)"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr "Cél"
+msgstr ""
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -3674,7 +3651,8 @@ msgstr "&Összefésülés"
 
 msgctxt "mainWindow|"
 msgid "Merge another set of recipes, ingredients, etc. into the current set"
-msgstr "Másik recept, összetevő, stb. adathalmaz összefésülése a jelenlegivel"
+msgstr ""
+"Másik recept, összetevő, stb. adathalmaz összefésülése a jelenlegivel"
 
 msgctxt "mainWindow|"
 msgid "&New Recipe"

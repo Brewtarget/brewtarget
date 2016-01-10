@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-12-17 09:38+0000\n"
+"Last-Translator: Walter Pépéka <walter.pepeka@hispeed.ch>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Language: fr\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: fr\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -114,9 +121,8 @@ msgstr "Chauffe de l'eau"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calories estimées (pour 33 cl)"
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
 msgstr "Calories estimées (pour 35cl)"
@@ -212,7 +218,7 @@ msgstr "Étape %1 : %2"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calories estimées (pour 33 cl)"
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -340,7 +346,7 @@ msgstr "Barils"
 
 msgctxt "Brewtarget|"
 msgid "Scale"
-msgstr ""
+msgstr "Échelle"
 
 msgctxt "BtDigitWidget|"
 msgid "Too low for style."
@@ -742,30 +748,25 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Annuler"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
 msgstr "Empâté"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Infusé"
+msgstr "Trempé"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Non empâté"
+msgstr "Trempé"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
 msgstr "Tardif"
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr "Normal"
+msgstr "Standard"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -823,27 +824,22 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Adjuvant"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
 msgstr "Empâté"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Infusé"
+msgstr "Trempé"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
 msgstr "Non empâté"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr "Normal"
+msgstr "Standard"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
 msgstr "Tardif"
@@ -884,11 +880,11 @@ msgstr "Couleur"
 
 msgctxt "FermentableTableModel|"
 msgid "Method"
-msgstr ""
+msgstr "Méthode"
 
 msgctxt "FermentableTableModel|"
 msgid "Addition"
-msgstr ""
+msgstr "Ajout"
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1385,62 +1381,52 @@ msgstr ""
 
 msgctxt "Misc|"
 msgid "Spice"
-msgstr ""
+msgstr "Épice"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr "Clarifiant"
+msgstr "Agents de collage"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
 msgstr "Agent d'eau"
 
 msgctxt "Misc|"
 msgid "Herb"
-msgstr ""
+msgstr "Herbes"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
 msgstr "Saveur"
 
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Autre"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr "Ébullition"
+msgstr "Cuisson"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
 msgstr "Empâtage"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
 msgstr "Primaire"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
 msgstr "Secondaire"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
 msgstr "Embouteillage"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
 msgstr "Poids"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
 msgstr "Volume"
@@ -1525,12 +1511,10 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Embouteillage"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
 msgstr "Poids"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
 msgstr "Volume"
@@ -1991,8 +1975,8 @@ msgstr "Vous devriez avoir %1 de moût."
 msgctxt "Recipe|"
 msgid " Add %1 water to the kettle, bringing pre-boil volume to %2."
 msgstr ""
-" Ajoutez %1 d'eau à la chaudière à moût pour obtenir un volume de moût "
-"pré-ébullition de %2."
+" Ajoutez %1 d'eau à la chaudière à moût pour obtenir un volume de moût pré-"
+"ébullition de %2."
 
 msgctxt "Recipe|"
 msgid "Pre-boil"
@@ -2383,30 +2367,26 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Floculation"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
 msgstr "Divers"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
 msgstr "Levures"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calories estimées (pour 33 cl)"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
 msgstr "Calories estimées (pour 35cl)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
-msgstr ""
+msgstr "Amertume"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
 msgstr "Cible"
@@ -2426,26 +2406,27 @@ msgstr ""
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "Select Equipment"
-msgstr ""
+msgstr "Sélectionner équipement"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid ""
 "The recipe will be scaled to match the batch size and efficiency of the "
 "selected equipment"
 msgstr ""
+"La recette sera dimensionnée pour correspondre à la taille du lot et à  "
+"l'efficience de l'équipement sélectionné"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Equipment"
-msgstr ""
+msgstr "Nouvel équipement"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
-msgstr ""
+msgstr "Nouvelle efficience (%)"
 
-#, fuzzy
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr "Ajuster la recette"
+msgstr "Redimensionner la recette"
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""
@@ -2453,6 +2434,10 @@ msgid ""
 "efficiency.Select another equipment with the new batch size and/or "
 "efficiency andthe wizard will scale the recipe ingredients automatically."
 msgstr ""
+"Cet assistant va vous aider à redimensionner une recette pour une autre "
+"taille ou efficience .Sélectionnez un autre équipement avec la nouvelle "
+"taille du lot et / ou efficience et l'assistant va redimensionner la recette "
+"automatiquement."
 
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
@@ -3735,7 +3720,7 @@ msgstr "tab_recipe"
 
 msgctxt "mainWindow|"
 msgid "Export to &BBCode"
-msgstr ""
+msgstr "Exporter vers &BBCode"
 
 msgctxt "mashDesigner|"
 msgid "Mash Designer"

@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-10-04 22:07+0000\n"
+"Last-Translator: Philip <Unknown>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Language: ru\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: ru\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -116,10 +123,9 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Приблизительно калорий (на 0,33л)"
+msgstr ""
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -745,25 +751,21 @@ msgctxt "Fermentable|"
 msgid "Mashed"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Загруженое"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Не затёртое"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr "Поздно"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr "Нормально"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -825,25 +827,21 @@ msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
 msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Загруженое"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr "Не затёртое"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr "Нормально"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr "Поздно"
+msgstr ""
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1372,25 +1370,21 @@ msgstr ""
 "У Вас слишком много сусла для кипячения. Я рекомендую изменить размер "
 "кипячения путём изменения времени кипячения. Или уменьшения толщины затора."
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr "Специя"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr "Очистка"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr "Агент воды"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr "Трава"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Flavor"
@@ -1400,15 +1394,13 @@ msgctxt "Misc|"
 msgid "Other"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr "Кипячение"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
-msgstr "Затор"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Primary"
@@ -1418,20 +1410,17 @@ msgctxt "Misc|"
 msgid "Secondary"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr "Бутылирование"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr "Вес"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr "Объём"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1513,15 +1502,13 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Бутылирование"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr "Вес"
+msgstr ""
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr "Объём"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -2366,33 +2353,29 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Флоккуляция"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr "Прочее"
+msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr "Дрожжи"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Приблизительно калорий (на 0,33л)"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr "Цель"
+msgstr ""
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -2425,10 +2408,9 @@ msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr "Масштабирование рецепта"
+msgstr ""
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="zh">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Philip &lt;Unknown&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2015-10-04 22:07+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 17881)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2016-01-10 19:56+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -116,7 +125,7 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">估计卡路里（每12盎司）</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -753,23 +762,23 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">捣碎Mashed</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">浸泡</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">未捣碎</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">晚Late</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">正常</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -835,23 +844,23 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">捣碎Mashed</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">浸泡</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">未捣碎</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">正常</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">晚Late</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1376,27 +1385,27 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">香料Spice</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">罚款Fining</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">水剂Water Agent</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished">草本植物Herb</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">味Flavor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">其他</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Boil</source>
@@ -1408,19 +1417,19 @@
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">主要</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">次要Secondary</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">装瓶</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">重量</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume</source>
@@ -1514,7 +1523,7 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">重量</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume</source>
@@ -2311,11 +2320,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished">Miscs</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished">酵母菌Yeasts</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
@@ -2323,7 +2332,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">估计卡路里（每12盎司）</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Bitterness</source>
@@ -2331,7 +2340,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">目标</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2377,7 @@ The final volume in the primary is %1.</source>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">规模配方</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

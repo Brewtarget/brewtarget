@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="nl">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Tom Lemmens &lt;Unknown&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2015-10-29 08:51+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 17881)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2016-01-10 19:56+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -116,7 +125,7 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Geschat aantal calorieën (per 340 g)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -753,15 +762,15 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Gemaischd</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Geweekt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Niet gemaischd</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -769,7 +778,7 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normaal</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -835,19 +844,19 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Gemaischd</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Geweekt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">Niet gemaischd</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normaal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Late</source>
@@ -1376,35 +1385,35 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Specerij</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Fining</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Waterbehandeling</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished">Kruid</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Smaak</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Overig</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Koken</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Maisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Primary</source>
@@ -1416,15 +1425,15 @@
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Bottelen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1514,11 +1523,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1819,7 +1828,7 @@
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished">Map</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to update the database</source>
@@ -2211,7 +2220,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Brouwdatum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Preboil</source>
@@ -2311,11 +2320,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished">Diversen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished">Gist</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
@@ -2323,7 +2332,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Geschat aantal calorieën (per 340 g)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Bitterness</source>
@@ -2331,7 +2340,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Doel</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2368,7 +2377,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Schaal Recept</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>

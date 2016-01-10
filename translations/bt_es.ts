@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="es">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Philip &lt;Unknown&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2015-12-23 23:24+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 17881)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2016-01-10 19:56+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -112,11 +121,11 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorías estimadas (por 33 cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Calorías Estimadas (por 340 gr.)</translation>
+        <translation>Calorías estimadas (por 12 oz)</translation>
     </message>
 </context>
 <context>
@@ -211,7 +220,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorías estimadas (por 33 cl)</translation>
     </message>
 </context>
 <context>
@@ -309,6 +318,18 @@
         <translation>Desconocido</translation>
     </message>
     <message>
+        <source>YYYY-mm-dd</source>
+        <translation>AAAA-mm-dd</translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation>dd-mm-AAAA</translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation>mm-dd-AAAA</translation>
+    </message>
+    <message>
         <source>Seconds</source>
         <translation>Segundos</translation>
     </message>
@@ -329,20 +350,8 @@
         <translation>Barriles</translation>
     </message>
     <message>
-        <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Escalar</translation>
     </message>
 </context>
 <context>
@@ -371,7 +380,7 @@
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargando...</translation>
     </message>
 </context>
 <context>
@@ -517,7 +526,7 @@
     </message>
     <message>
         <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar todo</translation>
     </message>
     <message>
         <source>Copy %1</source>
@@ -529,7 +538,7 @@
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre vacío saltará este %1.</translation>
     </message>
 </context>
 <context>
@@ -753,23 +762,23 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Macerado</translation>
+        <translation>Macerado</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Remojado</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">No macerado</translation>
+        <translation>No maceerado</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Tardío</translation>
+        <translation>Retrasado</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
 </context>
 <context>
@@ -808,7 +817,7 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitar ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
@@ -835,23 +844,23 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Macerado</translation>
+        <translation>Macerado</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished">Remojado</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished">No macerado</translation>
+        <translation>No macerado</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Tardío</translation>
+        <translation>Retrasado</translation>
     </message>
 </context>
 <context>
@@ -890,11 +899,11 @@
     </message>
     <message>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Método</translation>
     </message>
     <message>
         <source>Addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Adición</translation>
     </message>
 </context>
 <context>
@@ -976,7 +985,7 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitar ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
@@ -1049,7 +1058,7 @@
     <name>IbuGuSlider</name>
     <message>
         <source>Cloying</source>
-        <translation type="unfinished"></translation>
+        <translation>Muy dulce</translation>
     </message>
     <message>
         <source>Extra Malty</source>
@@ -1376,55 +1385,55 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Especia</translation>
+        <translation>Especia</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Aclarador</translation>
+        <translation>Aclarador</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Agente para Agua</translation>
+        <translation>Agente para Agua</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation>Hierba</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Sabor</translation>
+        <translation>Sabor</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Otro</translation>
+        <translation>Otro</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Hervir</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Maceración</translation>
+        <translation>Maceración</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Primario</translation>
+        <translation>Primario</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Secundario</translation>
+        <translation>Secundario</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Embotellar</translation>
+        <translation>Embotellar</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen</translation>
     </message>
 </context>
 <context>
@@ -1463,7 +1472,7 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitar ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
@@ -1514,11 +1523,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen</translation>
     </message>
 </context>
 <context>
@@ -1823,7 +1832,7 @@
     </message>
     <message>
         <source>Failed to update the database</source>
-        <translation type="unfinished"></translation>
+        <translation>Falló la actualización del base de datos</translation>
     </message>
 </context>
 <context>
@@ -2311,27 +2320,27 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished">Miscs</translation>
+        <translation>Miscs</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished">Levaduras</translation>
+        <translation>Levaduras</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorías estimadas (por 33 cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Calorías Estimadas (por 340 gr.)</translation>
+        <translation>Calorías estimadas (por 12 oz)</translation>
     </message>
     <message>
         <source>Bitterness</source>
-        <translation type="unfinished"></translation>
+        <translation>Amargura</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished">Objetivo</translation>
+        <translation>Objetivo</translation>
     </message>
 </context>
 <context>
@@ -2349,7 +2358,7 @@ El volumen final en el primario es %1.</translation>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
         <source>Select Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar equipamiento</translation>
     </message>
     <message>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
@@ -2357,18 +2366,18 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo equipamiento</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo Eficiencia (%)</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished">Balancear la Receta</translation>
+        <translation>Escalar Receta</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
@@ -2519,7 +2528,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitar ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
@@ -4348,19 +4357,19 @@ El volumen final en el primario es %1.</translation>
         <translation>Fecha</translation>
     </message>
     <message>
-        <source>YYYY-dd-mm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Noonan&apos;s approximation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>mm-dd-YYYY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YYYY-dd-mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noonan&apos;s approximation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4468,11 +4477,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fecha de producción</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Viabilidad estimada de la levadura</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
@@ -4484,7 +4493,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de levadura requisita</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
@@ -4712,7 +4721,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusión Inicial</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>

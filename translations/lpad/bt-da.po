@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-10-04 21:57+0000\n"
+"Last-Translator: Philip <Unknown>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Language: da\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: da\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -116,10 +123,9 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Forventet antal kalorier (0.33L)"
+msgstr ""
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -736,30 +742,25 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr "Mæsket"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Udtrukket"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Umæsket"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr "Forsinket"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr "Normal"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -817,30 +818,25 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Adjunk"
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr "Mæsket"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Udtrukket"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr "Umæsket"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr "Normal"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr "Forsinket"
+msgstr ""
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1381,15 +1377,13 @@ msgctxt "Misc|"
 msgid "Other"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr "Kog"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
-msgstr "Mæsk"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Primary"
@@ -2334,10 +2328,9 @@ msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Forventet antal kalorier (0.33L)"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"

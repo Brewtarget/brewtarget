@@ -1,12 +1,19 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-10-04 21:57+0000\n"
+"Last-Translator: Philip <Unknown>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
+"X-Qt-Contexts: true\n"
 "X-Language: cs_CZ\n"
 "X-Source-Language: en\n"
-"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -117,10 +124,9 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Kalorická hodnota (na 340 g)"
+msgstr ""
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -743,25 +749,21 @@ msgctxt "Fermentable|"
 msgid "Mashed"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Máčet"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Nermutovat"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr "Pozdní"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr "Obvyklé"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -823,25 +825,21 @@ msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
 msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Máčet"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr "Nermutovat"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr "Obvyklé"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr "Pozdní"
+msgstr ""
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1242,7 +1240,8 @@ msgctxt "MashDesigner|"
 msgid ""
 "You have not set an equipment for this recipe. We really cannot continue "
 "without one."
-msgstr "Tento recept nemá stanovné žádné vybavení. Bez něj to opravdu nepůjde."
+msgstr ""
+"Tento recept nemá stanovné žádné vybavení. Bez něj to opravdu nepůjde."
 
 msgctxt "MashDesigner|"
 msgid "Tun Temp"
@@ -1365,69 +1364,57 @@ msgstr ""
 "Doporučujeme zvýšit  odpar prodloužením času vaření nebo snížit hustotu "
 "rmutu."
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr "Koření"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr "Čeření"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr "Úprava vody"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr "Bylina"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr "Příchuť"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Other"
-msgstr "Jiný"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr "Chmelovar"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Mash"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr "Hlavní kvašení"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr "Dokvašování"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr "Stáčení"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr "Hmotnost"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr "Objem"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1509,15 +1496,13 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Stáčení"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr "Hmotnost"
+msgstr ""
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr "Objem"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -2362,33 +2347,29 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Flokulace"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr "Přípravky"
+msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr "Kvasnice"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Kalorická hodnota (na 340 g)"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr "Cílová teplota"
+msgstr ""
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -2421,10 +2402,9 @@ msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr "Změnit objem"
+msgstr ""
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""

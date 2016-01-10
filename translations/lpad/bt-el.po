@@ -1,11 +1,18 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-13 20:57+0000\n"
+"PO-Revision-Date: 2015-10-04 22:00+0000\n"
+"Last-Translator: Philip <Unknown>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Language: el\n"
+"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
+"X-Generator: Launchpad (build 17881)\n"
 "X-Qt-Contexts: true\n"
+"X-Language: el\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -116,10 +123,9 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Θερμίδες κατά προσέγγιση"
+msgstr ""
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -747,25 +753,21 @@ msgctxt "Fermentable|"
 msgid "Mashed"
 msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Steeped"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Not mashed"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr "Στο τέλος"
+msgstr ""
 
-#, fuzzy
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr "Κανονικό"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -827,25 +829,21 @@ msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
 msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Steeped"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr "Not mashed"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr "Κανονικό"
+msgstr ""
 
-#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr "Στο τέλος"
+msgstr ""
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1234,7 +1232,8 @@ msgstr ""
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
-msgstr "Ονόματα φακέλων θα πρέπει να περιέχουν τουλάχιστον ένα μή -/ χαρακτήρα"
+msgstr ""
+"Ονόματα φακέλων θα πρέπει να περιέχουν τουλάχιστον ένα μή -/ χαρακτήρα"
 
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
@@ -1383,69 +1382,57 @@ msgstr ""
 "να αυξήσετε τον όγκο βρασμού με το να αυξήσετε το χρόνο βρασμού, ή να "
 "μειώσετε την πυκνότητα σακχαροποίησης"
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr "Μπαχαρικά"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr "Βελτιωτικά"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr "Ρυθμιστής νερού"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr "Βότανα"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr "Άρωματικές Ύλες"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Other"
-msgstr "'Αλλο"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr "Στο Βράσιμο"
+msgstr ""
 
 msgctxt "Misc|"
 msgid "Mash"
 msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr "Κατά την πρώτη ζύμωση"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr "κατά την δεύτερη ζύμωση"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr "Κατά την εμφιάλωση"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr "Βάρος"
+msgstr ""
 
-#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr "Όγκος"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1527,15 +1514,13 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Κατά την εμφιάλωση"
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr "Βάρος"
+msgstr ""
 
-#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr "Όγκος"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -2384,33 +2369,29 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "κροκίδωση"
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr "Διάφορα"
+msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr "Μαγιές"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Θερμίδες κατά προσέγγιση"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
 msgstr ""
 
-#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr "Στόχος"
+msgstr ""
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -2444,10 +2425,9 @@ msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
 msgstr ""
 
-#, fuzzy
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr "Μετατροπή Συνταγής"
+msgstr ""
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""
