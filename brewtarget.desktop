@@ -3,6 +3,7 @@ Categories=Qt;KDE;Education;Utility;Engineering;
 Exec=brewtarget
 Name=Brewtarget
 GenericName=Beer calculator
+Keywords=Beer;Ale;Lager;Cider;Brew;Brewing;Recipe;Beersmith;
 X-KDE-StartupNotify=true
 Icon=brewtarget
 Terminal=false

@@ -197,6 +197,20 @@ IF( DOXYGEN_CMD )
                    )
 ENDIF()
 
+#=========================Changelog custom target==============================
+FIND_PROGRAM( GZIP_CMD gzip )
+IF( GZIP_CMD )
+   SET( CHANGELOG_UNCOMPRESSED "${CMAKE_CURRENT_SOURCE_DIR}/CHANGES.markdown" )
+   SET( CHANGELOG "${CMAKE_CURRENT_BINARY_DIR}/changelog.gz" )
+   ADD_CUSTOM_COMMAND(
+      OUTPUT ${CHANGELOG}
+      COMMAND ${GZIP_CMD} -9 -n -c ${CHANGELOG_UNCOMPRESSED} > ${CHANGELOG}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      MAIN_DEPENDENCY ${CHANGELOG_UNCOMPRESSED}
+   )
+   ADD_CUSTOM_TARGET(changelog ALL DEPENDS ${CHANGELOG})
+ENDIF()
+
 #=========================Detect Debian======================================== 
 IF( EXISTS "/etc/debian_version" )
   MESSAGE( STATUS "Debian detected..." )
@@ -592,6 +606,10 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
       # Install the .desktop file.
       INSTALL( FILES ${brewtarget_DESKTOP}
                DESTINATION "${DATAROOTDIR}/applications" )
+
+      # Install changelog
+      INSTALL( FILES ${CHANGELOG}
+               DESTINATION ${DOCPATH} )
    ENDIF()
 
    #--------Windows--------
