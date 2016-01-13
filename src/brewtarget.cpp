@@ -1078,8 +1078,8 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, Un
    // If we cannot find a unit system
    if ( temp == 0 )
       ret = QString("%L1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
-
-   ret = temp->displayAmount( amount, units, precision, displayScale );
+   else
+      ret = temp->displayAmount( amount, units, precision, displayScale );
 
    return ret;
 }
