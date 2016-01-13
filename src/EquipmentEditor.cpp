@@ -191,6 +191,7 @@ void EquipmentEditor::doLayout()
                   formLayout->setWidget(3, QFormLayout::LabelRole, label_batchSize);
                   formLayout->setWidget(3, QFormLayout::FieldRole, lineEdit_batchSize);
             groupBox_water = new QGroupBox(this);
+               groupBox_water->setProperty("configSection", QVariant(QStringLiteral("equipmentEditor")));
                formLayout_water = new QFormLayout(groupBox_water);
                   formLayout_water->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
                   label_boilTime = new BtTimeLabel(groupBox_water);
