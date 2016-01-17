@@ -146,8 +146,11 @@ void BrewNote::populateNote(Recipe* parent)
             setProjMashFinTemp_c(endTemp);
          }
 
-         if ( steps.size() - 2 > 0 )
+         if ( steps.size() > 2 )
          {
+            // NOTE: Qt will complain that steps.size()-2 is always positive,
+            // and therefore the internal assert that the index is positive is
+            // bunk. This is OK, as we just checked that we will not underflow.
             mStep = steps.at( steps.size() - 2 );
             setMashFinTemp_c( mStep->endTemp_c());
             setProjMashFinTemp_c( mStep->endTemp_c());

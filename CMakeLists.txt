@@ -440,7 +440,7 @@ IF( WIN32 )
         ${QtMultimediaWidgets_location}
    )
    ENDIF()
-   IF (${Qt5Core_VERSION_STRING} VERSION_GREATER "5.3.0")
+   IF (${Qt5Core_VERSION_STRING} VERSION_GREATER "5.4.0")
       FIND_PACKAGE(Qt5WebChannel REQUIRED)
       GET_TARGET_PROPERTY(QtWebChannel_location Qt5::WebChannel LOCATION_${CMAKE_BUILD_TYPE})
       list(APPEND Qt_DLLs ${QtWebChannel_location})
