@@ -413,6 +413,7 @@ IF( WIN32 )
    GET_TARGET_PROPERTY(QtQmng_location Qt5::QMngPlugin LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtQsvg_location Qt5::QSvgPlugin LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtQtiff_location Qt5::QTiffPlugin LOCATION_${CMAKE_BUILD_TYPE})
+   GET_TARGET_PROPERTY(QtQWindows_location Qt5::QWindowsIntegrationPlugin LOCATION_${CMAKE_BUILD_TYPE})
 
    GET_TARGET_PROPERTY(QtQsvgIcon_location Qt5::QSvgIconPlugin LOCATION_${CMAKE_BUILD_TYPE})
 
@@ -459,7 +460,15 @@ IF( WIN32 )
    SET( Icon_Engines_DLLs
         ${QtQsvgIcon_location}
    )
-   FILE( GLOB IcuDlls ${CMAKE_PREFIX_PATH}/bin/ic*.dll )
+   SET( Platform_DLLs
+      ${QtQWindows_location}
+   )
+
+   # This is ugly. UGLY.
+   FIND_PATH(QT5_BIN_DIR "qmake.exe")
+   FILE( GLOB IcuDlls
+        "${QT5_BIN_DIR}/ic*.dll"
+   )
 
    # Find extra MinGW-specific dlls.
    IF( MINGW )
@@ -622,6 +631,8 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
                DESTINATION "bin/imageformats" )
       INSTALL( FILES ${Icon_Engines_DLLs}
                DESTINATION "bin/iconengines" )
+      INSTALL( FILES ${Platform_DLLs}
+               DESTINATION "bin/platforms" )
    ENDIF()
 ENDIF()
 
