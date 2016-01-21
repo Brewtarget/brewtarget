@@ -74,6 +74,17 @@
 
 // Static members.
 Database* Database::dbInstance = 0;
+QString Database::dbHostname;
+QString Database::dbPortnum;
+QString Database::dbUsername;
+QString Database::dbPassword;
+bool Database::usingPg;
+
+QString Database::notDeletedFilter;
+QString Database::deletedFilter;
+QString Database::notDisplayedFilter;
+QString Database::displayedFilter;
+
 QFile Database::dbFile;
 QString Database::dbFileName;
 QFile Database::dataDbFile;
@@ -96,7 +107,7 @@ Database::Database()
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
 
-   converted = false;   
+   converted = false;
    dirty = false;
 
    loadWasSuccessful = load();
@@ -107,7 +118,7 @@ Database::~Database()
    // If we have not explicitly unloaded, do so now and discard changes.
    if( QSqlDatabase::database( dbConName, false ).isOpen() )
       unload(false);
-   
+
    // Delete all the ingredients floating around.
    qDeleteAll(allBrewNotes);
    qDeleteAll(allEquipments);
@@ -123,26 +134,30 @@ Database::~Database()
    qDeleteAll(allRecipes);
 }
 
-bool Database::load()
+bool Database::loadSQLite(QSqlDatabase sqldb)
 {
    bool dbIsOpen;
-   bool createFromScratch=false;
-   bool schemaUpdated=false;
-   
+
    // Set file names.
    dbFileName = Brewtarget::getUserDataDir().filePath("database.sqlite");
    dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
    dbTempBackupFileName = Brewtarget::getUserDataDir().filePath("tempBackupDatabase.sqlite");
-   
+
    // Set the files.
    dbFile.setFileName(dbFileName);
    dataDbFile.setFileName(dataDbFileName);
    dbTempBackupFile.setFileName(dbTempBackupFileName);
-   
+
+   // Set the filter(s)
+   notDeletedFilter = "deleted=0";
+   deletedFilter = "deleted=1";
+   notDisplayedFilter = "display=0";
+   displayedFilter = "display=1";
+
    // Cleanup the backup database if there was a previous error.
    if( !cleanupBackupDatabase() )
       return false;
-   
+
    // If user restored the database from a backup, make the backup into the primary.
    {
       QFile newdb(QString("%1.new").arg(dbFileName));
@@ -154,12 +169,12 @@ bool Database::load()
          newdb.remove();
       }
    }
-   
+
    // If there's no dbFile, try to copy from dataDbFile.
    if( !dbFile.exists() )
    {
       Brewtarget::userDatabaseDidNotExist = true;
-      
+
       // Have to wait until db is open before creating from scratch.
       if( !dataDbFile.exists() )
          createFromScratch = true;
@@ -168,72 +183,139 @@ bool Database::load()
          dataDbFile.copy(dbFileName);
          QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
       }
-      
+
       // Reset the last merge request.
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
 
    // Create a copy of the database to revert to if the user decides not to make changes.
    dbFile.copy(dbTempBackupFileName);
-   
+
    // Open SQLite db.
-   QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE");
+   sqldb = QSqlDatabase::addDatabase("QSQLITE");
    sqldb.setDatabaseName(dbFileName);
    dbIsOpen = sqldb.open();
    dbConName = sqldb.connectionName();
+
+  if( ! dbIsOpen )
+  {
+    Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
+    QMessageBox::critical(0,
+                          QObject::tr("Database Failure"),
+                          QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname)));
+  }
+   return dbIsOpen;
+}
+
+bool Database::loadPgSQL(QSqlDatabase sqldb)
+{
+  bool dbIsOpen;
+
+  dbHostname = Brewtarget::option("dbHostname").toString();
+  dbPortnum  = Brewtarget::option("dbPortnum").toString();
+  dbUsername = Brewtarget::option("dbUsername").toString();
+  // Yeah, this is a bad idea. Please make this anything other than this before rolling this out
+  dbPassword = Brewtarget::option("dbPassword").toString();
+
+  sqldb = QSqlDatabase::addDatabase("QPSQL");
+  sqldb.setHostName( dbHostname );
+  sqldb.setDatabaseName("brewtarget");
+  sqldb.setUserName( dbUsername );
+  sqldb.setPort(dbPortnum.toInt());
+  sqldb.setPassword(dbPassword);
+
+  dbIsOpen = sqldb.open();
+  dbConName = sqldb.connectionName();
+
+   // Set the filter(s)
+   notDeletedFilter = "deleted=false";
+   deletedFilter = "deleted=true";
+   notDisplayedFilter = "display=false";
+   displayedFilter = "display=true";
+
    if( ! dbIsOpen )
    {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
       QMessageBox::critical(0,
-                            QObject::tr("Database Failure"),
-                            QString(QObject::tr("Failed to open the database '%1'.").arg(dbFileName)));
+                          QObject::tr("Database Failure"),
+                          QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname)));
+   }
+   return dbIsOpen;
+}
 
-      // TODO: if we can't open the database, what should we do?
-      return false;
-   }
-   
-   // Database is open, so can create from scratch if needed
-   if(createFromScratch)
+bool Database::load()
+{
+   bool dbIsOpen;
+   QSqlDatabase sqldb;
+
+   createFromScratch=false;
+   schemaUpdated=false;
+
+   usingPg = Brewtarget::hasOption("dbHostname");
+
+   qDebug() << Brewtarget::hasOption("dbHostname");
+   qDebug() << Brewtarget::option("dbHostname", "localhost");
+   if ( usingPg )
    {
-      bool success = DatabaseSchemaHelper::create(sqldb);
-      if( !success )
-         Brewtarget::logE("DatabaseSchemaHelper::create() failed");
+      qDebug() << "Loading PgSQL";
+      dbIsOpen = loadPgSQL(sqldb);
+      qDebug() << "Loaded PgSQL successfully";
    }
-   
+   else
+   {
+      qDebug() << "Loading SQLite";
+      dbIsOpen = loadSQLite(sqldb);
+   }
+   if ( ! dbIsOpen )
+      return false;
+
    // Associate this db with the current thread.
    _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
    _threadToConnectionMutex.unlock();
-   
-   // NOTE: synchronous=off reduces query time by an order of magnitude!
-   QSqlQuery( "PRAGMA synchronous = off", sqlDatabase());
-   QSqlQuery( "PRAGMA foreign_keys = on", sqlDatabase());
-   QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqlDatabase());
-   // Store temporary tables in memory.
-   QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
-   
-   // Update the database if need be. This has to happen before we do anything
-   // else or we dump core 
-   bool schemaErr = false;
-   schemaUpdated = updateSchema(&schemaErr);
-   if( schemaErr )
+
+   if ( ! usingPg )
    {
-      QMessageBox::critical(
-         0,
-         QObject::tr("Database Failure"),
-         QObject::tr("Failed to update the database")
-      );
-      return false;
+      // Database is open, so can create from scratch if needed
+      if(createFromScratch)
+      {
+          bool success = DatabaseSchemaHelper::create(sqldb);
+          if( !success )
+            Brewtarget::logE("DatabaseSchemaHelper::create() failed");
+      }
+
+
+      // NOTE: synchronous=off reduces query time by an order of magnitude!
+      QSqlQuery( "PRAGMA synchronous = off", sqlDatabase());
+      QSqlQuery( "PRAGMA foreign_keys = on", sqlDatabase());
+      QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqlDatabase());
+      // Store temporary tables in memory.
+      QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
+
+      // Update the database if need be. This has to happen before we do anything
+      // else or we dump core
+      bool schemaErr = false;
+      schemaUpdated = updateSchema(&schemaErr);
+      if( schemaErr )
+      {
+          QMessageBox::critical(
+            0,
+            QObject::tr("Database Failure"),
+            QObject::tr("Failed to update the database")
+          );
+          return false;
+      }
    }
-   
+
    // Initialize the SELECT * query hashes.
+   qDebug() << "Calling selectAllHash()";
    selectAll = Database::selectAllHash();
-   
+/* No idea what needs to happen here. It should be somewhat painless, but cracked if I know
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
       && QFileInfo(dataDbFile).lastModified() > Brewtarget::lastDbMergeRequest )
    {
-      
+
       if(
          QMessageBox::question(
             0,
@@ -247,13 +329,15 @@ bool Database::load()
       {
          updateDatabase(dataDbFile.fileName());
       }
-      
+
       // Update this field.
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
-   
+*/
    // Create and store all pointers.
+   qDebug() << "Calling populateElements for brewnotes";
    populateElements( allBrewNotes, Brewtarget::BREWNOTETABLE );
+   qDebug() << "Calling populateElements for equipment";
    populateElements( allEquipments, Brewtarget::EQUIPTABLE );
    populateElements( allFermentables, Brewtarget::FERMTABLE );
    populateElements( allHops, Brewtarget::HOPTABLE );
@@ -264,9 +348,9 @@ bool Database::load()
    populateElements( allStyles, Brewtarget::STYLETABLE );
    populateElements( allWaters, Brewtarget::WATERTABLE );
    populateElements( allYeasts, Brewtarget::YEASTTABLE );
-   
+
    populateElements( allRecipes, Brewtarget::RECTABLE );
-   
+
    // Connect fermentable,hop changed signals to their parent recipe.
    QHash<int,Recipe*>::iterator i;
    QList<Fermentable*>::iterator j;
@@ -285,22 +369,22 @@ bool Database::load()
          connect( e, SIGNAL(changedBoilSize_l(double)), *i, SLOT(setBoilSize_l(double)));
          connect( e, SIGNAL(changedBoilTime_min(double)), *i, SLOT(setBoilTime_min(double)));
       }
-      
+
       QList<Fermentable*> tmpF = fermentables(*i);
       for( j = tmpF.begin(); j != tmpF.end(); ++j )
          connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
-      
+
       QList<Hop*> tmpH = hops(*i);
       for( k = tmpH.begin(); k != tmpH.end(); ++k )
          connect( *k, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptHopChange(QMetaProperty,QVariant)) );
-      
+
       QList<Yeast*> tmpY = yeasts(*i);
       for( l = tmpY.begin(); l != tmpY.end(); ++l )
          connect( *l, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptYeastChange(QMetaProperty,QVariant)) );
 
       connect( mash(*i), SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
    }
-   
+
    QList<Mash*> tmpM = mashs();
    for( m = tmpM.begin(); m != tmpM.end(); ++m )
    {
@@ -327,12 +411,12 @@ bool Database::createBlank(QString const& filename)
          Brewtarget::logW(QString("Database::createBlank(): could not open '%1'").arg(filename));
          return false;
       }
-      
+
       DatabaseSchemaHelper::create(sqldb);
-      
+
       sqldb.close();
    } // sqldb gets destroyed as it goes out of scope before removeDatabase()
-   
+
    QSqlDatabase::removeDatabase( "blank" );
    return true;
 }
@@ -358,16 +442,16 @@ void Database::convertFromXml()
    {
       dir.mkdir("obsolete");
       dir.cd("obsolete");
-      
+
       QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
-      for ( int i = 0; i < oldFiles.size(); ++i ) 
+      for ( int i = 0; i < oldFiles.size(); ++i )
       {
          QFile oldXmlFile(Brewtarget::getUserDataDir().filePath(oldFiles[i]));
          // If the old file exists, import.
          if( oldXmlFile.exists() )
          {
             importFromXML( oldXmlFile.fileName() );
-            
+
             // Move to obsolete/ directory.
             if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
                oldXmlFile.remove();
@@ -398,9 +482,10 @@ QSqlDatabase Database::sqlDatabase()
 {
    // Need a unique database connection for each thread.
    //http://www.linuxjournal.com/article/9602
-   
+
    QThread* t = QThread::currentThread();
-   
+   QSqlDatabase sqldb;
+
    _threadToConnectionMutex.lock();
    // If this thread already has a connection, return it.
    if( _threadToConnection.contains(t) )
@@ -411,16 +496,24 @@ QSqlDatabase Database::sqlDatabase()
    }
    // Create a unique connection name, just containing the addy of the thread.
    QString conName = QString("0x%1").arg(reinterpret_cast<uintptr_t>(t), 0, 16);
-   
+
    // Create the new connection.
-   QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE",conName);
-   sqldb.setDatabaseName(dbFileName);
+   if ( usingPg )
+   {
+      sqldb = QSqlDatabase::addDatabase("QPSQL",conName);
+   }
+   else
+   {
+      sqldb = QSqlDatabase::addDatabase("QSQLITE",conName);
+      sqldb.setDatabaseName(dbFileName);
+   }
+
    if( ! sqldb.open() )
    {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
       // TODO: what to do if we can't open?
    }
-   
+
    // Put new connection in the hash.
    _threadToConnection.insert(t,conName);
    _threadToConnectionMutex.unlock();
@@ -432,18 +525,21 @@ void Database::unload(bool keepChanges)
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
-   if (!loadWasSuccessful || keepChanges)
+   if ( ! usingPg ) 
    {
-      // If load() failed or want to keep the changes, then
-      // just keep the database and don't revert to the backup.
-      if (dbFile.exists())  dbTempBackupFile.remove();
-     return;
+      if (!loadWasSuccessful || keepChanges)
+      {
+         // If load() failed or want to keep the changes, then
+         // just keep the database and don't revert to the backup.
+         if (dbFile.exists())  dbTempBackupFile.remove();
+      return;
+      }
+      // If the user doesn't want to save changes, remove the active database
+      // and restore the backup.
+      dbFile.close();
+      dbFile.remove();
+      dbTempBackupFile.rename(dbFileName);
    }
-   // If the user doesn't want to save changes, remove the active database
-   // and restore the backup.
-   dbFile.close();
-   dbFile.remove();
-   dbTempBackupFile.rename(dbFileName);
 }
 
 bool Database::isDirty()
@@ -453,11 +549,11 @@ bool Database::isDirty()
 
 Database& Database::instance()
 {
-   
+
    // Not thread-safe
    //static Database dbSingleton;
    //return dbSingleton;
-   
+
    // This is not safe either. This is the double-check pattern that
    // avoids acquiring the lock unless we need to make a new instance.
    // The problem is that it's not safe. Should replace this lazy
@@ -468,42 +564,42 @@ Database& Database::instance()
    if( ! dbInstance )
    {
       mutex.lock();
-      
+
       if( ! dbInstance )
          dbInstance = new Database();
-      
+
       mutex.unlock();
    }
-   
+
    return *dbInstance;
 }
 
 void Database::dropInstance()
 {
    static QMutex mutex;
-  
+
    mutex.lock();
    delete dbInstance;
    dbInstance=0;
    mutex.unlock();
-   
+
 }
 
 bool Database::backupToDir(QString dir)
 {
    // Make sure the singleton exists.
    instance();
-   
+
    bool success = true;
    QString prefix = dir + "/";
    QString newDbFileName = prefix + "database.sqlite";
-   
+
    // Remove the files if they already exist so that
    // the copy() operation will succeed.
    QFile::remove(newDbFileName);
-   
+
    success = dbFile.copy( newDbFileName );
-   
+
    return success;
 }
 
@@ -515,15 +611,15 @@ bool Database::restoreFromFile(QString newDbFileStr)
    QString newDbFileName = prefix + "database.sqlite";
    QFile newDbFile(newDbFileName);
    */
-   
+
    QFile newDbFile(newDbFileStr);
    // Fail if we can't find file.
    if( !newDbFile.exists() )
       return false;
-   
+
    success &= newDbFile.copy(QString("%1.new").arg(dbFile.fileName()));
    QFile::setPermissions( newDbFile.fileName(), QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
-   
+
    return success;
 }
 
@@ -532,10 +628,10 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QSt
 {
    QSqlQuery q(sqlDatabase());
    q.setForwardOnly(true);
-   q.prepare( QString("DELETE FROM `%1` WHERE `%2`='%3' AND recipe_id='%4'").arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
+   q.prepare( QString("DELETE FROM %1 WHERE %2='%3' AND recipe_id=%4").arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
    q.exec();
    q.finish();
- 
+
    makeDirty();
    emit rec->changed( rec->metaProperty(propName), QVariant() );
 }
@@ -544,7 +640,7 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
 {
    // Just mark the brew note as deleted.
    sqlUpdate( Brewtarget::BREWNOTETABLE,
-              "deleted=1",
+              deletedFilter,
               QString("id=%1").arg(b->_key) );
    makeDirty();
    emit deletedBrewNoteSignal(b);
@@ -585,11 +681,11 @@ void Database::removeFromRecipe( Recipe* rec, Water* w )
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
    removeIngredientFromRecipe( rec, ins, "instructions", "instruction_in_recipe", "instruction_id" );
-   
+
    // --maf-- Instructions just need to get whacked.
    sqlDelete( Brewtarget::INSTRUCTIONTABLE,
               QString("id=%1").arg(ins->_key) );
-   
+
    allInstructions.remove(ins->_key);
    emit changed( metaProperty("instructions"), QVariant() );
 }
@@ -599,7 +695,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
 {
    // Just mark the step as deleted.
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              "deleted=1",
+              deletedFilter,
               QString("id=%1").arg(step->_key) );
    // emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
    makeDirty();
@@ -614,7 +710,7 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
    q.next();
    key = q.record().value("recipe_id").toInt();
    q.finish();
-   
+
    return allRecipes[key];
 }
 
@@ -633,7 +729,7 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
                 .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key),
                 sqlDatabase());//sqldb );
    q.finish();
-  
+
    makeDirty();
    emit m1->changed( m1->metaProperty("stepNumber") );
    emit m2->changed( m2->metaProperty("stepNumber") );
@@ -655,7 +751,7 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
       sqlDatabase()
    );
    q.finish();
-  
+
    makeDirty();
    emit in1->changed( in1->metaProperty("instructionNumber") );
    emit in2->changed( in2->metaProperty("instructionNumber") );
@@ -670,7 +766,7 @@ void Database::insertInstruction(Instruction* in, int pos)
    q.next();
    parentRecipeKey = q.record().value("recipe_id").toInt();
    q.finish();
-   
+
    // Increment all instruction positions greater or equal to pos.
    q.exec(
       QString(
@@ -679,11 +775,11 @@ void Database::insertInstruction(Instruction* in, int pos)
          "WHERE recipe_id=%1 AND instruction_number>=%2"
       ).arg(parentRecipeKey).arg(pos)
    );
-   
+
    // NOTE: right here, we should be emitting changed( "instructionNumber" )
    // for each one of the rows affected above. Probably creating problems by
    // not doing so :-/
-   
+
    // Change in's position to pos.
    q.exec(
       QString(
@@ -693,7 +789,7 @@ void Database::insertInstruction(Instruction* in, int pos)
       ).arg(pos).arg(in->_key)
    );
    q.finish();
-  
+
    makeDirty();
    emit in->changed( in->metaProperty("instructionNumber"), pos );
 }
@@ -701,10 +797,10 @@ void Database::insertInstruction(Instruction* in, int pos)
 QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 {
    QList<BrewNote*> ret;
-   QString filterString = QString("recipe_id = %1 AND deleted = 0").arg(parent->_key);
-   
+   QString filterString = QString("recipe_id = %1 AND %2").arg(parent->_key).arg(notDeletedFilter);
+
    getElements(ret, filterString, Brewtarget::BREWNOTETABLE, allBrewNotes);
-   
+
    return ret;
 }
 
@@ -713,11 +809,11 @@ QList<Fermentable*> Database::fermentables(Recipe const* parent)
    QList<Fermentable*> ret;
    QString queryString = QString("SELECT fermentable_id FROM fermentable_in_recipe WHERE recipe_id = %1").arg(parent->_key);
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-   
+
    while( q.next() )
       ret.append(allFermentables[q.record().value("fermentable_id").toInt()]);
    q.finish();
-   
+
    return ret;
 }
 
@@ -728,11 +824,11 @@ QList<Hop*> Database::hops(Recipe const* parent)
    QList<Hop*> ret;
    QString queryString = QString("SELECT hop_id FROM hop_in_recipe WHERE recipe_id = %1").arg(parent->_key);
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-   
+
    while( q.next() )
       ret.append(allHops[q.record().value("hop_id").toInt()]);
    q.finish();
-   
+
    return ret;
 }
 
@@ -741,18 +837,18 @@ QList<Misc*> Database::miscs(Recipe const* parent)
    QList<Misc*> ret;
    QString queryString = QString("SELECT misc_id FROM misc_in_recipe WHERE recipe_id = %1").arg(parent->_key);
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-   
+
    while( q.next() )
       ret.append(allMiscs[q.record().value("misc_id").toInt()]);
    q.finish();
-   
+
    return ret;
 }
 
 Equipment* Database::equipment(Recipe const* parent)
 {
    int id = get( Brewtarget::RECTABLE, parent->key(), "equipment_id" ).toInt();
-   
+
    if( allEquipments.contains(id) )
       return allEquipments[id];
    else
@@ -762,14 +858,14 @@ Equipment* Database::equipment(Recipe const* parent)
 Style* Database::style(Recipe const* parent)
 {
    int id;
-   
+
    QString queryString = QString("SELECT style_id FROM recipe WHERE id = %1").arg(parent->_key);
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-   
+
    while( q.next() )
       id = q.record().value("style_id").toInt();
    q.finish();
-   
+
    if( allStyles.contains(id) )
       return allStyles[id];
    else
@@ -779,7 +875,7 @@ Style* Database::style(Recipe const* parent)
 Mash* Database::mash( Recipe const* parent )
 {
    int mashId = get( Brewtarget::RECTABLE, parent->key(), "mash_id" ).toInt();
-   
+
    if( allMashs.contains(mashId) )
       return allMashs[mashId];
    else
@@ -789,10 +885,10 @@ Mash* Database::mash( Recipe const* parent )
 QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
-   QString filterString = QString("mash_id = %1 AND deleted = 0").arg(parent->_key);
-  
+   QString filterString = QString("mash_id = %1 AND %2").arg(parent->_key).arg(notDeletedFilter);
+
    getElements(ret, filterString, Brewtarget::MASHSTEPTABLE, allMashSteps);
-   
+
    return ret;
 }
 
@@ -802,13 +898,13 @@ QList<Instruction*> Database::instructions( Recipe const* parent )
    QString queryString = QString(
       "SELECT instruction_id FROM instruction_in_recipe WHERE recipe_id = %1 ORDER BY instruction_number ASC"
    ).arg(parent->_key);
-   
+
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-   
+
    while( q.next() )
       ret.append(allInstructions[q.record().value("instruction_id").toInt()]);
    q.finish();
-   
+
    return ret;
 }
 
@@ -817,11 +913,11 @@ QList<Water*> Database::waters(Recipe const* parent)
    QList<Water*> ret;
    QString queryString = QString("SELECT water_id FROM water_in_recipe WHERE recipe_id = %1").arg(parent->_key);
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-   
+
    while( q.next() )
       ret.append(allWaters[q.record().value("water_id").toInt()]);
    q.finish();
-   
+
    return ret;
 }
 
@@ -830,11 +926,11 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
    QList<Yeast*> ret;
    QString queryString = QString("SELECT yeast_id FROM yeast_in_recipe WHERE recipe_id = %1").arg(parent->_key);
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-   
+
    while( q.next() )
       ret.append(allYeasts[q.record().value("yeast_id").toInt()]);
    q.finish();
-   
+
    return ret;
 }
 
@@ -845,7 +941,7 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
    int key;
 
    QSqlQuery q(sqlDatabase());
-   q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
+   q.exec( QString("INSERT INTO %1 DEFAULT VALUES")
               .arg(tableNames[table])
          );
 
@@ -857,10 +953,10 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
    else
       key = q.lastInsertId().toInt();
    q.finish();
-   
+
    //if( q.lastError().isValid() )
    //   Brewtarget::logE( QString("Database::insertNewDefaultRecord: %1").arg(q.lastError().text()) );
-  
+
    makeDirty();
    return key;
 }
@@ -868,10 +964,10 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
 int Database::insertNewMashStepRecord( Mash* parent )
 {
    int key;
-   
+
    QSqlQuery q(sqlDatabase());//sqldb );
    q.setForwardOnly(true);
-   q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
+   q.exec( QString("INSERT INTO %1 DEFAULT VALUES")
               .arg(tableNames[Brewtarget::MASHSTEPTABLE])
          );
    if( q.numRowsAffected() < 1 )
@@ -882,18 +978,19 @@ int Database::insertNewMashStepRecord( Mash* parent )
    else
       key = q.lastInsertId().toInt();
    q.finish();
-   
+
    // I *think* we need to set the mash_id first
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString("`mash_id`='%1' ").arg(parent->_key),
-              QString("id='%1'").arg(key)
+              QString("mash_id=%1 ").arg(parent->_key),
+              QString("id=%1").arg(key)
             );
    // Just sets the step number within the mash to the next available number.
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString( "`step_number` = (SELECT IFNULL(MAX(`step_number`)+1,0) FROM `%1` WHERE deleted=0 AND mash_id='%2' )")
+              QString( "step_number = (SELECT IFNULL(MAX(step_number)+1,0) FROM %1 WHERE %2 AND mash_id=%3 )")
                       .arg(tableNames[Brewtarget::MASHSTEPTABLE])
+                      .arg(notDeletedFilter)
                       .arg(parent->_key),
-              QString("id='%1'").arg(key)
+              QString("id=%1").arg(key)
             );
    makeDirty();
    return key;
@@ -902,7 +999,7 @@ int Database::insertNewMashStepRecord( Mash* parent )
 BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 {
    BrewNote* tmp = copy<BrewNote>(other, true, &allBrewNotes);
-  
+
    if ( signal )
    {
       emit changed( metaProperty("brewNotes"), QVariant() );
@@ -925,12 +1022,12 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
               QString("recipe_id=%1").arg(parent->_key),
               QString("id=%2").arg(tmp->_key) );
 
-   if ( signal ) 
+   if ( signal )
    {
       emit changed( metaProperty("brewNotes"), QVariant() );
       emit newBrewNoteSignal(tmp);
    }
-   
+
    makeDirty();
    return tmp;
 }
@@ -952,11 +1049,11 @@ Equipment* Database::newEquipment()
 Equipment* Database::newEquipment(Equipment* other)
 {
    Equipment* tmp = copy<Equipment>(other, true, &allEquipments);
-   
+
    makeDirty();
    emit changed( metaProperty("equipments"), QVariant() );
    emit newEquipmentSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -966,22 +1063,22 @@ Fermentable* Database::newFermentable()
    tmp->_key = insertNewDefaultRecord(Brewtarget::FERMTABLE);
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
-   
+
    makeDirty();
    emit changed( metaProperty("fermentables"), QVariant() );
    emit newFermentableSignal(tmp);
-   
+
    return tmp;
 }
 
 Fermentable* Database::newFermentable(Fermentable* other)
 {
    Fermentable* tmp = copy<Fermentable>(other, true, &allFermentables);
-   
+
    makeDirty();
    emit changed( metaProperty("fermentables"), QVariant() );
    emit newFermentableSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -991,22 +1088,22 @@ Hop* Database::newHop()
    tmp->_key = insertNewDefaultRecord(Brewtarget::HOPTABLE);
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
-   
+
    makeDirty();
    emit changed( metaProperty("hops"), QVariant() );
    emit newHopSignal(tmp);
-   
+
    return tmp;
 }
 
 Hop* Database::newHop(Hop* other)
 {
    Hop* tmp = copy<Hop>(other, true, &allHops);
-   
+
    makeDirty();
    emit changed( metaProperty("hops"), QVariant() );
    emit newHopSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -1017,15 +1114,15 @@ Instruction* Database::newInstruction(Recipe* rec)
    tmp->_key = insertNewDefaultRecord(Brewtarget::INSTRUCTIONTABLE);
    tmp->_table = Brewtarget::INSTRUCTIONTABLE;
    allInstructions.insert(tmp->_key,tmp);
-   
+
    // Database's instructions have changed.
 
    makeDirty();
    emit changed( metaProperty("instructions"), QVariant() );
-   
+
    // Add without copying to "instruction_in_recipe"
    addIngredientToRecipe<Instruction>( rec, tmp, "instructions", "instruction_in_recipe", "instruction_id", "instruction_children", true, 0, false );
-   
+
    return tmp;
 }
 
@@ -1037,7 +1134,7 @@ int Database::instructionNumber(Instruction const* in)
       ).arg(in->_key),
       sqlDatabase()
    );
-   
+
    if( q.next() )
       return q.record().value("instruction_number").toInt();
    else
@@ -1051,11 +1148,11 @@ Mash* Database::newMash()
    tmp->_table = Brewtarget::MASHTABLE;
 
    allMashs.insert(tmp->_key,tmp);
-   
+
    makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -1065,12 +1162,12 @@ Mash* Database::newMash(Recipe* parent)
    tmp->_key = insertNewDefaultRecord(Brewtarget::MASHTABLE);
    tmp->_table = Brewtarget::MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
-   
+
    // Connect tmp to parent, removing any existing mash in parent.
    sqlUpdate( Brewtarget::RECTABLE,
               QString("mash_id=%1").arg(tmp->_key),
               QString("id=%1").arg(parent->_key) );
-   
+
    makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
@@ -1092,11 +1189,11 @@ Mash* Database::newMash(Mash* other, bool displace)
                  QString("mash_id=%1").arg(tmp->_key),
                  QString("mash_id=%1").arg(other->_key) );
    }
-   
+
    makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -1124,22 +1221,22 @@ Misc* Database::newMisc()
    tmp->_key = insertNewDefaultRecord(Brewtarget::MISCTABLE);
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
-   
+
    makeDirty();
    emit changed( metaProperty("miscs"), QVariant() );
    emit newMiscSignal(tmp);
-   
+
    return tmp;
 }
 
 Misc* Database::newMisc(Misc* other)
 {
    Misc* tmp = copy<Misc>(other, true, &allMiscs);
-   
+
    makeDirty();
    emit changed( metaProperty("miscs"), QVariant() );
    emit newMiscSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -1149,48 +1246,48 @@ Recipe* Database::newRecipe(bool addMash)
    tmp->_key = insertNewDefaultRecord(Brewtarget::RECTABLE);
    tmp->_table = Brewtarget::RECTABLE;
    allRecipes.insert(tmp->_key,tmp);
-   
+
    // Now, need to create a new mash for the recipe.
    if ( addMash )
       newMash( tmp );
-   
+
    makeDirty();
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
-   
+
    return tmp;
 }
 
 Recipe* Database::newRecipe(Recipe* other)
 {
    Recipe* tmp = copy<Recipe>(other, true, &allRecipes);
-   
+
    // Copy fermentables
    foreach( Fermentable* a, other->fermentables() )
       addToRecipe( tmp, a );
-   
+
    // Copy hops
    foreach( Hop* a, other->hops() )
       addToRecipe( tmp, a );
-   
+
    // Copy miscs
    foreach( Misc* a, other->miscs() )
       addToRecipe( tmp, a );
-   
+
    // Copy yeasts
    foreach( Yeast* a, other->yeasts() )
       addToRecipe( tmp, a );
-   
+
    // Copy style/mash/equipment
    // Style or equipment might be non-existent but these methods handle that.
    addToRecipe( tmp, other->equipment() );
    addToRecipe( tmp, other->mash() );
    addToRecipe( tmp, other->style() );
-   
+
    makeDirty();
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -1200,21 +1297,21 @@ Style* Database::newStyle()
    tmp->_key = insertNewDefaultRecord(Brewtarget::STYLETABLE);
    tmp->_table = Brewtarget::STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
-   
+
    makeDirty();
    emit changed( metaProperty("styles"), QVariant() );
    emit newStyleSignal(tmp);
-   
+
    return tmp;
 }
 
 Style* Database::newStyle(Style* other)
 {
    Style* tmp = copy<Style>(other, true, &allStyles);
-   
+
    emit changed( metaProperty("styles"), QVariant() );
    emit newStyleSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -1224,11 +1321,11 @@ Water* Database::newWater()
    tmp->_key = insertNewDefaultRecord(Brewtarget::WATERTABLE);
    tmp->_table = Brewtarget::WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
-   
+
    makeDirty();
    emit changed( metaProperty("waters"), QVariant() );
    emit newWaterSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -1238,22 +1335,22 @@ Yeast* Database::newYeast()
    tmp->_key = insertNewDefaultRecord(Brewtarget::YEASTTABLE);
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
-   
+
    makeDirty();
    emit changed( metaProperty("yeasts"), QVariant() );
    emit newYeastSignal(tmp);
-   
+
    return tmp;
 }
 
 Yeast* Database::newYeast(Yeast* other)
 {
    Yeast* tmp = copy<Yeast>(other, true, &allYeasts);
-   
+
    makeDirty();
    emit changed( metaProperty("yeasts"), QVariant() );
    emit newYeastSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -1273,7 +1370,7 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
    // For now, immediately execute the command.
    command->redo();
    makeDirty();
-   
+
    // Push the command on the undo stack.
    //commandStack.push(command);
 }
@@ -1286,18 +1383,18 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
    {
       // Copy the old mash step.
       MashStep* newStep = copy<MashStep>(*ms,true,&allMashSteps);
-      
+
       // Put it in the new mash.
       sqlUpdate(
          Brewtarget::MASHSTEPTABLE,
-         QString("mash_id='%1'").arg(newMash->key()),
-         QString("id='%1'").arg(newStep->key())
+         QString("mash_id=%1").arg(newMash->key()),
+         QString("id=%1").arg(newStep->key())
       );
-      
+
       // Make the new mash pay attention to the new step.
-      connect( newStep, SIGNAL(changed(QMetaProperty,QVariant)), newMash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );          
+      connect( newStep, SIGNAL(changed(QMetaProperty,QVariant)), newMash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
-   
+
    makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMash->mashStepsChanged();
@@ -1307,7 +1404,7 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
 void Database::remove(Equipment* equip)
 {
    deleteRecord(Brewtarget::EQUIPTABLE,equip);
-   
+
    emit changed( metaProperty("equipments"), QVariant() );
    emit deletedEquipmentSignal(equip);
 }
@@ -1331,7 +1428,7 @@ void Database::remove(QList<Equipment*> equip)
 void Database::remove(Fermentable* ferm)
 {
    deleteRecord(Brewtarget::FERMTABLE,ferm);
-   
+
    emit changed( metaProperty("fermentables"), QVariant());
    emit deletedFermentableSignal(ferm);
 }
@@ -1346,17 +1443,17 @@ void Database::remove(QList<Fermentable*> ferm)
    {
       deleteRecord(Brewtarget::FERMTABLE,*it);
       emit deletedFermentableSignal(*it);
-      
+
       it++;
    }
-   
+
    emit changed( metaProperty("fermentables"), QVariant());
 }
 
 void Database::remove(Hop* hop)
 {
    deleteRecord(Brewtarget::HOPTABLE,hop);
-   
+
    emit changed( metaProperty("hops"), QVariant() );
    emit deletedHopSignal(hop);
 }
@@ -1371,7 +1468,7 @@ void Database::remove(QList<Hop*> hop)
    {
       deleteRecord(Brewtarget::HOPTABLE,*it);
       emit deletedHopSignal(*it);
-      
+
       it++;
    }
 
@@ -1381,7 +1478,7 @@ void Database::remove(QList<Hop*> hop)
 void Database::remove(Mash* mash)
 {
    deleteRecord(Brewtarget::MASHTABLE,mash);
-   
+
    emit changed( metaProperty("mashs"), QVariant() );
    emit deletedMashSignal(mash);
 }
@@ -1418,7 +1515,7 @@ void Database::remove(QList<Mash*> mash)
 void Database::remove(MashStep* mashStep)
 {
    deleteRecord(Brewtarget::MASHSTEPTABLE,mashStep);
-   
+
    emit changed( metaProperty("mashSteps"), QVariant() );
 }
 
@@ -1439,7 +1536,7 @@ void Database::remove(QList<MashStep*> mashStep)
 void Database::remove(Misc* misc)
 {
    deleteRecord(Brewtarget::MISCTABLE,misc);
-   
+
    emit changed( metaProperty("miscs"), QVariant());
    emit deletedMiscSignal(misc);
 }
@@ -1462,7 +1559,7 @@ void Database::remove(QList<Misc*> misc)
 void Database::remove(Recipe* rec)
 {
    deleteRecord(Brewtarget::RECTABLE,rec);
-   
+
    emit changed( metaProperty("recipes"), QVariant() );
    emit deletedRecipeSignal(rec);
 }
@@ -1485,7 +1582,7 @@ void Database::remove(QList<Recipe*> rec)
 void Database::remove(Style* style)
 {
    deleteRecord(Brewtarget::STYLETABLE,style);
-   
+
    emit changed( metaProperty("styles"), QVariant() );
    emit deletedStyleSignal(style);
 }
@@ -1508,7 +1605,7 @@ void Database::remove(QList<Style*> style)
 void Database::remove(Water* water)
 {
    deleteRecord(Brewtarget::WATERTABLE,water);
-   
+
    emit changed( metaProperty("waters"), QVariant());
    emit deletedWaterSignal(water);
 }
@@ -1531,7 +1628,7 @@ void Database::remove(QList<Water*> water)
 void Database::remove(Yeast* yeast)
 {
    deleteRecord(Brewtarget::YEASTTABLE,yeast);
-   
+
    emit changed( metaProperty("yeasts"), QVariant());
    emit deletedYeastSignal(yeast);
 }
@@ -1555,7 +1652,7 @@ QString Database::getDbFileName()
 {
    // Ensure instance exists.
    instance();
-   
+
    return dbFileName;
 }
 
@@ -1576,12 +1673,12 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
 // Inventory functions ========================================================
 
-//This links ingredients with the same name. 
+//This links ingredients with the same name.
 //The first displayed ingredient in the database is assumed to be the parent.
 //TODO: make the child_id column UNIQUE in the database
 void Database::populateChildTablesByName(Brewtarget::DBTable table){
    Brewtarget::logW( "Populating Children Ingredient Links" );
-      
+
    QString queryString = QString(
       "SELECT DISTINCT name FROM %1"
    ).arg(tableNames[table]);
@@ -1589,14 +1686,14 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
    while (nameq.next()) {
       QString name = nameq.record().value(0).toString();
       queryString = QString(
-         "SELECT id FROM %1 WHERE ( name='%2' AND display=1 ) ORDER BY id ASC LIMIT 1"
-      ).arg(tableNames[table]).arg(name);
+         "SELECT id FROM %1 WHERE ( name='%2' AND %3 ) ORDER BY id ASC LIMIT 1"
+      ).arg(tableNames[table]).arg(name).arg(displayedFilter);
       QSqlQuery parentq( queryString, sqlDatabase() );
       parentq.first();
       QString parentID = parentq.record().value("id").toString();
       queryString = QString(
-         "SELECT id FROM %1 WHERE ( name='%2' AND display=0 ) ORDER BY id ASC"
-      ).arg(tableNames[table]).arg(name);
+         "SELECT id FROM %1 WHERE ( name='%2' AND %3 ) ORDER BY id ASC"
+      ).arg(tableNames[table]).arg(name).arg(displayedFilter);
       QSqlQuery childrenq( queryString, sqlDatabase() );
       while (childrenq.next()) {
          QString childID = childrenq.record().value("id").toString();
@@ -1606,7 +1703,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
          QSqlQuery insertq( queryString, sqlDatabase() );
       }
    }
-   
+
 }
 // populate ingredient tables
 void Database::populateChildTablesByName(){
@@ -1622,7 +1719,7 @@ int Database::getParentID(Brewtarget::DBTable table, int childKey){
    QString queryString = QString(
       "SELECT parent_id FROM %1 WHERE child_id = %2 LIMIT 1"
    ).arg(tableNames[tableToChildTable[table]]).arg(childKey);
-   
+
    QSqlQuery q( queryString, sqlDatabase() );
    q.first();
    ret = q.record().value("parent_id").toInt();
@@ -1654,12 +1751,12 @@ Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table){
 //create a new inventory row
 void Database::newInventory(Brewtarget::DBTable invForTable, int invForID){
    QString invTable = tableNames[tableToInventoryTable[invForTable]];
-   
+
    QString queryString = QString(
       "INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)"
    ).arg(invTable).arg(tableNames[invForTable]).arg(getParentID(invForTable, invForID));
    QSqlQuery q( queryString, sqlDatabase() );
-   
+
 }
 
 // Add to recipe ==============================================================
@@ -1669,22 +1766,22 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
 
    if( e == 0 )
       return;
-  
+
    // Make a copy of equipment.
    if ( ! noCopy )
       newEquip = copy<Equipment>(e,false,&allEquipments);
    else
       newEquip = e;
 
-   
+
    makeDirty();
    // Update equipment_id
    sqlUpdate(Brewtarget::RECTABLE,
-             QString("`equipment_id`='%1'").arg(newEquip->key()),
-             QString("id='%1'").arg(rec->_key));
+             QString("equipment_id=%1").arg(newEquip->key()),
+             QString("id=%1").arg(rec->_key));
 
    newEquip->setDisplay(false);
-   
+
    // NOTE: need to disconnect the recipe's old equipment?
    connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
    // NOTE: If we don't reconnect these signals, bad things happen when
@@ -1711,7 +1808,7 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
    connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
    // recalcAll is very expensive. When doing a massive import, don't do it
    // with every fermentable. Let it happen once
-   if (! noCopy ) 
+   if (! noCopy )
       rec->recalcAll();
 }
 
@@ -1768,7 +1865,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops )
 void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
 {
    Mash* newMash;
-  
+
    // Make a copy of mash.
    // Making a copy of the mash isn't enough. We need a copy of the mashsteps
    // too.
@@ -1779,12 +1876,12 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
    }
    else
       newMash = m;
-   
+
    // Update mash_id
    sqlUpdate(Brewtarget::RECTABLE,
-             QString("`mash_id`='%1'").arg(newMash->key()),
-             QString("id='%1'").arg(rec->_key));
-   
+             QString("mash_id=%1").arg(newMash->key()),
+             QString("id=%1").arg(rec->_key));
+
    // Emit a changed signal.
    makeDirty();
    connect( newMash, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptMashChange(QMetaProperty,QVariant)));
@@ -1797,7 +1894,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
 void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
 {
    addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", "misc_children", noCopy, &allMiscs );
-   if (! noCopy ) 
+   if (! noCopy )
       rec->recalcAll();
 }
 
@@ -1819,7 +1916,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs )
 void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
 {
    addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", "water_children", noCopy, &allWaters );
-   if (! noCopy ) 
+   if (! noCopy )
       rec->recalcAll();
 }
 
@@ -1829,19 +1926,19 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
 
    if ( s == 0 )
       return;
-   
+
    if ( ! noCopy )
       newStyle = copy<Style>(s,false,&allStyles);
-   else 
+   else
       newStyle = s;
-   
+
    sqlUpdate(Brewtarget::RECTABLE,
-             QString("`style_id`='%1'").arg(newStyle->key()),
-             QString("id='%1'").arg(rec->_key));
+             QString("style_id=%1").arg(newStyle->key()),
+             QString("id=%1").arg(rec->_key));
 
    newStyle->setDisplay(false);
    makeDirty();
-   
+
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
 }
@@ -1887,7 +1984,7 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
 {
-   QSqlQuery q( QString("UPDATE `%1` SET %2 WHERE %3")
+   QSqlQuery q( QString("UPDATE %1 SET %2 WHERE %3")
                 .arg(tableNames[table])
                 .arg(setClause)
                 .arg(whereClause),
@@ -1900,7 +1997,7 @@ void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, Q
 
 void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause )
 {
-   QSqlQuery q( QString("DELETE FROM `%1` WHERE %2")
+   QSqlQuery q( QString("DELETE FROM %1 WHERE %2")
                 .arg(tableNames[table])
                 .arg(whereClause),
                 sqlDatabase());
@@ -1912,22 +2009,23 @@ QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 {
    QHash<Brewtarget::DBTable,QSqlQuery> ret;
    QHash<Brewtarget::DBTable,QString> names = Database::tableNamesHash();
-   
+
    foreach( Brewtarget::DBTable table, names.keys() )
    {
       QSqlQuery q(sqlDatabase());
-      q.prepare( QString("SELECT * FROM `%1` WHERE `id`=:id").arg(names[table]) );
-      
+      QString query = QString("SELECT * FROM %1 WHERE id=:id").arg(names[table]);
+      q.prepare( query );
+
       ret[table] = q;
    }
-   
+
    return ret;
 }
 
 QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
 {
    QHash<Brewtarget::DBTable,QString> tmp;
-   
+
    tmp[ Brewtarget::BREWNOTETABLE ] = "brewnote";
    tmp[ Brewtarget::EQUIPTABLE ] = "equipment";
    tmp[ Brewtarget::FERMTABLE ] = "fermentable";
@@ -1940,7 +2038,7 @@ QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
    tmp[ Brewtarget::STYLETABLE ] = "style";
    tmp[ Brewtarget::WATERTABLE ] = "water";
    tmp[ Brewtarget::YEASTTABLE ] = "yeast";
-   
+
    //inventory tables
    tmp[ Brewtarget::FERMINVTABLE ] = "fermentable_in_inventory";
    tmp[ Brewtarget::HOPINVTABLE ] = "hop_in_inventory";
@@ -1951,14 +2049,14 @@ QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
    tmp[ Brewtarget::HOPCHILDTABLE ] = "hop_children";
    tmp[ Brewtarget::MISCCHILDTABLE ] = "misc_children";
    tmp[ Brewtarget::YEASTCHILDTABLE ] = "yeast_children";
-   
+
    return tmp;
 }
 
 QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
 {
    QHash<QString,Brewtarget::DBTable> tmp;
-   
+
    tmp["BrewNote"] = Brewtarget::BREWNOTETABLE;
    tmp["Equipment"] = Brewtarget::EQUIPTABLE;
    tmp["Fermentable"] = Brewtarget::FERMTABLE;
@@ -1971,31 +2069,31 @@ QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
    tmp["Style"] = Brewtarget::STYLETABLE;
    tmp["Water"] = Brewtarget::WATERTABLE;
    tmp["Yeast"] = Brewtarget::YEASTTABLE;
-   
+
    return tmp;
 }
 
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTableHash()
 {
    QHash<Brewtarget::DBTable,Brewtarget::DBTable> tmp;
-   
+
    tmp[Brewtarget::FERMTABLE] = Brewtarget::FERMCHILDTABLE;
    tmp[Brewtarget::HOPTABLE] = Brewtarget::HOPCHILDTABLE;
    tmp[Brewtarget::MISCTABLE] = Brewtarget::MISCCHILDTABLE;
    tmp[Brewtarget::YEASTTABLE] = Brewtarget::YEASTCHILDTABLE;
-   
+
    return tmp;
 }
 
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTableHash()
 {
    QHash<Brewtarget::DBTable,Brewtarget::DBTable> tmp;
-   
+
    tmp[Brewtarget::FERMTABLE] = Brewtarget::FERMINVTABLE;
    tmp[Brewtarget::HOPTABLE] = Brewtarget::HOPINVTABLE;
    tmp[Brewtarget::MISCTABLE] = Brewtarget::MISCINVTABLE;
    tmp[Brewtarget::YEASTTABLE] = Brewtarget::YEASTINVTABLE;
-   
+
    return tmp;
 }
 
@@ -2003,28 +2101,28 @@ QList<BrewNote*> Database::brewNotes()
 {
    QList<BrewNote*> tmp;
 
-   getElements( tmp, "deleted=0", Brewtarget::BREWNOTETABLE, allBrewNotes );
+   getElements( tmp, notDeletedFilter, Brewtarget::BREWNOTETABLE, allBrewNotes );
    return tmp;
 }
 
 QList<Equipment*> Database::equipments()
 {
    QList<Equipment*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::EQUIPTABLE, allEquipments);
+   getElements( tmp, notDeletedFilter, Brewtarget::EQUIPTABLE, allEquipments);
    return tmp;
 }
 
 QList<Fermentable*> Database::fermentables()
 {
    QList<Fermentable*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::FERMTABLE, allFermentables);
+   getElements( tmp, notDeletedFilter, Brewtarget::FERMTABLE, allFermentables);
    return tmp;
 }
 
 QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::HOPTABLE, allHops);
+   getElements( tmp, notDeletedFilter, Brewtarget::HOPTABLE, allHops);
    return tmp;
 }
 
@@ -2032,49 +2130,50 @@ QList<Mash*> Database::mashs()
 {
    QList<Mash*> tmp;
    //! Mashs and mashsteps are the odd balls.
-   getElements( tmp, "deleted=0", Brewtarget::MASHTABLE, allMashs);
+   getElements( tmp, notDeletedFilter, Brewtarget::MASHTABLE, allMashs);
    return tmp;
 }
 
 QList<MashStep*> Database::mashSteps()
 {
    QList<MashStep*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::MASHSTEPTABLE, allMashSteps);
+   getElements( tmp, notDeletedFilter, Brewtarget::MASHSTEPTABLE, allMashSteps);
    return tmp;
 }
 
 QList<Misc*> Database::miscs()
 {
    QList<Misc*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::MISCTABLE, allMiscs );
+   getElements( tmp, notDeletedFilter, Brewtarget::MISCTABLE, allMiscs );
    return tmp;
 }
 
 QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::RECTABLE, allRecipes );
+   // This is gonna kill me.
+   getElements( tmp, notDeletedFilter, Brewtarget::RECTABLE, allRecipes );
    return tmp;
 }
 
 QList<Style*> Database::styles()
 {
    QList<Style*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::STYLETABLE, allStyles );
+   getElements( tmp, notDeletedFilter, Brewtarget::STYLETABLE, allStyles );
    return tmp;
 }
 
 QList<Water*> Database::waters()
 {
    QList<Water*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::WATERTABLE, allWaters );
+   getElements( tmp, notDeletedFilter, Brewtarget::WATERTABLE, allWaters );
    return tmp;
 }
 
 QList<Yeast*> Database::yeasts()
 {
    QList<Yeast*> tmp;
-   getElements( tmp, "deleted=0", Brewtarget::YEASTTABLE, allYeasts );
+   getElements( tmp, notDeletedFilter, Brewtarget::YEASTTABLE, allYeasts );
    return tmp;
 }
 
@@ -2083,7 +2182,7 @@ bool Database::updateSchema(bool* err)
    int currentVersion = DatabaseSchemaHelper::currentVersion( sqlDatabase() );
    int newVersion = DatabaseSchemaHelper::dbVersion;
    bool doUpdate = currentVersion < newVersion;
-   
+
    if( doUpdate )
    {
       bool success = DatabaseSchemaHelper::migrate( currentVersion, newVersion, sqlDatabase() );
@@ -2096,19 +2195,19 @@ bool Database::updateSchema(bool* err)
       }
       makeDirty();
    }
-   
+
    //populate ingredient links
    int repopChild = 0;
    QSqlQuery popchildq( "SELECT repopulateChildrenOnNextStart FROM settings WHERE id=1", sqlDatabase() );
    if( popchildq.next() )
       repopChild = popchildq.record().value("repopulateChildrenOnNextStart").toInt();
-   
+
    if(repopChild == 1){
       populateChildTablesByName();
       QSqlQuery popchildq( "UPDATE settings SET repopulateChildrenOnNextStart = 0", sqlDatabase() );
-   
+
    }
-   
+
    if( err )
       *err = false;
    return doUpdate;
@@ -2126,7 +2225,7 @@ bool Database::importFromXML(const QString& filename)
    QStringList tags = QStringList() << "EQUIPMENT" << "FERMENTABLE" << "HOP" << "MISC" << "STYLE" << "YEAST" << "WATER" << "MASHS";
    inFile.setFileName(filename);
    bool ret = true;
-   
+
    if( ! inFile.open(QIODevice::ReadOnly) )
    {
       Brewtarget::logW(QString("Database::importFromXML: Could not open %1 for reading.").arg(filename));
@@ -2153,7 +2252,7 @@ bool Database::importFromXML(const QString& filename)
          list = xmlDoc.elementsByTagName(tag);
          count = list.size();
 
-         if ( count > 0 ) 
+         if ( count > 0 )
          {
             // Tell how many there were in the status bar.
             //statusBar()->showMessage( tr("Found %1 %2.").arg(count).arg(tag.toLower()), 5000 );
@@ -2412,59 +2511,59 @@ void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
    QDomElement equipNode;
    QDomElement tmpNode;
    QDomText tmpText;
-   
+
    equipNode = doc.createElement("EQUIPMENT");
-   
+
    tmpNode = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("BOIL_SIZE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->boilSize_l()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("BATCH_SIZE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->batchSize_l()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TUN_VOLUME");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tunVolume_l()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TUN_WEIGHT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tunWeight_kg()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TUN_SPECIFIC_HEAT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tunSpecificHeat_calGC()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TOP_UP_WATER");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->topUpWater_l()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TRUB_CHILLER_LOSS");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->trubChillerLoss_l()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("EVAP_RATE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->evapRate_pctHr()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("REAL_EVAP_RATE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->evapRate_lHr()));
    tmpNode.appendChild(tmpText);
@@ -2474,27 +2573,27 @@ void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
    tmpText = doc.createTextNode(BeerXMLElement::text(a->boilTime_min()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("CALC_BOIL_VOLUME");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->calcBoilVolume()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("LAUTER_DEADSPACE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->lauterDeadspace_l()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TOP_UP_KETTLE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->topUpKettle_l()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("HOP_UTILIZATION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->hopUtilization_pct()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("NOTES");
    tmpText = doc.createTextNode(a->notes());
    tmpNode.appendChild(tmpText);
@@ -2505,7 +2604,7 @@ void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
    tmpText = doc.createTextNode(BeerXMLElement::text(a->grainAbsorption_LKg()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("BOILING_POINT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->boilingPoint_c()));
    tmpNode.appendChild(tmpText);
@@ -2518,99 +2617,99 @@ void Database::toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent )
    QDomElement fermNode;
    QDomElement tmpNode;
    QDomText tmpText;
-   
+
    fermNode = doc.createElement("FERMENTABLE");
-   
+
    tmpNode = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TYPE");
    tmpText = doc.createTextNode(Fermentable::types.at(a->type()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("AMOUNT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->amount_kg()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("YIELD");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->yield_pct()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("COLOR");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->color_srm()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("ADD_AFTER_BOIL");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->addAfterBoil()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("ORIGIN");
    tmpText = doc.createTextNode(a->origin());
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("SUPPLIER");
    tmpText = doc.createTextNode(a->supplier());
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("NOTES");
    tmpText = doc.createTextNode(a->notes());
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("COARSE_FINE_DIFF");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->coarseFineDiff_pct()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("MOISTURE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->moisture_pct()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("DIASTATIC_POWER");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->diastaticPower_lintner()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("PROTEIN");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->protein_pct()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("MAX_IN_BATCH");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->maxInBatch_pct()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("RECOMMEND_MASH");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->recommendMash()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("IS_MASHED");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->isMashed()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("IBU_GAL_PER_LB");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->ibuGalPerLb()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
-   
+
    parent.appendChild(fermNode);
 }
 
@@ -2619,94 +2718,94 @@ void Database::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
    QDomElement hopNode;
    QDomElement tmpNode;
    QDomText tmpText;
-   
+
    hopNode = doc.createElement("HOP");
-   
+
    tmpNode = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("ALPHA");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->alpha_pct()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("AMOUNT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->amount_kg()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("USE");
    tmpText = doc.createTextNode(a->useString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TIME");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->time_min()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("NOTES");
    tmpText = doc.createTextNode(a->notes());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TYPE");
    tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("FORM");
    tmpText = doc.createTextNode(a->formString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("BETA");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->beta_pct()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("HSI");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->hsi_pct()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("ORIGIN");
    tmpText = doc.createTextNode(a->origin());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("SUBSTITUTES");
    tmpText = doc.createTextNode(a->substitutes());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("HUMULENE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->humulene_pct()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("CARYOPHYLLENE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->caryophyllene_pct()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("COHUMULONE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->cohumulone_pct()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("MYRCENE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->myrcene_pct()));
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
-   
+
    parent.appendChild(hopNode);
 }
 
@@ -2715,29 +2814,29 @@ void Database::toXml( Instruction* a, QDomDocument& doc, QDomNode& parent )
    QDomElement insNode;
    QDomElement tmpNode;
    QDomText tmpText;
-   
+
    insNode = doc.createElement("INSTRUCTION");
-   
+
    tmpNode = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpNode.appendChild(tmpText);
    insNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("DIRECTIONS");
    tmpText = doc.createTextNode(a->directions());
    tmpNode.appendChild(tmpText);
    insNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("HAS_TIMER");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->hasTimer()));
    tmpNode.appendChild(tmpText);
    insNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TIMER_VALUE");
    tmpText = doc.createTextNode(a->timerValue());
    tmpNode.appendChild(tmpText);
    insNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("COMPLETED");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->completed()));
    tmpNode.appendChild(tmpText);
@@ -2756,68 +2855,68 @@ void Database::toXml( Mash* a, QDomDocument& doc, QDomNode& parent )
    QDomElement mashNode;
    QDomElement tmpNode;
    QDomText tmpText;
-   
+
    int i, size;
-   
+
    mashNode = doc.createElement("MASH");
-   
+
    tmpNode = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("GRAIN_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->grainTemp_c()));
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("MASH_STEPS");
    QList<MashStep*> mashSteps = a->mashSteps();
    size = mashSteps.size();
    for( i = 0; i < size; ++i )
       toXml( mashSteps[i], doc, tmpNode);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("NOTES");
    tmpText = doc.createTextNode(a->notes());
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TUN_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tunTemp_c()));
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("SPARGE_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->spargeTemp_c()));
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("PH");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->ph()));
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TUN_WEIGHT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tunWeight_kg()));
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TUN_SPECIFIC_HEAT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tunSpecificHeat_calGC()));
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("EQUIP_ADJUST");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->equipAdjust()));
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
-   
+
    parent.appendChild(mashNode);
 }
 
@@ -2826,59 +2925,59 @@ void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
    QDomElement mashStepNode;
    QDomElement tmpNode;
    QDomText tmpText;
-   
+
    mashStepNode = doc.createElement("MASH_STEP");
-   
+
    tmpNode = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TYPE");
    tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("INFUSE_AMOUNT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->infuseAmount_l()));
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("STEP_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->stepTemp_c()));
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("STEP_TIME");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->stepTime_min()));
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("RAMP_TIME");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->rampTime_min()));
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("END_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->endTemp_c()));
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("INFUSE_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->infuseTemp_c()));
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("DECOCTION_AMOUNT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->decoctionAmount_l()));
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
-   
+
    parent.appendChild(mashStepNode);
 }
 
@@ -2887,54 +2986,54 @@ void Database::toXml( Misc* a, QDomDocument& doc, QDomNode& parent )
    QDomElement miscNode;
    QDomElement tmpNode;
    QDomText tmpText;
-   
+
    miscNode = doc.createElement("MISC");
-   
+
    tmpNode = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TYPE");
    tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("USE");
    tmpText = doc.createTextNode(a->useString());
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TIME");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->time()));
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("AMOUNT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->amount()));
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("AMOUNT_IS_WEIGHT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->amountIsWeight()));
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("USE_FOR");
    tmpText = doc.createTextNode(a->useFor());
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("NOTES");
    tmpText = doc.createTextNode(a->notes());
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
-   
+
    parent.appendChild(miscNode);
 }
 
@@ -2943,55 +3042,55 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    QDomElement recipeNode;
    QDomElement tmpNode;
    QDomText tmpText;
-   
+
    int i;
-   
+
    recipeNode = doc.createElement("RECIPE");
-   
+
    tmpNode = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TYPE");
    tmpText = doc.createTextNode(a->type());
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    Style* style = a->style();
    if( style != 0 )
       toXml( style, doc, recipeNode);
-   
+
    tmpNode = doc.createElement("BREWER");
    tmpText = doc.createTextNode(a->brewer());
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("BATCH_SIZE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->batchSize_l()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("BOIL_SIZE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->boilSize_l()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("BOIL_TIME");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->boilTime_min()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("EFFICIENCY");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->efficiency_pct()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("HOPS");
    QList<Hop*> hops = a->hops();
    for( i = 0; i < hops.size(); ++i )
@@ -3003,29 +3102,29 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    for( i = 0; i < ferms.size(); ++i )
       toXml( ferms[i], doc, tmpNode);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("MISCS");
    QList<Misc*> miscs = a->miscs();
    for( i = 0; i < miscs.size(); ++i )
       toXml( miscs[i], doc, tmpNode);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("YEASTS");
    QList<Yeast*> yeasts = a->yeasts();
    for( i = 0; i < yeasts.size(); ++i )
       toXml( yeasts[i], doc, tmpNode);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("WATERS");
    QList<Water*> waters = a->waters();
    for( i = 0; i < waters.size(); ++i )
       toXml( waters[i], doc, tmpNode);
    recipeNode.appendChild(tmpNode);
-   
+
    Mash* mash = a->mash();
    if( mash != 0 )
       toXml( mash, doc, recipeNode);
-   
+
    tmpNode = doc.createElement("INSTRUCTIONS");
    QList<Instruction*> instructions = a->instructions();
    for( i = 0; i < instructions.size(); ++i )
@@ -3042,116 +3141,116 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    tmpText = doc.createTextNode(a->asstBrewer());
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    Equipment* equip = a->equipment();
    if( equip )
       toXml( equip, doc, recipeNode);
-   
+
    tmpNode = doc.createElement("NOTES");
    tmpText = doc.createTextNode(a->notes());
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TASTE_NOTES");
    tmpText = doc.createTextNode(a->tasteNotes());
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TASTE_RATING");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tasteRating()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("OG");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->og()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("FG");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->fg()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("FERMENTATION_STAGES");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->fermentationStages()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("PRIMARY_AGE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->primaryAge_days()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("PRIMARY_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->primaryTemp_c()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("SECONDARY_AGE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->secondaryAge_days()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("SECONDARY_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->secondaryTemp_c()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TERTIARY_AGE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tertiaryAge_days()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("TERTIARY_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tertiaryTemp_c()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("AGE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->age_days()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("AGE_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->ageTemp_c()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("DATE");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->date()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("CARBONATION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->carbonation_vols()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("FORCED_CARBONATION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->forcedCarbonation()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("PRIMING_SUGAR_NAME");
    tmpText = doc.createTextNode(a->primingSugarName());
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("CARBONATION_TEMP");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->carbonationTemp_c()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("PRIMING_SUGAR_EQUIV");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->primingSugarEquiv()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    tmpNode = doc.createElement("KEG_PRIMING_FACTOR");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->kegPrimingFactor()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
-   
+
    parent.appendChild(recipeNode);
 }
 
@@ -3354,12 +3453,12 @@ void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
    QDomText tmpText;
 
    yeastNode = doc.createElement("YEAST");
-   
+
    tmpElement = doc.createElement("NAME");
    tmpText = doc.createTextNode(a->name());
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
-   
+
    tmpElement = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpElement.appendChild(tmpText);
@@ -3463,14 +3562,14 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
          Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-      
+
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-      
+
       xmlTag = node.nodeName();
       textNode = child.toText();
-       
+
       if( xmlTagsToProperties.contains(xmlTag) )
       {
          switch( element->metaProperty(xmlTagsToProperties[xmlTag]).type() )
@@ -3519,7 +3618,7 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
 
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
-   BrewNote* ret = newBrewNote(parent);  
+   BrewNote* ret = newBrewNote(parent);
 
    // Need to tell the brewnote not to perform the calculations
    ret->setLoading(true);
@@ -3533,8 +3632,8 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
    // When loading from XML, we need to delay the signals until after
    // everything is done. This should significantly speed up the load times
-   blockSignals(true); 
-   
+   blockSignals(true);
+
    Equipment* ret;
    QList<Equipment*> matchingEquips;
    QDomNode n;
@@ -3546,9 +3645,9 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
       // Check to see if there is a hop already in the DB with the same name.
       n = node.firstChildElement("NAME");
       QString name = n.firstChild().toText().nodeValue();
-      
+
       getElements<Equipment>( matchingEquips, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
-      
+
       if( matchingEquips.length() > 0 )
       {
          createdNew = false;
@@ -3559,7 +3658,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    }
    else
       ret = newEquipment();
-   
+
    fromXml( ret, Equipment::tagToProp, node );
 
    // If we are importing one of our beerXML files, the utilization is always
@@ -3579,7 +3678,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
       emit changed( metaProperty("equipments"), QVariant() );
       emit newEquipmentSignal(ret);
    }
-   
+
    return ret;
 }
 
@@ -3589,7 +3688,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    Fermentable* ret;
    bool createdNew = true;
    blockSignals(true);
-   
+
    // If we are just importing a hop by itself, need to do some dupe-checking.
    if( parent == 0 )
    {
@@ -3598,7 +3697,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
       QString name = n.firstChild().toText().nodeValue();
       QList<Fermentable*> matchingFerms;
       getElements<Fermentable>( matchingFerms, QString("name='%1'").arg(name), Brewtarget::FERMTABLE, allFermentables );
-      
+
       if( matchingFerms.length() > 0 )
       {
          createdNew = false;
@@ -3609,10 +3708,10 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    }
    else
       ret = newFermentable();
-   
+
    fromXml( ret, Fermentable::tagToProp, node );
 
-   
+
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
    if ( n.firstChild().isNull() )
@@ -3693,7 +3792,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
    QDomNode n;
    Hop* ret;
    bool createdNew = true;
-   blockSignals(true); 
+   blockSignals(true);
 
    // If we are just importing a hop by itself, need to do some dupe-checking.
    if( parent == 0 )
@@ -3703,7 +3802,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
       QString name = n.firstChild().toText().nodeValue();
       QList<Hop*> matchingHops;
       getElements<Hop>( matchingHops, QString("name='%1'").arg(name), Brewtarget::HOPTABLE, allHops );
-      
+
       if( matchingHops.length() > 0 )
       {
          createdNew = false;
@@ -3714,9 +3813,9 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
    }
    else
       ret = newHop();
-   
+
    fromXml( ret, Hop::tagToProp, node );
-  
+
    // Handle enums separately.
    n = node.firstChildElement("USE");
    if ( n.firstChild().isNull() )
@@ -3766,12 +3865,12 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent )
 {
 
-   blockSignals(true); 
+   blockSignals(true);
    Instruction* ret = newInstruction(parent);
-   
+
    fromXml( ret, Instruction::tagToProp, node );
 
-   blockSignals(false); 
+   blockSignals(false);
    emit changed( metaProperty("instructions"), QVariant() );
    return ret;
 }
@@ -3780,33 +3879,33 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
 
-   blockSignals(true); 
+   blockSignals(true);
    Mash* ret;
 
    // Mashes are weird. We need to know if this is a duplicate, but we need to
-   // make a copy of it anyway. 
+   // make a copy of it anyway.
    n = node.firstChildElement("NAME");
    QString name = n.firstChild().toText().nodeValue();
-   
+
    if( parent )
       ret = newMash(parent);
    else
       ret = newMash();
-  
-   // If the mash has a name 
+
+   // If the mash has a name
    if ( ! name.isEmpty() )
    {
       QList<Mash*> matchingMash;
       getElements<Mash>( matchingMash, QString("name='%1'").arg(name), Brewtarget::MASHTABLE, allMashs );
-     
-      // If there are no other matches in the database 
+
+      // If there are no other matches in the database
       if( matchingMash.isEmpty() )
          ret->setDisplay(true);
    }
    // First, get all the standard properties.
    fromXml( ret, Mash::tagToProp, node );
 
-   // Now, get the individual mash steps. 
+   // Now, get the individual mash steps.
    n = node.firstChildElement("MASH_STEPS");
    if( n.isNull() )
       return ret;
@@ -3819,7 +3918,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
          ret->invalidate();
    }
 
-   blockSignals(false); 
+   blockSignals(false);
 
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(ret);
@@ -3835,22 +3934,22 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    bool blocked = signalsBlocked();
 
    if (! blocked )
-      blockSignals(true); 
+      blockSignals(true);
 
    MashStep* ret = newMashStep(parent);
    // I am only doing this on mashsteps because they cause all sorts of
    // expensive recalculations to happen
    ret->blockSignals(true);
-  
+
    fromXml(ret,MashStep::tagToProp,node);
-   
+
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
    if ( n.firstChild().isNull() )
       ret->invalidate();
    else {
       //Try to make sure incoming format matches
-      //e.g. convert INFUSION to Infusion 
+      //e.g. convert INFUSION to Infusion
       str = n.firstChild().toText().nodeValue();
       str = str.toLower();
       str[0] = str.at(0).toTitleCase();
@@ -3860,11 +3959,11 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
                        )
                     ) );
    }
-  
+
    ret->blockSignals(false);
    if (! blocked )
    {
-      blockSignals(false); 
+      blockSignals(false);
       emit changed( metaProperty("mashs"), QVariant() );
       emit parent->mashStepsChanged();
    }
@@ -3928,9 +4027,9 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
    bool createdNew = true;
-   blockSignals(true); 
+   blockSignals(true);
    Misc* ret;
-   
+
    // If we are just importing a misc by itself, need to do some dupe-checking.
    if( parent == 0 )
    {
@@ -3939,7 +4038,7 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
       QString name = n.firstChild().toText().nodeValue();
       QList<Misc*> matchingMiscs;
       getElements<Misc>( matchingMiscs, QString("name='%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
-      
+
       if( matchingMiscs.length() > 0 )
       {
          createdNew = false;
@@ -3950,9 +4049,9 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    }
    else
       ret = newMisc();
-   
+
    fromXml( ret, Misc::tagToProp, node );
-   
+
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
    // Assuming these return anything is a bad idea. So far, several other brewing programs are not generating
@@ -3967,7 +4066,7 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
       ret->invalidate();
    else
       ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
-   
+
    if ( ! ret->isValid() )
    {
       QString name = ret->name();
@@ -4004,24 +4103,24 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 
    // Don't create a new mash -- we do that later
    Recipe* ret = newRecipe(false);
- 
+
    // Get standard properties.
    fromXml( ret, Recipe::tagToProp, node);
-   
+
    // Get style. Note: styleFromXml requires the entire node, not just the
    // firstchild of the node.
    n = node.firstChildElement("STYLE");
    styleFromXml(n, ret);
    if ( ! ret->style()->isValid())
       ret->invalidate();
-   
+
    // Get equipment. equipmentFromXml requires the entire node, not just the
    // first child
    n = node.firstChildElement("EQUIPMENT");
    equipmentFromXml(n, ret);
    if ( !ret->equipment()->isValid() )
       ret->invalidate();
-   
+
    // Get hops.
    n = node.firstChildElement("HOPS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -4030,7 +4129,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       if ( ! temp->isValid() )
          ret->invalidate();
    }
-   
+
    // Get ferms.
    n = node.firstChildElement("FERMENTABLES");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -4039,7 +4138,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       if ( ! temp->isValid() )
          ret->invalidate();
    }
-   
+
    // get mashes. There is only one mash per recipe, so this needs the entire
    // node.
    n = node.firstChildElement("MASH");
@@ -4055,7 +4154,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       if (! temp->isValid())
          ret->invalidate();
    }
-   
+
    // Get yeasts.
    n = node.firstChildElement("YEASTS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -4064,7 +4163,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       if ( !temp->isValid() )
          ret->invalidate();
    }
-   
+
    // Get waters. Odd. Waters don't invalidate.
    n = node.firstChildElement("WATERS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -4097,7 +4196,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
    bool createdNew = true;
-   blockSignals(true); 
+   blockSignals(true);
    Style* ret;
    QString name;
    QList<Style*> matching;
@@ -4109,7 +4208,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
       n = node.firstChildElement("NAME");
       name = n.firstChild().toText().nodeValue();
       getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
-      
+
       if( matching.length() > 0 )
       {
          createdNew = false;
@@ -4120,7 +4219,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    }
    else
       ret = newStyle();
-   
+
    fromXml( ret, Style::tagToProp, node );
 
    // Handle enums separately.
@@ -4162,11 +4261,11 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
 Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 {
-   blockSignals(true); 
+   blockSignals(true);
    bool createdNew = true;
    Water* ret;
    QDomNode n;
-   
+
    // If we are just importing a style by itself, need to do some dupe-checking.
    if( parent == 0 )
    {
@@ -4175,7 +4274,7 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
       QString name = n.firstChild().toText().nodeValue();
       QList<Water*> matching;
       getElements<Water>( matching, QString("name='%1'").arg(name), Brewtarget::WATERTABLE, allWaters );
-      
+
       if( matching.length() > 0 )
       {
          createdNew = false;
@@ -4186,7 +4285,7 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
    }
    else
       ret = newWater();
-   
+
    fromXml( ret, Water::tagToProp, node );
    if( parent )
       addToRecipe( parent, ret, true );
@@ -4197,7 +4296,7 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
       emit changed( metaProperty("waters"), QVariant() );
       emit newWaterSignal(ret);
    }
-   
+
    return ret;
 }
 
@@ -4209,7 +4308,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    Yeast* ret;
    QString name;
    QList<Yeast*> matching;
-   
+
    // If we are just importing a yeast by itself, need to do some dupe-checking.
    if( parent == 0 )
    {
@@ -4217,7 +4316,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
       n = node.firstChildElement("NAME");
       name = n.firstChild().toText().nodeValue();
       getElements<Yeast>( matching, QString("name='%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
-      
+
       if( matching.length() > 0 )
       {
          createdNew = false;
@@ -4228,7 +4327,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    }
    else
       ret = newYeast();
-   
+
    fromXml( ret, Yeast::tagToProp, node );
 
    // Handle enums separately.
@@ -4286,14 +4385,14 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
    if( parent )
       addToRecipe( parent, ret, true );
-   
+
    blockSignals(false);
    if( createdNew )
    {
       emit changed( metaProperty("yeasts"), QVariant() );
       emit newYeastSignal(ret);
    }
-   
+
    return ret;
 }
 
@@ -4323,7 +4422,7 @@ bool Database::cleanupBackupDatabase()
          QPushButton *restoreButton = messageBox.addButton(QObject::tr("Restore"), QMessageBox::AcceptRole);
          messageBox.addButton(QObject::tr("Rollback"), QMessageBox::RejectRole);
          messageBox.setDefaultButton(restoreButton);
-         
+
          // Display the message box.
          messageBox.exec();
 
@@ -4389,12 +4488,12 @@ bool Database::cleanupBackupDatabase()
 QList<TableParams> Database::makeTableParams()
 {
    typedef BeerXMLElement* (Database::*NewIngFunc)(void);
-   
+
    QList<TableParams> ret;
    TableParams tmp;
-   
+
    //=============================Equipment====================================
-   
+
    tmp.tableName = "equipment";
    tmp.propName = QStringList() <<
       "name" << "boil_size" << "batch_size" << "tun_volume" << "tun_weight" <<
@@ -4405,10 +4504,10 @@ QList<TableParams> Database::makeTableParams()
    tmp.newElement =
       (NewIngFunc) (Equipment*(Database::*)(void))
       &Database::newEquipment;
-   
+
    ret.append(tmp);
    //==============================Fermentables================================
-   
+
    tmp.tableName = "fermentable";
    tmp.propName = QStringList() <<
       "name" << "ftype" << "amount" << "yield" << "color" <<
@@ -4419,7 +4518,7 @@ QList<TableParams> Database::makeTableParams()
       (NewIngFunc)
       (Fermentable*(Database::*)(void))
       &Database::newFermentable;
-   
+
    //==============================Hops=============================
    tmp.tableName = "hop";
    tmp.propName = QStringList() <<
@@ -4432,11 +4531,11 @@ QList<TableParams> Database::makeTableParams()
       (NewIngFunc)
       (Hop*(Database::*)(void))
       &Database::newHop;
-   
+
    ret.append(tmp);
-   
+
    //==================================Miscs===================================
-   
+
    tmp.tableName = "misc";
    tmp.propName = QStringList() <<
       "name" << "mtype" << "use" << "time" << "amount" << "amount_is_weight" <<
@@ -4445,10 +4544,10 @@ QList<TableParams> Database::makeTableParams()
       (NewIngFunc)
       (Misc*(Database::*)(void))
       &Database::newMisc;
-   
+
    ret.append(tmp);
    //==================================Styles==================================
-   
+
    tmp.tableName = "style";
    tmp.propName = QStringList() <<
       "name" << "s_type" << "category" << "category_number" <<
@@ -4460,11 +4559,11 @@ QList<TableParams> Database::makeTableParams()
       (NewIngFunc)
       (Style*(Database::*)(void))
       &Database::newStyle;
-   
+
    ret.append(tmp);
-   
+
    //==================================Yeasts==================================
-   
+
    tmp.tableName = "yeast";
    tmp.propName = QStringList() <<
       "name" << "ytype" << "form" << "amount" << "amount_is_weight" <<
@@ -4475,11 +4574,11 @@ QList<TableParams> Database::makeTableParams()
       (NewIngFunc)
       (Yeast*(Database::*)(void))
       &Database::newYeast;
-   
+
    ret.append(tmp);
-   
+
    //===================================Waters=================================
-   
+
    tmp.tableName = "water";
    tmp.propName = QStringList() <<
       "name" << "amount" << "calcium" << "bicarbonate" << "sulfate" <<
@@ -4488,9 +4587,9 @@ QList<TableParams> Database::makeTableParams()
       (NewIngFunc)
       (Water*(Database::*)(void))
       &Database::newWater;
-   
+
    ret.append(tmp);
-   
+
    return ret;
 }
 
@@ -4501,7 +4600,7 @@ void Database::updateDatabase(QString const& filename)
 
    QVariant btid, newid, oldid;
    QVariant zero(0);
-   
+
    QList<QVariant> propVal;
    QStringList varAndHolder;
 
@@ -4516,18 +4615,18 @@ void Database::updateDatabase(QString const& filename)
                             QString(QObject::tr("Failed to open the database '%1'.").arg(filename)));
       return;
    }
-   
+
    // This is the basic gist...
    // For each (id, hop_id) in newSqldb.bt_hop...
-   
+
    // Call this newRecord
    // SELECT * FROM newSqldb.hop WHERE id=<hop_id>
-   
+
    // UPDATE hop SET name=:name, alpha=:alpha,... WHERE id=(SELECT hop_id FROM bt_hop WHERE id=:bt_id)
-   
+
    // Bind :bt_id from <id>
    // Bind :name, :alpha, ..., from newRecord.
-   
+
    // Execute.
 
    foreach( TableParams tp, tableParams)
@@ -4535,43 +4634,43 @@ void Database::updateDatabase(QString const& filename)
       QSqlQuery qNewBtIng(
          QString("SELECT * FROM bt_%1").arg(tp.tableName),
          newSqldb );
-                  
+
       QSqlQuery qNewIng( newSqldb );
       qNewIng.prepare(QString("SELECT * FROM %1 WHERE id=:id").arg(tp.tableName));
-      
+
       // Construct the big update query.
       QSqlQuery qUpdateOldIng( sqlDatabase() );
       QString updateString = QString("UPDATE %1 SET ").arg(tp.tableName);
       varAndHolder.clear();
       foreach( QString pn, tp.propName)
-         varAndHolder.append(QString("`%1`=:%2").arg(pn).arg(pn));
+         varAndHolder.append(QString("%1=:%2").arg(pn).arg(pn));
       updateString.append(varAndHolder.join(", "));
       // Un-delete it if it is somehow deleted.
-      updateString.append(", `deleted`=:zero WHERE `id`=:id");
+      updateString.append(", deleted=:zero WHERE id=:id");
       qUpdateOldIng.prepare(updateString);
       qUpdateOldIng.bindValue( ":zero", zero );
-      
+
       QSqlQuery qOldBtIng( sqlDatabase() );
       qOldBtIng.prepare(
-         QString("SELECT * FROM bt_%1 WHERE `id`=:btid").arg(tp.tableName) );
-      
+         QString("SELECT * FROM bt_%1 WHERE id=:btid").arg(tp.tableName) );
+
       QSqlQuery qOldBtIngInsert( sqlDatabase() );
       qOldBtIngInsert.prepare(
-         QString("INSERT INTO bt_%1 `id`=:id `%2_id`=:%3_id")
+         QString("INSERT INTO bt_%1 id=:id %2_id=:%3_id")
             .arg(tp.tableName)
             .arg(tp.tableName)
             .arg(tp.tableName) );
-      
+
       // Resize propVal appropriately for current table.
       propVal.clear();
       foreach( QString pn, tp.propName )
          propVal.append(QVariant());
-      
+
       while( qNewBtIng.next() )
       {
          btid = qNewBtIng.record().value("id");
          newid = qNewBtIng.record().value(QString("%1_id").arg(tp.tableName));
-         
+
          qNewIng.bindValue(":id", newid);
          qNewIng.exec();
          if( !qNewIng.next() )
@@ -4579,7 +4678,7 @@ void Database::updateDatabase(QString const& filename)
             Brewtarget::logE(QString("Oops. %1").arg(qNewIng.lastError().text()));
             return;
          }
-         
+
          QList<QVariant>::iterator it = propVal.begin();
          foreach( QString pn, tp.propName )
          {
@@ -4591,23 +4690,23 @@ void Database::updateDatabase(QString const& filename)
                *it );
             ++it;
          }
-         
+
          // Done retrieving new ingredient data.
          qNewIng.finish();
-         
+
          // Find the bt_<ingredient> record in the local table.
          qOldBtIng.bindValue( ":btid", btid );
          qOldBtIng.exec();
-         
+
          // If the btid exists in the old bt_hop table, do an update.
          if( qOldBtIng.next() )
          {
             oldid = qOldBtIng.record().value(
                QString("%1_id").arg(tp.tableName) );
             qOldBtIng.finish();
-            
+
             qUpdateOldIng.bindValue( ":id", oldid );
-            
+
             qUpdateOldIng.exec();
             if( qUpdateOldIng.lastError().isValid() )
             {
@@ -4631,7 +4730,7 @@ void Database::updateDatabase(QString const& filename)
                   QString("Database::updateDatabase(): %1")
                   .arg(qUpdateOldIng.lastError().text()) );
             }
-            
+
             // Insert an entry into our bt_<ingredient> table.
             qOldBtIngInsert.bindValue( ":id", btid );
             qOldBtIngInsert.bindValue( QString(":%1_id").arg(tp.tableName), oldid );
