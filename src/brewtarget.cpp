@@ -86,6 +86,7 @@ QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:
 
 QString Brewtarget::currentLanguage = "en";
 QDir Brewtarget::userDataDir = getConfigDir();
+Brewtarget::DBTypes Brewtarget::_dbType = Brewtarget::SQLITE;
 
 bool Brewtarget::checkVersion = true;
 Log Brewtarget::log(true);
@@ -512,6 +513,41 @@ bool Brewtarget::initialize(const QString &userDirectory)
       return false;
 }
 
+Brewtarget::DBTypes Brewtarget::dbType() { return _dbType; }
+QString Brewtarget::dbTrue()
+{
+   QString retval;
+
+   switch( _dbType ) {
+      case SQLITE:
+         retval = "1";
+         break;
+      case PGSQL:
+         retval = "true";
+         break;
+      default:
+         retval = "whiskeytangofoxtrot";
+   }
+   return retval;
+}
+
+QString Brewtarget::dbFalse()
+{
+   QString retval;
+
+   switch( _dbType ) {
+      case SQLITE:
+         retval = "0";
+         break;
+      case PGSQL:
+         retval = "false";
+         break;
+      default:
+         retval = "notwhiskeytangofoxtrot";
+   }
+   return retval;
+}
+
 void Brewtarget::cleanup()
 {
    log.info("Brewtarget is cleaning up.");
@@ -903,6 +939,10 @@ void Brewtarget::readSystemOptions()
 
    //=======================Date format===================
    dateFormat = (Unit::unitDisplay)option("date_format",Unit::displaySI).toInt();
+
+   //=======================Database type ================
+   _dbType = (Brewtarget::DBTypes)option("dbType",Brewtarget::SQLITE).toInt();
+
 }
 
 void Brewtarget::saveSystemOptions()

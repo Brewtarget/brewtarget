@@ -78,12 +78,6 @@ QString Database::dbHostname;
 QString Database::dbPortnum;
 QString Database::dbUsername;
 QString Database::dbPassword;
-bool Database::usingPg;
-
-QString Database::notDeletedFilter;
-QString Database::deletedFilter;
-QString Database::notDisplayedFilter;
-QString Database::displayedFilter;
 
 QFile Database::dbFile;
 QString Database::dbFileName;
@@ -148,12 +142,6 @@ bool Database::loadSQLite(QSqlDatabase sqldb)
    dataDbFile.setFileName(dataDbFileName);
    dbTempBackupFile.setFileName(dbTempBackupFileName);
 
-   // Set the filter(s)
-   notDeletedFilter = "deleted=0";
-   deletedFilter = "deleted=1";
-   notDisplayedFilter = "display=0";
-   displayedFilter = "display=1";
-
    // Cleanup the backup database if there was a previous error.
    if( !cleanupBackupDatabase() )
       return false;
@@ -176,9 +164,7 @@ bool Database::loadSQLite(QSqlDatabase sqldb)
       Brewtarget::userDatabaseDidNotExist = true;
 
       // Have to wait until db is open before creating from scratch.
-      if( !dataDbFile.exists() )
-         createFromScratch = true;
-      else
+      if( dataDbFile.exists() )
       {
          dataDbFile.copy(dbFileName);
          QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
@@ -197,48 +183,53 @@ bool Database::loadSQLite(QSqlDatabase sqldb)
    dbIsOpen = sqldb.open();
    dbConName = sqldb.connectionName();
 
-  if( ! dbIsOpen )
-  {
-    Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
-    QMessageBox::critical(0,
-                          QObject::tr("Database Failure"),
-                          QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname)));
-  }
+   if( ! dbIsOpen )
+   {
+      Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
+      QMessageBox::critical(0,
+                              QObject::tr("Database Failure"),
+                              QString(QObject::tr("Failed to open the database '%1'.").arg(dbFileName))
+                           );
+   }
+   else
+   {
+      // NOTE: synchronous=off reduces query time by an order of magnitude!
+      QSqlQuery( "PRAGMA synchronous = off", sqldb);
+      QSqlQuery( "PRAGMA foreign_keys = on", sqldb);
+      QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqldb);
+      // Store temporary tables in memory.
+      QSqlQuery( "PRAGMA temp_store = MEMORY", sqldb);
+   }
    return dbIsOpen;
 }
 
 bool Database::loadPgSQL(QSqlDatabase sqldb)
 {
-  bool dbIsOpen;
+   bool dbIsOpen;
 
-  dbHostname = Brewtarget::option("dbHostname").toString();
-  dbPortnum  = Brewtarget::option("dbPortnum").toString();
-  dbUsername = Brewtarget::option("dbUsername").toString();
-  // Yeah, this is a bad idea. Please make this anything other than this before rolling this out
-  dbPassword = Brewtarget::option("dbPassword").toString();
+   dbHostname = Brewtarget::option("dbHostname").toString();
+   dbPortnum  = Brewtarget::option("dbPortnum").toString();
+   dbUsername = Brewtarget::option("dbUsername").toString();
+   // Yeah, this is a bad idea. Please make this anything other than this before rolling this out
+   dbPassword = Brewtarget::option("dbPassword").toString();
 
-  sqldb = QSqlDatabase::addDatabase("QPSQL");
-  sqldb.setHostName( dbHostname );
-  sqldb.setDatabaseName("brewtarget");
-  sqldb.setUserName( dbUsername );
-  sqldb.setPort(dbPortnum.toInt());
-  sqldb.setPassword(dbPassword);
+   sqldb = QSqlDatabase::addDatabase("QPSQL");
+   sqldb.setHostName( dbHostname );
+   sqldb.setDatabaseName("brewtarget");
+   sqldb.setUserName( dbUsername );
+   sqldb.setPort(dbPortnum.toInt());
+   sqldb.setPassword(dbPassword);
 
-  dbIsOpen = sqldb.open();
-  dbConName = sqldb.connectionName();
-
-   // Set the filter(s)
-   notDeletedFilter = "deleted=false";
-   deletedFilter = "deleted=true";
-   notDisplayedFilter = "display=false";
-   displayedFilter = "display=true";
+   dbIsOpen = sqldb.open();
+   dbConName = sqldb.connectionName();
 
    if( ! dbIsOpen )
    {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
       QMessageBox::critical(0,
-                          QObject::tr("Database Failure"),
-                          QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname)));
+                            QObject::tr("Database Failure"),
+                            QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname))
+                           );
    }
    return dbIsOpen;
 }
@@ -251,19 +242,13 @@ bool Database::load()
    createFromScratch=false;
    schemaUpdated=false;
 
-   usingPg = Brewtarget::hasOption("dbHostname");
-
-   qDebug() << Brewtarget::hasOption("dbHostname");
-   qDebug() << Brewtarget::option("dbHostname", "localhost");
-   if ( usingPg )
+   // UGH! ALREADY NEEDS REWORK. HATE MY LIFE
+   if ( Brewtarget::dbType() == Brewtarget::PGSQL )
    {
-      qDebug() << "Loading PgSQL";
       dbIsOpen = loadPgSQL(sqldb);
-      qDebug() << "Loaded PgSQL successfully";
    }
    else
    {
-      qDebug() << "Loading SQLite";
       dbIsOpen = loadSQLite(sqldb);
    }
    if ( ! dbIsOpen )
@@ -273,24 +258,24 @@ bool Database::load()
    _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
    _threadToConnectionMutex.unlock();
 
-   if ( ! usingPg )
+   // Database is open, so can create from scratch if needed
+   // This should work regardless of the db being used. I hope.
+   qDebug() << Q_FUNC_INFO << sqldb.tables(QSql::Tables);
+   qDebug() << Q_FUNC_INFO << sqldb.primaryIndex("settings").name();
+
+   if( ! sqldb.tables().contains(QLatin1String("settings")) )
    {
-      // Database is open, so can create from scratch if needed
-      if(createFromScratch)
-      {
-          bool success = DatabaseSchemaHelper::create(sqldb);
-          if( !success )
+         bool success = DatabaseSchemaHelper::create(sqldb);
+         if( !success )
+         {
             Brewtarget::logE("DatabaseSchemaHelper::create() failed");
-      }
+            return success;
+         }
+   }
 
-
-      // NOTE: synchronous=off reduces query time by an order of magnitude!
-      QSqlQuery( "PRAGMA synchronous = off", sqlDatabase());
-      QSqlQuery( "PRAGMA foreign_keys = on", sqlDatabase());
-      QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqlDatabase());
-      // Store temporary tables in memory.
-      QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
-
+   // Mostly because I don't have everything translated yet
+   if ( Brewtarget::dbType() == Brewtarget::SQLITE )
+   {
       // Update the database if need be. This has to happen before we do anything
       // else or we dump core
       bool schemaErr = false;
@@ -397,6 +382,7 @@ bool Database::load()
    // It SHOULD be saved if the schema was updated.
    dirty = createFromScratch | schemaUpdated;
    emit isUnsavedChanged(dirty);
+
    return true;
 }
 
@@ -498,7 +484,7 @@ QSqlDatabase Database::sqlDatabase()
    QString conName = QString("0x%1").arg(reinterpret_cast<uintptr_t>(t), 0, 16);
 
    // Create the new connection.
-   if ( usingPg )
+   if ( Brewtarget::dbType() == Brewtarget::PGSQL )
    {
       sqldb = QSqlDatabase::addDatabase("QPSQL",conName);
    }
@@ -525,7 +511,7 @@ void Database::unload(bool keepChanges)
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
-   if ( ! usingPg ) 
+   if ( Brewtarget::dbType() == Brewtarget::SQLITE )
    {
       if (!loadWasSuccessful || keepChanges)
       {
@@ -640,7 +626,7 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
 {
    // Just mark the brew note as deleted.
    sqlUpdate( Brewtarget::BREWNOTETABLE,
-              deletedFilter,
+              QString("deleted = %1").arg(Brewtarget::dbTrue()),
               QString("id=%1").arg(b->_key) );
    makeDirty();
    emit deletedBrewNoteSignal(b);
@@ -695,7 +681,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
 {
    // Just mark the step as deleted.
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              deletedFilter,
+              QString("deleted = %1").arg(Brewtarget::dbTrue()),
               QString("id=%1").arg(step->_key) );
    // emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
    makeDirty();
@@ -797,7 +783,7 @@ void Database::insertInstruction(Instruction* in, int pos)
 QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 {
    QList<BrewNote*> ret;
-   QString filterString = QString("recipe_id = %1 AND %2").arg(parent->_key).arg(notDeletedFilter);
+   QString filterString = QString("recipe_id = %1 AND deleted = %2").arg(parent->_key).arg(Brewtarget::dbFalse());
 
    getElements(ret, filterString, Brewtarget::BREWNOTETABLE, allBrewNotes);
 
@@ -885,7 +871,7 @@ Mash* Database::mash( Recipe const* parent )
 QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
-   QString filterString = QString("mash_id = %1 AND %2").arg(parent->_key).arg(notDeletedFilter);
+   QString filterString = QString("mash_id = %1 AND deleted = %2").arg(parent->_key).arg(Brewtarget::dbFalse());
 
    getElements(ret, filterString, Brewtarget::MASHSTEPTABLE, allMashSteps);
 
@@ -986,9 +972,9 @@ int Database::insertNewMashStepRecord( Mash* parent )
             );
    // Just sets the step number within the mash to the next available number.
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString( "step_number = (SELECT IFNULL(MAX(step_number)+1,0) FROM %1 WHERE %2 AND mash_id=%3 )")
+              QString( "step_number = (SELECT IFNULL(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
                       .arg(tableNames[Brewtarget::MASHSTEPTABLE])
-                      .arg(notDeletedFilter)
+                      .arg(Brewtarget::dbFalse())
                       .arg(parent->_key),
               QString("id=%1").arg(key)
             );
@@ -1685,21 +1671,24 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
    QSqlQuery nameq( queryString, sqlDatabase() );
    while (nameq.next()) {
       QString name = nameq.record().value(0).toString();
-      queryString = QString(
-         "SELECT id FROM %1 WHERE ( name='%2' AND %3 ) ORDER BY id ASC LIMIT 1"
-      ).arg(tableNames[table]).arg(name).arg(displayedFilter);
+      queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC LIMIT 1")
+                    .arg(tableNames[table])
+                    .arg(name)
+                    .arg(Brewtarget::dbTrue());
       QSqlQuery parentq( queryString, sqlDatabase() );
       parentq.first();
       QString parentID = parentq.record().value("id").toString();
-      queryString = QString(
-         "SELECT id FROM %1 WHERE ( name='%2' AND %3 ) ORDER BY id ASC"
-      ).arg(tableNames[table]).arg(name).arg(displayedFilter);
+      queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC")
+                    .arg(tableNames[table])
+                    .arg(name)
+                    .arg(Brewtarget::dbTrue());
       QSqlQuery childrenq( queryString, sqlDatabase() );
       while (childrenq.next()) {
          QString childID = childrenq.record().value("id").toString();
-         queryString = QString(
-            "INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)"
-         ).arg(tableNames[tableToChildTable[table]]).arg(parentID).arg(childID);
+         queryString = QString("INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)")
+                       .arg(tableNames[tableToChildTable[table]])
+                       .arg(parentID)
+                       .arg(childID);
          QSqlQuery insertq( queryString, sqlDatabase() );
       }
    }
@@ -2101,28 +2090,28 @@ QList<BrewNote*> Database::brewNotes()
 {
    QList<BrewNote*> tmp;
 
-   getElements( tmp, notDeletedFilter, Brewtarget::BREWNOTETABLE, allBrewNotes );
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::BREWNOTETABLE, allBrewNotes );
    return tmp;
 }
 
 QList<Equipment*> Database::equipments()
 {
    QList<Equipment*> tmp;
-   getElements( tmp, notDeletedFilter, Brewtarget::EQUIPTABLE, allEquipments);
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::EQUIPTABLE, allEquipments);
    return tmp;
 }
 
 QList<Fermentable*> Database::fermentables()
 {
    QList<Fermentable*> tmp;
-   getElements( tmp, notDeletedFilter, Brewtarget::FERMTABLE, allFermentables);
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::FERMTABLE, allFermentables);
    return tmp;
 }
 
 QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
-   getElements( tmp, notDeletedFilter, Brewtarget::HOPTABLE, allHops);
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::HOPTABLE, allHops);
    return tmp;
 }
 
@@ -2130,21 +2119,21 @@ QList<Mash*> Database::mashs()
 {
    QList<Mash*> tmp;
    //! Mashs and mashsteps are the odd balls.
-   getElements( tmp, notDeletedFilter, Brewtarget::MASHTABLE, allMashs);
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::MASHTABLE, allMashs);
    return tmp;
 }
 
 QList<MashStep*> Database::mashSteps()
 {
    QList<MashStep*> tmp;
-   getElements( tmp, notDeletedFilter, Brewtarget::MASHSTEPTABLE, allMashSteps);
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::MASHSTEPTABLE, allMashSteps);
    return tmp;
 }
 
 QList<Misc*> Database::miscs()
 {
    QList<Misc*> tmp;
-   getElements( tmp, notDeletedFilter, Brewtarget::MISCTABLE, allMiscs );
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::MISCTABLE, allMiscs );
    return tmp;
 }
 
@@ -2152,28 +2141,28 @@ QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
    // This is gonna kill me.
-   getElements( tmp, notDeletedFilter, Brewtarget::RECTABLE, allRecipes );
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::RECTABLE, allRecipes );
    return tmp;
 }
 
 QList<Style*> Database::styles()
 {
    QList<Style*> tmp;
-   getElements( tmp, notDeletedFilter, Brewtarget::STYLETABLE, allStyles );
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::STYLETABLE, allStyles );
    return tmp;
 }
 
 QList<Water*> Database::waters()
 {
    QList<Water*> tmp;
-   getElements( tmp, notDeletedFilter, Brewtarget::WATERTABLE, allWaters );
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::WATERTABLE, allWaters );
    return tmp;
 }
 
 QList<Yeast*> Database::yeasts()
 {
    QList<Yeast*> tmp;
-   getElements( tmp, notDeletedFilter, Brewtarget::YEASTTABLE, allYeasts );
+   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::YEASTTABLE, allYeasts );
    return tmp;
 }
 

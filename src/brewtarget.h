@@ -62,6 +62,7 @@ Q_DECLARE_METATYPE( QMetaProperty )
 class Brewtarget : public QObject
 {
    Q_OBJECT
+   Q_ENUMS(DBTypes)
 
    friend class OptionDialog;
    friend class IbuMethods;
@@ -142,6 +143,14 @@ public:
      //! In the Yeast Parent Child Relationship table. 20
       YEASTCHILDTABLE
 
+   };
+
+   //! \brief Supported databases. I am not 100% sure I'm digging this
+   //  solution, but this is more extensible than what I was doing previously
+   enum DBTypes {
+      NODB,    // seems a popular choice with the cool enums
+      SQLITE,  // compact, fast and a little loose
+      PGSQL    // big, powerful, uptight and a little stodgy
    };
 
    //! \return the data directory
@@ -300,6 +309,20 @@ public:
    static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
 
+   /*! 
+    * \brief If we are supporting multiple databases, we need some way to
+    * figure out which database we are using. I still don't know that this
+    * will be the final implementation -- I can't help but think I should be
+    * subclassing something
+    */
+   static Brewtarget::DBTypes dbType();
+   /*!
+    * \brief Different databases use different values for true and false.
+    * These two methods handle that difference, in a marginally extensible way
+    */
+   static QString dbTrue();
+   static QString dbFalse();
+
    //! \return the main window.
    static MainWindow* mainWindow();
 
@@ -315,6 +338,8 @@ private:
    static bool userDatabaseDidNotExist;
    static QFile pidFile;
 
+   static DBTypes _dbType;
+
    //! \brief If this option is false, do not bother the user about new versions.
    static bool checkVersion;
 
@@ -328,7 +353,6 @@ private:
 
    // Options to be edited ONLY by the OptionDialog============================
    // Whether or not to display plato instead of SG.
-//   static bool usePlato;
 
    static iUnitSystem weightUnitSystem;
    static iUnitSystem volumeUnitSystem;

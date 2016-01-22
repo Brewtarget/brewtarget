@@ -60,6 +60,7 @@ private:
    static QString TYPEREAL;
    static QString TYPENUMERIC;
    static QString TYPEDATETIME;
+   static QString TYPEBOOLEAN;
    
    // ID string for EVERY table.
    static QString id;
@@ -344,4 +345,52 @@ private:
    
    //! \brief Current schema version of the given database
    static int currentVersion(QSqlDatabase db = QSqlDatabase());
+   static QString FOREIGNKEY( QString const& column, QString const& foreignTable );
+   static bool create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable);
+   void set_id();
+
+   //! brief These create the core tables, aka, the beerXML tables
+   static bool create_settings(QSqlQuery q);
+   static bool create_equipment(QSqlQuery q);
+   static bool create_fermentable(QSqlQuery q);
+   static bool create_hop(QSqlQuery q);
+   static bool create_misc(QSqlQuery q);
+   static bool create_style(QSqlQuery q);
+   static bool create_yeast(QSqlQuery q);
+   static bool create_water(QSqlQuery q);
+   static bool create_mash(QSqlQuery q);
+   static bool create_mashstep(QSqlQuery q);
+   static bool create_brewnote(QSqlQuery q);
+   static bool create_instruction(QSqlQuery q);
+   static bool create_recipe(QSqlQuery q);
+  
+   //! \brief This creates a relational table for a brewtarget ingredient or recipe
+   static bool create_btTable(QSqlQuery q, QString tableName, QString foreignTableName);
+   //! \brief This creates a relational table for things in recipes
+   static bool create_recipeChildTable(QSqlQuery q, QString tableName, QString foreignTableName);
+   //! \brief This creates a relational table for inventory
+   static bool create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName);
+
+   //! \brief Creating triggers is very DB specific. These isolate the
+   // specifics
+   static bool create_increment_trigger(QSqlQuery q);
+   static bool create_pgsql_increment_trigger(QSqlQuery q);
+   static bool create_sqlite_increment_trigger(QSqlQuery q);
+
+   static bool create_decrement_trigger(QSqlQuery q);
+   static bool create_pgsql_decrement_trigger(QSqlQuery q);
+   static bool create_sqlite_decrement_trigger(QSqlQuery q);
+
+   //! \brief These provide some convenience and reuse
+   static bool create_core(QSqlQuery q);
+   static bool create_btTables(QSqlQuery q);
+   static bool create_recipeChildren(QSqlQuery q);
+   static bool create_inventoryTables(QSqlQuery q);
+   static bool create_inheritenceTables(QSqlQuery q);
+
+   static bool migrate_to_202(QSqlQuery q);
+   static bool migrate_to_210(QSqlQuery q);
+   static bool migrate_to_4(QSqlQuery q);
+   static bool migrate_to_5(QSqlQuery q);
+   
 };

@@ -408,18 +408,13 @@ private:
    static QString dbTempBackupFileName;
    static QString dbConName;
 
-   // And these are for Postgres databases
+   // And these are for Postgres databases -- are these really required? Are
+   // the sqlite ones really required?
    static QString dbHostname;
    static QString dbPortnum;
    static QString dbUsername;
    static QString dbPassword;
-   // this is a pain -- sqlite uses 0/1 for boolean while pgsql uses
-   // false/true. There may be a better way, but I don't know what it is
-   static QString notDeletedFilter;
-   static QString deletedFilter;
-   static QString notDisplayedFilter;
-   static QString displayedFilter;
-
+   static QString dbName;
 
    static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
    static QHash<Brewtarget::DBTable,QString> tableNames;
@@ -444,7 +439,6 @@ private:
    bool dirty;
    bool createFromScratch;
    bool schemaUpdated;
-   static bool usingPg;
 
    // Don't know where to put this, so it goes here for right now
    bool loadSQLite(QSqlDatabase sqldb);

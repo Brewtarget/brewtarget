@@ -48,14 +48,15 @@ QString DatabaseSchemaHelper::TYPETEXT("TEXT");
 QString DatabaseSchemaHelper::TYPEREAL("REAL");
 QString DatabaseSchemaHelper::TYPENUMERIC("NUMERIC");
 QString DatabaseSchemaHelper::TYPEDATETIME("DATETIME");
+QString DatabaseSchemaHelper::TYPEBOOLEAN("DATETIME");
 
 QString DatabaseSchemaHelper::id("id " + TYPEINTEGER + " PRIMARY KEY autoincrement");
 QString DatabaseSchemaHelper::name("name " + TYPETEXT + " not null DEFAULT ''");
 QString DatabaseSchemaHelper::displayUnit("display_unit" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
 QString DatabaseSchemaHelper::displayScale("display_scale" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
 QString DatabaseSchemaHelper::displayTempUnit("display_temp_unit" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
-QString DatabaseSchemaHelper::deleted("deleted" + SEP + TYPEINTEGER + SEP + DEFAULT + " 0");
-QString DatabaseSchemaHelper::display("display" + SEP + TYPEINTEGER + SEP + DEFAULT + " 1");
+QString DatabaseSchemaHelper::deleted("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + Brewtarget::dbFalse());
+QString DatabaseSchemaHelper::display("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + Brewtarget::dbTrue());
 QString DatabaseSchemaHelper::folder("folder " + TYPETEXT + " DEFAULT ''");
 
 QString DatabaseSchemaHelper::tableSettings("settings");
@@ -197,7 +198,7 @@ QString DatabaseSchemaHelper::colMashStepInfTemp("infuse_temp");
 QString DatabaseSchemaHelper::colMashStepDecAmount("decoction_amount");
 QString DatabaseSchemaHelper::colMashStepMashId("mash_id");
 QString DatabaseSchemaHelper::colMashStepNumber("step_number");
-   
+
 // Brewnotes table
 QString DatabaseSchemaHelper::tableBrewnote("brewnote");
 QString DatabaseSchemaHelper::colBNoteBrewDate("brewDate");
@@ -325,23 +326,6 @@ QString DatabaseSchemaHelper::tableMiscInventory("misc_in_inventory");
 QString DatabaseSchemaHelper::tableYeastInventory("yeast_in_inventory");
 
 // Default namespace hides functions from everything outside this file.
-namespace {
-   
-   QString FOREIGNKEY( QString const& column, QString const& foreignTable )
-   {
-      return QString("FOREIGN KEY(%1) REFERENCES %2(id)").arg(column).arg(foreignTable);
-   }
-   
-   QString childrenTable( QString const& foreignTable )
-   {
-      return QString() +
-         "id INTEGER PRIMARY KEY autoincrement," +
-         "parent_id INTEGER," +
-         "child_id INTEGER," +
-         FOREIGNKEY("parent_id", foreignTable) + "," +
-         FOREIGNKEY("child_id", foreignTable);
-   }
-}
 
 bool DatabaseSchemaHelper::create(QSqlDatabase db)
 {
@@ -361,14 +345,144 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
    //                 be put into a recipe.
    //       display=0 means the ingredient is in a recipe already and should not
    //                 be shown in a list, available to be put into a recipe.
-   
+   // NOTE: This is order dependent. When using databases that actually
+   //       enforce constraints (not sqlite), anything with a foreign key has
+   //       to be created *after* what the foreign key references
+
    QSqlQuery q(db);
    bool ret = true;
-   
+
    // Start transaction
    bool hasTransaction = db.transaction();
-   
-   // Settings table
+
+   // Create the core (beerXML) tables
+   ret &= create_core(q);
+
+   // Create the bt relational tables
+   ret &= create_btTables(q);
+
+   // Recipe relational tables
+   ret &= create_recipeChildren(q);
+
+   // Triggers are still a pain
+   ret &= create_increment_trigger(q);
+   ret &= create_decrement_trigger(q);
+
+   // Ingredient inheritance tables============================================
+   ret &= create_inheritenceTables(q);
+
+   // Inventory tables=========================================================
+   ret &= create_inventoryTables(q);
+
+   // Commit transaction
+   if( hasTransaction )
+      ret &= db.commit();
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_202(QSqlQuery q)
+{
+   bool ret = true;
+
+   ret &= q.exec(
+      CREATETABLE + SEP + tableSettings + "(" +
+      id + "," +
+      colSettingsVersion + SEP + TYPETEXT +
+      ")"
+   );
+
+   // Add "projected_ferm_points" to brewnote table
+   ret &= q.exec(
+      ALTERTABLE + SEP + tableBrewnote + SEP +
+      ADDCOLUMN + SEP + "projected_ferm_points" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"
+   );
+
+   ret &= q.exec(
+      UPDATE + SEP + tableBrewnote + SEP +
+      SET + SEP + "projected_ferm_points = -1.0"
+   );
+
+   // Update version to 2.0.2
+   ret &= q.exec(
+      INSERTINTO + SEP + tableSettings + " VALUES(1,'2.0.2')"
+   );
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q)
+{
+   bool ret = true;
+   QStringList getFolders = QStringList() << tableEquipment << tableFermentable << tableHop <<
+      tableMisc << tableStyle << tableYeast << tableWater << tableMash <<
+      tableBrewnote << tableRecipe;
+
+   QStringList rebuildTables = QStringList() << tableEquipChildren << tableFermChildren <<
+      tableHopChildren << tableMiscChildren << tableRecChildren <<
+      tableStyleChildren << tableWaterChildren << tableYeastChildren <<
+      tableFermInventory << tableHopInventory << tableMiscInventory << tableYeastInventory;
+
+   foreach(const QString &table, getFolders)
+   {
+      ret &= q.exec(
+               ALTERTABLE + SEP + table + SEP +
+               ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
+            );
+   }
+
+   // Put the "Bt:.*" recipes into /brewtarget folder
+   ret &= q.exec(
+      UPDATE + SEP + tableRecipe + SEP +
+      SET + SEP + "folder='/brewtarget' WHERE name LIKE 'Bt:%'"
+   );
+
+   // Update version to 2.1.0
+   ret &= q.exec(
+      UPDATE + SEP + tableSettings + SEP +
+      SET + SEP + colSettingsVersion + "='2.1.0' WHERE id=1"
+   );
+
+   // Used to trigger the code to populate the ingredient inheritance tables
+   ret &= q.exec(
+      ALTERTABLE + SEP + tableSettings + SEP +
+      ADDCOLUMN + SEP + "repopulateChildrenOnNextStart" + SEP + TYPEINTEGER
+   );
+
+   ret &= q.exec(
+      UPDATE + SEP + tableSettings + SEP +
+      SET + SEP + "repopulateChildrenOnNextStart=1"
+   );
+
+   // Drop and re-create children tables with new UNIQUE requirement
+   // Drop and re-create inventory tables with new UNIQUE requirement
+   foreach(const QString &table, rebuildTables )
+   {
+      ret &= q.exec(
+         DROPTABLE + SEP + table
+      );
+   }
+   ret &= create_inheritenceTables(q);
+   ret &= create_inventoryTables(q);
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_4(QSqlQuery q)
+{
+   bool ret = true;
+
+   // Save old settings
+   ret &= q.exec(
+      "CREATE TEMP TABLE oldsettings AS SELECT * FROM " + tableSettings
+   );
+
+   // Drop the old settings with text version, and create new table
+   // with intever version.
+   ret &= q.exec(
+      DROPTABLE + SEP + tableSettings
+   );
+
    ret &= q.exec(
       CREATETABLE + SEP + tableSettings + "(" +
       id + "," +
@@ -376,12 +490,292 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       colSettingsRepopulateChildren + SEP + TYPEINTEGER +
       ")"
    );
+
+   // Update version to 4, saving other settings
+   ret &= q.exec(
+      INSERTINTO + SEP + tableSettings +
+      QString(" (id,%1,%2)").arg(colSettingsVersion).arg(colSettingsRepopulateChildren) + " " +
+      QString("SELECT 1, 4, %1 FROM oldsettings").arg(colSettingsRepopulateChildren)
+   );
+
+   // Cleanup
+   ret &= q.exec(
+      DROPTABLE + SEP + "oldsettings"
+   );
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q)
+{
+   bool ret = true;
+   // Drop the previous bugged TRIGGER
+   ret &= q.exec( QString() +
+      "DROP TRIGGER dec_ins_num"
+   );
+
+   // Create the good trigger
+   ret &= create_decrement_trigger(q);
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
+{
+   QSqlQuery q(db);
+   bool ret = true;
+
+   // NOTE: use this to debug your migration
+#define CHECKQUERY if(!ret) qDebug() << QString("ERROR: %1\nQUERY: %2").arg(q.lastError().text()).arg(q.lastQuery());
+
+   // NOTE: Add a new case when adding a new schema change
+   switch(oldVersion)
+   {
+      case 1: // == '2.0.0'
+         ret &= migrate_to_202(q);
+         break;
+
+      case 2: // == '2.0.2'
+         ret &= migrate_to_210(q);
+         break;
+
+      case 3: // == '2.1.0'
+         ret &= migrate_to_4(q);
+         break;
+
+      case 4:
+         ret &= migrate_to_5(q);
+         break;
+
+
+      default:
+         Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
+         return false;
+   }
+
+   // Set the database version
+   if( oldVersion > 3 )
+   {
+      ret &= q.exec(
+         UPDATE + SEP + tableSettings +
+         " SET " + colSettingsVersion + "=" + QString::number(oldVersion+1) + " WHERE id=1"
+      );
+   }
+
+   return ret;
+#undef CHECKQUERY
+}
+
+bool DatabaseSchemaHelper::migrate(int oldVersion, int newVersion, QSqlDatabase db)
+{
+   if( oldVersion >= newVersion || newVersion > dbVersion )
+   {
+      qDebug() << QString("DatabaseSchemaHelper::migrate(%1, %2): You are an imbecile").arg(oldVersion).arg(newVersion);
+      return false;
+   }
+
+   bool ret = true;
+
+   // Start a transaction
+   db.transaction();
+
+   for( ; oldVersion < newVersion && ret; ++oldVersion )
+      ret &= migrateNext(oldVersion, db);
+
+   // If any statement failed to execute, rollback database to last good state.
+   if( ret )
+      ret &= db.commit();
+   else
+   {
+      Brewtarget::logE("Rolling back");
+      db.rollback();
+   }
+
+   return ret;
+}
+
+int DatabaseSchemaHelper::currentVersion(QSqlDatabase db)
+{
+   QVariant ver;
+   QSqlQuery q(
+      SELECT + SEP + colSettingsVersion + " FROM " + tableSettings + " WHERE id=1",
+      db
+   );
+
+   // No settings table in version 2.0.0
+   if( q.next() )
+   {
+      int field = q.record().indexOf(colSettingsVersion);
+      ver = q.value(field);
+   }
+   else
+      ver = QString("2.0.0");
+
+   // Get the string before we kill it by convert()-ing
+   QString stringVer( ver.toString() );
+
+   // Initially, versioning was done with strings, so we need to convert
+   // the old version strings to integer versions
+   if( ver.convert(QVariant::Int) )
+      return ver.toInt();
+   else
+   {
+      if( stringVer == "2.0.0" )
+         return 1;
+      else if( stringVer == "2.0.2" )
+         return 2;
+      else if( stringVer == "2.1.0" )
+         return 3;
+   }
+
+   Brewtarget::logE("Could not find database version");
+   return -1;
+}
+
+bool DatabaseSchemaHelper::create_core(QSqlQuery q)
+{
+   bool ret = true;
+
+   ret &= create_settings(q);
+   ret &= create_equipment(q);
+   ret &= create_fermentable(q);
+   ret &= create_hop(q);
+   ret &= create_misc(q);
+   ret &= create_style(q);
+   ret &= create_yeast(q);
+   ret &= create_water(q);
+   ret &= create_mash(q);
+   ret &= create_mashstep(q);
+   ret &= create_recipe(q);
+   ret &= create_brewnote(q);
+   ret &= create_instruction(q);
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_btTables(QSqlQuery q)
+{
+   // The following bt_* tables simply point to ingredients provided by brewtarget.
+   // This is to make updating and pushing new ingredients easy.
+   // NOTE: they MUST be named bt_<table>, where <table> is the table name that
+   // they refer to, and they MUST contain fields 'id' and '<table>_id'.
+   bool ret = true;
+
+   ret &= create_btTable(q, tableBtEquipment, tableEquipment);
+   ret &= create_btTable(q, tableBtFermentable, tableFermentable);
+   ret &= create_btTable(q, tableBtHop, tableHop);
+   ret &= create_btTable(q, tableBtMisc, tableMisc);
+   ret &= create_btTable(q, tableBtStyle, tableStyle);
+   ret &= create_btTable(q, tableBtYeast, tableYeast);
+   ret &= create_btTable(q, tableBtWater, tableWater);
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_recipeChildren(QSqlQuery q)
+{
+   bool ret = true;
+
+   ret &= create_recipeChildTable(q, tableFermInRec, tableFermentable);
+   ret &= create_recipeChildTable(q, tableHopInRec, tableHop);
+   ret &= create_recipeChildTable(q, tableMiscInRec, tableMisc);
+   ret &= create_recipeChildTable(q, tableWaterInRec, tableWater);
+   ret &= create_recipeChildTable(q, tableYeastInRec, tableYeast);
+   ret &= create_recipeChildTable(q, tableInsInRec, tableInstruction);
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_inventoryTables(QSqlQuery q)
+{
+   bool ret = true;
+
+   ret &= create_inventoryTable(q,tableFermInventory,tableFermentable);
+   ret &= create_inventoryTable(q,tableHopInventory,tableHop);
+   ret &= create_inventoryTable(q,tableMiscInventory,tableMisc);
+
+   // For yeast, homebrewers don't usually keep stores of yeast. They keep
+   // packets or vials or some other type of discrete integer quantity. So, I
+   // don't know how useful a real-valued inventory amount would be for yeast.
+   // NOTE: This is the odd man out, due to the difference between amount and
+   //       quanta
+   ret &= q.exec(
+      CREATETABLE + SEP + tableYeastInventory + SEP + "(" +
+      id + "," +
+      "yeast_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
+      "quanta"   + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      FOREIGNKEY("yeast_id", tableYeast) +
+      ")"
+   );
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_inheritenceTables(QSqlQuery q)
+{
+   bool ret = true;
+
+   ret &= create_childTable(q,tableEquipChildren,tableEquipment);
+   ret &= create_childTable(q,tableFermChildren,tableFermentable);
+   ret &= create_childTable(q,tableHopChildren ,tableHop);
+   ret &= create_childTable(q,tableMiscChildren ,tableMisc);
+   ret &= create_childTable(q,tableRecChildren ,tableRecipe);
+   ret &= create_childTable(q,tableStyleChildren ,tableStyle);
+   ret &= create_childTable(q,tableWaterChildren ,tableWater);
+   ret &= create_childTable(q,tableYeastChildren ,tableYeast);
+
+   return ret;
+}
+
+QString DatabaseSchemaHelper::FOREIGNKEY( QString const& column, QString const& foreignTable )
+{
+   return QString("FOREIGN KEY(%1) REFERENCES %2(id)").arg(column).arg(foreignTable);
+}
+
+bool DatabaseSchemaHelper::create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable)
+{
+   return q.exec( QString() +
+            CREATETABLE + SEP + tableName + SEP + "(" +
+            id +
+            "parent_id INTEGER," +
+            "child_id INTEGER," +
+            FOREIGNKEY("parent_id", foreignTable) + "," +
+            FOREIGNKEY("child_id", foreignTable) +
+            ")"
+         );
+}
+
+void DatabaseSchemaHelper::set_id()
+{
+   switch(Brewtarget::dbType())
+   {
+      case Brewtarget::PGSQL:
+         DatabaseSchemaHelper::id = "id SERIAL PRIMARY KEY,";
+         break;
+      default:
+         DatabaseSchemaHelper::id = "id INTEGER PRIMARY KEY autoincrement,";
+   }
+}
+
+bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
+{
+   bool ret = true;
+
+   ret =  q.exec( CREATETABLE + SEP + tableSettings + "(" +
+                  id + "," +
+                  colSettingsVersion            + SEP + TYPEINTEGER + "," +
+                  colSettingsRepopulateChildren + SEP + TYPEINTEGER +
+                  ")"
+         );
    ret &= q.exec(
       INSERTINTO + SEP + tableSettings + QString(" VALUES(1,%1,1)").arg(dbVersion)
    );
-   
-   // Equipment
-   ret &= q.exec(
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableEquipment + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -410,9 +804,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Fermentable
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableFermentable + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -442,9 +838,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Hop
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_hop(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableHop + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -473,9 +871,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Misc
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_misc(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableMisc + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -496,9 +896,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Style
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_style(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableStyle + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -530,9 +932,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Yeast
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableYeast + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -561,9 +965,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Water
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_water(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableWater + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -583,9 +989,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Mash
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableMash + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -604,14 +1012,16 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // MashStep
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableMashStep + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
       name + "," +
-      colMashStepType      + SEP + 
+      colMashStepType      + SEP +
       colMashStepInfAmount + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colMashStepTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 67.0" + "," +
       colMashStepTime      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
@@ -633,9 +1043,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Brewnote
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableBrewnote + SEP + "(" +
       id + "," +
       colBNoteBrewDate        + SEP + TYPEDATETIME + SEP + DEFAULT + " CURRENT_DATETIME" + "," +
@@ -679,9 +1091,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // Instruction
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_instruction(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableInstruction + SEP + "(" +
       id + "," +
       name + "," +
@@ -696,9 +1110,11 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       // instructions aren't displayed in trees, and get no folder
       ")"
    );
-   
-   // Recipe
-   ret &= q.exec(
+}
+
+bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
+{
+   return q.exec(
       CREATETABLE + SEP + tableRecipe + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -744,133 +1160,69 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
       folder +
       ")"
    );
-   
-   // The following bt_* tables simply point to ingredients provided by brewtarget.
-   // This is to make updating and pushing new ingredients easy.
-   // NOTE: they MUST be named bt_<table>, where <table> is the table name that
-   // they refer to, and they MUST contain fields 'id' and '<table>_id'.
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableBtEquipment + SEP + "(" +
+}
+
+bool DatabaseSchemaHelper::create_btTable(QSqlQuery q, QString tableName, QString foreignTableName)
+{
+   QString foreignIdName = QString("%1_id").arg(foreignTableName);
+   return q.exec(
+      CREATETABLE + SEP + tableName + SEP + "(" +
       id + "," +
-      "equipment_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("equipment_id", tableEquipment) +
+       foreignIdName + SEP + TYPEINTEGER + "," +
+      FOREIGNKEY(foreignIdName, foreignTableName) +
       ")"
    );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableBtFermentable + SEP + "(" +
+}
+
+bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableName, QString foreignTableName)
+{
+   QString index = QString("%1_id").arg(tableName);
+
+   return q.exec(
+           CREATETABLE + SEP + tableName + SEP + "(" +
+           id + "," +
+           index + SEP + TYPEINTEGER + "," +
+           "recipe_id" + SEP + TYPEINTEGER + "," +
+           FOREIGNKEY("hop_id", foreignTableName) + "," +
+           FOREIGNKEY("recipe_id", tableRecipe) +
+        ")"
+        );
+
+}
+
+bool DatabaseSchemaHelper::create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName)
+{
+   QString foreignIdName = QString("%1_id").arg(foreignTableName);
+
+   return q.exec(
+      CREATETABLE + SEP + tableName + SEP + "(" +
       id + "," +
-      "fermentable_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("fermentable_id", tableFermentable) +
+      foreignIdName + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
+      "amount"         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
+      FOREIGNKEY(foreignIdName, foreignTableName) +
       ")"
    );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableBtHop + SEP + "(" +
-      id + "," +
-      "hop_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("hop_id", tableHop) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableBtMisc + SEP + "(" +
-      id + "," +
-      "misc_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("misc_id", tableMisc) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableBtStyle + SEP + "(" +
-      id + "," +
-      "style_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("style_id", tableStyle) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableBtYeast + SEP + "(" +
-      id + "," +
-      "yeast_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("yeast_id", tableYeast) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableBtWater + SEP + "(" +
-      id + "," +
-      "water_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("water_id", tableWater) +
-      ")"
-   );
-   
-   // Recipe relational tables
-   ret &= q.exec(
-      CREATETABLE + SEP + tableFermInRec + SEP + "(" +
-      id + "," +
-      "fermentable_id" + SEP + TYPEINTEGER + "," +
-      "recipe_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("fermentable_id", tableFermentable) + "," +
-      FOREIGNKEY("recipe_id", tableRecipe) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableHopInRec + SEP + "(" +
-      id + "," +
-      "hop_id" + SEP + TYPEINTEGER + "," +
-      "recipe_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("hop_id", tableHop) + "," +
-      FOREIGNKEY("recipe_id", tableRecipe) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableMiscInRec + SEP + "(" +
-      id + "," +
-      "misc_id" + SEP + TYPEINTEGER + "," +
-      "recipe_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("misc_id", tableMisc) + "," +
-      FOREIGNKEY("recipe_id", tableRecipe) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableWaterInRec + SEP + "(" +
-      id + "," +
-      "water_id" + SEP + TYPEINTEGER + "," +
-      "recipe_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("water_id", tableWater) + "," +
-      FOREIGNKEY("recipe_id", tableRecipe) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableYeastInRec + SEP + "(" +
-      id + "," +
-      "yeast_id" + SEP + TYPEINTEGER + "," +
-      "recipe_id" + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY("yeast_id", tableYeast) + "," +
-      FOREIGNKEY("recipe_id", tableRecipe) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableInsInRec + SEP + "(" +
-      id + "," +
-      "instruction_id" + SEP + TYPEINTEGER + "," +
-      "recipe_id" + SEP + TYPEINTEGER + "," +
-      // instruction_number is the order of the instruction in the recipe.
-      "instruction_number" + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
-      FOREIGNKEY("instruction_id", tableInstruction) + "," +
-      FOREIGNKEY("recipe_id", tableRecipe) +
-      ")"
-   );
-   
+}
+
+bool DatabaseSchemaHelper::create_increment_trigger(QSqlQuery q)
+{
+   bool ret;
+   switch( Brewtarget::dbType() )
+   {
+      case Brewtarget::PGSQL:
+         ret = create_pgsql_increment_trigger(q);
+         break;
+      default:
+         ret = create_sqlite_increment_trigger(q);
+   }
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_sqlite_increment_trigger(QSqlQuery q)
+{
    // This trigger automatically makes a new instruction in a recipe the last.
-   ret &= q.exec( QString() +
+   return q.exec( QString() +
       "CREATE TRIGGER inc_ins_num AFTER INSERT ON instruction_in_recipe " +
       "BEGIN " +
          "UPDATE instruction_in_recipe SET instruction_number = " +
@@ -878,500 +1230,84 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
            "WHERE rowid = new.rowid; " +
       "END"
    );
-   
+}
+
+bool DatabaseSchemaHelper::create_pgsql_increment_trigger(QSqlQuery q)
+{
+   // Triggers in PGSQL are harder. We have to define a function, then assign
+   // that function to the trigger
+   bool ret = true;
+
+   // This makes the function
+   ret = q.exec( QString() +
+         "CREATE OR REPLACE FUNCTION increment_instruction_num() RETURNS TRIGGER AS $BODY$ " +
+         "BEGIN " +
+            "UPDATE instruction_in_recipe SET instruction_number = " +
+            "(SELECT max(instruction_number) FROM instruction_in_recipe WHERE recipe_id = NEW.recipe_id) + 1 " +
+            "WHERE id = NEW.id;" +
+            "return NULL;" +
+         "END;" +
+         "$BODY$"+
+         " LANGUAGE plpgsql;"
+         );
+
+   ret &= q.exec( QString() +
+         "CREATE TRIGGER inc_ins_num AFTER INSERT ON instruction_in_recipe " +
+         "FOR EACH ROW EXECUTE PROCEDURE increment_instruction_num();"
+         );
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_decrement_trigger(QSqlQuery q)
+{
+   bool ret;
+   switch( Brewtarget::dbType() )
+   {
+      case Brewtarget::PGSQL:
+         ret = create_pgsql_decrement_trigger(q);
+         break;
+      default:
+         ret = create_sqlite_decrement_trigger(q);
+   }
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_sqlite_decrement_trigger(QSqlQuery q)
+{
    // This trigger automatically decrements all instruction numbers greater than the one
    // deleted in the given recipe.
-   ret &= q.exec( QString() +
+   return q.exec( QString() +
       "CREATE TRIGGER dec_ins_num AFTER DELETE ON instruction_in_recipe " +
       "BEGIN "
          "UPDATE instruction_in_recipe SET instruction_number = instruction_number - 1 " +
             "WHERE recipe_id = old.recipe_id AND instruction_number > old.instruction_number; " +
       "END"
    );
-   
-   // Ingredient inheritance tables============================================
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableEquipChildren + SEP + "(" +
-      childrenTable(tableEquipment) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableFermChildren + SEP + "(" +
-      childrenTable(tableFermentable) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableHopChildren + SEP + "(" +
-      childrenTable(tableHop) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableMiscChildren + SEP + "(" +
-      childrenTable(tableMisc) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableRecChildren + SEP + "(" +
-      childrenTable(tableRecipe) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableStyleChildren + SEP + "(" +
-      childrenTable(tableStyle) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableWaterChildren + SEP + "(" +
-      childrenTable(tableWater) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableYeastChildren + SEP + "(" +
-      childrenTable(tableYeast) +
-      ")"
-   );
-   
-   // Inventory tables=========================================================
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableFermInventory + SEP + "(" +
-      id + "," +
-      "fermentable_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-      "amount"         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      FOREIGNKEY("fermentable_id", tableFermentable) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableHopInventory + SEP + "(" +
-      id + "," +
-      "hop_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-      "amount" + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      FOREIGNKEY("hop_id", tableHop) +
-      ")"
-   );
-   
-   ret &= q.exec(
-      CREATETABLE + SEP + tableMiscInventory + SEP + "(" +
-      id + "," +
-      "misc_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-      "amount"  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      FOREIGNKEY("misc_id", tableMisc) +
-      ")"
-   );
-   
-   
-   // For yeast, homebrewers don't usually keep stores of yeast. They keep
-   // packets or vials or some other type of discrete integer quantity. So, I
-   // don't know how useful a real-valued inventory amount would be for yeast.
-   ret &= q.exec(
-      CREATETABLE + SEP + tableYeastInventory + SEP + "(" +
-      id + "," +
-      "yeast_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-      "quanta"   + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
-      FOREIGNKEY("yeast_id", tableYeast) +
-      ")"
-   );
-   
-   // Commit transaction
-   if( hasTransaction )
-      ret &= db.commit();
-   
-   return ret;
 }
 
-bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
+bool DatabaseSchemaHelper::create_pgsql_decrement_trigger(QSqlQuery q)
 {
-   QSqlQuery q(db);
+   // Triggers in PGSQL are harder. We have to define a function, then assign
+   // that function to the trigger
    bool ret = true;
 
-   // NOTE: use this to debug your migration
-#define CHECKQUERY if(!ret) qDebug() << QString("ERROR: %1\nQUERY: %2").arg(q.lastError().text()).arg(q.lastQuery());
+   // This makes the function
+   ret = q.exec( QString() +
+         "CREATE OR REPLACE FUNCTION decrement_instruction_num() RETURNS TRIGGER AS $BODY$ " +
+         "BEGIN " +
+            "UPDATE instruction_in_recipe SET instruction_number = instruction_number - 1 " +
+            "WHERE recipe_id = OLD.recipe_id AND instruction_id > OLD.instruction_id;" +
+            "return NULL;" +
+         "END;" +
+         "$BODY$"+
+         " LANGUAGE plpgsql;"
+         );
 
-   // NOTE: Add a new case when adding a new schema change
-   switch(oldVersion)
-   {
-      case 1: // == '2.0.0'
-         // Add settings table
-         ret &= q.exec(
-            CREATETABLE + SEP + tableSettings + "(" +
-            id + "," +
-            colSettingsVersion + SEP + TYPETEXT +
-            ")"
+   ret &= q.exec( QString() +
+         "CREATE TRIGGER dec_ins_num AFTER DELETE ON instruction_in_recipe " +
+         "FOR EACH ROW EXECUTE PROCEDURE decrement_instruction_num();"
          );
-         
-         // Add "projected_ferm_points" to brewnote table
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableBrewnote + SEP +
-            ADDCOLUMN + SEP + "projected_ferm_points" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"
-         );
-         
-         ret &= q.exec(
-            UPDATE + SEP + tableBrewnote + SEP +
-            SET + SEP + "projected_ferm_points = -1.0"
-         );
-         
-         // Update version to 2.0.2
-         ret &= q.exec(
-            INSERTINTO + SEP + tableSettings + " VALUES(1,'2.0.2')"
-         );
-         
-         break;
-         
-      case 2: // == '2.0.2'
-         
-         // Add 'folder' column to some tables
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableEquipment + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableFermentable + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableHop + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableMisc + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableStyle + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableYeast + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableWater + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableMash + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableBrewnote + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableRecipe + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-         );
-         
-         // Put the "Bt:.*" recipes into /brewtarget folder
-         ret &= q.exec(
-            UPDATE + SEP + tableRecipe + SEP +
-            SET + SEP + "folder='/brewtarget' WHERE name LIKE 'Bt:%'"
-         );
-         
-         // Update version to 2.1.0
-         ret &= q.exec(
-            UPDATE + SEP + tableSettings + SEP +
-            SET + SEP + colSettingsVersion + "='2.1.0' WHERE id=1"
-         );
-         
-         // Used to trigger the code to populate the ingredient inheritance tables
-         ret &= q.exec(
-            ALTERTABLE + SEP + tableSettings + SEP +
-            ADDCOLUMN + SEP + "repopulateChildrenOnNextStart" + SEP + TYPEINTEGER
-         );
-         
-         ret &= q.exec(
-            UPDATE + SEP + tableSettings + SEP +
-            SET + SEP + "repopulateChildrenOnNextStart=1"
-         );
-         
-         // Drop and re-create children tables with new UNIQUE requirement
-         ret &= q.exec(
-            DROPTABLE + SEP + tableEquipChildren
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableFermChildren
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableHopChildren
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableMiscChildren
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableRecChildren
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableStyleChildren
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableWaterChildren
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableYeastChildren
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableEquipChildren + SEP + "(" +
-            childrenTable(tableEquipment) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableFermChildren + SEP + "(" +
-            childrenTable(tableFermentable) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableHopChildren + SEP + "(" +
-            childrenTable(tableHop) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableMiscChildren + SEP + "(" +
-            childrenTable(tableMisc) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableRecChildren + SEP + "(" +
-            childrenTable(tableRecipe) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableStyleChildren + SEP + "(" +
-            childrenTable(tableStyle) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableWaterChildren + SEP + "(" +
-            childrenTable(tableWater) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableYeastChildren + SEP + "(" +
-            childrenTable(tableYeast) +
-            ")"
-         );
-         
-         // Drop and re-create inventory tables with new UNIQUE requirement
-         ret &= q.exec(
-            DROPTABLE + SEP + tableFermInventory
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableHopInventory
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableMiscInventory
-         );
-         
-         ret &= q.exec(
-            DROPTABLE + SEP + tableYeastInventory
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableFermInventory + SEP + "(" +
-            id + "," +
-            "fermentable_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-            "amount"         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-            FOREIGNKEY("fermentable_id", tableFermentable) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableHopInventory + SEP + "(" +
-            id + "," +
-            "hop_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-            "amount" + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-            FOREIGNKEY("hop_id", tableHop) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableMiscInventory + SEP + "(" +
-            id + "," +
-            "misc_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-            "amount"  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-            FOREIGNKEY("misc_id", tableMisc) +
-            ")"
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableYeastInventory + SEP + "(" +
-            id + "," +
-            "yeast_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-            "quanta"   + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
-            FOREIGNKEY("yeast_id", tableYeast) +
-            ")"
-         );
-         
-         break;
-         
-      case 3: // == '2.1.0'
-         
-         // Save old settings
-         ret &= q.exec(
-            "CREATE TEMP TABLE oldsettings AS SELECT * FROM " + tableSettings
-         );
-         
-         // Drop the old settings with text version, and create new table
-         // with intever version.
-         ret &= q.exec(
-            DROPTABLE + SEP + tableSettings
-         );
-         
-         ret &= q.exec(
-            CREATETABLE + SEP + tableSettings + "(" +
-            id + "," +
-            colSettingsVersion            + SEP + TYPEINTEGER + "," +
-            colSettingsRepopulateChildren + SEP + TYPEINTEGER +
-            ")"
-         );
-         
-         // Update version to 4, saving other settings
-         ret &= q.exec(
-            INSERTINTO + SEP + tableSettings +
-            QString(" (id,%1,%2)").arg(colSettingsVersion).arg(colSettingsRepopulateChildren) + " " +
-            QString("SELECT 1, 4, %1 FROM oldsettings").arg(colSettingsRepopulateChildren)
-         );
-         
-         // Cleanup
-         ret &= q.exec(
-            DROPTABLE + SEP + "oldsettings"
-         );
-         
-         break;
-      
-      case 4:
-         
-         // Drop the previous bugged TRIGGER
-         ret &= q.exec( QString() +
-            "DROP TRIGGER dec_ins_num"
-         );
-         
-         // Create the good trigger
-         ret &= q.exec( QString() +
-            "CREATE TRIGGER dec_ins_num AFTER DELETE ON instruction_in_recipe " +
-            "BEGIN "
-              "UPDATE instruction_in_recipe SET instruction_number = instruction_number - 1 " +
-                "WHERE recipe_id = old.recipe_id AND instruction_number > old.instruction_number; " +
-            "END"
-         );
-         
-         break;
-         
-         
-      default:
-         Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
-         return false;
-   }
-   
-   // Set the database version
-   if( oldVersion > 3 )
-   {
-      ret &= q.exec(
-         UPDATE + SEP + tableSettings +
-         " SET " + colSettingsVersion + "=" + QString::number(oldVersion+1) + " WHERE id=1"
-      );
-   }
-   
-   return ret;
-#undef CHECKQUERY
-}
-
-bool DatabaseSchemaHelper::migrate(int oldVersion, int newVersion, QSqlDatabase db)
-{
-   if( oldVersion >= newVersion || newVersion > dbVersion )
-   {
-      qDebug() << QString("DatabaseSchemaHelper::migrate(%1, %2): You are an imbecile").arg(oldVersion).arg(newVersion);
-      return false;
-   }
-   
-   bool ret = true;
-   
-   // Start a transaction
-   db.transaction();
-   
-   for( ; oldVersion < newVersion && ret; ++oldVersion )
-      ret &= migrateNext(oldVersion, db);
-   
-   // If any statement failed to execute, rollback database to last good state.
-   if( ret )
-      ret &= db.commit();
-   else
-   {
-      Brewtarget::logE("Rolling back");
-      db.rollback();
-   }
-   
    return ret;
 }
 
-int DatabaseSchemaHelper::currentVersion(QSqlDatabase db)
-{
-   QVariant ver;
-   QSqlQuery q(
-      SELECT + SEP + colSettingsVersion + " FROM " + tableSettings + " WHERE id=1",
-      db
-   );
-   
-   // No settings table in version 2.0.0
-   if( q.next() )
-   {
-      int field = q.record().indexOf(colSettingsVersion);
-      ver = q.value(field);
-   }
-   else
-      ver = QString("2.0.0");
-   
-   // Get the string before we kill it by convert()-ing
-   QString stringVer( ver.toString() );
-   
-   // Initially, versioning was done with strings, so we need to convert
-   // the old version strings to integer versions
-   if( ver.convert(QVariant::Int) )
-      return ver.toInt();
-   else
-   {
-      if( stringVer == "2.0.0" )
-         return 1;
-      else if( stringVer == "2.0.2" )
-         return 2;
-      else if( stringVer == "2.1.0" )
-         return 3;
-   }
-   
-   Brewtarget::logE("Could not find database version");
-   return -1;
-}
