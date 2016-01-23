@@ -361,7 +361,7 @@ const QDir Brewtarget::getConfigDir(bool *success)
    // See if brewtarget dir exists.
    if( !dir.exists("brewtarget") )
    {
-      logW( QString("\"%1\" does not exist...creating.").arg(dir.absolutePath() + "/brewtarget") );
+      // logW( QString("\"%1\" does not exist...creating.").arg(dir.absolutePath() + "/brewtarget") );
 
       // Try to make brewtarget dir.
       if( ! dir.mkdir("brewtarget") )

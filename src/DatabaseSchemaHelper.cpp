@@ -48,15 +48,15 @@ QString DatabaseSchemaHelper::TYPETEXT("TEXT");
 QString DatabaseSchemaHelper::TYPEREAL("REAL");
 QString DatabaseSchemaHelper::TYPENUMERIC("NUMERIC");
 QString DatabaseSchemaHelper::TYPEDATETIME("DATETIME");
-QString DatabaseSchemaHelper::TYPEBOOLEAN("DATETIME");
+QString DatabaseSchemaHelper::TYPEBOOLEAN("BOOLEAN");
 
 QString DatabaseSchemaHelper::id("id " + TYPEINTEGER + " PRIMARY KEY autoincrement");
 QString DatabaseSchemaHelper::name("name " + TYPETEXT + " not null DEFAULT ''");
 QString DatabaseSchemaHelper::displayUnit("display_unit" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
 QString DatabaseSchemaHelper::displayScale("display_scale" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
 QString DatabaseSchemaHelper::displayTempUnit("display_temp_unit" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
-QString DatabaseSchemaHelper::deleted("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + Brewtarget::dbFalse());
-QString DatabaseSchemaHelper::display("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + Brewtarget::dbTrue());
+QString DatabaseSchemaHelper::deleted("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + " " + Brewtarget::dbFalse());
+QString DatabaseSchemaHelper::display("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + " " + Brewtarget::dbTrue());
 QString DatabaseSchemaHelper::folder("folder " + TYPETEXT + " DEFAULT ''");
 
 QString DatabaseSchemaHelper::tableSettings("settings");
@@ -733,15 +733,16 @@ QString DatabaseSchemaHelper::FOREIGNKEY( QString const& column, QString const& 
 
 bool DatabaseSchemaHelper::create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable)
 {
-   return q.exec( QString() +
+   QString create = 
             CREATETABLE + SEP + tableName + SEP + "(" +
-            id +
+            id + "," +
             "parent_id INTEGER," +
             "child_id INTEGER," +
             FOREIGNKEY("parent_id", foreignTable) + "," +
             FOREIGNKEY("child_id", foreignTable) +
-            ")"
-         );
+            ")";
+
+   return q.exec( create );
 }
 
 void DatabaseSchemaHelper::set_id()
@@ -1032,7 +1033,6 @@ bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
       // Relational data-------------------------------------------------------
       colMashStepMashId    + SEP + TYPEINTEGER + "," +
       colMashStepNumber    + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
-      FOREIGNKEY(colMashStepMashId, tableMash) + "," +
       // Display stuff---------------------------------------------------------
       displayUnit + "," +
       displayScale + "," +
@@ -1040,7 +1040,8 @@ bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
       // Metadata--------------------------------------------------------------
       deleted + "," +
       display + "," +
-      folder +
+      folder + "," +
+      FOREIGNKEY(colMashStepMashId, tableMash) +
       ")"
    );
 }
@@ -1084,11 +1085,11 @@ bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
       colBNoteNotes           + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       // Relational data-------------------------------------------------------
       colBNoteRecipeId + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY(colBNoteRecipeId, tableRecipe) + "," +
       // Metadata--------------------------------------------------------------
       deleted + "," +
       display + "," +
-      folder +
+      folder + "," +
+      FOREIGNKEY(colBNoteRecipeId, tableRecipe) +
       ")"
    );
 }
@@ -1151,13 +1152,13 @@ bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
       colRecStyleId + SEP + TYPEINTEGER + "," +
       colRecMashId  + SEP + TYPEINTEGER + "," +
       colRecEquipId + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY(colRecStyleId, tableStyle) + "," +
-      FOREIGNKEY(colRecMashId, tableMash) + "," +
-      FOREIGNKEY(colRecEquipId, tableEquipment) + "," +
       // Metadata--------------------------------------------------------------
       deleted + "," +
       display + "," +
-      folder +
+      folder + "," +
+      FOREIGNKEY(colRecStyleId, tableStyle) + "," +
+      FOREIGNKEY(colRecMashId, tableMash) + "," +
+      FOREIGNKEY(colRecEquipId, tableEquipment) + 
       ")"
    );
 }
@@ -1178,15 +1179,16 @@ bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableNa
 {
    QString index = QString("%1_id").arg(tableName);
 
-   return q.exec(
+   QString create = 
            CREATETABLE + SEP + tableName + SEP + "(" +
            id + "," +
            index + SEP + TYPEINTEGER + "," +
            "recipe_id" + SEP + TYPEINTEGER + "," +
-           FOREIGNKEY("hop_id", foreignTableName) + "," +
+           FOREIGNKEY(index, foreignTableName) + "," +
            FOREIGNKEY("recipe_id", tableRecipe) +
-        ")"
-        );
+        ")";
+
+   return q.exec(create);
 
 }
 

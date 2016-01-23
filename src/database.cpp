@@ -135,6 +135,8 @@ bool Database::loadSQLite(QSqlDatabase sqldb)
    // Set file names.
    dbFileName = Brewtarget::getUserDataDir().filePath("database.sqlite");
    dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
+   qDebug() << Q_FUNC_INFO << dataDbFileName;
+
    dbTempBackupFileName = Brewtarget::getUserDataDir().filePath("tempBackupDatabase.sqlite");
 
    // Set the files.
