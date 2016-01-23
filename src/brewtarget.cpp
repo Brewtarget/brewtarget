@@ -84,11 +84,11 @@ bool Brewtarget::userDatabaseDidNotExist = false;
 QFile Brewtarget::pidFile;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
-QString Brewtarget::currentLanguage = "en";
-QDir Brewtarget::userDataDir = getConfigDir();
-
 bool Brewtarget::checkVersion = true;
 Log Brewtarget::log(true);
+
+QString Brewtarget::currentLanguage = "en";
+QDir Brewtarget::userDataDir = getConfigDir();
 
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
@@ -360,7 +360,6 @@ const QDir Brewtarget::getConfigDir(bool *success)
    // See if brewtarget dir exists.
    if( !dir.exists("brewtarget") )
    {
-      logW( QString("\"%1\" does not exist...creating.").arg(dir.absolutePath() + "/brewtarget") );
 
       // Try to make brewtarget dir.
       if( ! dir.mkdir("brewtarget") )
@@ -485,7 +484,8 @@ bool Brewtarget::initialize(const QString &userDirectory)
 
    readSystemOptions();
    loadMap();
-   log.changeDirectory(getUserDataDir());
+   // log.changeDirectory(getUserDataDir());
+   // log.changeDirectory(userDataDir);
 
    // Make sure all the necessary directories and files we need exist before starting.
    bool success;
