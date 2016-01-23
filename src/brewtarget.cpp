@@ -86,7 +86,7 @@ QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:
 
 QString Brewtarget::currentLanguage = "en";
 QDir Brewtarget::userDataDir = getConfigDir();
-Brewtarget::DBTypes Brewtarget::_dbType = Brewtarget::SQLITE;
+Brewtarget::DBTypes Brewtarget::_dbType = Brewtarget::NODB;
 
 bool Brewtarget::checkVersion = true;
 Log Brewtarget::log(true);
@@ -518,6 +518,10 @@ QString Brewtarget::dbTrue()
 {
    QString retval;
 
+   if ( _dbType == 0 )
+   {
+      _dbType = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
+   }
    switch( _dbType ) {
       case SQLITE:
          retval = "1";
@@ -534,6 +538,11 @@ QString Brewtarget::dbTrue()
 QString Brewtarget::dbFalse()
 {
    QString retval;
+
+   if ( _dbType == 0 )
+   {
+      _dbType = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
+   }
 
    switch( _dbType ) {
       case SQLITE:

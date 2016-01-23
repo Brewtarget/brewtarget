@@ -50,13 +50,16 @@ QString DatabaseSchemaHelper::TYPENUMERIC("NUMERIC");
 QString DatabaseSchemaHelper::TYPEDATETIME("DATETIME");
 QString DatabaseSchemaHelper::TYPEBOOLEAN("BOOLEAN");
 
-QString DatabaseSchemaHelper::id("id " + TYPEINTEGER + " PRIMARY KEY autoincrement");
+//Specials -- these all need to be initialized late.
+QString DatabaseSchemaHelper::THENOW;
+QString DatabaseSchemaHelper::id;
+QString DatabaseSchemaHelper::deleted;
+QString DatabaseSchemaHelper::display;
+
 QString DatabaseSchemaHelper::name("name " + TYPETEXT + " not null DEFAULT ''");
 QString DatabaseSchemaHelper::displayUnit("display_unit" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
 QString DatabaseSchemaHelper::displayScale("display_scale" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
 QString DatabaseSchemaHelper::displayTempUnit("display_temp_unit" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
-QString DatabaseSchemaHelper::deleted("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + " " + Brewtarget::dbFalse());
-QString DatabaseSchemaHelper::display("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + " " + Brewtarget::dbTrue());
 QString DatabaseSchemaHelper::folder("folder " + TYPETEXT + " DEFAULT ''");
 
 QString DatabaseSchemaHelper::tableSettings("settings");
@@ -188,7 +191,7 @@ QString DatabaseSchemaHelper::colMashTunSpecificHeat("tun_specific_heat");
 QString DatabaseSchemaHelper::colMashEquipAdjust("equip_adjust");
 
 QString DatabaseSchemaHelper::tableMashStep("mashstep");
-QString DatabaseSchemaHelper::colMashStepType("mstype");
+QString DatabaseSchemaHelper::colMashStepType("mstype varchar(32) DEFAULT 'Infusion'");
 QString DatabaseSchemaHelper::colMashStepInfAmount("infuse_amount");
 QString DatabaseSchemaHelper::colMashStepTemp("step_temp");
 QString DatabaseSchemaHelper::colMashStepTime("step_time");
@@ -351,6 +354,9 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
 
    QSqlQuery q(db);
    bool ret = true;
+
+   // Some stuff just needs evaluated late
+   select_dbStrings();
 
    // Start transaction
    bool hasTransaction = db.transaction();
@@ -745,28 +751,33 @@ bool DatabaseSchemaHelper::create_childTable( QSqlQuery q, QString const& tableN
    return q.exec( create );
 }
 
-void DatabaseSchemaHelper::set_id()
+void DatabaseSchemaHelper::select_dbStrings()
 {
    switch(Brewtarget::dbType())
    {
       case Brewtarget::PGSQL:
-         DatabaseSchemaHelper::id = "id SERIAL PRIMARY KEY,";
+         DatabaseSchemaHelper::id = "id SERIAL PRIMARY KEY";
+         TYPEDATETIME = "TIMESTAMP";
+         THENOW=" CURRENT_TIMESTAMP";
          break;
       default:
-         DatabaseSchemaHelper::id = "id INTEGER PRIMARY KEY autoincrement,";
+         DatabaseSchemaHelper::id = "id INTEGER PRIMARY KEY autoincrement";
+         TYPEDATETIME = "DATETIME";
+         THENOW=" CURRENT_DATETIME";
    }
+   deleted = QString("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + " " + Brewtarget::dbFalse());
+   display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + " " + Brewtarget::dbTrue());
 }
 
 bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
 {
    bool ret = true;
-
-   ret =  q.exec( CREATETABLE + SEP + tableSettings + "(" +
-                  id + "," +
-                  colSettingsVersion            + SEP + TYPEINTEGER + "," +
-                  colSettingsRepopulateChildren + SEP + TYPEINTEGER +
-                  ")"
-         );
+   QString create = CREATETABLE + SEP + tableSettings + "(" +
+                    id + "," +
+                    colSettingsVersion            + SEP + TYPEINTEGER + "," +
+                    colSettingsRepopulateChildren + SEP + TYPEINTEGER +
+                    ")";
+   ret =  q.exec(create);
    ret &= q.exec(
       INSERTINTO + SEP + tableSettings + QString(" VALUES(1,%1,1)").arg(dbVersion)
    );
@@ -776,7 +787,7 @@ bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
 
 bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
 {
-   return q.exec(
+   QString create = 
       CREATETABLE + SEP + tableEquipment + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -803,8 +814,9 @@ bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
       deleted + "," +
       display + "," +
       folder +
-      ")"
-   );
+      ")";
+
+   return q.exec(create);
 }
 
 bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
@@ -1017,12 +1029,12 @@ bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
 
 bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
 {
-   return q.exec(
+   QString create = 
       CREATETABLE + SEP + tableMashStep + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
       name + "," +
-      colMashStepType      + SEP +
+      colMashStepType      + SEP + "," +
       colMashStepInfAmount + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colMashStepTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 67.0" + "," +
       colMashStepTime      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
@@ -1042,8 +1054,9 @@ bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
       display + "," +
       folder + "," +
       FOREIGNKEY(colMashStepMashId, tableMash) +
-      ")"
-   );
+      ")";
+
+   return q.exec(create);
 }
 
 bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
@@ -1051,8 +1064,8 @@ bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
    return q.exec(
       CREATETABLE + SEP + tableBrewnote + SEP + "(" +
       id + "," +
-      colBNoteBrewDate        + SEP + TYPEDATETIME + SEP + DEFAULT + " CURRENT_DATETIME" + "," +
-      colBNoteFermentDate     + SEP + TYPEDATETIME + SEP + DEFAULT + " CURRENT_DATETIME" + "," +
+      colBNoteBrewDate        + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
+      colBNoteFermentDate     + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
       colBNoteSg              + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
       colBNoteBkVolume        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colBNoteStrikeTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 70.0" + "," +
@@ -1115,7 +1128,7 @@ bool DatabaseSchemaHelper::create_instruction(QSqlQuery q)
 
 bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
 {
-   return q.exec(
+   QString create = 
       CREATETABLE + SEP + tableRecipe + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -1138,7 +1151,7 @@ bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
       colRecTerTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
       colRecAge          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colRecAgeTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
-      colRecDate         + SEP + TYPEDATETIME + SEP + DEFAULT + " CURRENT_DATETIME" + "," +
+      colRecDate         + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
       colRecCarbVol      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colRecForceCarb    + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
       colRecPrimSug      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
@@ -1159,8 +1172,9 @@ bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
       FOREIGNKEY(colRecStyleId, tableStyle) + "," +
       FOREIGNKEY(colRecMashId, tableMash) + "," +
       FOREIGNKEY(colRecEquipId, tableEquipment) + 
-      ")"
-   );
+      ")";
+
+   return q.exec(create);
 }
 
 bool DatabaseSchemaHelper::create_btTable(QSqlQuery q, QString tableName, QString foreignTableName)

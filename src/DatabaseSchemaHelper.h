@@ -61,6 +61,9 @@ private:
    static QString TYPENUMERIC;
    static QString TYPEDATETIME;
    static QString TYPEBOOLEAN;
+
+   // Special values
+   static QString THENOW;
    
    // ID string for EVERY table.
    static QString id;
@@ -347,7 +350,7 @@ private:
    static int currentVersion(QSqlDatabase db = QSqlDatabase());
    static QString FOREIGNKEY( QString const& column, QString const& foreignTable );
    static bool create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable);
-   void set_id();
+   static void select_dbStrings();
 
    //! brief These create the core tables, aka, the beerXML tables
    static bool create_settings(QSqlQuery q);
