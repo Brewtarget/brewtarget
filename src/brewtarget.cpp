@@ -388,10 +388,16 @@ const QDir Brewtarget::getConfigDir(bool *success)
    return dir.absolutePath() + "/";
 
 #elif defined(Q_OS_WIN) // Windows OS.
+   if (!qApp)
+   {  //QApplication instance doesn't exist yet
+      if (success)
+         *success = false;
+      return QString();
+   }
 
    QDir dir;
    // This is the bin/ directory.
-   dir = QDir(qApp->applicationDirPath());
+   dir = QDir(QCoreApplication::applicationDirPath());
    dir.cdUp();
    // Now we should be in the base directory (i.e. Brewtarget-2.0.0/)
 
