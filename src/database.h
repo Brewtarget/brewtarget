@@ -108,6 +108,12 @@ public:
    //! \brief Reverts database to that of chosen file.
    static bool restoreFromFile(QString newDbFileStr);
 
+   static bool testConnection( Brewtarget::DBTypes testDb, QString const& hostname,
+                               int portnum=5432,
+                               QString const& schema="public",
+                               QString const& database="brewtarget",
+                               QString const& username="brewtarget",
+                               QString const& password="brewtarget");
    bool loadSuccessful();
    bool isDirty();
 

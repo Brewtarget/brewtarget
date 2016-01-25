@@ -4750,7 +4750,56 @@ void Database::updateDatabase(QString const& filename)
    makeDirty();
 }
 
-void Database::makeDirty() {
+void Database::makeDirty() 
+{
    dirty = true;
    emit isUnsavedChanged(true);
 }
+
+bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostname, int portnum, QString const& schema, 
+                              QString const& database, QString const& username, QString const& password)
+{
+   QString driverName;
+   QSqlDatabase connDb;
+   bool results;
+
+   switch( testDb ) 
+   {
+      case Brewtarget::PGSQL:
+         driverName = "QPSQL";
+         break;
+      default:
+         driverName = "SQLITE";
+   }
+   connDb = QSqlDatabase::addDatabase(driverName,"connDb");
+
+   switch( testDb ) 
+   {
+      case Brewtarget::PGSQL:
+         connDb.setHostName(hostname);
+         connDb.setPort(portnum);
+         connDb.setDatabaseName(database);
+         connDb.setUserName(username);
+         connDb.setPassword(password);
+         break;
+      default:
+         connDb.setDatabaseName(hostname);
+   }
+
+   results = connDb.open();
+
+   if ( results )
+   {
+      connDb.close();
+      connDb.removeDatabase("connDb");
+   }
+   else 
+   {
+      QMessageBox::critical(0, tr("Connection failed"), 
+               QString(tr("Could not connect to %1 : %2")).arg(hostname).arg(connDb.lastError().text())
+            );
+   }
+   return results;
+
+}
+

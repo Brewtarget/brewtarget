@@ -23,9 +23,9 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tab_units">
       <attribute name="title">
        <string>Units</string>
       </attribute>
@@ -99,7 +99,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tab_formula">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -218,7 +218,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tab_directory">
       <attribute name="title">
        <string>Directories</string>
       </attribute>
@@ -326,6 +326,156 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_database">
+      <attribute name="title">
+       <string>Databases</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Engines</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_engine">
+            <property name="text">
+             <string>RDBMS Engine</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBox_engine"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_dbConfig">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>Configuration</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_hostname">
+            <property name="text">
+             <string>Hostname</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="BtStringEdit" name="btStringEdit_hostname">
+            <property name="toolTip">
+             <string>PostgresSQL's host name or IP address</string>
+            </property>
+            <property name="text">
+             <string>localhost</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_portnum">
+            <property name="text">
+             <string>Port</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="BtStringEdit" name="btStringEdit_portnum">
+            <property name="toolTip">
+             <string>Port the PostgreSQL is listening on</string>
+            </property>
+            <property name="text">
+             <string>5432</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_schema">
+            <property name="text">
+             <string>Schema</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_dbName">
+            <property name="text">
+             <string>Database</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_username">
+            <property name="text">
+             <string>Username</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_password">
+            <property name="text">
+             <string>Password</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="BtStringEdit" name="btStringEdit_schema">
+            <property name="toolTip">
+             <string>The schema containing the database</string>
+            </property>
+            <property name="text">
+             <string>public</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="BtStringEdit" name="btStringEdit_dbname">
+            <property name="toolTip">
+             <string>The name of the database</string>
+            </property>
+            <property name="text">
+             <string>brewtarget</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="BtStringEdit" name="btStringEdit_username">
+            <property name="toolTip">
+             <string>User with create/delete table access</string>
+            </property>
+            <property name="text">
+             <string>brewtarget</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="BtStringEdit" name="btStringEdit_password">
+            <property name="toolTip">
+             <string>Password for the user</string>
+            </property>
+            <property name="echoMode">
+             <enum>QLineEdit::Password</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QPushButton" name="pushButton_testConnection">
+            <property name="text">
+             <string>Test Connection</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -340,6 +490,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtStringEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>lineEdit_dbDir</tabstop>

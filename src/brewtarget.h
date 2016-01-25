@@ -148,9 +148,9 @@ public:
    //! \brief Supported databases. I am not 100% sure I'm digging this
    //  solution, but this is more extensible than what I was doing previously
    enum DBTypes {
-      NODB,    // seems a popular choice with the cool enums
-      SQLITE,  // compact, fast and a little loose
-      PGSQL    // big, powerful, uptight and a little stodgy
+      NODB = -1,  // seems a popular choice with the cool enums
+      SQLITE,     // compact, fast and a little loose
+      PGSQL       // big, powerful, uptight and a little stodgy
    };
 
    //! \return the data directory
