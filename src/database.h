@@ -441,9 +441,8 @@ private:
    bool schemaUpdated;
 
    // Don't know where to put this, so it goes here for right now
-   bool loadSQLite(QSqlDatabase sqldb);
-   bool loadPgSQL(QSqlDatabase sqldb);
-
+   bool loadSQLite();
+   bool loadPgSQL();
 
    QHash< int, BrewNote* > allBrewNotes;
    QHash< int, Equipment* > allEquipments;

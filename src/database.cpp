@@ -109,6 +109,7 @@ Database::Database()
 
 Database::~Database()
 {
+
    // If we have not explicitly unloaded, do so now and discard changes.
    if( QSqlDatabase::database( dbConName, false ).isOpen() )
       unload(false);
@@ -126,16 +127,17 @@ Database::~Database()
    qDeleteAll(allWaters);
    qDeleteAll(allYeasts);
    qDeleteAll(allRecipes);
+
 }
 
-bool Database::loadSQLite(QSqlDatabase sqldb)
+bool Database::loadSQLite()
 {
    bool dbIsOpen;
+   QSqlDatabase sqldb;
 
    // Set file names.
    dbFileName = Brewtarget::getUserDataDir().filePath("database.sqlite");
    dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
-   qDebug() << Q_FUNC_INFO << dataDbFileName;
 
    dbTempBackupFileName = Brewtarget::getUserDataDir().filePath("tempBackupDatabase.sqlite");
 
@@ -201,13 +203,20 @@ bool Database::loadSQLite(QSqlDatabase sqldb)
       QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqldb);
       // Store temporary tables in memory.
       QSqlQuery( "PRAGMA temp_store = MEMORY", sqldb);
+
+      createFromScratch = ! sqldb.tables().contains("settings");
+      // Associate this db with the current thread.
+      _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
+      _threadToConnectionMutex.unlock();
    }
+
    return dbIsOpen;
 }
 
-bool Database::loadPgSQL(QSqlDatabase sqldb)
+bool Database::loadPgSQL()
 {
    bool dbIsOpen;
+   QSqlDatabase sqldb;
 
    dbHostname = Brewtarget::option("dbHostname").toString();
    dbPortnum  = Brewtarget::option("dbPortnum").toString();
@@ -215,7 +224,7 @@ bool Database::loadPgSQL(QSqlDatabase sqldb)
    // Yeah, this is a bad idea. Please make this anything other than this before rolling this out
    dbPassword = Brewtarget::option("dbPassword").toString();
 
-   sqldb = QSqlDatabase::addDatabase("QPSQL");
+   sqldb = QSqlDatabase::addDatabase("QPSQL","brewtarget");
    sqldb.setHostName( dbHostname );
    sqldb.setDatabaseName("brewtarget");
    sqldb.setUserName( dbUsername );
@@ -233,6 +242,14 @@ bool Database::loadPgSQL(QSqlDatabase sqldb)
                             QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname))
                            );
    }
+   else
+   {
+     createFromScratch = ! sqldb.tables().contains("settings");
+     // Associate this db with the current thread.
+     _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
+     _threadToConnectionMutex.unlock();
+   }
+
    return dbIsOpen;
 }
 
@@ -244,27 +261,21 @@ bool Database::load()
    createFromScratch=false;
    schemaUpdated=false;
 
-   // UGH! ALREADY NEEDS REWORK. HATE MY LIFE
    if ( Brewtarget::dbType() == Brewtarget::PGSQL )
    {
-      dbIsOpen = loadPgSQL(sqldb);
+      dbIsOpen = loadPgSQL();
    }
    else
    {
-      dbIsOpen = loadSQLite(sqldb);
+      dbIsOpen = loadSQLite();
    }
+
    if ( ! dbIsOpen )
       return false;
 
-   // Associate this db with the current thread.
-   _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
-   _threadToConnectionMutex.unlock();
+   sqldb = sqlDatabase();
 
-   // Database is open, so can create from scratch if needed
-   // This should work regardless of the db being used. I hope.
-   qDebug() << Q_FUNC_INFO << sqldb.tables(QSql::Tables);
-   qDebug() << Q_FUNC_INFO << sqldb.primaryIndex("settings").name();
-
+   // This should work regardless of the db being used. 
    if( ! sqldb.tables().contains(QLatin1String("settings")) )
    {
          bool success = DatabaseSchemaHelper::create(sqldb);
@@ -294,7 +305,6 @@ bool Database::load()
    }
 
    // Initialize the SELECT * query hashes.
-   qDebug() << "Calling selectAllHash()";
    selectAll = Database::selectAllHash();
 /* No idea what needs to happen here. It should be somewhat painless, but cracked if I know
    // See if there are new ingredients that we need to merge from the data-space db.
@@ -322,9 +332,7 @@ bool Database::load()
    }
 */
    // Create and store all pointers.
-   qDebug() << "Calling populateElements for brewnotes";
    populateElements( allBrewNotes, Brewtarget::BREWNOTETABLE );
-   qDebug() << "Calling populateElements for equipment";
    populateElements( allEquipments, Brewtarget::EQUIPTABLE );
    populateElements( allFermentables, Brewtarget::FERMTABLE );
    populateElements( allHops, Brewtarget::HOPTABLE );
@@ -510,11 +518,14 @@ QSqlDatabase Database::sqlDatabase()
 
 void Database::unload(bool keepChanges)
 {
-   QSqlDatabase::database( dbConName, false ).close();
-   QSqlDatabase::removeDatabase( dbConName );
-
+   // The postgres driver wants nothing to do with this. Core gets dumped if
+   // we try it. Since we don't need to copy things about for postgres...
    if ( Brewtarget::dbType() == Brewtarget::SQLITE )
    {
+      QSqlDatabase::database( dbConName, false ).close();
+
+      QSqlDatabase::removeDatabase( dbConName );
+
       if (!loadWasSuccessful || keepChanges)
       {
          // If load() failed or want to keep the changes, then
