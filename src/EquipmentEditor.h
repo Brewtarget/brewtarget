@@ -137,7 +137,7 @@ public:
 
    //! Edit the given equipment.
    void setEquipment( Equipment* e );
-   double calcBatchSize();
+   
 
 public slots:
    //! Save the changes to the equipment.
@@ -161,6 +161,8 @@ public slots:
    void updateDefaultEquipment(int state);
 
    void changed(QMetaProperty,QVariant);
+
+   double calcBatchSize();
 
 protected:
    //! User closed the dialog

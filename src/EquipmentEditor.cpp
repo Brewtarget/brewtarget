@@ -75,7 +75,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(lineEdit_evaporationRate,SIGNAL(textModified()),this,SLOT(updateCheckboxRecord()));
    connect(lineEdit_topUpWater,SIGNAL(textModified()),this,SLOT(updateCheckboxRecord()));
    connect(lineEdit_trubChillerLoss,SIGNAL(textModified()),this,SLOT(updateCheckboxRecord()));
-
+   connect(lineEdit_batchSize, SIGNAL( editingFinished() ), this,SLOT(updateCheckboxRecord()));
+                     
    // Set up the buttons
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
@@ -105,6 +106,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
 
    // make sure the dialog gets populated the first time it's opened from the menu
    equipmentSelected();
+   // Ensure correct state of Boil Volume edit box.
+   updateCheckboxRecord();
 }
 
 void EquipmentEditor::doLayout()
@@ -164,17 +167,19 @@ void EquipmentEditor::doLayout()
                      lineEdit_boilSize->setMinimumSize(QSize(100, 0));
                      lineEdit_boilSize->setMaximumSize(QSize(100, 16777215));
                      lineEdit_boilSize->setProperty("editField", QVariant(QStringLiteral("boilSize_l")));
-                  label_calcBoilVolume = new QLabel(groupBox_required);
-                     label_calcBoilVolume->setObjectName(QStringLiteral("label_calcBoilVolume"));
-                     sizePolicy1.setHeightForWidth(label_calcBoilVolume->sizePolicy().hasHeightForWidth());
-                     label_calcBoilVolume->setSizePolicy(sizePolicy1);
-                  checkBox_calcBoilVolume = new QCheckBox(groupBox_required);
-                     checkBox_calcBoilVolume->setObjectName(QStringLiteral("checkBox_calcBoilVolume"));
                   label_batchSize = new BtVolumeLabel(groupBox_required);
                      label_batchSize->setObjectName(QStringLiteral("label_batchSize"));
                      sizePolicy1.setHeightForWidth(label_batchSize->sizePolicy().hasHeightForWidth());
                      label_batchSize->setSizePolicy(sizePolicy1);
                      label_batchSize->setContextMenuPolicy(Qt::CustomContextMenu);
+                  checkBox_calcBoilVolume = new QCheckBox(groupBox_required);
+                     checkBox_calcBoilVolume->setObjectName(QStringLiteral("checkBox_calcBoilVolume"));
+                  label_calcBoilVolume = new QLabel(groupBox_required);
+                     label_calcBoilVolume->setObjectName(QStringLiteral("label_calcBoilVolume"));
+                     sizePolicy1.setHeightForWidth(label_calcBoilVolume->sizePolicy().hasHeightForWidth());
+                     label_calcBoilVolume->setSizePolicy(sizePolicy1);
+
+
                   lineEdit_batchSize = new BtVolumeEdit(groupBox_required);
                      lineEdit_batchSize->setObjectName(QStringLiteral("lineEdit_batchSize"));
                      sizePolicy2.setHeightForWidth(lineEdit_batchSize->sizePolicy().hasHeightForWidth());
@@ -182,14 +187,16 @@ void EquipmentEditor::doLayout()
                      lineEdit_batchSize->setMinimumSize(QSize(100, 0));
                      lineEdit_batchSize->setMaximumSize(QSize(100, 16777215));
                      lineEdit_batchSize->setProperty("editField", QVariant(QStringLiteral("batchSize_l")));
+                     
                   formLayout->setWidget(0, QFormLayout::LabelRole, label_name);
                   formLayout->setWidget(0, QFormLayout::FieldRole, lineEdit_name);
-                  formLayout->setWidget(1, QFormLayout::LabelRole, label_boilSize);
-                  formLayout->setWidget(1, QFormLayout::FieldRole, lineEdit_boilSize);
-                  formLayout->setWidget(2, QFormLayout::LabelRole, label_calcBoilVolume);
-                  formLayout->setWidget(2, QFormLayout::FieldRole, checkBox_calcBoilVolume);
-                  formLayout->setWidget(3, QFormLayout::LabelRole, label_batchSize);
-                  formLayout->setWidget(3, QFormLayout::FieldRole, lineEdit_batchSize);
+                  formLayout->setWidget(1, QFormLayout::LabelRole, label_batchSize);
+                  formLayout->setWidget(1, QFormLayout::FieldRole, lineEdit_batchSize);
+                  formLayout->setWidget(2, QFormLayout::LabelRole, label_boilSize);
+                  formLayout->setWidget(2, QFormLayout::FieldRole, lineEdit_boilSize);
+                  formLayout->setWidget(3, QFormLayout::LabelRole, label_calcBoilVolume);
+                  formLayout->setWidget(3, QFormLayout::FieldRole, checkBox_calcBoilVolume);
+                  
             groupBox_water = new QGroupBox(this);
                groupBox_water->setProperty("configSection", QVariant(QStringLiteral("equipmentEditor")));
                formLayout_water = new QFormLayout(groupBox_water);
@@ -433,9 +440,9 @@ void EquipmentEditor::doLayout()
    QWidget::setTabOrder(equipmentComboBox, pushButton_remove);
    QWidget::setTabOrder(pushButton_remove, checkBox_defaultEquipment);
    QWidget::setTabOrder(checkBox_defaultEquipment, lineEdit_name);
-   QWidget::setTabOrder(lineEdit_name, lineEdit_boilSize);
-   QWidget::setTabOrder(lineEdit_boilSize, checkBox_calcBoilVolume);
    QWidget::setTabOrder(checkBox_calcBoilVolume, lineEdit_batchSize);
+   QWidget::setTabOrder(lineEdit_boilSize, checkBox_calcBoilVolume);
+   QWidget::setTabOrder(lineEdit_name, lineEdit_boilSize);
    QWidget::setTabOrder(lineEdit_batchSize, lineEdit_boilTime);
    QWidget::setTabOrder(lineEdit_boilTime, lineEdit_evaporationRate);
    QWidget::setTabOrder(lineEdit_evaporationRate, lineEdit_topUpKettle);
@@ -730,7 +737,9 @@ void EquipmentEditor::updateCheckboxRecord()
    {
       double bar = calcBatchSize();
       lineEdit_boilSize->setText(bar);
+      lineEdit_boilSize->setReadOnly(true);
    }
+   else lineEdit_boilSize->setReadOnly(false);
 }
 
 double EquipmentEditor::calcBatchSize()
