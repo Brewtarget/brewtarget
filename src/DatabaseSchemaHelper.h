@@ -203,6 +203,7 @@ private:
    static QString colWaterNotes;
    
    static QString tableMash;
+   static QString colMashName;
    static QString colMashGrainTemp;
    static QString colMashNotes;
    static QString colMashTunTemp;

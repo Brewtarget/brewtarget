@@ -286,6 +286,16 @@ bool Database::load()
          }
    }
 
+   if ( Brewtarget::option("transferContent",false).toBool() ) {
+      bool converted = convertDatabase();
+      if ( ! converted ) {
+         Brewtarget::logE(QString("Well you fucked that one up. Now what?"));
+      }
+      else {
+         Brewtarget::setOption("transferContent",false);
+      }
+   }
+
    // Mostly because I don't have everything translated yet
    if ( Brewtarget::dbType() == Brewtarget::SQLITE )
    {
@@ -4769,7 +4779,7 @@ bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostnam
          driverName = "QPSQL";
          break;
       default:
-         driverName = "SQLITE";
+         driverName = "QSQLITE";
    }
    connDb = QSqlDatabase::addDatabase(driverName,"connDb");
 
@@ -4803,3 +4813,154 @@ bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostnam
 
 }
 
+// This is going to be initially very ugly, but what did you expect when
+// translating perl to c++?
+// I am expecting this to be called after the target database is open.
+bool Database::convertDatabase()
+{
+   QStringList tables = 
+      QStringList() << "hop" << "style" << "instruction:hasTimer:completed" << "water" << "mash:equip_adjust" << "equipment:calc_boil_volume" << "mashstep" << "yeast:amount_is_weight:add_to_secondary" << "misc:amount_is_weight" << "fermentable:add_after_boil:recommend_mash:is_mashed" << "recipe:forced_carb" << "brewnote" << "bt_equipment" << "bt_fermentable" << "bt_hop" <<  "bt_misc" << "bt_style" << "bt_water" << "bt_yeast" << "fermentable_in_recipe" << "recipe_children" << "hop_children" << "hop_in_inventory" << "hop_in_recipe" << "style_children" << "instruction_in_recipe" << "water_children" << "water_in_recipe" << "equipment_children" << "yeast_children" << "misc_children" << "yeast_in_inventory" << "fermentable_children" << "misc_in_inventory" << "yeast_in_recipe" << "fermentable_in_inventory" << "misc_in_recipe";
+
+   Brewtarget::DBTypes newType = (Brewtarget::DBTypes)Brewtarget::option("dbType",-1).toInt();
+   Brewtarget::DBTypes oldType = (Brewtarget::DBTypes)Brewtarget::option("old.dbType",-1).toInt();
+
+   if ( newType == Brewtarget::NODB )
+   {
+      Brewtarget::logE(tr("No type found for the new database."));
+      return false;
+   }
+   if ( oldType == Brewtarget::NODB )
+   {
+      Brewtarget::logE(tr("No type found for the old database."));
+      return false;
+   }
+
+   if ( oldType == Brewtarget::SQLITE && newType == Brewtarget::PGSQL )
+   {
+      QString filePath = Brewtarget::option("old.dbLocation","").toString();
+      bool openDb;
+
+      if ( filePath.isEmpty() )
+      {
+         Brewtarget::logE(tr("Could not read old.dbLocation from the config file"));
+         return false;
+      }
+
+      QSqlDatabase oldDb = QSqlDatabase::addDatabase("QSQLITE", "olddb");
+      oldDb.setDatabaseName(filePath);
+      openDb = oldDb.open();
+
+      if ( !openDb )
+      {
+         Brewtarget::logE(tr("Could not open %1 : %2").arg(filePath).arg(oldDb.lastError().text()));
+         return false;
+      }
+
+      return convertSqliteToPostgres(tables,oldDb);
+   }
+   return true;
+}
+
+//THIS IS A STUB. 
+bool Database::convertPostgresToSql() 
+{
+   Brewtarget::logE(tr("This doesn't work yet."));
+   return false;
+}
+
+bool Database::convertSqliteToPostgres( QStringList tables, QSqlDatabase oldDb)
+{
+   QSqlDatabase newDb = sqlDatabase();
+   QSqlQuery readOld(oldDb);
+
+   bool wtf;
+
+   // There are a lot of tables to process
+   foreach( QString table, tables ) {
+      QString realName = table;
+      QStringList fields;
+      QString columns,qmarks;
+      bool mustPrepare = true;
+      int maxid = -1;
+
+      if ( table.contains(":") ) {
+         fields = realName.split(":");
+         realName = fields.takeFirst();
+      }
+
+      fields += "display";
+      fields += "deleted";
+
+      QString findAllQuery = QString("SELECT * FROM %1").arg(realName);
+      wtf = readOld.exec(findAllQuery);
+
+      if ( wtf == false ) {
+         Brewtarget::logE(tr("Could not execute %1 : %2").arg(readOld.lastQuery()).arg(readOld.lastError().text()));
+         return false;
+      }
+
+      newDb.transaction();
+
+      QSqlQuery insertNew(newDb); // we will prepare this in a bit
+      while(readOld.next()) {
+         int idx;
+         QSqlRecord here = readOld.record();
+         QString insertQuery;
+
+         idx = here.indexOf("id");
+         if ( idx != -1 && here.value(idx).toInt() > maxid ) {
+            maxid = here.value(idx).toInt();
+         }
+/* Date time stamps are going to hurt, I think
+*/
+         if ( here.contains("fermentDate") ) {
+            idx = here.indexOf("fermentDate");
+            if ( here.value(idx).toString() == "CURRENT_DATETIME" ) {
+               here.setValue(idx, "'now()'");
+            }
+         }
+         // Prepare the insert for this table if required 
+         if ( mustPrepare ) {
+            for(int i=0; i < here.count(); ++i) {
+               if ( ! columns.isEmpty() ) {
+                  columns += QString(",%1").arg( here.fieldName(i));
+                  qmarks  += ",?";
+               }
+               else {
+                  columns = here.fieldName(i);
+                  qmarks = "?";
+               }
+            }
+            insertQuery = QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
+            insertNew.prepare(insertQuery);
+            mustPrepare = false;
+         }
+         // All that's left is to bind 
+         for(int i=0; i < here.count(); ++i) {
+            if ( fields.contains( here.fieldName(i) ) ) {
+               insertNew.bindValue(i, here.value(i).toBool(), QSql::In);
+            }
+            else if ( here.value(i).toString().isEmpty() ) {
+               insertNew.bindValue(i,QVariant(QVariant::String),QSql::In);
+            }
+            else 
+               insertNew.bindValue(i,here.value(i), QSql::In);
+         }
+
+         // and execute
+         wtf = insertNew.exec();
+         if ( ! wtf ) {
+            Brewtarget::logE(QString("That failed just like we expected it to. %1 : %2").arg(insertNew.lastQuery()).arg(insertNew.lastError().text()));
+            return wtf;
+         }
+      }
+      // We need to manually reset the sequences
+      if ( realName != "settings" && maxid > -1 ) {
+         QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(realName).arg(maxid);
+         newDb.exec(seq);
+      }
+
+      newDb.commit();
+   }
+   return true;
+}

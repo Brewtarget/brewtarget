@@ -109,10 +109,10 @@ QString DatabaseSchemaHelper::colHopAmount("amount");
 QString DatabaseSchemaHelper::colHopUse("use");
 QString DatabaseSchemaHelper::colHopTime("time");
 QString DatabaseSchemaHelper::colHopNotes("notes");
-QString DatabaseSchemaHelper::colHopHtype("htyp");
+QString DatabaseSchemaHelper::colHopHtype("htype");
 QString DatabaseSchemaHelper::colHopForm("form");
 QString DatabaseSchemaHelper::colHopBeta("beta");
-QString DatabaseSchemaHelper::colHopHsi("his");
+QString DatabaseSchemaHelper::colHopHsi("hsi");
 QString DatabaseSchemaHelper::colHopOrigin("origin");
 QString DatabaseSchemaHelper::colHopSubstitutes("substitutes");
 QString DatabaseSchemaHelper::colHopHumulene("humulene");
@@ -180,7 +180,9 @@ QString DatabaseSchemaHelper::colWaterMg("magnesium");
 QString DatabaseSchemaHelper::colWaterPh("ph");
 QString DatabaseSchemaHelper::colWaterNotes("notes");
 
+// Mashes can be unnamed, so we need a different definition here.
 QString DatabaseSchemaHelper::tableMash("mash");
+QString DatabaseSchemaHelper::colMashName("name " + TYPETEXT + " DEFAULT ''");
 QString DatabaseSchemaHelper::colMashGrainTemp("grain_temp");
 QString DatabaseSchemaHelper::colMashNotes("notes");
 QString DatabaseSchemaHelper::colMashTunTemp("tun_temp");
@@ -687,6 +689,7 @@ bool DatabaseSchemaHelper::create_recipeChildren(QSqlQuery q)
    ret &= create_recipeChildTable(q, tableMiscInRec, tableMisc);
    ret &= create_recipeChildTable(q, tableWaterInRec, tableWater);
    ret &= create_recipeChildTable(q, tableYeastInRec, tableYeast);
+   // Instructions are the oddball -- they add an extra field nobody else adds
    ret &= create_recipeChildTable(q, tableInsInRec, tableInstruction);
 
    return ret;
@@ -765,8 +768,8 @@ void DatabaseSchemaHelper::select_dbStrings()
          TYPEDATETIME = "DATETIME";
          THENOW=" CURRENT_DATETIME";
    }
-   deleted = QString("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + " " + Brewtarget::dbFalse());
-   display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + " " + Brewtarget::dbTrue());
+   deleted = QString("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse());
+   display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbTrue());
 }
 
 bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
@@ -801,7 +804,7 @@ bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
       colEquipTrubChillerLoss + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colEquipEvapRate        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colEquipBoilTime        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipCalcBoilVolume  + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colEquipCalcBoilVolume  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
       colEquipLauterDeadspace + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colEquipTopUpKettle     + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colEquipHopUtilization  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
@@ -830,7 +833,7 @@ bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
       colFermAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colFermYield          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colFermColor          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermAddAfterBoil   + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colFermAddAfterBoil   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
       colFermOrigin         + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colFermSupplier       + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colFermNotes          + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
@@ -839,8 +842,8 @@ bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
       colFermDiastaticPower + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colFermProtein        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colFermMaxInBatch     + SEP + TYPEREAL + SEP + DEFAULT + " 100.0" + "," +
-      colFermRecommendMash  + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
-      colFermIsMashed       + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colFermRecommendMash  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colFermIsMashed       + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
       colFermIbuGalLb       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       // Display stuff---------------------------------------------------------
       displayUnit + "," +
@@ -897,7 +900,7 @@ bool DatabaseSchemaHelper::create_misc(QSqlQuery q)
       colMiscUse            + SEP + TYPETEXT + SEP + DEFAULT + " 'Boil'" + "," +
       colMiscTime           + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colMiscAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMiscAmountIsWeight + SEP + TYPEINTEGER + SEP + DEFAULT + " 1" + "," +
+      colMiscAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbTrue() + "," +
       colMiscUseFor         + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colMiscNotes          + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       // Display stuff---------------------------------------------------------
@@ -957,7 +960,7 @@ bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
       colYeastType           + SEP + TYPETEXT + SEP + DEFAULT + " 'Ale'" + "," +
       colYeastForm           + SEP + TYPETEXT + SEP + DEFAULT + " 'Liquid'" + "," +
       colYeastAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colYeastAmountIsWeight + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colYeastAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
       colYeastLab            + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colYeastProductId      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colYeastTempMin        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
@@ -968,7 +971,7 @@ bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
       colYeastBestFor        + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colYeastRecultures     + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
       colYeastReuseMax       + SEP + TYPEINTEGER + SEP + DEFAULT + " 10" + "," +
-      colYeastSecondary      + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colYeastSecondary      + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
       // Display stuff---------------------------------------------------------
       displayUnit + "," +
       displayScale + "," +
@@ -1010,7 +1013,7 @@ bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
       CREATETABLE + SEP + tableMash + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
-      name + "," +
+      colMashName + "," +
       colMashGrainTemp       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colMashNotes           + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colMashTunTemp         + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
@@ -1018,7 +1021,7 @@ bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
       colMashPh              + SEP + TYPEREAL + SEP + DEFAULT + " 7.0" + "," +
       colMashTunWeight       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colMashTunSpecificHeat + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMashEquipAdjust     + SEP + TYPEINTEGER + SEP + DEFAULT + " 1" + "," +
+      colMashEquipAdjust     + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbTrue() + "," +
       // Metadata--------------------------------------------------------------
       deleted + "," +
       display + "," +
@@ -1114,9 +1117,9 @@ bool DatabaseSchemaHelper::create_instruction(QSqlQuery q)
       id + "," +
       name + "," +
       colInsDirections + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colInsHasTimer   + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colInsHasTimer   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
       colInsTimerVal   + SEP + TYPETEXT + SEP + DEFAULT + " '00:00:00'" + "," +
-      colInsCompleted  + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colInsCompleted  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
       colInsInterval   + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       // Metadata--------------------------------------------------------------
       deleted + "," +
@@ -1153,7 +1156,7 @@ bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
       colRecAgeTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
       colRecDate         + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
       colRecCarbVol      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecForceCarb    + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colRecForceCarb    + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
       colRecPrimSug      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colRecCarbTemp     + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
       colRecPrimSugEquiv + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
@@ -1191,15 +1194,19 @@ bool DatabaseSchemaHelper::create_btTable(QSqlQuery q, QString tableName, QStrin
 
 bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableName, QString foreignTableName)
 {
-   QString index = QString("%1_id").arg(tableName);
+   QString index = QString("%1_id").arg(foreignTableName);
 
    QString create = 
            CREATETABLE + SEP + tableName + SEP + "(" +
            id + "," +
            index + SEP + TYPEINTEGER + "," +
-           "recipe_id" + SEP + TYPEINTEGER + "," +
-           FOREIGNKEY(index, foreignTableName) + "," +
-           FOREIGNKEY("recipe_id", tableRecipe) +
+           "recipe_id" + SEP + TYPEINTEGER + ",";
+   // silly special cases
+   if ( tableName == tableInsInRec ) 
+      create += "instruction_number " + TYPEINTEGER + SEP + DEFAULT + " 0,";
+
+   create += FOREIGNKEY(index, foreignTableName) + "," +
+             FOREIGNKEY("recipe_id", tableRecipe) +
         ")";
 
    return q.exec(create);

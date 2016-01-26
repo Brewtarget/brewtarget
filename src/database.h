@@ -796,6 +796,12 @@ private:
     * \brief Register that the DB was modified.
     */
    void makeDirty();
+
+   // May St. Stevens intercede on my behalf.
+   bool convertSqliteToPostgres();
+   bool convertSqliteToPostgres( QStringList tables, QSqlDatabase oldDb);
+   bool convertPostgresToSql(); // ambitious, aren't I?
+   bool convertDatabase();
 };
 
 #endif   /* _DATABASE_H */

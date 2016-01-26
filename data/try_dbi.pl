@@ -172,7 +172,6 @@ foreach my $tref ( @tables ) {
       if ( ! $ins ) {
          my ($colnames,$qmarks) = ("","");
          foreach my $col ( sort keys %$vref ) {
-            push @vals, $vref->{$col};
             if ( $colnames ) {
                $colnames .= ",$col";
                $qmarks .= ",?";
@@ -186,6 +185,10 @@ foreach my $tref ( @tables ) {
          $ins_sth = $pgsql->prepare("insert into $name ($colnames) VALUES($qmarks)");
       }
 
+      # yeah, it is two passes for a new table. 
+      foreach my $col ( sort keys %$vref ) {
+         push @vals, $vref->{$col};
+      }
       print "DEBUG: ", join("|", @vals), "\n";
       $ins_sth->execute(@vals); # oh sweet mercy
    }
