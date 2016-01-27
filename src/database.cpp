@@ -1704,7 +1704,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
       queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC")
                     .arg(tableNames[table])
                     .arg(name)
-                    .arg(Brewtarget::dbTrue());
+                    .arg(Brewtarget::dbFalse());
       QSqlQuery childrenq( queryString, sqlDatabase() );
       // TODO Need to make this syntax postgresql safe
       while (childrenq.next()) {
