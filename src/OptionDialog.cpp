@@ -149,6 +149,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    comboBox_engine->addItem( tr("PostgreSQL"), QVariant(Brewtarget::PGSQL));
    connect( comboBox_engine, SIGNAL( currentIndexChanged(int) ), this, SLOT( setEngine(int) ) );
    connect( pushButton_testConnection, SIGNAL( clicked() ), this, SLOT(testConnection()));
+   connect( checkBox_savePassword, SIGNAL(clicked(bool)), this, SLOT(savePassword(bool)));
 
    // I hope this works
    connect( btStringEdit_hostname, SIGNAL( textModified() ), this, SLOT(testRequired()));
@@ -226,33 +227,42 @@ void OptionDialog::saveAndClose()
    {
       QMessageBox::critical(0,
             tr("Test connection or cancel"),
-            tr("Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX")
+            tr("Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.")
             );
       return;
    }
 
-   if ( status == OptionDialog::TESTPASSED )
-   {
+   if ( status == OptionDialog::TESTPASSED ) {
+      bool saveDbConfig = true;
       // This got unpleasant. There are multiple possible transer paths.
       // SQLite->Pgsql, Pgsql->Pgsql and Pgsql->SQLite. This will ensure we
       // preserve the information required.
-      QString theQuestion = QObject::tr("Would you like brewtarget to automatically transfer your data to the new database?");
-      if ( QMessageBox::Yes == QMessageBox::question(0, QObject::tr("Transfer database"), theQuestion) ) {
-         switch(Brewtarget::dbType() ) {
-            case Brewtarget::PGSQL:
-               Brewtarget::setOption("old.dbHostname", Brewtarget::option("dbHostname"));
-               Brewtarget::setOption("old.dbPortnum",  Brewtarget::option("dbPortnum"));
-               Brewtarget::setOption("old.dbSchema",   Brewtarget::option("dbSchema"));
-               Brewtarget::setOption("old.dbName",     Brewtarget::option("dbName"));
-               Brewtarget::setOption("old.dbUsername", Brewtarget::option("dbUsername"));
-               Brewtarget::setOption("old.dbPassword", Brewtarget::option("dbPassword"));
-               break;
-            default:
-               Brewtarget::setOption("old.dbFilename",Database::getDbFileName());
-               break;
+      QString theQuestion = tr("Would you like brewtarget to transfer your data to the new database? NOTE: If you've already loaded the data, say No");
+      if ( QMessageBox::Yes == QMessageBox::question(this, tr("Transfer database"), theQuestion) ) {
+         saveDbConfig = Database::instance().convertDatabase(btStringEdit_hostname->text(), btStringEdit_dbname->text(),
+                                                     btStringEdit_username->text(), btStringEdit_password->text(),
+                                                     btStringEdit_portnum->text().toInt(),
+                                                     (Brewtarget::DBTypes)comboBox_engine->currentIndex());
+         if ( ! saveDbConfig ) {
+            Brewtarget::logE(QString("Messed that up. Now what?"));
          }
-         Brewtarget::setOption("old.dbType", Brewtarget::dbType());
-         Brewtarget::setOption("transferContent", true);
+      }
+
+      if ( saveDbConfig ) {
+         // Database engine stuff
+         Brewtarget::setOption("dbType", comboBox_engine->currentIndex());
+         Brewtarget::setOption("dbHostname", btStringEdit_hostname->text());
+         Brewtarget::setOption("dbPortnum", btStringEdit_portnum->text());
+         Brewtarget::setOption("dbSchema", btStringEdit_schema->text());
+         Brewtarget::setOption("dbName", btStringEdit_dbname->text());
+         Brewtarget::setOption("dbUsername", btStringEdit_username->text());
+         if ( checkBox_savePassword->checkState() == Qt::Checked ) {
+            Brewtarget::setOption("dbPassword", btStringEdit_password->text());
+         }
+         else {
+            Brewtarget::removeOption("dbPassword");
+         }
+         QMessageBox::information(this, tr("Restart"), tr("Please restart brewtarget to connect to the new database"));
       }
    }
 
@@ -382,14 +392,6 @@ void OptionDialog::saveAndClose()
    Brewtarget::setOption("mashHopAdjustment", ibuAdjustmentMashHopDoubleSpinBox->value() / 100);
    Brewtarget::setOption("firstWortHopAdjustment", ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);
 
-   // Database engine stuff
-   Brewtarget::setOption("dbType", comboBox_engine->currentIndex());
-   Brewtarget::setOption("dbHostname", btStringEdit_hostname->text());
-   Brewtarget::setOption("dbPortnum", btStringEdit_portnum->text());
-   Brewtarget::setOption("dbSchema", btStringEdit_schema->text());
-   Brewtarget::setOption("dbName", btStringEdit_dbname->text());
-   Brewtarget::setOption("dbUsername", btStringEdit_username->text());
-   Brewtarget::setOption("dbPassword", btStringEdit_password->text());
 
    // Make sure the main window updates.
    if( Brewtarget::mainWindow() )
@@ -431,9 +433,10 @@ void OptionDialog::showChanges()
    amt = Brewtarget::toDouble(Brewtarget::option("firstWortHopAdjustment",100).toString(), "OptionDialog::showChanges()");
    ibuAdjustmentFirstWortDoubleSpinBox->setValue(amt*100);
 
-   // Database stuff
-   Brewtarget::DBTypes tmp = (Brewtarget::DBTypes)Brewtarget::option("dbType",0).toInt();
-   comboBox_engine->setCurrentIndex( tmp );
+   // Database stuff -- this looks weird, but trust me. We want SQLITE to be
+   // the default for this field
+   int tmp = (Brewtarget::DBTypes)Brewtarget::option("dbType",Brewtarget::SQLITE).toInt();
+   comboBox_engine->setCurrentIndex(tmp);
    groupBox_dbConfig->setEnabled(tmp != Brewtarget::SQLITE);
 
    btStringEdit_hostname->setText(Brewtarget::option("dbHostname","localhost").toString());
@@ -442,6 +445,8 @@ void OptionDialog::showChanges()
    btStringEdit_dbname->setText(Brewtarget::option("dbName","brewtarget").toString());
    btStringEdit_username->setText(Brewtarget::option("dbUsername","brewtarget").toString());
    btStringEdit_password->setText(Brewtarget::option("dbPassword","").toString());
+   checkBox_savePassword->setChecked( Brewtarget::hasOption("dbPassword") );
+
    status = OptionDialog::NOCHANGE;
 
 }
@@ -544,5 +549,13 @@ void OptionDialog::changeColors()
       case OptionDialog::NOCHANGE:
          pushButton_testConnection->setEnabled(false);
 
+   }
+}
+
+void OptionDialog::savePassword(bool state)
+{
+   if ( state ) {
+      QMessageBox::warning(0, QObject::tr("Plaintext"), 
+                              QObject::tr("Passwords are saved in plaintext. We are making exactly 0 effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems."));
    }
 }

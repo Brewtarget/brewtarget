@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "brewtarget.h"
 #include <QString>
 #include <QSqlDatabase>
 
@@ -64,6 +65,8 @@ private:
 
    // Special values
    static QString THENOW;
+   static QString FALSE;
+   static QString TRUE;
    
    // ID string for EVERY table.
    static QString id;
@@ -335,7 +338,7 @@ private:
    /*!
     * \brief Create a blank database whose schema version is \c dbVersion
     */
-   static bool create(QSqlDatabase db = QSqlDatabase());
+   static bool create(QSqlDatabase db = QSqlDatabase(), Brewtarget::DBTypes dbType = Brewtarget::NODB);
    
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
@@ -351,7 +354,7 @@ private:
    static int currentVersion(QSqlDatabase db = QSqlDatabase());
    static QString FOREIGNKEY( QString const& column, QString const& foreignTable );
    static bool create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable);
-   static void select_dbStrings();
+   static void select_dbStrings(Brewtarget::DBTypes dbType);
 
    //! brief These create the core tables, aka, the beerXML tables
    static bool create_settings(QSqlQuery q);
@@ -377,11 +380,11 @@ private:
 
    //! \brief Creating triggers is very DB specific. These isolate the
    // specifics
-   static bool create_increment_trigger(QSqlQuery q);
+   static bool create_increment_trigger(QSqlQuery q, Brewtarget::DBTypes dbType=Brewtarget::NODB);
    static bool create_pgsql_increment_trigger(QSqlQuery q);
    static bool create_sqlite_increment_trigger(QSqlQuery q);
 
-   static bool create_decrement_trigger(QSqlQuery q);
+   static bool create_decrement_trigger(QSqlQuery q, Brewtarget::DBTypes dbType=Brewtarget::NODB);
    static bool create_pgsql_decrement_trigger(QSqlQuery q);
    static bool create_sqlite_decrement_trigger(QSqlQuery q);
 

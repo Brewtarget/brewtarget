@@ -41,8 +41,14 @@ BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
 
 bool BeerXMLElement::deleted() const { return get("deleted").toBool(); }
 bool BeerXMLElement::display() const { return get("display").toBool(); }
-void BeerXMLElement::setDeleted(bool var) { set("deleted", "deleted", var ? 1 : 0); }
-void BeerXMLElement::setDisplay(bool var) { set("display", "display", var ? 1 : 0); }
+
+// Sigh. New databases, more complexity
+void BeerXMLElement::setDeleted(bool var) { 
+   set("deleted", "deleted", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+}
+void BeerXMLElement::setDisplay(bool var) {
+   set("display", "display", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+}
 
 QString BeerXMLElement::folder() const { return get("folder").toString(); }
 void BeerXMLElement::setFolder(QString var, bool signal) 

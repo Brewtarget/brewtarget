@@ -366,6 +366,11 @@ public:
 
    bool isConverted();
 
+   //! \brief Figures out what databases we are copying to and from, opens what
+   //   needs opens and then calls the appropriate workhorse to get it done. 
+   bool convertDatabase(QString const& Hostname, QString const& DbName,
+                        QString const& Username, QString const& Password,
+                        int Portnum, Brewtarget::DBTypes newType);
 signals:
    void changed(QMetaProperty prop, QVariant value);
    void newEquipmentSignal(Equipment*);
@@ -417,8 +422,9 @@ private:
    // And these are for Postgres databases -- are these really required? Are
    // the sqlite ones really required?
    static QString dbHostname;
-   static QString dbPortnum;
+   static int dbPortnum;
    static QString dbName;
+   static QString dbSchema;
    static QString dbUsername;
    static QString dbPassword;
 
@@ -609,7 +615,10 @@ private:
       // Ensure this ingredient is not already in the recipe.
       QSqlQuery q(
                    QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
-                   .arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(reinterpret_cast<BeerXMLElement*>(rec)->_key),
+                   .arg(relTableName)
+                   .arg(ingKeyName)
+                   .arg(ing->_key)
+                   .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key),
                    sqlDatabase()
                  );
       if( q.next() )
@@ -751,7 +760,7 @@ private:
             q.bindValue(QString(":%1").arg(name), object->_key);
          // Display is being set by the call, not by what we are copying
          else if ( name == "display" )
-            q.bindValue(":display", displayed ? 1 : 0 );
+            q.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
          // Ignore ID again, for the same reasons as before.
          else if ( name != "id" )
             q.bindValue(QString(":%1").arg(name), val);
@@ -798,14 +807,30 @@ private:
    void makeDirty();
 
    // May St. Stevens intercede on my behalf.
-   QSqlDatabase openOldSQLite();
-   QSqlDatabase openOldPostgres();
+   //
+   //! \brief opens an SQLite db for transfer
+   QSqlDatabase openSQLite();
+
+   //! \brief opens a PostgreSQL db for transfer. I need
+   QSqlDatabase openPostgres(QString const& Hostname, QString const& DbName,
+                             QString const& Username, QString const& Password,
+                             int Portnum);
+   //! \brief makes a query string we can prepare. Needed this in two places,
+   // so it got a method
    QString makeQueryString( QSqlRecord here, QString realName );
+
+   //! \brief converts sqlite values (mostly booleans) into something postgres
+   // wants
    QVariant convertValueToPostgres(Brewtarget::DBTypes oldType, QString name, QVariant value, QStringList fields);
+
+   //! \brief does the heavy lefting to convert data to postgres
    bool convertToPostgres( Brewtarget::DBTypes oldType, QStringList tables, QSqlDatabase oldDb);
-   bool convertToSQLite(); // ambitious, aren't I?
-   bool convertDatabase();
-   void cleanOptions();
+
+   //! \brief this is a stub at the moment, but sooner or later will convert
+   //   from the existing db into a new sqlite db
+   bool convertToSQLite();
+
+
 };
 
 #endif   /* _DATABASE_H */

@@ -63,6 +63,8 @@ public slots:
    void testConnection();
    //! \brief mark a change to the database config
    void testRequired();
+   //! \brief handle the dialogs for saving passwords
+   void savePassword(bool state);
    
 protected:
    

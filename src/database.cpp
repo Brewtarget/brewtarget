@@ -48,6 +48,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPushButton>
+#include <QInputDialog>
 #include <QCryptographicHash>
 #include <QPair>
 
@@ -75,10 +76,11 @@
 // Static members.
 Database* Database::dbInstance = 0;
 QString Database::dbHostname;
-QString Database::dbPortnum;
+int Database::dbPortnum;
 QString Database::dbUsername;
 QString Database::dbPassword;
 QString Database::dbName;
+QString Database::dbSchema;
 
 QFile Database::dbFile;
 QString Database::dbFileName;
@@ -220,18 +222,37 @@ bool Database::loadPgSQL()
    QSqlDatabase sqldb;
 
    dbHostname = Brewtarget::option("dbHostname").toString();
-   dbPortnum  = Brewtarget::option("dbPortnum").toString();
+   dbPortnum  = Brewtarget::option("dbPortnum").toInt();
    dbName     = Brewtarget::option("dbName").toString();
+   dbSchema   = Brewtarget::option("dbSchema").toString();
+
+   dbUsername = Brewtarget::option("dbUsername").toString();
 
    // Yeah, this is a bad idea. Please make this anything other than this before rolling this out
-   dbUsername = Brewtarget::option("dbUsername").toString();
-   dbPassword = Brewtarget::option("dbPassword").toString();
+   if ( Brewtarget::hasOption("dbPassword") ) {
+      dbPassword = Brewtarget::option("dbPassword").toString();
+   }
+   else {
+      bool isOk = false;
+
+      // prompt for the password until we get it? I don't think this is a good
+      // idea?
+      while ( ! isOk ) {
+
+         dbPassword = QInputDialog::getText(0,tr("Database password"),
+               tr("Password"), QLineEdit::Password,QString(),&isOk);
+         if ( isOk ) {
+            isOk = testConnection( Brewtarget::PGSQL, dbHostname, dbPortnum, dbSchema, 
+                                 dbName, dbUsername, dbPassword);
+         }
+      }
+   }
 
    sqldb = QSqlDatabase::addDatabase("QPSQL","brewtarget");
    sqldb.setHostName( dbHostname );
    sqldb.setDatabaseName( dbName );
    sqldb.setUserName( dbUsername );
-   sqldb.setPort( dbPortnum.toInt() );
+   sqldb.setPort( dbPortnum );
    sqldb.setPassword( dbPassword );
 
    dbIsOpen = sqldb.open();
@@ -287,13 +308,6 @@ bool Database::load()
             Brewtarget::logE("DatabaseSchemaHelper::create() failed");
             return success;
          }
-   }
-
-   if ( Brewtarget::option("transferContent",false).toBool() ) {
-      bool converted = convertDatabase();
-      if ( ! converted ) {
-         Brewtarget::logE(QString("Well you fucked that one up. Now what?"));
-      }
    }
 
    // Mostly because I don't have everything translated yet
@@ -994,8 +1008,10 @@ int Database::insertNewMashStepRecord( Mash* parent )
               QString("id=%1").arg(key)
             );
    // Just sets the step number within the mash to the next available number.
+   // we need coalesce here instead of isnull. coalesce is SQL standard, so
+   // should be more widely supported than isnull
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString( "step_number = (SELECT IFNULL(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
+              QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
                       .arg(tableNames[Brewtarget::MASHSTEPTABLE])
                       .arg(Brewtarget::dbFalse())
                       .arg(parent->_key),
@@ -1706,13 +1722,23 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
                     .arg(name)
                     .arg(Brewtarget::dbFalse());
       QSqlQuery childrenq( queryString, sqlDatabase() );
-      // TODO Need to make this syntax postgresql safe
+      // Postgres uses a more verbose upsert syntax. I don't like this, but
+      // I'm not seeing a better way yet.
       while (childrenq.next()) {
          QString childID = childrenq.record().value("id").toString();
-         queryString = QString("INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)")
+         switch( Brewtarget::dbType() ) {
+            case Brewtarget::PGSQL:
+               queryString = QString("INSERT INTO %1 (parent_id, child_id) VALUES (%2, %3) ON CONFLICT(child_id) DO UPDATE set parent_id = EXCLUDED.parent_id")
                        .arg(tableNames[tableToChildTable[table]])
                        .arg(parentID)
                        .arg(childID);
+               break;
+            default:
+               queryString = QString("INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)")
+                           .arg(tableNames[tableToChildTable[table]])
+                           .arg(parentID)
+                           .arg(childID);
+         }
          QSqlQuery insertq( queryString, sqlDatabase() );
       }
    }
@@ -1772,7 +1798,7 @@ void Database::newInventory(Brewtarget::DBTable invForTable, int invForID){
    switch(Brewtarget::dbType())
    {
       case Brewtarget::PGSQL:
-         queryString = QString("INSERT INTO %1 (%2_id) VALUES(%3) ON CONFLICT (%2_id) DO NOTHING")
+         queryString = QString("INSERT INTO %1 (%2_id) VALUES(%3) ON CONFLICT(%2_id) DO UPDATE set %2_id = EXCLUDED.%2_id")
                      .arg(invTable)
                      .arg(tableNames[invForTable])
                      .arg(getParentID(invForTable, invForID));
@@ -4830,7 +4856,7 @@ bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostnam
 
 }
 
-QSqlDatabase Database::openOldSQLite()
+QSqlDatabase Database::openSQLite()
 {
    QString filePath = Brewtarget::option("old.dbFilename","").toString();
    QSqlDatabase oldDb = QSqlDatabase::addDatabase("QSQLITE", "olddb");
@@ -4850,43 +4876,69 @@ QSqlDatabase Database::openOldSQLite()
    return oldDb;
 }
 
-QSqlDatabase Database::openOldPostgres()
+QSqlDatabase Database::openPostgres(QString const& Hostname, QString const& DbName,
+                                    QString const& Username, QString const& Password,
+                                    int Portnum)
 {
-   QSqlDatabase oldDb;
+   QSqlDatabase newDb;
 
-   oldDb = QSqlDatabase::addDatabase("QPSQL","olddb");
-   oldDb.setHostName( Brewtarget::option("old.dbHostname").toString());
-   oldDb.setDatabaseName( Brewtarget::option("old.dbName").toString());
-   oldDb.setUserName( Brewtarget::option("old.dbUsername" ).toString());
-   oldDb.setPort( Brewtarget::option("old.dbPortnum").toInt());
-   oldDb.setPassword(Brewtarget::option("old.dbPassword").toString());
+   newDb = QSqlDatabase::addDatabase("QPSQL","altdb");
+   newDb.setHostName(Hostname);
+   newDb.setDatabaseName(DbName);
+   newDb.setUserName(Username);
+   newDb.setPort(Portnum);
+   newDb.setPassword(Password);
 
-   oldDb.open();
+   newDb.open();
 
-   return oldDb;
+   return newDb;
 }
 
-//! \brief remove the old.* options and the transfer flag.
-void Database::cleanOptions()
+bool Database::convertDatabase(QString const& Hostname, QString const& DbName,
+                               QString const& Username, QString const& Password,
+                               int Portnum, Brewtarget::DBTypes newType)
 {
-   Brewtarget::removeOption("old.dbType");
-   Brewtarget::removeOption("old.dbFilename");
-   Brewtarget::removeOption("old.dbHostname");
-   Brewtarget::removeOption("old.dbName");
-   Brewtarget::removeOption("old.dbUsername");
-   Brewtarget::removeOption("old.dbPortnum");
-   Brewtarget::removeOption("old.dbPassword");
-   Brewtarget::removeOption("transferContent");
-}
-
-bool Database::convertDatabase()
-{
-   QSqlDatabase oldDb;
+   QSqlDatabase newDb;
    QStringList tables = 
-      QStringList() << "hop" << "style" << "instruction:hasTimer:completed" << "water" << "mash:equip_adjust" << "equipment:calc_boil_volume" << "mashstep" << "yeast:amount_is_weight:add_to_secondary" << "misc:amount_is_weight" << "fermentable:add_after_boil:recommend_mash:is_mashed" << "recipe:forced_carb" << "brewnote" << "bt_equipment" << "bt_fermentable" << "bt_hop" <<  "bt_misc" << "bt_style" << "bt_water" << "bt_yeast" << "fermentable_in_recipe" << "recipe_children" << "hop_children" << "hop_in_inventory" << "hop_in_recipe" << "style_children" << "instruction_in_recipe" << "water_children" << "water_in_recipe" << "equipment_children" << "yeast_children" << "misc_children" << "yeast_in_inventory" << "fermentable_children" << "misc_in_inventory" << "yeast_in_recipe" << "fermentable_in_inventory" << "misc_in_recipe";
+      QStringList() << "hop" << 
+                       "style" << 
+                       "instruction:hasTimer:completed" <<
+                       "water" <<
+                       "mash:equip_adjust" <<
+                       "equipment:calc_boil_volume" <<
+                       "mashstep" <<
+                       "yeast:amount_is_weight:add_to_secondary" <<
+                       "misc:amount_is_weight" <<
+                       "fermentable:add_after_boil:recommend_mash:is_mashed" <<
+                       "recipe:forced_carb" <<
+                       "brewnote" <<
+                       "bt_equipment" <<
+                       "bt_fermentable" <<
+                       "bt_hop" <<
+                       "bt_misc" <<
+                       "bt_style" <<
+                       "bt_water" <<
+                       "bt_yeast" << 
+                       "fermentable_in_recipe" <<
+                       "recipe_children" <<
+                       "hop_children" <<
+                       "hop_in_inventory" <<
+                       "hop_in_recipe" <<
+                       "style_children" <<
+                       "instruction_in_recipe" <<
+                       "water_children" <<
+                       "water_in_recipe" <<
+                       "equipment_children" <<
+                       "yeast_children" <<
+                       "misc_children" <<
+                       "yeast_in_inventory" <<
+                       "fermentable_children" <<
+                       "misc_in_inventory" <<
+                       "yeast_in_recipe" <<
+                       "fermentable_in_inventory" <<
+                       "misc_in_recipe";
 
-   Brewtarget::DBTypes newType = (Brewtarget::DBTypes)Brewtarget::option("dbType",-1).toInt();
-   Brewtarget::DBTypes oldType = (Brewtarget::DBTypes)Brewtarget::option("old.dbType",-1).toInt();
+   Brewtarget::DBTypes oldType = (Brewtarget::DBTypes)Brewtarget::option("dbType",Brewtarget::SQLITE).toInt();
    bool retval = false;
 
    if ( newType == Brewtarget::NODB ) {
@@ -4898,21 +4950,28 @@ bool Database::convertDatabase()
       return retval;
    }
 
-   switch( oldType ) {
+   switch( newType ) {
       case Brewtarget::PGSQL:
-         oldDb = openOldPostgres();
+         newDb = openPostgres(Hostname, DbName,Username, Password, Portnum);
          break;
       default:
-         oldDb = openOldSQLite();
+         newDb = openSQLite();
    }
 
    if ( newType == Brewtarget::PGSQL ) {
-      if ( oldDb.isOpen() )
-         retval = convertToPostgres(oldType, tables,oldDb);
-   }
+      if ( newDb.isOpen() ) {
+         if( ! newDb.tables().contains(QLatin1String("settings")) ) {
+            retval = DatabaseSchemaHelper::create(newDb,newType);
+            if( !retval ) {
+               Brewtarget::logE("DatabaseSchemaHelper::create() failed");
+            }
+         }
 
-   if ( retval ) 
-      cleanOptions();
+         // The initial load may have screwed up, so don't try what won't work
+         if ( retval )  
+            retval = convertToPostgres(oldType,tables,newDb);
+      }
+   }
 
    return retval;
 }
@@ -4956,9 +5015,9 @@ QVariant Database::convertValueToPostgres(Brewtarget::DBTypes oldType, QString n
    return retVar;
 }
 
-bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QStringList tables, QSqlDatabase oldDb)
+bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QStringList tables, QSqlDatabase newDb)
 {
-   QSqlDatabase newDb = sqlDatabase();
+   QSqlDatabase oldDb = sqlDatabase();
    QSqlQuery readOld(oldDb);
 
    bool wtf;

@@ -52,6 +52,9 @@ QString DatabaseSchemaHelper::TYPEBOOLEAN("BOOLEAN");
 
 //Specials -- these all need to be initialized late.
 QString DatabaseSchemaHelper::THENOW;
+QString DatabaseSchemaHelper::FALSE;
+QString DatabaseSchemaHelper::TRUE;
+
 QString DatabaseSchemaHelper::id;
 QString DatabaseSchemaHelper::deleted;
 QString DatabaseSchemaHelper::display;
@@ -332,7 +335,7 @@ QString DatabaseSchemaHelper::tableYeastInventory("yeast_in_inventory");
 
 // Default namespace hides functions from everything outside this file.
 
-bool DatabaseSchemaHelper::create(QSqlDatabase db)
+bool DatabaseSchemaHelper::create(QSqlDatabase db, Brewtarget::DBTypes dbType)
 {
    //--------------------------------------------------------------------------
    // NOTE: if you edit this function, increment dbVersion and edit
@@ -358,13 +361,16 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
    bool ret = true;
 
    // Some stuff just needs evaluated late
-   select_dbStrings();
+   select_dbStrings(dbType);
 
    // Start transaction
    bool hasTransaction = db.transaction();
 
    // Create the core (beerXML) tables
    ret &= create_core(q);
+   if ( ! ret ) {
+      Brewtarget::logE("create_core() failed");
+   }
 
    // Create the bt relational tables
    ret &= create_btTables(q);
@@ -373,8 +379,8 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db)
    ret &= create_recipeChildren(q);
 
    // Triggers are still a pain
-   ret &= create_increment_trigger(q);
-   ret &= create_decrement_trigger(q);
+   ret &= create_increment_trigger(q,dbType);
+   ret &= create_decrement_trigger(q,dbType);
 
    // Ingredient inheritance tables============================================
    ret &= create_inheritenceTables(q);
@@ -754,10 +760,14 @@ bool DatabaseSchemaHelper::create_childTable( QSqlQuery q, QString const& tableN
    return q.exec( create );
 }
 
-void DatabaseSchemaHelper::select_dbStrings()
+void DatabaseSchemaHelper::select_dbStrings(Brewtarget::DBTypes dbType)
 {
-   switch(Brewtarget::dbType())
-   {
+   Brewtarget::DBTypes thisDbType = dbType;
+
+   if ( thisDbType == Brewtarget::NODB )
+      thisDbType = Brewtarget::dbType();
+
+   switch( thisDbType ) {
       case Brewtarget::PGSQL:
          DatabaseSchemaHelper::id = "id SERIAL PRIMARY KEY";
          TYPEDATETIME = "TIMESTAMP";
@@ -768,8 +778,11 @@ void DatabaseSchemaHelper::select_dbStrings()
          TYPEDATETIME = "DATETIME";
          THENOW=" CURRENT_DATETIME";
    }
-   deleted = QString("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse());
-   display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbTrue());
+   TRUE  = Brewtarget::dbTrue(thisDbType);
+   FALSE = Brewtarget::dbFalse(thisDbType);
+
+   deleted = QString("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE );
+   display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE);
 }
 
 bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
@@ -781,15 +794,23 @@ bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
                     colSettingsRepopulateChildren + SEP + TYPEINTEGER +
                     ")";
    ret =  q.exec(create);
-   ret &= q.exec(
-      INSERTINTO + SEP + tableSettings + QString(" VALUES(1,%1,1)").arg(dbVersion)
-   );
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableSettings).arg(create).arg(q.lastError().text()));
+   }
+   else {
+      QString insert = INSERTINTO + SEP + tableSettings + QString(" VALUES(1,%1,1)").arg(dbVersion);
+      ret &= q.exec( insert );
+      if ( ! ret ) {
+         Brewtarget::logE(QString("Inserting into settings table failed: %1 : %2").arg(insert).arg(q.lastError().text()));
+      }
+   }
 
    return ret;
 }
 
 bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
 {
+   bool ret = true;
    QString create = 
       CREATETABLE + SEP + tableEquipment + SEP + "(" +
       id + "," +
@@ -804,7 +825,7 @@ bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
       colEquipTrubChillerLoss + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colEquipEvapRate        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colEquipBoilTime        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipCalcBoilVolume  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colEquipCalcBoilVolume  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
       colEquipLauterDeadspace + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colEquipTopUpKettle     + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colEquipHopUtilization  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
@@ -819,12 +840,17 @@ bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
       folder +
       ")";
 
-   return q.exec(create);
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableEquipment).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create =
       CREATETABLE + SEP + tableFermentable + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -833,7 +859,7 @@ bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
       colFermAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colFermYield          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colFermColor          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermAddAfterBoil   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colFermAddAfterBoil   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
       colFermOrigin         + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colFermSupplier       + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colFermNotes          + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
@@ -842,8 +868,8 @@ bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
       colFermDiastaticPower + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colFermProtein        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colFermMaxInBatch     + SEP + TYPEREAL + SEP + DEFAULT + " 100.0" + "," +
-      colFermRecommendMash  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
-      colFermIsMashed       + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colFermRecommendMash  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
+      colFermIsMashed       + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
       colFermIbuGalLb       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       // Display stuff---------------------------------------------------------
       displayUnit + "," +
@@ -852,13 +878,18 @@ bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
       deleted + "," +
       display + "," +
       folder +
-      ")"
-   );
+      ")";
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableFermentable).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_hop(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableHop + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -885,13 +916,19 @@ bool DatabaseSchemaHelper::create_hop(QSqlQuery q)
       deleted + "," +
       display + "," +
       folder +
-      ")"
-   );
+      ")";
+
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableHop).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_misc(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableMisc + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -900,7 +937,7 @@ bool DatabaseSchemaHelper::create_misc(QSqlQuery q)
       colMiscUse            + SEP + TYPETEXT + SEP + DEFAULT + " 'Boil'" + "," +
       colMiscTime           + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colMiscAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMiscAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbTrue() + "," +
+      colMiscAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE + "," +
       colMiscUseFor         + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colMiscNotes          + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       // Display stuff---------------------------------------------------------
@@ -910,13 +947,19 @@ bool DatabaseSchemaHelper::create_misc(QSqlQuery q)
       deleted + "," +
       display + "," +
       folder +
-      ")"
-   );
+      ")";
+
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableMisc).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_style(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableStyle + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -946,13 +989,18 @@ bool DatabaseSchemaHelper::create_style(QSqlQuery q)
       deleted + "," +
       display + "," +
       folder +
-      ")"
-   );
+      ")";
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableStyle).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableYeast + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -960,7 +1008,7 @@ bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
       colYeastType           + SEP + TYPETEXT + SEP + DEFAULT + " 'Ale'" + "," +
       colYeastForm           + SEP + TYPETEXT + SEP + DEFAULT + " 'Liquid'" + "," +
       colYeastAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colYeastAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colYeastAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
       colYeastLab            + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colYeastProductId      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colYeastTempMin        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
@@ -971,7 +1019,7 @@ bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
       colYeastBestFor        + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colYeastRecultures     + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
       colYeastReuseMax       + SEP + TYPEINTEGER + SEP + DEFAULT + " 10" + "," +
-      colYeastSecondary      + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colYeastSecondary      + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
       // Display stuff---------------------------------------------------------
       displayUnit + "," +
       displayScale + "," +
@@ -979,13 +1027,18 @@ bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
       deleted + "," +
       display + "," +
       folder +
-      ")"
-   );
+      ")";
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableYeast).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_water(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableWater + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -1003,13 +1056,19 @@ bool DatabaseSchemaHelper::create_water(QSqlQuery q)
       deleted + "," +
       display + "," +
       folder +
-      ")"
-   );
+      ")";
+
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableWater).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableMash + SEP + "(" +
       id + "," +
       // BeerXML properties----------------------------------------------------
@@ -1021,17 +1080,23 @@ bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
       colMashPh              + SEP + TYPEREAL + SEP + DEFAULT + " 7.0" + "," +
       colMashTunWeight       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       colMashTunSpecificHeat + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMashEquipAdjust     + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbTrue() + "," +
+      colMashEquipAdjust     + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE + "," +
       // Metadata--------------------------------------------------------------
       deleted + "," +
       display + "," +
       folder +
-      ")"
-   );
+      ")";
+
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableMash).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
 {
+   bool ret = true;
    QString create = 
       CREATETABLE + SEP + tableMashStep + SEP + "(" +
       id + "," +
@@ -1059,12 +1124,17 @@ bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
       FOREIGNKEY(colMashStepMashId, tableMash) +
       ")";
 
-   return q.exec(create);
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableMashStep).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableBrewnote + SEP + "(" +
       id + "," +
       colBNoteBrewDate        + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
@@ -1106,31 +1176,41 @@ bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
       display + "," +
       folder + "," +
       FOREIGNKEY(colBNoteRecipeId, tableRecipe) +
-      ")"
-   );
+      ")";
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableBrewnote).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_instruction(QSqlQuery q)
 {
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableInstruction + SEP + "(" +
       id + "," +
       name + "," +
       colInsDirections + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colInsHasTimer   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colInsHasTimer   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
       colInsTimerVal   + SEP + TYPETEXT + SEP + DEFAULT + " '00:00:00'" + "," +
-      colInsCompleted  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colInsCompleted  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
       colInsInterval   + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       // Metadata--------------------------------------------------------------
       deleted + "," +
       display +
       // instructions aren't displayed in trees, and get no folder
-      ")"
-   );
+      ")";
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableInstruction).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
 {
+   bool ret = true;
    QString create = 
       CREATETABLE + SEP + tableRecipe + SEP + "(" +
       id + "," +
@@ -1156,7 +1236,7 @@ bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
       colRecAgeTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
       colRecDate         + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
       colRecCarbVol      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecForceCarb    + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + Brewtarget::dbFalse() + "," +
+      colRecForceCarb    + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
       colRecPrimSug      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
       colRecCarbTemp     + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
       colRecPrimSugEquiv + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
@@ -1177,25 +1257,34 @@ bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
       FOREIGNKEY(colRecEquipId, tableEquipment) + 
       ")";
 
-   return q.exec(create);
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableRecipe).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_btTable(QSqlQuery q, QString tableName, QString foreignTableName)
 {
    QString foreignIdName = QString("%1_id").arg(foreignTableName);
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableName + SEP + "(" +
       id + "," +
        foreignIdName + SEP + TYPEINTEGER + "," +
       FOREIGNKEY(foreignIdName, foreignTableName) +
-      ")"
-   );
+      ")";
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableName, QString foreignTableName)
 {
    QString index = QString("%1_id").arg(foreignTableName);
-
+   bool ret = true;
    QString create = 
            CREATETABLE + SEP + tableName + SEP + "(" +
            id + "," +
@@ -1209,29 +1298,40 @@ bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableNa
              FOREIGNKEY("recipe_id", tableRecipe) +
         ")";
 
-   return q.exec(create);
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 
 }
 
 bool DatabaseSchemaHelper::create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName)
 {
    QString foreignIdName = QString("%1_id").arg(foreignTableName);
-
-   return q.exec(
+   bool ret = true;
+   QString create = 
       CREATETABLE + SEP + tableName + SEP + "(" +
       id + "," +
       foreignIdName + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
       "amount"         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
       FOREIGNKEY(foreignIdName, foreignTableName) +
-      ")"
-   );
+      ")";
+
+   ret = q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
-bool DatabaseSchemaHelper::create_increment_trigger(QSqlQuery q)
+bool DatabaseSchemaHelper::create_increment_trigger(QSqlQuery q, Brewtarget::DBTypes dbType)
 {
+   // Mmm. This looks evil, doesn't it?
+   Brewtarget::DBTypes thisType = dbType == Brewtarget::NODB ?  Brewtarget::dbType() : dbType;
    bool ret;
-   switch( Brewtarget::dbType() )
-   {
+
+   switch( thisType ) {
       case Brewtarget::PGSQL:
          ret = create_pgsql_increment_trigger(q);
          break;
@@ -1242,17 +1342,24 @@ bool DatabaseSchemaHelper::create_increment_trigger(QSqlQuery q)
    return ret;
 }
 
+// This trigger automatically makes a new instruction in a recipe the last.
 bool DatabaseSchemaHelper::create_sqlite_increment_trigger(QSqlQuery q)
 {
-   // This trigger automatically makes a new instruction in a recipe the last.
-   return q.exec( QString() +
+   bool ret = true;
+   QString create =
+      QString() +
       "CREATE TRIGGER inc_ins_num AFTER INSERT ON instruction_in_recipe " +
       "BEGIN " +
          "UPDATE instruction_in_recipe SET instruction_number = " +
            "(SELECT max(instruction_number) FROM instruction_in_recipe WHERE recipe_id = new.recipe_id) + 1 " +
            "WHERE rowid = new.rowid; " +
-      "END"
-   );
+      "END";
+
+   ret =  q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating trigger failed: %1 : %2").arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_pgsql_increment_trigger(QSqlQuery q)
@@ -1260,9 +1367,7 @@ bool DatabaseSchemaHelper::create_pgsql_increment_trigger(QSqlQuery q)
    // Triggers in PGSQL are harder. We have to define a function, then assign
    // that function to the trigger
    bool ret = true;
-
-   // This makes the function
-   ret = q.exec( QString() +
+   QString function = QString() +
          "CREATE OR REPLACE FUNCTION increment_instruction_num() RETURNS TRIGGER AS $BODY$ " +
          "BEGIN " +
             "UPDATE instruction_in_recipe SET instruction_number = " +
@@ -1271,21 +1376,31 @@ bool DatabaseSchemaHelper::create_pgsql_increment_trigger(QSqlQuery q)
             "return NULL;" +
          "END;" +
          "$BODY$"+
-         " LANGUAGE plpgsql;"
-         );
-
-   ret &= q.exec( QString() +
+         " LANGUAGE plpgsql;";
+   QString trigger = QString() +
          "CREATE TRIGGER inc_ins_num AFTER INSERT ON instruction_in_recipe " +
-         "FOR EACH ROW EXECUTE PROCEDURE increment_instruction_num();"
-         );
+         "FOR EACH ROW EXECUTE PROCEDURE increment_instruction_num();";
+
+
+   // This makes the function
+   ret = q.exec( function );
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating function failed: %1 : %2").arg(function).arg(q.lastError().text()));
+   }
+
+   ret &= q.exec(trigger);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating trigger failed: %1 : %2").arg(trigger).arg(q.lastError().text()));
+   }
    return ret;
 }
 
-bool DatabaseSchemaHelper::create_decrement_trigger(QSqlQuery q)
+bool DatabaseSchemaHelper::create_decrement_trigger(QSqlQuery q, Brewtarget::DBTypes dbType)
 {
+   // Mmm. This looks evil, doesn't it?
+   Brewtarget::DBTypes thisType = dbType == Brewtarget::NODB ?  Brewtarget::dbType() : dbType;
    bool ret;
-   switch( Brewtarget::dbType() )
-   {
+   switch( thisType ) {
       case Brewtarget::PGSQL:
          ret = create_pgsql_decrement_trigger(q);
          break;
@@ -1298,15 +1413,21 @@ bool DatabaseSchemaHelper::create_decrement_trigger(QSqlQuery q)
 
 bool DatabaseSchemaHelper::create_sqlite_decrement_trigger(QSqlQuery q)
 {
-   // This trigger automatically decrements all instruction numbers greater than the one
-   // deleted in the given recipe.
-   return q.exec( QString() +
+   bool ret = true;
+   QString create = QString() +
       "CREATE TRIGGER dec_ins_num AFTER DELETE ON instruction_in_recipe " +
       "BEGIN "
          "UPDATE instruction_in_recipe SET instruction_number = instruction_number - 1 " +
             "WHERE recipe_id = old.recipe_id AND instruction_number > old.instruction_number; " +
-      "END"
-   );
+      "END";
+
+   // This trigger automatically decrements all instruction numbers greater than the one
+   // deleted in the given recipe.
+   ret =  q.exec(create);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating trigger failed: %1 : %2").arg(create).arg(q.lastError().text()));
+   }
+   return ret;
 }
 
 bool DatabaseSchemaHelper::create_pgsql_decrement_trigger(QSqlQuery q)
@@ -1314,9 +1435,7 @@ bool DatabaseSchemaHelper::create_pgsql_decrement_trigger(QSqlQuery q)
    // Triggers in PGSQL are harder. We have to define a function, then assign
    // that function to the trigger
    bool ret = true;
-
-   // This makes the function
-   ret = q.exec( QString() +
+   QString function = QString() +
          "CREATE OR REPLACE FUNCTION decrement_instruction_num() RETURNS TRIGGER AS $BODY$ " +
          "BEGIN " +
             "UPDATE instruction_in_recipe SET instruction_number = instruction_number - 1 " +
@@ -1324,13 +1443,22 @@ bool DatabaseSchemaHelper::create_pgsql_decrement_trigger(QSqlQuery q)
             "return NULL;" +
          "END;" +
          "$BODY$"+
-         " LANGUAGE plpgsql;"
-         );
-
-   ret &= q.exec( QString() +
+         " LANGUAGE plpgsql;";
+   QString trigger =QString() + 
          "CREATE TRIGGER dec_ins_num AFTER DELETE ON instruction_in_recipe " +
-         "FOR EACH ROW EXECUTE PROCEDURE decrement_instruction_num();"
-         );
+         "FOR EACH ROW EXECUTE PROCEDURE decrement_instruction_num();";
+
+
+   // This makes the function
+   ret = q.exec( function );
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating function failed: %1 : %2").arg(function).arg(q.lastError().text()));
+   }
+
+   ret &= q.exec(trigger);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating trigger failed: %1 : %2").arg(trigger).arg(q.lastError().text()));
+   }
    return ret;
 }
 

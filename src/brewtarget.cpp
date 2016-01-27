@@ -514,15 +514,16 @@ bool Brewtarget::initialize(const QString &userDirectory)
 }
 
 Brewtarget::DBTypes Brewtarget::dbType() { return _dbType; }
-QString Brewtarget::dbTrue()
+
+QString Brewtarget::dbTrue(Brewtarget::DBTypes type)
 {
+   Brewtarget::DBTypes whichDb = type;
    QString retval;
 
-   if ( _dbType == 0 )
-   {
-      _dbType = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
-   }
-   switch( _dbType ) {
+   if ( whichDb == Brewtarget::NODB )
+      whichDb = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
+
+   switch( whichDb ) {
       case SQLITE:
          retval = "1";
          break;
@@ -535,16 +536,15 @@ QString Brewtarget::dbTrue()
    return retval;
 }
 
-QString Brewtarget::dbFalse()
+QString Brewtarget::dbFalse(Brewtarget::DBTypes type)
 {
+   Brewtarget::DBTypes whichDb = type;
    QString retval;
 
-   if ( _dbType == 0 )
-   {
-      _dbType = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
-   }
+   if ( whichDb == Brewtarget::NODB )
+      whichDb = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
 
-   switch( _dbType ) {
+   switch( whichDb ) {
       case SQLITE:
          retval = "0";
          break;

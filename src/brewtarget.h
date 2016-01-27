@@ -320,8 +320,8 @@ public:
     * \brief Different databases use different values for true and false.
     * These two methods handle that difference, in a marginally extensible way
     */
-   static QString dbTrue();
-   static QString dbFalse();
+   static QString dbTrue(Brewtarget::DBTypes whichDb = Brewtarget::NODB);
+   static QString dbFalse(Brewtarget::DBTypes whichDb = Brewtarget::NODB);
 
    //! \return the main window.
    static MainWindow* mainWindow();
