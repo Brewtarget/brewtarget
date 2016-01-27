@@ -33,25 +33,9 @@ This will automatically grant that user create/delete table access.
 6. Build this branch.
 7. Start brewtarget, open the options screen and set up the database
 information.
-8. Restart brewtarget. If I did it right, it should just work.
-
-### Optional -- Import
-I've written a perl script that can take the SQLite database and import it
-into postgres. This is harder than it sounds, due to subtle differences
-between the two products.
-   $ try\_dbi.pl -h
-   Usage: try\_dbi.pl -s sqlite db -p password \[-u username\] \[-h hostname\] \[-P port\] \[-n database\] \[-h\]
-   where
-      -s [sqlite db] -- the SQLite database file
-      -p [password]  -- password for the user 
-      -h [hostname]  -- hostname for the PgSQL server, defaults to localhost
-      -P [port]      -- port number for the PgSQL server, defaults to 5432
-      -n [database]  -- database name, defaults to "brewtarget"
-      -u [username]  -- user with create table access in the PgSQL server,
-                        defaults to brewtarget
-      -h             -- prints this screen and exits
-You nede to atleast provide the -s and -p flags. If you changed the username
-or database name, you will need to provide those two.
+8. Restart brewtarget. If I did it right, it should just work. The restart
+may seem a bit slow. Welcome to the cloud -- it runs everywhere, just not
+quickly.
 
 ## Run
 Now you should be able to run brewtarget, using postgres as its data source.

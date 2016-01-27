@@ -219,7 +219,6 @@ void OptionDialog::defaultDataDir()
 
 void OptionDialog::saveAndClose()
 {
-   Brewtarget::DBTypes oldEngine = (Brewtarget::DBTypes)Brewtarget::option("dbType", 0).toInt();
    bool okay = false;
 
    // TODO:: FIX THIS UI. I am really not sure what the best approach is here.
@@ -232,13 +231,27 @@ void OptionDialog::saveAndClose()
       return;
    }
 
-   if ( oldEngine == Brewtarget::SQLITE )
+   if ( status == OptionDialog::TESTPASSED )
    {
-      // TODO:: Fix the question to be more generic
-      QString theQuestion = QString("Would you like brewtarget to automatically transfer your data from %1 to %2?").arg("SQLite").arg("PostgreSQL");
-      if ( QMessageBox::Yes == QMessageBox::question(0, QObject::tr("Upload database"), theQuestion) ) {
-         Brewtarget::setOption("old.dbType", Brewtarget::SQLITE);
-         Brewtarget::setOption("old.dbLocation",Database::getDbFileName());
+      // This got unpleasant. There are multiple possible transer paths.
+      // SQLite->Pgsql, Pgsql->Pgsql and Pgsql->SQLite. This will ensure we
+      // preserve the information required.
+      QString theQuestion = QObject::tr("Would you like brewtarget to automatically transfer your data to the new database?");
+      if ( QMessageBox::Yes == QMessageBox::question(0, QObject::tr("Transfer database"), theQuestion) ) {
+         switch(Brewtarget::dbType() ) {
+            case Brewtarget::PGSQL:
+               Brewtarget::setOption("old.dbHostname", Brewtarget::option("dbHostname"));
+               Brewtarget::setOption("old.dbPortnum",  Brewtarget::option("dbPortnum"));
+               Brewtarget::setOption("old.dbSchema",   Brewtarget::option("dbSchema"));
+               Brewtarget::setOption("old.dbName",     Brewtarget::option("dbName"));
+               Brewtarget::setOption("old.dbUsername", Brewtarget::option("dbUsername"));
+               Brewtarget::setOption("old.dbPassword", Brewtarget::option("dbPassword"));
+               break;
+            default:
+               Brewtarget::setOption("old.dbFilename",Database::getDbFileName());
+               break;
+         }
+         Brewtarget::setOption("old.dbType", Brewtarget::dbType());
          Brewtarget::setOption("transferContent", true);
       }
    }
@@ -272,7 +285,6 @@ void OptionDialog::saveAndClose()
          Brewtarget::thingToUnitSystem.insert(Unit::Temp,UnitSystems::fahrenheitTempUnitSystem());
          break;
    }
-
 
    switch (volumeComboBox->itemData(volumeComboBox->currentIndex()).toInt(&okay))
    {
@@ -456,7 +468,6 @@ void OptionDialog::setEngine(int selected)
    testRequired();
 
 }
-
 
 void OptionDialog::testConnection()
 {

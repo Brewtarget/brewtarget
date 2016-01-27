@@ -78,6 +78,7 @@ QString Database::dbHostname;
 QString Database::dbPortnum;
 QString Database::dbUsername;
 QString Database::dbPassword;
+QString Database::dbName;
 
 QFile Database::dbFile;
 QString Database::dbFileName;
@@ -220,16 +221,18 @@ bool Database::loadPgSQL()
 
    dbHostname = Brewtarget::option("dbHostname").toString();
    dbPortnum  = Brewtarget::option("dbPortnum").toString();
-   dbUsername = Brewtarget::option("dbUsername").toString();
+   dbName     = Brewtarget::option("dbName").toString();
+
    // Yeah, this is a bad idea. Please make this anything other than this before rolling this out
+   dbUsername = Brewtarget::option("dbUsername").toString();
    dbPassword = Brewtarget::option("dbPassword").toString();
 
    sqldb = QSqlDatabase::addDatabase("QPSQL","brewtarget");
    sqldb.setHostName( dbHostname );
-   sqldb.setDatabaseName("brewtarget");
+   sqldb.setDatabaseName( dbName );
    sqldb.setUserName( dbUsername );
-   sqldb.setPort(dbPortnum.toInt());
-   sqldb.setPassword(dbPassword);
+   sqldb.setPort( dbPortnum.toInt() );
+   sqldb.setPassword( dbPassword );
 
    dbIsOpen = sqldb.open();
    dbConName = sqldb.connectionName();
@@ -290,9 +293,6 @@ bool Database::load()
       bool converted = convertDatabase();
       if ( ! converted ) {
          Brewtarget::logE(QString("Well you fucked that one up. Now what?"));
-      }
-      else {
-         Brewtarget::setOption("transferContent",false);
       }
    }
 
@@ -1706,6 +1706,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
                     .arg(name)
                     .arg(Brewtarget::dbTrue());
       QSqlQuery childrenq( queryString, sqlDatabase() );
+      // TODO Need to make this syntax postgresql safe
       while (childrenq.next()) {
          QString childID = childrenq.record().value("id").toString();
          queryString = QString("INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)")
@@ -1745,7 +1746,7 @@ int Database::getParentID(Brewtarget::DBTable table, int childKey){
 int Database::getInventoryID(Brewtarget::DBTable table, int key){
    int ret;
    QString queryString = QString(
-      "SELECT id FROM %1 WHERE %2_id = '%3' LIMIT 1"
+      "SELECT id FROM %1 WHERE %2_id = %3 LIMIT 1"
    ).arg(tableNames[tableToInventoryTable[table]]).arg(tableNames[table]).arg(getParentID(table, key));
    QSqlQuery q( queryString, sqlDatabase() );
    q.first();
@@ -1764,9 +1765,25 @@ Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table){
 void Database::newInventory(Brewtarget::DBTable invForTable, int invForID){
    QString invTable = tableNames[tableToInventoryTable[invForTable]];
 
-   QString queryString = QString(
-      "INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)"
-   ).arg(invTable).arg(tableNames[invForTable]).arg(getParentID(invForTable, invForID));
+   QString queryString;
+
+   // TODO: This is broken as written. Postgres 9.5 supports the ON CONFLICT
+   // method. I'm working on it, but got distracted by other issues.
+   switch(Brewtarget::dbType())
+   {
+      case Brewtarget::PGSQL:
+         queryString = QString("INSERT INTO %1 (%2_id) VALUES(%3) ON CONFLICT (%2_id) DO NOTHING")
+                     .arg(invTable)
+                     .arg(tableNames[invForTable])
+                     .arg(getParentID(invForTable, invForID));
+         break;
+      default:
+         queryString = QString("INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)")
+                     .arg(invTable)
+                     .arg(tableNames[invForTable])
+                     .arg(getParentID(invForTable, invForID));
+   }
+
    QSqlQuery q( queryString, sqlDatabase() );
 
 }
@@ -4813,62 +4830,133 @@ bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostnam
 
 }
 
-// This is going to be initially very ugly, but what did you expect when
-// translating perl to c++?
-// I am expecting this to be called after the target database is open.
+QSqlDatabase Database::openOldSQLite()
+{
+   QString filePath = Brewtarget::option("old.dbFilename","").toString();
+   QSqlDatabase oldDb = QSqlDatabase::addDatabase("QSQLITE", "olddb");
+
+   bool openDb;
+
+   if (! filePath.isEmpty() ) {
+      oldDb.setDatabaseName(filePath);
+      openDb = oldDb.open();
+
+      if ( !openDb )
+         Brewtarget::logE(tr("Could not open %1 : %2").arg(filePath).arg(oldDb.lastError().text()));
+   }
+   else {
+      Brewtarget::logE(tr("Could not read old.dbFilename from the config file"));
+   }
+   return oldDb;
+}
+
+QSqlDatabase Database::openOldPostgres()
+{
+   QSqlDatabase oldDb;
+
+   oldDb = QSqlDatabase::addDatabase("QPSQL","olddb");
+   oldDb.setHostName( Brewtarget::option("old.dbHostname").toString());
+   oldDb.setDatabaseName( Brewtarget::option("old.dbName").toString());
+   oldDb.setUserName( Brewtarget::option("old.dbUsername" ).toString());
+   oldDb.setPort( Brewtarget::option("old.dbPortnum").toInt());
+   oldDb.setPassword(Brewtarget::option("old.dbPassword").toString());
+
+   oldDb.open();
+
+   return oldDb;
+}
+
+//! \brief remove the old.* options and the transfer flag.
+void Database::cleanOptions()
+{
+   Brewtarget::removeOption("old.dbType");
+   Brewtarget::removeOption("old.dbFilename");
+   Brewtarget::removeOption("old.dbHostname");
+   Brewtarget::removeOption("old.dbName");
+   Brewtarget::removeOption("old.dbUsername");
+   Brewtarget::removeOption("old.dbPortnum");
+   Brewtarget::removeOption("old.dbPassword");
+   Brewtarget::removeOption("transferContent");
+}
+
 bool Database::convertDatabase()
 {
+   QSqlDatabase oldDb;
    QStringList tables = 
       QStringList() << "hop" << "style" << "instruction:hasTimer:completed" << "water" << "mash:equip_adjust" << "equipment:calc_boil_volume" << "mashstep" << "yeast:amount_is_weight:add_to_secondary" << "misc:amount_is_weight" << "fermentable:add_after_boil:recommend_mash:is_mashed" << "recipe:forced_carb" << "brewnote" << "bt_equipment" << "bt_fermentable" << "bt_hop" <<  "bt_misc" << "bt_style" << "bt_water" << "bt_yeast" << "fermentable_in_recipe" << "recipe_children" << "hop_children" << "hop_in_inventory" << "hop_in_recipe" << "style_children" << "instruction_in_recipe" << "water_children" << "water_in_recipe" << "equipment_children" << "yeast_children" << "misc_children" << "yeast_in_inventory" << "fermentable_children" << "misc_in_inventory" << "yeast_in_recipe" << "fermentable_in_inventory" << "misc_in_recipe";
 
    Brewtarget::DBTypes newType = (Brewtarget::DBTypes)Brewtarget::option("dbType",-1).toInt();
    Brewtarget::DBTypes oldType = (Brewtarget::DBTypes)Brewtarget::option("old.dbType",-1).toInt();
+   bool retval = false;
 
-   if ( newType == Brewtarget::NODB )
-   {
+   if ( newType == Brewtarget::NODB ) {
       Brewtarget::logE(tr("No type found for the new database."));
-      return false;
+      return retval;
    }
-   if ( oldType == Brewtarget::NODB )
-   {
+   if ( oldType == Brewtarget::NODB ) {
       Brewtarget::logE(tr("No type found for the old database."));
-      return false;
+      return retval;
    }
 
-   if ( oldType == Brewtarget::SQLITE && newType == Brewtarget::PGSQL )
-   {
-      QString filePath = Brewtarget::option("old.dbLocation","").toString();
-      bool openDb;
-
-      if ( filePath.isEmpty() )
-      {
-         Brewtarget::logE(tr("Could not read old.dbLocation from the config file"));
-         return false;
-      }
-
-      QSqlDatabase oldDb = QSqlDatabase::addDatabase("QSQLITE", "olddb");
-      oldDb.setDatabaseName(filePath);
-      openDb = oldDb.open();
-
-      if ( !openDb )
-      {
-         Brewtarget::logE(tr("Could not open %1 : %2").arg(filePath).arg(oldDb.lastError().text()));
-         return false;
-      }
-
-      return convertSqliteToPostgres(tables,oldDb);
+   switch( oldType ) {
+      case Brewtarget::PGSQL:
+         oldDb = openOldPostgres();
+         break;
+      default:
+         oldDb = openOldSQLite();
    }
-   return true;
+
+   if ( newType == Brewtarget::PGSQL ) {
+      if ( oldDb.isOpen() )
+         retval = convertToPostgres(oldType, tables,oldDb);
+   }
+
+   if ( retval ) 
+      cleanOptions();
+
+   return retval;
 }
 
 //THIS IS A STUB. 
-bool Database::convertPostgresToSql() 
+bool Database::convertToSQLite() 
 {
    Brewtarget::logE(tr("This doesn't work yet."));
    return false;
 }
 
-bool Database::convertSqliteToPostgres( QStringList tables, QSqlDatabase oldDb)
+QString Database::makeQueryString( QSqlRecord here, QString realName )
+{
+   QString columns,qmarks;
+
+   for(int i=0; i < here.count(); ++i) {
+      if ( ! columns.isEmpty() ) {
+         columns += QString(",%1").arg( here.fieldName(i));
+         qmarks  += ",?";
+      }
+      else {
+         columns = here.fieldName(i);
+         qmarks = "?";
+      }
+   }
+   return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
+}
+
+QVariant Database::convertValueToPostgres(Brewtarget::DBTypes oldType, QString name, QVariant value, QStringList fields) 
+{
+   QVariant retVar = value;
+   if ( oldType == Brewtarget::SQLITE ) {
+      if ( fields.contains(name) ) {
+         retVar = value.toBool();
+      }
+      else if ( name == "fermentDate" && value.toString() == "CURRENT_DATETIME" ) {
+         retVar = "'now()'";
+      }
+   }
+
+   return retVar;
+}
+
+bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QStringList tables, QSqlDatabase oldDb)
 {
    QSqlDatabase newDb = sqlDatabase();
    QSqlQuery readOld(oldDb);
@@ -4911,40 +4999,19 @@ bool Database::convertSqliteToPostgres( QStringList tables, QSqlDatabase oldDb)
          if ( idx != -1 && here.value(idx).toInt() > maxid ) {
             maxid = here.value(idx).toInt();
          }
-/* Date time stamps are going to hurt, I think
-*/
-         if ( here.contains("fermentDate") ) {
-            idx = here.indexOf("fermentDate");
-            if ( here.value(idx).toString() == "CURRENT_DATETIME" ) {
-               here.setValue(idx, "'now()'");
-            }
-         }
+
          // Prepare the insert for this table if required 
          if ( mustPrepare ) {
-            for(int i=0; i < here.count(); ++i) {
-               if ( ! columns.isEmpty() ) {
-                  columns += QString(",%1").arg( here.fieldName(i));
-                  qmarks  += ",?";
-               }
-               else {
-                  columns = here.fieldName(i);
-                  qmarks = "?";
-               }
-            }
-            insertQuery = QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
+            insertQuery = makeQueryString(here,realName);
             insertNew.prepare(insertQuery);
             mustPrepare = false;
          }
          // All that's left is to bind 
          for(int i=0; i < here.count(); ++i) {
-            if ( fields.contains( here.fieldName(i) ) ) {
-               insertNew.bindValue(i, here.value(i).toBool(), QSql::In);
-            }
-            else if ( here.value(i).toString().isEmpty() ) {
-               insertNew.bindValue(i,QVariant(QVariant::String),QSql::In);
-            }
-            else 
-               insertNew.bindValue(i,here.value(i), QSql::In);
+            insertNew.bindValue(i, 
+                     convertValueToPostgres(oldType, here.fieldName(i), here.value(i), fields) ,
+                     QSql::In
+            );
          }
 
          // and execute
@@ -4964,3 +5031,4 @@ bool Database::convertSqliteToPostgres( QStringList tables, QSqlDatabase oldDb)
    }
    return true;
 }
+

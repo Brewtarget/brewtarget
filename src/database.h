@@ -418,9 +418,9 @@ private:
    // the sqlite ones really required?
    static QString dbHostname;
    static QString dbPortnum;
+   static QString dbName;
    static QString dbUsername;
    static QString dbPassword;
-   static QString dbName;
 
    static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
    static QHash<Brewtarget::DBTable,QString> tableNames;
@@ -798,10 +798,14 @@ private:
    void makeDirty();
 
    // May St. Stevens intercede on my behalf.
-   bool convertSqliteToPostgres();
-   bool convertSqliteToPostgres( QStringList tables, QSqlDatabase oldDb);
-   bool convertPostgresToSql(); // ambitious, aren't I?
+   QSqlDatabase openOldSQLite();
+   QSqlDatabase openOldPostgres();
+   QString makeQueryString( QSqlRecord here, QString realName );
+   QVariant convertValueToPostgres(Brewtarget::DBTypes oldType, QString name, QVariant value, QStringList fields);
+   bool convertToPostgres( Brewtarget::DBTypes oldType, QStringList tables, QSqlDatabase oldDb);
+   bool convertToSQLite(); // ambitious, aren't I?
    bool convertDatabase();
+   void cleanOptions();
 };
 
 #endif   /* _DATABASE_H */
