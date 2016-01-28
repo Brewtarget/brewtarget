@@ -256,16 +256,16 @@ void OptionDialog::saveAndClose()
          Brewtarget::setOption("dbSchema", btStringEdit_schema->text());
          Brewtarget::setOption("dbName", btStringEdit_dbname->text());
          Brewtarget::setOption("dbUsername", btStringEdit_username->text());
-         if ( checkBox_savePassword->checkState() == Qt::Checked ) {
-            Brewtarget::setOption("dbPassword", btStringEdit_password->text());
-         }
-         else {
-            Brewtarget::removeOption("dbPassword");
-         }
          QMessageBox::information(this, tr("Restart"), tr("Please restart brewtarget to connect to the new database"));
       }
    }
 
+   if ( checkBox_savePassword->checkState() == Qt::Checked ) {
+      Brewtarget::setOption("dbPassword", btStringEdit_password->text());
+   }
+   else {
+      Brewtarget::removeOption("dbPassword");
+   }
    switch (weightComboBox->itemData(weightComboBox->currentIndex()).toInt(&okay))
    {
       case SI:
@@ -448,6 +448,8 @@ void OptionDialog::showChanges()
    checkBox_savePassword->setChecked( Brewtarget::hasOption("dbPassword") );
 
    status = OptionDialog::NOCHANGE;
+   qDebug() << Q_FUNC_INFO << "status:" << status;
+   changeColors();
 
 }
 
@@ -532,6 +534,8 @@ void OptionDialog::changeColors()
    // Red when the test failed
    // Green when the test passed
    // Black otherwise.
+   qDebug() << Q_FUNC_INFO << "status:" << status;
+
    switch(status)
    {
       case OptionDialog::NEEDSTEST:
@@ -544,11 +548,11 @@ void OptionDialog::changeColors()
          pushButton_testConnection->setStyleSheet("color:red");
          break;
       case OptionDialog::TESTPASSED:
-         buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
          pushButton_testConnection->setStyleSheet("color:green");
       case OptionDialog::NOCHANGE:
+         buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
          pushButton_testConnection->setEnabled(false);
-
+         break;
    }
 }
 

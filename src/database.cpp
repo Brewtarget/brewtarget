@@ -310,27 +310,22 @@ bool Database::load()
          }
    }
 
-   // Mostly because I don't have everything translated yet
-   if ( Brewtarget::dbType() == Brewtarget::SQLITE )
+   // Update the database if need be. This has to happen before we do anything
+   // else or we dump core
+   bool schemaErr = false;
+   schemaUpdated = updateSchema(&schemaErr);
+   if( schemaErr )
    {
-      // Update the database if need be. This has to happen before we do anything
-      // else or we dump core
-      bool schemaErr = false;
-      schemaUpdated = updateSchema(&schemaErr);
-      if( schemaErr )
-      {
-          QMessageBox::critical(
-            0,
-            QObject::tr("Database Failure"),
-            QObject::tr("Failed to update the database")
-          );
-          return false;
-      }
+         QMessageBox::critical(
+         0,
+         QObject::tr("Database Failure"),
+         QObject::tr("Failed to update the database")
+         );
+         return false;
    }
 
    // Initialize the SELECT * query hashes.
    selectAll = Database::selectAllHash();
-/* No idea what needs to happen here. It should be somewhat painless, but cracked if I know
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -354,7 +349,7 @@ bool Database::load()
       // Update this field.
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
-*/
+
    // Create and store all pointers.
    populateElements( allBrewNotes, Brewtarget::BREWNOTETABLE );
    populateElements( allEquipments, Brewtarget::EQUIPTABLE );
@@ -1742,7 +1737,6 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
          QSqlQuery insertq( queryString, sqlDatabase() );
       }
    }
-
 }
 // populate ingredient tables
 void Database::populateChildTablesByName(){
@@ -4703,7 +4697,7 @@ void Database::updateDatabase(QString const& filename)
       // Un-delete it if it is somehow deleted.
       updateString.append(", deleted=:zero WHERE id=:id");
       qUpdateOldIng.prepare(updateString);
-      qUpdateOldIng.bindValue( ":zero", zero );
+      qUpdateOldIng.bindValue( ":zero", Brewtarget::dbFalse() );
 
       QSqlQuery qOldBtIng( sqlDatabase() );
       qOldBtIng.prepare(
@@ -4805,8 +4799,11 @@ void Database::updateDatabase(QString const& filename)
 
 void Database::makeDirty() 
 {
-   dirty = true;
-   emit isUnsavedChanged(true);
+   // databases are updated automagically for postgres
+   if ( Brewtarget::dbType() != Brewtarget::PGSQL ) {
+      dirty = true;
+      emit isUnsavedChanged(true);
+   }
 }
 
 bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostname, int portnum, QString const& schema, 
