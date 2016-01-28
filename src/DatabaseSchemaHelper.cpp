@@ -27,7 +27,7 @@
 #include <QDebug>
 #include <QSqlError>
 
-const int DatabaseSchemaHelper::dbVersion = 5;
+const int DatabaseSchemaHelper::dbVersion = 6;
 
 // Commands and keywords
 QString DatabaseSchemaHelper::CREATETABLE("CREATE TABLE");
@@ -40,6 +40,11 @@ QString DatabaseSchemaHelper::INSERTINTO("INSERT INTO");
 QString DatabaseSchemaHelper::DEFAULT("DEFAULT");
 QString DatabaseSchemaHelper::SELECT("SELECT");
 QString DatabaseSchemaHelper::SEP(" ");
+QString DatabaseSchemaHelper::COMMA(",");
+QString DatabaseSchemaHelper::OPENPAREN("(");
+QString DatabaseSchemaHelper::CLOSEPAREN(")");
+QString DatabaseSchemaHelper::END(";");
+
 QString DatabaseSchemaHelper::UNIQUE("UNIQUE");
 
 // Types
@@ -64,6 +69,14 @@ QString DatabaseSchemaHelper::displayUnit("display_unit" + SEP + TYPEINTEGER + S
 QString DatabaseSchemaHelper::displayScale("display_scale" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
 QString DatabaseSchemaHelper::displayTempUnit("display_temp_unit" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
 QString DatabaseSchemaHelper::folder("folder " + TYPETEXT + " DEFAULT ''");
+
+QString DatabaseSchemaHelper::tableMeta("bt_alltables");
+QString DatabaseSchemaHelper::colMetaIsSearched("is_searched");
+QString DatabaseSchemaHelper::colMetaIsInventory("is_inventory");
+QString DatabaseSchemaHelper::colMetaIsChild("is_child");
+QString DatabaseSchemaHelper::colMetaDateCreated("created");
+QString DatabaseSchemaHelper::colMetaVersion("version");
+QString DatabaseSchemaHelper::colMetaTableId("table_id");
 
 QString DatabaseSchemaHelper::tableSettings("settings");
 QString DatabaseSchemaHelper::colSettingsVersion("version");
@@ -363,27 +376,29 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db, Brewtarget::DBTypes dbType)
    // Some stuff just needs evaluated late
    select_dbStrings(dbType);
 
+   // This has to be done outside the transaction
+   ret = create_meta(q);
    // Start transaction
    bool hasTransaction = db.transaction();
 
    // Create the core (beerXML) tables
-   ret &= create_core(q);
+   ret &= create_beerXMLTables(q);
    if ( ! ret ) {
-      Brewtarget::logE("create_core() failed");
+      Brewtarget::logE("create_beerXMLTables() failed");
    }
 
    // Create the bt relational tables
    ret &= create_btTables(q);
 
    // Recipe relational tables
-   ret &= create_recipeChildren(q);
+   ret &= create_inRecipeTables(q);
 
    // Triggers are still a pain
    ret &= create_increment_trigger(q,dbType);
    ret &= create_decrement_trigger(q,dbType);
 
    // Ingredient inheritance tables============================================
-   ret &= create_inheritenceTables(q);
+   ret &= create_childrenTables(q);
 
    // Inventory tables=========================================================
    ret &= create_inventoryTables(q);
@@ -391,145 +406,6 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db, Brewtarget::DBTypes dbType)
    // Commit transaction
    if( hasTransaction )
       ret &= db.commit();
-
-   return ret;
-}
-
-bool DatabaseSchemaHelper::migrate_to_202(QSqlQuery q)
-{
-   bool ret = true;
-
-   ret &= q.exec(
-      CREATETABLE + SEP + tableSettings + "(" +
-      id + "," +
-      colSettingsVersion + SEP + TYPETEXT +
-      ")"
-   );
-
-   // Add "projected_ferm_points" to brewnote table
-   ret &= q.exec(
-      ALTERTABLE + SEP + tableBrewnote + SEP +
-      ADDCOLUMN + SEP + "projected_ferm_points" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"
-   );
-
-   ret &= q.exec(
-      UPDATE + SEP + tableBrewnote + SEP +
-      SET + SEP + "projected_ferm_points = -1.0"
-   );
-
-   // Update version to 2.0.2
-   ret &= q.exec(
-      INSERTINTO + SEP + tableSettings + " VALUES(1,'2.0.2')"
-   );
-
-   return ret;
-}
-
-bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q)
-{
-   bool ret = true;
-   QStringList getFolders = QStringList() << tableEquipment << tableFermentable << tableHop <<
-      tableMisc << tableStyle << tableYeast << tableWater << tableMash <<
-      tableBrewnote << tableRecipe;
-
-   QStringList rebuildTables = QStringList() << tableEquipChildren << tableFermChildren <<
-      tableHopChildren << tableMiscChildren << tableRecChildren <<
-      tableStyleChildren << tableWaterChildren << tableYeastChildren <<
-      tableFermInventory << tableHopInventory << tableMiscInventory << tableYeastInventory;
-
-   foreach(const QString &table, getFolders)
-   {
-      ret &= q.exec(
-               ALTERTABLE + SEP + table + SEP +
-               ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
-            );
-   }
-
-   // Put the "Bt:.*" recipes into /brewtarget folder
-   ret &= q.exec(
-      UPDATE + SEP + tableRecipe + SEP +
-      SET + SEP + "folder='/brewtarget' WHERE name LIKE 'Bt:%'"
-   );
-
-   // Update version to 2.1.0
-   ret &= q.exec(
-      UPDATE + SEP + tableSettings + SEP +
-      SET + SEP + colSettingsVersion + "='2.1.0' WHERE id=1"
-   );
-
-   // Used to trigger the code to populate the ingredient inheritance tables
-   ret &= q.exec(
-      ALTERTABLE + SEP + tableSettings + SEP +
-      ADDCOLUMN + SEP + "repopulateChildrenOnNextStart" + SEP + TYPEINTEGER
-   );
-
-   ret &= q.exec(
-      UPDATE + SEP + tableSettings + SEP +
-      SET + SEP + "repopulateChildrenOnNextStart=1"
-   );
-
-   // Drop and re-create children tables with new UNIQUE requirement
-   // Drop and re-create inventory tables with new UNIQUE requirement
-   foreach(const QString &table, rebuildTables )
-   {
-      ret &= q.exec(
-         DROPTABLE + SEP + table
-      );
-   }
-   ret &= create_inheritenceTables(q);
-   ret &= create_inventoryTables(q);
-
-   return ret;
-}
-
-bool DatabaseSchemaHelper::migrate_to_4(QSqlQuery q)
-{
-   bool ret = true;
-
-   // Save old settings
-   ret &= q.exec(
-      "CREATE TEMP TABLE oldsettings AS SELECT * FROM " + tableSettings
-   );
-
-   // Drop the old settings with text version, and create new table
-   // with intever version.
-   ret &= q.exec(
-      DROPTABLE + SEP + tableSettings
-   );
-
-   ret &= q.exec(
-      CREATETABLE + SEP + tableSettings + "(" +
-      id + "," +
-      colSettingsVersion            + SEP + TYPEINTEGER + "," +
-      colSettingsRepopulateChildren + SEP + TYPEINTEGER +
-      ")"
-   );
-
-   // Update version to 4, saving other settings
-   ret &= q.exec(
-      INSERTINTO + SEP + tableSettings +
-      QString(" (id,%1,%2)").arg(colSettingsVersion).arg(colSettingsRepopulateChildren) + " " +
-      QString("SELECT 1, 4, %1 FROM oldsettings").arg(colSettingsRepopulateChildren)
-   );
-
-   // Cleanup
-   ret &= q.exec(
-      DROPTABLE + SEP + "oldsettings"
-   );
-
-   return ret;
-}
-
-bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q)
-{
-   bool ret = true;
-   // Drop the previous bugged TRIGGER
-   ret &= q.exec( QString() +
-      "DROP TRIGGER dec_ins_num"
-   );
-
-   // Create the good trigger
-   ret &= create_decrement_trigger(q);
 
    return ret;
 }
@@ -548,20 +424,18 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
       case 1: // == '2.0.0'
          ret &= migrate_to_202(q);
          break;
-
       case 2: // == '2.0.2'
          ret &= migrate_to_210(q);
          break;
-
       case 3: // == '2.1.0'
          ret &= migrate_to_4(q);
          break;
-
       case 4:
          ret &= migrate_to_5(q);
          break;
-
-
+      case 5:
+         ret &= migrate_to_6(q);
+         break;
       default:
          Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
          return false;
@@ -646,7 +520,93 @@ int DatabaseSchemaHelper::currentVersion(QSqlDatabase db)
    return -1;
 }
 
-bool DatabaseSchemaHelper::create_core(QSqlQuery q)
+QString DatabaseSchemaHelper::foreignKey( QString const& column, QString const& foreignTable )
+{
+   return QString("FOREIGN KEY(%1) REFERENCES %2(id)").arg(column).arg(foreignTable);
+}
+
+void DatabaseSchemaHelper::select_dbStrings(Brewtarget::DBTypes dbType)
+{
+   Brewtarget::DBTypes thisDbType = dbType;
+
+   if ( thisDbType == Brewtarget::NODB )
+      thisDbType = Brewtarget::dbType();
+
+   switch( thisDbType ) {
+      case Brewtarget::PGSQL:
+         DatabaseSchemaHelper::id = "id SERIAL PRIMARY KEY";
+         TYPEDATETIME = "TIMESTAMP";
+         THENOW="CURRENT_TIMESTAMP";
+         break;
+      default:
+         DatabaseSchemaHelper::id = "id INTEGER PRIMARY KEY autoincrement";
+         TYPEDATETIME = "DATETIME";
+         THENOW="CURRENT_DATETIME";
+   }
+   TRUE  = Brewtarget::dbTrue(thisDbType);
+   FALSE = Brewtarget::dbFalse(thisDbType);
+
+   deleted = QString("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE );
+   display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE);
+}
+
+bool DatabaseSchemaHelper::create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid, bool isSearched, bool isInv, bool isChild)
+{
+   bool ret = q.exec(create);
+
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
+   }
+   else {
+      ret &= insert_meta(q,tableName,tableid,isSearched,isInv,isChild);
+   }
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_meta(QSqlQuery q)
+{
+   QString create =QString(
+      CREATETABLE + SEP + tableMeta + SEP + OPENPAREN +
+         id                                                                     + COMMA +
+         name                                                                   + COMMA +
+         colMetaIsSearched  + SEP + TYPEBOOLEAN  + SEP + DEFAULT + SEP + TRUE   + COMMA +
+         colMetaIsInventory + SEP + TYPEBOOLEAN  + SEP + DEFAULT + SEP + TRUE   + COMMA +
+         colMetaIsChild     + SEP + TYPEBOOLEAN  + SEP + DEFAULT + SEP + TRUE   + COMMA +
+         colMetaDateCreated + SEP + TYPEDATETIME + SEP + DEFAULT + SEP + THENOW + COMMA +
+         colMetaVersion     + SEP + TYPEINTEGER  + SEP + DEFAULT + SEP + "%1"   + COMMA +
+         colMetaTableId     + SEP + TYPEINTEGER  + SEP + "not null" +
+      CLOSEPAREN).arg(dbVersion);
+   
+   return create_table(q,create,tableMeta,Brewtarget::BTALLTABLE,false,false,false);
+}
+
+bool DatabaseSchemaHelper::insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid, bool isSearched, bool isInventory, bool isChild)
+{
+   QString insert = QString(
+         INSERTINTO + SEP + tableMeta + SEP + 
+         OPENPAREN +
+            "name"             + COMMA +
+            colMetaTableId     + COMMA +
+            colMetaIsSearched  + COMMA +
+            colMetaIsInventory + COMMA +
+            colMetaIsChild     + 
+         CLOSEPAREN + SEP +
+         "VALUES('%1',%2,%3,%4,%5)")
+      .arg(name)
+      .arg(tableid)
+      .arg(isSearched ? TRUE : FALSE)
+      .arg(isInventory ? TRUE : FALSE)
+      .arg(isChild ? TRUE : FALSE);
+   bool ret = true;
+
+   ret = q.exec(insert);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Inserting into meta table failed: %1 : %2").arg(insert).arg(q.lastError().text()));
+   }
+   return ret;
+}
+
+bool DatabaseSchemaHelper::create_beerXMLTables(QSqlQuery q)
 {
    bool ret = true;
 
@@ -675,28 +635,28 @@ bool DatabaseSchemaHelper::create_btTables(QSqlQuery q)
    // they refer to, and they MUST contain fields 'id' and '<table>_id'.
    bool ret = true;
 
-   ret &= create_btTable(q, tableBtEquipment, tableEquipment);
-   ret &= create_btTable(q, tableBtFermentable, tableFermentable);
-   ret &= create_btTable(q, tableBtHop, tableHop);
-   ret &= create_btTable(q, tableBtMisc, tableMisc);
-   ret &= create_btTable(q, tableBtStyle, tableStyle);
-   ret &= create_btTable(q, tableBtYeast, tableYeast);
-   ret &= create_btTable(q, tableBtWater, tableWater);
+   ret &= create_btTable(q, tableBtEquipment, tableEquipment, Brewtarget::BT_EQUIPTABLE);
+   ret &= create_btTable(q, tableBtFermentable, tableFermentable, Brewtarget::BT_FERMTABLE);
+   ret &= create_btTable(q, tableBtHop, tableHop, Brewtarget::BT_HOPTABLE);
+   ret &= create_btTable(q, tableBtMisc, tableMisc, Brewtarget::BT_MISCTABLE);
+   ret &= create_btTable(q, tableBtStyle, tableStyle, Brewtarget::BT_STYLETABLE);
+   ret &= create_btTable(q, tableBtYeast, tableYeast, Brewtarget::BT_YEASTTABLE);
+   ret &= create_btTable(q, tableBtWater, tableWater, Brewtarget::BT_WATERTABLE);
 
    return ret;
 }
 
-bool DatabaseSchemaHelper::create_recipeChildren(QSqlQuery q)
+bool DatabaseSchemaHelper::create_inRecipeTables(QSqlQuery q)
 {
    bool ret = true;
 
-   ret &= create_recipeChildTable(q, tableFermInRec, tableFermentable);
-   ret &= create_recipeChildTable(q, tableHopInRec, tableHop);
-   ret &= create_recipeChildTable(q, tableMiscInRec, tableMisc);
-   ret &= create_recipeChildTable(q, tableWaterInRec, tableWater);
-   ret &= create_recipeChildTable(q, tableYeastInRec, tableYeast);
+   ret &= create_recipeChildTable(q, tableFermInRec, tableFermentable, Brewtarget::FERMINRECTABLE);
+   ret &= create_recipeChildTable(q, tableHopInRec, tableHop, Brewtarget::HOPINRECTABLE);
+   ret &= create_recipeChildTable(q, tableMiscInRec, tableMisc, Brewtarget::MISCINRECTABLE);
+   ret &= create_recipeChildTable(q, tableWaterInRec, tableWater, Brewtarget::WATERINRECTABLE);
+   ret &= create_recipeChildTable(q, tableYeastInRec, tableYeast, Brewtarget::YEASTINRECTABLE);
    // Instructions are the oddball -- they add an extra field nobody else adds
-   ret &= create_recipeChildTable(q, tableInsInRec, tableInstruction);
+   ret &= create_recipeChildTable(q, tableInsInRec, tableInstruction, Brewtarget::INSTINRECTABLE);
 
    return ret;
 }
@@ -705,95 +665,53 @@ bool DatabaseSchemaHelper::create_inventoryTables(QSqlQuery q)
 {
    bool ret = true;
 
-   ret &= create_inventoryTable(q,tableFermInventory,tableFermentable);
-   ret &= create_inventoryTable(q,tableHopInventory,tableHop);
-   ret &= create_inventoryTable(q,tableMiscInventory,tableMisc);
+   ret &= create_inventoryTable(q,tableFermInventory,tableFermentable, Brewtarget::FERMINVTABLE);
+   ret &= create_inventoryTable(q,tableHopInventory,tableHop, Brewtarget::HOPINVTABLE);
+   ret &= create_inventoryTable(q,tableMiscInventory,tableMisc, Brewtarget::MISCINVTABLE);
+   ret &= create_inventoryTable(q,tableYeastInventory,tableYeast, Brewtarget::YEASTINVTABLE);
 
-   // For yeast, homebrewers don't usually keep stores of yeast. They keep
-   // packets or vials or some other type of discrete integer quantity. So, I
-   // don't know how useful a real-valued inventory amount would be for yeast.
-   // NOTE: This is the odd man out, due to the difference between amount and
-   //       quanta
-   ret &= q.exec(
-      CREATETABLE + SEP + tableYeastInventory + SEP + "(" +
-      id + "," +
-      "yeast_id" + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-      "quanta"   + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
-      FOREIGNKEY("yeast_id", tableYeast) +
-      ")"
-   );
-   return ret;
+   return ret ;
 }
 
-bool DatabaseSchemaHelper::create_inheritenceTables(QSqlQuery q)
+bool DatabaseSchemaHelper::create_childrenTables(QSqlQuery q)
 {
    bool ret = true;
-
-   ret &= create_childTable(q,tableEquipChildren,tableEquipment);
-   ret &= create_childTable(q,tableFermChildren,tableFermentable);
-   ret &= create_childTable(q,tableHopChildren ,tableHop);
-   ret &= create_childTable(q,tableMiscChildren ,tableMisc);
-   ret &= create_childTable(q,tableRecChildren ,tableRecipe);
-   ret &= create_childTable(q,tableStyleChildren ,tableStyle);
-   ret &= create_childTable(q,tableWaterChildren ,tableWater);
-   ret &= create_childTable(q,tableYeastChildren ,tableYeast);
+   ret &= create_childTable(q,tableEquipChildren,tableEquipment, Brewtarget::EQUIPCHILDTABLE);
+   ret &= create_childTable(q,tableFermChildren,tableFermentable, Brewtarget::FERMCHILDTABLE);
+   ret &= create_childTable(q,tableHopChildren ,tableHop, Brewtarget::HOPCHILDTABLE);
+   ret &= create_childTable(q,tableMiscChildren ,tableMisc, Brewtarget::MISCCHILDTABLE);
+   ret &= create_childTable(q,tableRecChildren ,tableRecipe, Brewtarget::RECIPECHILDTABLE);
+   ret &= create_childTable(q,tableStyleChildren ,tableStyle, Brewtarget::STYLECHILDTABLE);
+   ret &= create_childTable(q,tableWaterChildren ,tableWater, Brewtarget::WATERCHILDTABLE);
+   ret &= create_childTable(q,tableYeastChildren ,tableYeast, Brewtarget::YEASTCHILDTABLE);
 
    return ret;
 }
 
-QString DatabaseSchemaHelper::FOREIGNKEY( QString const& column, QString const& foreignTable )
-{
-   return QString("FOREIGN KEY(%1) REFERENCES %2(id)").arg(column).arg(foreignTable);
-}
-
-bool DatabaseSchemaHelper::create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable)
+bool DatabaseSchemaHelper::create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable, Brewtarget::DBTable tableid)
 {
    QString create = 
-            CREATETABLE + SEP + tableName + SEP + "(" +
-            id + "," +
-            "parent_id INTEGER," +
-            "child_id INTEGER," +
-            FOREIGNKEY("parent_id", foreignTable) + "," +
-            FOREIGNKEY("child_id", foreignTable) +
-            ")";
+            CREATETABLE + SEP + tableName + SEP + OPENPAREN +
+            id                                    + COMMA +
+            "parent_id" + SEP + TYPEINTEGER             + COMMA +
+            "child_id"  + SEP + TYPEINTEGER             + COMMA +
+            foreignKey("parent_id", foreignTable) + COMMA +
+            foreignKey("child_id", foreignTable) +
+            CLOSEPAREN;
 
-   return q.exec( create );
+   return create_table(q,create,tableName,tableid,true,false,true);
 }
 
-void DatabaseSchemaHelper::select_dbStrings(Brewtarget::DBTypes dbType)
-{
-   Brewtarget::DBTypes thisDbType = dbType;
-
-   if ( thisDbType == Brewtarget::NODB )
-      thisDbType = Brewtarget::dbType();
-
-   switch( thisDbType ) {
-      case Brewtarget::PGSQL:
-         DatabaseSchemaHelper::id = "id SERIAL PRIMARY KEY";
-         TYPEDATETIME = "TIMESTAMP";
-         THENOW=" CURRENT_TIMESTAMP";
-         break;
-      default:
-         DatabaseSchemaHelper::id = "id INTEGER PRIMARY KEY autoincrement";
-         TYPEDATETIME = "DATETIME";
-         THENOW=" CURRENT_DATETIME";
-   }
-   TRUE  = Brewtarget::dbTrue(thisDbType);
-   FALSE = Brewtarget::dbFalse(thisDbType);
-
-   deleted = QString("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE );
-   display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE);
-}
-
+// This ones a bit ugly, but the meta stuff is
 bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
 {
    bool ret = true;
-   QString create = CREATETABLE + SEP + tableSettings + "(" +
-                    id + "," +
-                    colSettingsVersion            + SEP + TYPEINTEGER + "," +
+   QString create = CREATETABLE + SEP + tableSettings + OPENPAREN +
+                    id                                                + COMMA +
+                    colSettingsVersion            + SEP + TYPEINTEGER + COMMA +
                     colSettingsRepopulateChildren + SEP + TYPEINTEGER +
                     ")";
-   ret =  q.exec(create);
+   ret =  create_table(q,create,tableSettings,Brewtarget::SETTINGTABLE,false,false,false);
    if ( ! ret ) {
       Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableSettings).arg(create).arg(q.lastError().text()));
    }
@@ -810,519 +728,460 @@ bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
 
 bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableEquipment + SEP + "(" +
-      id + "," +
+      CREATETABLE + SEP + tableEquipment + SEP + OPENPAREN +
+      id                                                                          + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colEquipBoilSize        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipBatchSize       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipTunVolume       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipTunWeight       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipTunSpecificHeat + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipTopUpWater      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipTrubChillerLoss + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipEvapRate        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipBoilTime        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipCalcBoilVolume  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
-      colEquipLauterDeadspace + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipTopUpKettle     + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipHopUtilization  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipNotes           + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
+      name                                                                        + COMMA +
+      colEquipBoilSize        + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipBatchSize       + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipTunVolume       + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipTunWeight       + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipTunSpecificHeat + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipTopUpWater      + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipTrubChillerLoss + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipEvapRate        + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipBoilTime        + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipCalcBoilVolume  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE    + COMMA +
+      colEquipLauterDeadspace + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipTopUpKettle     + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipHopUtilization  + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipNotes           + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"    + COMMA +
       // Our BeerXML extensions
-      colEquipRealEvapRate + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colEquipBoilingPoint + SEP + TYPEREAL + SEP + DEFAULT + " 100.0" + "," +
-      colEquipAbsorption   + SEP + TYPEREAL + SEP + DEFAULT + " 1.085" + "," +
+      colEquipRealEvapRate    + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colEquipBoilingPoint    + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "100.0" + COMMA +
+      colEquipAbsorption      + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "1.085" + COMMA +
       // Metadata
-      deleted + "," +
-      display + "," +
+      deleted                                                                     + COMMA +
+      display                                                                     + COMMA +
       folder +
-      ")";
+      CLOSEPAREN;
 
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableEquipment).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+   return create_table(q,create,tableEquipment,Brewtarget::EQUIPTABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
 {
-   bool ret = true;
    QString create =
-      CREATETABLE + SEP + tableFermentable + SEP + "(" +
-      id + "," +
+      CREATETABLE + SEP + tableFermentable + SEP + OPENPAREN +
+      id                                                                          + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colFermFtype          + SEP + TYPETEXT + SEP + DEFAULT + " 'Grain'" + "," +
-      colFermAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermYield          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermColor          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermAddAfterBoil   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
-      colFermOrigin         + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colFermSupplier       + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colFermNotes          + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colFermCoarseFineDiff + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermMoisture       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermDiastaticPower + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermProtein        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colFermMaxInBatch     + SEP + TYPEREAL + SEP + DEFAULT + " 100.0" + "," +
-      colFermRecommendMash  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
-      colFermIsMashed       + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
-      colFermIbuGalLb       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
+      name                                                                        + COMMA +
+      colFermFtype          + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "'Grain'" + COMMA +
+      colFermAmount         + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colFermYield          + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colFermColor          + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colFermAddAfterBoil   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE     + COMMA +
+      colFermOrigin         + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"      + COMMA +
+      colFermSupplier       + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"      + COMMA +
+      colFermNotes          + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"      + COMMA +
+      colFermCoarseFineDiff + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colFermMoisture       + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colFermDiastaticPower + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colFermProtein        + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colFermMaxInBatch     + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "100.0"   + COMMA +
+      colFermRecommendMash  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE     + COMMA +
+      colFermIsMashed       + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE     + COMMA +
+      colFermIbuGalLb       + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
       // Display stuff---------------------------------------------------------
-      displayUnit + "," +
-      displayScale + "," +
+      displayUnit                                                                 + COMMA +
+      displayScale                                                                + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
+      deleted                                                                     + COMMA +
+      display                                                                     + COMMA +
       folder +
-      ")";
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableFermentable).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+      CLOSEPAREN;
+
+   return create_table(q,create,tableFermentable,Brewtarget::FERMTABLE, true, false, false);
 }
 
 bool DatabaseSchemaHelper::create_hop(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableHop + SEP + "(" +
-      id + "," +
+      CREATETABLE         + SEP + tableHop + OPENPAREN +
+      id                                                                      + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colHopAlpha         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colHopAmount        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colHopUse           + SEP + TYPETEXT + SEP + DEFAULT + " 'Boil'" + "," +
-      colHopTime          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colHopNotes         + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colHopHtype         + SEP + TYPETEXT + SEP + DEFAULT + " 'Both'" + "," +
-      colHopForm          + SEP + TYPETEXT + SEP + DEFAULT + " 'Pellet'" + "," +
-      colHopBeta          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colHopHsi           + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colHopOrigin        + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colHopSubstitutes   + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colHopHumulene      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colHopCaryophyllene + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colHopCohumulone    + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colHopMyrcene       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
+      name                                                                    + COMMA +
+      colHopAlpha         + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colHopAmount        + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colHopUse           + SEP + TYPETEXT + SEP + DEFAULT + SEP + "'Boil'"   + COMMA +
+      colHopTime          + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colHopNotes         + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"       + COMMA +
+      colHopHtype         + SEP + TYPETEXT + SEP + DEFAULT + SEP + "'Both'"   + COMMA +
+      colHopForm          + SEP + TYPETEXT + SEP + DEFAULT + SEP + "'Pellet'" + COMMA +
+      colHopBeta          + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colHopHsi           + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colHopOrigin        + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"       + COMMA +
+      colHopSubstitutes   + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"       + COMMA +
+      colHopHumulene      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colHopCaryophyllene + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colHopCohumulone    + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colHopMyrcene       + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"      + COMMA +
       // Display stuff---------------------------------------------------------
-      displayUnit + "," +
-      displayScale + "," +
+      displayUnit                                                             + COMMA +
+      displayScale                                                            + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
+      deleted                                                                 + COMMA +
+      display                                                                 + COMMA +
       folder +
-      ")";
+      CLOSEPAREN;
 
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableHop).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+   return create_table(q,create,tableHop,Brewtarget::HOPTABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_misc(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableMisc + SEP + "(" +
-      id + "," +
+      CREATETABLE + SEP + tableMisc + SEP + OPENPAREN +
+      id                                                                          + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colMiscMtype          + SEP + TYPETEXT + SEP + DEFAULT + " 'Other'" + "," +
-      colMiscUse            + SEP + TYPETEXT + SEP + DEFAULT + " 'Boil'" + "," +
-      colMiscTime           + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMiscAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMiscAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE + "," +
-      colMiscUseFor         + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colMiscNotes          + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
+      name + COMMA +
+      colMiscMtype          + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "'Other'" + COMMA +
+      colMiscUse            + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "'Boil'"  + COMMA +
+      colMiscTime           + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colMiscAmount         + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"     + COMMA +
+      colMiscAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE      + COMMA +
+      colMiscUseFor         + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"      + COMMA +
+      colMiscNotes          + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"      + COMMA +
       // Display stuff---------------------------------------------------------
-      displayUnit + "," +
-      displayScale + "," +
+      displayUnit                                                                 + COMMA +
+      displayScale                                                                + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
+      deleted                                                                     + COMMA +
+      display                                                                     + COMMA +
       folder +
-      ")";
+      CLOSEPAREN;
 
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableMisc).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+   return create_table(q,create,tableMisc,Brewtarget::MISCTABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_style(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableStyle + SEP + "(" +
-      id + "," +
+      CREATETABLE + SEP + tableStyle + SEP + OPENPAREN +
+      id                                                                   + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colStyleType        + SEP + TYPETEXT + SEP + DEFAULT + " 'Ale'" + "," +
-      colStyleCat         + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colStyleCatNum      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colStyleLetter      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colStyleGuide       + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colStyleOgMin       + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colStyleOgMax       + SEP + TYPEREAL + SEP + DEFAULT + " 1.1" + "," +
-      colStyleFgMin       + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colStyleFgMax       + SEP + TYPEREAL + SEP + DEFAULT + " 1.1" + "," +
-      colStyleIbuMin      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colStyleIbuMax      + SEP + TYPEREAL + SEP + DEFAULT + " 100.0" + "," +
-      colStyleColorMin    + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colStyleColorMax    + SEP + TYPEREAL + SEP + DEFAULT + " 100.0" + "," +
-      colStyleAbvMin      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colStyleAbvMax      + SEP + TYPEREAL + SEP + DEFAULT + " 100.0" + "," +
-      colStyleCarbMin     + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colStyleCarbMax     + SEP + TYPEREAL + SEP + DEFAULT + " 100.0" + "," +
-      colStyleNotes       + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colStyleProfile     + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colStyleIngredients + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colStyleExamples    + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
+      name                                                                 + COMMA +
+      colStyleType        + SEP + TYPETEXT + SEP + DEFAULT + SEP + "'Ale'" + COMMA +
+      colStyleCat         + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"    + COMMA +
+      colStyleCatNum      + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"    + COMMA +
+      colStyleLetter      + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"    + COMMA +
+      colStyleGuide       + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"    + COMMA +
+      colStyleOgMin       + SEP + TYPEREAL + SEP + DEFAULT + SEP + "1.0"   + COMMA +
+      colStyleOgMax       + SEP + TYPEREAL + SEP + DEFAULT + SEP + "1.1"   + COMMA +
+      colStyleFgMin       + SEP + TYPEREAL + SEP + DEFAULT + SEP + "1.0"   + COMMA +
+      colStyleFgMax       + SEP + TYPEREAL + SEP + DEFAULT + SEP + "1.1"   + COMMA +
+      colStyleIbuMin      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colStyleIbuMax      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "100.0" + COMMA +
+      colStyleColorMin    + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colStyleColorMax    + SEP + TYPEREAL + SEP + DEFAULT + SEP + "100.0" + COMMA +
+      colStyleAbvMin      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colStyleAbvMax      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "100.0" + COMMA +
+      colStyleCarbMin     + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"   + COMMA +
+      colStyleCarbMax     + SEP + TYPEREAL + SEP + DEFAULT + SEP + "100.0" + COMMA +
+      colStyleNotes       + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"    + COMMA +
+      colStyleProfile     + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"    + COMMA +
+      colStyleIngredients + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"    + COMMA +
+      colStyleExamples    + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"    + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
+      deleted                                                              + COMMA +
+      display                                                              + COMMA +
       folder +
-      ")";
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableStyle).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+      CLOSEPAREN;
+   return create_table(q,create,tableStyle,Brewtarget::STYLETABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableYeast + SEP + "(" +
-      id + "," +
+      CREATETABLE + SEP + tableYeast + SEP + OPENPAREN +
+      id                                                                            + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colYeastType           + SEP + TYPETEXT + SEP + DEFAULT + " 'Ale'" + "," +
-      colYeastForm           + SEP + TYPETEXT + SEP + DEFAULT + " 'Liquid'" + "," +
-      colYeastAmount         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colYeastAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
-      colYeastLab            + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colYeastProductId      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colYeastTempMin        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colYeastTempMax        + SEP + TYPEREAL + SEP + DEFAULT + " 32.0" + "," +
-      colYeastFlocc          + SEP + TYPETEXT + SEP + DEFAULT + " 'Medium'" + "," +
-      colYeastAtten          + SEP + TYPEREAL + SEP + DEFAULT + " 75.0" + "," +
-      colYeastNotes          + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colYeastBestFor        + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colYeastRecultures     + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
-      colYeastReuseMax       + SEP + TYPEINTEGER + SEP + DEFAULT + " 10" + "," +
-      colYeastSecondary      + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
+      name                                                                          + COMMA +
+      colYeastType           + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "'Ale'"    + COMMA +
+      colYeastForm           + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "'Liquid'" + COMMA +
+      colYeastAmount         + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colYeastAmountIsWeight + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE      + COMMA +
+      colYeastLab            + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"       + COMMA +
+      colYeastProductId      + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"       + COMMA +
+      colYeastTempMin        + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"      + COMMA +
+      colYeastTempMax        + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "32.0"     + COMMA +
+      colYeastFlocc          + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "'Medium'" + COMMA +
+      colYeastAtten          + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "75.0"     + COMMA +
+      colYeastNotes          + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"       + COMMA +
+      colYeastBestFor        + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"       + COMMA +
+      colYeastRecultures     + SEP + TYPEINTEGER + SEP + DEFAULT + SEP + "0"        + COMMA +
+      colYeastReuseMax       + SEP + TYPEINTEGER + SEP + DEFAULT + SEP + "10"       + COMMA +
+      colYeastSecondary      + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE      + COMMA +
       // Display stuff---------------------------------------------------------
-      displayUnit + "," +
-      displayScale + "," +
+      displayUnit                                                                   + COMMA +
+      displayScale                                                                  + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
+      deleted                                                                       + COMMA +
+      display                                                                       + COMMA +
       folder +
-      ")";
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableYeast).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+      CLOSEPAREN;
+
+   return create_table(q,create,tableYeast,Brewtarget::YEASTTABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_water(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
       CREATETABLE + SEP + tableWater + SEP + "(" +
-      id + "," +
+      id                                                             + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colWaterAmount  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colWaterCa      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colWaterBicarb  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colWaterSulfate + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colWaterCl      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colWaterNa      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colWaterMg      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colWaterPh      + SEP + TYPEREAL + SEP + DEFAULT + " 7.0" + "," +
-      colWaterNotes   + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
+      name                                                           + COMMA +
+      colWaterAmount  + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0" + COMMA +
+      colWaterCa      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0" + COMMA +
+      colWaterBicarb  + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0" + COMMA +
+      colWaterSulfate + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0" + COMMA +
+      colWaterCl      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0" + COMMA +
+      colWaterNa      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0" + COMMA +
+      colWaterMg      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0" + COMMA +
+      colWaterPh      + SEP + TYPEREAL + SEP + DEFAULT + SEP + "7.0" + COMMA +
+      colWaterNotes   + SEP + TYPETEXT + SEP + DEFAULT + SEP + "''"  + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
+      deleted                                                        + COMMA +
+      display                                                        + COMMA +
       folder +
-      ")";
+      CLOSEPAREN;
 
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableWater).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+   return create_table(q,create,tableWater,Brewtarget::WATERTABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableMash + SEP + "(" +
-      id + "," +
+      CREATETABLE + SEP + tableMash + SEP + OPENPAREN +
+      id                                                                        + COMMA +
       // BeerXML properties----------------------------------------------------
-      colMashName + "," +
-      colMashGrainTemp       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMashNotes           + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colMashTunTemp         + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
-      colMashSpargeTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 74.0" + "," +
-      colMashPh              + SEP + TYPEREAL + SEP + DEFAULT + " 7.0" + "," +
-      colMashTunWeight       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMashTunSpecificHeat + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMashEquipAdjust     + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE + "," +
+      colMashName + COMMA +
+      colMashGrainTemp       + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colMashNotes           + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"   + COMMA +
+      colMashTunTemp         + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "20.0" + COMMA +
+      colMashSpargeTemp      + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "74.0" + COMMA +
+      colMashPh              + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "7.0"  + COMMA +
+      colMashTunWeight       + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colMashTunSpecificHeat + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colMashEquipAdjust     + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE   + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
+      deleted                                                                   + COMMA +
+      display                                                                   + COMMA +
       folder +
-      ")";
+      CLOSEPAREN;
 
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableMash).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+   return create_table(q, create, tableMash,Brewtarget::MASHTABLE, true, false, false);
 }
 
 bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableMashStep + SEP + "(" +
-      id + "," +
+      CREATETABLE + SEP + tableMashStep + SEP + OPENPAREN +
+      id                                                                       + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colMashStepType      + SEP + "," +
-      colMashStepInfAmount + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMashStepTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 67.0" + "," +
-      colMashStepTime      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMashStepRampTime  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colMashStepEndTemp   + SEP + TYPEREAL + SEP + DEFAULT + " 67.0" + "," +
-      colMashStepInfTemp   + SEP + TYPEREAL + SEP + DEFAULT + " 67.0" + "," +
-      colMashStepDecAmount + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
+      name                                                                     + COMMA +
+      colMashStepType      + SEP                                               + COMMA +
+      colMashStepInfAmount + SEP + TYPEREAL    + SEP  + DEFAULT + SEP + "0.0"  + COMMA +
+      colMashStepTemp      + SEP + TYPEREAL    + SEP  + DEFAULT + SEP + "67.0" + COMMA +
+      colMashStepTime      + SEP + TYPEREAL    + SEP  + DEFAULT + SEP + "0.0"  + COMMA +
+      colMashStepRampTime  + SEP + TYPEREAL    + SEP  + DEFAULT + SEP + "0.0"  + COMMA +
+      colMashStepEndTemp   + SEP + TYPEREAL    + SEP  + DEFAULT + SEP + "67.0" + COMMA +
+      colMashStepInfTemp   + SEP + TYPEREAL    + SEP  + DEFAULT + SEP + "67.0" + COMMA +
+      colMashStepDecAmount + SEP + TYPEREAL    + SEP  + DEFAULT + SEP + "0.0"  + COMMA +
       // Relational data-------------------------------------------------------
-      colMashStepMashId    + SEP + TYPEINTEGER + "," +
-      colMashStepNumber    + SEP + TYPEINTEGER + SEP + DEFAULT + " 0" + "," +
+      colMashStepMashId    + SEP + TYPEINTEGER                                 + COMMA +
+      colMashStepNumber    + SEP + TYPEINTEGER + SEP  + DEFAULT + SEP + "0"    + COMMA +
       // Display stuff---------------------------------------------------------
-      displayUnit + "," +
-      displayScale + "," +
-      displayTempUnit + "," +
+      displayUnit                                                              + COMMA +
+      displayScale                                                             + COMMA +
+      displayTempUnit                                                          + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
-      folder + "," +
-      FOREIGNKEY(colMashStepMashId, tableMash) +
-      ")";
+      deleted                                                                  + COMMA +
+      display                                                                  + COMMA +
+      folder                                                                   + COMMA +
+      foreignKey(colMashStepMashId, tableMash) +
+      CLOSEPAREN;
 
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableMashStep).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+   return create_table(q,create,tableMashStep,Brewtarget::MASHSTEPTABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableBrewnote + SEP + "(" +
-      id + "," +
-      colBNoteBrewDate        + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
-      colBNoteFermentDate     + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
-      colBNoteSg              + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colBNoteBkVolume        + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteStrikeTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 70.0" + "," +
-      colBNoteFinalMashTemp   + SEP + TYPEREAL + SEP + DEFAULT + " 67.0" + "," +
-      colBNoteOg              + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colBNotePostboilVolume  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteFermenterVolume + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNotePitchTemp       + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
-      colBNoteFg              + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colBNoteBkEff           + SEP + TYPEREAL + SEP + DEFAULT + " 70.0" + "," +
-      colBNoteAbv             + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNotePredOg          + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colBNoteEff             + SEP + TYPEREAL + SEP + DEFAULT + " 70.0" + "," +
-      colBNotePredAbv         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteProjBoilGrav    + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colBNoteProjStrikeTemp  + SEP + TYPEREAL + SEP + DEFAULT + " 70.0" + "," +
-      colBNoteProjFinTemp     + SEP + TYPEREAL + SEP + DEFAULT + " 67.0" + "," +
-      colBNoteProjFinMashTemp + SEP + TYPEREAL + SEP + DEFAULT + " 67.0" + "," +
-      colBNoteProjBkVol       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteProjOg          + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colBNoteProjFermVol     + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteProjFg          + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colBNoteProjEff         + SEP + TYPEREAL + SEP + DEFAULT + " 70.0" + "," +
-      colBNoteProjAbv         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteProjAtten       + SEP + TYPEREAL + SEP + DEFAULT + " 75.0" + "," +
-      colBNoteProjPoints      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteProjFermPoints  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteBoilOff         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteFinalVolume     + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colBNoteNotes           + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
+      CREATETABLE + SEP + tableBrewnote + SEP + OPENPAREN +
+      id                                                                          + COMMA +
+      colBNoteBrewDate        + SEP + TYPEDATETIME + SEP + DEFAULT + SEP + THENOW + COMMA +
+      colBNoteFermentDate     + SEP + TYPEDATETIME + SEP + DEFAULT + SEP + THENOW + COMMA +
+      colBNoteSg              + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
+      colBNoteBkVolume        + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteStrikeTemp      + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
+      colBNoteFinalMashTemp   + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "67.0" + COMMA +
+      colBNoteOg              + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
+      colBNotePostboilVolume  + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteFermenterVolume + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNotePitchTemp       + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "20.0" + COMMA +
+      colBNoteFg              + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
+      colBNoteBkEff           + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
+      colBNoteAbv             + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNotePredOg          + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
+      colBNoteEff             + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
+      colBNotePredAbv         + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteProjBoilGrav    + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
+      colBNoteProjStrikeTemp  + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
+      colBNoteProjFinTemp     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "67.0" + COMMA +
+      colBNoteProjFinMashTemp + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "67.0" + COMMA +
+      colBNoteProjBkVol       + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteProjOg          + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
+      colBNoteProjFermVol     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteProjFg          + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
+      colBNoteProjEff         + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
+      colBNoteProjAbv         + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteProjAtten       + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "75.0" + COMMA +
+      colBNoteProjPoints      + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteProjFermPoints  + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteBoilOff         + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteFinalVolume     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
+      colBNoteNotes           + SEP + TYPETEXT     + SEP + DEFAULT + SEP + "''"   + COMMA +
       // Relational data-------------------------------------------------------
-      colBNoteRecipeId + SEP + TYPEINTEGER + "," +
+      colBNoteRecipeId        + SEP + TYPEINTEGER                                 + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
-      folder + "," +
-      FOREIGNKEY(colBNoteRecipeId, tableRecipe) +
-      ")";
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableBrewnote).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+      deleted                                                                     + COMMA +
+      display                                                                     + COMMA +
+      folder                                                                      + COMMA +
+      foreignKey(colBNoteRecipeId, tableRecipe) +
+      CLOSEPAREN;
+
+   return create_table(q,create,tableBrewnote,Brewtarget::BREWNOTETABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_instruction(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableInstruction + SEP + "(" +
-      id + "," +
-      name + "," +
-      colInsDirections + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colInsHasTimer   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
-      colInsTimerVal   + SEP + TYPETEXT + SEP + DEFAULT + " '00:00:00'" + "," +
-      colInsCompleted  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
-      colInsInterval   + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
+      CREATETABLE + SEP + tableInstruction + SEP + OPENPAREN +
+      id                                                                        + COMMA +
+      name                                                                      + COMMA +
+      colInsDirections + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "''"         + COMMA +
+      colInsHasTimer   + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE        + COMMA +
+      colInsTimerVal   + SEP + TYPETEXT    + SEP + DEFAULT + SEP + "'00:00:00'" + COMMA +
+      colInsCompleted  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE        + COMMA +
+      colInsInterval   + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"        + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
+      deleted                                                                   + COMMA +
       display +
       // instructions aren't displayed in trees, and get no folder
-      ")";
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableInstruction).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+      CLOSEPAREN;
+
+   return create_table(q,create,tableInstruction,Brewtarget::INSTRUCTIONTABLE,true,false,false);
 }
 
 bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
 {
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableRecipe + SEP + "(" +
-      id + "," +
+      CREATETABLE + SEP + tableRecipe + SEP + OPENPAREN +
+      id                                                                                                 + COMMA +
       // BeerXML properties----------------------------------------------------
-      name + "," +
-      colRecType         + SEP + TYPETEXT + SEP + DEFAULT + " 'All Grain'" + "," +
-      colRecBrewer       + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colRecAsstBrewer   + SEP + TYPETEXT + SEP + DEFAULT + " 'Brewtarget: free beer software'" + "," +
-      colRecBatchSize    + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecBoilSize     + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecBoilTime     + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecEff          + SEP + TYPEREAL + SEP + DEFAULT + " 70.0" + "," +
-      colRecOg           + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colRecFg           + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colRecFermStages   + SEP + TYPEINTEGER + SEP + DEFAULT + " 1" + "," +
-      colRecPrimAge      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecPrimTemp     + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
-      colRecSecAge       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecSecTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
-      colRecTerAge       + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecTerTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
-      colRecAge          + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecAgeTemp      + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
-      colRecDate         + SEP + TYPEDATETIME + SEP + DEFAULT + THENOW + "," +
-      colRecCarbVol      + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      colRecForceCarb    + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE + "," +
-      colRecPrimSug      + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colRecCarbTemp     + SEP + TYPEREAL + SEP + DEFAULT + " 20.0" + "," +
-      colRecPrimSugEquiv + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colRecKegPrimFact  + SEP + TYPEREAL + SEP + DEFAULT + " 1.0" + "," +
-      colRecNotes        + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colRecTasteNotes   + SEP + TYPETEXT + SEP + DEFAULT + " ''" + "," +
-      colRecTasteRating  + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
+      name                                                                                               + COMMA +
+      colRecType         + SEP + TYPETEXT     + SEP + DEFAULT + SEP + "'All Grain'"                      + COMMA +
+      colRecBrewer       + SEP + TYPETEXT     + SEP + DEFAULT + SEP + "''"                               + COMMA +
+      colRecAsstBrewer   + SEP + TYPETEXT     + SEP + DEFAULT + SEP + "'Brewtarget: free beer software'" + COMMA +
+      colRecBatchSize    + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
+      colRecBoilSize     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
+      colRecBoilTime     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
+      colRecEff          + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0"                             + COMMA +
+      colRecOg           + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"                              + COMMA +
+      colRecFg           + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"                              + COMMA +
+      colRecFermStages   + SEP + TYPEINTEGER  + SEP + DEFAULT + SEP + "1"                                + COMMA +
+      colRecPrimAge      + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
+      colRecPrimTemp     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "20.0"                             + COMMA +
+      colRecSecAge       + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
+      colRecSecTemp      + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "20.0"                             + COMMA +
+      colRecTerAge       + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
+      colRecTerTemp      + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "20.0"                             + COMMA +
+      colRecAge          + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
+      colRecAgeTemp      + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "20.0"                             + COMMA +
+      colRecDate         + SEP + TYPEDATETIME + SEP + DEFAULT + SEP + THENOW                             + COMMA +
+      colRecCarbVol      + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
+      colRecForceCarb    + SEP + TYPEBOOLEAN  + SEP + DEFAULT + SEP + FALSE                              + COMMA +
+      colRecPrimSug      + SEP + TYPETEXT     + SEP + DEFAULT + SEP + "''"                               + COMMA +
+      colRecCarbTemp     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "20.0"                             + COMMA +
+      colRecPrimSugEquiv + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"                              + COMMA +
+      colRecKegPrimFact  + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"                              + COMMA +
+      colRecNotes        + SEP + TYPETEXT     + SEP + DEFAULT + SEP + "''"                               + COMMA +
+      colRecTasteNotes   + SEP + TYPETEXT     + SEP + DEFAULT + SEP + "''"                               + COMMA +
+      colRecTasteRating  + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"                              + COMMA +
       // Relational data-------------------------------------------------------
-      colRecStyleId + SEP + TYPEINTEGER + "," +
-      colRecMashId  + SEP + TYPEINTEGER + "," +
-      colRecEquipId + SEP + TYPEINTEGER + "," +
+      colRecStyleId      + SEP + TYPEINTEGER                                                             + COMMA +
+      colRecMashId       + SEP + TYPEINTEGER                                                             + COMMA +
+      colRecEquipId      + SEP + TYPEINTEGER                                                             + COMMA +
       // Metadata--------------------------------------------------------------
-      deleted + "," +
-      display + "," +
-      folder + "," +
-      FOREIGNKEY(colRecStyleId, tableStyle) + "," +
-      FOREIGNKEY(colRecMashId, tableMash) + "," +
-      FOREIGNKEY(colRecEquipId, tableEquipment) + 
-      ")";
+      deleted                                                                                            + COMMA +
+      display                                                                                            + COMMA +
+      folder                                                                                             + COMMA +
+      foreignKey(colRecStyleId, tableStyle)                                                              + COMMA +
+      foreignKey(colRecMashId, tableMash)                                                                + COMMA +
+      foreignKey(colRecEquipId, tableEquipment) + 
+      CLOSEPAREN;
 
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableRecipe).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+   return create_table(q,create,tableRecipe,Brewtarget::RECTABLE,true,false,false);
 }
 
-bool DatabaseSchemaHelper::create_btTable(QSqlQuery q, QString tableName, QString foreignTableName)
+bool DatabaseSchemaHelper::create_btTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid)
 {
    QString foreignIdName = QString("%1_id").arg(foreignTableName);
-   bool ret = true;
    QString create = 
-      CREATETABLE + SEP + tableName + SEP + "(" +
-      id + "," +
-       foreignIdName + SEP + TYPEINTEGER + "," +
-      FOREIGNKEY(foreignIdName, foreignTableName) +
-      ")";
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
+      CREATETABLE + SEP + tableName + SEP + OPENPAREN +
+      id                                           + COMMA +
+      foreignIdName + SEP + TYPEINTEGER            + COMMA +
+      foreignKey(foreignIdName, foreignTableName) +
+      CLOSEPAREN;
+   return create_table(q,create,tableName,tableid,false,false,false);
 }
 
-bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableName, QString foreignTableName)
+bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid)
 {
    QString index = QString("%1_id").arg(foreignTableName);
-   bool ret = true;
    QString create = 
-           CREATETABLE + SEP + tableName + SEP + "(" +
-           id + "," +
-           index + SEP + TYPEINTEGER + "," +
-           "recipe_id" + SEP + TYPEINTEGER + ",";
+           CREATETABLE + SEP + tableName + SEP + OPENPAREN +
+           id                                               + COMMA +
+           index + SEP + TYPEINTEGER                        + COMMA +
+           "recipe_id" + SEP + TYPEINTEGER                  + COMMA;
    // silly special cases
    if ( tableName == tableInsInRec ) 
-      create += "instruction_number " + TYPEINTEGER + SEP + DEFAULT + " 0,";
+      create += "instruction_number " + TYPEINTEGER + SEP + DEFAULT + SEP + "0" + COMMA;
 
-   create += FOREIGNKEY(index, foreignTableName) + "," +
-             FOREIGNKEY("recipe_id", tableRecipe) +
-        ")";
+   create += foreignKey(index, foreignTableName) + COMMA +
+             foreignKey("recipe_id", tableRecipe) +
+             CLOSEPAREN;
 
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
-   }
-   return ret;
-
+   return create_table(q,create,tableName,tableid,false,false,true);
 }
 
-bool DatabaseSchemaHelper::create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName)
+bool DatabaseSchemaHelper::create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid)
 {
    QString foreignIdName = QString("%1_id").arg(foreignTableName);
-   bool ret = true;
-   QString create = 
-      CREATETABLE + SEP + tableName + SEP + "(" +
-      id + "," +
-      foreignIdName + SEP + TYPEINTEGER + SEP + UNIQUE + "," +
-      "amount"         + SEP + TYPEREAL + SEP + DEFAULT + " 0.0" + "," +
-      FOREIGNKEY(foreignIdName, foreignTableName) +
-      ")";
-
-   ret = q.exec(create);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
+   QString field;
+   // For yeast, homebrewers don't usually keep stores of yeast. They keep
+   // packets or vials or some other type of discrete integer quantity. So, I
+   // don't know how useful a real-valued inventory amount would be for yeast.
+   if ( tableName == tableYeastInventory ) {
+      field = "quanta" + SEP + TYPEINTEGER + SEP + DEFAULT +SEP + "0";
    }
-   return ret;
+   else {
+      field = "amount" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0";
+   }
+
+   QString cName = tableName == tableYeastInventory ? "quanta" : "amount";
+
+   QString create = 
+      CREATETABLE   + SEP + tableName + SEP + OPENPAREN +
+      id                                                + COMMA +
+      field                                             + COMMA +
+      foreignIdName + SEP + TYPEINTEGER + SEP + UNIQUE  + COMMA +
+      foreignKey(foreignIdName, foreignTableName) +
+      CLOSEPAREN;
+
+   return create_table(q,create,tableName,tableid,false,true,false);
 }
 
 bool DatabaseSchemaHelper::create_increment_trigger(QSqlQuery q, Brewtarget::DBTypes dbType)
@@ -1462,3 +1321,191 @@ bool DatabaseSchemaHelper::create_pgsql_decrement_trigger(QSqlQuery q)
    return ret;
 }
 
+bool DatabaseSchemaHelper::migrate_to_202(QSqlQuery q)
+{
+   bool ret = true;
+
+   ret &= q.exec(
+      CREATETABLE + SEP + tableSettings + "(" +
+      id + "," +
+      colSettingsVersion + SEP + TYPETEXT +
+      ")"
+   );
+
+   // Add "projected_ferm_points" to brewnote table
+   ret &= q.exec(
+      ALTERTABLE + SEP + tableBrewnote + SEP +
+      ADDCOLUMN + SEP + "projected_ferm_points" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"
+   );
+
+   ret &= q.exec(
+      UPDATE + SEP + tableBrewnote + SEP +
+      SET + SEP + "projected_ferm_points = -1.0"
+   );
+
+   // Update version to 2.0.2
+   ret &= q.exec(
+      INSERTINTO + SEP + tableSettings + " VALUES(1,'2.0.2')"
+   );
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q)
+{
+   bool ret = true;
+   QStringList getFolders = QStringList() << tableEquipment << tableFermentable << tableHop <<
+      tableMisc << tableStyle << tableYeast << tableWater << tableMash <<
+      tableBrewnote << tableRecipe;
+
+   QStringList rebuildTables = QStringList() << tableEquipChildren << tableFermChildren <<
+      tableHopChildren << tableMiscChildren << tableRecChildren <<
+      tableStyleChildren << tableWaterChildren << tableYeastChildren <<
+      tableFermInventory << tableHopInventory << tableMiscInventory << tableYeastInventory;
+
+   foreach(const QString &table, getFolders)
+   {
+      ret &= q.exec(
+               ALTERTABLE + SEP + table + SEP +
+               ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
+            );
+   }
+
+   // Put the "Bt:.*" recipes into /brewtarget folder
+   ret &= q.exec(
+      UPDATE + SEP + tableRecipe + SEP +
+      SET + SEP + "folder='/brewtarget' WHERE name LIKE 'Bt:%'"
+   );
+
+   // Update version to 2.1.0
+   ret &= q.exec(
+      UPDATE + SEP + tableSettings + SEP +
+      SET + SEP + colSettingsVersion + "='2.1.0' WHERE id=1"
+   );
+
+   // Used to trigger the code to populate the ingredient inheritance tables
+   ret &= q.exec(
+      ALTERTABLE + SEP + tableSettings + SEP +
+      ADDCOLUMN + SEP + "repopulateChildrenOnNextStart" + SEP + TYPEINTEGER
+   );
+
+   ret &= q.exec(
+      UPDATE + SEP + tableSettings + SEP +
+      SET + SEP + "repopulateChildrenOnNextStart=1"
+   );
+
+   // Drop and re-create children tables with new UNIQUE requirement
+   // Drop and re-create inventory tables with new UNIQUE requirement
+   foreach(const QString &table, rebuildTables )
+   {
+      ret &= q.exec(
+         DROPTABLE + SEP + table
+      );
+   }
+   ret &= create_childrenTables(q);
+   ret &= create_inventoryTables(q);
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_4(QSqlQuery q)
+{
+   bool ret = true;
+
+   // Save old settings
+   ret &= q.exec(
+      "CREATE TEMP TABLE oldsettings AS SELECT * FROM " + tableSettings
+   );
+
+   // Drop the old settings with text version, and create new table
+   // with intever version.
+   ret &= q.exec(
+      DROPTABLE + SEP + tableSettings
+   );
+
+   ret &= q.exec(
+      CREATETABLE + SEP + tableSettings + "(" +
+      id + "," +
+      colSettingsVersion            + SEP + TYPEINTEGER + "," +
+      colSettingsRepopulateChildren + SEP + TYPEINTEGER +
+      ")"
+   );
+
+   // Update version to 4, saving other settings
+   ret &= q.exec(
+      INSERTINTO + SEP + tableSettings +
+      QString(" (id,%1,%2)").arg(colSettingsVersion).arg(colSettingsRepopulateChildren) + " " +
+      QString("SELECT 1, 4, %1 FROM oldsettings").arg(colSettingsRepopulateChildren)
+   );
+
+   // Cleanup
+   ret &= q.exec(
+      DROPTABLE + SEP + "oldsettings"
+   );
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q)
+{
+   bool ret = true;
+   // Drop the previous bugged TRIGGER
+   ret &= q.exec( QString() +
+      "DROP TRIGGER dec_ins_num"
+   );
+
+   // Create the good trigger
+   ret &= create_decrement_trigger(q);
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q) {
+   bool ret = true;
+
+   ret = create_meta(q);
+   ret &= insert_meta(q,tableSettings,Brewtarget::SETTINGTABLE,false,false,false);
+   ret &= insert_meta(q,tableEquipment,Brewtarget::EQUIPTABLE,true,false,false);
+   ret &= insert_meta(q,tableFermentable,Brewtarget::FERMTABLE, true, false, false);
+   ret &= insert_meta(q,tableHop,Brewtarget::HOPTABLE,true,false,false);
+   ret &= insert_meta(q,tableMisc,Brewtarget::MISCTABLE,true,false,false);
+   ret &= insert_meta(q,tableStyle,Brewtarget::STYLETABLE,true,false,false);
+   ret &= insert_meta(q,tableYeast,Brewtarget::YEASTTABLE,true,false,false);
+   ret &= insert_meta(q,tableWater,Brewtarget::WATERTABLE,true,false,false);
+   ret &= insert_meta(q,tableMash, Brewtarget::MASHTABLE,true, false, false);
+   ret &= insert_meta(q,tableMashStep,Brewtarget::MASHSTEPTABLE,true,false,false);
+   ret &= insert_meta(q,tableBrewnote,Brewtarget::BREWNOTETABLE,true,false,false);
+   ret &= insert_meta(q,tableInstruction,Brewtarget::INSTRUCTIONTABLE,true,false,false);
+   ret &= insert_meta(q,tableRecipe,Brewtarget::RECTABLE,true,false,false);
+
+   ret &= insert_meta(q,tableBtEquipment,Brewtarget::BT_EQUIPTABLE,false,false,false);
+   ret &= insert_meta(q,tableBtFermentable,Brewtarget::BT_FERMTABLE,false,false,false);
+   ret &= insert_meta(q,tableBtHop,  Brewtarget::BT_HOPTABLE,false,false,false);
+   ret &= insert_meta(q,tableBtMisc, Brewtarget::BT_MISCTABLE,false,false,false);
+   ret &= insert_meta(q,tableBtStyle,Brewtarget::BT_STYLETABLE,false,false,false);
+   ret &= insert_meta(q,tableBtYeast,Brewtarget::BT_YEASTTABLE,false,false,false);
+   ret &= insert_meta(q,tableBtWater,Brewtarget::BT_WATERTABLE,false,false,false);
+
+   ret &= insert_meta(q,tableFermInRec,Brewtarget::FERMINRECTABLE,false,false,true);
+   ret &= insert_meta(q,tableHopInRec,Brewtarget::HOPINRECTABLE,false,false,true);
+   ret &= insert_meta(q,tableMiscInRec,Brewtarget::MISCINRECTABLE,false,false,true);
+   ret &= insert_meta(q,tableWaterInRec,Brewtarget::WATERINRECTABLE,false,false,true);
+   ret &= insert_meta(q,tableYeastInRec,Brewtarget::YEASTINRECTABLE,false,false,true);
+   ret &= insert_meta(q,tableInsInRec,Brewtarget::INSTINRECTABLE,false,false,true);
+
+   ret &= insert_meta(q,tableEquipChildren,Brewtarget::EQUIPCHILDTABLE,true,false,true);
+   ret &= insert_meta(q,tableFermChildren,Brewtarget::FERMCHILDTABLE,true,false,true);
+   ret &= insert_meta(q,tableHopChildren ,Brewtarget::HOPCHILDTABLE,true,false,true);
+   ret &= insert_meta(q,tableMiscChildren ,Brewtarget::MISCCHILDTABLE,true,false,true);
+   ret &= insert_meta(q,tableRecChildren ,Brewtarget::RECIPECHILDTABLE,true,false,true);
+   ret &= insert_meta(q,tableStyleChildren ,Brewtarget::STYLECHILDTABLE,true,false,true);
+   ret &= insert_meta(q,tableWaterChildren ,Brewtarget::WATERCHILDTABLE,true,false,true);
+   ret &= insert_meta(q,tableYeastChildren ,Brewtarget::YEASTCHILDTABLE,true,false,true);
+
+   ret &= insert_meta(q,tableFermInventory,Brewtarget::FERMINVTABLE,false,true,false);
+   ret &= insert_meta(q,tableHopInventory,Brewtarget::HOPINVTABLE,false,true,false);
+   ret &= insert_meta(q,tableMiscInventory,Brewtarget::MISCINVTABLE,false,true,false);
+   ret &= insert_meta(q,tableYeastInventory,Brewtarget::YEASTINVTABLE,false,true,false);
+
+   return ret;
+}

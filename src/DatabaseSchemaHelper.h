@@ -54,6 +54,10 @@ private:
    static QString SELECT;
    static QString SEP;
    static QString UNIQUE;
+   static QString COMMA;
+   static QString OPENPAREN;
+   static QString CLOSEPAREN;
+   static QString END;
    
    // Types
    static QString TYPEINTEGER;
@@ -79,6 +83,15 @@ private:
    static QString folder;
    
    // =============================Table Names/Columns=========================
+   // the meta table
+   static QString tableMeta;
+   static QString colMetaIsSearched;
+   static QString colMetaIsInventory;
+   static QString colMetaIsChild;
+   static QString colMetaDateCreated;
+   static QString colMetaVersion;
+   static QString colMetaTableId;
+
    // Settings table
    static QString tableSettings;
    static QString colSettingsVersion;
@@ -352,12 +365,21 @@ private:
    
    //! \brief Current schema version of the given database
    static int currentVersion(QSqlDatabase db = QSqlDatabase());
-   static QString FOREIGNKEY( QString const& column, QString const& foreignTable );
-   static bool create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable);
+   static QString foreignKey( QString const& column, QString const& foreignTable );
+
+
    static void select_dbStrings(Brewtarget::DBTypes dbType);
 
-   //! brief These create the core tables, aka, the beerXML tables
+   // !\brief create_table is a convenience method to wrap a lot of boiler // plate
+   static bool create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid, bool isSearched=true, bool isInv=false, bool isChild=false);
+   // !\brief I need a meta table
+   static bool create_meta(QSqlQuery q);
+   // !\brief And another meta table we've already created
    static bool create_settings(QSqlQuery q);
+   // \!brief inserts a row into the meta table when a // table is created
+   static bool insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid, bool isSearched, bool isInventory, bool IsChild);
+
+   //! brief These create the beerXML tables
    static bool create_equipment(QSqlQuery q);
    static bool create_fermentable(QSqlQuery q);
    static bool create_hop(QSqlQuery q);
@@ -371,15 +393,23 @@ private:
    static bool create_instruction(QSqlQuery q);
    static bool create_recipe(QSqlQuery q);
   
-   //! \brief This creates a relational table for a brewtarget ingredient or recipe
-   static bool create_btTable(QSqlQuery q, QString tableName, QString foreignTableName);
-   //! \brief This creates a relational table for things in recipes
-   static bool create_recipeChildTable(QSqlQuery q, QString tableName, QString foreignTableName);
-   //! \brief This creates a relational table for inventory
-   static bool create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName);
+   //! \brief These provide some convenience and reuse
+   static bool create_beerXMLTables(QSqlQuery q);
+   static bool create_btTables(QSqlQuery q);
+   static bool create_inRecipeTables(QSqlQuery q);
+   static bool create_inventoryTables(QSqlQuery q);
+   static bool create_childrenTables(QSqlQuery q);
 
-   //! \brief Creating triggers is very DB specific. These isolate the
-   // specifics
+   //! \brief This creates a table for a bt_* table
+   static bool create_btTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
+   //! \brief This creates a table for *in_recipe 
+   static bool create_recipeChildTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
+   //! \brief This creates a table for inventory
+   static bool create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
+   //! \brief This creates a beerXML child table
+   static bool create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable, Brewtarget::DBTable tableid);
+
+   //! \brief Creating triggers is very DB specific. These isolate the specifics
    static bool create_increment_trigger(QSqlQuery q, Brewtarget::DBTypes dbType=Brewtarget::NODB);
    static bool create_pgsql_increment_trigger(QSqlQuery q);
    static bool create_sqlite_increment_trigger(QSqlQuery q);
@@ -388,16 +418,10 @@ private:
    static bool create_pgsql_decrement_trigger(QSqlQuery q);
    static bool create_sqlite_decrement_trigger(QSqlQuery q);
 
-   //! \brief These provide some convenience and reuse
-   static bool create_core(QSqlQuery q);
-   static bool create_btTables(QSqlQuery q);
-   static bool create_recipeChildren(QSqlQuery q);
-   static bool create_inventoryTables(QSqlQuery q);
-   static bool create_inheritenceTables(QSqlQuery q);
-
    static bool migrate_to_202(QSqlQuery q);
    static bool migrate_to_210(QSqlQuery q);
    static bool migrate_to_4(QSqlQuery q);
    static bool migrate_to_5(QSqlQuery q);
+   static bool migrate_to_6(QSqlQuery q);
    
 };

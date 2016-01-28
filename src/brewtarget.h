@@ -97,52 +97,63 @@ public:
    };
 
    //! \brief The database tables.
+   //! \brief You know. I need all the db tables, and I need them in a
+   //  specific order. I need these constants defined in the EXACT order the
+   //  tables are created by DatabaseSchemaHelper::create. Do not modify this
+   //  unless you understand the relationship and fix all sides
    enum DBTable{
       //! None of the tables. 0
       NOTABLE,
-      //! In the BrewNote table. 1
-      BREWNOTETABLE,
-      //! In the Equipment table. 2
+      // Meta tables first
+      BTALLTABLE,
+      SETTINGTABLE,
+
+      // BeerXML tables next
       EQUIPTABLE,
-      //! In the Fermentable table. 3
       FERMTABLE,
-      //! In the Hop table. 4
       HOPTABLE,
-      //! In the Instruction table. 5
-      INSTRUCTIONTABLE,
-      //! In the MashStep table. 6
-      MASHSTEPTABLE,
-      //! In the Mash table. 7
-      MASHTABLE,
-      //! In the Misc table. 8
       MISCTABLE,
-      //! In the Recipe table. 9
-      RECTABLE,
-      //! In the Style table. 10
       STYLETABLE,
-      //! In the Water table. 11
-      WATERTABLE,
-      //! In the Yeast table. 12
       YEASTTABLE,
+      WATERTABLE,
+      MASHTABLE,
+      MASHSTEPTABLE,
+      RECTABLE,
+      BREWNOTETABLE,
+      INSTRUCTIONTABLE,
 
-     //! In the Fermentable Inventory table. 13
-      FERMINVTABLE,
-      //! In the Hop Inventory table. 14
-      HOPINVTABLE,
-      //! In the Misc Inventory table. 15
-      MISCINVTABLE,
-     //! In the Yeast Inventory table. 16
-      YEASTINVTABLE,
+      // then the bt_* tables
+      BT_EQUIPTABLE,
+      BT_FERMTABLE,
+      BT_HOPTABLE,
+      BT_MISCTABLE,
+      BT_STYLETABLE,
+      BT_YEASTTABLE,
+      BT_WATERTABLE,
 
-      //! In the Fermentable Parent Child Relationship table. 17
+      // then the *_in_recipe tables
+      FERMINRECTABLE,
+      HOPINRECTABLE,
+      MISCINRECTABLE,
+      WATERINRECTABLE,
+      YEASTINRECTABLE,
+      INSTINRECTABLE,
+
+      // then the child tables
+      EQUIPCHILDTABLE,
       FERMCHILDTABLE,
-      //! In the Hop Parent Child Relationship table. 18
       HOPCHILDTABLE,
-      //! In the Misc Parent Child Relationship table. 19
       MISCCHILDTABLE,
-     //! In the Yeast Parent Child Relationship table. 20
-      YEASTCHILDTABLE
+      RECIPECHILDTABLE,
+      STYLECHILDTABLE,
+      WATERCHILDTABLE,
+      YEASTCHILDTABLE,
 
+      // finally the inventory tables
+      FERMINVTABLE,
+      HOPINVTABLE,
+      MISCINVTABLE,
+      YEASTINVTABLE
    };
 
    //! \brief Supported databases. I am not 100% sure I'm digging this
