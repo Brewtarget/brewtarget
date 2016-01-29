@@ -821,10 +821,11 @@ private:
 
    //! \brief converts sqlite values (mostly booleans) into something postgres
    // wants
-   QVariant convertValueToPostgres(Brewtarget::DBTypes oldType, QString name, QVariant value, QStringList fields);
+   QVariant convertValueToPostgres(Brewtarget::DBTypes oldType, QSqlField field);
 
+   QStringList allTablesInOrder(QSqlQuery q);
    //! \brief does the heavy lefting to convert data to postgres
-   bool convertToPostgres( Brewtarget::DBTypes oldType, QStringList tables, QSqlDatabase oldDb);
+   bool convertToPostgres( Brewtarget::DBTypes oldType, QSqlDatabase oldDb);
 
    //! \brief this is a stub at the moment, but sooner or later will convert
    //   from the existing db into a new sqlite db

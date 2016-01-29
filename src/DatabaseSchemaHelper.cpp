@@ -72,8 +72,9 @@ QString DatabaseSchemaHelper::folder("folder " + TYPETEXT + " DEFAULT ''");
 
 QString DatabaseSchemaHelper::tableMeta("bt_alltables");
 QString DatabaseSchemaHelper::colMetaIsSearched("is_searched");
-QString DatabaseSchemaHelper::colMetaIsInventory("is_inventory");
-QString DatabaseSchemaHelper::colMetaIsChild("is_child");
+QString DatabaseSchemaHelper::colMetaClassName("class_name");
+QString DatabaseSchemaHelper::colMetaInvId("inventory_table_id");
+QString DatabaseSchemaHelper::colMetaChildId("child_table_id");
 QString DatabaseSchemaHelper::colMetaDateCreated("created");
 QString DatabaseSchemaHelper::colMetaVersion("version");
 QString DatabaseSchemaHelper::colMetaTableId("table_id");
@@ -389,23 +390,45 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db, Brewtarget::DBTypes dbType)
 
    // Create the bt relational tables
    ret &= create_btTables(q);
+   if ( ! ret ) {
+      Brewtarget::logE("create_btTables() failed");
+   }
 
    // Recipe relational tables
    ret &= create_inRecipeTables(q);
+   if ( ! ret ) {
+      Brewtarget::logE("create_inRecipeTables() failed");
+   }
 
    // Triggers are still a pain
    ret &= create_increment_trigger(q,dbType);
+   if ( ! ret ) {
+      Brewtarget::logE("create_increment_trigger() failed");
+   }
    ret &= create_decrement_trigger(q,dbType);
+   if ( ! ret ) {
+      Brewtarget::logE("create_decrement_trigger() failed");
+   }
 
    // Ingredient inheritance tables============================================
    ret &= create_childrenTables(q);
+   if ( ! ret ) {
+      Brewtarget::logE("create_childrenTables() failed");
+   }
 
    // Inventory tables=========================================================
    ret &= create_inventoryTables(q);
+   if ( ! ret ) {
+      Brewtarget::logE("create_inventoryTables() failed");
+   }
 
    // Commit transaction
    if( hasTransaction )
       ret &= db.commit();
+
+   if ( ! ret ) {
+      Brewtarget::logE("db.commit() failed");
+   }
 
    return ret;
 }
@@ -464,6 +487,8 @@ bool DatabaseSchemaHelper::migrate(int oldVersion, int newVersion, QSqlDatabase 
 
    bool ret = true;
 
+   // Late eval of some strings
+   select_dbStrings(Brewtarget::dbType());
    // Start a transaction
    db.transaction();
 
@@ -534,14 +559,14 @@ void DatabaseSchemaHelper::select_dbStrings(Brewtarget::DBTypes dbType)
 
    switch( thisDbType ) {
       case Brewtarget::PGSQL:
-         DatabaseSchemaHelper::id = "id SERIAL PRIMARY KEY";
+         id = "id SERIAL PRIMARY KEY";
          TYPEDATETIME = "TIMESTAMP";
-         THENOW="CURRENT_TIMESTAMP";
+         THENOW = "CURRENT_TIMESTAMP";
          break;
       default:
-         DatabaseSchemaHelper::id = "id INTEGER PRIMARY KEY autoincrement";
+         id = "id INTEGER PRIMARY KEY autoincrement";
          TYPEDATETIME = "DATETIME";
-         THENOW="CURRENT_DATETIME";
+         THENOW = "CURRENT_DATETIME";
    }
    TRUE  = Brewtarget::dbTrue(thisDbType);
    FALSE = Brewtarget::dbFalse(thisDbType);
@@ -550,7 +575,9 @@ void DatabaseSchemaHelper::select_dbStrings(Brewtarget::DBTypes dbType)
    display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE);
 }
 
-bool DatabaseSchemaHelper::create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid, bool isSearched, bool isInv, bool isChild)
+bool DatabaseSchemaHelper::create_table(QSqlQuery q, QString create, QString tableName, 
+                  Brewtarget::DBTable tableid, bool isSearched, QString className, 
+                  Brewtarget::DBTable inv_id, Brewtarget::DBTable child_id)
 {
    bool ret = q.exec(create);
 
@@ -558,7 +585,37 @@ bool DatabaseSchemaHelper::create_table(QSqlQuery q, QString create, QString tab
       Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
    }
    else {
-      ret &= insert_meta(q,tableName,tableid,isSearched,isInv,isChild);
+      ret &= insert_meta(q,tableName,tableid,isSearched,className,inv_id,child_id);
+   }
+   return ret;
+}
+
+bool DatabaseSchemaHelper::insert_meta(QSqlQuery q, QString const& name, 
+                  Brewtarget::DBTable tableid, bool isSearched, QString className, 
+                  Brewtarget::DBTable inv_id, Brewtarget::DBTable child_id)
+{
+   QString insert = QString(
+         INSERTINTO + SEP + tableMeta + SEP + 
+         OPENPAREN +
+            "name"             + COMMA +
+            colMetaClassName   + COMMA +
+            colMetaTableId     + COMMA +
+            colMetaIsSearched  + COMMA +
+            colMetaInvId       + COMMA +
+            colMetaChildId     + 
+         CLOSEPAREN + SEP +
+         "VALUES('%1','%2',%3,%4,%5,%6)")
+      .arg(name)
+      .arg(className)
+      .arg(tableid)
+      .arg(isSearched ? TRUE : FALSE)
+      .arg(inv_id)
+      .arg(child_id);
+   bool ret = true;
+
+   ret = q.exec(insert);
+   if ( ! ret ) {
+      Brewtarget::logE(QString("Inserting into meta table failed: %1 : %2").arg(insert).arg(q.lastError().text()));
    }
    return ret;
 }
@@ -570,40 +627,15 @@ bool DatabaseSchemaHelper::create_meta(QSqlQuery q)
          id                                                                     + COMMA +
          name                                                                   + COMMA +
          colMetaIsSearched  + SEP + TYPEBOOLEAN  + SEP + DEFAULT + SEP + TRUE   + COMMA +
-         colMetaIsInventory + SEP + TYPEBOOLEAN  + SEP + DEFAULT + SEP + TRUE   + COMMA +
-         colMetaIsChild     + SEP + TYPEBOOLEAN  + SEP + DEFAULT + SEP + TRUE   + COMMA +
+         colMetaClassName   + SEP + TYPETEXT     + SEP + DEFAULT + SEP + "''"   + COMMA +
+         colMetaInvId       + SEP + TYPEINTEGER  + SEP + DEFAULT + SEP + "0"   + COMMA +
+         colMetaChildId     + SEP + TYPEINTEGER  + SEP + DEFAULT + SEP + "0"   + COMMA +
          colMetaDateCreated + SEP + TYPEDATETIME + SEP + DEFAULT + SEP + THENOW + COMMA +
          colMetaVersion     + SEP + TYPEINTEGER  + SEP + DEFAULT + SEP + "%1"   + COMMA +
          colMetaTableId     + SEP + TYPEINTEGER  + SEP + "not null" +
       CLOSEPAREN).arg(dbVersion);
    
-   return create_table(q,create,tableMeta,Brewtarget::BTALLTABLE,false,false,false);
-}
-
-bool DatabaseSchemaHelper::insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid, bool isSearched, bool isInventory, bool isChild)
-{
-   QString insert = QString(
-         INSERTINTO + SEP + tableMeta + SEP + 
-         OPENPAREN +
-            "name"             + COMMA +
-            colMetaTableId     + COMMA +
-            colMetaIsSearched  + COMMA +
-            colMetaIsInventory + COMMA +
-            colMetaIsChild     + 
-         CLOSEPAREN + SEP +
-         "VALUES('%1',%2,%3,%4,%5)")
-      .arg(name)
-      .arg(tableid)
-      .arg(isSearched ? TRUE : FALSE)
-      .arg(isInventory ? TRUE : FALSE)
-      .arg(isChild ? TRUE : FALSE);
-   bool ret = true;
-
-   ret = q.exec(insert);
-   if ( ! ret ) {
-      Brewtarget::logE(QString("Inserting into meta table failed: %1 : %2").arg(insert).arg(q.lastError().text()));
-   }
-   return ret;
+   return create_table(q,create,tableMeta,Brewtarget::BTALLTABLE);
 }
 
 bool DatabaseSchemaHelper::create_beerXMLTables(QSqlQuery q)
@@ -699,7 +731,7 @@ bool DatabaseSchemaHelper::create_childTable( QSqlQuery q, QString const& tableN
             foreignKey("child_id", foreignTable) +
             CLOSEPAREN;
 
-   return create_table(q,create,tableName,tableid,true,false,true);
+   return create_table(q,create,tableName,tableid,true);
 }
 
 // This ones a bit ugly, but the meta stuff is
@@ -711,7 +743,7 @@ bool DatabaseSchemaHelper::create_settings(QSqlQuery q)
                     colSettingsVersion            + SEP + TYPEINTEGER + COMMA +
                     colSettingsRepopulateChildren + SEP + TYPEINTEGER +
                     ")";
-   ret =  create_table(q,create,tableSettings,Brewtarget::SETTINGTABLE,false,false,false);
+   ret =  create_table(q,create,tableSettings,Brewtarget::SETTINGTABLE);
    if ( ! ret ) {
       Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableSettings).arg(create).arg(q.lastError().text()));
    }
@@ -757,7 +789,7 @@ bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
       folder +
       CLOSEPAREN;
 
-   return create_table(q,create,tableEquipment,Brewtarget::EQUIPTABLE,true,false,false);
+   return create_table(q,create,tableEquipment,Brewtarget::EQUIPTABLE,true,"Equipment",Brewtarget::NOTABLE,Brewtarget::EQUIPCHILDTABLE);
 }
 
 bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
@@ -792,7 +824,7 @@ bool DatabaseSchemaHelper::create_fermentable(QSqlQuery q)
       folder +
       CLOSEPAREN;
 
-   return create_table(q,create,tableFermentable,Brewtarget::FERMTABLE, true, false, false);
+   return create_table(q,create,tableFermentable,Brewtarget::FERMTABLE, true, "Fermentable",Brewtarget::FERMINVTABLE,Brewtarget::FERMCHILDTABLE );
 }
 
 bool DatabaseSchemaHelper::create_hop(QSqlQuery q)
@@ -826,7 +858,7 @@ bool DatabaseSchemaHelper::create_hop(QSqlQuery q)
       folder +
       CLOSEPAREN;
 
-   return create_table(q,create,tableHop,Brewtarget::HOPTABLE,true,false,false);
+   return create_table(q,create,tableHop,Brewtarget::HOPTABLE,true,"Hop",Brewtarget::HOPINVTABLE,Brewtarget::HOPCHILDTABLE );
 }
 
 bool DatabaseSchemaHelper::create_misc(QSqlQuery q)
@@ -852,7 +884,7 @@ bool DatabaseSchemaHelper::create_misc(QSqlQuery q)
       folder +
       CLOSEPAREN;
 
-   return create_table(q,create,tableMisc,Brewtarget::MISCTABLE,true,false,false);
+   return create_table(q,create,tableMisc,Brewtarget::MISCTABLE,true,"Misc",Brewtarget::MISCINVTABLE,Brewtarget::MISCCHILDTABLE );
 }
 
 bool DatabaseSchemaHelper::create_style(QSqlQuery q)
@@ -888,7 +920,7 @@ bool DatabaseSchemaHelper::create_style(QSqlQuery q)
       display                                                              + COMMA +
       folder +
       CLOSEPAREN;
-   return create_table(q,create,tableStyle,Brewtarget::STYLETABLE,true,false,false);
+   return create_table(q,create,tableStyle,Brewtarget::STYLETABLE,true,"Style",Brewtarget::NOTABLE,Brewtarget::STYLECHILDTABLE);
 }
 
 bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
@@ -922,7 +954,7 @@ bool DatabaseSchemaHelper::create_yeast(QSqlQuery q)
       folder +
       CLOSEPAREN;
 
-   return create_table(q,create,tableYeast,Brewtarget::YEASTTABLE,true,false,false);
+   return create_table(q,create,tableYeast,Brewtarget::YEASTTABLE,true,"Yeast",Brewtarget::YEASTINVTABLE,Brewtarget::YEASTCHILDTABLE );
 }
 
 bool DatabaseSchemaHelper::create_water(QSqlQuery q)
@@ -947,7 +979,7 @@ bool DatabaseSchemaHelper::create_water(QSqlQuery q)
       folder +
       CLOSEPAREN;
 
-   return create_table(q,create,tableWater,Brewtarget::WATERTABLE,true,false,false);
+   return create_table(q,create,tableWater,Brewtarget::WATERTABLE,true,"Water",Brewtarget::NOTABLE,Brewtarget::WATERCHILDTABLE);
 }
 
 bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
@@ -971,7 +1003,7 @@ bool DatabaseSchemaHelper::create_mash(QSqlQuery q)
       folder +
       CLOSEPAREN;
 
-   return create_table(q, create, tableMash,Brewtarget::MASHTABLE, true, false, false);
+   return create_table(q, create, tableMash,Brewtarget::MASHTABLE, true, "Mash");
 }
 
 bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
@@ -1003,7 +1035,8 @@ bool DatabaseSchemaHelper::create_mashstep(QSqlQuery q)
       foreignKey(colMashStepMashId, tableMash) +
       CLOSEPAREN;
 
-   return create_table(q,create,tableMashStep,Brewtarget::MASHSTEPTABLE,true,false,false);
+   return
+      create_table(q,create,tableMashStep,Brewtarget::MASHSTEPTABLE,true,"MashStep");
 }
 
 bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
@@ -1052,7 +1085,8 @@ bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
       foreignKey(colBNoteRecipeId, tableRecipe) +
       CLOSEPAREN;
 
-   return create_table(q,create,tableBrewnote,Brewtarget::BREWNOTETABLE,true,false,false);
+   return
+      create_table(q,create,tableBrewnote,Brewtarget::BREWNOTETABLE,true,"BrewNote");
 }
 
 bool DatabaseSchemaHelper::create_instruction(QSqlQuery q)
@@ -1072,7 +1106,7 @@ bool DatabaseSchemaHelper::create_instruction(QSqlQuery q)
       // instructions aren't displayed in trees, and get no folder
       CLOSEPAREN;
 
-   return create_table(q,create,tableInstruction,Brewtarget::INSTRUCTIONTABLE,true,false,false);
+   return create_table(q,create,tableInstruction,Brewtarget::INSTRUCTIONTABLE,true,"Instruction");
 }
 
 bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
@@ -1123,7 +1157,7 @@ bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
       foreignKey(colRecEquipId, tableEquipment) + 
       CLOSEPAREN;
 
-   return create_table(q,create,tableRecipe,Brewtarget::RECTABLE,true,false,false);
+   return create_table(q,create,tableRecipe,Brewtarget::RECTABLE,true,"Recipe",Brewtarget::NOTABLE,Brewtarget::RECIPECHILDTABLE);
 }
 
 bool DatabaseSchemaHelper::create_btTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid)
@@ -1135,7 +1169,7 @@ bool DatabaseSchemaHelper::create_btTable(QSqlQuery q, QString tableName, QStrin
       foreignIdName + SEP + TYPEINTEGER            + COMMA +
       foreignKey(foreignIdName, foreignTableName) +
       CLOSEPAREN;
-   return create_table(q,create,tableName,tableid,false,false,false);
+   return create_table(q,create,tableName,tableid);
 }
 
 bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid)
@@ -1154,7 +1188,7 @@ bool DatabaseSchemaHelper::create_recipeChildTable( QSqlQuery q, QString tableNa
              foreignKey("recipe_id", tableRecipe) +
              CLOSEPAREN;
 
-   return create_table(q,create,tableName,tableid,false,false,true);
+   return create_table(q,create,tableName,tableid);
 }
 
 bool DatabaseSchemaHelper::create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid)
@@ -1181,7 +1215,7 @@ bool DatabaseSchemaHelper::create_inventoryTable(QSqlQuery q, QString tableName,
       foreignKey(foreignIdName, foreignTableName) +
       CLOSEPAREN;
 
-   return create_table(q,create,tableName,tableid,false,true,false);
+   return create_table(q,create,tableName,tableid,true);
 }
 
 bool DatabaseSchemaHelper::create_increment_trigger(QSqlQuery q, Brewtarget::DBTypes dbType)
@@ -1464,48 +1498,48 @@ bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q) {
    bool ret = true;
 
    ret = create_meta(q);
-   ret &= insert_meta(q,tableSettings,Brewtarget::SETTINGTABLE,false,false,false);
-   ret &= insert_meta(q,tableEquipment,Brewtarget::EQUIPTABLE,true,false,false);
-   ret &= insert_meta(q,tableFermentable,Brewtarget::FERMTABLE, true, false, false);
-   ret &= insert_meta(q,tableHop,Brewtarget::HOPTABLE,true,false,false);
-   ret &= insert_meta(q,tableMisc,Brewtarget::MISCTABLE,true,false,false);
-   ret &= insert_meta(q,tableStyle,Brewtarget::STYLETABLE,true,false,false);
-   ret &= insert_meta(q,tableYeast,Brewtarget::YEASTTABLE,true,false,false);
-   ret &= insert_meta(q,tableWater,Brewtarget::WATERTABLE,true,false,false);
-   ret &= insert_meta(q,tableMash, Brewtarget::MASHTABLE,true, false, false);
-   ret &= insert_meta(q,tableMashStep,Brewtarget::MASHSTEPTABLE,true,false,false);
-   ret &= insert_meta(q,tableBrewnote,Brewtarget::BREWNOTETABLE,true,false,false);
-   ret &= insert_meta(q,tableInstruction,Brewtarget::INSTRUCTIONTABLE,true,false,false);
-   ret &= insert_meta(q,tableRecipe,Brewtarget::RECTABLE,true,false,false);
+   ret &= insert_meta(q,tableSettings,    Brewtarget::SETTINGTABLE);
+   ret &= insert_meta(q,tableEquipment,   Brewtarget::EQUIPTABLE,       true, "Equipment",   Brewtarget::NOTABLE,       Brewtarget::EQUIPCHILDTABLE);
+   ret &= insert_meta(q,tableFermentable, Brewtarget::FERMTABLE,        true, "Fermentable", Brewtarget::FERMINVTABLE,  Brewtarget::FERMCHILDTABLE);
+   ret &= insert_meta(q,tableHop,         Brewtarget::HOPTABLE,         true, "Hop",         Brewtarget::HOPINVTABLE,   Brewtarget::HOPCHILDTABLE);
+   ret &= insert_meta(q,tableMisc,        Brewtarget::MISCTABLE,        true, "Misc",        Brewtarget::MISCINVTABLE,  Brewtarget::MISCCHILDTABLE);
+   ret &= insert_meta(q,tableStyle,       Brewtarget::STYLETABLE,       true, "Style",       Brewtarget::NOTABLE,       Brewtarget::STYLECHILDTABLE);
+   ret &= insert_meta(q,tableYeast,       Brewtarget::YEASTTABLE,       true, "Yeast",       Brewtarget::YEASTINVTABLE, Brewtarget::YEASTCHILDTABLE);
+   ret &= insert_meta(q,tableWater,       Brewtarget::WATERTABLE,       true, "Water",       Brewtarget::NOTABLE,       Brewtarget::WATERCHILDTABLE);
+   ret &= insert_meta(q,tableRecipe,      Brewtarget::RECTABLE,         true, "Recipe",      Brewtarget::NOTABLE,       Brewtarget::RECIPECHILDTABLE);
+   ret &= insert_meta(q,tableMash,        Brewtarget::MASHTABLE,        true, "Mash");
+   ret &= insert_meta(q,tableMashStep,    Brewtarget::MASHSTEPTABLE,    true, "MashStep");
+   ret &= insert_meta(q,tableBrewnote,    Brewtarget::BREWNOTETABLE,    true, "BrewNote");
+   ret &= insert_meta(q,tableInstruction, Brewtarget::INSTRUCTIONTABLE, true, "Instruction");
 
-   ret &= insert_meta(q,tableBtEquipment,Brewtarget::BT_EQUIPTABLE,false,false,false);
-   ret &= insert_meta(q,tableBtFermentable,Brewtarget::BT_FERMTABLE,false,false,false);
-   ret &= insert_meta(q,tableBtHop,  Brewtarget::BT_HOPTABLE,false,false,false);
-   ret &= insert_meta(q,tableBtMisc, Brewtarget::BT_MISCTABLE,false,false,false);
-   ret &= insert_meta(q,tableBtStyle,Brewtarget::BT_STYLETABLE,false,false,false);
-   ret &= insert_meta(q,tableBtYeast,Brewtarget::BT_YEASTTABLE,false,false,false);
-   ret &= insert_meta(q,tableBtWater,Brewtarget::BT_WATERTABLE,false,false,false);
+   ret &= insert_meta(q,tableBtEquipment,   Brewtarget::BT_EQUIPTABLE);
+   ret &= insert_meta(q,tableBtFermentable, Brewtarget::BT_FERMTABLE);
+   ret &= insert_meta(q,tableBtHop,         Brewtarget::BT_HOPTABLE);
+   ret &= insert_meta(q,tableBtMisc,        Brewtarget::BT_MISCTABLE);
+   ret &= insert_meta(q,tableBtStyle,       Brewtarget::BT_STYLETABLE);
+   ret &= insert_meta(q,tableBtYeast,       Brewtarget::BT_YEASTTABLE);
+   ret &= insert_meta(q,tableBtWater,       Brewtarget::BT_WATERTABLE);
 
-   ret &= insert_meta(q,tableFermInRec,Brewtarget::FERMINRECTABLE,false,false,true);
-   ret &= insert_meta(q,tableHopInRec,Brewtarget::HOPINRECTABLE,false,false,true);
-   ret &= insert_meta(q,tableMiscInRec,Brewtarget::MISCINRECTABLE,false,false,true);
-   ret &= insert_meta(q,tableWaterInRec,Brewtarget::WATERINRECTABLE,false,false,true);
-   ret &= insert_meta(q,tableYeastInRec,Brewtarget::YEASTINRECTABLE,false,false,true);
-   ret &= insert_meta(q,tableInsInRec,Brewtarget::INSTINRECTABLE,false,false,true);
+   ret &= insert_meta(q,tableFermInRec,     Brewtarget::FERMINRECTABLE);
+   ret &= insert_meta(q,tableHopInRec,      Brewtarget::HOPINRECTABLE);
+   ret &= insert_meta(q,tableMiscInRec,     Brewtarget::MISCINRECTABLE);
+   ret &= insert_meta(q,tableWaterInRec,    Brewtarget::WATERINRECTABLE);
+   ret &= insert_meta(q,tableYeastInRec,    Brewtarget::YEASTINRECTABLE);
+   ret &= insert_meta(q,tableInsInRec,      Brewtarget::INSTINRECTABLE);
 
-   ret &= insert_meta(q,tableEquipChildren,Brewtarget::EQUIPCHILDTABLE,true,false,true);
-   ret &= insert_meta(q,tableFermChildren,Brewtarget::FERMCHILDTABLE,true,false,true);
-   ret &= insert_meta(q,tableHopChildren ,Brewtarget::HOPCHILDTABLE,true,false,true);
-   ret &= insert_meta(q,tableMiscChildren ,Brewtarget::MISCCHILDTABLE,true,false,true);
-   ret &= insert_meta(q,tableRecChildren ,Brewtarget::RECIPECHILDTABLE,true,false,true);
-   ret &= insert_meta(q,tableStyleChildren ,Brewtarget::STYLECHILDTABLE,true,false,true);
-   ret &= insert_meta(q,tableWaterChildren ,Brewtarget::WATERCHILDTABLE,true,false,true);
-   ret &= insert_meta(q,tableYeastChildren ,Brewtarget::YEASTCHILDTABLE,true,false,true);
+   ret &= insert_meta(q,tableEquipChildren, Brewtarget::EQUIPCHILDTABLE);
+   ret &= insert_meta(q,tableFermChildren,  Brewtarget::FERMCHILDTABLE);
+   ret &= insert_meta(q,tableHopChildren,   Brewtarget::HOPCHILDTABLE);
+   ret &= insert_meta(q,tableMiscChildren,  Brewtarget::MISCCHILDTABLE);
+   ret &= insert_meta(q,tableRecChildren,   Brewtarget::RECIPECHILDTABLE);
+   ret &= insert_meta(q,tableStyleChildren, Brewtarget::STYLECHILDTABLE);
+   ret &= insert_meta(q,tableWaterChildren, Brewtarget::WATERCHILDTABLE);
+   ret &= insert_meta(q,tableYeastChildren, Brewtarget::YEASTCHILDTABLE);
 
-   ret &= insert_meta(q,tableFermInventory,Brewtarget::FERMINVTABLE,false,true,false);
-   ret &= insert_meta(q,tableHopInventory,Brewtarget::HOPINVTABLE,false,true,false);
-   ret &= insert_meta(q,tableMiscInventory,Brewtarget::MISCINVTABLE,false,true,false);
-   ret &= insert_meta(q,tableYeastInventory,Brewtarget::YEASTINVTABLE,false,true,false);
+   ret &= insert_meta(q,tableFermInventory, Brewtarget::FERMINVTABLE);
+   ret &= insert_meta(q,tableHopInventory,  Brewtarget::HOPINVTABLE);
+   ret &= insert_meta(q,tableMiscInventory, Brewtarget::MISCINVTABLE);
+   ret &= insert_meta(q,tableYeastInventory,Brewtarget::YEASTINVTABLE);
 
    return ret;
 }

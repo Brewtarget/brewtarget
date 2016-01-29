@@ -221,6 +221,7 @@ void OptionDialog::defaultDataDir()
 void OptionDialog::saveAndClose()
 {
    bool okay = false;
+   bool saveDbConfig = true;
 
    // TODO:: FIX THIS UI. I am really not sure what the best approach is here.
    if ( status == OptionDialog::NEEDSTEST || status == OptionDialog::TESTFAILED )
@@ -233,7 +234,6 @@ void OptionDialog::saveAndClose()
    }
 
    if ( status == OptionDialog::TESTPASSED ) {
-      bool saveDbConfig = true;
       // This got unpleasant. There are multiple possible transer paths.
       // SQLite->Pgsql, Pgsql->Pgsql and Pgsql->SQLite. This will ensure we
       // preserve the information required.
@@ -260,7 +260,7 @@ void OptionDialog::saveAndClose()
       }
    }
 
-   if ( checkBox_savePassword->checkState() == Qt::Checked ) {
+   if ( saveDbConfig && checkBox_savePassword->checkState() == Qt::Checked ) {
       Brewtarget::setOption("dbPassword", btStringEdit_password->text());
    }
    else {
@@ -448,7 +448,6 @@ void OptionDialog::showChanges()
    checkBox_savePassword->setChecked( Brewtarget::hasOption("dbPassword") );
 
    status = OptionDialog::NOCHANGE;
-   qDebug() << Q_FUNC_INFO << "status:" << status;
    changeColors();
 
 }
@@ -534,14 +533,13 @@ void OptionDialog::changeColors()
    // Red when the test failed
    // Green when the test passed
    // Black otherwise.
-   qDebug() << Q_FUNC_INFO << "status:" << status;
 
    switch(status)
    {
       case OptionDialog::NEEDSTEST:
          buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
          pushButton_testConnection->setEnabled(true);
-         pushButton_testConnection->setStyleSheet("color:black");
+         pushButton_testConnection->setStyleSheet("color:rgb(240,225,25)");
          break;
       case OptionDialog::TESTFAILED:
          buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
@@ -549,7 +547,11 @@ void OptionDialog::changeColors()
          break;
       case OptionDialog::TESTPASSED:
          pushButton_testConnection->setStyleSheet("color:green");
+         buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+         pushButton_testConnection->setEnabled(false);
+         break;
       case OptionDialog::NOCHANGE:
+         pushButton_testConnection->setStyleSheet("color:grey");
          buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
          pushButton_testConnection->setEnabled(false);
          break;

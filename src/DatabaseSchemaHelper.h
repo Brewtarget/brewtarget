@@ -86,8 +86,9 @@ private:
    // the meta table
    static QString tableMeta;
    static QString colMetaIsSearched;
-   static QString colMetaIsInventory;
-   static QString colMetaIsChild;
+   static QString colMetaClassName;
+   static QString colMetaInvId;
+   static QString colMetaChildId;
    static QString colMetaDateCreated;
    static QString colMetaVersion;
    static QString colMetaTableId;
@@ -370,14 +371,18 @@ private:
 
    static void select_dbStrings(Brewtarget::DBTypes dbType);
 
-   // !\brief create_table is a convenience method to wrap a lot of boiler // plate
-   static bool create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid, bool isSearched=true, bool isInv=false, bool isChild=false);
+   // !\brief create_table is a convenience method to wrap a lot of boiler  plate
+   static bool create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid, bool isSearched=false, 
+                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
+                        Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
    // !\brief I need a meta table
    static bool create_meta(QSqlQuery q);
    // !\brief And another meta table we've already created
    static bool create_settings(QSqlQuery q);
-   // \!brief inserts a row into the meta table when a // table is created
-   static bool insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid, bool isSearched, bool isInventory, bool IsChild);
+   // \!brief inserts a row into the meta table when a table is created
+   static bool insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid, bool isSearched=false, 
+                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
+                        Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
 
    //! brief These create the beerXML tables
    static bool create_equipment(QSqlQuery q);

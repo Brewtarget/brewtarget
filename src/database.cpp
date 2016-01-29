@@ -43,6 +43,7 @@
 #include <QSqlQuery>
 #include <QSqlIndex>
 #include <QSqlError>
+#include <QSqlField>
 #include <QThread>
 #include <QDebug>
 #include <QMutex>
@@ -89,8 +90,8 @@ QString Database::dataDbFileName;
 QFile Database::dbTempBackupFile;
 QString Database::dbTempBackupFileName;
 QString Database::dbConName;
-QHash<Brewtarget::DBTable,QString> Database::tableNames = Database::tableNamesHash();
-QHash<QString,Brewtarget::DBTable> Database::classNameToTable = Database::classNameToTableHash();
+QHash<Brewtarget::DBTable,QString> Database::tableNames;
+QHash<QString,Brewtarget::DBTable> Database::classNameToTable;
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTable = Database::tableToChildTableHash();
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTable = Database::tableToInventoryTableHash();
 const QList<TableParams> Database::tableParams = Database::makeTableParams();
@@ -323,6 +324,10 @@ bool Database::load()
          );
          return false;
    }
+
+   // With the db open, we can get all our hashes
+   Database::tableNames = tableNamesHash();
+   Database::classNameToTable = classNameToTableHash();
 
    // Initialize the SELECT * query hashes.
    selectAll = Database::selectAllHash();
@@ -2029,7 +2034,6 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
    rec->recalcABV_pct();
 }
 
-
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
 {
@@ -2057,12 +2061,11 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 {
    QHash<Brewtarget::DBTable,QSqlQuery> ret;
-   QHash<Brewtarget::DBTable,QString> names = Database::tableNamesHash();
 
-   foreach( Brewtarget::DBTable table, names.keys() )
+   foreach( Brewtarget::DBTable table, tableNames.keys() )
    {
       QSqlQuery q(sqlDatabase());
-      QString query = QString("SELECT * FROM %1 WHERE id=:id").arg(names[table]);
+      QString query = QString("SELECT * FROM %1 WHERE id=:id").arg(tableNames[table]);
       q.prepare( query );
 
       ret[table] = q;
@@ -2071,53 +2074,30 @@ QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
    return ret;
 }
 
+// Now the payoff for a lot of hard work elsewhere
 QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
 {
+   
    QHash<Brewtarget::DBTable,QString> tmp;
+   QString query = QString("SELECT name,table_id from bt_alltables where is_searched=%1").arg(Brewtarget::dbTrue());
+   QSqlQuery q(query,sqlDatabase());
 
-   tmp[ Brewtarget::BREWNOTETABLE ] = "brewnote";
-   tmp[ Brewtarget::EQUIPTABLE ] = "equipment";
-   tmp[ Brewtarget::FERMTABLE ] = "fermentable";
-   tmp[ Brewtarget::HOPTABLE ] = "hop";
-   tmp[ Brewtarget::INSTRUCTIONTABLE ] = "instruction";
-   tmp[ Brewtarget::MASHSTEPTABLE ] = "mashstep";
-   tmp[ Brewtarget::MASHTABLE ] = "mash";
-   tmp[ Brewtarget::MISCTABLE ] = "misc";
-   tmp[ Brewtarget::RECTABLE ] = "recipe";
-   tmp[ Brewtarget::STYLETABLE ] = "style";
-   tmp[ Brewtarget::WATERTABLE ] = "water";
-   tmp[ Brewtarget::YEASTTABLE ] = "yeast";
-
-   //inventory tables
-   tmp[ Brewtarget::FERMINVTABLE ] = "fermentable_in_inventory";
-   tmp[ Brewtarget::HOPINVTABLE ] = "hop_in_inventory";
-   tmp[ Brewtarget::MISCINVTABLE ] = "misc_in_inventory";
-   tmp[ Brewtarget::YEASTINVTABLE ] = "yeast_in_inventory";
-   //parent child ingredient tables
-   tmp[ Brewtarget::FERMCHILDTABLE ] = "fermentable_children";
-   tmp[ Brewtarget::HOPCHILDTABLE ] = "hop_children";
-   tmp[ Brewtarget::MISCCHILDTABLE ] = "misc_children";
-   tmp[ Brewtarget::YEASTCHILDTABLE ] = "yeast_children";
-
+   while( q.next() ) {
+      tmp [ (Brewtarget::DBTable)q.value("table_id").toInt() ] = q.value("name").toString(); 
+   }
    return tmp;
+
 }
 
 QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
 {
    QHash<QString,Brewtarget::DBTable> tmp;
+   QString query = QString("SELECT class_name,table_id from bt_alltables where class_name != ''");
+   QSqlQuery q(query,sqlDatabase());
 
-   tmp["BrewNote"] = Brewtarget::BREWNOTETABLE;
-   tmp["Equipment"] = Brewtarget::EQUIPTABLE;
-   tmp["Fermentable"] = Brewtarget::FERMTABLE;
-   tmp["Hop"] = Brewtarget::HOPTABLE;
-   tmp["Instruction"] = Brewtarget::INSTRUCTIONTABLE;
-   tmp["MashStep"] = Brewtarget::MASHSTEPTABLE;
-   tmp["Mash"] = Brewtarget::MASHTABLE;
-   tmp["Misc"] = Brewtarget::MISCTABLE;
-   tmp["Recipe"] = Brewtarget::RECTABLE;
-   tmp["Style"] = Brewtarget::STYLETABLE;
-   tmp["Water"] = Brewtarget::WATERTABLE;
-   tmp["Yeast"] = Brewtarget::YEASTTABLE;
+   while( q.next() ) {
+      tmp [ q.value("class_name").toString() ] = (Brewtarget::DBTable)q.value("table_id").toInt(); 
+   }
 
    return tmp;
 }
@@ -4849,7 +4829,7 @@ bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostnam
                QString(tr("Could not connect to %1 : %2")).arg(hostname).arg(connDb.lastError().text())
             );
    }
-   return results;
+   return results ;
 
 }
 
@@ -4896,44 +4876,6 @@ bool Database::convertDatabase(QString const& Hostname, QString const& DbName,
                                int Portnum, Brewtarget::DBTypes newType)
 {
    QSqlDatabase newDb;
-   QStringList tables = 
-      QStringList() << "hop" << 
-                       "style" << 
-                       "instruction:hasTimer:completed" <<
-                       "water" <<
-                       "mash:equip_adjust" <<
-                       "equipment:calc_boil_volume" <<
-                       "mashstep" <<
-                       "yeast:amount_is_weight:add_to_secondary" <<
-                       "misc:amount_is_weight" <<
-                       "fermentable:add_after_boil:recommend_mash:is_mashed" <<
-                       "recipe:forced_carb" <<
-                       "brewnote" <<
-                       "bt_equipment" <<
-                       "bt_fermentable" <<
-                       "bt_hop" <<
-                       "bt_misc" <<
-                       "bt_style" <<
-                       "bt_water" <<
-                       "bt_yeast" << 
-                       "fermentable_in_recipe" <<
-                       "recipe_children" <<
-                       "hop_children" <<
-                       "hop_in_inventory" <<
-                       "hop_in_recipe" <<
-                       "style_children" <<
-                       "instruction_in_recipe" <<
-                       "water_children" <<
-                       "water_in_recipe" <<
-                       "equipment_children" <<
-                       "yeast_children" <<
-                       "misc_children" <<
-                       "yeast_in_inventory" <<
-                       "fermentable_children" <<
-                       "misc_in_inventory" <<
-                       "yeast_in_recipe" <<
-                       "fermentable_in_inventory" <<
-                       "misc_in_recipe";
 
    Brewtarget::DBTypes oldType = (Brewtarget::DBTypes)Brewtarget::option("dbType",Brewtarget::SQLITE).toInt();
    bool retval = false;
@@ -4966,7 +4908,7 @@ bool Database::convertDatabase(QString const& Hostname, QString const& DbName,
 
          // The initial load may have screwed up, so don't try what won't work
          if ( retval )  
-            retval = convertToPostgres(oldType,tables,newDb);
+            retval = convertToPostgres(oldType,newDb);
       }
    }
 
@@ -4997,14 +4939,14 @@ QString Database::makeQueryString( QSqlRecord here, QString realName )
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
 }
 
-QVariant Database::convertValueToPostgres(Brewtarget::DBTypes oldType, QString name, QVariant value, QStringList fields) 
+QVariant Database::convertValueToPostgres(Brewtarget::DBTypes oldType, QSqlField field)
 {
-   QVariant retVar = value;
+   QVariant retVar = field.value();
    if ( oldType == Brewtarget::SQLITE ) {
-      if ( fields.contains(name) ) {
-         retVar = value.toBool();
+      if ( field.type() == QVariant::Bool ) {
+         retVar = field.value().toBool();
       }
-      else if ( name == "fermentDate" && value.toString() == "CURRENT_DATETIME" ) {
+      else if ( field.name() == "fermentDate" && field.value().toString() == "CURRENT_DATETIME" ) {
          retVar = "'now()'";
       }
    }
@@ -5012,30 +4954,39 @@ QVariant Database::convertValueToPostgres(Brewtarget::DBTypes oldType, QString n
    return retVar;
 }
 
-bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QStringList tables, QSqlDatabase newDb)
+QStringList Database::allTablesInOrder(QSqlQuery q) {
+   QString query = "SELECT name FROM bt_alltables ORDER BY table_id";
+   QStringList tmp;
+
+   q.exec(query);
+   while ( q.next() ) {
+      tmp.append( q.value("name").toString());
+   }
+   return tmp;
+}
+
+bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QSqlDatabase newDb)
 {
    QSqlDatabase oldDb = sqlDatabase();
    QSqlQuery readOld(oldDb);
+
+   QStringList tables = allTablesInOrder(readOld);
 
    bool wtf;
 
    // There are a lot of tables to process
    foreach( QString table, tables ) {
-      QString realName = table;
-      QStringList fields;
+      QSqlField field;
       QString columns,qmarks;
       bool mustPrepare = true;
       int maxid = -1;
 
-      if ( table.contains(":") ) {
-         fields = realName.split(":");
-         realName = fields.takeFirst();
-      }
+      // settings and bt_alltables don't get copied; metatables are created
+      // when the database is
+      if ( table == "settings" || table == "bt_alltables" )
+         continue;
 
-      fields += "display";
-      fields += "deleted";
-
-      QString findAllQuery = QString("SELECT * FROM %1").arg(realName);
+      QString findAllQuery = QString("SELECT * FROM %1").arg(table);
       wtf = readOld.exec(findAllQuery);
 
       if ( wtf == false ) {
@@ -5058,14 +5009,14 @@ bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QStringList table
 
          // Prepare the insert for this table if required 
          if ( mustPrepare ) {
-            insertQuery = makeQueryString(here,realName);
+            insertQuery = makeQueryString(here,table);
             insertNew.prepare(insertQuery);
             mustPrepare = false;
          }
          // All that's left is to bind 
          for(int i=0; i < here.count(); ++i) {
             insertNew.bindValue(i, 
-                     convertValueToPostgres(oldType, here.fieldName(i), here.value(i), fields) ,
+                     convertValueToPostgres(oldType, here.field(i)),
                      QSql::In
             );
          }
@@ -5078,10 +5029,8 @@ bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QStringList table
          }
       }
       // We need to manually reset the sequences
-      if ( realName != "settings" && maxid > -1 ) {
-         QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(realName).arg(maxid);
-         newDb.exec(seq);
-      }
+      QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(table).arg(maxid);
+      newDb.exec(seq);
 
       newDb.commit();
    }
