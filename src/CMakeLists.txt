@@ -424,7 +424,6 @@ SET( QT5_USE_MODULES_LIST
    Widgets
    Network
    PrintSupport
-   Qml
    Sql
    Xml
    WebKit
@@ -452,7 +451,6 @@ SET( QT5_USE_MODULES_LIST
    Widgets
    Network
    PrintSupport
-   Qml
    Sql
    Xml
    WebKit
