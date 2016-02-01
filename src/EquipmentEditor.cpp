@@ -737,9 +737,9 @@ void EquipmentEditor::updateCheckboxRecord()
    {
       double bar = calcBatchSize();
       lineEdit_boilSize->setText(bar);
-      lineEdit_boilSize->setReadOnly(true);
+      lineEdit_boilSize->setEnabled(false);
    }
-   else lineEdit_boilSize->setReadOnly(false);
+   else lineEdit_boilSize->setEnabled(true);
 }
 
 double EquipmentEditor::calcBatchSize()
