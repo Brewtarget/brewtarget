@@ -101,20 +101,26 @@ public:
 
    //! \brief Create a blank database in the given file
    static bool createBlank(QString const& filename);
-   
+
    //! backs up database to 'dir' in chosen directory
    static bool backupToDir(QString dir);
 
    //! \brief Reverts database to that of chosen file.
    static bool restoreFromFile(QString newDbFileStr);
 
+   static bool verifyDbConnection( Brewtarget::DBTypes testDb, QString const& hostname,
+                                   int portnum=5432,
+                                   QString const& schema="public",
+                                   QString const& database="brewtarget",
+                                   QString const& username="brewtarget",
+                                   QString const& password="brewtarget");
    bool loadSuccessful();
    bool isDirty();
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */
    void updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
-   
+
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
    {
@@ -135,7 +141,7 @@ public:
 
    //! Get a table view.
    QTableView* createView( Brewtarget::DBTable table );
-   
+
    // Named constructors ======================================================
    //! Create new brew note attached to \b parent.
    BrewNote* newBrewNote(Recipe* parent, bool signal = true);
@@ -155,7 +161,7 @@ public:
    Water* newWater();
    Yeast* newYeast();
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   
+
    // Named copy constructors==================================================
    //! \returns a copy of the given note.
    BrewNote* newBrewNote(BrewNote* other, bool signal = true);
@@ -171,13 +177,13 @@ public:
    Misc* newMisc(Misc* other);
    Style* newStyle(Style* other);
    Yeast* newYeast(Yeast* other);
-   
+
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   /* This links ingredients with the same name. 
+   /* This links ingredients with the same name.
    * The first displayed ingredient in the database is assumed to be the parent.
    */
    void populateChildTablesByName(Brewtarget::DBTable table);
-   // Runs populateChildTablesByName for each 
+   // Runs populateChildTablesByName for each
    void populateChildTablesByName();
    //! \returns the key of the parent ingredient
    int getParentID(Brewtarget::DBTable table, int childKey);
@@ -189,14 +195,14 @@ public:
    Brewtarget::DBTable getInventoryTable(Brewtarget::DBTable table);
    //! Inserts an new inventory row in the appropriate table
    void newInventory(Brewtarget::DBTable invForTable, int invForID);
-      
+
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  
+
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash
    void duplicateMashSteps(Mash *oldMash, Mash *newMash);
    //! Import ingredients from BeerXML documents.
    bool importFromXML(const QString& filename);
-   
+
    //! Get anything by key value.
    Recipe* recipe(int key);
    Equipment* equipment(int key);
@@ -205,7 +211,7 @@ public:
    Misc* misc(int key);
    Style* style(int key);
    Yeast* yeast(int key);
-   
+
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec. If noCopy is true, then don't copy, and set
@@ -224,12 +230,12 @@ public:
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    //
-   //! \brief bulk add to a recipe. 
+   //! \brief bulk add to a recipe.
    void addToRecipe(Recipe* rec, QList<Fermentable*> ferms);
    void addToRecipe(Recipe* rec, QList<Hop*> hops);
    void addToRecipe(Recipe* rec, QList<Misc*> miscs);
    void addToRecipe(Recipe* rec, QList<Yeast*> yeasts);
-   
+
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
@@ -240,10 +246,10 @@ public:
    void removeFromRecipe( Recipe* rec, Water* w );
    void removeFromRecipe( Recipe* rec, Instruction* ins );
    void removeFromRecipe( Recipe* rec, BrewNote* b );
-   
+
    //! Remove \b step from \b mash.
    void removeFrom( Mash* mash, MashStep* step );
-   
+
    // Mark an item as deleted.
    // NOTE: should these also remove all references to the ingredients?
    void remove(Equipment* equip);
@@ -273,7 +279,7 @@ public:
 
    //! Get the recipe that this \b note is part of.
    Recipe* getParentRecipe( BrewNote const* note );
-   
+
    //! Interchange the step orders of the two steps. Must be in same mash.
    void swapMashStepOrder(MashStep* m1, MashStep* m2);
    //! Interchange the instruction orders. Must be in same recipe.
@@ -282,7 +288,7 @@ public:
    void insertInstruction(Instruction* in, int pos);
    //! \brief The instruction number of an instruction.
    int instructionNumber(Instruction const* in);
-   
+
    Q_PROPERTY( QList<BrewNote*> brewNotes READ brewNotes /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Equipment*> equipments READ equipments /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false )
@@ -294,7 +300,7 @@ public:
    Q_PROPERTY( QList<Style*> styles READ styles /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false )
-   
+
    // Returns non-deleted BeerXMLElements.
    QList<BrewNote*> brewNotes();
    QList<Equipment*> equipments();
@@ -307,7 +313,7 @@ public:
    QList<Style*> styles();
    QList<Water*> waters();
    QList<Yeast*> yeasts();
-   
+
    //! \b returns a list of the brew notes in a recipe.
    QList<BrewNote*> brewNotes(Recipe const* parent);
    //! Return a list of all the fermentables in a recipe.
@@ -330,7 +336,7 @@ public:
    Style* style(Recipe const* parent);
    //! Return a list of all the steps in a mash.
    QList<MashStep*> mashSteps(Mash const* parent);
-   
+
    // Export to BeerXML =======================================================
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
@@ -345,10 +351,10 @@ public:
    void toXml( Water* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Yeast* a, QDomDocument& doc, QDomNode& parent );
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   
+
    //! Get the file where this database was loaded from.
    static QString getDbFileName();
-   
+
    /*!
     * Updates the brewtarget-provided ingredients from the given sqlite
     * database file.
@@ -360,6 +366,11 @@ public:
 
    bool isConverted();
 
+   //! \brief Figures out what databases we are copying to and from, opens what
+   //   needs opens and then calls the appropriate workhorse to get it done. 
+   bool convertDatabase(QString const& Hostname, QString const& DbName,
+                        QString const& Username, QString const& Password,
+                        int Portnum, Brewtarget::DBTypes newType);
 signals:
    void changed(QMetaProperty prop, QVariant value);
    void newEquipmentSignal(Equipment*);
@@ -389,15 +400,17 @@ signals:
    void deletedMashStepSignal(MashStep*);
    // Emits a signal when the dirty status changes
    void isUnsavedChanged(bool);
-   
+
 private slots:
    //! Load database from file.
    bool load();
-   
+
 private:
    static Database* dbInstance; // The singleton object
+
    //QThread* _thread;
    //SetterCommandStack* _setterCommandStack;
+   // These are for SQLite databases
    static QFile dbFile;
    static QString dbFileName;
    static QFile dataDbFile;
@@ -405,6 +418,16 @@ private:
    static QFile dbTempBackupFile;
    static QString dbTempBackupFileName;
    static QString dbConName;
+
+   // And these are for Postgres databases -- are these really required? Are
+   // the sqlite ones really required?
+   static QString dbHostname;
+   static int dbPortnum;
+   static QString dbName;
+   static QString dbSchema;
+   static QString dbUsername;
+   static QString dbPassword;
+
    static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
    static QHash<Brewtarget::DBTable,QString> tableNames;
    static QHash<Brewtarget::DBTable,QString> tableNamesHash();
@@ -415,9 +438,9 @@ private:
    static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTable;
    static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTableHash();
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
-   
+
    static const QList<TableParams> tableParams;
-   
+
    // Each thread should have its own connection to QSqlDatabase.
    static QHash< QThread*, QString > _threadToConnection;
    static QMutex _threadToConnectionMutex;
@@ -426,6 +449,12 @@ private:
    bool loadWasSuccessful;
    bool converted;
    bool dirty;
+   bool createFromScratch;
+   bool schemaUpdated;
+
+   // Don't know where to put this, so it goes here for right now
+   bool loadSQLite();
+   bool loadPgSQL();
 
    QHash< int, BrewNote* > allBrewNotes;
    QHash< int, Equipment* > allEquipments;
@@ -440,39 +469,39 @@ private:
    QHash< int, Water* > allWaters;
    QHash< int, Yeast* > allYeasts;
    QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
-   
+
    //! Get the right database connection for the calling thread.
    static QSqlDatabase sqlDatabase();
-   
+
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       int key;
       BeerXMLElement* e;
       T* et;
-      
+
       QSqlQuery q(sqlDatabase());
       q.setForwardOnly(true);
-      QString queryString = QString("SELECT id FROM `%1`").arg(tableNames[table]);
+      QString queryString = QString("SELECT id FROM %1").arg(tableNames[table]);
       q.prepare( queryString );
       q.exec();
-      
+
       while( q.next() )
       {
          key = q.record().value("id").toInt();
-         
+
          e = new T();
          et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
          et->_key = key;
          et->_table = table;
-         
+
          if( ! hash.contains(key) )
             hash.insert(key,et);
       }
-      
+
       q.finish();
    }
-   
+
    //! Helper to populate the list using the given filter.
    template <class T> void getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements )
    {
@@ -481,22 +510,23 @@ private:
       q.setForwardOnly(true);
       QString queryString;
       if( !filter.isEmpty() )
-         queryString = QString("SELECT id FROM `%1` WHERE %2").arg(tableNames[table]).arg(filter);
+         queryString = QString("SELECT id FROM %1 WHERE %2").arg(tableNames[table]).arg(filter);
       else
-         queryString = QString("SELECT id FROM `%1`").arg(tableNames[table]);
+         queryString = QString("SELECT id FROM %1").arg(tableNames[table]);
+
       q.prepare( queryString );
       q.exec();
-      
+
       while( q.next() )
       {
          key = q.record().value("id").toInt();
          if( allElements.contains(key) )
             list.append( allElements[key] );
       }
-      
+
       q.finish();
    }
-   
+
    /*! Populates the \b element with properties. This must be a class that
     *  simple properties only (no subelements).
     * \param element is the element you want to populate.
@@ -504,7 +534,7 @@ private:
     * \param elementNode is the root node of the element we are reading from.
     */
    void fromXml(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
-   
+
    // Import from BeerXML =====================================================
    BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );
    Equipment* equipmentFromXml( QDomNode const& node, Recipe* parent = 0 );
@@ -519,7 +549,7 @@ private:
    Water* waterFromXml( QDomNode const& node, Recipe* parent = 0 );
    Yeast* yeastFromXml( QDomNode const& node, Recipe* parent = 0 );
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   
+
    //! Hidden constructor.
    Database();
    //! Copy constructor hidden.
@@ -528,26 +558,26 @@ private:
    Database& operator=(Database const&){ return *this; }
    //! Destructor hidden.
    ~Database();
-   
+
    //! Helper to more easily get QMetaProperties.
    QMetaProperty metaProperty(const char* name)
    {
       return metaObject()->property(metaObject()->indexOfProperty(name));
    }
-   
+
    /*! Make a new row in the \b table.
     *  \returns key of new row.
     *  Only works if all the fields in the table have default values.
     */
    int insertNewDefaultRecord( Brewtarget::DBTable table );
-   
+
    /*! Insert a new row in \b mashstep, where \b parent is the parent mash.
     */
    int insertNewMashStepRecord( Mash* parent );
-   
+
    //! Mark the \b object in \b table as deleted.
    void deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object );
-   
+
    // TODO: encapsulate this in a QUndoCommand.
    /*!
     * Create a \e copy (by default) of \b ing and add the copy to \b recipe where \b ing's
@@ -578,14 +608,17 @@ private:
    )
    {
       T* newIng = 0;
-      
+
       if( rec == 0 || ing == 0 )
          return 0;
-      
+
       // Ensure this ingredient is not already in the recipe.
       QSqlQuery q(
-                   QString("SELECT recipe_id from `%1` WHERE `%2`='%3' AND recipe_id='%4'")
-                   .arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(reinterpret_cast<BeerXMLElement*>(rec)->_key),
+                   QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
+                   .arg(relTableName)
+                   .arg(ingKeyName)
+                   .arg(ing->_key)
+                   .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key),
                    sqlDatabase()
                  );
       if( q.next() )
@@ -596,8 +629,8 @@ private:
       }
       else
          q.finish();
-      
-      if ( noCopy ) 
+
+      if ( noCopy )
       {
          newIng = qobject_cast<T*>(ing);
          // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
@@ -608,12 +641,12 @@ private:
       {
          newIng = copy<T>(ing, false, keyHash);
       }
-      
+
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
       q = QSqlQuery( sqlDatabase() );//sqldb );
       q.setForwardOnly(true);
-      
-      q.prepare( QString("INSERT INTO `%1` (`%2`, `recipe_id`) VALUES (:ingredient, :recipe)")
+
+      q.prepare( QString("INSERT INTO %1 (%2, recipe_id) VALUES (:ingredient, :recipe)")
                  .arg(relTableName)
                  .arg(ingKeyName)
                );
@@ -629,10 +662,10 @@ private:
          q.finish();
          Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
       }
-     
+
      //Put this in the <ing_type>_children table.
      if(childTableName != "instruction_children"){
-       q.prepare( QString("INSERT INTO `%1` (`parent_id`, `child_id`) VALUES (:parent, :child)")
+       q.prepare( QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
                .arg(childTableName)
               );
        q.bindValue(":parent", ing->key());
@@ -648,13 +681,13 @@ private:
          Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
        }
      }
-      dirty = true; 
+      dirty = true;
       return newIng;
    }
-   
+
    //! Remove ingredient from a recipe.
    void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName );
-   
+
    /*!
     * \brief Create a deep copy of the \b object.
     * \em T must be a subclass of \em BeerXMLElement.
@@ -671,32 +704,32 @@ private:
       int newKey;
       int i;
       T* newOne = new T();
-      
+
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
       QString tName = tableNames[t];
-      
+
       QSqlQuery q(QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key),
                   sqlDatabase()
                  );
-      
+
       if( !q.next() )
       {
          Brewtarget::logE( QString("Database::copy: %1").arg(q.lastError().text()) );
          q.finish();
          return 0;
       }
-      
+
       QSqlRecord oldRecord = q.record();
       q.finish();
-      QString prepString = QString("UPDATE `%1` SET " ).arg(tName);
-    
-      // Get the field names from the oldRecord. But skip ID, because it 
+      QString prepString = QString("UPDATE %1 SET " ).arg(tName);
+
+      // Get the field names from the oldRecord. But skip ID, because it
       // won't work to copy it
       for (i=0; i< oldRecord.count(); ++i)
       {
          QString name = oldRecord.fieldName(i);
          if ( name != "id" )
-            prepString.append(QString("`%1`=:%2,").arg(name).arg(name));
+            prepString.append(QString("%1=:%2,").arg(name).arg(name));
       }
 
       // Remove the trailing ,
@@ -710,8 +743,8 @@ private:
       q.next();
       QSqlRecord newRecord = q.record();
       q.finish();
-      
-      prepString.append( QString(" where `id`='%1'").arg(newKey));
+
+      prepString.append( QString(" where id=%1").arg(newKey));
 
       q = QSqlQuery( sqlDatabase() );
       q.prepare(prepString);
@@ -722,12 +755,12 @@ private:
          QString name = oldRecord.fieldName(i);
          QVariant val = oldRecord.value(i);
 
-         // We need to set the parent correctly. 
+         // We need to set the parent correctly.
          if ( name == "parent" )
             q.bindValue(QString(":%1").arg(name), object->_key);
          // Display is being set by the call, not by what we are copying
          else if ( name == "display" )
-            q.bindValue(":display", displayed ? 1 : 0 );
+            q.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
          // Ignore ID again, for the same reasons as before.
          else if ( name != "id" )
             q.bindValue(QString(":%1").arg(name), val);
@@ -735,7 +768,7 @@ private:
 
       q.exec();
       q.finish();
-      
+
       // Update the hash if need be.
       if( keyHash )
       {
@@ -744,16 +777,16 @@ private:
          newOneCast->_table = t;
          keyHash->insert( newKey, newOne );
       }
-      
+
       return newOne;
    }
-   
+
    // Do an sql update.
    void sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );
-   
+
    // Do an sql delete.
    void sqlDelete( Brewtarget::DBTable table, QString const& whereClause );
-   
+
    int getQualifiedHopTypeIndex(QString type, Hop* hop);
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
@@ -761,9 +794,9 @@ private:
 
    // Cleans up the backup database if it was leftover from an error.
    bool cleanupBackupDatabase();
-   
+
    static QList<TableParams> makeTableParams();
-   
+
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.
    bool updateSchema(bool* err = 0);
@@ -772,6 +805,31 @@ private:
     * \brief Register that the DB was modified.
     */
    void makeDirty();
+
+   // May St. Stevens intercede on my behalf.
+   //
+   //! \brief opens an SQLite db for transfer
+   QSqlDatabase openSQLite();
+
+   //! \brief opens a PostgreSQL db for transfer. I need
+   QSqlDatabase openPostgres(QString const& Hostname, QString const& DbName,
+                             QString const& Username, QString const& Password,
+                             int Portnum);
+   //! \brief makes a query string we can prepare. Needed this in two places,
+   // so it got a method
+   QString makeQueryString( QSqlRecord here, QString realName );
+
+   //! \brief converts sqlite values (mostly booleans) into something postgres
+   // wants
+   QVariant convertValue(Brewtarget::DBTypes newType, QSqlField field);
+
+   QStringList allTablesInOrder(QSqlQuery q);
+
+   //! \brief does the heavy lefting to copy the contents from one db to the
+   //next
+   bool copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase oldDb);
+
+
 };
 
 #endif   /* _DATABASE_H */

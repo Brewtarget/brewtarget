@@ -78,7 +78,7 @@ QList<QSqlQuery> SetterCommand::setterStatements()
    {
       QSqlQuery q( Database::sqlDatabase() );
       q.setForwardOnly(true); // Helps with speed/memory.
-      str = QString("UPDATE `%1` SET `%2`= :value WHERE id='%3'")
+      str = QString("UPDATE %1 SET %2=:value WHERE id=%3")
                 .arg(Database::tableNames[*tableIt])
                 .arg(*colNameIt)
                 .arg(*keyIt);
@@ -115,7 +115,7 @@ QList<QSqlQuery> SetterCommand::undoStatements()
    {
       QSqlQuery q( Database::sqlDatabase() );
       q.setForwardOnly(true);
-      str = QString("UPDATE `%1` SET `%2` = :oldValue WHERE id='%3'")
+      str = QString("UPDATE %1 SET %2 = :oldValue WHERE id=%3")
                 .arg(Database::tableNames[*tableIt])
                 .arg(*colNameIt)
                 .arg(*keyIt);
@@ -153,7 +153,7 @@ void SetterCommand::oldValueTransaction()
    {
       QSqlQuery q( Database::sqlDatabase() );
       q.setForwardOnly(true);
-      str = QString("SELECT `%1` FROM `%2` WHERE id='%3'")
+      str = QString("SELECT %1 FROM %2 WHERE id=%3")
                 .arg(*colNameIt)
                 .arg(Database::tableNames[*tableIt])
                 .arg(*keyIt);
@@ -173,7 +173,7 @@ void SetterCommand::oldValueTransaction()
       QSqlQuery q = *qIt;
       if( q.next() )
          oldValues.append(q.record().value(0));
-      else
+      else if ( ! q.isValid() )
          Brewtarget::logE( QString("SetterCommand::oldValueTransaction: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
    }
 }

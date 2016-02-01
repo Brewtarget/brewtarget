@@ -86,6 +86,7 @@ QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:
 
 QString Brewtarget::currentLanguage = "en";
 QDir Brewtarget::userDataDir = getConfigDir();
+Brewtarget::DBTypes Brewtarget::_dbType = Brewtarget::NODB;
 
 bool Brewtarget::checkVersion = true;
 Log Brewtarget::log(true);
@@ -360,7 +361,7 @@ const QDir Brewtarget::getConfigDir(bool *success)
    // See if brewtarget dir exists.
    if( !dir.exists("brewtarget") )
    {
-      logW( QString("\"%1\" does not exist...creating.").arg(dir.absolutePath() + "/brewtarget") );
+      // logW( QString("\"%1\" does not exist...creating.").arg(dir.absolutePath() + "/brewtarget") );
 
       // Try to make brewtarget dir.
       if( ! dir.mkdir("brewtarget") )
@@ -510,6 +511,50 @@ bool Brewtarget::initialize(const QString &userDirectory)
    }
    else
       return false;
+}
+
+Brewtarget::DBTypes Brewtarget::dbType() { return _dbType; }
+
+QString Brewtarget::dbTrue(Brewtarget::DBTypes type)
+{
+   Brewtarget::DBTypes whichDb = type;
+   QString retval;
+
+   if ( whichDb == Brewtarget::NODB )
+      whichDb = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
+
+   switch( whichDb ) {
+      case SQLITE:
+         retval = "1";
+         break;
+      case PGSQL:
+         retval = "true";
+         break;
+      default:
+         retval = "whiskeytangofoxtrot";
+   }
+   return retval;
+}
+
+QString Brewtarget::dbFalse(Brewtarget::DBTypes type)
+{
+   Brewtarget::DBTypes whichDb = type;
+   QString retval;
+
+   if ( whichDb == Brewtarget::NODB )
+      whichDb = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
+
+   switch( whichDb ) {
+      case SQLITE:
+         retval = "0";
+         break;
+      case PGSQL:
+         retval = "false";
+         break;
+      default:
+         retval = "notwhiskeytangofoxtrot";
+   }
+   return retval;
 }
 
 void Brewtarget::cleanup()
@@ -903,6 +948,10 @@ void Brewtarget::readSystemOptions()
 
    //=======================Date format===================
    dateFormat = (Unit::unitDisplay)option("date_format",Unit::displaySI).toInt();
+
+   //=======================Database type ================
+   _dbType = (Brewtarget::DBTypes)option("dbType",Brewtarget::SQLITE).toInt();
+
 }
 
 void Brewtarget::saveSystemOptions()
