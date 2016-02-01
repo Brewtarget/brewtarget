@@ -349,6 +349,7 @@ private:
    
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+   static bool upgrade;
    /*!
     * \brief Create a blank database whose schema version is \c dbVersion
     */

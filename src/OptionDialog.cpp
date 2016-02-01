@@ -498,11 +498,11 @@ void OptionDialog::testConnection()
          password = btStringEdit_password->text();
          port     = (btStringEdit_portnum->text()).toInt();
 
-         success = Database::testConnection( newType, hostname, port, schema, database, username, password);
+         success = Database::verifyDbConnection(newType,hostname,port,schema,database,username,password);
          break;
       default:
          hostname = QString("%1/%2").arg(lineEdit_dbDir->text()).arg("database.sqlite");
-         success = Database::testConnection(newType,hostname);
+         success = Database::verifyDbConnection(newType,hostname);
    }
 
    if ( success ) 
@@ -562,6 +562,6 @@ void OptionDialog::savePassword(bool state)
 {
    if ( state ) {
       QMessageBox::warning(0, QObject::tr("Plaintext"), 
-                              QObject::tr("Passwords are saved in plaintext. We are making exactly 0 effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems."));
+                              QObject::tr("Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems."));
    }
 }

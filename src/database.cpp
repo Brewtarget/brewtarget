@@ -208,7 +208,10 @@ bool Database::loadSQLite()
       // Store temporary tables in memory.
       QSqlQuery( "PRAGMA temp_store = MEMORY", sqldb);
 
-      createFromScratch = ! sqldb.tables().contains("settings");
+      // older sqlite databases may not have a settings table. I think I will
+      // just check to see if anything is in there.
+      createFromScratch = sqldb.tables().size() == 0;
+
       // Associate this db with the current thread.
       _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
       _threadToConnectionMutex.unlock();
@@ -239,11 +242,10 @@ bool Database::loadPgSQL()
       // prompt for the password until we get it? I don't think this is a good
       // idea?
       while ( ! isOk ) {
-
          dbPassword = QInputDialog::getText(0,tr("Database password"),
                tr("Password"), QLineEdit::Password,QString(),&isOk);
          if ( isOk ) {
-            isOk = testConnection( Brewtarget::PGSQL, dbHostname, dbPortnum, dbSchema, 
+            isOk = verifyDbConnection( Brewtarget::PGSQL, dbHostname, dbPortnum, dbSchema, 
                                  dbName, dbUsername, dbPassword);
          }
       }
@@ -259,20 +261,19 @@ bool Database::loadPgSQL()
    dbIsOpen = sqldb.open();
    dbConName = sqldb.connectionName();
 
-   if( ! dbIsOpen )
-   {
+   if( ! dbIsOpen ) {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
       QMessageBox::critical(0,
                             QObject::tr("Database Failure"),
                             QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname))
                            );
    }
-   else
-   {
-     createFromScratch = ! sqldb.tables().contains("settings");
-     // Associate this db with the current thread.
-     _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
-     _threadToConnectionMutex.unlock();
+   else {
+      // by the time we had pgsql support, there is a settings table
+      createFromScratch = ! sqldb.tables().contains("settings");
+      // Associate this db with the current thread.
+      _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
+      _threadToConnectionMutex.unlock();
    }
 
    return dbIsOpen;
@@ -301,7 +302,7 @@ bool Database::load()
    sqldb = sqlDatabase();
 
    // This should work regardless of the db being used. 
-   if( ! sqldb.tables().contains(QLatin1String("settings")) )
+   if( createFromScratch )
    {
          bool success = DatabaseSchemaHelper::create(sqldb);
          if( !success )
@@ -4786,7 +4787,7 @@ void Database::makeDirty()
    }
 }
 
-bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostname, int portnum, QString const& schema, 
+bool Database::verifyDbConnection(Brewtarget::DBTypes testDb, QString const& hostname, int portnum, QString const& schema, 
                               QString const& database, QString const& username, QString const& password)
 {
    QString driverName;
@@ -4835,22 +4836,26 @@ bool Database::testConnection(Brewtarget::DBTypes testDb, QString const& hostnam
 
 QSqlDatabase Database::openSQLite()
 {
-   QString filePath = Brewtarget::option("old.dbFilename","").toString();
-   QSqlDatabase oldDb = QSqlDatabase::addDatabase("QSQLITE", "olddb");
+   QString filePath = Brewtarget::getUserDataDir().filePath("database.sqlite");
+   QSqlDatabase newDb = QSqlDatabase::addDatabase("QSQLITE", "altdb");
 
    bool openDb;
 
-   if (! filePath.isEmpty() ) {
-      oldDb.setDatabaseName(filePath);
-      openDb = oldDb.open();
+   dbFile.setFileName(dbFileName);
 
-      if ( !openDb )
-         Brewtarget::logE(tr("Could not open %1 : %2").arg(filePath).arg(oldDb.lastError().text()));
+   if ( filePath.isEmpty() ) {
+      Brewtarget::logE(tr("Could not read the database file(%1)").arg(filePath));
+      return newDb;
    }
-   else {
-      Brewtarget::logE(tr("Could not read old.dbFilename from the config file"));
-   }
-   return oldDb;
+
+
+   newDb.setDatabaseName(filePath);
+   openDb = newDb.open();
+
+   if ( !openDb )
+      Brewtarget::logE(tr("Could not open %1 : %2").arg(filePath).arg(newDb.lastError().text()));
+
+   return newDb;
 }
 
 QSqlDatabase Database::openPostgres(QString const& Hostname, QString const& DbName,
@@ -4897,29 +4902,20 @@ bool Database::convertDatabase(QString const& Hostname, QString const& DbName,
          newDb = openSQLite();
    }
 
-   if ( newType == Brewtarget::PGSQL ) {
-      if ( newDb.isOpen() ) {
-         if( ! newDb.tables().contains(QLatin1String("settings")) ) {
-            retval = DatabaseSchemaHelper::create(newDb,newType);
-            if( !retval ) {
-               Brewtarget::logE("DatabaseSchemaHelper::create() failed");
-            }
+   if ( newDb.isOpen() ) {
+      if( ! newDb.tables().contains(QLatin1String("settings")) ) {
+         retval = DatabaseSchemaHelper::create(newDb,newType);
+         if( !retval ) {
+            Brewtarget::logE("DatabaseSchemaHelper::create() failed");
          }
-
-         // The initial load may have screwed up, so don't try what won't work
-         if ( retval )  
-            retval = convertToPostgres(oldType,newDb);
       }
+
+      // The initial load may have screwed up, so don't try what won't work
+      if ( retval )  
+         retval = copyDatabase(oldType,newType,newDb);
    }
 
    return retval;
-}
-
-//THIS IS A STUB. 
-bool Database::convertToSQLite() 
-{
-   Brewtarget::logE(tr("This doesn't work yet."));
-   return false;
 }
 
 QString Database::makeQueryString( QSqlRecord here, QString realName )
@@ -4939,18 +4935,22 @@ QString Database::makeQueryString( QSqlRecord here, QString realName )
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
 }
 
-QVariant Database::convertValueToPostgres(Brewtarget::DBTypes oldType, QSqlField field)
+QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
 {
    QVariant retVar = field.value();
-   if ( oldType == Brewtarget::SQLITE ) {
-      if ( field.type() == QVariant::Bool ) {
-         retVar = field.value().toBool();
-      }
-      else if ( field.name() == "fermentDate" && field.value().toString() == "CURRENT_DATETIME" ) {
-         retVar = "'now()'";
+   if ( field.type() == QVariant::Bool ) {
+      switch(newType) {
+         case Brewtarget::PGSQL:
+            retVar = field.value().toBool();
+            break;
+         default:
+            retVar = field.value().toInt();
+            break;
       }
    }
-
+   else if ( field.name() == "fermentDate" && field.value().toString() == "CURRENT_DATETIME" ) {
+         retVar = "'now()'";
+      }
    return retVar;
 }
 
@@ -4965,7 +4965,7 @@ QStringList Database::allTablesInOrder(QSqlQuery q) {
    return tmp;
 }
 
-bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QSqlDatabase newDb)
+bool Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase newDb)
 {
    QSqlDatabase oldDb = sqlDatabase();
    QSqlQuery readOld(oldDb);
@@ -5016,7 +5016,7 @@ bool Database::convertToPostgres( Brewtarget::DBTypes oldType, QSqlDatabase newD
          // All that's left is to bind 
          for(int i=0; i < here.count(); ++i) {
             insertNew.bindValue(i, 
-                     convertValueToPostgres(oldType, here.field(i)),
+                     convertValue(newType, here.field(i)),
                      QSql::In
             );
          }

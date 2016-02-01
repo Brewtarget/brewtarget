@@ -108,12 +108,12 @@ public:
    //! \brief Reverts database to that of chosen file.
    static bool restoreFromFile(QString newDbFileStr);
 
-   static bool testConnection( Brewtarget::DBTypes testDb, QString const& hostname,
-                               int portnum=5432,
-                               QString const& schema="public",
-                               QString const& database="brewtarget",
-                               QString const& username="brewtarget",
-                               QString const& password="brewtarget");
+   static bool verifyDbConnection( Brewtarget::DBTypes testDb, QString const& hostname,
+                                   int portnum=5432,
+                                   QString const& schema="public",
+                                   QString const& database="brewtarget",
+                                   QString const& username="brewtarget",
+                                   QString const& password="brewtarget");
    bool loadSuccessful();
    bool isDirty();
 
@@ -821,15 +821,13 @@ private:
 
    //! \brief converts sqlite values (mostly booleans) into something postgres
    // wants
-   QVariant convertValueToPostgres(Brewtarget::DBTypes oldType, QSqlField field);
+   QVariant convertValue(Brewtarget::DBTypes newType, QSqlField field);
 
    QStringList allTablesInOrder(QSqlQuery q);
-   //! \brief does the heavy lefting to convert data to postgres
-   bool convertToPostgres( Brewtarget::DBTypes oldType, QSqlDatabase oldDb);
 
-   //! \brief this is a stub at the moment, but sooner or later will convert
-   //   from the existing db into a new sqlite db
-   bool convertToSQLite();
+   //! \brief does the heavy lefting to copy the contents from one db to the
+   //next
+   bool copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase oldDb);
 
 
 };

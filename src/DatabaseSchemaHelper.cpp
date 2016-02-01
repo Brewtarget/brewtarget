@@ -347,6 +347,7 @@ QString DatabaseSchemaHelper::tableMiscInventory("misc_in_inventory");
 
 QString DatabaseSchemaHelper::tableYeastInventory("yeast_in_inventory");
 
+bool DatabaseSchemaHelper::upgrade = false;
 // Default namespace hides functions from everything outside this file.
 
 bool DatabaseSchemaHelper::create(QSqlDatabase db, Brewtarget::DBTypes dbType)
@@ -585,7 +586,8 @@ bool DatabaseSchemaHelper::create_table(QSqlQuery q, QString create, QString tab
       Brewtarget::logE(QString("Creating %1 table failed: %2 : %3").arg(tableName).arg(create).arg(q.lastError().text()));
    }
    else {
-      ret &= insert_meta(q,tableName,tableid,isSearched,className,inv_id,child_id);
+      if ( ! upgrade ) 
+         ret &= insert_meta(q,tableName,tableid,isSearched,className,inv_id,child_id);
    }
    return ret;
 }
@@ -622,7 +624,7 @@ bool DatabaseSchemaHelper::insert_meta(QSqlQuery q, QString const& name,
 
 bool DatabaseSchemaHelper::create_meta(QSqlQuery q)
 {
-   QString create =QString(
+   QString create = QString(
       CREATETABLE + SEP + tableMeta + SEP + OPENPAREN +
          id                                                                     + COMMA +
          name                                                                   + COMMA +
@@ -634,7 +636,7 @@ bool DatabaseSchemaHelper::create_meta(QSqlQuery q)
          colMetaVersion     + SEP + TYPEINTEGER  + SEP + DEFAULT + SEP + "%1"   + COMMA +
          colMetaTableId     + SEP + TYPEINTEGER  + SEP + "not null" +
       CLOSEPAREN).arg(dbVersion);
-   
+  
    return create_table(q,create,tableMeta,Brewtarget::BTALLTABLE);
 }
 
@@ -1428,16 +1430,20 @@ bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q)
       SET + SEP + "repopulateChildrenOnNextStart=1"
    );
 
-   // Drop and re-create children tables with new UNIQUE requirement
-   // Drop and re-create inventory tables with new UNIQUE requirement
+   // Drop and re-create children and inventory tables with new UNIQUE requirement
    foreach(const QString &table, rebuildTables )
    {
       ret &= q.exec(
          DROPTABLE + SEP + table
       );
    }
+   // This happens before the bt_alltables exists. Setting upgrade to true
+   // prevents create_table from trying to insert into it.
+   upgrade = true;
    ret &= create_childrenTables(q);
    ret &= create_inventoryTables(q);
+   // Just to avoid any weird side effects
+   upgrade = false;
 
    return ret;
 }
@@ -1498,6 +1504,7 @@ bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q) {
    bool ret = true;
 
    ret = create_meta(q);
+
    ret &= insert_meta(q,tableSettings,    Brewtarget::SETTINGTABLE);
    ret &= insert_meta(q,tableEquipment,   Brewtarget::EQUIPTABLE,       true, "Equipment",   Brewtarget::NOTABLE,       Brewtarget::EQUIPCHILDTABLE);
    ret &= insert_meta(q,tableFermentable, Brewtarget::FERMTABLE,        true, "Fermentable", Brewtarget::FERMINVTABLE,  Brewtarget::FERMCHILDTABLE);
