@@ -978,9 +978,6 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
       key = q.lastInsertId().toInt();
    q.finish();
 
-   //if( q.lastError().isValid() )
-   //   Brewtarget::logE( QString("Database::insertNewDefaultRecord: %1").arg(q.lastError().text()) );
-
    makeDirty();
    return key;
 }
