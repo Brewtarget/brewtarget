@@ -183,8 +183,8 @@ void Testing::postBoilLossOgTest()
    recNoLoss->setEfficiency_pct(70.0);
 
    recLoss->setName("TestRecipe_loss");
-   recLoss->setBatchSize_l(eLoss->batchSize_l());
-   recLoss->setBoilSize_l(eLoss->boilSize_l());
+   recLoss->setBatchSize_l(eLoss->batchSize_l() - eLoss->trubChillerLoss_l()); // Adjust for trub losses
+   recLoss->setBoilSize_l(eLoss->boilSize_l() - eLoss->trubChillerLoss_l());
    recLoss->setEfficiency_pct(70.0);
 
    double mashWaterNoLoss_l = recNoLoss->boilSize_l()
