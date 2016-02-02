@@ -85,7 +85,7 @@ QFile Brewtarget::pidFile;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
-QDir Brewtarget::userDataDir = getConfigDir();
+QDir Brewtarget::userDataDir = QString();
 
 bool Brewtarget::checkVersion = true;
 Log Brewtarget::log(true);
@@ -391,7 +391,7 @@ const QDir Brewtarget::getConfigDir(bool *success)
 
    QDir dir;
    // This is the bin/ directory.
-   dir = QDir(qApp->applicationDirPath());
+   dir = QDir(QCoreApplication::applicationDirPath());
    dir.cdUp();
    // Now we should be in the base directory (i.e. Brewtarget-2.0.0/)
 
