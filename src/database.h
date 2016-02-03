@@ -239,13 +239,11 @@ public:
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
-   void removeFromRecipe( Recipe* rec, Hop* hop );
-   void removeFromRecipe( Recipe* rec, Fermentable* ferm );
-   void removeFromRecipe( Recipe* rec, Misc* m );
-   void removeFromRecipe( Recipe* rec, Yeast* y );
-   void removeFromRecipe( Recipe* rec, Water* w );
-   void removeFromRecipe( Recipe* rec, Instruction* ins );
+   bool removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing );
+
+   // Two odd balls I can't resolve quite yet. But I will.
    void removeFromRecipe( Recipe* rec, BrewNote* b );
+   void removeFromRecipe( Recipe* rec, Instruction* ins );
 
    //! Remove \b step from \b mash.
    void removeFrom( Mash* mash, MashStep* step );
@@ -692,9 +690,6 @@ private:
      dirty = true;
      return newIng;
    }
-
-   //! Remove ingredient from a recipe.
-   void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName );
 
    /*!
     * \brief Create a deep copy of the \b object.

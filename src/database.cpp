@@ -648,10 +648,25 @@ bool Database::restoreFromFile(QString newDbFileStr)
 }
 
 // removeFromRecipe ===========================================================
-void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
+bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 {
    QSqlQuery q(sqlDatabase());
    QString tableName = tableNames[classNameToTable[ing->metaObject()->className()]];
+   const QMetaObject* meta = ing->metaObject();
+
+   int ndx = meta->indexOfClassInfo("signal");
+   QString propName, relTableName, ingKeyName;
+
+   if ( ndx != -1 ) {
+      QString prefix = meta->classInfo( meta->indexOfClassInfo("prefix")).value();
+      propName  = meta->classInfo(ndx).value();
+      relTableName = QString("%1_in_recipe").arg(prefix);
+      ingKeyName = QString("%1_id").arg(prefix);
+   }
+   else {
+      Brewtarget::logE(QString("%1 could not locate classInfo for signal on %2").arg(Q_FUNC_INFO).arg(meta->className()));
+      return false;
+   }
 
    sqlDatabase().transaction();
 
@@ -670,6 +685,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QSt
 
    makeDirty();
    emit rec->changed( rec->metaProperty(propName), QVariant() );
+   return true;
 }
 
 void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
@@ -682,41 +698,9 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
    emit deletedBrewNoteSignal(b);
 }
 
-void Database::removeFromRecipe( Recipe* rec, Hop* hop )
-{
-   removeIngredientFromRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
-   disconnect( hop, 0, rec, 0 );
-   rec->recalcAll();
-}
-
-void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
-{
-   removeIngredientFromRecipe( rec, ferm, "fermentables", "fermentable_in_recipe", "fermentable_id" );
-   disconnect( ferm, 0, rec, 0 );
-   rec->recalcAll();
-}
-
-void Database::removeFromRecipe( Recipe* rec, Misc* m )
-{
-   removeIngredientFromRecipe( rec, m, "miscs", "misc_in_recipe", "misc_id" );
-   rec->recalcAll();
-}
-
-void Database::removeFromRecipe( Recipe* rec, Yeast* y )
-{
-   removeIngredientFromRecipe( rec, y, "yeasts", "yeast_in_recipe", "yeast_id" );
-   rec->recalcAll();
-}
-
-void Database::removeFromRecipe( Recipe* rec, Water* w )
-{
-   removeIngredientFromRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
-   rec->recalcAll();
-}
-
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
-   removeIngredientFromRecipe( rec, ins, "instructions", "instruction_in_recipe", "instruction_id" );
+   removeIngredientFromRecipe( rec, ins);
 
    // --maf-- Instructions just need to get whacked.
    sqlDelete( Brewtarget::INSTRUCTIONTABLE,

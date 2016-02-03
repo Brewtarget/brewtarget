@@ -1345,29 +1345,9 @@ QDate Recipe::date()               const { return QDate::fromString( get("date")
 //=============================Removers========================================
 
 // Returns true if var is found and removed.
-void Recipe::removeHop( Hop *var )
+bool Recipe::remove( BeerXMLElement *var )
 {
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeFermentable(Fermentable* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeMisc(Misc* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeWater(Water* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeYeast(Yeast* var)
-{
-   Database::instance().removeFromRecipe( this, var );
+   return Database::instance().removeIngredientFromRecipe( this, var );
 }
 
 void Recipe::removeBrewNote(BrewNote* var)

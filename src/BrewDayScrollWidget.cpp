@@ -93,7 +93,7 @@ void BrewDayScrollWidget::removeSelectedInstruction()
    int row = listWidget->currentRow();
    if( row < 0 )
       return;
-   Database::instance().removeFromRecipe(recObs, recIns[row]);
+   recObs->remove(recIns[row]);
 
    if(recIns.isEmpty())
    {
