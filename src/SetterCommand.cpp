@@ -62,7 +62,7 @@ QList<QSqlQuery> SetterCommand::setterStatements()
 {
    QList<QSqlQuery> ret;
    QString str;
-   
+
    QList<Brewtarget::DBTable>::const_iterator tableIt, tableEnd;
    QList<QString>::const_iterator colNameIt;
    QList<int>::const_iterator keyIt;
@@ -71,7 +71,7 @@ QList<QSqlQuery> SetterCommand::setterStatements()
    colNameIt = col_names.constBegin();
    keyIt = keys.constBegin();
    valueIt = values.constBegin();
-   
+
    // Construct the statements.
    tableEnd = tables.constEnd();
    while( tableIt != tableEnd )
@@ -85,13 +85,13 @@ QList<QSqlQuery> SetterCommand::setterStatements()
       q.prepare(str);
       q.bindValue(":value",*valueIt);
       ret.append(q);
-      
+
       ++tableIt;
       ++colNameIt;
       ++keyIt;
       ++valueIt;
    }
-   
+
    return ret;
 }
 
@@ -108,7 +108,7 @@ QList<QSqlQuery> SetterCommand::undoStatements()
    colNameIt = col_names.constBegin();
    keyIt = keys.begin();
    oldValueIt = oldValues.begin();
-   
+
    // Construct the transaction string.
    tableEnd = tables.constEnd();
    while( tableIt != tableEnd )
@@ -122,13 +122,13 @@ QList<QSqlQuery> SetterCommand::undoStatements()
       q.prepare(str);
       q.bindValue(":oldValue",*oldValueIt);
       ret.append(q);
-      
+
       ++tableIt;
       ++colNameIt;
       ++keyIt;
       ++oldValueIt;
    }
-   
+
    return ret;
 }
 
@@ -146,7 +146,7 @@ void SetterCommand::oldValueTransaction()
    colNameIt = col_names.constBegin();
    keyIt = keys.begin();
    oldValueIt = oldValues.begin();
-   
+
    tableEnd = tables.constEnd();
    QSqlQuery transBegin("BEGIN TRANSACTION", Database::sqlDatabase());
    while( tableIt != tableEnd )
@@ -165,7 +165,7 @@ void SetterCommand::oldValueTransaction()
       ++keyIt;
    }
    QSqlQuery transCommit("COMMIT", Database::sqlDatabase());
-   
+
    qEnd = queries.constEnd();
    oldValues.clear();
    for( qIt = queries.constBegin(); qIt != qEnd; ++qIt )
@@ -219,16 +219,18 @@ bool SetterCommand::mergeWith( const QUndoCommand* command )
    return true;
 }
 
+bool SetterCommand::sqlSuccess() { return _sqlSuccess; }
+
 void SetterCommand::redo()
-{   
+{
    int i, size;
    size = tables.size();
    if( size <= 0 )
       return;
-   
+
    // Get the old values.
    oldValueTransaction();
-   
+
    // Set the new values.
    QSqlQuery transBegin("BEGIN TRANSACTION", Database::sqlDatabase());
    QList<QSqlQuery> queries = setterStatements();
@@ -236,7 +238,10 @@ void SetterCommand::redo()
    foreach( QSqlQuery q, queries )
    {
       if( ! q.exec() )
+      {
          Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
+         _sqlSuccess &= false;
+      }
    }
    QSqlQuery transEnd("COMMIT", Database::sqlDatabase());
    

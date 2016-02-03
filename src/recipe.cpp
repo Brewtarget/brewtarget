@@ -881,7 +881,7 @@ void Recipe::setBoilTime_min( double var )
       tmp = var;
    }
 
-   set( "boilTime_min", "boil_time", tmp );
+   set( "boilTime_min", "boil_time", tmp);
 }
 
 void Recipe::setEfficiency_pct( double var )
@@ -1347,12 +1347,11 @@ QDate Recipe::date()               const { return QDate::fromString( get("date")
 // Returns true if var is found and removed.
 bool Recipe::remove( BeerXMLElement *var )
 {
-   return Database::instance().removeIngredientFromRecipe( this, var );
-}
+   // brewnotes a bit odd
+   if ( var->metaObject()->className() == QString("BrewNote") )
+      return Database::instance().remove(var);
 
-void Recipe::removeBrewNote(BrewNote* var)
-{
-   Database::instance().removeFromRecipe(this, var);
+   return Database::instance().removeIngredientFromRecipe( this, var );
 }
 
 double Recipe::batchSizeNoLosses_l()

@@ -655,13 +655,14 @@ bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
    const QMetaObject* meta = ing->metaObject();
 
    int ndx = meta->indexOfClassInfo("signal");
-   QString propName, relTableName, ingKeyName;
+   QString propName, relTableName, ingKeyName, childTableName;
 
    if ( ndx != -1 ) {
       QString prefix = meta->classInfo( meta->indexOfClassInfo("prefix")).value();
       propName  = meta->classInfo(ndx).value();
       relTableName = QString("%1_in_recipe").arg(prefix);
       ingKeyName = QString("%1_id").arg(prefix);
+      childTableName = QString("%1_children").arg(prefix);
    }
    else {
       Brewtarget::logE(QString("%1 could not locate classInfo for signal on %2").arg(Q_FUNC_INFO).arg(meta->className()));
@@ -670,14 +671,45 @@ bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 
    sqlDatabase().transaction();
 
-   // We need to do two things right now -- destroy the link from in_recipe
-   // and mark the original as deleted
+   // We need to do many things -- remove the link in *in_recipe,
+   // remove the entry from *_children
+   // and DELETE THE COPY
+   QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND recipe_id=%4")
+                              .arg(relTableName)
+                              .arg(ingKeyName)
+                              .arg(ing->_key)
+                              .arg(rec->_key);
+   QString deleteFromChildren = QString("DELETE FROM %1 WHERE child_id=%2")
+                              .arg(childTableName)
+                              .arg(ing->_key);
+   QString deleteIngredient = QString("DELETE FROM %1 where id=%2")
+                              .arg(tableName)
+                              .arg(ing->_key);
    q.setForwardOnly(true);
-   q.prepare( QString("DELETE FROM %1 WHERE %2='%3' AND recipe_id=%4").arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
-   q.exec();
 
-   q.prepare( QString("UPDATE %1 SET deleted=%2 WHERE id=%3").arg(tableName).arg(Brewtarget::dbTrue()).arg(ing->_key));
-   q.exec();
+   if ( ! q.exec(deleteFromInRecipe) ) {
+      Brewtarget::logE( QString("%1 failed to delete in recipe. %2 : %3")
+                        .arg(Q_FUNC_INFO)
+                        .arg(q.lastQuery())
+                        .arg(q.lastError().text()));
+      return false;
+   }
+
+   if ( ! q.exec( deleteFromChildren ) ) {
+      Brewtarget::logE( QString("%1 failed to delete children. %2 : %3")
+                        .arg(Q_FUNC_INFO)
+                        .arg(q.lastQuery())
+                        .arg(q.lastError().text()));
+      return false;
+   }
+
+   if ( ! q.exec( deleteIngredient ) ) {
+      Brewtarget::logE( QString("%1 failed to delete ingredient. %2 : %3")
+                        .arg(Q_FUNC_INFO)
+                        .arg(q.lastQuery())
+                        .arg(q.lastError().text()));
+      return false;
+   }
 
    q.finish();
 
@@ -686,16 +718,6 @@ bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
    makeDirty();
    emit rec->changed( rec->metaProperty(propName), QVariant() );
    return true;
-}
-
-void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
-{
-   // Just mark the brew note as deleted.
-   sqlUpdate( Brewtarget::BREWNOTETABLE,
-              QString("deleted = %1").arg(Brewtarget::dbTrue()),
-              QString("id=%1").arg(b->_key) );
-   makeDirty();
-   emit deletedBrewNoteSignal(b);
 }
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
@@ -1375,14 +1397,14 @@ Yeast* Database::newYeast(Yeast* other)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
+bool Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
 {
    // Assumes the table has a column called 'deleted'.
    SetterCommand* command;
    command = new SetterCommand(table,
                          object->_key,
                          "deleted",
-                         QVariant(1),
+                         QVariant( Brewtarget::dbTrue() ),
                          object->metaProperty("deleted"),
                          object,
                          true);
@@ -1390,6 +1412,7 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
    command->redo();
    makeDirty();
 
+   return command->sqlSuccess();
    // Push the command on the undo stack.
    //commandStack.push(command);
 }
@@ -1420,251 +1443,71 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
 }
 
 // Ever think I sometimes abuse multiple dispatch?
-void Database::remove(Equipment* equip)
+// Yes, you do.
+bool Database::remove(BeerXMLElement* ing, bool emitSignal)
 {
-   deleteRecord(Brewtarget::EQUIPTABLE,equip);
+   const QMetaObject *meta = ing->metaObject();
+   Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
+   QString propName;
 
-   emit changed( metaProperty("equipments"), QVariant() );
-   emit deletedEquipmentSignal(equip);
-}
-
-void Database::remove(QList<Equipment*> equip)
-{
-   if ( equip.empty() )
-      return;
-
-   QList<Equipment*>::Iterator it = equip.begin();
-   while( it != equip.end() )
-   {
-      deleteRecord(Brewtarget::EQUIPTABLE,*it);
-      emit deletedEquipmentSignal(*it);
-      it++;
+   if ( ingTable == Brewtarget::BREWNOTETABLE ) {
+      emitSignal = false;
    }
 
-   emit changed( metaProperty("equipments"), QVariant() );
-}
-
-void Database::remove(Fermentable* ferm)
-{
-   deleteRecord(Brewtarget::FERMTABLE,ferm);
-
-   emit changed( metaProperty("fermentables"), QVariant());
-   emit deletedFermentableSignal(ferm);
-}
-
-void Database::remove(QList<Fermentable*> ferm)
-{
-   if ( ferm.empty() )
-      return;
-
-   QList<Fermentable*>::Iterator it = ferm.begin();
-   while( it != ferm.end() )
-   {
-      deleteRecord(Brewtarget::FERMTABLE,*it);
-      emit deletedFermentableSignal(*it);
-
-      it++;
+   if ( emitSignal ) {
+      int ndx = meta->indexOfClassInfo("signal");
+      if ( ndx != -1 ) {
+         propName = meta->classInfo(ndx).value();
+      }
+      else {
+         Brewtarget::logE(QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className()));
+         return false;
+      }
    }
+   deleteRecord(ingTable, ing);
 
-   emit changed( metaProperty("fermentables"), QVariant());
-}
-
-void Database::remove(Hop* hop)
-{
-   deleteRecord(Brewtarget::HOPTABLE,hop);
-
-   emit changed( metaProperty("hops"), QVariant() );
-   emit deletedHopSignal(hop);
-}
-
-void Database::remove(QList<Hop*> hop)
-{
-   if ( hop.empty() )
-      return;
-
-   QList<Hop*>::Iterator it = hop.begin();
-   while( it != hop.end() )
-   {
-      deleteRecord(Brewtarget::HOPTABLE,*it);
-      emit deletedHopSignal(*it);
-
-      it++;
+   // Brewnotes are weird and don't emit a metapropery change
+   if ( emitSignal )
+      emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
+   // This was screaming until I needed to vit a freaking signal
+   switch( ingTable ) {
+      case Brewtarget::EQUIPTABLE:
+         emit deletedEquipmentSignal(qobject_cast<Equipment*>(ing));
+         break;
+      case Brewtarget::FERMTABLE:
+         emit deletedFermentableSignal(qobject_cast<Fermentable*>(ing));
+         break;
+      case Brewtarget::HOPTABLE:
+         emit deletedHopSignal(qobject_cast<Hop*>(ing));
+         break;
+      case Brewtarget::MISCTABLE:
+         emit deletedMiscSignal(qobject_cast<Misc*>(ing));
+         break;
+      case Brewtarget::STYLETABLE:
+         emit deletedStyleSignal(qobject_cast<Style*>(ing));
+         break;
+      case Brewtarget::YEASTTABLE:
+         emit deletedYeastSignal(qobject_cast<Yeast*>(ing));
+         break;
+      case Brewtarget::WATERTABLE:
+         emit deletedWaterSignal(qobject_cast<Water*>(ing));
+         break;
+      case Brewtarget::MASHTABLE:
+         emit deletedMashSignal(qobject_cast<Mash*>(ing));
+         break;
+      case Brewtarget::MASHSTEPTABLE:
+         break; // mashsteps don't emit. Go figure
+      case Brewtarget::RECTABLE:
+         emit deletedRecipeSignal(qobject_cast<Recipe*>(ing));
+         break;
+      case Brewtarget::BREWNOTETABLE:
+         emit deletedBrewNoteSignal(qobject_cast<BrewNote*>(ing));
+         break;
+      default:
+         Brewtarget::logW(QString("%1 unrecognized ingredient table %2").arg(Q_FUNC_INFO).arg(ingTable));
+         break;
    }
-
-   emit changed( metaProperty("hops"), QVariant() );
-}
-
-void Database::remove(Mash* mash)
-{
-   deleteRecord(Brewtarget::MASHTABLE,mash);
-
-   emit changed( metaProperty("mashs"), QVariant() );
-   emit deletedMashSignal(mash);
-}
-
-void Database::remove(BrewNote* b)
-{
-   deleteRecord(Brewtarget::BREWNOTETABLE,b);
-   emit deletedBrewNoteSignal(b);
-}
-
-void Database::remove(QList<BrewNote*> notes)
-{
-   if (notes.empty())
-      return;
-   foreach( BrewNote* b, notes )
-      remove(b);
-}
-
-void Database::remove(QList<Mash*> mash)
-{
-   if ( mash.empty() )
-      return;
-
-   QList<Mash*>::Iterator it = mash.begin();
-   while( it != mash.end() )
-   {
-      deleteRecord(Brewtarget::MASHTABLE,*it);
-      emit deletedMashSignal(*it);
-      it++;
-   }
-   emit changed( metaProperty("mashs"), QVariant() );
-}
-
-void Database::remove(MashStep* mashStep)
-{
-   deleteRecord(Brewtarget::MASHSTEPTABLE,mashStep);
-
-   emit changed( metaProperty("mashSteps"), QVariant() );
-}
-
-void Database::remove(QList<MashStep*> mashStep)
-{
-   if ( mashStep.empty() )
-      return;
-
-   QList<MashStep*>::Iterator it = mashStep.begin();
-   while( it != mashStep.end() )
-   {
-      deleteRecord(Brewtarget::MASHSTEPTABLE,*it);
-      it++;
-   }
-   emit changed( metaProperty("mashSteps"), QVariant() );
-}
-
-void Database::remove(Misc* misc)
-{
-   deleteRecord(Brewtarget::MISCTABLE,misc);
-
-   emit changed( metaProperty("miscs"), QVariant());
-   emit deletedMiscSignal(misc);
-}
-
-void Database::remove(QList<Misc*> misc)
-{
-   if ( misc.empty() )
-      return;
-
-   QList<Misc*>::Iterator it = misc.begin();
-   while( it != misc.end() )
-   {
-      deleteRecord(Brewtarget::MISCTABLE,*it);
-      emit deletedMiscSignal(*it);
-      it++;
-   }
-   emit changed( metaProperty("miscs"), QVariant());
-}
-
-void Database::remove(Recipe* rec)
-{
-   deleteRecord(Brewtarget::RECTABLE,rec);
-
-   emit changed( metaProperty("recipes"), QVariant() );
-   emit deletedRecipeSignal(rec);
-}
-
-void Database::remove(QList<Recipe*> rec)
-{
-   if ( rec.empty() )
-      return;
-
-   QList<Recipe*>::Iterator it = rec.begin();
-   while( it != rec.end() )
-   {
-      deleteRecord(Brewtarget::RECTABLE,*it);
-      emit deletedRecipeSignal(*it);
-      it++;
-   }
-   emit changed( metaProperty("recipes"), QVariant() );
-}
-
-void Database::remove(Style* style)
-{
-   deleteRecord(Brewtarget::STYLETABLE,style);
-
-   emit changed( metaProperty("styles"), QVariant() );
-   emit deletedStyleSignal(style);
-}
-
-void Database::remove(QList<Style*> style)
-{
-   if ( style.empty() )
-      return;
-
-   QList<Style*>::Iterator it = style.begin();
-   while( it != style.end() )
-   {
-      deleteRecord(Brewtarget::STYLETABLE,*it);
-      emit deletedStyleSignal(*it);
-      it++;
-   }
-   emit changed( metaProperty("styles"), QVariant() );
-}
-
-void Database::remove(Water* water)
-{
-   deleteRecord(Brewtarget::WATERTABLE,water);
-
-   emit changed( metaProperty("waters"), QVariant());
-   emit deletedWaterSignal(water);
-}
-
-void Database::remove(QList<Water*> water)
-{
-   if ( water.empty() )
-      return;
-
-   QList<Water*>::Iterator it = water.begin();
-   while( it != water.end() )
-   {
-      deleteRecord(Brewtarget::WATERTABLE,*it);
-      emit deletedWaterSignal(*it);
-      it++;
-   }
-   emit changed( metaProperty("waters"), QVariant());
-}
-
-void Database::remove(Yeast* yeast)
-{
-   deleteRecord(Brewtarget::YEASTTABLE,yeast);
-
-   emit changed( metaProperty("yeasts"), QVariant());
-   emit deletedYeastSignal(yeast);
-}
-
-void Database::remove(QList<Yeast*> yeast)
-{
-   if ( yeast.empty() )
-      return;
-
-   QList<Yeast*>::Iterator it = yeast.begin();
-   while( it != yeast.end() )
-   {
-      deleteRecord(Brewtarget::YEASTTABLE,*it);
-      emit deletedYeastSignal(*it);
-      it++;
-   }
-   emit changed( metaProperty("yeasts"), QVariant());
+   return true;
 }
 
 QString Database::getDbFileName()

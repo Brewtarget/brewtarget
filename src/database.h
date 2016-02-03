@@ -242,7 +242,9 @@ public:
    bool removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing );
 
    // Two odd balls I can't resolve quite yet. But I will.
-   void removeFromRecipe( Recipe* rec, BrewNote* b );
+   // This one isn't even needed. remove does it
+   // void removeFromRecipe( Recipe* rec, BrewNote* b );
+   // 
    void removeFromRecipe( Recipe* rec, Instruction* ins );
 
    //! Remove \b step from \b mash.
@@ -250,30 +252,36 @@ public:
 
    // Mark an item as deleted.
    // NOTE: should these also remove all references to the ingredients?
-   void remove(Equipment* equip);
-   void remove(Fermentable* ferm);
-   void remove(Hop* hop);
-   void remove(Mash* mash);
-   void remove(MashStep* mashStep);
-   void remove(Misc* misc);
-   void remove(Recipe* rec);
-   void remove(Style* style);
-   void remove(Water* water);
-   void remove(Yeast* yeast);
-   void remove(BrewNote* b);
+   bool remove(BeerXMLElement* ing, bool emitSignal = true);
 
    // Or you can mark whole lists as deleted.
-   void remove(QList<Equipment*> equip);
-   void remove(QList<Fermentable*> ferm);
-   void remove(QList<Hop*> hop);
-   void remove(QList<Mash*> mash);
-   void remove(QList<MashStep*> mashStep);
-   void remove(QList<Misc*> misc);
-   void remove(QList<Recipe*> rec);
-   void remove(QList<Style*> style);
-   void remove(QList<Water*> water);
-   void remove(QList<Yeast*> yeast);
-   void remove(QList<BrewNote*> notes);
+   // ONE METHOD TO CALL THEM ALL AND IN DARKNESS BIND THEM!
+   template<class T> bool remove(QList<T*> list) 
+   {
+      if ( list.empty() )
+         return false;
+
+      const QMetaObject *meta = list[0]->metaObject();
+      Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
+      QString propName;
+      bool ret = true;
+
+      int ndx = meta->indexOfClassInfo("signal");
+      if ( ndx != -1 ) {
+         propName = meta->classInfo(ndx).value();
+      }
+      else {
+         Brewtarget::logE(QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className()));
+         return false;
+      }
+
+      foreach( T* dead, list ) {
+         ret &= deleteRecord(ingTable,dead);
+      }
+
+      emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
+      return ret;
+   }
 
    //! Get the recipe that this \b note is part of.
    Recipe* getParentRecipe( BrewNote const* note );
@@ -574,7 +582,7 @@ private:
    int insertNewMashStepRecord( Mash* parent );
 
    //! Mark the \b object in \b table as deleted.
-   void deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object );
+   bool deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object );
 
    // TODO: encapsulate this in a QUndoCommand.
    // Note -- this has to happen on a transactional boundary. We are touching

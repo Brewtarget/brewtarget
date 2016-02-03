@@ -57,6 +57,8 @@ public:
    virtual void redo();
    //! Reimplemented from QUndoCommand. Undoes the command.
    virtual void undo();
+
+   bool sqlSuccess();
    
 private:
    QList<Brewtarget::DBTable> tables;
@@ -67,6 +69,7 @@ private:
    QList<QVariant> oldValues;
    QList<BeerXMLElement*> objects;
    QList<bool> notify;
+   bool _sqlSuccess;
    
    //! Append a command to us.
    void appendCommand( Brewtarget::DBTable table,
