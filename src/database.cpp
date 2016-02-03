@@ -651,10 +651,22 @@ bool Database::restoreFromFile(QString newDbFileStr)
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
 {
    QSqlQuery q(sqlDatabase());
+   QString tableName = tableNames[classNameToTable[ing->metaObject()->className()]];
+
+   sqlDatabase().transaction();
+
+   // We need to do two things right now -- destroy the link from in_recipe
+   // and mark the original as deleted
    q.setForwardOnly(true);
    q.prepare( QString("DELETE FROM %1 WHERE %2='%3' AND recipe_id=%4").arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
    q.exec();
+
+   q.prepare( QString("UPDATE %1 SET deleted=%2 WHERE id=%3").arg(tableName).arg(Brewtarget::dbTrue()).arg(ing->_key));
+   q.exec();
+
    q.finish();
+
+   sqlDatabase().commit();
 
    makeDirty();
    emit rec->changed( rec->metaProperty(propName), QVariant() );
