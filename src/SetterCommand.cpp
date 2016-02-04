@@ -28,10 +28,10 @@
 #include "SetterCommand.h"
 #include "database.h"
 
-SetterCommand::SetterCommand( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
+SetterCommand::SetterCommand( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify, bool transaction)
    : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value.toString()))
 {
-   appendCommand( table, key, QString(col_name), value, prop, object, notify );
+   appendCommand( table, key, QString(col_name), value, prop, object, notify, transaction );
 }
 
 SetterCommand::~SetterCommand()
@@ -45,6 +45,7 @@ void SetterCommand::appendCommand( Brewtarget::DBTable table,
                   QMetaProperty prop,
                   BeerXMLElement* object,
                   bool n,
+                  bool transaction,
                   QVariant oldValue)
 {
    tables.append(table);
@@ -54,6 +55,7 @@ void SetterCommand::appendCommand( Brewtarget::DBTable table,
    props.append(prop);
    objects.append(object);
    notify.append(n);
+   _transact = transaction;
    
    oldValues.append(oldValue);
 }
@@ -212,6 +214,7 @@ bool SetterCommand::mergeWith( const QUndoCommand* command )
          other->props[i],
          other->objects[i],
          other->notify[i],
+         other->_transact,
          other->oldValues[i]
       );
    }
@@ -232,7 +235,9 @@ void SetterCommand::redo()
    oldValueTransaction();
 
    // Set the new values.
-   QSqlQuery transBegin("BEGIN TRANSACTION", Database::sqlDatabase());
+   if ( _transact )
+      Database::sqlDatabase().transaction();
+
    QList<QSqlQuery> queries = setterStatements();
 
    foreach( QSqlQuery q, queries )
@@ -243,7 +248,8 @@ void SetterCommand::redo()
          _sqlSuccess &= false;
       }
    }
-   QSqlQuery transEnd("COMMIT", Database::sqlDatabase());
+   if ( _transact )
+      Database::sqlDatabase().commit();
    
    // Emit signals.
    for( i = 0; i < size; ++i )
@@ -261,7 +267,9 @@ void SetterCommand::undo()
    size = tables.size();
    
    // Set back the old values.
-   QSqlQuery transBegin("BEGIN TRANSACTION", Database::sqlDatabase());
+   if ( _transact ) 
+      Database::sqlDatabase().transaction();
+
    QList<QSqlQuery> queries = undoStatements();
 
    foreach( QSqlQuery q, queries )
@@ -269,7 +277,8 @@ void SetterCommand::undo()
       if( ! q.exec() )
          Brewtarget::logE( QString("SetterCommand::undo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
    }
-   QSqlQuery transEnd("COMMIT", Database::sqlDatabase());
+   if ( _transact )
+      Database::sqlDatabase().commit();
    
    // Emit signals.
    for( i = 0; i < size; ++i )

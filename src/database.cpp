@@ -767,9 +767,16 @@ Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
    // TODO: encapsulate in QUndoCommand.
-   QSqlQuery q( QString("UPDATE mashstep SET step_number = CASE msid WHEN %1 then %2 when %3 then %4 END WHERE msid IN (%5,%6)")
-                .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key),
-                sqlDatabase());//sqldb );
+   QString update = QString("UPDATE mashstep SET step_number = CASE msid WHEN %1 then %2 when %3 then %4 END WHERE msid IN (%5,%6)")
+                .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key);
+
+   QSqlQuery q(sqlDatabase() );
+
+   if ( !q.exec(update) ) {
+      Brewtarget::logE(QString("%1 failed to swap steps: %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+      q.finish();
+      return;
+   }
    q.finish();
 
    makeDirty();
@@ -779,8 +786,7 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 
 void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 {
-   // TODO: encapsulate in QUndoCommand.
-   QSqlQuery q(
+   QString update = 
       QString(
          "UPDATE instruction_in_recipe "
          "SET instruction_number = "
@@ -788,10 +794,16 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
          "    WHEN %1 THEN %3 "
          "    WHEN %2 THEN %4 "
          "  END "
-         "WHERE instruction_id IN (%1,%2)"
-      ).arg(in1->_key).arg(in2->_key).arg(in2->instructionNumber()).arg(in1->instructionNumber()),
-      sqlDatabase()
-   );
+         "WHERE instruction_id IN (%1,%2)")
+      .arg(in1->_key).arg(in2->_key).arg(in2->instructionNumber()).arg(in1->instructionNumber());
+   // TODO: encapsulate in QUndoCommand.
+   QSqlQuery q( sqlDatabase());
+
+   if ( !q.exec(update) ) {
+      Brewtarget::logE(QString("%1 failed to swap steps: %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+      q.finish();
+      return;
+   }
    q.finish();
 
    makeDirty();
@@ -802,35 +814,69 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 void Database::insertInstruction(Instruction* in, int pos)
 {
    int parentRecipeKey;
-   QSqlQuery q( QString("SELECT recipe_id FROM instruction_in_recipe WHERE instruction_id=%2")
-                   .arg(in->_key),
-                sqlDatabase());//sqldb);
+   QString query = QString("SELECT recipe_id FROM instruction_in_recipe WHERE instruction_id=%2")
+                   .arg(in->_key);
+   QString update;
+
+   QSqlQuery q(sqlDatabase());
+
+   if ( !q.exec(query) ) {
+      Brewtarget::logE(QString("%1 failed to find recipe: %2 : %3").arg(Q_FUNC_INFO).arg(query).arg(q.lastError().text()));
+      q.finish();
+      return;
+   }
+
    q.next();
    parentRecipeKey = q.record().value("recipe_id").toInt();
    q.finish();
 
+   sqlDatabase().transaction();
    // Increment all instruction positions greater or equal to pos.
-   q.exec(
-      QString(
+   update = QString(
          "UPDATE instruction_in_recipe "
          "SET instruction_number=instruction_number+1 "
-         "WHERE recipe_id=%1 AND instruction_number>=%2"
-      ).arg(parentRecipeKey).arg(pos)
-   );
+         "WHERE recipe_id=%1 AND instruction_number>=%2")
+      .arg(parentRecipeKey).arg(pos);
 
-   // NOTE: right here, we should be emitting changed( "instructionNumber" )
-   // for each one of the rows affected above. Probably creating problems by
-   // not doing so :-/
+   if ( !q.exec(update) ) {
+      Brewtarget::logE(QString("%1 failed to renumber instructions recipe: %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+      q.finish();
+      return;
+   }
+
+   // This is sort of spooky action at a distance -- the emit should really be
+   // happening with the update. So it goes.
+   query = QString("SELECT instruction_id as id, instruction_number as pos FROM instruction_in_recipe WHERE recipe_id=%1 and instruction_number>%2")
+      .arg(parentRecipeKey).arg(pos);
+
+   if ( !q.exec(query) ) {
+      Brewtarget::logE(QString("%1 failed to find renumbered instructions: %2 : %3").arg(Q_FUNC_INFO).arg(query).arg(q.lastError().text()));
+      q.finish();
+      return;
+   }
+
+   while( q.next() ) {
+      Instruction* inst = allInstructions[ q.record().value("id").toInt() ];
+      int newPos = q.record().value("pos").toInt();
+
+      emit inst->changed( inst->metaProperty("instructionNumber"),newPos );
+   }
 
    // Change in's position to pos.
-   q.exec(
-      QString(
+   update = QString(
          "UPDATE instruction_in_recipe "
          "SET instruction_number=%1 "
          "WHERE instruction_id=%2"
-      ).arg(pos).arg(in->_key)
-   );
+      ).arg(pos).arg(in->_key);
+
+   if ( !q.exec(update) ) {
+      Brewtarget::logE(QString("%1 failed to insert new instruction recipe: %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+      q.finish();
+      return;
+   }
    q.finish();
+
+   sqlDatabase().commit();
 
    makeDirty();
    emit in->changed( in->metaProperty("instructionNumber"), pos );
@@ -864,12 +910,9 @@ QList<Fermentable*> Database::fermentables(Recipe const* parent)
 QList<Hop*> Database::hops(Recipe const* parent)
 {
    QList<Hop*> ret;
-   QString queryString = QString("SELECT hop_id FROM hop_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
+   QString filter = QString("recipe_id = %1").arg(parent->_key);
 
-   while( q.next() )
-      ret.append(allHops[q.record().value("hop_id").toInt()]);
-   q.finish();
+   getElements(ret,filter, Brewtarget::HOPINRECTABLE, allHops, "hop_id");
 
    return ret;
 }
@@ -877,12 +920,10 @@ QList<Hop*> Database::hops(Recipe const* parent)
 QList<Misc*> Database::miscs(Recipe const* parent)
 {
    QList<Misc*> ret;
-   QString queryString = QString("SELECT misc_id FROM misc_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
+   QString filter = QString("recipe_id = %1").arg(parent->_key);
 
-   while( q.next() )
-      ret.append(allMiscs[q.record().value("misc_id").toInt()]);
-   q.finish();
+
+   getElements(ret,filter, Brewtarget::MISCINRECTABLE, allMiscs, "misc_id");
 
    return ret;
 }
@@ -899,14 +940,7 @@ Equipment* Database::equipment(Recipe const* parent)
 
 Style* Database::style(Recipe const* parent)
 {
-   int id;
-
-   QString queryString = QString("SELECT style_id FROM recipe WHERE id = %1").arg(parent->_key);
-   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-
-   while( q.next() )
-      id = q.record().value("style_id").toInt();
-   q.finish();
+   int id = get( Brewtarget::RECTABLE, parent->key(), "style_id").toInt();
 
    if( allStyles.contains(id) )
       return allStyles[id];
@@ -937,15 +971,9 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
 QList<Instruction*> Database::instructions( Recipe const* parent )
 {
    QList<Instruction*> ret;
-   QString queryString = QString(
-      "SELECT instruction_id FROM instruction_in_recipe WHERE recipe_id = %1 ORDER BY instruction_number ASC"
-   ).arg(parent->_key);
+   QString filter = QString("recipe_id = %1 ORDER BY instruction_number ASC").arg(parent->_key);
 
-   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
-
-   while( q.next() )
-      ret.append(allInstructions[q.record().value("instruction_id").toInt()]);
-   q.finish();
+   getElements(ret,filter,Brewtarget::INSTINRECTABLE,allInstructions,"instruction_id");
 
    return ret;
 }
@@ -953,12 +981,9 @@ QList<Instruction*> Database::instructions( Recipe const* parent )
 QList<Water*> Database::waters(Recipe const* parent)
 {
    QList<Water*> ret;
-   QString queryString = QString("SELECT water_id FROM water_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
+   QString filter = QString("recipe_id = %1").arg(parent->_key);
 
-   while( q.next() )
-      ret.append(allWaters[q.record().value("water_id").toInt()]);
-   q.finish();
+   getElements(ret,filter,Brewtarget::WATERINRECTABLE,allWaters,"water_id");
 
    return ret;
 }
@@ -966,12 +991,9 @@ QList<Water*> Database::waters(Recipe const* parent)
 QList<Yeast*> Database::yeasts(Recipe const* parent)
 {
    QList<Yeast*> ret;
-   QString queryString = QString("SELECT yeast_id FROM yeast_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
+   QString filter = QString("recipe_id = %1").arg(parent->_key);
 
-   while( q.next() )
-      ret.append(allYeasts[q.record().value("yeast_id").toInt()]);
-   q.finish();
+   getElements(ret,filter,Brewtarget::YEASTINRECTABLE,allYeasts,"yeast_id");
 
    return ret;
 }

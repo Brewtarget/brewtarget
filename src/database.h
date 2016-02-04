@@ -509,19 +509,25 @@ private:
    }
 
    //! Helper to populate the list using the given filter.
-   template <class T> void getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements )
+   template <class T> void getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
    {
       int key;
       QSqlQuery q(sqlDatabase());
       q.setForwardOnly(true);
       QString queryString;
-      if( !filter.isEmpty() )
-         queryString = QString("SELECT id FROM %1 WHERE %2").arg(tableNames[table]).arg(filter);
-      else
-         queryString = QString("SELECT id FROM %1").arg(tableNames[table]);
 
-      q.prepare( queryString );
-      q.exec();
+      if ( id.isEmpty() ) 
+         id = "id";
+
+      if( !filter.isEmpty() )
+         queryString = QString("SELECT %1 as id FROM %2 WHERE %3").arg(id).arg(tableNames[table]).arg(filter);
+      else
+         queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tableNames[table]);
+
+      if ( ! q.exec(queryString) ) {
+         Brewtarget::logE(QString("%1 could not execute query: %2 : %3").arg(Q_FUNC_INFO).arg(queryString).arg(q.lastError().text()));
+         return;
+      }
 
       while( q.next() )
       {
