@@ -480,7 +480,7 @@ private:
    static QSqlDatabase sqlDatabase();
 
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
-   template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
+   template <class T> bool populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       int key;
       BeerXMLElement* e;
@@ -490,7 +490,16 @@ private:
       q.setForwardOnly(true);
       QString queryString = QString("SELECT id FROM %1").arg(tableNames[table]);
       q.prepare( queryString );
-      q.exec();
+
+      try {
+         if ( ! q.exec() )
+            throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
+      }
+      catch (QString e) {
+         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         q.finish();
+         return false;
+      }
 
       while( q.next() )
       {
@@ -506,6 +515,7 @@ private:
       }
 
       q.finish();
+      return true;
    }
 
    //! Helper to populate the list using the given filter.
@@ -524,8 +534,13 @@ private:
       else
          queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tableNames[table]);
 
-      if ( ! q.exec(queryString) ) {
-         Brewtarget::logE(QString("%1 could not execute query: %2 : %3").arg(Q_FUNC_INFO).arg(queryString).arg(q.lastError().text()));
+      try {
+         if ( ! q.exec(queryString) ) 
+            throw QString("could not execute query: %2 : %3").arg(queryString).arg(q.lastError().text());
+      }
+      catch (QString e) {
+         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         q.finish();
          return;
       }
 
@@ -622,87 +637,87 @@ private:
    )
    {
       T* newIng = 0;
+      QSqlQuery q(sqlDatabase());
 
       if( rec == 0 || ing == 0 )
          return 0;
 
-      // Ensure this ingredient is not already in the recipe.
-      QSqlQuery q(
-                   QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
-                   .arg(relTableName)
-                   .arg(ingKeyName)
-                   .arg(ing->_key)
-                   .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key),
-                   sqlDatabase()
-                 );
-      if( q.next() )
-      {
-         q.finish();
-         Brewtarget::logW( "Database::addIngredientToRecipe: Ingredient already exists in recipe." );
-         return 0;
-      }
-      else
-         q.finish();
-
       // TRANSACTION BEGINS
       sqlDatabase().transaction();
 
-      if ( noCopy )
-      {
-         newIng = qobject_cast<T*>(ing);
-         // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
-         // Not sure I like this. It's a long call stack just to end up back
-         // here
-         ing->setDisplay(! doNotDisplay );
-      }
-      else
-      {
-         newIng = copy<T>(ing, false, keyHash);
-         if ( newIng == 0 ) {
-            Brewtarget::logE(QString("%1 error copying ingredient").arg(Q_FUNC_INFO));
-            return 0;
+      try {
+         // Ensure this ingredient is not already in the recipe.
+         QString select = QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
+                              .arg(relTableName)
+                              .arg(ingKeyName)
+                              .arg(ing->_key)
+                              .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key);
+         if (! q.exec() )
+            throw QString("Couldn't execute search");
+
+         if( q.next() )
+            throw QString("Ingredient already exists in recipe." );
+
+
+         q.finish();
+
+         if ( noCopy )
+         {
+            newIng = qobject_cast<T*>(ing);
+            // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
+            // Not sure I like this. It's a long call stack just to end up back
+            // here
+            ing->setDisplay(! doNotDisplay );
+         }
+         else
+         {
+            newIng = copy<T>(ing, false, keyHash);
+            if ( newIng == 0 )
+               throw QString("error copying ingredient");
+         }
+
+         // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
+         q.setForwardOnly(true);
+
+         q.prepare( QString("INSERT INTO %1 (%2, recipe_id) VALUES (:ingredient, :recipe)")
+                  .arg(relTableName)
+                  .arg(ingKeyName)
+                  );
+         q.bindValue(":ingredient", newIng->key());
+         q.bindValue(":recipe", rec->_key);
+
+         if ( ! q.exec() ) 
+            throw QString("%2 : %1.").arg(q.lastQuery()).arg(q.lastError().text());
+
+         emit rec->changed( rec->metaProperty(propName), QVariant() );
+
+         q.finish();
+
+         //Put this in the <ing_type>_children table.
+         if( childTableName != "instruction_children" ) {
+               q.prepare( QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
+                     .arg(childTableName)
+                  );
+            q.bindValue(":parent", ing->key());
+            q.bindValue(":child", newIng->key());
+
+            if ( ! q.exec() )
+               throw QString("%1 %2.").arg(q.lastQuery()).arg(q.lastError().text());
+
+            emit rec->changed( rec->metaProperty(propName), QVariant() );
          }
       }
-
-      // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
-      q = QSqlQuery( sqlDatabase() );
-      q.setForwardOnly(true);
-
-      q.prepare( QString("INSERT INTO %1 (%2, recipe_id) VALUES (:ingredient, :recipe)")
-                 .arg(relTableName)
-                 .arg(ingKeyName)
-               );
-      q.bindValue(":ingredient", newIng->key());
-      q.bindValue(":recipe", rec->_key);
-      if( q.exec() )
-         emit rec->changed( rec->metaProperty(propName), QVariant() );
-      else
-      {
-         Brewtarget::logE( QString("Database::addIngredientToRecipe: %2 : %1.").arg(q.lastQuery()).arg(q.lastError().text()) );
+      catch (QString e) {
+         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         q.finish();
+         sqlDatabase().rollback();
          return 0;
       }
-
       q.finish();
+      sqlDatabase().commit();
+      dirty = true;
 
-     //Put this in the <ing_type>_children table.
-     if(childTableName != "instruction_children"){
-         q.prepare( QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
-               .arg(childTableName)
-              );
-       q.bindValue(":parent", ing->key());
-       q.bindValue(":child", newIng->key());
-       if( q.exec() )
-         emit rec->changed( rec->metaProperty(propName), QVariant() );
-       else
-       {
-         Brewtarget::logE( QString("Database::addIngredientToRecipe: %1 %2.").arg(q.lastQuery()).arg(q.lastError().text()) );
-         return 0;
-       }
-       q.finish();
-     }
-     sqlDatabase().commit();
-     dirty = true;
-     return newIng;
+      return newIng;
    }
 
    /*!
@@ -725,65 +740,64 @@ private:
 
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
       QString tName = tableNames[t];
+      QSqlQuery q(sqlDatabase());
 
-      QSqlQuery q(QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key),
-                  sqlDatabase()
-                 );
+      try {
+         QString select = QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key);
 
-      if( !q.next() )
-      {
-         Brewtarget::logE( QString("Database::copy: %1").arg(q.lastError().text()) );
+         if( !q.next() )
+            throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
+
+         QSqlRecord oldRecord = q.record();
+         q.finish();
+
+         // Get the field names from the oldRecord. But skip ID, because it
+         // won't work to copy it
+         for (i=0; i< oldRecord.count(); ++i)
+         {
+            QString name = oldRecord.fieldName(i);
+            if ( name != "id" )
+            {
+               fields += fields.isEmpty() ? name : QString(",%1").arg(name);
+               holder += holder.isEmpty() ? QString(":%1").arg(name) : QString(",:%1").arg(name);
+            }
+         }
+
+         // Create a new row.
+         QString prepString = QString("INSERT INTO %1 (%2) VALUES(%3)")
+                              .arg(tName)
+                              .arg(fields)
+                              .arg(holder);
+
+         QSqlQuery insert = QSqlQuery( sqlDatabase() );
+         insert.prepare(prepString);
+
+         // Bind, bind like the wind! Or at least like mueslix
+         for (i=0; i< oldRecord.count(); ++i)
+         {
+            QString name = oldRecord.fieldName(i);
+            QVariant val = oldRecord.value(i);
+
+            // We need to set the parent correctly.
+            if ( name == "parent" )
+               insert.bindValue(QString(":%1").arg(name), object->_key);
+            // Display is being set by the call, not by what we are copying
+            else if ( name == "display" )
+               insert.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
+            // Ignore ID again, for the same reasons as before.
+            else if ( name != "id" )
+               insert.bindValue(QString(":%1").arg(name), val);
+         }
+
+         if (! insert.exec() )
+            throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
+
+         newKey = insert.lastInsertId().toInt();
+      }
+      catch (QString e) {
+         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
          q.finish();
          return 0;
-      }
-
-      QSqlRecord oldRecord = q.record();
-      q.finish();
-
-      // Get the field names from the oldRecord. But skip ID, because it
-      // won't work to copy it
-      for (i=0; i< oldRecord.count(); ++i)
-      {
-         QString name = oldRecord.fieldName(i);
-         if ( name != "id" )
-         {
-            fields += fields.isEmpty() ? name : QString(",%1").arg(name);
-            holder += holder.isEmpty() ? QString(":%1").arg(name) : QString(",:%1").arg(name);
-         }
-      }
-
-      // Create a new row.
-      QString prepString = QString("INSERT INTO %1 (%2) VALUES(%3)")
-                           .arg(tName)
-                           .arg(fields)
-                           .arg(holder);
-
-      QSqlQuery insert = QSqlQuery( sqlDatabase() );
-      insert.prepare(prepString);
-
-      // Bind, bind like the wind! Or at least like mueslix
-      for (i=0; i< oldRecord.count(); ++i)
-      {
-         QString name = oldRecord.fieldName(i);
-         QVariant val = oldRecord.value(i);
-
-         // We need to set the parent correctly.
-         if ( name == "parent" )
-            insert.bindValue(QString(":%1").arg(name), object->_key);
-         // Display is being set by the call, not by what we are copying
-         else if ( name == "display" )
-            insert.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
-         // Ignore ID again, for the same reasons as before.
-         else if ( name != "id" )
-            insert.bindValue(QString(":%1").arg(name), val);
-      }
-
-      if (! insert.exec() ) {
-         Brewtarget::logE(QString("Database::copy could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text()));
-         return 0;
-      }
-      else {
-         newKey = insert.lastInsertId().toInt();
       }
 
       q.finish();
@@ -801,10 +815,10 @@ private:
    }
 
    // Do an sql update.
-   void sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );
+   bool sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );
 
    // Do an sql delete.
-   void sqlDelete( Brewtarget::DBTable table, QString const& whereClause );
+   bool sqlDelete( Brewtarget::DBTable table, QString const& whereClause );
 
    int getQualifiedHopTypeIndex(QString type, Hop* hop);
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);

@@ -650,69 +650,65 @@ bool Database::restoreFromFile(QString newDbFileStr)
 // removeFromRecipe ===========================================================
 bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 {
-   QSqlQuery q(sqlDatabase());
    QString tableName = tableNames[classNameToTable[ing->metaObject()->className()]];
    const QMetaObject* meta = ing->metaObject();
 
    int ndx = meta->indexOfClassInfo("signal");
    QString propName, relTableName, ingKeyName, childTableName;
 
-   if ( ndx != -1 ) {
-      QString prefix = meta->classInfo( meta->indexOfClassInfo("prefix")).value();
-      propName  = meta->classInfo(ndx).value();
-      relTableName = QString("%1_in_recipe").arg(prefix);
-      ingKeyName = QString("%1_id").arg(prefix);
-      childTableName = QString("%1_children").arg(prefix);
-   }
-   else {
-      Brewtarget::logE(QString("%1 could not locate classInfo for signal on %2").arg(Q_FUNC_INFO).arg(meta->className()));
-      return false;
-   }
-
    sqlDatabase().transaction();
+   QSqlQuery q(sqlDatabase());
 
-   // We need to do many things -- remove the link in *in_recipe,
-   // remove the entry from *_children
-   // and DELETE THE COPY
-   QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND recipe_id=%4")
-                              .arg(relTableName)
-                              .arg(ingKeyName)
-                              .arg(ing->_key)
-                              .arg(rec->_key);
-   QString deleteFromChildren = QString("DELETE FROM %1 WHERE child_id=%2")
-                              .arg(childTableName)
-                              .arg(ing->_key);
-   QString deleteIngredient = QString("DELETE FROM %1 where id=%2")
-                              .arg(tableName)
-                              .arg(ing->_key);
-   q.setForwardOnly(true);
+   try {
+      if ( ndx != -1 ) {
+         QString prefix = meta->classInfo( meta->indexOfClassInfo("prefix")).value();
+         propName  = meta->classInfo(ndx).value();
+         relTableName = QString("%1_in_recipe").arg(prefix);
+         ingKeyName = QString("%1_id").arg(prefix);
+         childTableName = QString("%1_children").arg(prefix);
+      }
+      else 
+         throw QString("%1 could not locate classInfo for signal on %2").arg(Q_FUNC_INFO).arg(meta->className());
 
-   if ( ! q.exec(deleteFromInRecipe) ) {
-      Brewtarget::logE( QString("%1 failed to delete in recipe. %2 : %3")
-                        .arg(Q_FUNC_INFO)
-                        .arg(q.lastQuery())
-                        .arg(q.lastError().text()));
-      return false;
+
+      // We need to do many things -- remove the link in *in_recipe,
+      // remove the entry from *_children
+      // and DELETE THE COPY
+      QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND recipe_id=%4")
+                                 .arg(relTableName)
+                                 .arg(ingKeyName)
+                                 .arg(ing->_key)
+                                 .arg(rec->_key);
+      QString deleteFromChildren = QString("DELETE FROM %1 WHERE child_id=%2")
+                                 .arg(childTableName)
+                                 .arg(ing->_key);
+      QString deleteIngredient = QString("DELETE FROM %1 where id=%2")
+                                 .arg(tableName)
+                                 .arg(ing->_key);
+      q.setForwardOnly(true);
+
+      if ( ! q.exec(deleteFromInRecipe) )
+         throw QString("failed to delete in recipe.");
+
+      if ( ! q.exec( deleteFromChildren ) )
+         throw QString("failed to delete children.");
+
+      if ( ! q.exec( deleteIngredient ) ) {
+         throw QString("failed to delete ingredient.");
+      }
    }
-
-   if ( ! q.exec( deleteFromChildren ) ) {
-      Brewtarget::logE( QString("%1 failed to delete children. %2 : %3")
-                        .arg(Q_FUNC_INFO)
-                        .arg(q.lastQuery())
-                        .arg(q.lastError().text()));
-      return false;
-   }
-
-   if ( ! q.exec( deleteIngredient ) ) {
-      Brewtarget::logE( QString("%1 failed to delete ingredient. %2 : %3")
-                        .arg(Q_FUNC_INFO)
-                        .arg(q.lastQuery())
-                        .arg(q.lastError().text()));
+   catch ( QString e ) {
+      Brewtarget::logE(QString("%1 %2 %3 %4")
+                           .arg(Q_FUNC_INFO)
+                           .arg(e)
+                           .arg(q.lastQuery())
+                           .arg(q.lastError().text()));
+      q.finish();
+      sqlDatabase().rollback();
       return false;
    }
 
    q.finish();
-
    sqlDatabase().commit();
 
    makeDirty();
@@ -720,6 +716,9 @@ bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
    return true;
 }
 
+// TODO: Fix this. The transaction boundaries are wrong, and can't easily be
+// made right. I think we need to put this as a special case into
+// removeIngredientFromRecipe
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
    removeIngredientFromRecipe( rec, ins);
@@ -735,11 +734,20 @@ void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 
 void Database::removeFrom( Mash* mash, MashStep* step )
 {
+   bool ret = true;
    // Just mark the step as deleted.
-   sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString("deleted = %1").arg(Brewtarget::dbTrue()),
-              QString("id=%1").arg(step->_key) );
-   // emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
+   try {
+      ret = sqlUpdate( Brewtarget::MASHSTEPTABLE,
+               QString("deleted = %1").arg(Brewtarget::dbTrue()),
+               QString("id=%1").arg(step->_key) );
+      if ( ! ret ) 
+         throw ("Could not remove the mashstep");
+   }
+   catch ( QString e ) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      return;
+   }
+
    makeDirty();
    emit mash->mashStepsChanged();
 }
@@ -747,8 +755,24 @@ void Database::removeFrom( Mash* mash, MashStep* step )
 Recipe* Database::getParentRecipe( BrewNote const* note )
 {
    int key;
-   QSqlQuery q( QString("SELECT recipe_id FROM brewnote WHERE id = %1").arg(note->_key),
-                sqlDatabase());//sqldb );
+   QString query = QString("SELECT recipe_id FROM brewnote WHERE id = %1").arg(note->_key);
+
+   QSqlQuery q(sqlDatabase());
+
+   try {
+      if ( ! q.exec(query) )
+         throw QString("could not find recipe id");
+   }
+   catch ( QString e ) {
+      Brewtarget::logE(QString("%1 %2 %3 %4")
+                           .arg(Q_FUNC_INFO)
+                           .arg(e)
+                           .arg(q.lastQuery())
+                           .arg(q.lastError().text()));
+      q.finish();
+      return 0;
+   }
+
    q.next();
    key = q.record().value("recipe_id").toInt();
    q.finish();
@@ -772,11 +796,20 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 
    QSqlQuery q(sqlDatabase() );
 
-   if ( !q.exec(update) ) {
-      Brewtarget::logE(QString("%1 failed to swap steps: %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+   try {
+      if ( !q.exec(update) )
+         throw QString("failed to swap steps");
+   }
+   catch ( QString e ) {
+      Brewtarget::logE(QString("%1 %2 %3 %4")
+                           .arg(Q_FUNC_INFO)
+                           .arg(e)
+                           .arg(q.lastQuery())
+                           .arg(q.lastError().text()));
       q.finish();
       return;
    }
+
    q.finish();
 
    makeDirty();
@@ -799,11 +832,20 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
    // TODO: encapsulate in QUndoCommand.
    QSqlQuery q( sqlDatabase());
 
-   if ( !q.exec(update) ) {
-      Brewtarget::logE(QString("%1 failed to swap steps: %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+   try {
+      if ( !q.exec(update) )
+         throw QString("failed to swap steps");
+   }
+   catch ( QString e ) {
+      Brewtarget::logE(QString("%1 %2 %3 %4")
+                           .arg(Q_FUNC_INFO)
+                           .arg(e)
+                           .arg(q.lastQuery())
+                           .arg(q.lastError().text()));
       q.finish();
       return;
    }
+
    q.finish();
 
    makeDirty();
@@ -818,60 +860,61 @@ void Database::insertInstruction(Instruction* in, int pos)
                    .arg(in->_key);
    QString update;
 
+   sqlDatabase().transaction();
+
    QSqlQuery q(sqlDatabase());
 
-   if ( !q.exec(query) ) {
-      Brewtarget::logE(QString("%1 failed to find recipe: %2 : %3").arg(Q_FUNC_INFO).arg(query).arg(q.lastError().text()));
+   try {
+      if ( !q.exec(query) )
+         throw QString("failed to find recipe");
+
+      q.next();
+      parentRecipeKey = q.record().value("recipe_id").toInt();
       q.finish();
-      return;
+
+      // Increment all instruction positions greater or equal to pos.
+      update = QString(
+            "UPDATE instruction_in_recipe "
+            "SET instruction_number=instruction_number+1 "
+            "WHERE recipe_id=%1 AND instruction_number>=%2")
+         .arg(parentRecipeKey).arg(pos);
+
+      if ( !q.exec(update) )
+         throw QString("failed to renumber instructions recipe");
+
+      // This is sort of spooky action at a distance -- the emit should really be
+      // happening with the update. So it goes.
+      query = QString("SELECT instruction_id as id, instruction_number as pos FROM instruction_in_recipe WHERE recipe_id=%1 and instruction_number>%2")
+         .arg(parentRecipeKey).arg(pos);
+
+      if ( !q.exec(query) )
+         throw QString("failed to find renumbered instructions");
+
+      while( q.next() ) {
+         Instruction* inst = allInstructions[ q.record().value("id").toInt() ];
+         int newPos = q.record().value("pos").toInt();
+
+         emit inst->changed( inst->metaProperty("instructionNumber"),newPos );
+      }
+
+      // Change in's position to pos.
+      update = QString(
+            "UPDATE instruction_in_recipe "
+            "SET instruction_number=%1 "
+            "WHERE instruction_id=%2"
+         ).arg(pos).arg(in->_key);
+
+      if ( !q.exec(update) )
+         throw QString("failed to insert new instruction recipe");
    }
-
-   q.next();
-   parentRecipeKey = q.record().value("recipe_id").toInt();
-   q.finish();
-
-   sqlDatabase().transaction();
-   // Increment all instruction positions greater or equal to pos.
-   update = QString(
-         "UPDATE instruction_in_recipe "
-         "SET instruction_number=instruction_number+1 "
-         "WHERE recipe_id=%1 AND instruction_number>=%2")
-      .arg(parentRecipeKey).arg(pos);
-
-   if ( !q.exec(update) ) {
-      Brewtarget::logE(QString("%1 failed to renumber instructions recipe: %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+   catch ( QString e ) {
+      Brewtarget::logE(QString("%1 %2 %3 %4")
+                           .arg(Q_FUNC_INFO)
+                           .arg(e)
+                           .arg(q.lastQuery())
+                           .arg(q.lastError().text()));
       q.finish();
-      return;
-   }
-
-   // This is sort of spooky action at a distance -- the emit should really be
-   // happening with the update. So it goes.
-   query = QString("SELECT instruction_id as id, instruction_number as pos FROM instruction_in_recipe WHERE recipe_id=%1 and instruction_number>%2")
-      .arg(parentRecipeKey).arg(pos);
-
-   if ( !q.exec(query) ) {
-      Brewtarget::logE(QString("%1 failed to find renumbered instructions: %2 : %3").arg(Q_FUNC_INFO).arg(query).arg(q.lastError().text()));
-      q.finish();
-      return;
-   }
-
-   while( q.next() ) {
-      Instruction* inst = allInstructions[ q.record().value("id").toInt() ];
-      int newPos = q.record().value("pos").toInt();
-
-      emit inst->changed( inst->metaProperty("instructionNumber"),newPos );
-   }
-
-   // Change in's position to pos.
-   update = QString(
-         "UPDATE instruction_in_recipe "
-         "SET instruction_number=%1 "
-         "WHERE instruction_id=%2"
-      ).arg(pos).arg(in->_key);
-
-   if ( !q.exec(update) ) {
-      Brewtarget::logE(QString("%1 failed to insert new instruction recipe: %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
-      q.finish();
+      sqlDatabase().rollback();
       return;
    }
    q.finish();
@@ -895,18 +938,13 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 QList<Fermentable*> Database::fermentables(Recipe const* parent)
 {
    QList<Fermentable*> ret;
-   QString queryString = QString("SELECT fermentable_id FROM fermentable_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
+   QString filter = QString("recipe_id = %1").arg(parent->_key);
 
-   while( q.next() )
-      ret.append(allFermentables[q.record().value("fermentable_id").toInt()]);
-   q.finish();
+   getElements(ret,filter, Brewtarget::FERMINRECTABLE, allFermentables, "fermentable_id");
 
    return ret;
 }
 
-// Use this to get hop IDs then line 2614 creates XML from hops - Possibly get data from there?
-// otherwise write functions to query DB from data?
 QList<Hop*> Database::hops(Recipe const* parent)
 {
    QList<Hop*> ret;
@@ -1003,58 +1041,68 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
 {
    int key;
-
+   QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(tableNames[table]);
    QSqlQuery q(sqlDatabase());
-   q.exec( QString("INSERT INTO %1 DEFAULT VALUES")
-              .arg(tableNames[table])
-         );
 
-   if( q.numRowsAffected() < 1 )
-   {
-      Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1. %2").arg(tableNames[table]).arg(q.lastError().text()) );
-      key = -42;
+   try {
+      if ( ! q.exec(insert) )
+         throw QString("could not insert a record into");
    }
-   else
-      key = q.lastInsertId().toInt();
+   catch ( QString e ) {
+      Brewtarget::logE(QString("%1 %2 %3 %4")
+                           .arg(Q_FUNC_INFO)
+                           .arg(e)
+                           .arg(q.lastQuery())
+                           .arg(q.lastError().text()));
+      q.finish();
+      return -42;
+   }
+
+   key = q.lastInsertId().toInt();
    q.finish();
 
    makeDirty();
    return key;
 }
 
+// If we are doing triggers for instructions, why aren't we doing triggers for
+// mash steps?
+
 int Database::insertNewMashStepRecord( Mash* parent )
 {
    int key;
+   QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
+                        .arg(tableNames[Brewtarget::MASHSTEPTABLE])
+                        .arg(Brewtarget::dbFalse())
+                        .arg(parent->_key);
 
-   QSqlQuery q(sqlDatabase());//sqldb );
+   sqlDatabase().transaction();
+
+   QSqlQuery q(sqlDatabase());
    q.setForwardOnly(true);
-   q.exec( QString("INSERT INTO %1 DEFAULT VALUES")
-              .arg(tableNames[Brewtarget::MASHSTEPTABLE])
-         );
-   if( q.numRowsAffected() < 1 )
-   {
-      Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1.").arg(tableNames[Brewtarget::MASHSTEPTABLE]) );
-      key = -42;
-   }
-   else
-      key = q.lastInsertId().toInt();
-   q.finish();
 
-   // I *think* we need to set the mash_id first
-   sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString("mash_id=%1 ").arg(parent->_key),
-              QString("id=%1").arg(key)
-            );
-   // Just sets the step number within the mash to the next available number.
-   // we need coalesce here instead of isnull. coalesce is SQL standard, so
-   // should be more widely supported than isnull
-   sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
-                      .arg(tableNames[Brewtarget::MASHSTEPTABLE])
-                      .arg(Brewtarget::dbFalse())
-                      .arg(parent->_key),
-              QString("id=%1").arg(key)
-            );
+   try {
+      key = insertNewDefaultRecord(Brewtarget::MASHSTEPTABLE);
+      if ( key == -42 ) 
+         throw QString("invalid key");
+
+      // I *think* we need to set the mash_id first
+      if ( ! sqlUpdate( Brewtarget::MASHSTEPTABLE, QString("mash_id=%1 ").arg(parent->_key), QString("id=%1").arg(key) ) )
+         throw QString("Couldn't insert into mashstep table");
+
+      // Just sets the step number within the mash to the next available number.
+      // we need coalesce here instead of isnull. coalesce is SQL standard, so
+      // should be more widely supported than isnull
+      if ( ! sqlUpdate( Brewtarget::MASHSTEPTABLE, coalesce, QString("id=%1").arg(key) ) )
+         throw QString("Couldn't increment mashstep counter");
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      return -42;
+   }
+
+   sqlDatabase().commit();
    makeDirty();
    return key;
 }
@@ -1063,28 +1111,49 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 {
    BrewNote* tmp = copy<BrewNote>(other, true, &allBrewNotes);
 
-   if ( signal )
-   {
-      emit changed( metaProperty("brewNotes"), QVariant() );
-      emit newBrewNoteSignal(tmp);
-   }
+   if ( tmp ) {
+      if ( signal )
+      {
+         emit changed( metaProperty("brewNotes"), QVariant() );
+         emit newBrewNoteSignal(tmp);
+      }
 
-   makeDirty();
+      makeDirty();
+   }
    return tmp;
 }
 
 BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
 {
    BrewNote* tmp = new BrewNote();
+   int key;
+   bool ret = true;
 
-   tmp->_key = insertNewDefaultRecord(Brewtarget::BREWNOTETABLE);
-   tmp->_table = Brewtarget::BREWNOTETABLE;
+   sqlDatabase().transaction();
 
-   allBrewNotes.insert(tmp->_key,tmp);
-   sqlUpdate( Brewtarget::BREWNOTETABLE,
-              QString("recipe_id=%1").arg(parent->_key),
-              QString("id=%2").arg(tmp->_key) );
+   try {
+      key = insertNewDefaultRecord(Brewtarget::BREWNOTETABLE);
+      if ( key == -42 )
+         throw QString("could not insert new brewnote");
 
+      tmp->_key = key;
+      tmp->_table = Brewtarget::BREWNOTETABLE;
+
+      allBrewNotes.insert(tmp->_key,tmp);
+      ret = sqlUpdate( Brewtarget::BREWNOTETABLE,
+               QString("recipe_id=%1").arg(parent->_key),
+               QString("id=%2").arg(tmp->_key) );
+
+      if ( ! ret )
+         throw QString("could not associate new brewnote");
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      return 0;
+   }
+
+   sqlDatabase().commit();
    if ( signal )
    {
       emit changed( metaProperty("brewNotes"), QVariant() );
@@ -1097,9 +1166,22 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
 
 Equipment* Database::newEquipment()
 {
+   int key;
    Equipment* tmp = new Equipment();
-   tmp->_key = insertNewDefaultRecord(Brewtarget::EQUIPTABLE);
+
+   try {
+      key = insertNewDefaultRecord(Brewtarget::EQUIPTABLE);
+      if ( key == -42 ) 
+         throw QString("could not insert equipment");
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      return 0;
+   }
+
+   tmp->_key = key;
    tmp->_table = Brewtarget::EQUIPTABLE;
+
    allEquipments.insert(tmp->_key,tmp);
 
    makeDirty();
@@ -1894,27 +1976,43 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
+bool Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
 {
-   QSqlQuery q( QString("UPDATE %1 SET %2 WHERE %3")
+   QString update = QString("UPDATE %1 SET %2 WHERE %3")
                 .arg(tableNames[table])
                 .arg(setClause)
-                .arg(whereClause),
-                sqlDatabase());
-   if( q.lastError().isValid() )
-      Brewtarget::logE( QString("Database::sqlUpdate(): %1").arg(q.lastError().text()) );
+                .arg(whereClause);
+
+   QSqlQuery q(sqlDatabase());
+
+   if ( ! q.exec(update) ) {
+      Brewtarget::logE( QString("%1 Could not execute update %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+      q.finish();
+      return false;
+   }
+
    q.finish();
    makeDirty();
+   return true;
 }
 
-void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause )
+bool Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause )
 {
-   QSqlQuery q( QString("DELETE FROM %1 WHERE %2")
+   QString del = QString("DELETE FROM %1 WHERE %2")
                 .arg(tableNames[table])
-                .arg(whereClause),
-                sqlDatabase());
+                .arg(whereClause);
+
+   QSqlQuery q(sqlDatabase());
+
+   if ( ! q.exec(del) ) {
+      Brewtarget::logE( QString("%1 Could not delete %2 : %3").arg(Q_FUNC_INFO).arg(del).arg(q.lastError().text()));
+      q.finish();
+      return false;
+   }
+
    q.finish();
    makeDirty();
+   return true;
 }
 
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
@@ -1938,7 +2036,7 @@ QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
 {
    
    QHash<Brewtarget::DBTable,QString> tmp;
-   QString query = QString("SELECT name,table_id from bt_alltables where is_searched=%1").arg(Brewtarget::dbTrue());
+   QString query = QString("SELECT name,table_id from bt_alltables");
    QSqlQuery q(query,sqlDatabase());
 
    while( q.next() ) {

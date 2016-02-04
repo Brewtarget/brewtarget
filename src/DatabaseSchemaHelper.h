@@ -85,7 +85,6 @@ private:
    // =============================Table Names/Columns=========================
    // the meta table
    static QString tableMeta;
-   static QString colMetaIsSearched;
    static QString colMetaClassName;
    static QString colMetaInvId;
    static QString colMetaChildId;
@@ -373,7 +372,7 @@ private:
    static void select_dbStrings(Brewtarget::DBTypes dbType);
 
    // !\brief create_table is a convenience method to wrap a lot of boiler  plate
-   static bool create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid, bool isSearched=false, 
+   static bool create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid,
                         QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
                         Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
    // !\brief I need a meta table
@@ -381,7 +380,7 @@ private:
    // !\brief And another meta table we've already created
    static bool create_settings(QSqlQuery q);
    // \!brief inserts a row into the meta table when a table is created
-   static bool insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid, bool isSearched=false, 
+   static bool insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid,
                         QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
                         Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
 

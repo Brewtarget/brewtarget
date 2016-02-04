@@ -240,17 +240,30 @@ void SetterCommand::redo()
 
    QList<QSqlQuery> queries = setterStatements();
 
-   foreach( QSqlQuery q, queries )
-   {
-      if( ! q.exec() )
+   try {
+      foreach( QSqlQuery q, queries )
       {
-         Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
-         _sqlSuccess &= false;
+         if( ! q.exec() )
+         {
+            QString e = QString("%1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery());
+            q.finish();
+            throw e;
+         }
+
+         q.finish();
       }
    }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      _sqlSuccess = false;
+      if ( _transact )
+         Database::sqlDatabase().rollback();
+   }
+
    if ( _transact )
       Database::sqlDatabase().commit();
-   
+  
+   _sqlSuccess = true; 
    // Emit signals.
    for( i = 0; i < size; ++i )
    {
@@ -262,7 +275,6 @@ void SetterCommand::redo()
 
 void SetterCommand::undo()
 {
-   
    int i, size;
    size = tables.size();
    
@@ -272,14 +284,29 @@ void SetterCommand::undo()
 
    QList<QSqlQuery> queries = undoStatements();
 
-   foreach( QSqlQuery q, queries )
-   {
-      if( ! q.exec() )
-         Brewtarget::logE( QString("SetterCommand::undo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
+   try {
+      foreach( QSqlQuery q, queries )
+      {
+         if( ! q.exec() )
+         {
+            QString e = QString("%1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery());
+            q.finish();
+            throw e;
+         }
+         q.finish();
+      }
    }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      _sqlSuccess = false;
+      if ( _transact )
+         Database::sqlDatabase().rollback();
+   }
+
    if ( _transact )
       Database::sqlDatabase().commit();
-   
+  
+   _sqlSuccess = true; 
    // Emit signals.
    for( i = 0; i < size; ++i )
    {
