@@ -144,39 +144,59 @@ public:
 
    // Named constructors ======================================================
    //! Create new brew note attached to \b parent.
+   // maybe I should have never learned templates?
+   template<class T> T* newIngredient(QHash<int,T*>* all) {
+      int key;
+      T* tmp = new T();
+      // To quote the talking heads, my god what have I done?
+      Brewtarget::DBTable table = classNameToTable[ tmp->metaObject()->className() ];
+      try {
+         key = insertNewDefaultRecord(table);
+         if ( key == -42 )
+            throw QString("could not create default %1").arg(tmp->metaObject()->className());
+      }
+      catch (QString e) {
+         Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         return 0;
+      }
+
+      tmp->_key = key;
+      tmp->_table = table;
+      
+      all->insert(tmp->_key,tmp);
+
+      return tmp;
+   }
+
+      
    BrewNote* newBrewNote(Recipe* parent, bool signal = true);
-   Equipment* newEquipment();
-   Fermentable* newFermentable();
-   Hop* newHop();
    //! Create new instruction attached to \b parent.
    Instruction* newInstruction(Recipe* parent);
-   Mash* newMash();
-   //! Create new mash attached to \b parent.
-   Mash* newMash(Recipe* parent);
-   //! Create new mash step attached to \b parent.
+
    MashStep* newMashStep(Mash* parent);
-   Misc* newMisc();
+
+   Mash* newMash();
+   Mash* newMash(Mash* other, bool displace = true);
+   Mash* newMash(Recipe* parent);
+
    Recipe* newRecipe(bool addMash = true);
-   Style* newStyle();
-   Water* newWater();
-   Yeast* newYeast();
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    // Named copy constructors==================================================
    //! \returns a copy of the given note.
    BrewNote* newBrewNote(BrewNote* other, bool signal = true);
-   Equipment* newEquipment(Equipment* other);
+   Equipment* newEquipment(Equipment* other = 0);
+   Fermentable* newFermentable(Fermentable* other = 0);
+   Hop* newHop(Hop* other = 0);
    //! \returns a copy of the given recipe.
    Recipe* newRecipe(Recipe* other);
    /*! \returns a copy of the given mash. Displaces the mash currently in the
     * parent recipe unless \b displace is false.
     */
-   Mash* newMash(Mash* other, bool displace = true);
-   Fermentable* newFermentable(Fermentable* other);
-   Hop* newHop(Hop* other);
-   Misc* newMisc(Misc* other);
-   Style* newStyle(Style* other);
-   Yeast* newYeast(Yeast* other);
+   Misc* newMisc(Misc* other = 0);
+   Style* newStyle(Style* other = 0);
+   Water* newWater(Water* other = 0);
+   Yeast* newYeast(Yeast* other = 0);
 
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    /* This links ingredients with the same name.

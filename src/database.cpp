@@ -1164,90 +1164,67 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
    return tmp;
 }
 
-Equipment* Database::newEquipment()
-{
-   int key;
-   Equipment* tmp = new Equipment();
-
-   try {
-      key = insertNewDefaultRecord(Brewtarget::EQUIPTABLE);
-      if ( key == -42 ) 
-         throw QString("could not insert equipment");
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      return 0;
-   }
-
-   tmp->_key = key;
-   tmp->_table = Brewtarget::EQUIPTABLE;
-
-   allEquipments.insert(tmp->_key,tmp);
-
-   makeDirty();
-   emit changed( metaProperty("equipments"), QVariant() );
-   emit newEquipmentSignal(tmp);
-
-   return tmp;
-}
-
 Equipment* Database::newEquipment(Equipment* other)
 {
-   Equipment* tmp = copy<Equipment>(other, true, &allEquipments);
+   Equipment* tmp;
+  
+   if (other)
+      tmp = copy(other, true, &allEquipments);
+   else
+      tmp = newIngredient(&allEquipments);
 
-   makeDirty();
-   emit changed( metaProperty("equipments"), QVariant() );
-   emit newEquipmentSignal(tmp);
-
-   return tmp;
-}
-
-Fermentable* Database::newFermentable()
-{
-   Fermentable* tmp = new Fermentable();
-   tmp->_key = insertNewDefaultRecord(Brewtarget::FERMTABLE);
-   tmp->_table = Brewtarget::FERMTABLE;
-   allFermentables.insert(tmp->_key,tmp);
-
-   makeDirty();
-   emit changed( metaProperty("fermentables"), QVariant() );
-   emit newFermentableSignal(tmp);
+   if ( tmp ) {
+      makeDirty();
+      emit changed( metaProperty("equipments"), QVariant() );
+      emit newEquipmentSignal(tmp);
+   }
+   else {
+      Brewtarget::logE( QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name()));
+   }
 
    return tmp;
 }
 
 Fermentable* Database::newFermentable(Fermentable* other)
 {
-   Fermentable* tmp = copy<Fermentable>(other, true, &allFermentables);
+   Fermentable* tmp;
+  
+   if (other)
+      tmp = copy(other, true, &allFermentables);
+   else
+      tmp = newIngredient(&allFermentables);
 
-   makeDirty();
-   emit changed( metaProperty("fermentables"), QVariant() );
-   emit newFermentableSignal(tmp);
-
-   return tmp;
-}
-
-Hop* Database::newHop()
-{
-   Hop* tmp = new Hop();
-   tmp->_key = insertNewDefaultRecord(Brewtarget::HOPTABLE);
-   tmp->_table = Brewtarget::HOPTABLE;
-   allHops.insert(tmp->_key,tmp);
-
-   makeDirty();
-   emit changed( metaProperty("hops"), QVariant() );
-   emit newHopSignal(tmp);
+   if ( tmp ) {
+      makeDirty();
+      emit changed( metaProperty("fermentables"), QVariant() );
+      emit newFermentableSignal(tmp);
+   }
+   else {
+      Brewtarget::logE( QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name()));
+   }
 
    return tmp;
 }
 
 Hop* Database::newHop(Hop* other)
 {
-   Hop* tmp = copy<Hop>(other, true, &allHops);
+   Hop* tmp;
 
-   makeDirty();
-   emit changed( metaProperty("hops"), QVariant() );
-   emit newHopSignal(tmp);
+   if ( other )
+      tmp = copy(other, true, &allHops);
+   else 
+      tmp = newIngredient(&allHops);
+
+   if ( tmp ) {
+      makeDirty();
+      emit changed( metaProperty("hops"), QVariant() );
+      emit newHopSignal(tmp);
+   }
+   else {
+      Brewtarget::logE( QString("%1 could not %2 hop")
+            .arg(Q_FUNC_INFO)
+            .arg( other ? "copy" : "create"));
+   }
 
    return tmp;
 }
@@ -1286,6 +1263,8 @@ int Database::instructionNumber(Instruction const* in)
       return 0;
 }
 
+// TODO: Fix these -- I would like to see if there is a reasonable way to
+// collapse these three methods into one
 Mash* Database::newMash()
 {
    Mash* tmp = new Mash();
@@ -1360,31 +1339,31 @@ MashStep* Database::newMashStep(Mash* mash)
    return tmp;
 }
 
-Misc* Database::newMisc()
-{
-   Misc* tmp = new Misc();
-   tmp->_key = insertNewDefaultRecord(Brewtarget::MISCTABLE);
-   tmp->_table = Brewtarget::MISCTABLE;
-   allMiscs.insert(tmp->_key,tmp);
-
-   makeDirty();
-   emit changed( metaProperty("miscs"), QVariant() );
-   emit newMiscSignal(tmp);
-
-   return tmp;
-}
-
 Misc* Database::newMisc(Misc* other)
 {
-   Misc* tmp = copy<Misc>(other, true, &allMiscs);
+   Misc* tmp;
+  
+   if ( other )
+     tmp = copy(other, true, &allMiscs);
+   else
+      tmp = newIngredient(&allMiscs);
 
-   makeDirty();
-   emit changed( metaProperty("miscs"), QVariant() );
-   emit newMiscSignal(tmp);
+   if ( tmp ) {
+      makeDirty();
+      emit changed( metaProperty("miscs"), QVariant() );
+      emit newMiscSignal(tmp);
+   }
+   else {
+      Brewtarget::logE( QString("%1 could not %2 misc")
+            .arg(Q_FUNC_INFO)
+            .arg( other ? "copy" : "create"));
+   }
 
    return tmp;
 }
 
+// TODO: Fix these next two. newRecipe(recipe*) really needs help with error
+// checking. Transaction boundaries are gonna be nuts
 Recipe* Database::newRecipe(bool addMash)
 {
    Recipe* tmp = new Recipe();
@@ -1436,65 +1415,73 @@ Recipe* Database::newRecipe(Recipe* other)
    return tmp;
 }
 
-Style* Database::newStyle()
-{
-   Style* tmp = new Style();
-   tmp->_key = insertNewDefaultRecord(Brewtarget::STYLETABLE);
-   tmp->_table = Brewtarget::STYLETABLE;
-   allStyles.insert(tmp->_key,tmp);
-
-   makeDirty();
-   emit changed( metaProperty("styles"), QVariant() );
-   emit newStyleSignal(tmp);
-
-   return tmp;
-}
-
 Style* Database::newStyle(Style* other)
 {
-   Style* tmp = copy<Style>(other, true, &allStyles);
+   Style* tmp;
+  
+   if ( other )
+      tmp = copy(other, true, &allStyles);
+   else 
+      tmp = newIngredient(&allStyles);
 
-   emit changed( metaProperty("styles"), QVariant() );
-   emit newStyleSignal(tmp);
+   if ( tmp ) {
+      makeDirty();
+      emit changed( metaProperty("styles"), QVariant() );
+      emit newStyleSignal(tmp);
+   }
+   else {
+      Brewtarget::logE( QString("%1 could not %2 hop")
+            .arg(Q_FUNC_INFO)
+            .arg( other ? "copy" : "create"));
+   }
 
    return tmp;
 }
 
-Water* Database::newWater()
+Water* Database::newWater(Water* other)
 {
-   Water* tmp = new Water();
-   tmp->_key = insertNewDefaultRecord(Brewtarget::WATERTABLE);
-   tmp->_table = Brewtarget::WATERTABLE;
-   allWaters.insert(tmp->_key,tmp);
+   Water* tmp;
+  
+   if ( other ) 
+      tmp = copy(other,true,&allWaters);
+   else 
+      tmp = newIngredient(&allWaters);
 
-   makeDirty();
-   emit changed( metaProperty("waters"), QVariant() );
-   emit newWaterSignal(tmp);
 
-   return tmp;
-}
-
-Yeast* Database::newYeast()
-{
-   Yeast* tmp = new Yeast();
-   tmp->_key = insertNewDefaultRecord(Brewtarget::YEASTTABLE);
-   tmp->_table = Brewtarget::YEASTTABLE;
-   allYeasts.insert(tmp->_key,tmp);
-
-   makeDirty();
-   emit changed( metaProperty("yeasts"), QVariant() );
-   emit newYeastSignal(tmp);
+   if ( tmp ) {
+      makeDirty();
+      emit changed( metaProperty("waters"), QVariant() );
+      emit newWaterSignal(tmp);
+   }
+   else {
+      Brewtarget::logE( QString("%1 could not %2 hop")
+            .arg(Q_FUNC_INFO)
+            .arg( other ? "copy" : "create"));
+   }
 
    return tmp;
 }
 
 Yeast* Database::newYeast(Yeast* other)
 {
-   Yeast* tmp = copy<Yeast>(other, true, &allYeasts);
+   Yeast* tmp;
+  
+   if (other)
+      tmp = copy(other, true, &allYeasts);
+   else
+      tmp = newIngredient(&allYeasts);
 
-   makeDirty();
-   emit changed( metaProperty("yeasts"), QVariant() );
-   emit newYeastSignal(tmp);
+
+   if ( tmp ) {
+      makeDirty();
+      emit changed( metaProperty("yeasts"), QVariant() );
+      emit newYeastSignal(tmp);
+   }
+   else {
+      Brewtarget::logE( QString("%1 could not %2 hop")
+            .arg(Q_FUNC_INFO)
+            .arg( other ? "copy" : "create"));
+   }
 
    return tmp;
 }
@@ -1573,7 +1560,7 @@ bool Database::remove(BeerXMLElement* ing, bool emitSignal)
    // Brewnotes are weird and don't emit a metapropery change
    if ( emitSignal )
       emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
-   // This was screaming until I needed to vit a freaking signal
+   // This was screaming until I needed to emit a freaking signal
    switch( ingTable ) {
       case Brewtarget::EQUIPTABLE:
          emit deletedEquipmentSignal(qobject_cast<Equipment*>(ing));
