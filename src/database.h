@@ -657,12 +657,14 @@ private:
    )
    {
       T* newIng = 0;
+
       QSqlQuery q(sqlDatabase());
 
+    
       if( rec == 0 || ing == 0 )
          return 0;
 
-      // TRANSACTION BEGINS
+      // TRANSACTION BEGIN
       sqlDatabase().transaction();
 
       try {
@@ -672,7 +674,7 @@ private:
                               .arg(ingKeyName)
                               .arg(ing->_key)
                               .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key);
-         if (! q.exec() )
+         if (! q.exec(select) )
             throw QString("Couldn't execute search");
 
          if( q.next() )
@@ -691,6 +693,7 @@ private:
          }
          else
          {
+
             newIng = copy<T>(ing, false, keyHash);
             if ( newIng == 0 )
                throw QString("error copying ingredient");
@@ -699,10 +702,11 @@ private:
          // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
          q.setForwardOnly(true);
 
-         q.prepare( QString("INSERT INTO %1 (%2, recipe_id) VALUES (:ingredient, :recipe)")
+         QString insert = QString("INSERT INTO %1 (%2, recipe_id) VALUES (:ingredient, :recipe)")
                   .arg(relTableName)
-                  .arg(ingKeyName)
-                  );
+                  .arg(ingKeyName);
+
+         q.prepare(insert);
          q.bindValue(":ingredient", newIng->key());
          q.bindValue(":recipe", rec->_key);
 
@@ -715,9 +719,11 @@ private:
 
          //Put this in the <ing_type>_children table.
          if( childTableName != "instruction_children" ) {
-               q.prepare( QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
-                     .arg(childTableName)
-                  );
+
+            insert = QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
+                  .arg(childTableName);
+
+            q.prepare(insert);
             q.bindValue(":parent", ing->key());
             q.bindValue(":child", newIng->key());
 
@@ -728,7 +734,7 @@ private:
          }
       }
       catch (QString e) {
-         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         Brewtarget::logE( QString("%1 %2").arg(QString("Q_FUNC_INFO")).arg(e));
          q.finish();
          sqlDatabase().rollback();
          return 0;
@@ -758,21 +764,27 @@ private:
       T* newOne = new T();
       QString holder,fields;
 
-      Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
-      QString tName = tableNames[t];
-      QSqlQuery q(sqlDatabase());
 
+      Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
+
+      QString tName = tableNames[t];
+
+      QSqlQuery q(sqlDatabase());
+     
       try {
          QString select = QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key);
 
-         if( !q.next() )
+         if( !q.exec(select) )
             throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
-
+         else 
+            q.next();
+        
          QSqlRecord oldRecord = q.record();
          q.finish();
 
          // Get the field names from the oldRecord. But skip ID, because it
          // won't work to copy it
+
          for (i=0; i< oldRecord.count(); ++i)
          {
             QString name = oldRecord.fieldName(i);

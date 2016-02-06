@@ -1386,21 +1386,30 @@ Recipe* Database::newRecipe(Recipe* other)
 {
    Recipe* tmp = copy<Recipe>(other, true, &allRecipes);
 
+   if ( ! tmp ) {
+      Brewtarget::logE( QString("Could not copy %1").arg(other->name()));
+   }
+
    // Copy fermentables
    foreach( Fermentable* a, other->fermentables() )
+   {
       addToRecipe( tmp, a );
+   }
 
    // Copy hops
-   foreach( Hop* a, other->hops() )
+   foreach( Hop* a, other->hops() ) {
       addToRecipe( tmp, a );
+   }
 
    // Copy miscs
-   foreach( Misc* a, other->miscs() )
+   foreach( Misc* a, other->miscs() ) {
       addToRecipe( tmp, a );
+   }
 
    // Copy yeasts
-   foreach( Yeast* a, other->yeasts() )
+   foreach( Yeast* a, other->yeasts() ) {
       addToRecipe( tmp, a );
+   }
 
    // Copy style/mash/equipment
    // Style or equipment might be non-existent but these methods handle that.
@@ -1711,17 +1720,15 @@ Brewtarget::DBTable Database::getChildTable(Brewtarget::DBTable table){
    return tableToChildTable[table];
 }
 //Returns the inventory table number from the hash
-Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table){
+Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table) {
    return tableToInventoryTable[table];
 }
 //create a new inventory row
-void Database::newInventory(Brewtarget::DBTable invForTable, int invForID){
+void Database::newInventory(Brewtarget::DBTable invForTable, int invForID) {
    QString invTable = tableNames[tableToInventoryTable[invForTable]];
 
    QString queryString;
 
-   // TODO: This is broken as written. Postgres 9.5 supports the ON CONFLICT
-   // method. I'm working on it, but got distracted by other issues.
    switch(Brewtarget::dbType())
    {
       case Brewtarget::PGSQL:
@@ -1742,6 +1749,8 @@ void Database::newInventory(Brewtarget::DBTable invForTable, int invForID){
 }
 
 // Add to recipe ==============================================================
+// TODO: These all need some help. In short, everything can now possibly return
+// null. When it does, we should problably not dump core?
 void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
 {
    Equipment* newEquip;
@@ -1787,11 +1796,16 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
                                                  "fermentable_id",
                                                  "fermentable_children",
                                                  noCopy, &allFermentables );
-   connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
-   // recalcAll is very expensive. When doing a massive import, don't do it
-   // with every fermentable. Let it happen once
-   if (! noCopy )
-      rec->recalcAll();
+   if ( newFerm ) {
+      connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+      // recalcAll is very expensive. When doing a massive import, don't do it
+      // with every fermentable. Let it happen once
+      if (! noCopy )
+         rec->recalcAll();
+   }
+   else {
+      Brewtarget::logE( QString("Could not add %1 to database").arg(ferm->name()).arg(rec->name()));
+   }
 }
 
 void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms )
@@ -1807,7 +1821,9 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms )
                                                     "fermentable_id",
                                                     "fermentable_children",
                                                     false, &allFermentables );
-      connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+      if ( newFerm ) {
+         connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+      }
    }
 
    rec->recalcAll();
