@@ -3,6 +3,12 @@
 This changelog is for high-level user-visible changes to Brewtarget, intended
 for consumption by the typical end-user.
 
+## v2.3.1
+
+### New Features
+
+### Bug Fixes
+
 ## v2.3.0
 
 ### New Features

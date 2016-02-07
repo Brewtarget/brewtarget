@@ -124,6 +124,10 @@ INCLUDE_DIRECTORIES(${Qt5PrintSupport_INCLUDE_DIRS})
 FIND_PACKAGE(Qt5Sql REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Sql_INCLUDE_DIRS})
 
+# This is required to make the deploy scripts pick up the svg plugins
+FIND_PACKAGE(Qt5Svg REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Svg_INCLUDE_DIRS})
+
 FIND_PACKAGE(Qt5WebKit REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5WebKit_INCLUDE_DIRS})
 
@@ -144,28 +148,10 @@ INCLUDE_DIRECTORIES(${Qt5Test_INCLUDE_DIRS})
 FIND_PACKAGE(Qt5LinguistTools REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5LinguistTools_INCLUDE_DIRS})
 
-# Need to find SVG component to locate svg dlls later
-IF(WIN32)
-   FIND_PACKAGE(Qt5Svg REQUIRED)
-   INCLUDE_DIRECTORIES(${Qt5Svg_INCLUDE_DIRS})
-ENDIF()
-
 # Fuckin Qt5 requires -fPIC if Qt5 itself was built with -fPIC
 IF(Qt5_POSITION_INDEPENDENT_CODE)
    SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ENDIF()
-
-#IF( ${BUILD_DESIGNER_PLUGINS} )
-#   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebKit QtXml QtDesigner REQUIRED)
-#ELSE()
-#   # This is a major kludge, but linking with QtSvg is the easiest way to get
-#   # an app that includes the svg image format plugin that works.
-#   IF( APPLE )
-#      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml QtSvg REQUIRED)
-#   ELSE()
-#      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml REQUIRED)
-#   ENDIF()
-#ENDIF()
 
 MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
 

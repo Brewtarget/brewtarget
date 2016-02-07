@@ -425,6 +425,7 @@ SET( QT5_USE_MODULES_LIST
    Network
    PrintSupport
    Sql
+   Svg
    Xml
    WebKit
    WebKitWidgets
@@ -452,6 +453,7 @@ SET( QT5_USE_MODULES_LIST
    Network
    PrintSupport
    Sql
+   Svg
    Xml
    WebKit
    WebKitWidgets
