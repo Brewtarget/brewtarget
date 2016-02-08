@@ -291,11 +291,10 @@ void OptionDialog::saveAndClose()
          break;
    }
 
-   Brewtarget::ibuFormula = Brewtarget::IbuType(
-           ibuFormulaComboBox->itemData(ibuFormulaComboBox->currentIndex()).toInt(&okay));
-
-   Brewtarget::colorFormula = Brewtarget::ColorType(
-           colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay));
+   int ndx = ibuFormulaComboBox->itemData(ibuFormulaComboBox->currentIndex()).toInt(&okay);
+   Brewtarget::ibuFormula = static_cast<Brewtarget::IbuType>(ndx);
+   ndx = colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay);
+   Brewtarget::colorFormula = static_cast<Brewtarget::ColorType>(ndx);
 
    // Set the right language.
    Brewtarget::setLanguage( ndxToLangCode[ comboBox_lang->currentIndex() ] );
@@ -357,8 +356,8 @@ void OptionDialog::showChanges()
    dateComboBox->setCurrentIndex(dateComboBox->findData(Brewtarget::dateFormat));
    colorComboBox->setCurrentIndex(colorComboBox->findData(Brewtarget::colorUnit));
 
-   colorFormulaComboBox->setCurrentIndex(colorFormulaComboBox->findData(Brewtarget::ibuFormula));
-   ibuFormulaComboBox->setCurrentIndex(ibuFormulaComboBox->findData(Brewtarget::colorFormula));
+   colorFormulaComboBox->setCurrentIndex(colorFormulaComboBox->findData(Brewtarget::colorFormula));
+   ibuFormulaComboBox->setCurrentIndex(ibuFormulaComboBox->findData(Brewtarget::ibuFormula));
 
    // Data directory
    lineEdit_dbDir->setText(Brewtarget::getUserDataDir().canonicalPath());
