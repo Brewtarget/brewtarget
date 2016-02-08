@@ -35,7 +35,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="splitter_vertical">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -217,7 +217,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QSplitter" name="splitter">
+      <widget class="QSplitter" name="splitter_horizontal">
        <property name="acceptDrops">
         <bool>true</bool>
        </property>
