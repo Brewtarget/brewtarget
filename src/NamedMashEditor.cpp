@@ -246,6 +246,11 @@ void NamedMashEditor::removeMashStep()
 void NamedMashEditor::moveMashStepUp()
 {
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
+   if (selected.isEmpty())
+   {  //nothing selected
+      return;
+   }
+
    int row = selected[0].row();
 
    if ( ! justOne(selected) || row < 1)
@@ -259,6 +264,11 @@ void NamedMashEditor::moveMashStepUp()
 void NamedMashEditor::moveMashStepDown()
 {
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
+   if (selected.isEmpty())
+   {  //nothing selected
+      return;
+   }
+
    int row = selected[0].row();
 
    if ( ! justOne(selected) || row >= mashStepTableModel->rowCount()-1 )
