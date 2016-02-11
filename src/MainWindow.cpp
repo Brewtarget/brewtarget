@@ -324,8 +324,8 @@ MainWindow::MainWindow(QWidget* parent)
    fileSaver->setDefaultSuffix(QString("xml"));
 
    // Do some magic on the splitter widget to keep the tree from expanding
-   splitter_2->setStretchFactor(0,0);
-   splitter_2->setStretchFactor(1,1);
+   splitter_vertical->setStretchFactor(0,0);
+   splitter_vertical->setStretchFactor(1,1);
 
    // Once more with the context menus too
    setupContextMenu();
@@ -361,6 +361,28 @@ MainWindow::MainWindow(QWidget* parent)
       if( recs.size() > 0 )
          setRecipe( recs[0] );
    }
+
+   //UI restore state
+   if (Brewtarget::hasOption("MainWindow/splitter_vertical_State"))
+      splitter_vertical->restoreState(Brewtarget::option("MainWindow/splitter_vertical_State").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/splitter_horizontal_State"))
+      splitter_horizontal->restoreState(Brewtarget::option("MainWindow/splitter_horizontal_State").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/treeView_recipe_headerState"))
+      treeView_recipe->header()->restoreState(Brewtarget::option("MainWindow/treeView_recipe_headerState").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/treeView_style_headerState"))
+      treeView_style->header()->restoreState(Brewtarget::option("MainWindow/treeView_style_headerState").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/treeView_equip_headerState"))
+      treeView_equip->header()->restoreState(Brewtarget::option("MainWindow/treeView_equip_headerState").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/treeView_ferm_headerState"))
+      treeView_ferm->header()->restoreState(Brewtarget::option("MainWindow/treeView_ferm_headerState").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/treeView_hops_headerState"))
+      treeView_hops->header()->restoreState(Brewtarget::option("MainWindow/treeView_hops_headerState").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/treeView_misc_headerState"))
+      treeView_misc->header()->restoreState(Brewtarget::option("MainWindow/treeView_misc_headerState").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/treeView_yeast_headerState"))
+      treeView_yeast->header()->restoreState(Brewtarget::option("MainWindow/treeView_yeast_headerState").toByteArray());
+   if (Brewtarget::hasOption("MainWindow/mashStepTableWidget_headerState"))
+      mashStepTableWidget->horizontalHeader()->restoreState(Brewtarget::option("MainWindow/mashStepTableWidget_headerState").toByteArray());
 
    // Connect signals.
    // actions
@@ -1874,6 +1896,18 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    Brewtarget::setOption("windowState", saveState());
    if ( recipeObs )
       Brewtarget::setOption("recipeKey", recipeObs->key());
+
+   //UI save state
+   Brewtarget::setOption("MainWindow/splitter_vertical_State", splitter_vertical->saveState());
+   Brewtarget::setOption("MainWindow/splitter_horizontal_State", splitter_horizontal->saveState());
+   Brewtarget::setOption("MainWindow/treeView_recipe_headerState", treeView_recipe->header()->saveState());
+   Brewtarget::setOption("MainWindow/treeView_style_headerState", treeView_style->header()->saveState());
+   Brewtarget::setOption("MainWindow/treeView_equip_headerState", treeView_equip->header()->saveState());
+   Brewtarget::setOption("MainWindow/treeView_ferm_headerState", treeView_ferm->header()->saveState());
+   Brewtarget::setOption("MainWindow/treeView_hops_headerState", treeView_hops->header()->saveState());
+   Brewtarget::setOption("MainWindow/treeView_misc_headerState", treeView_misc->header()->saveState());
+   Brewtarget::setOption("MainWindow/treeView_yeast_headerState", treeView_yeast->header()->saveState());
+   Brewtarget::setOption("MainWindow/mashStepTableWidget_headerState", mashStepTableWidget->horizontalHeader()->saveState());
 
    // After unloading the database, can't make any more queries to it, so first
    // make the main window disappear so that redraw events won't inadvertently
