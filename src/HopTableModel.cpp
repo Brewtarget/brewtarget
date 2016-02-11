@@ -362,6 +362,8 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
 
    row = hopObs[index.row()];
 
+   Unit::unitDisplay dspUnit = displayUnit(index.column());
+   Unit::unitScale   dspScl  = displayScale(index.column());
    switch( index.column() )
    {
       case HOPNAMECOL:
@@ -388,7 +390,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
       case HOPAMOUNTCOL:
          retVal = value.canConvert(QVariant::String);
          if( retVal )
-            row->setAmount_kg( Brewtarget::qStringToSI(value.toString(), Units::kilograms, displayUnit(HOPAMOUNTCOL)));
+            row->setAmount_kg( Brewtarget::qStringToSI(value.toString(), Units::kilograms, dspUnit, dspScl));
          break;
       case HOPUSECOL:
          retVal = value.canConvert(QVariant::Int);
@@ -403,7 +405,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
       case HOPTIMECOL:
          retVal = value.canConvert(QVariant::String);
          if( retVal )
-            row->setTime_min( Brewtarget::qStringToSI(value.toString(),Units::minutes));
+            row->setTime_min( Brewtarget::qStringToSI(value.toString(),Units::minutes,dspUnit,dspScl));
          break;
       default:
          Brewtarget::logW(QString("HopTableModel::setdata Bad column: %1").arg(index.column()));

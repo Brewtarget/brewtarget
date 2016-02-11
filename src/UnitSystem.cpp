@@ -43,7 +43,7 @@ UnitSystem::UnitSystem()
    amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
 }
 
-double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
+double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force, Unit::unitScale scale)
 {
    double amt = 0.0;
    Unit* u = defUnit;
@@ -65,7 +65,14 @@ double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
    // qts, 3.6 US qts, 3.41L. If you enter 3L, you get 2.64 imperial qts,
    // 3.17 US qt. If you mean 3 US qt, you are SOL unless you mark the field
    // as US Customary.
-   found = qstringToUnit().value(unit);
+
+   if ( ! unit.isEmpty() ) {
+      found = qstringToUnit().value(unit);
+   }
+   else if ( scale != Unit::noScale ) {
+      found = scaleToUnit().value(scale);
+   }
+
    if ( ! found )
       found = Unit::getUnit(unit,false);
 

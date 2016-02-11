@@ -325,13 +325,15 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
 bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Yeast *row;
-   Unit::unitDisplay dispUnit;
    Unit* unit;
 
    if( index.row() >= (int)yeastObs.size() || role != Qt::EditRole )
       return false;
    else
       row = yeastObs[index.row()];
+
+   Unit::unitDisplay dspUnit = displayUnit(index.column());
+   Unit::unitScale   dspScl  = displayScale(index.column());
 
    switch( index.column() )
    {
@@ -369,10 +371,9 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::String) )
             return false;
 
-         dispUnit = displayUnit(YEASTAMOUNTCOL);
          unit = row->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
 
-         row->setAmount(Brewtarget::qStringToSI(value.toString(),unit,dispUnit));
+         row->setAmount(Brewtarget::qStringToSI(value.toString(),unit,dspUnit,dspScl));
          break;
 
       default:

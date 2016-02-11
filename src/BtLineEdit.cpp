@@ -211,7 +211,7 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
 
       // get the qstringToSI() from the unit system, using the found unit.
       // Force the issue in qstringToSI() unless dspScale is Unit::noScale.
-      return temp->qstringToSI(text(), works, dspScale != Unit::noScale);
+      return temp->qstringToSI(text(), works, dspScale != Unit::noScale, dspScale);
    }
    else if ( _type == STRING )
       return 0.0;
