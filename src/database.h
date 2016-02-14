@@ -235,24 +235,23 @@ public:
    // signal corresponding to the appropriate QList
    // of ingredients in rec. If noCopy is true, then don't copy, and set
    // the ingredient's display parameter to 0 (don't display in lists).
-   void addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false );
-   void addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false );
-   void addToRecipe( Recipe* rec, Misc* m, bool noCopy = false );
-   void addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false );
-   void addToRecipe( Recipe* rec, Water* w, bool noCopy = false );
-   //! Add a mash, displacing any current mash.
-   void addToRecipe( Recipe* rec, Mash* m, bool noCopy = false );
-   //! Add an equipment, displacing any current equipment.
    bool addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Misc* m, bool noCopy = false );
+   void addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Water* w, bool noCopy = false );
+   //! Add a mash, displacing any current mash.
+   bool addToRecipe( Recipe* rec, Mash* m, bool noCopy = false );
    //! Add a style, displacing any current style.
    void addToRecipe( Recipe* rec, Style* s, bool noCopy = false );
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    //
    //! \brief bulk add to a recipe.
-   void addToRecipe(Recipe* rec, QList<Fermentable*> ferms);
-   void addToRecipe(Recipe* rec, QList<Hop*> hops);
-   void addToRecipe(Recipe* rec, QList<Misc*> miscs);
+   bool addToRecipe(Recipe* rec, QList<Fermentable*> ferms);
+   bool addToRecipe(Recipe* rec, QList<Hop*> hops);
+   bool addToRecipe(Recipe* rec, QList<Misc*> miscs);
    void addToRecipe(Recipe* rec, QList<Yeast*> yeasts);
 
    // Remove these from a recipe, then call the changed()
@@ -768,7 +767,7 @@ private:
     * \param displayed is true if you want the \em displayed column set to true.
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
-   template<class T> T* copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0 )
+   template<class T> T* copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0, bool transact = true )
    {
       int newKey;
       int i;
