@@ -831,5 +831,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBox_amountIsWeight</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>lineEdit_amount</receiver>
+   <slot>setIsWeight(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>200</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>171</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
