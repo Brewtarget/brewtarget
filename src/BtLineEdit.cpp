@@ -90,6 +90,22 @@ void BtLineEdit::initializeProperties()
    {
       _forceUnit = Unit::noUnit;
    }
+
+   unitName = property("forcedScale");
+   _property = property("editField").toString();
+
+   if ( unitName.isValid() )
+   {
+      const QMetaObject &mo = Unit::staticMetaObject;
+      int index = mo.indexOfEnumerator("unitScale");
+      QMetaEnum unitEnum = mo.enumerator(index);
+      _forceScale = (Unit::unitScale)unitEnum.keyToValue(unitName.toString().toStdString().c_str());
+   }
+
+   else
+   {
+      _forceScale = Unit::noScale;
+   }
 }
 
 void BtLineEdit::initializeSection()
@@ -195,7 +211,11 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
       else
          dspUnit   = (Unit::unitDisplay)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::UNIT).toInt();
 
-      dspScale  = (Unit::unitScale)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::SCALE).toInt();
+      // If the display scale is forced, use this scale as the default one.
+      if( _forceScale != Unit::noScale )
+         dspScale = _forceScale;
+      else
+         dspScale  = (Unit::unitScale)Brewtarget::option(_property, Unit::noUnit, _section, Brewtarget::SCALE).toInt();
    }
 
    // Find the unit system containing dspUnit
