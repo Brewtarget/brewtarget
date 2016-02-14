@@ -168,7 +168,6 @@ public:
       return tmp;
    }
 
-      
    BrewNote* newBrewNote(Recipe* parent, bool signal = true);
    //! Create new instruction attached to \b parent.
    Instruction* newInstruction(Recipe* parent);
@@ -177,9 +176,9 @@ public:
 
    Mash* newMash();
    Mash* newMash(Mash* other, bool displace = true);
-   Mash* newMash(Recipe* parent);
+   Mash* newMash(Recipe* parent, bool transaction = true);
 
-   Recipe* newRecipe(bool addMash = true);
+   Recipe* newRecipe();
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    // Named copy constructors==================================================
@@ -219,7 +218,7 @@ public:
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash
-   void duplicateMashSteps(Mash *oldMash, Mash *newMash);
+   bool duplicateMashSteps(Mash *oldMash, Mash *newMash);
    //! Import ingredients from BeerXML documents.
    bool importFromXML(const QString& filename);
 
@@ -244,7 +243,7 @@ public:
    //! Add a mash, displacing any current mash.
    void addToRecipe( Recipe* rec, Mash* m, bool noCopy = false );
    //! Add an equipment, displacing any current equipment.
-   void addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false );
    //! Add a style, displacing any current style.
    void addToRecipe( Recipe* rec, Style* s, bool noCopy = false );
    // NOTE: not possible in this format.
@@ -539,7 +538,7 @@ private:
    }
 
    //! Helper to populate the list using the given filter.
-   template <class T> void getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
+   template <class T> bool getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
    {
       int key;
       QSqlQuery q(sqlDatabase());
@@ -561,7 +560,7 @@ private:
       catch (QString e) {
          Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
          q.finish();
-         return;
+         return false;
       }
 
       while( q.next() )
@@ -572,6 +571,7 @@ private:
       }
 
       q.finish();
+      return true;
    }
 
    /*! Populates the \b element with properties. This must be a class that
@@ -647,27 +647,36 @@ private:
    template<class T> T* addIngredientToRecipe(
       Recipe* rec,
       BeerXMLElement* ing,
-      QString propName,
-      QString relTableName,
-      QString ingKeyName,
-     QString childTableName,
       bool noCopy = false,
       QHash<int,T*>* keyHash = 0,
-      bool doNotDisplay = true
+      bool doNotDisplay = true,
+      bool transact = true
    )
    {
       T* newIng = 0;
-
-      QSqlQuery q(sqlDatabase());
-
+      QString propName, relTableName, ingKeyName, childTableName;
+      const QMetaObject* meta = ing->metaObject();
+      int ndx = meta->indexOfClassInfo("signal");
     
       if( rec == 0 || ing == 0 )
          return 0;
 
-      // TRANSACTION BEGIN
-      sqlDatabase().transaction();
+      // TRANSACTION BEGIN, but only if requested. Yeah. Had to go there.
+      if ( transact )
+         sqlDatabase().transaction();
+      // Queries have to be created inside transactional boundaries
 
+      QSqlQuery q(sqlDatabase());
       try {
+         if ( ndx != -1 ) {
+            QString prefix = meta->classInfo( meta->indexOfClassInfo("prefix")).value();
+            propName  = meta->classInfo(ndx).value();
+            relTableName = QString("%1_in_recipe").arg(prefix);
+            ingKeyName = QString("%1_id").arg(prefix);
+            childTableName = QString("%1_children").arg(prefix);
+         }
+         else 
+            throw QString("could not locate classInfo for signal on %2").arg(meta->className());
          // Ensure this ingredient is not already in the recipe.
          QString select = QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
                               .arg(relTableName)
@@ -736,11 +745,13 @@ private:
       catch (QString e) {
          Brewtarget::logE( QString("%1 %2").arg(QString("Q_FUNC_INFO")).arg(e));
          q.finish();
-         sqlDatabase().rollback();
+         if ( transact )
+            sqlDatabase().rollback();
          return 0;
       }
       q.finish();
-      sqlDatabase().commit();
+      if ( transact )
+         sqlDatabase().commit();
       dirty = true;
 
       return newIng;
