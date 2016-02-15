@@ -129,7 +129,7 @@ public:
       q.exec();
       if( !q.next() )
       {
-         Brewtarget::logE( QString("Database::get(): %1").arg(q.lastError().text()) );
+         Brewtarget::logE( QString("Database::get(): %1 (%2) %3").arg(q.lastQuery()).arg(col_name).arg(q.lastError().text()));
          q.finish();
          return QVariant();
       }
@@ -239,12 +239,12 @@ public:
    bool addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false );
    bool addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false );
    bool addToRecipe( Recipe* rec, Misc* m, bool noCopy = false );
-   void addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false );
    bool addToRecipe( Recipe* rec, Water* w, bool noCopy = false );
    //! Add a mash, displacing any current mash.
    bool addToRecipe( Recipe* rec, Mash* m, bool noCopy = false );
    //! Add a style, displacing any current style.
-   void addToRecipe( Recipe* rec, Style* s, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Style* s, bool noCopy = false );
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    //
@@ -252,7 +252,7 @@ public:
    bool addToRecipe(Recipe* rec, QList<Fermentable*> ferms);
    bool addToRecipe(Recipe* rec, QList<Hop*> hops);
    bool addToRecipe(Recipe* rec, QList<Misc*> miscs);
-   void addToRecipe(Recipe* rec, QList<Yeast*> yeasts);
+   bool addToRecipe(Recipe* rec, QList<Yeast*> yeasts);
 
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList
@@ -751,7 +751,6 @@ private:
       q.finish();
       if ( transact )
          sqlDatabase().commit();
-      dirty = true;
 
       return newIng;
    }

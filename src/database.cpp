@@ -1921,6 +1921,7 @@ bool Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
       Brewtarget::logE( QString("Could not add %1 to database").arg(ferm->name()).arg(rec->name()));
       return false;
    }
+   makeDirty();
    return true;
 }
 
@@ -1949,6 +1950,7 @@ bool Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms )
    }
 
    sqlDatabase().commit();
+   makeDirty();
    foreach (Fermentable *newFerm, added)
       connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
 
@@ -1961,11 +1963,13 @@ bool Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
    Hop* newHop = addIngredientToRecipe<Hop>( rec, hop, noCopy, &allHops );
 
    if ( ! newHop ) {
+      Brewtarget::logE( QString("%1 could not add hop %2 to recipe").arg(Q_FUNC_INFO).arg(hop->name()));
       return false;
    }
 
    connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
    rec->recalcIBU();
+   makeDirty();
    return true;
 }
 
@@ -1999,6 +2003,7 @@ bool Database::addToRecipe( Recipe* rec, QList<Hop*>hops )
       connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
 
    rec->recalcIBU();
+   makeDirty();
    return true;
 
 }
@@ -2046,6 +2051,8 @@ bool Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
    // And let the recipe recalc all?
    if ( !noCopy)
       rec->recalcAll();
+
+   return true;
 }
 
 bool Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
@@ -2058,6 +2065,7 @@ bool Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
    if (! noCopy )
       rec->recalcAll();
 
+   makeDirty();
    return true;
 
 }
@@ -2082,6 +2090,7 @@ bool Database::addToRecipe( Recipe* rec, QList<Misc*>miscs )
    }
    sqlDatabase().commit();
    rec->recalcAll();
+   makeDirty();
    return true;
 
 }
@@ -2094,7 +2103,9 @@ bool Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
    }
 
    if (! noCopy )
-      rec->recalcAll();
+   rec->recalcAll();
+
+   makeDirty(); 
    return true;
 }
 
@@ -2127,38 +2138,65 @@ bool Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
       return false;
    }
    sqlDatabase().commit();
-
-   makeDirty();
-
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
+
+   makeDirty();
+   return true;
 }
-// TODO: Restart here
-// Why no connect here?
-void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
+
+bool Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
 {
    Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, y, noCopy, &allYeasts );
+
+   if ( ! newYeast ) {
+      Brewtarget::logE( QString("%1 could not add yeast %2 to recipe").arg(Q_FUNC_INFO).arg(y->name()));
+      return false;
+   }
+
    connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
    if ( ! noCopy )
    {
       rec->recalcOgFg();
       rec->recalcABV_pct();
    }
+   makeDirty();
+   return true;
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
+bool Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
 {
+   QList<Yeast*> added;
+
    if ( yeasts.size() == 0 )
-      return;
+      return false;
 
-   foreach (Yeast* yeast, yeasts )
-   {
-      Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, yeast, false, &allYeasts );
-
-      connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
+   sqlDatabase().transaction();
+   try {
+      foreach (Yeast* yeast, yeasts )
+      {
+         Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, yeast, false, &allYeasts,true,false );
+         if ( ! newYeast )
+            throw QString("Could not add yeast %1 to recipe").arg(yeast->name());
+         added.append(newYeast);
+      }
    }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      return false;
+   }
+
+   sqlDatabase().commit();
+
+   foreach( Yeast* newYeast, added)
+      connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
+
    rec->recalcOgFg();
    rec->recalcABV_pct();
+
+   makeDirty();
+   return true;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
