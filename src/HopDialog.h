@@ -63,6 +63,8 @@ public:
    QLineEdit *qLineEdit_searchBox;
    //! @}
 
+   void newHop(QString folder);
+
 public slots:
    //! Add selected hop to current recipe.
    void addHop(const QModelIndex& = QModelIndex());

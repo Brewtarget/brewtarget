@@ -38,6 +38,7 @@
 #include <QLineEdit>
 #include <QTextEdit>
 
+#include "BtLabel.h"
 // Forward declarations
 class BtGenericEdit;
 class BtMassEdit;
@@ -138,6 +139,7 @@ public:
    //! Edit the given equipment.
    void setEquipment( Equipment* e );
    
+   void newEquipment(QString folder);
 
 public slots:
    //! Save the changes to the equipment.
