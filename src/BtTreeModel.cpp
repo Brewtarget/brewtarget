@@ -18,6 +18,7 @@
  */
 
 #include <QModelIndex>
+#include <QMessageBox>
 #include <QVariant>
 #include <QList>
 #include <QAbstractItemModel>
@@ -763,6 +764,7 @@ int BtTreeModel::mask()
 
 void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
 {
+   bool failed = false;
    while ( ! toBeCopied.isEmpty() ) 
    {
       QPair<QModelIndex,QString> thisPair = toBeCopied.takeFirst();
@@ -775,47 +777,73 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             Equipment *copyKit,  *oldKit;
             oldKit = equipment(ndx);
             copyKit = Database::instance().newEquipment(oldKit); // Create a deep copy.
-            copyKit->setName(name);
+            if ( copyKit) 
+               copyKit->setName(name);
+            else 
+               failed = true;
             break;
          case BtTreeItem::FERMENTABLE:
             Fermentable *copyFerm, *oldFerm;
             oldFerm = fermentable(ndx);
             copyFerm = Database::instance().newFermentable(oldFerm); // Create a deep copy.
-            copyFerm->setName(name);
+            if ( copyFerm )
+               copyFerm->setName(name);
+            else 
+               failed = true;
             break;
          case BtTreeItem::HOP:
             Hop *copyHop,  *oldHop;
             oldHop = hop(ndx);
             copyHop = Database::instance().newHop(oldHop); // Create a deep copy.
-            copyHop->setName(name);
+            if ( copyHop )
+               copyHop->setName(name);
+            else 
+               failed = true;
             break;
          case BtTreeItem::MISC:
             Misc *copyMisc, *oldMisc;
             oldMisc = misc(ndx);
             copyMisc = Database::instance().newMisc(oldMisc); // Create a deep copy.
-            copyMisc->setName(name);
+            if ( copyMisc )
+               copyMisc->setName(name);
+            else 
+               failed = true;
             break;
          case BtTreeItem::RECIPE:
             Recipe *copyRec,  *oldRec;
             oldRec = recipe(ndx);
             copyRec = Database::instance().newRecipe(oldRec); // Create a deep copy.
-            copyRec->setName(name);
+            if ( copyRec )
+               copyRec->setName(name);
+            else 
+               failed = true;
             break;
          case BtTreeItem::STYLE:
             Style *copyStyle, *oldStyle;
             oldStyle = style(ndx);
             copyStyle = Database::instance().newStyle(oldStyle); // Create a deep copy.
-            copyStyle->setName(name);
+            if ( copyStyle )
+               copyStyle->setName(name);
+            else 
+               failed = true;
             break;
          case BtTreeItem::YEAST:
             Yeast *copyYeast, *oldYeast;
             oldYeast = yeast(ndx);
             copyYeast = Database::instance().newYeast(oldYeast); // Create a deep copy.
-            copyYeast->setName(name);
-            
+            if ( copyYeast )
+               copyYeast->setName(name);
+            else 
+               failed = true;
             break;
          default:
             Brewtarget::logW(QString("deleteSelected:: unknown type %1").arg(type(ndx)));
+      }
+      if ( failed ) {
+         QMessageBox::warning(0,
+                              tr("Could not copy"), 
+                              tr("There was an unexpected error creating %1").arg(name));
+         return;
       }
    }
 }

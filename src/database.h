@@ -119,7 +119,7 @@ public:
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */
-   void updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
+   bool updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true, bool transact = true );
 
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
@@ -201,9 +201,9 @@ public:
    /* This links ingredients with the same name.
    * The first displayed ingredient in the database is assumed to be the parent.
    */
-   void populateChildTablesByName(Brewtarget::DBTable table);
+   bool populateChildTablesByName(Brewtarget::DBTable table);
    // Runs populateChildTablesByName for each
-   void populateChildTablesByName();
+   bool populateChildTablesByName();
    //! \returns the key of the parent ingredient
    int getParentID(Brewtarget::DBTable table, int childKey);
    //! \returns the key to the inventory table for a given ingredient
@@ -235,24 +235,24 @@ public:
    // signal corresponding to the appropriate QList
    // of ingredients in rec. If noCopy is true, then don't copy, and set
    // the ingredient's display parameter to 0 (don't display in lists).
-   bool addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false );
-   bool addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false );
-   bool addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false );
-   bool addToRecipe( Recipe* rec, Misc* m, bool noCopy = false );
-   bool addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false );
-   bool addToRecipe( Recipe* rec, Water* w, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false, bool transact = true );
+   bool addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false, bool transact = true);
+   bool addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false, bool transact = true);
    //! Add a mash, displacing any current mash.
-   bool addToRecipe( Recipe* rec, Mash* m, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Mash* m, bool noCopy = false, bool transact = true );
+   bool addToRecipe( Recipe* rec, Misc* m, bool noCopy = false, bool transact = true);
    //! Add a style, displacing any current style.
-   bool addToRecipe( Recipe* rec, Style* s, bool noCopy = false );
+   bool addToRecipe( Recipe* rec, Style* s, bool noCopy = false, bool transact = true );
+   bool addToRecipe( Recipe* rec, Water* w, bool noCopy = false, bool transact = true);
+   bool addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false, bool transact = true);
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    //
    //! \brief bulk add to a recipe.
-   bool addToRecipe(Recipe* rec, QList<Fermentable*> ferms);
-   bool addToRecipe(Recipe* rec, QList<Hop*> hops);
-   bool addToRecipe(Recipe* rec, QList<Misc*> miscs);
-   bool addToRecipe(Recipe* rec, QList<Yeast*> yeasts);
+   bool addToRecipe(Recipe* rec, QList<Fermentable*> ferms, bool transact = true);
+   bool addToRecipe(Recipe* rec, QList<Hop*> hops, bool transact = true);
+   bool addToRecipe(Recipe* rec, QList<Misc*> miscs, bool transact = true);
+   bool addToRecipe(Recipe* rec, QList<Yeast*> yeasts, bool transact = true);
 
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList
@@ -661,8 +661,9 @@ private:
          return 0;
 
       // TRANSACTION BEGIN, but only if requested. Yeah. Had to go there.
-      if ( transact )
+      if ( transact ) {
          sqlDatabase().transaction();
+      }
       // Queries have to be created inside transactional boundaries
 
       QSqlQuery q(sqlDatabase());
@@ -697,6 +698,7 @@ private:
             // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
             // Not sure I like this. It's a long call stack just to end up back
             // here
+            qDebug() << Q_FUNC_INFO << "Bet its here";
             ing->setDisplay(! doNotDisplay );
          }
          else
@@ -766,13 +768,12 @@ private:
     * \param displayed is true if you want the \em displayed column set to true.
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
-   template<class T> T* copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0, bool transact = true )
+   template<class T> T* copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0 )
    {
       int newKey;
       int i;
       T* newOne = new T();
       QString holder,fields;
-
 
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
 

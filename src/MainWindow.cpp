@@ -1367,6 +1367,12 @@ void MainWindow::newRecipe()
 
    Recipe* newRec = Database::instance().newRecipe();
 
+   // bad things happened -- let somebody know
+   if ( ! newRec ) {
+      QMessageBox::warning(this,tr("Error copying recipe"), 
+                           tr("An error was returned while creating %1").arg(name));
+      return;
+   }
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
    newRec->setName(name);
@@ -1906,7 +1912,8 @@ void MainWindow::copyRecipe()
       return;
 
    Recipe* newRec = Database::instance().newRecipe(recipeObs); // Create a deep copy.
-   newRec->setName(name);
+   if ( newRec ) 
+      newRec->setName(name);
 }
 
 void MainWindow::setMashToCurrentlySelected()
