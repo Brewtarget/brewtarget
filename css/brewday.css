@@ -1,18 +1,18 @@
 body{
-   width: 8.5in;
-   margin: auto auto auto 10px; 
+   width: 90%;
+   margin: auto auto auto 10%; 
 }
 caption { caption-side:top; }
 ul { list-style-type:circle; }
 h1 
 { 
-   font-size:36px;
+   font-size:3em;
    font-weight:bold;
    text-align:left;
 }
 h2
 {
-   font-size:20px;
+   font-size:2em;
    font-weight:bold;
    text-align:center;
    border-bottom-style:solid;
@@ -34,7 +34,7 @@ img
 #title td, #title th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    empty-cells:show;
 }
 #title td.left
@@ -61,13 +61,13 @@ img
 #steps td, #steps th 
 {
    border: 1px solid black;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
 }
 #steps th
 {
    text-align:left;
-   padding-top:5px;
-   padding-bottom:4px;
+   padding-top:0.3em;
+   padding-bottom:0.4em;
    background-color:#d8d8d8;
 }
 #steps tr.alt td
@@ -97,7 +97,7 @@ img
 #notes td, #notes th
 {
    border: 0px solid white;
-   padding: 30px 10px 20px 10px;
+   padding: 2em 1em 1.5em 0.6em;
    empty-cells:show;
 }
 #notes tr.alt

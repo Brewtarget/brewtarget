@@ -1,6 +1,6 @@
 body{
-   width: 8.5in;
-   margin: auto auto auto 10px; 
+   width: 100%;
+   margin: auto 5% auto 5%; 
 }
 ul { list-style-type:circle; }
 caption 
@@ -10,29 +10,31 @@ caption
 }
 h1 
 { 
-   font-size:36px;
+   font-size:3em;
    font-weight:bold;
    text-align:left;
 }
 h2
 {
-   font-size:18px;
+   font-size:1.25em;
    font-weight:bold;
    text-align:left;
    border-bottom-style:solid;
+   width: 90%
 }
 h3
 {
-   font-size:14px;
+   font-size:1.2em;
    text-align:left;
    font-weight:normal;
-   border-bottom-width:1px;
+   border-bottom-width:0.1em;
    border-bottom-style:solid;
+   width: 90%
 }
 
 h4
 {
-   font-size:12px;
+   font-size:0.75em;
    text-align:left;
    font-weight:normal;
 }
@@ -46,51 +48,51 @@ img
 }
 #headerdiv
 {
-    padding-bottom:30px;
+    padding-bottom:2.5em;
 }
 #header
 {
    border-collapse:collapse;
-   width:100%;
+   width:90%;
    empty-cells:hide;
 }
 #header td 
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
-    empty-cells:hide;
+   padding: 0.2em 0.5em 0.3em 0.5em;
+   empty-cells:hide;
 }
 #header td.label
 {
-    width:10%;
-    font-size:14px;
+   width:10%;
+   font-size:0.9em;
    font-weight:bold;
    text-align:left;
 }
 #header td.value
 {
    width:60%;
-    font-size:14px;
+   font-size:0.9em;
    font-weight:normal;
    text-align:left;
 }
 #header caption
 {
-    font-size:36px;
+    font-size:3em;
     caption-side:top; 
     text-align: left;
 }
 #title
 {
    border-collapse:collapse;
-   width:100%;
+   width:90%;
    empty-cells:hide;
-   border: 1px solid;
+   border: 0.1em solid;
 }
 #title td, #title th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    empty-cells:show;
 }
 #title td.left
@@ -111,19 +113,19 @@ img
 #fermentables
 {
    border-collapse:collapse;
-   width:100%;
+   width:90%;
    empty-cells:hide;
 }
 #fermentables td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    empty-cells:show;
 }
 #fermentables th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    font-weight:bold;
    text-align:left;
    empty-cells:show;
@@ -138,7 +140,7 @@ img
 #hops
 {
    border-collapse:collapse;
-   width:100%;
+   width:90%;
    empty-cells:hide;
 }
 #hops td
@@ -164,22 +166,22 @@ img
 #misc
 {
    border-collapse:collapse;
-   width:100%;
+   width:90%;
    empty-cells:hide;
 }
 #misc td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    empty-cells:show;
 }
 #misc th
 {
    border: 0px solid white;
-    padding: 3px 7px 2px 7px;
-    font-weight:bold;
-    text-align:left;
-    empty-cells:show;
+   padding: 0.2em 0.5em 0.3em 0.5em;
+   font-weight:bold;
+   text-align:left;
+   empty-cells:show;
 }
 #misc caption 
 { 
@@ -190,22 +192,22 @@ img
 #yeast
 {
    border-collapse:collapse;
-   width:100%;
+   width:90%;
    empty-cells:hide;
 }
 #yeast td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    empty-cells:show;
 }
 #yeast th
 {
    border: 0px solid white;
-    padding: 3px 7px 2px 7px;
-    font-weight:bold;
-    text-align:left;
-    empty-cells:show;
+   padding: 0.2em 0.5em 0.3em 0.5em;
+   font-weight:bold;
+   text-align:left;
+   empty-cells:show;
 }
 #yeast caption 
 { 
@@ -216,19 +218,19 @@ img
 #mash
 {
    border-collapse:collapse;
-   width:100%;
+   width:90%;
    empty-cells:hide;
 }
 #mash td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    empty-cells:show;
 }
 #mash th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    font-weight:bold;
    text-align:left;
    empty-cells:show;
@@ -246,7 +248,7 @@ img
 #brewnote
 {
    border-collapse:collapse;
-   width:100%;
+   width:90%;
 }
 #brewnote caption 
 { 
@@ -258,7 +260,7 @@ img
 #brewnote td, #brewnote th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding: 0.2em 0.5em 0.3em 0.5em;
    empty-cells:show;
 }
 #brewnote tr.alt
