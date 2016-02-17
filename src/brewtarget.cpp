@@ -1217,10 +1217,10 @@ QString Brewtarget::displayThickness( double thick_lkg, bool showUnits )
       return QString("%L1").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
 }
 
-double Brewtarget::qStringToSI(QString qstr, Unit* unit, Unit::unitDisplay dispUnit, bool force)
+double Brewtarget::qStringToSI(QString qstr, Unit* unit, Unit::unitDisplay dispUnit, Unit::unitScale dispScale)
 {
    UnitSystem* temp = findUnitSystem(unit, dispUnit);
-   return temp->qstringToSI(qstr,temp->unit(),force);
+   return temp->qstringToSI(qstr,temp->unit(),false,dispScale);
 }
 
 QString Brewtarget::ibuFormulaName()

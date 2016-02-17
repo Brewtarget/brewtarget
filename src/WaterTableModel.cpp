@@ -289,13 +289,16 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
    if ( ! retval )
       return retval;
 
+   Unit::unitDisplay dspUnit = displayUnit(index.column());
+   Unit::unitScale   dspScl  = displayScale(index.column());
+
    switch( index.column() )
    {
       case WATERNAMECOL:
          row->setName(value.toString());
          break;
       case WATERAMOUNTCOL:
-         row->setAmount_l( Brewtarget::qStringToSI(value.toString(), Units::liters) );
+         row->setAmount_l( Brewtarget::qStringToSI(value.toString(), Units::liters, dspUnit, dspScl) );
          break;
       case WATERCALCIUMCOL:
          row->setCalcium_ppm( Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));
@@ -321,6 +324,86 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
    }
 
    return retval;
+}
+
+Unit::unitDisplay WaterTableModel::displayUnit(int column) const
+{
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return Unit::noUnit;
+
+   return (Unit::unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
+}
+
+Unit::unitScale WaterTableModel::displayScale(int column) const
+{
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return Unit::noScale;
+
+   return (Unit::unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
+}
+
+// We need to:
+//   o clear the custom scale if set
+//   o clear any custom unit from the rows
+//      o which should have the side effect of clearing any scale
+void WaterTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
+{
+   // Yeast* row; // disabled per-cell magic
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
+   Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
+
+   /* Disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getYeast(i);
+      row->setDisplayUnit(Unit::noUnit);
+   }
+   */
+}
+
+// Setting the scale should clear any cell-level scaling options
+void WaterTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
+{
+   // Yeast* row; //disabled per-cell magic
+
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
+
+   /* disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getYeast(i);
+      row->setDisplayScale(Unit::noScale);
+   }
+   */
+}
+
+QString WaterTableModel::generateName(int column) const
+{
+   QString attribute;
+
+   switch(column)
+   {
+      case WATERAMOUNTCOL:
+         attribute = "amount";
+         break;
+      default:
+         attribute = "";
+   }
+   return attribute;
 }
 
 //==========================CLASS HopItemDelegate===============================

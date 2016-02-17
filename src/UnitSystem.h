@@ -60,7 +60,7 @@ public:
     * followed by a unit string) to the appropriate SI amount under this
     * UnitSystem.
     */
-   double qstringToSI(QString qstr, Unit* defUnit = 0, bool force = false);
+   double qstringToSI(QString qstr, Unit* defUnit = 0, bool force = false, Unit::unitScale scale = Unit::noScale);
 
    Unit* scaleUnit(Unit::unitScale scale);
    /*!

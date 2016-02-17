@@ -32,6 +32,7 @@ class WaterItemDelegate;
 #include <QItemDelegate>
 #include <QList>
 
+#include "unit.h"
 // Forward declarations.
 class Water;
 class WaterTableWidget;
@@ -81,6 +82,12 @@ private:
    QList<Water*> waterObs;
    Recipe* recObs;
    WaterTableWidget* parentTableWidget;
+
+   void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
+   void setDisplayScale(int column, Unit::unitScale displayScale);
+   QString generateName(int column) const;
+   Unit::unitDisplay displayUnit(int column) const;
+   Unit::unitScale displayScale(int column) const;
 };
 
 /*!
