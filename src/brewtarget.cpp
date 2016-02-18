@@ -114,11 +114,13 @@ bool Brewtarget::ensureDirectoriesExist()
    const QDir dataDir = getDataDir();
    if( ! dataDir.exists() || ! dataDir.isReadable() )
    {
-      QMessageBox::information(
-         0,
-         errTitle,
-         errText.arg(dataDir.path())
-      );
+      if (Brewtarget::isInteractive()) {
+         QMessageBox::information(
+            0,
+            errTitle,
+            errText.arg(dataDir.path())
+         );
+      }
       return false;
    }
 
@@ -126,11 +128,13 @@ bool Brewtarget::ensureDirectoriesExist()
    const QDir docDir = getDocDir();
    if( ! docDir.exists() || ! docDir.isReadable() )
    {
-      QMessageBox::information(
-         0,
-         errTitle,
-         errText.arg(docDir.path())
-      );
+      if (Brewtarget::isInteractive()) {
+         QMessageBox::information(
+            0,
+            errTitle,
+            errText.arg(docDir.path())
+         );
+      }
       return false;
    }
 
@@ -138,11 +142,13 @@ bool Brewtarget::ensureDirectoriesExist()
    const QDir configDir = getConfigDir(&success);
    if( !success || ! configDir.exists() || ! configDir.isReadable() )
    {
-      QMessageBox::information(
-         0,
-         errTitle,
-         errText.arg(configDir.path())
-      );
+      if (Brewtarget::isInteractive()) {
+         QMessageBox::information(
+            0,
+            errTitle,
+            errText.arg(configDir.path())
+         );
+      }
       return false;
    }
 
@@ -150,11 +156,13 @@ bool Brewtarget::ensureDirectoriesExist()
    const QDir userDataDir = getUserDataDir();
    if( !userDataDir.exists() && !userDataDir.mkpath(".") )
    {
-      QMessageBox::information(
-         0,
-         errTitle,
-         errText.arg(userDataDir.path())
-      );
+      if (Brewtarget::isInteractive()) {
+         QMessageBox::information(
+            0,
+            errTitle,
+            errText.arg(userDataDir.path())
+         );
+      }
       return false;
    }
 
