@@ -41,6 +41,8 @@ void Testing::initTestCase()
    Brewtarget::setOption("color_formula", "morey");
    Brewtarget::setOption("ibu_formula", "tinseth");
 
+   // Tell Brewtarget not to require any "user" input on starting
+   Brewtarget::setInteractive(false);
    QVERIFY( Brewtarget::initialize() );
 
    // 5 gallon equipment

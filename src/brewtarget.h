@@ -315,6 +315,7 @@ private:
    static QSettings btSettings;
    static bool userDatabaseDidNotExist;
    static QFile pidFile;
+   static bool _isInteractive;
 
    //! \brief If this option is false, do not bother the user about new versions.
    static bool checkVersion;
@@ -360,6 +361,16 @@ private:
     * \brief Run after QApplication exits to clean up shit, close database, etc.
     */
    static void cleanup();
+
+   /*!
+    * \brief If false, run Brewtarget in a way that requires no user interaction
+    *
+    * For example, if running a test case, ensure that no dialogs pop up that
+    * prevent Brewtarget from starting
+    */
+   static bool isInteractive();
+   //! \brief Set the mode to an interactive or non-interactive state
+   static void setInteractive(bool val);
 
    /*!
     *  \brief Helper to get option values from XML.

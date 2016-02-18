@@ -82,6 +82,7 @@ QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
 bool Brewtarget::userDatabaseDidNotExist = false;
 QFile Brewtarget::pidFile;
+bool Brewtarget::_isInteractive = true;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
@@ -525,6 +526,14 @@ void Brewtarget::cleanup()
    pidFile.remove();
 #endif
 
+}
+
+bool Brewtarget::isInteractive() {
+   return _isInteractive;
+}
+
+void Brewtarget::setInteractive(bool val) {
+   _isInteractive = val;
 }
 
 int Brewtarget::run(const QString &userDirectory)

@@ -235,6 +235,7 @@ bool Database::load()
    {
       
       if(
+         Brewtarget::isInteractive() &&
          QMessageBox::question(
             0,
             tr("Merge Database"),
@@ -243,8 +244,7 @@ bool Database::load()
             QMessageBox::Yes
          )
          == QMessageBox::Yes
-      )
-      {
+      ) {
          updateDatabase(dataDbFile.fileName());
       }
       
