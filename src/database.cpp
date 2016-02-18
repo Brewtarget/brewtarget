@@ -184,9 +184,13 @@ bool Database::load()
    if( ! dbIsOpen )
    {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
-      QMessageBox::critical(0,
-                            QObject::tr("Database Failure"),
-                            QString(QObject::tr("Failed to open the database '%1'.").arg(dbFileName)));
+      if (Brewtarget::isInteractive()) {
+         QMessageBox::critical(
+            0,
+            QObject::tr("Database Failure"),
+            QString(QObject::tr("Failed to open the database '%1'.").arg(dbFileName))
+         );
+      }
 
       // TODO: if we can't open the database, what should we do?
       return false;
@@ -217,11 +221,13 @@ bool Database::load()
    schemaUpdated = updateSchema(&schemaErr);
    if( schemaErr )
    {
-      QMessageBox::critical(
-         0,
-         QObject::tr("Database Failure"),
-         QObject::tr("Failed to update the database")
-      );
+      if (Brewtarget::isInteractive()) {
+         QMessageBox::critical(
+            0,
+            QObject::tr("Database Failure"),
+            QObject::tr("Failed to update the database")
+         );
+      }
       return false;
    }
    
