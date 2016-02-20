@@ -405,10 +405,10 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
          _newMenu->addAction(tr("Misc"), this, SLOT(newIngredient()));
          break;
       case BtTreeModel::STYLEMASK:
-         _newMenu->addAction(tr("Style"), editor, SLOT(newIngredient()));
+         _newMenu->addAction(tr("Style"), this, SLOT(newIngredient()));
          break;
       case BtTreeModel::YEASTMASK:
-         _newMenu->addAction(tr("Yeast"), editor, SLOT(newYeast()));
+         _newMenu->addAction(tr("Yeast"), this, SLOT(newIngredient()));
          break;
       default:
          Brewtarget::logW(QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type));
