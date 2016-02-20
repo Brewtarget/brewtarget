@@ -1749,8 +1749,8 @@ bool Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
                                value,
                                prop,
                                object,
-                               notify,
-                               transact);
+                               notify
+                               );
 
    command->redo();
    if ( command->sqlSuccess() ) 
@@ -3877,8 +3877,6 @@ void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
 }
 
 // fromXml ====================================================================
-// TODO:: Start from here. This and the importFromXML methods are likely to be
-// unpleasant.
 void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode)
 {
    QDomNode node, child;
@@ -3941,6 +3939,11 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
                Brewtarget::logW("Database::fromXML: don't understand property type.");
                break;
          }
+         // Not sure if we should keep processing or just dump?
+         if ( ! element->isValid() ) {
+            Brewtarget::logE( QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag));
+            return;
+         }
       }
       else
       {
@@ -3952,14 +3955,27 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
    makeDirty();
 }
 
+// Brewnotes can never be created w/ a recipe, so we will always assume the
+// calling method has the transactions
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
    BrewNote* ret = newBrewNote(parent);
 
-   // Need to tell the brewnote not to perform the calculations
-   ret->setLoading(true);
-   fromXml( ret, BrewNote::tagToProp, node);
-   ret->setLoading(false);
+   try {
+      if ( ! ret )
+         throw QString("Could not create new brewnote");
+
+      // Need to tell the brewnote not to perform the calculations
+      ret->setLoading(true);
+      fromXml( ret, BrewNote::tagToProp, node);
+      if ( ! ret->isValid() ) 
+         throw QString("Error loading brewnote from XML");
+
+      ret->setLoading(false);
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+   }
 
    return ret;
 }
@@ -3975,40 +3991,61 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    QDomNode n;
    bool createdNew = true;
 
-   // If we are just importing an equip by itself, need to do some dupe-checking.
-   if( parent == 0 )
-   {
-      // Check to see if there is a hop already in the DB with the same name.
-      n = node.firstChildElement("NAME");
-      QString name = n.firstChild().toText().nodeValue();
-
-      getElements<Equipment>( matchingEquips, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
-
-      if( matchingEquips.length() > 0 )
+   try {
+      // If we are just importing an equip by itself, need to do some dupe-checking.
+      if( parent == 0 )
       {
-         createdNew = false;
-         ret = matchingEquips.first();
+         // No parent means we handle the transaction
+         sqlDatabase().transaction();
+         // Check to see if there is a hop already in the DB with the same name.
+         n = node.firstChildElement("NAME");
+         QString name = n.firstChild().toText().nodeValue();
+
+         getElements<Equipment>( matchingEquips, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
+
+         if( matchingEquips.length() > 0 )
+         {
+            createdNew = false;
+            ret = matchingEquips.first();
+         }
+         else
+            ret = newEquipment();
       }
       else
          ret = newEquipment();
+
+      if ( ! ret )
+         throw QString("Could not create new equipment profile");
+
+      fromXml( ret, Equipment::tagToProp, node );
+      if ( ! ret->isValid() )
+         throw QString("There was an error loading equipment profile from XML");
+
+      // If we are importing one of our beerXML files, the utilization is always
+      // 0%. We need to fix that.
+      if ( ret->hopUtilization_pct() == 0.0 )
+         ret->setHopUtilization_pct(100.0);
+
+      if( parent )
+      {
+         ret->setDisplay(false);
+         if ( ! addToRecipe( parent, ret, true ) ) {
+            throw QString("Could not add equipment profile to recipe");
+         }
+      }
    }
-   else
-      ret = newEquipment();
-
-   fromXml( ret, Equipment::tagToProp, node );
-
-   // If we are importing one of our beerXML files, the utilization is always
-   // 0%. We need to fix that.
-   if ( ret->hopUtilization_pct() == 0.0 )
-      ret->setHopUtilization_pct(100.0);
-
-   if( parent )
-   {
-      ret->setDisplay(false);
-      addToRecipe( parent, ret, true );
+   catch (QString e) {
+      if ( ! parent ) 
+         sqlDatabase().rollback();
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      blockSignals(false);
+      return ret;
    }
 
    blockSignals(false);
+   if ( ! parent ) 
+   sqlDatabase().commit();
+
    if( createdNew )
    {
       emit changed( metaProperty("equipments"), QVariant() );
@@ -4025,41 +4062,62 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    bool createdNew = true;
    blockSignals(true);
 
-   // If we are just importing a hop by itself, need to do some dupe-checking.
-   if( parent == 0 )
-   {
-      // Check to see if there is a hop already in the DB with the same name.
-      n = node.firstChildElement("NAME");
-      QString name = n.firstChild().toText().nodeValue();
-      QList<Fermentable*> matchingFerms;
-      getElements<Fermentable>( matchingFerms, QString("name='%1'").arg(name), Brewtarget::FERMTABLE, allFermentables );
-
-      if( matchingFerms.length() > 0 )
+   try {
+      // If we are just importing a hop by itself, need to do some dupe-checking.
+      if( parent == 0 )
       {
-         createdNew = false;
-         ret = matchingFerms.first();
+         // Check to see if there is a hop already in the DB with the same name.
+         sqlDatabase().transaction();
+         n = node.firstChildElement("NAME");
+         QString name = n.firstChild().toText().nodeValue();
+         QList<Fermentable*> matchingFerms;
+         getElements<Fermentable>( matchingFerms, QString("name='%1'").arg(name), Brewtarget::FERMTABLE, allFermentables );
+
+         if( matchingFerms.length() > 0 )
+         {
+            createdNew = false;
+            ret = matchingFerms.first();
+         }
+         else
+            ret = newFermentable();
       }
       else
          ret = newFermentable();
+
+      if ( ! ret )
+         throw QString("Could not create new fermentable");
+
+      fromXml( ret, Fermentable::tagToProp, node );
+      if ( ! ret->isValid() )
+         throw QString("Error reading fermentable from XML");
+
+
+      // Handle enums separately.
+      n = node.firstChildElement("TYPE");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else {
+         ret->setType( static_cast<Fermentable::Type>(
+                        Fermentable::types.indexOf(
+                           n.firstChild().toText().nodeValue()
+                        )
+                     ) );
+         if ( ! ret->isValid() )
+            throw QString("Could not change the type of the fermentable");
+      }
+
+      if( parent && !  addToRecipe( parent, ret, true ) )
+         throw QString("Could not add the fermentable to the recipe");
    }
-   else
-      ret = newFermentable();
+   catch (QString e) {
+      if ( ! parent )
+         sqlDatabase().rollback();
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      return ret;
+   }
 
-   fromXml( ret, Fermentable::tagToProp, node );
-
-
-   // Handle enums separately.
-   n = node.firstChildElement("TYPE");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else
-      ret->setType( static_cast<Fermentable::Type>(
-                       Fermentable::types.indexOf(
-                          n.firstChild().toText().nodeValue()
-                       )
-                    ) );
-   if( parent )
-      addToRecipe( parent, ret, true );
+   if ( ! parent )
+      sqlDatabase().commit();
 
    blockSignals(false);
    if( createdNew )
@@ -4071,6 +4129,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    return ret;
 }
 
+// TODO:: Start from here. 
 int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
 {
   if ( Hop::types.indexOf(type) < 0 )

@@ -45,8 +45,7 @@ public:
                   QVariant value,
                   QMetaProperty prop,
                   BeerXMLElement* object,
-                  bool notify=true,
-                  bool transaction = false
+                  bool notify=true
                   );
    virtual ~SetterCommand();
    
@@ -72,7 +71,6 @@ private:
    QList<BeerXMLElement*> objects;
    QList<bool> notify;
    bool _sqlSuccess;
-   bool _transact;
    
    //! Append a command to us.
    void appendCommand( Brewtarget::DBTable table,
@@ -82,7 +80,6 @@ private:
                   QMetaProperty prop,
                   BeerXMLElement* object,
                   bool notify,
-                  bool transaction,
                   QVariant oldValue = QVariant());
 
    //! \returns query statements for setting the values.

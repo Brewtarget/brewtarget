@@ -167,7 +167,7 @@ private:
     * \param valid - Indicates if the beerXML element was valid. There is a problem with importing invalid
     * XML. I'm hoping this helps fix it
     */
-  bool valid;
+  bool _valid;
 };
 
 
