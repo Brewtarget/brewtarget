@@ -815,7 +815,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             
             break;
          default:
-            Brewtarget::logW(QString("copySelected:: unknown type %1").arg(type(ndx)));
+            Brewtarget::logW(QString("deleteSelected:: unknown type %1").arg(type(ndx)));
       }
    }
 }
@@ -829,6 +829,9 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
       QModelIndex ndx = toBeDeleted.takeFirst();
       switch ( type(ndx) ) 
       {
+         case BtTreeItem::RECIPE:
+            Database::instance().remove( recipe(ndx) );
+            break;
          case BtTreeItem::EQUIPMENT:
             Database::instance().remove( equipment(ndx) );
             break;
@@ -840,12 +843,6 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
             break;
          case BtTreeItem::MISC:
             Database::instance().remove( misc(ndx) );
-            break;
-         case BtTreeItem::RECIPE:
-            Database::instance().remove( recipe(ndx) );
-            break;
-         case BtTreeItem::STYLE:
-            Database::instance().remove( style(ndx) );
             break;
          case BtTreeItem::YEAST:
             Database::instance().remove( yeast(ndx) );
@@ -992,7 +989,7 @@ bool BtTreeModel::renameFolder(BtFolder* victim, QString newName)
    QPair<QString,BtTreeItem*> f;
    QList<QPair<QString, BtTreeItem*> > folders;
    // This space is important       ^
-   int i;
+   int i,kids,src;
 
    if ( ! ndx.isValid() )
       return false;
@@ -1014,10 +1011,17 @@ bool BtTreeModel::renameFolder(BtFolder* victim, QString newName)
       targetPath = f.first;
       BtTreeItem* target = f.second;
 
+      // As we move things, childCount changes. This makes sure we loop
+      // through all the current children
+      kids = target->childCount();
+      src = 0;
       // Ok. We have a start and an index.
-      for (i=0; i < target->childCount(); ++i)
+      for (i=0; i < kids; ++i)
       {
-         BtTreeItem* next = target->child(i);
+         // This looks weird, and it is. As we move children out, the 0
+         // item changes to the next child. In the case of a folder, though,
+         // we don't move it, so we need to get the item beyond that.
+         BtTreeItem* next = target->child(src);
          // If a folder, push it onto the folders stack for latter processing
          if ( next->type() == BtTreeItem::FOLDER ) 
          {
@@ -1025,9 +1029,11 @@ bool BtTreeModel::renameFolder(BtFolder* victim, QString newName)
             newTarget.first = targetPath % "/" % next->name();
             newTarget.second = next;
             folders.append(newTarget);
+            src++;
          }
-         else // Leafnode
+         else { // Leafnode
             next->thing()->setFolder(targetPath);
+         }
       }
    }
    // Last thing is to remove the victim. 
