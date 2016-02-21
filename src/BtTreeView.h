@@ -128,6 +128,9 @@ public:
    friend class YeastTreeView;
    friend class StyleTreeView;
 
+public slots:
+   void newIngredient();
+
 private slots:
    void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);
 
@@ -137,6 +140,7 @@ private:
    BtTreeModel::TypeMasks _type;
    QMenu* _contextMenu, *subMenu;
    QPoint dragStart;
+   QWidget* _editor;
 
    bool doubleClick;
 
