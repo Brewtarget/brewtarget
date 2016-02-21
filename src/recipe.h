@@ -201,7 +201,7 @@ public:
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
    // One method to bring them all and in darkness bind them
-   bool remove( BeerXMLElement *var);
+   void remove( BeerXMLElement *var);
 
    // And you do know what happens next right?
    void addHop( Hop *var );

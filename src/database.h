@@ -119,7 +119,7 @@ public:
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */
-   bool updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true, bool transact = true );
+   void updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true, bool transact = true );
 
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
@@ -157,7 +157,7 @@ public:
       }
       catch (QString e) {
          Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-         return 0;
+         throw; // rethrow the error until somebody cares
       }
 
       tmp->_key = key;
@@ -201,9 +201,9 @@ public:
    /* This links ingredients with the same name.
    * The first displayed ingredient in the database is assumed to be the parent.
    */
-   bool populateChildTablesByName(Brewtarget::DBTable table);
+   void populateChildTablesByName(Brewtarget::DBTable table);
    // Runs populateChildTablesByName for each
-   bool populateChildTablesByName();
+   void populateChildTablesByName();
    //! \returns the key of the parent ingredient
    int getParentID(Brewtarget::DBTable table, int childKey);
    //! \returns the key to the inventory table for a given ingredient
@@ -218,7 +218,7 @@ public:
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash
-   bool duplicateMashSteps(Mash *oldMash, Mash *newMash);
+   void duplicateMashSteps(Mash *oldMash, Mash *newMash);
    //! Import ingredients from BeerXML documents.
    bool importFromXML(const QString& filename);
 
@@ -235,29 +235,29 @@ public:
    // signal corresponding to the appropriate QList
    // of ingredients in rec. If noCopy is true, then don't copy, and set
    // the ingredient's display parameter to 0 (don't display in lists).
-   bool addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false, bool transact = true );
-   bool addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false, bool transact = true);
-   bool addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false, bool transact = true);
+   void addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false, bool transact = true );
+   void addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false, bool transact = true);
+   void addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false, bool transact = true);
    //! Add a mash, displacing any current mash.
-   bool addToRecipe( Recipe* rec, Mash* m, bool noCopy = false, bool transact = true );
-   bool addToRecipe( Recipe* rec, Misc* m, bool noCopy = false, bool transact = true);
+   void addToRecipe( Recipe* rec, Mash* m, bool noCopy = false, bool transact = true );
+   void addToRecipe( Recipe* rec, Misc* m, bool noCopy = false, bool transact = true);
    //! Add a style, displacing any current style.
-   bool addToRecipe( Recipe* rec, Style* s, bool noCopy = false, bool transact = true );
-   bool addToRecipe( Recipe* rec, Water* w, bool noCopy = false, bool transact = true);
-   bool addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false, bool transact = true);
+   void addToRecipe( Recipe* rec, Style* s, bool noCopy = false, bool transact = true );
+   void addToRecipe( Recipe* rec, Water* w, bool noCopy = false, bool transact = true);
+   void addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false, bool transact = true);
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    //
    //! \brief bulk add to a recipe.
-   bool addToRecipe(Recipe* rec, QList<Fermentable*> ferms, bool transact = true);
-   bool addToRecipe(Recipe* rec, QList<Hop*> hops, bool transact = true);
-   bool addToRecipe(Recipe* rec, QList<Misc*> miscs, bool transact = true);
-   bool addToRecipe(Recipe* rec, QList<Yeast*> yeasts, bool transact = true);
+   void addToRecipe(Recipe* rec, QList<Fermentable*> ferms, bool transact = true);
+   void addToRecipe(Recipe* rec, QList<Hop*> hops, bool transact = true);
+   void addToRecipe(Recipe* rec, QList<Misc*> miscs, bool transact = true);
+   void addToRecipe(Recipe* rec, QList<Yeast*> yeasts, bool transact = true);
 
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
-   bool removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing );
+   void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing );
 
    // Two odd balls I can't resolve quite yet. But I will.
    // This one isn't even needed. remove does it
@@ -268,37 +268,64 @@ public:
    //! Remove \b step from \b mash.
    void removeFrom( Mash* mash, MashStep* step );
 
-   // Mark an item as deleted.
-   // NOTE: should these also remove all references to the ingredients?
-   bool remove(BeerXMLElement* ing, bool emitSignal = true);
-
    // Or you can mark whole lists as deleted.
    // ONE METHOD TO CALL THEM ALL AND IN DARKNESS BIND THEM!
-   template<class T> bool remove(QList<T*> list) 
+   template<class T> void remove(QList<T*> list) 
    {
       if ( list.empty() )
-         return false;
+         return;
 
       const QMetaObject *meta = list[0]->metaObject();
       Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
       QString propName;
-      bool ret = true;
 
       int ndx = meta->indexOfClassInfo("signal");
       if ( ndx != -1 ) {
          propName = meta->classInfo(ndx).value();
       }
-      else {
-         Brewtarget::logE(QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className()));
-         return false;
-      }
+      else 
+         throw QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className());
 
       foreach( T* dead, list ) {
-         ret &= deleteRecord(ingTable,dead);
+         deleteRecord(ingTable,dead);
       }
 
       emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
-      return ret;
+   }
+
+   template <class T>void remove(T* ing, bool emitSignal = true)
+   {
+      const QMetaObject *meta = ing->metaObject();
+      Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
+      QString propName;
+
+      if ( ingTable == Brewtarget::BREWNOTETABLE ) {
+         emitSignal = false;
+      }
+
+      if ( emitSignal ) {
+         int ndx = meta->indexOfClassInfo("signal");
+         if ( ndx != -1 ) {
+            propName = meta->classInfo(ndx).value();
+         }
+         else {
+            throw QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className());
+         }
+      }
+
+      try {
+         deleteRecord(ingTable, ing);
+      }
+      catch (QString e) {
+         throw;
+      }
+
+      // Brewnotes are weird and don't emit a metapropery change
+      if ( emitSignal )
+         emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
+      // This was screaming until I needed to emit a freaking signal
+      if ( ingTable != Brewtarget::MASHSTEPTABLE )
+         emit deletedSignal(ing);
    }
 
    //! Get the recipe that this \b note is part of.
@@ -398,30 +425,31 @@ public:
 signals:
    void changed(QMetaProperty prop, QVariant value);
    void newEquipmentSignal(Equipment*);
-   void deletedEquipmentSignal(Equipment*);
    void newFermentableSignal(Fermentable*);
-   void deletedFermentableSignal(Fermentable*);
    void newHopSignal(Hop*);
-   void deletedHopSignal(Hop*);
    void newMashSignal(Mash*);
-   void deletedMashSignal(Mash*);
    void newMiscSignal(Misc*);
-   void deletedMiscSignal(Misc*);
    void newRecipeSignal(Recipe*);
-   void deletedRecipeSignal(Recipe*);
    void newStyleSignal(Style*);
-   void deletedStyleSignal(Style*);
    void newWaterSignal(Water*);
-   void deletedWaterSignal(Water*);
    void newYeastSignal(Yeast*);
-   void deletedYeastSignal(Yeast*);
    // This is still experimental. Or at least mental
    void newBrewNoteSignal(BrewNote*);
-   void deletedBrewNoteSignal(BrewNote*);
+
+   void deletedSignal(Equipment*);
+   void deletedSignal(Fermentable*);
+   void deletedSignal(Hop*);
+   void deletedSignal(Mash*);
+   void deletedSignal(Misc*);
+   void deletedSignal(Recipe*);
+   void deletedSignal(Style*);
+   void deletedSignal(Water*);
+   void deletedSignal(Yeast*);
+   void deletedSignal(BrewNote*);
+   void deletedSignal(MashStep*);
 
    // MashSteps need signals too
    void newMashStepSignal(MashStep*);
-   void deletedMashStepSignal(MashStep*);
    // Emits a signal when the dirty status changes
    void isUnsavedChanged(bool);
 
@@ -498,7 +526,7 @@ private:
    static QSqlDatabase sqlDatabase();
 
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
-   template <class T> bool populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
+   template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       int key;
       BeerXMLElement* e;
@@ -516,7 +544,7 @@ private:
       catch (QString e) {
          Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
          q.finish();
-         return false;
+         throw;
       }
 
       while( q.next() )
@@ -533,7 +561,6 @@ private:
       }
 
       q.finish();
-      return true;
    }
 
    //! Helper to populate the list using the given filter.
@@ -559,7 +586,7 @@ private:
       catch (QString e) {
          Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
          q.finish();
-         return false;
+         throw;
       }
 
       while( q.next() )
@@ -622,7 +649,7 @@ private:
    int insertNewMashStepRecord( Mash* parent );
 
    //! Mark the \b object in \b table as deleted.
-   bool deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object );
+   void deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object );
 
    // TODO: encapsulate this in a QUndoCommand.
    // Note -- this has to happen on a transactional boundary. We are touching
@@ -748,7 +775,7 @@ private:
          q.finish();
          if ( transact )
             sqlDatabase().rollback();
-         return 0;
+         throw;
       }
       q.finish();
       if ( transact )
@@ -839,7 +866,7 @@ private:
       catch (QString e) {
          Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
          q.finish();
-         return 0;
+         throw;
       }
 
       q.finish();
@@ -857,10 +884,10 @@ private:
    }
 
    // Do an sql update.
-   bool sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );
+   void sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );
 
    // Do an sql delete.
-   bool sqlDelete( Brewtarget::DBTable table, QString const& whereClause );
+   void sqlDelete( Brewtarget::DBTable table, QString const& whereClause );
 
    int getQualifiedHopTypeIndex(QString type, Hop* hop);
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);

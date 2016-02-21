@@ -460,7 +460,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
-   connect( &(Database::instance()), SIGNAL( deletedBrewNoteSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+   connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
    connect( &(Database::instance()), SIGNAL( isUnsavedChanged(bool)), this, SLOT( updateUnsavedStatus(bool)));
 }
 

@@ -94,7 +94,7 @@ void FermentableTableModel::observeDatabase(bool val)
 
       removeAll();
       connect( &(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)), this, SLOT(addFermentable(Fermentable*)) );
-      connect( &(Database::instance()), SIGNAL(deletedFermentableSignal(Fermentable*)), this, SLOT(removeFermentable(Fermentable*)) );
+      connect( &(Database::instance()), SIGNAL(deletedSignal(Fermentable*)), this, SLOT(removeFermentable(Fermentable*)) );
       addFermentables( Database::instance().fermentables() );
    }
    else

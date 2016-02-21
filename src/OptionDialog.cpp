@@ -244,7 +244,7 @@ void OptionDialog::saveAndClose()
                                                      btStringEdit_portnum->text().toInt(),
                                                      (Brewtarget::DBTypes)comboBox_engine->currentIndex());
          if ( ! saveDbConfig ) {
-            Brewtarget::logE(QString("Messed that up. Now what?"));
+            Brewtarget::logE(QString("%1 Messed that up.").arg(Q_FUNC_INFO));
          }
       }
 

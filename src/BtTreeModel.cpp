@@ -58,52 +58,52 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
       case RECIPEMASK:
          rootItem->insertChildren(items,1,BtTreeItem::RECIPE);
          connect( &(Database::instance()), SIGNAL(newRecipeSignal(Recipe*)),this, SLOT(elementAdded(Recipe*)));
-         connect( &(Database::instance()), SIGNAL(deletedRecipeSignal(Recipe*)),this, SLOT(elementRemoved(Recipe*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(Recipe*)),this, SLOT(elementRemoved(Recipe*)));
          // Brewnotes need love too!
          connect( &(Database::instance()), SIGNAL(newBrewNoteSignal(BrewNote*)),this, SLOT(elementAdded(BrewNote*)));
-         connect( &(Database::instance()), SIGNAL(deletedBrewNoteSignal(BrewNote*)),this, SLOT(elementRemoved(BrewNote*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(BrewNote*)),this, SLOT(elementRemoved(BrewNote*)));
          _type = BtTreeItem::RECIPE;
          _mimeType = "application/x-brewtarget-recipe";
          break;
       case EQUIPMASK:
          rootItem->insertChildren(items,1,BtTreeItem::EQUIPMENT);
          connect( &(Database::instance()), SIGNAL(newEquipmentSignal(Equipment*)),this, SLOT(elementAdded(Equipment*)));
-         connect( &(Database::instance()), SIGNAL(deletedEquipmentSignal(Equipment*)),this, SLOT(elementRemoved(Equipment*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(Equipment*)),this, SLOT(elementRemoved(Equipment*)));
          _type = BtTreeItem::EQUIPMENT;
          _mimeType = "application/x-brewtarget-recipe";
          break;
       case FERMENTMASK:
          rootItem->insertChildren(items,1,BtTreeItem::FERMENTABLE);
          connect( &(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)),this, SLOT(elementAdded(Fermentable*)));
-         connect( &(Database::instance()), SIGNAL(deletedFermentableSignal(Fermentable*)),this, SLOT(elementRemoved(Fermentable*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(Fermentable*)),this, SLOT(elementRemoved(Fermentable*)));
          _type = BtTreeItem::FERMENTABLE;
          _mimeType = "application/x-brewtarget-ingredient";
          break;
       case HOPMASK:
          rootItem->insertChildren(items,1,BtTreeItem::HOP);
          connect( &(Database::instance()), SIGNAL(newHopSignal(Hop*)),this, SLOT(elementAdded(Hop*)));
-         connect( &(Database::instance()), SIGNAL(deletedHopSignal(Hop*)),this, SLOT(elementRemoved(Hop*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(Hop*)),this, SLOT(elementRemoved(Hop*)));
          _type = BtTreeItem::HOP;
          _mimeType = "application/x-brewtarget-ingredient";
          break;
       case MISCMASK:
          rootItem->insertChildren(items,1,BtTreeItem::MISC);
          connect( &(Database::instance()), SIGNAL(newMiscSignal(Misc*)),this, SLOT(elementAdded(Misc*)));
-         connect( &(Database::instance()), SIGNAL(deletedMiscSignal(Misc*)),this, SLOT(elementRemoved(Misc*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(Misc*)),this, SLOT(elementRemoved(Misc*)));
          _type = BtTreeItem::MISC;
          _mimeType = "application/x-brewtarget-ingredient";
          break;
       case STYLEMASK:
          rootItem->insertChildren(items,1,BtTreeItem::STYLE);
          connect( &(Database::instance()), SIGNAL(newStyleSignal(Style*)),this, SLOT(elementAdded(Style*)));
-         connect( &(Database::instance()), SIGNAL(deletedStyleSignal(Style*)),this, SLOT(elementRemoved(Style*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(Style*)),this, SLOT(elementRemoved(Style*)));
          _type = BtTreeItem::STYLE;
          _mimeType = "application/x-brewtarget-recipe";
          break;
       case YEASTMASK:
          rootItem->insertChildren(items,1,BtTreeItem::YEAST);
          connect( &(Database::instance()), SIGNAL(newYeastSignal(Yeast*)),this, SLOT(elementAdded(Yeast*)));
-         connect( &(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)),this, SLOT(elementRemoved(Yeast*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(Yeast*)),this, SLOT(elementRemoved(Yeast*)));
          _type = BtTreeItem::YEAST;
          _mimeType = "application/x-brewtarget-ingredient";
          break;

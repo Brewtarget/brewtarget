@@ -312,6 +312,10 @@ bool Database::load()
          }
    }
 
+   // With the db open, we can get all our hashes. This has to happen before
+   // updateSchema
+   Database::tableNames = tableNamesHash();
+   Database::classNameToTable = classNameToTableHash();
    // Update the database if need be. This has to happen before we do anything
    // else or we dump core
    bool schemaErr = false;
@@ -326,9 +330,6 @@ bool Database::load()
          return false;
    }
 
-   // With the db open, we can get all our hashes
-   Database::tableNames = tableNamesHash();
-   Database::classNameToTable = classNameToTableHash();
 
    // Initialize the SELECT * query hashes.
    selectAll = Database::selectAllHash();
@@ -648,7 +649,7 @@ bool Database::restoreFromFile(QString newDbFileStr)
 }
 
 // removeFromRecipe ===========================================================
-bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
+void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 {
    QString tableName = tableNames[classNameToTable[ing->metaObject()->className()]];
    const QMetaObject* meta = ing->metaObject();
@@ -693,15 +694,11 @@ bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       if ( ! q.exec( deleteFromChildren ) )
          throw QString("failed to delete children.");
 
-      if ( ! q.exec( deleteIngredient ) ) {
+      if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
-      }
 
-      if ( qobject_cast<Instruction*>(ing) ) {
-         if ( ! sqlDelete( Brewtarget::INSTRUCTIONTABLE,QString("id=%1").arg(ing->_key)))
-            throw QString("failed to remove instruction");
-      }
-
+      if ( qobject_cast<Instruction*>(ing) ) 
+         sqlDelete( Brewtarget::INSTRUCTIONTABLE,QString("id=%1").arg(ing->_key));
    }
    catch ( QString e ) {
       Brewtarget::logE(QString("%1 %2 %3 %4")
@@ -709,31 +706,26 @@ bool Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
                            .arg(e)
                            .arg(q.lastQuery())
                            .arg(q.lastError().text()));
-      q.finish();
       sqlDatabase().rollback();
-      return false;
+      q.finish();
+      throw QString("%1 %2 %3 %4").arg(Q_FUNC_INFO).arg(e).arg(q.lastQuery()).arg(q.lastError().text());
+
    }
 
    sqlDatabase().commit();
-   q.finish();
 
+   q.finish();
    makeDirty();
    emit rec->changed( rec->metaProperty(propName), QVariant() );
-   return true;
 }
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
-   bool ret = true;
-
    try {
-      ret = removeIngredientFromRecipe( rec, ins);
-      if ( ! ret )
-         throw QString("Could not remove instruction");
+      removeIngredientFromRecipe( rec, ins);
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      return;
+      throw; //up the stack!
    }
 
    allInstructions.remove(ins->_key);
@@ -744,18 +736,15 @@ void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 
 void Database::removeFrom( Mash* mash, MashStep* step )
 {
-   bool ret = true;
    // Just mark the step as deleted.
    try {
-      ret = sqlUpdate( Brewtarget::MASHSTEPTABLE,
+      sqlUpdate( Brewtarget::MASHSTEPTABLE,
                QString("deleted = %1").arg(Brewtarget::dbTrue()),
                QString("id=%1").arg(step->_key) );
-      if ( ! ret )
-         throw QString("Could not remove the mashstep");
    }
    catch ( QString e ) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      return;
+      throw;
    }
 
    makeDirty();
@@ -780,7 +769,7 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
                            .arg(q.lastQuery())
                            .arg(q.lastError().text()));
       q.finish();
-      return 0;
+      throw;
    }
 
    q.next();
@@ -817,7 +806,7 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
                            .arg(q.lastQuery())
                            .arg(q.lastError().text()));
       q.finish();
-      return;
+      throw;
    }
 
    q.finish();
@@ -853,7 +842,7 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
                            .arg(q.lastQuery())
                            .arg(q.lastError().text()));
       q.finish();
-      return;
+      throw;;
    }
 
    q.finish();
@@ -925,7 +914,7 @@ void Database::insertInstruction(Instruction* in, int pos)
                            .arg(q.lastError().text()));
       q.finish();
       sqlDatabase().rollback();
-      return;
+      throw;
    }
 
    sqlDatabase().commit();
@@ -1065,7 +1054,7 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
                            .arg(q.lastQuery())
                            .arg(q.lastError().text()));
       q.finish();
-      return -42;
+      throw;
    }
 
    key = q.lastInsertId().toInt();
@@ -1097,19 +1086,17 @@ int Database::insertNewMashStepRecord( Mash* parent )
          throw QString("invalid key");
 
       // I *think* we need to set the mash_id first
-      if ( ! sqlUpdate( Brewtarget::MASHSTEPTABLE, QString("mash_id=%1 ").arg(parent->_key), QString("id=%1").arg(key) ) )
-         throw QString("Couldn't insert into mashstep table");
+      sqlUpdate( Brewtarget::MASHSTEPTABLE, QString("mash_id=%1 ").arg(parent->_key), QString("id=%1").arg(key) );
 
       // Just sets the step number within the mash to the next available number.
       // we need coalesce here instead of isnull. coalesce is SQL standard, so
       // should be more widely supported than isnull
-      if ( ! sqlUpdate( Brewtarget::MASHSTEPTABLE, coalesce, QString("id=%1").arg(key) ) )
-         throw QString("Couldn't increment mashstep counter");
+      sqlUpdate( Brewtarget::MASHSTEPTABLE, coalesce, QString("id=%1").arg(key) );
    }
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      return -42;
+      throw;
    }
 
    sqlDatabase().commit();
@@ -1137,7 +1124,6 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
 {
    BrewNote* tmp = new BrewNote();
    int key;
-   bool ret = true;
 
    sqlDatabase().transaction();
 
@@ -1150,17 +1136,15 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
       tmp->_table = Brewtarget::BREWNOTETABLE;
 
       allBrewNotes.insert(tmp->_key,tmp);
-      ret = sqlUpdate( Brewtarget::BREWNOTETABLE,
+      sqlUpdate( Brewtarget::BREWNOTETABLE,
                QString("recipe_id=%1").arg(parent->_key),
                QString("id=%2").arg(tmp->_key) );
 
-      if ( ! ret )
-         throw QString("could not associate new brewnote");
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      return 0;
+      throw;
    }
 
    sqlDatabase().commit();
@@ -1260,7 +1244,7 @@ Instruction* Database::newInstruction(Recipe* rec)
    catch ( QString e ) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      return tmp;
+      throw;
    }
 
    // Database's instructions have changed.
@@ -1306,7 +1290,6 @@ Mash* Database::newMash()
 Mash* Database::newMash(Mash* other, bool displace)
 {
    Mash* tmp;
-   bool ret = true;
 
    if ( other ) {
       sqlDatabase().transaction();
@@ -1318,32 +1301,25 @@ Mash* Database::newMash(Mash* other, bool displace)
       else
          tmp = newIngredient(&allMashs);
 
-      if ( ! tmp )
-         throw QString("Could not create new mash");
-
       if ( other ) {
          // Just copying the Mash isn't enough. We need to copy the mashsteps too
-         if ( ! duplicateMashSteps(other,tmp) )
-            throw QString("Could not duplicate mashsteps");
+         duplicateMashSteps(other,tmp);
 
          // Connect tmp to parent, removing any existing mash in parent.
          // This doesn't really work. It simply orphans the old mash and its
          // steps.
          if( displace )
          {
-            ret = sqlUpdate( Brewtarget::RECTABLE,
-                             QString("mash_id=%1").arg(tmp->_key),
-                             QString("mash_id=%1").arg(other->_key) );
-            if ( ! ret )
-               throw QString("Could not connect mash to parent recipe");
+            sqlUpdate( Brewtarget::RECTABLE,
+                       QString("mash_id=%1").arg(tmp->_key),
+                       QString("mash_id=%1").arg(other->_key) );
          }
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       if ( other )
          sqlDatabase().rollback();
-      return 0;
+      throw;
    }
 
    if ( other )
@@ -1358,7 +1334,6 @@ Mash* Database::newMash(Mash* other, bool displace)
 Mash* Database::newMash(Recipe* parent, bool transact)
 {
    Mash* tmp;
-   bool ret = true;
 
    if ( transact )
       sqlDatabase().transaction();
@@ -1370,17 +1345,15 @@ Mash* Database::newMash(Recipe* parent, bool transact)
          throw QString("Could not create new mash");
 
       // Connect tmp to parent, removing any existing mash in parent.
-      ret = sqlUpdate( Brewtarget::RECTABLE,
-                       QString("mash_id=%1").arg(tmp->_key),
-                       QString("id=%1").arg(parent->_key) );
-      if ( !ret )
-         throw QString("Could not add new mash to recipe");
+      sqlUpdate( Brewtarget::RECTABLE,
+                 QString("mash_id=%1").arg(tmp->_key),
+                 QString("id=%1").arg(parent->_key) );
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       if ( transact )
          sqlDatabase().rollback();
-      return 0;
+      throw;
    }
 
    if ( transact )
@@ -1412,7 +1385,7 @@ MashStep* Database::newMashStep(Mash* mash)
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      return 0;
+      throw;
    }
 
    connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
@@ -1465,7 +1438,7 @@ Recipe* Database::newRecipe()
    catch (QString e ) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      return 0;
+      throw;
    }
 
    sqlDatabase().commit();
@@ -1486,38 +1459,24 @@ Recipe* Database::newRecipe(Recipe* other)
    try {
       tmp = copy<Recipe>(other, true, &allRecipes);
 
-      if ( ! tmp )
-         throw QString("Could not create a recipe");
-
       // Copy fermentables, hops, miscs and yeasts. We've the convenience
       // methods, so use them? And now I have to instruct all of them to not do
       // transactions either. -4 SAN points!
-      if ( ! addToRecipe( tmp, other->fermentables(), false) )
-         throw QString("Could not copy fermentables");
-
-      if ( ! addToRecipe( tmp, other->hops(), false) ) 
-         throw QString("Could not copy hops");
-
-      if ( ! addToRecipe( tmp, other->miscs(), false) )
-         throw QString("Could not copy misc");
-
-      if ( ! addToRecipe( tmp, other->yeasts(), false) ) 
-         throw QString("Could not copy yeast");
+      addToRecipe( tmp, other->fermentables(), false);
+      addToRecipe( tmp, other->hops(), false);
+      addToRecipe( tmp, other->miscs(), false);
+      addToRecipe( tmp, other->yeasts(), false);
 
       // Copy style/mash/equipment
       // Style or equipment might be non-existent but these methods handle that.
-      if ( ! addToRecipe( tmp, other->equipment(), false, false) )
-         throw QString("Could not copy equipment");
-
-      if ( ! addToRecipe( tmp, other->mash(), false, false) )
-         throw QString("Could not copy mash");
-      if ( ! addToRecipe( tmp, other->style(), false, false) )
-         throw QString("Could not copy style");
+      addToRecipe( tmp, other->equipment(), false, false);
+      addToRecipe( tmp, other->mash(), false, false);
+      addToRecipe( tmp, other->style(), false, false);
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      return 0;
+      throw;
    }
 
    sqlDatabase().commit();
@@ -1601,7 +1560,7 @@ Yeast* Database::newYeast(Yeast* other)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-bool Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
+void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
 {
    // Assumes the table has a column called 'deleted'.
    SetterCommand* command;
@@ -1616,7 +1575,9 @@ bool Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
    command->redo();
    makeDirty();
 
-   return command->sqlSuccess();
+   if ( ! command->sqlSuccess() )
+      throw QString("%1 unexpected error. check error logs for more information").arg(Q_FUNC_INFO);
+
    // Push the command on the undo stack.
    //commandStack.push(command);
 }
@@ -1624,28 +1585,22 @@ bool Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
 // NOTE: This really should be in a transaction, but I am going to leave that
 // as the responsibility of the calling method. I am not comfortable with this
 // idea.
-bool Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
+void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
 {
    QList<MashStep*> tmpMS = mashSteps(oldMash);
    QList<MashStep*>::iterator ms;
 
-   bool ret = true;
    try {
       for( ms=tmpMS.begin(); ms != tmpMS.end(); ++ms)
       {
          // Copy the old mash step.
          MashStep* newStep = copy<MashStep>(*ms,true,&allMashSteps);
-         if ( ! newStep )
-            throw QString( "Could not copy mashstep");
 
          // Put it in the new mash.
-         ret = sqlUpdate( Brewtarget::MASHSTEPTABLE,
-                          QString("mash_id=%1").arg(newMash->key()),
-                          QString("id=%1").arg(newStep->key())
-                        );
-         if ( ! ret )
-            throw QString("Could not add mashstep to mash");
-
+         sqlUpdate( Brewtarget::MASHSTEPTABLE,
+                      QString("mash_id=%1").arg(newMash->key()),
+                      QString("id=%1").arg(newStep->key())
+                  );
          // Make the new mash pay attention to the new step.
          connect( newStep, SIGNAL(changed(QMetaProperty,QVariant)),
                   newMash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
@@ -1653,82 +1608,13 @@ bool Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      return false;
+      throw;
    }
 
    makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMash->mashStepsChanged();
 
-   return true;
-}
-
-// Ever think I sometimes abuse multiple dispatch?
-// Yes, you do.
-bool Database::remove(BeerXMLElement* ing, bool emitSignal)
-{
-   const QMetaObject *meta = ing->metaObject();
-   Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
-   QString propName;
-
-   if ( ingTable == Brewtarget::BREWNOTETABLE ) {
-      emitSignal = false;
-   }
-
-   if ( emitSignal ) {
-      int ndx = meta->indexOfClassInfo("signal");
-      if ( ndx != -1 ) {
-         propName = meta->classInfo(ndx).value();
-      }
-      else {
-         Brewtarget::logE(QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className()));
-         return false;
-      }
-   }
-   deleteRecord(ingTable, ing);
-
-   // Brewnotes are weird and don't emit a metapropery change
-   if ( emitSignal )
-      emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
-   // This was screaming until I needed to emit a freaking signal
-   switch( ingTable ) {
-      case Brewtarget::EQUIPTABLE:
-         emit deletedEquipmentSignal(qobject_cast<Equipment*>(ing));
-         break;
-      case Brewtarget::FERMTABLE:
-         emit deletedFermentableSignal(qobject_cast<Fermentable*>(ing));
-         break;
-      case Brewtarget::HOPTABLE:
-         emit deletedHopSignal(qobject_cast<Hop*>(ing));
-         break;
-      case Brewtarget::MISCTABLE:
-         emit deletedMiscSignal(qobject_cast<Misc*>(ing));
-         break;
-      case Brewtarget::STYLETABLE:
-         emit deletedStyleSignal(qobject_cast<Style*>(ing));
-         break;
-      case Brewtarget::YEASTTABLE:
-         emit deletedYeastSignal(qobject_cast<Yeast*>(ing));
-         break;
-      case Brewtarget::WATERTABLE:
-         emit deletedWaterSignal(qobject_cast<Water*>(ing));
-         break;
-      case Brewtarget::MASHTABLE:
-         emit deletedMashSignal(qobject_cast<Mash*>(ing));
-         break;
-      case Brewtarget::MASHSTEPTABLE:
-         break; // mashsteps don't emit. Go figure
-      case Brewtarget::RECTABLE:
-         emit deletedRecipeSignal(qobject_cast<Recipe*>(ing));
-         break;
-      case Brewtarget::BREWNOTETABLE:
-         emit deletedBrewNoteSignal(qobject_cast<BrewNote*>(ing));
-         break;
-      default:
-         Brewtarget::logW(QString("%1 unrecognized ingredient table %2").arg(Q_FUNC_INFO).arg(ingTable));
-         break;
-   }
-   return true;
 }
 
 QString Database::getDbFileName()
@@ -1740,7 +1626,7 @@ QString Database::getDbFileName()
 }
 
 // Cthulhu weeps (and we lose 2 SAN points)
-bool Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify, bool transact )
+void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify, bool transact )
 {
    SetterCommand* command;
    command = new SetterCommand(table,
@@ -1755,7 +1641,8 @@ bool Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
    command->redo();
    if ( command->sqlSuccess() ) 
       makeDirty();
-   return command->sqlSuccess();
+   else
+      throw QString("%1 Error updating entry").arg(Q_FUNC_INFO);
 
 }
 
@@ -1763,7 +1650,7 @@ bool Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
 //This links ingredients with the same name.
 //The first displayed ingredient in the database is assumed to be the parent.
-bool Database::populateChildTablesByName(Brewtarget::DBTable table){
+void Database::populateChildTablesByName(Brewtarget::DBTable table){
    Brewtarget::logW( "Populating Children Ingredient Links" );
 
    try {
@@ -1823,31 +1710,23 @@ bool Database::populateChildTablesByName(Brewtarget::DBTable table){
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      return false;
+      throw QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
-   return true;
 }
 // populate ingredient tables
-bool Database::populateChildTablesByName(){
+void Database::populateChildTablesByName(){
    try {
-      if ( ! populateChildTablesByName(Brewtarget::FERMTABLE) )
-         throw QString("Could not create fermentable child tables");
-
-      if ( ! populateChildTablesByName(Brewtarget::HOPTABLE) ) 
-         throw QString("Could not create hop child tables");
-
-      if ( ! populateChildTablesByName(Brewtarget::MISCTABLE) ) 
-         throw QString("Could not create misc child tables");
-      if ( ! populateChildTablesByName(Brewtarget::YEASTTABLE) )
-         throw QString("Could not create yeast child tables");
+      populateChildTablesByName(Brewtarget::FERMTABLE);
+      populateChildTablesByName(Brewtarget::HOPTABLE);
+      populateChildTablesByName(Brewtarget::MISCTABLE);
+      populateChildTablesByName(Brewtarget::YEASTTABLE);
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      return false;
+      throw;
    }
-   return true;
-
 }
+
 //Returns the key of the parent ingredient
 int Database::getParentID(Brewtarget::DBTable table, int childKey){
    int ret;
@@ -1910,13 +1789,12 @@ void Database::newInventory(Brewtarget::DBTable invForTable, int invForID) {
 }
 
 // Add to recipe ==============================================================
-bool Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transact )
 {
    Equipment* newEquip = e;
-   bool ret = false;
 
    if( e == 0 )
-      return false;
+      return;
 
    if ( transact )
       sqlDatabase().transaction();
@@ -1925,26 +1803,18 @@ bool Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
       // Make a copy of equipment.
       if ( ! noCopy ) {
          newEquip = copy<Equipment>(e,false,&allEquipments);
-         if ( ! newEquip ) {
-            throw QString("Could not copy equipment");
-         }
       }
 
       // Update equipment_id
-      ret = sqlUpdate(Brewtarget::RECTABLE,
-               QString("equipment_id=%1").arg(newEquip->key()),
-               QString("id=%1").arg(rec->_key));
-
-      if ( ! ret ) {
-         throw QString("Could not add equipment to recipe");
-      }
+      sqlUpdate(Brewtarget::RECTABLE,
+                QString("equipment_id=%1").arg(newEquip->key()),
+                QString("id=%1").arg(rec->_key));
 
    }
    catch (QString e ) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       if ( transact )
          sqlDatabase().rollback();
-      return false;
+      throw;
    }
 
    // This is likely illadvised. But if you are telling me to not transact it,
@@ -1968,37 +1838,34 @@ bool Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
    // attached, etc.
    if ( transact )
       rec->recalcAll();
-
-   return true;
 }
 
-bool Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy, bool transact )
 {
    if ( ferm == 0 )
-      return false;
+      return;
 
-   Fermentable* newFerm = addIngredientToRecipe<Fermentable>(rec,ferm,noCopy,&allFermentables,true,transact );
-   if ( newFerm )
+   try {
+      Fermentable* newFerm = addIngredientToRecipe<Fermentable>(rec,ferm,noCopy,&allFermentables,true,transact );
       connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
-   else {
-      Brewtarget::logE( QString("Could not add %1 to database").arg(ferm->name()).arg(rec->name()));
-      return false;
    }
+   catch (QString e) {
+      throw;
+   }
+
+   // If somebody upstream is doing the transaction, let them call recalcAll
+   // and makeDirty
    if ( transact ) {
       makeDirty();
       if (! noCopy )
          rec->recalcAll();
    }
-
-   return true;
 }
 
-bool Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact )
+void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact )
 {
-   QList<Fermentable*> added;
-   // This seems weird, but if you send us nothing the copy succeeds
    if ( ferms.size() == 0 )
-      return true;
+      return;
 
    if ( transact ) {
       sqlDatabase().transaction();
@@ -2007,70 +1874,53 @@ bool Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
    try { 
       foreach (Fermentable* ferm, ferms )
       {
-
          Fermentable* newFerm = addIngredientToRecipe<Fermentable>(rec,ferm,false,&allFermentables,true,false);
-         if (! newFerm )
-            throw QString("Could not copy fermentable %1").arg(ferm->name());
-         added.append(newFerm);
+         connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
       }
    }
    catch ( QString(e) ) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       if ( transact ) {
          sqlDatabase().rollback();
       }
-      return false;
+      throw;
    }
 
    if ( transact ) {
       sqlDatabase().commit();
       makeDirty();
-   }
-   foreach (Fermentable *newFerm, added)
-      connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
-
-   if ( transact )
       rec->recalcAll();
-
-   return true;
+   }
 }
 
-bool Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 {
-   Hop* newHop = addIngredientToRecipe<Hop>( rec, hop, noCopy, &allHops, true, transact );
-
-   if ( ! newHop ) {
-      Brewtarget::logE( QString("%1 could not add hop %2 to recipe").arg(Q_FUNC_INFO).arg(hop->name()));
-      return false;
+   try {
+      Hop* newHop = addIngredientToRecipe<Hop>( rec, hop, noCopy, &allHops, true, transact );
+      // it's slightly dirty pool to put this all in the try block. Sue me.
+      connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+      if ( transact ) {
+         rec->recalcIBU();
+         makeDirty();
+      }
    }
-
-   connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
-   if ( transact ) {
-      rec->recalcIBU();
-      makeDirty();
+   catch (QString e) {
+      throw;
    }
-   return true;
 }
 
-bool Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
+void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
 {
-   QList<Hop*> added;
    if ( hops.size() == 0 )
-      return true;
+      return;
 
    if ( transact ) 
-   {
       sqlDatabase().transaction();
-   }
 
    try {
       foreach (Hop* hop, hops )
       {
          Hop* newHop = addIngredientToRecipe<Hop>( rec, hop, false, &allHops, true, false );
-         if ( ! newHop ) 
-            throw QString("Could not add hop %1 to recipe").arg(hop->name());
-
-         added.append(newHop);
+         connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
       }
    }
    catch (QString e) {
@@ -2078,26 +1928,19 @@ bool Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
       if ( transact ) {
          sqlDatabase().rollback();
       }
-      return false;
+      throw;
    }
 
    if ( transact ) {
       sqlDatabase().commit();
       makeDirty();
-   }
-
-   foreach (Hop* newHop, added)
-      connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
-
-   if ( transact ) 
       rec->recalcIBU();
-   return true;
+   }
 }
 
-bool Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
    Mash* newMash = m;
-   bool ret = true;
 
    if ( transact ) 
       sqlDatabase().transaction();
@@ -2108,26 +1951,19 @@ bool Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
       if ( ! noCopy )
       {
          newMash = copy<Mash>(m, false, &allMashs);
-         if ( ! newMash ) 
-            throw QString("Could not copy mash");
-
-         ret = duplicateMashSteps(m,newMash);
-         if ( ! ret ) 
-            throw QString("Could not duplicate mashsteps");
+         duplicateMashSteps(m,newMash);
       }
 
       // Update mash_id
-      ret = sqlUpdate(Brewtarget::RECTABLE,
+      sqlUpdate(Brewtarget::RECTABLE,
                QString("mash_id=%1").arg(newMash->key()),
                QString("id=%1").arg(rec->_key));
-      if ( ! ret ) 
-         throw QString("Could not assign mash to recipe");
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       if ( transact )
          sqlDatabase().rollback();
-      return false;
+      throw;
    }
 
    if ( transact ) {
@@ -2139,31 +1975,29 @@ bool Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
    // And let the recipe recalc all?
    if ( !noCopy && transact )
       rec->recalcAll();
-
-   return true;
 }
 
-bool Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy, bool transact )
 {
-   if ( ! addIngredientToRecipe( rec, m, noCopy, &allMiscs, true, transact ) ) {
-      Brewtarget::logE( QString("%1 could not insert new misc").arg(Q_FUNC_INFO));
-      return false;
+   try {
+      addIngredientToRecipe( rec, m, noCopy, &allMiscs, true, transact );
    }
-
+   catch (QString e) {
+      throw;
+   }
 
    if ( transact ) {
       makeDirty();
       if (! noCopy )
          rec->recalcAll();
    }
-   return true;
 
 }
 
-bool Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
+void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
 {
    if ( miscs.size() == 0 )
-      return true;
+      return;
 
    if ( transact ) 
       sqlDatabase().transaction();
@@ -2171,8 +2005,7 @@ bool Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
    try {
       foreach (Misc* misc, miscs )
       {
-         if ( ! addIngredientToRecipe( rec, misc, false, &allMiscs,true,false ) )
-            throw QString("Could not add misc %1").arg(misc->name());
+         addIngredientToRecipe( rec, misc, false, &allMiscs,true,false );
       }
    }
    catch (QString e) {
@@ -2180,22 +2013,23 @@ bool Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
       if ( transact ) {
          sqlDatabase().rollback();
       }
-      return false;
+      throw;
    }
    if ( transact ) { 
       sqlDatabase().commit();
       makeDirty();
       rec->recalcAll();
    }
-   return true;
-
 }
 
-bool Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
 {
-   if ( ! addIngredientToRecipe( rec, w, noCopy, &allWaters,true,transact ) ) {
-      Brewtarget::logE( QString("%1 could not add water to recipe").arg(Q_FUNC_INFO));
-      return false;
+
+   try {
+      addIngredientToRecipe( rec, w, noCopy, &allWaters,true,transact );
+   }
+   catch (QString e) {
+      throw;
    }
 
    if ( transact ) {
@@ -2203,16 +2037,15 @@ bool Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
       if (! noCopy )
          rec->recalcAll();
    }
-   return true;
 }
 
-bool Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
 {
+
    Style* newStyle = s;
-   bool ret = true;
 
    if ( s == 0 )
-      return false;
+      return;
 
    if ( transact ) 
       sqlDatabase().transaction();
@@ -2221,20 +2054,15 @@ bool Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
       if ( ! noCopy )
          newStyle = copy<Style>(s,false,&allStyles);
 
-      if ( ! newStyle ) 
-         throw QString("Could not copy style %1").arg(s->name());
-
-      ret = sqlUpdate(Brewtarget::RECTABLE,
-                      QString("style_id=%1").arg(newStyle->key()),
-                      QString("id=%1").arg(rec->_key));
-      if ( ! ret )
-         throw QString("Could not associated style to recipe");
+      sqlUpdate(Brewtarget::RECTABLE,
+                QString("style_id=%1").arg(newStyle->key()),
+                QString("id=%1").arg(rec->_key));
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       if ( transact )
          sqlDatabase().rollback();
-      return false;
+      throw;
    }
 
    if ( transact ) {
@@ -2243,37 +2071,31 @@ bool Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
    }
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
-
-   return true;
 }
 
-bool Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
 {
-   Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, y, noCopy, &allYeasts, true, transact );
-
-   if ( ! newYeast ) {
-      Brewtarget::logE( QString("%1 could not add yeast %2 to recipe").arg(Q_FUNC_INFO).arg(y->name()));
-      return false;
-   }
-
-   connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
-   if ( transact ) {
-      makeDirty();
-      if ( ! noCopy )
-      {
-         rec->recalcOgFg();
-         rec->recalcABV_pct();
+   try {
+      Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, y, noCopy, &allYeasts, true, transact );
+      connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
+      if ( transact ) {
+         makeDirty();
+         if ( ! noCopy )
+         {
+            rec->recalcOgFg();
+            rec->recalcABV_pct();
+         }
       }
    }
-   return true;
+   catch (QString e) {
+      throw;
+   }
 }
 
-bool Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
+void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
 {
-   QList<Yeast*> added;
-
    if ( yeasts.size() == 0 )
-      return true;
+      return;
 
    if ( transact )
       sqlDatabase().transaction();
@@ -2282,20 +2104,15 @@ bool Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
       foreach (Yeast* yeast, yeasts )
       {
          Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, yeast, false, &allYeasts,true,false );
-         if ( ! newYeast )
-            throw QString("Could not add yeast %1 to recipe").arg(yeast->name());
-         added.append(newYeast);
+         connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
       }
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       if ( transact )
          sqlDatabase().rollback();
-      return false;
+      throw;
    }
-
-   foreach( Yeast* newYeast, added)
-      connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
 
    if ( transact ) {
       sqlDatabase().commit();
@@ -2303,11 +2120,10 @@ bool Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
       rec->recalcOgFg();
       rec->recalcABV_pct();
    }
-   return true;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-bool Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
+void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
 {
    QString update = QString("UPDATE %1 SET %2 WHERE %3")
                 .arg(tableNames[table])
@@ -2315,35 +2131,39 @@ bool Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, Q
                 .arg(whereClause);
 
    QSqlQuery q(sqlDatabase());
-
-   if ( ! q.exec(update) ) {
-      Brewtarget::logE( QString("%1 Could not execute update %2 : %3").arg(Q_FUNC_INFO).arg(update).arg(q.lastError().text()));
+   try {
+      if ( ! q.exec(update) )
+         throw QString("Could not execute update %1 : %2").arg(update).arg(q.lastError().text());
+   }
+   catch (QString e) {
       q.finish();
-      return false;
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      throw QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
 
    q.finish();
    makeDirty();
-   return true;
 }
 
-bool Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause )
+void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause )
 {
    QString del = QString("DELETE FROM %1 WHERE %2")
                 .arg(tableNames[table])
                 .arg(whereClause);
 
    QSqlQuery q(sqlDatabase());
-
-   if ( ! q.exec(del) ) {
-      Brewtarget::logE( QString("%1 Could not delete %2 : %3").arg(Q_FUNC_INFO).arg(del).arg(q.lastError().text()));
+   try {
+      if ( ! q.exec(del) )
+         throw QString("Could not delete %1 : %2").arg(del).arg(q.lastError().text());
+   }
+   catch (QString e) {
       q.finish();
-      return false;
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      throw QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
 
    q.finish();
    makeDirty();
-   return true;
 }
 
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
@@ -2525,9 +2345,8 @@ bool Database::updateSchema(bool* err)
       else 
          throw QString("%1 %2").arg(popchildq.lastQuery()).arg(popchildq.lastError().text());
 
-      if(repopChild == 1){
-         if ( ! populateChildTablesByName() )
-            throw QString("Could not populate child tables -- see previous message for more info");
+      if(repopChild == 1) {
+         populateChildTablesByName();
 
          QSqlQuery popchildq( "UPDATE settings SET repopulateChildrenOnNextStart = 0", sqlDatabase() );
          if ( ! popchildq.isActive() )
@@ -2537,9 +2356,7 @@ bool Database::updateSchema(bool* err)
    catch (QString e ) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      if ( err )
-         *err = false;
-      return doUpdate;
+      throw;
    }
 
    sqlDatabase().commit();
@@ -3975,6 +3792,7 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
    }
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      throw;
    }
 
    return ret;
@@ -4029,9 +3847,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
       if( parent )
       {
          ret->setDisplay(false);
-         if ( ! addToRecipe( parent, ret, true ) ) {
-            throw QString("Could not add equipment profile to recipe");
-         }
+         addToRecipe( parent, ret, true );
       }
    }
    catch (QString e) {
@@ -4039,12 +3855,12 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
          sqlDatabase().rollback();
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       blockSignals(false);
-      return ret;
+      throw;
    }
 
    blockSignals(false);
    if ( ! parent ) 
-   sqlDatabase().commit();
+      sqlDatabase().commit();
 
    if( createdNew )
    {
@@ -4106,14 +3922,14 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
             throw QString("Could not change the type of the fermentable");
       }
 
-      if( parent && !  addToRecipe( parent, ret, true ) )
-         throw QString("Could not add the fermentable to the recipe");
+      if( parent )
+         addToRecipe( parent, ret, true );
    }
    catch (QString e) {
       if ( ! parent )
          sqlDatabase().rollback();
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      return ret;
+      throw;
    }
 
    if ( ! parent )
@@ -5248,17 +5064,18 @@ bool Database::convertDatabase(QString const& Hostname, QString const& DbName,
    QSqlDatabase newDb;
 
    Brewtarget::DBTypes oldType = (Brewtarget::DBTypes)Brewtarget::option("dbType",Brewtarget::SQLITE).toInt();
-   bool retval = false;
+   bool retval = true;
 
    if ( newType == Brewtarget::NODB ) {
       Brewtarget::logE(tr("No type found for the new database."));
-      return retval;
+      return false;
    }
    if ( oldType == Brewtarget::NODB ) {
       Brewtarget::logE(tr("No type found for the old database."));
-      return retval;
+      return false;
    }
 
+   qDebug() << Q_FUNC_INFO << "found types for old and new db";
    switch( newType ) {
       case Brewtarget::PGSQL:
          newDb = openPostgres(Hostname, DbName,Username, Password, Portnum);
@@ -5268,18 +5085,25 @@ bool Database::convertDatabase(QString const& Hostname, QString const& DbName,
    }
 
    if ( newDb.isOpen() ) {
+      qDebug() << Q_FUNC_INFO << "opened newdb";
       if( ! newDb.tables().contains(QLatin1String("settings")) ) {
+         qDebug() << Q_FUNC_INFO << "no settings table, assuming we are creating";
          retval = DatabaseSchemaHelper::create(newDb,newType);
          if( !retval ) {
+            qDebug() << Q_FUNC_INFO << "couldn't create newdb";
             Brewtarget::logE("DatabaseSchemaHelper::create() failed");
          }
       }
 
+      qDebug() << Q_FUNC_INFO << "found settings table";
       // The initial load may have screwed up, so don't try what won't work
       if ( retval )
          retval = copyDatabase(oldType,newType,newDb);
    }
+   else
+      return false;
 
+   qDebug() << Q_FUNC_INFO << "returning " << retval;
    return retval;
 }
 

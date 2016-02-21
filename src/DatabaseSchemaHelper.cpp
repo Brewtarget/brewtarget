@@ -733,10 +733,10 @@ bool DatabaseSchemaHelper::create_childTable( QSqlQuery q, QString const& tableN
 {
    QString create = 
             CREATETABLE + SEP + tableName + SEP + OPENPAREN +
-            id                                    + COMMA +
-            "parent_id" + SEP + TYPEINTEGER             + COMMA +
-            "child_id"  + SEP + TYPEINTEGER             + COMMA +
-            foreignKey("parent_id", foreignTable) + COMMA +
+            id                                             + COMMA +
+            "parent_id" + SEP + TYPEINTEGER  + COMMA +
+            "child_id"  + SEP + TYPEINTEGER  + SEP + UNIQUE              + COMMA +
+            foreignKey("parent_id", foreignTable)          + COMMA +
             foreignKey("child_id", foreignTable) +
             CLOSEPAREN;
 

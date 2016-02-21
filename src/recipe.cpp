@@ -1345,13 +1345,14 @@ QDate Recipe::date()               const { return QDate::fromString( get("date")
 //=============================Removers========================================
 
 // Returns true if var is found and removed.
-bool Recipe::remove( BeerXMLElement *var )
+void Recipe::remove( BeerXMLElement *var )
 {
    // brewnotes a bit odd
    if ( var->metaObject()->className() == QString("BrewNote") )
-      return Database::instance().remove(var);
-
-   return Database::instance().removeIngredientFromRecipe( this, var );
+      // the cast is required to force the template to gets it thing right
+      Database::instance().remove(qobject_cast<BrewNote*>(var));
+   else
+      Database::instance().removeIngredientFromRecipe( this, var );
 }
 
 double Recipe::batchSizeNoLosses_l()

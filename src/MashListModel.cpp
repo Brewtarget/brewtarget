@@ -29,7 +29,7 @@ MashListModel::MashListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)
 {
    connect( &(Database::instance()), SIGNAL(newMashSignal(Mash*)), this, SLOT(addMash(Mash*)) );
-   connect( &(Database::instance()), SIGNAL(deletedMashSignal(Mash*)), this, SLOT(removeMash(Mash*)) );
+   connect( &(Database::instance()), SIGNAL(deletedSignal(Mash*)), this, SLOT(removeMash(Mash*)) );
    repopulateList();
 }
 

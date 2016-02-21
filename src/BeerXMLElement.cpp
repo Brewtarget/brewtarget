@@ -200,7 +200,7 @@ void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant 
     
     // Should schedule an update of the appropriate entry in table,
     // then use prop to emit its notification signal.
-    _valid = Database::instance().updateEntry( _table, _key, col_name, value, metaObject()->property(ndx), this, notify );
+    Database::instance().updateEntry( _table, _key, col_name, value, metaObject()->property(ndx), this, notify );
    }
 }
 
