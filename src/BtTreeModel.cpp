@@ -992,7 +992,7 @@ bool BtTreeModel::renameFolder(BtFolder* victim, QString newName)
    QPair<QString,BtTreeItem*> f;
    QList<QPair<QString, BtTreeItem*> > folders;
    // This space is important       ^
-   int i;
+   int i, kids,src;
 
    if ( ! ndx.isValid() )
       return false;
@@ -1014,10 +1014,17 @@ bool BtTreeModel::renameFolder(BtFolder* victim, QString newName)
       targetPath = f.first;
       BtTreeItem* target = f.second;
 
+      // As we move things, childCount changes. This makes sure we loop
+      // through all of the kids
+      kids = target->childCount();
+      src = 0;
       // Ok. We have a start and an index.
-      for (i=0; i < target->childCount(); ++i)
+      for (i=0; i < kids; ++i)
       {
-         BtTreeItem* next = target->child(i);
+         // This looks weird and it is. As we move children out, the 0 items
+         // changes to the next child. In the case of a folder, though, we
+         // don't move it, so we need to get the item beyond that.
+         BtTreeItem* next = target->child(src);
          // If a folder, push it onto the folders stack for latter processing
          if ( next->type() == BtTreeItem::FOLDER ) 
          {
@@ -1025,6 +1032,7 @@ bool BtTreeModel::renameFolder(BtFolder* victim, QString newName)
             newTarget.first = targetPath % "/" % next->name();
             newTarget.second = next;
             folders.append(newTarget);
+            src++;
          }
          else // Leafnode
             next->thing()->setFolder(targetPath);
