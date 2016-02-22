@@ -3945,7 +3945,6 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    return ret;
 }
 
-// TODO:: Start from here. 
 int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
 {
   if ( Hop::types.indexOf(type) < 0 )
@@ -4005,64 +4004,79 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
    bool createdNew = true;
    blockSignals(true);
 
-   // If we are just importing a hop by itself, need to do some dupe-checking.
-   if( parent == 0 )
-   {
-      // Check to see if there is a hop already in the DB with the same name.
-      n = node.firstChildElement("NAME");
-      QString name = n.firstChild().toText().nodeValue();
-      QList<Hop*> matchingHops;
-      getElements<Hop>( matchingHops, QString("name='%1'").arg(name), Brewtarget::HOPTABLE, allHops );
-
-      if( matchingHops.length() > 0 )
+   try {
+      // If we are just importing a hop by itself, need to do some dupe-checking.
+      if( parent == 0 )
       {
-         createdNew = false;
-         ret = matchingHops.first();
+         // as always, start the transaction if no parent
+         sqlDatabase().transaction();
+         // Check to see if there is a hop already in the DB with the same name.
+         n = node.firstChildElement("NAME");
+         QString name = n.firstChild().toText().nodeValue();
+         QList<Hop*> matchingHops;
+         getElements<Hop>( matchingHops, QString("name='%1'").arg(name), Brewtarget::HOPTABLE, allHops );
+
+         if( matchingHops.length() > 0 )
+         {
+            createdNew = false;
+            ret = matchingHops.first();
+         }
+         else
+            ret = newHop();
       }
       else
          ret = newHop();
-   }
-   else
-      ret = newHop();
 
-   fromXml( ret, Hop::tagToProp, node );
+      fromXml( ret, Hop::tagToProp, node );
 
-   // Handle enums separately.
-   n = node.firstChildElement("USE");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else
-      ret->setUse( static_cast<Hop::Use>(getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret)));
+      // Handle enums separately.
+      n = node.firstChildElement("USE");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else
+         ret->setUse( static_cast<Hop::Use>(getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret)));
 
-   n = node.firstChildElement("TYPE");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else
-      ret->setType( static_cast<Hop::Type>(getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret)));
+      n = node.firstChildElement("TYPE");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else
+         ret->setType( static_cast<Hop::Type>(getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret)));
 
-   n = node.firstChildElement("FORM");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else
-      ret->setForm( static_cast<Hop::Form>(Hop::forms.indexOf(n.firstChild().toText().nodeValue())));
+      n = node.firstChildElement("FORM");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else
+         ret->setForm( static_cast<Hop::Form>(Hop::forms.indexOf(n.firstChild().toText().nodeValue())));
 
-   if ( ! ret->isValid() )
-   {
-      QString name = ret->name();
-      QList<Hop*> matching;
-      getElements<Hop>( matching, QString("name like '%1'").arg(name), Brewtarget::HOPTABLE, allHops );
-
-      if( matching.length() > 0 )
+      if ( ! ret->isValid() )
       {
-         createdNew = false;
-         Hop* temp = ret;
-         ret = matching.first();
-         ret->setAmount_kg(temp->amount_kg());
+         QString name = ret->name();
+         QList<Hop*> matching;
+         getElements<Hop>( matching, QString("name like '%1'").arg(name), Brewtarget::HOPTABLE, allHops );
+
+         if( matching.length() > 0 )
+         {
+            createdNew = false;
+            Hop* temp = ret;
+            ret = matching.first();
+            ret->setAmount_kg(temp->amount_kg());
+         }
       }
+
+      if( parent )
+         addToRecipe( parent, ret, true );
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      blockSignals(false);
+      if ( ! parent )
+         sqlDatabase().rollback();
+
+      throw;
    }
 
-   if( parent )
-      addToRecipe( parent, ret, true );
+   if ( ! parent )
+      sqlDatabase().commit();
 
    blockSignals(false);
    if( createdNew )
@@ -4073,17 +4087,26 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
    return ret;
 }
 
+// like brewnotes, we will assume here that the caller has the transaction
+// block
 Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent )
 {
 
    blockSignals(true);
-   Instruction* ret = newInstruction(parent);
+   try {
+      Instruction* ret = newInstruction(parent);
 
-   fromXml( ret, Instruction::tagToProp, node );
+      fromXml( ret, Instruction::tagToProp, node );
 
-   blockSignals(false);
-   emit changed( metaProperty("instructions"), QVariant() );
-   return ret;
+      blockSignals(false);
+      emit changed( metaProperty("instructions"), QVariant() );
+      return ret;
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      blockSignals(false);
+      throw;
+   }
 }
 
 Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
@@ -4098,36 +4121,50 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    n = node.firstChildElement("NAME");
    QString name = n.firstChild().toText().nodeValue();
 
-   if( parent )
-      ret = newMash(parent);
-   else
-      ret = newMash();
+   try {
+      if( parent )
+         ret = newMash(parent);
+      else {
+         sqlDatabase().transaction();
+         ret = newMash();
+      }
 
-   // If the mash has a name
-   if ( ! name.isEmpty() )
-   {
-      QList<Mash*> matchingMash;
-      getElements<Mash>( matchingMash, QString("name='%1'").arg(name), Brewtarget::MASHTABLE, allMashs );
+      // If the mash has a name
+      if ( ! name.isEmpty() )
+      {
+         QList<Mash*> matchingMash;
+         getElements<Mash>( matchingMash, QString("name='%1'").arg(name), Brewtarget::MASHTABLE, allMashs );
 
-      // If there are no other matches in the database
-      if( matchingMash.isEmpty() )
-         ret->setDisplay(true);
+         // If there are no other matches in the database
+         if( matchingMash.isEmpty() )
+            ret->setDisplay(true);
+      }
+      // First, get all the standard properties.
+      fromXml( ret, Mash::tagToProp, node );
+
+      // Now, get the individual mash steps.
+      n = node.firstChildElement("MASH_STEPS");
+      if( n.isNull() )
+         return ret;
+
+      // Iterate through all the mash steps.
+      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      {
+         MashStep* temp = mashStepFromXml( n, ret );
+         if ( ! temp->isValid() )
+            throw;
+      }
    }
-   // First, get all the standard properties.
-   fromXml( ret, Mash::tagToProp, node );
-
-   // Now, get the individual mash steps.
-   n = node.firstChildElement("MASH_STEPS");
-   if( n.isNull() )
-      return ret;
-
-   // Iterate through all the mash steps.
-   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-   {
-      MashStep* temp = mashStepFromXml( n, ret );
-      if ( ! temp->isValid() )
-         ret->invalidate();
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      blockSignals(false);
+      if ( ! parent ) 
+         sqlDatabase().rollback();
+      throw;
    }
+
+   if ( ! parent ) 
+      sqlDatabase().commit();
 
    blockSignals(false);
 
@@ -4138,6 +4175,8 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    return ret;
 }
 
+// mashsteps don't exist without a mash. It is up to mashFromXml or
+// recipeFromXml to deal with the transaction
 MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
 {
    QDomNode n;
@@ -4147,39 +4186,47 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    if (! blocked )
       blockSignals(true);
 
-   MashStep* ret = newMashStep(parent);
-   // I am only doing this on mashsteps because they cause all sorts of
-   // expensive recalculations to happen
-   ret->blockSignals(true);
+   try {
+      MashStep* ret = newMashStep(parent);
+      // I am only doing this on mashsteps because they cause all sorts of
+      // expensive recalculations to happen
+      ret->blockSignals(true);
 
-   fromXml(ret,MashStep::tagToProp,node);
+      fromXml(ret,MashStep::tagToProp,node);
 
-   // Handle enums separately.
-   n = node.firstChildElement("TYPE");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else {
-      //Try to make sure incoming format matches
-      //e.g. convert INFUSION to Infusion
-      str = n.firstChild().toText().nodeValue();
-      str = str.toLower();
-      str[0] = str.at(0).toTitleCase();
-      ret->setType( static_cast<MashStep::Type>(
-                       MashStep::types.indexOf(
-                          str
-                       )
-                    ) );
+      // Handle enums separately.
+      n = node.firstChildElement("TYPE");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else {
+         //Try to make sure incoming format matches
+         //e.g. convert INFUSION to Infusion
+         str = n.firstChild().toText().nodeValue();
+         str = str.toLower();
+         str[0] = str.at(0).toTitleCase();
+         ret->setType( static_cast<MashStep::Type>(
+                        MashStep::types.indexOf(
+                           str
+                        )
+                     ) );
+      }
+
+      ret->blockSignals(false);
+      if (! blocked )
+      {
+         blockSignals(false);
+         emit changed( metaProperty("mashs"), QVariant() );
+         emit parent->mashStepsChanged();
+      }
+      return ret;
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      if (! blocked )
+         blockSignals(false);
+      throw;
    }
 
-   ret->blockSignals(false);
-   if (! blocked )
-   {
-      blockSignals(false);
-      emit changed( metaProperty("mashs"), QVariant() );
-      emit parent->mashStepsChanged();
-   }
-
-   return ret;
 }
 
 int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
@@ -4241,60 +4288,71 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    blockSignals(true);
    Misc* ret;
 
-   // If we are just importing a misc by itself, need to do some dupe-checking.
-   if( parent == 0 )
-   {
-      // Check to see if there is a hop already in the DB with the same name.
-      n = node.firstChildElement("NAME");
-      QString name = n.firstChild().toText().nodeValue();
-      QList<Misc*> matchingMiscs;
-      getElements<Misc>( matchingMiscs, QString("name='%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
-
-      if( matchingMiscs.length() > 0 )
+   try {
+      // If we are just importing a misc by itself, need to do some dupe-checking.
+      if( parent == 0 )
       {
-         createdNew = false;
-         ret = matchingMiscs.first();
+         // Check to see if there is a hop already in the DB with the same name.
+         sqlDatabase().transaction();
+
+         n = node.firstChildElement("NAME");
+         QString name = n.firstChild().toText().nodeValue();
+         QList<Misc*> matchingMiscs;
+         getElements<Misc>( matchingMiscs, QString("name='%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
+
+         if( matchingMiscs.length() > 0 )
+         {
+            createdNew = false;
+            ret = matchingMiscs.first();
+         }
+         else
+            ret = newMisc();
       }
       else
          ret = newMisc();
-   }
-   else
-      ret = newMisc();
 
-   fromXml( ret, Misc::tagToProp, node );
+      fromXml( ret, Misc::tagToProp, node );
 
-   // Handle enums separately.
-   n = node.firstChildElement("TYPE");
-   // Assuming these return anything is a bad idea. So far, several other brewing programs are not generating
-   // valid XML.
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else
-      ret->setType( static_cast<Misc::Type>(getQualifiedMiscTypeIndex(n.firstChild().toText().nodeValue(), ret)));
+      // Handle enums separately.
+      n = node.firstChildElement("TYPE");
+      // Assuming these return anything is a bad idea. So far, several other brewing programs are not generating
+      // valid XML.
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else
+         ret->setType( static_cast<Misc::Type>(getQualifiedMiscTypeIndex(n.firstChild().toText().nodeValue(), ret)));
 
-   n = node.firstChildElement("USE");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else
-      ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
+      n = node.firstChildElement("USE");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else
+         ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
 
-   if ( ! ret->isValid() )
-   {
-      QString name = ret->name();
-      QList<Misc*> matching;
-      getElements<Misc>( matching, QString("name like '%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
-
-      if( matching.length() > 0 )
+      if ( ! ret->isValid() )
       {
-         createdNew = false;
-         Misc* temp = ret;
-         ret = matching.first();
-         ret->setAmount( temp->amount() );
-      }
-   }
+         QString name = ret->name();
+         QList<Misc*> matching;
+         getElements<Misc>( matching, QString("name like '%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
 
-   if( parent )
-      addToRecipe( parent, ret, true );
+         if( matching.length() > 0 )
+         {
+            createdNew = false;
+            Misc* temp = ret;
+            ret = matching.first();
+            ret->setAmount( temp->amount() );
+         }
+      }
+
+      if( parent )
+         addToRecipe( parent, ret, true );
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      if ( ! parent )
+         sqlDatabase().rollback();
+      blockSignals(false);
+      throw;
+   }
 
    blockSignals(false);
    if( createdNew )
@@ -4309,98 +4367,113 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 {
    QDomNode n;
 
-   // I was wrong. We need to block signals here. Weird things happen if you don't.
-   blockSignals(true);
+   try {
+      // I was wrong. We need to block signals here. Weird things happen if you don't.
+      blockSignals(true);
 
-   // This works, strangely enough.
-   Recipe* ret = newIngredient(&allRecipes);
+      // This is all one long, gnarly transaction.
+      sqlDatabase().transaction();
 
-   // Get standard properties.
-   fromXml( ret, Recipe::tagToProp, node);
+      // This works, strangely enough.
+      Recipe* ret = newIngredient(&allRecipes);
 
-   // Get style. Note: styleFromXml requires the entire node, not just the
-   // firstchild of the node.
-   n = node.firstChildElement("STYLE");
-   styleFromXml(n, ret);
-   if ( ! ret->style()->isValid())
-      ret->invalidate();
+      // Get standard properties.
+      fromXml( ret, Recipe::tagToProp, node);
 
-   // Get equipment. equipmentFromXml requires the entire node, not just the
-   // first child
-   n = node.firstChildElement("EQUIPMENT");
-   equipmentFromXml(n, ret);
-   if ( !ret->equipment()->isValid() )
-      ret->invalidate();
-
-   // Get hops.
-   n = node.firstChildElement("HOPS");
-   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-   {
-      Hop* temp = hopFromXml(n, ret);
-      if ( ! temp->isValid() )
+      // Get style. Note: styleFromXml requires the entire node, not just the
+      // firstchild of the node.
+      n = node.firstChildElement("STYLE");
+      styleFromXml(n, ret);
+      if ( ! ret->style()->isValid())
          ret->invalidate();
+
+      // Get equipment. equipmentFromXml requires the entire node, not just the
+      // first child
+      n = node.firstChildElement("EQUIPMENT");
+      equipmentFromXml(n, ret);
+      if ( !ret->equipment()->isValid() )
+         ret->invalidate();
+
+      // Get hops.
+      n = node.firstChildElement("HOPS");
+      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      {
+         Hop* temp = hopFromXml(n, ret);
+         if ( ! temp->isValid() )
+            ret->invalidate();
+      }
+
+      // Get ferms.
+      n = node.firstChildElement("FERMENTABLES");
+      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      {
+         Fermentable* temp = fermentableFromXml(n, ret);
+         if ( ! temp->isValid() )
+            ret->invalidate();
+      }
+
+      // get mashes. There is only one mash per recipe, so this needs the entire
+      // node.
+      n = node.firstChildElement("MASH");
+      mashFromXml(n, ret);
+      if ( ! ret->mash()->isValid() )
+         ret->invalidate();
+
+      // Get miscs.
+      n = node.firstChildElement("MISCS");
+      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      {
+         Misc* temp = miscFromXml(n, ret);
+         if (! temp->isValid())
+            ret->invalidate();
+      }
+
+      // Get yeasts.
+      n = node.firstChildElement("YEASTS");
+      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      {
+         Yeast* temp = yeastFromXml(n, ret);
+         if ( !temp->isValid() )
+            ret->invalidate();
+      }
+
+      // Get waters. Odd. Waters don't invalidate.
+      n = node.firstChildElement("WATERS");
+      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+         waterFromXml(n, ret);
+
+      /* That ends the beerXML defined objects. I'm not going to do the
+      * validation for these last two. We write em, and we had better be
+      * writing them properly
+      */
+      // Get instructions.
+      n = node.firstChildElement("INSTRUCTIONS");
+      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+         instructionFromXml(n, ret);
+
+      // Get brew notes
+      n = node.firstChildElement("BREWNOTES");
+      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+         brewNoteFromXml(n, ret);
+
+      // If we get here, commit
+      sqlDatabase().commit();
+
+      // Recalc everything, just for grins and giggles.
+      ret->recalcAll();
+      blockSignals(false);
+
+      emit newRecipeSignal(ret);
+
+      return ret;
    }
 
-   // Get ferms.
-   n = node.firstChildElement("FERMENTABLES");
-   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-   {
-      Fermentable* temp = fermentableFromXml(n, ret);
-      if ( ! temp->isValid() )
-         ret->invalidate();
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      blockSignals(false);
+      throw;
    }
-
-   // get mashes. There is only one mash per recipe, so this needs the entire
-   // node.
-   n = node.firstChildElement("MASH");
-   mashFromXml(n, ret);
-   if ( ! ret->mash()->isValid() )
-      ret->invalidate();
-
-   // Get miscs.
-   n = node.firstChildElement("MISCS");
-   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-   {
-      Misc* temp = miscFromXml(n, ret);
-      if (! temp->isValid())
-         ret->invalidate();
-   }
-
-   // Get yeasts.
-   n = node.firstChildElement("YEASTS");
-   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-   {
-      Yeast* temp = yeastFromXml(n, ret);
-      if ( !temp->isValid() )
-         ret->invalidate();
-   }
-
-   // Get waters. Odd. Waters don't invalidate.
-   n = node.firstChildElement("WATERS");
-   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      waterFromXml(n, ret);
-
-   /* That ends the beerXML defined objects. I'm not going to do the
-    * validation for these last two. We write em, and we had better be
-    * writing them properly
-    */
-   // Get instructions.
-   n = node.firstChildElement("INSTRUCTIONS");
-   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      instructionFromXml(n, ret);
-
-   // Get brew notes
-   n = node.firstChildElement("BREWNOTES");
-   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      brewNoteFromXml(n, ret);
-
-   // Recalc everything, just for grins and giggles.
-   ret->recalcAll();
-   blockSignals(false);
-
-   emit newRecipeSignal(ret);
-
-   return ret;
 }
 
 Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
@@ -4412,53 +4485,63 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Style*> matching;
 
-   // If we are just importing a style by itself, need to do some dupe-checking.
-   if( parent == 0 )
-   {
-      // Check to see if there is a hop already in the DB with the same name.
-      n = node.firstChildElement("NAME");
-      name = n.firstChild().toText().nodeValue();
-      getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
-
-      if( matching.length() > 0 )
+   try { 
+      // If we are just importing a style by itself, need to do some dupe-checking.
+      if( parent == 0 )
       {
-         createdNew = false;
-         ret = matching.first();
+         // Check to see if there is a hop already in the DB with the same name.
+         sqlDatabase().transaction();
+         n = node.firstChildElement("NAME");
+         name = n.firstChild().toText().nodeValue();
+         getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
+
+         if( matching.length() > 0 )
+         {
+            createdNew = false;
+            ret = matching.first();
+         }
+         else
+            ret = newStyle();
       }
       else
          ret = newStyle();
-   }
-   else
-      ret = newStyle();
 
-   fromXml( ret, Style::tagToProp, node );
+      fromXml( ret, Style::tagToProp, node );
 
-   // Handle enums separately.
-   n = node.firstChildElement("TYPE");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else
-      ret->setType(static_cast<Style::Type>(
-                      Style::types.indexOf(
-                         n.firstChild().toText().nodeValue()
-                      )
-                  ));
+      // Handle enums separately.
+      n = node.firstChildElement("TYPE");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else
+         ret->setType(static_cast<Style::Type>(
+                        Style::types.indexOf(
+                           n.firstChild().toText().nodeValue()
+                        )
+                     ));
 
-   // let's see if I can be clever and find this style in our db
-   if (! ret->isValid() )
-   {
-      name = ret->name();
-      getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE ,allStyles);
-      // If we find a match, discard what we just built and use what's in teh DB instead
-      if( matching.length() > 0 )
+      // let's see if I can be clever and find this style in our db
+      if (! ret->isValid() )
       {
-         createdNew = false;
-         ret = matching.first();
-      }
+         name = ret->name();
+         getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE ,allStyles);
+         // If we find a match, discard what we just built and use what's in teh DB instead
+         if( matching.length() > 0 )
+         {
+            createdNew = false;
+            ret = matching.first();
+         }
 
+      }
+      if( parent )
+         addToRecipe( parent, ret );
    }
-   if( parent )
-      addToRecipe( parent, ret );
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      if ( ! parent )
+         sqlDatabase().rollback();
+      blockSignals(false);
+      throw;
+   }
 
    blockSignals(false);
    if( createdNew )
@@ -4477,29 +4560,38 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
    Water* ret;
    QDomNode n;
 
-   // If we are just importing a style by itself, need to do some dupe-checking.
-   if( parent == 0 )
-   {
-      // Check to see if there is a hop already in the DB with the same name.
-      n = node.firstChildElement("NAME");
-      QString name = n.firstChild().toText().nodeValue();
-      QList<Water*> matching;
-      getElements<Water>( matching, QString("name='%1'").arg(name), Brewtarget::WATERTABLE, allWaters );
-
-      if( matching.length() > 0 )
+   try {
+      // If we are just importing a style by itself, need to do some dupe-checking.
+      if( parent == 0 )
       {
-         createdNew = false;
-         ret = matching.first();
+         // Check to see if there is a hop already in the DB with the same name.
+         n = node.firstChildElement("NAME");
+         QString name = n.firstChild().toText().nodeValue();
+         QList<Water*> matching;
+         getElements<Water>( matching, QString("name='%1'").arg(name), Brewtarget::WATERTABLE, allWaters );
+
+         if( matching.length() > 0 )
+         {
+            createdNew = false;
+            ret = matching.first();
+         }
+         else
+            ret = newWater();
       }
       else
          ret = newWater();
-   }
-   else
-      ret = newWater();
 
-   fromXml( ret, Water::tagToProp, node );
-   if( parent )
-      addToRecipe( parent, ret, true );
+      fromXml( ret, Water::tagToProp, node );
+      if( parent )
+         addToRecipe( parent, ret, true );
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      if ( ! parent )
+         sqlDatabase().rollback();
+      blockSignals(false);
+      throw;
+   }
 
    blockSignals(false);
    if( createdNew )
@@ -4520,82 +4612,88 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Yeast*> matching;
 
-   // If we are just importing a yeast by itself, need to do some dupe-checking.
-   if( parent == 0 )
-   {
-      // Check to see if there is a hop already in the DB with the same name.
-      n = node.firstChildElement("NAME");
-      name = n.firstChild().toText().nodeValue();
-      getElements<Yeast>( matching, QString("name='%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
-
-      if( matching.length() > 0 )
+   try { 
+      // If we are just importing a yeast by itself, need to do some dupe-checking.
+      if( parent == 0 )
       {
-         createdNew = false;
-         ret = matching.first();
+         // Check to see if there is a hop already in the DB with the same name.
+         sqlDatabase().transaction();
+         n = node.firstChildElement("NAME");
+         name = n.firstChild().toText().nodeValue();
+         getElements<Yeast>( matching, QString("name='%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
+
+         if( matching.length() > 0 )
+         {
+            createdNew = false;
+            ret = matching.first();
+         }
+         else
+            ret = newYeast();
       }
       else
          ret = newYeast();
-   }
-   else
-      ret = newYeast();
 
-   fromXml( ret, Yeast::tagToProp, node );
+      fromXml( ret, Yeast::tagToProp, node );
 
-   // Handle enums separately.
-   n = node.firstChildElement("TYPE");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else if (
-               Yeast::types.indexOf(
+      // Handle enums separately.
+      n = node.firstChildElement("TYPE");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else if ( Yeast::types.indexOf( n.firstChild().toText().nodeValue()) != -1) {
+         ret->setType( static_cast<Yeast::Type>(
+                        Yeast::types.indexOf(
+                           n.firstChild().toText().nodeValue()
+                        )
+                     ) );
+      }
+      // Handle enums separately.
+      n = node.firstChildElement("FORM");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else
+         ret->setForm( static_cast<Yeast::Form>(
+                        Yeast::forms.indexOf(
+                           n.firstChild().toText().nodeValue()
+                        )
+                     ) );
+      // Handle enums separately.
+      n = node.firstChildElement("FLOCCULATION");
+      if ( n.firstChild().isNull() )
+         ret->invalidate();
+      else if (
+               Yeast::flocculations.indexOf(
                   n.firstChild().toText().nodeValue()
                ) != -1
-   ) {
-      ret->setType( static_cast<Yeast::Type>(
-                       Yeast::types.indexOf(
-                          n.firstChild().toText().nodeValue()
-                       )
-                    ) );
-   }
-   // Handle enums separately.
-   n = node.firstChildElement("FORM");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else
-      ret->setForm( static_cast<Yeast::Form>(
-                       Yeast::forms.indexOf(
-                          n.firstChild().toText().nodeValue()
-                       )
-                    ) );
-   // Handle enums separately.
-   n = node.firstChildElement("FLOCCULATION");
-   if ( n.firstChild().isNull() )
-      ret->invalidate();
-   else if (
-            Yeast::flocculations.indexOf(
-               n.firstChild().toText().nodeValue()
-            ) != -1
-      ) {
-         ret->setFlocculation( static_cast<Yeast::Flocculation>(
-                               Yeast::flocculations.indexOf(
-                                  n.firstChild().toText().nodeValue()
-                               )
-                            ) );
-      }
+         ) {
+            ret->setFlocculation( static_cast<Yeast::Flocculation>(
+                                 Yeast::flocculations.indexOf(
+                                    n.firstChild().toText().nodeValue()
+                                 )
+                              ) );
+         }
 
-   if ( ! ret->isValid() )
-   {
-      name = ret->name();
-      getElements<Yeast>( matching, QString("name like '%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
-
-      if( matching.length() > 0 )
+      if ( ! ret->isValid() )
       {
-         createdNew = false;
-         ret = matching.first();
-      }
-   }
+         name = ret->name();
+         getElements<Yeast>( matching, QString("name like '%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
 
-   if( parent )
-      addToRecipe( parent, ret, true );
+         if( matching.length() > 0 )
+         {
+            createdNew = false;
+            ret = matching.first();
+         }
+      }
+
+      if( parent )
+         addToRecipe( parent, ret, true );
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      if ( ! parent )
+         sqlDatabase().rollback();
+      blockSignals(false);
+      throw;
+   }
 
    blockSignals(false);
    if( createdNew )
@@ -4815,148 +4913,156 @@ void Database::updateDatabase(QString const& filename)
    QList<QVariant> propVal;
    QStringList varAndHolder;
 
-   QString newCon("newSqldbCon");
-   QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
-   newSqldb.setDatabaseName(filename);
-   if( ! newSqldb.open() )
-   {
-      Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(filename).arg(newSqldb.lastError().text()));
-      QMessageBox::critical(0,
-                            QObject::tr("Database Failure"),
-                            QString(QObject::tr("Failed to open the database '%1'.").arg(filename)));
-      return;
-   }
-
-   // This is the basic gist...
-   // For each (id, hop_id) in newSqldb.bt_hop...
-
-   // Call this newRecord
-   // SELECT * FROM newSqldb.hop WHERE id=<hop_id>
-
-   // UPDATE hop SET name=:name, alpha=:alpha,... WHERE id=(SELECT hop_id FROM bt_hop WHERE id=:bt_id)
-
-   // Bind :bt_id from <id>
-   // Bind :name, :alpha, ..., from newRecord.
-
-   // Execute.
-
-   foreach( TableParams tp, tableParams)
-   {
-      QSqlQuery qNewBtIng(
-         QString("SELECT * FROM bt_%1").arg(tp.tableName),
-         newSqldb );
-
-      QSqlQuery qNewIng( newSqldb );
-      qNewIng.prepare(QString("SELECT * FROM %1 WHERE id=:id").arg(tp.tableName));
-
-      // Construct the big update query.
-      QSqlQuery qUpdateOldIng( sqlDatabase() );
-      QString updateString = QString("UPDATE %1 SET ").arg(tp.tableName);
-      varAndHolder.clear();
-      foreach( QString pn, tp.propName)
-         varAndHolder.append(QString("%1=:%2").arg(pn).arg(pn));
-      updateString.append(varAndHolder.join(", "));
-      // Un-delete it if it is somehow deleted.
-      updateString.append(", deleted=:zero WHERE id=:id");
-      qUpdateOldIng.prepare(updateString);
-      qUpdateOldIng.bindValue( ":zero", Brewtarget::dbFalse() );
-
-      QSqlQuery qOldBtIng( sqlDatabase() );
-      qOldBtIng.prepare(
-         QString("SELECT * FROM bt_%1 WHERE id=:btid").arg(tp.tableName) );
-
-      QSqlQuery qOldBtIngInsert( sqlDatabase() );
-      qOldBtIngInsert.prepare(
-         QString("INSERT INTO bt_%1 id=:id %2_id=:%3_id")
-            .arg(tp.tableName)
-            .arg(tp.tableName)
-            .arg(tp.tableName) );
-
-      // Resize propVal appropriately for current table.
-      propVal.clear();
-      foreach( QString pn, tp.propName )
-         propVal.append(QVariant());
-
-      while( qNewBtIng.next() )
+   try { 
+      QString newCon("newSqldbCon");
+      QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
+      newSqldb.setDatabaseName(filename);
+      if( ! newSqldb.open() )
       {
-         btid = qNewBtIng.record().value("id");
-         newid = qNewBtIng.record().value(QString("%1_id").arg(tp.tableName));
+         QMessageBox::critical(0,
+                              QObject::tr("Database Failure"),
+                              QString(QObject::tr("Failed to open the database '%1'.").arg(filename)));
+         throw QString("Could not open %1 for reading.\n%2").arg(filename).arg(newSqldb.lastError().text());
+      }
 
-         qNewIng.bindValue(":id", newid);
-         qNewIng.exec();
-         if( !qNewIng.next() )
-         {
-            Brewtarget::logE(QString("Oops. %1").arg(qNewIng.lastError().text()));
-            return;
-         }
+      // This is the basic gist...
+      // For each (id, hop_id) in newSqldb.bt_hop...
 
-         QList<QVariant>::iterator it = propVal.begin();
+      // Call this newRecord
+      // SELECT * FROM newSqldb.hop WHERE id=<hop_id>
+
+      // UPDATE hop SET name=:name, alpha=:alpha,... WHERE id=(SELECT hop_id FROM bt_hop WHERE id=:bt_id)
+
+      // Bind :bt_id from <id>
+      // Bind :name, :alpha, ..., from newRecord.
+
+      // Execute.
+
+      foreach( TableParams tp, tableParams)
+      {
+         QSqlQuery qNewBtIng(
+            QString("SELECT * FROM bt_%1").arg(tp.tableName),
+            newSqldb );
+
+         QSqlQuery qNewIng( newSqldb );
+         qNewIng.prepare(QString("SELECT * FROM %1 WHERE id=:id").arg(tp.tableName));
+
+         // Construct the big update query.
+         QSqlQuery qUpdateOldIng( sqlDatabase() );
+         QString updateString = QString("UPDATE %1 SET ").arg(tp.tableName);
+         varAndHolder.clear();
+         foreach( QString pn, tp.propName)
+            varAndHolder.append(QString("%1=:%2").arg(pn).arg(pn));
+         updateString.append(varAndHolder.join(", "));
+
+         // Un-delete it if it is somehow deleted.
+         updateString.append(", deleted=:zero WHERE id=:id");
+         qUpdateOldIng.prepare(updateString);
+         qUpdateOldIng.bindValue( ":zero", Brewtarget::dbFalse() );
+
+         QSqlQuery qOldBtIng( sqlDatabase() );
+         qOldBtIng.prepare( QString("SELECT * FROM bt_%1 WHERE id=:btid").arg(tp.tableName) );
+
+         QSqlQuery qOldBtIngInsert( sqlDatabase() );
+         qOldBtIngInsert.prepare(
+            QString("INSERT INTO bt_%1 id=:id %2_id=:%3_id")
+               .arg(tp.tableName)
+               .arg(tp.tableName)
+               .arg(tp.tableName) );
+
+         // Resize propVal appropriately for current table.
+         propVal.clear();
          foreach( QString pn, tp.propName )
+            propVal.append(QVariant());
+
+         while( qNewBtIng.next() )
          {
-            // Get new value.
-            *it = qNewIng.record().value(pn);
-            // Bind it to the old ingredient.
-            qUpdateOldIng.bindValue(
-               QString(":%1").arg(pn),
-               *it );
-            ++it;
-         }
+            btid = qNewBtIng.record().value("id");
+            newid = qNewBtIng.record().value(QString("%1_id").arg(tp.tableName));
 
-         // Done retrieving new ingredient data.
-         qNewIng.finish();
-
-         // Find the bt_<ingredient> record in the local table.
-         qOldBtIng.bindValue( ":btid", btid );
-         qOldBtIng.exec();
-
-         // If the btid exists in the old bt_hop table, do an update.
-         if( qOldBtIng.next() )
-         {
-            oldid = qOldBtIng.record().value(
-               QString("%1_id").arg(tp.tableName) );
-            qOldBtIng.finish();
-
-            qUpdateOldIng.bindValue( ":id", oldid );
-
-            qUpdateOldIng.exec();
-            if( qUpdateOldIng.lastError().isValid() )
+            qNewIng.bindValue(":id", newid);
+            if ( ! qNewIng.exec() )
+               throw QString("Could not retrieve new ingredient: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
+            if( !qNewIng.next() )
+               throw QString("Could not advance query: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
+               
+            QList<QVariant>::iterator it = propVal.begin();
+            foreach( QString pn, tp.propName )
             {
-               Brewtarget::logE(
-                  QString("Database::updateDatabase(): %1")
-                  .arg(qUpdateOldIng.lastError().text()) );
-            }
-         }
-         // If the btid doesn't exist in the old bt_hop table, do an insert into
-         // the old hop table, then into the old bt_hop table.
-         else
-         {
-            // Create a new ingredient.
-            oldid = (this->*(tp.newElement))()->_key;
-            // Copy in the new data.
-            qUpdateOldIng.bindValue( ":id", oldid );
-            qUpdateOldIng.exec();
-            if( qUpdateOldIng.lastError().isValid() )
-            {
-               Brewtarget::logE(
-                  QString("Database::updateDatabase(): %1")
-                  .arg(qUpdateOldIng.lastError().text()) );
+               // Get new value.
+               *it = qNewIng.record().value(pn);
+               // Bind it to the old ingredient.
+               qUpdateOldIng.bindValue(
+                  QString(":%1").arg(pn),
+                  *it );
+               ++it;
             }
 
-            // Insert an entry into our bt_<ingredient> table.
-            qOldBtIngInsert.bindValue( ":id", btid );
-            qOldBtIngInsert.bindValue( QString(":%1_id").arg(tp.tableName), oldid );
-            qOldBtIngInsert.exec();
-            if( qOldBtIng.lastError().isValid() )
+            // Done retrieving new ingredient data.
+            qNewIng.finish();
+
+            // Find the bt_<ingredient> record in the local table.
+            qOldBtIng.bindValue( ":btid", btid );
+            if ( ! qOldBtIng.exec() ) 
+               throw QString("Could not find btID (%1): %2 %3")
+                        .arg(btid.toInt())
+                        .arg(qOldBtIng.lastQuery())
+                        .arg(qOldBtIng.lastError().text());
+
+            // If the btid exists in the old bt_hop table, do an update.
+            if( qOldBtIng.next() )
             {
-               Brewtarget::logE(
-                  QString("Database::updateDatabase(): %1")
-                  .arg(qOldBtIng.lastError().text()) );
+               oldid = qOldBtIng.record().value( QString("%1_id").arg(tp.tableName) );
+               qOldBtIng.finish();
+
+               qUpdateOldIng.bindValue( ":id", oldid );
+
+               if ( ! qUpdateOldIng.exec() ) 
+                  throw QString("Could not update old btID (%1): %2 %3")
+                           .arg(oldid.toInt())
+                           .arg(qUpdateOldIng.lastQuery())
+                           .arg(qUpdateOldIng.lastError().text());
+                           
+            }
+            // If the btid doesn't exist in the old bt_hop table, do an insert into
+            // the old hop table, then into the old bt_hop table.
+            else
+            {
+               // Create a new ingredient.
+               oldid = (this->*(tp.newElement))()->_key;
+               // Copy in the new data.
+               qUpdateOldIng.bindValue( ":id", oldid );
+
+               if ( ! qUpdateOldIng.exec() )
+                  throw QString("Could not insert new btID (%1): %2 %3")
+                           .arg(oldid.toInt())
+                           .arg(qUpdateOldIng.lastQuery())
+                           .arg(qUpdateOldIng.lastError().text());
+
+
+               // Insert an entry into our bt_<ingredient> table.
+               qOldBtIngInsert.bindValue( ":id", btid );
+               qOldBtIngInsert.bindValue( QString(":%1_id").arg(tp.tableName), oldid );
+
+               if ( !  qOldBtIngInsert.exec() ) 
+                  throw QString("Could not insert btID (%1): %2 %3")
+                           .arg(btid.toInt())
+                           .arg(qOldBtIngInsert.lastQuery())
+                           .arg(qOldBtIngInsert.lastError().text());
             }
          }
       }
+      // If we, by some miracle, get here, commit
+      sqlDatabase().commit();
+      // I think
+      makeDirty();
    }
-   // I think
-   makeDirty();
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      blockSignals(false);
+      throw;
+   }
 }
 
 void Database::makeDirty()
@@ -4968,6 +5074,7 @@ void Database::makeDirty()
    }
 }
 
+// TODO:: Pick up here
 bool Database::verifyDbConnection(Brewtarget::DBTypes testDb, QString const& hostname, int portnum, QString const& schema,
                               QString const& database, QString const& username, QString const& password)
 {
@@ -4983,7 +5090,7 @@ bool Database::verifyDbConnection(Brewtarget::DBTypes testDb, QString const& hos
       default:
          driverName = "QSQLITE";
    }
-   connDb = QSqlDatabase::addDatabase(driverName,"connDb");
+   connDb = QSqlDatabase::addDatabase(driverName,"testConnDb");
 
    switch( testDb )
    {
@@ -5003,7 +5110,6 @@ bool Database::verifyDbConnection(Brewtarget::DBTypes testDb, QString const& hos
    if ( results )
    {
       connDb.close();
-      connDb.removeDatabase("connDb");
    }
    else
    {

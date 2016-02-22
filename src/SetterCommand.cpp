@@ -250,6 +250,7 @@ void SetterCommand::redo()
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       _sqlSuccess = false;
+      throw;
    }
 
    _sqlSuccess = true; 
