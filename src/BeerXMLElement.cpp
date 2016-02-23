@@ -219,10 +219,8 @@ void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, 
     if(invkey == 0){ //no inventory row in the database so lets make one
       Database::instance().newInventory(_table,_key);
       invkey = Database::instance().getInventoryID(_table, _key);
-      Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
-    }else{//it's already there so lets just update it
-      Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
     }
+    Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
 }
 
 QVariant BeerXMLElement::getInventory( const char* col_name ) const

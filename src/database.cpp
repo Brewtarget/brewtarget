@@ -70,8 +70,6 @@
 #include "config.h"
 #include "brewtarget.h"
 #include "QueuedMethod.h"
-#include "SetterCommand.h"
-#include "SetterCommandStack.h"
 #include "DatabaseSchemaHelper.h"
 
 // Static members.
@@ -1562,24 +1560,18 @@ Yeast* Database::newYeast(Yeast* other)
 
 void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
 {
-   // Assumes the table has a column called 'deleted'.
-   SetterCommand* command;
-   command = new SetterCommand(table,
-                         object->_key,
-                         "deleted",
-                         QVariant( Brewtarget::dbTrue() ),
-                         object->metaProperty("deleted"),
-                         object,
-                         true);
-   // For now, immediately execute the command.
-   command->redo();
+   int ndx = object->metaObject()->indexOfProperty("deleted");
+
+   try {
+      updateEntry( table, object->_key, "deleted", Brewtarget::dbTrue(),
+                   object->metaObject()->property(ndx), object, false, false);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      throw;
+   }
+
    makeDirty();
-
-   if ( ! command->sqlSuccess() )
-      throw QString("%1 unexpected error. check error logs for more information").arg(Q_FUNC_INFO);
-
-   // Push the command on the undo stack.
-   //commandStack.push(command);
 }
 
 // NOTE: This really should be in a transaction, but I am going to leave that
@@ -1628,21 +1620,41 @@ QString Database::getDbFileName()
 // Cthulhu weeps (and we lose 2 SAN points)
 void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify, bool transact )
 {
-   SetterCommand* command;
-   command = new SetterCommand(table,
-                               key,
-                               col_name,
-                               value,
-                               prop,
-                               object,
-                               notify
-                               );
+   // Assumes the table has a column called 'deleted'.
+   QString tableName = tableNames[table];
 
-   command->redo();
-   if ( command->sqlSuccess() ) 
-      makeDirty();
-   else
-      throw QString("%1 Error updating entry").arg(Q_FUNC_INFO);
+   if ( transact )
+      sqlDatabase().transaction();
+
+   try {
+      QSqlQuery update( sqlDatabase() );
+      QString command = QString("UPDATE %1 set %2=:value where id=%3")
+                           .arg(tableName)
+                           .arg(col_name)
+                           .arg(object->_key);
+
+      update.prepare( command );
+      update.bindValue(":value", value);
+
+      if ( ! update.exec() )
+         throw QString("Could not update %1.%2 to %3: %4 %5")
+                  .arg( tableName )
+                  .arg( col_name )
+                  .arg( value.toString() )
+                  .arg( update.lastQuery() )
+                  .arg( update.lastError().text() );
+
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      if ( transact )
+         sqlDatabase().rollback();
+      throw;
+   }
+
+   if ( transact )
+      sqlDatabase().commit();
+   makeDirty();
 
 }
 

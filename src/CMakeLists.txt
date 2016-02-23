@@ -133,8 +133,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SgDensityUnitSystem.cpp
-    ${SRCDIR}/SetterCommand.cpp
-    ${SRCDIR}/SetterCommandStack.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
     ${SRCDIR}/SrmColorUnitSystem.cpp
@@ -266,7 +264,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RecipeFormatter.h
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
-    ${SRCDIR}/SetterCommandStack.h
     ${SRCDIR}/StrikeWaterDialog.h
     ${SRCDIR}/StyleButton.h
     ${SRCDIR}/StyleListModel.h

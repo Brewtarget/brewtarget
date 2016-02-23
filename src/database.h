@@ -63,7 +63,6 @@ class Style;
 class Water;
 class Yeast;
 class QThread;
-class SetterCommandStack;
 
 typedef struct
 {
@@ -89,7 +88,6 @@ class Database : public QObject
    Q_OBJECT
 
    friend class BtSqlQuery; // This class needs the _thread instance.
-   friend class SetterCommand; // Needs sqlDatabase().
 public:
 
    //! This should be the ONLY way you get an instance.
@@ -117,9 +115,11 @@ public:
    bool loadSuccessful();
    bool isDirty();
 
-   /*! Schedule an update of the entry, and call the notification when complete.
+   /*! update an entry, and call the notification when complete.
+    * NOTE: This cannot be simplified without a bit more work. The inventory
+    * needs to specify a table other than the one named by the beerXML element
     */
-   void updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true, bool transact = true );
+   void updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true, bool transact = false );
 
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
@@ -461,7 +461,6 @@ private:
    static Database* dbInstance; // The singleton object
 
    //QThread* _thread;
-   //SetterCommandStack* _setterCommandStack;
    // These are for SQLite databases
    static QFile dbFile;
    static QString dbFileName;
