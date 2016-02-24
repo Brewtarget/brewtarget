@@ -521,7 +521,7 @@ QString Brewtarget::dbTrue(Brewtarget::DBTypes type)
    QString retval;
 
    if ( whichDb == Brewtarget::NODB )
-      whichDb = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
+      whichDb = (Brewtarget::DBTypes)option("dbType", dbType()).toInt();
 
    switch( whichDb ) {
       case SQLITE:
@@ -542,7 +542,7 @@ QString Brewtarget::dbFalse(Brewtarget::DBTypes type)
    QString retval;
 
    if ( whichDb == Brewtarget::NODB )
-      whichDb = (Brewtarget::DBTypes)option("dbType", Brewtarget::SQLITE).toInt();
+      whichDb = (Brewtarget::DBTypes)option("dbType", dbType()).toInt();
 
    switch( whichDb ) {
       case SQLITE:
