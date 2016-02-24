@@ -21,21 +21,25 @@ Steps
 1. Install PostgreSQL. There are a bazillion guides for this. Find one, follow
 it. 
 2. Modify pg\_hba.conf to allow md5 authentication for both local and host
-connections.
+   connections.
 3. Modify pg\_hba.conf to bind to whatever IP addresses you want.
-4. Create a user. I created one called brewtarget, mostly because I lack
-imagination
-5. Create a database. I've named mine brewtarget, in a fit of originality.
-This document will assume you did the same, or that if you change it you are
-smart enough to figure it out. Make the user you created in step 4 the owner.
-This will automatically grant that user create/delete table access.
-6. Build this branch.
-7. Start brewtarget, open the options screen and set up the database
-information.
-8. When asked, say you want to automatically copy the data. This should work,
+4. Connect to postgresql: psql -U postgres
+5. Create a user: create user [username] with password 'password'; 
+   I created one called brewtarget, mostly because I lack imagination
+6. Create a database: create database brewtarget with owner brewtarget; 
+   I've named mine brewtarget, in a fit of originality.  This document will
+   assume you did the same, or that if you change it you are smart enough to
+   figure it out.  If you created a user in step 5, make sure they are the
+   owner of the database.  This will automatically grant that user
+   create/delete table access.
+7. Build this branch.
+8. Start brewtarget, open the options screen and set up the database
+   information. Keep the schema to public for now. That may go away at some
+   point.
+9. When asked, say you want to automatically copy the data. This should work,
    but it may take some time. If it doesn't, it will spit an error message on
    the console that I NEED in order to know what broke.
-9. Restart brewtarget. It will be slower to start than using SQLite
+10. Restart brewtarget. It will be slower to start than using SQLite
 
 ## What works
   o Recipe CRUD (create/read/update/delete)
@@ -45,6 +49,7 @@ information.
   o PostgreSQL remote and localhost -- I haven't tried cloud systems, but they should work
   o Automatically copying information from SQLite -> PostgreSQL
   o Automatically copying information from PostgreSQL -> PostgreSQL
+  o Automatically copying information from PostgreSQL -> SQLite
   o Configuration screens for setting up remote dbs
 
 ## What may not work (not tested)
@@ -55,28 +60,25 @@ information.
 ## What won't work
   o Backup copies just don't make sense anymore
   o Saving -- all updates are written automatically.
-  o Copying data from PostgreSQL -> SQLite. Just haven't written the code yet,
-  but this will happen
 
 ## Known Issues
-  o "QSqlDatabasePrivate::removeDatabase: connection 'connDb' is still in use, all queries will cease to work."
-  I've dug and dug to figure out what this issue is, with no luck. I believe
-  it has to do with the database connector thinking there are open queries
-  (even though no query has ever been run on that connector). I think the
-  solution may be to just let the QSqlDatabase object go out of scope -- the
-  plugin seems to do a good job of cleaning up after itself.
+  o sqlite is much faster. I can tell simply from the delay at startup how I'm
+    configured. Of course, I have spent exactly 0 seconds trying to optimize
+    postgresql.
+  o I wonder if we shouldn't attempt to restart brewtarget automatically after
+    step 9?
 
 ## Some tricks
   o If you want to quickly reset, just remove the db\* variables from your
-  config file. brewtarget will default back to your sqlite file and you can do
-  the conversion all over again! I have done this ad nauseum
+    config file. brewtarget will default back to your sqlite file. You can then
+    drop the psql database and recreate it. I've done this many, many
+    times.
 
 #Introduction
 
 It's a brave new world of clouds and mobile devices. I have been slowly
 burning cycles for the last year trying to get brewtarget ready. This is the
-third step. No worries, the pelvic thrust is still what will drive you
-insane.
+third step. No worries, the pelvic thrust will still drive you insane.
 
 In moving to mobile and clouds, the hardest problem to solve has been the
 database. SQLite is great for local access, and mighty fast. But it is
@@ -166,10 +168,16 @@ than I am with mariadb. I had to start somewhere, and so I did. I think I will
 still try my hand at mariadb. Having done it once, it should be easy to do it
 twice, right?
 
+So I tried that. It didn't work so well. It seems "use" is a keyword in
+mariadb, which causes problems for the hop table and the misc table. The
+really fun part is that is one of the BeerXML defined attributes that we are
+no supposed to change. So I guess mariadb is on the back burner until somebody
+has a brilliant idea.
+
 ### Why PostgreSQL 9.5
 This coding effort was started on Jan 22, 2016. PostgreSQL 9.5 was released on
 Jan 6, 2016. I would not normally be so close to the bleeding edge. The
-inventory tables, though, used SQLites "insert or update" functionality.
+inventory tables, though, used SQLite's "insert or update" functionality.
 PostgreSQL didn't have anything similar until 9.5.
 
 
