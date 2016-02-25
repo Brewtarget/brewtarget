@@ -4723,6 +4723,10 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
  */
 bool Database::cleanupBackupDatabase()
 {
+   // there are no backup databases in postgresql
+   if ( Brewtarget::dbType() == Brewtarget::PGSQL )
+      return true;
+
    // Check if the temporary backup database exists.
    if (QFile::exists(dbTempBackupFileName))
    {

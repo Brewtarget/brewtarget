@@ -64,6 +64,7 @@ public:
    QString getToolTip(Hop* hop);
    QString getToolTip(Misc* misc);
    QString getToolTip(Yeast* yeast);
+   QString getLabelToolTip();
    //! Get the maximum number of characters in a list of strings.
    unsigned int getMaxLength( QStringList* list );
    //! Prepend a string with spaces until its final length is the given length.
