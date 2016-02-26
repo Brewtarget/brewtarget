@@ -24,15 +24,20 @@
 #include "Algorithms.h"
 #include "recipe.h"
 
-OgAdjuster::OgAdjuster( QWidget* parent ) : QDialog(parent)
+OgAdjuster::OgAdjuster( QWidget* parent ) :
+   QDialog(parent),
+   recObs(0)
 {
    setupUi(this);
+   createButtonGroup();
 
-   recObs = 0;
-
-   connect( pushButton_calculate, SIGNAL( clicked() ), this, SLOT( calculate() ) );
+   connect( lineEdit_sg, SIGNAL( textChanged(QString)), this, SLOT( calculate() ) );
+   connect( lineEdit_plato, SIGNAL( textChanged(QString)), this, SLOT( calculate() ) );
+   connect( lineEdit_temp, SIGNAL( textChanged(QString)), this, SLOT( calculate() ) );
+   connect( lineEdit_calTemp, SIGNAL( textChanged(QString)), this, SLOT( calculate() ) );
+   connect( lineEdit_volume, SIGNAL( textChanged(QString)), this, SLOT( calculate() ) );
+   connect( buttonBox, SIGNAL( accepted()), this, SLOT( accept() ) );
 }
-
 
 void OgAdjuster::setRecipe( Recipe* rec )
 {
@@ -40,6 +45,15 @@ void OgAdjuster::setRecipe( Recipe* rec )
    {
       recObs = rec;
    }
+}
+
+void OgAdjuster::createButtonGroup()
+{
+   QButtonGroup *buttonGroup = new QButtonGroup();
+   buttonGroup->addButton(radioButton_plato,RADIO_PLATO);
+   buttonGroup->addButton(radioButton_temp,RADIO_TEMP);
+   buttonGroup->setExclusive(true);
+   connect( buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(updateRadioButtonsState(int) ) );
 }
 
 // TODO: There are a LOT of assumptions and simplifications here. Need to change that.
@@ -135,4 +149,22 @@ void OgAdjuster::calculate()
    lineEdit_og->setText(finalUncorrectedSg_20C);
    lineEdit_add->setText(waterToAdd_l);
    lineEdit_batchSize->setText(finalVolume_l);
+}
+
+void OgAdjuster::updateRadioButtonsState(int id)
+{
+   switch(id)
+   {
+   case RADIO_PLATO :
+      lineEdit_plato->setEnabled(true);
+      lineEdit_temp->setEnabled(false);
+      break;
+   case RADIO_TEMP :
+      lineEdit_plato->setEnabled(false);
+      lineEdit_temp->setEnabled(true);
+      break;
+   default:
+      // Unexpected option
+      break;
+   }
 }

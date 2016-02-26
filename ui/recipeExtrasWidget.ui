@@ -6,574 +6,607 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
-    <height>372</height>
+    <width>821</width>
+    <height>499</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="widgetResizable">
-      <bool>true</bool>
+    <widget class="QSplitter" name="splitter">
+     <property name="lineWidth">
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>598</width>
-        <height>358</height>
-       </rect>
-      </property>
-      <property name="configSection" stdset="0">
-       <string notr="true">recipeExtras</string>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <layout class="QFormLayout" name="formLayout">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QFormLayout" name="formLayout">
+       <property name="fieldGrowthPolicy">
+        <enum>QFormLayout::ExpandingFieldsGrow</enum>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_brewer">
+         <property name="text">
+          <string>Brewer</string>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_brewer">
-           <property name="text">
-            <string>Brewer</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_brewer</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="BtStringEdit" name="lineEdit_brewer">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">brewer</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_asstBrewer">
-           <property name="text">
-            <string>Asst. Brewer</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_asstBrewer</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_tasteRating">
-           <property name="text">
-            <string>Taste Rating</string>
-           </property>
-           <property name="buddy">
-            <cstring>spinBox_tasteRating</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QSpinBox" name="spinBox_tasteRating">
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::UpDownArrows</enum>
-           </property>
-           <property name="maximum">
-            <number>50</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="BtStringEdit" name="lineEdit_asstBrewer">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">asstBrewer</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="BtTimeLabel" name="label_primaryAge">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Primary Age (days)</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_primaryAge</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="BtTimeEdit" name="lineEdit_primaryAge">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">primaryAge_days</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="BtTemperatureLabel" name="label_primaryTemp">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Primary Temp</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_primaryTemp</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="BtTemperatureEdit" name="lineEdit_primaryTemp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">primaryTemp_c</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="BtTimeLabel" name="label_secAge">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Secondary Age (days)</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_secAge</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="BtTimeEdit" name="lineEdit_secAge">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">secondaryAge_days</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="BtTemperatureLabel" name="label_secTemp">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Secondary Temp</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_secTemp</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="BtTemperatureEdit" name="lineEdit_secTemp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">secondaryTemp_c</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="BtTimeLabel" name="label_tertAge">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Tertiary Age (days)</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_tertAge</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="BtTimeEdit" name="lineEdit_tertAge">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">tertiaryAge_days</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="BtTemperatureLabel" name="label_tertTemp">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Tertiary Temp</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_tertTemp</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="BtTemperatureEdit" name="lineEdit_tertTemp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">tertiaryTemp_c</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="BtTimeLabel" name="label_age">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Bottle/Keg Age (days)</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_age</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1">
-          <widget class="BtTimeEdit" name="lineEdit_age">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">age</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="0">
-          <widget class="BtTemperatureLabel" name="label_ageTemp">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Bottle/Keg Temp</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_ageTemp</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1">
-          <widget class="BtTemperatureEdit" name="lineEdit_ageTemp">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">ageTemp_c</string>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="0">
-          <widget class="QLabel" name="label_date">
-           <property name="text">
-            <string>Date First Brewed</string>
-           </property>
-           <property name="buddy">
-            <cstring>dateEdit_date</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="1">
-          <widget class="QDateEdit" name="dateEdit_date">
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="dateTime">
-            <datetime>
-             <hour>0</hour>
-             <minute>0</minute>
-             <second>0</second>
-             <year>2011</year>
-             <month>1</month>
-             <day>1</day>
-            </datetime>
-           </property>
-           <property name="displayFormat">
-            <string>dd MMM yyyy</string>
-           </property>
-           <property name="calendarPopup">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="0">
-          <widget class="QLabel" name="labe_carbVols">
-           <property name="text">
-            <string>Carbonation Volumes</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_carbVols</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="1">
-          <widget class="BtGenericEdit" name="lineEdit_carbVols">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>64</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>256</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="mouseTracking">
-            <bool>true</bool>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">carbonation_vols</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         <property name="buddy">
+          <cstring>lineEdit_brewer</cstring>
+         </property>
+        </widget>
        </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QTabWidget" name="tabWidget">
-           <property name="currentIndex">
-            <number>0</number>
-           </property>
-           <widget class="QWidget" name="tab">
-            <attribute name="title">
-             <string>Taste Notes</string>
-            </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <item>
-              <widget class="BtTextEdit" name="btTextEdit_tasteNotes">
-               <property name="minimumSize">
-                <size>
-                 <width>256</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="tab_2">
-            <attribute name="title">
-             <string>Notes</string>
-            </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="BtTextEdit" name="btTextEdit_notes">
-               <property name="minimumSize">
-                <size>
-                 <width>256</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </widget>
-         </item>
-        </layout>
+       <item row="0" column="1">
+        <widget class="BtStringEdit" name="lineEdit_brewer">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">brewer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_asstBrewer">
+         <property name="text">
+          <string>Asst. Brewer</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_asstBrewer</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_tasteRating">
+         <property name="text">
+          <string>Taste Rating</string>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_tasteRating</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QSpinBox" name="spinBox_tasteRating">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::UpDownArrows</enum>
+         </property>
+         <property name="maximum">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="BtStringEdit" name="lineEdit_asstBrewer">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">asstBrewer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="BtTimeLabel" name="label_primaryAge">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Primary Age (days)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_primaryAge</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="BtTimeEdit" name="lineEdit_primaryAge">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">primaryAge_days</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="BtTemperatureLabel" name="label_primaryTemp">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Primary Temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_primaryTemp</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="BtTemperatureEdit" name="lineEdit_primaryTemp">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">primaryTemp_c</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="BtTimeLabel" name="label_secAge">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Secondary Age (days)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_secAge</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="BtTimeEdit" name="lineEdit_secAge">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">secondaryAge_days</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="BtTemperatureLabel" name="label_secTemp">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Secondary Temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_secTemp</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="BtTemperatureEdit" name="lineEdit_secTemp">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">secondaryTemp_c</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="BtTimeLabel" name="label_tertAge">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Tertiary Age (days)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_tertAge</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="BtTimeEdit" name="lineEdit_tertAge">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">tertiaryAge_days</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="BtTemperatureLabel" name="label_tertTemp">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Tertiary Temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_tertTemp</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="BtTemperatureEdit" name="lineEdit_tertTemp">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">tertiaryTemp_c</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="BtTimeLabel" name="label_age">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Bottle/Keg Age (days)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_age</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="BtTimeEdit" name="lineEdit_age">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">age</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="BtTemperatureLabel" name="label_ageTemp">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Bottle/Keg Temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_ageTemp</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="BtTemperatureEdit" name="lineEdit_ageTemp">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">ageTemp_c</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="label_date">
+         <property name="text">
+          <string>Date First Brewed</string>
+         </property>
+         <property name="buddy">
+          <cstring>dateEdit_date</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1">
+        <widget class="QDateEdit" name="dateEdit_date">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="dateTime">
+          <datetime>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+           <year>2011</year>
+           <month>1</month>
+           <day>1</day>
+          </datetime>
+         </property>
+         <property name="displayFormat">
+          <string>dd MMM yyyy</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="labe_carbVols">
+         <property name="text">
+          <string>Carbonation Volumes</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_carbVols</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <widget class="BtGenericEdit" name="lineEdit_carbVols">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">carbonation_vols</string>
+         </property>
+        </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Taste Notes</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="BtTextEdit" name="btTextEdit_tasteNotes">
+          <property name="minimumSize">
+           <size>
+            <width>256</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Notes</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="BtTextEdit" name="btTextEdit_notes">
+          <property name="minimumSize">
+           <size>
+            <width>256</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
    </item>
   </layout>
+  <action name="actionTeste1">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallYeast.svg</normaloff>:/images/smallYeast.svg</iconset>
+   </property>
+   <property name="text">
+    <string>teste1</string>
+   </property>
+   <property name="toolTip">
+    <string>TEste1</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>BtGenericEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">BtLineEdit.h</header>
+   <header>BtLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>BtTimeEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">BtLineEdit.h</header>
+   <header>BtLineEdit.h</header>
    <slots>
     <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
@@ -581,15 +614,7 @@
   <customwidget>
    <class>BtTimeLabel</class>
    <extends>QLabel</extends>
-   <header location="global">BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureLabel</class>
-   <extends>QLabel</extends>
-   <header location="global">BtLabel.h</header>
+   <header>BtLabel.h</header>
    <slots>
     <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
@@ -597,9 +622,17 @@
   <customwidget>
    <class>BtTemperatureEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">BtLineEdit.h</header>
+   <header>BtLineEdit.h</header>
    <slots>
     <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTemperatureLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
   <customwidget>
@@ -614,7 +647,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>scrollArea</tabstop>
   <tabstop>lineEdit_brewer</tabstop>
   <tabstop>lineEdit_asstBrewer</tabstop>
   <tabstop>spinBox_tasteRating</tabstop>
@@ -628,11 +660,12 @@
   <tabstop>lineEdit_ageTemp</tabstop>
   <tabstop>dateEdit_date</tabstop>
   <tabstop>lineEdit_carbVols</tabstop>
-  <tabstop>tabWidget</tabstop>
   <tabstop>btTextEdit_tasteNotes</tabstop>
   <tabstop>btTextEdit_notes</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../brewtarget.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>label_ageTemp</sender>

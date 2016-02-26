@@ -30,7 +30,10 @@ RefractoDialog::RefractoDialog(QWidget* parent) : QDialog(parent)
 {
    setupUi(this);
 
-   connect( pushButton_calculate, SIGNAL( clicked() ), this, SLOT( calculate() ) );
+   connect( buttonBox, SIGNAL(accepted()), this, SLOT(accept() ) );
+   connect( lineEdit_op, SIGNAL( textModified() ), this, SLOT( calculate() ) );
+   connect( lineEdit_inputOG, SIGNAL( textModified() ), this, SLOT( calculate() ) );
+   connect( lineEdit_cp, SIGNAL( textModified() ), this, SLOT( calculate() ) );
 }
 
 RefractoDialog::~RefractoDialog()

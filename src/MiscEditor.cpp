@@ -32,6 +32,11 @@ MiscEditor::MiscEditor( QWidget* parent )
    : QDialog(parent), obsMisc(0)
 {
    setupUi(this);
+
+   // Hide the tab Properties
+   // Currently we don't have data for this tab, but
+   // once we have, just remove the following line
+   tabWidget->removeTab(1);
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));

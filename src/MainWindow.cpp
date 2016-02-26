@@ -119,6 +119,12 @@
    #include <windows.h>
 #endif
 
+const int MainWindow::COL_COUNT_FERMENTABLES = 8;
+const int MainWindow::COL_COUNT_HOPS = 7;
+const int MainWindow::COL_COUNT_MISC = 7;
+const int MainWindow::COL_COUNT_YEAST = 7;
+const int MainWindow::COL_COUNT_MASH = 6;
+
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
 {
@@ -130,8 +136,8 @@ MainWindow::MainWindow(QWidget* parent)
     test internationalization is by forcing the locale manually. I am tired
     of having to figure this out every time I need to test. 
     PLEASE DO NOT REMOVE.
-   QLocale german(QLocale::German,QLocale::Germany);
-   QLocale::setDefault(german);
+    QLocale german(QLocale::German,QLocale::Germany);
+    QLocale::setDefault(german);
    */
 
    QDesktopWidget *desktop = QApplication::desktop();
@@ -249,7 +255,7 @@ MainWindow::MainWindow(QWidget* parent)
    // Nothing to say.
    namedMashEditor = new NamedMashEditor(this, mashStepEditor);
    // I don't think this is used yet
-   singleNamedMashEditor = new NamedMashEditor(this,mashStepEditor,true);
+   singleNamedMashEditor = new NamedMashEditor(this,mashStepEditor, true);
 
    // Set table models.
    // Fermentables
@@ -1225,6 +1231,31 @@ Yeast* MainWindow::selectedYeast()
    return y;
 }
 
+MashStep* MainWindow::selectedMashStep()
+{
+    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
+    int row, size, i;
+
+    size = selected.size();
+    if( size == 0 )
+       return 0;
+
+    // Make sure only one row is selected.
+    row = selected[0].row();
+    for( i = 1; i < size; ++i )
+    {
+       if( selected[i].row() != row )
+          return 0;
+    }
+/*
+    // Make sure it's not the last row so we can move it down.
+    if( row >= mashStepTableModel->rowCount() - 1 )
+       return 0;
+*/
+    MashStep* mashStep = mashStepTableModel->getMashStep(row);
+
+    return mashStep;
+}
 
 void MainWindow::removeSelectedFermentable()
 {

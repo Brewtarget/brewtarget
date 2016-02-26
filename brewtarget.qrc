@@ -63,5 +63,7 @@
         <file alias="css/tooltip.css">css/tooltip.css</file>
         <file>images/alarm_stop.png</file>
         <file>images/sound.png</file>
+        <file alias="images/find.png">images/find.png</file>
+        <file alias="images/restoreDefault.png">images/restoreDefault.png</file>
     </qresource>
 </RCC>

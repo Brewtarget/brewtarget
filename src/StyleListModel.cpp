@@ -50,7 +50,11 @@ void StyleListModel::addStyles(QList<Style*> s)
 {
    QList<Style*>::iterator i;
    QList<Style*> tmp;
-   
+
+   QStringList teste;
+   QString te("d");
+   teste.filter(te);
+
    for( i = s.begin(); i != s.end(); i++ )
    {
       if( !styles.contains(*i) )

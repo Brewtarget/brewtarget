@@ -33,8 +33,12 @@ PrimingDialog::PrimingDialog(QWidget* parent) : QDialog(parent)
    sugarGroup->addButton(radioButton_gluc);
    sugarGroup->addButton(radioButton_sucrose);
    sugarGroup->addButton(radioButton_dme);
-   
-   connect( pushButton_calculate, SIGNAL( clicked() ), this, SLOT( calculate() ) );
+
+   connect( buttonBox, SIGNAL(accepted() ), SLOT(accept() ) );
+   connect( lineEdit_beerVol, SIGNAL(textModified() ), this, SLOT( calculate() ) );
+   connect( lineEdit_temp, SIGNAL(textModified() ), this, SLOT( calculate() ) );
+   connect( lineEdit_vols, SIGNAL(textModified() ), this, SLOT( calculate() ) );
+   connect( sugarGroup, SIGNAL(buttonClicked(int) ), this, SLOT( calculate() ) );
 }
 
 PrimingDialog::~PrimingDialog()
@@ -58,9 +62,9 @@ void PrimingDialog::calculate()
    double sugar_mol;
    double sugar_g;
    
-   beer_l = lineEdit_beerVol->toSI();
-   temp_c = lineEdit_temp->toSI();
-   desiredVols = lineEdit_vols->toSI();
+   beer_l = lineEdit_beerVol->text().isEmpty() ? 0 : lineEdit_beerVol->toSI();
+   temp_c = lineEdit_temp->text().isEmpty() ? 0 : lineEdit_temp->toSI();
+   desiredVols = lineEdit_vols->text().isEmpty() ? 0 : lineEdit_vols->toSI();
    
    residualVols = 1.57 * pow( 0.97, temp_c ); // Amount of CO2 still in suspension.
    addedVols = desiredVols - residualVols;

@@ -86,6 +86,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentListModel.cpp
     ${SRCDIR}/EquipmentEditor.cpp
+    ${SRCDIR}/EquipmentSortFilterProxyModel.cpp
     ${SRCDIR}/FahrenheitTempUnitSystem.cpp
     ${SRCDIR}/fermentable.cpp
     ${SRCDIR}/FermentableEditor.cpp
@@ -108,6 +109,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/mash.cpp
     ${SRCDIR}/MashButton.cpp
     ${SRCDIR}/MashEditor.cpp
+    ${SRCDIR}/MashSortFilterProxyModel.cpp
     ${SRCDIR}/MashListModel.cpp
     ${SRCDIR}/mashstep.cpp
     ${SRCDIR}/MashStepEditor.cpp
@@ -180,6 +182,7 @@ SET( brewtarget_UIS
     ${UIDIR}/mashStepEditor.ui
     ${UIDIR}/miscEditor.ui
     ${UIDIR}/fermentableEditor.ui
+    ${UIDIR}/equipmentEditor.ui
     ${UIDIR}/hopEditor.ui
     ${UIDIR}/instructionWidget.ui
     ${UIDIR}/mashEditor.ui
@@ -231,6 +234,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/EquipmentButton.h
     ${SRCDIR}/EquipmentListModel.h
     ${SRCDIR}/EquipmentEditor.h
+    ${SRCDIR}/EquipmentSortFilterProxyModel.h
     ${SRCDIR}/FermentableEditor.h
     ${SRCDIR}/FermentableDialog.h
     ${SRCDIR}/FermentableSortFilterProxyModel.h
@@ -249,6 +253,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/NamedMashEditor.h
     ${SRCDIR}/MashListModel.h
     ${SRCDIR}/MashStepEditor.h
+    ${SRCDIR}/MashSortFilterProxyModel.h
     ${SRCDIR}/MashStepTableModel.h
     ${SRCDIR}/MashStepTableWidget.h
     ${SRCDIR}/MashWizard.h

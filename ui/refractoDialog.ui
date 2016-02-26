@@ -6,327 +6,342 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
-    <height>256</height>
+    <width>537</width>
+    <height>320</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Refractometer Tools</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
         <string>Inputs</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_op">
-            <property name="text">
-             <string>Original Plato</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_op</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="BtDensityEdit" name="lineEdit_op">
-            <property name="maximumSize">
-             <size>
-              <width>128</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="acceptDrops">
-             <bool>true</bool>
-            </property>
-            <property name="toolTip">
-             <string>Measured original plato</string>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">origPlato</string>
-            </property>
-            <property name="forcedUnit" stdset="0">
-             <string notr="true">displayPlato</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_inputOG">
-            <property name="text">
-             <string>OG (20 C)</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_inputOG</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="BtDensityEdit" name="lineEdit_inputOG">
-            <property name="maximumSize">
-             <size>
-              <width>128</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Measured original gravity</string>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">inputOG</string>
-            </property>
-            <property name="forcedUnit" stdset="0">
-             <string notr="true">displaySg</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_op">
+          <property name="text">
+           <string>Original Plato</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_op</cstring>
           </property>
          </widget>
         </item>
-        <item>
-         <layout class="QFormLayout" name="formLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_cp">
-            <property name="text">
-             <string>Current Plato</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_cp</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="BtDensityEdit" name="lineEdit_cp">
-            <property name="maximumSize">
-             <size>
-              <width>128</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Current measured plato</string>
-            </property>
-            <property name="editField" stdset="0">
-             <string notr="true">curP</string>
-            </property>
-            <property name="forcedUnit" stdset="0">
-             <string notr="true">displayPlato</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        <item row="0" column="1">
+         <widget class="BtDensityEdit" name="lineEdit_op">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="acceptDrops">
+           <bool>true</bool>
+          </property>
+          <property name="toolTip">
+           <string>Measured original plato</string>
+          </property>
+          <property name="editField" stdset="0">
+           <string notr="true">origPlato</string>
+          </property>
+          <property name="forcedUnit" stdset="0">
+           <string notr="true">displayPlato</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_inputOG">
+          <property name="text">
+           <string>OG (20 C)</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_inputOG</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="BtDensityEdit" name="lineEdit_inputOG">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Measured original gravity</string>
+          </property>
+          <property name="editField" stdset="0">
+           <string notr="true">inputOG</string>
+          </property>
+          <property name="forcedUnit" stdset="0">
+           <string notr="true">displaySg</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_cp">
+          <property name="text">
+           <string>Current Plato</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_cp</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="BtDensityEdit" name="lineEdit_cp">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Current measured plato</string>
+          </property>
+          <property name="editField" stdset="0">
+           <string notr="true">curP</string>
+          </property>
+          <property name="forcedUnit" stdset="0">
+           <string notr="true">displayPlato</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Outputs</string>
        </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QPushButton" name="pushButton_calculate">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Calculate</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+       <layout class="QFormLayout" name="formLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_ri">
+          <property name="text">
+           <string>Refractive Index</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_ri</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="BtGenericEdit" name="lineEdit_ri">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_og">
+          <property name="text">
+           <string>OG (20 C)</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_og</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="BtDensityEdit" name="lineEdit_og">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="forcedUnit" stdset="0">
+           <string notr="true">displaySg</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_sg">
+          <property name="text">
+           <string>SG (20 C)</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_sg</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="BtDensityEdit" name="lineEdit_sg">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="forcedUnit" stdset="0">
+           <string notr="true">displaySg</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_re">
+          <property name="text">
+           <string>Real Extract (Plato)</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_re</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="BtDensityEdit" name="lineEdit_re">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="forcedUnit" stdset="0">
+           <string notr="true">displayPlato</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_abv">
+          <property name="text">
+           <string>ABV</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_abv</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="BtGenericEdit" name="lineEdit_abv">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_abw">
+          <property name="text">
+           <string>ABW</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit_abw</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="BtGenericEdit" name="lineEdit_abw">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>128</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>Outputs</string>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok</set>
      </property>
-     <layout class="QFormLayout" name="formLayout_2">
-      <item row="1" column="1">
-       <widget class="BtGenericEdit" name="lineEdit_ri">
-        <property name="maximumSize">
-         <size>
-          <width>128</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_sg">
-        <property name="text">
-         <string>SG (20C)</string>
-        </property>
-        <property name="buddy">
-         <cstring>lineEdit_sg</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="BtDensityEdit" name="lineEdit_sg">
-        <property name="maximumSize">
-         <size>
-          <width>128</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="forcedUnit" stdset="0">
-         <string notr="true">displaySg</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_abv">
-        <property name="text">
-         <string>ABV</string>
-        </property>
-        <property name="buddy">
-         <cstring>lineEdit_abv</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="BtGenericEdit" name="lineEdit_abv">
-        <property name="maximumSize">
-         <size>
-          <width>128</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_abw">
-        <property name="text">
-         <string>ABW</string>
-        </property>
-        <property name="buddy">
-         <cstring>lineEdit_abw</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="BtGenericEdit" name="lineEdit_abw">
-        <property name="maximumSize">
-         <size>
-          <width>128</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_ri">
-        <property name="text">
-         <string>Refractive Index</string>
-        </property>
-        <property name="buddy">
-         <cstring>lineEdit_ri</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_re">
-        <property name="text">
-         <string>Real Extract (Plato)</string>
-        </property>
-        <property name="buddy">
-         <cstring>lineEdit_re</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="BtDensityEdit" name="lineEdit_re">
-        <property name="maximumSize">
-         <size>
-          <width>128</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="forcedUnit" stdset="0">
-         <string notr="true">displayPlato</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_og">
-        <property name="text">
-         <string>OG (20C)</string>
-        </property>
-        <property name="buddy">
-         <cstring>lineEdit_og</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="BtDensityEdit" name="lineEdit_og">
-        <property name="maximumSize">
-         <size>
-          <width>128</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="forcedUnit" stdset="0">
-         <string notr="true">displaySg</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
   <customwidget>
    <class>BtDensityEdit</class>
    <extends>QLineEdit</extends>
@@ -335,23 +350,11 @@
     <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
-  <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>lineEdit_op</tabstop>
   <tabstop>lineEdit_inputOG</tabstop>
   <tabstop>lineEdit_cp</tabstop>
-  <tabstop>lineEdit_ri</tabstop>
-  <tabstop>lineEdit_og</tabstop>
-  <tabstop>lineEdit_sg</tabstop>
-  <tabstop>lineEdit_re</tabstop>
-  <tabstop>lineEdit_abv</tabstop>
-  <tabstop>lineEdit_abw</tabstop>
-  <tabstop>pushButton_calculate</tabstop>
  </tabstops>
  <resources/>
  <connections/>

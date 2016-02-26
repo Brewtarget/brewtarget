@@ -30,6 +30,11 @@ MashStepEditor::MashStepEditor(QWidget* parent)
 
    comboBox_type->setCurrentIndex(-1);
 
+   // Hide the tab Info
+   // Currently we don't have data for this tab, but
+   // once we have, just remove the following line
+   tabWidget->removeTab(2);
+
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT(saveAndClose()) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT(close()) );
    connect( comboBox_type, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(grayOutStuff(const QString &)) );

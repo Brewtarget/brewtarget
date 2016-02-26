@@ -333,6 +333,15 @@ private:
    BtDatePopup* btDatePopup;
    int confirmDelete;
 
+   //! \brief Number of columns for each bottom tab on mainWindow
+   static const int COL_COUNT_FERMENTABLES;
+   static const int COL_COUNT_HOPS;
+   static const int COL_COUNT_MISC;
+   static const int COL_COUNT_YEAST;
+   static const int COL_COUNT_MASH;
+
+   //! \brief Update the UI states
+   void updateUI();
    //! \brief Currently highlighted fermentable in the fermentable table.
    Fermentable* selectedFermentable();
    //! \brief Currently highlighted hop in the hop table.
@@ -341,6 +350,8 @@ private:
    Misc* selectedMisc();
    //! \brief Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
+   //! \brief Currently highlighted mash step in the mash table
+   MashStep* selectedMashStep();
 
    //! \brief Find an open brewnote tab, if it is open
    BrewNoteWidget* findBrewNoteWidget(BrewNote* b);

@@ -21,6 +21,7 @@
 #include "database.h"
 #include "StyleEditor.h"
 #include <QInputDialog>
+#include <QDialogButtonBox>
 #include "style.h"
 #include "StyleListModel.h"
 #include "StyleSortFilterProxyModel.h"
@@ -31,6 +32,10 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    : QDialog(parent), obsStyle(0)
 {
    setupUi(this);
+   configureFilterLineEdit();
+   updateAddRemoveButtonState(singleStyleEditor);
+
+   /*
    if ( singleStyleEditor ) 
    {
       for(int i = 0; i < horizontalLayout_styles->count(); ++i)
@@ -42,20 +47,22 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
       
       pushButton_new->setVisible(false);
    }
+   */
 
-   styleListModel = new StyleListModel(styleComboBox);
-   styleProxyModel = new StyleSortFilterProxyModel(styleComboBox);
+   styleListModel = new StyleListModel(styleListView);
+   styleProxyModel = new StyleSortFilterProxyModel(styleListView);
    styleProxyModel->setDynamicSortFilter(true);
    styleProxyModel->setSourceModel(styleListModel);
-   styleComboBox->setModel(styleProxyModel);
+   styleListView->setModel(styleProxyModel);
    
-   connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
+   connect( buttonBox, SIGNAL( clicked(QAbstractButton*) ), this, SLOT( buttonBoxClicked(QAbstractButton*) ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
-   connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT(removeStyle()) );
-   connect( styleComboBox, SIGNAL(activated( const QString& )), this, SLOT( styleSelected(const QString&) ) );
+   connect( lineEdit_filter, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString) ) );
 
-   setStyle( styleListModel->at(styleComboBox->currentIndex()));
+   connect( styleListView, SIGNAL(activated( const QModelIndex& )), this, SLOT( styleSelected( const QModelIndex&) ) );
+
+   setStyle( styleListModel->at(0));
 }
 
 void StyleEditor::setStyle( Style* s )
@@ -69,8 +76,9 @@ void StyleEditor::setStyle( Style* s )
       connect( obsStyle, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
- 
-   styleComboBox->setCurrentIndex(styleListModel->indexOf(obsStyle));
+
+   QModelIndex modelIndex = styleProxyModel->index(styleListModel->indexOf(obsStyle),0);
+   styleListView->setCurrentIndex(modelIndex);
 }
 
 void StyleEditor::removeStyle()
@@ -81,11 +89,10 @@ void StyleEditor::removeStyle()
    setStyle(0);
 }
 
-void StyleEditor::styleSelected( const QString& /*text*/ )
+void StyleEditor::styleSelected(const QModelIndex &model)
 {
-   QModelIndex proxyIndex( styleProxyModel->index(styleComboBox->currentIndex(),0) );
-   QModelIndex sourceIndex( styleProxyModel->mapToSource(proxyIndex) );
-   setStyle( styleListModel->at(sourceIndex.row()) );
+   QModelIndex sourceIndex(styleProxyModel->mapToSource(model));
+   setStyle(styleListModel->at(sourceIndex.row()));
 }
 
 void StyleEditor::save()
@@ -144,7 +151,34 @@ void StyleEditor::clearAndClose()
 
 void StyleEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   showChanges(&prop);
+    showChanges(&prop);
+}
+
+void StyleEditor::buttonBoxClicked(QAbstractButton* button)
+{
+    QDialogButtonBox::StandardButton standardButton = buttonBox->standardButton(button);
+    switch(standardButton)
+    {
+    // Standard buttons:
+    case QDialogButtonBox::Ok:
+        clearAndClose();
+        break;
+    case QDialogButtonBox::Cancel:
+        clearAndClose();
+        break;
+    case QDialogButtonBox::Save:
+        save();
+        break;
+    default:
+    // shouldn't happen
+        break;
+    }
+}
+
+void StyleEditor::filterChanged(QString newFilter)
+{
+    QRegExp regExp(newFilter,Qt::CaseInsensitive);
+    styleProxyModel->setFilterRegExp(regExp);
 }
 
 void StyleEditor::clear()
@@ -263,5 +297,27 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
    else if( propName == "examples" )
       textEdit_examples->setText(val.toString());
    else if( propName == "notes" )
-      textEdit_notes->setText(val.toString());
+       textEdit_notes->setText(val.toString());
+}
+
+void StyleEditor::configureFilterLineEdit()
+{
+   const QIcon icon = QIcon(QPixmap(":/images/find.png"));
+   lineEdit_filter->addAction(icon,QLineEdit::LeadingPosition);
+}
+
+void StyleEditor::updateAddRemoveButtonState(bool isSingleSelection)
+{
+   pushButton_new->setDisabled(isSingleSelection);
+   pushButton_remove->setDisabled(isSingleSelection);
+   if(isSingleSelection)
+   {
+      pushButton_new->setToolTip("You cannot add a style in this edition mode");
+      pushButton_remove->setToolTip("You cannot remove a style in this edition mode");
+   }
+   else
+   {
+      pushButton_new->setToolTip("Add style");
+      pushButton_remove->setToolTip("Remove style");
+   }
 }
