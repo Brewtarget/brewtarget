@@ -518,20 +518,32 @@ QSqlDatabase Database::sqlDatabase()
    QString conName = QString("0x%1").arg(reinterpret_cast<uintptr_t>(t), 0, 16);
 
    // Create the new connection.
-   if ( Brewtarget::dbType() == Brewtarget::PGSQL )
-   {
-      sqldb = QSqlDatabase::addDatabase("QPSQL",conName);
-   }
-   else
-   {
-      sqldb = QSqlDatabase::addDatabase("QSQLITE",conName);
-      sqldb.setDatabaseName(dbFileName);
-   }
+   try {
+      if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
+         sqldb = QSqlDatabase::addDatabase("QPSQL",conName);
 
-   if( ! sqldb.open() )
-   {
-      Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
-      // TODO: what to do if we can't open?
+         sqldb.setHostName( dbHostname );
+         sqldb.setDatabaseName( dbName );
+         sqldb.setUserName( dbUsername );
+         sqldb.setPort( dbPortnum );
+         sqldb.setPassword( dbPassword );
+
+         if( ! sqldb.open() )
+            throw QString("Could not open %1 for reading.\n%2")
+            .arg(dbHostname).arg(sqldb.lastError().text());
+      }
+      else {
+         sqldb = QSqlDatabase::addDatabase("QSQLITE",conName);
+         sqldb.setDatabaseName(dbFileName);
+         if( ! sqldb.open() )
+            throw QString("Could not open %1 for reading.\n%2")
+            .arg(dbFileName).arg(sqldb.lastError().text());
+      }
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      _threadToConnectionMutex.unlock();
+      throw;
    }
 
    // Put new connection in the hash.
@@ -787,7 +799,6 @@ Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
-   // TODO: encapsulate in QUndoCommand.
    QString update = QString("UPDATE mashstep SET step_number = CASE msid WHEN %1 then %2 when %3 then %4 END WHERE msid IN (%5,%6)")
                 .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key);
 
@@ -826,7 +837,6 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
          "  END "
          "WHERE instruction_id IN (%1,%2)")
       .arg(in1->_key).arg(in2->_key).arg(in2->instructionNumber()).arg(in1->instructionNumber());
-   // TODO: encapsulate in QUndoCommand.
    QSqlQuery q( sqlDatabase());
 
    try {
@@ -5090,7 +5100,6 @@ void Database::makeDirty()
    }
 }
 
-// TODO:: Pick up here
 bool Database::verifyDbConnection(Brewtarget::DBTypes testDb, QString const& hostname, int portnum, QString const& schema,
                               QString const& database, QString const& username, QString const& password)
 {
@@ -5124,16 +5133,12 @@ bool Database::verifyDbConnection(Brewtarget::DBTypes testDb, QString const& hos
    results = connDb.open();
 
    if ( results )
-   {
       connDb.close();
-   }
    else
-   {
       QMessageBox::critical(0, tr("Connection failed"),
                QString(tr("Could not connect to %1 : %2")).arg(hostname).arg(connDb.lastError().text())
             );
-   }
-   return results ;
+   return results;
 
 }
 
@@ -5142,21 +5147,21 @@ QSqlDatabase Database::openSQLite()
    QString filePath = Brewtarget::getUserDataDir().filePath("database.sqlite");
    QSqlDatabase newDb = QSqlDatabase::addDatabase("QSQLITE", "altdb");
 
-   bool openDb;
+   try {
+      dbFile.setFileName(dbFileName);
 
-   dbFile.setFileName(dbFileName);
+      if ( filePath.isEmpty() )
+         throw QString("Could not read the database file(%1)").arg(filePath);
 
-   if ( filePath.isEmpty() ) {
-      Brewtarget::logE(tr("Could not read the database file(%1)").arg(filePath));
-      return newDb;
+      newDb.setDatabaseName(filePath);
+
+      if (!  newDb.open() )
+         throw QString("Could not open %1 : %2").arg(filePath).arg(newDb.lastError().text());
    }
-
-
-   newDb.setDatabaseName(filePath);
-   openDb = newDb.open();
-
-   if ( !openDb )
-      Brewtarget::logE(tr("Could not open %1 : %2").arg(filePath).arg(newDb.lastError().text()));
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      throw;
+   }
 
    return newDb;
 }
@@ -5165,74 +5170,69 @@ QSqlDatabase Database::openPostgres(QString const& Hostname, QString const& DbNa
                                     QString const& Username, QString const& Password,
                                     int Portnum)
 {
-   QSqlDatabase newDb;
+   QSqlDatabase newDb = QSqlDatabase::addDatabase("QPSQL","altdb");
 
-   newDb = QSqlDatabase::addDatabase("QPSQL","altdb");
-   newDb.setHostName(Hostname);
-   newDb.setDatabaseName(DbName);
-   newDb.setUserName(Username);
-   newDb.setPort(Portnum);
-   newDb.setPassword(Password);
+   try {
+      newDb.setHostName(Hostname);
+      newDb.setDatabaseName(DbName);
+      newDb.setUserName(Username);
+      newDb.setPort(Portnum);
+      newDb.setPassword(Password);
 
-   newDb.open();
-
+      if ( ! newDb.open() )
+         throw QString("Could not open %1 : %2").arg(Hostname).arg(newDb.lastError().text());
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      throw;
+   }
    return newDb;
 }
 
-bool Database::convertDatabase(QString const& Hostname, QString const& DbName,
+void Database::convertDatabase(QString const& Hostname, QString const& DbName,
                                QString const& Username, QString const& Password,
                                int Portnum, Brewtarget::DBTypes newType)
 {
    QSqlDatabase newDb;
 
    Brewtarget::DBTypes oldType = (Brewtarget::DBTypes)Brewtarget::option("dbType",Brewtarget::SQLITE).toInt();
-   bool retval = true;
 
-   if ( newType == Brewtarget::NODB ) {
-      Brewtarget::logE(tr("No type found for the new database."));
-      return false;
-   }
-   if ( oldType == Brewtarget::NODB ) {
-      Brewtarget::logE(tr("No type found for the old database."));
-      return false;
-   }
+   try {
+      if ( newType == Brewtarget::NODB )
+         throw QString("No type found for the new database.");
 
-   qDebug() << Q_FUNC_INFO << "found types for old and new db";
-   switch( newType ) {
-      case Brewtarget::PGSQL:
-         newDb = openPostgres(Hostname, DbName,Username, Password, Portnum);
-         break;
-      default:
-         newDb = openSQLite();
-   }
+      if ( oldType == Brewtarget::NODB )
+         throw QString("No type found for the old database.");
 
-   if ( newDb.isOpen() ) {
-      qDebug() << Q_FUNC_INFO << "opened newdb";
-      if( ! newDb.tables().contains(QLatin1String("settings")) ) {
-         qDebug() << Q_FUNC_INFO << "no settings table, assuming we are creating";
-         retval = DatabaseSchemaHelper::create(newDb,newType);
-         if( !retval ) {
-            qDebug() << Q_FUNC_INFO << "couldn't create newdb";
-            Brewtarget::logE("DatabaseSchemaHelper::create() failed");
-         }
+      switch( newType ) {
+         case Brewtarget::PGSQL:
+            newDb = openPostgres(Hostname, DbName,Username, Password, Portnum);
+            break;
+         default:
+            newDb = openSQLite();
       }
 
-      qDebug() << Q_FUNC_INFO << "found settings table";
-      // The initial load may have screwed up, so don't try what won't work
-      if ( retval )
-         retval = copyDatabase(oldType,newType,newDb);
-   }
-   else
-      return false;
+      if ( ! newDb.isOpen() )
+         throw QString("Could not open new database: %1").arg(newDb.lastError().text());
 
-   qDebug() << Q_FUNC_INFO << "returning " << retval;
-   return retval;
+      if( newDb.tables().contains(QLatin1String("settings")) )
+         return;
+
+      if ( ! DatabaseSchemaHelper::create(newDb,newType) )
+         throw QString("DatabaseSchemaHelper::create() failed");
+
+      copyDatabase(oldType,newType,newDb);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      throw;
+   }
 }
 
-QString Database::makeQueryString( QSqlRecord here, QString realName )
-{
+QString Database::makeQueryString( QSqlRecord here, QString realName ) {
    QString columns,qmarks;
 
+   // Yes. I went from named to positional place holders. Such is life
    for(int i=0; i < here.count(); ++i) {
       if ( ! columns.isEmpty() ) {
          columns += QString(",%1").arg( here.fieldName(i));
@@ -5246,8 +5246,7 @@ QString Database::makeQueryString( QSqlRecord here, QString realName )
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
 }
 
-QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
-{
+QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field) {
    QVariant retVar = field.value();
    if ( field.type() == QVariant::Bool ) {
       switch(newType) {
@@ -5276,14 +5275,12 @@ QStringList Database::allTablesInOrder(QSqlQuery q) {
    return tmp;
 }
 
-bool Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase newDb)
+void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase newDb)
 {
    QSqlDatabase oldDb = sqlDatabase();
    QSqlQuery readOld(oldDb);
 
    QStringList tables = allTablesInOrder(readOld);
-
-   bool wtf;
 
    // There are a lot of tables to process
    foreach( QString table, tables ) {
@@ -5298,53 +5295,66 @@ bool Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
          continue;
 
       QString findAllQuery = QString("SELECT * FROM %1").arg(table);
-      wtf = readOld.exec(findAllQuery);
+      try {
 
-      if ( wtf == false ) {
-         Brewtarget::logE(tr("Could not execute %1 : %2").arg(readOld.lastQuery()).arg(readOld.lastError().text()));
-         return false;
+         if (! readOld.exec(findAllQuery) )
+            throw QString("Could not execute %1 : %2").arg(readOld.lastQuery()).arg(readOld.lastError().text());
+
+         newDb.transaction();
+
+         QSqlQuery insertNew(newDb); // we will prepare this in a bit
+
+         // Start reading the records from the old db
+         while(readOld.next()) {
+            int idx;
+            QSqlRecord here = readOld.record();
+            QString insertQuery;
+
+            idx = here.indexOf("id");
+
+            // We are going to need this for resetting the indexes later. We only
+            // need it for copying to postgresql, but .. meh, not worth the extra
+            // work
+            if ( idx != -1 && here.value(idx).toInt() > maxid ) {
+               maxid = here.value(idx).toInt();
+            }
+
+            // Prepare the insert for this table if required
+            if ( mustPrepare ) {
+               insertQuery = makeQueryString(here,table);
+               insertNew.prepare(insertQuery);
+               // but do it only once for this table
+               mustPrepare = false;
+            }
+            // All that's left is to bind
+            for(int i=0; i < here.count(); ++i) {
+               insertNew.bindValue(i,
+                        convertValue(newType, here.field(i)),
+                        QSql::In
+               );
+            }
+
+            // and execute
+            if ( ! insertNew.exec() )
+               throw QString("Could not insert new row %1 : %2").arg(insertNew.lastQuery()).arg(insertNew.lastError().text());
+         }
+         // We need to manually reset the sequences
+         if ( newType == Brewtarget::PGSQL ) {
+            QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(table).arg(maxid);
+            QSqlQuery updateSeq(seq, newDb);
+
+            if ( ! updateSeq.exec(seq) )
+               throw QString("Could not reset the sequences: %1 %2")
+                  .arg(seq).arg(updateSeq.lastError().text());
+         }
       }
-
-      newDb.transaction();
-
-      QSqlQuery insertNew(newDb); // we will prepare this in a bit
-      while(readOld.next()) {
-         int idx;
-         QSqlRecord here = readOld.record();
-         QString insertQuery;
-
-         idx = here.indexOf("id");
-         if ( idx != -1 && here.value(idx).toInt() > maxid ) {
-            maxid = here.value(idx).toInt();
-         }
-
-         // Prepare the insert for this table if required
-         if ( mustPrepare ) {
-            insertQuery = makeQueryString(here,table);
-            insertNew.prepare(insertQuery);
-            mustPrepare = false;
-         }
-         // All that's left is to bind
-         for(int i=0; i < here.count(); ++i) {
-            insertNew.bindValue(i,
-                     convertValue(newType, here.field(i)),
-                     QSql::In
-            );
-         }
-
-         // and execute
-         wtf = insertNew.exec();
-         if ( ! wtf ) {
-            Brewtarget::logE(QString("That failed just like we expected it to. %1 : %2").arg(insertNew.lastQuery()).arg(insertNew.lastError().text()));
-            return wtf;
-         }
+      catch (QString e) {
+         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         newDb.rollback();
+         throw;
       }
-      // We need to manually reset the sequences
-      QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(table).arg(maxid);
-      newDb.exec(seq);
 
       newDb.commit();
    }
-   return true;
 }
 

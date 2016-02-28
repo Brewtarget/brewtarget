@@ -419,7 +419,7 @@ public:
 
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done. 
-   bool convertDatabase(QString const& Hostname, QString const& DbName,
+   void convertDatabase(QString const& Hostname, QString const& DbName,
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
 signals:
@@ -926,9 +926,9 @@ private:
 
    QStringList allTablesInOrder(QSqlQuery q);
 
-   //! \brief does the heavy lefting to copy the contents from one db to the
+   //! \brief does the heavy lifting to copy the contents from one db to the
    //next
-   bool copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase oldDb);
+   void copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase oldDb);
 
 
 };

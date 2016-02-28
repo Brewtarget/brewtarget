@@ -237,18 +237,13 @@ void OptionDialog::saveAndClose()
       // This got unpleasant. There are multiple possible transer paths.
       // SQLite->Pgsql, Pgsql->Pgsql and Pgsql->SQLite. This will ensure we
       // preserve the information required.
-      QString theQuestion = tr("Would you like brewtarget to transfer your data to the new database? NOTE: If you've already loaded the data, say No");
-      if ( QMessageBox::Yes == QMessageBox::question(this, tr("Transfer database"), theQuestion) ) {
-         saveDbConfig = Database::instance().convertDatabase(btStringEdit_hostname->text(), btStringEdit_dbname->text(),
-                                                     btStringEdit_username->text(), btStringEdit_password->text(),
-                                                     btStringEdit_portnum->text().toInt(),
-                                                     (Brewtarget::DBTypes)comboBox_engine->currentIndex());
-         if ( ! saveDbConfig ) {
-            Brewtarget::logE(QString("%1 Messed that up.").arg(Q_FUNC_INFO));
-         }
-      }
-
-      if ( saveDbConfig ) {
+      try {
+         QString theQuestion = tr("Would you like brewtarget to transfer your data to the new database? NOTE: If you've already loaded the data, say No");
+         if ( QMessageBox::Yes == QMessageBox::question(this, tr("Transfer database"), theQuestion) )
+            Database::instance().convertDatabase(btStringEdit_hostname->text(), btStringEdit_dbname->text(),
+                                                 btStringEdit_username->text(), btStringEdit_password->text(),
+                                                 btStringEdit_portnum->text().toInt(),
+                                                 (Brewtarget::DBTypes)comboBox_engine->currentIndex());
          // Database engine stuff
          Brewtarget::setOption("dbType", comboBox_engine->currentIndex());
          Brewtarget::setOption("dbHostname", btStringEdit_hostname->text());
@@ -257,6 +252,10 @@ void OptionDialog::saveAndClose()
          Brewtarget::setOption("dbName", btStringEdit_dbname->text());
          Brewtarget::setOption("dbUsername", btStringEdit_username->text());
          QMessageBox::information(this, tr("Restart"), tr("Please restart brewtarget to connect to the new database"));
+      }
+      catch (QString e) {
+         Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         saveDbConfig = false;
       }
    }
 
