@@ -14,6 +14,28 @@ ELSE()
    SET(brewtarget_EXECUTABLE "brewtarget")
 ENDIF()
 
+#=============================Installation Components==========================
+
+# For architecture-independent data
+SET( DATA_INSTALL_COMPONENT "Data" )
+# For architecture-dependent binaries
+SET( RUNTIME_INSTALL_COMPONENT "Runtime" )
+
+# `make install-data` or `make install-runtime`
+ADD_CUSTOM_TARGET(
+   install-data
+   COMMAND "${CMAKE_COMMAND}"
+           -DCOMPONENT=${DATA_INSTALL_COMPONENT}
+           -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+)
+ADD_CUSTOM_TARGET(
+   install-runtime
+   DEPENDS ${brewtarget_EXECUTABLE}
+   COMMAND "${CMAKE_COMMAND}"
+           -DCOMPONENT=${RUNTIME_INSTALL_COMPONENT}
+           -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+)
+
 #=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 2 )
 SET( brewtarget_VERSION_MINOR 4 )
@@ -566,43 +588,54 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
 
    # Install the data.
    INSTALL( FILES ${brewtarget_DATA}
-            DESTINATION ${DATAPATH} )
+            DESTINATION ${DATAPATH}
+            COMPONENT ${DATA_INSTALL_COMPONENT} )
 
    # Install the documentation.
    INSTALL( FILES ${brewtarget_DOCS}
-            DESTINATION ${DOCPATH} )
+            DESTINATION ${DOCPATH}
+            COMPONENT ${DATA_INSTALL_COMPONENT} )
 
    # Install sounds.
    INSTALL( FILES ${brewtarget_SOUNDS}
-            DESTINATION "${DATAPATH}/sounds" )
+            DESTINATION "${DATAPATH}/sounds"
+            COMPONENT ${DATA_INSTALL_COMPONENT} )
 
    #-----------Unix-----------
    IF( UNIX AND NOT APPLE )
       # Install the icons.
       INSTALL( FILES ${brewtarget_ICONS}
-               DESTINATION "${DATAROOTDIR}/icons/hicolor/scalable/apps/" )
+               DESTINATION "${DATAROOTDIR}/icons/hicolor/scalable/apps/"
+               COMPONENT ${DATA_INSTALL_COMPONENT} )
 
       # Install the .desktop file.
       INSTALL( FILES ${brewtarget_DESKTOP}
-               DESTINATION "${DATAROOTDIR}/applications" )
+               DESTINATION "${DATAROOTDIR}/applications"
+               COMPONENT ${DATA_INSTALL_COMPONENT} )
 
       # Install changelog
       INSTALL( FILES ${CHANGELOG}
-               DESTINATION ${DOCPATH} )
+               DESTINATION ${DOCPATH}
+               COMPONENT ${DATA_INSTALL_COMPONENT} )
    ENDIF()
 
    #--------Windows--------
    IF( WIN32 )
       INSTALL( FILES ${Qt_DLLs}
-               DESTINATION "bin" )
+               DESTINATION "bin"
+               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
       INSTALL( FILES ${SQL_Drivers_DLLs}
-               DESTINATION "bin/sqldrivers" )
+               DESTINATION "bin/sqldrivers"
+               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
       INSTALL( FILES ${Image_Formats_DLLs}
-               DESTINATION "bin/imageformats" )
+               DESTINATION "bin/imageformats"
+               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
       INSTALL( FILES ${Icon_Engines_DLLs}
-               DESTINATION "bin/iconengines" )
+               DESTINATION "bin/iconengines"
+               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
       INSTALL( FILES ${Platform_DLLs}
-               DESTINATION "bin/platforms" )
+               DESTINATION "bin/platforms"
+               COMPONENT ${RUNTIME_INSTALL_COMPONENT})
    ENDIF()
 ENDIF()
 
