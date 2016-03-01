@@ -2112,7 +2112,6 @@ void MainWindow::setupContextMenu()
 
    connect( treeView_style, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
    connect( treeView_style, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
-
 }
 
 void MainWindow::copySelected()

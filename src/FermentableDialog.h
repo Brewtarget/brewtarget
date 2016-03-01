@@ -63,6 +63,7 @@ public:
    QPushButton *pushButton_remove;
    //! @}
 
+   void newFermentable(QString folder);
 public slots:
    /*! If \b index is the default, will add the selected fermentable to list.
     *  Otherwise, will add the fermentable at the specified index.
@@ -70,9 +71,10 @@ public slots:
    void addFermentable(const QModelIndex& index = QModelIndex());
    void removeFermentable();
    void editSelected();
-   void newFermentable();
+
    void filterFermentables(QString searchExpression);
    //void changed(QMetaProperty,QVariant);
+   void newFermentable();
 
 protected:
 

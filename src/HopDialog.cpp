@@ -206,6 +206,11 @@ void HopDialog::editSelected()
 
 void HopDialog::newHop()
 {
+   newHop(QString());
+}
+
+void HopDialog::newHop(QString folder)
+{
    QString name = QInputDialog::getText(this, tr("Hop name"),
                                           tr("Hop name:"));
    if( name.isEmpty() )
@@ -213,6 +218,9 @@ void HopDialog::newHop()
 
    Hop* hop = Database::instance().newHop();
    hop->setName(name);
+   if ( ! folder.isEmpty() )
+      hop->setFolder(folder);
+
    hopEditor->setHop(hop);
    hopEditor->show();
 }

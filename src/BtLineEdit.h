@@ -99,6 +99,7 @@ protected:
    QString _section, _property;
    FieldType _type;
    Unit::unitDisplay _forceUnit;
+   Unit::unitScale _forceScale;
    Unit* _units;
 
    void initializeProperties();

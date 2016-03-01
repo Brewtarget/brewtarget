@@ -43,6 +43,7 @@
 #include <QVariant>
 #include "ui_equipmentEditor.h"
 
+#include "BtLabel.h"
 // Forward declarations
 class BtGenericEdit;
 class BtMassEdit;
@@ -74,7 +75,9 @@ public:
 
    //! Edit the given equipment.
    void setEquipment( Equipment* e );
-   
+
+   void newEquipment(QString folder);
+
 private slots:
 
    void buttonBoxClicked(QAbstractButton* button);

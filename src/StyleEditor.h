@@ -49,6 +49,8 @@ public:
    virtual ~StyleEditor() {}
    void setStyle( Style* s );
 
+   void newStyle(QString folder);
+
 public slots:
    void save();
    void newStyle();

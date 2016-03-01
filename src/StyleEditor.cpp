@@ -132,6 +132,11 @@ void StyleEditor::save()
 
 void StyleEditor::newStyle()
 {
+   newStyle(QString());
+}
+
+void StyleEditor::newStyle(QString folder)
+{
    QString name = QInputDialog::getText(this, tr("Style name"),
                                           tr("Style name:"));
    if( name.isEmpty() )
@@ -139,6 +144,8 @@ void StyleEditor::newStyle()
 
    Style *s = Database::instance().newStyle();
    s->setName( name );
+   if ( ! folder.isEmpty() )
+      s->setFolder(folder);
 
    setStyle(s);
    show();

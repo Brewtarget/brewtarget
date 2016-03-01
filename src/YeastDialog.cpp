@@ -207,6 +207,11 @@ void YeastDialog::editSelected()
 
 void YeastDialog::newYeast()
 {
+   newYeast(QString());
+}
+
+void YeastDialog::newYeast(QString folder)
+{
    QString name = QInputDialog::getText(this, tr("Yeast name"),
                                               tr("Yeast name:"));
    if( name.isEmpty() )
@@ -214,6 +219,9 @@ void YeastDialog::newYeast()
 
    Yeast* y = Database::instance().newYeast();
    y->setName(name);
+   if ( ! folder.isEmpty() )
+      y->setFolder(folder);
+
    yeastEditor->setYeast(y);
    yeastEditor->show();
    y->setDisplay(true);

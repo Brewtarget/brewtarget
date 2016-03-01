@@ -276,6 +276,11 @@ void EquipmentEditor::save()
 
 void EquipmentEditor::newEquipment()
 {
+   newEquipment(QString());
+}
+
+void EquipmentEditor::newEquipment(QString folder)
+{
    QString name = QInputDialog::getText(this, tr("Equipment name"),
                                           tr("Equipment name:"));
    if( name.isEmpty() )
@@ -283,6 +288,9 @@ void EquipmentEditor::newEquipment()
 
    Equipment* e = Database::instance().newEquipment();
    e->setName( name );
+
+   if ( ! folder.isEmpty() )
+      e->setFolder(folder);
 
    setEquipment(e);
    show();
