@@ -358,6 +358,7 @@ private:
 
    void convertedMsg();
    void importMsg();
+
 };
 
 #endif   /* _MAINWINDOW_H */

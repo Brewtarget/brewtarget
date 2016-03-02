@@ -39,6 +39,12 @@
 #include "yeast.h"
 #include "brewnote.h"
 #include "style.h"
+#include "FermentableDialog.h"
+#include "EquipmentEditor.h"
+#include "HopDialog.h"
+#include "MiscDialog.h"
+#include "StyleEditor.h"
+#include "YeastDialog.h"
 
 BtTreeView::BtTreeView(QWidget *parent, BtTreeModel::TypeMasks type) :
    QTreeView(parent)
@@ -325,12 +331,48 @@ bool BtTreeView::multiSelected()
    return hasRecipe && hasSomethingElse;
 }
 
+void BtTreeView::newIngredient() {
+
+   QString folder;
+   QModelIndexList indexes = selectionModel()->selectedRows();
+   // This is a little weird. There is an edge case where nothing is
+   // selected and you click the big blue + button.
+   if ( indexes.size() > 0 )
+      folder = folderName(indexes.at(0));
+
+   switch(_type) {
+      case BtTreeModel::EQUIPMASK:
+         qobject_cast<EquipmentEditor*>(_editor)->newEquipment(folder);
+         break;
+      case BtTreeModel::FERMENTMASK:
+         qobject_cast<FermentableDialog*>(_editor)->newFermentable(folder);
+         break;
+      case BtTreeModel::HOPMASK:
+         qobject_cast<HopDialog*>(_editor)->newHop(folder);
+         break;
+      case BtTreeModel::MISCMASK:
+         qobject_cast<MiscDialog*>(_editor)->newMisc(folder);
+         break;
+      case BtTreeModel::STYLEMASK:
+         qobject_cast<StyleEditor*>(_editor)->newStyle(folder);
+         break;
+      case BtTreeModel::YEASTMASK:
+         qobject_cast<YeastDialog*>(_editor)->newYeast(folder);
+         break;
+      default:
+         Brewtarget::logW(QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type));
+   }
+
+}
+
 void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 {
    QMenu*_newMenu = new QMenu(this);
 
    _contextMenu = new QMenu(this);
    subMenu = new QMenu(this);
+
+   _editor = editor;
 
    _newMenu->setTitle(tr("New"));
    _contextMenu->addMenu(_newMenu);
@@ -351,22 +393,22 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 
          break;
       case BtTreeModel::EQUIPMASK:
-         _newMenu->addAction(tr("Equipment"), editor, SLOT(newEquipment()));
+         _newMenu->addAction(tr("Equipment"), this, SLOT(newIngredient()));
          break;
       case BtTreeModel::FERMENTMASK:
-         _newMenu->addAction(tr("Fermentable"), editor, SLOT(newFermentable()));
+         _newMenu->addAction(tr("Fermentable"), this, SLOT(newIngredient()));
          break;
       case BtTreeModel::HOPMASK:
-         _newMenu->addAction(tr("Hop"), editor, SLOT(newHop()));
+         _newMenu->addAction(tr("Hop"), this, SLOT(newIngredient()));
          break;
       case BtTreeModel::MISCMASK:
-         _newMenu->addAction(tr("Misc"), editor, SLOT(newMisc()));
+         _newMenu->addAction(tr("Misc"), this, SLOT(newIngredient()));
          break;
       case BtTreeModel::STYLEMASK:
-         _newMenu->addAction(tr("Style"), editor, SLOT(newStyle()));
+         _newMenu->addAction(tr("Style"), this, SLOT(newIngredient()));
          break;
       case BtTreeModel::YEASTMASK:
-         _newMenu->addAction(tr("Yeast"), editor, SLOT(newYeast()));
+         _newMenu->addAction(tr("Yeast"), this, SLOT(newIngredient()));
          break;
       default:
          Brewtarget::logW(QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type));

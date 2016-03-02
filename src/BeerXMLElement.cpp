@@ -30,19 +30,25 @@
 BeerXMLElement::BeerXMLElement()
    : QObject(0), _key(-1), _table(Brewtarget::NOTABLE)
 {
-   valid = true;
+   _valid = true;
 }
 
 BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
    : QObject(0), _key(other._key), _table(other._table)
 {
-   valid = true;
+   _valid = true;
 }
 
 bool BeerXMLElement::deleted() const { return get("deleted").toBool(); }
 bool BeerXMLElement::display() const { return get("display").toBool(); }
-void BeerXMLElement::setDeleted(bool var) { set("deleted", "deleted", var ? 1 : 0); }
-void BeerXMLElement::setDisplay(bool var) { set("display", "display", var ? 1 : 0); }
+
+// Sigh. New databases, more complexity
+void BeerXMLElement::setDeleted(bool var) { 
+   set("deleted", "deleted", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+}
+void BeerXMLElement::setDisplay(bool var) {
+   set("display", "display", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+}
 
 QString BeerXMLElement::folder() const { return get("folder").toString(); }
 void BeerXMLElement::setFolder(QString var, bool signal) 
@@ -213,10 +219,8 @@ void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, 
     if(invkey == 0){ //no inventory row in the database so lets make one
       Database::instance().newInventory(_table,_key);
       invkey = Database::instance().getInventoryID(_table, _key);
-      Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
-    }else{//it's already there so lets just update it
-      Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
     }
+    Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
 }
 
 QVariant BeerXMLElement::getInventory( const char* col_name ) const
@@ -232,10 +236,10 @@ QVariant BeerXMLElement::getInventory( const char* col_name ) const
 
 bool BeerXMLElement::isValid()
 {
-   return valid;
+   return _valid;
 }
 
 void BeerXMLElement::invalidate()
 {
-   valid = false;
+   _valid = false;
 }

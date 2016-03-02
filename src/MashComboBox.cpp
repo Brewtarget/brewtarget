@@ -29,7 +29,7 @@ MashComboBox::MashComboBox(QWidget* parent)
 {
    setCurrentIndex(-1);
    connect( &(Database::instance()), SIGNAL(newMashSignal(Mash*)), this, SLOT(addMash(Mash*)) );
-   connect( &(Database::instance()), SIGNAL(deletedMashSignal(Mash*)), this, SLOT(removeMash(Mash*)) );
+   connect( &(Database::instance()), SIGNAL(deletedSignal(Mash*)), this, SLOT(removeMash(Mash*)) );
    repopulateList();
 }
 

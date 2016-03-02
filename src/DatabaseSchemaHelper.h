@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "brewtarget.h"
 #include <QString>
 #include <QSqlDatabase>
 
@@ -53,6 +54,10 @@ private:
    static QString SELECT;
    static QString SEP;
    static QString UNIQUE;
+   static QString COMMA;
+   static QString OPENPAREN;
+   static QString CLOSEPAREN;
+   static QString END;
    
    // Types
    static QString TYPEINTEGER;
@@ -60,6 +65,12 @@ private:
    static QString TYPEREAL;
    static QString TYPENUMERIC;
    static QString TYPEDATETIME;
+   static QString TYPEBOOLEAN;
+
+   // Special values
+   static QString THENOW;
+   static QString FALSE;
+   static QString TRUE;
    
    // ID string for EVERY table.
    static QString id;
@@ -72,6 +83,15 @@ private:
    static QString folder;
    
    // =============================Table Names/Columns=========================
+   // the meta table
+   static QString tableMeta;
+   static QString colMetaClassName;
+   static QString colMetaInvId;
+   static QString colMetaChildId;
+   static QString colMetaDateCreated;
+   static QString colMetaVersion;
+   static QString colMetaTableId;
+
    // Settings table
    static QString tableSettings;
    static QString colSettingsVersion;
@@ -199,6 +219,7 @@ private:
    static QString colWaterNotes;
    
    static QString tableMash;
+   static QString colMashName;
    static QString colMashGrainTemp;
    static QString colMashNotes;
    static QString colMashTunTemp;
@@ -327,10 +348,11 @@ private:
    
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+   static bool upgrade;
    /*!
     * \brief Create a blank database whose schema version is \c dbVersion
     */
-   static bool create(QSqlDatabase db = QSqlDatabase());
+   static bool create(QSqlDatabase db = QSqlDatabase(), Brewtarget::DBTypes dbType = Brewtarget::NODB);
    
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
@@ -344,4 +366,67 @@ private:
    
    //! \brief Current schema version of the given database
    static int currentVersion(QSqlDatabase db = QSqlDatabase());
+   static QString foreignKey( QString const& column, QString const& foreignTable );
+
+
+   static void select_dbStrings(Brewtarget::DBTypes dbType);
+
+   // !\brief create_table is a convenience method to wrap a lot of boiler  plate
+   static bool create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid,
+                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
+                        Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
+   // !\brief I need a meta table
+   static bool create_meta(QSqlQuery q);
+   // !\brief And another meta table we've already created
+   static bool create_settings(QSqlQuery q);
+   // \!brief inserts a row into the meta table when a table is created
+   static bool insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid,
+                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
+                        Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
+
+   //! brief These create the beerXML tables
+   static bool create_equipment(QSqlQuery q);
+   static bool create_fermentable(QSqlQuery q);
+   static bool create_hop(QSqlQuery q);
+   static bool create_misc(QSqlQuery q);
+   static bool create_style(QSqlQuery q);
+   static bool create_yeast(QSqlQuery q);
+   static bool create_water(QSqlQuery q);
+   static bool create_mash(QSqlQuery q);
+   static bool create_mashstep(QSqlQuery q);
+   static bool create_brewnote(QSqlQuery q);
+   static bool create_instruction(QSqlQuery q);
+   static bool create_recipe(QSqlQuery q);
+  
+   //! \brief These provide some convenience and reuse
+   static bool create_beerXMLTables(QSqlQuery q);
+   static bool create_btTables(QSqlQuery q);
+   static bool create_inRecipeTables(QSqlQuery q);
+   static bool create_inventoryTables(QSqlQuery q);
+   static bool create_childrenTables(QSqlQuery q);
+
+   //! \brief This creates a table for a bt_* table
+   static bool create_btTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
+   //! \brief This creates a table for *in_recipe 
+   static bool create_recipeChildTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
+   //! \brief This creates a table for inventory
+   static bool create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
+   //! \brief This creates a beerXML child table
+   static bool create_childTable( QSqlQuery q, QString const& tableName, QString const& foreignTable, Brewtarget::DBTable tableid);
+
+   //! \brief Creating triggers is very DB specific. These isolate the specifics
+   static bool create_increment_trigger(QSqlQuery q, Brewtarget::DBTypes dbType=Brewtarget::NODB);
+   static bool create_pgsql_increment_trigger(QSqlQuery q);
+   static bool create_sqlite_increment_trigger(QSqlQuery q);
+
+   static bool create_decrement_trigger(QSqlQuery q, Brewtarget::DBTypes dbType=Brewtarget::NODB);
+   static bool create_pgsql_decrement_trigger(QSqlQuery q);
+   static bool create_sqlite_decrement_trigger(QSqlQuery q);
+
+   static bool migrate_to_202(QSqlQuery q);
+   static bool migrate_to_210(QSqlQuery q);
+   static bool migrate_to_4(QSqlQuery q);
+   static bool migrate_to_5(QSqlQuery q);
+   static bool migrate_to_6(QSqlQuery q);
+   
 };

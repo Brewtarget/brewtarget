@@ -145,6 +145,7 @@ void Hop::setAmount_kg( double num )
       set("amount_kg", "amount", num);
    }
 }
+
 void Hop::setInventoryAmount( double num )
 {
    if( num < 0.0 )
