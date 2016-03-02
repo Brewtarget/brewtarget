@@ -206,7 +206,7 @@ void FermentableDialog::addFermentable(const QModelIndex& index)
    Database::instance().addToRecipe( mainWindow->currentRecipe(), ferm );
 }
 
-void FermentableDialog::newFermentable()
+void FermentableDialog::newFermentable(QString folder)
 {
    QString name = QInputDialog::getText(this, tr("Fermentable name"),
                                           tr("Fermentable name:"));
@@ -215,8 +215,15 @@ void FermentableDialog::newFermentable()
    
    Fermentable* ferm = Database::instance().newFermentable();
    ferm->setName(name);
+   if ( ! folder.isEmpty() )
+      ferm->setFolder(folder);
+
    fermEdit->setFermentable(ferm);
    fermEdit->show();
+}
+
+void FermentableDialog::newFermentable() {
+   newFermentable(QString());
 }
 
 void FermentableDialog::filterFermentables(QString searchExpression)

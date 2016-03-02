@@ -592,6 +592,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
    else
       row = fermObs[index.row()];
 
+   Unit::unitDisplay dspUnit = displayUnit(index.column());
+   Unit::unitScale   dspScl  = displayScale(index.column());
+
    switch( index.column() )
    {
       case FERMNAMECOL:
@@ -607,13 +610,13 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMINVENTORYCOL:
          retVal = value.canConvert(QVariant::String);
          if( retVal )
-            row->setInventoryAmount( Brewtarget::qStringToSI(value.toString(), Units::kilograms,displayUnit(FERMINVENTORYCOL)));
+            row->setInventoryAmount(Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl));
          break;
       case FERMAMOUNTCOL:
          retVal = value.canConvert(QVariant::String);
          if( retVal )
          {
-            row->setAmount_kg( Brewtarget::qStringToSI(value.toString(), Units::kilograms,displayUnit(FERMAMOUNTCOL)));
+            row->setAmount_kg(Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl));
             if( rowCount() > 0 )
                headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
          }
@@ -636,7 +639,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMCOLORCOL:
          retVal = value.canConvert(QVariant::Double);
          if( retVal )
-            row->setColor_srm(Brewtarget::qStringToSI(value.toString(), Units::srm, displayUnit(FERMCOLORCOL)));
+            row->setColor_srm(Brewtarget::qStringToSI(value.toString(), Units::srm, dspUnit, dspScl));
          break;
       default:
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));

@@ -73,6 +73,7 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
         lUse = uses.indexOf( (sourceModel()->data(lSibling)).toString() );
         rUse = uses.indexOf( (sourceModel()->data(rSibling)).toString() );
 
+        unit = Units::minutes; // not Units::kilogram
         if ( lUse == rUse )
             return Brewtarget::qStringToSI(leftHop.toString(),unit) < Brewtarget::qStringToSI(rightHop.toString(),unit);
 

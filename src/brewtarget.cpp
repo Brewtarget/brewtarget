@@ -85,7 +85,7 @@ QFile Brewtarget::pidFile;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
-QDir Brewtarget::userDataDir = getConfigDir();
+QDir Brewtarget::userDataDir = QString();
 Brewtarget::DBTypes Brewtarget::_dbType = Brewtarget::NODB;
 
 bool Brewtarget::checkVersion = true;
@@ -392,7 +392,7 @@ const QDir Brewtarget::getConfigDir(bool *success)
 
    QDir dir;
    // This is the bin/ directory.
-   dir = QDir(qApp->applicationDirPath());
+   dir = QDir(QCoreApplication::applicationDirPath());
    dir.cdUp();
    // Now we should be in the base directory (i.e. Brewtarget-2.0.0/)
 
@@ -1270,10 +1270,10 @@ QString Brewtarget::displayThickness( double thick_lkg, bool showUnits )
       return QString("%L1").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
 }
 
-double Brewtarget::qStringToSI(QString qstr, Unit* unit, Unit::unitDisplay dispUnit, bool force)
+double Brewtarget::qStringToSI(QString qstr, Unit* unit, Unit::unitDisplay dispUnit, Unit::unitScale dispScale)
 {
    UnitSystem* temp = findUnitSystem(unit, dispUnit);
-   return temp->qstringToSI(qstr,temp->unit(),force);
+   return temp->qstringToSI(qstr,temp->unit(),false,dispScale);
 }
 
 QString Brewtarget::ibuFormulaName()

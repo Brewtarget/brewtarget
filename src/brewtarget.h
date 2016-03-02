@@ -252,7 +252,8 @@ public:
    static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
 
    //! \return SI amount for the string
-   static double qStringToSI( QString qstr, Unit* unit, Unit::unitDisplay dispUnit = Unit::noUnit, bool force = false);
+   static double qStringToSI( QString qstr, Unit* unit, 
+         Unit::unitDisplay dispUnit = Unit::noUnit, Unit::unitScale dispScale = Unit::noScale);
 
    //! \brief return the bitterness formula's name
    static QString ibuFormulaName();

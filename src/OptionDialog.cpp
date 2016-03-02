@@ -352,11 +352,10 @@ void OptionDialog::saveAndClose()
          break;
    }
 
-   Brewtarget::ibuFormula = Brewtarget::IbuType(
-           ibuFormulaComboBox->itemData(ibuFormulaComboBox->currentIndex()).toInt(&okay));
-
-   Brewtarget::colorFormula = Brewtarget::ColorType(
-           colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay));
+   int ndx = ibuFormulaComboBox->itemData(ibuFormulaComboBox->currentIndex()).toInt(&okay);
+   Brewtarget::ibuFormula = static_cast<Brewtarget::IbuType>(ndx);
+   ndx = colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay);
+   Brewtarget::colorFormula = static_cast<Brewtarget::ColorType>(ndx);
 
    // Set the right language.
    Brewtarget::setLanguage( ndxToLangCode[ comboBox_lang->currentIndex() ] );
@@ -419,17 +418,17 @@ void OptionDialog::showChanges()
    dateComboBox->setCurrentIndex(dateComboBox->findData(Brewtarget::dateFormat));
    colorComboBox->setCurrentIndex(colorComboBox->findData(Brewtarget::colorUnit));
 
-   colorFormulaComboBox->setCurrentIndex(colorFormulaComboBox->findData(Brewtarget::ibuFormula));
-   ibuFormulaComboBox->setCurrentIndex(ibuFormulaComboBox->findData(Brewtarget::colorFormula));
+   colorFormulaComboBox->setCurrentIndex(colorFormulaComboBox->findData(Brewtarget::colorFormula));
+   ibuFormulaComboBox->setCurrentIndex(ibuFormulaComboBox->findData(Brewtarget::ibuFormula));
 
    // Data directory
    lineEdit_dbDir->setText(Brewtarget::getUserDataDir().canonicalPath());
 
    // The IBU modifications. These will all be calculated from a 60 min boil. This is gonna get confusing.
-   double amt = Brewtarget::toDouble(Brewtarget::option("mashHopAdjustment",100).toString(), "OptionDialog::showChanges()");
+   double amt = Brewtarget::toDouble(Brewtarget::option("mashHopAdjustment",0).toString(), "OptionDialog::showChanges()");
    ibuAdjustmentMashHopDoubleSpinBox->setValue(amt*100);
 
-   amt = Brewtarget::toDouble(Brewtarget::option("firstWortHopAdjustment",100).toString(), "OptionDialog::showChanges()");
+   amt = Brewtarget::toDouble(Brewtarget::option("firstWortHopAdjustment",1.1).toString(), "OptionDialog::showChanges()");
    ibuAdjustmentFirstWortDoubleSpinBox->setValue(amt*100);
 
    // Database stuff -- this looks weird, but trust me. We want SQLITE to be
@@ -448,7 +447,6 @@ void OptionDialog::showChanges()
 
    status = OptionDialog::NOCHANGE;
    changeColors();
-
 }
 
 void OptionDialog::changeEvent(QEvent* e)

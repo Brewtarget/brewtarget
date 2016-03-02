@@ -74,7 +74,7 @@ void RefractoDialog::calculate()
    else if( (!haveOP) && haveOG )
    {
       originalPlato = Algorithms::SG_20C20C_toPlato( inputOG );
-      lineEdit_op->setText(originalPlato);
+      lineEdit_op->setText(inputOG);
    }
    else if( (!haveOP) && (!haveOG) ) {
       qDebug() << Q_FUNC_INFO << "no plato or og";

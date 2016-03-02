@@ -837,7 +837,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
                failed = true;
             break;
          default:
-            Brewtarget::logW(QString("deleteSelected:: unknown type %1").arg(type(ndx)));
+            Brewtarget::logW(QString("copySelected:: unknown type %1").arg(type(ndx)));
       }
       if ( failed ) {
          QMessageBox::warning(0,
@@ -857,9 +857,6 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
       QModelIndex ndx = toBeDeleted.takeFirst();
       switch ( type(ndx) ) 
       {
-         case BtTreeItem::RECIPE:
-            Database::instance().remove( recipe(ndx) );
-            break;
          case BtTreeItem::EQUIPMENT:
             Database::instance().remove( equipment(ndx) );
             break;
@@ -871,6 +868,12 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
             break;
          case BtTreeItem::MISC:
             Database::instance().remove( misc(ndx) );
+            break;
+         case BtTreeItem::RECIPE:
+            Database::instance().remove( recipe(ndx) );
+            break;
+         case BtTreeItem::STYLE:
+            Database::instance().remove( style(ndx) );
             break;
          case BtTreeItem::YEAST:
             Database::instance().remove( yeast(ndx) );

@@ -16,7 +16,7 @@ ENDIF()
 
 #=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 2 )
-SET( brewtarget_VERSION_MINOR 3 )
+SET( brewtarget_VERSION_MINOR 4 )
 SET( brewtarget_VERSION_PATCH 0 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
@@ -103,72 +103,58 @@ ENDIF()
 
 #==================================Find Qt5====================================
 
+# The minimum QT5 version we need. Keep as low as necessary.
+SET(QT5_MIN_VERSION 5.3)
+
 # Automatically run moc on source files when necessary
 SET(CMAKE_AUTOMOC ON)
 # As moc files are generated in the binary dir, tell CMake
 # to always look for includes there:
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-FIND_PACKAGE(Qt5Core REQUIRED)
+FIND_PACKAGE(Qt5Core ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Widgets REQUIRED)
+FIND_PACKAGE(Qt5Widgets ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Network REQUIRED)
+FIND_PACKAGE(Qt5Network ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Network_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5PrintSupport REQUIRED)
+FIND_PACKAGE(Qt5PrintSupport ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5PrintSupport_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Qml REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Qml_INCLUDE_DIRS})
-
-FIND_PACKAGE(Qt5Sql REQUIRED)
+FIND_PACKAGE(Qt5Sql ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Sql_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5WebKit REQUIRED)
+# This is required to make the deploy scripts pick up the svg plugins
+FIND_PACKAGE(Qt5Svg ${QT5_MIN_VERSION} REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Svg_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5WebKit ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5WebKit_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5WebKitWidgets REQUIRED)
+FIND_PACKAGE(Qt5WebKitWidgets ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5WebKitWidgets_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5Xml REQUIRED)
+FIND_PACKAGE(Qt5Xml ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Xml_INCLUDE_DIRS})
 
 IF( NOT ${NO_QTMULTIMEDIA} )
-FIND_PACKAGE(Qt5Multimedia REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
+   FIND_PACKAGE(Qt5Multimedia ${QT5_MIN_VERSION} REQUIRED)
+   INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
 ENDIF()
 
-FIND_PACKAGE(Qt5Test REQUIRED)
+FIND_PACKAGE(Qt5Test ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Test_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5LinguistTools REQUIRED)
+FIND_PACKAGE(Qt5LinguistTools ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5LinguistTools_INCLUDE_DIRS})
-
-# Need to find SVG component to locate svg dlls later
-IF(WIN32)
-   FIND_PACKAGE(Qt5Svg REQUIRED)
-   INCLUDE_DIRECTORIES(${Qt5Svg_INCLUDE_DIRS})
-ENDIF()
 
 # Fuckin Qt5 requires -fPIC if Qt5 itself was built with -fPIC
 IF(Qt5_POSITION_INDEPENDENT_CODE)
    SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ENDIF()
-
-#IF( ${BUILD_DESIGNER_PLUGINS} )
-#   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebKit QtXml QtDesigner REQUIRED)
-#ELSE()
-#   # This is a major kludge, but linking with QtSvg is the easiest way to get
-#   # an app that includes the svg image format plugin that works.
-#   IF( APPLE )
-#      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml QtSvg REQUIRED)
-#   ELSE()
-#      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml REQUIRED)
-#   ENDIF()
-#ENDIF()
 
 MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
 
@@ -381,9 +367,6 @@ IF( WIN32 )
    FIND_PACKAGE(Qt5MultimediaWidgets REQUIRED)
    ENDIF()
    FIND_PACKAGE(Qt5OpenGL REQUIRED)
-   FIND_PACKAGE(Qt5Sensors REQUIRED)
-   FIND_PACKAGE(Qt5Quick REQUIRED)
-   FIND_PACKAGE(Qt5Positioning REQUIRED)
 
    GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtGui_location Qt5::Gui LOCATION_${CMAKE_BUILD_TYPE})
@@ -393,11 +376,7 @@ IF( WIN32 )
    ENDIF()
    GET_TARGET_PROPERTY(QtNetwork_location Qt5::Network LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtOpenGL_location Qt5::OpenGL LOCATION_${CMAKE_BUILD_TYPE})
-   GET_TARGET_PROPERTY(QtPositioning_location Qt5::Positioning LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtPrintSupport_location Qt5::PrintSupport LOCATION_${CMAKE_BUILD_TYPE})
-   GET_TARGET_PROPERTY(QtQml_location Qt5::Qml LOCATION_${CMAKE_BUILD_TYPE})
-   GET_TARGET_PROPERTY(QtQuick_location Qt5::Quick LOCATION_${CMAKE_BUILD_TYPE})
-   GET_TARGET_PROPERTY(QtSensors_location Qt5::Sensors LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtSql_location Qt5::Sql LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtSvg_location Qt5::Svg LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtWebKit_location Qt5::WebKit LOCATION_${CMAKE_BUILD_TYPE})
@@ -422,7 +401,6 @@ IF( WIN32 )
         ${QtWidgets_location}
         ${QtNetwork_location}
         ${QtPrintSupport_location}
-        ${QtQml_location}
         ${QtSql_location}
         ${QtSvg_location}
         ${QtXml_location}
@@ -430,9 +408,6 @@ IF( WIN32 )
         ${QtGui_location}
         ${QtWebKitWidgets_location}
         ${QtOpenGL_location}
-        ${QtSensors_location}
-        ${QtQuick_location}
-        ${QtPositioning_location}
    )
    IF( NOT ${NO_QTMULTIMEDIA})
       SET( Qt_DLLs
@@ -440,11 +415,6 @@ IF( WIN32 )
         ${QtMultimedia_location}
         ${QtMultimediaWidgets_location}
    )
-   ENDIF()
-   IF (${Qt5Core_VERSION_STRING} VERSION_GREATER "5.4.0")
-      FIND_PACKAGE(Qt5WebChannel REQUIRED)
-      GET_TARGET_PROPERTY(QtWebChannel_location Qt5::WebChannel LOCATION_${CMAKE_BUILD_TYPE})
-      list(APPEND Qt_DLLs ${QtWebChannel_location})
    ENDIF()
    SET( SQL_Drivers_DLLs
         ${QtSqliteDriver_location}
