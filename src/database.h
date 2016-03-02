@@ -148,7 +148,7 @@ public:
    //! Create new mash attached to \b parent.
    Mash* newMash(Recipe* parent);
    //! Create new mash step attached to \b parent.
-   MashStep* newMashStep(Mash* parent);
+   MashStep* newMashStep(Mash* parent,bool connected=true);
    Misc* newMisc();
    Recipe* newRecipe(bool addMash = true);
    Style* newStyle();

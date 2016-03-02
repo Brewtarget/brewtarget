@@ -66,6 +66,34 @@ void MashWizard::show()
    setVisible(true);
 }
 
+double MashWizard::calcDecoctionAmount( MashStep* step, Mash* mash, double waterMass, double grainMass, double lastTemp, double boiling)
+{
+   double grainDensity = PhysicalConstants::grainDensity_kgL;
+
+   double stepTemp  = step->stepTemp_c();
+   double equipMass = (mash->equipAdjust()) ? mash->tunWeight_kg() : 0;
+   double c_e       = (mash->equipAdjust()) ? mash->tunSpecificHeat_calGC() : 0;
+
+   double grHeat = grainMass * HeatCalculations::Cw_calGC;
+   double waHeat = waterMass * HeatCalculations::Cgrain_calGC;
+   double eqHeat = equipMass * c_e;
+
+   double totalHeat = grHeat + waHeat;
+   double deltaTemp = stepTemp - lastTemp;
+
+   // r is the ratio of water and grain to take out for decoction.
+   double r = ((totalHeat + eqHeat)*deltaTemp) / (totalHeat*(boiling - stepTemp) + totalHeat*deltaTemp);
+
+   if( r < 0 || r > 1 )
+   {
+      QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation.") );
+      Brewtarget::logE(QString("%1: r=%2").arg(Q_FUNC_INFO).arg(r));
+      return -1;
+   }
+   return r * (waterMass + grainMass/grainDensity);
+
+}
+
 void MashWizard::wizardry()
 {
    if( recObs == 0 || recObs->mash() == 0 )
@@ -119,7 +147,7 @@ void MashWizard::wizardry()
    }
    
    // Ensure first mash step is an infusion.
-   if( mashStep->type() != MashStep::Infusion )
+   if( ! mashStep->isInfusion() && ! mashStep->isSparge() )
    {
       QMessageBox::information(this, tr("First step"), tr("Your first mash step must be an infusion."));
       return;
@@ -129,7 +157,9 @@ void MashWizard::wizardry()
    for( i = 0; i < steps.size(); ++i)
    {
       MashStep* step = steps[i];
-      if( step && step->name() == "Final Batch Sparge" )
+      // NOTE: For backwards compatibility, the Final Batch Sparge comparison
+      // must be allowed. No matter how much we desire otherwise.
+      if( step->isSparge() || step->name() == "Final Batch Sparge" )
          Database::instance().removeFrom(mash,step);
    }
 
@@ -171,9 +201,9 @@ void MashWizard::wizardry()
    {
       mashStep = steps[i];
 
-      if( mashStep->type() == MashStep::Temperature )
+      if( mashStep->isTemperature() )
          continue;
-      else if( mashStep->type() == MashStep::Decoction )
+      else if( mashStep->isDecoction() )
       {
          double m_w, m_g, m_e, r;
          double c_w, c_g, c_e;
@@ -243,6 +273,8 @@ void MashWizard::wizardry()
 
    if( spargeWater_l >= 0.0 )
    {
+      /* We just removed all of the batch sparge steps (line 144). How will
+       * this code actually do anything?
       // If the recipe already has a mash step named "Final Batch Sparge",
       // find it and use it instead of making a new one.
       bool foundSparge = false;
@@ -257,9 +289,10 @@ void MashWizard::wizardry()
       }
       if( ! foundSparge )
       {
+      */
          mashStep = Database::instance().newMashStep(mash); // Or just make a new one.
          steps.append(mashStep);
-      }
+      //}
 
       int lastMashStep = steps.size()-1;
       tf = mash->spargeTemp_c();
@@ -282,8 +315,8 @@ void MashWizard::wizardry()
                                   tr("Sparge temp."),
                                   tr("In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water."));
 
-      mashStep->setName("Final Batch Sparge");
-      mashStep->setType(MashStep::Infusion);
+      mashStep->setName(tr("Final Batch Sparge"));
+      mashStep->setType(MashStep::batchSparge);
       mashStep->setInfuseAmount_l(spargeWater_l);
       mashStep->setInfuseTemp_c(tw);
       mashStep->setEndTemp_c(tw);

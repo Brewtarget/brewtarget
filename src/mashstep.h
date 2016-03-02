@@ -98,6 +98,12 @@ public:
    //! What number this step is in the mash.
    int stepNumber() const;
 
+   //! some convenience methods
+   bool isInfusion() const;
+   bool isSparge() const;
+   bool isTemperature() const;
+   bool isDecoction() const;
+
 signals:
 
    //! \brief Emitted when \c name() changes.

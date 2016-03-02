@@ -1100,7 +1100,7 @@ Mash* Database::newMash(Mash* other, bool displace)
    return tmp;
 }
 
-MashStep* Database::newMashStep(Mash* mash)
+MashStep* Database::newMashStep(Mash* mash, bool connected)
 {
    // TODO: encapsulate in QUndoCommand.
    // NOTE: we have unique(mash_id,step_number) constraints on this table,
@@ -1110,7 +1110,9 @@ MashStep* Database::newMashStep(Mash* mash)
    tmp->_table = Brewtarget::MASHSTEPTABLE;
 
    allMashSteps.insert(tmp->_key,tmp);
-   connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
+
+   if ( connected ) 
+      connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
    makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );

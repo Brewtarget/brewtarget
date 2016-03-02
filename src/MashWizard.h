@@ -50,6 +50,10 @@ private:
    Recipe* recObs;
    Unit *weightUnit;
    Unit *volumeUnit;
+
+   //!brief helper method to calculate the volume of a decocation step
+   double calcDecoctionAmount( MashStep* step, Mash* mash, double waterMass, double grainMass, double lastTemp, double boiling);
+
 };
 
 #endif   /* _MASHWIZARD_H */

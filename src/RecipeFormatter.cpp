@@ -1157,12 +1157,12 @@ QString RecipeFormatter::buildMashTableHtml()
              .arg(ms->name())
              .arg(ms->typeStringTr());
 
-      if( ms->type() == MashStep::Infusion )
+      if( ms->isInfusion() )
       {
          tmp = tmp.arg(Brewtarget::displayAmount(ms->infuseAmount_l(), "mashStepTableModel", "amount", Units::liters))
                   .arg(Brewtarget::displayAmount(ms->infuseTemp_c(),   "mashStepTableModel", "infuseTemp_c", Units::celsius));
       }
-      else if( ms->type() == MashStep::Decoction )
+      else if( ms->isDecoction() )
       {
          tmp = tmp.arg( Brewtarget::displayAmount( ms->decoctionAmount_l(), "mashStepTableModel", "amount", Units::liters ) )
                .arg("---");
@@ -1211,12 +1211,12 @@ QString RecipeFormatter::buildMashTableTxt()
          MashStep* s = mashSteps[i];
          names.append(s->name());
          types.append(s->typeStringTr());
-         if( s->type() == MashStep::Infusion )
+         if( s->isInfusion() )
          {
             amounts.append(Brewtarget::displayAmount(s->infuseAmount_l(), "mashStepTableModel", "amount", Units::liters));
             temps.append(Brewtarget::displayAmount(s->infuseTemp_c(),   "mashStepTableModel", "infuseTemp_c", Units::celsius));
          }
-         else if( s->type() == MashStep::Decoction )
+         else if( s->isDecoction() )
          {
             amounts.append(Brewtarget::displayAmount(s->decoctionAmount_l(), "mashStepTableModel", "amount", Units::liters));
             temps.append("---");
