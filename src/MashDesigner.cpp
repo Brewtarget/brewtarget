@@ -158,6 +158,7 @@ void MashDesigner::saveStep()
       mashStep->setInfuseAmount_l( selectedAmount_l() );
       mashStep->setInfuseTemp_c( selectedTemp_c() );
    }
+   emit mash->mashStepsChanged();
 }
 
 double MashDesigner::stepTemp_c()
@@ -200,8 +201,7 @@ double MashDesigner::maxAmt_l()
       return 0;
 
    // However much more we can fit in the tun.
-   /*
-   if( ! isSparge() )
+   if( ! isFlySparge() )
    {
       return equip->tunVolume_l() - mashVolume_l();
    }
@@ -209,9 +209,6 @@ double MashDesigner::maxAmt_l()
    {
       return equip->tunVolume_l() - grainVolume_l();
    }
-   */
-   return equip->tunVolume_l() - mashVolume_l();
-
 }
 
 // Returns the required volume of water to infuse if the strike water is
@@ -372,13 +369,30 @@ void MashDesigner::updateFullness()
    label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + (isInfusion() ? selectedAmount_l() : 0) )/grain_kg ));
 }
 
+double MashDesigner::waterFromMash_l()
+{
+   double waterAdded_l = mash->totalMashWater_l();
+   double absorption_lKg;
+
+   if ( recObs == 0 )
+      return 0.0;
+
+   if( equip )
+      absorption_lKg = equip->grainAbsorption_LKg();
+   else
+      absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+
+   return (waterAdded_l - absorption_lKg * recObs->grainsInMash_kg());
+}
+
 void MashDesigner::updateCollectedWort()
 {
    if( recObs == 0 )
       return;
 
    // double wort_l = recObs->wortFromMash_l();
-   double wort_l = mash->totalMashWater_l();
+   double wort_l = waterFromMash_l();
+
    double ratio = wort_l / recObs->boilSize_l();
    if( ratio < 0 )
      ratio = 0;
@@ -619,6 +633,15 @@ void MashDesigner::typeChanged(int t)
 
    if( mashStep != 0 )
       mashStep->setType(_type);
+
+   // fly sparge is the end of the line. No more steps can be added after
+   if ( isFlySparge() ) 
+   {
+      // more will happen here, but I need to understand a few things
+      pushButton_next->setEnabled(false);
+   }
+   else if ( ! pushButton_next->isEnabled() )
+      pushButton_next->setEnabled(true);
 
    if( isInfusion() )
    {

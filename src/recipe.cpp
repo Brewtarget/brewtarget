@@ -1503,7 +1503,6 @@ void Recipe::recalcVolumeEstimates()
       _wortFromMash_l = 0.0;
    else
    {
-   
       waterAdded_l = mash()->totalMashWater_l();
       if( equipment() != 0 )
          absorption_lKg = equipment()->grainAbsorption_LKg();

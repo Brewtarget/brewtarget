@@ -77,6 +77,7 @@ private:
    double tempFromVolume_c( double vol_l );
    double volFromTemp_l( double temp_c );
    double getDecoctionAmount_l();
+   double waterFromMash_l();
 
    // I have developed a distaste for "getBlah"
    double selectedAmount_l();
