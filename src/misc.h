@@ -38,8 +38,8 @@ class Misc;
 class Misc : public BeerXMLElement
 {
    Q_OBJECT
-   Q_CLASSINFO("signal", "miscs");
-   Q_CLASSINFO("prefix", "misc");
+   Q_CLASSINFO("signal", "miscs")
+   Q_CLASSINFO("prefix", "misc")
    
    friend class Database;
 public:

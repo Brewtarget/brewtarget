@@ -65,8 +65,8 @@ bool operator==(Recipe &r1, Recipe &r2 );
 class Recipe : public BeerXMLElement
 {
    Q_OBJECT
-   Q_CLASSINFO("signal", "recipes");
-   Q_CLASSINFO("prefix", "recipe");
+   Q_CLASSINFO("signal", "recipes")
+   Q_CLASSINFO("prefix", "recipe")
    
    friend class Database;
 public:
