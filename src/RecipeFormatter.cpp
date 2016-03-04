@@ -150,11 +150,62 @@ QString RecipeFormatter::getTextSeparator()
    return *textSeparator;
 }
 
+QString RecipeFormatter::buildHTMLHeader() {
+    QString header;
+
+   // Do the style sheet first
+   header = "<html><head><style type=\"text/css\">";
+   header += getCSS();
+   header += "</style></head>";
+
+   header += "<body>";
+
+   return header;
+}
+
+QString RecipeFormatter::buildHTMLFooter() {
+    return "</div></body></html>";
+}
+
+QString RecipeFormatter::getHTMLFormat( QList<Recipe*> recipes ) {
+   Recipe *current = rec;
+   QString hDoc;
+
+   hDoc = buildHTMLHeader();
+
+   // build a toc -- why do I do this to myself?
+   hDoc += "<ul>";
+   foreach ( Recipe* foo, recipes ) {
+       hDoc += QString("<li><a href=\"#%1\">%1</a></li>").arg(foo->name());
+   }
+   hDoc += "</ul>";
+
+   foreach (Recipe* foo, recipes) {
+      rec = foo;
+      hDoc += QString("<a name=\"%1\"></a>").arg(foo->name());
+      hDoc += buildStatTableHtml();
+      hDoc += buildFermentableTableHtml();
+      hDoc += buildHopsTableHtml();
+      hDoc += buildMiscTableHtml();
+      hDoc += buildYeastTableHtml();
+      hDoc += buildMashTableHtml();
+      hDoc += buildNotesHtml();
+      hDoc += buildInstructionTableHtml();
+      hDoc += buildBrewNotesHtml();
+      hDoc += "<p></p>";
+   }
+   hDoc += buildHTMLFooter();
+
+   rec = current;
+   return hDoc;
+}
+
 QString RecipeFormatter::getHTMLFormat()
 {
    QString pDoc;
 
-   pDoc = buildStatTableHtml();
+   pDoc = buildHTMLHeader();
+   pDoc += buildStatTableHtml();
    pDoc += buildFermentableTableHtml();
    pDoc += buildHopsTableHtml();
    pDoc += buildMiscTableHtml();
@@ -164,7 +215,7 @@ QString RecipeFormatter::getHTMLFormat()
    pDoc += buildInstructionTableHtml();
    pDoc += buildBrewNotesHtml();
 
-   pDoc += "</div></body></html>";
+   pDoc += buildHTMLFooter();
 
    return pDoc;
 }
@@ -643,12 +694,6 @@ QString RecipeFormatter::buildStatTableHtml()
 
    style = rec->style();
 
-   // Do the style sheet first
-   header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
-   header += "</style></head>";
-
-   body   = "<body>";
    //body += QString("<h1>%1</h1>").arg(rec->getName()());
    body += QString("<div id=\"headerdiv\">");
    body += QString("<table id=\"header\">");
