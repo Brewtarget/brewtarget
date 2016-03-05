@@ -2133,6 +2133,39 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
    return outFile;
 }
 
+void MainWindow::exportSelectedHtml() {
+   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   QModelIndexList selected;
+   QList <Recipe*> targets;
+   QFile* outFile;
+
+   if ( active == 0 )
+      return;
+
+   // this only works for recipes
+   if ( active != treeView_recipe ) {
+       return;
+   }
+
+   // get the targeted file
+   outFile = openForWrite(tr("HTML files (*.html)"), QString("html"));
+   if ( !outFile )
+      return;
+
+   // Get the selected recipes and throw them into a list
+   selected = active->selectionModel()->selectedRows();
+   if( selected.count() == 0 )
+      return;
+
+   foreach( QModelIndex ndx, selected) 
+      targets.append( treeView_recipe->recipe(ndx) );
+
+   // and write it all
+   QTextStream out(outFile);
+   out << recipeFormatter->getHTMLFormat(targets);
+   outFile->close();
+}
+
 void MainWindow::exportSelected()
 {
    BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());

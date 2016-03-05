@@ -21,8 +21,8 @@
 #include "mashstep.h"
 #include "brewtarget.h"
 
-QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction";
-QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
+QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction" << "Fly Sparge" << "Batch Sparge";
+QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction") << QObject::tr("Fly Sparge") << QObject::tr("Batch Sparge");
 
 QHash<QString,QString> MashStep::tagToProp = MashStep::tagToPropHash();
 
@@ -170,7 +170,7 @@ void MashStep::setInfuseAmount_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Mashstep: number cannot be negative: %1").arg(var) );
+      Brewtarget::logW( QString("%1 number cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
       return;
    }
    else
@@ -183,7 +183,7 @@ void MashStep::setStepTemp_c( double var )
 {
    if( var < -273.15 )
    {
-      Brewtarget::logW( QString("Mashstep: temp below absolute zero: %1").arg(var) );
+      Brewtarget::logW( QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var) );
       return;
    }
    else
@@ -196,7 +196,7 @@ void MashStep::setStepTime_min( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Mashstep: step time cannot be negative: %1").arg(var) );
+      Brewtarget::logW( QString("%1: step time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
       return;
    }
    else
@@ -209,7 +209,8 @@ void MashStep::setRampTime_min( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Mashstep: ramp time cannot be negative: %1").arg(var) );
+      Brewtarget::logW( QString("%1: ramp time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
+
       return;
    }
    else
@@ -222,7 +223,7 @@ void MashStep::setEndTemp_c( double var )
 {
    if( var < -273.15 )
    {
-      Brewtarget::logW( QString("Mashstep: temp below absolute zero: %1").arg(var) );
+      Brewtarget::logW( QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var) );
       return;
    }
    else
@@ -255,15 +256,33 @@ double MashStep::decoctionAmount_l()   const { return get("decoction_amount").to
 
 int MashStep::stepNumber()             const { return get("step_number").toInt(); }
 
+bool MashStep::isInfusion() const {
+   MashStep::Type _type = type();
+   return ( _type == MashStep::Infusion    ||
+            _type == MashStep::batchSparge ||
+            _type == MashStep::flySparge );
+}
+
+bool MashStep::isSparge() const {
+   MashStep::Type _type = type();
+   return ( _type == MashStep::batchSparge ||
+            _type == MashStep::flySparge   || 
+            name() == "Final Batch Sparge" );
+}
+
+bool MashStep::isTemperature() const
+{
+   MashStep::Type _type = type();
+   return ( _type == MashStep::Temperature );
+}
+
+bool MashStep::isDecoction() const
+{
+   MashStep::Type _type = type();
+   return ( _type == MashStep::Decoction );
+}
+
 bool MashStep::isValidType( const QString &str ) const
 {
-   static const QString types[] = {"Infusion", "Temperature", "Decoction"};
-   static const unsigned int size = 3;
-   unsigned int i;
-   
-   for( i = 0; i < size; ++i )
-      if( str == types[i] )
-         return true;
-   
-   return false;
+   return MashStep::types.contains(str);
 }

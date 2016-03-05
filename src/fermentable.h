@@ -43,8 +43,8 @@ bool operator==(Fermentable &f1, Fermentable &f2);
 class Fermentable : public BeerXMLElement
 {
    Q_OBJECT
-   Q_CLASSINFO("signal", "fermentables");
-   Q_CLASSINFO("prefix", "fermentable");
+   Q_CLASSINFO("signal", "fermentables")
+   Q_CLASSINFO("prefix", "fermentable")
 
    friend class Brewtarget;
    friend class Database;

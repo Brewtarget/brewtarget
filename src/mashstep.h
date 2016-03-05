@@ -41,10 +41,11 @@ class MashStep : public BeerXMLElement
    Q_OBJECT
    
    friend class Database;
+   friend class MashStepItemDelegate;
 public:
 
    //! \brief The type of step.
-   enum Type { Infusion, Temperature, Decoction };
+   enum Type { Infusion, Temperature, Decoction, flySparge, batchSparge };
    Q_ENUMS( Type )
    
    virtual ~MashStep() {}
@@ -96,6 +97,12 @@ public:
    
    //! What number this step is in the mash.
    int stepNumber() const;
+
+   //! some convenience methods
+   bool isInfusion() const;
+   bool isSparge() const;
+   bool isTemperature() const;
+   bool isDecoction() const;
 
 signals:
 

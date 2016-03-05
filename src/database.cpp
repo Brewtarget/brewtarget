@@ -313,14 +313,16 @@ bool Database::load()
          }
    }
 
-   // With the db open, we can get all our hashes. This has to happen before
-   // updateSchema
-   Database::tableNames = tableNamesHash();
-   Database::classNameToTable = classNameToTableHash();
    // Update the database if need be. This has to happen before we do anything
    // else or we dump core
    bool schemaErr = false;
    schemaUpdated = updateSchema(&schemaErr);
+
+   // Since updateSchema could add new tables, we have to wait until this
+   // point to populate the tables. 
+   Database::tableNames = tableNamesHash();
+   Database::classNameToTable = classNameToTableHash();
+
    if( schemaErr )
    {
       if (Brewtarget::isInteractive()) {
@@ -332,7 +334,6 @@ bool Database::load()
       }
       return false;
    }
-
 
    // Initialize the SELECT * query hashes.
    selectAll = Database::selectAllHash();
@@ -1380,7 +1381,7 @@ Mash* Database::newMash(Recipe* parent, bool transact)
    return tmp;
 }
 
-MashStep* Database::newMashStep(Mash* mash)
+MashStep* Database::newMashStep(Mash* mash, bool connected)
 {
    // TODO: encapsulate in QUndoCommand.
    // NOTE: we have unique(mash_id,step_number) constraints on this table,
@@ -1401,7 +1402,10 @@ MashStep* Database::newMashStep(Mash* mash)
       throw;
    }
 
-   connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
+   allMashSteps.insert(tmp->_key,tmp);
+
+   if ( connected ) 
+      connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
    sqlDatabase().commit();
    makeDirty();
@@ -1742,7 +1746,15 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
 }
 // populate ingredient tables
 void Database::populateChildTablesByName(){
+
    try {
+      // I really dislike this. It counts as spooky action at a distance, but
+      // the populateChildTablesByName methods need these hashes populated
+      // early and there is no easy way to untangle them. Yes, this results in
+      // the work being done twice. Such is life.
+      Database::tableNames = tableNamesHash();
+      Database::classNameToTable = classNameToTableHash();
+
       populateChildTablesByName(Brewtarget::FERMTABLE);
       populateChildTablesByName(Brewtarget::HOPTABLE);
       populateChildTablesByName(Brewtarget::MISCTABLE);
@@ -3117,7 +3129,10 @@ void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
    mashStepNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->typeString());
+   if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) 
+      tmpText = doc.createTextNode(  MashStep::types[0] );
+   else 
+      tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
 

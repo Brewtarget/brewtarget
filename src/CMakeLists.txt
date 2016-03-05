@@ -480,11 +480,13 @@ ADD_TEST(
 # Install executable.
 INSTALL( TARGETS ${brewtarget_EXECUTABLE}
          BUNDLE DESTINATION .
-         RUNTIME DESTINATION ${TARGETPATH} )
+         RUNTIME DESTINATION ${TARGETPATH}
+         COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
 
 # Install the translations.
 INSTALL(FILES ${QM_FILES}
-        DESTINATION "${DATAPATH}/translations_qm")
+        DESTINATION "${DATAPATH}/translations_qm"
+        COMPONENT ${DATA_INSTALL_COMPONENT} )
 
 # http://pmarinc-tidylib.googlecode.com/hg/src/Sigil/CMakeLists.txt?r=8276c61e05bc385d5ffbcc58e1f007f84b0c52df
 IF( APPLE )

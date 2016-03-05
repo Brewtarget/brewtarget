@@ -227,7 +227,7 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double to
    {
       mstep = msteps[i];
 
-      if( mstep->type() == MashStep::Infusion )
+      if( mstep->isInfusion() )
       {
          str = tr("Add %1 water at %2 to mash to bring it to %3.")
                .arg(Brewtarget::displayAmount(mstep->infuseAmount_l(), "mashStepTableModel", "infuseAmount_l", Units::liters))
@@ -235,11 +235,11 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double to
                .arg(Brewtarget::displayAmount(mstep->stepTemp_c(), "mashStepTableModel", "stepTemp_c", Units::celsius));
          totalWaterAdded_l += mstep->infuseAmount_l();
       }
-      else if( mstep->type() == MashStep::Temperature )
+      else if( mstep->isTemperature() )
       {
          str = tr("Heat mash to %1.").arg(Brewtarget::displayAmount(mstep->stepTemp_c(), "mashStepTableModel", "stepTemp_c", Units::celsius));
       }
-      else if( mstep->type() == MashStep::Decoction )
+      else if( mstep->isDecoction() )
       {
          str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
                .arg(Brewtarget::displayAmount(mstep->decoctionAmount_l(), "mashStepTableModel", "decoctionAmount_l", Units::liters))
@@ -1483,7 +1483,6 @@ void Recipe::recalcVolumeEstimates()
       _wortFromMash_l = 0.0;
    else
    {
-   
       waterAdded_l = mash()->totalMashWater_l();
       if( equipment() != 0 )
          absorption_lKg = equipment()->grainAbsorption_LKg();
@@ -1982,7 +1981,7 @@ QList<QString> Recipe::getReagents( QList<MashStep*> msteps )
 
    for ( int i = 0; i < msteps.size(); ++i )
    {
-      if( msteps[i]->type() != MashStep::Infusion )
+      if( ! msteps[i]->isInfusion() )
          continue;
 
       if ( i+1 < msteps.size() ) 

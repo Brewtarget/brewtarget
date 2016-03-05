@@ -7,7 +7,14 @@ for consumption by the typical end-user.
 
 ### New Features
 
+* None
+
 ### Bug Fixes
+
+* Bad amount/weight behavior in yeast editor [#183](https://github.com/Brewtarget/brewtarget/issues/183)
+* Bad time sorting in hop table [#182](https://github.com/Brewtarget/brewtarget/issues/182)
+* First wort hop adjustment 100x too high [#177](https://github.com/Brewtarget/brewtarget/issues/177)
+* OG in Plato wrongly displayed in refracto dialog [#159](https://github.com/Brewtarget/brewtarget/issues/159)
 
 ## v2.3.0
 
