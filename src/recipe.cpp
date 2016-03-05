@@ -881,7 +881,7 @@ void Recipe::setBoilTime_min( double var )
       tmp = var;
    }
 
-   set( "boilTime_min", "boil_time", tmp );
+   set( "boilTime_min", "boil_time", tmp);
 }
 
 void Recipe::setEfficiency_pct( double var )
@@ -1345,34 +1345,14 @@ QDate Recipe::date()               const { return QDate::fromString( get("date")
 //=============================Removers========================================
 
 // Returns true if var is found and removed.
-void Recipe::removeHop( Hop *var )
+void Recipe::remove( BeerXMLElement *var )
 {
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeFermentable(Fermentable* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeMisc(Misc* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeWater(Water* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeYeast(Yeast* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeBrewNote(BrewNote* var)
-{
-   Database::instance().removeFromRecipe(this, var);
+   // brewnotes a bit odd
+   if ( var->metaObject()->className() == QString("BrewNote") )
+      // the cast is required to force the template to gets it thing right
+      Database::instance().remove(qobject_cast<BrewNote*>(var));
+   else
+      Database::instance().removeIngredientFromRecipe( this, var );
 }
 
 double Recipe::batchSizeNoLosses_l()

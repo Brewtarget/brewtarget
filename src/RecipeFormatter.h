@@ -54,6 +54,8 @@ public:
    QString getTextFormat();
    //! Get an html view.
    QString getHTMLFormat();
+   //! Get a whole mess of html views
+   QString getHTMLFormat( QList<Recipe*> recipes );
    //! Get a BBCode view. Why is this here?
    QString getBBCodeFormat();
    //! Generate a tooltip for a recipe
@@ -64,6 +66,7 @@ public:
    QString getToolTip(Hop* hop);
    QString getToolTip(Misc* misc);
    QString getToolTip(Yeast* yeast);
+   QString getLabelToolTip();
    //! Get the maximum number of characters in a list of strings.
    unsigned int getMaxLength( QStringList* list );
    //! Prepend a string with spaces until its final length is the given length.
@@ -83,6 +86,7 @@ public slots:
 private:
    QString getTextSeparator();
 
+   QString buildHTMLHeader();
    QString buildStatTableHtml();
    QString buildStatTableTxt();
    QString buildFermentableTableHtml();
@@ -100,6 +104,7 @@ private:
    QString buildInstructionTableTxt();
    QString buildBrewNotesHtml();
    QString buildBrewNotesTxt();
+   QString buildHTMLFooter();
    QString getCSS();
 
    QList<Hop*> sortHopsByTime(Recipe* rec);

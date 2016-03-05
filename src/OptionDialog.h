@@ -57,6 +57,14 @@ public slots:
    void setDataDir();
    //! \brief Reset data directory to default.
    void defaultDataDir();
+   //! \brief Enable or disable the configuration panel based on the engine choice
+   void setEngine(int selected);
+   //! \brief test connection to remote databases. This could get ugly
+   void testConnection();
+   //! \brief mark a change to the database config
+   void testRequired();
+   //! \brief handle the dialogs for saving passwords
+   void savePassword(bool state);
    
 protected:
    
@@ -64,10 +72,20 @@ protected:
    virtual void changeEvent(QEvent* e);
 
 private:
+   enum testStates {
+      NOCHANGE,
+      NEEDSTEST,
+      TESTFAILED,
+      TESTPASSED,
+   };
+
+   testStates status;
    // Update UI strings according to current language.
    void retranslate();
    // Update dialog with current options.
    void showChanges();
+   //
+   void changeColors();
    QButtonGroup *colorGroup, *ibuGroup;
    QStringList ndxToLangCode;
    QVector<QIcon> langIcons;

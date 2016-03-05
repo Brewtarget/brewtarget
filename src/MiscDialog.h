@@ -63,6 +63,7 @@ public:
    QPushButton *pushButton_remove;
    //! @}
 
+   void newMisc(QString folder);
 public slots:
    //! Add the selected misc to the current recipe.
    void addMisc(const QModelIndex& = QModelIndex());

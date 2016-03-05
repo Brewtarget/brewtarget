@@ -64,6 +64,7 @@ public:
    QPushButton *pushButton_remove;
    //! @}
 
+   void newYeast(QString folder);
 public slots:
    void addYeast(const QModelIndex& = QModelIndex());
    void removeYeast();

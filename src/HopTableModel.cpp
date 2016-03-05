@@ -101,7 +101,7 @@ void HopTableModel::observeDatabase(bool val)
       observeRecipe(0);
       removeAll();
       connect( &(Database::instance()), SIGNAL(newHopSignal(Hop*)), this, SLOT(addHop(Hop*)) );
-      connect( &(Database::instance()), SIGNAL(deletedHopSignal(Hop*)), this, SLOT(removeHop(Hop*)) );
+      connect( &(Database::instance()), SIGNAL(deletedSignal(Hop*)), this, SLOT(removeHop(Hop*)) );
       addHops( Database::instance().hops() );
    }
    else
