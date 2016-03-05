@@ -76,7 +76,7 @@ private:
       NOCHANGE,
       NEEDSTEST,
       TESTFAILED,
-      TESTPASSED,
+      TESTPASSED
    };
 
    testStates status;
