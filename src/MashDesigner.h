@@ -26,6 +26,7 @@ class MashDesigner;
 #include "ui_mashDesigner.h"
 #include "recipe.h"
 #include "mash.h"
+#include "mashstep.h"
 #include "equipment.h"
 #include <QDialog>
 #include <QWidget>
@@ -76,11 +77,21 @@ private:
    double tempFromVolume_c( double vol_l );
    double volFromTemp_l( double temp_c );
    double getDecoctionAmount_l();
+   double waterFromMash_l();
 
-   double getSelectedAmount_l();
-   double getSelectedTemp_c();
+   // I have developed a distaste for "getBlah"
+   double selectedAmount_l();
+   double selectedTemp_c();
+   double stepTemp_c();
 
-   bool isBatchSparge();
+   MashStep::Type type() const;
+   bool isBatchSparge() const;
+   bool isFlySparge() const;
+   bool isSparge() const;
+   bool isInfusion() const;
+   bool isTemperature() const;
+   bool isDecoction() const;
+
 
    Recipe* recObs;
    Mash* mash;

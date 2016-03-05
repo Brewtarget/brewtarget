@@ -1376,7 +1376,7 @@ Mash* Database::newMash(Recipe* parent, bool transact)
    return tmp;
 }
 
-MashStep* Database::newMashStep(Mash* mash)
+MashStep* Database::newMashStep(Mash* mash, bool connected)
 {
    // TODO: encapsulate in QUndoCommand.
    // NOTE: we have unique(mash_id,step_number) constraints on this table,
@@ -1397,7 +1397,10 @@ MashStep* Database::newMashStep(Mash* mash)
       throw;
    }
 
-   connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
+   allMashSteps.insert(tmp->_key,tmp);
+
+   if ( connected ) 
+      connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
    sqlDatabase().commit();
    makeDirty();
@@ -3121,7 +3124,10 @@ void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
    mashStepNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->typeString());
+   if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) 
+      tmpText = doc.createTextNode(  MashStep::types[0] );
+   else 
+      tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
 

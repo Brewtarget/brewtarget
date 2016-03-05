@@ -172,7 +172,7 @@ public:
    //! Create new instruction attached to \b parent.
    Instruction* newInstruction(Recipe* parent);
 
-   MashStep* newMashStep(Mash* parent);
+   MashStep* newMashStep(Mash* parent, bool connected = true);
 
    Mash* newMash();
    Mash* newMash(Mash* other, bool displace = true);
