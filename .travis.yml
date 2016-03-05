@@ -9,4 +9,4 @@ before_script:
   - mkdir build
   - cd build
   - cmake ..
-script: make && make test
+script: make && (CTEST_OUTPUT_ON_FAILURE=TRUE make test || cat Testing/Temporary/LastTest.log)
