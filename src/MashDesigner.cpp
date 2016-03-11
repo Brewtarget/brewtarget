@@ -127,7 +127,7 @@ bool MashDesigner::nextStep(int step)
    // If we have a step number, and the step is smaller than the current
    // number of mashsteps. How can this happen? When you get into
    // the mash designer, the first thing it does is clear all the steps.
-   if ( step >= 0 && step < mash->mashSteps().size() ) 
+   if ( step >= 0 && step < mash->mashSteps().size() )
       mashStep = mash->mashSteps()[step];
    else
       mashStep = Database::instance().newMashStep( mash,false ); // TODO: Come back to check on this later. Really need this new step to be inserted in right place.
@@ -621,7 +621,7 @@ bool MashDesigner::isTemperature() const
    return ( _type == MashStep::Temperature );
 }
 
-MashStep::Type MashDesigner::type() const 
+MashStep::Type MashDesigner::type() const
 {
    int curIdx = comboBox_type->currentIndex();
    return static_cast<MashStep::Type>(curIdx);
@@ -635,7 +635,7 @@ void MashDesigner::typeChanged(int t)
       mashStep->setType(_type);
 
    // fly sparge is the end of the line. No more steps can be added after
-   if ( isFlySparge() ) 
+   if ( isFlySparge() )
    {
       // more will happen here, but I need to understand a few things
       pushButton_next->setEnabled(false);

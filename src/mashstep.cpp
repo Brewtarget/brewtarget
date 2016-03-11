@@ -266,7 +266,7 @@ bool MashStep::isInfusion() const {
 bool MashStep::isSparge() const {
    MashStep::Type _type = type();
    return ( _type == MashStep::batchSparge ||
-            _type == MashStep::flySparge   || 
+            _type == MashStep::flySparge   ||
             name() == "Final Batch Sparge" );
 }
 

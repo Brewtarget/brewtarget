@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>702</width>
-    <height>341</height>
+    <width>670</width>
+    <height>357</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,421 +15,536 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="leftMargin">
-    <number>25</number>
+    <number>9</number>
    </property>
    <property name="topMargin">
     <number>9</number>
    </property>
    <property name="rightMargin">
-    <number>25</number>
+    <number>9</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="inputs">
-     <item>
-      <widget class="QGroupBox" name="initialInfusion">
-       <property name="title">
-        <string>Initial Infusion</string>
-       </property>
-       <property name="configSection" stdset="0">
-        <string notr="true">strikeWaterCalc</string>
-       </property>
-       <layout class="QFormLayout" name="formLayout_2">
-        <property name="fieldGrowthPolicy">
-         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-        </property>
-        <item row="0" column="0">
-         <widget class="BtTemperatureLabel" name="grainTempLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Original Grain Temperature</string>
-          </property>
-          <property name="buddy">
-           <cstring>grainTempVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="BtTemperatureEdit" name="grainTempVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">grainTempVal</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="BtTemperatureLabel" name="targetMashLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Target Mash Temperature</string>
-          </property>
-          <property name="buddy">
-           <cstring>targetMashVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="BtTemperatureEdit" name="targetMashVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">targetMashVal</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="BtMassLabel" name="grainWeightInitLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Weight of Grain</string>
-          </property>
-          <property name="buddy">
-           <cstring>grainWeightInitVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="BtMassEdit" name="grainWeightInitVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="decimals" stdset="0">
-           <number>1</number>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">grainWeightInitVal</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="BtVolumeLabel" name="waterVolumeLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Volume of Water</string>
-          </property>
-          <property name="buddy">
-           <cstring>waterVolumeVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="BtVolumeEdit" name="waterVolumeVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">waterVolumeVal</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="mashInfusion">
-       <property name="title">
-        <string>Mash Infusion</string>
-       </property>
-       <property name="configSection" stdset="0">
-        <string notr="true">strikeWaterCalc</string>
-       </property>
-       <layout class="QFormLayout" name="formLayout">
-        <property name="fieldGrowthPolicy">
-         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-        </property>
-        <item row="0" column="0">
-         <widget class="BtVolumeLabel" name="mashVolLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Total Volume of Water</string>
-          </property>
-          <property name="buddy">
-           <cstring>mashVolVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="BtVolumeEdit" name="mashVolVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">mashVolVal</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="BtMassLabel" name="grainWeightLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Grain Weight</string>
-          </property>
-          <property name="buddy">
-           <cstring>grainWeightVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="BtMassEdit" name="grainWeightVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">grainWeight</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="BtTemperatureLabel" name="actualMashLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Actual Mash Temperature</string>
-          </property>
-          <property name="buddy">
-           <cstring>actualMashVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="BtTemperatureEdit" name="actualMashVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">actualMashVal</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="BtTemperatureLabel" name="targetMashInfLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Target Mash Temperature</string>
-          </property>
-          <property name="buddy">
-           <cstring>targetMashInfVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="BtTemperatureEdit" name="targetMashInfVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">targetMashInfVal</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="BtTemperatureLabel" name="infusionWaterLbl">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-          <property name="text">
-           <string>Infusion Water Temperature</string>
-          </property>
-          <property name="buddy">
-           <cstring>infusionWaterVal</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="BtTemperatureEdit" name="infusionWaterVal">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="editField" stdset="0">
-           <string notr="true">infusionWaterVal</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton_calculate">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip">
-        <string>Calculate</string>
-       </property>
-       <property name="text">
-        <string>Calculate</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>24</width>
-         <height>24</height>
-        </size>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="results">
-     <item>
-      <layout class="QHBoxLayout" name="initialResult">
-       <item>
-        <widget class="BtTemperatureLabel" name="initialResultLbl">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Strike Water Temperature</string>
-         </property>
-         <property name="buddy">
-          <cstring>initialResultTxt</cstring>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="BtTemperatureEdit" name="initialResultTxt">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">initialResultTxt</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="mashResult">
-       <item>
-        <widget class="BtVolumeLabel" name="mashResultLbl">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Volume to add</string>
-         </property>
-         <property name="buddy">
-          <cstring>mashResultTxt</cstring>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="BtVolumeEdit" name="mashResultTxt">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">mashResultTxt</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QLabel" name="Notes">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <property name="text">
-      <string>Note: This calculator assumes a preheated mash tun.</string>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Initial infusion</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QGroupBox" name="groupBoxInitialInfusionInput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="title">
+            <string>Input</string>
+           </property>
+           <layout class="QFormLayout" name="formLayout_3">
+            <item row="0" column="0">
+             <widget class="BtTemperatureLabel" name="grainTempLbl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Original Grain Temperature</string>
+              </property>
+              <property name="buddy">
+               <cstring>grainTempVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="BtTemperatureEdit" name="grainTempVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">grainTempVal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="BtTemperatureLabel" name="targetMashLbl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Target Mash Temperature</string>
+              </property>
+              <property name="buddy">
+               <cstring>targetMashVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="BtTemperatureEdit" name="targetMashVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">targetMashVal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="BtMassLabel" name="grainWeightInitLbl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Grain Weight</string>
+              </property>
+              <property name="buddy">
+               <cstring>grainWeightInitVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="BtMassEdit" name="grainWeightInitVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="decimals" stdset="0">
+               <number>1</number>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">grainWeightInitVal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="BtVolumeLabel" name="waterVolumeLbl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Volume of Water</string>
+              </property>
+              <property name="buddy">
+               <cstring>waterVolumeVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="BtVolumeEdit" name="waterVolumeVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">waterVolumeVal</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxInitialInfusionOutput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="title">
+            <string>Output</string>
+           </property>
+           <layout class="QFormLayout" name="formLayout">
+            <item row="0" column="0">
+             <widget class="BtTemperatureLabel" name="initialResultLbl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Strike Water Temperature</string>
+              </property>
+              <property name="buddy">
+               <cstring>initialResultTxt</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="BtTemperatureEdit" name="initialResultTxt">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">initialResultTxt</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="Notes">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Note: This calculator assumes a preheated mash tun</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Mash infusion</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QGroupBox" name="groupBoxMashInfusionInput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="title">
+            <string>Input</string>
+           </property>
+           <layout class="QFormLayout" name="formLayout_2">
+            <item row="0" column="0">
+             <widget class="BtVolumeLabel" name="mashVolLbl">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Total Volume of Water</string>
+              </property>
+              <property name="buddy">
+               <cstring>mashVolVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="BtVolumeEdit" name="mashVolVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">mashVolVal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="BtMassLabel" name="grainWeightLbl">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Grain Weight</string>
+              </property>
+              <property name="buddy">
+               <cstring>grainWeightVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="BtMassEdit" name="grainWeightVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">grainWeight</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="BtTemperatureLabel" name="actualMashLbl">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Actual Mash Temperature</string>
+              </property>
+              <property name="buddy">
+               <cstring>actualMashVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="BtTemperatureEdit" name="actualMashVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">actualMashVal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="BtTemperatureLabel" name="targetMashInfLbl">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Target Mash Temperature</string>
+              </property>
+              <property name="buddy">
+               <cstring>targetMashInfVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="BtTemperatureEdit" name="targetMashInfVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">targetMashInfVal</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="BtTemperatureLabel" name="infusionWaterLbl">
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Infusion Water Temperature</string>
+              </property>
+              <property name="buddy">
+               <cstring>infusionWaterVal</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="BtTemperatureEdit" name="infusionWaterVal">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">infusionWaterVal</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBoxMashInfusionOutput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="title">
+            <string>Output</string>
+           </property>
+           <layout class="QFormLayout" name="formLayout_4">
+            <item row="0" column="0">
+             <widget class="BtVolumeLabel" name="mashResultLbl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
+              </property>
+              <property name="text">
+               <string>Volume to add</string>
+              </property>
+              <property name="buddy">
+               <cstring>mashResultTxt</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="BtVolumeEdit" name="mashResultTxt">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="editField" stdset="0">
+               <string notr="true">mashResultTxt</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Note: This calculator assumes a preheated mash tun</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -437,7 +552,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtVolumeLabel</class>
+   <class>BtTemperatureEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTemperatureLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
@@ -445,11 +568,12 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtVolumeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <class>BtMassLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
    <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -463,16 +587,7 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtMassLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-    <slot>popContextMenu(QPoint)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTemperatureLabel</class>
+   <class>BtVolumeLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
@@ -480,7 +595,7 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtTemperatureEdit</class>
+   <class>BtVolumeEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>

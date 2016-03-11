@@ -162,7 +162,7 @@ public:
 
       tmp->_key = key;
       tmp->_table = table;
-      
+
       all->insert(tmp->_key,tmp);
 
       return tmp;
@@ -262,7 +262,7 @@ public:
    // Two odd balls I can't resolve quite yet. But I will.
    // This one isn't even needed. remove does it
    // void removeFromRecipe( Recipe* rec, BrewNote* b );
-   // 
+   //
    void removeFromRecipe( Recipe* rec, Instruction* ins );
 
    //! Remove \b step from \b mash.
@@ -270,7 +270,7 @@ public:
 
    // Or you can mark whole lists as deleted.
    // ONE METHOD TO CALL THEM ALL AND IN DARKNESS BIND THEM!
-   template<class T> void remove(QList<T*> list) 
+   template<class T> void remove(QList<T*> list)
    {
       if ( list.empty() )
          return;
@@ -283,7 +283,7 @@ public:
       if ( ndx != -1 ) {
          propName = meta->classInfo(ndx).value();
       }
-      else 
+      else
          throw QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className());
 
       foreach( T* dead, list ) {
@@ -418,7 +418,7 @@ public:
    bool isConverted();
 
    //! \brief Figures out what databases we are copying to and from, opens what
-   //   needs opens and then calls the appropriate workhorse to get it done. 
+   //   needs opens and then calls the appropriate workhorse to get it done.
    void convertDatabase(QString const& Hostname, QString const& DbName,
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
@@ -570,7 +570,7 @@ private:
       q.setForwardOnly(true);
       QString queryString;
 
-      if ( id.isEmpty() ) 
+      if ( id.isEmpty() )
          id = "id";
 
       if( !filter.isEmpty() )
@@ -579,7 +579,7 @@ private:
          queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tableNames[table]);
 
       try {
-         if ( ! q.exec(queryString) ) 
+         if ( ! q.exec(queryString) )
             throw QString("could not execute query: %2 : %3").arg(queryString).arg(q.lastError().text());
       }
       catch (QString e) {
@@ -682,7 +682,7 @@ private:
       QString propName, relTableName, ingKeyName, childTableName;
       const QMetaObject* meta = ing->metaObject();
       int ndx = meta->indexOfClassInfo("signal");
-    
+
       if( rec == 0 || ing == 0 )
          return 0;
 
@@ -701,7 +701,7 @@ private:
             ingKeyName = QString("%1_id").arg(prefix);
             childTableName = QString("%1_children").arg(prefix);
          }
-         else 
+         else
             throw QString("could not locate classInfo for signal on %2").arg(meta->className());
          // Ensure this ingredient is not already in the recipe.
          QString select = QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
@@ -746,7 +746,7 @@ private:
          q.bindValue(":ingredient", newIng->key());
          q.bindValue(":recipe", rec->_key);
 
-         if ( ! q.exec() ) 
+         if ( ! q.exec() )
             throw QString("%2 : %1.").arg(q.lastQuery()).arg(q.lastError().text());
 
          emit rec->changed( rec->metaProperty(propName), QVariant() );
@@ -806,15 +806,15 @@ private:
       QString tName = tableNames[t];
 
       QSqlQuery q(sqlDatabase());
-     
+
       try {
          QString select = QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key);
 
          if( !q.exec(select) )
             throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
-         else 
+         else
             q.next();
-        
+
          QSqlRecord oldRecord = q.record();
          q.finish();
 

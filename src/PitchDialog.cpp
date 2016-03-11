@@ -34,6 +34,7 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
    dateEdit_ProductionDate->setDate(QDate::currentDate());
    updateViabilityFromDate(QDate::currentDate());
 
+   connect( buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
    connect( lineEdit_vol, SIGNAL(textModified()), this, SLOT(calculate()));
    connect( lineEdit_OG, SIGNAL(textModified()), this, SLOT(calculate()));
    connect( slider_pitchRate, SIGNAL(valueChanged(int)), this, SLOT(calculate()) );

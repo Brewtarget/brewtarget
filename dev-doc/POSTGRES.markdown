@@ -19,14 +19,14 @@ Steps
 =====
 
 1. Install PostgreSQL. There are a bazillion guides for this. Find one, follow
-it. 
+it.
 2. Modify pg\_hba.conf to allow md5 authentication for both local and host
    connections.
 3. Modify pg\_hba.conf to bind to whatever IP addresses you want.
 4. Connect to postgresql: psql -U postgres
-5. Create a user: create user [username] with password 'password'; 
+5. Create a user: create user [username] with password 'password';
    I created one called brewtarget, mostly because I lack imagination
-6. Create a database: create database brewtarget with owner brewtarget; 
+6. Create a database: create database brewtarget with owner brewtarget;
    I've named mine brewtarget, in a fit of originality.  This document will
    assume you did the same, or that if you change it you are smart enough to
    figure it out.  If you created a user in step 5, make sure they are the
@@ -83,7 +83,7 @@ third step. No worries, the pelvic thrust will still drive you insane.
 In moving to mobile and clouds, the hardest problem to solve has been the
 database. SQLite is great for local access, and mighty fast. But it is
 ultimately a file, and keeping that synchronized over multiple devices has
-proven hard. 
+proven hard.
 
 Additionally, SQLite likes to have just one process accessing the DB at a time, which
 has caused problems previously.
@@ -93,7 +93,7 @@ Whatever solution we used has to at least address these two issues.
 ##Dropbox, Google Drive and the rest
 
 One option was to keep the SQLite database file, and use an external service
-to synchronize the file. 
+to synchronize the file.
 
 This had the lowest possible impact. We already have code in place to make
 backup copies and to move the SQLite db file. It should have been a simple
@@ -179,5 +179,3 @@ This coding effort was started on Jan 22, 2016. PostgreSQL 9.5 was released on
 Jan 6, 2016. I would not normally be so close to the bleeding edge. The
 inventory tables, though, used SQLite's "insert or update" functionality.
 PostgreSQL didn't have anything similar until 9.5.
-
-

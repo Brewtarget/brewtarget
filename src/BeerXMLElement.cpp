@@ -43,7 +43,7 @@ bool BeerXMLElement::deleted() const { return get("deleted").toBool(); }
 bool BeerXMLElement::display() const { return get("display").toBool(); }
 
 // Sigh. New databases, more complexity
-void BeerXMLElement::setDeleted(bool var) { 
+void BeerXMLElement::setDeleted(bool var) {
    set("deleted", "deleted", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 void BeerXMLElement::setDisplay(bool var) {

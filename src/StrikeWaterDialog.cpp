@@ -29,7 +29,18 @@ const double StrikeWaterDialog::specificHeatBarley = 0.41;
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent)
 {
    setupUi(this);
-   connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
+   connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+//   connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
+
+   connect(grainTempVal, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect(targetMashVal, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect(grainWeightInitVal, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect(waterVolumeVal, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect(mashVolVal, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect(grainWeightVal, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect(actualMashVal, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect(targetMashInfVal, SIGNAL(textModified()), this, SLOT(calculate()));
+   connect(infusionWaterVal, SIGNAL(textModified()), this, SLOT(calculate()));
 }
 
 StrikeWaterDialog::~StrikeWaterDialog() {}
@@ -40,7 +51,7 @@ void StrikeWaterDialog::calculate()
   double mash = computeMashInfusion();
 
   initialResultTxt->setText(initial);
-  mashResultTxt->setText(mash);
+  mashResultTxt->setText(mash > 0 ? mash : 0); // Avoid showing negative volumes
 }
 
 double StrikeWaterDialog::computeInitialInfusion()

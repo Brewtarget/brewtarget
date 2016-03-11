@@ -6,32 +6,38 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>569</width>
-    <height>260</height>
+    <width>525</width>
+    <height>324</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Priming Calculator</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Input</string>
-     </property>
-     <property name="configSection" stdset="0">
-      <string notr="true">primingCalculator</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Input</string>
+       </property>
+       <property name="configSection" stdset="0">
+        <string notr="true">primingCalculator</string>
+       </property>
        <layout class="QFormLayout" name="formLayout">
         <item row="0" column="0">
          <widget class="BtVolumeLabel" name="label_beerVol">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="contextMenuPolicy">
            <enum>Qt::CustomContextMenu</enum>
           </property>
           <property name="text">
-           <string>Collected Beer Volume</string>
+           <string>Beer Volume</string>
           </property>
           <property name="buddy">
            <cstring>lineEdit_beerVol</cstring>
@@ -48,7 +54,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>128</width>
+            <width>16777215</width>
             <height>16777215</height>
            </size>
           </property>
@@ -62,6 +68,12 @@
         </item>
         <item row="1" column="0">
          <widget class="BtTemperatureLabel" name="label_temp">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Beer Temperature</string>
           </property>
@@ -80,7 +92,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>128</width>
+            <width>16777215</width>
             <height>16777215</height>
            </size>
           </property>
@@ -94,6 +106,12 @@
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_vols">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Desired Volumes</string>
           </property>
@@ -112,7 +130,7 @@
           </property>
           <property name="maximumSize">
            <size>
-            <width>128</width>
+            <width>16777215</width>
             <height>16777215</height>
            </size>
           </property>
@@ -121,62 +139,45 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="QRadioButton" name="radioButton_glucMono">
+          <property name="text">
+           <string>Glucose Monohydrate (corn sugar)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QRadioButton" name="radioButton_gluc">
+          <property name="text">
+           <string>Anhydrous Glucose</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <widget class="QRadioButton" name="radioButton_sucrose">
+          <property name="text">
+           <string>Sucrose (table sugar)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QRadioButton" name="radioButton_dme">
+          <property name="text">
+           <string>Dry Malt Extract</string>
+          </property>
+         </widget>
+        </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="radioButton_glucMono">
-        <property name="text">
-         <string>Glucose Monohydrate (corn sugar)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="radioButton_gluc">
-        <property name="text">
-         <string>Anhydrous Glucose</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="radioButton_sucrose">
-        <property name="text">
-         <string>Sucrose (table sugar)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="radioButton_dme">
-        <property name="text">
-         <string>Dry Malt Extract</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>Output</string>
-     </property>
-     <property name="configSection" stdset="0">
-      <string notr="true">primingCalculator</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Output</string>
+       </property>
+       <property name="configSection" stdset="0">
+        <string notr="true">primingCalculator</string>
+       </property>
        <layout class="QFormLayout" name="formLayout_2">
         <item row="0" column="0">
          <widget class="BtMassLabel" name="label_output">
@@ -195,7 +196,7 @@
          <widget class="BtMassEdit" name="lineEdit_output">
           <property name="minimumSize">
            <size>
-            <width>80</width>
+            <width>100</width>
             <height>0</height>
            </size>
           </property>
@@ -217,47 +218,20 @@
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_calculate">
-        <property name="toolTip">
-         <string>Calculate</string>
-        </property>
-        <property name="text">
-         <string>Calculate</string>
-        </property>
-        <property name="autoDefault">
-         <bool>false</bool>
-        </property>
-        <property name="default">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
   <customwidget>
    <class>BtTemperatureEdit</class>
    <extends>QLineEdit</extends>
@@ -272,22 +246,6 @@
    <header>BtLabel.h</header>
    <slots>
     <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -309,6 +267,27 @@
     <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   </slots>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>lineEdit_beerVol</tabstop>
@@ -319,7 +298,6 @@
   <tabstop>radioButton_sucrose</tabstop>
   <tabstop>radioButton_dme</tabstop>
   <tabstop>lineEdit_output</tabstop>
-  <tabstop>pushButton_calculate</tabstop>
  </tabstops>
  <resources/>
  <connections>

@@ -38,11 +38,21 @@ public:
    //! Set the recipe whose OG to correct.
    void setRecipe( Recipe* rec );
 
+private:
+
+   void createButtonGroup();
+
 public slots:
    void calculate();
 
+private slots:
+
+   //! Update the state of lineedit based on what radio is checked
+   void updateRadioButtonsState(int id);
+
 private:
    Recipe* recObs;
+   enum {RADIO_PLATO, RADIO_TEMP, _LAST};
 };
 
 #endif

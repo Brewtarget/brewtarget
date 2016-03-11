@@ -144,7 +144,7 @@ void MashWizard::wizardry()
 
    if ( bGroup->checkedButton() != radioButton_noSparge ) {
       thickNum = Brewtarget::toDouble(lineEdit_mashThickness->text(), &ok);
-      if ( ! ok ) 
+      if ( ! ok )
          Brewtarget::logW( QString("MashWizard::wizardry() could not convert %1 to double").arg(lineEdit_mashThickness->text()));
 
    }

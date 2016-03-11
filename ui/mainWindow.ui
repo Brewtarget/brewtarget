@@ -121,6 +121,9 @@
            <attribute name="title">
             <string/>
            </attribute>
+           <attribute name="toolTip">
+            <string>Styles</string>
+           </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
              <widget class="StyleTreeView" name="treeView_style">
@@ -138,6 +141,9 @@
            </attribute>
            <attribute name="title">
             <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Equipments</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_9">
             <item>
@@ -225,6 +231,12 @@
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="QScrollArea" name="scrollArea_2">
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
@@ -233,11 +245,17 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>412</height>
+           <width>632</width>
+           <height>486</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="BtTabWidget" name="tabWidget_recipeView">
             <property name="acceptDrops">
@@ -339,22 +357,6 @@
                        <number>0</number>
                       </property>
                       <item>
-                       <widget class="EquipmentButton" name="equipmentButton">
-                        <property name="minimumSize">
-                         <size>
-                          <width>0</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
                        <widget class="CustomComboBox" name="equipmentComboBox">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -364,9 +366,32 @@
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>30</width>
+                          <width>360</width>
                           <height>16777215</height>
                          </size>
+                        </property>
+                        <property name="sizeAdjustPolicy">
+                         <enum>QComboBox::AdjustToContents</enum>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="EquipmentButton" name="equipmentButton">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>46</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../brewtarget.qrc">
+                          <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
                         </property>
                        </widget>
                       </item>
@@ -633,6 +658,25 @@
                     <item row="2" column="1">
                      <layout class="QHBoxLayout" name="horizontalLayout_11">
                       <item>
+                       <widget class="CustomComboBox" name="styleComboBox">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>360</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="sizeAdjustPolicy">
+                         <enum>QComboBox::AdjustToContents</enum>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
                        <widget class="StyleButton" name="styleButton">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -648,28 +692,16 @@
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>360</width>
+                          <width>46</width>
                           <height>16777215</height>
                          </size>
                         </property>
                         <property name="text">
                          <string/>
                         </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="CustomComboBox" name="styleComboBox">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>30</width>
-                          <height>16777215</height>
-                         </size>
+                        <property name="icon">
+                         <iconset resource="../brewtarget.qrc">
+                          <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
                         </property>
                        </widget>
                       </item>
@@ -837,14 +869,14 @@
                  <layout class="QVBoxLayout" name="verticalLayout_lcd">
                   <item>
                    <layout class="QGridLayout" name="gridLayout">
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <property name="horizontalSpacing">
                      <number>4</number>
                     </property>
                     <property name="verticalSpacing">
                      <number>5</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
                     </property>
                     <item row="4" column="1">
                      <widget class="StyleRangeWidget" name="styleRangeWidget_srm" native="true">
@@ -1088,6 +1120,15 @@
         </widget>
        </widget>
        <widget class="QScrollArea" name="scrollArea">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
@@ -1096,11 +1137,26 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>323</height>
+           <width>647</width>
+           <height>296</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="BtTabWidget" name="tabWidget_ingredients">
             <property name="sizePolicy">
@@ -1136,6 +1192,9 @@
                <widget class="QTableView" name="fermentableTable">
                 <property name="contextMenuPolicy">
                  <enum>Qt::CustomContextMenu</enum>
+                </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
                 </property>
                </widget>
               </item>
@@ -1209,7 +1268,11 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_20">
               <item>
-               <widget class="QTableView" name="hopTable"/>
+               <widget class="QTableView" name="hopTable">
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1284,6 +1347,9 @@
                <widget class="QTableView" name="miscTable">
                 <property name="contextMenuPolicy">
                  <enum>Qt::CustomContextMenu</enum>
+                </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
                 </property>
                </widget>
               </item>
@@ -1360,6 +1426,9 @@
                <widget class="QTableView" name="yeastTable">
                 <property name="contextMenuPolicy">
                  <enum>Qt::CustomContextMenu</enum>
+                </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
                 </property>
                </widget>
               </item>
@@ -1438,6 +1507,9 @@
                  <widget class="QTableView" name="mashStepTableWidget">
                   <property name="contextMenuPolicy">
                    <enum>Qt::CustomContextMenu</enum>
+                  </property>
+                  <property name="selectionBehavior">
+                   <enum>QAbstractItemView::SelectRows</enum>
                   </property>
                  </widget>
                 </item>
@@ -1649,7 +1721,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1758,12 +1830,12 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNewRecipe"/>
-   <addaction name="actionSave"/>
    <addaction name="actionDeleteSelected"/>
+   <addaction name="actionSave"/>
    <addaction name="separator"/>
+   <addaction name="actionStyles"/>
    <addaction name="actionEquipments"/>
    <addaction name="actionMashs"/>
-   <addaction name="actionStyles"/>
    <addaction name="separator"/>
    <addaction name="actionFermentables"/>
    <addaction name="actionHops"/>
@@ -2193,7 +2265,17 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtTimeEdit</class>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CustomComboBox</class>
+   <extends>QComboBox</extends>
+   <header>CustomComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
@@ -2201,7 +2283,15 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtTimeLabel</class>
+   <class>BtDensityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtColorLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>
@@ -2217,14 +2307,6 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtDensityLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
    <class>BtVolumeEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
@@ -2233,7 +2315,7 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtDensityEdit</class>
+   <class>BtTimeEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
@@ -2241,19 +2323,12 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtColorLabel</class>
+   <class>BtTimeLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>CustomComboBox</class>
-   <extends>QComboBox</extends>
-   <header>CustomComboBox.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
   </customwidget>
   <customwidget>
    <class>IbuGuSlider</class>
@@ -2345,9 +2420,7 @@
   <tabstop>tabWidget_recipeView</tabstop>
   <tabstop>lineEdit_name</tabstop>
   <tabstop>styleButton</tabstop>
-  <tabstop>styleComboBox</tabstop>
   <tabstop>equipmentButton</tabstop>
-  <tabstop>equipmentComboBox</tabstop>
   <tabstop>lineEdit_batchSize</tabstop>
   <tabstop>lineEdit_boilSize</tabstop>
   <tabstop>lineEdit_efficiency</tabstop>

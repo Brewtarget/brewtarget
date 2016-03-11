@@ -1,7 +1,7 @@
 /*
  * StyleSortFilterProxyModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - Philip Greggory Lee <rocketman768@gmail.com>
+ * authors 2016
+ * - Rodrigo Farias Andriolo <rondonctba@outlook.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +17,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _STYLESORTFILTERPROXYMODEL_H
-#define _STYLESORTFILTERPROXYMODEL_H
+#ifndef EQUIPMENTSORTFILTERPROXYMODEL_H
+#define EQUIPMENTSORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 /*!
- * \class StyleSortFilterProxyModel
- * \author Philip G. Lee
+ * \class EquipmentSortFilterProxyModel
+ * \author Rodrigo F. Andriolo
  *
- * \brief Proxy model for sorting/filtering Styles.
- * This should really be a base filter for all ingredient models that filters
- * based on the BeerXMLElement::display() field.
+ * \brief Proxy model for sorting/filtering Equipments.
  */
-class StyleSortFilterProxyModel : public QSortFilterProxyModel
+class EquipmentSortFilterProxyModel : public QSortFilterProxyModel
 {
    Q_OBJECT
-   
-   public:
-      StyleSortFilterProxyModel(QObject* parent = 0);
-      
-   protected:
 
-      bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
+public:
+
+   EquipmentSortFilterProxyModel(QObject* parent = 0);
+
+protected:
+  // Magic fancy stuff can be done in here!
+  // bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 };
 
-#endif
+#endif // EQUIPMENTSORTFILTERPROXYMODEL_H

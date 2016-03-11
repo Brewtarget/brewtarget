@@ -208,7 +208,8 @@ void HopDialog::newHop()
 {
    newHop(QString());
 }
-void HopDialog::newHop(QString folder) 
+
+void HopDialog::newHop(QString folder)
 {
    QString name = QInputDialog::getText(this, tr("Hop name"),
                                           tr("Hop name:"));

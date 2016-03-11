@@ -58,15 +58,29 @@ public slots:
    void clear();
    void clearAndClose();
 
-   void styleSelected( const QString& text );
+   void styleSelected( const QModelIndex& model );
    void changed(QMetaProperty,QVariant);
 
+private slots:
+
+   void buttonBoxClicked(QAbstractButton* button);
+   void filterChanged(QString newFilter);
+
 private:
+
+   void showChanges(QMetaProperty* prop = 0);
+   //! Adds a filter icon to the left side of line edit
+   void configureFilterLineEdit();
+   //! Updates the add/remove states. When triggered from the toolbar both will
+   //! be active, when triggered from tree they will both be disabled.
+   void updateAddRemoveButtonState(bool isSingleSelection);
+
+private:
+
    Style* obsStyle;
+
    StyleListModel* styleListModel;
    StyleSortFilterProxyModel* styleProxyModel;
-   
-   void showChanges(QMetaProperty* prop = 0);
 };
 
 #endif   /* _STYLEEDITOR_H */

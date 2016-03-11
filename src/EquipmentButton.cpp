@@ -53,7 +53,6 @@ void EquipmentButton::setEquipment(Equipment* equip)
    if( _equip )
    {
       connect( _equip, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
-      setText( _equip->name() );
    }
    else
       setText("");

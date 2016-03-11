@@ -252,7 +252,7 @@ public:
    static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
 
    //! \return SI amount for the string
-   static double qStringToSI( QString qstr, Unit* unit, 
+   static double qStringToSI( QString qstr, Unit* unit,
          Unit::unitDisplay dispUnit = Unit::noUnit, Unit::unitScale dispScale = Unit::noScale);
 
    //! \brief return the bitterness formula's name
@@ -321,7 +321,7 @@ public:
    static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
 
-   /*! 
+   /*!
     * \brief If we are supporting multiple databases, we need some way to
     * figure out which database we are using. I still don't know that this
     * will be the final implementation -- I can't help but think I should be

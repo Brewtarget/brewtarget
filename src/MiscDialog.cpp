@@ -205,7 +205,7 @@ void MiscDialog::newMisc()
    newMisc(QString());
 }
 
-void MiscDialog::newMisc(QString folder) 
+void MiscDialog::newMisc(QString folder)
 {
    QString name = QInputDialog::getText(this, tr("Misc name"),
                                               tr("Misc name:"));
@@ -214,7 +214,7 @@ void MiscDialog::newMisc(QString folder)
 
    Misc* m = Database::instance().newMisc();
    m->setName(name);
-   if ( ! folder.isEmpty() ) 
+   if ( ! folder.isEmpty() )
       m->setFolder(folder);
 
    miscEdit->setMisc(m);

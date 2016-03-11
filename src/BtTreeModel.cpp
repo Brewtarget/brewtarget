@@ -777,9 +777,9 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             Equipment *copyKit,  *oldKit;
             oldKit = equipment(ndx);
             copyKit = Database::instance().newEquipment(oldKit); // Create a deep copy.
-            if ( copyKit) 
+            if ( copyKit)
                copyKit->setName(name);
-            else 
+            else
                failed = true;
             break;
          case BtTreeItem::FERMENTABLE:
@@ -788,7 +788,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             copyFerm = Database::instance().newFermentable(oldFerm); // Create a deep copy.
             if ( copyFerm )
                copyFerm->setName(name);
-            else 
+            else
                failed = true;
             break;
          case BtTreeItem::HOP:
@@ -797,7 +797,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             copyHop = Database::instance().newHop(oldHop); // Create a deep copy.
             if ( copyHop )
                copyHop->setName(name);
-            else 
+            else
                failed = true;
             break;
          case BtTreeItem::MISC:
@@ -806,7 +806,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             copyMisc = Database::instance().newMisc(oldMisc); // Create a deep copy.
             if ( copyMisc )
                copyMisc->setName(name);
-            else 
+            else
                failed = true;
             break;
          case BtTreeItem::RECIPE:
@@ -815,7 +815,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             copyRec = Database::instance().newRecipe(oldRec); // Create a deep copy.
             if ( copyRec )
                copyRec->setName(name);
-            else 
+            else
                failed = true;
             break;
          case BtTreeItem::STYLE:
@@ -824,7 +824,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             copyStyle = Database::instance().newStyle(oldStyle); // Create a deep copy.
             if ( copyStyle )
                copyStyle->setName(name);
-            else 
+            else
                failed = true;
             break;
          case BtTreeItem::YEAST:
@@ -833,7 +833,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             copyYeast = Database::instance().newYeast(oldYeast); // Create a deep copy.
             if ( copyYeast )
                copyYeast->setName(name);
-            else 
+            else
                failed = true;
             break;
          default:
@@ -841,7 +841,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
       }
       if ( failed ) {
          QMessageBox::warning(0,
-                              tr("Could not copy"), 
+                              tr("Could not copy"),
                               tr("There was an unexpected error creating %1").arg(name));
          return;
       }
@@ -1314,7 +1314,7 @@ void BtTreeModel::observeElement(BeerXMLElement* d)
 
    if ( qobject_cast<BrewNote*>(d) )
       connect( d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(elementChanged()) );
-   else 
+   else
    {
       connect( d, SIGNAL(changedName(QString)), this, SLOT(elementChanged()) );
       connect( d, SIGNAL(changedFolder(QString)), this, SLOT(folderChanged(QString)));
@@ -1350,7 +1350,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
 
    if ( isFolder(parent) )
       target = folder(parent)->fullPath();
-   else 
+   else
    {
       BeerXMLElement* _thing = thing(parent);
 
@@ -1400,7 +1400,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
 
       if ( oType != BtTreeItem::FOLDER ) 
          elem->setFolder(target);
-      else 
+      else
       {
          // I need the actual folder object that got dropped.
          BtFolder* victim = new BtFolder;

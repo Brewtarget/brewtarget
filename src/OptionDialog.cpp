@@ -502,7 +502,7 @@ void OptionDialog::testConnection()
          success = Database::verifyDbConnection(newType,hostname);
    }
 
-   if ( success ) 
+   if ( success )
    {
       QMessageBox::information(0,
                            QObject::tr("Connection Test"),
@@ -510,7 +510,7 @@ void OptionDialog::testConnection()
                            );
       status = OptionDialog::TESTPASSED;
    }
-   else 
+   else
    {
       // Database::testConnection already popped the dialog
       status = OptionDialog::TESTFAILED;
@@ -558,7 +558,7 @@ void OptionDialog::changeColors()
 void OptionDialog::savePassword(bool state)
 {
    if ( state ) {
-      QMessageBox::warning(0, QObject::tr("Plaintext"), 
+      QMessageBox::warning(0, QObject::tr("Plaintext"),
                               QObject::tr("Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems."));
    }
 }

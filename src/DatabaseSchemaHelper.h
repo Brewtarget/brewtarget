@@ -373,7 +373,7 @@ private:
 
    // !\brief create_table is a convenience method to wrap a lot of boiler  plate
    static bool create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid,
-                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
+                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE,
                         Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
    // !\brief I need a meta table
    static bool create_meta(QSqlQuery q);
@@ -381,7 +381,7 @@ private:
    static bool create_settings(QSqlQuery q);
    // \!brief inserts a row into the meta table when a table is created
    static bool insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid,
-                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
+                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE,
                         Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
 
    //! brief These create the beerXML tables
@@ -397,7 +397,7 @@ private:
    static bool create_brewnote(QSqlQuery q);
    static bool create_instruction(QSqlQuery q);
    static bool create_recipe(QSqlQuery q);
-  
+
    //! \brief These provide some convenience and reuse
    static bool create_beerXMLTables(QSqlQuery q);
    static bool create_btTables(QSqlQuery q);
@@ -407,7 +407,7 @@ private:
 
    //! \brief This creates a table for a bt_* table
    static bool create_btTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
-   //! \brief This creates a table for *in_recipe 
+   //! \brief This creates a table for *in_recipe
    static bool create_recipeChildTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
    //! \brief This creates a table for inventory
    static bool create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
@@ -428,5 +428,5 @@ private:
    static bool migrate_to_4(QSqlQuery q);
    static bool migrate_to_5(QSqlQuery q);
    static bool migrate_to_6(QSqlQuery q);
-   
+
 };

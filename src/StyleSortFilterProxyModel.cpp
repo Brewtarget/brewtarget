@@ -28,12 +28,16 @@ StyleSortFilterProxyModel::StyleSortFilterProxyModel(QObject* parent)
 
 bool StyleSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
 {
+   Q_UNUSED(source_parent);
+
    StyleListModel* m = qobject_cast<StyleListModel*>(sourceModel());
    if( !m )
       return true;
    Style* s = m->at(source_row);
    if( !s )
       return true;
+
+
    
-   return s->display() && !s->deleted();
+   return s->display() && !s->deleted() && s->name().contains(filterRegExp());
 }

@@ -513,7 +513,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
       return false;
 }
 
-Brewtarget::DBTypes Brewtarget::dbType() { 
+Brewtarget::DBTypes Brewtarget::dbType() {
    if ( _dbType == Brewtarget::NODB )
       _dbType = (Brewtarget::DBTypes)option("dbType", dbType()).toInt();
    return _dbType;
