@@ -56,7 +56,6 @@ void StyleButton::setStyle(Style* style)
    if( _style )
    {
       connect( _style, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(styleChanged(QMetaProperty,QVariant)) );
-      setText( _style->name() );
    }
    else
       setText("");

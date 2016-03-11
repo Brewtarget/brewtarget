@@ -45,11 +45,19 @@ public:
 public slots:
    void wizardry(); // Do what the wizard is supposed to do.
    void show();
+   void toggleSpinBox(QAbstractButton* button);
 
 private:
    Recipe* recObs;
    Unit *weightUnit;
    Unit *volumeUnit;
+
+   //!brief just need a holder for the three buttons
+   QButtonGroup* bGroup;
+
+   //!brief helper method to calculate the volume of a decocation step
+   double calcDecoctionAmount( MashStep* step, Mash* mash, double waterMass, double grainMass, double lastTemp, double boiling);
+
 };
 
 #endif   /* _MASHWIZARD_H */

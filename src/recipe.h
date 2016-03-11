@@ -65,6 +65,8 @@ bool operator==(Recipe &r1, Recipe &r2 );
 class Recipe : public BeerXMLElement
 {
    Q_OBJECT
+   Q_CLASSINFO("signal", "recipes")
+   Q_CLASSINFO("prefix", "recipe")
    
    friend class Database;
 public:
@@ -198,16 +200,15 @@ public:
    
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
+   // One method to bring them all and in darkness bind them
+   void remove( BeerXMLElement *var);
+
+   // And you do know what happens next right?
    void addHop( Hop *var );
-   void removeHop( Hop *var );
    void addFermentable( Fermentable* var );
-   void removeFermentable( Fermentable* var );
    void addMisc( Misc* var );
-   void removeMisc( Misc* var );
    void addYeast( Yeast* var );
-   void removeYeast( Yeast* var );
    void addWater( Water* var );
-   void removeWater( Water* var );
    //void addBrewNote(BrewNote* var);
    void removeBrewNote(BrewNote* var);
    //void addInstruction( Instruction* ins );

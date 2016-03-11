@@ -72,7 +72,6 @@ void MashStepTableModel::setMash( Mash* m )
       QList<MashStep*> tmpSteps = mashObs->mashSteps();
       if(tmpSteps.size() > 0){
          beginInsertRows( QModelIndex(), 0, tmpSteps.size()-1 );
-         //connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
          steps = tmpSteps;
          for( i = 0; i < steps.size(); ++i )
             connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashStepChanged(QMetaProperty,QVariant)) );
@@ -458,10 +457,9 @@ QWidget* MashStepItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
    {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem("Infusion");
-      box->addItem("Temperature");
-      box->addItem("Decoction");
-      box->setMinimumWidth(box->minimumSizeHint().width());
+      foreach( QString mtype, MashStep::types )
+         box->addItem(mtype);
+
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;

@@ -72,7 +72,7 @@ void MiscTableModel::observeDatabase(bool val)
       observeRecipe(0);
       removeAll();
       connect( &(Database::instance()), SIGNAL(newMiscSignal(Misc*)), this, SLOT(addMisc(Misc*)) );
-      connect( &(Database::instance()), SIGNAL(deletedMiscSignal(Misc*)), this, SLOT(removeMisc(Misc*)) );
+      connect( &(Database::instance()), SIGNAL(deletedSignal(Misc*)), this, SLOT(removeMisc(Misc*)) );
       addMiscs( Database::instance().miscs() );
    }
    else

@@ -42,7 +42,7 @@
       <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
-         <widget class="QLabel" name="label_12">
+         <widget class="QLabel" name="label_Brewtarget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -246,7 +246,7 @@
            <x>0</x>
            <y>0</y>
            <width>632</width>
-           <height>478</height>
+           <height>486</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -357,22 +357,6 @@
                        <number>0</number>
                       </property>
                       <item>
-                       <widget class="EquipmentButton" name="equipmentButton">
-                        <property name="minimumSize">
-                         <size>
-                          <width>0</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
                        <widget class="CustomComboBox" name="equipmentComboBox">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -382,9 +366,32 @@
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>30</width>
+                          <width>360</width>
                           <height>16777215</height>
                          </size>
+                        </property>
+                        <property name="sizeAdjustPolicy">
+                         <enum>QComboBox::AdjustToContents</enum>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="EquipmentButton" name="equipmentButton">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>46</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../brewtarget.qrc">
+                          <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
                         </property>
                        </widget>
                       </item>
@@ -651,6 +658,25 @@
                     <item row="2" column="1">
                      <layout class="QHBoxLayout" name="horizontalLayout_11">
                       <item>
+                       <widget class="CustomComboBox" name="styleComboBox">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>360</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="sizeAdjustPolicy">
+                         <enum>QComboBox::AdjustToContents</enum>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
                        <widget class="StyleButton" name="styleButton">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -666,28 +692,16 @@
                         </property>
                         <property name="maximumSize">
                          <size>
-                          <width>360</width>
+                          <width>46</width>
                           <height>16777215</height>
                          </size>
                         </property>
                         <property name="text">
                          <string/>
                         </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="CustomComboBox" name="styleComboBox">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>30</width>
-                          <height>16777215</height>
-                         </size>
+                        <property name="icon">
+                         <iconset resource="../brewtarget.qrc">
+                          <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
                         </property>
                        </widget>
                       </item>
@@ -2406,9 +2420,7 @@
   <tabstop>tabWidget_recipeView</tabstop>
   <tabstop>lineEdit_name</tabstop>
   <tabstop>styleButton</tabstop>
-  <tabstop>styleComboBox</tabstop>
   <tabstop>equipmentButton</tabstop>
-  <tabstop>equipmentComboBox</tabstop>
   <tabstop>lineEdit_batchSize</tabstop>
   <tabstop>lineEdit_boilSize</tabstop>
   <tabstop>lineEdit_efficiency</tabstop>

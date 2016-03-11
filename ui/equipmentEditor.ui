@@ -84,7 +84,7 @@
      <item>
       <widget class="QTabWidget" name="tabEquipmentWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tabEquipmentDetails">
         <attribute name="title">

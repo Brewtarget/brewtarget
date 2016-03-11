@@ -227,7 +227,7 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double to
    {
       mstep = msteps[i];
 
-      if( mstep->type() == MashStep::Infusion )
+      if( mstep->isInfusion() )
       {
          str = tr("Add %1 water at %2 to mash to bring it to %3.")
                .arg(Brewtarget::displayAmount(mstep->infuseAmount_l(), "mashStepTableModel", "infuseAmount_l", Units::liters))
@@ -235,11 +235,11 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double to
                .arg(Brewtarget::displayAmount(mstep->stepTemp_c(), "mashStepTableModel", "stepTemp_c", Units::celsius));
          totalWaterAdded_l += mstep->infuseAmount_l();
       }
-      else if( mstep->type() == MashStep::Temperature )
+      else if( mstep->isTemperature() )
       {
          str = tr("Heat mash to %1.").arg(Brewtarget::displayAmount(mstep->stepTemp_c(), "mashStepTableModel", "stepTemp_c", Units::celsius));
       }
-      else if( mstep->type() == MashStep::Decoction )
+      else if( mstep->isDecoction() )
       {
          str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
                .arg(Brewtarget::displayAmount(mstep->decoctionAmount_l(), "mashStepTableModel", "decoctionAmount_l", Units::liters))
@@ -881,7 +881,7 @@ void Recipe::setBoilTime_min( double var )
       tmp = var;
    }
 
-   set( "boilTime_min", "boil_time", tmp );
+   set( "boilTime_min", "boil_time", tmp);
 }
 
 void Recipe::setEfficiency_pct( double var )
@@ -1345,34 +1345,14 @@ QDate Recipe::date()               const { return QDate::fromString( get("date")
 //=============================Removers========================================
 
 // Returns true if var is found and removed.
-void Recipe::removeHop( Hop *var )
+void Recipe::remove( BeerXMLElement *var )
 {
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeFermentable(Fermentable* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeMisc(Misc* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeWater(Water* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeYeast(Yeast* var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
-void Recipe::removeBrewNote(BrewNote* var)
-{
-   Database::instance().removeFromRecipe(this, var);
+   // brewnotes a bit odd
+   if ( var->metaObject()->className() == QString("BrewNote") )
+      // the cast is required to force the template to gets it thing right
+      Database::instance().remove(qobject_cast<BrewNote*>(var));
+   else
+      Database::instance().removeIngredientFromRecipe( this, var );
 }
 
 double Recipe::batchSizeNoLosses_l()
@@ -1503,7 +1483,6 @@ void Recipe::recalcVolumeEstimates()
       _wortFromMash_l = 0.0;
    else
    {
-   
       waterAdded_l = mash()->totalMashWater_l();
       if( equipment() != 0 )
          absorption_lKg = equipment()->grainAbsorption_LKg();
@@ -2002,7 +1981,7 @@ QList<QString> Recipe::getReagents( QList<MashStep*> msteps )
 
    for ( int i = 0; i < msteps.size(); ++i )
    {
-      if( msteps[i]->type() != MashStep::Infusion )
+      if( ! msteps[i]->isInfusion() )
          continue;
 
       if ( i+1 < msteps.size() ) 

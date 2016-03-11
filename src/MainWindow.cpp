@@ -410,8 +410,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
    connect( actionConvert_Units, SIGNAL( triggered() ), converterTool, SLOT( show() ) );
    connect( actionOG_Correction_Help, SIGNAL( triggered() ), ogAdjuster, SLOT( show() ) );
-   connect( actionBackup_Database, SIGNAL( triggered() ), this, SLOT( backup() ) );
-   connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
    connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
    connect( actionStrikeWater_Calculator, SIGNAL( triggered() ), strikeWaterDialog, SLOT( show() ) );
@@ -420,8 +418,20 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );
    connect( actionTimers, SIGNAL(triggered()), timerMainDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
-   connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
 
+   // postgresql cannot backup or restore yet. I would like to find some way
+   // around this, but for now just disable
+   if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
+      actionBackup_Database->setEnabled(false);
+      actionRestore_Database->setEnabled(false);
+      actionSave->setEnabled(false);
+      label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
+   }
+   else {
+      connect( actionBackup_Database, SIGNAL( triggered() ), this, SLOT( backup() ) );
+      connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
+      connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
+   }
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
    connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(print()));
@@ -488,7 +498,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
-   connect( &(Database::instance()), SIGNAL( deletedBrewNoteSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+   connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
    connect( &(Database::instance()), SIGNAL( isUnsavedChanged(bool)), this, SLOT( updateUnsavedStatus(bool)));
 }
 
@@ -1280,7 +1290,7 @@ void MainWindow::removeSelectedFermentable()
     for(i = 0; i < itemsToRemove.size(); i++)
     {
         fermTableModel->removeFermentable(itemsToRemove.at(i));
-        recipeObs->removeFermentable(itemsToRemove.at(i));
+        recipeObs->remove(itemsToRemove.at(i));
     }
 }
 
@@ -1348,7 +1358,7 @@ void MainWindow::removeSelectedHop()
     for(i = 0; i < itemsToRemove.size(); i++)
     {
         hopTableModel->removeHop(itemsToRemove.at(i));
-        recipeObs->removeHop(itemsToRemove.at(i));
+        recipeObs->remove(itemsToRemove.at(i));
     }
 
 }
@@ -1377,7 +1387,7 @@ void MainWindow::removeSelectedMisc()
     for(i = 0; i < itemsToRemove.size(); i++)
     {
        miscTableModel->removeMisc(itemsToRemove.at(i));
-       recipeObs->removeMisc(itemsToRemove.at(i));
+       recipeObs->remove(itemsToRemove.at(i));
     }
 }
 
@@ -1404,7 +1414,7 @@ void MainWindow::removeSelectedYeast()
     for(i = 0; i < itemsToRemove.size(); i++)
     {
        yeastTableModel->removeYeast(itemsToRemove.at(i));
-       recipeObs->removeYeast(itemsToRemove.at(i));
+       recipeObs->remove(itemsToRemove.at(i));
     }
 }
 
@@ -1420,6 +1430,12 @@ void MainWindow::newRecipe()
 
    Recipe* newRec = Database::instance().newRecipe();
 
+   // bad things happened -- let somebody know
+   if ( ! newRec ) {
+      QMessageBox::warning(this,tr("Error copying recipe"),
+                           tr("An error was returned while creating %1").arg(name));
+      return;
+   }
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
    newRec->setName(name);
@@ -1971,7 +1987,8 @@ void MainWindow::copyRecipe()
       return;
 
    Recipe* newRec = Database::instance().newRecipe(recipeObs); // Create a deep copy.
-   newRec->setName(name);
+   if ( newRec )
+      newRec->setName(name);
 }
 
 void MainWindow::setMashToCurrentlySelected()
@@ -2144,6 +2161,39 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
      outFile = 0;
 
    return outFile;
+}
+
+void MainWindow::exportSelectedHtml() {
+   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   QModelIndexList selected;
+   QList <Recipe*> targets;
+   QFile* outFile;
+
+   if ( active == 0 )
+      return;
+
+   // this only works for recipes
+   if ( active != treeView_recipe ) {
+       return;
+   }
+
+   // get the targeted file
+   outFile = openForWrite(tr("HTML files (*.html)"), QString("html"));
+   if ( !outFile )
+      return;
+
+   // Get the selected recipes and throw them into a list
+   selected = active->selectionModel()->selectedRows();
+   if( selected.count() == 0 )
+      return;
+
+   foreach( QModelIndex ndx, selected)
+      targets.append( treeView_recipe->recipe(ndx) );
+
+   // and write it all
+   QTextStream out(outFile);
+   out << recipeFormatter->getHTMLFormat(targets);
+   outFile->close();
 }
 
 void MainWindow::exportSelected()

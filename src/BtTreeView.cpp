@@ -367,7 +367,8 @@ void BtTreeView::newIngredient() {
 
 void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 {
-   QMenu*_newMenu = new QMenu(this);
+   QMenu* _newMenu = new QMenu(this);
+   QMenu* _exportMenu = new QMenu(this);
 
    _contextMenu = new QMenu(this);
    subMenu = new QMenu(this);
@@ -377,6 +378,7 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
    _newMenu->setTitle(tr("New"));
    _contextMenu->addMenu(_newMenu);
    _contextMenu->addSeparator();
+
    switch(_type) 
    {
       // the recipe case is a bit more complex, because we need to handle the brewnotes too
@@ -421,7 +423,10 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
    _contextMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
    // export and import
    _contextMenu->addSeparator();
-   _contextMenu->addAction(tr("Export"), top, SLOT(exportSelected()));
+   _exportMenu->setTitle(tr("Export"));
+   _exportMenu->addAction(tr("To XML"), top, SLOT(exportSelected()));
+   _exportMenu->addAction(tr("To HTML"), top, SLOT(exportSelectedHtml()));
+   _contextMenu->addMenu(_exportMenu);
    _contextMenu->addAction(tr("Import"), top, SLOT(importFiles()));
    
 }

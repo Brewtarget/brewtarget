@@ -213,6 +213,7 @@ public slots:
    void deleteSelected();
    void copySelected();
    void exportSelected();
+   void exportSelectedHtml();
 
    //! \brief Prints the right thing, depending on the signal sender.
    void print();
@@ -369,6 +370,7 @@ private:
 
    void convertedMsg();
    void importMsg();
+
 };
 
 #endif   /* _MAINWINDOW_H */

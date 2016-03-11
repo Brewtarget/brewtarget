@@ -42,6 +42,8 @@ bool operator==( Hop &h1, Hop &h2 );
 class Hop : public BeerXMLElement
 {
    Q_OBJECT
+   Q_CLASSINFO("signal", "hops")
+   Q_CLASSINFO("prefix", "hop")
    
    friend class Database;
 public:

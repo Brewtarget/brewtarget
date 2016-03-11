@@ -135,8 +135,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SgDensityUnitSystem.cpp
-    ${SRCDIR}/SetterCommand.cpp
-    ${SRCDIR}/SetterCommandStack.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
     ${SRCDIR}/SrmColorUnitSystem.cpp
@@ -271,7 +269,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RecipeFormatter.h
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
-    ${SRCDIR}/SetterCommandStack.h
     ${SRCDIR}/StrikeWaterDialog.h
     ${SRCDIR}/StyleButton.h
     ${SRCDIR}/StyleListModel.h
@@ -488,11 +485,13 @@ ADD_TEST(
 # Install executable.
 INSTALL( TARGETS ${brewtarget_EXECUTABLE}
          BUNDLE DESTINATION .
-         RUNTIME DESTINATION ${TARGETPATH} )
+         RUNTIME DESTINATION ${TARGETPATH}
+         COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
 
 # Install the translations.
 INSTALL(FILES ${QM_FILES}
-        DESTINATION "${DATAPATH}/translations_qm")
+        DESTINATION "${DATAPATH}/translations_qm"
+        COMPONENT ${DATA_INSTALL_COMPONENT} )
 
 # http://pmarinc-tidylib.googlecode.com/hg/src/Sigil/CMakeLists.txt?r=8276c61e05bc385d5ffbcc58e1f007f84b0c52df
 IF( APPLE )

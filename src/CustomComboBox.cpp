@@ -43,10 +43,10 @@ void CustomComboBox::paintEvent(QPaintEvent*)
    QStyleOptionComboBox opts;
    initStyleOption(&opts);
    //opts.currentText = "Wasup";
-   opts.currentText = "";
-   
+   opts.currentText = currentText();
+
    // Draw combo box frame and shit.
    painter.drawComplexControl(QStyle::CC_ComboBox, opts);
    // Have to draw label separately? Stupid.
-   //painter.drawControl(QStyle::CE_ComboBoxLabel, opts);
+   painter.drawControl(QStyle::CE_ComboBoxLabel, opts);
 }

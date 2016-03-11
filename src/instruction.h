@@ -38,6 +38,8 @@
 class Instruction : public BeerXMLElement
 {
    Q_OBJECT
+   Q_CLASSINFO("signal", "instructions")
+   Q_CLASSINFO("prefix", "instruction")
    friend class Database;
 public:
    

@@ -150,11 +150,62 @@ QString RecipeFormatter::getTextSeparator()
    return *textSeparator;
 }
 
+QString RecipeFormatter::buildHTMLHeader() {
+    QString header;
+
+   // Do the style sheet first
+   header = "<html><head><style type=\"text/css\">";
+   header += getCSS();
+   header += "</style></head>";
+
+   header += "<body>";
+
+   return header;
+}
+
+QString RecipeFormatter::buildHTMLFooter() {
+    return "</div></body></html>";
+}
+
+QString RecipeFormatter::getHTMLFormat( QList<Recipe*> recipes ) {
+   Recipe *current = rec;
+   QString hDoc;
+
+   hDoc = buildHTMLHeader();
+
+   // build a toc -- why do I do this to myself?
+   hDoc += "<ul>";
+   foreach ( Recipe* foo, recipes ) {
+       hDoc += QString("<li><a href=\"#%1\">%1</a></li>").arg(foo->name());
+   }
+   hDoc += "</ul>";
+
+   foreach (Recipe* foo, recipes) {
+      rec = foo;
+      hDoc += QString("<a name=\"%1\"></a>").arg(foo->name());
+      hDoc += buildStatTableHtml();
+      hDoc += buildFermentableTableHtml();
+      hDoc += buildHopsTableHtml();
+      hDoc += buildMiscTableHtml();
+      hDoc += buildYeastTableHtml();
+      hDoc += buildMashTableHtml();
+      hDoc += buildNotesHtml();
+      hDoc += buildInstructionTableHtml();
+      hDoc += buildBrewNotesHtml();
+      hDoc += "<p></p>";
+   }
+   hDoc += buildHTMLFooter();
+
+   rec = current;
+   return hDoc;
+}
+
 QString RecipeFormatter::getHTMLFormat()
 {
    QString pDoc;
 
-   pDoc = buildStatTableHtml();
+   pDoc = buildHTMLHeader();
+   pDoc += buildStatTableHtml();
    pDoc += buildFermentableTableHtml();
    pDoc += buildHopsTableHtml();
    pDoc += buildMiscTableHtml();
@@ -164,7 +215,7 @@ QString RecipeFormatter::getHTMLFormat()
    pDoc += buildInstructionTableHtml();
    pDoc += buildBrewNotesHtml();
 
-   pDoc += "</div></body></html>";
+   pDoc += buildHTMLFooter();
 
    return pDoc;
 }
@@ -643,12 +694,6 @@ QString RecipeFormatter::buildStatTableHtml()
 
    style = rec->style();
 
-   // Do the style sheet first
-   header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
-   header += "</style></head>";
-
-   body   = "<body>";
    //body += QString("<h1>%1</h1>").arg(rec->getName()());
    body += QString("<div id=\"headerdiv\">");
    body += QString("<table id=\"header\">");
@@ -1157,12 +1202,12 @@ QString RecipeFormatter::buildMashTableHtml()
              .arg(ms->name())
              .arg(ms->typeStringTr());
 
-      if( ms->type() == MashStep::Infusion )
+      if( ms->isInfusion() )
       {
          tmp = tmp.arg(Brewtarget::displayAmount(ms->infuseAmount_l(), "mashStepTableModel", "amount", Units::liters))
                   .arg(Brewtarget::displayAmount(ms->infuseTemp_c(),   "mashStepTableModel", "infuseTemp_c", Units::celsius));
       }
-      else if( ms->type() == MashStep::Decoction )
+      else if( ms->isDecoction() )
       {
          tmp = tmp.arg( Brewtarget::displayAmount( ms->decoctionAmount_l(), "mashStepTableModel", "amount", Units::liters ) )
                .arg("---");
@@ -1211,12 +1256,12 @@ QString RecipeFormatter::buildMashTableTxt()
          MashStep* s = mashSteps[i];
          names.append(s->name());
          types.append(s->typeStringTr());
-         if( s->type() == MashStep::Infusion )
+         if( s->isInfusion() )
          {
             amounts.append(Brewtarget::displayAmount(s->infuseAmount_l(), "mashStepTableModel", "amount", Units::liters));
             temps.append(Brewtarget::displayAmount(s->infuseTemp_c(),   "mashStepTableModel", "infuseTemp_c", Units::celsius));
          }
-         else if( s->type() == MashStep::Decoction )
+         else if( s->isDecoction() )
          {
             amounts.append(Brewtarget::displayAmount(s->decoctionAmount_l(), "mashStepTableModel", "amount", Units::liters));
             temps.append("---");
@@ -1402,6 +1447,54 @@ QString RecipeFormatter::buildBrewNotesHtml()
 
    return bnTable;
 }
+
+QString RecipeFormatter::getLabelToolTip() {
+   QString header;
+   QString body;
+
+   cssName = QString(":/css/tooltip.css");
+
+   // Do the style sheet first
+   header = "<html><head><style type=\"text/css\">";
+   header += getCSS();
+   header += "</style></head>";
+
+   body   = "<body>";
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( "Using PostgreSQL");
+
+   // First row -- hostname and port
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+         .arg(tr("Hostname"))
+         .arg(Brewtarget::option("dbHostname").toString());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+         .arg(tr("Port"))
+         .arg(Brewtarget::option("dbPortnum").toInt());
+   // Second row -- schema and database
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+         .arg(tr("Schema"))
+         .arg(Brewtarget::option("dbSchema").toString());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+         .arg(tr("Database"))
+         .arg(Brewtarget::option("dbName").toString());
+
+   // third row -- username and is the password saved (NOTE: NOT THE
+   // PASSWORD ITSELF)
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+         .arg(tr("Username"))
+         .arg(Brewtarget::option("dbUsername").toString());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+         .arg(tr("Saved Password"))
+         .arg( Brewtarget::hasOption("dbPassword") ? "Yes" : "No");
+
+
+   body += "</table></body></html>";
+
+   return header + body;
+}
+
 
 bool RecipeFormatter::loadComplete(bool ok)
 {

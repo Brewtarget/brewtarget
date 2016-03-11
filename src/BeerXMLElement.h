@@ -56,7 +56,6 @@ class BeerXMLElement : public QObject
    Q_CLASSINFO("version","1")
    
    friend class Database;
-   friend class SetterCommand;
 public:
    BeerXMLElement();
    BeerXMLElement( BeerXMLElement const& other );
@@ -167,7 +166,7 @@ private:
     * \param valid - Indicates if the beerXML element was valid. There is a problem with importing invalid
     * XML. I'm hoping this helps fix it
     */
-  bool valid;
+  bool _valid;
 };
 
 
