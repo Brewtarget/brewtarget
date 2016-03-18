@@ -248,7 +248,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_topUpWater->setSizePolicy(sizePolicy2);
                      lineEdit_topUpWater->setMinimumSize(QSize(100, 0));
                      lineEdit_topUpWater->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_topUpWater->setProperty("editField", QVariant(QStringLiteral("topUpKettle_l")));
+                     lineEdit_topUpWater->setProperty("editField", QVariant(QStringLiteral("topUpWater_l")));
                   label_absorption = new QLabel(groupBox_water);
                      label_absorption->setObjectName(QStringLiteral("label_absorption"));
                   lineEdit_grainAbsorption = new BtGenericEdit(groupBox_water);

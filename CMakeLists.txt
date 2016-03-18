@@ -126,7 +126,7 @@ ENDIF()
 #==================================Find Qt5====================================
 
 # The minimum QT5 version we need. Keep as low as necessary.
-SET(QT5_MIN_VERSION 5.3)
+SET(QT5_MIN_VERSION 5.1)
 
 # Automatically run moc on source files when necessary
 SET(CMAKE_AUTOMOC ON)
