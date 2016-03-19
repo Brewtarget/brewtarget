@@ -67,27 +67,7 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-   config.vm.provision "shell", inline: <<-SHELL
-     # Install Postgres 9.5
-     # Instructions lifted from https://wiki.postgresql.org/wiki/Apt#PostgreSQL_packages_for_Debian_and_Ubuntu
-     sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-     sudo apt-get install wget ca-certificates
-     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-     sudo apt-get update
-     sudo apt-get upgrade
-     sudo apt-get install -y postgresql-9.5
-
-     sudo apt-get install -y build-essential
-     sudo apt-get install -y \
-        cmake \
-        qt5-default \
-        libqt5sql5-psql \
-        libqt5svg5-dev \
-        libqt5webkit5-dev \
-        libqt5multimedia5 \
-        qtmultimedia5-dev \
-        qttools5-dev \
-        qttools5-dev-tools \
-
-   SHELL
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provision.yml"
+  end
 end
