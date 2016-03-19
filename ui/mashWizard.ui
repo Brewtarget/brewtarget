@@ -132,7 +132,6 @@
   </layout>
   <zorder>buttonBox</zorder>
   <zorder>label_batches</zorder>
-  <zorder>verticalLayoutWidget</zorder>
  </widget>
  <tabstops>
   <tabstop>lineEdit_mashThickness</tabstop>
