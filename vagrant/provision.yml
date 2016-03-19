@@ -1,0 +1,72 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Config Postgres repo
+      shell: echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+        creates=/etc/apt/sources.list.d/pgdg.list
+      tags:
+        - install
+
+    - name: Install Postgres apt key
+      apt_key:
+        url=https://www.postgresql.org/media/keys/ACCC4CF8.asc
+        state=present
+      tags:
+        - install
+
+    - name: Install packages
+      apt:
+        name={{item}}
+        state=present
+        update_cache=yes
+      with_items:
+        - build-essential
+        - cmake
+        - qt5-default
+        - libqt5sql5-psql
+        - libqt5svg5-dev
+        - libqt5webkit5-dev
+        - libqt5multimedia5
+        - qtmultimedia5-dev
+        - qttools5-dev
+        - qttools5-dev-tools
+        - postgresql-9.5
+        - python-psycopg2
+      tags:
+        - install
+
+
+
+    - name: Create postgres user
+      become_user: postgres
+      postgresql_user:
+        name=brewtarget
+        password=brewtarget
+        role_attr_flags=NOCREATEDB,NOSUPERUSER
+      tags: dbsetup
+
+    - name: Create postgres database
+      become_user: postgres
+      postgresql_db:
+        name=brewtarget
+        owner=brewtarget
+      tags: dbsetup
+
+
+    - name: Create config directories
+      file:
+        state=directory
+        path=/home/vagrant/.config/brewtarget/
+        recurse=yes
+        owner=vagrant
+
+    - name: Install default config
+      copy:
+        src=brewtarget.conf
+        dest=/home/vagrant/.config/brewtarget/brewtarget.conf
+        owner=vagrant
+        mode=0644
+
+# vim: ft=ansible

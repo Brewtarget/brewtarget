@@ -1,0 +1,8 @@
+#!/bin/sh
+
+SSH_CONF=`mktemp vagrant_ssh.XXXXXXX`
+
+vagrant ssh-config > ${SSH_CONF}
+ssh -X -F ${SSH_CONF} default
+
+rm ${SSH_CONF}
