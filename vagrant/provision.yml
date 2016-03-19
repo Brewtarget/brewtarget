@@ -54,4 +54,19 @@
         owner=brewtarget
       tags: dbsetup
 
+
+    - name: Create config directories
+      file:
+        state=directory
+        path=/home/vagrant/.config/brewtarget/
+        recurse=yes
+        owner=vagrant
+
+    - name: Install default config
+      copy:
+        src=brewtarget.conf
+        dest=/home/vagrant/.config/brewtarget/brewtarget.conf
+        owner=vagrant
+        mode=0644
+
 # vim: ft=ansible
