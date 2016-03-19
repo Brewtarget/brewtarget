@@ -724,7 +724,6 @@ private:
             // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
             // Not sure I like this. It's a long call stack just to end up back
             // here
-            qDebug() << Q_FUNC_INFO << "Bet its here";
             ing->setDisplay(! doNotDisplay );
          }
          else

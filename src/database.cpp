@@ -700,16 +700,17 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       q.setForwardOnly(true);
 
       if ( ! q.exec(deleteFromInRecipe) )
-         throw QString("failed to delete in recipe.");
+         throw QString("failed to delete in_recipe.");
 
-      if ( ! q.exec( deleteFromChildren ) )
+      // I don't really like this, but I can't think of a better solution. Of
+      // all the ingredients, instructions don't have a _children table. Given
+      // that it is only one table, I will try the easy way first
+      if ( tableName != "instruction" && ! q.exec( deleteFromChildren ) )
          throw QString("failed to delete children.");
 
       if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
 
-      if ( qobject_cast<Instruction*>(ing) ) 
-         sqlDelete( Brewtarget::INSTRUCTIONTABLE,QString("id=%1").arg(ing->_key));
    }
    catch ( QString e ) {
       Brewtarget::logE(QString("%1 %2 %3 %4")
