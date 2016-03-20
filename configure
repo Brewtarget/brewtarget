@@ -44,10 +44,13 @@ done
 
 # Cmake defaults CMAKE_INSTALL_PREFIX=/usr/local.
 # This is not good for debian, so try to detect debian/ubuntu.
-grep -i ubuntu /etc/issue > /dev/null 2> /dev/null || grep -i debian /etc/issue > /dev/null 2> /dev/null
-if [ $? == 0 ]
+if [ `uname` == 'Linux' ]
 then
-   PREFIX=/usr;
+   grep -i ubuntu /etc/issue > /dev/null 2> /dev/null || grep -i debian /etc/issue > /dev/null 2> /dev/null
+   if [ $? == 0 ]
+   then
+     PREFIX=/usr;
+   fi
 fi
 
 echo "Prefix: $PREFIX";
