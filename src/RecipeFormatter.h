@@ -28,7 +28,7 @@ class RecipeFormatter;
 #include <QObject>
 #include <QPrinter>
 #include <QPrintDialog>
-#include <QWebView>
+#include <QTextBrowser>
 #include <QDialog>
 #include <QFile>
 #include "recipe.h"
@@ -114,7 +114,7 @@ private:
    Recipe* rec;
 
    QPrinter* printer;
-   QWebView* doc;
+   QTextBrowser* doc;
    QDialog* docDialog;
    QString cssName;
 
