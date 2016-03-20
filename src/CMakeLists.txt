@@ -424,7 +424,6 @@ SET( QT5_USE_MODULES_LIST
    Sql
    Svg
    Xml
-   WebKitWidgets
    )
 
 IF( NOT ${NO_QTMULTIMEDIA})
@@ -451,7 +450,6 @@ SET( QT5_USE_MODULES_LIST
    Sql
    Svg
    Xml
-   WebKitWidgets
    Test
    )
 
