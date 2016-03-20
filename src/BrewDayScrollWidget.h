@@ -27,7 +27,7 @@ class BrewDayScrollWidget;
 #include "ui_brewDayScrollWidget.h"
 #include <QWidget>
 #include <QSize>
-#include <QWebView>
+#include <QTextBrowser>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QFile>
@@ -90,7 +90,7 @@ private:
    
    Recipe* recObs;
    QPrinter* printer;
-   QWebView* doc;
+   QTextBrowser* doc;
    //! Internal list of recipe instructions, always sorted by instruction number.
    QList<Instruction*> recIns;
 

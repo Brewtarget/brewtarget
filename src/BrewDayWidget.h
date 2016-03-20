@@ -27,7 +27,7 @@ class BrewDayWidget;
 #include "ui_brewDayWidget.h"
 #include <QWidget>
 #include <QSize>
-#include <QWebView>
+#include <QTextBrowser>
 #include <QMetaProperty>
 #include <QVariant>
 
@@ -70,7 +70,7 @@ private:
    
    Recipe* recObs;
    QPrinter* printer;
-   QWebView* doc;
+   QTextBrowser* doc;
 
    QString cssName;
 

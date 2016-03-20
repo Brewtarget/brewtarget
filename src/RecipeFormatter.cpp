@@ -52,7 +52,7 @@ RecipeFormatter::RecipeFormatter(QObject* parent)
    docDialog->setWindowTitle("Print Preview");
    if( docDialog->layout() == 0 )
       docDialog->setLayout(new QVBoxLayout(docDialog));
-   doc = new QWebView(docDialog);
+   doc = new QTextBrowser(docDialog);
    docDialog->layout()->addWidget(doc);
    /*
    // Add a print button at the bottom.

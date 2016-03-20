@@ -37,7 +37,7 @@
 
 // NOTE: QPrinter has no parent? Will it get destroyed properly?
 BrewDayWidget::BrewDayWidget(QWidget* parent) :
-   QWidget(parent), recObs(0), printer(new QPrinter()), doc(new QWebView(this))
+   QWidget(parent), recObs(0), printer(new QPrinter()), doc(new QTextBrowser(this))
 {
    setupUi(this);
 
@@ -291,7 +291,7 @@ void BrewDayWidget::pushInstructionPrint()
    QString pDoc;
    QPrintDialog *dialog = new QPrintDialog(printer, this);
 
-   /* Instantiate the Webview and then connect its signal */
+   /* Instantiate the TextBrowser and then connect its signal */
    connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
 
    dialog->setWindowTitle(tr("Print Document"));

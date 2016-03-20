@@ -424,7 +424,6 @@ SET( QT5_USE_MODULES_LIST
    Sql
    Svg
    Xml
-   WebKit
    WebKitWidgets
    )
 
@@ -452,7 +451,6 @@ SET( QT5_USE_MODULES_LIST
    Sql
    Svg
    Xml
-   WebKit
    WebKitWidgets
    Test
    )
