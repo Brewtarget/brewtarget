@@ -215,7 +215,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
 
          scale = displayScale(MISCTIMECOL);
 
-         return QVariant( Brewtarget::displayAmount(row->time(), Units::minutes, 0, Unit::noUnit, scale) );
+         return QVariant( Brewtarget::displayAmount(row->time(), Units::minutes, 3, Unit::noUnit, scale) );
       case MISCINVENTORYCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
