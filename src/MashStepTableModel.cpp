@@ -174,7 +174,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
          return QVariant( Brewtarget::displayAmount(row->stepTemp_c(), Units::celsius,3, unit, Unit::noScale) );
       case MASHSTEPTIMECOL:
          scale = displayScale(col);
-         return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes,0,Unit::noUnit,scale) );
+         return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes,3,Unit::noUnit,scale) );
       default :
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return QVariant();
