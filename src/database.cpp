@@ -1171,7 +1171,7 @@ Instruction* Database::newInstruction(Recipe* rec)
 
       // Add without copying to "instruction_in_recipe". We already have a
       // transaction open, so tell addIng to not worry about it
-      tmp = addIngredientToRecipe(rec,tmp,true,0,false,false);
+      tmp = addIngredientToRecipe<Instruction>(rec,tmp,true,0,false,false);
    }
    catch ( QString e ) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
