@@ -34,6 +34,7 @@
         - qttools5-dev-tools
         - postgresql-9.5
         - python-psycopg2
+        - gdb
       tags:
         - install
 
