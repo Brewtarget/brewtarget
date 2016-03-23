@@ -104,61 +104,64 @@ Brewtarget::DensityUnitType Brewtarget::densityUnit = Brewtarget::SG;
 
 QHash<int, UnitSystem*> Brewtarget::thingToUnitSystem;
 
+
+bool Brewtarget::createDir(QDir dir, QString errText)
+{
+  if( ! dir.mkpath(dir.absolutePath()) )
+  {
+    // Write a message to the log, the usablity check below will alert the user
+    QString errText(QObject::tr("Error attempting to create directory \"%1\""));
+    logE(errText.arg(dir.path()));
+  }
+
+  // It's possible that the path exists, but is useless to us
+  if( ! dir.exists() || ! dir.isReadable() )
+  {
+    QString errTitle(QObject::tr("Directory Problem"));
+
+    if( errText == NULL)
+      errText = QString(QObject::tr("\"%1\" cannot be read."));
+
+    logW(errText.arg(dir.path()));
+
+    QMessageBox::information(
+       0,
+       errTitle,
+       errText.arg(dir.path())
+    );
+    return false;
+  }
+
+  return true;
+}
+
 bool Brewtarget::ensureDirectoriesExist()
 {
-   bool success;
-   QString errTitle(QObject::tr("Directory Problem"));
-   QString errText(QObject::tr("\"%1\" cannot be read."));
+  // A missing dataDir is a serious issue, without it we're missing the default DB, sound files & translations.
+  // An attempt could be made to created it, like the other config directories, but an empty data dir is just as bad as a missing one.
+  // Because of that, we'll display a little more dire warning, and not try to create it.
+  QDir dataDir = getDataDir();
+  bool dataDirSuccess = true;
 
-   // Check data dir
-   const QDir dataDir = getDataDir();
-   if( ! dataDir.exists() || ! dataDir.isReadable() )
-   {
-      QMessageBox::information(
-         0,
-         errTitle,
-         errText.arg(dataDir.path())
-      );
-      return false;
-   }
+  if (! dataDir.exists())
+  {
+    dataDirSuccess = false;
+    QString errMsg = QString(QObject::tr("Data directory \"%1\" is missing.  Some fatures will be unavaliable.")).arg(dataDir.path());
+    logE(errMsg);
 
-   // Check doc dir
-   const QDir docDir = getDocDir();
-   if( ! docDir.exists() || ! docDir.isReadable() )
-   {
-      QMessageBox::information(
-         0,
-         errTitle,
-         errText.arg(docDir.path())
-      );
-      return false;
-   }
+    QMessageBox::critical(
+       0,
+       QObject::tr("Directory Problem"),
+       errMsg
+    );
+  }
 
-   // Check config dir
-   const QDir configDir = getConfigDir(&success);
-   if( !success || ! configDir.exists() || ! configDir.isReadable() )
-   {
-      QMessageBox::information(
-         0,
-         errTitle,
-         errText.arg(configDir.path())
-      );
-      return false;
-   }
 
-   // Check/create user data directory
-   const QDir userDataDir = getUserDataDir();
-   if( !userDataDir.exists() && !userDataDir.mkpath(".") )
-   {
-      QMessageBox::information(
-         0,
-         errTitle,
-         errText.arg(userDataDir.path())
-      );
-      return false;
-   }
-
-   return true;
+  return
+    dataDirSuccess &&
+    createDir(getConfigDir()) &&
+    createDir(getDocDir()) &&
+    createDir(getUserDataDir());
 }
 
 void Brewtarget::checkForNewVersion(MainWindow* mw)
@@ -310,82 +313,27 @@ QDir Brewtarget::getDocDir()
    return dir;
 }
 
-const QDir Brewtarget::getConfigDir(bool *success)
+const QDir Brewtarget::getConfigDir()
 {
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
-
    QDir dir;
    QFileInfo fileInfo;
-   char* xdg_config_home = getenv("XDG_CONFIG_HOME");
-   bool tmp;
-   QFile::Permissions sevenFiveFive = QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner |
-                                      QFile::ReadGroup |                     QFile::ExeGroup |
-                                      QFile::ReadOther |                     QFile::ExeOther;
+
    // First, try XDG_CONFIG_HOME.
    // If that variable doesn't exist, create ~/.config
+   char* xdg_config_home = getenv("XDG_CONFIG_HOME");
+
    if (xdg_config_home)
    {
-      dir = xdg_config_home;
+     dir = QString(xdg_config_home).append("/brewtarget");
    }
    else
    {
-      // Creating config directory.
-      dir = QDir::home();
-      if( !dir.exists(".config") )
-      {
-         logW( QString("Config dir \"%1\" did not exist...").arg(dir.absolutePath() + "/.config") );
-         tmp = dir.mkdir(".config");
-         logW( QString( tmp ? "...created it." : "...could not create it.") );
-         if( !tmp )
-         {
-            // Failure.
-            if( success != 0 )
-               *success = false;
-            return QDir::temp();
-         }
-
-         // chmod 755 ~/.config
-         QFile::setPermissions( dir.absolutePath() + "/.config", sevenFiveFive );
-      }
-
-      // CD to config directory.
-      if( ! dir.cd(".config") )
-      {
-         logE( QString("Could not CD to \"%1\".").arg(dir.absolutePath() + "/.config") );
-         if( success != 0 )
-            *success = false;
-         return QDir::temp();
-      }
+     // If XDG_CONFIG_HOME doesn't exist, config goes in ~/.config/brewtarget
+     QString dirPath = QDir::homePath().append("/.config/brewtarget");
+     dir = QDir(dirPath);
    }
 
-   // See if brewtarget dir exists.
-   if( !dir.exists("brewtarget") )
-   {
-      // logW( QString("\"%1\" does not exist...creating.").arg(dir.absolutePath() + "/brewtarget") );
-
-      // Try to make brewtarget dir.
-      if( ! dir.mkdir("brewtarget") )
-      {
-         logE( QString("Could not create \"%1\"").arg(dir.absolutePath() + "/brewtarget") );
-         if( success != 0 )
-            *success = false;
-         return QDir::temp();
-      }
-
-      // chmod 755 ~/.config/brewtarget
-      QFile::setPermissions( dir.absolutePath() + "/brewtarget", sevenFiveFive );
-   }
-
-   if( ! dir.cd("brewtarget") )
-   {
-      logE(QString("Could not CD into \"%1\"").arg(dir.absolutePath() + "/brewtarget"));
-      if( success != 0 )
-         *success = false;
-      return QDir::temp();
-   }
-
-   if( success != 0 )
-      *success = true;
    return dir.absolutePath() + "/";
 
 #elif defined(Q_OS_WIN) // Windows OS.
@@ -489,10 +437,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
    log.changeDirectory(getUserDataDir());
 
    // Make sure all the necessary directories and files we need exist before starting.
-   bool success;
-   success = ensureDirectoriesExist();
-   if(!success)
-      return false;
+   ensureDirectoriesExist();
 
    loadTranslations(); // Do internationalization.
 
