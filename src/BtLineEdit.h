@@ -48,21 +48,13 @@ class BtStringEdit;
 class BtLineEdit : public QLineEdit
 {
    Q_OBJECT
-   Q_ENUMS(FieldType)
+   Q_PROPERTY( int     type              READ type              WRITE setType              STORED false);
+   Q_PROPERTY( QString configSection     READ configSection     WRITE setConfigSection     STORED false);
+   Q_PROPERTY( QString editField         READ editField         WRITE setEditField         STORED false);
+   Q_PROPERTY( QString forcedUnit        READ forcedUnit        WRITE setForcedUnit        STORED false);
+   Q_PROPERTY( QString forcedScale       READ forcedScale       WRITE setForcedScale       STORED false);
 
 public:
-
-   enum FieldType {
-      GENERIC,
-      MASS,
-      VOLUME,
-      TEMPERATURE,
-      TIME,
-      DENSITY,
-      COLOR,
-      STRING,
-      MIXED // ick, but I have to figure this out.
-   };
 
    /*! \brief Initialize the BtLineEdit with the parent and do some things with the type
    * \param parent - QWidget* to the parent object
@@ -72,7 +64,7 @@ public:
    *       Not sure how to signal the parent to redisplay
    */
 
-   BtLineEdit(QWidget* parent = 0, FieldType type = GENERIC);
+   BtLineEdit(QWidget* parent = 0, Unit::UnitType type = Unit::None);
    double toSI(Unit::unitDisplay oldUnit = Unit::noUnit, Unit::unitScale oldScale = Unit::noScale, bool force = false);
    // Use this when you want to do something with the returned QString
    QString displayAmount( double amount, int precision = 3);
@@ -87,6 +79,23 @@ public:
    // gonna fix this.
    double  toDouble(bool* ok);
 
+   // By defining the setters/getters, we can remove the need for
+   // initializeProperties.
+   QString editField() const;
+   void setEditField( QString editField );
+
+   QString configSection() const;
+   void setConfigSection( QString configSection );
+
+   int type() const;
+   void setType(int type);
+
+   QString forcedUnit() const;
+   void setForcedUnit(QString forcedUnit);
+
+   QString forcedScale() const;
+   void setForcedScale(QString forcedScale);
+
 public slots:
    void lineChanged();
    void lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
@@ -96,13 +105,12 @@ signals:
 
 protected:
    QWidget *btParent;
-   QString _section, _property;
-   FieldType _type;
+   QString _section, _editField;
+   Unit::UnitType _type;
    Unit::unitDisplay _forceUnit;
    Unit::unitScale _forceScale;
    Unit* _units;
 
-   void initializeProperties();
    void initializeSection();
 
 };
