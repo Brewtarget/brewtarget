@@ -396,6 +396,14 @@ private:
     */
    static void cleanup();
 
+
+   /*!
+    * \brief Checks if another instance is already running.
+    *
+    * Currently only works on Unix systems.
+    */
+   static bool instanceRunning();
+
    /*!
     *  \brief Helper to get option values from XML.
     *

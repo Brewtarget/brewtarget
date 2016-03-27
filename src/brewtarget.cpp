@@ -76,6 +76,12 @@
 #include "instruction.h"
 #include "water.h"
 
+// Needed for kill(2)
+#if defined(Q_OS_UNIX)
+#include <sys/types.h>
+#include <signal.h>
+#endif
+
 MainWindow* Brewtarget::_mainWindow = 0;
 QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = new QTranslator();
@@ -432,39 +438,6 @@ bool Brewtarget::initialize(const QString &userDirectory)
    qRegisterMetaType< QList<Yeast*> >();
    qRegisterMetaType< QList<Water*> >();
 
-   // In Unix, make sure the user isn't running 2 copies.
-#if defined(Q_OS_LINUX)
-   pidFile.setFileName(QString("%1.pid").arg(getUserDataDir().canonicalPath()));
-   if( pidFile.exists() )
-   {
-      // Read the pid.
-      qint64 pid;
-      pidFile.open(QIODevice::ReadOnly);
-      {
-         QTextStream pidStream(&pidFile);
-         pidStream >> pid;
-      }
-      pidFile.close();
-
-      // If the pid is in the proc filesystem, another instance is running.
-      // Have to check /proc, because perhaps the last instance crashed without
-      // cleaning up after itself.
-      QDir procDir(QString("/proc/%1").arg(pid));
-      if( procDir.exists() )
-      {
-         std::cerr << "Brewtarget is already running. PID: " << pid << std::endl;
-         return false;
-      }
-   }
-
-   // Open the pidFile, erasing any contents, and write our pid.
-   pidFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-   {
-      QTextStream pidStream(&pidFile);
-      pidStream << QCoreApplication::applicationPid();
-   }
-   pidFile.close();
-#endif
 
    // Use overwride if present.
    if (!userDirectory.isEmpty() && QDir(userDirectory).exists())
@@ -487,6 +460,10 @@ bool Brewtarget::initialize(const QString &userDirectory)
    readSystemOptions();
    loadMap();
    log.changeDirectory(getUserDataDir());
+
+  // Make sure we're the only instance if we're using SQLite
+  if ( instanceRunning() && dbType() == Brewtarget::SQLITE)
+    return false;
 
    // Make sure all the necessary directories and files we need exist before starting.
    bool success;
@@ -511,6 +488,41 @@ bool Brewtarget::initialize(const QString &userDirectory)
    }
    else
       return false;
+}
+
+bool Brewtarget::instanceRunning() {
+   // In Unix, make sure the user isn't running 2 copies.
+#if defined(Q_OS_UNIX)
+   pidFile.setFileName(QString("%1.pid").arg(getUserDataDir().canonicalPath()));
+   if( pidFile.exists() )
+   {
+      // Read the pid.
+      qint64 pid;
+      pidFile.open(QIODevice::ReadOnly);
+      {
+         QTextStream pidStream(&pidFile);
+         pidStream >> pid;
+      }
+      pidFile.close();
+
+      // kill(2) with sig=0 does existence error checking w/o sending any real signal.
+      if ( kill(pid, 0) == 0 )
+      {
+         std::cerr << "Brewtarget is already running. PID: " << pid << std::endl;
+         return true;
+      }
+   }
+
+   // Open the pidFile, erasing any contents, and write our pid.
+   pidFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+   {
+      QTextStream pidStream(&pidFile);
+      pidStream << QCoreApplication::applicationPid();
+   }
+   pidFile.close();
+
+#endif
+   return false;
 }
 
 Brewtarget::DBTypes Brewtarget::dbType() { 
