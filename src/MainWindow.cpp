@@ -884,10 +884,16 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    // See if we need to change the mash in the table.
    if( (updateAll && recipeObs->mash()) ||
-       (propName == "mash" &&
-       recipeObs->mash()) )
+       (propName == "mash" && recipeObs->mash()) )
    {
       mashStepTableModel->setMash(recipeObs->mash());
+   }
+
+   // Not sure about this, but I am annoyed that modifying the hop usage
+   // modifiers isn't automatically updating my display
+   if ( updateAll ) {
+     recipeObs->acceptHopChange( recipeObs->metaProperty("hops"), QVariant());
+     hopTableProxy->invalidate();
    }
 }
 
