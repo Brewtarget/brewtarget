@@ -168,7 +168,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="primingdialog">
      <property name="title">
       <string>Output</string>
      </property>
