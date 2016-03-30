@@ -48,11 +48,11 @@ class BtStringEdit;
 class BtLineEdit : public QLineEdit
 {
    Q_OBJECT
-   Q_PROPERTY( int     type              READ type              WRITE setType              STORED false);
-   Q_PROPERTY( QString configSection     READ configSection     WRITE setConfigSection     STORED false);
-   Q_PROPERTY( QString editField         READ editField         WRITE setEditField         STORED false);
-   Q_PROPERTY( QString forcedUnit        READ forcedUnit        WRITE setForcedUnit        STORED false);
-   Q_PROPERTY( QString forcedScale       READ forcedScale       WRITE setForcedScale       STORED false);
+   Q_PROPERTY( int     type              READ type              WRITE setType              STORED false)
+   Q_PROPERTY( QString configSection     READ configSection     WRITE setConfigSection     STORED false)
+   Q_PROPERTY( QString editField         READ editField         WRITE setEditField         STORED false)
+   Q_PROPERTY( QString forcedUnit        READ forcedUnit        WRITE setForcedUnit        STORED false)
+   Q_PROPERTY( QString forcedScale       READ forcedScale       WRITE setForcedScale       STORED false)
 
 public:
 
