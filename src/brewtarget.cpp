@@ -152,7 +152,7 @@ bool Brewtarget::ensureDirectoriesExist()
   if (! dataDir.exists())
   {
     dataDirSuccess = false;
-    QString errMsg = QString(QObject::tr("Data directory \"%1\" is missing.  Some fatures will be unavaliable.")).arg(dataDir.path());
+    QString errMsg = QString(QObject::tr("Data directory \"%1\" is missing.  Some features will be unavaliable.")).arg(dataDir.path());
     logE(errMsg);
 
     QMessageBox::critical(
