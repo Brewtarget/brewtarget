@@ -381,6 +381,9 @@
          <property name="title">
           <string>Configuration</string>
          </property>
+         <property name="configSection" stdset="0">
+          <string notr="true">optionsDialog</string>
+         </property>
          <layout class="QFormLayout" name="formLayout_2">
           <property name="fieldGrowthPolicy">
            <enum>QFormLayout::ExpandingFieldsGrow</enum>

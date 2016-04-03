@@ -84,7 +84,7 @@ public:
    QString editField() const;
    void setEditField( QString editField );
 
-   QString configSection() const;
+   QString configSection();
    void setConfigSection( QString configSection );
 
    int type() const;
@@ -110,8 +110,6 @@ protected:
    Unit::unitDisplay _forceUnit;
    Unit::unitScale _forceScale;
    Unit* _units;
-
-   void initializeSection();
 
 };
 
