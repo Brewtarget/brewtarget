@@ -131,11 +131,13 @@ bool Brewtarget::createDir(QDir dir, QString errText)
 
     logW(errText.arg(dir.path()));
 
-    QMessageBox::information(
-       0,
-       errTitle,
-       errText.arg(dir.path())
-    );
+    if (Brewtarget::isInteractive()) {
+       QMessageBox::information(
+          0,
+          errTitle,
+          errText.arg(dir.path())
+       );
+    }
     return false;
   }
 
@@ -156,11 +158,13 @@ bool Brewtarget::ensureDirectoriesExist()
     QString errMsg = QString(QObject::tr("Data directory \"%1\" is missing.  Some features will be unavaliable.")).arg(dataDir.path());
     logE(errMsg);
 
-    QMessageBox::critical(
-       0,
-       QObject::tr("Directory Problem"),
-       errMsg
-    );
+    if (Brewtarget::isInteractive()) {
+       QMessageBox::critical(
+          0,
+          QObject::tr("Directory Problem"),
+          errMsg
+       );
+    }
   }
 
 
