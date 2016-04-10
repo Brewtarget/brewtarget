@@ -705,16 +705,17 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       q.setForwardOnly(true);
 
       if ( ! q.exec(deleteFromInRecipe) )
-         throw QString("failed to delete in recipe.");
+         throw QString("failed to delete in_recipe.");
 
-      if ( ! q.exec( deleteFromChildren ) )
+      // I don't really like this, but I can't think of a better solution. Of
+      // all the ingredients, instructions don't have a _children table. Given
+      // that it is only one table, I will try the easy way first
+      if ( tableName != "instruction" && ! q.exec( deleteFromChildren ) )
          throw QString("failed to delete children.");
 
       if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
 
-      if ( qobject_cast<Instruction*>(ing) ) 
-         sqlDelete( Brewtarget::INSTRUCTIONTABLE,QString("id=%1").arg(ing->_key));
    }
    catch ( QString e ) {
       Brewtarget::logE(QString("%1 %2 %3 %4")
@@ -1051,73 +1052,6 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 
 // Named constructors =========================================================
 
-int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
-{
-   int key;
-   QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(tableNames[table]);
-   QSqlQuery q(sqlDatabase());
-
-   try {
-      if ( ! q.exec(insert) )
-         throw QString("could not insert a record into");
-   }
-   catch ( QString e ) {
-      Brewtarget::logE(QString("%1 %2 %3 %4")
-                           .arg(Q_FUNC_INFO)
-                           .arg(e)
-                           .arg(q.lastQuery())
-                           .arg(q.lastError().text()));
-      q.finish();
-      throw;
-   }
-
-   key = q.lastInsertId().toInt();
-   q.finish();
-
-   makeDirty();
-   return key;
-}
-
-// If we are doing triggers for instructions, why aren't we doing triggers for
-// mash steps?
-
-int Database::insertNewMashStepRecord( Mash* parent )
-{
-   int key;
-   QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
-                        .arg(tableNames[Brewtarget::MASHSTEPTABLE])
-                        .arg(Brewtarget::dbFalse())
-                        .arg(parent->_key);
-
-   sqlDatabase().transaction();
-
-   QSqlQuery q(sqlDatabase());
-   q.setForwardOnly(true);
-
-   try {
-      key = insertNewDefaultRecord(Brewtarget::MASHSTEPTABLE);
-      if ( key == -42 )
-         throw QString("invalid key");
-
-      // I *think* we need to set the mash_id first
-      sqlUpdate( Brewtarget::MASHSTEPTABLE, QString("mash_id=%1 ").arg(parent->_key), QString("id=%1").arg(key) );
-
-      // Just sets the step number within the mash to the next available number.
-      // we need coalesce here instead of isnull. coalesce is SQL standard, so
-      // should be more widely supported than isnull
-      sqlUpdate( Brewtarget::MASHSTEPTABLE, coalesce, QString("id=%1").arg(key) );
-   }
-   catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      sqlDatabase().rollback();
-      throw;
-   }
-
-   sqlDatabase().commit();
-   makeDirty();
-   return key;
-}
-
 BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 {
    BrewNote* tmp = copy<BrewNote>(other, true, &allBrewNotes);
@@ -1136,20 +1070,13 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 
 BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
 {
-   BrewNote* tmp = new BrewNote();
-   int key;
+   BrewNote* tmp;
 
    sqlDatabase().transaction();
 
    try {
-      key = insertNewDefaultRecord(Brewtarget::BREWNOTETABLE);
-      if ( key == -42 )
-         throw QString("could not insert new brewnote");
+      tmp = newIngredient(&allBrewNotes);
 
-      tmp->_key = key;
-      tmp->_table = Brewtarget::BREWNOTETABLE;
-
-      allBrewNotes.insert(tmp->_key,tmp);
       sqlUpdate( Brewtarget::BREWNOTETABLE,
                QString("recipe_id=%1").arg(parent->_key),
                QString("id=%2").arg(tmp->_key) );
@@ -1247,13 +1174,9 @@ Instruction* Database::newInstruction(Recipe* rec)
    try {
       tmp = newIngredient(&allInstructions);
 
-      if ( ! tmp )
-         throw QString("Could not create new instruction");
       // Add without copying to "instruction_in_recipe". We already have a
       // transaction open, so tell addIng to not worry about it
-         tmp = addIngredientToRecipe<Instruction>(rec,tmp,true,0,false,false);
-         if ( ! tmp )
-            throw QString("Could not add instruction to recipe");
+      tmp = addIngredientToRecipe<Instruction>(rec,tmp,true,0,false,false);
    }
    catch ( QString e ) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -1282,23 +1205,6 @@ int Database::instructionNumber(Instruction const* in)
       return q.record().value("instruction_number").toInt();
    else
       return 0;
-}
-
-// TODO: Fix these -- I would like to see if there is a reasonable way to
-// collapse these three methods into one
-Mash* Database::newMash()
-{
-   Mash* tmp = new Mash();
-   tmp->_key = insertNewDefaultRecord(Brewtarget::MASHTABLE);
-   tmp->_table = Brewtarget::MASHTABLE;
-
-   allMashs.insert(tmp->_key,tmp);
-
-   makeDirty();
-   emit changed( metaProperty("mashs"), QVariant() );
-   emit newMashSignal(tmp);
-
-   return tmp;
 }
 
 Mash* Database::newMash(Mash* other, bool displace)
@@ -1355,9 +1261,6 @@ Mash* Database::newMash(Recipe* parent, bool transact)
    try {
       tmp = newIngredient(&allMashs);
 
-      if ( ! tmp )
-         throw QString("Could not create new mash");
-
       // Connect tmp to parent, removing any existing mash in parent.
       sqlUpdate( Brewtarget::RECTABLE,
                  QString("mash_id=%1").arg(tmp->_key),
@@ -1381,20 +1284,39 @@ Mash* Database::newMash(Recipe* parent, bool transact)
    return tmp;
 }
 
+// If we are doing triggers for instructions, why aren't we doing triggers for
+// mash steps?
 MashStep* Database::newMashStep(Mash* mash, bool connected)
 {
    // TODO: encapsulate in QUndoCommand.
    // NOTE: we have unique(mash_id,step_number) constraints on this table,
    // so may have to pay special attention when creating the new record.
    MashStep* tmp;
+   QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
+                        .arg(tableNames[Brewtarget::MASHSTEPTABLE])
+                        .arg(Brewtarget::dbFalse())
+                        .arg(mash->_key);
 
    sqlDatabase().transaction();
 
+   QSqlQuery q(sqlDatabase());
+   q.setForwardOnly(true);
+
+   // mashsteps are weird, because we have to do the linking between step and
+   // mash
    try {
       tmp = newIngredient(&allMashSteps);
 
-      if ( !tmp )
-         throw QString("Could not create new mashstep");
+      // I *think* we need to set the mash_id first
+      sqlUpdate( Brewtarget::MASHSTEPTABLE, 
+                 QString("mash_id=%1 ").arg(mash->_key),
+                 QString("id=%1").arg(tmp->_key)
+               );
+
+      // Just sets the step number within the mash to the next available number.
+      // we need coalesce here instead of isnull. coalesce is SQL standard, so
+      // should be more widely supported than isnull
+      sqlUpdate( Brewtarget::MASHSTEPTABLE, coalesce, QString("id=%1").arg(tmp->_key) );
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -1402,12 +1324,11 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
       throw;
    }
 
-   allMashSteps.insert(tmp->_key,tmp);
+   sqlDatabase().commit();
 
    if ( connected ) 
       connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
-   sqlDatabase().commit();
    makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit mash->mashStepsChanged();
@@ -1446,11 +1367,7 @@ Recipe* Database::newRecipe()
    try {
       tmp = newIngredient(&allRecipes);
 
-      if ( ! tmp )
-         throw QString("Could not create new recipe");
-
-      if( ! newMash(tmp,false) )
-         throw QString("Could not create new mash");
+      newMash(tmp,false);
    }
    catch (QString e ) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -1466,8 +1383,9 @@ Recipe* Database::newRecipe()
    return tmp;
 }
 
-// TODO: Oh my. This ... the entire thing should be transacted. But there is
-// no way to tell each of the addTo* to not transact and ... oh my.
+// TODO: Oh my. This the entire thing should be transacted. It took some work
+// to get all the addToRecipe methods to play nice.
+// 
 Recipe* Database::newRecipe(Recipe* other)
 {
    Recipe* tmp;
@@ -1508,21 +1426,21 @@ Style* Database::newStyle(Style* other)
 {
    Style* tmp;
 
-   if ( other )
-      tmp = copy(other, true, &allStyles);
-   else
-      tmp = newIngredient(&allStyles);
+   try {
+      if ( other )
+         tmp = copy(other, true, &allStyles);
+      else
+         tmp = newIngredient(&allStyles);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
 
-   if ( tmp ) {
-      makeDirty();
-      emit changed( metaProperty("styles"), QVariant() );
-      emit newStyleSignal(tmp);
-   }
-   else {
-      Brewtarget::logE( QString("%1 could not %2 hop")
-            .arg(Q_FUNC_INFO)
-            .arg( other ? "copy" : "create"));
-   }
+   makeDirty();
+   emit changed( metaProperty("styles"), QVariant() );
+   emit newStyleSignal(tmp);
 
    return tmp;
 }
@@ -1531,22 +1449,21 @@ Water* Database::newWater(Water* other)
 {
    Water* tmp;
 
-   if ( other )
-      tmp = copy(other,true,&allWaters);
-   else
-      tmp = newIngredient(&allWaters);
-
-
-   if ( tmp ) {
-      makeDirty();
-      emit changed( metaProperty("waters"), QVariant() );
-      emit newWaterSignal(tmp);
+   try {
+      if ( other )
+         tmp = copy(other,true,&allWaters);
+      else
+         tmp = newIngredient(&allWaters);
    }
-   else {
-      Brewtarget::logE( QString("%1 could not %2 hop")
-            .arg(Q_FUNC_INFO)
-            .arg( other ? "copy" : "create"));
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
    }
+
+   makeDirty();
+   emit changed( metaProperty("waters"), QVariant() );
+   emit newWaterSignal(tmp);
 
    return tmp;
 }
@@ -1555,22 +1472,22 @@ Yeast* Database::newYeast(Yeast* other)
 {
    Yeast* tmp;
 
-   if (other)
-      tmp = copy(other, true, &allYeasts);
-   else
-      tmp = newIngredient(&allYeasts);
+   try {
+      if (other)
+         tmp = copy(other, true, &allYeasts);
+      else
+         tmp = newIngredient(&allYeasts);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
 
 
-   if ( tmp ) {
-      makeDirty();
-      emit changed( metaProperty("yeasts"), QVariant() );
-      emit newYeastSignal(tmp);
-   }
-   else {
-      Brewtarget::logE( QString("%1 could not %2 hop")
-            .arg(Q_FUNC_INFO)
-            .arg( other ? "copy" : "create"));
-   }
+   makeDirty();
+   emit changed( metaProperty("yeasts"), QVariant() );
+   emit newYeastSignal(tmp);
 
    return tmp;
 }
@@ -1583,7 +1500,7 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
 
    try {
       updateEntry( table, object->_key, "deleted", Brewtarget::dbTrue(),
-                   object->metaObject()->property(ndx), object, false, false);
+                   object->metaObject()->property(ndx), object, true);
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
@@ -1673,6 +1590,10 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
    if ( transact )
       sqlDatabase().commit();
+
+   if ( notify )
+      emit object->changed(prop,value);
+
    makeDirty();
 
 }
@@ -1685,9 +1606,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
    Brewtarget::logW( "Populating Children Ingredient Links" );
 
    try {
-      QString queryString = QString(
-         "SELECT DISTINCT name FROM %1"
-      ).arg(tableNames[table]);
+      QString queryString = QString("SELECT DISTINCT name FROM %1").arg(tableNames[table]);
 
       QSqlQuery nameq( queryString, sqlDatabase() );
 
@@ -2142,7 +2061,7 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
    try {
       foreach (Yeast* yeast, yeasts )
       {
-         Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, yeast, false, &allYeasts,true,false );
+         Yeast* newYeast = addIngredientToRecipe( rec, yeast, false, &allYeasts,true,false );
          connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
       }
    }

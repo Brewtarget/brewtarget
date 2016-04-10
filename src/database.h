@@ -150,10 +150,18 @@ public:
       T* tmp = new T();
       // To quote the talking heads, my god what have I done?
       Brewtarget::DBTable table = classNameToTable[ tmp->metaObject()->className() ];
+      QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(tableNames[table]);
+
+      QSqlQuery q(sqlDatabase());
+
+      q.setForwardOnly(true);
+
       try {
-         key = insertNewDefaultRecord(table);
-         if ( key == -42 )
-            throw QString("could not create default %1").arg(tmp->metaObject()->className());
+         if ( ! q.exec(insert) )
+            throw QString("could not insert a record into");
+
+         key = q.lastInsertId().toInt();
+         q.finish();
       }
       catch (QString e) {
          Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -174,8 +182,7 @@ public:
 
    MashStep* newMashStep(Mash* parent, bool connected = true);
 
-   Mash* newMash();
-   Mash* newMash(Mash* other, bool displace = true);
+   Mash* newMash(Mash* other = 0, bool displace = true);
    Mash* newMash(Recipe* parent, bool transaction = true);
 
    Recipe* newRecipe();
@@ -259,10 +266,8 @@ public:
    // of ingredients in rec.
    void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing );
 
-   // Two odd balls I can't resolve quite yet. But I will.
+   // An odd ball I can't resolve quite yet. But I will.
    // This one isn't even needed. remove does it
-   // void removeFromRecipe( Recipe* rec, BrewNote* b );
-   // 
    void removeFromRecipe( Recipe* rec, Instruction* ins );
 
    //! Remove \b step from \b mash.
@@ -637,16 +642,6 @@ private:
       return metaObject()->property(metaObject()->indexOfProperty(name));
    }
 
-   /*! Make a new row in the \b table.
-    *  \returns key of new row.
-    *  Only works if all the fields in the table have default values.
-    */
-   int insertNewDefaultRecord( Brewtarget::DBTable table );
-
-   /*! Insert a new row in \b mashstep, where \b parent is the parent mash.
-    */
-   int insertNewMashStepRecord( Mash* parent );
-
    //! Mark the \b object in \b table as deleted.
    void deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object );
 
@@ -724,7 +719,6 @@ private:
             // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
             // Not sure I like this. It's a long call stack just to end up back
             // here
-            qDebug() << Q_FUNC_INFO << "Bet its here";
             ing->setDisplay(! doNotDisplay );
          }
          else

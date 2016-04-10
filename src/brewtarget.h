@@ -169,7 +169,7 @@ public:
    //! \return the doc directory
    static QDir getDocDir();
    //! \return the config directory
-   static const QDir getConfigDir(bool* success = 0);
+   static const QDir getConfigDir();
    //! \return user-specified directory where the database files reside.
    static QDir getUserDataDir();
    /*!
@@ -397,6 +397,14 @@ private:
     */
    static void cleanup();
 
+
+   /*!
+    * \brief Checks if another instance is already running.
+    *
+    * Currently only works on Unix systems.
+    */
+   static bool instanceRunning();
+
    /*!
     * \brief If false, run Brewtarget in a way that requires no user interaction
     *
@@ -425,6 +433,9 @@ private:
 
    //! \brief Ensure our directories exist.
    static bool ensureDirectoriesExist();
+   //! \brief Create a directory if it doesn't exist, popping a error dialog if creation fails
+   static bool createDir(QDir dir, QString errText = NULL);
+
    //! \brief Load translation files.
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.

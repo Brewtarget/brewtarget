@@ -35,7 +35,7 @@
 #include "mash.h"
 
 BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
-   : QWidget(parent), doc(new QWebView())
+   : QWidget(parent), doc(new QTextBrowser())
 {
    setupUi(this);
    setObjectName("BrewDayScrollWidget");
