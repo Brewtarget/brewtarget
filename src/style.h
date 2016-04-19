@@ -40,6 +40,8 @@ bool operator==(Style &s1, Style &s2);
 class Style : public BeerXMLElement
 {
    Q_OBJECT
+   Q_CLASSINFO("signal", "styles")
+   Q_CLASSINFO("prefix", "style")
    
    friend class Database;
 public:
