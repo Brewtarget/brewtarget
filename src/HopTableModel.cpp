@@ -295,7 +295,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
 
          scale = displayScale(col);
 
-         return QVariant( Brewtarget::displayAmount(row->time_min(), Units::minutes, 0, Unit::noUnit, scale) );
+         return QVariant( Brewtarget::displayAmount(row->time_min(), Units::minutes, 3, Unit::noUnit, scale) );
       case HOPFORMCOL:
         if ( role == Qt::DisplayRole )
           return QVariant( row->formStringTr() );

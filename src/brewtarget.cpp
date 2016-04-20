@@ -88,6 +88,7 @@ QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
 bool Brewtarget::userDatabaseDidNotExist = false;
 QFile Brewtarget::pidFile;
+bool Brewtarget::_isInteractive = true;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
@@ -130,11 +131,13 @@ bool Brewtarget::createDir(QDir dir, QString errText)
 
     logW(errText.arg(dir.path()));
 
-    QMessageBox::information(
-       0,
-       errTitle,
-       errText.arg(dir.path())
-    );
+    if (Brewtarget::isInteractive()) {
+       QMessageBox::information(
+          0,
+          errTitle,
+          errText.arg(dir.path())
+       );
+    }
     return false;
   }
 
@@ -152,14 +155,16 @@ bool Brewtarget::ensureDirectoriesExist()
   if (! dataDir.exists())
   {
     dataDirSuccess = false;
-    QString errMsg = QString(QObject::tr("Data directory \"%1\" is missing.  Some fatures will be unavaliable.")).arg(dataDir.path());
+    QString errMsg = QString(QObject::tr("Data directory \"%1\" is missing.  Some features will be unavaliable.")).arg(dataDir.path());
     logE(errMsg);
 
-    QMessageBox::critical(
-       0,
-       QObject::tr("Directory Problem"),
-       errMsg
-    );
+    if (Brewtarget::isInteractive()) {
+       QMessageBox::critical(
+          0,
+          QObject::tr("Directory Problem"),
+          errMsg
+       );
+    }
   }
 
 
@@ -531,6 +536,14 @@ void Brewtarget::cleanup()
    pidFile.remove();
 #endif
 
+}
+
+bool Brewtarget::isInteractive() {
+   return _isInteractive;
+}
+
+void Brewtarget::setInteractive(bool val) {
+   _isInteractive = val;
 }
 
 int Brewtarget::run(const QString &userDirectory)

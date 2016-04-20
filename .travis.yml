@@ -9,4 +9,4 @@ before_script:
   - mkdir build
   - cd build
   - cmake ..
-script: make
+script: make && (CTEST_OUTPUT_ON_FAILURE=TRUE make test)

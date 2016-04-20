@@ -192,10 +192,13 @@ bool Database::loadSQLite()
    if( ! dbIsOpen )
    {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
-      QMessageBox::critical(0,
-                              QObject::tr("Database Failure"),
-                              QString(QObject::tr("Failed to open the database '%1'.").arg(dbFileName))
-                           );
+      if (Brewtarget::isInteractive()) {
+         QMessageBox::critical(
+            0,
+            QObject::tr("Database Failure"),
+            QString(QObject::tr("Failed to open the database '%1'.").arg(dbFileName))
+         );
+      }
    }
    else
    {
@@ -322,12 +325,14 @@ bool Database::load()
 
    if( schemaErr )
    {
+      if (Brewtarget::isInteractive()) {
          QMessageBox::critical(
-         0,
-         QObject::tr("Database Failure"),
-         QObject::tr("Failed to update the database")
+            0,
+            QObject::tr("Database Failure"),
+            QObject::tr("Failed to update the database")
          );
-         return false;
+      }
+      return false;
    }
 
    // Initialize the SELECT * query hashes.
@@ -339,6 +344,7 @@ bool Database::load()
    {
 
       if(
+         Brewtarget::isInteractive() &&
          QMessageBox::question(
             0,
             tr("Merge Database"),
@@ -347,8 +353,7 @@ bool Database::load()
             QMessageBox::Yes
          )
          == QMessageBox::Yes
-      )
-      {
+      ) {
          updateDatabase(dataDbFile.fileName());
       }
 

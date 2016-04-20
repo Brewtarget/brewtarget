@@ -29,6 +29,9 @@
          <property name="title">
           <string>Required Fields</string>
          </property>
+         <property name="configSection" stdset="0">
+          <string notr="true">yeastEditor</string>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="spacing">
            <number>0</number>
@@ -711,6 +714,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>BtTemperatureEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
@@ -725,11 +733,6 @@
    <slots>
     <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>BtMixedLabel</class>
