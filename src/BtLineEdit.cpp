@@ -58,7 +58,7 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
    // This is where it gets hard
    double val = -1.0;
    QString amt;
-   bool force = false;
+   bool force = true;
    bool ok = false;
 
    // editingFinished happens on focus being lost, regardless of anything
@@ -69,13 +69,10 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
       return;
    }
 
-   // If we are here because somebody else sent the signal (ie, a label) or we
-   // generated the signal but nothing has changed then don't try to guess the
-   // units.
-   if ( sender() != this )
-   {
-      force = true;
-   }
+   // If we have intentionally forced the scale or unit, then make toSI use
+   // that.
+   if ( _forceUnit || _forceScale )
+      force = false;
 
    if ( _section.isEmpty() )
       initializeSection();
@@ -85,6 +82,14 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
       return;
    }
 
+   if ( !force ) {
+      qDebug() << Q_FUNC_INFO << "sender()->objectName():" << sender()->objectName() << "text():" << text() << "force:" << force;
+   }
+
+   if ( objectName() == "lineEdit_boilSize" ) {
+      qDebug() << Q_FUNC_INFO << "sender()->objectName():" << sender()->objectName() << "text():" << text() << "force:" << force;
+      // force = true;
+   }
    // The idea here is we need to first translate the field into a known
    // amount (aka to SI) and then into the unit we want.
    switch( _type )
@@ -96,6 +101,9 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
       case Unit::Density:
          val = toSI(oldUnit,oldScale,force);
          amt = displayAmount(val,3);
+         if ( objectName() == "lineEdit_boilSize" ) {
+            qDebug() << Q_FUNC_INFO << "text():" << text() << "val:" << val << "amt:" << amt;
+         }
          break;
       case Unit::Color:
          val = toSI(oldUnit,oldScale,force);
@@ -129,6 +137,10 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
    if ( _section.isEmpty() )
       initializeSection();
 
+   if ( objectName() == "lineEdit_boilSize" ) {
+      qDebug() << Q_FUNC_INFO << "oldUnit:" << oldUnit << "oldScale:" << oldScale << "force:" << force;
+   }
+   
    // If force is set, just use what is provided in the call. If we are
    // not forcing the unit & scale, we need to read the configured properties
    if ( ! force )
@@ -143,13 +155,23 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
       if( _forceScale != Unit::noScale )
          dspScale = _forceScale;
       else
-         dspScale  = (Unit::unitScale)Brewtarget::option(_editField, Unit::noUnit, _section, Brewtarget::SCALE).toInt();
+         dspScale  = (Unit::unitScale)Brewtarget::option(_editField, Unit::noScale, _section, Brewtarget::SCALE).toInt();
    }
 
+   // The rule should be that if you provide no unit, we get the default scale
+   if ( ! Brewtarget::hasUnits( text() ) )
+      dspScale  = (Unit::unitScale)Brewtarget::option(_editField, Unit::noScale, _section, Brewtarget::SCALE).toInt();
+
    // Find the unit system containing dspUnit
+   if ( objectName() == "lineEdit_boilSize" ) {
+      qDebug() << Q_FUNC_INFO << "_units->getUnitName():" << _units->getUnitName();
+   }
    temp = Brewtarget::findUnitSystem(_units,dspUnit);
    if ( temp )
    {
+      if ( objectName() == "lineEdit_boilSize" ) {
+         qDebug() << Q_FUNC_INFO << "temp->unitType(): " << temp->unitType();
+      }
       // If we found it, find the unit referred by dspScale
       works = temp->scaleUnit(dspScale);
       if (! works )
@@ -159,11 +181,18 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
 
       // get the qstringToSI() from the unit system, using the found unit.
       // Force the issue in qstringToSI() unless dspScale is Unit::noScale.
+      
+      if ( objectName() == "lineEdit_boilSize" ) {
+         qDebug() << Q_FUNC_INFO << "works->getUnitName():" << works->getUnitName();
+      }
       return temp->qstringToSI(text(), works, dspScale != Unit::noScale, dspScale);
    }
    else if ( _type == Unit::String )
       return 0.0;
 
+   if ( objectName() == "lineEdit_boilSize" ) {
+      qDebug() << Q_FUNC_INFO << "fell through? What?";
+   }
    // If all else fails, simply try to force the contents of the field to a
    // double. This doesn't seem advisable?
    bool ok = false;
