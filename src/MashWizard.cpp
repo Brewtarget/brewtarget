@@ -116,6 +116,7 @@ void MashWizard::show()
       }
       widget_batches->setEnabled(true);
       widget_mashThickness->setEnabled(true);
+      radioButton_batchSparge->setChecked(true);
       spinBox_batches->setValue(countSteps);
    }
 
