@@ -28,11 +28,19 @@
 #include <QDebug>
 
 BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type) :
-   QLineEdit(parent)
+   QLineEdit(parent),
+   btParent(parent),
+   _type(type),
+   _forceUnit(Unit::noUnit),
+   _forceScale(Unit::noScale)
 {
+   _section = property("configSection").toString();
+   /*
    btParent = parent;
    _type = type;
-   _section = property("configSection").toString();
+   _forceUnit = Unit::noUnit;
+   _forceScale = Unit::noScale;
+   */
    
    connect(this,SIGNAL(editingFinished()),this,SLOT(lineChanged()));
 }
@@ -47,7 +55,7 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
    // This is where it gets hard
    double val = -1.0;
    QString amt;
-   bool force = false;
+   bool force = Brewtarget::hasUnits(text());
    bool ok = false;
 
    // editingFinished happens on focus being lost, regardless of anything
@@ -56,14 +64,6 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
    if ( sender() == this && ! isModified() )
    {
       return;
-   }
-
-   // If we are here because somebody else sent the signal (ie, a label) or we
-   // generated the signal but nothing has changed then don't try to guess the
-   // units.
-   if ( sender() != this )
-   {
-      force = true;
    }
 
    if (text().isEmpty())
@@ -126,7 +126,7 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
       if( _forceScale != Unit::noScale )
          dspScale = _forceScale;
       else
-         dspScale  = (Unit::unitScale)Brewtarget::option(_editField, Unit::noUnit, _section, Brewtarget::SCALE).toInt();
+         dspScale  = (Unit::unitScale)Brewtarget::option(_editField, Unit::noScale, _section, Brewtarget::SCALE).toInt();
    }
 
    // Find the unit system containing dspUnit
@@ -142,6 +142,7 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
 
       // get the qstringToSI() from the unit system, using the found unit.
       // Force the issue in qstringToSI() unless dspScale is Unit::noScale.
+      
       return temp->qstringToSI(text(), works, dspScale != Unit::noScale, dspScale);
    }
    else if ( _type == Unit::String )
@@ -313,6 +314,7 @@ void BtLineEdit::setForcedScale( QString forcedScale )
    const QMetaObject &mo = Unit::staticMetaObject;
    int index = mo.indexOfEnumerator("unitScale");
    QMetaEnum unitEnum = mo.enumerator(index);
+
    _forceScale = (Unit::unitScale)unitEnum.keyToValue(forcedScale.toStdString().c_str());
 }
 
