@@ -44,7 +44,7 @@ MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
    bGroup->addButton(radioButton_batchSparge);
    bGroup->addButton(radioButton_flySparge);
 
-   radioButton_batchSparge->setChecked(true);
+//   radioButton_batchSparge->setChecked(true);
 
    connect(bGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(toggleSpinBox(QAbstractButton*)));
    connect(buttonBox, SIGNAL(accepted()), this, SLOT(wizardry()) );
@@ -53,12 +53,19 @@ MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 
 void MashWizard::toggleSpinBox(QAbstractButton* button)
 {
-   if ( button == radioButton_batchSparge )
-      spinBox_batches->setEnabled(true);
-   else
-      spinBox_batches->setEnabled(false);
+   if ( button == radioButton_noSparge ) {
+      widget_batches->setEnabled(false);
+      widget_mashThickness->setEnabled(false);
+   }
+   else if ( button == radioButton_flySparge ) {
+      widget_batches->setEnabled(false);
+      widget_mashThickness->setEnabled(true);
+   }
+   else {
+      widget_batches->setEnabled(true);
+      widget_mashThickness->setEnabled(true);
+   }
 }
-
 
 void MashWizard::setRecipe(Recipe* rec)
 {
@@ -79,6 +86,38 @@ void MashWizard::show()
 
    Brewtarget::getThicknessUnits(&volumeUnit,&weightUnit);
    label_mashThickness->setText(tr("Mash thickness (%1/%2)").arg(volumeUnit->getUnitName(),weightUnit->getUnitName()));
+
+   MashStep *firstStep = recObs->mash()->mashSteps().first();
+   MashStep *lastStep = recObs->mash()->mashSteps().last();
+
+   // Recalculate the mash thickness
+   double thickNum = firstStep->infuseAmount_l()/recObs->grainsInMash_kg();
+   double thickness = thickNum * weightUnit->toSI(1) / volumeUnit->toSI(1) ;
+   doubleSpinBox_thickness->setValue(thickness);
+
+   // Is this a batch, fly or no sparge?
+   if ( firstStep == lastStep ) {
+      radioButton_noSparge->setChecked(true);
+      widget_batches->setEnabled(false);
+      widget_mashThickness->setEnabled(false);
+   }
+   else if ( lastStep->type() == MashStep::flySparge ) {
+      radioButton_flySparge->setChecked(true);
+      widget_batches->setEnabled(false);
+      widget_mashThickness->setEnabled(true);
+   }
+   else {
+      int countSteps = 0;
+      QList<MashStep*> steps = recObs->mash()->mashSteps();
+      foreach( MashStep* step, steps) {
+         if ( step->isSparge() ) {
+            countSteps++;
+         }
+      }
+      widget_batches->setEnabled(true);
+      widget_mashThickness->setEnabled(true);
+      spinBox_batches->setValue(countSteps);
+   }
 
    setVisible(true);
 }
@@ -128,8 +167,6 @@ void MashWizard::wizardry()
    double absorption_LKg;
    double boilingPoint_c; 
 
-   bool ok = false;
-
    // If we have an equipment, utilize the custom absorption and boiling temp.
    if( recObs->equipment() != 0 )
    {
@@ -142,22 +179,19 @@ void MashWizard::wizardry()
       boilingPoint_c = 100.0;
    }
 
+   grainMass = recObs->grainsInMash_kg();
    if ( bGroup->checkedButton() != radioButton_noSparge ) {
-      thickNum = Brewtarget::toDouble(lineEdit_mashThickness->text(), &ok);
-      if ( ! ok ) 
-         Brewtarget::logW( QString("MashWizard::wizardry() could not convert %1 to double").arg(lineEdit_mashThickness->text()));
-
+      thickNum = doubleSpinBox_thickness->value();
+      thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
    }
    // No sparge is mostly heat calculations. I think this could work
    else {
-      grainMass = recObs->grainsInMash_kg();
       thickNum = mash->totalMashWater_l()/grainMass;
+      // We don't need to adjust for units, since we are already using kg of
+      // grains and L of water
+      thickness_LKg = thickNum;
    }
 
-   qDebug() << Q_FUNC_INFO << "thickNum =" << thickNum;
-   thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
-
-   qDebug() << Q_FUNC_INFO << "thickness_Lkg =" << thickness_LKg;
    if( thickness_LKg <= 0.0 )
    {
       QMessageBox::information(this, tr("Bad thickness"), tr("You must have a positive mash thickness."));
@@ -191,7 +225,6 @@ void MashWizard::wizardry()
    }
 
    steps = mash->mashSteps();
-   grainMass = recObs->grainsInMash_kg();
 
    // Do first step
    tf = mashStep->stepTemp_c();
@@ -199,6 +232,7 @@ void MashWizard::wizardry()
    massWater = thickness_LKg * grainMass;
    MCw = HeatCalculations::Cw_calGC * massWater;
    MC = HeatCalculations::Cgrain_calGC * grainMass;
+
    // I am specifically ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
    tw = MC/MCw * (tf-t1) + (mash->tunSpecificHeat_calGC()*mash->tunWeight_kg())/MCw * (tf-mash->tunTemp_c()) + tf;
 
