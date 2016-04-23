@@ -3840,10 +3840,10 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    blockSignals(true);
 
    try {
-      // If we are just importing a hop by itself, need to do some dupe-checking.
+      // If we are just importing a ferm by itself, need to do some dupe-checking.
       if( parent == 0 )
       {
-         // Check to see if there is a hop already in the DB with the same name.
+         // Check to see if there is a ferm already in the DB with the same name.
          sqlDatabase().transaction();
          n = node.firstChildElement("NAME");
          QString name = n.firstChild().toText().nodeValue();
@@ -3874,14 +3874,15 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
       if ( n.firstChild().isNull() )
          ret->invalidate();
       else {
-         ret->setType( static_cast<Fermentable::Type>(
-                        Fermentable::types.indexOf(
-                           n.firstChild().toText().nodeValue()
-                        )
-                     ) );
-         if ( ! ret->isValid() )
-            throw QString("Could not change the type of the fermentable");
+         int ndx = Fermentable::types.indexOf( n.firstChild().toText().nodeValue());
+         if ( ndx != -1 ) 
+            ret->setType( static_cast<Fermentable::Type>(ndx));
+         else
+            ret->invalidate();
       }
+
+      if ( ! ret->isValid() )
+         throw QString("Could not change the type of the fermentable");
 
       if( parent )
          addToRecipe( parent, ret, true );
@@ -3994,20 +3995,35 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
       n = node.firstChildElement("USE");
       if ( n.firstChild().isNull() )
          ret->invalidate();
-      else
-         ret->setUse( static_cast<Hop::Use>(getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret)));
+      else {
+         int ndx = getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret);
+         if ( ndx != -1 )
+            ret->setUse( static_cast<Hop::Use>(ndx));
+         else
+            ret->invalidate();
+      }
 
       n = node.firstChildElement("TYPE");
       if ( n.firstChild().isNull() )
          ret->invalidate();
-      else
-         ret->setType( static_cast<Hop::Type>(getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret)));
+      else {
+         int ndx = getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret);
+         if ( ndx != -1 )
+            ret->setType( static_cast<Hop::Type>(ndx) );
+         else 
+            ret->invalidate();
+      }
 
       n = node.firstChildElement("FORM");
       if ( n.firstChild().isNull() )
          ret->invalidate();
-      else
-         ret->setForm( static_cast<Hop::Form>(Hop::forms.indexOf(n.firstChild().toText().nodeValue())));
+      else {
+         int ndx = Hop::forms.indexOf(n.firstChild().toText().nodeValue());
+         if ( ndx != -1 )
+            ret->setForm( static_cast<Hop::Form>(ndx));
+         else 
+            ret->invalidate();
+      }
 
       if ( ! ret->isValid() )
       {
@@ -4165,11 +4181,12 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
          str = n.firstChild().toText().nodeValue();
          str = str.toLower();
          str[0] = str.at(0).toTitleCase();
-         ret->setType( static_cast<MashStep::Type>(
-                        MashStep::types.indexOf(
-                           str
-                        )
-                     ) );
+         int ndx =  MashStep::types.indexOf(str);
+
+         if ( ndx != -1 ) 
+            ret->setType( static_cast<MashStep::Type>(ndx) );
+         else
+            ret->invalidate();
       }
 
       ret->blockSignals(false);
@@ -4222,7 +4239,7 @@ int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
 {
   if ( Misc::uses.indexOf(use) < 0 )
   {
-    // look for a valid hop type from our database to use
+    // look for a valid misc type from our database to use
     QSqlQuery q(QString("SELECT use FROM misc WHERE name='%1' AND use != ''").arg(misc->name()), sqlDatabase());
     q.first();
     if ( q.isValid() )
@@ -4473,12 +4490,13 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
       n = node.firstChildElement("TYPE");
       if ( n.firstChild().isNull() )
          ret->invalidate();
-      else
-         ret->setType(static_cast<Style::Type>(
-                        Style::types.indexOf(
-                           n.firstChild().toText().nodeValue()
-                        )
-                     ));
+      else {
+         int ndx = Style::types.indexOf( n.firstChild().toText().nodeValue());
+         if ( ndx != -1 ) 
+            ret->setType(static_cast<Style::Type>(ndx));
+         else
+            ret->invalidate();
+      }
 
       // let's see if I can be clever and find this style in our db
       if (! ret->isValid() )
@@ -4600,39 +4618,39 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
       n = node.firstChildElement("TYPE");
       if ( n.firstChild().isNull() )
          ret->invalidate();
-      else if ( Yeast::types.indexOf( n.firstChild().toText().nodeValue()) != -1) {
-         ret->setType( static_cast<Yeast::Type>(
-                        Yeast::types.indexOf(
-                           n.firstChild().toText().nodeValue()
-                        )
-                     ) );
+      else {
+         int ndx = Yeast::types.indexOf( n.firstChild().toText().nodeValue());
+         if ( ndx != -1)
+            ret->setType( static_cast<Yeast::Type>(ndx) );
+         else
+            ret->invalidate();
       }
       // Handle enums separately.
       n = node.firstChildElement("FORM");
       if ( n.firstChild().isNull() )
          ret->invalidate();
-      else
-         ret->setForm( static_cast<Yeast::Form>(
-                        Yeast::forms.indexOf(
-                           n.firstChild().toText().nodeValue()
-                        )
-                     ) );
+      else {
+         int ndx = Yeast::forms.indexOf( n.firstChild().toText().nodeValue());
+         if ( ndx != -1 ) 
+            ret->setForm( static_cast<Yeast::Form>(ndx) );
+         else
+            ret->invalidate();
+      }
       // Handle enums separately.
       n = node.firstChildElement("FLOCCULATION");
       if ( n.firstChild().isNull() )
          ret->invalidate();
-      else if (
-               Yeast::flocculations.indexOf(
-                  n.firstChild().toText().nodeValue()
-               ) != -1
-         ) {
-            ret->setFlocculation( static_cast<Yeast::Flocculation>(
-                                 Yeast::flocculations.indexOf(
-                                    n.firstChild().toText().nodeValue()
-                                 )
-                              ) );
-         }
+      else {
+         int ndx = Yeast::flocculations.indexOf( n.firstChild().toText().nodeValue());
+         if (ndx != -1)
+            ret->setFlocculation( static_cast<Yeast::Flocculation>(ndx) );
+         else
+            ret->invalidate();
+      }
 
+      // If we cannot import the yeast, we find the nearest possible match in
+      // the database and just use that? With absolutely no feed back to the
+      // user saying "Hey! That didn't work!"? No sir, I don't like it.
       if ( ! ret->isValid() )
       {
          name = ret->name();
