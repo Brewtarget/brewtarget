@@ -64,6 +64,7 @@ class ScaleRecipeTool;
 class RecipeFormatter;
 class OgAdjuster;
 class ConverterTool;
+class HydrometerTool;
 class TimerMainDialog;
 class PrimingDialog;
 class StrikeWaterDialog;
@@ -306,6 +307,7 @@ private:
    RecipeFormatter* recipeFormatter;
    OgAdjuster* ogAdjuster;
    ConverterTool* converterTool;
+   HydrometerTool* hydrometerTool;
    TimerMainDialog* timerMainDialog;
    PrimingDialog* primingDialog;
    StrikeWaterDialog* strikeWaterDialog;
