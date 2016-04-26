@@ -1013,7 +1013,7 @@ Mash* Database::mash( Recipe const* parent )
 QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
-   QString filterString = QString("mash_id = %1 AND deleted = %2").arg(parent->_key).arg(Brewtarget::dbFalse());
+   QString filterString = QString("mash_id = %1 AND deleted = %2 order by step_number").arg(parent->_key).arg(Brewtarget::dbFalse());
 
    getElements(ret, filterString, Brewtarget::MASHSTEPTABLE, allMashSteps);
 
@@ -2232,7 +2232,7 @@ QList<Mash*> Database::mashs()
 QList<MashStep*> Database::mashSteps()
 {
    QList<MashStep*> tmp;
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::MASHSTEPTABLE, allMashSteps);
+   getElements( tmp, QString("deleted=%1 order by step_number").arg(Brewtarget::dbFalse()), Brewtarget::MASHSTEPTABLE, allMashSteps);
    return tmp;
 }
 
