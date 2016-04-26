@@ -24,6 +24,8 @@
 #include <QFormLayout>
 #include <QSpacerItem>
 #include <math.h>
+#include <brewtarget.h>
+#include "BtLineEdit.h"
 
 HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent)
 {
@@ -42,7 +44,7 @@ void HydrometerTool::doLayout()
             inputLineEdit->setMinimumSize(QSize(100, 0));
             inputLineEdit->setMaximumSize(QSize(128, 16777215));
          outputUnitsLabel = new QLabel(this);
-         outputUnitsLineEdit = new QLineEdit(this);
+         outputUnitsLineEdit = new BtTemperatureEdit(this);
             outputUnitsLineEdit->setMinimumSize(QSize(40, 0));
             outputUnitsLineEdit->setMaximumSize(QSize(40, 16777215));
          outputLabel = new QLabel(this);
@@ -114,17 +116,39 @@ void HydrometerTool::convert()
     double cg;
     double mg;
     QString tr_string;
+    QString fahr = "F";
     double tr;
     double tc = 60;
-    QString unit;
+    Unit *unit;
+    double test;
+
+    //tempVal->setObjectName(QStringLiteral("TempVal"));
 
     tr_string = outputUnitsLineEdit->text();
 
-    //unit = Unit::getUnitType();
+    //test = outputUnitsLineEdit->toSI();
 
-    tr = (Unit::convert(tr_string, "F")).toDouble();
 
-    tr = outputUnitsLineEdit->text().toDouble();
+   // test = unit->getUnitOrTempSystem();
+
+    //tr_string = (Unit::convert(tr_string, "F")).toDouble();
+
+    bool ok = false;
+
+    tr_string = Unit::convert(outputUnitsLineEdit->text(), fahr);
+
+    tr = outputUnitsLineEdit->toDouble(&ok);
+    tr = outputUnitsLineEdit->toSI();
+
+   // static QString convert(QString qstr, QString toUnit);
+
+
+    // tr=tr_string.toDouble();
+
+   // test = unit->getUnitOrTempSystem();
+
+   // test = test;
+
     mg = inputLineEdit->text().toDouble();
 
     /*

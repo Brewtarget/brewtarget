@@ -28,6 +28,8 @@ class HydrometerTool;
 #include <QLineEdit>
 #include <QLabel>
 #include <QEvent>
+#include <brewtarget.h>
+#include "BtLineEdit.h"
 
 /*!
  * \brief Dialog to convert units.
@@ -48,7 +50,7 @@ public:
    QLabel* outputLabel;
    QLabel* outputLineEdit;
    QLabel* outputUnitsLabel;
-   QLineEdit* outputUnitsLineEdit;
+   BtTemperatureEdit* outputUnitsLineEdit;
    //! @}
 
 public slots:
