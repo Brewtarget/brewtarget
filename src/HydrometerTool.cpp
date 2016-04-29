@@ -41,12 +41,12 @@ void HydrometerTool::doLayout()
       QFormLayout* formLayout = new QFormLayout();
          inputLabel = new QLabel(this);
          inputLineEdit = new QLineEdit(this);
-            inputLineEdit->setMinimumSize(QSize(100, 0));
-            inputLineEdit->setMaximumSize(QSize(128, 16777215));
+            inputLineEdit->setMinimumSize(QSize(80, 0));
+            inputLineEdit->setMaximumSize(QSize(80, 16777215));
          outputUnitsLabel = new QLabel(this);
          outputUnitsLineEdit = new BtTemperatureEdit(this);
-            outputUnitsLineEdit->setMinimumSize(QSize(40, 0));
-            outputUnitsLineEdit->setMaximumSize(QSize(40, 16777215));
+            outputUnitsLineEdit->setMinimumSize(QSize(80, 0));
+            outputUnitsLineEdit->setMaximumSize(QSize(80, 16777215));
          outputLabel = new QLabel(this);
          outputLineEdit = new QLabel(this);
             outputLineEdit->setMinimumSize(QSize(100, 0));
@@ -93,7 +93,8 @@ void HydrometerTool::retranslateUi()
    pushButton_convert->setText(tr("Convert"));
 #ifndef QT_NO_TOOLTIP
    inputLineEdit->setToolTip(tr("Measured gravity"));  //TODO translate
-   outputUnitsLineEdit->setToolTip(tr("Temperature with units"));  //TODO translate
+   outputUnitsLineEdit->setToolTip(tr("Temperature"));  //TODO translate
+//   outputUnitsLineEdit->setText(outputUnitsLineEdit->text(),0);
    outputLineEdit->setToolTip(tr("Corrected gravity"));  //TODO translate
 
 
@@ -105,11 +106,8 @@ void HydrometerTool::convert()
    //outputLineEdit->setText(Unit::convert(inputLineEdit->text(), outputUnitsLineEdit->text()));
     /*
     cg = corrected gravity
-
     mg = measured gravity
-
     tr = temperature at time of reading
-
     tc = calibration temperature of hydrometer*/
 
 
@@ -119,47 +117,21 @@ void HydrometerTool::convert()
     QString fahr = "F";
     double tr;
     double tc = 60;
-    Unit *unit;
-    double test;
-
-    //tempVal->setObjectName(QStringLiteral("TempVal"));
-
-    tr_string = outputUnitsLineEdit->text();
-
-    //test = outputUnitsLineEdit->toSI();
-
-
-   // test = unit->getUnitOrTempSystem();
-
-    //tr_string = (Unit::convert(tr_string, "F")).toDouble();
-
     bool ok = false;
 
     tr_string = Unit::convert(outputUnitsLineEdit->text(), fahr);
 
-    tr = outputUnitsLineEdit->toDouble(&ok);
-    tr = outputUnitsLineEdit->toSI();
-
-   // static QString convert(QString qstr, QString toUnit);
-
-
-    // tr=tr_string.toDouble();
-
-   // test = unit->getUnitOrTempSystem();
-
-   // test = test;
+    //tr = tr_string.toDouble(&ok);
+    //tr = Brewtarget::toDouble(tr_string, &ok);
+    //tr_string = tr_string::remove(QRegExp(".*")).toDouble();
+    tr = tr_string.remove(QRegExp("F")).toDouble();
 
     mg = inputLineEdit->text().toDouble();
 
-    /*
-    if(tr[tr.length]=="C")
-    {
-        println("Needs Converted");
-    }
-*/
 
     cg = mg * ((1.00130346 - 0.000134722124 * tr + 0.00000204052596 * pow(tr,2) - 0.00000000232820948 * pow(tr,3)) / (1.00130346 - 0.000134722124 * tc + 0.00000204052596 * pow(tc,2) - 0.00000000232820948 * pow(tc,3)));
 
 
     outputLineEdit->setText(QString::number(cg,'f',3));
+
 }
