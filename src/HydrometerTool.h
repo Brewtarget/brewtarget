@@ -49,8 +49,8 @@ public:
    QLineEdit* inputLineEdit;
    QLabel* outputLabel;
    QLabel* outputLineEdit;
-   QLabel* outputUnitsLabel;
-   BtTemperatureEdit* outputUnitsLineEdit;
+   QLabel* inputTempLabel;
+   BtTemperatureEdit* inputTempLineEdit;
    //! @}
 
 public slots:

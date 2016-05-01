@@ -43,21 +43,20 @@ void HydrometerTool::doLayout()
          inputLineEdit = new QLineEdit(this);
             inputLineEdit->setMinimumSize(QSize(80, 0));
             inputLineEdit->setMaximumSize(QSize(80, 16777215));
-         outputUnitsLabel = new QLabel(this);
-         outputUnitsLineEdit = new BtTemperatureEdit(this);
-            outputUnitsLineEdit->setMinimumSize(QSize(80, 0));
-            outputUnitsLineEdit->setMaximumSize(QSize(80, 16777215));
+         inputTempLabel = new QLabel(this);
+         inputTempLineEdit = new BtTemperatureEdit(this);
+            inputTempLineEdit->setMinimumSize(QSize(80, 0));
+            inputTempLineEdit->setMaximumSize(QSize(80, 16777215));
          outputLabel = new QLabel(this);
          outputLineEdit = new QLabel(this);
             outputLineEdit->setMinimumSize(QSize(100, 0));
             outputLineEdit->setMaximumSize(QSize(128, 16777215));
-           // outputLineEdit->setReadOnly(true);
 
 
          formLayout->setWidget(0, QFormLayout::LabelRole, inputLabel);
          formLayout->setWidget(0, QFormLayout::FieldRole, inputLineEdit);
-         formLayout->setWidget(1, QFormLayout::LabelRole, outputUnitsLabel);
-         formLayout->setWidget(1, QFormLayout::FieldRole, outputUnitsLineEdit);
+         formLayout->setWidget(1, QFormLayout::LabelRole, inputTempLabel);
+         formLayout->setWidget(1, QFormLayout::FieldRole, inputTempLineEdit);
          formLayout->setWidget(2, QFormLayout::LabelRole, outputLabel);
          formLayout->setWidget(2, QFormLayout::FieldRole, outputLineEdit);
 
@@ -87,14 +86,13 @@ void HydrometerTool::retranslateUi()
 {
    setWindowTitle(tr("Hydrometer Tool"));
    inputLabel->setText(tr("SG Reading")); //TODO translation
-   outputUnitsLabel->setText(tr("Temp"));
-   outputLabel->setText(tr("Adjust SG"));
+   inputTempLabel->setText(tr("Temperature"));  //TODO translation
+   outputLabel->setText(tr("Adjust SG"));  //TODO translation
 
    pushButton_convert->setText(tr("Convert"));
 #ifndef QT_NO_TOOLTIP
    inputLineEdit->setToolTip(tr("Measured gravity"));  //TODO translate
-   outputUnitsLineEdit->setToolTip(tr("Temperature"));  //TODO translate
-//   outputUnitsLineEdit->setText(outputUnitsLineEdit->text(),0);
+   inputTempLineEdit->setToolTip(tr("Temperature"));  //TODO translate
    outputLineEdit->setToolTip(tr("Corrected gravity"));  //TODO translate
 
 
@@ -103,35 +101,24 @@ void HydrometerTool::retranslateUi()
 
 void HydrometerTool::convert()
 {
-   //outputLineEdit->setText(Unit::convert(inputLineEdit->text(), outputUnitsLineEdit->text()));
-    /*
-    cg = corrected gravity
-    mg = measured gravity
-    tr = temperature at time of reading
-    tc = calibration temperature of hydrometer*/
+   /*
+   cg = corrected gravity
+   mg = measured gravity
+   tr = temperature at time of reading
+   tc = calibration temperature of hydrometer*/
 
+   double cg;
+   double mg;
+   QString tr_string;
+   QString fahr = "F";
+   double tr;
+   double tc = 60;
 
-    double cg;
-    double mg;
-    QString tr_string;
-    QString fahr = "F";
-    double tr;
-    double tc = 60;
-    bool ok = false;
+   tr_string = Unit::convert(inputTempLineEdit->text(), fahr);
+   tr = tr_string.remove(QRegExp("F")).toDouble();
+   mg = inputLineEdit->text().toDouble();
+   cg = mg * ((1.00130346 - 0.000134722124 * tr + 0.00000204052596 * pow(tr,2) - 0.00000000232820948 * pow(tr,3))
+         / (1.00130346 - 0.000134722124 * tc + 0.00000204052596 * pow(tc,2) - 0.00000000232820948 * pow(tc,3)));
 
-    tr_string = Unit::convert(outputUnitsLineEdit->text(), fahr);
-
-    //tr = tr_string.toDouble(&ok);
-    //tr = Brewtarget::toDouble(tr_string, &ok);
-    //tr_string = tr_string::remove(QRegExp(".*")).toDouble();
-    tr = tr_string.remove(QRegExp("F")).toDouble();
-
-    mg = inputLineEdit->text().toDouble();
-
-
-    cg = mg * ((1.00130346 - 0.000134722124 * tr + 0.00000204052596 * pow(tr,2) - 0.00000000232820948 * pow(tr,3)) / (1.00130346 - 0.000134722124 * tc + 0.00000204052596 * pow(tc,2) - 0.00000000232820948 * pow(tc,3)));
-
-
-    outputLineEdit->setText(QString::number(cg,'f',3));
-
+   outputLineEdit->setText(QString::number(cg,'f',3));
 }
