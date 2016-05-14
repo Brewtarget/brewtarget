@@ -1,7 +1,7 @@
 /*
- * ConverterTool.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
- * - Philip Greggory Lee <rocketman768@gmail.com>
+ * HydrometerTool.cpp is part of Brewtarget and was written by Ryan Hoobler
+ * (rhoob@yahoo.com).  Copyright is granted to Philip G. Lee
+ * (rocketman768@gmail.com), 2016.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,25 +40,29 @@ void HydrometerTool::doLayout()
    QHBoxLayout* hLayout = new QHBoxLayout(this);
       QFormLayout* formLayout = new QFormLayout();
          inputLabel = new QLabel(this);
-         inputLineEdit = new QLineEdit(this);
-            inputLineEdit->setMinimumSize(QSize(80, 0));
-            inputLineEdit->setMaximumSize(QSize(80, 16777215));
-         inputTempLabel = new QLabel(this);
-         inputTempLineEdit = new BtTemperatureEdit(this);
-            inputTempLineEdit->setMinimumSize(QSize(80, 0));
-            inputTempLineEdit->setMaximumSize(QSize(80, 16777215));
+        // inputLineEdit = new QLineEdit(this);
+         lineEdit_inputSg = new BtDensityEdit(this);
+            lineEdit_inputSg->setMinimumSize(QSize(80, 0));
+            lineEdit_inputSg->setMaximumSize(QSize(80, 16777215));
+            lineEdit_inputSg->setProperty("forcedUnit",QVariant(QStringLiteral("displaySG")));
+            inputTempLabel = new QLabel(this);
+         lineEdit_inputTemp = new BtTemperatureEdit(this);
+            lineEdit_inputTemp->setMinimumSize(QSize(80, 0));
+            lineEdit_inputTemp->setMaximumSize(QSize(80, 16777215));
          outputLabel = new QLabel(this);
-         outputLineEdit = new QLabel(this);
-            outputLineEdit->setMinimumSize(QSize(100, 0));
-            outputLineEdit->setMaximumSize(QSize(128, 16777215));
+         lineEdit_outputSg = new BtDensityEdit(this);
+            lineEdit_outputSg->setMinimumSize(QSize(80, 0));
+            lineEdit_outputSg->setMaximumSize(QSize(80, 16777215));
+            lineEdit_outputSg->setProperty("forcedUnit",QVariant(QStringLiteral("displaySG")));
+            lineEdit_outputSg->setReadOnly(true);
 
 
          formLayout->setWidget(0, QFormLayout::LabelRole, inputLabel);
-         formLayout->setWidget(0, QFormLayout::FieldRole, inputLineEdit);
+         formLayout->setWidget(0, QFormLayout::FieldRole, lineEdit_inputSg);
          formLayout->setWidget(1, QFormLayout::LabelRole, inputTempLabel);
-         formLayout->setWidget(1, QFormLayout::FieldRole, inputTempLineEdit);
+         formLayout->setWidget(1, QFormLayout::FieldRole, lineEdit_inputTemp);
          formLayout->setWidget(2, QFormLayout::LabelRole, outputLabel);
-         formLayout->setWidget(2, QFormLayout::FieldRole, outputLineEdit);
+         formLayout->setWidget(2, QFormLayout::FieldRole, lineEdit_outputSg);
 
 
          formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
@@ -91,9 +95,9 @@ void HydrometerTool::retranslateUi()
 
    pushButton_convert->setText(tr("Convert"));
 #ifndef QT_NO_TOOLTIP
-   inputLineEdit->setToolTip(tr("Measured gravity"));  //TODO translate
-   inputTempLineEdit->setToolTip(tr("Temperature"));  //TODO translate
-   outputLineEdit->setToolTip(tr("Corrected gravity"));  //TODO translate
+   lineEdit_inputSg->setToolTip(tr("Measured gravity"));  //TODO translate
+   lineEdit_inputTemp->setToolTip(tr("Temperature"));  //TODO translate
+   lineEdit_outputSg->setToolTip(tr("Corrected gravity"));  //TODO translate
 
 
 #endif // QT_NO_TOOLTIP
@@ -113,12 +117,17 @@ void HydrometerTool::convert()
    QString fahr = "F";
    double tr;
    double tc = 60;
+   bool ok = false;
 
-   tr_string = Unit::convert(inputTempLineEdit->text(), fahr);
+   tr_string = Unit::convert(lineEdit_inputTemp->text(), fahr);
    tr = tr_string.remove(QRegExp("F")).toDouble();
-   mg = inputLineEdit->text().toDouble();
+  // mg = inputLineEdit->text().toDouble();
+   mg = lineEdit_inputSg->toDouble(&ok);
+
+   //formula from http://www.straighttothepint.com/hydrometer-temperature-correction/
    cg = mg * ((1.00130346 - 0.000134722124 * tr + 0.00000204052596 * pow(tr,2) - 0.00000000232820948 * pow(tr,3))
          / (1.00130346 - 0.000134722124 * tc + 0.00000204052596 * pow(tc,2) - 0.00000000232820948 * pow(tc,3)));
 
-   outputLineEdit->setText(QString::number(cg,'f',3));
+   //lineEdit_outputSg->setText(QString::number(cg,'f',3));
+   lineEdit_outputSg->setText(cg);
 }

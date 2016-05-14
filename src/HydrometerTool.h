@@ -1,7 +1,7 @@
 /*
- * ConverterTool.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
- * - Philip Greggory Lee <rocketman768@gmail.com>
+ * HydrometerTool.h is part of Brewtarget and was written by Ryan Hoobler
+ * (rhoob@yahoo.com).  Copyright is granted to Philip G. Lee
+ * (rocketman768@gmail.com), 2016.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,11 +46,11 @@ public:
    //! @{
    QPushButton* pushButton_convert;
    QLabel* inputLabel;
-   QLineEdit* inputLineEdit;
+   BtLineEdit* lineEdit_inputSg;
    QLabel* outputLabel;
-   QLabel* outputLineEdit;
+   BtLineEdit* lineEdit_outputSg;
    QLabel* inputTempLabel;
-   BtTemperatureEdit* inputTempLineEdit;
+   BtTemperatureEdit* lineEdit_inputTemp;
    //! @}
 
 public slots:
