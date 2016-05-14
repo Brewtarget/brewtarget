@@ -32,6 +32,8 @@ HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent)
    doLayout();
    
    connect( pushButton_convert, SIGNAL(clicked()), this, SLOT(convert()) );
+   connect(label_inputTemp, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_inputTemp, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+
 }
 
 void HydrometerTool::doLayout()
@@ -40,15 +42,21 @@ void HydrometerTool::doLayout()
    QHBoxLayout* hLayout = new QHBoxLayout(this);
       QFormLayout* formLayout = new QFormLayout();
          inputLabel = new QLabel(this);
-        // inputLineEdit = new QLineEdit(this);
          lineEdit_inputSg = new BtDensityEdit(this);
             lineEdit_inputSg->setMinimumSize(QSize(80, 0));
             lineEdit_inputSg->setMaximumSize(QSize(80, 16777215));
             lineEdit_inputSg->setProperty("forcedUnit",QVariant(QStringLiteral("displaySG")));
-            inputTempLabel = new QLabel(this);
+         label_inputTemp = new BtTemperatureLabel(this);
+         label_inputTemp  = new BtTemperatureLabel(this);
+            label_inputTemp ->setObjectName(QStringLiteral("label_inputTemp"));
+            label_inputTemp ->setContextMenuPolicy(Qt::CustomContextMenu);
+
          lineEdit_inputTemp = new BtTemperatureEdit(this);
             lineEdit_inputTemp->setMinimumSize(QSize(80, 0));
             lineEdit_inputTemp->setMaximumSize(QSize(80, 16777215));
+
+         label_inputTemp->setBuddy(lineEdit_inputTemp);
+
          outputLabel = new QLabel(this);
          lineEdit_outputSg = new BtDensityEdit(this);
             lineEdit_outputSg->setMinimumSize(QSize(80, 0));
@@ -56,10 +64,9 @@ void HydrometerTool::doLayout()
             lineEdit_outputSg->setProperty("forcedUnit",QVariant(QStringLiteral("displaySG")));
             lineEdit_outputSg->setReadOnly(true);
 
-
          formLayout->setWidget(0, QFormLayout::LabelRole, inputLabel);
          formLayout->setWidget(0, QFormLayout::FieldRole, lineEdit_inputSg);
-         formLayout->setWidget(1, QFormLayout::LabelRole, inputTempLabel);
+         formLayout->setWidget(1, QFormLayout::LabelRole, label_inputTemp);
          formLayout->setWidget(1, QFormLayout::FieldRole, lineEdit_inputTemp);
          formLayout->setWidget(2, QFormLayout::LabelRole, outputLabel);
          formLayout->setWidget(2, QFormLayout::FieldRole, lineEdit_outputSg);
@@ -90,7 +97,7 @@ void HydrometerTool::retranslateUi()
 {
    setWindowTitle(tr("Hydrometer Tool"));
    inputLabel->setText(tr("SG Reading")); //TODO translation
-   inputTempLabel->setText(tr("Temperature"));  //TODO translation
+   label_inputTemp->setText(tr("Temperature"));  //TODO translation
    outputLabel->setText(tr("Adjust SG"));  //TODO translation
 
    pushButton_convert->setText(tr("Convert"));
@@ -121,13 +128,11 @@ void HydrometerTool::convert()
 
    tr_string = Unit::convert(lineEdit_inputTemp->text(), fahr);
    tr = tr_string.remove(QRegExp("F")).toDouble();
-  // mg = inputLineEdit->text().toDouble();
    mg = lineEdit_inputSg->toDouble(&ok);
 
    //formula from http://www.straighttothepint.com/hydrometer-temperature-correction/
    cg = mg * ((1.00130346 - 0.000134722124 * tr + 0.00000204052596 * pow(tr,2) - 0.00000000232820948 * pow(tr,3))
          / (1.00130346 - 0.000134722124 * tc + 0.00000204052596 * pow(tc,2) - 0.00000000232820948 * pow(tc,3)));
 
-   //lineEdit_outputSg->setText(QString::number(cg,'f',3));
    lineEdit_outputSg->setText(cg);
 }

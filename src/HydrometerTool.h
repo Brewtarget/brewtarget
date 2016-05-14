@@ -30,6 +30,7 @@ class HydrometerTool;
 #include <QEvent>
 #include <brewtarget.h>
 #include "BtLineEdit.h"
+#include "BtLabel.h"
 
 /*!
  * \brief Dialog to convert units.
@@ -49,8 +50,11 @@ public:
    BtLineEdit* lineEdit_inputSg;
    QLabel* outputLabel;
    BtLineEdit* lineEdit_outputSg;
-   QLabel* inputTempLabel;
-   BtTemperatureEdit* lineEdit_inputTemp;
+ //  QLabel* inputTempLabel;
+ //  BtTemperatureEdit* lineEdit_inputTemp;
+
+   BtTemperatureLabel *label_inputTemp;
+   BtTemperatureEdit *lineEdit_inputTemp;
    //! @}
 
 public slots:
