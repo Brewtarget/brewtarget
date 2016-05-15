@@ -115,19 +115,20 @@ void HydrometerTool::convert()
    /*
    cg = corrected gravity
    mg = measured gravity
-   tr = temperature at time of reading
-   tc = calibration temperature of hydrometer*/
+   tr = temperature at time of reading in Fahrenheit
+   tc = calibration temperature of hydrometer in Fahrenheit*/
 
    double cg;
    double mg;
-   QString tr_string;
-   QString fahr = "F";
    double tr;
    double tc = 60;
    bool ok = false;
 
-   tr_string = Unit::convert(lineEdit_inputTemp->text(), fahr);
-   tr = tr_string.remove(QRegExp("F")).toDouble();
+  // tr_string = Unit::convert(lineEdit_inputTemp->text(), fahr);
+  // tr = tr_string.remove(QRegExp("F")).toDouble();
+
+   tr = lineEdit_inputTemp->toSI();
+   tr = tr * 1.8 + 32;  //formula below uses Fahrenheit
    mg = lineEdit_inputSg->toDouble(&ok);
 
    //formula from http://www.straighttothepint.com/hydrometer-temperature-correction/
