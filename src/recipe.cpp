@@ -1839,7 +1839,10 @@ void Recipe::recalcOgFg()
       // being updated for no good reason.
       // NOTE: We are we recalculating all of these on load? Shouldn't we be
       // reading these values from the database somehow?
-      set( "og", "og", _og, false );
+      // NOTE: We always calculate this, so lets not cause
+      // a database dirty when loading recipes. This fixes
+      // starting the app and then closing causing a Save Changes.
+      // set( "og", "og", _og, false );
       emit changed( metaProperty("og"), _og );
       emit changed( metaProperty("points"), (_og-1.0)*1e3 );
    }
@@ -1847,7 +1850,11 @@ void Recipe::recalcOgFg()
    if ( tmp_fg != _fg ) 
    {
       _fg     = tmp_fg;
-      set( "fg", "fg", _fg, false );
+      // NOTE: We always calculate this, so lets not cause
+      // a database dirty when loading recipes. This fixes
+      // starting the app and then closing causing a Save Changes.
+      // set( "og", "og", _og, false );
+      // set( "fg", "fg", _fg, false );
       emit changed( metaProperty("fg"), _fg );
    }
 }
