@@ -105,7 +105,7 @@ private:
    QString buildBrewNotesHtml();
    QString buildBrewNotesTxt();
    QString buildHTMLFooter();
-   QString getCSS();
+   QString getCSS(QString resourceName);
 
    QList<Hop*> sortHopsByTime(Recipe* rec);
    QList<Fermentable*> sortFermentablesByWeight(Recipe* rec);
@@ -116,7 +116,6 @@ private:
    QPrinter* printer;
    QTextBrowser* doc;
    QDialog* docDialog;
-   QString cssName;
 
 private slots:
    bool loadComplete(bool ok);
