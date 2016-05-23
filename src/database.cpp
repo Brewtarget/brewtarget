@@ -562,8 +562,9 @@ void Database::unload(bool keepChanges)
 {
    // The postgres driver wants nothing to do with this. Core gets dumped if
    // we try it. Since we don't need to copy things about for postgres...
-   if ( Brewtarget::dbType() == Brewtarget::SQLITE )
-   {
+
+   if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
+
       QSqlDatabase::database( dbConName, false ).close();
 
       QSqlDatabase::removeDatabase( dbConName );
@@ -572,8 +573,14 @@ void Database::unload(bool keepChanges)
       {
          // If load() failed or want to keep the changes, then
          // just keep the database and don't revert to the backup.
-         if (dbFile.exists())  dbTempBackupFile.remove();
-      return;
+         if (dbFile.exists())
+            dbTempBackupFile.remove();
+
+         // We only want to make a backup when the user persists the changes.  I
+         // think?
+         if ( keepChanges )
+            automaticBackup();
+         return;
       }
       // If the user doesn't want to save changes, remove the active database
       // and restore the backup.
@@ -581,6 +588,83 @@ void Database::unload(bool keepChanges)
       dbFile.remove();
       dbTempBackupFile.rename(dbFileName);
    }
+}
+
+void Database::automaticBackup()
+{
+   int count = Brewtarget::option("count",0,"backups").toInt() + 1;
+   int frequency = Brewtarget::option("frequency",4,"backups").toInt();
+   int maxBackups = Brewtarget::option("maximum",10,"backups").toInt();
+
+   // The most common case is update the counter and nothing else
+   // A frequency of 1 means backup every time. Which this statisfies
+   if ( count % frequency != 0 ) {
+      Brewtarget::setOption( "count", count, "backups");
+      return;
+   }
+
+   // If the user has selected 0 max backups, we just return. There's a weird
+   // case where they have a frequency of 1 and a maxBackup of 0. In that
+   // case, maxBackup wins
+   if ( maxBackups == 0 ) {
+      return;
+   }
+
+   QString backupDir = Brewtarget::option("directory", Brewtarget::getConfigDir().canonicalPath(),"backups").toString();
+   QString listOfFiles = Brewtarget::option("files",QVariant(),"backups").toString();
+   QStringList fileNames = listOfFiles.split(",", QString::SkipEmptyParts);
+
+   QString halfName = QString("%1.%2").arg("bt_database").arg(QDate::currentDate().toString("yyyyMMdd"));
+   QString newName = halfName;
+   // Unique filenames are a pain in the ass. In the case you open brewtarget
+   // twice in a day, this loop makes sure we don't over write (or delete) the
+   // wrong thing
+   int foobar = 0;
+   while ( foobar < 10000 && QFile::exists( backupDir + "/" + newName ) ) {
+      foobar++;
+      newName = QString("%1_%2").arg(halfName).arg(foobar,4,10,QChar('0'));
+      if ( foobar > 9999 ) {
+         Brewtarget::logW( QString("%1 : could not find a unique name in 10000 tries. Overwriting %2").arg(Q_FUNC_INFO).arg(halfName));
+         newName = halfName;
+      }
+   }
+   // backup the file first
+   backupToDir(backupDir,newName);
+
+   // If we have maxBackups == -1, it means never clean. It also means we
+   // don't track the filenames. 
+   if ( maxBackups == -1 )  {
+      Brewtarget::removeOption("files","backups");
+      return;
+   }
+
+   fileNames.append(newName);
+
+   // If we have too many backups. This is in a while loop because we need to
+   // handle the case where a user decides they only want 4 backups, not 10.
+   // The while loop will clean that up properly.
+   while ( fileNames.size() > maxBackups ) {
+      // takeFirst() removes the file from the list, which is important
+      QString victim = backupDir + "/" + fileNames.takeFirst();
+      QFile *file = new QFile(victim);
+      QFileInfo *fileThing = new QFileInfo(victim);
+
+      // Make sure it exists, and make sure it is a file before we
+      // try remove it
+      if ( fileThing->exists() && fileThing->isFile() ) {
+         // If we can't remove it, give a warning.
+         if (! file->remove() ) {
+            Brewtarget::logW( QString("%1 : could not remove %2 (%3).").arg(Q_FUNC_INFO).arg(victim).arg(file->error()));
+         }
+      }
+   }
+
+   // re-encode the list 
+   listOfFiles = fileNames.join(",");
+
+   // finally, reset the counter and save the new list of files
+   Brewtarget::setOption( "count", 0, "backups");
+   Brewtarget::setOption( "files", listOfFiles, "backups");
 }
 
 bool Database::isDirty()
@@ -626,7 +710,7 @@ void Database::dropInstance()
 
 }
 
-bool Database::backupToDir(QString dir)
+bool Database::backupToDir(QString dir,QString filename)
 {
    // Make sure the singleton exists.
    instance();
@@ -634,6 +718,13 @@ bool Database::backupToDir(QString dir)
    bool success = true;
    QString prefix = dir + "/";
    QString newDbFileName = prefix + "database.sqlite";
+
+   if ( filename.isEmpty() ) {
+      newDbFileName = prefix + "database.sqlite";
+   }
+   else {
+      newDbFileName = prefix + filename;
+   }
 
    // Remove the files if they already exist so that
    // the copy() operation will succeed.

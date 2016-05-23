@@ -30,6 +30,8 @@ class OptionDialog;
 #include <QString>
 #include <QVector>
 #include <QIcon>
+#include <QCheckBox>
+#include "BtLineEdit.h"
 #include "ui_optionsDialog.h"
 #include "unit.h"
 
@@ -46,6 +48,45 @@ public:
    //! \brief Default constructor.
    OptionDialog(QWidget *parent=0);
 
+   // UI stuff to make this work as I want
+   // Postgres things
+   QLabel *label_hostname;
+   BtStringEdit *btStringEdit_hostname;
+   QLabel *label_portnum;
+   BtStringEdit *btStringEdit_portnum;
+   QLabel *label_schema;
+   BtStringEdit *btStringEdit_schema;
+   QLabel *label_dbName;
+   BtStringEdit *btStringEdit_dbname;
+   QLabel *label_username;
+   BtStringEdit *btStringEdit_username;
+   QLabel *label_password;
+   BtStringEdit *btStringEdit_password;
+   QHBoxLayout *horizontalLayout_7;
+   QSpacerItem *horizontalSpacer_3;
+   QCheckBox *checkBox_savePassword;
+   // SQLite things
+   QLabel *label_dataDir;
+   BtStringEdit *btStringEdit_dataDir;
+   QPushButton *pushButton_browseDataDir;
+   QPushButton *pushButton_defaultDataDir;
+   QLabel *label_backupDir;
+   BtStringEdit *btStringEdit_backupDir;
+   QPushButton *pushButton_browseBackupDir;
+   QPushButton *pushButton_defaultBackupDir;
+   QLabel *label_numBackups;
+   QSpinBox *spinBox_numBackups;
+   QLabel *label_frequency;
+   QSpinBox *spinBox_frequency;
+
+   void createPostgresElements();
+   void createSQLiteElements();
+   void clearLayout();
+   void setDbDialog(Brewtarget::DBTypes db);
+   void retranslateDbDialog(QDialog *optionsDialog);
+   void sqliteVisible(bool canSee);
+   void postgresVisible(bool canSee);
+
 public slots:
    //! \brief Show the dialog.
    void show();
@@ -55,8 +96,11 @@ public slots:
    void cancel();
    //! \brief Pop up a dialog to choose the data directory.
    void setDataDir();
+   void setBackupDir();
    //! \brief Reset data directory to default.
    void defaultDataDir();
+   void defaultBackupDir();
+
    //! \brief Enable or disable the configuration panel based on the engine choice
    void setEngine(int selected);
    //! \brief test connection to remote databases. This could get ugly
@@ -65,7 +109,8 @@ public slots:
    void testRequired();
    //! \brief handle the dialogs for saving passwords
    void savePassword(bool state);
-   
+  
+
 protected:
    
    //! \brief Reimplemented from QWidget.

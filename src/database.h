@@ -101,7 +101,7 @@ public:
    static bool createBlank(QString const& filename);
 
    //! backs up database to 'dir' in chosen directory
-   static bool backupToDir(QString dir);
+   static bool backupToDir(QString dir, QString filename="");
 
    //! \brief Reverts database to that of chosen file.
    static bool restoreFromFile(QString newDbFileStr);
@@ -923,7 +923,7 @@ private:
    //! \brief does the heavy lifting to copy the contents from one db to the
    //next
    void copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase oldDb);
-
+   void automaticBackup();
 
 };
 

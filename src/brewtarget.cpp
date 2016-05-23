@@ -1403,10 +1403,17 @@ QVariant Brewtarget::option(QString attribute, QVariant default_value, QString s
    return QSettings().value(name,default_value);
 }
 
-void Brewtarget::removeOption(QString attribute)
+void Brewtarget::removeOption(QString attribute, QString section)
 {
-   if ( hasOption(attribute) )
-        QSettings().remove(attribute);
+   QString name;
+
+   if ( section.isNull() )
+      name = attribute;
+   else
+      name = generateName(attribute,section,NOOP);
+
+   if ( hasOption(name) )
+        QSettings().remove(name);
 }
 
 QString Brewtarget::generateName(QString attribute, const QString section, iUnitOps ops)

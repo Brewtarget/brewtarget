@@ -307,7 +307,7 @@ public:
    static bool  hasOption(QString attribute, const QString section = QString(), iUnitOps ops = NOOP);
    static void  setOption(QString attribute, QVariant value, const QString section = QString(), iUnitOps ops = NOOP);
    static QVariant option(QString attribute, QVariant default_value = QVariant(), QString section = QString(), iUnitOps = NOOP);
-   static void removeOption(QString attribute);
+   static void removeOption(QString attribute, QString section=QString());
 
    static QString generateName(QString attribute, const QString section, iUnitOps ops);
 
