@@ -136,8 +136,9 @@ MainWindow::MainWindow(QWidget* parent)
 
    QDesktopWidget *desktop = QApplication::desktop();
 
-   // Ensure database initializes.
-   Database::instance();
+   // If the database doesn't load, we bail
+   if (! Database::instance().loadSuccessful() )
+      exit(1);
 
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
@@ -1938,7 +1939,11 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
 
    // Ask the user if they want to save changes, only if the dirty bit has
    // been thrown
-   if( Database::instance().isDirty() &&
+   // We should also make sure the backup db still exists -- there's some edge
+   // cases where it doesn't.
+
+   if( Database::instance().tempBackupExists() &&
+       Database::instance().isDirty() &&
        QMessageBox::question(this,
           QObject::tr("Save Database Changes"),
           QObject::tr("Would you like to save the changes you made?"),

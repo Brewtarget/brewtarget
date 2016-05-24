@@ -422,6 +422,7 @@ public:
 
    bool isConverted();
 
+   bool tempBackupExists();
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done. 
    void convertDatabase(QString const& Hostname, QString const& DbName,

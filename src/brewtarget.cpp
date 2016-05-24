@@ -459,7 +459,7 @@ bool Brewtarget::instanceRunning() {
       if ( kill(pid, 0) == 0 )
       {
          std::cerr << "Brewtarget is already running. PID: " << pid << std::endl;
-         return true;
+         return false;
       }
    }
 
