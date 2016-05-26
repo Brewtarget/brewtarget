@@ -203,21 +203,29 @@ bool Database::loadSQLite()
    else
    {
       // NOTE: synchronous=off reduces query time by an order of magnitude!
-      QSqlQuery( "PRAGMA synchronous = off", sqldb);
-      QSqlQuery( "PRAGMA foreign_keys = on", sqldb);
-      QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqldb);
-      // Store temporary tables in memory.
-      QSqlQuery( "PRAGMA temp_store = MEMORY", sqldb);
+      QSqlQuery pragma(sqldb);
+      try {
+         if ( ! pragma.exec( "PRAGMA synchronous = off" ) )
+            throw QString("could not disable synchronous writes");
+         if ( ! pragma.exec( "PRAGMA foreign_keys = on"))
+            throw QString("could not enable foreign keys");
+         if ( ! pragma.exec( "PRAGMA locking_mode = EXCLUSIVE"))
+            throw QString("could not enable exclusive locks");
+         if ( ! pragma.exec("PRAGMA temp_store = MEMORY") )
+            throw QString("could not enable temporary memory");
 
-      // older sqlite databases may not have a settings table. I think I will
-      // just check to see if anything is in there.
-      createFromScratch = sqldb.tables().size() == 0;
+         // older sqlite databases may not have a settings table. I think I will
+         // just check to see if anything is in there.
+         createFromScratch = sqldb.tables().size() == 0;
 
-      // Associate this db with the current thread.
-      _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
-      _threadToConnectionMutex.unlock();
+         // Associate this db with the current thread.
+         _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
+      }
+      catch(QString e) {
+         Brewtarget::logE( QString("%1: %2 (%3)").arg(Q_FUNC_INFO).arg(e).arg(pragma.lastError().text()));
+         dbIsOpen = false;
+      }
    }
-
    return dbIsOpen;
 }
 
@@ -233,7 +241,6 @@ bool Database::loadPgSQL()
 
    dbUsername = Brewtarget::option("dbUsername").toString();
 
-   // Yeah, this is a bad idea. Please make this anything other than this before rolling this out
    if ( Brewtarget::hasOption("dbPassword") ) {
       dbPassword = Brewtarget::option("dbPassword").toString();
    }
@@ -274,7 +281,6 @@ bool Database::loadPgSQL()
       createFromScratch = ! sqldb.tables().contains("settings");
       // Associate this db with the current thread.
       _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
-      _threadToConnectionMutex.unlock();
    }
 
    return dbIsOpen;
@@ -297,6 +303,7 @@ bool Database::load()
       dbIsOpen = loadSQLite();
    }
 
+   _threadToConnectionMutex.unlock();
    if ( ! dbIsOpen )
       return false;
 
@@ -753,6 +760,10 @@ bool Database::restoreFromFile(QString newDbFileStr)
    QFile::setPermissions( newDbFile.fileName(), QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
 
    return success;
+}
+
+bool Database::tempBackupExists() {
+   return dbTempBackupFile.exists();
 }
 
 // removeFromRecipe ===========================================================
@@ -4791,6 +4802,25 @@ bool Database::cleanupBackupDatabase()
       // Check if the primary database also exists.
       if (QFile::exists(dbFileName))
       {
+         {
+            QSqlDatabase testdb;
+
+            testdb = QSqlDatabase::addDatabase("QSQLITE", "test");
+            testdb.setDatabaseName(dbFileName);
+
+            // If we can't test open the db, bail out
+            if ( ! testdb.open() )
+               return false;
+
+            QSqlQuery testConn(testdb);
+            // if we cannot execute this query, something is wrong and simply
+            // don't do anything
+            if ( ! testConn.exec("PRAGMA synchronous = off" ) ) {
+               Brewtarget::logE( QString("%1 : could not access database. Do you have another instance open?" ).arg(Q_FUNC_INFO) );
+               return false;
+            }
+            testdb.close();
+         }
          // If it does, prompt the user as to whether they'd like to keep their changes
          // from the last session (keep the primary DB), or revert back to where they
          // were before their changes (overwrite the primary DB with the backup).
