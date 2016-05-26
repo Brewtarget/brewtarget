@@ -47,7 +47,6 @@ void HydrometerTool::doLayout()
             lineEdit_inputSg->setMaximumSize(QSize(80, 16777215));
             lineEdit_inputSg->setProperty("forcedUnit",QVariant(QStringLiteral("displaySG")));
          label_inputTemp = new BtTemperatureLabel(this);
-         label_inputTemp  = new BtTemperatureLabel(this);
             label_inputTemp ->setObjectName(QStringLiteral("label_inputTemp"));
             label_inputTemp ->setContextMenuPolicy(Qt::CustomContextMenu);
 
