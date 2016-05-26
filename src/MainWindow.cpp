@@ -91,6 +91,7 @@
 #include "OptionDialog.h"
 #include "OgAdjuster.h"
 #include "ConverterTool.h"
+#include "HydrometerTool.h"
 #include "TimerMainDialog.h"
 #include "RecipeFormatter.h"
 #include "PrimingDialog.h"
@@ -177,6 +178,7 @@ MainWindow::MainWindow(QWidget* parent)
    recipeFormatter = new RecipeFormatter(this);
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
+   hydrometerTool = new HydrometerTool(this);
    timerMainDialog = new TimerMainDialog(this);
    primingDialog = new PrimingDialog(this);
    strikeWaterDialog = new StrikeWaterDialog(this);
@@ -403,6 +405,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionScale_Recipe, SIGNAL( triggered() ), recipeScaler, SLOT( show() ) );
    connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
    connect( actionConvert_Units, SIGNAL( triggered() ), converterTool, SLOT( show() ) );
+   connect( actionHydrometer_Temp_Adjustment, SIGNAL( triggered() ), hydrometerTool, SLOT( show() ) );
    connect( actionOG_Correction_Help, SIGNAL( triggered() ), ogAdjuster, SLOT( show() ) );
    connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
