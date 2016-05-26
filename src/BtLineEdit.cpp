@@ -57,6 +57,7 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
    QString amt;
    bool force = Brewtarget::hasUnits(text());
    bool ok = false;
+   bool wasChanged = sender() == this;
 
    // editingFinished happens on focus being lost, regardless of anything
    // being changed. I am hoping this short circuits properly and we do
@@ -99,8 +100,7 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
    }
    QLineEdit::setText(amt);
 
-   if ( ! force )
-   {
+   if ( wasChanged ) {
       emit textModified();
    }
 }
