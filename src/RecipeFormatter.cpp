@@ -155,7 +155,7 @@ QString RecipeFormatter::buildHTMLHeader() {
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":css/recipe.css");
    header += "</style></head>";
 
    header += "<body>";
@@ -292,12 +292,11 @@ QString RecipeFormatter::getToolTip(Recipe* rec)
    if ( rec == 0 )
       return "";
 
-   cssName = QString(":/css/tooltip.css");
    style = rec->style();
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -341,11 +340,9 @@ QString RecipeFormatter::getToolTip(Style* style)
    if ( style == 0 )
       return "";
 
-   cssName = QString(":/css/tooltip.css");
-
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -386,11 +383,9 @@ QString RecipeFormatter::getToolTip(Equipment* kit)
    if ( kit == 0 )
       return "";
 
-   cssName = QString(":/css/tooltip.css");
-
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -423,11 +418,9 @@ QString RecipeFormatter::getToolTip(Fermentable* ferm)
    if ( ferm == 0 )
       return "";
 
-   cssName = QString(":/css/tooltip.css");
-
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -466,11 +459,9 @@ QString RecipeFormatter::getToolTip(Hop* hop)
    if ( hop == 0 )
       return "";
 
-   cssName = QString(":/css/tooltip.css");
-
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -510,11 +501,9 @@ QString RecipeFormatter::getToolTip(Misc* misc)
    if ( misc == 0 )
       return "";
 
-   cssName = QString(":/css/tooltip.css");
-
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -546,11 +535,9 @@ QString RecipeFormatter::getToolTip(Yeast* yeast)
    if ( yeast == 0 )
       return "";
 
-   cssName = QString(":/css/tooltip.css");
-
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -665,12 +652,10 @@ QString RecipeFormatter::wrapText( const QString &text, int wrapLength )
    return wrappedText;
 }
 
-QString RecipeFormatter::getCSS()
+QString RecipeFormatter::getCSS(QString resourceName)
 {
-   if ( cssName == NULL )
-       cssName = QString(":/css/recipe.css");
 
-   QFile cssInput(cssName);
+   QFile cssInput(resourceName);
    QString css;
 
    if (cssInput.open(QFile::ReadOnly)) {
@@ -1026,7 +1011,7 @@ QString RecipeFormatter::buildMiscTableHtml()
       Misc *misc = miscs[i];
       kindOf = misc->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
 
-      mtable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
+      mtable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
             .arg( misc->name())
             .arg( misc->typeStringTr())
             .arg( misc->useStringTr())
@@ -1452,11 +1437,9 @@ QString RecipeFormatter::getLabelToolTip() {
    QString header;
    QString body;
 
-   cssName = QString(":/css/tooltip.css");
-
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
+   header += getCSS(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";

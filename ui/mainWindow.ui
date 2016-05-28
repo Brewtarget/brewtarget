@@ -233,8 +233,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>386</height>
+           <width>637</width>
+           <height>437</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1096,8 +1096,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>337</height>
+           <width>653</width>
+           <height>313</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1649,7 +1649,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>19</height>
+      <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1729,6 +1729,7 @@
     <addaction name="action_recipeToTextClipboard"/>
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
+    <addaction name="actionHydrometer_Temp_Adjustment"/>
     <addaction name="actionStrikeWater_Calculator"/>
     <addaction name="actionTimers"/>
     <addaction name="separator"/>
@@ -2188,8 +2189,18 @@
     <string>Export to &amp;BBCode</string>
    </property>
   </action>
+  <action name="actionHydrometer_Temp_Adjustment">
+   <property name="text">
+    <string>Hydrometer Temp Adjustment</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
   <customwidget>
    <class>BtTimeEdit</class>
    <extends>QLineEdit</extends>
@@ -2237,11 +2248,6 @@
    <slots>
     <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>BtColorLabel</class>
