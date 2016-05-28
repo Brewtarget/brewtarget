@@ -169,9 +169,8 @@ OptionDialog::OptionDialog(QWidget* parent)
    connect( btStringEdit_password, SIGNAL( textModified() ), this, SLOT(testRequired()));
 
    connect( pushButton_browseDataDir, SIGNAL( clicked() ), this, SLOT( setDataDir() ) );
-   connect( pushButton_defaultDataDir, SIGNAL( clicked() ), this, SLOT( defaultDataDir() ) );
    connect( pushButton_browseBackupDir, SIGNAL( clicked() ), this, SLOT( setBackupDir() ) );
-   connect( pushButton_defaultBackupDir, SIGNAL( clicked() ), this, SLOT( defaultBackupDir() ) );
+   connect( pushButton_resetToDefault, SIGNAL( clicked() ), this, SLOT( resetToDefault() ) );
    pushButton_testConnection->setEnabled(false);
 
 }
@@ -234,14 +233,25 @@ void OptionDialog::setBackupDir()
       btStringEdit_backupDir->setText( dir );
 }
 
-void OptionDialog::defaultDataDir()
+void OptionDialog::resetToDefault()
 {
-   btStringEdit_dataDir->setText( Brewtarget::getConfigDir().canonicalPath() );
-}
 
-void OptionDialog::defaultBackupDir()
-{
-   btStringEdit_backupDir->setText( Brewtarget::getConfigDir().canonicalPath() );
+   Brewtarget::DBTypes engine = (Brewtarget::DBTypes)comboBox_engine->currentIndex();
+   if ( engine == Brewtarget::PGSQL ) {
+      btStringEdit_hostname->setText(QString("localhost"));
+      btStringEdit_portnum->setText(QString("5432"));
+      btStringEdit_schema->setText(QString("public"));
+      btStringEdit_dbname->setText(QString("brewtarget"));
+      btStringEdit_username->setText(QString("brewtarget"));
+      btStringEdit_password->setText(QString(""));
+      checkBox_savePassword->setChecked(false);
+   }
+   else {
+      btStringEdit_dataDir->setText( Brewtarget::getConfigDir().canonicalPath() );
+      btStringEdit_backupDir->setText( Brewtarget::getConfigDir().canonicalPath() );
+      spinBox_frequency->setValue(4);
+      spinBox_numBackups->setValue(10);
+   }
 }
 
 void OptionDialog::saveAndClose()
@@ -510,11 +520,9 @@ void OptionDialog::sqliteVisible(bool canSee)
    btStringEdit_dataDir->setVisible(canSee);
 
    pushButton_browseDataDir->setVisible(canSee);
-   pushButton_defaultDataDir->setVisible(canSee);
    label_backupDir->setVisible(canSee);
    btStringEdit_backupDir->setVisible(canSee);
    pushButton_browseBackupDir->setVisible(canSee);
-   pushButton_defaultBackupDir->setVisible(canSee);
 
    label_numBackups->setVisible(canSee);
    spinBox_numBackups->setVisible(canSee);
@@ -533,24 +541,24 @@ void OptionDialog::setDbDialog(Brewtarget::DBTypes db)
       sqliteVisible(false);
 
       gridLayout->addWidget(label_hostname,0,0);
-      gridLayout->addWidget(btStringEdit_hostname,0,1);
+      gridLayout->addWidget(btStringEdit_hostname,0,1,1,2);
 
-      gridLayout->addWidget(label_portnum,1,0);
-      gridLayout->addWidget(btStringEdit_portnum,1,1);
+      gridLayout->addWidget(label_portnum,0,3);
+      gridLayout->addWidget(btStringEdit_portnum,0,4);
 
-      gridLayout->addWidget(label_schema,2,0);
-      gridLayout->addWidget(btStringEdit_schema,2,1);
+      gridLayout->addWidget(label_schema,1,0);
+      gridLayout->addWidget(btStringEdit_schema,1,1);
 
-      gridLayout->addWidget(label_dbName,3,0);
-      gridLayout->addWidget(btStringEdit_dbname,3,1);
+      gridLayout->addWidget(label_dbName,2,0);
+      gridLayout->addWidget(btStringEdit_dbname,2,1);
 
-      gridLayout->addWidget(label_username,4,0);
-      gridLayout->addWidget(btStringEdit_username,4,1);
+      gridLayout->addWidget(label_username,3,0);
+      gridLayout->addWidget(btStringEdit_username,3,1);
 
-      gridLayout->addWidget(label_password,5,0);
-      gridLayout->addWidget(btStringEdit_password,5,1);
+      gridLayout->addWidget(label_password,4,0);
+      gridLayout->addWidget(btStringEdit_password,4,1);
 
-      gridLayout->addWidget(checkBox_savePassword, 5, 2);
+      gridLayout->addWidget(checkBox_savePassword, 4, 4);
       
    }
    else {
@@ -558,22 +566,19 @@ void OptionDialog::setDbDialog(Brewtarget::DBTypes db)
       sqliteVisible(true);
 
       gridLayout->addWidget(label_dataDir,0,0);
-      gridLayout->addWidget(btStringEdit_dataDir,0,1,1,-1);
-      gridLayout->addWidget(pushButton_browseDataDir,1,2);
-      gridLayout->addWidget(pushButton_defaultDataDir,1,3);
+      gridLayout->addWidget(btStringEdit_dataDir,0,1,1,2);
+      gridLayout->addWidget(pushButton_browseDataDir,0,3);
 
-      gridLayout->addWidget(label_backupDir,2,0);
-      gridLayout->addWidget(btStringEdit_backupDir,2,1,1,-1);
-      gridLayout->addWidget(pushButton_browseBackupDir,3,2);
-      gridLayout->addWidget(pushButton_defaultBackupDir,3,3);
+      gridLayout->addWidget(label_backupDir,1,0);
+      gridLayout->addWidget(btStringEdit_backupDir,1,1,1,2);
+      gridLayout->addWidget(pushButton_browseBackupDir,1,3);
 
-      gridLayout->addWidget(label_numBackups,4,0);
-      gridLayout->addWidget(spinBox_numBackups,4,1);
+      gridLayout->addWidget(label_numBackups,3,0);
+      gridLayout->addWidget(spinBox_numBackups,3,1);
 
-      gridLayout->addWidget(label_frequency,5,0);
-      gridLayout->addWidget(spinBox_frequency,5,1);
+      gridLayout->addWidget(label_frequency,4,0);
+      gridLayout->addWidget(spinBox_frequency,4,1);
    }
-
    groupBox_dbConfig->setVisible(true);
 }
 
@@ -645,9 +650,6 @@ void OptionDialog::createSQLiteElements()
    pushButton_browseDataDir = new QPushButton(groupBox_dbConfig);
    pushButton_browseDataDir->setObjectName(QStringLiteral("button_browseDataDir"));
 
-   pushButton_defaultDataDir = new QPushButton(groupBox_dbConfig);
-   pushButton_defaultDataDir->setObjectName(QStringLiteral("button_defaultDataDir"));
-
    // Set up the backup directory dialog and buttons
    label_backupDir = new QLabel(groupBox_dbConfig);
    label_backupDir->setObjectName(QStringLiteral("label_backupDir"));
@@ -657,9 +659,6 @@ void OptionDialog::createSQLiteElements()
 
    pushButton_browseBackupDir = new QPushButton(groupBox_dbConfig);
    pushButton_browseBackupDir->setObjectName(QStringLiteral("button_browseBackupDir"));
-
-   pushButton_defaultBackupDir = new QPushButton(groupBox_dbConfig);
-   pushButton_defaultBackupDir->setObjectName(QStringLiteral("button_defaultBackupDir"));
 
    // Set up the two spin boxes
    label_numBackups = new QLabel(groupBox_dbConfig);
@@ -698,10 +697,8 @@ void OptionDialog::retranslateDbDialog(QDialog *optionsDialog)
    // SQLite things
    label_dataDir->setText(QApplication::translate("optionsDialog", "Data Directory", 0));
    pushButton_browseDataDir->setText(QApplication::translate("optionsDialog", "Browse", 0));
-   pushButton_defaultDataDir->setText(QApplication::translate("optionsDialog", "Default", 0));
    label_backupDir->setText(QApplication::translate("optionsDialog", "Backup Directory", 0));
    pushButton_browseBackupDir->setText(QApplication::translate("optionsDialog", "Browse", 0));
-   pushButton_defaultBackupDir->setText(QApplication::translate("optionsDialog", "Default", 0));
    label_numBackups->setText(QApplication::translate("optionsDialog", "Number of Backups", 0));
    label_frequency->setText(QApplication::translate("optionsDialog", "Frequency of Backups", 0));
 

@@ -493,9 +493,6 @@ void Brewtarget::cleanup()
    delete _mainWindow;
 
    Database::dropInstance();
-#if defined(Q_OS_LINUX)
-   pidFile.remove();
-#endif
 
 }
 

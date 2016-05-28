@@ -69,11 +69,9 @@ public:
    QLabel *label_dataDir;
    BtStringEdit *btStringEdit_dataDir;
    QPushButton *pushButton_browseDataDir;
-   QPushButton *pushButton_defaultDataDir;
    QLabel *label_backupDir;
    BtStringEdit *btStringEdit_backupDir;
    QPushButton *pushButton_browseBackupDir;
-   QPushButton *pushButton_defaultBackupDir;
    QLabel *label_numBackups;
    QSpinBox *spinBox_numBackups;
    QLabel *label_frequency;
@@ -98,8 +96,7 @@ public slots:
    void setDataDir();
    void setBackupDir();
    //! \brief Reset data directory to default.
-   void defaultDataDir();
-   void defaultBackupDir();
+   void resetToDefault();
 
    //! \brief Enable or disable the configuration panel based on the engine choice
    void setEngine(int selected);

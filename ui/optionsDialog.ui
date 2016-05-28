@@ -275,47 +275,73 @@
       <attribute name="title">
        <string>Databases</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+        <widget class="QGroupBox" name="groupBox_engine">
+         <property name="title">
+          <string>Engines</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_engine">
+            <property name="text">
+             <string>RDBMS Engine</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_engine"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_testConnection">
+            <property name="text">
+             <string>Test Connection</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_dbConfig">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Configuration</string>
+         </property>
+         <property name="configSection" stdset="0">
+          <string notr="true">optionsDialog</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout"/>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QGroupBox" name="groupBox_engine">
-           <property name="title">
-            <string>Engines</string>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QLabel" name="label_engine">
-              <property name="text">
-               <string>RDBMS Engine</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="comboBox_engine"/>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_testConnection">
-              <property name="text">
-               <string>Test Connection</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_dbConfig">
-           <property name="enabled">
-            <bool>true</bool>
+          <widget class="QPushButton" name="pushButton_resetToDefault">
+           <property name="text">
+            <string>Restore defaults</string>
            </property>
-           <property name="title">
-            <string>Configuration</string>
-           </property>
-           <property name="configSection" stdset="0">
-            <string notr="true">optionsDialog</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout"/>
           </widget>
          </item>
         </layout>
