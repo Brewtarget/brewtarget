@@ -143,8 +143,6 @@ public slots:
 
    //! \brief Update the main windows statusbar.
    void updateStatus(const QString status);
-   //! \brief Change unsaved status.
-   void updateUnsavedStatus(bool isUnsaved);
 
    //! \brief Close a brewnote tab if we must
    void closeBrewNote(BrewNote*);
@@ -217,9 +215,6 @@ public slots:
 
    //! \brief Prints the right thing, depending on the signal sender.
    void print();
-   //! \brief saves the database, which will have some interesting
-   //implications later
-   void save();
    //! \brief Backup the database.
    void backup();
    //! \brief Restore the database.

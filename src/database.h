@@ -95,7 +95,7 @@ public:
    //! Call this to delete the internal instance.
    static void dropInstance();
    //! \brief Should be called when we are about to close down.
-   void unload(bool keepChanges = true);
+   void unload();
 
    //! \brief Create a blank database in the given file
    static bool createBlank(QString const& filename);
@@ -113,7 +113,6 @@ public:
                                    QString const& username="brewtarget",
                                    QString const& password="brewtarget");
    bool loadSuccessful();
-   bool isDirty();
 
    /*! update an entry, and call the notification when complete.
     * NOTE: This cannot be simplified without a bit more work. The inventory
@@ -416,13 +415,10 @@ public:
     * database file.
     */
    void updateDatabase(QString const& filename);
-   void saveDatabase();
    void convertFromXml();
-
 
    bool isConverted();
 
-   bool tempBackupExists();
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done. 
    void convertDatabase(QString const& Hostname, QString const& DbName,
@@ -456,8 +452,6 @@ signals:
 
    // MashSteps need signals too
    void newMashStepSignal(MashStep*);
-   // Emits a signal when the dirty status changes
-   void isUnsavedChanged(bool);
 
 private slots:
    //! Load database from file.
@@ -472,8 +466,6 @@ private:
    static QString dbFileName;
    static QFile dataDbFile;
    static QString dataDbFileName;
-   static QFile dbTempBackupFile;
-   static QString dbTempBackupFileName;
    static QString dbConName;
 
    // And these are for Postgres databases -- are these really required? Are
@@ -505,7 +497,6 @@ private:
    // Instance variables.
    bool loadWasSuccessful;
    bool converted;
-   bool dirty;
    bool createFromScratch;
    bool schemaUpdated;
 
@@ -888,19 +879,11 @@ private:
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
 
-   // Cleans up the backup database if it was leftover from an error.
-   bool cleanupBackupDatabase();
-
    static QList<TableParams> makeTableParams();
 
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.
    bool updateSchema(bool* err = 0);
-
-   /*!
-    * \brief Register that the DB was modified.
-    */
-   void makeDirty();
 
    // May St. Stevens intercede on my behalf.
    //

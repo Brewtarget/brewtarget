@@ -234,7 +234,7 @@
            <x>0</x>
            <y>0</y>
            <width>636</width>
-           <height>412</height>
+           <height>386</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -837,14 +837,14 @@
                  <layout class="QVBoxLayout" name="verticalLayout_lcd">
                   <item>
                    <layout class="QGridLayout" name="gridLayout">
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <property name="horizontalSpacing">
                      <number>4</number>
                     </property>
                     <property name="verticalSpacing">
                      <number>5</number>
-                    </property>
-                    <property name="bottomMargin">
-                     <number>0</number>
                     </property>
                     <item row="4" column="1">
                      <widget class="StyleRangeWidget" name="styleRangeWidget_srm" native="true">
@@ -1097,7 +1097,7 @@
            <x>0</x>
            <y>0</y>
            <width>636</width>
-           <height>323</height>
+           <height>337</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1649,7 +1649,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1695,7 +1695,6 @@
     </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
-    <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionImport_Recipes"/>
     <addaction name="actionExportRecipe"/>
@@ -1758,7 +1757,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNewRecipe"/>
-   <addaction name="actionSave"/>
    <addaction name="actionDeleteSelected"/>
    <addaction name="separator"/>
    <addaction name="actionEquipments"/>

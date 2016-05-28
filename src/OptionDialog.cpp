@@ -686,6 +686,7 @@ void OptionDialog::createSQLiteElements()
 
 void OptionDialog::retranslateDbDialog(QDialog *optionsDialog)
 {
+   //PostgreSQL stuff
    label_hostname->setText(QApplication::translate("optionsDialog", "Hostname", 0));
    label_portnum->setText(QApplication::translate("optionsDialog", "Port", 0));
    label_schema->setText(QApplication::translate("optionsDialog", "Schema", 0));
@@ -693,7 +694,9 @@ void OptionDialog::retranslateDbDialog(QDialog *optionsDialog)
    label_username->setText(QApplication::translate("optionsDialog", "Username", 0));
    label_password->setText(QApplication::translate("optionsDialog", "Password", 0));
    checkBox_savePassword->setText(QApplication::translate("optionsDialog", "Save password", 0));
-   label_dataDir->setText(QApplication::translate("optionsDialog", "Backup Directory", 0));
+
+   // SQLite things
+   label_dataDir->setText(QApplication::translate("optionsDialog", "Data Directory", 0));
    pushButton_browseDataDir->setText(QApplication::translate("optionsDialog", "Browse", 0));
    pushButton_defaultDataDir->setText(QApplication::translate("optionsDialog", "Default", 0));
    label_backupDir->setText(QApplication::translate("optionsDialog", "Backup Directory", 0));
@@ -712,8 +715,8 @@ void OptionDialog::retranslateDbDialog(QDialog *optionsDialog)
    btStringEdit_dbname->setToolTip(QApplication::translate("optionsDialog", "The name of the database", 0));
    label_dataDir->setToolTip(QApplication::translate("optionsDialog", "Where your database file is",0));
    label_backupDir->setToolTip(QApplication::translate("optionsDialog", "Where to save your backups",0));
-   label_numBackups->setToolTip(QApplication::translate("optionsDialog", "Number of backups to keep", 0));
-   label_frequency->setToolTip(QApplication::translate("optionsDialog", "How frequently a backup is made", 0));
+   label_numBackups->setToolTip(QApplication::translate("optionsDialog", "Number of backups to keep: -1 means never remove, 0 means never backup", 0));
+   label_frequency->setToolTip(QApplication::translate("optionsDialog", "How frequently a backup is made: 1 means always backup", 0));
 #endif
 }
 
