@@ -806,7 +806,7 @@ Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
-   QString update = QString("UPDATE mashstep SET step_number = CASE msid WHEN %1 then %2 when %3 then %4 END WHERE msid IN (%5,%6)")
+   QString update = QString("UPDATE mashstep SET step_number = CASE mash_id WHEN %1 then %2 when %3 then %4 END WHERE mash_id IN (%5,%6)")
                 .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key);
 
    QSqlQuery q(sqlDatabase() );
