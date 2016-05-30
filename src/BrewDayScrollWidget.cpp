@@ -148,7 +148,9 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
    if ( action == PRINT )
    {
       printer = mainPrinter;
-      connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+      // connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+      //
+      // GSG: QTextBrowser doesn't have a loadFinished signal.
 
       dialog->setWindowTitle(tr("Print Document"));
       if (dialog->exec() != QDialog::Accepted)
@@ -175,6 +177,10 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
       QTextStream out(outFile);
       out << pDoc;
       outFile->close();
+   }
+   else
+   {
+       loadComplete(true);
    }
 }
 
