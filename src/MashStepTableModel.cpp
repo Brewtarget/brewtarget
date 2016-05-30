@@ -86,6 +86,23 @@ void MashStepTableModel::setMash( Mash* m )
    }
 }
 
+void MashStepTableModel::reorderMashSteps()
+{
+   if( mashObs && steps.size() > 0)
+   {
+      // I am NOT disconnecting the signals. I just want things redrawn
+      beginRemoveRows( QModelIndex(), 0, steps.size()-1 );
+      // Remove mashObs and all steps.
+      steps.clear();
+      endRemoveRows();
+
+      QList<MashStep*> tmpSteps = mashObs->mashSteps();
+      beginInsertRows( QModelIndex(), 0, tmpSteps.size()-1 );
+      steps = tmpSteps;
+      endInsertRows();
+   }
+}
+
 MashStep* MashStepTableModel::getMashStep(unsigned int i)
 {
    if( i < static_cast<unsigned int>(steps.size()) )
@@ -103,9 +120,13 @@ void MashStepTableModel::mashChanged()
 void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
 {
    int i;
+
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
    if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
    {
+      if ( prop.name() == QStringLiteral("stepNumber") )
+         reorderMashSteps();
+
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS-1));
    }
