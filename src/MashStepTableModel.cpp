@@ -86,21 +86,39 @@ void MashStepTableModel::setMash( Mash* m )
    }
 }
 
-void MashStepTableModel::reorderMashSteps()
+void MashStepTableModel::reorderMashStep(MashStep* step, int current)
 {
-   if( mashObs && steps.size() > 0)
-   {
-      // I am NOT disconnecting the signals. I just want things redrawn
-      beginRemoveRows( QModelIndex(), 0, steps.size()-1 );
-      // Remove mashObs and all steps.
-      steps.clear();
-      endRemoveRows();
+   // doSomething will be -1 if we are moving up and 1 if we are moving down
+   // and 0 if nothing is to be done (see next comment)
+   int doSomething = step->stepNumber() - current - 1;
+   int destChild   = step->stepNumber();
 
-      QList<MashStep*> tmpSteps = mashObs->mashSteps();
-      beginInsertRows( QModelIndex(), 0, tmpSteps.size()-1 );
-      steps = tmpSteps;
-      endInsertRows();
-   }
+   // Moving a step up or down generates two signals, one for each row
+   // impacted. If we move row B above row A:
+   //    1. The first signal is to move B above A, which will result in A
+   //    being below B
+   //    2. The second signal is to move A below B, which we just did.
+   // Therefore, the second signal mostly needs to be ignored. In those
+   // circusmtances, A->stepNumber() will be the same as it's position in the
+   // steps list, modulo some indexing
+   if ( doSomething == 0 )
+      return;
+
+   // beginMoveRows is a little odd. When moving rows within the same parent,
+   // destChild points one beyond where you want to insert the row. Think of
+   // it as saying "insert before destChild". If we are moving something up,
+   // we need to be one less than stepNumber. If we are moving down, it just
+   // works.
+   if ( doSomething < 0 )
+      destChild--; 
+
+   beginMoveRows(QModelIndex(),current,current,QModelIndex(),destChild);
+   // doSomething is -1 if moving up and 1 if moving down. swap current with
+   // current -1 when moving up, and swap current with current+1 when moving
+   // down
+   steps.swap(current,current+doSomething);
+   endMoveRows();
+
 }
 
 MashStep* MashStepTableModel::getMashStep(unsigned int i)
@@ -124,8 +142,10 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
    if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
    {
-      if ( prop.name() == QStringLiteral("stepNumber") )
-         reorderMashSteps();
+      if ( prop.name() == QStringLiteral("stepNumber") ) {
+         reorderMashStep(stepSender,i);
+      }
+         
 
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS-1));
