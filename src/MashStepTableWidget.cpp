@@ -20,6 +20,7 @@
 
 #include <QTableView>
 #include <QWidget>
+#include <QDebug>
 #include "MashStepTableModel.h"
 #include "MashStepTableWidget.h"
 

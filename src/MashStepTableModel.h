@@ -90,6 +90,9 @@ private:
    Mash* mashObs;
    QTableView* parentTableWidget;
    QList<MashStep*> steps;
+
+//   void reorderMashSteps();
+   void reorderMashStep(MashStep *step, int current);
 };
 
 /*!
