@@ -393,15 +393,16 @@ bool Brewtarget::initialize(const QString &userDirectory)
 
 
    // Use overwride if present.
-   if (!userDirectory.isEmpty() && QDir(userDirectory).exists())
+   if (!userDirectory.isEmpty() && QDir(userDirectory).exists()) {
       userDataDir = QDir(userDirectory).canonicalPath();
+   }
    // Use directory from app settings.
-   else if (hasOption("user_data_dir"))
+   else if (hasOption("user_data_dir")) {
       userDataDir = QDir(option("user_data_dir","").toString()).canonicalPath();
+   }
    // Guess where to put it.
    else {
       userDataDir = getConfigDir();
-      setOption("user_data_dir", userDataDir.canonicalPath());
    }
 
    // If the old options file exists, convert it. Otherwise, just get the
@@ -420,6 +421,13 @@ bool Brewtarget::initialize(const QString &userDirectory)
 
    // Make sure all the necessary directories and files we need exist before starting.
    ensureDirectoriesExist();
+
+   // If the directory doesn't exist, canonicalPath() will return an empty
+   // string. By waiting until after we know the directory is created, we
+   // make sure it isn't empty
+   if ( ! hasOption("user_data_dir") ) {
+      setOption("user_data_dir", userDataDir.canonicalPath());
+   }
 
    loadTranslations(); // Do internationalization.
 
@@ -1386,7 +1394,6 @@ void Brewtarget::setOption(QString attribute, QVariant value, const QString sect
       name = attribute;
    else
       name = generateName(attribute,section,ops);
-
 
    QSettings().setValue(name,value);
 }
