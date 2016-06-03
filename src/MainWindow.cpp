@@ -137,8 +137,9 @@ MainWindow::MainWindow(QWidget* parent)
 
    QDesktopWidget *desktop = QApplication::desktop();
 
-   // Ensure database initializes.
-   Database::instance();
+   // If the database doesn't load, we bail
+   if (! Database::instance().loadSuccessful() )
+      exit(1);
 
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
@@ -421,13 +422,11 @@ MainWindow::MainWindow(QWidget* parent)
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
       actionBackup_Database->setEnabled(false);
       actionRestore_Database->setEnabled(false);
-      actionSave->setEnabled(false);
       label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
    }
    else {
       connect( actionBackup_Database, SIGNAL( triggered() ), this, SLOT( backup() ) );
       connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
-      connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
    }
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
@@ -496,14 +495,12 @@ MainWindow::MainWindow(QWidget* parent)
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
    connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
-   connect( &(Database::instance()), SIGNAL( isUnsavedChanged(bool)), this, SLOT( updateUnsavedStatus(bool)));
 }
 
 void MainWindow::setupShortCuts()
 {
    actionNewRecipe->setShortcut(QKeySequence::New);
    actionCopy_Recipe->setShortcut(QKeySequence::Copy);
-   actionSave->setShortcut(QKeySequence::Save);
    actionDeleteSelected->setShortcut(QKeySequence::Delete);
 }
 
@@ -1909,11 +1906,6 @@ void MainWindow::removeMash()
 
 }
 
-void MainWindow::save()
-{
-   Database::instance().saveDatabase();
-}
-
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
    Brewtarget::saveSystemOptions();
@@ -1941,20 +1933,10 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
 
    // Ask the user if they want to save changes, only if the dirty bit has
    // been thrown
-   if( Database::instance().isDirty() &&
-       QMessageBox::question(this,
-          QObject::tr("Save Database Changes"),
-          QObject::tr("Would you like to save the changes you made?"),
-          QMessageBox::Yes | QMessageBox::No,
-          QMessageBox::Yes)
-      == QMessageBox::Yes)
-   {
-      Database::instance().unload(true);
-   }
-   else
-   {
-      Database::instance().unload(false);
-   }
+   // We should also make sure the backup db still exists -- there's some edge
+   // cases where it doesn't.
+
+   Database::instance().unload();
 }
 
 void MainWindow::copyRecipe()
@@ -2448,17 +2430,6 @@ void MainWindow::fixBrewNote()
 void MainWindow::updateStatus(const QString status) {
    if( statusBar() )
       statusBar()->showMessage(status, 3000);
-}
-
-void MainWindow::updateUnsavedStatus(bool isUnsaved) {
-   if ( isUnsaved ) {
-      statusBar()->showMessage(tr("Unsaved Changes"));
-      actionSave->setIcon(QIcon(SAVEDIRTYPNG));
-   }
-   else {
-      statusBar()->clearMessage();
-      actionSave->setIcon(QIcon(SAVEPNG));
-   }
 }
 
 void MainWindow::closeBrewNote(BrewNote* b)

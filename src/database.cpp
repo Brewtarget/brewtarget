@@ -85,8 +85,6 @@ QFile Database::dbFile;
 QString Database::dbFileName;
 QFile Database::dataDbFile;
 QString Database::dataDbFileName;
-QFile Database::dbTempBackupFile;
-QString Database::dbTempBackupFileName;
 QString Database::dbConName;
 QHash<Brewtarget::DBTable,QString> Database::tableNames;
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable;
@@ -104,7 +102,6 @@ Database::Database()
    _threadToConnectionMutex.lock();
 
    converted = false;
-   dirty = false;
 
    loadWasSuccessful = load();
 }
@@ -114,7 +111,7 @@ Database::~Database()
 
    // If we have not explicitly unloaded, do so now and discard changes.
    if( QSqlDatabase::database( dbConName, false ).isOpen() )
-      unload(false);
+      unload();
 
    // Delete all the ingredients floating around.
    qDeleteAll(allBrewNotes);
@@ -141,16 +138,9 @@ bool Database::loadSQLite()
    dbFileName = Brewtarget::getUserDataDir().filePath("database.sqlite");
    dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
 
-   dbTempBackupFileName = Brewtarget::getUserDataDir().filePath("tempBackupDatabase.sqlite");
-
    // Set the files.
    dbFile.setFileName(dbFileName);
    dataDbFile.setFileName(dataDbFileName);
-   dbTempBackupFile.setFileName(dbTempBackupFileName);
-
-   // Cleanup the backup database if there was a previous error.
-   if( !cleanupBackupDatabase() )
-      return false;
 
    // If user restored the database from a backup, make the backup into the primary.
    {
@@ -180,9 +170,6 @@ bool Database::loadSQLite()
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
 
-   // Create a copy of the database to revert to if the user decides not to make changes.
-   dbFile.copy(dbTempBackupFileName);
-
    // Open SQLite db.
    sqldb = QSqlDatabase::addDatabase("QSQLITE");
    sqldb.setDatabaseName(dbFileName);
@@ -203,21 +190,29 @@ bool Database::loadSQLite()
    else
    {
       // NOTE: synchronous=off reduces query time by an order of magnitude!
-      QSqlQuery( "PRAGMA synchronous = off", sqldb);
-      QSqlQuery( "PRAGMA foreign_keys = on", sqldb);
-      QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqldb);
-      // Store temporary tables in memory.
-      QSqlQuery( "PRAGMA temp_store = MEMORY", sqldb);
+      QSqlQuery pragma(sqldb);
+      try {
+         if ( ! pragma.exec( "PRAGMA synchronous = off" ) )
+            throw QString("could not disable synchronous writes");
+         if ( ! pragma.exec( "PRAGMA foreign_keys = on"))
+            throw QString("could not enable foreign keys");
+         if ( ! pragma.exec( "PRAGMA locking_mode = EXCLUSIVE"))
+            throw QString("could not enable exclusive locks");
+         if ( ! pragma.exec("PRAGMA temp_store = MEMORY") )
+            throw QString("could not enable temporary memory");
 
-      // older sqlite databases may not have a settings table. I think I will
-      // just check to see if anything is in there.
-      createFromScratch = sqldb.tables().size() == 0;
+         // older sqlite databases may not have a settings table. I think I will
+         // just check to see if anything is in there.
+         createFromScratch = sqldb.tables().size() == 0;
 
-      // Associate this db with the current thread.
-      _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
-      _threadToConnectionMutex.unlock();
+         // Associate this db with the current thread.
+         _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
+      }
+      catch(QString e) {
+         Brewtarget::logE( QString("%1: %2 (%3)").arg(Q_FUNC_INFO).arg(e).arg(pragma.lastError().text()));
+         dbIsOpen = false;
+      }
    }
-
    return dbIsOpen;
 }
 
@@ -233,7 +228,6 @@ bool Database::loadPgSQL()
 
    dbUsername = Brewtarget::option("dbUsername").toString();
 
-   // Yeah, this is a bad idea. Please make this anything other than this before rolling this out
    if ( Brewtarget::hasOption("dbPassword") ) {
       dbPassword = Brewtarget::option("dbPassword").toString();
    }
@@ -274,7 +268,6 @@ bool Database::loadPgSQL()
       createFromScratch = ! sqldb.tables().contains("settings");
       // Associate this db with the current thread.
       _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
-      _threadToConnectionMutex.unlock();
    }
 
    return dbIsOpen;
@@ -297,6 +290,7 @@ bool Database::load()
       dbIsOpen = loadSQLite();
    }
 
+   _threadToConnectionMutex.unlock();
    if ( ! dbIsOpen )
       return false;
 
@@ -418,11 +412,6 @@ bool Database::load()
          connect( *n, SIGNAL(changed(QMetaProperty,QVariant)), *m, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
 
-   // The database MUST be saved if we created from scratch.
-   // It SHOULD be saved if the schema was updated.
-   dirty = createFromScratch | schemaUpdated;
-   emit isUnsavedChanged(dirty);
-
    return true;
 }
 
@@ -488,15 +477,6 @@ void Database::convertFromXml()
       }
    }
    Brewtarget::setOption("converted", QDate().currentDate().toString());
-   saveDatabase();
-}
-
-void Database::saveDatabase()
-{
-   dbTempBackupFile.remove();
-   dbFile.copy(dbTempBackupFileName);
-   dirty = false;
-   emit isUnsavedChanged(false);
 }
 
 bool Database::isConverted()
@@ -558,34 +538,98 @@ QSqlDatabase Database::sqlDatabase()
    return sqldb;
 }
 
-void Database::unload(bool keepChanges)
+void Database::unload()
 {
    // The postgres driver wants nothing to do with this. Core gets dumped if
    // we try it. Since we don't need to copy things about for postgres...
-   if ( Brewtarget::dbType() == Brewtarget::SQLITE )
-   {
+
+   if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
+
       QSqlDatabase::database( dbConName, false ).close();
 
       QSqlDatabase::removeDatabase( dbConName );
 
-      if (!loadWasSuccessful || keepChanges)
-      {
-         // If load() failed or want to keep the changes, then
-         // just keep the database and don't revert to the backup.
-         if (dbFile.exists())  dbTempBackupFile.remove();
-      return;
-      }
-      // If the user doesn't want to save changes, remove the active database
-      // and restore the backup.
       dbFile.close();
-      dbFile.remove();
-      dbTempBackupFile.rename(dbFileName);
+      if (loadWasSuccessful)
+         automaticBackup();
    }
 }
 
-bool Database::isDirty()
+void Database::automaticBackup()
 {
-   return dirty;
+   int count = Brewtarget::option("count",0,"backups").toInt() + 1;
+   int frequency = Brewtarget::option("frequency",4,"backups").toInt();
+   int maxBackups = Brewtarget::option("maximum",10,"backups").toInt();
+
+   // The most common case is update the counter and nothing else
+   // A frequency of 1 means backup every time. Which this statisfies
+   if ( count % frequency != 0 ) {
+      Brewtarget::setOption( "count", count, "backups");
+      return;
+   }
+
+   // If the user has selected 0 max backups, we just return. There's a weird
+   // case where they have a frequency of 1 and a maxBackup of 0. In that
+   // case, maxBackup wins
+   if ( maxBackups == 0 ) {
+      return;
+   }
+
+   QString backupDir = Brewtarget::option("directory", Brewtarget::getConfigDir().canonicalPath(),"backups").toString();
+   QString listOfFiles = Brewtarget::option("files",QVariant(),"backups").toString();
+   QStringList fileNames = listOfFiles.split(",", QString::SkipEmptyParts);
+
+   QString halfName = QString("%1.%2").arg("bt_database").arg(QDate::currentDate().toString("yyyyMMdd"));
+   QString newName = halfName;
+   // Unique filenames are a pain in the ass. In the case you open brewtarget
+   // twice in a day, this loop makes sure we don't over write (or delete) the
+   // wrong thing
+   int foobar = 0;
+   while ( foobar < 10000 && QFile::exists( backupDir + "/" + newName ) ) {
+      foobar++;
+      newName = QString("%1_%2").arg(halfName).arg(foobar,4,10,QChar('0'));
+      if ( foobar > 9999 ) {
+         Brewtarget::logW( QString("%1 : could not find a unique name in 10000 tries. Overwriting %2").arg(Q_FUNC_INFO).arg(halfName));
+         newName = halfName;
+      }
+   }
+   // backup the file first
+   backupToDir(backupDir,newName);
+
+   // If we have maxBackups == -1, it means never clean. It also means we
+   // don't track the filenames. 
+   if ( maxBackups == -1 )  {
+      Brewtarget::removeOption("files","backups");
+      return;
+   }
+
+   fileNames.append(newName);
+
+   // If we have too many backups. This is in a while loop because we need to
+   // handle the case where a user decides they only want 4 backups, not 10.
+   // The while loop will clean that up properly.
+   while ( fileNames.size() > maxBackups ) {
+      // takeFirst() removes the file from the list, which is important
+      QString victim = backupDir + "/" + fileNames.takeFirst();
+      QFile *file = new QFile(victim);
+      QFileInfo *fileThing = new QFileInfo(victim);
+
+      // Make sure it exists, and make sure it is a file before we
+      // try remove it
+      if ( fileThing->exists() && fileThing->isFile() ) {
+         // If we can't remove it, give a warning.
+         if (! file->remove() ) {
+            Brewtarget::logW( QString("%1 : could not remove %2 (%3).").arg(Q_FUNC_INFO).arg(victim).arg(file->error()));
+         }
+      }
+   }
+
+   // re-encode the list 
+   listOfFiles = fileNames.join(",");
+
+   // finally, reset the counter and save the new list of files
+   Brewtarget::setOption( "count", 0, "backups");
+   Brewtarget::setOption( "files", listOfFiles, "backups");
 }
 
 Database& Database::instance()
@@ -626,7 +670,7 @@ void Database::dropInstance()
 
 }
 
-bool Database::backupToDir(QString dir)
+bool Database::backupToDir(QString dir,QString filename)
 {
    // Make sure the singleton exists.
    instance();
@@ -634,6 +678,13 @@ bool Database::backupToDir(QString dir)
    bool success = true;
    QString prefix = dir + "/";
    QString newDbFileName = prefix + "database.sqlite";
+
+   if ( filename.isEmpty() ) {
+      newDbFileName = prefix + "database.sqlite";
+   }
+   else {
+      newDbFileName = prefix + filename;
+   }
 
    // Remove the files if they already exist so that
    // the copy() operation will succeed.
@@ -732,7 +783,6 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
    sqlDatabase().commit();
 
    q.finish();
-   makeDirty();
    emit rec->changed( rec->metaProperty(propName), QVariant() );
 }
 
@@ -764,7 +814,6 @@ void Database::removeFrom( Mash* mash, MashStep* step )
       throw;
    }
 
-   makeDirty();
    emit mash->mashStepsChanged();
 }
 
@@ -827,7 +876,6 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 
    q.finish();
 
-   makeDirty();
    emit m1->changed( m1->metaProperty("stepNumber") );
    emit m2->changed( m2->metaProperty("stepNumber") );
 }
@@ -862,7 +910,6 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 
    q.finish();
 
-   makeDirty();
    emit in1->changed( in1->metaProperty("instructionNumber") );
    emit in2->changed( in2->metaProperty("instructionNumber") );
 }
@@ -935,7 +982,6 @@ void Database::insertInstruction(Instruction* in, int pos)
    sqlDatabase().commit();
    q.finish();
 
-   makeDirty();
    emit in->changed( in->metaProperty("instructionNumber"), pos );
 }
 
@@ -1063,7 +1109,6 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
          emit newBrewNoteSignal(tmp);
       }
 
-      makeDirty();
    }
    return tmp;
 }
@@ -1095,7 +1140,6 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
       emit newBrewNoteSignal(tmp);
    }
 
-   makeDirty();
    return tmp;
 }
 
@@ -1109,7 +1153,6 @@ Equipment* Database::newEquipment(Equipment* other)
       tmp = newIngredient(&allEquipments);
 
    if ( tmp ) {
-      makeDirty();
       emit changed( metaProperty("equipments"), QVariant() );
       emit newEquipmentSignal(tmp);
    }
@@ -1130,7 +1173,6 @@ Fermentable* Database::newFermentable(Fermentable* other)
       tmp = newIngredient(&allFermentables);
 
    if ( tmp ) {
-      makeDirty();
       emit changed( metaProperty("fermentables"), QVariant() );
       emit newFermentableSignal(tmp);
    }
@@ -1151,7 +1193,6 @@ Hop* Database::newHop(Hop* other)
       tmp = newIngredient(&allHops);
 
    if ( tmp ) {
-      makeDirty();
       emit changed( metaProperty("hops"), QVariant() );
       emit newHopSignal(tmp);
    }
@@ -1186,7 +1227,6 @@ Instruction* Database::newInstruction(Recipe* rec)
 
    // Database's instructions have changed.
    sqlDatabase().commit();
-   makeDirty();
    emit changed( metaProperty("instructions"), QVariant() );
 
    return tmp;
@@ -1244,7 +1284,6 @@ Mash* Database::newMash(Mash* other, bool displace)
 
    if ( other )
       sqlDatabase().commit();
-   makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
 
@@ -1276,7 +1315,6 @@ Mash* Database::newMash(Recipe* parent, bool transact)
    if ( transact )
       sqlDatabase().commit();
 
-   makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
 
@@ -1329,7 +1367,6 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
    if ( connected ) 
       connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
-   makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit mash->mashStepsChanged();
    return tmp;
@@ -1345,7 +1382,6 @@ Misc* Database::newMisc(Misc* other)
       tmp = newIngredient(&allMiscs);
 
    if ( tmp ) {
-      makeDirty();
       emit changed( metaProperty("miscs"), QVariant() );
       emit newMiscSignal(tmp);
    }
@@ -1376,7 +1412,6 @@ Recipe* Database::newRecipe()
    }
 
    sqlDatabase().commit();
-   makeDirty();
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
 
@@ -1415,7 +1450,6 @@ Recipe* Database::newRecipe(Recipe* other)
    }
 
    sqlDatabase().commit();
-   makeDirty();
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
 
@@ -1438,7 +1472,6 @@ Style* Database::newStyle(Style* other)
       throw;
    }
 
-   makeDirty();
    emit changed( metaProperty("styles"), QVariant() );
    emit newStyleSignal(tmp);
 
@@ -1461,7 +1494,6 @@ Water* Database::newWater(Water* other)
       throw;
    }
 
-   makeDirty();
    emit changed( metaProperty("waters"), QVariant() );
    emit newWaterSignal(tmp);
 
@@ -1484,8 +1516,6 @@ Yeast* Database::newYeast(Yeast* other)
       throw;
    }
 
-
-   makeDirty();
    emit changed( metaProperty("yeasts"), QVariant() );
    emit newYeastSignal(tmp);
 
@@ -1507,7 +1537,6 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
       throw;
    }
 
-   makeDirty();
 }
 
 // NOTE: This really should be in a transaction, but I am going to leave that
@@ -1539,7 +1568,6 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
       throw;
    }
 
-   makeDirty();
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMash->mashStepsChanged();
 
@@ -1593,8 +1621,6 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
    if ( notify )
       emit object->changed(prop,value);
-
-   makeDirty();
 
 }
 
@@ -1776,10 +1802,9 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
    }
 
    // This is likely illadvised. But if you are telling me to not transact it,
-   // it is up to you to mark the DB as dirty. This should reduce signals
+   // it is up to you to commit the changes
    if ( transact ) {
       sqlDatabase().commit();
-      makeDirty();
    }
    // NOTE: need to disconnect the recipe's old equipment?
    connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
@@ -1812,12 +1837,9 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy, bool tr
    }
 
    // If somebody upstream is doing the transaction, let them call recalcAll
-   // and makeDirty
-   if ( transact ) {
-      makeDirty();
-      if (! noCopy )
-         rec->recalcAll();
-   }
+   if ( transact && ! noCopy )
+      rec->recalcAll();
+
 }
 
 void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact )
@@ -1845,7 +1867,6 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
 
    if ( transact ) {
       sqlDatabase().commit();
-      makeDirty();
       rec->recalcAll();
    }
 }
@@ -1858,7 +1879,6 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
       connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
       if ( transact ) {
          rec->recalcIBU();
-         makeDirty();
       }
    }
    catch (QString e) {
@@ -1891,7 +1911,6 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
 
    if ( transact ) {
       sqlDatabase().commit();
-      makeDirty();
       rec->recalcIBU();
    }
 }
@@ -1926,7 +1945,6 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 
    if ( transact ) {
       sqlDatabase().commit();
-      makeDirty();
    }
    connect( newMash, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptMashChange(QMetaProperty,QVariant)));
    emit rec->changed( rec->metaProperty("mash"), BeerXMLElement::qVariantFromPtr(newMash) );
@@ -1944,11 +1962,8 @@ void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy, bool transact )
       throw;
    }
 
-   if ( transact ) {
-      makeDirty();
-      if (! noCopy )
-         rec->recalcAll();
-   }
+   if ( transact && ! noCopy )
+      rec->recalcAll();
 
 }
 
@@ -1975,7 +1990,6 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
    }
    if ( transact ) { 
       sqlDatabase().commit();
-      makeDirty();
       rec->recalcAll();
    }
 }
@@ -1990,11 +2004,8 @@ void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
       throw;
    }
 
-   if ( transact ) {
-      makeDirty(); 
-      if (! noCopy )
-         rec->recalcAll();
-   }
+   if ( transact  && ! noCopy )
+      rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
@@ -2025,7 +2036,6 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
 
    if ( transact ) {
       sqlDatabase().commit();
-      makeDirty();
    }
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
@@ -2036,13 +2046,10 @@ void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
    try {
       Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, y, noCopy, &allYeasts, true, transact );
       connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
-      if ( transact ) {
-         makeDirty();
-         if ( ! noCopy )
-         {
-            rec->recalcOgFg();
-            rec->recalcABV_pct();
-         }
+      if ( transact && ! noCopy )
+      {
+         rec->recalcOgFg();
+         rec->recalcABV_pct();
       }
    }
    catch (QString e) {
@@ -2074,7 +2081,6 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
 
    if ( transact ) {
       sqlDatabase().commit();
-      makeDirty();
       rec->recalcOgFg();
       rec->recalcABV_pct();
    }
@@ -2100,7 +2106,6 @@ void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, Q
    }
 
    q.finish();
-   makeDirty();
 }
 
 void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause )
@@ -2121,7 +2126,6 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
    }
 
    q.finish();
-   makeDirty();
 }
 
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
@@ -2288,7 +2292,6 @@ bool Database::updateSchema(bool* err)
             *err = true;
          return false;
       }
-      makeDirty();
    }
 
    sqlDatabase().transaction();
@@ -3730,7 +3733,6 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
       }
    }
 
-   makeDirty();
 }
 
 // Brewnotes can never be created w/ a recipe, so we will always assume the
@@ -4684,97 +4686,6 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    return ret;
 }
 
-/*
- * Cleans up the backup database if an error occurred
- * during the previous Brewtarget session.
- */
-bool Database::cleanupBackupDatabase()
-{
-   // there are no backup databases in postgresql
-   if ( Brewtarget::dbType() == Brewtarget::PGSQL )
-      return true;
-
-   // Check if the temporary backup database exists.
-   if (QFile::exists(dbTempBackupFileName))
-   {
-      // Check if the primary database also exists.
-      if (QFile::exists(dbFileName))
-      {
-         // If it does, prompt the user as to whether they'd like to keep their changes
-         // from the last session (keep the primary DB), or revert back to where they
-         // were before their changes (overwrite the primary DB with the backup).
-         QMessageBox messageBox;
-         messageBox.setIcon(QMessageBox::Question);
-         messageBox.setWindowTitle(QObject::tr("Multiple Databases Found"));
-         messageBox.setText(QObject::tr("Multiple databases were found.  Do you want to "
-                                                   "restore the changes you made during your last "
-                                                   "Brewtarget session, or rollback to before last session's changes?"));
-
-         // Add the Restore and Rollback buttons.
-         QPushButton *restoreButton = messageBox.addButton(QObject::tr("Restore"), QMessageBox::AcceptRole);
-         messageBox.addButton(QObject::tr("Rollback"), QMessageBox::RejectRole);
-         messageBox.setDefaultButton(restoreButton);
-
-         // Display the message box.
-         messageBox.exec();
-
-         // Check which button the user clicked.
-         if (messageBox.clickedButton() == restoreButton)
-         {
-            // If they clicked Restore, then simply remove the backup database and keep
-            // the primary.  If that fails, display a message as something likely has
-            // the file locked, and it needs to be resolved outside Brewtarget.
-            if (!QFile::remove(dbTempBackupFileName))
-            {
-               QMessageBox::critical(0,
-                                     "Database Restore Failure",
-                                     QString(QObject::tr("Failed to remove the temporary backup database.  "
-                                                         "Navigate to '%1' and remove "
-                                                         "'tempBackupDatabase.sqlite'.")).arg(Brewtarget::getUserDataDir().canonicalPath()));
-
-               return false;
-            }
-         }
-         else
-         {
-            // If they clicked Rollback, replace the primary DB with the temporary backup
-            // database.  If that fails, display a message as something likely has the
-            // file locked, and it needs to be cleaned up outside Brewtarget.
-            QFile::remove(dbFileName);
-            if (!QFile::rename(dbTempBackupFileName, dbFileName))
-            {
-               QMessageBox::critical(0,
-                                     "Database Rollback Failure",
-                                     QString(QObject::tr("Failed to rollback to the backup database.  "
-                                                         "Navigate to '%1', remove 'database.sqlite' if it exists, "
-                                                         "and rename 'tempBackupDatabase.sqlite' to "
-                                                         "'database.sqlite'.")).arg(Brewtarget::getUserDataDir().canonicalPath()));
-
-               return false;
-            }
-         }
-      }
-      else
-      {
-         // If the primary DB doesn't exist, then restore the backup database as the
-         // primary.  If that fails, display a message as something likely has the
-         // file locked, and it needs to be cleaned up outside Brewtarget.
-         if (!QFile::rename(dbTempBackupFileName, dbFileName))
-         {
-            QMessageBox::critical(0,
-                                  QObject::tr("Database Restore Failure"),
-                                  QString(QObject::tr("Failed to restore the backup database. Navigate to '%1' "
-                                                      "and rename 'tempBackupDatabase.sqlite' to "
-                                                      "'database.sqlite'.").arg(Brewtarget::getUserDataDir().canonicalPath())));
-
-            return false;
-         }
-      }
-   }
-
-   return true;
-}
-
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 QList<TableParams> Database::makeTableParams()
@@ -5038,22 +4949,12 @@ void Database::updateDatabase(QString const& filename)
       // If we, by some miracle, get here, commit
       sqlDatabase().commit();
       // I think
-      makeDirty();
    }
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
       blockSignals(false);
       throw;
-   }
-}
-
-void Database::makeDirty()
-{
-   // databases are updated automagically for postgres
-   if ( Brewtarget::dbType() != Brewtarget::PGSQL ) {
-      dirty = true;
-      emit isUnsavedChanged(true);
    }
 }
 
