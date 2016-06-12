@@ -6,6 +6,9 @@ body{
    margin: auto auto auto auto;
 }
 ul { list-style-type:circle; }
+table {
+   font-size: 1rem;
+}
 caption 
 { 
     caption-side:bottom; 
