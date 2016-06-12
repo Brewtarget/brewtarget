@@ -1,18 +1,21 @@
+html {
+   font-size: 100%;
+}
 body{
-   width: 8.5in;
-   margin: auto auto auto 10px; 
+   width: 90%;
+   margin: auto auto auto auto;
 }
 caption { caption-side:top; }
 ul { list-style-type:circle; }
 h1 
 { 
-   font-size:36px;
+   font-size:3rem;
    font-weight:bold;
    text-align:left;
 }
 h2
 {
-   font-size:20px;
+   font-size:2rem;
    font-weight:bold;
    text-align:center;
    border-bottom-style:solid;
@@ -82,7 +85,7 @@ img
 #steps td.check
 {
    width:10%;
-   font-size:3em;
+   font-size:3rem;
    text-align:center;
 }
 #steps td.time
