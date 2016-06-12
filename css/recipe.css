@@ -1,6 +1,9 @@
+html {
+   font-size: 100%;
+}
 body{
-   width: 8.5in;
-   margin: auto auto auto 10px; 
+   width: 90%;
+   margin: auto auto auto auto;
 }
 ul { list-style-type:circle; }
 caption 
@@ -10,20 +13,20 @@ caption
 }
 h1 
 { 
-   font-size:36px;
+   font-size:3rem;
    font-weight:bold;
    text-align:left;
 }
 h2
 {
-   font-size:18px;
+   font-size:1.5rem;
    font-weight:bold;
    text-align:left;
    border-bottom-style:solid;
 }
 h3
 {
-   font-size:14px;
+   font-size:1.17rem;
    text-align:left;
    font-weight:normal;
    border-bottom-width:1px;
@@ -32,7 +35,7 @@ h3
 
 h4
 {
-   font-size:12px;
+   font-size:1rem;
    text-align:left;
    font-weight:normal;
 }
@@ -63,20 +66,20 @@ img
 #header td.label
 {
     width:10%;
-    font-size:14px;
+    font-size:1.17rem;
    font-weight:bold;
    text-align:left;
 }
 #header td.value
 {
    width:60%;
-    font-size:14px;
+    font-size:1.17rem;
    font-weight:normal;
    text-align:left;
 }
 #header caption
 {
-    font-size:36px;
+    font-size:3rem;
     caption-side:top; 
     text-align: left;
 }
