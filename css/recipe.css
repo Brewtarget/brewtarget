@@ -76,6 +76,7 @@ img
     font-size:1.17rem;
    font-weight:normal;
    text-align:left;
+   padding-left: 12px;
 }
 #header caption
 {
@@ -105,6 +106,7 @@ img
 {
    font-weight:normal;
    text-align:left;
+   padding-left: 12px;
 }
 #title td.right
 {
