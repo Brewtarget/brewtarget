@@ -29,7 +29,6 @@ h3
    font-size:1.17rem;
    text-align:left;
    font-weight:normal;
-   border-bottom-width:1px;
    border-bottom-style:solid;
 }
 
@@ -43,13 +42,13 @@ h4
 img
 {
    position:absolute;
-   right:0px;
-   top:0px;
+   right:0rem;
+   top:0rem;
    z-index:-1;
 }
 #headerdiv
 {
-    padding-bottom:30px;
+    padding-bottom:3rem;
 }
 #header
 {
@@ -59,8 +58,6 @@ img
 }
 #header td 
 {
-   border: 0px solid white;
-   padding: 3px 7px 2px 7px;
     empty-cells:hide;
 }
 #header td.label
@@ -93,7 +90,7 @@ img
 #title td, #title th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding-left: 0.5rem;
    empty-cells:show;
 }
 #title td.left
@@ -120,13 +117,11 @@ img
 #fermentables td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #fermentables th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    font-weight:bold;
    text-align:left;
    empty-cells:show;
@@ -147,13 +142,11 @@ img
 #hops td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #hops th
 {
    border: 0px solid white;
-    padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
     empty-cells:show;
@@ -173,13 +166,11 @@ img
 #misc td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #misc th
 {
    border: 0px solid white;
-    padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
     empty-cells:show;
@@ -199,13 +190,11 @@ img
 #yeast td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #yeast th
 {
    border: 0px solid white;
-    padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
     empty-cells:show;
@@ -225,13 +214,11 @@ img
 #mash td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #mash th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    font-weight:bold;
    text-align:left;
    empty-cells:show;
