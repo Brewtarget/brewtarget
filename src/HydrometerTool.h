@@ -31,11 +31,9 @@ class HydrometerTool;
 #include <brewtarget.h>
 #include "BtLineEdit.h"
 #include "BtLabel.h"
+#include <QGroupBox>
 
-/*!
- * \brief Dialog to convert units.
- * \author Philip G. Lee
- */
+
 class HydrometerTool : public QDialog
 {
    Q_OBJECT
@@ -46,19 +44,20 @@ public:
    //! \name Public UI Variables
    //! @{
    QPushButton* pushButton_convert;
-   QLabel* inputLabel;
-   BtLineEdit* lineEdit_inputSg;
-   QLabel* outputLabel;
+   BtDensityLabel* label_inputSg;
+   BtDensityEdit* lineEdit_inputSg;
+   BtDensityLabel* label_outputSg;
    BtLineEdit* lineEdit_outputSg;
- //  QLabel* inputTempLabel;
- //  BtTemperatureEdit* lineEdit_inputTemp;
+
 
    BtTemperatureLabel *label_inputTemp;
    BtTemperatureEdit *lineEdit_inputTemp;
+   QGroupBox *groupBox_inputSg;
    //! @}
 
 public slots:
    void convert();
+
 
 protected:
 
