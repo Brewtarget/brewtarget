@@ -1,8 +1,14 @@
+html {
+   font-size: 100%;
+}
 body{
-   width: 8.5in;
-   margin: auto auto auto 10px; 
+   width: 90%;
+   margin: auto auto auto auto;
 }
 ul { list-style-type:circle; }
+table {
+   font-size: 1rem;
+}
 caption 
 { 
     caption-side:bottom; 
@@ -10,29 +16,28 @@ caption
 }
 h1 
 { 
-   font-size:36px;
+   font-size:3rem;
    font-weight:bold;
    text-align:left;
 }
 h2
 {
-   font-size:18px;
+   font-size:1.5rem;
    font-weight:bold;
    text-align:left;
    border-bottom-style:solid;
 }
 h3
 {
-   font-size:14px;
+   font-size:1.17rem;
    text-align:left;
    font-weight:normal;
-   border-bottom-width:1px;
    border-bottom-style:solid;
 }
 
 h4
 {
-   font-size:12px;
+   font-size:1rem;
    text-align:left;
    font-weight:normal;
 }
@@ -40,13 +45,13 @@ h4
 img
 {
    position:absolute;
-   right:0px;
-   top:0px;
+   right:0rem;
+   top:0rem;
    z-index:-1;
 }
 #headerdiv
 {
-    padding-bottom:30px;
+    padding-bottom:3rem;
 }
 #header
 {
@@ -56,27 +61,26 @@ img
 }
 #header td 
 {
-   border: 0px solid white;
-   padding: 3px 7px 2px 7px;
     empty-cells:hide;
 }
 #header td.label
 {
     width:10%;
-    font-size:14px;
+    font-size:1.17rem;
    font-weight:bold;
    text-align:left;
 }
 #header td.value
 {
    width:60%;
-    font-size:14px;
+    font-size:1.17rem;
    font-weight:normal;
    text-align:left;
+   padding-left: 12px;
 }
 #header caption
 {
-    font-size:36px;
+    font-size:3rem;
     caption-side:top; 
     text-align: left;
 }
@@ -90,7 +94,7 @@ img
 #title td, #title th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
+   padding-left: 0.5rem;
    empty-cells:show;
 }
 #title td.left
@@ -102,6 +106,7 @@ img
 {
    font-weight:normal;
    text-align:left;
+   padding-left: 12px;
 }
 #title td.right
 {
@@ -117,13 +122,11 @@ img
 #fermentables td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #fermentables th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    font-weight:bold;
    text-align:left;
    empty-cells:show;
@@ -144,13 +147,11 @@ img
 #hops td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #hops th
 {
    border: 0px solid white;
-    padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
     empty-cells:show;
@@ -170,13 +171,11 @@ img
 #misc td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #misc th
 {
    border: 0px solid white;
-    padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
     empty-cells:show;
@@ -196,13 +195,11 @@ img
 #yeast td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #yeast th
 {
    border: 0px solid white;
-    padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
     empty-cells:show;
@@ -222,13 +219,11 @@ img
 #mash td
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    empty-cells:show;
 }
 #mash th
 {
    border: 0px solid white;
-   padding: 3px 7px 2px 7px;
    font-weight:bold;
    text-align:left;
    empty-cells:show;
