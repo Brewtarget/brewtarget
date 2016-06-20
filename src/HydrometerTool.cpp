@@ -25,8 +25,6 @@
 #include <QSpacerItem>
 #include <math.h>
 #include <brewtarget.h>
-#include "BtLineEdit.h"
-
 
 HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent)
 {
@@ -45,75 +43,75 @@ void HydrometerTool::doLayout()
 {
    resize(279, 96);
    QHBoxLayout* hLayout = new QHBoxLayout(this);
-      QFormLayout* formLayout = new QFormLayout();
-      groupBox_inputSg = new QGroupBox(this);
-      groupBox_inputSg->setProperty("configSection", QVariant(QStringLiteral("hydrometerTool")));
-         label_inputSg = new BtDensityLabel(groupBox_inputSg);
-      //       label_inputSg ->setObjectName(QStringLiteral("label_inputSg"));
-             label_inputSg ->setContextMenuPolicy(Qt::CustomContextMenu);
-         lineEdit_inputSg = new BtDensityEdit(groupBox_inputSg);
-            lineEdit_inputSg->setMinimumSize(QSize(80, 0));
-            lineEdit_inputSg->setMaximumSize(QSize(80, 16777215));
-     //       lineEdit_inputSg->setProperty("forcedUnit",QVariant(QStringLiteral("0")));
-     //       lineEdit_inputSg->setObjectName(QStringLiteral("lineEdit_inputSg"));
-     //       lineEdit_inputSg->setProperty("editField", QVariant(QStringLiteral("70")));
+     QFormLayout* formLayout = new QFormLayout();
+     groupBox_inputSg = new QGroupBox(this);
+     groupBox_inputSg->setProperty("configSection", QVariant(QStringLiteral("hydrometerTool")));
+
+     label_inputSg = new BtDensityLabel(groupBox_inputSg);
+        label_inputSg ->setContextMenuPolicy(Qt::CustomContextMenu);
+
+     lineEdit_inputSg = new BtDensityEdit(groupBox_inputSg);
+        lineEdit_inputSg->setMinimumSize(QSize(80, 0));
+        lineEdit_inputSg->setMaximumSize(QSize(80, 16777215));
 
 
-         label_inputTemp = new BtTemperatureLabel(groupBox_inputSg);
-            label_inputTemp ->setObjectName(QStringLiteral("label_inputTemp"));
-            label_inputTemp ->setContextMenuPolicy(Qt::CustomContextMenu);
+     label_inputTemp = new BtTemperatureLabel(groupBox_inputSg);
+        label_inputTemp ->setObjectName(QStringLiteral("label_inputTemp"));
+        label_inputTemp ->setContextMenuPolicy(Qt::CustomContextMenu);
 
-         lineEdit_inputTemp = new BtTemperatureEdit(groupBox_inputSg);
-            lineEdit_inputTemp->setMinimumSize(QSize(80, 0));
-            lineEdit_inputTemp->setMaximumSize(QSize(80, 16777215));
-            lineEdit_inputTemp->setObjectName(QStringLiteral("lineEdit_inputTemp"));
- //           lineEdit_inputTemp->setProperty("editField", QVariant(QStringLiteral("boilingPoint_c")));
+     lineEdit_inputTemp = new BtTemperatureEdit(groupBox_inputSg);
+        lineEdit_inputTemp->setMinimumSize(QSize(80, 0));
+        lineEdit_inputTemp->setMaximumSize(QSize(80, 16777215));
+        lineEdit_inputTemp->setObjectName(QStringLiteral("lineEdit_inputTemp"));
 
-        label_outputSg = new BtDensityLabel(groupBox_inputSg);
-                 label_outputSg ->setContextMenuPolicy(Qt::CustomContextMenu);
-        lineEdit_outputSg = new BtDensityEdit(groupBox_inputSg);
-           lineEdit_outputSg->setMinimumSize(QSize(80, 0));
-           lineEdit_outputSg->setMaximumSize(QSize(80, 16777215));
- //          lineEdit_outputSg->setProperty("forcedUnit",QVariant(QStringLiteral("displaySG")));
-           lineEdit_outputSg->setReadOnly(true);
+
+    label_outputSg = new BtDensityLabel(groupBox_inputSg);
+        label_outputSg ->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    lineEdit_outputSg = new BtDensityEdit(groupBox_inputSg);
+        lineEdit_outputSg->setMinimumSize(QSize(80, 0));
+        lineEdit_outputSg->setMaximumSize(QSize(80, 16777215));
+        lineEdit_outputSg->setProperty("forcedUnit",QVariant(QStringLiteral("displaySG")));
+        lineEdit_outputSg->setReadOnly(true);
+
 
 
 #ifndef QT_NO_SHORTCUT
-         label_inputTemp->setBuddy(lineEdit_inputTemp);
-         label_inputSg->setBuddy(lineEdit_inputSg);
-         label_outputSg->setBuddy(lineEdit_outputSg);
+  label_inputSg->setBuddy(lineEdit_inputSg);
+  label_inputTemp->setBuddy(lineEdit_inputTemp);
+  label_outputSg->setBuddy(lineEdit_outputSg);
 #endif  //QT_NO_SHORTCUT
 
 
 
-         formLayout->setWidget(0, QFormLayout::LabelRole, label_inputSg);
-         formLayout->setWidget(0, QFormLayout::FieldRole, lineEdit_inputSg);
-         formLayout->setWidget(1, QFormLayout::LabelRole, label_inputTemp);
-         formLayout->setWidget(1, QFormLayout::FieldRole, lineEdit_inputTemp);
-         formLayout->setWidget(2, QFormLayout::LabelRole, label_outputSg);
-         formLayout->setWidget(2, QFormLayout::FieldRole, lineEdit_outputSg);
+  formLayout->setWidget(0, QFormLayout::LabelRole, label_inputSg);
+  formLayout->setWidget(0, QFormLayout::FieldRole, lineEdit_inputSg);
+  formLayout->setWidget(1, QFormLayout::LabelRole, label_inputTemp);
+  formLayout->setWidget(1, QFormLayout::FieldRole, lineEdit_inputTemp);
+  formLayout->setWidget(2, QFormLayout::LabelRole, label_outputSg);
+  formLayout->setWidget(2, QFormLayout::FieldRole, lineEdit_outputSg);
 
 
-         formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
-      QVBoxLayout* vLayout = new QVBoxLayout();
-         QSpacerItem* verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-         pushButton_convert = new QPushButton(this);
-            pushButton_convert->setAutoDefault(false);
-            pushButton_convert->setDefault(true);
-         QSpacerItem* verticalSpacer2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-         vLayout->addItem(verticalSpacer);
-         vLayout->addWidget(pushButton_convert);
-         vLayout->addWidget(groupBox_inputSg);
-         vLayout->addItem(verticalSpacer2);
+  formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+  QVBoxLayout* vLayout = new QVBoxLayout();
+     QSpacerItem* verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        pushButton_convert = new QPushButton(this);
+           pushButton_convert->setAutoDefault(false);
+           pushButton_convert->setDefault(true);
+        QSpacerItem* verticalSpacer2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+           vLayout->addItem(verticalSpacer);
+           vLayout->addWidget(pushButton_convert);
+           vLayout->addWidget(groupBox_inputSg);
+           vLayout->addItem(verticalSpacer2);
 
-         QSpacerItem* verticalSpacer3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-         vLayout->addItem(verticalSpacer3);
+       QSpacerItem* verticalSpacer3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+           vLayout->addItem(verticalSpacer3);
 
-   hLayout->addLayout(formLayout);
-   hLayout->addLayout(vLayout);
+  hLayout->addLayout(formLayout);
+  hLayout->addLayout(vLayout);
 
 
-   retranslateUi();
+  retranslateUi();
 }
 
 void HydrometerTool::retranslateUi()
@@ -145,14 +143,9 @@ void HydrometerTool::convert()
    double mg;
    double tr;
    double tc = 60;
-   bool ok = false;
 
-  // tr_string = Unit::convert(lineEdit_inputTemp->text(), fahr);
-  // tr = tr_string.remove(QRegExp("F")).toDouble();
-
-   tr = lineEdit_inputTemp->toSI();
+   tr = lineEdit_inputTemp->toSI();  //does not always return C
    tr = tr * 1.8 + 32;  //formula below uses Fahrenheit
-   //mg = lineEdit_inputSg->toDouble(&ok);
    mg = lineEdit_inputSg->toSI();
 
    //formula from http://www.straighttothepint.com/hydrometer-temperature-correction/

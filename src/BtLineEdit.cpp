@@ -53,12 +53,14 @@ void BtLineEdit::lineChanged()
 void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale)
 {
    // This is where it gets hard
+   qDebug() << "entered line change";
    double val = -1.0;
    QString amt;
    bool force = Brewtarget::hasUnits(text());
    bool ok = false;
    bool wasChanged = sender() == this;
-
+   qDebug() << "was sender:" << sender();
+   qDebug() << "was force:" << force;
    // editingFinished happens on focus being lost, regardless of anything
    // being changed. I am hoping this short circuits properly and we do
    // nothing if nothing changed.
@@ -82,7 +84,10 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
       case Unit::Time:
       case Unit::Density:
          val = toSI(oldUnit,oldScale,force);
+         qDebug() << "oldUnit" << oldUnit;
+         qDebug() << "val" << val;
          amt = displayAmount(val,3);
+         qDebug() << "amt" << amt;
          break;
       case Unit::Color:
          val = toSI(oldUnit,oldScale,force);
@@ -161,6 +166,9 @@ QString BtLineEdit::displayAmount( double amount, int precision)
 {
    Unit::unitDisplay unitDsp;
    Unit::unitScale scale;
+
+   qDebug() << "unitDsp" << unitDsp;
+   qDebug() << "scale" << scale;
 
    if ( _forceUnit != Unit::noUnit )
       unitDsp = _forceUnit;

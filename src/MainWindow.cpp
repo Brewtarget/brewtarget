@@ -58,6 +58,7 @@
 #include <QDesktopWidget>
 
 #include "Algorithms.h"
+#include "AlcoholTool.h"
 #include "MashStepEditor.h"
 #include "MashStepTableModel.h"
 #include "mash.h"
@@ -179,6 +180,7 @@ MainWindow::MainWindow(QWidget* parent)
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
    hydrometerTool = new HydrometerTool(this);
+   alcoholTool = new AlcoholTool(this);
    timerMainDialog = new TimerMainDialog(this);
    primingDialog = new PrimingDialog(this);
    strikeWaterDialog = new StrikeWaterDialog(this);
@@ -406,6 +408,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
    connect( actionConvert_Units, SIGNAL( triggered() ), converterTool, SLOT( show() ) );
    connect( actionHydrometer_Temp_Adjustment, SIGNAL( triggered() ), hydrometerTool, SLOT( show() ) );
+   connect( actionAlcohol_Calculator_Tool, SIGNAL( triggered() ), alcoholTool, SLOT( show() ) );
    connect( actionOG_Correction_Help, SIGNAL( triggered() ), ogAdjuster, SLOT( show() ) );
    connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );

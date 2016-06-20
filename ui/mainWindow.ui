@@ -1731,6 +1731,7 @@
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
     <addaction name="actionHydrometer_Temp_Adjustment"/>
+    <addaction name="actionAlcohol_Calculator_Tool"/>
     <addaction name="actionStrikeWater_Calculator"/>
     <addaction name="actionTimers"/>
     <addaction name="separator"/>
@@ -2194,6 +2195,11 @@
   <action name="actionHydrometer_Temp_Adjustment">
    <property name="text">
     <string>Hydrometer Temp Adjustment</string>
+   </property>
+  </action>
+  <action name="actionAlcohol_Calculator_Tool">
+   <property name="text">
+    <string>Alcohol Calculator Tool</string>
    </property>
   </action>
  </widget>

@@ -65,6 +65,7 @@ class RecipeFormatter;
 class OgAdjuster;
 class ConverterTool;
 class HydrometerTool;
+class AlcoholTool;
 class TimerMainDialog;
 class PrimingDialog;
 class StrikeWaterDialog;
@@ -308,6 +309,7 @@ private:
    OgAdjuster* ogAdjuster;
    ConverterTool* converterTool;
    HydrometerTool* hydrometerTool;
+   AlcoholTool* alcoholTool;
    TimerMainDialog* timerMainDialog;
    PrimingDialog* primingDialog;
    StrikeWaterDialog* strikeWaterDialog;
