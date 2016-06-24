@@ -1,0 +1,78 @@
+{
+   "fermentable" : [
+      {
+         "name" : "asdf",
+         "ftype" : "",
+         "yield" : "",
+         "color" : "",
+         "origin" : "",
+         "notes" : "",
+      },
+      {
+         "name" : "fsda",
+         "ftype" : "",
+         "yield" : "",
+         "color" : "",
+         "origin" : "",
+         "notes" : "",
+      }
+   ],
+   "hop" : [
+      {
+         "name" : "asdf",
+         "alpha" : "",
+         "notes" : "",
+         "htype" : ""
+      },
+      {
+         "name" : "fsda",
+         "alpha" : "",
+         "notes" : "",
+         "htype" : ""
+      }
+   ],
+   "misc" : [
+      {
+         "name" : "asdf",
+         "mtype" : "",
+         "use" : "",
+         "notes" : ""
+      },
+      {
+         "name" : "fsda",
+         "mtype" : "",
+         "use" : "",
+         "notes" : ""
+      }
+   ],
+   "yeast" : [
+      {
+         "name" : "asdf",
+         "ytype" : "",
+         "amount" : "",
+         "amount_is_weight" : "",
+         "laboratory" : "",
+         "product_id" : "",
+         "min_temperature" : "",
+         "max_temperature" : "",
+         "flocculation" : "",
+         "attenuation" : "",
+         "notes" : "",
+         "best_for" : ""
+      },
+      {
+         "name" : "fdsa",
+         "ytype" : "",
+         "amount" : "",
+         "amount_is_weight" : "",
+         "laboratory" : "",
+         "product_id" : "",
+         "min_temperature" : "",
+         "max_temperature" : "",
+         "flocculation" : "",
+         "attenuation" : "",
+         "notes" : "",
+         "best_for" : ""
+      }
+   ]
+}
