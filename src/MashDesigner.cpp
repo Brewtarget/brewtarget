@@ -49,12 +49,17 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateTempSlider()) );
    // Update amount slider when we move temp slider.
    connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateAmtSlider()) );
-   // Update tun fullness bar when the amount slider moves.
+   // Update tun fullness bar when either slider moves.
    connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateFullness()) );
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
+   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateFullness()) );
    // Update amount/temp text when sliders move.
    connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateAmt()) );
+   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateTemp()) );
+   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateAmt()) );
    connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateTemp()) );
+   // Update collected wort when sliders move.
+   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
+   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
    // Save the target temp whenever it's changed.
    connect( lineEdit_temp, SIGNAL(textModified()), this, SLOT(saveTargetTemp()) );
    // Move to next step.
@@ -425,7 +430,7 @@ void MashDesigner::updateMaxTemp()
 
 double MashDesigner::selectedAmount_l()
 {
-   double ratio = horizontalSlider_amount->value() / (double)(horizontalSlider_amount->maximum());
+   double ratio = horizontalSlider_amount->sliderPosition() / (double)(horizontalSlider_amount->maximum());
    double minAmt = minAmt_l();
    double maxAmt = maxAmt_l();
    double amt = minAmt + (maxAmt - minAmt)*ratio;
@@ -435,7 +440,7 @@ double MashDesigner::selectedAmount_l()
 
 double MashDesigner::selectedTemp_c()
 {
-   double ratio = horizontalSlider_temp->value() / (double)(horizontalSlider_temp->maximum());
+   double ratio = horizontalSlider_temp->sliderPosition() / (double)(horizontalSlider_temp->maximum());
    double minT = minTemp_c();
    double maxT = maxTemp_c();
    double T = minT + (maxT - minT)*ratio;
@@ -491,7 +496,7 @@ void MashDesigner::updateAmt()
 
    if( isInfusion() )
    {
-      double vol = horizontalSlider_amount->value() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
+      double vol = horizontalSlider_amount->sliderPosition() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
 
       label_amt->setText(Brewtarget::displayAmount( vol, Units::liters));
 
@@ -511,7 +516,7 @@ void MashDesigner::updateTemp()
 
    if( isInfusion() )
    {
-      double temp = horizontalSlider_temp->value() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
+      double temp = horizontalSlider_temp->sliderPosition() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
 
       label_temp->setText(Brewtarget::displayAmount( temp, Units::celsius));
 
