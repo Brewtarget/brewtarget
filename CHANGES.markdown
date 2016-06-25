@@ -3,6 +3,45 @@
 This changelog is for high-level user-visible changes to Brewtarget, intended
 for consumption by the typical end-user.
 
+
+## v2.4
+
+### New Features
+
+* PostgreSQL 9.5 is now a supported database.
+* SQLite database is automatically backed up
+* Temporary database has been removed, in favor of the automated backups
+* All writes are now live -- no need to save your work.
+* Three new mash types have been added: Batch Sparge, Fly Sparge and No
+  Sparge. The maths should work.
+* Units&scale now work for input as well as output
+* UI state persists
+* Improved equipment editor.
+
+Fixes:
+
+* When you change the scale of the Boil Time in the equipment dialog the prg crash [#137](https://github.com/Brewtarget/brewtarget/issues/137)
+* Can't delete a style from the tree [#155](https://github.com/Brewtarget/brewtarget/issues/155)
+* OG P wrongly calculated for OG sg in refractometer tool [#159](https://github.com/Brewtarget/brewtarget/issues/159)
+* We are not properly deleting things [#164](https://github.com/Brewtarget/brewtarget/issues/164)
+* Not linking with QtSvg: macdeployqt misses the svg plugins [#169](https://github.com/Brewtarget/brewtarget/issues/169)
+* First wort hop adjustment too high by a factor of 100 [#177](https://github.com/Brewtarget/brewtarget/issues/177)
+* Program crashes after moving up or down a mash step for an empty mash profile [#180](https://github.com/Brewtarget/brewtarget/issues/180)
+* HopSortFilterProxy isn't quite behaving properly on TIMECOL [#182](https://github.com/Brewtarget/brewtarget/issues/182)
+* Display amount always in volumeunit in yeast editor [#183](https://github.com/Brewtarget/brewtarget/issues/183)
+* Half the recipes in a folder are moved when dragged-and-dropped into another folder [#195](https://github.com/Brewtarget/brewtarget/issues/195)
+* Brewtarget::Initialize fails on a blank system [#210](https://github.com/Brewtarget/brewtarget/issues/210)
+* Bug: Incorrect mash temperature is shown in editor and grid [#220](https://github.com/Brewtarget/brewtarget/issues/220)
+* Changing IBU formula or mash/fwh percentages, nothing happens [#223](https://github.com/Brewtarget/brewtarget/issues/223)
+* fromXML methods are not fault tolerant [#239](https://github.com/Brewtarget/brewtarget/issues/239)
+* Database VANISHED!!! [#247](https://github.com/Brewtarget/brewtarget/issues/247)
+* Instant crash when export to print (on Ubuntu) [#250](https://github.com/Brewtarget/brewtarget/issues/250)
+* Bad css on recipe output [#251](https://github.com/Brewtarget/brewtarget/issues/251)
+* Printed pages do not fill page width on high-dpi displays [#88](https://github.com/Brewtarget/brewtarget/issues/88)
+* New ingredient can't be created into a folder [#117](https://github.com/Brewtarget/brewtarget/issues/117)
+* ibu/color formulas do not persist [#133](https://github.com/Brewtarget/brewtarget/issues/133)
+* Two running Brewtargets Resets Database [#73](https://github.com/Brewtarget/brewtarget/issues/73)
+
 ## v2.3.1
 
 ### New Features
