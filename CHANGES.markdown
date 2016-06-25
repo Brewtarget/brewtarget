@@ -3,8 +3,7 @@
 This changelog is for high-level user-visible changes to Brewtarget, intended
 for consumption by the typical end-user.
 
-
-## v2.4
+## v2.4.0
 
 ### New Features
 
@@ -18,7 +17,7 @@ for consumption by the typical end-user.
 * UI state persists
 * Improved equipment editor.
 
-Fixes:
+### Bug Fixes
 
 * When you change the scale of the Boil Time in the equipment dialog the prg crash [#137](https://github.com/Brewtarget/brewtarget/issues/137)
 * Can't delete a style from the tree [#155](https://github.com/Brewtarget/brewtarget/issues/155)
