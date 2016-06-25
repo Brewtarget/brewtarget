@@ -23,6 +23,10 @@ and extract them into lpad/.
 
         $ lconvert lpad/bt-ca.po -o bt_ca.ts
 
+NOTE: lpad/bt-pt_BR.po maps to bt_pt.ts, as Brazilian Portuguese is now the
+official dialect of Portuguese. I'm not really sure what to do with the
+lpad/bt-pt_PT.po translation, as we currently do not support dialects.
+
 2. Commit the result with the date that the .po files were exported from
    launchpad in the commit headline. This is so that we maintain a history
    of the files as they are on launchpad in case anything goes wrong and we
@@ -40,6 +44,10 @@ and extract them into lpad/.
         $ lconvert bt_en.ts -o lpad/bt.pot
         $ cd lpad
         $ tar -czf bt.tar.gz *.po *.pot 
+
+NOTE: lpad/bt-pt_BR.po maps to bt_pt.ts, as Brazilian Portuguese is now the
+official dialect of Portuguese. I'm not really sure what to do with the
+lpad/bt-pt_PT.po translation, as we currently do not support dialects.
 
 5. Upload to Launchpad.
   - First, need to 'approve' bt.pot in the upload queue and wait for it to
