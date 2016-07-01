@@ -87,7 +87,6 @@ QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
 bool Brewtarget::userDatabaseDidNotExist = false;
-QFile Brewtarget::pidFile;
 bool Brewtarget::_isInteractive = true;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
@@ -393,15 +392,16 @@ bool Brewtarget::initialize(const QString &userDirectory)
 
 
    // Use overwride if present.
-   if (!userDirectory.isEmpty() && QDir(userDirectory).exists())
+   if (!userDirectory.isEmpty() && QDir(userDirectory).exists()) {
       userDataDir = QDir(userDirectory).canonicalPath();
+   }
    // Use directory from app settings.
-   else if (hasOption("user_data_dir"))
+   else if (hasOption("user_data_dir")) {
       userDataDir = QDir(option("user_data_dir","").toString()).canonicalPath();
+   }
    // Guess where to put it.
    else {
       userDataDir = getConfigDir();
-      setOption("user_data_dir", userDataDir.canonicalPath());
    }
 
    // If the old options file exists, convert it. Otherwise, just get the
@@ -414,12 +414,15 @@ bool Brewtarget::initialize(const QString &userDirectory)
    loadMap();
    log.changeDirectory(getUserDataDir());
 
-  // Make sure we're the only instance if we're using SQLite
-  if ( instanceRunning() && dbType() == Brewtarget::SQLITE)
-    return false;
-
    // Make sure all the necessary directories and files we need exist before starting.
    ensureDirectoriesExist();
+
+   // If the directory doesn't exist, canonicalPath() will return an empty
+   // string. By waiting until after we know the directory is created, we
+   // make sure it isn't empty
+   if ( ! hasOption("user_data_dir") ) {
+      setOption("user_data_dir", userDataDir.canonicalPath());
+   }
 
    loadTranslations(); // Do internationalization.
 
@@ -440,42 +443,8 @@ bool Brewtarget::initialize(const QString &userDirectory)
       return false;
 }
 
-bool Brewtarget::instanceRunning() {
-   // In Unix, make sure the user isn't running 2 copies.
-#if defined(Q_OS_UNIX)
-   pidFile.setFileName(QString("%1.pid").arg(getUserDataDir().canonicalPath()));
-   if( pidFile.exists() )
-   {
-      // Read the pid.
-      qint64 pid;
-      pidFile.open(QIODevice::ReadOnly);
-      {
-         QTextStream pidStream(&pidFile);
-         pidStream >> pid;
-      }
-      pidFile.close();
-
-      // kill(2) with sig=0 does existence error checking w/o sending any real signal.
-      if ( kill(pid, 0) == 0 )
-      {
-         std::cerr << "Brewtarget is already running. PID: " << pid << std::endl;
-         return true;
-      }
-   }
-
-   // Open the pidFile, erasing any contents, and write our pid.
-   pidFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
-   {
-      QTextStream pidStream(&pidFile);
-      pidStream << QCoreApplication::applicationPid();
-   }
-   pidFile.close();
-
-#endif
-   return false;
-}
-
-Brewtarget::DBTypes Brewtarget::dbType() { 
+Brewtarget::DBTypes Brewtarget::dbType()
+{ 
    if ( _dbType == Brewtarget::NODB )
       _dbType = (Brewtarget::DBTypes)option("dbType", dbType()).toInt();
    return _dbType;
@@ -532,9 +501,6 @@ void Brewtarget::cleanup()
    delete _mainWindow;
 
    Database::dropInstance();
-#if defined(Q_OS_LINUX)
-   pidFile.remove();
-#endif
 
 }
 
@@ -1387,7 +1353,6 @@ void Brewtarget::setOption(QString attribute, QVariant value, const QString sect
    else
       name = generateName(attribute,section,ops);
 
-
    QSettings().setValue(name,value);
 }
 
@@ -1403,10 +1368,17 @@ QVariant Brewtarget::option(QString attribute, QVariant default_value, QString s
    return QSettings().value(name,default_value);
 }
 
-void Brewtarget::removeOption(QString attribute)
+void Brewtarget::removeOption(QString attribute, QString section)
 {
-   if ( hasOption(attribute) )
-        QSettings().remove(attribute);
+   QString name;
+
+   if ( section.isNull() )
+      name = attribute;
+   else
+      name = generateName(attribute,section,NOOP);
+
+   if ( hasOption(name) )
+        QSettings().remove(name);
 }
 
 QString Brewtarget::generateName(QString attribute, const QString section, iUnitOps ops)

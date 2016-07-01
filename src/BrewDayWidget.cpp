@@ -292,7 +292,9 @@ void BrewDayWidget::pushInstructionPrint()
    QPrintDialog *dialog = new QPrintDialog(printer, this);
 
    /* Instantiate the TextBrowser and then connect its signal */
-   connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+   // connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+   // GSG: QTextBrowser does not have a loadFinished signal.
+   // Also don't see where this is called anywhere else.
 
    dialog->setWindowTitle(tr("Print Document"));
    if (dialog->exec() != QDialog::Accepted)
@@ -310,6 +312,7 @@ void BrewDayWidget::pushInstructionPrint()
    pDoc += "</body></html>";
 
    doc->setHtml(pDoc);
+   loadComplete(true);
 }
 
 void BrewDayWidget::pushInstructionPreview()
