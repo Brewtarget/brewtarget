@@ -68,7 +68,7 @@ typedef struct
 {
    QString tableName; // Name of the table.
    QStringList propName; // List of BeerXML column names.
-   BeerXMLElement* (Database::*newElement)(void); // Function to make a new ingredient in this table.
+   BeerXMLElement* (Database::*newElement)(int); // Function to make a new ingredient in this table.
 } TableParams;
 
 /*!

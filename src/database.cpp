@@ -4690,7 +4690,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 QList<TableParams> Database::makeTableParams()
 {
-   typedef BeerXMLElement* (Database::*NewIngFunc)(void);
+   typedef BeerXMLElement* (Database::*NewIngFunc)(int);
 
    QList<TableParams> ret;
    TableParams tmp;
@@ -4705,7 +4705,7 @@ QList<TableParams> Database::makeTableParams()
       "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
       "notes";
    tmp.newElement =
-      (NewIngFunc) (Equipment*(Database::*)(void))
+      (NewIngFunc) (Equipment*(Database::*)())
       &Database::newEquipment;
 
    ret.append(tmp);
@@ -4719,7 +4719,7 @@ QList<TableParams> Database::makeTableParams()
       "max_in_batch" << "recommend_mash" << "ibu_gal_per_lb";
    tmp.newElement =
       (NewIngFunc)
-      (Fermentable*(Database::*)(void))
+      (Fermentable*(Database::*)())
       &Database::newFermentable;
 
    //==============================Hops=============================
@@ -4732,7 +4732,7 @@ QList<TableParams> Database::makeTableParams()
    // Second cast is to force the conversion of the function pointer.
    tmp.newElement =
       (NewIngFunc)
-      (Hop*(Database::*)(void))
+      (Hop*(Database::*)())
       &Database::newHop;
 
    ret.append(tmp);
@@ -4745,7 +4745,7 @@ QList<TableParams> Database::makeTableParams()
       "use_for" << "notes";
    tmp.newElement =
       (NewIngFunc)
-      (Misc*(Database::*)(void))
+      (Misc*(Database::*)())
       &Database::newMisc;
 
    ret.append(tmp);
@@ -4760,7 +4760,7 @@ QList<TableParams> Database::makeTableParams()
       "profile" << "ingredients" << "examples";
    tmp.newElement =
       (NewIngFunc)
-      (Style*(Database::*)(void))
+      (Style*(Database::*)())
       &Database::newStyle;
 
    ret.append(tmp);
@@ -4775,7 +4775,7 @@ QList<TableParams> Database::makeTableParams()
       "times_cultured" << "max_reuse" << "add_to_secondary";
    tmp.newElement =
       (NewIngFunc)
-      (Yeast*(Database::*)(void))
+      (Yeast*(Database::*)())
       &Database::newYeast;
 
    ret.append(tmp);
@@ -4788,7 +4788,7 @@ QList<TableParams> Database::makeTableParams()
       "chloride" << "sodium" << "magnesium" << "ph" << "notes";
    tmp.newElement =
       (NewIngFunc)
-      (Water*(Database::*)(void))
+      (Water*(Database::*)())
       &Database::newWater;
 
    ret.append(tmp);
@@ -4859,10 +4859,7 @@ void Database::updateDatabase(QString const& filename)
 
          QSqlQuery qOldBtIngInsert( sqlDatabase() );
          qOldBtIngInsert.prepare(
-            QString("INSERT INTO bt_%1 id=:id %2_id=:%3_id")
-               .arg(tp.tableName)
-               .arg(tp.tableName)
-               .arg(tp.tableName) );
+            QString("INSERT INTO bt_%1 (id,%1_id) values (:id,:%1_id)").arg(tp.tableName) );
 
          // Resize propVal appropriately for current table.
          propVal.clear();
@@ -4923,7 +4920,7 @@ void Database::updateDatabase(QString const& filename)
             else
             {
                // Create a new ingredient.
-               oldid = (this->*(tp.newElement))()->_key;
+               oldid = (this->*(tp.newElement))(0)->_key;
                // Copy in the new data.
                qUpdateOldIng.bindValue( ":id", oldid );
 
