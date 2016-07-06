@@ -355,8 +355,6 @@ const QDir Brewtarget::getConfigDir()
    // Now we should be in the base directory (i.e. Brewtarget-2.0.0/)
 
    dir.cd("data");
-   if( success != 0 )
-      *success = true;
    return dir.absolutePath() + "/";
 
 #else
