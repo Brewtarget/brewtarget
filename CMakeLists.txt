@@ -87,6 +87,8 @@ IF( ${NO_QTMULTIMEDIA} )
    ADD_DEFINITIONS( -DNO_QTMULTIMEDIA )
 ENDIF()
 
+ADD_DEFINITIONS("-std=c++11")
+
 IF( ${DO_RELEASE_BUILD} )
    SET( CMAKE_BUILD_TYPE "Release" )
 ELSE()
@@ -98,7 +100,6 @@ IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    #SET( CMAKE_OSX_ARCHITECTURES i386 x86_64 ) # Build intel binary. 
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
-
 #============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(SRCDIR "${ROOTDIR}/src")
@@ -641,3 +642,5 @@ ELSE()
    MESSAGE( STATUS "Building Brewtarget." )
    ADD_SUBDIRECTORY(${SRCDIR})
 ENDIF()
+
+
