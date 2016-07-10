@@ -143,6 +143,8 @@ bool MashDesigner::nextStep(int step)
    lineEdit_time->clear();
 
    horizontalSlider_amount->setValue(0); // Least amount of water.
+   // Update max amount here, instead of later. Cause later makes no sense.
+   updateMaxAmt();
 
    return true;
 }
@@ -206,7 +208,7 @@ double MashDesigner::maxAmt_l()
       return 0;
 
    // However much more we can fit in the tun.
-   if( ! isFlySparge() )
+   if( ! isSparge() )
    {
       return equip->tunVolume_l() - mashVolume_l();
    }
@@ -652,6 +654,7 @@ void MashDesigner::typeChanged(int t)
    {
       horizontalSlider_amount->setEnabled(true);
       horizontalSlider_temp->setEnabled(true);
+      updateMaxAmt();
    }
    else if( isDecoction() )
    {
