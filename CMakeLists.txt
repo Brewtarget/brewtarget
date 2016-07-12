@@ -70,6 +70,11 @@ SET( MACOSX_BUNDLE_ICON_FILE "BrewtargetIcon.icns" )
 SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 
 #==============================Compile flags===================================
+
+# Enable and enforce c++11 standards, so that we may lambda
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED_ON)
+
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )
       SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -Wno-long-long -O2" )
@@ -86,8 +91,6 @@ ENDIF()
 IF( ${NO_QTMULTIMEDIA} )
    ADD_DEFINITIONS( -DNO_QTMULTIMEDIA )
 ENDIF()
-
-ADD_DEFINITIONS("-std=c++11")
 
 IF( ${DO_RELEASE_BUILD} )
    SET( CMAKE_BUILD_TYPE "Release" )
