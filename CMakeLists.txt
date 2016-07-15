@@ -1,6 +1,6 @@
 PROJECT(brewtarget)
-CMAKE_MINIMUM_REQUIRED( VERSION 3.1 )
-CMAKE_POLICY( VERSION 3.1 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
+CMAKE_POLICY( VERSION 3.0 )
 
 # Creates a Makefile.
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
@@ -103,6 +103,9 @@ IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    #SET( CMAKE_OSX_ARCHITECTURES i386 x86_64 ) # Build intel binary. 
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
+
+ADD_DEFINITIONS("-std=c++11")
+
 #============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(SRCDIR "${ROOTDIR}/src")
