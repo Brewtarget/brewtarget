@@ -1346,7 +1346,9 @@ QString RecipeFormatter::buildNotesHtml()
       return "";
 
    notes = QString("<h3>%1</h3>").arg(tr("Notes"));
-   notes += QString("%1").arg( QTextDocument(rec->notes()).toHtml());
+   // NOTE: (heh) Using the QTextDocument.toHtml() method doesn't really work
+   // here. So we cheat and use some newer functionality
+   notes += rec->notes().toHtmlEscaped();
 
    return notes;
 }

@@ -97,7 +97,6 @@ void MashDesigner::show()
       );
       return;
    }
-
    setVisible(nextStep(0));
 }
 
@@ -143,25 +142,37 @@ bool MashDesigner::nextStep(int step)
    lineEdit_time->clear();
 
    horizontalSlider_amount->setValue(0); // Least amount of water.
+   // Update max amount here, instead of later. Cause later makes no sense.
+   updateMaxAmt();
 
    return true;
 }
 
 void MashDesigner::saveStep()
 {
+   double temp,maxT;
+
    MashStep::Type type = static_cast<MashStep::Type>(comboBox_type->currentIndex());
+
+   temp = lineEdit_temp->toSI();
+   maxT = maxTemp_c();
+   if ( temp > maxT ) 
+      temp = maxT;
 
    mashStep->setName( lineEdit_name->text() );
    mashStep->setType( type );
-   mashStep->setStepTemp_c(   Brewtarget::qStringToSI(lineEdit_temp->text(), Units::celsius) );
-   mashStep->setStepTime_min( Brewtarget::qStringToSI(lineEdit_time->text(), Units::minutes) );
+   mashStep->setStepTemp_c( temp );
+   mashStep->setStepTime_min( lineEdit_time->toSI() );
 
    // finish a few things -- this may be premature optimization
    connect( mashStep, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    if( isInfusion() )
    {
       mashStep->setInfuseAmount_l( selectedAmount_l() );
-      mashStep->setInfuseTemp_c( selectedTemp_c() );
+      temp = selectedTemp_c();
+      if ( temp > maxT ) 
+         temp = maxT;
+      mashStep->setInfuseTemp_c( temp );
    }
    emit mash->mashStepsChanged();
 }
@@ -206,7 +217,7 @@ double MashDesigner::maxAmt_l()
       return 0;
 
    // However much more we can fit in the tun.
-   if( ! isFlySparge() )
+   if( ! isSparge() )
    {
       return equip->tunVolume_l() - mashVolume_l();
    }
@@ -420,12 +431,19 @@ void MashDesigner::updateMaxAmt()
 
 void MashDesigner::updateMinTemp()
 {
-   label_tempMin->setText(Brewtarget::displayAmount(minTemp_c(), Units::celsius));
+   double minTemp = minTemp_c();
+
+   if ( minTemp > 100 )
+      minTemp = maxTemp_c();
+
+   label_tempMin->setText(Brewtarget::displayAmount(minTemp, Units::celsius));
 }
 
 void MashDesigner::updateMaxTemp()
 {
-   label_tempMax->setText(Brewtarget::displayAmount(maxTemp_c(), Units::celsius));
+   double maxTemp = maxTemp_c();
+
+   label_tempMax->setText(Brewtarget::displayAmount(maxTemp, Units::celsius));
 }
 
 double MashDesigner::selectedAmount_l()
@@ -511,12 +529,17 @@ void MashDesigner::updateAmt()
 
 void MashDesigner::updateTemp()
 {
+   double temp,maxT;
+
    if( mashStep == 0 )
       return;
 
    if( isInfusion() )
    {
-      double temp = horizontalSlider_temp->sliderPosition() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
+      temp = horizontalSlider_temp->sliderPosition() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
+      maxT = maxTemp_c();
+      if ( temp > maxT )
+         temp = maxT;
 
       label_temp->setText(Brewtarget::displayAmount( temp, Units::celsius));
 
@@ -525,14 +548,19 @@ void MashDesigner::updateTemp()
    }
    else if( isDecoction() )
       label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), Units::celsius));
-   else
-      // label_temp->setText(Brewtarget::displayAmount( mashStep->stepTemp_c(), Units::celsius));
+   else {
+   
       label_temp->setText(Brewtarget::displayAmount( stepTemp_c(), Units::celsius));
+   }
 }
 
 void MashDesigner::saveTargetTemp()
 {
    double temp = stepTemp_c();
+   double maxT = maxTemp_c();
+
+   if ( temp > maxT ) 
+      temp = maxT;
 
    // be nice and reset the field so it displays in proper units
    lineEdit_temp->setText(temp);
@@ -652,6 +680,7 @@ void MashDesigner::typeChanged(int t)
    {
       horizontalSlider_amount->setEnabled(true);
       horizontalSlider_temp->setEnabled(true);
+      updateMaxAmt();
    }
    else if( isDecoction() )
    {
