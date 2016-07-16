@@ -599,33 +599,46 @@ void EquipmentEditor::save()
 
    double ga_LKg = grainAbs * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
 
-   QMessageBox::StandardButton ret;
+   QString message,inform,describe;
+   bool problems=false;
 
    // Do some prewarning things. I would prefer to do this only on change, but
    // we need to be worried about new equipment too.
-   if ( lineEdit_tunVolume->toSI() <= 0.001 )
-      ret = QMessageBox::warning(this,
-               tr("Tun Volume Warning"),
-               tr("The tun volume you entered is 0. This may cause problems"),
-               QMessageBox::Save | QMessageBox::Cancel,
-               QMessageBox::Save);
+   message = tr("This equipment profile may break brewtarget's maths");
+   inform = QString("%1%2")
+            .arg(tr("The following values are not set:"))
+            .arg(QString("<ul>"));
+   if ( qFuzzyCompare(lineEdit_tunVolume->toSI(),0.0) ) {
+      problems = true;
+      inform = inform + QString("<li>%1</li>").arg(tr("mash tun volume (all-grain and BIAB only)"));
+   }
 
-   if ( ret != QMessageBox::Cancel && lineEdit_batchSize->toSI() <= 0.001 )
-      ret = QMessageBox::warning(this,
-               tr("Batch Size Warning"),
-               tr("The batch size you entered is 0. This may cause problems"),
-               QMessageBox::Save | QMessageBox::Cancel,
-               QMessageBox::Save);
+   if ( qFuzzyCompare(lineEdit_batchSize->toSI(), 0.0) ) {
+      problems = true;
+      inform = inform + QString("<li>%1</li>").arg(tr("batch size"));
+   }
 
-   if ( ret != QMessageBox::Cancel && lineEdit_hopUtilization->toSI() < 0.001 )
-      ret = QMessageBox::warning(this,
-               tr("Hop Utilization Warning"),
-               tr("The hop utilization percentage you entered is 0. This may cause problems"),
-               QMessageBox::Save | QMessageBox::Cancel,
-               QMessageBox::Save);
+   if ( qFuzzyCompare(lineEdit_hopUtilization->toSI(), 0.0) ) {
+      problems = true;
+      inform = inform + QString("<li>%1</li>").arg(tr("hop utilization"));
+   }
+   inform = inform + QString("</ul");
 
-   if ( ret == QMessageBox::Cancel )
-      return;
+   if ( problems ) {
+      QMessageBox theQuestion;
+      int retcon;
+
+      theQuestion.setWindowTitle( tr("Calculation Warnings") );
+      theQuestion.setText( message );
+      theQuestion.setInformativeText( inform );
+      theQuestion.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+      theQuestion.setDefaultButton(QMessageBox::Save);
+      theQuestion.setIcon(QMessageBox::Warning);
+
+      retcon = theQuestion.exec();
+      if ( retcon == QMessageBox::Cancel )
+         return;
+   }
 
    obsEquip->setName( lineEdit_name->text() );
    obsEquip->setBoilSize_l( lineEdit_boilSize->toSI() );
