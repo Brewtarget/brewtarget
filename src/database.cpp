@@ -90,7 +90,6 @@ QHash<Brewtarget::DBTable,QString> Database::tableNames;
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable;
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTable = Database::tableToChildTableHash();
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTable = Database::tableToInventoryTableHash();
-const QList<TableParams> Database::tableParams = Database::makeTableParams();
 
 QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
@@ -4690,8 +4689,6 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 QList<TableParams> Database::makeTableParams()
 {
-   typedef BeerXMLElement* (Database::*NewIngFunc)(void);
-
    QList<TableParams> ret;
    TableParams tmp;
 
@@ -4704,9 +4701,7 @@ QList<TableParams> Database::makeTableParams()
       "evap_rate" << "real_evap_rate" << "boil_time" << "calc_boil_volume" <<
       "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
       "notes";
-   tmp.newElement =
-      (NewIngFunc) (Equipment*(Database::*)(void))
-      &Database::newEquipment;
+   tmp.newElement = [&]() { return this->newEquipment(); };
 
    ret.append(tmp);
    //==============================Fermentables================================
@@ -4717,10 +4712,7 @@ QList<TableParams> Database::makeTableParams()
       "add_after_boil" << "origin" << "supplier" << "notes" <<
       "coarse_fine_diff" << "moisture" << "diastatic_power" << "protein" <<
       "max_in_batch" << "recommend_mash" << "ibu_gal_per_lb";
-   tmp.newElement =
-      (NewIngFunc)
-      (Fermentable*(Database::*)(void))
-      &Database::newFermentable;
+   tmp.newElement = [&]() { return this->newFermentable(); };
 
    //==============================Hops=============================
    tmp.tableName = "hop";
@@ -4730,10 +4722,7 @@ QList<TableParams> Database::makeTableParams()
       "caryophyllene" << "cohumulone" << "myrcene",
    // First cast specifies which newHop() I want, since it is overloaded.
    // Second cast is to force the conversion of the function pointer.
-   tmp.newElement =
-      (NewIngFunc)
-      (Hop*(Database::*)(void))
-      &Database::newHop;
+   tmp.newElement = [&]() { return this->newHop(); };
 
    ret.append(tmp);
 
@@ -4743,10 +4732,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "mtype" << "use" << "time" << "amount" << "amount_is_weight" <<
       "use_for" << "notes";
-   tmp.newElement =
-      (NewIngFunc)
-      (Misc*(Database::*)(void))
-      &Database::newMisc;
+   tmp.newElement = [&]() { return this->newMisc(); };
 
    ret.append(tmp);
    //==================================Styles==================================
@@ -4758,10 +4744,7 @@ QList<TableParams> Database::makeTableParams()
       "fg_max" << "ibu_min" << "ibu_max" << "color_min" << "color_max" <<
       "abv_min" << "abv_max" << "carb_min" << "carb_max" << "notes" <<
       "profile" << "ingredients" << "examples";
-   tmp.newElement =
-      (NewIngFunc)
-      (Style*(Database::*)(void))
-      &Database::newStyle;
+   tmp.newElement = [&]() { return this->newStyle(); };
 
    ret.append(tmp);
 
@@ -4773,10 +4756,7 @@ QList<TableParams> Database::makeTableParams()
       "laboratory" << "product_id" << "min_temperature" << "max_temperature" <<
       "flocculation" << "attenuation" << "notes" << "best_for" <<
       "times_cultured" << "max_reuse" << "add_to_secondary";
-   tmp.newElement =
-      (NewIngFunc)
-      (Yeast*(Database::*)(void))
-      &Database::newYeast;
+   tmp.newElement = [&]() { return this->newYeast(); };
 
    ret.append(tmp);
 
@@ -4786,10 +4766,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "amount" << "calcium" << "bicarbonate" << "sulfate" <<
       "chloride" << "sodium" << "magnesium" << "ph" << "notes";
-   tmp.newElement =
-      (NewIngFunc)
-      (Water*(Database::*)(void))
-      &Database::newWater;
+   tmp.newElement = [&]() { return this->newWater(); };
 
    ret.append(tmp);
 
@@ -4803,6 +4780,7 @@ void Database::updateDatabase(QString const& filename)
 
    QVariant btid, newid, oldid;
    QVariant zero(0);
+   QList<TableParams> tableParams = makeTableParams();
 
    QList<QVariant> propVal;
    QStringList varAndHolder;
@@ -4859,10 +4837,7 @@ void Database::updateDatabase(QString const& filename)
 
          QSqlQuery qOldBtIngInsert( sqlDatabase() );
          qOldBtIngInsert.prepare(
-            QString("INSERT INTO bt_%1 id=:id %2_id=:%3_id")
-               .arg(tp.tableName)
-               .arg(tp.tableName)
-               .arg(tp.tableName) );
+            QString("INSERT INTO bt_%1 (id,%1_id) values (:id,:%1_id)").arg(tp.tableName) );
 
          // Resize propVal appropriately for current table.
          propVal.clear();
@@ -4923,7 +4898,8 @@ void Database::updateDatabase(QString const& filename)
             else
             {
                // Create a new ingredient.
-               oldid = (this->*(tp.newElement))()->_key;
+               oldid = tp.newElement()->_key;
+
                // Copy in the new data.
                qUpdateOldIng.bindValue( ":id", oldid );
 

@@ -27,6 +27,7 @@
 
 class Database;
 
+#include <functional>
 #include <QDomDocument>
 #include <QDomNode>
 #include <QList>
@@ -68,7 +69,9 @@ typedef struct
 {
    QString tableName; // Name of the table.
    QStringList propName; // List of BeerXML column names.
-   BeerXMLElement* (Database::*newElement)(void); // Function to make a new ingredient in this table.
+   std::function<BeerXMLElement*()> newElement;
+
+   // BeerXMLElement* (Database::*newElement)(int); // Function to make a new ingredient in this table.
 } TableParams;
 
 /*!
@@ -488,8 +491,6 @@ private:
    static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTableHash();
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
 
-   static const QList<TableParams> tableParams;
-
    // Each thread should have its own connection to QSqlDatabase.
    static QHash< QThread*, QString > _threadToConnection;
    static QMutex _threadToConnectionMutex;
@@ -879,7 +880,7 @@ private:
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
 
-   static QList<TableParams> makeTableParams();
+   QList<TableParams> makeTableParams();
 
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.
