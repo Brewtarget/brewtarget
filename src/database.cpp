@@ -543,15 +543,14 @@ void Database::unload()
    // The postgres driver wants nothing to do with this. Core gets dumped if
    // we try it. Since we don't need to copy things about for postgres...
 
-   if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
 
-      QSqlDatabase::database( dbConName, false ).close();
+   QSqlDatabase::database( dbConName, false ).close();
+   QSqlDatabase::removeDatabase( dbConName );
 
-      QSqlDatabase::removeDatabase( dbConName );
-
+   if (loadWasSuccessful && Brewtarget::dbType() == Brewtarget::SQLITE )
+   {
       dbFile.close();
-      if (loadWasSuccessful)
-         automaticBackup();
+      automaticBackup();
    }
 }
 
@@ -664,6 +663,7 @@ void Database::dropInstance()
    static QMutex mutex;
 
    mutex.lock();
+   dbInstance->unload();
    delete dbInstance;
    dbInstance=0;
    mutex.unlock();
