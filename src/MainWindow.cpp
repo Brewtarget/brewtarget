@@ -1931,12 +1931,6 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    // cause any more queries.
    setVisible(false);
 
-   // Ask the user if they want to save changes, only if the dirty bit has
-   // been thrown
-   // We should also make sure the backup db still exists -- there's some edge
-   // cases where it doesn't.
-
-   Database::instance().unload();
 }
 
 void MainWindow::copyRecipe()
