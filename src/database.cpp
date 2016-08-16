@@ -313,7 +313,7 @@ bool Database::load()
    schemaUpdated = updateSchema(&schemaErr);
 
    // Since updateSchema could add new tables, we have to wait until this
-   // point to populate the tables. 
+   // point to populate the tables.
    Database::tableNames = tableNamesHash();
    Database::classNameToTable = classNameToTableHash();
 
@@ -597,7 +597,7 @@ void Database::automaticBackup()
    backupToDir(backupDir,newName);
 
    // If we have maxBackups == -1, it means never clean. It also means we
-   // don't track the filenames. 
+   // don't track the filenames.
    if ( maxBackups == -1 )  {
       Brewtarget::removeOption("files","backups");
       return;
@@ -624,7 +624,7 @@ void Database::automaticBackup()
       }
    }
 
-   // re-encode the list 
+   // re-encode the list
    listOfFiles = fileNames.join(",");
 
    // finally, reset the counter and save the new list of files
@@ -1346,7 +1346,7 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
       tmp = newIngredient(&allMashSteps);
 
       // I *think* we need to set the mash_id first
-      sqlUpdate( Brewtarget::MASHSTEPTABLE, 
+      sqlUpdate( Brewtarget::MASHSTEPTABLE,
                  QString("mash_id=%1 ").arg(mash->_key),
                  QString("id=%1").arg(tmp->_key)
                );
@@ -1364,7 +1364,7 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
 
    sqlDatabase().commit();
 
-   if ( connected ) 
+   if ( connected )
       connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
    emit changed( metaProperty("mashs"), QVariant() );
@@ -1420,7 +1420,7 @@ Recipe* Database::newRecipe()
 
 // TODO: Oh my. This the entire thing should be transacted. It took some work
 // to get all the addToRecipe methods to play nice.
-// 
+//
 Recipe* Database::newRecipe(Recipe* other)
 {
    Recipe* tmp;
@@ -1851,7 +1851,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
       sqlDatabase().transaction();
    }
 
-   try { 
+   try {
       foreach (Fermentable* ferm, ferms )
       {
          Fermentable* newFerm = addIngredientToRecipe<Fermentable>(rec,ferm,false,&allFermentables,true,false);
@@ -1891,7 +1891,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
    if ( hops.size() == 0 )
       return;
 
-   if ( transact ) 
+   if ( transact )
       sqlDatabase().transaction();
 
    try {
@@ -1919,7 +1919,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
    Mash* newMash = m;
 
-   if ( transact ) 
+   if ( transact )
       sqlDatabase().transaction();
    // Make a copy of mash.
    // Making a copy of the mash isn't enough. We need a copy of the mashsteps
@@ -1972,7 +1972,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
    if ( miscs.size() == 0 )
       return;
 
-   if ( transact ) 
+   if ( transact )
       sqlDatabase().transaction();
 
    try {
@@ -1988,7 +1988,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
       }
       throw;
    }
-   if ( transact ) { 
+   if ( transact ) {
       sqlDatabase().commit();
       rec->recalcAll();
    }
@@ -2016,7 +2016,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
    if ( s == 0 )
       return;
 
-   if ( transact ) 
+   if ( transact )
       sqlDatabase().transaction();
 
    try {
@@ -2303,7 +2303,7 @@ bool Database::updateSchema(bool* err)
 
       if( popchildq.next() )
          repopChild = popchildq.record().value("repopulateChildrenOnNextStart").toInt();
-      else 
+      else
          throw QString("%1 %2").arg(popchildq.lastQuery()).arg(popchildq.lastError().text());
 
       if(repopChild == 1) {
@@ -3051,9 +3051,9 @@ void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
    mashStepNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("TYPE");
-   if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) 
+   if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) )
       tmpText = doc.createTextNode(  MashStep::types[0] );
-   else 
+   else
       tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
@@ -3748,7 +3748,7 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
       // Need to tell the brewnote not to perform the calculations
       ret->setLoading(true);
       fromXml( ret, BrewNote::tagToProp, node);
-      if ( ! ret->isValid() ) 
+      if ( ! ret->isValid() )
          throw QString("Error loading brewnote from XML");
 
       ret->setLoading(false);
@@ -3814,7 +3814,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
       }
    }
    catch (QString e) {
-      if ( ! parent ) 
+      if ( ! parent )
          sqlDatabase().rollback();
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       blockSignals(false);
@@ -3822,7 +3822,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    }
 
    blockSignals(false);
-   if ( ! parent ) 
+   if ( ! parent )
       sqlDatabase().commit();
 
    if( createdNew )
@@ -3877,7 +3877,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
          ret->invalidate();
       else {
          int ndx = Fermentable::types.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 ) 
+         if ( ndx != -1 )
             ret->setType( static_cast<Fermentable::Type>(ndx));
          else
             ret->invalidate();
@@ -4012,7 +4012,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
          int ndx = getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret);
          if ( ndx != -1 )
             ret->setType( static_cast<Hop::Type>(ndx) );
-         else 
+         else
             ret->invalidate();
       }
 
@@ -4023,7 +4023,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
          int ndx = Hop::forms.indexOf(n.firstChild().toText().nodeValue());
          if ( ndx != -1 )
             ret->setForm( static_cast<Hop::Form>(ndx));
-         else 
+         else
             ret->invalidate();
       }
 
@@ -4137,12 +4137,12 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       blockSignals(false);
-      if ( ! parent ) 
+      if ( ! parent )
          sqlDatabase().rollback();
       throw;
    }
 
-   if ( ! parent ) 
+   if ( ! parent )
       sqlDatabase().commit();
 
    blockSignals(false);
@@ -4185,7 +4185,7 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
          str[0] = str.at(0).toTitleCase();
          int ndx =  MashStep::types.indexOf(str);
 
-         if ( ndx != -1 ) 
+         if ( ndx != -1 )
             ret->setType( static_cast<MashStep::Type>(ndx) );
          else
             ret->invalidate();
@@ -4465,7 +4465,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Style*> matching;
 
-   try { 
+   try {
       // If we are just importing a style by itself, need to do some dupe-checking.
       if( parent == 0 )
       {
@@ -4494,7 +4494,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
          ret->invalidate();
       else {
          int ndx = Style::types.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 ) 
+         if ( ndx != -1 )
             ret->setType(static_cast<Style::Type>(ndx));
          else
             ret->invalidate();
@@ -4593,7 +4593,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Yeast*> matching;
 
-   try { 
+   try {
       // If we are just importing a yeast by itself, need to do some dupe-checking.
       if( parent == 0 )
       {
@@ -4633,7 +4633,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
          ret->invalidate();
       else {
          int ndx = Yeast::forms.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 ) 
+         if ( ndx != -1 )
             ret->setForm( static_cast<Yeast::Form>(ndx) );
          else
             ret->invalidate();
@@ -4807,7 +4807,7 @@ void Database::updateDatabase(QString const& filename)
    QList<QVariant> propVal;
    QStringList varAndHolder;
 
-   try { 
+   try {
       QString newCon("newSqldbCon");
       QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
       newSqldb.setDatabaseName(filename);
@@ -4879,7 +4879,7 @@ void Database::updateDatabase(QString const& filename)
                throw QString("Could not retrieve new ingredient: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
             if( !qNewIng.next() )
                throw QString("Could not advance query: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
-               
+
             QList<QVariant>::iterator it = propVal.begin();
             foreach( QString pn, tp.propName )
             {
@@ -4897,7 +4897,7 @@ void Database::updateDatabase(QString const& filename)
 
             // Find the bt_<ingredient> record in the local table.
             qOldBtIng.bindValue( ":btid", btid );
-            if ( ! qOldBtIng.exec() ) 
+            if ( ! qOldBtIng.exec() )
                throw QString("Could not find btID (%1): %2 %3")
                         .arg(btid.toInt())
                         .arg(qOldBtIng.lastQuery())
@@ -4911,12 +4911,12 @@ void Database::updateDatabase(QString const& filename)
 
                qUpdateOldIng.bindValue( ":id", oldid );
 
-               if ( ! qUpdateOldIng.exec() ) 
+               if ( ! qUpdateOldIng.exec() )
                   throw QString("Could not update old btID (%1): %2 %3")
                            .arg(oldid.toInt())
                            .arg(qUpdateOldIng.lastQuery())
                            .arg(qUpdateOldIng.lastError().text());
-                           
+
             }
             // If the btid doesn't exist in the old bt_hop table, do an insert into
             // the old hop table, then into the old bt_hop table.
@@ -4938,7 +4938,7 @@ void Database::updateDatabase(QString const& filename)
                qOldBtIngInsert.bindValue( ":id", btid );
                qOldBtIngInsert.bindValue( QString(":%1_id").arg(tp.tableName), oldid );
 
-               if ( !  qOldBtIngInsert.exec() ) 
+               if ( !  qOldBtIngInsert.exec() )
                   throw QString("Could not insert btID (%1): %2 %3")
                            .arg(btid.toInt())
                            .arg(qOldBtIngInsert.lastQuery())
@@ -5197,7 +5197,7 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
                throw QString("Could not insert new row %1 : %2").arg(insertNew.lastQuery()).arg(insertNew.lastError().text());
          }
          // We need to manually reset the sequences
-         if ( newType == Brewtarget::PGSQL ) {
+         if ( newType == Brewtarget::PGSQL && maxid > 0 ) {
             QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(table).arg(maxid);
             QSqlQuery updateSeq(seq, newDb);
 
