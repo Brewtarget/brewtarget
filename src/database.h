@@ -897,7 +897,8 @@ private:
                              int Portnum);
    //! \brief makes a query string we can prepare. Needed this in two places,
    // so it got a method
-   QString makeQueryString( QSqlRecord here, QString realName );
+   QString makeInsertString( QSqlRecord here, QString realName );
+   QString makeUpdateString( QSqlRecord here, QString realName, int key );
 
    //! \brief converts sqlite values (mostly booleans) into something postgres
    // wants
