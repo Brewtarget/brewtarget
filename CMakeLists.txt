@@ -1,6 +1,6 @@
 PROJECT(brewtarget)
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8.8 )
-CMAKE_POLICY( VERSION 2.8.11 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
+CMAKE_POLICY( VERSION 3.0 )
 
 # Creates a Makefile.
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
@@ -70,6 +70,11 @@ SET( MACOSX_BUNDLE_ICON_FILE "BrewtargetIcon.icns" )
 SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 
 #==============================Compile flags===================================
+
+# Enable and enforce c++11 standards, so that we may lambda
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED_ON)
+
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )
       SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -Wno-long-long -O2" )
@@ -98,6 +103,8 @@ IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    #SET( CMAKE_OSX_ARCHITECTURES i386 x86_64 ) # Build intel binary. 
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
+
+ADD_DEFINITIONS("-std=c++11")
 
 #============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -641,3 +648,5 @@ ELSE()
    MESSAGE( STATUS "Building Brewtarget." )
    ADD_SUBDIRECTORY(${SRCDIR})
 ENDIF()
+
+
