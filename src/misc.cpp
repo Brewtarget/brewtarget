@@ -59,35 +59,23 @@ Misc::Misc(Misc const& other) : BeerXMLElement(other)
 }
 
 //============================"GET" METHODS=====================================
-QString Misc::name() const
-{
-   return get( "name" ).toString();
-}
-
-Misc::Type Misc::type() const
-{
-   return static_cast<Misc::Type>(types.indexOf(get("mtype").toString()));
-}
-
-const QString Misc::typeString() const
-{
-   return types.at(type());
-}
+Misc::Type Misc::type() const { return static_cast<Misc::Type>(types.indexOf(get("mtype").toString())); }
+const QString Misc::typeString() const { return types.at(type()); }
+Misc::Use Misc::use() const { return static_cast<Misc::Use>(uses.indexOf(get("use").toString())); }
+const QString Misc::useString() const { return uses.at(use()); }
+double Misc::amount()    const { return get("amount").toDouble(); }
+double Misc::time()      const { return get("time").toDouble(); }
+bool Misc::amountIsWeight() const { return get("amount_is_weight").toBool(); }
+QString Misc::useFor() const { return get("use_for").toString(); }
+QString Misc::notes() const { return get("notes").toString(); }
+double Misc::inventory() const { return getInventory("amount").toDouble(); }
+Misc::AmountType Misc::amountType() const { return amountIsWeight() ? AmountType_Weight : AmountType_Volume; }
+const QString Misc::amountTypeString() const { return amountTypes.at(amountType()); }
 
 const QString Misc::typeStringTr() const
 {
    QStringList typesTr = QStringList() << tr("Spice") << tr("Fining") << tr("Water Agent") << tr("Herb") << tr("Flavor") << tr("Other");
    return typesTr.at(type());
-}
-
-Misc::Use Misc::use() const
-{
-   return static_cast<Misc::Use>(uses.indexOf(get("use").toString()));
-}
-
-const QString Misc::useString() const
-{
-   return uses.at(use());
 }
 
 const QString Misc::useStringTr() const
@@ -96,56 +84,19 @@ const QString Misc::useStringTr() const
    return usesTr.at(use());
 }
 
-Misc::AmountType Misc::amountType() const
-{
-   return amountIsWeight() ? AmountType_Weight : AmountType_Volume;
-}
-
-const QString Misc::amountTypeString() const
-{
-   return amountTypes.at(amountType());
-}
-
 const QString Misc::amountTypeStringTr() const
 {
    QStringList amountTypesTr = QStringList() << tr("Weight") << tr("Volume");
    return amountTypesTr.at(amountType());
 }
 
-double Misc::amount()    const { return get("amount").toDouble(); }
-double Misc::time()      const { return get("time").toDouble(); }
-
-bool Misc::amountIsWeight() const { return get("amount_is_weight").toBool(); }
-
-QString Misc::useFor() const { return get("use_for").toString(); }
-QString Misc::notes() const { return get("notes").toString(); }
-
-double Misc::inventory() const 
-{ 
-   return getInventory("amount").toDouble();
-}
-
 //============================"SET" METHODS=====================================
-void Misc::setName( const QString& var )
-{
-   set( "name", "name", var );
-   emit changedName(var);
-}
-
-void Misc::setType( Type t )
-{
-   set( "type", "mtype", types.at(t) );
-}
-
-void Misc::setUse( Use u )
-{
-   set( "use", "use", uses.at(u) );
-}
-
-void Misc::setAmountType( AmountType t )
-{
-   setAmountIsWeight(t == AmountType_Weight ? true : false);
-}
+void Misc::setType( Type t ) { set( "type", "mtype", types.at(t) ); }
+void Misc::setUse( Use u ) { set( "use", "use", uses.at(u) ); }
+void Misc::setAmountType( AmountType t ) { setAmountIsWeight(t == AmountType_Weight ? true : false); }
+void Misc::setUseFor( const QString& var ) { set( "useFor", "use_for", var ); }
+void Misc::setNotes( const QString& var ) { set( "notes", "notes", var ); }
+void Misc::setAmountIsWeight( bool var ) { set( "amountIsWeight", "amount_is_weight", var ); }
 
 void Misc::setAmount( double var )
 {
@@ -169,21 +120,6 @@ void Misc::setTime( double var )
       Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
    else
       set( "time", "time", var );
-}
-
-void Misc::setAmountIsWeight( bool var )
-{
-   set( "amountIsWeight", "amount_is_weight", var );
-}
-
-void Misc::setUseFor( const QString& var )
-{
-   set( "useFor", "use_for", var );
-}
-
-void Misc::setNotes( const QString& var )
-{
-   set( "notes", "notes", var );
 }
 
 //========================OTHER METHODS=========================================

@@ -47,8 +47,6 @@ public:
 
    virtual ~Water() {}
    
-   //! \brief The name.
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    //! \brief The amount in liters.
    Q_PROPERTY( double amount_l READ amount_l WRITE setAmount_l /*NOTIFY changed*/ /*changedAmount_l*/ )
    //! \brief The ppm of calcium.
@@ -68,7 +66,6 @@ public:
    //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
    
-   QString name() const;
    double amount_l() const;
    double calcium_ppm() const;
    double bicarbonate_ppm() const;
@@ -79,7 +76,6 @@ public:
    double ph() const;
    QString notes() const;
 
-   void setName( const QString &var );
    void setAmount_l( double var );
    void setCalcium_ppm( double var );
    void setSulfate_ppm( double var );

@@ -329,7 +329,7 @@ bool Database::load()
    }
 
    // Initialize the SELECT * query hashes.
-   selectAll = Database::selectAllHash();
+   // selectAll = Database::selectAllHash();
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -2127,6 +2127,7 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
    q.finish();
 }
 
+/*
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 {
    QHash<Brewtarget::DBTable,QSqlQuery> ret;
@@ -2142,7 +2143,7 @@ QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 
    return ret;
 }
-
+*/
 // Now the payoff for a lot of hard work elsewhere
 QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
 {

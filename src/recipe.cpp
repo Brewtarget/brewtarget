@@ -799,12 +799,6 @@ void Recipe::addWater( Water* var )
 }
 
 //==============================="SET" METHODS=================================
-void Recipe::setName( const QString &var )
-{
-   set( "name", "name", var );
-   emit changedName(var);
-}
-
 void Recipe::setType( const QString &var )
 {
    QString tmp;
@@ -1260,7 +1254,6 @@ double Recipe::points()
 }
 
 //=========================Relational Getters=============================
-
 Style* Recipe::style() const
 {
    return Database::instance().style(this);
@@ -1312,7 +1305,6 @@ QList<Water*> Recipe::waters() const
 }
 
 //==============================Getters===================================
-QString Recipe::name()             const { return get("name").toString(); }
 QString Recipe::type()             const { return get("type").toString(); }
 QString Recipe::brewer()           const { return get("brewer").toString(); }
 QString Recipe::asstBrewer()       const { return get("assistant_brewer").toString(); }
