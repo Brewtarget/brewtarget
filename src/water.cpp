@@ -54,33 +54,12 @@ bool operator==(Water &w1, Water &w2)
    return w1.name() == w2.name();
 }
 
-/*
-void Water::setDefaults()
-{
-   name = "";
-   amount_l = 0.0;
-   calcium_ppm = 0.0;
-   bicarbonate_ppm = 0.0;
-   chloride_ppm = 0.0;
-   sodium_ppm = 0.0;
-   magnesium_ppm = 0.0;
-   ph = 7.0;
-   notes = "";
-}
-*/
-
 Water::Water()
    : BeerXMLElement()
 {
 }
 
 //================================"SET" METHODS=================================
-void Water::setName( const QString &var )
-{
-   set("name", "name", var);
-   emit changedName(var);
-}
-
 void Water::setAmount_l( double var )
 {
    set("amount_l", "amount", var);
@@ -127,7 +106,6 @@ void Water::setNotes( const QString &var )
 }
 
 //=========================="GET" METHODS=======================================
-QString Water::name() const { return get("name").toString(); }
 QString Water::notes() const { return get("notes").toString(); }
 
 double Water::sulfate_ppm() const { return get("sulfate").toDouble(); }

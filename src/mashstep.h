@@ -50,8 +50,6 @@ public:
    
    virtual ~MashStep() {}
 
-   //! \brief The name.
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The translated \c Type string.
@@ -73,7 +71,6 @@ public:
    //! \brief The step number in a sequence of other steps.
    Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
-   void setName( const QString &var );
    void setType( Type t );
    void setInfuseAmount_l( double var );
    void setStepTemp_c( double var );
@@ -83,7 +80,6 @@ public:
    void setInfuseTemp_c( double var );
    void setDecoctionAmount_l( double var );
    
-   QString name() const;
    Type type() const;
    const QString typeString() const;
    const QString typeStringTr() const;

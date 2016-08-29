@@ -69,12 +69,6 @@ Style::Style()
 }
 
 //==============================="SET" METHODS==================================
-void Style::setName( const QString& var )
-{
-   set( "name", "name", var );
-   emit changedName(var);
-}
-
 void Style::setCategory( const QString& var )
 {
    set( "category", "category", var );
@@ -241,7 +235,6 @@ void Style::setExamples( const QString& var )
 }
 
 //============================="GET" METHODS====================================
-QString Style::name() const { return get("name").toString(); }
 QString Style::category() const { return get("category").toString(); }
 QString Style::categoryNumber() const { return get("category_number").toString(); }
 QString Style::styleLetter() const { return get("style_letter").toString(); }
