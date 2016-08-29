@@ -60,8 +60,6 @@ public:
 
    virtual ~Fermentable() {}
    
-   //! \brief The name.
-   Q_PROPERTY( QString name                  READ name                   WRITE setName                   NOTIFY changedName )
    //! \brief The \c Type.
    Q_PROPERTY( Type type                     READ type                   WRITE setType                   /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The \c Type string.
@@ -115,15 +113,17 @@ public:
    //! \brief Whether this fermentable is a sugar. Somewhat redundant, but it makes for nice symetry elsewhere
    Q_PROPERTY( bool isSugar                  READ isSugar STORED false)
    
-   const QString name() const;
    const Type type() const;
    const QString typeString() const;
+
    //! Returns a translated type string.
    const QString typeStringTr() const;
    const AdditionMethod additionMethod() const;
+
    //! Returns a translated addition method string.
    const QString additionMethodStringTr() const;
    const AdditionTime additionTime() const;
+
    //! Returns a translated addition time string.
    const QString additionTimeStringTr() const;
    double amount_kg() const;
@@ -142,15 +142,9 @@ public:
    bool recommendMash() const;
    double ibuGalPerLb() const;
 
-   /* disabled per-cell
-   unitDisplay displayUnit() const;
-   unitScale displayScale() const;
-   */
-
    // Calculated getters.
    double equivSucrose_kg() const;
 
-   void setName( const QString& str );
    void setType( Type t );
    void setAdditionMethod( AdditionMethod m );
    void setAdditionTime( AdditionTime t );

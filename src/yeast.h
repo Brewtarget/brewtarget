@@ -56,8 +56,6 @@ public:
    
    virtual ~Yeast() {}
    
-   //! \brief The name.
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The \c Type string.
@@ -104,7 +102,6 @@ public:
    Q_PROPERTY( bool addToSecondary READ addToSecondary WRITE setAddToSecondary /*NOTIFY changed*/ /*changedAddToSecondary*/ )
    
    // Setters
-   void setName( const QString& var );
    void setType( Type t );
    void setForm( Form f );
    void setAmount( double var );
@@ -123,7 +120,6 @@ public:
    void setAddToSecondary( bool var );
    
    // Getters
-   QString name() const;
    Type type() const;
    const QString typeString() const;
    const QString typeStringTr() const;
@@ -151,23 +147,6 @@ signals:
 
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   /*
-   void changedType(Type);
-   void changedForm(Form);
-   void changedAmount(double);
-   void changedAmountIsWeight(bool);
-   void changedLaboratory(QString);
-   void changedProductID(QString);
-   void changedMinTemperature_c(double);
-   void changedMaxTemperature_c(double);
-   void changedFlocculation(Flocculation);
-   void changedAttenuation_pct(double);
-   void changedNotes(QString);
-   void changedBestFor(QString);
-   void changedTimesCultured(int);
-   void changedMaxReuse(int);
-   void changedAddToSecondary(bool);
-   */
 
 private:
    Yeast();
@@ -181,7 +160,6 @@ private:
    bool isValidType(const QString& str) const;
    bool isValidForm(const QString& str) const;
    bool isValidFlocculation(const QString& str) const;
-   //void setDefaults();
    
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
