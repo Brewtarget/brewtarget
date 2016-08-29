@@ -54,31 +54,37 @@ class BeerXMLElement : public QObject
 {
    Q_OBJECT
    Q_CLASSINFO("version","1")
-   
+
    friend class Database;
 public:
    BeerXMLElement();
    BeerXMLElement( BeerXMLElement const& other );
 
-   // Everything that inherits from BeerXML has delete, display and a folder
-   Q_PROPERTY( bool deleted READ deleted WRITE setDeleted )
-   Q_PROPERTY( bool display READ display WRITE setDisplay )
+   // Everything that inherits from BeerXML has a name, delete, display and a folder
+   Q_PROPERTY( QString name   READ name WRITE setName )
+   Q_PROPERTY( bool deleted   READ deleted WRITE setDeleted )
+   Q_PROPERTY( bool display   READ display WRITE setDisplay )
    Q_PROPERTY( QString folder READ folder WRITE setFolder )
 
    Q_PROPERTY( int key READ key )
    Q_PROPERTY( Brewtarget::DBTable table READ table )
-   
+
    //! Convenience method to determine if we are deleted or displayed
    bool deleted() const;
    bool display() const;
    //! Access to the folder attribute.
    QString folder() const;
+   //! Access to the name attribute.
+   QString name() const;
 
    //! And ways to set those flags
-   void setDeleted(bool var);
-   void setDisplay(bool var);
+   void setDeleted(const bool var);
+   void setDisplay(const bool var);
    //! and a way to set the folder
-   virtual void setFolder(QString var, bool signal=true);
+   virtual void setFolder(const QString var, bool signal=true);
+
+   //!
+   void setName(const QString var);
 
    //! \returns our key in the table we are stored in.
    int key() const;
@@ -90,7 +96,7 @@ public:
    QMetaProperty metaProperty(const char* name) const;
    //! Convenience method to get a meta property by name.
    QMetaProperty metaProperty(QString const& name) const;
-   
+
    // Some static helpers to convert to/from text.
    static double getDouble( const QDomText& textNode );
    static bool getBool( const QDomText& textNode );
@@ -106,14 +112,14 @@ public:
    static QString text(int val);
    //! Convert the date to string in Qt::ISODate format for storage NOT display.
    static QString text(QDate const& val);
-   
+
    //! Use this to pass pointers around in QVariants.
    static inline QVariant qVariantFromPtr( BeerXMLElement* ptr )
    {
       uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
       return QVariant::fromValue<uintptr_t>(addr);
    }
-   
+
    static inline BeerXMLElement* extractPtr( QVariant ptrVal )
    {
       uintptr_t addr = ptrVal.value<uintptr_t>();
@@ -122,7 +128,7 @@ public:
 
    bool isValid();
    void invalidate();
-   
+
 signals:
    /*!
     * Passes the meta property that has changed about this object.
@@ -131,9 +137,10 @@ signals:
     */
    void changed(QMetaProperty, QVariant value = QVariant());
    void changedFolder(QString);
-   
+   void changedName(QString);
+
 protected:
-   
+
    //! The key of this ingredient in its table.
    int _key;
    //! The table where this ingredient is stored.
@@ -149,24 +156,27 @@ protected:
     * 2) Call the NOTIFY method associated with \c prop_name if \c notify == true.
     */
    void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
-   
+
    /*!
     * \param col_name - The database column of the attribute we want to get.
     * Returns the value of the attribute specified by key/table/col_name.
     */
    QVariant get( const char* col_name ) const;
-   
+
    void setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    QVariant getInventory( const char* col_name ) const;
-   
-   
-   
+
 private:
    /*!
     * \param valid - Indicates if the beerXML element was valid. There is a problem with importing invalid
     * XML. I'm hoping this helps fix it
     */
   bool _valid;
+  mutable QString _folder;
+  mutable QString _name;
+  mutable QVariant _display;
+  mutable QVariant _deleted;
+
 };
 
 

@@ -76,7 +76,6 @@ Yeast::Yeast(Yeast const& other) : BeerXMLElement(other)
 }
 
 //============================="GET" METHODS====================================
-QString Yeast::name() const { return get("name").toString(); }
 QString Yeast::laboratory() const { return get("laboratory").toString();; }
 QString Yeast::productID() const { return get("product_id").toString(); }
 QString Yeast::notes() const { return get("notes").toString(); }
@@ -130,12 +129,6 @@ const QString Yeast::flocculationStringTr() const
 }
 
 //============================="SET" METHODS====================================
-void Yeast::setName( const QString& var )
-{
-   set("name", "name", var);
-   emit changedName(var);
-}
-
 void Yeast::setType( Yeast::Type t )
 {
    set("type", "ytype", types.at(t));
@@ -238,7 +231,6 @@ void Yeast::setAddToSecondary( bool var )
 }
 
 //========================OTHER METHODS=========================================
-
 bool Yeast::isValidType(const QString& str) const
 {
    static const QString types[] = {"Ale", "Lager", "Wheat", "Wine", "Champagne"};

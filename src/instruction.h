@@ -45,7 +45,6 @@ public:
    
    virtual ~Instruction() {}
 
-   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
    Q_PROPERTY( QString directions READ directions WRITE setDirections /*NOTIFY changed*/ /*changedDirections*/ )
    Q_PROPERTY( bool hasTimer READ hasTimer WRITE setHasTimer /*NOTIFY changed*/ /*changedHasTimer*/ )
    Q_PROPERTY( QString timerValue READ timerValue WRITE setTimerValue /*NOTIFY changed*/ /*changedTimerValue*/ )
@@ -56,7 +55,6 @@ public:
    Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
    // "set" methods.
-   void setName(const QString& n);
    void setDirections(const QString& dir);
    void setHasTimer(bool has);
    void setTimerValue(const QString& timerVal);
@@ -65,7 +63,6 @@ public:
    void addReagent(const QString& reagent);
 
    // "get" methods.
-   QString name();
    QString directions();
    bool hasTimer();
    QString timerValue();

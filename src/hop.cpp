@@ -80,29 +80,6 @@ bool Hop::isValidForm(const QString& str)
    return (forms.indexOf(str) >= 0);
 }
 
-/*
-void Hop::setDefaults()
-{
-   name = "";
-   use = USEBOIL;
-   notes = "";
-   type = TYPEBOTH;
-   form = FORMPELLET;
-   origin = "";
-   substitutes = "";
-   
-   alpha_pct = 0.0;
-   amount_kg = 0.0;
-   time_min = 0.0;
-   beta_pct = 0.0;
-   hsi_pct = 0.0;
-   humulene_pct = 0.0;
-   caryophyllene_pct = 0.0;
-   cohumulone_pct = 0.0;
-   myrcene_pct = 0.0;
-}
-*/
-
 Hop::Hop()
    : BeerXMLElement()
 {
@@ -114,12 +91,6 @@ Hop::Hop( Hop const& other )
 }
 
 //============================="SET" METHODS====================================
-void Hop::setName( const QString& str )
-{
-   set("name","name",str);
-   emit changedName(str);
-}
-
 void Hop::setAlpha_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
@@ -285,7 +256,6 @@ void Hop::setMyrcene_pct( double num )
 
 //============================="GET" METHODS====================================
 
-const QString Hop::name() const { return get("name").toString(); }
 Hop::Use Hop::use() const { return static_cast<Hop::Use>(uses.indexOf(get("use").toString())); }
 const QString Hop::useString() const { return get("use").toString(); }
 Hop::Form Hop::form() const { return static_cast<Hop::Form>(forms.indexOf(get("form").toString())); }
@@ -311,7 +281,6 @@ double Hop::inventory() const
 {
    return getInventory("amount").toDouble();
 }
- 
 
 const QString Hop::useStringTr() const
 {

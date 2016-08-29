@@ -329,7 +329,7 @@ bool Database::load()
    }
 
    // Initialize the SELECT * query hashes.
-   selectAll = Database::selectAllHash();
+   // selectAll = Database::selectAllHash();
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -2127,6 +2127,7 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
    q.finish();
 }
 
+/*
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 {
    QHash<Brewtarget::DBTable,QSqlQuery> ret;
@@ -2142,7 +2143,7 @@ QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 
    return ret;
 }
-
+*/
 // Now the payoff for a lot of hard work elsewhere
 QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
 {
@@ -5063,7 +5064,8 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
    }
 }
 
-QString Database::makeQueryString( QSqlRecord here, QString realName ) {
+QString Database::makeInsertString( QSqlRecord here, QString realName )
+{
    QString columns,qmarks;
 
    // Yes. I went from named to positional place holders. Such is life
@@ -5080,7 +5082,25 @@ QString Database::makeQueryString( QSqlRecord here, QString realName ) {
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
 }
 
-QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field) {
+QString Database::makeUpdateString( QSqlRecord here, QString realName, int key )
+{
+   QString columns;
+
+   // Yes. I am still using positional place holders, and you are still dealing
+   // with it
+   for(int i=0; i < here.count(); ++i) {
+      if ( ! columns.isEmpty() ) {
+         columns += QString(",%1=?").arg( here.fieldName(i) );
+      }
+      else {
+         columns = QString("%1=?").arg( here.fieldName(i) );
+      }
+   }
+   return QString("UPDATE %1 SET %2 where id=%3").arg(realName).arg(columns).arg(key);
+}
+
+QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
+{
    QVariant retVar = field.value();
    if ( field.type() == QVariant::Bool ) {
       switch(newType) {
@@ -5098,7 +5118,8 @@ QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field) {
    return retVar;
 }
 
-QStringList Database::allTablesInOrder(QSqlQuery q) {
+QStringList Database::allTablesInOrder(QSqlQuery q)
+{
    QString query = "SELECT name FROM bt_alltables ORDER BY table_id";
    QStringList tmp;
 
@@ -5119,13 +5140,13 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
    // There are a lot of tables to process
    foreach( QString table, tables ) {
       QSqlField field;
-      QString columns,qmarks;
       bool mustPrepare = true;
       int maxid = -1;
 
-      // settings and bt_alltables don't get copied; metatables are created
-      // when the database is
-      if ( table == "settings" || table == "bt_alltables" )
+      // bt_alltables don't get copied; metatables are created
+      // when the database is. I used to say this about settings. I was wrong
+      // about settings
+      if ( table == "bt_alltables" )
          continue;
 
       QString findAllQuery = QString("SELECT * FROM %1").arg(table);
@@ -5136,13 +5157,13 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
          newDb.transaction();
 
-         QSqlQuery insertNew(newDb); // we will prepare this in a bit
+         QSqlQuery upsertNew(newDb); // we will prepare this in a bit
 
          // Start reading the records from the old db
          while(readOld.next()) {
             int idx;
             QSqlRecord here = readOld.record();
-            QString insertQuery;
+            QString upsertQuery;
 
             idx = here.indexOf("id");
 
@@ -5155,22 +5176,27 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
             // Prepare the insert for this table if required
             if ( mustPrepare ) {
-               insertQuery = makeQueryString(here,table);
-               insertNew.prepare(insertQuery);
+               if ( table == QStringLiteral("settings") ) {
+                  upsertQuery = makeUpdateString(here,table,here.value(idx).toInt());
+               }
+               else {
+                  upsertQuery = makeInsertString(here,table);
+               }
+               upsertNew.prepare(upsertQuery);
                // but do it only once for this table
                mustPrepare = false;
             }
             // All that's left is to bind
             for(int i=0; i < here.count(); ++i) {
-               insertNew.bindValue(i,
+               upsertNew.bindValue(i,
                         convertValue(newType, here.field(i)),
                         QSql::In
                );
             }
 
             // and execute
-            if ( ! insertNew.exec() )
-               throw QString("Could not insert new row %1 : %2").arg(insertNew.lastQuery()).arg(insertNew.lastError().text());
+            if ( ! upsertNew.exec() )
+               throw QString("Could not insert new row %1 : %2").arg(upsertNew.lastQuery()).arg(upsertNew.lastError().text());
          }
          // We need to manually reset the sequences
          if ( newType == Brewtarget::PGSQL && maxid > 0 ) {

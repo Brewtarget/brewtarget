@@ -61,31 +61,11 @@ Mash::Mash()
 {
 }
 
-void Mash::setName( const QString& var )
-{
-   set("name", "name", var);
-   emit changedName(var);
-}
-
-void Mash::setGrainTemp_c( double var )
-{
-   set("grainTemp_c", "grain_temp", var);
-}
-
-void Mash::setNotes( const QString& var )
-{
-   set("notes", "notes", var);
-}
-
-void Mash::setTunTemp_c( double var )
-{
-   set("tunTemp_c", "tun_temp", var);
-}
-
-void Mash::setSpargeTemp_c( double var )
-{
-   set("spargeTemp_c", "sparge_temp", var);
-}
+void Mash::setGrainTemp_c( double var ) { set("grainTemp_c", "grain_temp", var); }
+void Mash::setNotes( const QString& var ) { set("notes", "notes", var); }
+void Mash::setTunTemp_c( double var ) { set("tunTemp_c", "tun_temp", var); }
+void Mash::setSpargeTemp_c( double var ) { set("spargeTemp_c", "sparge_temp", var); }
+void Mash::setEquipAdjust( bool var ) { set("equipAdjust", "equip_adjust", var); }
 
 void Mash::setPh( double var )
 {
@@ -126,11 +106,6 @@ void Mash::setTunSpecificHeat_calGC( double var )
    }
 }
 
-void Mash::setEquipAdjust( bool var )
-{
-   set("equipAdjust", "equip_adjust", var);
-}
-
 void Mash::removeAllMashSteps()
 {
    int i, size;
@@ -142,17 +117,13 @@ void Mash::removeAllMashSteps()
 }
 
 //============================="GET" METHODS====================================
-
-QString Mash::name()                 const { return get("name").toString(); }
 QString Mash::notes()                const { return get("notes").toString(); }
-
 double Mash::grainTemp_c()           const { return get("grain_temp").toDouble(); }
 double Mash::tunTemp_c()             const { return get("tun_temp").toDouble(); }
 double Mash::spargeTemp_c()          const { return get("sparge_temp").toDouble(); }
 double Mash::ph()                    const { return get("ph").toDouble(); }
 double Mash::tunWeight_kg()          const { return get("tun_weight").toDouble(); }
 double Mash::tunSpecificHeat_calGC() const { return get("tun_specific_heat").toDouble(); }
-
 bool Mash::equipAdjust()             const { return get("equip_adjust").toBool(); }
 
 // === other methods ===
