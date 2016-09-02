@@ -754,7 +754,7 @@ int BtTreeModel::type(const QModelIndex &index) const
 
 QString BtTreeModel::name(const QModelIndex &idx)
 {
-   return idx.isValid() ? item(idx)->name() : "";
+   return idx.isValid() ? item(idx)->name() : QString();
 }
 
 int BtTreeModel::mask()

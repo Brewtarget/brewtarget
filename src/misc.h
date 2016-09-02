@@ -54,8 +54,6 @@ public:
    
    virtual ~Misc() {}
    
-   //! \brief The name.
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The  \c Type string.
@@ -88,7 +86,6 @@ public:
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
    
    // Set
-   void setName( const QString &var );
    void setType( Type t );
    void setUse( Use u );
    void setAmountType( AmountType t );
@@ -100,7 +97,7 @@ public:
    void setNotes( const QString &var );
    
    // Get
-   QString name() const;
+//   QString name() const;
    Type type() const;
    const QString typeString() const;
    const QString typeStringTr() const;

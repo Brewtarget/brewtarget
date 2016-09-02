@@ -90,7 +90,6 @@ QHash<Brewtarget::DBTable,QString> Database::tableNames;
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable;
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTable = Database::tableToChildTableHash();
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTable = Database::tableToInventoryTableHash();
-const QList<TableParams> Database::tableParams = Database::makeTableParams();
 
 QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
@@ -313,7 +312,7 @@ bool Database::load()
    schemaUpdated = updateSchema(&schemaErr);
 
    // Since updateSchema could add new tables, we have to wait until this
-   // point to populate the tables. 
+   // point to populate the tables.
    Database::tableNames = tableNamesHash();
    Database::classNameToTable = classNameToTableHash();
 
@@ -330,7 +329,7 @@ bool Database::load()
    }
 
    // Initialize the SELECT * query hashes.
-   selectAll = Database::selectAllHash();
+   // selectAll = Database::selectAllHash();
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -543,15 +542,14 @@ void Database::unload()
    // The postgres driver wants nothing to do with this. Core gets dumped if
    // we try it. Since we don't need to copy things about for postgres...
 
-   if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
 
-      QSqlDatabase::database( dbConName, false ).close();
+   QSqlDatabase::database( dbConName, false ).close();
+   QSqlDatabase::removeDatabase( dbConName );
 
-      QSqlDatabase::removeDatabase( dbConName );
-
+   if (loadWasSuccessful && Brewtarget::dbType() == Brewtarget::SQLITE )
+   {
       dbFile.close();
-      if (loadWasSuccessful)
-         automaticBackup();
+      automaticBackup();
    }
 }
 
@@ -597,7 +595,7 @@ void Database::automaticBackup()
    backupToDir(backupDir,newName);
 
    // If we have maxBackups == -1, it means never clean. It also means we
-   // don't track the filenames. 
+   // don't track the filenames.
    if ( maxBackups == -1 )  {
       Brewtarget::removeOption("files","backups");
       return;
@@ -624,7 +622,7 @@ void Database::automaticBackup()
       }
    }
 
-   // re-encode the list 
+   // re-encode the list
    listOfFiles = fileNames.join(",");
 
    // finally, reset the counter and save the new list of files
@@ -664,6 +662,7 @@ void Database::dropInstance()
    static QMutex mutex;
 
    mutex.lock();
+   dbInstance->unload();
    delete dbInstance;
    dbInstance=0;
    mutex.unlock();
@@ -1346,7 +1345,7 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
       tmp = newIngredient(&allMashSteps);
 
       // I *think* we need to set the mash_id first
-      sqlUpdate( Brewtarget::MASHSTEPTABLE, 
+      sqlUpdate( Brewtarget::MASHSTEPTABLE,
                  QString("mash_id=%1 ").arg(mash->_key),
                  QString("id=%1").arg(tmp->_key)
                );
@@ -1364,7 +1363,7 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
 
    sqlDatabase().commit();
 
-   if ( connected ) 
+   if ( connected )
       connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
    emit changed( metaProperty("mashs"), QVariant() );
@@ -1420,7 +1419,7 @@ Recipe* Database::newRecipe()
 
 // TODO: Oh my. This the entire thing should be transacted. It took some work
 // to get all the addToRecipe methods to play nice.
-// 
+//
 Recipe* Database::newRecipe(Recipe* other)
 {
    Recipe* tmp;
@@ -1851,7 +1850,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
       sqlDatabase().transaction();
    }
 
-   try { 
+   try {
       foreach (Fermentable* ferm, ferms )
       {
          Fermentable* newFerm = addIngredientToRecipe<Fermentable>(rec,ferm,false,&allFermentables,true,false);
@@ -1891,7 +1890,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
    if ( hops.size() == 0 )
       return;
 
-   if ( transact ) 
+   if ( transact )
       sqlDatabase().transaction();
 
    try {
@@ -1919,7 +1918,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
    Mash* newMash = m;
 
-   if ( transact ) 
+   if ( transact )
       sqlDatabase().transaction();
    // Make a copy of mash.
    // Making a copy of the mash isn't enough. We need a copy of the mashsteps
@@ -1972,7 +1971,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
    if ( miscs.size() == 0 )
       return;
 
-   if ( transact ) 
+   if ( transact )
       sqlDatabase().transaction();
 
    try {
@@ -1988,7 +1987,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
       }
       throw;
    }
-   if ( transact ) { 
+   if ( transact ) {
       sqlDatabase().commit();
       rec->recalcAll();
    }
@@ -2016,7 +2015,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
    if ( s == 0 )
       return;
 
-   if ( transact ) 
+   if ( transact )
       sqlDatabase().transaction();
 
    try {
@@ -2128,6 +2127,7 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
    q.finish();
 }
 
+/*
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 {
    QHash<Brewtarget::DBTable,QSqlQuery> ret;
@@ -2143,7 +2143,7 @@ QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 
    return ret;
 }
-
+*/
 // Now the payoff for a lot of hard work elsewhere
 QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
 {
@@ -2303,7 +2303,7 @@ bool Database::updateSchema(bool* err)
 
       if( popchildq.next() )
          repopChild = popchildq.record().value("repopulateChildrenOnNextStart").toInt();
-      else 
+      else
          throw QString("%1 %2").arg(popchildq.lastQuery()).arg(popchildq.lastError().text());
 
       if(repopChild == 1) {
@@ -3051,9 +3051,9 @@ void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
    mashStepNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("TYPE");
-   if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) 
+   if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) )
       tmpText = doc.createTextNode(  MashStep::types[0] );
-   else 
+   else
       tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
@@ -3748,7 +3748,7 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
       // Need to tell the brewnote not to perform the calculations
       ret->setLoading(true);
       fromXml( ret, BrewNote::tagToProp, node);
-      if ( ! ret->isValid() ) 
+      if ( ! ret->isValid() )
          throw QString("Error loading brewnote from XML");
 
       ret->setLoading(false);
@@ -3814,7 +3814,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
       }
    }
    catch (QString e) {
-      if ( ! parent ) 
+      if ( ! parent )
          sqlDatabase().rollback();
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       blockSignals(false);
@@ -3822,7 +3822,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    }
 
    blockSignals(false);
-   if ( ! parent ) 
+   if ( ! parent )
       sqlDatabase().commit();
 
    if( createdNew )
@@ -3877,7 +3877,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
          ret->invalidate();
       else {
          int ndx = Fermentable::types.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 ) 
+         if ( ndx != -1 )
             ret->setType( static_cast<Fermentable::Type>(ndx));
          else
             ret->invalidate();
@@ -4012,7 +4012,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
          int ndx = getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret);
          if ( ndx != -1 )
             ret->setType( static_cast<Hop::Type>(ndx) );
-         else 
+         else
             ret->invalidate();
       }
 
@@ -4023,7 +4023,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
          int ndx = Hop::forms.indexOf(n.firstChild().toText().nodeValue());
          if ( ndx != -1 )
             ret->setForm( static_cast<Hop::Form>(ndx));
-         else 
+         else
             ret->invalidate();
       }
 
@@ -4137,12 +4137,12 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       blockSignals(false);
-      if ( ! parent ) 
+      if ( ! parent )
          sqlDatabase().rollback();
       throw;
    }
 
-   if ( ! parent ) 
+   if ( ! parent )
       sqlDatabase().commit();
 
    blockSignals(false);
@@ -4185,7 +4185,7 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
          str[0] = str.at(0).toTitleCase();
          int ndx =  MashStep::types.indexOf(str);
 
-         if ( ndx != -1 ) 
+         if ( ndx != -1 )
             ret->setType( static_cast<MashStep::Type>(ndx) );
          else
             ret->invalidate();
@@ -4465,7 +4465,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Style*> matching;
 
-   try { 
+   try {
       // If we are just importing a style by itself, need to do some dupe-checking.
       if( parent == 0 )
       {
@@ -4494,7 +4494,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
          ret->invalidate();
       else {
          int ndx = Style::types.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 ) 
+         if ( ndx != -1 )
             ret->setType(static_cast<Style::Type>(ndx));
          else
             ret->invalidate();
@@ -4593,7 +4593,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Yeast*> matching;
 
-   try { 
+   try {
       // If we are just importing a yeast by itself, need to do some dupe-checking.
       if( parent == 0 )
       {
@@ -4633,7 +4633,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
          ret->invalidate();
       else {
          int ndx = Yeast::forms.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 ) 
+         if ( ndx != -1 )
             ret->setForm( static_cast<Yeast::Form>(ndx) );
          else
             ret->invalidate();
@@ -4690,8 +4690,6 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 QList<TableParams> Database::makeTableParams()
 {
-   typedef BeerXMLElement* (Database::*NewIngFunc)(void);
-
    QList<TableParams> ret;
    TableParams tmp;
 
@@ -4704,9 +4702,7 @@ QList<TableParams> Database::makeTableParams()
       "evap_rate" << "real_evap_rate" << "boil_time" << "calc_boil_volume" <<
       "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
       "notes";
-   tmp.newElement =
-      (NewIngFunc) (Equipment*(Database::*)(void))
-      &Database::newEquipment;
+   tmp.newElement = [&]() { return this->newEquipment(); };
 
    ret.append(tmp);
    //==============================Fermentables================================
@@ -4717,10 +4713,7 @@ QList<TableParams> Database::makeTableParams()
       "add_after_boil" << "origin" << "supplier" << "notes" <<
       "coarse_fine_diff" << "moisture" << "diastatic_power" << "protein" <<
       "max_in_batch" << "recommend_mash" << "ibu_gal_per_lb";
-   tmp.newElement =
-      (NewIngFunc)
-      (Fermentable*(Database::*)(void))
-      &Database::newFermentable;
+   tmp.newElement = [&]() { return this->newFermentable(); };
 
    //==============================Hops=============================
    tmp.tableName = "hop";
@@ -4730,10 +4723,7 @@ QList<TableParams> Database::makeTableParams()
       "caryophyllene" << "cohumulone" << "myrcene",
    // First cast specifies which newHop() I want, since it is overloaded.
    // Second cast is to force the conversion of the function pointer.
-   tmp.newElement =
-      (NewIngFunc)
-      (Hop*(Database::*)(void))
-      &Database::newHop;
+   tmp.newElement = [&]() { return this->newHop(); };
 
    ret.append(tmp);
 
@@ -4743,10 +4733,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "mtype" << "use" << "time" << "amount" << "amount_is_weight" <<
       "use_for" << "notes";
-   tmp.newElement =
-      (NewIngFunc)
-      (Misc*(Database::*)(void))
-      &Database::newMisc;
+   tmp.newElement = [&]() { return this->newMisc(); };
 
    ret.append(tmp);
    //==================================Styles==================================
@@ -4758,10 +4745,7 @@ QList<TableParams> Database::makeTableParams()
       "fg_max" << "ibu_min" << "ibu_max" << "color_min" << "color_max" <<
       "abv_min" << "abv_max" << "carb_min" << "carb_max" << "notes" <<
       "profile" << "ingredients" << "examples";
-   tmp.newElement =
-      (NewIngFunc)
-      (Style*(Database::*)(void))
-      &Database::newStyle;
+   tmp.newElement = [&]() { return this->newStyle(); };
 
    ret.append(tmp);
 
@@ -4773,10 +4757,7 @@ QList<TableParams> Database::makeTableParams()
       "laboratory" << "product_id" << "min_temperature" << "max_temperature" <<
       "flocculation" << "attenuation" << "notes" << "best_for" <<
       "times_cultured" << "max_reuse" << "add_to_secondary";
-   tmp.newElement =
-      (NewIngFunc)
-      (Yeast*(Database::*)(void))
-      &Database::newYeast;
+   tmp.newElement = [&]() { return this->newYeast(); };
 
    ret.append(tmp);
 
@@ -4786,10 +4767,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "amount" << "calcium" << "bicarbonate" << "sulfate" <<
       "chloride" << "sodium" << "magnesium" << "ph" << "notes";
-   tmp.newElement =
-      (NewIngFunc)
-      (Water*(Database::*)(void))
-      &Database::newWater;
+   tmp.newElement = [&]() { return this->newWater(); };
 
    ret.append(tmp);
 
@@ -4803,11 +4781,12 @@ void Database::updateDatabase(QString const& filename)
 
    QVariant btid, newid, oldid;
    QVariant zero(0);
+   QList<TableParams> tableParams = makeTableParams();
 
    QList<QVariant> propVal;
    QStringList varAndHolder;
 
-   try { 
+   try {
       QString newCon("newSqldbCon");
       QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
       newSqldb.setDatabaseName(filename);
@@ -4859,10 +4838,7 @@ void Database::updateDatabase(QString const& filename)
 
          QSqlQuery qOldBtIngInsert( sqlDatabase() );
          qOldBtIngInsert.prepare(
-            QString("INSERT INTO bt_%1 id=:id %2_id=:%3_id")
-               .arg(tp.tableName)
-               .arg(tp.tableName)
-               .arg(tp.tableName) );
+            QString("INSERT INTO bt_%1 (id,%1_id) values (:id,:%1_id)").arg(tp.tableName) );
 
          // Resize propVal appropriately for current table.
          propVal.clear();
@@ -4879,7 +4855,7 @@ void Database::updateDatabase(QString const& filename)
                throw QString("Could not retrieve new ingredient: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
             if( !qNewIng.next() )
                throw QString("Could not advance query: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
-               
+
             QList<QVariant>::iterator it = propVal.begin();
             foreach( QString pn, tp.propName )
             {
@@ -4897,7 +4873,7 @@ void Database::updateDatabase(QString const& filename)
 
             // Find the bt_<ingredient> record in the local table.
             qOldBtIng.bindValue( ":btid", btid );
-            if ( ! qOldBtIng.exec() ) 
+            if ( ! qOldBtIng.exec() )
                throw QString("Could not find btID (%1): %2 %3")
                         .arg(btid.toInt())
                         .arg(qOldBtIng.lastQuery())
@@ -4911,19 +4887,20 @@ void Database::updateDatabase(QString const& filename)
 
                qUpdateOldIng.bindValue( ":id", oldid );
 
-               if ( ! qUpdateOldIng.exec() ) 
+               if ( ! qUpdateOldIng.exec() )
                   throw QString("Could not update old btID (%1): %2 %3")
                            .arg(oldid.toInt())
                            .arg(qUpdateOldIng.lastQuery())
                            .arg(qUpdateOldIng.lastError().text());
-                           
+
             }
             // If the btid doesn't exist in the old bt_hop table, do an insert into
             // the old hop table, then into the old bt_hop table.
             else
             {
                // Create a new ingredient.
-               oldid = (this->*(tp.newElement))()->_key;
+               oldid = tp.newElement()->_key;
+
                // Copy in the new data.
                qUpdateOldIng.bindValue( ":id", oldid );
 
@@ -4938,7 +4915,7 @@ void Database::updateDatabase(QString const& filename)
                qOldBtIngInsert.bindValue( ":id", btid );
                qOldBtIngInsert.bindValue( QString(":%1_id").arg(tp.tableName), oldid );
 
-               if ( !  qOldBtIngInsert.exec() ) 
+               if ( !  qOldBtIngInsert.exec() )
                   throw QString("Could not insert btID (%1): %2 %3")
                            .arg(btid.toInt())
                            .arg(qOldBtIngInsert.lastQuery())
@@ -5087,7 +5064,8 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
    }
 }
 
-QString Database::makeQueryString( QSqlRecord here, QString realName ) {
+QString Database::makeInsertString( QSqlRecord here, QString realName )
+{
    QString columns,qmarks;
 
    // Yes. I went from named to positional place holders. Such is life
@@ -5104,7 +5082,25 @@ QString Database::makeQueryString( QSqlRecord here, QString realName ) {
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
 }
 
-QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field) {
+QString Database::makeUpdateString( QSqlRecord here, QString realName, int key )
+{
+   QString columns;
+
+   // Yes. I am still using positional place holders, and you are still dealing
+   // with it
+   for(int i=0; i < here.count(); ++i) {
+      if ( ! columns.isEmpty() ) {
+         columns += QString(",%1=?").arg( here.fieldName(i) );
+      }
+      else {
+         columns = QString("%1=?").arg( here.fieldName(i) );
+      }
+   }
+   return QString("UPDATE %1 SET %2 where id=%3").arg(realName).arg(columns).arg(key);
+}
+
+QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
+{
    QVariant retVar = field.value();
    if ( field.type() == QVariant::Bool ) {
       switch(newType) {
@@ -5122,7 +5118,8 @@ QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field) {
    return retVar;
 }
 
-QStringList Database::allTablesInOrder(QSqlQuery q) {
+QStringList Database::allTablesInOrder(QSqlQuery q)
+{
    QString query = "SELECT name FROM bt_alltables ORDER BY table_id";
    QStringList tmp;
 
@@ -5143,13 +5140,13 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
    // There are a lot of tables to process
    foreach( QString table, tables ) {
       QSqlField field;
-      QString columns,qmarks;
       bool mustPrepare = true;
       int maxid = -1;
 
-      // settings and bt_alltables don't get copied; metatables are created
-      // when the database is
-      if ( table == "settings" || table == "bt_alltables" )
+      // bt_alltables don't get copied; metatables are created
+      // when the database is. I used to say this about settings. I was wrong
+      // about settings
+      if ( table == "bt_alltables" )
          continue;
 
       QString findAllQuery = QString("SELECT * FROM %1").arg(table);
@@ -5160,13 +5157,13 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
          newDb.transaction();
 
-         QSqlQuery insertNew(newDb); // we will prepare this in a bit
+         QSqlQuery upsertNew(newDb); // we will prepare this in a bit
 
          // Start reading the records from the old db
          while(readOld.next()) {
             int idx;
             QSqlRecord here = readOld.record();
-            QString insertQuery;
+            QString upsertQuery;
 
             idx = here.indexOf("id");
 
@@ -5179,25 +5176,30 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
             // Prepare the insert for this table if required
             if ( mustPrepare ) {
-               insertQuery = makeQueryString(here,table);
-               insertNew.prepare(insertQuery);
+               if ( table == QStringLiteral("settings") ) {
+                  upsertQuery = makeUpdateString(here,table,here.value(idx).toInt());
+               }
+               else {
+                  upsertQuery = makeInsertString(here,table);
+               }
+               upsertNew.prepare(upsertQuery);
                // but do it only once for this table
                mustPrepare = false;
             }
             // All that's left is to bind
             for(int i=0; i < here.count(); ++i) {
-               insertNew.bindValue(i,
+               upsertNew.bindValue(i,
                         convertValue(newType, here.field(i)),
                         QSql::In
                );
             }
 
             // and execute
-            if ( ! insertNew.exec() )
-               throw QString("Could not insert new row %1 : %2").arg(insertNew.lastQuery()).arg(insertNew.lastError().text());
+            if ( ! upsertNew.exec() )
+               throw QString("Could not insert new row %1 : %2").arg(upsertNew.lastQuery()).arg(upsertNew.lastError().text());
          }
          // We need to manually reset the sequences
-         if ( newType == Brewtarget::PGSQL ) {
+         if ( newType == Brewtarget::PGSQL && maxid > 0 ) {
             QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(table).arg(maxid);
             QSqlQuery updateSeq(seq, newDb);
 

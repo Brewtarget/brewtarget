@@ -28,34 +28,88 @@
 #include "database.h"
 
 BeerXMLElement::BeerXMLElement()
-   : QObject(0), _key(-1), _table(Brewtarget::NOTABLE)
+   : QObject(0),
+     _key(-1),
+     _table(Brewtarget::NOTABLE),
+     _folder(QString()),
+     _name(QString()),
+     _display(QVariant()),
+     _deleted(QVariant())
 {
    _valid = true;
 }
 
 BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
-   : QObject(0), _key(other._key), _table(other._table)
+   : QObject(0),
+   _key(other._key),
+   _table(other._table),
+   _folder(QString()),
+   _name(QString()),
+   _display(QVariant()),
+   _deleted(QVariant())
 {
    _valid = true;
 }
 
-bool BeerXMLElement::deleted() const { return get("deleted").toBool(); }
-bool BeerXMLElement::display() const { return get("display").toBool(); }
+bool BeerXMLElement::deleted() const
+{
+
+   if ( ! _deleted.isValid() )
+      _deleted = get("deleted");
+
+   return _deleted.toBool();
+}
+
+bool BeerXMLElement::display() const
+{
+   if ( ! _display.isValid() )
+      _display = get("display");
+
+   return _display.toBool();
+}
 
 // Sigh. New databases, more complexity
-void BeerXMLElement::setDeleted(bool var) { 
+void BeerXMLElement::setDeleted(const bool var)
+{
    set("deleted", "deleted", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
-}
-void BeerXMLElement::setDisplay(bool var) {
-   set("display", "display", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   _deleted = var;
 }
 
-QString BeerXMLElement::folder() const { return get("folder").toString(); }
-void BeerXMLElement::setFolder(QString var, bool signal) 
+void BeerXMLElement::setDisplay(bool var)
+{
+   set("display", "display", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   _display = var;
+}
+
+QString BeerXMLElement::folder() const
+{
+   if ( _folder.isEmpty() )
+      _folder = get("folder").toString();
+
+   return _folder;
+}
+
+void BeerXMLElement::setFolder(const QString var, bool signal)
 {
    set( "folder", "folder", var );
+   _folder = var;
    if ( signal )
       emit changedFolder(var);
+}
+
+QString BeerXMLElement::name() const
+{
+   if ( _name.isEmpty() )
+      _name = get("name").toString();
+
+   return _name;
+}
+
+void BeerXMLElement::setName(const QString var)
+{
+   set( "name", "name", var );
+   _name = var;
+   emit changedName(var);
 }
 
 int BeerXMLElement::key() const { return _key; }
@@ -151,7 +205,7 @@ QDate BeerXMLElement::getDate( QDomText const& textNode )
       ok = ret.isValid();
    }
 
-   if ( !ok ) 
+   if ( !ok )
       Brewtarget::logE(QString("BeerXMLElement::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
@@ -162,8 +216,8 @@ QDate BeerXMLElement::getDate( QDomText const& textNode )
 QDateTime BeerXMLElement::getDateTime(QString const& str)
 {
    QDateTime temp;
-   
-   if ( str != "" && (temp = QDateTime::fromString(str, Qt::ISODate)).isValid() ) 
+
+   if ( str != "" && (temp = QDateTime::fromString(str, Qt::ISODate)).isValid() )
       return temp;
    else
       return QDateTime::currentDateTime();
@@ -197,7 +251,7 @@ void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant 
    if (prop_name != NULL && col_name != NULL) {
     // Get the meta property.
     int ndx = metaObject()->indexOfProperty(prop_name);
-    
+
     // Should schedule an update of the appropriate entry in table,
     // then use prop to emit its notification signal.
     Database::instance().updateEntry( _table, _key, col_name, value, metaObject()->property(ndx), this, notify );
@@ -213,7 +267,7 @@ void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, 
 {
     // Get the meta property.
     int ndx = metaObject()->indexOfProperty(prop_name);
-    
+
     int invkey = Database::instance().getInventoryID(_table, _key);
     Brewtarget::DBTable invtable = Database::instance().getInventoryTable(_table);
     if(invkey == 0){ //no inventory row in the database so lets make one

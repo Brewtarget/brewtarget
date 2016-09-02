@@ -27,6 +27,7 @@
 
 class Database;
 
+#include <functional>
 #include <QDomDocument>
 #include <QDomNode>
 #include <QList>
@@ -68,7 +69,9 @@ typedef struct
 {
    QString tableName; // Name of the table.
    QStringList propName; // List of BeerXML column names.
-   BeerXMLElement* (Database::*newElement)(void); // Function to make a new ingredient in this table.
+   std::function<BeerXMLElement*()> newElement;
+
+   // BeerXMLElement* (Database::*newElement)(int); // Function to make a new ingredient in this table.
 } TableParams;
 
 /*!
@@ -123,8 +126,21 @@ public:
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
    {
-      QSqlQuery& q = selectAll[table];
-      q.bindValue( ":id", key );
+      QSqlQuery q;
+      QString index = QString("%1_%2").arg(tableNames[table]).arg(col_name);
+
+      if ( ! selectSome.contains(index) ) {
+         QString query = QString("SELECT %1 from %2 WHERE id=:id")
+                           .arg(col_name)
+                           .arg(tableNames[table]);
+         q = QSqlQuery( sqlDatabase() );
+         q.prepare(query);
+         selectSome.insert(index,q);
+      }
+
+      q = selectSome.value(index);
+      q.bindValue(":id", key);
+
       q.exec();
       if( !q.next() )
       {
@@ -169,7 +185,7 @@ public:
 
       tmp->_key = key;
       tmp->_table = table;
-      
+
       all->insert(tmp->_key,tmp);
 
       return tmp;
@@ -274,7 +290,7 @@ public:
 
    // Or you can mark whole lists as deleted.
    // ONE METHOD TO CALL THEM ALL AND IN DARKNESS BIND THEM!
-   template<class T> void remove(QList<T*> list) 
+   template<class T> void remove(QList<T*> list)
    {
       if ( list.empty() )
          return;
@@ -287,7 +303,7 @@ public:
       if ( ndx != -1 ) {
          propName = meta->classInfo(ndx).value();
       }
-      else 
+      else
          throw QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className());
 
       foreach( T* dead, list ) {
@@ -477,7 +493,7 @@ private:
    static QString dbUsername;
    static QString dbPassword;
 
-   static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
+//   static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
    static QHash<Brewtarget::DBTable,QString> tableNames;
    static QHash<Brewtarget::DBTable,QString> tableNamesHash();
    static QHash<QString,Brewtarget::DBTable> classNameToTable;
@@ -487,8 +503,6 @@ private:
    static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTable;
    static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTableHash();
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
-
-   static const QList<TableParams> tableParams;
 
    // Each thread should have its own connection to QSqlDatabase.
    static QHash< QThread*, QString > _threadToConnection;
@@ -516,7 +530,8 @@ private:
    QHash< int, Style* > allStyles;
    QHash< int, Water* > allWaters;
    QHash< int, Yeast* > allYeasts;
-   QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
+//   QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
+   QHash<QString,QSqlQuery> selectSome;
 
    //! Get the right database connection for the calling thread.
    static QSqlDatabase sqlDatabase();
@@ -567,7 +582,7 @@ private:
       q.setForwardOnly(true);
       QString queryString;
 
-      if ( id.isEmpty() ) 
+      if ( id.isEmpty() )
          id = "id";
 
       if( !filter.isEmpty() )
@@ -576,7 +591,7 @@ private:
          queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tableNames[table]);
 
       try {
-         if ( ! q.exec(queryString) ) 
+         if ( ! q.exec(queryString) )
             throw QString("could not execute query: %2 : %3").arg(queryString).arg(q.lastError().text());
       }
       catch (QString e) {
@@ -669,7 +684,7 @@ private:
       QString propName, relTableName, ingKeyName, childTableName;
       const QMetaObject* meta = ing->metaObject();
       int ndx = meta->indexOfClassInfo("signal");
-    
+
       if( rec == 0 || ing == 0 )
          return 0;
 
@@ -688,7 +703,7 @@ private:
             ingKeyName = QString("%1_id").arg(prefix);
             childTableName = QString("%1_children").arg(prefix);
          }
-         else 
+         else
             throw QString("could not locate classInfo for signal on %2").arg(meta->className());
          // Ensure this ingredient is not already in the recipe.
          QString select = QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
@@ -702,7 +717,6 @@ private:
          if( q.next() )
             throw QString("Ingredient already exists in recipe." );
 
-
          q.finish();
 
          if ( noCopy )
@@ -715,7 +729,6 @@ private:
          }
          else
          {
-
             newIng = copy<T>(ing, false, keyHash);
             if ( newIng == 0 )
                throw QString("error copying ingredient");
@@ -732,7 +745,7 @@ private:
          q.bindValue(":ingredient", newIng->key());
          q.bindValue(":recipe", rec->_key);
 
-         if ( ! q.exec() ) 
+         if ( ! q.exec() )
             throw QString("%2 : %1.").arg(q.lastQuery()).arg(q.lastError().text());
 
          emit rec->changed( rec->metaProperty(propName), QVariant() );
@@ -792,7 +805,7 @@ private:
       QString tName = tableNames[t];
 
       QSqlQuery q(sqlDatabase());
-     
+
       try {
          QString select = QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key);
 
@@ -800,7 +813,7 @@ private:
             throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
          else 
             q.next();
-        
+
          QSqlRecord oldRecord = q.record();
          q.finish();
 
@@ -879,7 +892,7 @@ private:
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
 
-   static QList<TableParams> makeTableParams();
+   QList<TableParams> makeTableParams();
 
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.
@@ -896,7 +909,8 @@ private:
                              int Portnum);
    //! \brief makes a query string we can prepare. Needed this in two places,
    // so it got a method
-   QString makeQueryString( QSqlRecord here, QString realName );
+   QString makeInsertString( QSqlRecord here, QString realName );
+   QString makeUpdateString( QSqlRecord here, QString realName, int key );
 
    //! \brief converts sqlite values (mostly booleans) into something postgres
    // wants

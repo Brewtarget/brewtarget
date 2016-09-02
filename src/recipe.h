@@ -81,8 +81,6 @@ public:
    //! \brief Retains only the name, but sets everything else to defaults.
    void clear();
    
-   //! \brief The name.
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    //! \brief The type (lager, ale, etc.).
    Q_PROPERTY( QString type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The brewer.
@@ -209,9 +207,7 @@ public:
    void addMisc( Misc* var );
    void addYeast( Yeast* var );
    void addWater( Water* var );
-   //void addBrewNote(BrewNote* var);
    void removeBrewNote(BrewNote* var);
-   //void addInstruction( Instruction* ins );
    void removeInstruction( Instruction* ins );
    /*!
     * \brief Swap instructions \c ins1 and \c ins2
@@ -232,7 +228,6 @@ public:
    QString nextAddToBoil(double& time);
 
    // Getters
-   QString name() const;
    QString type() const;
    QString brewer() const;
    double batchSize_l() const;
@@ -327,8 +322,7 @@ public slots:
    void acceptYeastChange(Yeast* yeast);
    void acceptMashChange(Mash* mash);
 
-   // Setters
-   void setName( const QString &var );
+   // Setters -- why are these slots?
    void setType( const QString &var );
    void setBrewer( const QString &var );
    void setBatchSize_l( double var );

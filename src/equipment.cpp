@@ -100,127 +100,7 @@ Equipment::Equipment( Equipment const& other )
 {
 }
 
-/*
-void Equipment::fromNode(const QDomNode& equipmentNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString property, value;
-   bool hasRealEvapRate = false;
-   
-   setDefaults();
-   
-   for( node = equipmentNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
-         continue;
-      }
-      
-      child = node.firstChild();
-      if( child.isNull() || ! child.isText() )
-         continue;
-      
-      property = node.nodeName();
-      textNode = child.toText();
-      value = textNode.nodeValue();
-      
-      if( property == "NAME" )
-      {
-         name = value;
-      }
-      else if( property == "VERSION" )
-      {
-         if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QObject::tr("EQUIPMENT says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
-      }
-      else if( property == "BOIL_SIZE" )
-      {
-         setBoilSize_l(getDouble(textNode));
-      }
-      else if( property == "BATCH_SIZE" )
-      {
-         setBatchSize_l(getDouble(textNode));
-      }
-      else if( property == "TUN_VOLUME" )
-      {
-         setTunVolume_l(getDouble(textNode));
-      }
-      else if( property == "TUN_WEIGHT" )
-      {
-         setTunWeight_kg(getDouble(textNode));
-      }
-      else if( property == "TUN_SPECIFIC_HEAT" )
-      {
-         setTunSpecificHeat_calGC(getDouble(textNode));
-      }
-      else if( property == "TOP_UP_WATER" )
-      {
-         setTopUpWater_l(getDouble(textNode));
-      }
-      else if( property == "TRUB_CHILLER_LOSS" )
-      {
-         setTrubChillerLoss_l(getDouble(textNode));
-      }
-      else if( property == "EVAP_RATE" && ! hasRealEvapRate )
-      {
-         setEvapRate_pctHr(getDouble(textNode));
-      }
-      else if( property == "REAL_EVAP_RATE" )
-      {
-         setEvapRate_lHr(getDouble(textNode));
-         hasRealEvapRate = true;
-      }
-      else if( property == "BOIL_TIME" )
-      {
-         setBoilTime_min(getDouble(textNode));
-      }
-      else if( property == "CALC_BOIL_VOLUME" )
-      {
-         setCalcBoilVolume(getBool(textNode));
-      }
-      else if( property == "LAUTER_DEADSPACE" )
-      {
-         setLauterDeadspace_l(getDouble(textNode));
-      }
-      else if( property == "TOP_UP_KETTLE" )
-      {
-         setTopUpKettle_l(getDouble(textNode));
-      }
-      else if( property == "HOP_UTILIZATION" )
-      {
-         setHopUtilization_pct(getDouble(textNode));
-      }
-      else if( property == "NOTES" )
-      {
-         setNotes(value);
-      }
-      else if( property == "ABSORPTION" ) // My extension.
-      {
-         setGrainAbsorption_LKg( getDouble(textNode) );
-      }
-      else if ( property == "BOILING_POINT")
-      {
-         setBoilingPoint_c( getDouble(textNode) );
-      }
-      else
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported EQUIPMENT property: %1. Line %2").arg(property).arg(node.lineNumber()) );
-   }
-   
-   // Estimate the actual evaporation rate if we didn't get one.
-   if( ! hasRealEvapRate )
-      setEvapRate_lHr( evapRate_pctHr/(double)100 * boilSize_l );
-}
-*/
-
 //============================"SET" METHODS=====================================
-
-void Equipment::setName( const QString &var )
-{
-   set( "name", "name", var );
-   emit changedName(var);
-}
 
 void Equipment::setBoilSize_l( double var )
 {
@@ -441,7 +321,6 @@ void Equipment::setBoilingPoint_c(double var)
 
 //============================"GET" METHODS=====================================
 
-QString Equipment::name() const { return get("name").toString(); }
 QString Equipment::notes() const { return get("notes").toString(); }
 bool Equipment::calcBoilVolume() const { return get("calc_boil_volume").toBool(); }
 
