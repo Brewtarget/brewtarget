@@ -539,10 +539,11 @@ QSqlDatabase Database::sqlDatabase()
 
 void Database::unload()
 {
-   // The postgres driver wants nothing to do with this. Core gets dumped if
-   // we try it. Since we don't need to copy things about for postgres...
 
 
+   // selectSome saves context. If we close the database before we tear that
+   // context down, core gets dumped
+   selectSome.clear();
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
