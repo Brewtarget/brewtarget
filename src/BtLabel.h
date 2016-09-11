@@ -39,6 +39,7 @@ class BtVolumeLabel;
 class BtTimeLabel;
 class BtMixedLabel;
 class BtDateLabel;
+class BtDiastaticPowerLabel;
 
 /*!
  * \class BtLabel
@@ -63,7 +64,8 @@ public:
       VOLUME,
       TIME,
       MIXED,
-      DATE
+      DATE,
+      DIASTATIC_POWER
    };
 
    BtLabel(QWidget* parent = 0, LabelType lType = NONE);
@@ -144,6 +146,13 @@ class BtDateLabel : public BtLabel
    Q_OBJECT
 public:
    BtDateLabel(QWidget* parent = 0);
+};
+
+class BtDiastaticPowerLabel : public BtLabel
+{
+   Q_OBJECT
+public:
+   BtDiastaticPowerLabel(QWidget* parent = 0);
 };
 
 #endif

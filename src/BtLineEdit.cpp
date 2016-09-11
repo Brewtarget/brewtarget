@@ -91,6 +91,10 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
       case Unit::String:
          amt = text();
          break;
+      case Unit::DiastaticPower:
+         val = toSI(oldUnit,oldScale,force);
+         amt = displayAmount(val,3);
+         break;
       case Unit::None:
       default:
          val = Brewtarget::toDouble(text(),&ok);
@@ -390,5 +394,11 @@ void BtMixedEdit::setIsWeight(bool state)
 
    // maybe? My head hurts now
    lineChanged();
+}
+
+BtDiastaticPowerEdit::BtDiastaticPowerEdit(QWidget *parent)
+   : BtLineEdit(parent,Unit::DiastaticPower)
+{
+   _units = Units::lintner;
 }
 
