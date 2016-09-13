@@ -1595,7 +1595,7 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
       QString command = QString("UPDATE %1 set %2=:value where id=%3")
                            .arg(tableName)
                            .arg(col_name)
-                           .arg(object->_key);
+                           .arg(key);
 
       update.prepare( command );
       update.bindValue(":value", value);
