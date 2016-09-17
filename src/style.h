@@ -52,8 +52,6 @@ public:
    enum Type {Lager, Ale, Mead, Wheat, Mixed, Cider};
    Q_ENUMS( Type )
    
-   //! \brief The name.
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    //! \brief The category.
    Q_PROPERTY( QString category READ category WRITE setCategory /*NOTIFY changed*/ /*changedCategory*/ )
    //! \brief The category number.
@@ -97,7 +95,6 @@ public:
    //! \brief The commercial examples.
    Q_PROPERTY( QString examples READ examples WRITE setExamples /*NOTIFY changed*/ /*changedExamples*/ )
    
-   void setName( const QString& var );
    void setCategory( const QString& var );
    void setCategoryNumber( const QString& var );
    void setStyleLetter( const QString& var );
@@ -120,7 +117,6 @@ public:
    void setIngredients( const QString& var );
    void setExamples( const QString& var );
 
-   QString name() const;
    QString category() const;
    QString categoryNumber() const;
    QString styleLetter() const;

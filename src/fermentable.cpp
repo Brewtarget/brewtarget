@@ -77,140 +77,7 @@ Fermentable::Fermentable( Fermentable const& other )
 {
 }
 
-/*
-void Fermentable::fromNode(const QDomNode& fermentableNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString property, value;
-   
-   setDefaults();
-   
-   for( node = fermentableNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
-         continue;
-      }
-      
-      child = node.firstChild();
-      if( child.isNull() || ! child.isText() )
-         continue;
-      
-      property = node.nodeName();
-      textNode = child.toText();
-      value = textNode.nodeValue();
-      
-      if( property == "NAME" )
-      {
-         name = value;
-      }
-      else if( property == "VERSION" )
-      {
-         if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QObject::tr("FERMENTABLE says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
-      }
-      else if( property == "TYPE" )
-      {
-         int ndx = types.indexOf(value);
-         if( ndx < 0 )
-            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for FERMENTABLE. Line %2").arg(value).arg(textNode.lineNumber()) );
-         else
-            type = static_cast<Fermentable::Type>( ndx );
-      }
-      else if( property == "AMOUNT" )
-      {
-         setAmount_kg(getDouble(textNode));
-      }
-      else if( property == "YIELD" )
-      {
-         setYield_pct(getDouble(textNode));
-      }
-      else if( property == "COLOR" )
-      {
-         setColor_srm(getDouble(textNode));
-      }
-      else if( property == "ADD_AFTER_BOIL" )
-      {
-         setAddAfterBoil(getBool(textNode));
-      }
-      else if( property == "ORIGIN" )
-      {
-         setOrigin(value);
-      }
-      else if( property == "SUPPLIER" )
-      {
-         setSupplier(value);
-      }
-      else if( property == "NOTES" )
-      {
-         setNotes(value);
-      }
-      else if( property == "COARSE_FINE_DIFF" )
-      {
-         setCoarseFineDiff_pct(getDouble(textNode));
-      }
-      else if( property == "MOISTURE" )
-      {
-         setMoisture_pct(getDouble(textNode));
-      }
-      else if( property == "DIASTATIC_POWER" )
-      {
-         setDiastaticPower_lintner(getDouble(textNode));
-      }
-      else if( property == "PROTEIN" )
-      {
-         setProtein_pct(getDouble(textNode));
-      }
-      else if( property == "MAX_IN_BATCH" )
-      {
-         setMaxInBatch_pct(getDouble(textNode));
-      }
-      else if( property == "RECOMMEND_MASH" )
-      {
-         setRecommendMash(getBool(textNode));
-      }
-      else if( property == "IS_MASHED" )
-      {
-         setIsMashed(getBool(textNode));
-      }
-      else if( property == "IBU_GAL_PER_LB" )
-      {
-         setIbuGalPerLb(getDouble(textNode));
-      }
-      else
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported FERMENTABLE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
-   }
-}
-*/
-
-/*
-void Fermentable::setDefaults()
-{
-   name = "";
-   type = TYPEGRAIN;
-   amount_kg = 0.0;
-   yield_pct = 0.0;
-   color_srm = 0.0;
-
-   addAfterBoil = false;
-   origin = "";
-   supplier = "";
-   notes = "";
-   coarseFineDiff_pct = 0.0;
-   moisture_pct = 0.0;
-   diastaticPower_lintner = 0.0;
-   protein_pct = 0.0;
-   maxInBatch_pct = 0.0;
-   recommendMash = false;
-   isMashed = false;
-   ibuGalPerLb = 0.0;
-}
-*/
-
 // Get
-const QString Fermentable::name() const { return get("name").toString(); }
 const Fermentable::Type Fermentable::type() const { return static_cast<Fermentable::Type>(types.indexOf(get("ftype").toString())); }
 const Fermentable::AdditionMethod Fermentable::additionMethod() const
 {
@@ -298,7 +165,18 @@ bool Fermentable::recommendMash() const { return get("recommend_mash").toBool();
 bool Fermentable::isMashed() const { return get("is_mashed").toBool(); }
 bool Fermentable::isExtract() { return ((type() == Extract) || (type() == Dry_Extract)); }
 bool Fermentable::isSugar() { return (type() == Sugar); }
+bool Fermentable::isValidType( const QString& str ) { return (types.indexOf(str) >= 0); }
 
+void Fermentable::setType( Type t ) { set("type", "ftype", types.at(t)); }
+void Fermentable::setAdditionMethod( Fermentable::AdditionMethod m ) { setIsMashed(m == Fermentable::Mashed); }
+void Fermentable::setAdditionTime( Fermentable::AdditionTime t ) { setAddAfterBoil(t == Fermentable::Late ); }
+void Fermentable::setAddAfterBoil( bool b ) { set("addAfterBoil", "add_after_boil", b); }
+void Fermentable::setOrigin( const QString& str ) { set("origin","origin",str);}
+void Fermentable::setSupplier( const QString& str) { set("supplier","supplier",str);}
+void Fermentable::setNotes( const QString& str ) { set("notes","notes",str);}
+void Fermentable::setRecommendMash( bool b ) { set("recommendMash","recommend_mash",b);}
+void Fermentable::setIsMashed(bool var) { set("isMashed","is_mashed",var); }
+void Fermentable::setIbuGalPerLb( double num ) { set("ibuGalPerLb","ibu_gal_per_lb",num);}
 
 double Fermentable::equivSucrose_kg() const
 {
@@ -310,41 +188,6 @@ double Fermentable::equivSucrose_kg() const
    else
       return ret;
 }
-
-// disabled per-cell work
-/*
-unitDisplay Fermentable::displayUnit() const  { return (unitDisplay)get("display_unit").toInt(); }
-unitScale Fermentable::displayScale() const { return (unitScale)get("display_scale").toInt(); }
-*/
-
-// Set
-void Fermentable::setName( const QString& str )
-{
-   set("name", "name", str);
-   emit changedName(str);
-}
-
-void Fermentable::setType( Type t )
-{
-   set("type", "ftype", types.at(t));
-}
-
-void Fermentable::setAdditionMethod( Fermentable::AdditionMethod m )
-{
-   if( m == Fermentable::Mashed )
-      setIsMashed(true);
-   else
-      setIsMashed(false);
-}
-
-void Fermentable::setAdditionTime( Fermentable::AdditionTime t )
-{
-   if( t == Fermentable::Late )
-      setAddAfterBoil(true);
-   else
-      setAddAfterBoil(false);
-}
-
 void Fermentable::setAmount_kg( double num )
 {
    if( num < 0.0 )
@@ -392,14 +235,6 @@ void Fermentable::setColor_srm( double num )
       set("color_srm", "color", num);
    }
 }
-
-void Fermentable::setAddAfterBoil( bool b )
-{
-   set("addAfterBoil", "add_after_boil", b);
-}
-void Fermentable::setOrigin( const QString& str ) { set("origin","origin",str);}
-void Fermentable::setSupplier( const QString& str) { set("supplier","supplier",str);}
-void Fermentable::setNotes( const QString& str ) { set("notes","notes",str);}
 void Fermentable::setCoarseFineDiff_pct( double num )
 {
    if( num >= 0.0 && num <= 100.0 )
@@ -456,22 +291,4 @@ void Fermentable::setMaxInBatch_pct( double num )
       Brewtarget::logW( QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num) );
    }
 }
-void Fermentable::setRecommendMash( bool b ) { set("recommendMash","recommend_mash",b);}
-void Fermentable::setIsMashed(bool var) { set("isMashed","is_mashed",var); }
-void Fermentable::setIbuGalPerLb( double num ) { set("ibuGalPerLb","ibu_gal_per_lb",num);}
 
-bool Fermentable::isValidType( const QString& str )
-{
-   return (types.indexOf(str) >= 0);
-}
-
-// disabled per-cell work
-/*
-void Fermentable::setDisplayUnit( unitDisplay unit ) 
-{ 
-   set("displayUnit", "display_unit", unit); 
-   set("displayScale", "display_scale", noScale);
-}
-
-void Fermentable::setDisplayScale( unitScale scale ) { set("displayScale", "display_scale", scale); }
-*/

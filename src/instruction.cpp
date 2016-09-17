@@ -45,11 +45,6 @@ Instruction::Instruction()
 }
 
 // Setters ====================================================================
-void Instruction::setName(const QString& n)
-{
-   set("name", "name", n);
-}
-
 void Instruction::setDirections(const QString& dir)
 {
    set("directions", "directions", dir);
@@ -89,43 +84,16 @@ void Instruction::addReagent(const QString& reagent)
 }
 
 // Accessors ==================================================================
+QString Instruction::directions() { return get("directions").toString(); }
 
-QString Instruction::name()
-{
-   return get("name").toString();
-}
+bool Instruction::hasTimer() { return get("hasTimer").toBool(); }
 
-QString Instruction::directions()
-{
-   return get("directions").toString();
-}
+QString Instruction::timerValue() { return get("timerValue").toString(); }
 
-bool Instruction::hasTimer()
-{
-   return get("hasTimer").toBool();
-}
+bool Instruction::completed() { return get("completed").toBool(); }
 
-QString Instruction::timerValue()
-{
-   return get("timerValue").toString();
-}
+QList<QString> Instruction::reagents() { return _reagents; }
 
-bool Instruction::completed()
-{
-   return get("completed").toBool();
-}
+double Instruction::interval() { return get("interval").toDouble(); }
 
-QList<QString> Instruction::reagents()
-{
-   return _reagents;
-}
-
-double Instruction::interval() 
-{
-   return get("interval").toDouble();
-}
-
-int Instruction::instructionNumber() const
-{
-   return Database::instance().instructionNumber(this);
-}
+int Instruction::instructionNumber() const { return Database::instance().instructionNumber(this); }

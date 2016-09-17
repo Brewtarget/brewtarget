@@ -108,7 +108,7 @@ int BtTreeItem::columnCount(int _type) const
          Brewtarget::logW( QString("BtTreeItem::columnCount Bad column: %1").arg(_type));
             return 0;
     }
-            
+
 }
 
 QVariant BtTreeItem::data(int _type, int column)
@@ -185,7 +185,7 @@ bool BtTreeItem::removeChildren(int position, int count)
    return true;
 }
 
-QVariant BtTreeItem::dataRecipe( int column ) 
+QVariant BtTreeItem::dataRecipe( int column )
 {
    Recipe* recipe = qobject_cast<Recipe*>(_thing);
    switch(column)
@@ -210,7 +210,7 @@ QVariant BtTreeItem::dataRecipe( int column )
    return QVariant();
 }
 
-QVariant BtTreeItem::dataEquipment(int column) 
+QVariant BtTreeItem::dataEquipment(int column)
 {
    Equipment* kit = qobject_cast<Equipment*>(_thing);
    switch(column)
@@ -373,7 +373,7 @@ QVariant BtTreeItem::dataFolder(int column)
    if ( ! folder && column == FOLDERNAMECOL )
       return QVariant(QObject::tr("Folder"));
 
-   if ( ! folder ) 
+   if ( ! folder )
       return QVariant(QObject::tr("Folder"));
    else if ( column == FOLDERNAMECOL )
       return QVariant( folder->name() );
@@ -410,28 +410,28 @@ Fermentable* BtTreeItem::fermentable()
 
 Hop* BtTreeItem::hop()
 {
-    if ( _type == HOP ) 
+    if ( _type == HOP )
        return qobject_cast<Hop*>(_thing);
     return 0;
 }
 
 Misc* BtTreeItem::misc()
 {
-    if ( _type == MISC ) 
+    if ( _type == MISC )
        return qobject_cast<Misc*>(_thing);
     return 0;
 }
 
 Yeast* BtTreeItem::yeast()
 {
-    if ( _type == YEAST ) 
+    if ( _type == YEAST )
        return qobject_cast<Yeast*>(_thing);
     return 0;
 }
 
 BrewNote* BtTreeItem::brewNote()
 {
-    if ( _type == BREWNOTE && _thing ) 
+    if ( _type == BREWNOTE && _thing )
        return qobject_cast<BrewNote*>(_thing);
 
     return 0;
@@ -439,7 +439,7 @@ BrewNote* BtTreeItem::brewNote()
 
 Style* BtTreeItem::style()
 {
-    if ( _type == STYLE && _thing ) 
+    if ( _type == STYLE && _thing )
        return qobject_cast<Style*>(_thing);
 
     return 0;
@@ -447,7 +447,7 @@ Style* BtTreeItem::style()
 
 BtFolder* BtTreeItem::folder()
 {
-    if ( _type == FOLDER && _thing ) 
+    if ( _type == FOLDER && _thing )
        return qobject_cast<BtFolder*>(_thing);
 
     return 0;
@@ -463,26 +463,9 @@ BeerXMLElement* BtTreeItem::thing()
 
 QString BtTreeItem::name()
 {
+   BeerXMLElement *tmp;
    if ( ! _thing )
       return QString();
-   switch(_type)
-   {
-      case RECIPE:
-         return qobject_cast<Recipe*>(_thing)->name();
-      case EQUIPMENT:
-         return qobject_cast<Equipment*>(_thing)->name();
-      case FERMENTABLE:
-         return qobject_cast<Fermentable*>(_thing)->name();
-      case FOLDER:
-         return qobject_cast<BtFolder*>(_thing)->name();
-      case HOP:
-         return qobject_cast<Hop*>(_thing)->name();
-      case MISC:
-         return qobject_cast<Misc*>(_thing)->name();
-      case STYLE:
-         return qobject_cast<Style*>(_thing)->name();
-      case YEAST:
-         return qobject_cast<Yeast*>(_thing)->name();
-   }
-   return QString();
+   tmp = qobject_cast<BeerXMLElement*>(_thing);
+   return tmp->name();
 }

@@ -43,8 +43,6 @@ public:
 
    virtual ~Equipment() {}
    
-   //! \brief The name.
-   Q_PROPERTY( QString name                 READ name                  WRITE setName                  NOTIFY changedName )
    //! \brief The boil size in liters.
    Q_PROPERTY( double boilSize_l            READ boilSize_l            WRITE setBoilSize_l            NOTIFY changedBoilSize_l )
    //! \brief The batch size in liters.
@@ -81,7 +79,6 @@ public:
    Q_PROPERTY( double boilingPoint_c        READ boilingPoint_c        WRITE setBoilingPoint_c        NOTIFY changedBoilingPoint_c )
 
    // Set
-   void setName( const QString &var );
    void setBoilSize_l( double var );
    void setBatchSize_l( double var );
    void setTunVolume_l( double var );
@@ -101,7 +98,6 @@ public:
    void setBoilingPoint_c(double var);
 
    // Get
-   QString name() const;
    double boilSize_l() const;
    double batchSize_l() const;
    double tunVolume_l() const;

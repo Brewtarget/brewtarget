@@ -48,8 +48,6 @@ public:
 
    virtual ~Mash() {}
    
-   //! \brief The name.
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    //! \brief The initial grain temp in Celsius.
    Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c /*NOTIFY changed*/ /*changedGrainTemp_c*/ )
    //! \brief The notes.
@@ -75,7 +73,6 @@ public:
    Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
    
    // Setters
-   void setName( const QString &var );
    void setGrainTemp_c( double var );
    void setNotes( const QString &var );
    void setTunTemp_c( double var );
@@ -86,7 +83,6 @@ public:
    void setEquipAdjust( bool var );
 
    // Getters
-   QString name() const;
    double grainTemp_c() const;
    unsigned int numMashSteps() const;
    QString notes() const;

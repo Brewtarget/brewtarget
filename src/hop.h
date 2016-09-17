@@ -58,8 +58,6 @@ public:
    
    virtual ~Hop() {}
    
-   //! \brief The name.
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    //! \brief The percent alpha.
    Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct /*NOTIFY changed*/ /*changedAlpha_pct*/ )
    //! \brief The amount in kg.
@@ -93,12 +91,12 @@ public:
    //! \brief Myrcene as a percentage of total hop oil.
    Q_PROPERTY( double myrcene_pct READ myrcene_pct WRITE setMyrcene_pct /*NOTIFY changed*/ /*changedMyrcene_pct*/ )
    
-   const QString name() const;
    double alpha_pct() const;
    double amount_kg() const;
    double inventory() const;
    Use use() const;
    const QString useString() const;
+
    //! \brief A translated use string.
    const QString useStringTr() const;
    double time_min() const;
@@ -121,7 +119,6 @@ public:
    double myrcene_pct() const;
    
    //set
-   void setName( const QString& str );
    void setAlpha_pct( double num );
    void setAmount_kg( double num );
    void setInventoryAmount( double num );

@@ -90,7 +90,6 @@ QHash<Brewtarget::DBTable,QString> Database::tableNames;
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable;
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTable = Database::tableToChildTableHash();
 QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTable = Database::tableToInventoryTableHash();
-const QList<TableParams> Database::tableParams = Database::makeTableParams();
 
 QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
@@ -330,7 +329,7 @@ bool Database::load()
    }
 
    // Initialize the SELECT * query hashes.
-   selectAll = Database::selectAllHash();
+   // selectAll = Database::selectAllHash();
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -540,18 +539,18 @@ QSqlDatabase Database::sqlDatabase()
 
 void Database::unload()
 {
-   // The postgres driver wants nothing to do with this. Core gets dumped if
-   // we try it. Since we don't need to copy things about for postgres...
 
-   if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
 
-      QSqlDatabase::database( dbConName, false ).close();
+   // selectSome saves context. If we close the database before we tear that
+   // context down, core gets dumped
+   selectSome.clear();
+   QSqlDatabase::database( dbConName, false ).close();
+   QSqlDatabase::removeDatabase( dbConName );
 
-      QSqlDatabase::removeDatabase( dbConName );
-
+   if (loadWasSuccessful && Brewtarget::dbType() == Brewtarget::SQLITE )
+   {
       dbFile.close();
-      if (loadWasSuccessful)
-         automaticBackup();
+      automaticBackup();
    }
 }
 
@@ -664,6 +663,7 @@ void Database::dropInstance()
    static QMutex mutex;
 
    mutex.lock();
+   dbInstance->unload();
    delete dbInstance;
    dbInstance=0;
    mutex.unlock();
@@ -1595,7 +1595,7 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
       QString command = QString("UPDATE %1 set %2=:value where id=%3")
                            .arg(tableName)
                            .arg(col_name)
-                           .arg(object->_key);
+                           .arg(key);
 
       update.prepare( command );
       update.bindValue(":value", value);
@@ -1641,11 +1641,14 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
 
       while (nameq.next()) {
          QString name = nameq.record().value(0).toString();
-         queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC LIMIT 1")
+         queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC LIMIT 1")
                      .arg(tableNames[table])
-                     .arg(name)
                      .arg(Brewtarget::dbTrue());
-         QSqlQuery parentq( queryString, sqlDatabase() );
+         QSqlQuery parentq( sqlDatabase() );
+
+         parentq.prepare(queryString);
+         parentq.bindValue(":name", name);
+         parentq.exec();
 
          if ( !parentq.isActive() )
             throw QString("%1 %2").arg(parentq.lastQuery()).arg(parentq.lastError().text());
@@ -1653,11 +1656,13 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
          parentq.first();
          QString parentID = parentq.record().value("id").toString();
 
-         queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC")
+         queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC")
                      .arg(tableNames[table])
-                     .arg(name)
                      .arg(Brewtarget::dbFalse());
-         QSqlQuery childrenq( queryString, sqlDatabase() );
+         QSqlQuery childrenq( sqlDatabase() );
+         childrenq.prepare(queryString);
+         childrenq.bindValue(":name", name);
+         childrenq.exec();
 
          if ( !childrenq.isActive() )
             throw QString("%1 %2").arg(childrenq.lastQuery()).arg(childrenq.lastError().text());
@@ -2128,6 +2133,7 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
    q.finish();
 }
 
+/*
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 {
    QHash<Brewtarget::DBTable,QSqlQuery> ret;
@@ -2143,7 +2149,7 @@ QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 
    return ret;
 }
-
+*/
 // Now the payoff for a lot of hard work elsewhere
 QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
 {
@@ -4690,8 +4696,6 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 QList<TableParams> Database::makeTableParams()
 {
-   typedef BeerXMLElement* (Database::*NewIngFunc)(void);
-
    QList<TableParams> ret;
    TableParams tmp;
 
@@ -4704,9 +4708,7 @@ QList<TableParams> Database::makeTableParams()
       "evap_rate" << "real_evap_rate" << "boil_time" << "calc_boil_volume" <<
       "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
       "notes";
-   tmp.newElement =
-      (NewIngFunc) (Equipment*(Database::*)(void))
-      &Database::newEquipment;
+   tmp.newElement = [&]() { return this->newEquipment(); };
 
    ret.append(tmp);
    //==============================Fermentables================================
@@ -4717,10 +4719,7 @@ QList<TableParams> Database::makeTableParams()
       "add_after_boil" << "origin" << "supplier" << "notes" <<
       "coarse_fine_diff" << "moisture" << "diastatic_power" << "protein" <<
       "max_in_batch" << "recommend_mash" << "ibu_gal_per_lb";
-   tmp.newElement =
-      (NewIngFunc)
-      (Fermentable*(Database::*)(void))
-      &Database::newFermentable;
+   tmp.newElement = [&]() { return this->newFermentable(); };
 
    //==============================Hops=============================
    tmp.tableName = "hop";
@@ -4730,10 +4729,7 @@ QList<TableParams> Database::makeTableParams()
       "caryophyllene" << "cohumulone" << "myrcene",
    // First cast specifies which newHop() I want, since it is overloaded.
    // Second cast is to force the conversion of the function pointer.
-   tmp.newElement =
-      (NewIngFunc)
-      (Hop*(Database::*)(void))
-      &Database::newHop;
+   tmp.newElement = [&]() { return this->newHop(); };
 
    ret.append(tmp);
 
@@ -4743,10 +4739,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "mtype" << "use" << "time" << "amount" << "amount_is_weight" <<
       "use_for" << "notes";
-   tmp.newElement =
-      (NewIngFunc)
-      (Misc*(Database::*)(void))
-      &Database::newMisc;
+   tmp.newElement = [&]() { return this->newMisc(); };
 
    ret.append(tmp);
    //==================================Styles==================================
@@ -4758,10 +4751,7 @@ QList<TableParams> Database::makeTableParams()
       "fg_max" << "ibu_min" << "ibu_max" << "color_min" << "color_max" <<
       "abv_min" << "abv_max" << "carb_min" << "carb_max" << "notes" <<
       "profile" << "ingredients" << "examples";
-   tmp.newElement =
-      (NewIngFunc)
-      (Style*(Database::*)(void))
-      &Database::newStyle;
+   tmp.newElement = [&]() { return this->newStyle(); };
 
    ret.append(tmp);
 
@@ -4773,10 +4763,7 @@ QList<TableParams> Database::makeTableParams()
       "laboratory" << "product_id" << "min_temperature" << "max_temperature" <<
       "flocculation" << "attenuation" << "notes" << "best_for" <<
       "times_cultured" << "max_reuse" << "add_to_secondary";
-   tmp.newElement =
-      (NewIngFunc)
-      (Yeast*(Database::*)(void))
-      &Database::newYeast;
+   tmp.newElement = [&]() { return this->newYeast(); };
 
    ret.append(tmp);
 
@@ -4786,10 +4773,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "amount" << "calcium" << "bicarbonate" << "sulfate" <<
       "chloride" << "sodium" << "magnesium" << "ph" << "notes";
-   tmp.newElement =
-      (NewIngFunc)
-      (Water*(Database::*)(void))
-      &Database::newWater;
+   tmp.newElement = [&]() { return this->newWater(); };
 
    ret.append(tmp);
 
@@ -4803,6 +4787,7 @@ void Database::updateDatabase(QString const& filename)
 
    QVariant btid, newid, oldid;
    QVariant zero(0);
+   QList<TableParams> tableParams = makeTableParams();
 
    QList<QVariant> propVal;
    QStringList varAndHolder;
@@ -4859,10 +4844,7 @@ void Database::updateDatabase(QString const& filename)
 
          QSqlQuery qOldBtIngInsert( sqlDatabase() );
          qOldBtIngInsert.prepare(
-            QString("INSERT INTO bt_%1 id=:id %2_id=:%3_id")
-               .arg(tp.tableName)
-               .arg(tp.tableName)
-               .arg(tp.tableName) );
+            QString("INSERT INTO bt_%1 (id,%1_id) values (:id,:%1_id)").arg(tp.tableName) );
 
          // Resize propVal appropriately for current table.
          propVal.clear();
@@ -4923,7 +4905,8 @@ void Database::updateDatabase(QString const& filename)
             else
             {
                // Create a new ingredient.
-               oldid = (this->*(tp.newElement))()->_key;
+               oldid = tp.newElement()->_key;
+
                // Copy in the new data.
                qUpdateOldIng.bindValue( ":id", oldid );
 
@@ -5087,7 +5070,8 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
    }
 }
 
-QString Database::makeQueryString( QSqlRecord here, QString realName ) {
+QString Database::makeInsertString( QSqlRecord here, QString realName )
+{
    QString columns,qmarks;
 
    // Yes. I went from named to positional place holders. Such is life
@@ -5104,7 +5088,25 @@ QString Database::makeQueryString( QSqlRecord here, QString realName ) {
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
 }
 
-QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field) {
+QString Database::makeUpdateString( QSqlRecord here, QString realName, int key )
+{
+   QString columns;
+
+   // Yes. I am still using positional place holders, and you are still dealing
+   // with it
+   for(int i=0; i < here.count(); ++i) {
+      if ( ! columns.isEmpty() ) {
+         columns += QString(",%1=?").arg( here.fieldName(i) );
+      }
+      else {
+         columns = QString("%1=?").arg( here.fieldName(i) );
+      }
+   }
+   return QString("UPDATE %1 SET %2 where id=%3").arg(realName).arg(columns).arg(key);
+}
+
+QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
+{
    QVariant retVar = field.value();
    if ( field.type() == QVariant::Bool ) {
       switch(newType) {
@@ -5122,7 +5124,8 @@ QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field) {
    return retVar;
 }
 
-QStringList Database::allTablesInOrder(QSqlQuery q) {
+QStringList Database::allTablesInOrder(QSqlQuery q)
+{
    QString query = "SELECT name FROM bt_alltables ORDER BY table_id";
    QStringList tmp;
 
@@ -5143,13 +5146,13 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
    // There are a lot of tables to process
    foreach( QString table, tables ) {
       QSqlField field;
-      QString columns,qmarks;
       bool mustPrepare = true;
       int maxid = -1;
 
-      // settings and bt_alltables don't get copied; metatables are created
-      // when the database is
-      if ( table == "settings" || table == "bt_alltables" )
+      // bt_alltables don't get copied; metatables are created
+      // when the database is. I used to say this about settings. I was wrong
+      // about settings
+      if ( table == "bt_alltables" )
          continue;
 
       QString findAllQuery = QString("SELECT * FROM %1").arg(table);
@@ -5160,13 +5163,13 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
          newDb.transaction();
 
-         QSqlQuery insertNew(newDb); // we will prepare this in a bit
+         QSqlQuery upsertNew(newDb); // we will prepare this in a bit
 
          // Start reading the records from the old db
          while(readOld.next()) {
             int idx;
             QSqlRecord here = readOld.record();
-            QString insertQuery;
+            QString upsertQuery;
 
             idx = here.indexOf("id");
 
@@ -5179,22 +5182,27 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
             // Prepare the insert for this table if required
             if ( mustPrepare ) {
-               insertQuery = makeQueryString(here,table);
-               insertNew.prepare(insertQuery);
+               if ( table == QStringLiteral("settings") ) {
+                  upsertQuery = makeUpdateString(here,table,here.value(idx).toInt());
+               }
+               else {
+                  upsertQuery = makeInsertString(here,table);
+               }
+               upsertNew.prepare(upsertQuery);
                // but do it only once for this table
                mustPrepare = false;
             }
             // All that's left is to bind
             for(int i=0; i < here.count(); ++i) {
-               insertNew.bindValue(i,
+               upsertNew.bindValue(i,
                         convertValue(newType, here.field(i)),
                         QSql::In
                );
             }
 
             // and execute
-            if ( ! insertNew.exec() )
-               throw QString("Could not insert new row %1 : %2").arg(insertNew.lastQuery()).arg(insertNew.lastError().text());
+            if ( ! upsertNew.exec() )
+               throw QString("Could not insert new row %1 : %2").arg(upsertNew.lastQuery()).arg(upsertNew.lastError().text());
          }
          // We need to manually reset the sequences
          if ( newType == Brewtarget::PGSQL && maxid > 0 ) {
