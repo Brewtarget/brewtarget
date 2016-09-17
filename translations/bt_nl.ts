@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="nl">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Robin Fiddelaers &lt;robin@fiddelaers.be&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2016-03-09 16:48+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 18186)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2016-09-17 13:52+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -112,11 +121,11 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwachte calorieën (per 33 cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Geschat aantal calorieën (per 340 g)</translation>
+        <translation>Verwachte calorieën (per 12oz)</translation>
     </message>
 </context>
 <context>
@@ -131,7 +140,7 @@
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Kook Volume</translation>
+        <translation>Kookvolume</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
@@ -139,15 +148,15 @@
     </message>
     <message>
         <source>Final Volume</source>
-        <translation>eind Volume</translation>
+        <translation>Eind SG</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation>begin SG</translation>
+        <translation>Begin SG</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Kook Tijd</translation>
+        <translation>Kooktijd</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -167,7 +176,7 @@
     </message>
     <message>
         <source>Completed</source>
-        <translation>Gereed</translation>
+        <translation>Voltooid</translation>
     </message>
     <message>
         <source>Time</source>
@@ -191,7 +200,7 @@
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation>SG voor het koken:</translation>
+        <translation>SG na het koken</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
@@ -199,11 +208,11 @@
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Print Document</translation>
+        <translation>Document afdrukken</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Aantekeningen</translation>
+        <translation>Notities</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
@@ -211,7 +220,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwachte calorieën (per 33 cl)</translation>
     </message>
 </context>
 <context>
@@ -234,15 +243,15 @@
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation>Specifieke zwaartekracht</translation>
+        <translation>Soortelijk Gewicht</translation>
     </message>
     <message>
         <source>SI</source>
-        <translation type="unfinished"></translation>
+        <translation>Metrisch</translation>
     </message>
     <message>
         <source>US Customary</source>
-        <translation>Amerikaans maatsysteem</translation>
+        <translation>USC</translation>
     </message>
     <message>
         <source>Milligrams</source>
@@ -274,7 +283,7 @@
     </message>
     <message>
         <source>British Imperial</source>
-        <translation>Brits maatsysteem</translation>
+        <translation>Brits Imperial</translation>
     </message>
     <message>
         <source>MilliLiters</source>
@@ -294,11 +303,11 @@
     </message>
     <message>
         <source>Cups</source>
-        <translation>Kopjes</translation>
+        <translation>Cups</translation>
     </message>
     <message>
         <source>Quarts</source>
-        <translation type="unfinished"></translation>
+        <translation>Quart</translation>
     </message>
     <message>
         <source>Gallons</source>
@@ -310,15 +319,15 @@
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
+        <translation>YYYY-mm-dd</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>dd-mm-YYYY</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>mm-dd-YYYY</translation>
     </message>
     <message>
         <source>Seconds</source>
@@ -342,7 +351,7 @@
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaal</translation>
     </message>
 </context>
 <context>
@@ -406,7 +415,7 @@
     </message>
     <message>
         <source>Form</source>
-        <translation>Vorm</translation>
+        <translation>Formulier</translation>
     </message>
     <message>
         <source>Category</source>
@@ -414,23 +423,23 @@
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Letter</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Handleiding</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation type="unfinished"></translation>
+        <translation>PAD</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation type="unfinished"></translation>
+        <translation>VOLLEDIGPAD</translation>
     </message>
 </context>
 <context>
@@ -461,7 +470,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation>Verwijderen</translation>
+        <translation>Verwijder</translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -473,7 +482,7 @@
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Hop</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -505,7 +514,7 @@
     </message>
     <message>
         <source>Delete %1</source>
-        <translation>%1 Verwijderen</translation>
+        <translation>Wis %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
@@ -552,7 +561,7 @@
     </message>
     <message>
         <source>Convert</source>
-        <translation>Conversie</translation>
+        <translation>Converteer</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -626,11 +635,11 @@
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Als standaard instellen</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Vereiste Velden</translation>
+        <translation>Vereiste velden</translation>
     </message>
     <message>
         <source>Name</source>
@@ -753,7 +762,7 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Gemaischd</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -765,7 +774,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Late</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Normal</source>
@@ -835,7 +844,7 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Gemaischd</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -851,7 +860,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Late</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1376,35 +1385,35 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Specerij</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Fining</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Waterbehandeling</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished">Kruid</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Smaak</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Overig</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Koken</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Maisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Primary</source>
@@ -1416,15 +1425,15 @@
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Bottelen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1514,11 +1523,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1819,7 +1828,7 @@
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished">Map</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to update the database</source>
@@ -2211,7 +2220,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Brouwdatum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Preboil</source>
@@ -2311,11 +2320,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished">Diversen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished">Gist</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
@@ -2323,7 +2332,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Geschat aantal calorieën (per 340 g)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Bitterness</source>

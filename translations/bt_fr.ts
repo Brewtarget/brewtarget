@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="fr">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Jean-Marc &lt;Unknown&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2016-04-04 13:14+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 18186)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2016-09-17 13:52+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -40,7 +49,7 @@
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation>Densité Initiale</translation>
+        <translation>Densité initiale</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -116,7 +125,7 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Calories estimées (pour 35cl)</translation>
+        <translation>Calories estimées (pour 33cl)</translation>
     </message>
 </context>
 <context>
@@ -143,7 +152,7 @@
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation>Densité Initiale</translation>
+        <translation>Densité initiale</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -159,7 +168,7 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Calories estimées (pour 35cl)</translation>
+        <translation>Calories estimées (pour 33cl)</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -218,7 +227,7 @@
     <name>Brewtarget</name>
     <message>
         <source>Default</source>
-        <translation>Défaut</translation>
+        <translation>Par défaut</translation>
     </message>
     <message>
         <source>EBC</source>
@@ -234,7 +243,7 @@
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation>Densité Spécifique</translation>
+        <translation>Densité spécifique</translation>
     </message>
     <message>
         <source>SI</source>
@@ -242,7 +251,7 @@
     </message>
     <message>
         <source>US Customary</source>
-        <translation>Unités US</translation>
+        <translation>Unités américaines</translation>
     </message>
     <message>
         <source>Milligrams</source>
@@ -757,11 +766,11 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation>Trempé</translation>
+        <translation>Infusé</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation>Trempé</translation>
+        <translation>Non empâté</translation>
     </message>
     <message>
         <source>Late</source>
@@ -839,7 +848,7 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation>Trempé</translation>
+        <translation>Infusé</translation>
     </message>
     <message>
         <source>Not mashed</source>
@@ -913,7 +922,7 @@
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Arôme</translation>
+        <translation>Arômatique</translation>
     </message>
     <message>
         <source>Dry Hop</source>
@@ -999,7 +1008,7 @@
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Arôme</translation>
+        <translation>Arômatique</translation>
     </message>
     <message>
         <source>Leaf</source>
@@ -2323,7 +2332,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Calories estimées (pour 35cl)</translation>
+        <translation>Calories estimées (pour 33cl)</translation>
     </message>
     <message>
         <source>Bitterness</source>
@@ -2754,7 +2763,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation>Pré-ébullition</translation>
+        <translation>Post-ébullition</translation>
     </message>
     <message>
         <source>OG</source>
@@ -3077,7 +3086,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Arôme</translation>
+        <translation>Arômatique</translation>
     </message>
     <message>
         <source>Dry Hop</source>
@@ -3323,7 +3332,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation>Calories/35cl</translation>
+        <translation>Calories/33cl</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -3467,7 +3476,7 @@ Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Visualiser</translation>
+        <translation>Afficha&amp;ge</translation>
     </message>
     <message>
         <source>&amp;Tools</source>

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: brewtarget\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-06-13 21:56+0000\n"
+"PO-Revision-Date: 2016-04-29 10:27+0000\n"
 "Last-Translator: Andi Chandler <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
-"X-Generator: Launchpad (build 17881)\n"
+"X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -124,11 +124,11 @@ msgstr "Heat water"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Estimated calories (per 33 cl)"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Estimated calories (per 12 oz)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -221,7 +221,7 @@ msgstr "Step %1: %2"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Estimated calories (per 33 cl)"
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -349,7 +349,7 @@ msgstr "Barrels"
 
 msgctxt "Brewtarget|"
 msgid "Scale"
-msgstr ""
+msgstr "Scale"
 
 msgctxt "BtDigitWidget|"
 msgid "Too low for style."
@@ -478,7 +478,7 @@ msgstr "Style"
 
 msgctxt "BtTreeView|"
 msgid "Yeast"
-msgstr ""
+msgstr "Yeast"
 
 msgctxt "BtTreeView|"
 msgid "Folder"
@@ -494,586 +494,593 @@ msgstr "Export"
 
 msgctxt "BtTreeView|"
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Delete %1"
-msgstr ""
+msgstr "Delete %1"
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Delete %1 %2?"
-msgstr ""
+msgstr "Delete %1 %2?"
 
 msgctxt "BtTreeView|"
 msgid "BrewNote"
-msgstr ""
+msgstr "BrewNote"
 
 msgctxt "BtTreeView|"
 msgid "Cancel All"
-msgstr ""
+msgstr "Cancel All"
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Copy %1"
-msgstr ""
+msgstr "Copy %1"
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Enter a unique name for the copy of %1."
-msgstr ""
+msgstr "Enter a unique name for the copy of %1."
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
-msgstr ""
+msgstr "An empty name will skip copying this %1."
 
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
-msgstr ""
+msgstr "Converter Tool"
 
 msgctxt "ConverterTool|"
 msgid "Input"
-msgstr ""
+msgstr "Input"
 
 msgctxt "ConverterTool|"
 msgid "Output Units"
-msgstr ""
+msgstr "Output Units"
 
 msgctxt "ConverterTool|"
 msgid "Output"
-msgstr ""
+msgstr "Output"
 
 msgctxt "ConverterTool|"
 msgid "Convert"
-msgstr ""
+msgstr "Convert"
 
 msgctxt "ConverterTool|"
 msgid "Amount and units to convert"
-msgstr ""
+msgstr "Amount and units to convert"
 
 msgctxt "ConverterTool|"
 msgid "Unit you want to convert to"
-msgstr ""
+msgstr "Unit you want to convert to"
 
 msgctxt "ConverterTool|"
 msgid "Output conversion"
-msgstr ""
+msgstr "Output conversion"
 
 msgctxt "Database|"
 msgid "Merge Database"
-msgstr ""
+msgstr "Merge Database"
 
 msgctxt "Database|"
 msgid ""
 "There may be new ingredients and recipes available. Would you like to add "
 "these to your database?"
 msgstr ""
+"There may be new ingredients and recipes available. Would you like to add "
+"these to your database?"
 
 #, qt-format
 msgctxt "EquipmentEditor|"
 msgid "Grain absorption (%1/%2)"
-msgstr ""
+msgstr "Grain absorption (%1/%2)"
 
 msgctxt "EquipmentEditor|"
 msgid "Tun Volume Warning"
-msgstr ""
+msgstr "Tun Volume Warning"
 
 msgctxt "EquipmentEditor|"
 msgid "Batch Size Warning"
-msgstr ""
+msgstr "Batch Size Warning"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name"
-msgstr ""
+msgstr "Equipment name"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name:"
-msgstr ""
+msgstr "Equipment name:"
 
 msgctxt "EquipmentEditor|"
 msgid "The tun volume you entered is 0. This may cause problems"
-msgstr ""
+msgstr "The tun volume you entered is 0. This may cause problems"
 
 msgctxt "EquipmentEditor|"
 msgid "The batch size you entered is 0. This may cause problems"
-msgstr ""
+msgstr "The batch size you entered is 0. This may cause problems"
 
 msgctxt "EquipmentEditor|"
 msgid "Hop Utilization Warning"
-msgstr ""
+msgstr "Hop Utilisation Warning"
 
 msgctxt "EquipmentEditor|"
 msgid ""
 "The hop utilization percentage you entered is 0. This may cause problems"
 msgstr ""
+"The hop utilisation percentage you entered is 0. This may cause problems"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment Editor"
-msgstr ""
+msgstr "Equipment Editor"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment"
-msgstr ""
+msgstr "Equipment"
 
 msgctxt "EquipmentEditor|"
 msgid "Set as Default"
-msgstr ""
+msgstr "Set as Default"
 
 msgctxt "EquipmentEditor|"
 msgid "Required Fields"
-msgstr ""
+msgstr "Required Fields"
 
 msgctxt "EquipmentEditor|"
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgctxt "EquipmentEditor|"
 msgid "Pre-boil volume"
-msgstr ""
+msgstr "Pre-boil volume"
 
 msgctxt "EquipmentEditor|"
 msgid "Calculate pre-boil volume"
-msgstr ""
+msgstr "Calculate pre-boil volume"
 
 msgctxt "EquipmentEditor|"
 msgid "Batch size"
-msgstr ""
+msgstr "Batch size"
 
 msgctxt "EquipmentEditor|"
 msgid "Boiling && Water"
-msgstr ""
+msgstr "Boiling && Water"
 
 msgctxt "EquipmentEditor|"
 msgid "Boil time"
-msgstr ""
+msgstr "Boil time"
 
 msgctxt "EquipmentEditor|"
 msgid "Evaporation rate (per hr)"
-msgstr ""
+msgstr "Evaporation rate (per hr)"
 
 msgctxt "EquipmentEditor|"
 msgid "Kettle top-up water"
-msgstr ""
+msgstr "Kettle top-up water"
 
 msgctxt "EquipmentEditor|"
 msgid "Final top-up water"
-msgstr ""
+msgstr "Final top-up water"
 
 msgctxt "EquipmentEditor|"
 msgid "Grain Absorption (L/kg)"
-msgstr ""
+msgstr "Grain Absorption (L/kg)"
 
 msgctxt "EquipmentEditor|"
 msgid "Default Absorption"
-msgstr ""
+msgstr "Default Absorption"
 
 msgctxt "EquipmentEditor|"
 msgid "Hop Utilization "
-msgstr ""
+msgstr "Hop Utilisation "
 
 msgctxt "EquipmentEditor|"
 msgid "Boiling Point of Water"
-msgstr ""
+msgstr "Boiling Point of Water"
 
 msgctxt "EquipmentEditor|"
 msgid "Mash Tun"
-msgstr ""
+msgstr "Mash Tun"
 
 msgctxt "EquipmentEditor|"
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 msgctxt "EquipmentEditor|"
 msgid "Mass"
-msgstr ""
+msgstr "Mass"
 
 msgctxt "EquipmentEditor|"
 msgid "Remove equipment"
-msgstr ""
+msgstr "Remove equipment"
 
 msgctxt "EquipmentEditor|"
 msgid ""
 "If checked, we will calculate your pre-boil volume based on your desired "
 "batch size, boil time, evaporation rate, losses, etc."
 msgstr ""
+"If checked, we will calculate your pre-boil volume based on your desired "
+"batch size, boil time, evaporation rate, losses, etc."
 
 msgctxt "EquipmentEditor|"
 msgid "Automatically fill in pre-boil volume"
-msgstr ""
+msgstr "Automatically fill in pre-boil volume"
 
 msgctxt "EquipmentEditor|"
 msgid "How much water boils off per hour"
-msgstr ""
+msgstr "How much water boils off per hour"
 
 msgctxt "EquipmentEditor|"
 msgid "How much water is added to kettle immediately pre-boil"
-msgstr ""
+msgstr "How much water is added to kettle immediately pre-boil"
 
 msgctxt "EquipmentEditor|"
 msgid "Water added to fermenter"
-msgstr ""
+msgstr "Water added to fermenter"
 
 msgctxt "EquipmentEditor|"
 msgid "Volume of mash tun"
-msgstr ""
+msgstr "Volume of mash tun"
 
 msgctxt "EquipmentEditor|"
 msgid "Mass or weight of mash tun"
-msgstr ""
+msgstr "Mass or weight of mash tun"
 
 msgctxt "EquipmentEditor|"
 msgid "Wort lost between kettle and fermenter"
-msgstr ""
+msgstr "Wort lost between kettle and fermenter"
 
 msgctxt "EquipmentEditor|"
 msgid "Volume of wort lost to lauter deadspace"
-msgstr ""
+msgstr "Volume of wort lost to lauter deadspace"
 
 msgctxt "EquipmentEditor|"
 msgid "New equipment"
-msgstr ""
+msgstr "New equipment"
 
 msgctxt "EquipmentEditor|"
 msgid "Save"
-msgstr ""
+msgstr "Save"
 
 msgctxt "EquipmentEditor|"
 msgid "Cancel"
-msgstr ""
+msgstr "Cancel"
 
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr ""
+msgstr "Mashed"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr ""
+msgstr "Steeped"
 
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr ""
+msgstr "Not mashed"
 
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr ""
+msgstr "Late"
 
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
-msgstr ""
+msgstr "Fermentable name"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name:"
-msgstr ""
+msgstr "Fermentable name:"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable Database"
-msgstr ""
+msgstr "Fermentable Database"
 
 msgctxt "FermentableDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Add to Recipe"
 
 msgctxt "FermentableDialog|"
 msgid "New"
-msgstr ""
+msgstr "New"
 
 msgctxt "FermentableDialog|"
 msgid "Add selected ingredient to recipe"
-msgstr ""
+msgstr "Add selected ingredient to recipe"
 
 msgctxt "FermentableDialog|"
 msgid "Create new ingredient"
-msgstr ""
+msgstr "Create new ingredient"
 
 msgctxt "FermentableDialog|"
 msgid "Edit selected ingredient"
-msgstr ""
+msgstr "Edit selected ingredient"
 
 msgctxt "FermentableDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "Remove selected ingredient"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Grain"
-msgstr ""
+msgstr "Grain"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Sugar"
-msgstr ""
+msgstr "Sugar"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Extract"
-msgstr ""
+msgstr "Extract"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Dry Extract"
-msgstr ""
+msgstr "Dry Extract"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
-msgstr ""
+msgstr "Adjunct"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr ""
+msgstr "Mashed"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr ""
+msgstr "Steeped"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr ""
+msgstr "Not mashed"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr ""
+msgstr "Late"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
-msgstr ""
+msgstr "Bad model index. row = %1"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad column: %1"
-msgstr ""
+msgstr "Bad column: %1"
 
 msgctxt "FermentableTableModel|"
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgctxt "FermentableTableModel|"
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgctxt "FermentableTableModel|"
 msgid "Amount"
-msgstr ""
+msgstr "Amount"
 
 msgctxt "FermentableTableModel|"
 msgid "Yield %"
-msgstr ""
+msgstr "Yield %"
 
 msgctxt "FermentableTableModel|"
 msgid "Inventory"
-msgstr ""
+msgstr "Inventory"
 
 msgctxt "FermentableTableModel|"
 msgid "Color"
-msgstr ""
+msgstr "Colour"
 
 msgctxt "FermentableTableModel|"
 msgid "Method"
-msgstr ""
+msgstr "Method"
 
 msgctxt "FermentableTableModel|"
 msgid "Addition"
-msgstr ""
+msgstr "Addition"
 
 msgctxt "Hop|"
 msgid "Mash"
-msgstr ""
+msgstr "Mash"
 
 msgctxt "Hop|"
 msgid "First Wort"
-msgstr ""
+msgstr "First Wort"
 
 msgctxt "Hop|"
 msgid "Boil"
-msgstr ""
+msgstr "Boil"
 
 msgctxt "Hop|"
 msgid "Aroma"
-msgstr ""
+msgstr "Aroma"
 
 msgctxt "Hop|"
 msgid "Dry Hop"
-msgstr ""
+msgstr "Dry Hop"
 
 msgctxt "Hop|"
 msgid "Bittering"
-msgstr ""
+msgstr "Bittering"
 
 msgctxt "Hop|"
 msgid "Both"
-msgstr ""
+msgstr "Both"
 
 msgctxt "Hop|"
 msgid "Leaf"
-msgstr ""
+msgstr "Leaf"
 
 msgctxt "Hop|"
 msgid "Pellet"
-msgstr ""
+msgstr "Pellet"
 
 msgctxt "Hop|"
 msgid "Plug"
-msgstr ""
+msgstr "Plug"
 
 msgctxt "HopDialog|"
 msgid "Hop name"
-msgstr ""
+msgstr "Hop name"
 
 msgctxt "HopDialog|"
 msgid "Hop name:"
-msgstr ""
+msgstr "Hop name:"
 
 msgctxt "HopDialog|"
 msgid "Hop Database"
-msgstr ""
+msgstr "Hop Database"
 
 msgctxt "HopDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Add to Recipe"
 
 msgctxt "HopDialog|"
 msgid "New"
-msgstr ""
+msgstr "New"
 
 msgctxt "HopDialog|"
 msgid "Add selected ingredient to recipe"
-msgstr ""
+msgstr "Add selected ingredient to recipe"
 
 msgctxt "HopDialog|"
 msgid "Create new ingredient"
-msgstr ""
+msgstr "Create new ingredient"
 
 msgctxt "HopDialog|"
 msgid "Edit selected ingredient"
-msgstr ""
+msgstr "Edit selected ingredient"
 
 msgctxt "HopDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "Remove selected ingredient"
 
 msgctxt "HopItemDelegate|"
 msgid "Boil"
-msgstr ""
+msgstr "Boil"
 
 msgctxt "HopItemDelegate|"
 msgid "Dry Hop"
-msgstr ""
+msgstr "Dry Hop"
 
 msgctxt "HopItemDelegate|"
 msgid "Mash"
-msgstr ""
+msgstr "Mash"
 
 msgctxt "HopItemDelegate|"
 msgid "First Wort"
-msgstr ""
+msgstr "First Wort"
 
 msgctxt "HopItemDelegate|"
 msgid "Aroma"
-msgstr ""
+msgstr "Aroma"
 
 msgctxt "HopItemDelegate|"
 msgid "Leaf"
-msgstr ""
+msgstr "Leaf"
 
 msgctxt "HopItemDelegate|"
 msgid "Pellet"
-msgstr ""
+msgstr "Pellet"
 
 msgctxt "HopItemDelegate|"
 msgid "Plug"
-msgstr ""
+msgstr "Plug"
 
 msgctxt "HopTableModel|"
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgctxt "HopTableModel|"
 msgid "Alpha %"
-msgstr ""
+msgstr "Alpha %"
 
 msgctxt "HopTableModel|"
 msgid "Amount"
-msgstr ""
+msgstr "Amount"
 
 msgctxt "HopTableModel|"
 msgid "Use"
-msgstr ""
+msgstr "Use"
 
 msgctxt "HopTableModel|"
 msgid "Time"
-msgstr ""
+msgstr "Time"
 
 msgctxt "HopTableModel|"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 msgctxt "HopTableModel|"
 msgid "Inventory"
-msgstr ""
+msgstr "Inventory"
 
 msgctxt "IbuGuSlider|"
 msgid "Cloying"
-msgstr ""
+msgstr "Cloying"
 
 msgctxt "IbuGuSlider|"
 msgid "Extra Malty"
-msgstr ""
+msgstr "Extra Malty"
 
 msgctxt "IbuGuSlider|"
 msgid "Slightly Malty"
-msgstr ""
+msgstr "Slightly Malty"
 
 msgctxt "IbuGuSlider|"
 msgid "Balanced"
-msgstr ""
+msgstr "Balanced"
 
 msgctxt "IbuGuSlider|"
 msgid "Slightly Hoppy"
-msgstr ""
+msgstr "Slightly Hoppy"
 
 msgctxt "IbuGuSlider|"
 msgid "Extra Hoppy"
-msgstr ""
+msgstr "Extra Hoppy"
 
 msgctxt "IbuGuSlider|"
 msgid "Way Hoppy"
-msgstr ""
+msgstr "Way Hoppy"
 
 msgctxt "MainWindow|"
 msgid "Open"
-msgstr ""
+msgstr "Open"
 
 msgctxt "MainWindow|"
 msgid "BeerXML files (*.xml)"
-msgstr ""
+msgstr "BeerXML files (*.xml)"
 
 msgctxt "MainWindow|"
 msgid "Save"
-msgstr ""
+msgstr "Save"
 
 msgctxt "MainWindow|"
 msgid "Equipment request"
-msgstr ""
+msgstr "Equipment request"
 
 msgctxt "MainWindow|"
 msgid ""
 "Would you like to set the batch size, boil size and time to that requested "
 "by the equipment?"
 msgstr ""
+"Would you like to set the batch size, boil size and time to that requested "
+"by the equipment?"
 
 msgctxt "MainWindow|"
 msgid "HTML files (*.html)"
-msgstr ""
+msgstr "HTML files (*.html)"
 
 msgctxt "MainWindow|"
 msgid "Database Update"
-msgstr ""
+msgstr "Database Update"
 
 msgctxt "MainWindow|"
 msgid ""
@@ -1081,266 +1088,278 @@ msgid ""
 "changes to (but will not delete) some of your ingredients. It will not "
 "modify any of your recipes. Continue?"
 msgstr ""
+"You are about to update the current database with another one. This may make "
+"changes to (but will not delete) some of your ingredients. It will not "
+"modify any of your recipes. Continue?"
 
 msgctxt "MainWindow|"
 msgid "Select Database File"
-msgstr ""
+msgstr "Select Database File"
 
 msgctxt "MainWindow|"
 msgid "Brewtarget Database (*.sqlite)"
-msgstr ""
+msgstr "Brewtarget Database (*.sqlite)"
 
 msgctxt "MainWindow|"
 msgid "Recipe name"
-msgstr ""
+msgstr "Recipe name"
 
 msgctxt "MainWindow|"
 msgid "Recipe name:"
-msgstr ""
+msgstr "Recipe name:"
 
 msgctxt "MainWindow|"
 msgid "Backup Database"
-msgstr ""
+msgstr "Backup Database"
 
 msgctxt "MainWindow|"
 msgid "Oops!"
-msgstr ""
+msgstr "Oops!"
 
 msgctxt "MainWindow|"
 msgid "Could not copy the files for some reason."
-msgstr ""
+msgstr "Could not copy the files for some reason."
 
 msgctxt "MainWindow|"
 msgid "A Warning"
-msgstr ""
+msgstr "A Warning"
 
 msgctxt "MainWindow|"
 msgid ""
 "This will obliterate your current set of recipes and ingredients. Do you "
 "want to continue?"
 msgstr ""
+"This will obliterate your current set of recipes and ingredients. Do you "
+"want to continue?"
 
 msgctxt "MainWindow|"
 msgid "For some reason, the operation failed."
-msgstr ""
+msgstr "For some reason, the operation failed."
 
 #, qt-format
 msgctxt "MainWindow|"
 msgid "Import %1?"
-msgstr ""
+msgstr "Import %1?"
 
 msgctxt "MainWindow|"
 msgid "No mash"
-msgstr ""
+msgstr "No mash"
 
 msgctxt "MainWindow|"
 msgid "Trying to add a mash step without a mash. Please create a mash first."
 msgstr ""
+"Trying to add a mash step without a mash. Please create a mash first."
 
 msgctxt "MainWindow|"
 msgid "Copy Recipe"
-msgstr ""
+msgstr "Copy Recipe"
 
 msgctxt "MainWindow|"
 msgid "Enter a unique name for the copy."
-msgstr ""
+msgstr "Enter a unique name for the copy."
 
 msgctxt "MainWindow|"
 msgid "Please give your mash a name before saving."
-msgstr ""
+msgstr "Please give your mash a name before saving."
 
 msgctxt "MainWindow|"
 msgid "Restart"
-msgstr ""
+msgstr "Restart"
 
 msgctxt "MainWindow|"
 msgid "Please restart Brewtarget."
-msgstr ""
+msgstr "Please restart Brewtarget."
 
 msgctxt "MainWindow|"
 msgid "No equipment"
-msgstr ""
+msgstr "No equipment"
 
 msgctxt "MainWindow|"
 msgid "You must select or define an equipment profile first."
-msgstr ""
+msgstr "You must select or define an equipment profile first."
 
 msgctxt "MainWindow|"
 msgid "No style"
-msgstr ""
+msgstr "No style"
 
 msgctxt "MainWindow|"
 msgid "You must select a style first."
-msgstr ""
+msgstr "You must select a style first."
 
 msgctxt "MainWindow|"
 msgid "Choose File"
-msgstr ""
+msgstr "Choose File"
 
 msgctxt "MainWindow|"
 msgid "SQLite (*.sqlite)"
-msgstr ""
+msgstr "SQLite (*.sqlite)"
 
 msgctxt "MainWindow|"
 msgid "The database has been converted/upgraded."
-msgstr ""
+msgstr "The database has been converted/upgraded."
 
 msgctxt "MainWindow|"
 msgid "The original XML files can be found in "
-msgstr ""
+msgstr "The original XML files can be found in "
 
 msgctxt "MainWindow|"
 msgid ""
 "The import contained invalid beerXML. It has been imported, but please make "
 "certain it makes sense."
 msgstr ""
+"The import contained invalid beerXML. It has been imported, but please make "
+"certain it makes sense."
 
 msgctxt "MainWindow|"
 msgid "Folder name"
-msgstr ""
+msgstr "Folder name"
 
 msgctxt "MainWindow|"
 msgid "Folder name:"
-msgstr ""
+msgstr "Folder name:"
 
 msgctxt "MainWindow|"
 msgid "Bad Name"
-msgstr ""
+msgstr "Bad Name"
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-whitespace character in it"
-msgstr ""
+msgstr "A folder name must have at least one non-whitespace character in it"
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
-msgstr ""
+msgstr "A folder name must have at least one non-/ character in it"
 
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
-msgstr ""
+msgstr "No Fermentables"
 
 msgctxt "MashDesigner|"
 msgid "Your recipe must have fermentables to design a mash."
-msgstr ""
+msgstr "Your recipe must have fermentables to design a mash."
 
 msgctxt "MashDesigner|"
 msgid "No Equipment"
-msgstr ""
+msgstr "No Equipment"
 
 msgctxt "MashDesigner|"
 msgid ""
 "You have not set an equipment for this recipe. We really cannot continue "
 "without one."
 msgstr ""
+"You have not set an equipment for this recipe. We really cannot continue "
+"without one."
 
 msgctxt "MashDesigner|"
 msgid "Tun Temp"
-msgstr ""
+msgstr "Tun Temp"
 
 msgctxt "MashDesigner|"
 msgid "Enter the temperature of the tun before your first infusion."
-msgstr ""
+msgstr "Enter the temperature of the tun before your first infusion."
 
 msgctxt "MashDesigner|"
 msgid "Decoction error"
-msgstr ""
+msgstr "Decoction error"
 
 msgctxt "MashDesigner|"
 msgid "The first mash step cannot be a decoction."
-msgstr ""
+msgstr "The first mash step cannot be a decoction."
 
 #, qt-format
 msgctxt "MashStepTableModel|"
 msgid "Bad model index. row = %1"
-msgstr ""
+msgstr "Bad model index. row = %1"
 
 #, qt-format
 msgctxt "MashStepTableModel|"
 msgid "Bad column: %1"
-msgstr ""
+msgstr "Bad column: %1"
 
 msgctxt "MashStepTableModel|"
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgctxt "MashStepTableModel|"
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgctxt "MashStepTableModel|"
 msgid "Amount"
-msgstr ""
+msgstr "Amount"
 
 msgctxt "MashStepTableModel|"
 msgid "Infusion Temp"
-msgstr ""
+msgstr "Infusion Temp"
 
 msgctxt "MashStepTableModel|"
 msgid "Target Temp"
-msgstr ""
+msgstr "Target Temp"
 
 msgctxt "MashStepTableModel|"
 msgid "Time"
-msgstr ""
+msgstr "Time"
 
 #, qt-format
 msgctxt "MashWizard|"
 msgid "Mash thickness (%1/%2)"
-msgstr ""
+msgstr "Mash thickness (%1/%2)"
 
 msgctxt "MashWizard|"
 msgid "Bad thickness"
-msgstr ""
+msgstr "Bad thickness"
 
 msgctxt "MashWizard|"
 msgid "You must have a positive mash thickness."
-msgstr ""
+msgstr "You must have a positive mash thickness."
 
 msgctxt "MashWizard|"
 msgid "No steps"
-msgstr ""
+msgstr "No steps"
 
 msgctxt "MashWizard|"
 msgid "There must be at least one mash step to run the wizard."
-msgstr ""
+msgstr "There must be at least one mash step to run the wizard."
 
 msgctxt "MashWizard|"
 msgid "First step"
-msgstr ""
+msgstr "First step"
 
 msgctxt "MashWizard|"
 msgid "Your first mash step must be an infusion."
-msgstr ""
+msgstr "Your first mash step must be an infusion."
 
 msgctxt "MashWizard|"
 msgid "Mash too thick"
-msgstr ""
+msgstr "Mash too thick"
 
 msgctxt "MashWizard|"
 msgid "Your mash is too thick for desired temp. at first step."
-msgstr ""
+msgstr "Your mash is too thick for desired temp. at first step."
 
 msgctxt "MashWizard|"
 msgid "Decoction error"
-msgstr ""
+msgstr "Decoction error"
 
 msgctxt "MashWizard|"
 msgid "Something went wrong in decoction calculation."
-msgstr ""
+msgstr "Something went wrong in decoction calculation."
 
 msgctxt "MashWizard|"
 msgid "Sparge temp."
-msgstr ""
+msgstr "Sparge temp."
 
 msgctxt "MashWizard|"
 msgid ""
 "In order to hit your sparge temp, the sparge water must be above boiling. "
 "Lower your sparge temp, or allow for more sparge water."
 msgstr ""
+"In order to hit your sparge temp, the sparge water must be above boiling. "
+"Lower your sparge temp, or allow for more sparge water."
 
 msgctxt "MashWizard|"
 msgid "Too much wort"
-msgstr ""
+msgstr "Too much wort"
 
 msgctxt "MashWizard|"
 msgid ""
@@ -1348,62 +1367,65 @@ msgid ""
 "increasing the boil size by increasing the boil time, or reducing your mash "
 "thickness."
 msgstr ""
+"You have too much wort from the mash for your boil size. I suggest "
+"increasing the boil size by increasing the boil time, or reducing your mash "
+"thickness."
 
 msgctxt "Misc|"
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 msgctxt "Misc|"
 msgid "Fining"
-msgstr ""
+msgstr "Fining"
 
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr ""
+msgstr "Water Agent"
 
 msgctxt "Misc|"
 msgid "Herb"
-msgstr ""
+msgstr "Herb"
 
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr ""
+msgstr "Flavour"
 
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Other"
 
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Boil"
 
 msgctxt "Misc|"
 msgid "Mash"
-msgstr ""
+msgstr "Mash"
 
 msgctxt "Misc|"
 msgid "Primary"
-msgstr ""
+msgstr "Primary"
 
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr ""
+msgstr "Secondary"
 
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr ""
+msgstr "Bottling"
 
 msgctxt "Misc|"
 msgid "Weight"
-msgstr ""
+msgstr "Weight"
 
 msgctxt "Misc|"
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
-msgstr ""
+msgstr "Misc name"
 
 msgctxt "MiscDialog|"
 msgid "Misc name:"

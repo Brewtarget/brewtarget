@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-10-04 22:03+0000\n"
-"Last-Translator: Philip <Unknown>\n"
+"PO-Revision-Date: 2016-06-05 13:29+0000\n"
+"Last-Translator: Titusz Feher <titusz.feher@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
-"X-Generator: Launchpad (build 17881)\n"
+"X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 "X-Qt-Contexts: true\n"
 "X-Language: hu\n"
 
@@ -314,31 +314,31 @@ msgstr "ismeretlen"
 
 msgctxt "Brewtarget|"
 msgid "YYYY-mm-dd"
-msgstr ""
+msgstr "ÉÉÉÉ-hh-nn"
 
 msgctxt "Brewtarget|"
 msgid "dd-mm-YYYY"
-msgstr ""
+msgstr "nn-hh-ÉÉÉÉ"
 
 msgctxt "Brewtarget|"
 msgid "mm-dd-YYYY"
-msgstr ""
+msgstr "hh-nn-ÉÉÉÉ"
 
 msgctxt "Brewtarget|"
 msgid "Seconds"
-msgstr ""
+msgstr "Másodpercek"
 
 msgctxt "Brewtarget|"
 msgid "Minutes"
-msgstr ""
+msgstr "Percek"
 
 msgctxt "Brewtarget|"
 msgid "Hours"
-msgstr ""
+msgstr "Órák"
 
 msgctxt "Brewtarget|"
 msgid "Days"
-msgstr ""
+msgstr "Napok"
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
@@ -509,7 +509,7 @@ msgstr "Megjegyzés"
 
 msgctxt "BtTreeView|"
 msgid "Cancel All"
-msgstr ""
+msgstr "Összes Visszavonása"
 
 #, qt-format
 msgctxt "BtTreeView|"
@@ -524,7 +524,7 @@ msgstr "A következő fájl másolatának adj egyedi nevet %1"
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
-msgstr ""
+msgstr "Üres név esetén %1 nem lesz lemásolva."
 
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
@@ -646,7 +646,7 @@ msgstr "Főzet mennyisége"
 
 msgctxt "EquipmentEditor|"
 msgid "Boiling && Water"
-msgstr ""
+msgstr "Forralás && Víz"
 
 msgctxt "EquipmentEditor|"
 msgid "Boil time"
@@ -766,7 +766,7 @@ msgstr ""
 
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr ""
+msgstr "Normál"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -838,7 +838,7 @@ msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr ""
+msgstr "Normál"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
@@ -880,11 +880,11 @@ msgstr "Szín"
 
 msgctxt "FermentableTableModel|"
 msgid "Method"
-msgstr ""
+msgstr "Eljárás"
 
 msgctxt "FermentableTableModel|"
 msgid "Addition"
-msgstr ""
+msgstr "Hozzáadás"
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -1374,7 +1374,7 @@ msgstr ""
 
 msgctxt "Misc|"
 msgid "Spice"
-msgstr ""
+msgstr "Fűszer"
 
 msgctxt "Misc|"
 msgid "Fining"
@@ -1382,7 +1382,7 @@ msgstr ""
 
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr ""
+msgstr "Vízkezelő anyag"
 
 msgctxt "Misc|"
 msgid "Herb"

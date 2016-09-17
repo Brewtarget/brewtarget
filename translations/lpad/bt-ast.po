@@ -1,54 +1,57 @@
+# Asturian translation for brewtarget
+# Copyright (c) 2016 Rosetta Contributors and Canonical Ltd 2016
+# This file is distributed under the same license as the brewtarget package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: brewtarget\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-10-09 07:11+0000\n"
-"Last-Translator: Jonas <jonas@falkens.se>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2016-05-16 22:14+0000\n"
+"Last-Translator: Xuacu Saturio <xuacusk8@gmail.com>\n"
+"Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
 "X-Generator: Launchpad (build 18186)\n"
-"X-Qt-Contexts: true\n"
-"X-Language: sv\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
-msgstr "Om Brewtarget"
+msgstr "Tocante a Brewtarget"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
-msgstr "Stil"
+msgstr "Estilu"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Date"
-msgstr "Datum"
+msgstr "Data"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Boil Time"
-msgstr "Koktid"
+msgstr "Tiempu de fervíu"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Efficiency"
-msgstr "Effektivitet"
+msgstr "Eficiencia"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Boil Volume"
-msgstr "Kokvolym"
+msgstr "Volume de fervíu"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Preboil Gravity"
-msgstr "Densitet före kok"
+msgstr "Densidá antes de ferver"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Final Volume"
-msgstr "Slutvolym"
+msgstr "Volume final"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Starting Gravity"
-msgstr "Startdensitet"
+msgstr "Densidá de principiu"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "IBU"
@@ -56,104 +59,104 @@ msgstr "IBU"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Final Gravity"
-msgstr "Slutdensitet"
+msgstr "Densidá final"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "ABV"
-msgstr "Alkoholhalt"
+msgstr "Alcohol per volume"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Instructions"
-msgstr "Instruktioner"
+msgstr "Instrucciones"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Completed"
-msgstr "Färdig"
+msgstr "Completáu"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Time"
-msgstr "Tid"
+msgstr "Tiempu"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Step"
-msgstr "Steg"
+msgstr "Pasu"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Actual PreBoil Volume"
-msgstr "Verklig volym före kok"
+msgstr "Volume real antes de ferver"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Actual PreBoil Gravity"
-msgstr "Verklig densitet före kok"
+msgstr "Densidá real antes de ferver"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "PostBoil Volume"
-msgstr "Volym efter kok"
+msgstr "Volume después de ferver"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "PostBoil Gravity"
-msgstr "Densitet före kok"
+msgstr "Densidá después de ferver"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Volume into fermenter"
-msgstr "Volym i jäskärl"
+msgstr "Volume nel formentador"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Print Document"
-msgstr "Skriv ut dokument"
+msgstr "Imprentar documentu"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "<h2>Notes</h2>"
-msgstr "<h2>Anteckningar</h2>"
+msgstr "<h2>Notes</h2>"
 
 #, qt-format
 msgctxt "BrewDayScrollWidget|"
 msgid "Step %1: %2"
-msgstr "Steg %1: %2"
+msgstr "Pasu %1: %2"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Add grains"
-msgstr "Tillsätt malt"
+msgstr "Añadir granos"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
-msgstr "Värm vatten"
+msgstr "Calentar l'agua"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Caloríes albidraes (per 33 cl)"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Caloríes albidraes (per 12 oz)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
-msgstr "Stil"
+msgstr "Estilu"
 
 msgctxt "BrewDayWidget|"
 msgid "Date"
-msgstr "Datum"
+msgstr "Data"
 
 msgctxt "BrewDayWidget|"
 msgid "Boil Volume"
-msgstr "Kokvolym"
+msgstr "Volume de fervíu"
 
 msgctxt "BrewDayWidget|"
 msgid "Preboil Gravity"
-msgstr "Densitet före kok"
+msgstr "Densidá antes de ferver"
 
 msgctxt "BrewDayWidget|"
 msgid "Final Volume"
-msgstr "Slutvolym"
+msgstr "Volume final"
 
 msgctxt "BrewDayWidget|"
 msgid "Starting Gravity"
-msgstr "Startdensitet"
+msgstr "Densidá de principiu"
 
 msgctxt "BrewDayWidget|"
 msgid "Boil Time"
-msgstr "Koktid"
+msgstr "Tiempu de fervíu"
 
 msgctxt "BrewDayWidget|"
 msgid "IBU"
@@ -161,112 +164,112 @@ msgstr "IBU"
 
 msgctxt "BrewDayWidget|"
 msgid "Predicted Efficiency"
-msgstr "Förväntad verkningsgrad"
+msgstr ""
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Uppskattade kalorier (per 12 oz)"
+msgstr "Caloríes albidraes (per 12 oz)"
 
 msgctxt "BrewDayWidget|"
 msgid "Instructions"
-msgstr "Instruktioner"
+msgstr "Instrucciones"
 
 msgctxt "BrewDayWidget|"
 msgid "Completed"
-msgstr "Färdig"
+msgstr "Completáu"
 
 msgctxt "BrewDayWidget|"
 msgid "Time"
-msgstr "Tid"
+msgstr "Tiempu"
 
 msgctxt "BrewDayWidget|"
 msgid "Step"
-msgstr "Steg"
+msgstr "Pasu"
 
 msgctxt "BrewDayWidget|"
 msgid "Actual Pre-boil Volume:"
-msgstr "Verklig volym innan kokning:"
+msgstr "Volume real antes de ferver:"
 
 msgctxt "BrewDayWidget|"
 msgid "Actual Pre-boil Gravity:"
-msgstr "Verklig densitet före kok:"
+msgstr "Densidá real antes de ferver:"
 
 msgctxt "BrewDayWidget|"
 msgid "Post-boil Volume:"
-msgstr "Volym efter kok"
+msgstr "Volume después de ferver:"
 
 msgctxt "BrewDayWidget|"
 msgid "Post-boil Gravity:"
-msgstr "Densitet efter kok"
+msgstr "Densidá después de ferver:"
 
 msgctxt "BrewDayWidget|"
 msgid "Volume in fermenter:"
-msgstr "Volym i jäskar"
+msgstr "Volume nel formientador:"
 
 msgctxt "BrewDayWidget|"
 msgid "Print Document"
-msgstr "Skriv ut dokument"
+msgstr "Imprentar documentu"
 
 msgctxt "BrewDayWidget|"
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr "Notes"
 
 #, qt-format
 msgctxt "BrewDayWidget|"
 msgid "Step %1: %2"
-msgstr "Steg %1: %2"
+msgstr "Pasu %1: %2"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Caloríes albidraes (per 33 cl)"
 
 msgctxt "Brewtarget|"
 msgid "Default"
-msgstr "Förvalt"
+msgstr "Predetermináu"
 
 msgctxt "Brewtarget|"
 msgid "EBC"
-msgstr "EBC"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "SRM"
-msgstr "SRM"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Plato"
-msgstr "Plato"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Specific Gravity"
-msgstr "Densitet"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "SI"
-msgstr "SI"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "US Customary"
-msgstr "Vanlig i US"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Milligrams"
-msgstr "milligram"
+msgstr "Miligramos"
 
 msgctxt "Brewtarget|"
 msgid "Grams"
-msgstr "gram"
+msgstr "Gramos"
 
 msgctxt "Brewtarget|"
 msgid "Kilograms"
-msgstr "kilogram"
+msgstr "Kilogramos"
 
 msgctxt "Brewtarget|"
 msgid "Ounces"
-msgstr "Uns"
+msgstr "Onces"
 
 msgctxt "Brewtarget|"
 msgid "Pounds"
-msgstr "Pund"
+msgstr "Llibres"
 
 msgctxt "Brewtarget|"
 msgid "Celsius"
@@ -274,71 +277,71 @@ msgstr "Celsius"
 
 msgctxt "Brewtarget|"
 msgid "Fahrenheit"
-msgstr "Fahrenheit"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "British Imperial"
-msgstr "brittisk standard"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "MilliLiters"
-msgstr "milliliter"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Liters"
-msgstr "liter"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Teaspoons"
-msgstr "tesked"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Tablespoons"
-msgstr "matsked"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Cups"
-msgstr "Kopp"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Quarts"
-msgstr "Quart"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Gallons"
-msgstr "Gallons"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Unknown"
-msgstr "Okänd"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "YYYY-mm-dd"
-msgstr "YYYY-mm-dd"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "dd-mm-YYYY"
-msgstr "dd-mm-YYYY"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "mm-dd-YYYY"
-msgstr "dd-mm-YYYY"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Seconds"
-msgstr "Sekunder"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Minutes"
-msgstr "Minuter"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Hours"
-msgstr "Timmar"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Days"
-msgstr "Dagar"
+msgstr ""
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
@@ -350,176 +353,176 @@ msgstr ""
 
 msgctxt "BtDigitWidget|"
 msgid "Too low for style."
-msgstr "För låg för vald stil"
+msgstr ""
 
 msgctxt "BtDigitWidget|"
 msgid "In range for style."
-msgstr "I intervall för stilen,"
+msgstr ""
 
 msgctxt "BtDigitWidget|"
 msgid "Too high for style."
-msgstr "För högt för stilen,"
+msgstr ""
 
 #, qt-format
 msgctxt "BtLabel|"
 msgid "Color (%1)"
-msgstr "Färg (%1)"
+msgstr ""
 
 msgctxt "BtSplashScreen|"
 msgid "Loading..."
-msgstr "Laddar"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Brew Date"
-msgstr "Bryggdatum"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Style"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Boil Time"
-msgstr "Koktid"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Color"
-msgstr "Färg"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Type"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Use"
-msgstr "Använd"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Category"
-msgstr "Kategori"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Number"
-msgstr "Nummer"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Letter"
-msgstr "Bokstav"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Guide"
-msgstr "Guide"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "PATH"
-msgstr "SÖKVÄG"
+msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "FULLPATH"
-msgstr "Hela sökvägen"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "New"
-msgstr "Ny"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Recipe"
-msgstr "Recept"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Brew It!"
-msgstr "Brygg den!"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Brew Again"
-msgstr "Brygg den igen"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Change date"
-msgstr "Byt datum"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Recalculate eff"
-msgstr "Räkna om effektivitet"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Delete"
-msgstr "Ta bort"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Equipment"
-msgstr "Utrustning"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Fermentable"
-msgstr "Jäsbar"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Hop"
-msgstr "Humle"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Misc"
-msgstr "Övrigt"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Style"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Yeast"
-msgstr "Jäst"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Folder"
-msgstr "Mapp"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Copy"
-msgstr "Kopiera"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Export"
-msgstr "Exportera"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Import"
-msgstr "Importera"
+msgstr ""
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Delete %1"
-msgstr "Ta bort %1"
+msgstr ""
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Delete %1 %2?"
-msgstr "Ta bort %1 %2"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "BrewNote"
-msgstr "Brygganteckning"
+msgstr ""
 
 msgctxt "BtTreeView|"
 msgid "Cancel All"
-msgstr "Ångra alla"
+msgstr ""
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Copy %1"
-msgstr "Kopiera %1"
+msgstr ""
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Enter a unique name for the copy of %1."
-msgstr "Skriv in ett unikt namn för kopian av %1."
+msgstr ""
 
 #, qt-format
 msgctxt "BtTreeView|"
@@ -532,7 +535,7 @@ msgstr ""
 
 msgctxt "ConverterTool|"
 msgid "Input"
-msgstr "Inmatning"
+msgstr ""
 
 msgctxt "ConverterTool|"
 msgid "Output Units"
@@ -540,11 +543,11 @@ msgstr ""
 
 msgctxt "ConverterTool|"
 msgid "Output"
-msgstr "Output"
+msgstr ""
 
 msgctxt "ConverterTool|"
 msgid "Convert"
-msgstr "Konvertera"
+msgstr ""
 
 msgctxt "ConverterTool|"
 msgid "Amount and units to convert"
@@ -560,53 +563,51 @@ msgstr ""
 
 msgctxt "Database|"
 msgid "Merge Database"
-msgstr "Sammanfoga databas"
+msgstr ""
 
 msgctxt "Database|"
 msgid ""
 "There may be new ingredients and recipes available. Would you like to add "
 "these to your database?"
 msgstr ""
-"Det kan finnas ny ingredienser och recept tillgängliga. Vill du lägga till "
-"dem till din databas?"
 
 #, qt-format
 msgctxt "EquipmentEditor|"
 msgid "Grain absorption (%1/%2)"
-msgstr "Malt upptag (%1/%2)"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Tun Volume Warning"
-msgstr "Tunnvolyms-varning"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Batch Size Warning"
-msgstr "Satsstorlekeks Varning"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name"
-msgstr "Utrustningsnamn"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name:"
-msgstr "Utrustningsnamn:"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "The tun volume you entered is 0. This may cause problems"
-msgstr "Den tun volym du angav är 0. Detta kan orsaka problem"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "The batch size you entered is 0. This may cause problems"
-msgstr "Satsstorleken du angav är 0. Detta kan orsaka problem"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Hop Utilization Warning"
-msgstr "Humle användnings varning"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid ""
 "The hop utilization percentage you entered is 0. This may cause problems"
-msgstr "Nyttjandegraden för humlen du angav är 0. Detta kan orsaka problem"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment Editor"
@@ -614,7 +615,7 @@ msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment"
-msgstr "Utrustning"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Set as Default"
@@ -622,11 +623,11 @@ msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Required Fields"
-msgstr "Obligatoriska fält"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Pre-boil volume"
@@ -646,7 +647,7 @@ msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Boil time"
-msgstr "Koktid"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Evaporation rate (per hr)"
@@ -682,7 +683,7 @@ msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Volume"
-msgstr "Volym"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Mass"
@@ -736,7 +737,7 @@ msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Save"
-msgstr "Spara"
+msgstr ""
 
 msgctxt "EquipmentEditor|"
 msgid "Cancel"
@@ -764,11 +765,11 @@ msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
-msgstr "Jästnamn"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name:"
-msgstr "Jästnamn"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable Database"
@@ -780,7 +781,7 @@ msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "New"
-msgstr "Ny"
+msgstr ""
 
 msgctxt "FermentableDialog|"
 msgid "Add selected ingredient to recipe"
@@ -800,23 +801,23 @@ msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Grain"
-msgstr "Malt"
+msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Sugar"
-msgstr "Socker"
+msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Extract"
-msgstr "Extrakt"
+msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Dry Extract"
-msgstr "torrextrakt"
+msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
-msgstr "Tillsats"
+msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
@@ -841,36 +842,36 @@ msgstr ""
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad model index. row = %1"
-msgstr "Dåligt modellindex. rad = %1"
+msgstr ""
 
 #, qt-format
 msgctxt "FermentableTableModel|"
 msgid "Bad column: %1"
-msgstr "Felaktig kolumn:%1"
+msgstr ""
 
 msgctxt "FermentableTableModel|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "FermentableTableModel|"
 msgid "Type"
-msgstr "Sort"
+msgstr ""
 
 msgctxt "FermentableTableModel|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "FermentableTableModel|"
 msgid "Yield %"
-msgstr "Ge %"
+msgstr ""
 
 msgctxt "FermentableTableModel|"
 msgid "Inventory"
-msgstr "Lager"
+msgstr ""
 
 msgctxt "FermentableTableModel|"
 msgid "Color"
-msgstr "Färg"
+msgstr ""
 
 msgctxt "FermentableTableModel|"
 msgid "Method"
@@ -882,51 +883,51 @@ msgstr ""
 
 msgctxt "Hop|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "First Wort"
-msgstr "Första Vörten"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Boil"
-msgstr "Kokning"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Aroma"
-msgstr "Arom"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Dry Hop"
-msgstr "Torrhumling"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Bittering"
-msgstr "Bitter"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Both"
-msgstr "Både"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Leaf"
-msgstr "Löv"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Pellet"
-msgstr "Pellets"
+msgstr ""
 
 msgctxt "Hop|"
 msgid "Plug"
-msgstr "Puck"
+msgstr ""
 
 msgctxt "HopDialog|"
 msgid "Hop name"
-msgstr "Humlenamn"
+msgstr ""
 
 msgctxt "HopDialog|"
 msgid "Hop name:"
-msgstr "Humlenamn:"
+msgstr ""
 
 msgctxt "HopDialog|"
 msgid "Hop Database"
@@ -938,7 +939,7 @@ msgstr ""
 
 msgctxt "HopDialog|"
 msgid "New"
-msgstr "Ny"
+msgstr ""
 
 msgctxt "HopDialog|"
 msgid "Add selected ingredient to recipe"
@@ -958,63 +959,63 @@ msgstr ""
 
 msgctxt "HopItemDelegate|"
 msgid "Boil"
-msgstr "Kokning"
+msgstr ""
 
 msgctxt "HopItemDelegate|"
 msgid "Dry Hop"
-msgstr "Torrhumling"
+msgstr ""
 
 msgctxt "HopItemDelegate|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
 msgctxt "HopItemDelegate|"
 msgid "First Wort"
-msgstr "Första Vörten"
+msgstr ""
 
 msgctxt "HopItemDelegate|"
 msgid "Aroma"
-msgstr "Arom"
+msgstr ""
 
 msgctxt "HopItemDelegate|"
 msgid "Leaf"
-msgstr "Löv"
+msgstr ""
 
 msgctxt "HopItemDelegate|"
 msgid "Pellet"
-msgstr "Pellets"
+msgstr ""
 
 msgctxt "HopItemDelegate|"
 msgid "Plug"
-msgstr "Puck"
+msgstr ""
 
 msgctxt "HopTableModel|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "HopTableModel|"
 msgid "Alpha %"
-msgstr "Alfa %"
+msgstr ""
 
 msgctxt "HopTableModel|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "HopTableModel|"
 msgid "Use"
-msgstr "Användning"
+msgstr ""
 
 msgctxt "HopTableModel|"
 msgid "Time"
-msgstr "Tid"
+msgstr ""
 
 msgctxt "HopTableModel|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "HopTableModel|"
 msgid "Inventory"
-msgstr "Lager"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Cloying"
@@ -1022,59 +1023,57 @@ msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Extra Malty"
-msgstr "Extra maltig"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Slightly Malty"
-msgstr "Lätt maltig"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Balanced"
-msgstr "Balanserad"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Slightly Hoppy"
-msgstr "Lätt humlearomatisk"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Extra Hoppy"
-msgstr "Extra humlearomatisk"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Way Hoppy"
-msgstr "Extremt humlearomatisk"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Open"
-msgstr "Öppna"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "BeerXML files (*.xml)"
-msgstr "BeerXML-fil (*.xml)"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Save"
-msgstr "Spara"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Equipment request"
-msgstr "Utrustningsbegäran"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid ""
 "Would you like to set the batch size, boil size and time to that requested "
 "by the equipment?"
 msgstr ""
-"Vill du ändra batch-volym, kokvolym och tid baserat på de värden som "
-"angivits för utrustningen?"
 
 msgctxt "MainWindow|"
 msgid "HTML files (*.html)"
-msgstr "HTML-fil (*.html)"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Database Update"
-msgstr "Uppdatera databas"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid ""
@@ -1082,281 +1081,266 @@ msgid ""
 "changes to (but will not delete) some of your ingredients. It will not "
 "modify any of your recipes. Continue?"
 msgstr ""
-"Du är på väg att uppdatera den nuvarande databasen med en annan databas. Det "
-"kan innebära att vissa av dina ingredienser ändras (men de tas inte bort). "
-"Dina recept kommer inte att ändras. Vill du fortsätta?"
 
 msgctxt "MainWindow|"
 msgid "Select Database File"
-msgstr "Välj databasfil"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Brewtarget Database (*.sqlite)"
-msgstr "Brewtargetdatabas (*.sqlite)"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Recipe name"
-msgstr "Receptnamn"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Recipe name:"
-msgstr "Receptnamn:"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Backup Database"
-msgstr "Säkerhetskopiera databasen"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Oops!"
-msgstr "Hoppsan!"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Could not copy the files for some reason."
-msgstr "Kunde inte kopiera filen."
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "A Warning"
-msgstr "En varning"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid ""
 "This will obliterate your current set of recipes and ingredients. Do you "
 "want to continue?"
 msgstr ""
-"Detta kommer att RADERA din nuvarande samling av recept och ingredienser. "
-"Vill du fortsätta?"
 
 msgctxt "MainWindow|"
 msgid "For some reason, the operation failed."
-msgstr "Av någon anledning, fungerade det inte."
+msgstr ""
 
 #, qt-format
 msgctxt "MainWindow|"
 msgid "Import %1?"
-msgstr "Importera %1?"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "No mash"
-msgstr "Ingen mäskning"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Trying to add a mash step without a mash. Please create a mash first."
 msgstr ""
-"Du försöker lägga till ett mäskningssteg utan ha angett en mäskning. Skapa "
-"en mäskning först."
 
 msgctxt "MainWindow|"
 msgid "Copy Recipe"
-msgstr "Kopiera recept"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Enter a unique name for the copy."
-msgstr "Skriv in ett unikt namn för kopian."
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Please give your mash a name before saving."
-msgstr "Namnge din mäsk innan du sparar."
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Restart"
-msgstr "Börja om"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Please restart Brewtarget."
-msgstr "Starta om Brewtarget, tack."
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "No equipment"
-msgstr "Ingen utrustning"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "You must select or define an equipment profile first."
-msgstr "Du måste välja eller definiera en utrustningsprofil först."
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "No style"
-msgstr "Ingen stil"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "You must select a style first."
-msgstr "Du måste välja en stil först."
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Choose File"
-msgstr "Välj fil"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "SQLite (*.sqlite)"
-msgstr "SQLite (*.sqlite)"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "The database has been converted/upgraded."
-msgstr "Databasen har konverterats/uppdaterats."
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "The original XML files can be found in "
-msgstr "Den ursprungliga XML-filen finns i "
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid ""
 "The import contained invalid beerXML. It has been imported, but please make "
 "certain it makes sense."
 msgstr ""
-"Importen innehåller felaktig beerXML-data. Importen slutfördes men bör "
-"kontrolleras så den är korrekt."
 
 msgctxt "MainWindow|"
 msgid "Folder name"
-msgstr "Katalognamn"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Folder name:"
-msgstr "Katalognamn:"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Bad Name"
-msgstr "Felaktigt namn"
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-whitespace character in it"
-msgstr "Ett katalognamn måste innehålla minst ett icke blankstegs-tecken."
+msgstr ""
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
-msgstr "Ett katalognamn måste innehålla något annat än bara specialtecken."
+msgstr ""
 
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
-msgstr "Inga jäsningsbara råvaror"
+msgstr ""
 
 msgctxt "MashDesigner|"
 msgid "Your recipe must have fermentables to design a mash."
 msgstr ""
-"Ditt recept måste innehålla förjäsningsbara råvaror för att kunna designa en "
-"mäskning"
 
 msgctxt "MashDesigner|"
 msgid "No Equipment"
-msgstr "Ingen utrustning"
+msgstr ""
 
 msgctxt "MashDesigner|"
 msgid ""
 "You have not set an equipment for this recipe. We really cannot continue "
 "without one."
 msgstr ""
-"Du har inte valt någon utrustning för det här receptet. Vi kan inte "
-"fortsätta utan en."
 
 msgctxt "MashDesigner|"
 msgid "Tun Temp"
-msgstr "Kärlets temp."
+msgstr ""
 
 msgctxt "MashDesigner|"
 msgid "Enter the temperature of the tun before your first infusion."
-msgstr "Ange kärlets temperatur före den första infusionen"
+msgstr ""
 
 msgctxt "MashDesigner|"
 msgid "Decoction error"
-msgstr "Dekoktionsfel"
+msgstr ""
 
 msgctxt "MashDesigner|"
 msgid "The first mash step cannot be a decoction."
-msgstr "Det första mäsksteget kan inte vara en dekoktion"
+msgstr ""
 
 #, qt-format
 msgctxt "MashStepTableModel|"
 msgid "Bad model index. row = %1"
-msgstr "Dåligt modellindex. rad = %1"
+msgstr ""
 
 #, qt-format
 msgctxt "MashStepTableModel|"
 msgid "Bad column: %1"
-msgstr "Felaktig kolumn:%1"
+msgstr ""
 
 msgctxt "MashStepTableModel|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "MashStepTableModel|"
 msgid "Type"
-msgstr "Typ"
+msgstr ""
 
 msgctxt "MashStepTableModel|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "MashStepTableModel|"
 msgid "Infusion Temp"
-msgstr "Infusionstemp."
+msgstr ""
 
 msgctxt "MashStepTableModel|"
 msgid "Target Temp"
-msgstr "Måltemperatur"
+msgstr ""
 
 msgctxt "MashStepTableModel|"
 msgid "Time"
-msgstr "Tid"
+msgstr ""
 
 #, qt-format
 msgctxt "MashWizard|"
 msgid "Mash thickness (%1/%2)"
-msgstr "Mäsktjocklek (%1/%2)"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "Bad thickness"
-msgstr "Dålig tjocklek"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "You must have a positive mash thickness."
-msgstr "Tjoclecken på mäsken måste vara positiv."
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "No steps"
-msgstr "Inga steg"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "There must be at least one mash step to run the wizard."
-msgstr "Det måste finnas minst ett mäskningssteg för att kunna köra guiden"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "First step"
-msgstr "Första steget"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "Your first mash step must be an infusion."
-msgstr "Det första mäsksteget måste vara en infusion."
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "Mash too thick"
-msgstr "För tjock mäsk"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "Your mash is too thick for desired temp. at first step."
-msgstr "Din mäsk är för tjock för den valda temperaturen i första steget."
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "Decoction error"
-msgstr "Dekoktionsfel"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "Something went wrong in decoction calculation."
-msgstr "Ett fel uppstod vid beräkningav dekoktion"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid "Sparge temp."
-msgstr "Lakningstemp."
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid ""
 "In order to hit your sparge temp, the sparge water must be above boiling. "
 "Lower your sparge temp, or allow for more sparge water."
 msgstr ""
-"För att träffa din sköljtemperatur så måste sköljvattnet ha en temperatur "
-"över kokpunkten. Sänk din sköljtemperatur eller öka på mängden vatten."
 
 msgctxt "MashWizard|"
 msgid "Too much wort"
-msgstr "För mycket vört"
+msgstr ""
 
 msgctxt "MashWizard|"
 msgid ""
@@ -1364,9 +1348,6 @@ msgid ""
 "increasing the boil size by increasing the boil time, or reducing your mash "
 "thickness."
 msgstr ""
-"Det blir för mycket vört från mäsken för den angivna kokvolymen. Jag "
-"föreslår en ökning av kokvolymen genom att öka koktiden eller minska "
-"mäsktjockleken."
 
 msgctxt "Misc|"
 msgid "Spice"
@@ -1422,7 +1403,7 @@ msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
-msgstr "Övriga namn"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Misc name:"
@@ -1438,7 +1419,7 @@ msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "New"
-msgstr "Ny"
+msgstr ""
 
 msgctxt "MiscDialog|"
 msgid "Add selected ingredient to recipe"
@@ -1458,47 +1439,47 @@ msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Spice"
-msgstr "Krydda"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Fining"
-msgstr "Klarningsmedel"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Water Agent"
-msgstr "Vattenbehandling"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Herb"
-msgstr "Örtkrydda"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Flavor"
-msgstr "Smak"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Other"
-msgstr "Övrigt"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Boil"
-msgstr "Kokning"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Primary"
-msgstr "Primär"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Secondary"
-msgstr "Sekundär"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Bottling"
-msgstr "Flasktappning"
+msgstr ""
 
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
@@ -1510,160 +1491,158 @@ msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Type"
-msgstr "Typ"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Use"
-msgstr "Användning"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Time"
-msgstr "Tid"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Amount Type"
-msgstr "Mängdbeteckning"
+msgstr ""
 
 msgctxt "MiscTableModel|"
 msgid "Inventory"
-msgstr "Lager"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Open Directory"
-msgstr "Öppna katalog"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Copy Data"
-msgstr "Kopiera Data"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid ""
 "There do not seem to be any data files in this directory, so we will copy "
 "your old data here."
 msgstr ""
-"Det verkar inte finnas några datafiler i den här katalogen så vi kommer att "
-"kopiera din gamla data hit."
 
 msgctxt "OptionDialog|"
 msgid "Restart"
-msgstr "Starta om"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Please restart Brewtarget."
-msgstr "Vänligen  starta om Brewtarget."
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Catalan"
-msgstr "Katalanska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Czech"
-msgstr "Tjeckiska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "German"
-msgstr "Tyska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "English"
-msgstr "Engelska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Greek"
-msgstr "Grekiska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Spanish"
-msgstr "Spanska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "French"
-msgstr "Franska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Italian"
-msgstr "Italienska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Dutch"
-msgstr "Holländska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Polish"
-msgstr "Polska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Portuguese"
-msgstr "Portugisiska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Russian"
-msgstr "Ryska"
+msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Chinese"
-msgstr "Kinesiska"
+msgstr ""
 
 #, qt-format
 msgctxt "QObject|"
 msgid "Invalid color formula type: %1"
-msgstr "Ogiltig typ för färgformel:%1"
+msgstr ""
 
 #, qt-format
 msgctxt "QObject|"
 msgid "Unrecognized IBU formula type. %1"
-msgstr "Okänd typ för IBU formel. %1"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Directory Problem"
-msgstr "Katalogproblem"
+msgstr ""
 
 #, qt-format
 msgctxt "QObject|"
 msgid "\"%1\" cannot be read."
-msgstr "\"%1\" kan ej läsas."
+msgstr ""
 
 msgctxt "QObject|"
 msgid "New Version"
-msgstr "Ny Version"
+msgstr ""
 
 #, qt-format
 msgctxt "QObject|"
 msgid "Version %1 is now available. Download it?"
-msgstr "Version %1 är nu tillgänglig. Ladda ner?"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Stop bothering you about new versions?"
-msgstr "Sluta störa dig angående nya versioner?"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Database Failure"
-msgstr "Databasfel"
+msgstr ""
 
 #, qt-format
 msgctxt "QObject|"
 msgid "Failed to open the database '%1'."
-msgstr "Kunde inte öppna databasen '%1'."
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Save Database Changes"
-msgstr "Spara Databasändringar"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Would you like to save the changes you made?"
-msgstr "Vill du spara de ändringar som gjorts?"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Multiple Databases Found"
-msgstr "Hittade Flera Databaser"
+msgstr ""
 
 msgctxt "QObject|"
 msgid ""
@@ -1671,17 +1650,14 @@ msgid ""
 "during your last Brewtarget session, or rollback to before last session's "
 "changes?"
 msgstr ""
-"Flera databaser hittades. Vill du återskapa ändringarna som gjordes under "
-"din förra session eller vill du återställa till före förra sessionens "
-"ändringar?"
 
 msgctxt "QObject|"
 msgid "Restore"
-msgstr "Återskapa"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Rollback"
-msgstr "Återställ"
+msgstr ""
 
 #, qt-format
 msgctxt "QObject|"
@@ -1689,8 +1665,6 @@ msgid ""
 "Failed to remove the temporary backup database.  Navigate to '%1' and remove "
 "'tempBackupDatabase.sqlite'."
 msgstr ""
-"Kunde inte ta bort den temporära databasbackupen. Öppna '%1' och ta bort "
-"'tempBackupDatabase.sqlite'."
 
 #, qt-format
 msgctxt "QObject|"
@@ -1699,13 +1673,10 @@ msgid ""
 "'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
 "'database.sqlite'."
 msgstr ""
-"Kunde inte återställa till föregående backup. Öppna '%1' och ta bort "
-"'database.sqlite' Döp sedan om  'tempBackupDatabase.sqlite' till "
-"'database.sqlite'."
 
 msgctxt "QObject|"
 msgid "Database Restore Failure"
-msgstr "Databasåterställning misslyckades"
+msgstr ""
 
 #, qt-format
 msgctxt "QObject|"
@@ -1713,125 +1684,122 @@ msgid ""
 "Failed to restore the backup database. Navigate to '%1' and rename "
 "'tempBackupDatabase.sqlite' to 'database.sqlite'."
 msgstr ""
-"Kunde inte återskapa föregående backup. Öppna '%1' och ta bort "
-"'database.sqlite' Döp sedan om  'tempBackupDatabase.sqlite' till "
-"'database.sqlite'."
 
 msgctxt "QObject|"
 msgid "Grain"
-msgstr "Korn"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Sugar"
-msgstr "Socker"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Extract"
-msgstr "Extrakt"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Dry Extract"
-msgstr "torrextrakt"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Adjunct"
-msgstr "Tillsats"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Infusion"
-msgstr "avkok"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Temperature"
-msgstr "Temperatur"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Decoction"
-msgstr "Avkok"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Ale"
-msgstr "Ale"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Lager"
-msgstr "Lager"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Wheat"
-msgstr "Vete"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Wine"
-msgstr "Vin"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Champagne"
-msgstr "Champagne"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Liquid"
-msgstr "Vätska"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Dry"
-msgstr "Torrt"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Slant"
-msgstr "Lutning"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Culture"
-msgstr "Kultur"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Low"
-msgstr "Låg"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Medium"
-msgstr "Medel"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "High"
-msgstr "Hög"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Very High"
-msgstr "Mycket hög"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Recipes"
-msgstr "Recept"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Equipment"
-msgstr "Utrustning"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Fermentables"
-msgstr "Jäsbart"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Hops"
-msgstr "Humle"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Miscellaneous"
-msgstr "Övrigt"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Yeast"
-msgstr "Jäst"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Style"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Folder"
-msgstr "Katalog"
+msgstr ""
 
 msgctxt "QObject|"
 msgid "Failed to update the database"
@@ -1839,87 +1807,87 @@ msgstr ""
 
 msgctxt "Recipe|"
 msgid "Add grains"
-msgstr "Tillsätt malt"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Add "
-msgstr "Lägg till "
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "to the mash tun."
-msgstr "till mäsktunnan"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Heat water"
-msgstr "Värm vatten"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Bring "
-msgstr "Värm "
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "%1 water to %2, "
-msgstr "%1 vatten till %2, "
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "for upcoming infusions."
-msgstr "för kommande avkok"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Add %1 water at %2 to mash to bring it to %3."
-msgstr "Addera %1 vatten vid %2 till mäsken för att få den till %3"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Heat mash to %1."
-msgstr "Värm mäsken till %1."
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid ""
 "Bring %1 of the mash to a boil and return to the mash tun to bring it to %2."
-msgstr "Koka %1 av mäsken och häll tillbaka det i mäsktunnan för att nå %2"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid " Hold for %1."
-msgstr " Håll den här för %1"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Put %1 %2 into boil for %3."
-msgstr "Lägg i %1 %2 i koket vid %3"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Put %1 %2 into fermenter for %3."
-msgstr "Lägg i %1 %2 i jäskaret vid %3"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Put %1 %2 into first wort for %3."
-msgstr "Lägg i %1 %2 i primären vid %3"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Put %1 %2 into mash for %3."
-msgstr "Lägg i %1 %2 i mäsken vid %3"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Steep %1 %2 in wort for %3."
-msgstr "Stöp %1 %2 in mäsken vid %3."
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Use %1 %2 for %3"
-msgstr "Använd %1 %2 till %3"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Hop addition"
-msgstr "Addera humle"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
@@ -1929,51 +1897,51 @@ msgstr ""
 #, qt-format
 msgctxt "Recipe|"
 msgid "Put %1 %2 into primary for %3."
-msgstr "Tillsätt %1 %2 till primären vid %3"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Put %1 %2 into secondary for %3."
-msgstr "Tillsätt %1 %2 till sekundären vid %3"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Use %1 %2 for %3."
-msgstr "Använd %1 %2 till %3"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Misc addition"
-msgstr "Övrig tillsats"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Do first wort hopping with "
-msgstr "Humla den okokta mäsken med "
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "First wort hopping"
-msgstr "Humling av okokt mäsk"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "You should now have %1 wort."
-msgstr "Du borde nu ha %1 mäsk"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid " Add %1 water to the kettle, bringing pre-boil volume to %2."
-msgstr " Tillsätt %1 vatten till grytan så att volymen för kokning blir %2."
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Pre-boil"
-msgstr "Före kokning"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Boil or steep "
-msgstr "Koka eller stöp "
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Boil/steep fermentables"
-msgstr "Koka/stöp de jäsbara"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "to the boil at knockout."
@@ -1986,7 +1954,7 @@ msgstr ""
 #, qt-format
 msgctxt "Recipe|"
 msgid "You should have %1 wort post-boil."
-msgstr "Du bör ha %1 vört efter kokning."
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
@@ -2008,257 +1976,253 @@ msgid ""
 "\n"
 "The final volume in the primary is %1."
 msgstr ""
-"\n"
-"Primärens slutgiltiga volym är %1"
 
 msgctxt "Recipe|"
 msgid "Post boil"
-msgstr "Efter kokning"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Boil time"
-msgstr "Koktid"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid ""
 "You did not configure an equipment (which you really should), so tell me the "
 "boil time."
 msgstr ""
-"Du har inte ställt in din utrustning (vilket du bör göra), så ange din koktid"
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Bring the wort to a boil and hold for %1."
-msgstr "Koka upp vörten och låt den koka i %1"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Start boil"
-msgstr "Starta kokningen"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Flameout"
-msgstr "Flameout"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Stop boiling the wort."
-msgstr "Stoppa vörtens kokning"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Cool wort and pitch "
-msgstr "Kyl vörten och tillsätt "
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "%1 %2 yeast, "
-msgstr "%1 %2 jäst, "
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "to the primary."
-msgstr "till primären"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Pitch yeast"
-msgstr "Tillsätt jäst"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Let ferment until FG is %1."
-msgstr "Lät det jäsa till slutdensiteten är %1"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Ferment"
-msgstr "Jäs"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Transfer beer to secondary."
-msgstr "Överför ölen till sekundären"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Transfer to secondary"
-msgstr "Överför ill sekundären"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "Add %1 %2 to boil at %3."
-msgstr "Tillsätt %1 %2 till koket vid %3"
+msgstr ""
 
 msgctxt "Recipe|"
 msgid "Raise water to boil and then remove from heat. Stir in  "
 msgstr ""
-"Värm vattnet tills det kokar och ta sedan bort det från värmekällan.  Rör i  "
 
 msgctxt "Recipe|"
 msgid "Add Extracts to water"
-msgstr "Tillsätt extraktet till vattnet"
+msgstr ""
 
 #, qt-format
 msgctxt "Recipe|"
 msgid "%1 water to %2 "
-msgstr "%1 vatten till %2 "
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "unknown style"
-msgstr "Okänd stil"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "N/A"
-msgstr "Ej tillämplig"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Brewer"
-msgstr "Bryggare"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Date"
-msgstr "Datum"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Batch Size"
-msgstr "Satsstorlek"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Boil Size"
-msgstr "Kokmängd"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Boil Time"
-msgstr "Koktid"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Efficiency"
-msgstr "Effektivitet"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "OG"
-msgstr "OG"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "FG"
-msgstr "FG"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "ABV"
-msgstr "Volymprocent alkohol"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Color"
-msgstr "Färg"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Fermentables"
-msgstr "Jäsbart"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Total grain:"
-msgstr "Total kornmängd:"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Type"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Mashed"
-msgstr "Mäskat"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Late"
-msgstr "Sent"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Yield"
-msgstr "Avkastning"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Yes"
-msgstr "Ja"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "No"
-msgstr "Nej"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Hops"
-msgstr "Humle"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Alpha"
-msgstr "Alfa"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Use"
-msgstr "Använd"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Time"
-msgstr "Tid"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "IBU"
-msgstr "IBU"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Misc"
-msgstr "Övrigt"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Yeast"
-msgstr "Jäst"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Stage"
-msgstr "Steg"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Secondary"
-msgstr "Sekundär"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Primary"
-msgstr "Primär"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Temp"
-msgstr "Temperatur"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Target Temp"
-msgstr "Måltemperatur"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Instructions"
-msgstr "Instruktioner"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Brew Date"
-msgstr "Bryggdatum"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Preboil"
-msgstr "Före kokning"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "SG"
-msgstr "SG"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Volume into BK"
@@ -2270,7 +2234,7 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Final Temp"
-msgstr "Slutgiltig temperatur"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Eff into BK"
@@ -2278,63 +2242,63 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Projected OG"
-msgstr "Beräknad OG"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Postboil"
-msgstr "Efter kokning"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Postboil Volume"
-msgstr "Volym efter kokning"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Volume Into Fermenter"
-msgstr "Volym som överförs till jäskaret"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Brewhouse Eff"
-msgstr "Brygghusets effektivitt"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Projected ABV"
-msgstr "Beräknad volymprocent alkohol"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Postferment"
-msgstr "Efter jäsning"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Volume"
-msgstr "Volym"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Print Document"
-msgstr "Skriv ut dokument"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Category"
-msgstr "Kategori"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Code"
-msgstr "Kod"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Guide"
-msgstr "Guide"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "BoilTime"
-msgstr "Koktid"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Beta"
-msgstr "Beta"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Lab"
-msgstr "Lab"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Attenuation"
@@ -2342,11 +2306,11 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Id"
-msgstr "Id"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Flocculation"
-msgstr "Flockulering"
+msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
@@ -2374,7 +2338,7 @@ msgstr ""
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
-msgstr "Missat OG"
+msgstr ""
 
 #, qt-format
 msgctxt "RefractoDialog|"
@@ -2382,8 +2346,6 @@ msgid ""
 "Based on the given original plato, the OG should be %1, but you have entered "
 "%2. Continuing with the calculated OG."
 msgstr ""
-"Baserat på angiven plato så bör OG vara minst %1, men det inmatade värdet är "
-"%2. Fortsätter med det beräknad OG."
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "Select Equipment"
@@ -2416,7 +2378,7 @@ msgstr ""
 
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
-msgstr "Receptet är skalat"
+msgstr ""
 
 msgctxt "ScaleRecipeTool|"
 msgid ""
@@ -2426,11 +2388,11 @@ msgstr ""
 
 msgctxt "StyleEditor|"
 msgid "Style name"
-msgstr "Stilnamn"
+msgstr ""
 
 msgctxt "StyleEditor|"
 msgid "Style name:"
-msgstr "Stil:"
+msgstr ""
 
 msgctxt "TimerWidget|"
 msgid "Open Sound"
@@ -2438,15 +2400,15 @@ msgstr ""
 
 msgctxt "TimerWidget|"
 msgid "Audio Files (*.wav *.ogg *.mp3 *.aiff)"
-msgstr "Ljudfiler (*.wav *.ogg *.mp3 *.aiff)"
+msgstr ""
 
 msgctxt "TimerWidget|"
 msgid "Stop"
-msgstr "Stopp"
+msgstr ""
 
 msgctxt "TimerWidget|"
 msgid "Start"
-msgstr "Start"
+msgstr ""
 
 msgctxt "TimerWidget|"
 msgid "Set the timer to the specified value"
@@ -2475,52 +2437,52 @@ msgstr ""
 #, qt-format
 msgctxt "WaterTableModel|"
 msgid "Bad model index. row = %1"
-msgstr "Felaktigt modellindex. rad = %1"
+msgstr ""
 
 #, qt-format
 msgctxt "WaterTableModel|"
 msgid "Bad column: %1"
-msgstr "Felaktig kolumn:%1"
+msgstr ""
 
 msgctxt "WaterTableModel|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "WaterTableModel|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "WaterTableModel|"
 msgid "Calcium (ppm)"
-msgstr "Kalcium (ppm)"
+msgstr ""
 
 msgctxt "WaterTableModel|"
 msgid "Bicarbonate (ppm)"
-msgstr "Bikarbonat (ppm)"
+msgstr ""
 
 msgctxt "WaterTableModel|"
 msgid "Sulfate (ppm)"
-msgstr "Sulfater (ppm)"
+msgstr ""
 
 msgctxt "WaterTableModel|"
 msgid "Chloride (ppm)"
-msgstr "Klor (ppm)"
+msgstr ""
 
 msgctxt "WaterTableModel|"
 msgid "Sodium (ppm)"
-msgstr "Natrium (ppm)"
+msgstr ""
 
 msgctxt "WaterTableModel|"
 msgid "Magnesium (ppm)"
-msgstr "Magnesium (ppm)"
+msgstr ""
 
 msgctxt "YeastDialog|"
 msgid "Yeast name"
-msgstr "Jästnamn"
+msgstr ""
 
 msgctxt "YeastDialog|"
 msgid "Yeast name:"
-msgstr "Jästnamn:"
+msgstr ""
 
 msgctxt "YeastDialog|"
 msgid "Yeast Database"
@@ -2532,7 +2494,7 @@ msgstr ""
 
 msgctxt "YeastDialog|"
 msgid "New"
-msgstr "Ny"
+msgstr ""
 
 msgctxt "YeastDialog|"
 msgid "Add selected ingredient to recipe"
@@ -2552,125 +2514,125 @@ msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Ale"
-msgstr "Ale"
+msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Lager"
-msgstr "Lager"
+msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Wheat"
-msgstr "Vete"
+msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Wine"
-msgstr "Vin"
+msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Champagne"
-msgstr "Champagne"
+msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Liquid"
-msgstr "Vätska"
+msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Dry"
-msgstr "Torr"
+msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Slant"
-msgstr "Lutning"
+msgstr ""
 
 msgctxt "YeastItemDelegate|"
 msgid "Culture"
-msgstr "Kultur"
+msgstr ""
 
 #, qt-format
 msgctxt "YeastTableModel|"
 msgid "Bad model index. row = %1"
-msgstr "Felaktigt modellindex. rad = %1"
+msgstr ""
 
 #, qt-format
 msgctxt "YeastTableModel|"
 msgid "Bad column: %1"
-msgstr "Felaktig kolumn:%1"
+msgstr ""
 
 msgctxt "YeastTableModel|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "YeastTableModel|"
 msgid "Type"
-msgstr "Sort"
+msgstr ""
 
 msgctxt "YeastTableModel|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "YeastTableModel|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "YeastTableModel|"
 msgid "Laboratory"
-msgstr "Laboratorium"
+msgstr ""
 
 msgctxt "YeastTableModel|"
 msgid "Product ID"
-msgstr "Produkt-ID"
+msgstr ""
 
 msgctxt "YeastTableModel|"
 msgid "Inventory"
-msgstr "Inventarium"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Generate Instructions"
-msgstr "Generera instruktioner"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Insert step"
-msgstr "Lägg till steg"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Name of new step"
-msgstr "Namn för nytt steg"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Step #"
-msgstr "Steg #"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "The number where the new step should be placed"
-msgstr "Numret för det nya steget"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Insert the new step"
-msgstr "Lägg till det nya steget"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Move steps"
-msgstr "Fler steg"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Move currently selected step up"
-msgstr "Flytta valt steg uppåt"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Move currently selected step down"
-msgstr "Flytta valt steg nedåt"
+msgstr ""
 
 msgctxt "brewDayScrollWidget|"
 msgid "Remove currently selected step"
-msgstr "Ta bort valt steg"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Brewday Mode"
@@ -2678,79 +2640,79 @@ msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Instructions"
-msgstr "Instruktioner"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Move currently selected step up"
-msgstr "Flytta vald utrustning"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Up"
-msgstr "Uppåt"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Move currently selected step down"
-msgstr "Flytta valt steg nedåt"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Down"
-msgstr "Ned"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Remove currently selected step"
-msgstr "Ta bort valt steg"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Remove"
-msgstr "Ta bort"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Insert step"
-msgstr "Lägg till steg"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Name of new step"
-msgstr "Namn för nytt steg"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Step #"
-msgstr "Steg #"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "The number where the new step should be placed"
-msgstr "Numret för det nya steget"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Insert the new step"
-msgstr "Lägg till det nya steget"
+msgstr ""
 
 msgctxt "brewDayWidget|"
 msgid "Insert"
-msgstr "Infoga"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Preboil"
-msgstr "Före kokning"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "SG"
-msgstr "SG"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Preboil gravity"
-msgstr "Densitet före kok"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Volume"
-msgstr "Volym"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Volume of wort collected"
-msgstr "Volym på vörten"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Strike Temp"
@@ -2762,27 +2724,27 @@ msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Final Temp"
-msgstr "Slutgiltig temperatur"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Temperature of mash before mash out"
-msgstr "Mäskens temperatur innan \"Mash out\""
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Postboil"
-msgstr "Efter kokning"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "OG"
-msgstr "OG"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Post boil gravity"
-msgstr "Densitet efter kokning"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Postboil Volume"
-msgstr "Volym efter kokning"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Volume of wort in BK after boil"
@@ -2790,27 +2752,27 @@ msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Volume of wort transferred to fermenter"
-msgstr "Mängden vört som överförts till jäskaret"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Volume into fermenter"
-msgstr "Volym i jäskärl"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid " Pitch Temp"
-msgstr " Temperatur för pitch"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Temperature of wort when yeast is pitched"
-msgstr "Vörtens temperatur när jästen tillsätts."
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Postferment"
-msgstr "Efter jäsning"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Final gravity"
-msgstr "Slutgiltig densitet"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Volume of beer into serving keg/bottles"
@@ -2830,23 +2792,23 @@ msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Projected OG"
-msgstr "Beräknad OG"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Brewhouse efficiency"
-msgstr "Brygghusets effektivitet"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Brewhouse Eff"
-msgstr "Brygghusets effektivitet"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Expected ABV based on OG"
-msgstr "Beräknad volymprocent alkohol beräknad på OG"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Projected ABV"
-msgstr "Beräknad volymprocent alkohol"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "ABV based on FG"
@@ -2854,11 +2816,11 @@ msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "ABV"
-msgstr "Alkoholhalt"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr ""
 
 msgctxt "brewNoteWidget|"
 msgid "brewNote"
@@ -2894,39 +2856,39 @@ msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Required Fields"
-msgstr "Obligatoriska fält"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Type"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Grain"
-msgstr "Malt"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Sugar"
-msgstr "Socker"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Extract"
-msgstr "Extrakt"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Dry Extract"
-msgstr "torrextrakt"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Adjunct"
-msgstr "Tillsats"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Yield (%)"
@@ -3022,11 +2984,11 @@ msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Notes:"
-msgstr "Anteckningar:"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Default Amount"
-msgstr "Standardmängd"
+msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Amount in Inventory"
@@ -3038,7 +3000,7 @@ msgstr ""
 
 msgctxt "fermentableEditor|"
 msgid "Color"
-msgstr "Färg"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Hop Editor"
@@ -3046,11 +3008,11 @@ msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Required Fields"
-msgstr "Obligatoriska fält"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Alpha (%)"
@@ -3062,63 +3024,63 @@ msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Use"
-msgstr "Använd"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "First Wort"
-msgstr "Första Vörten"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Boil"
-msgstr "Kokning"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Aroma"
-msgstr "Arom"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Dry Hop"
-msgstr "Torrhumling"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Time"
-msgstr "Tid"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Type"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Bittering"
-msgstr "Bitter"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Both"
-msgstr "Både"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Leaf"
-msgstr "Löv"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Pellet"
-msgstr "Pellets"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Plug"
-msgstr "Puck"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Beta (%)"
@@ -3178,7 +3140,7 @@ msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Notes:"
-msgstr "Anteckningar:"
+msgstr ""
 
 msgctxt "hopEditor|"
 msgid "Default Amount "
@@ -3194,7 +3156,7 @@ msgstr ""
 
 msgctxt "instructionWidget|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "instructionWidget|"
 msgid "Show a timer"
@@ -3214,7 +3176,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Recipes"
-msgstr "Recept"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Styles"
@@ -3222,11 +3184,11 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Fermentables"
-msgstr "Jäsbart"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Hops"
-msgstr "Humle"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Miscs"
@@ -3238,11 +3200,11 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Recipe"
-msgstr "Recept"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Name of recipe"
@@ -3270,11 +3232,11 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Style"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Boil Time"
-msgstr "Koktid"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Target batch size"
@@ -3286,7 +3248,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Equipment"
-msgstr "Utrustning"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Target Boil Size"
@@ -3294,7 +3256,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "OG"
-msgstr "OG"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Boil SG"
@@ -3302,11 +3264,11 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "FG"
-msgstr "FG"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "ABV"
-msgstr "Alkoholhalt"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Bitterness (IBU)"
@@ -3314,7 +3276,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Color"
-msgstr "Färg"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "IBU/GU"
@@ -3358,7 +3320,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Miscellaneous"
-msgstr "Övrigt"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Add misc"
@@ -3374,7 +3336,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Yeast"
-msgstr "Jäst"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Add yeast"
@@ -3382,15 +3344,15 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Remove selected yeast"
-msgstr "Ta bort vald jäst"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Edit selected yeast"
-msgstr "Editera vald jäst"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Add mash step"
@@ -3482,7 +3444,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "About Brewtarget"
-msgstr "Om Brewtarget"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "&Export Recipe"
@@ -3574,7 +3536,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Backup Database"
-msgstr "Säkerhetskopiera databasen"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Restore Database"
@@ -3658,7 +3620,7 @@ msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Save"
-msgstr "Spara"
+msgstr ""
 
 msgctxt "mainWindow|"
 msgid "Delete selected"
@@ -3698,11 +3660,11 @@ msgstr ""
 
 msgctxt "mashDesigner|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "mashDesigner|"
 msgid "Type"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "mashDesigner|"
 msgid "Target temp."
@@ -3710,7 +3672,7 @@ msgstr ""
 
 msgctxt "mashDesigner|"
 msgid "Time"
-msgstr "Tid"
+msgstr ""
 
 msgctxt "mashDesigner|"
 msgid "Batch Sparge"
@@ -3742,7 +3704,7 @@ msgstr ""
 
 msgctxt "mashDesigner|"
 msgid "Infusion Temp"
-msgstr "Infusionstemp."
+msgstr ""
 
 msgctxt "mashDesigner|"
 msgid "Total Collected Wort"
@@ -3770,7 +3732,7 @@ msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Initial grain temp"
@@ -3790,7 +3752,7 @@ msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Tun"
@@ -3826,23 +3788,23 @@ msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Type"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Infusion"
-msgstr "avkok"
+msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Temperature"
-msgstr "Temperatur"
+msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Decoction"
-msgstr "Avkok"
+msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Target temp."
@@ -3878,7 +3840,7 @@ msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Time"
-msgstr "Tid"
+msgstr ""
 
 msgctxt "mashStepEditor|"
 msgid "Time to conduct the step"
@@ -3918,67 +3880,67 @@ msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Type"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Spice"
-msgstr "Krydda"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Fining"
-msgstr "Klarningsmedel"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Water Agent"
-msgstr "Vattenbehandling"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Herb"
-msgstr "Örtkrydda"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Flavor"
-msgstr "Smak"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Other"
-msgstr "Övrigt"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Use"
-msgstr "Använd"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Boil"
-msgstr "Kokning"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Primary"
-msgstr "Primär"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Secondary"
-msgstr "Sekundär"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Bottling"
-msgstr "Flasktappning"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Time"
-msgstr "Tid"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Check it if the amount listed is in kg instead of L."
@@ -3990,7 +3952,7 @@ msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Checked if the given amount is weight instead of volume"
-msgstr "Markera denna om värdet indikerar vikt istället för volym"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Use for:"
@@ -3998,11 +3960,11 @@ msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Notes:"
-msgstr "Anteckningar:"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Default Amount"
-msgstr "Standardmängd"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Amount in Inventory"
@@ -4018,7 +3980,7 @@ msgstr ""
 
 msgctxt "namedMashEditor|"
 msgid "Mash"
-msgstr "Mäsk"
+msgstr ""
 
 msgctxt "namedMashEditor|"
 msgid "Delete selected style"
@@ -4026,7 +3988,7 @@ msgstr ""
 
 msgctxt "namedMashEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "namedMashEditor|"
 msgid "Initial grain temp"
@@ -4046,7 +4008,7 @@ msgstr ""
 
 msgctxt "namedMashEditor|"
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr ""
 
 msgctxt "namedMashEditor|"
 msgid "Tun"
@@ -4098,7 +4060,7 @@ msgstr ""
 
 msgctxt "ogAdjuster|"
 msgid "SG"
-msgstr "SG"
+msgstr ""
 
 msgctxt "ogAdjuster|"
 msgid "Measured gravity pre-boil"
@@ -4106,7 +4068,7 @@ msgstr ""
 
 msgctxt "ogAdjuster|"
 msgid "Temp"
-msgstr "Temperatur"
+msgstr ""
 
 msgctxt "ogAdjuster|"
 msgid "Temperature of SG reading"
@@ -4126,7 +4088,7 @@ msgstr ""
 
 msgctxt "ogAdjuster|"
 msgid "Plato"
-msgstr "Plato"
+msgstr ""
 
 msgctxt "ogAdjuster|"
 msgid "Plato (percent by mass of equivalent sucrose)"
@@ -4183,7 +4145,7 @@ msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Weight"
-msgstr "Vikt"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Use SI units"
@@ -4199,19 +4161,19 @@ msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Temperature"
-msgstr "Temperatur"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Celsius"
-msgstr "Celsius"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Fahrenheit"
-msgstr "Fahrenheit"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Volume"
-msgstr "Volym"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Gravity"
@@ -4227,7 +4189,7 @@ msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Color"
-msgstr "Färg"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Use SRM"
@@ -4255,7 +4217,7 @@ msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "IBU"
-msgstr "IBU"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Tinseth's approximation"
@@ -4279,7 +4241,7 @@ msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "First Wort"
-msgstr "Första Vörten"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Directories"
@@ -4299,7 +4261,7 @@ msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Default"
-msgstr "Förvalt"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Language"
@@ -4318,7 +4280,7 @@ msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "Date"
-msgstr "Datum"
+msgstr ""
 
 msgctxt "optionsDialog|"
 msgid "mm-dd-YYYY"
@@ -4350,7 +4312,7 @@ msgstr ""
 
 msgctxt "pitchDialog|"
 msgid "OG"
-msgstr "OG"
+msgstr ""
 
 msgctxt "pitchDialog|"
 msgid "For ales, 0.75-1. For lagers, 1.5-2."
@@ -4534,11 +4496,11 @@ msgstr ""
 
 msgctxt "recipeExtrasWidget|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "recipeExtrasWidget|"
 msgid "Brewer"
-msgstr "Bryggare"
+msgstr ""
 
 msgctxt "recipeExtrasWidget|"
 msgid "Asst. Brewer"
@@ -4598,7 +4560,7 @@ msgstr ""
 
 msgctxt "recipeExtrasWidget|"
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "Refractometer Tools"
@@ -4634,7 +4596,7 @@ msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "ABV"
-msgstr "Alkoholhalt"
+msgstr ""
 
 msgctxt "refractoDialog|"
 msgid "ABW"
@@ -4730,7 +4692,7 @@ msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Style"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Delete selected style"
@@ -4742,11 +4704,11 @@ msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Category"
-msgstr "Kategori"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Category number"
@@ -4762,7 +4724,7 @@ msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Type"
-msgstr "Stil"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Type of beverage"
@@ -4770,11 +4732,11 @@ msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Lager"
-msgstr "Lager"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Ale"
-msgstr "Ale"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Mead"
@@ -4782,7 +4744,7 @@ msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Wheat"
-msgstr "Vete"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Mixed"
@@ -4806,11 +4768,11 @@ msgstr ""
 
 msgctxt "styleEditor|"
 msgid "OG"
-msgstr "OG"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "FG"
-msgstr "FG"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "IBUs"
@@ -4818,7 +4780,7 @@ msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Color (SRM)"
-msgstr "Färg (SRM)"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Carb (vols)"
@@ -4842,15 +4804,15 @@ msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "New"
-msgstr "Ny"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Save"
-msgstr "Spara"
+msgstr ""
 
 msgctxt "styleEditor|"
 msgid "Cancel"
@@ -4866,75 +4828,75 @@ msgstr ""
 
 msgctxt "waterEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "waterEditor|"
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Yeast Editor"
-msgstr "Jästeditor"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Required Fields"
-msgstr "Obligatoriska fält"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Type"
-msgstr "Typ"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Ale"
-msgstr "Ale"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Lager"
-msgstr "Lager"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Wheat"
-msgstr "Vete"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Wine"
-msgstr "Vin"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Champagne"
-msgstr "Champagne"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Form"
-msgstr "Formulär"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Liquid"
-msgstr "Vätska"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Dry"
-msgstr "Torrt"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Slant"
-msgstr "Lutning"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Culture"
-msgstr "Kultur"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Amount"
-msgstr "Mängd"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Check it if the amount given is in kg instead of L."
-msgstr "Markera denna om mängden anges i kilo istället för liter"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Amount is weight?"
@@ -4942,55 +4904,55 @@ msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Checked if the given amount is weight instead of volume"
-msgstr "Markera denna om värdet indikerar vikt istället för volym"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Lab"
-msgstr "Lab"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Product ID"
-msgstr "Produkt-ID"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Min Temp"
-msgstr "Min temp"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Min temp"
-msgstr "Min temp"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Max Temp"
-msgstr "Max temp"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Max temp"
-msgstr "Max temp"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Flocculation"
-msgstr "flockulering"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Low"
-msgstr "Låg"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Medium"
-msgstr "Mellan"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "High"
-msgstr "Hög"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Very High"
-msgstr "Mycket hög"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Attenuation (%)"
-msgstr "Förtunning (%)"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Apparent attenuation as percentage of OG points"
@@ -4998,11 +4960,11 @@ msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Times Recultured"
-msgstr "Antal omodlingar"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Times this yeast has been recultured"
-msgstr "Antal gånger denna jäst har blivit omodlad"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Max Recultures"
@@ -5014,30 +4976,28 @@ msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Add to Secondary"
-msgstr "Tillsätt i sekundären"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Checked means add this yeast to secondary instead of primary"
 msgstr ""
-"Markering betyder att den här jästen ska tillsättas i sekundären istället "
-"för i primären"
 
 msgctxt "yeastEditor|"
 msgid "Best For:"
-msgstr "Passar till:"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Notes:"
-msgstr "Anteckningar:"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Default Amount"
-msgstr "Standardmängd"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Quanta in Inventory"
-msgstr "Mängd i lager"
+msgstr ""
 
 msgctxt "yeastEditor|"
 msgid "Quanta in inventory"
-msgstr "Mängd i lager"
+msgstr ""

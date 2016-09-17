@@ -2,8 +2,8 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="pt">
     <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
-    <extra-po-header-last_translator>Philip &lt;Unknown&gt;</extra-po-header-last_translator>
-    <extra-po-header-po_revision_date>2015-12-13 21:16+0000</extra-po-header-po_revision_date>
+    <extra-po-header-last_translator>Raphael de Almeida da Silva &lt;Unknown&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2016-08-25 14:06+0000</extra-po-header-po_revision_date>
     <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
     <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
     <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
@@ -14,7 +14,7 @@
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation>Sobre BrewTarget</translation>
+        <translation>About Brewtarget</translation>
     </message>
 </context>
 <context>
@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>Date</source>
-        <translation>Data</translation>
+        <translation>Data:</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -117,15 +117,15 @@
     </message>
     <message>
         <source>Heat water</source>
-        <translation>Aquecer Água</translation>
+        <translation>Aquecer água</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorias estimadas (por 330ml)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorias estimadas (por 355ml)</translation>
     </message>
 </context>
 <context>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Densidade de Pré-fervura</translation>
+        <translation>Densidade Pré-fervura</translation>
     </message>
     <message>
         <source>Final Volume</source>
@@ -168,7 +168,7 @@
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Calorias Estimadas (por 12oz - 340,19g)</translation>
+        <translation>Calorias Estimadas (por 340g)</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -220,7 +220,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorias estimadas (por 330ml)</translation>
     </message>
 </context>
 <context>
@@ -263,7 +263,7 @@
     </message>
     <message>
         <source>Kilograms</source>
-        <translation>Kilogramas</translation>
+        <translation>Quilogramas</translation>
     </message>
     <message>
         <source>Ounces</source>
@@ -311,7 +311,7 @@
     </message>
     <message>
         <source>Gallons</source>
-        <translation>Galão(ões)</translation>
+        <translation>Galões</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -351,7 +351,7 @@
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Redimensionar</translation>
     </message>
 </context>
 <context>
@@ -391,7 +391,7 @@
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Data da brassagem</translation>
+        <translation>Data da Brassagem</translation>
     </message>
     <message>
         <source>Style</source>
@@ -439,7 +439,7 @@
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation>FULLPATH</translation>
+        <translation>Caminho completo</translation>
     </message>
 </context>
 <context>
@@ -478,7 +478,7 @@
     </message>
     <message>
         <source>Fermentable</source>
-        <translation>Fermentescível</translation>
+        <translation>Fermentável</translation>
     </message>
     <message>
         <source>Hop</source>
@@ -522,7 +522,7 @@
     </message>
     <message>
         <source>BrewNote</source>
-        <translation>BrewNote</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <source>Cancel All</source>
@@ -538,7 +538,7 @@
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Um nome vazio pulará a cópia de %1</translation>
     </message>
 </context>
 <context>
@@ -762,23 +762,23 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostura</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusão</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fora da mostura</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation>Ao final</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
 </context>
 <context>
@@ -844,23 +844,23 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostura</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusão</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fora da mostura</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation>Ao final</translation>
     </message>
 </context>
 <context>
@@ -899,11 +899,11 @@
     </message>
     <message>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Método</translation>
     </message>
     <message>
         <source>Addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Adição</translation>
     </message>
 </context>
 <context>
@@ -1385,55 +1385,55 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished"></translation>
+        <translation>Condimento</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajustes</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation>Corretor de água</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation>Erva</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation>Aroma</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Outro</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferver</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation>Mosto</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>Primária</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>Secundária</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished"></translation>
+        <translation>Engarrafamento</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume</translation>
     </message>
 </context>
 <context>
@@ -1523,11 +1523,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume</translation>
     </message>
 </context>
 <context>
@@ -1625,7 +1625,7 @@
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Português (Portugal)</translation>
+        <translation>Português do Brasil</translation>
     </message>
     <message>
         <source>Russian</source>
@@ -2320,27 +2320,27 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>Diversos</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>Leveduras</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorias estimadas (por 330ml)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorias estimadas (por 355ml)</translation>
     </message>
     <message>
         <source>Bitterness</source>
-        <translation type="unfinished"></translation>
+        <translation>Amargor</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation>Alvo</translation>
     </message>
 </context>
 <context>
@@ -2358,30 +2358,30 @@ O volume final do fermentador primário é %1.</translation>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
         <source>Select Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecione o equipamento</translation>
     </message>
     <message>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>A receita será redimensionada para corresponder ao volume e eficiência do equipamento selecionado</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Novo Equipamento</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nova Eficiência</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Redimensionar Receita</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este assistente de instalação o ajudará a redimensionar a receita para outro volume/tamanho ou eficiência. Selecione outro equipamento com o novo volume e/ou eficiência e o assistente redimensionará automaticamente os ingredientes da receita.</translation>
     </message>
 </context>
 <context>
@@ -2547,7 +2547,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vinho</translation>
+        <translation>Wine</translation>
     </message>
     <message>
         <source>Champagne</source>
@@ -2855,7 +2855,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>brewNote</source>
-        <translation type="unfinished"></translation>
+        <translation>Nota do cervejeiro</translation>
     </message>
     <message>
         <source>yyyy-dd-MM</source>
@@ -2882,7 +2882,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>equipmentEditor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor de equipamento</translation>
     </message>
 </context>
 <context>
@@ -3694,11 +3694,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>tab_recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Aba receita</translation>
     </message>
     <message>
         <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar para &amp;BBCode</translation>
     </message>
 </context>
 <context>
@@ -4370,7 +4370,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Noonan&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Aproximação por Noonan</translation>
     </message>
 </context>
 <context>
@@ -4477,19 +4477,19 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
+        <translation>Data de produção (Melhor por data menos três meses)</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Viabilidade estimada da levedura</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Contagem desejada</translation>
     </message>
     <message>
         <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de frascos/pacotes adicionados ao starter</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
@@ -4497,15 +4497,15 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantos pacotes ou fracos são necessários para atingir a contagem</translation>
     </message>
     <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade de levedura seca necessária para atingir a contagem</translation>
     </message>
     <message>
         <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume do starter para atingir a contagem</translation>
     </message>
 </context>
 <context>
@@ -4702,7 +4702,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Graus Plato medido original</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
@@ -4710,7 +4710,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Graus Plato medido atual</translation>
     </message>
 </context>
 <context>

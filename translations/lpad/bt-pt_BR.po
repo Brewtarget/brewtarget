@@ -3,20 +3,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2016-01-05 18:30+0000\n"
-"Last-Translator: Matheus Antonelli <matheus.antonelli@gmail.com>\n"
+"PO-Revision-Date: 2016-08-25 14:06+0000\n"
+"Last-Translator: Raphael de Almeida da Silva <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
-"X-Generator: Launchpad (build 17881)\n"
+"X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 "X-Qt-Contexts: true\n"
 "X-Language: pt\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
-msgstr "Sobre BrewTarget"
+msgstr "About Brewtarget"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -24,7 +24,7 @@ msgstr "Estilo"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Date"
-msgstr "Data"
+msgstr "Data:"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Boil Time"
@@ -117,7 +117,7 @@ msgstr "Adicionar Grãos"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Heat water"
-msgstr "Aquecer Água"
+msgstr "Aquecer água"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
@@ -141,7 +141,7 @@ msgstr "Volume de Fervura"
 
 msgctxt "BrewDayWidget|"
 msgid "Preboil Gravity"
-msgstr "Densidade de Pré-fervura"
+msgstr "Densidade Pré-fervura"
 
 msgctxt "BrewDayWidget|"
 msgid "Final Volume"
@@ -165,7 +165,7 @@ msgstr "Eficiência Calculada"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Calorias Estimadas (por 12oz - 340,19g)"
+msgstr "Calorias Estimadas (por 340g)"
 
 msgctxt "BrewDayWidget|"
 msgid "Instructions"
@@ -258,7 +258,7 @@ msgstr "Gramas"
 
 msgctxt "Brewtarget|"
 msgid "Kilograms"
-msgstr "Kilogramas"
+msgstr "Quilogramas"
 
 msgctxt "Brewtarget|"
 msgid "Ounces"
@@ -306,7 +306,7 @@ msgstr "Quartos"
 
 msgctxt "Brewtarget|"
 msgid "Gallons"
-msgstr "Galão(ões)"
+msgstr "Galões"
 
 msgctxt "Brewtarget|"
 msgid "Unknown"
@@ -346,7 +346,7 @@ msgstr "Barris"
 
 msgctxt "Brewtarget|"
 msgid "Scale"
-msgstr ""
+msgstr "Redimensionar"
 
 msgctxt "BtDigitWidget|"
 msgid "Too low for style."
@@ -375,7 +375,7 @@ msgstr "Nome"
 
 msgctxt "BtTreeModel|"
 msgid "Brew Date"
-msgstr "Data da brassagem"
+msgstr "Data da Brassagem"
 
 msgctxt "BtTreeModel|"
 msgid "Style"
@@ -423,7 +423,7 @@ msgstr "CAMINHO"
 
 msgctxt "BtTreeModel|"
 msgid "FULLPATH"
-msgstr "FULLPATH"
+msgstr "Caminho completo"
 
 msgctxt "BtTreeView|"
 msgid "New"
@@ -459,7 +459,7 @@ msgstr "Equipamento"
 
 msgctxt "BtTreeView|"
 msgid "Fermentable"
-msgstr "Fermentescível"
+msgstr "Fermentável"
 
 msgctxt "BtTreeView|"
 msgid "Hop"
@@ -505,7 +505,7 @@ msgstr "Excluir %1 %2?"
 
 msgctxt "BtTreeView|"
 msgid "BrewNote"
-msgstr "BrewNote"
+msgstr "Notas"
 
 msgctxt "BtTreeView|"
 msgid "Cancel All"
@@ -524,7 +524,7 @@ msgstr "Insira um nome único para a cópia de %1."
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
-msgstr ""
+msgstr "Um nome vazio pulará a cópia de %1"
 
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
@@ -749,19 +749,19 @@ msgstr "Cancelar"
 
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr ""
+msgstr "Mostura"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr ""
+msgstr "Infusão"
 
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr ""
+msgstr "Fora da mostura"
 
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr ""
+msgstr "Ao final"
 
 msgctxt "Fermentable|"
 msgid "Normal"
@@ -825,15 +825,15 @@ msgstr "Adjunto"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr ""
+msgstr "Mostura"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr ""
+msgstr "Infusão"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr ""
+msgstr "Fora da mostura"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
@@ -841,7 +841,7 @@ msgstr "Normal"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr ""
+msgstr "Ao final"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1376,11 +1376,11 @@ msgstr "Condimento"
 
 msgctxt "Misc|"
 msgid "Fining"
-msgstr ""
+msgstr "Ajustes"
 
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr ""
+msgstr "Corretor de água"
 
 msgctxt "Misc|"
 msgid "Herb"
@@ -1404,23 +1404,23 @@ msgstr "Mosto"
 
 msgctxt "Misc|"
 msgid "Primary"
-msgstr ""
+msgstr "Primária"
 
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr ""
+msgstr "Secundária"
 
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr ""
+msgstr "Engarrafamento"
 
 msgctxt "Misc|"
 msgid "Weight"
-msgstr ""
+msgstr "Peso"
 
 msgctxt "Misc|"
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1504,11 +1504,11 @@ msgstr "Engarrafamento"
 
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr ""
+msgstr "Peso"
 
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -1604,7 +1604,7 @@ msgstr "Polonês"
 
 msgctxt "OptionDialog|"
 msgid "Portuguese"
-msgstr "Português (Portugal)"
+msgstr "Português do Brasil"
 
 msgctxt "OptionDialog|"
 msgid "Russian"
@@ -2360,11 +2360,11 @@ msgstr "Floculação"
 
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr ""
+msgstr "Diversos"
 
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr ""
+msgstr "Leveduras"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
@@ -2376,11 +2376,11 @@ msgstr "Calorias estimadas (por 355ml)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
-msgstr ""
+msgstr "Amargor"
 
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr ""
+msgstr "Alvo"
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -2397,25 +2397,27 @@ msgstr ""
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "Select Equipment"
-msgstr ""
+msgstr "Selecione o equipamento"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid ""
 "The recipe will be scaled to match the batch size and efficiency of the "
 "selected equipment"
 msgstr ""
+"A receita será redimensionada para corresponder ao volume e eficiência do "
+"equipamento selecionado"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Equipment"
-msgstr ""
+msgstr "Novo Equipamento"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
-msgstr ""
+msgstr "Nova Eficiência"
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr ""
+msgstr "Redimensionar Receita"
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""
@@ -2423,6 +2425,10 @@ msgid ""
 "efficiency.Select another equipment with the new batch size and/or "
 "efficiency andthe wizard will scale the recipe ingredients automatically."
 msgstr ""
+"Este assistente de instalação o ajudará a redimensionar a receita para outro "
+"volume/tamanho ou eficiência. Selecione outro equipamento com o novo volume "
+"e/ou eficiência e o assistente redimensionará automaticamente os "
+"ingredientes da receita."
 
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
@@ -2577,7 +2583,7 @@ msgstr "Trigo"
 
 msgctxt "YeastItemDelegate|"
 msgid "Wine"
-msgstr "Vinho"
+msgstr "Wine"
 
 msgctxt "YeastItemDelegate|"
 msgid "Champagne"
@@ -2875,7 +2881,7 @@ msgstr "Notas"
 
 msgctxt "brewNoteWidget|"
 msgid "brewNote"
-msgstr ""
+msgstr "Nota do cervejeiro"
 
 msgctxt "brewNoteWidget|"
 msgid "yyyy-dd-MM"
@@ -2899,7 +2905,7 @@ msgstr "Volume morto do tanque de filtração"
 
 msgctxt "equipmentEditor|"
 msgid "equipmentEditor"
-msgstr ""
+msgstr "Editor de equipamento"
 
 msgctxt "fermentableEditor|"
 msgid "Fermentable Editor"
@@ -3704,11 +3710,11 @@ msgstr "Calculador de água inicial"
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
-msgstr ""
+msgstr "Aba receita"
 
 msgctxt "mainWindow|"
 msgid "Export to &BBCode"
-msgstr ""
+msgstr "Exportar para &BBCode"
 
 msgctxt "mashDesigner|"
 msgid "Mash Designer"
@@ -4362,7 +4368,7 @@ msgstr "AAAA-DD-MM"
 
 msgctxt "optionsDialog|"
 msgid "Noonan's approximation"
-msgstr ""
+msgstr "Aproximação por Noonan"
 
 msgctxt "pitchDialog|"
 msgid "Pitch Rate Calculator"
@@ -4466,19 +4472,19 @@ msgstr "Método de aeração"
 
 msgctxt "pitchDialog|"
 msgid "Production date (Best By date less three months)"
-msgstr ""
+msgstr "Data de produção (Melhor por data menos três meses)"
 
 msgctxt "pitchDialog|"
 msgid "Estimated viability of the yeast"
-msgstr ""
+msgstr "Viabilidade estimada da levedura"
 
 msgctxt "pitchDialog|"
 msgid "Desired pitch rate"
-msgstr ""
+msgstr "Contagem desejada"
 
 msgctxt "pitchDialog|"
 msgid "Number of vials/smack packs added to starter"
-msgstr ""
+msgstr "Número de frascos/pacotes adicionados ao starter"
 
 msgctxt "pitchDialog|"
 msgid "How much yeast you will need"
@@ -4486,15 +4492,15 @@ msgstr "Quanto de fermento (levedura) precisará"
 
 msgctxt "pitchDialog|"
 msgid "How many smack packs or vials required to reach pitch rate"
-msgstr ""
+msgstr "Quantos pacotes ou fracos são necessários para atingir a contagem"
 
 msgctxt "pitchDialog|"
 msgid "Amount of dry yeast needed to reach pitch rate"
-msgstr ""
+msgstr "Quantidade de levedura seca necessária para atingir a contagem"
 
 msgctxt "pitchDialog|"
 msgid "Starter size to reach pitch rate"
-msgstr ""
+msgstr "Volume do starter para atingir a contagem"
 
 msgctxt "primingDialog|"
 msgid "Priming Calculator"
@@ -4682,7 +4688,7 @@ msgstr "OG (20C)"
 
 msgctxt "refractoDialog|"
 msgid "Measured original plato"
-msgstr ""
+msgstr "Graus Plato medido original"
 
 msgctxt "refractoDialog|"
 msgid "Measured original gravity"
@@ -4690,7 +4696,7 @@ msgstr "Gravidade original medida"
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
+msgstr "Graus Plato medido atual"
 
 msgctxt "strikeWaterDialog|"
 msgid "Strike Water Calculator"

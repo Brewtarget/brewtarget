@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-12-17 09:38+0000\n"
-"Last-Translator: Walter Pépéka <walter.pepeka@hispeed.ch>\n"
+"PO-Revision-Date: 2016-04-04 13:14+0000\n"
+"Last-Translator: Jean-Marc <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
-"X-Generator: Launchpad (build 17881)\n"
+"X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 "X-Qt-Contexts: true\n"
 "X-Language: fr\n"
 
@@ -48,7 +48,7 @@ msgstr "Volume final"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Starting Gravity"
-msgstr "Densité Initiale"
+msgstr "Densité initiale"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "IBU"
@@ -125,7 +125,7 @@ msgstr "Calories estimées (pour 33 cl)"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Calories estimées (pour 35cl)"
+msgstr "Calories estimées (pour 33cl)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -149,7 +149,7 @@ msgstr "Volume final"
 
 msgctxt "BrewDayWidget|"
 msgid "Starting Gravity"
-msgstr "Densité Initiale"
+msgstr "Densité initiale"
 
 msgctxt "BrewDayWidget|"
 msgid "Boil Time"
@@ -165,7 +165,7 @@ msgstr "Efficacité prévue"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Calories estimées (pour 35cl)"
+msgstr "Calories estimées (pour 33cl)"
 
 msgctxt "BrewDayWidget|"
 msgid "Instructions"
@@ -222,7 +222,7 @@ msgstr "Calories estimées (pour 33 cl)"
 
 msgctxt "Brewtarget|"
 msgid "Default"
-msgstr "Défaut"
+msgstr "Par défaut"
 
 msgctxt "Brewtarget|"
 msgid "EBC"
@@ -238,7 +238,7 @@ msgstr "Plato"
 
 msgctxt "Brewtarget|"
 msgid "Specific Gravity"
-msgstr "Densité Spécifique"
+msgstr "Densité spécifique"
 
 msgctxt "Brewtarget|"
 msgid "SI"
@@ -246,7 +246,7 @@ msgstr "SI"
 
 msgctxt "Brewtarget|"
 msgid "US Customary"
-msgstr "Unités US"
+msgstr "Unités américaines"
 
 msgctxt "Brewtarget|"
 msgid "Milligrams"
@@ -754,11 +754,11 @@ msgstr "Empâté"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr "Trempé"
+msgstr "Infusé"
 
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr "Trempé"
+msgstr "Non empâté"
 
 msgctxt "Fermentable|"
 msgid "Late"
@@ -830,7 +830,7 @@ msgstr "Empâté"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr "Trempé"
+msgstr "Infusé"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
@@ -900,7 +900,7 @@ msgstr "Ébullition"
 
 msgctxt "Hop|"
 msgid "Aroma"
-msgstr "Arôme"
+msgstr "Arômatique"
 
 msgctxt "Hop|"
 msgid "Dry Hop"
@@ -980,7 +980,7 @@ msgstr "Pré-ébullition"
 
 msgctxt "HopItemDelegate|"
 msgid "Aroma"
-msgstr "Arôme"
+msgstr "Arômatique"
 
 msgctxt "HopItemDelegate|"
 msgid "Leaf"
@@ -2381,7 +2381,7 @@ msgstr "Calories estimées (pour 33 cl)"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr "Calories estimées (pour 35cl)"
+msgstr "Calories estimées (pour 33cl)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
@@ -2798,7 +2798,7 @@ msgstr "Température avant mash out"
 
 msgctxt "brewNoteWidget|"
 msgid "Postboil"
-msgstr "Pré-ébullition"
+msgstr "Post-ébullition"
 
 # Densité initiale
 msgctxt "brewNoteWidget|"
@@ -3112,7 +3112,7 @@ msgstr "Ébullition"
 
 msgctxt "hopEditor|"
 msgid "Aroma"
-msgstr "Arôme"
+msgstr "Arômatique"
 
 msgctxt "hopEditor|"
 msgid "Dry Hop"
@@ -3352,7 +3352,7 @@ msgstr "IBU/GU"
 
 msgctxt "mainWindow|"
 msgid "Calories/12oz"
-msgstr "Calories/35cl"
+msgstr "Calories/33cl"
 
 msgctxt "mainWindow|"
 msgid "Extras"
@@ -3496,7 +3496,7 @@ msgstr "Base de &données"
 
 msgctxt "mainWindow|"
 msgid "&View"
-msgstr "&Visualiser"
+msgstr "Afficha&ge"
 
 msgctxt "mainWindow|"
 msgid "&Tools"

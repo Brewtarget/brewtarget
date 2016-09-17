@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-10-04 22:00+0000\n"
-"Last-Translator: Philip <Unknown>\n"
+"PO-Revision-Date: 2016-01-17 15:22+0000\n"
+"Last-Translator: Lars <lars.j.graf@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
-"X-Generator: Launchpad (build 17881)\n"
+"X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 "X-Qt-Contexts: true\n"
 "X-Language: de\n"
 
@@ -121,11 +121,11 @@ msgstr "Wasser erhitzen"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Geschätzte Kalorien (pro 33 cl)"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Geschätzte Kalorien (pro 12 oz)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -218,7 +218,7 @@ msgstr "Schritt %1: %2"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Geschätzte Kalorien (pro 33 cl)"
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -314,15 +314,15 @@ msgstr "unbekannt"
 
 msgctxt "Brewtarget|"
 msgid "YYYY-mm-dd"
-msgstr ""
+msgstr "JJJJ-MM-TT"
 
 msgctxt "Brewtarget|"
 msgid "dd-mm-YYYY"
-msgstr ""
+msgstr "TT-MM-JJJJ"
 
 msgctxt "Brewtarget|"
 msgid "mm-dd-YYYY"
-msgstr ""
+msgstr "MM-TT-JJJJ"
 
 msgctxt "Brewtarget|"
 msgid "Seconds"
@@ -509,7 +509,7 @@ msgstr "Braunotiz"
 
 msgctxt "BtTreeView|"
 msgid "Cancel All"
-msgstr ""
+msgstr "Alles Abbrechen"
 
 #, qt-format
 msgctxt "BtTreeView|"
@@ -753,7 +753,7 @@ msgstr "Abbruch"
 
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr ""
+msgstr "Gemaischt"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
@@ -765,11 +765,11 @@ msgstr ""
 
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr ""
+msgstr "Spät"
 
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -805,7 +805,7 @@ msgstr "Bearbeite ausgewählte Zutat"
 
 msgctxt "FermentableDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "ausgewählte Zutat entfernen"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Grain"
@@ -829,7 +829,7 @@ msgstr "Beigabe"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr ""
+msgstr "Gemaischt"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
@@ -841,11 +841,11 @@ msgstr ""
 
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr ""
+msgstr "Spät"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -883,7 +883,7 @@ msgstr "Farbe"
 
 msgctxt "FermentableTableModel|"
 msgid "Method"
-msgstr ""
+msgstr "Methode"
 
 msgctxt "FermentableTableModel|"
 msgid "Addition"
@@ -963,7 +963,7 @@ msgstr "Bearbeite ausgewählte Zutat"
 
 msgctxt "HopDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "ausgewählte Zutat entfernen"
 
 msgctxt "HopItemDelegate|"
 msgid "Boil"
@@ -1395,19 +1395,19 @@ msgstr ""
 
 msgctxt "Misc|"
 msgid "Herb"
-msgstr ""
+msgstr "Herb"
 
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr ""
+msgstr "Aroma"
 
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Andere"
 
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Kochen"
 
 msgctxt "Misc|"
 msgid "Mash"
@@ -1427,11 +1427,11 @@ msgstr ""
 
 msgctxt "Misc|"
 msgid "Weight"
-msgstr ""
+msgstr "Gewicht"
 
 msgctxt "Misc|"
 msgid "Volume"
-msgstr ""
+msgstr "Volumen"
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1467,7 +1467,7 @@ msgstr "Bearbeite ausgewählte Zutat"
 
 msgctxt "MiscDialog|"
 msgid "Remove selected ingredient"
-msgstr ""
+msgstr "ausgewählte Zutat entfernen"
 
 msgctxt "MiscItemDelegate|"
 msgid "Spice"
@@ -1515,11 +1515,11 @@ msgstr "Abfüllung"
 
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr ""
+msgstr "Gewicht"
 
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr ""
+msgstr "Volumen"
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -2366,7 +2366,7 @@ msgstr "Vergärungsgrad"
 
 msgctxt "RecipeFormatter|"
 msgid "Id"
-msgstr ""
+msgstr "ID"
 
 msgctxt "RecipeFormatter|"
 msgid "Flocculation"
@@ -2378,15 +2378,15 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr ""
+msgstr "Hefen"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Geschätzte Kalorien (pro 33 cl)"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Geschätzte Kalorien (pro 12 oz)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
@@ -2394,7 +2394,7 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Target"
-msgstr ""
+msgstr "Ziel"
 
 msgctxt "RefractoDialog|"
 msgid "OG Mismatch"
@@ -2422,15 +2422,15 @@ msgstr ""
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Equipment"
-msgstr ""
+msgstr "Neue Gerätschaft"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
-msgstr ""
+msgstr "Neue Effizienz (%)"
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr ""
+msgstr "Rezept skalieren"
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""

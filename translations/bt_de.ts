@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="de">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Lars &lt;lars.j.graf@gmail.com&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2016-01-17 15:22+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2015-12-13 20:57+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 18186)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2016-09-17 13:52+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -112,11 +121,11 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschätzte Kalorien (pro 33 cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Geschätzte Kalorien (pro 12 oz)</translation>
+        <translation>Geschätzte Kalorien (pro 12 oz)</translation>
     </message>
 </context>
 <context>
@@ -211,7 +220,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschätzte Kalorien (pro 33 cl)</translation>
     </message>
 </context>
 <context>
@@ -310,15 +319,15 @@
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
+        <translation>JJJJ-MM-TT</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>TT-MM-JJJJ</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>MM-TT-JJJJ</translation>
     </message>
     <message>
         <source>Seconds</source>
@@ -517,7 +526,7 @@
     </message>
     <message>
         <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles Abbrechen</translation>
     </message>
     <message>
         <source>Copy %1</source>
@@ -753,7 +762,7 @@
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Gemaischt</translation>
+        <translation>Gemaischt</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -765,11 +774,11 @@
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Spät</translation>
+        <translation>Spät</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
 </context>
 <context>
@@ -808,7 +817,7 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>ausgewählte Zutat entfernen</translation>
     </message>
 </context>
 <context>
@@ -835,7 +844,7 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Gemaischt</translation>
+        <translation>Gemaischt</translation>
     </message>
     <message>
         <source>Steeped</source>
@@ -847,11 +856,11 @@
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Spät</translation>
+        <translation>Spät</translation>
     </message>
 </context>
 <context>
@@ -890,7 +899,7 @@
     </message>
     <message>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Methode</translation>
     </message>
     <message>
         <source>Addition</source>
@@ -976,7 +985,7 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>ausgewählte Zutat entfernen</translation>
     </message>
 </context>
 <context>
@@ -1376,55 +1385,55 @@
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Gewürz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Schönung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Wasserzusatzmittel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation>Herb</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation>Aroma</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Andere</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Kochen</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Maische</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Hauptgärung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Nachgärung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Abfüllung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation>Gewicht</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volumen</translation>
+        <translation>Volumen</translation>
     </message>
 </context>
 <context>
@@ -1463,7 +1472,7 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>ausgewählte Zutat entfernen</translation>
     </message>
 </context>
 <context>
@@ -1514,11 +1523,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation>Gewicht</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volumen</translation>
+        <translation>Volumen</translation>
     </message>
 </context>
 <context>
@@ -2303,7 +2312,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Id</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <source>Flocculation</source>
@@ -2311,19 +2320,19 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished">Sonstiges</translation>
-    </message>
-    <message>
-        <source>Yeasts</source>
-        <translation type="unfinished">Hefen</translation>
-    </message>
-    <message>
-        <source>Estimated calories (per 33 cl)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Yeasts</source>
+        <translation>Hefen</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation>Geschätzte Kalorien (pro 33 cl)</translation>
+    </message>
+    <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Geschätzte Kalorien (pro 12 oz)</translation>
+        <translation>Geschätzte Kalorien (pro 12 oz)</translation>
     </message>
     <message>
         <source>Bitterness</source>
@@ -2331,7 +2340,7 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziel</translation>
     </message>
 </context>
 <context>
@@ -2357,18 +2366,18 @@ Das endgültige Volumen in der Hauptgärung beträgt %1.</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Gerätschaft</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Effizienz (%)</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Rezept skalieren</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
