@@ -1,18 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-10-04 22:03+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: nb\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -123,9 +116,10 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
+#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Estimert kalorier"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -425,6 +419,15 @@ msgctxt "BtTreeModel|"
 msgid "FULLPATH"
 msgstr "HEL STI"
 
+msgctxt "BtTreeModel|"
+msgid "Could not copy"
+msgstr ""
+
+#, qt-format
+msgctxt "BtTreeModel|"
+msgid "There was an unexpected error creating %1"
+msgstr ""
+
 msgctxt "BtTreeView|"
 msgid "New"
 msgstr "Ny"
@@ -526,6 +529,14 @@ msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
 msgstr ""
 
+msgctxt "BtTreeView|"
+msgid "To XML"
+msgstr ""
+
+msgctxt "BtTreeView|"
+msgid "To HTML"
+msgstr ""
+
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
 msgstr "Konverteringsverktøy"
@@ -570,18 +581,35 @@ msgstr ""
 "Det kan være nye in indegrienser og oppskrifter tilgjegelig. Ønsker du å "
 "legge disse til databasen?"
 
+msgctxt "Database|"
+msgid "Database password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Connection failed"
+msgstr ""
+
+#, qt-format
+msgctxt "Database|"
+msgid "Could not connect to %1 : %2"
+msgstr ""
+
 #, qt-format
 msgctxt "EquipmentEditor|"
 msgid "Grain absorption (%1/%2)"
 msgstr "Malt absorption (%1/%2)"
 
-msgctxt "EquipmentEditor|"
-msgid "Tun Volume Warning"
-msgstr "Tønnevolum advarsel"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Tun Volume Warning"
+#~ msgstr "Tønnevolum advarsel"
 
-msgctxt "EquipmentEditor|"
-msgid "Batch Size Warning"
-msgstr "Bryggevolum advarsel"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Batch Size Warning"
+#~ msgstr "Bryggevolum advarsel"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name"
@@ -591,23 +619,23 @@ msgctxt "EquipmentEditor|"
 msgid "Equipment name:"
 msgstr "Utstyrsnavn:"
 
-msgctxt "EquipmentEditor|"
-msgid "The tun volume you entered is 0. This may cause problems"
-msgstr "Tønnevolumet ble satt til 0. Dette kan skape problemer"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The tun volume you entered is 0. This may cause problems"
+#~ msgstr "Tønnevolumet ble satt til 0. Dette kan skape problemer"
 
-msgctxt "EquipmentEditor|"
-msgid "The batch size you entered is 0. This may cause problems"
-msgstr "Bryggevolumet ble satt til 0. Dette kan skape problemer"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The batch size you entered is 0. This may cause problems"
+#~ msgstr "Bryggevolumet ble satt til 0. Dette kan skape problemer"
 
-msgctxt "EquipmentEditor|"
-msgid "Hop Utilization Warning"
-msgstr "Humleutnyttelse advarsel"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Hop Utilization Warning"
+#~ msgstr "Humleutnyttelse advarsel"
 
-msgctxt "EquipmentEditor|"
-msgid ""
-"The hop utilization percentage you entered is 0. This may cause problems"
-msgstr ""
-"Prosentvis utnyttelse av humlen ble satt til 0. Dette kan skape problemer"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid ""
+#~ "The hop utilization percentage you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "Prosentvis utnyttelse av humlen ble satt til 0. Dette kan skape problemer"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment Editor"
@@ -745,9 +773,34 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Avbryt"
 
+msgctxt "EquipmentEditor|"
+msgid "This equipment profile may break brewtarget's maths"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "The following values are not set:"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "mash tun volume (all-grain and BIAB only)"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "batch size"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "hop utilization"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "Calculation Warnings"
+msgstr ""
+
+#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr ""
+msgstr "Mesket"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
@@ -757,9 +810,10 @@ msgctxt "Fermentable|"
 msgid "Not mashed"
 msgstr ""
 
+#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr ""
+msgstr "Sen"
 
 msgctxt "Fermentable|"
 msgid "Normal"
@@ -821,9 +875,10 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Adjunkt"
 
+#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr ""
+msgstr "Mesket"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
@@ -837,9 +892,10 @@ msgctxt "FermentableItemDelegate|"
 msgid "Normal"
 msgstr ""
 
+#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr ""
+msgstr "Sen"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1018,6 +1074,36 @@ msgstr "Form"
 msgctxt "HopTableModel|"
 msgid "Inventory"
 msgstr "Lagerbeholdning"
+
+msgctxt "HydrometerTool|"
+msgid "Hydrometer Tool"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "SG Reading"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Temperature"
+msgstr "Temperatur"
+
+msgctxt "HydrometerTool|"
+msgid "Adjust SG"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Convert"
+msgstr "Konverter"
+
+msgctxt "HydrometerTool|"
+msgid "Measured gravity"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "Corrected gravity"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Cloying"
@@ -1227,6 +1313,15 @@ msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
 msgstr "Et mappenavn må ha minst et ikke-/  tegn"
 
+msgctxt "MainWindow|"
+msgid "Error copying recipe"
+msgstr ""
+
+#, qt-format
+msgctxt "MainWindow|"
+msgid "An error was returned while creating %1"
+msgstr ""
+
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "Ingen gjærbare råvarer"
@@ -1367,57 +1462,79 @@ msgstr ""
 "Du har for mye vørter fra meskingen for kokemengden din. Jeg foreslår å øke "
 "kokemengden ved å øke koketiden eller redusere mesketykkelsen."
 
+#, qt-format
+msgctxt "MashWizard|"
+msgid "Batch Sparge %1"
+msgstr ""
+
+msgctxt "MashWizard|"
+msgid "Fly Sparge"
+msgstr ""
+
+#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr ""
+msgstr "Krydder"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr ""
+msgstr "Klaringsmiddel"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr ""
+msgstr "Vannjustering"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr ""
+msgstr "Urt"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr ""
+msgstr "Smak"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Annet"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Kok"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
-msgstr ""
+msgstr "Mesk"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr ""
+msgstr "Primær"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr ""
+msgstr "Sekundær"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr ""
+msgstr "Flasking"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr ""
+msgstr "Vekt"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr ""
+msgstr "Volum"
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1499,13 +1616,15 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Flasking"
 
+#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr ""
+msgstr "Vekt"
 
+#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr ""
+msgstr "Volum"
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -1611,6 +1730,162 @@ msgctxt "OptionDialog|"
 msgid "Chinese"
 msgstr "Kinesisk"
 
+msgctxt "OptionDialog|"
+msgid "SI units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "US traditional units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "British imperial units"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Celsius"
+msgstr "Celsius"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Fahrenheit"
+msgstr "Fahrenheit"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "20C/20C Specific Gravity"
+msgstr "20C/20C Spesifikk Gravitasjon"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Plato/Brix/Balling"
+msgstr "Plato/Brix/Balling"
+
+msgctxt "OptionDialog|"
+msgid "mm-dd-YYYY"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "dd-mm-YYYY"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "YYYY-mm-dd"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "SRM"
+msgstr "SRM"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "EBC"
+msgstr "EBC"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Tinseth's approximation"
+msgstr "Tineth's tilnærming"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Rager's approximation"
+msgstr "Roger's tilnærming"
+
+msgctxt "OptionDialog|"
+msgid "Noonan's approximation"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Mosher's approximation"
+msgstr "Mosher's tilnærming"
+
+msgctxt "OptionDialog|"
+msgid "Daniel's approximation"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Morey's approximation"
+msgstr "Morey's tilnærming"
+
+msgctxt "OptionDialog|"
+msgid "SQLite (default)"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "PostgreSQL"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Danish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Estonian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Basque"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Galician"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Hungarian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Latvian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Norwegian Bokmål"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Serbian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Swedish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Turkish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Test connection or cancel"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Saving the options without testing the connection can cause brewtarget to "
+"not restart. Your changes have been discarded, which is likely really, "
+"really crappy UX. Please open a bug explaining exactly how you got to this "
+"message."
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Would you like brewtarget to transfer your data to the new database? NOTE: "
+"If you've already loaded the data, say No"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Transfer database"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Please restart brewtarget to connect to the new database"
+msgstr ""
+
 #, qt-format
 msgctxt "QObject|"
 msgid "Invalid color formula type: %1"
@@ -1652,68 +1927,68 @@ msgctxt "QObject|"
 msgid "Failed to open the database '%1'."
 msgstr "Kunne ikke åpne database '%1'."
 
-msgctxt "QObject|"
-msgid "Save Database Changes"
-msgstr "Lagre databaseendringer"
+#~ msgctxt "QObject|"
+#~ msgid "Save Database Changes"
+#~ msgstr "Lagre databaseendringer"
 
-msgctxt "QObject|"
-msgid "Would you like to save the changes you made?"
-msgstr "Vil du lagre endringene du gjorde?"
+#~ msgctxt "QObject|"
+#~ msgid "Would you like to save the changes you made?"
+#~ msgstr "Vil du lagre endringene du gjorde?"
 
-msgctxt "QObject|"
-msgid "Multiple Databases Found"
-msgstr "Flere databaser funnet"
+#~ msgctxt "QObject|"
+#~ msgid "Multiple Databases Found"
+#~ msgstr "Flere databaser funnet"
 
-msgctxt "QObject|"
-msgid ""
-"Multiple databases were found.  Do you want to restore the changes you made "
-"during your last Brewtarget session, or rollback to before last session's "
-"changes?"
-msgstr ""
-"Flere databaser ble funnet. Vil du gjenopprette endringene du gjorde under "
-"din forrige Brewtarget-økt eller tilbakestille til før forrige økts "
-"endringer?"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Multiple databases were found.  Do you want to restore the changes you "
+#~ "made during your last Brewtarget session, or rollback to before last "
+#~ "session's changes?"
+#~ msgstr ""
+#~ "Flere databaser ble funnet. Vil du gjenopprette endringene du gjorde "
+#~ "under din forrige Brewtarget-økt eller tilbakestille til før forrige økts "
+#~ "endringer?"
 
-msgctxt "QObject|"
-msgid "Restore"
-msgstr "Gjenopprett"
+#~ msgctxt "QObject|"
+#~ msgid "Restore"
+#~ msgstr "Gjenopprett"
 
-msgctxt "QObject|"
-msgid "Rollback"
-msgstr "Tilbakestill"
-
-#, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to remove the temporary backup database.  Navigate to '%1' and remove "
-"'tempBackupDatabase.sqlite'."
-msgstr ""
-"Kunne ikke fjerne den midlertidige sikkerhetskopien av databasen. Naviger "
-"til '%1' og fjern 'tempBackupDatabase.sqlite'."
+#~ msgctxt "QObject|"
+#~ msgid "Rollback"
+#~ msgstr "Tilbakestill"
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to rollback to the backup database.  Navigate to '%1', remove "
-"'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
-"'database.sqlite'."
-msgstr ""
-"Kunne ikke tilbakestille til sikkerhetskopien av databasen. Naviger til "
-"'%1', fjern 'database.sqlite' hvis den eksisterer og endre navnet på "
-"'tempBackupDatabase.sqlite' til 'database.sqlite'."
-
-msgctxt "QObject|"
-msgid "Database Restore Failure"
-msgstr "Feil i tilbakestilling av database"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to remove the temporary backup database.  Navigate to '%1' and "
+#~ "remove 'tempBackupDatabase.sqlite'."
+#~ msgstr ""
+#~ "Kunne ikke fjerne den midlertidige sikkerhetskopien av databasen. Naviger "
+#~ "til '%1' og fjern 'tempBackupDatabase.sqlite'."
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to restore the backup database. Navigate to '%1' and rename "
-"'tempBackupDatabase.sqlite' to 'database.sqlite'."
-msgstr ""
-"Kunne ikke gjenopprette sikkerhetskopien av databasen. Naviger til '%1' og "
-"endre navnet på 'tempBackupDatabase.sqlite' til 'database.sqlite'."
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to rollback to the backup database.  Navigate to '%1', remove "
+#~ "'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
+#~ "'database.sqlite'."
+#~ msgstr ""
+#~ "Kunne ikke tilbakestille til sikkerhetskopien av databasen. Naviger til "
+#~ "'%1', fjern 'database.sqlite' hvis den eksisterer og endre navnet på "
+#~ "'tempBackupDatabase.sqlite' til 'database.sqlite'."
+
+#~ msgctxt "QObject|"
+#~ msgid "Database Restore Failure"
+#~ msgstr "Feil i tilbakestilling av database"
+
+#, qt-format
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to restore the backup database. Navigate to '%1' and rename "
+#~ "'tempBackupDatabase.sqlite' to 'database.sqlite'."
+#~ msgstr ""
+#~ "Kunne ikke gjenopprette sikkerhetskopien av databasen. Naviger til '%1' "
+#~ "og endre navnet på 'tempBackupDatabase.sqlite' til 'database.sqlite'."
 
 msgctxt "QObject|"
 msgid "Grain"
@@ -1833,6 +2108,44 @@ msgstr "Mappe"
 
 msgctxt "QObject|"
 msgid "Failed to update the database"
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Error attempting to create directory \"%1\""
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Data directory \"%1\" is missing.  Some features will be unavaliable."
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Fly Sparge"
+msgstr ""
+
+#, fuzzy
+msgctxt "QObject|"
+msgid "Batch Sparge"
+msgstr "Skylling"
+
+msgctxt "QObject|"
+msgid "Connection Test"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Connection to database was successful"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Plaintext"
+msgstr ""
+
+msgctxt "QObject|"
+msgid ""
+"Passwords are saved in plaintext. We make no effort to hide, obscure or "
+"otherwise protect the password. By enabling this option, you take full "
+"responsibility for any potential problems."
 msgstr ""
 
 msgctxt "Recipe|"
@@ -2351,21 +2664,24 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Flokkulering"
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr ""
+msgstr "Diverse"
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr ""
+msgstr "Gjær"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Estimert kalorier"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
@@ -2373,6 +2689,34 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Target"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Total"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Port"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Database"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Username"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Saved Password"
 msgstr ""
 
 msgctxt "RefractoDialog|"
@@ -2437,6 +2781,154 @@ msgctxt "StyleEditor|"
 msgid "Style name:"
 msgstr "Stilnavn:"
 
+msgctxt "TimerDialog|"
+msgid "Addition Timer"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Addition Time(min):"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Time Remaining:"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes: "
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Alarm sound"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Stop Alarm"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerDialog|"
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgctxt "TimerListDialog|"
+msgid "Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Main Boil Timer"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add Timer"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Start"
+msgstr "Start"
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Stop"
+msgstr "Stopp"
+
+msgctxt "TimerMainDialog|"
+msgid "Reset"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Hide Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Show Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Cancel Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Load Current Recipe"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Timer (mins):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Time Here"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Limit Alarm Ring Time "
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Alarm Ring Time (secs):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are currently no timers to show."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "KNOCKOUT"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Active Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid ""
+"You currently have active timers, would you like to replace them or add to "
+"them?"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Replace"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 of %2"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop addition is already timed and has been ignored."
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop additions are already timed and have been ignored."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Duplicate Timers Ignored"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are no boil addition, no timers generated."
+msgstr ""
+
 msgctxt "TimerWidget|"
 msgid "Open Sound"
 msgstr "Åpne lyd"
@@ -2445,37 +2937,53 @@ msgctxt "TimerWidget|"
 msgid "Audio Files (*.wav *.ogg *.mp3 *.aiff)"
 msgstr "Lydfiler (*.wav *.ogg *.mp3 *.aiff)"
 
-msgctxt "TimerWidget|"
-msgid "Stop"
-msgstr "Stopp"
+#~ msgctxt "TimerWidget|"
+#~ msgid "Stop"
+#~ msgstr "Stopp"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start"
+#~ msgstr "Start"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set the timer to the specified value"
+#~ msgstr "Sett tidtaker til spesifisert tid"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "HH:MM:SS"
+#~ msgstr "HH:MM:SS"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start/Stop timer"
+#~ msgstr "Start/Stop tidtaker"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set a sound as the alarm"
+#~ msgstr "Sett en lyd som alarmlyd"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set"
+#~ msgstr "Sett"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Sound"
+#~ msgstr "Lyd"
 
 msgctxt "TimerWidget|"
-msgid "Start"
-msgstr "Start"
+msgid "Notes..."
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Set the timer to the specified value"
-msgstr "Sett tidtaker til spesifisert tid"
+msgid " and "
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "HH:MM:SS"
-msgstr "HH:MM:SS"
+msgid "Error"
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Start/Stop timer"
-msgstr "Start/Stop tidtaker"
-
-msgctxt "TimerWidget|"
-msgid "Set a sound as the alarm"
-msgstr "Sett en lyd som alarmlyd"
-
-msgctxt "TimerWidget|"
-msgid "Set"
-msgstr "Sett"
-
-msgctxt "TimerWidget|"
-msgid "Sound"
-msgstr "Lyd"
+msgid "Addition time cannot be longer than remaining boil time"
+msgstr ""
 
 #, qt-format
 msgctxt "WaterTableModel|"
@@ -3698,29 +4206,33 @@ msgctxt "mainWindow|"
 msgid "Export to &BBCode"
 msgstr ""
 
+msgctxt "mainWindow|"
+msgid "Hydrometer Temp Adjustment"
+msgstr ""
+
 msgctxt "mashDesigner|"
 msgid "Mash Designer"
 msgstr "Meskedesigner"
 
-msgctxt "mashDesigner|"
-msgid "Name"
-msgstr "Navn"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Name"
+#~ msgstr "Navn"
 
-msgctxt "mashDesigner|"
-msgid "Type"
-msgstr "Type"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Type"
+#~ msgstr "Type"
 
-msgctxt "mashDesigner|"
-msgid "Target temp."
-msgstr "Måltemp."
+#~ msgctxt "mashDesigner|"
+#~ msgid "Target temp."
+#~ msgstr "Måltemp."
 
 msgctxt "mashDesigner|"
 msgid "Time"
 msgstr "Tid"
 
-msgctxt "mashDesigner|"
-msgid "Batch Sparge"
-msgstr "Skylling"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Batch Sparge"
+#~ msgstr "Skylling"
 
 msgctxt "mashDesigner|"
 msgid "Next"
@@ -3769,6 +4281,18 @@ msgstr "Karvolum"
 msgctxt "mashDesigner|"
 msgid "thickness"
 msgstr "tykkelse"
+
+msgctxt "mashDesigner|"
+msgid "&Name"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "&Type"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "Tar&get temp."
+msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Mash Editor"
@@ -3914,9 +4438,25 @@ msgctxt "mashWizard|"
 msgid "Mash thickness (L/kg)"
 msgstr "Mesketetthet (L/kg)"
 
+#~ msgctxt "mashWizard|"
+#~ msgid "Mash thickness (do not enter any units)"
+#~ msgstr "Mesketetthet (ikke skriv inn enhet)"
+
 msgctxt "mashWizard|"
-msgid "Mash thickness (do not enter any units)"
-msgstr "Mesketetthet (ikke skriv inn enhet)"
+msgid "No Spar&ge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Fl&y Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Ba&tch Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Batches"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Misc Editor"
@@ -4181,6 +4721,10 @@ msgctxt "ogAdjuster|"
 msgid "Calculate"
 msgstr "Beregn"
 
+msgctxt "ogAdjuster|"
+msgid "ogAdjuster"
+msgstr ""
+
 msgctxt "optionsDialog|"
 msgid "Options"
 msgstr "Alternativer"
@@ -4193,29 +4737,29 @@ msgctxt "optionsDialog|"
 msgid "Weight"
 msgstr "Vekt"
 
-msgctxt "optionsDialog|"
-msgid "Use SI units"
-msgstr "Bruk metriske enheter"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use SI units"
+#~ msgstr "Bruk metriske enheter"
 
-msgctxt "optionsDialog|"
-msgid "Use US traditional units"
-msgstr "Bruk amerikanske enheter"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use US traditional units"
+#~ msgstr "Bruk amerikanske enheter"
 
-msgctxt "optionsDialog|"
-msgid "Use British imperial units"
-msgstr "Bruk engelske enheter"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use British imperial units"
+#~ msgstr "Bruk engelske enheter"
 
 msgctxt "optionsDialog|"
 msgid "Temperature"
 msgstr "Temperatur"
 
-msgctxt "optionsDialog|"
-msgid "Celsius"
-msgstr "Celsius"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Celsius"
+#~ msgstr "Celsius"
 
-msgctxt "optionsDialog|"
-msgid "Fahrenheit"
-msgstr "Fahrenheit"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Fahrenheit"
+#~ msgstr "Fahrenheit"
 
 msgctxt "optionsDialog|"
 msgid "Volume"
@@ -4225,89 +4769,89 @@ msgctxt "optionsDialog|"
 msgid "Gravity"
 msgstr "Gravitasjon"
 
-msgctxt "optionsDialog|"
-msgid "20C/20C Specific Gravity"
-msgstr "20C/20C Spesifikk Gravitasjon"
+#~ msgctxt "optionsDialog|"
+#~ msgid "20C/20C Specific Gravity"
+#~ msgstr "20C/20C Spesifikk Gravitasjon"
 
-msgctxt "optionsDialog|"
-msgid "Plato/Brix/Balling"
-msgstr "Plato/Brix/Balling"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Plato/Brix/Balling"
+#~ msgstr "Plato/Brix/Balling"
 
 msgctxt "optionsDialog|"
 msgid "Color"
 msgstr "Farge"
 
-msgctxt "optionsDialog|"
-msgid "Use SRM"
-msgstr "Bruk SRM"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use SRM"
+#~ msgstr "Bruk SRM"
 
-msgctxt "optionsDialog|"
-msgid "Use EBC"
-msgstr "Bruk EBC"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use EBC"
+#~ msgstr "Bruk EBC"
 
 msgctxt "optionsDialog|"
 msgid "Formulas"
 msgstr "Formularer"
 
-msgctxt "optionsDialog|"
-msgid "Mosher's approximation"
-msgstr "Mosher's tilnærming"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Mosher's approximation"
+#~ msgstr "Mosher's tilnærming"
 
-msgctxt "optionsDialog|"
-msgid "Daniels' approximation"
-msgstr "Daniel's tilnærming"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Daniels' approximation"
+#~ msgstr "Daniel's tilnærming"
 
-msgctxt "optionsDialog|"
-msgid "Morey's approximation"
-msgstr "Morey's tilnærming"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Morey's approximation"
+#~ msgstr "Morey's tilnærming"
 
 msgctxt "optionsDialog|"
 msgid "IBU"
 msgstr "IBU"
 
-msgctxt "optionsDialog|"
-msgid "Tinseth's approximation"
-msgstr "Tineth's tilnærming"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Tinseth's approximation"
+#~ msgstr "Tineth's tilnærming"
 
-msgctxt "optionsDialog|"
-msgid "Rager's approximation"
-msgstr "Roger's tilnærming"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Rager's approximation"
+#~ msgstr "Roger's tilnærming"
 
 msgctxt "optionsDialog|"
 msgid "IBU Adjustments"
 msgstr "IBU-justeringer"
 
-msgctxt "optionsDialog|"
-msgid "% IBU adjustment"
-msgstr "% IBU-justering"
+#~ msgctxt "optionsDialog|"
+#~ msgid "% IBU adjustment"
+#~ msgstr "% IBU-justering"
 
-msgctxt "optionsDialog|"
-msgid "Mash Hop"
-msgstr "Meskehumle"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Mash Hop"
+#~ msgstr "Meskehumle"
 
-msgctxt "optionsDialog|"
-msgid "First Wort"
-msgstr "Skylling"
+#~ msgctxt "optionsDialog|"
+#~ msgid "First Wort"
+#~ msgstr "Skylling"
 
-msgctxt "optionsDialog|"
-msgid "Directories"
-msgstr "Mapper"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Directories"
+#~ msgstr "Mapper"
 
-msgctxt "optionsDialog|"
-msgid "Database Directory"
-msgstr "Databasemappe"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Database Directory"
+#~ msgstr "Databasemappe"
 
-msgctxt "optionsDialog|"
-msgid "Where your brewtarget .xml files are."
-msgstr "Hvor dine Brewtarget .xml filer er lokalisert."
+#~ msgctxt "optionsDialog|"
+#~ msgid "Where your brewtarget .xml files are."
+#~ msgstr "Hvor dine Brewtarget .xml filer er lokalisert."
 
 msgctxt "optionsDialog|"
 msgid "Browse"
 msgstr "Bla gjennom"
 
-msgctxt "optionsDialog|"
-msgid "Default"
-msgstr "Forvalg"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Default"
+#~ msgstr "Forvalg"
 
 msgctxt "optionsDialog|"
 msgid "Language"
@@ -4336,19 +4880,123 @@ msgid "Date"
 msgstr "Dato"
 
 msgctxt "optionsDialog|"
-msgid "mm-dd-YYYY"
+msgid "Forumulas"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "dd-mm-YYYY"
+msgid "Mash Hop (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "YYYY-dd-mm"
+msgid "First Wort (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "Noonan's approximation"
+msgid "Databases"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Engines"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "RDBMS Engine"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Test Connection"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Configuration"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Restore defaults"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Username"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Save password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Data Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Backup Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Frequency of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "PostgresSQL's host name or IP address"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port the PostgreSQL is listening on"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The schema containing the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "User with create/delete table access"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password for the user"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The name of the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where your database file is"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where to save your backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of backups to keep: -1 means never remove, 0 means never backup"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "How frequently a backup is made: 1 means always backup"
 msgstr ""
 
 msgctxt "pitchDialog|"
@@ -4871,9 +5519,33 @@ msgctxt "styleEditor|"
 msgid "Cancel"
 msgstr "Avbryt"
 
+#~ msgctxt "timerListDialog|"
+#~ msgid "Timers"
+#~ msgstr "Tidtakere"
+
 msgctxt "timerListDialog|"
-msgid "Timers"
-msgstr "Tidtakere"
+msgid "Addition Timers"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Form"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Add:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "At:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "mins"
+msgstr ""
 
 msgctxt "waterEditor|"
 msgid "Dialog"

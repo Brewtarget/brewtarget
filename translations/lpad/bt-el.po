@@ -1,18 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-10-04 22:00+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: el\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -123,9 +116,10 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
+#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Θερμίδες κατά προσέγγιση"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -425,6 +419,15 @@ msgctxt "BtTreeModel|"
 msgid "FULLPATH"
 msgstr "Πλήρης διαδρομή"
 
+msgctxt "BtTreeModel|"
+msgid "Could not copy"
+msgstr ""
+
+#, qt-format
+msgctxt "BtTreeModel|"
+msgid "There was an unexpected error creating %1"
+msgstr ""
+
 msgctxt "BtTreeView|"
 msgid "New"
 msgstr "Νέα"
@@ -526,6 +529,14 @@ msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
 msgstr ""
 
+msgctxt "BtTreeView|"
+msgid "To XML"
+msgstr ""
+
+msgctxt "BtTreeView|"
+msgid "To HTML"
+msgstr ""
+
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
 msgstr "Εργαλείο μετατροπής"
@@ -570,18 +581,35 @@ msgstr ""
 "Πιθανόν να είναι διαθέσιμα νέα συστατικά και συνταγές. Θα θέλατε να "
 "προστεθούν στην υπάρχουσα βάση δεδομένων;"
 
+msgctxt "Database|"
+msgid "Database password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Connection failed"
+msgstr ""
+
+#, qt-format
+msgctxt "Database|"
+msgid "Could not connect to %1 : %2"
+msgstr ""
+
 #, qt-format
 msgctxt "EquipmentEditor|"
 msgid "Grain absorption (%1/%2)"
 msgstr "Απορόφηση από τα σιτηρά (%1/%2)"
 
-msgctxt "EquipmentEditor|"
-msgid "Tun Volume Warning"
-msgstr "Προειδοποίηση Ορίων όγκου σκεύους σακχαροποίησης"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Tun Volume Warning"
+#~ msgstr "Προειδοποίηση Ορίων όγκου σκεύους σακχαροποίησης"
 
-msgctxt "EquipmentEditor|"
-msgid "Batch Size Warning"
-msgstr "Προειδοποίηση ορίων μεγέθους παρτίδας"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Batch Size Warning"
+#~ msgstr "Προειδοποίηση ορίων μεγέθους παρτίδας"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name"
@@ -591,27 +619,27 @@ msgctxt "EquipmentEditor|"
 msgid "Equipment name:"
 msgstr "Όνομα εξοπλισμού"
 
-msgctxt "EquipmentEditor|"
-msgid "The tun volume you entered is 0. This may cause problems"
-msgstr ""
-"Ο όγκος του σκεύους σακχαροποίησης που έχετε εισάγει είναι 0. Αυτό πιθανόν "
-"να προκαλέσει προβλήματα"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The tun volume you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "Ο όγκος του σκεύους σακχαροποίησης που έχετε εισάγει είναι 0. Αυτό "
+#~ "πιθανόν να προκαλέσει προβλήματα"
 
-msgctxt "EquipmentEditor|"
-msgid "The batch size you entered is 0. This may cause problems"
-msgstr ""
-"Το μέγεθος της παρτίδας που έχετε εισάγει είναι 0. Αυτό πιθανόν να "
-"προκαλέσει προβλήματα"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The batch size you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "Το μέγεθος της παρτίδας που έχετε εισάγει είναι 0. Αυτό πιθανόν να "
+#~ "προκαλέσει προβλήματα"
 
-msgctxt "EquipmentEditor|"
-msgid "Hop Utilization Warning"
-msgstr "Προειδοποίηση χρήσης λυκίσκου"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Hop Utilization Warning"
+#~ msgstr "Προειδοποίηση χρήσης λυκίσκου"
 
-msgctxt "EquipmentEditor|"
-msgid ""
-"The hop utilization percentage you entered is 0. This may cause problems"
-msgstr ""
-"Το ποσοστό χρήσης λυκίσκου είναι 0. Αυτό πιθανό να προκαλέσει προβλήματα"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid ""
+#~ "The hop utilization percentage you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "Το ποσοστό χρήσης λυκίσκου είναι 0. Αυτό πιθανό να προκαλέσει προβλήματα"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment Editor"
@@ -749,9 +777,34 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Ακύρωση"
 
+msgctxt "EquipmentEditor|"
+msgid "This equipment profile may break brewtarget's maths"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "The following values are not set:"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "mash tun volume (all-grain and BIAB only)"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "batch size"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "hop utilization"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "Calculation Warnings"
+msgstr ""
+
+#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr ""
+msgstr "στο σκεύος σακχαροποίησης"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
@@ -761,9 +814,10 @@ msgctxt "Fermentable|"
 msgid "Not mashed"
 msgstr ""
 
+#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr ""
+msgstr "Στο τέλος"
 
 msgctxt "Fermentable|"
 msgid "Normal"
@@ -825,9 +879,10 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Πρόσθετα"
 
+#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr ""
+msgstr "στο σκεύος σακχαροποίησης"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
@@ -841,9 +896,10 @@ msgctxt "FermentableItemDelegate|"
 msgid "Normal"
 msgstr ""
 
+#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr ""
+msgstr "Στο τέλος"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1022,6 +1078,36 @@ msgstr "Μορφή"
 msgctxt "HopTableModel|"
 msgid "Inventory"
 msgstr "Ευρετήριο ειδών"
+
+msgctxt "HydrometerTool|"
+msgid "Hydrometer Tool"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "SG Reading"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Temperature"
+msgstr "Θερμοκρασία"
+
+msgctxt "HydrometerTool|"
+msgid "Adjust SG"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Convert"
+msgstr "Μετατροπή"
+
+msgctxt "HydrometerTool|"
+msgid "Measured gravity"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "Corrected gravity"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Cloying"
@@ -1232,8 +1318,16 @@ msgstr ""
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
+msgstr "Ονόματα φακέλων θα πρέπει να περιέχουν τουλάχιστον ένα μή -/ χαρακτήρα"
+
+msgctxt "MainWindow|"
+msgid "Error copying recipe"
 msgstr ""
-"Ονόματα φακέλων θα πρέπει να περιέχουν τουλάχιστον ένα μή -/ χαρακτήρα"
+
+#, qt-format
+msgctxt "MainWindow|"
+msgid "An error was returned while creating %1"
+msgstr ""
 
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
@@ -1382,57 +1476,78 @@ msgstr ""
 "να αυξήσετε τον όγκο βρασμού με το να αυξήσετε το χρόνο βρασμού, ή να "
 "μειώσετε την πυκνότητα σακχαροποίησης"
 
+#, qt-format
+msgctxt "MashWizard|"
+msgid "Batch Sparge %1"
+msgstr ""
+
+msgctxt "MashWizard|"
+msgid "Fly Sparge"
+msgstr ""
+
+#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr ""
+msgstr "Μπαχαρικά"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr ""
+msgstr "Βελτιωτικά"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr ""
+msgstr "Ρυθμιστής νερού"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr ""
+msgstr "Βότανα"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr ""
+msgstr "Άρωματικές Ύλες"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "'Αλλο"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Στο Βράσιμο"
 
 msgctxt "Misc|"
 msgid "Mash"
 msgstr ""
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr ""
+msgstr "Κατά την πρώτη ζύμωση"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr ""
+msgstr "κατά την δεύτερη ζύμωση"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr ""
+msgstr "Κατά την εμφιάλωση"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr ""
+msgstr "Βάρος"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr ""
+msgstr "Όγκος"
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1514,13 +1629,15 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Κατά την εμφιάλωση"
 
+#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr ""
+msgstr "Βάρος"
 
+#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr ""
+msgstr "Όγκος"
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -1626,6 +1743,162 @@ msgctxt "OptionDialog|"
 msgid "Chinese"
 msgstr "Κινέζικα"
 
+msgctxt "OptionDialog|"
+msgid "SI units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "US traditional units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "British imperial units"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Celsius"
+msgstr "Κελσίου"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Fahrenheit"
+msgstr "Φάρεναϊτ"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "20C/20C Specific Gravity"
+msgstr "20C/20C ειδικό βάρος"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Plato/Brix/Balling"
+msgstr "Plato/Brix/Balling"
+
+msgctxt "OptionDialog|"
+msgid "mm-dd-YYYY"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "dd-mm-YYYY"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "YYYY-mm-dd"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "SRM"
+msgstr "SRM"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "EBC"
+msgstr "EBC"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Tinseth's approximation"
+msgstr "Προσέγγιση κατά Tinseth"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Rager's approximation"
+msgstr "Προσέγγιση κατά Rager"
+
+msgctxt "OptionDialog|"
+msgid "Noonan's approximation"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Mosher's approximation"
+msgstr "Προσέγγιση κατά Mosher"
+
+msgctxt "OptionDialog|"
+msgid "Daniel's approximation"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Morey's approximation"
+msgstr "Προσέγγιση κατά Morey"
+
+msgctxt "OptionDialog|"
+msgid "SQLite (default)"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "PostgreSQL"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Danish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Estonian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Basque"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Galician"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Hungarian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Latvian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Norwegian Bokmål"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Serbian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Swedish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Turkish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Test connection or cancel"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Saving the options without testing the connection can cause brewtarget to "
+"not restart. Your changes have been discarded, which is likely really, "
+"really crappy UX. Please open a bug explaining exactly how you got to this "
+"message."
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Would you like brewtarget to transfer your data to the new database? NOTE: "
+"If you've already loaded the data, say No"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Transfer database"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Please restart brewtarget to connect to the new database"
+msgstr ""
+
 #, qt-format
 msgctxt "QObject|"
 msgid "Invalid color formula type: %1"
@@ -1667,68 +1940,68 @@ msgctxt "QObject|"
 msgid "Failed to open the database '%1'."
 msgstr "Δεν ήταν δυνατό να ανοίξει η βάση δεδομένων '%1'."
 
-msgctxt "QObject|"
-msgid "Save Database Changes"
-msgstr "Αποθήκευση των αλλαγών στην βάση δεδομένων"
+#~ msgctxt "QObject|"
+#~ msgid "Save Database Changes"
+#~ msgstr "Αποθήκευση των αλλαγών στην βάση δεδομένων"
 
-msgctxt "QObject|"
-msgid "Would you like to save the changes you made?"
-msgstr "θα θέλατε να αποθηκευτούν οι αλλαγές που έγιναν;"
+#~ msgctxt "QObject|"
+#~ msgid "Would you like to save the changes you made?"
+#~ msgstr "θα θέλατε να αποθηκευτούν οι αλλαγές που έγιναν;"
 
-msgctxt "QObject|"
-msgid "Multiple Databases Found"
-msgstr "Βρέθηκαν πολλαπλές βάσεις δεδομένων"
+#~ msgctxt "QObject|"
+#~ msgid "Multiple Databases Found"
+#~ msgstr "Βρέθηκαν πολλαπλές βάσεις δεδομένων"
 
-msgctxt "QObject|"
-msgid ""
-"Multiple databases were found.  Do you want to restore the changes you made "
-"during your last Brewtarget session, or rollback to before last session's "
-"changes?"
-msgstr ""
-"Βρέθηκαν πολλαπλές βάσεις δεδομένων. Θα θέλατε να επαναφέρετε τις αλλαγές "
-"που έγιναν κατά την τελευταία χρήση του προγράμματος ή  να αποκαταστήσω τις "
-"αλλαγές πριν από αυτήν;"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Multiple databases were found.  Do you want to restore the changes you "
+#~ "made during your last Brewtarget session, or rollback to before last "
+#~ "session's changes?"
+#~ msgstr ""
+#~ "Βρέθηκαν πολλαπλές βάσεις δεδομένων. Θα θέλατε να επαναφέρετε τις αλλαγές "
+#~ "που έγιναν κατά την τελευταία χρήση του προγράμματος ή  να αποκαταστήσω "
+#~ "τις αλλαγές πριν από αυτήν;"
 
-msgctxt "QObject|"
-msgid "Restore"
-msgstr "Επαναφορά"
+#~ msgctxt "QObject|"
+#~ msgid "Restore"
+#~ msgstr "Επαναφορά"
 
-msgctxt "QObject|"
-msgid "Rollback"
-msgstr "αποκατάσταση"
-
-#, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to remove the temporary backup database.  Navigate to '%1' and remove "
-"'tempBackupDatabase.sqlite'."
-msgstr ""
-"Αποτυχία διαγραφής της προσωρινής βάσης δεδομένων. Πηγαίνετε στο φάκελο  "
-"'%1' και αφαιρέστε το αρχείο  'tempBackupDatabase.sqlite'."
+#~ msgctxt "QObject|"
+#~ msgid "Rollback"
+#~ msgstr "αποκατάσταση"
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to rollback to the backup database.  Navigate to '%1', remove "
-"'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
-"'database.sqlite'."
-msgstr ""
-"Αποτυχία διαγραφής της προσωρινής βάσης δεδομένων. Πηγαίνετε στο φάκελο  "
-"'%1' και αφαιρέστε το αρχείο 'database.sqlite' εάν υπάρχει, και μετονομάστε "
-"το αρχείο  'tempBackupDatabase.sqlite' σε 'database.sqlite'."
-
-msgctxt "QObject|"
-msgid "Database Restore Failure"
-msgstr "Αποτυχία επαναφοράς βάσης δεδομένων"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to remove the temporary backup database.  Navigate to '%1' and "
+#~ "remove 'tempBackupDatabase.sqlite'."
+#~ msgstr ""
+#~ "Αποτυχία διαγραφής της προσωρινής βάσης δεδομένων. Πηγαίνετε στο φάκελο  "
+#~ "'%1' και αφαιρέστε το αρχείο  'tempBackupDatabase.sqlite'."
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to restore the backup database. Navigate to '%1' and rename "
-"'tempBackupDatabase.sqlite' to 'database.sqlite'."
-msgstr ""
-"Αποτυχία επαναφοράς βάσης δεδομένων   Πηγαίνετε στο φάκελο  '%1'  και "
-"μετονομάστε το αρχείο 'tempBackupDatabase.sqlite' σε 'database.sqlite'."
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to rollback to the backup database.  Navigate to '%1', remove "
+#~ "'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
+#~ "'database.sqlite'."
+#~ msgstr ""
+#~ "Αποτυχία διαγραφής της προσωρινής βάσης δεδομένων. Πηγαίνετε στο φάκελο  "
+#~ "'%1' και αφαιρέστε το αρχείο 'database.sqlite' εάν υπάρχει, και "
+#~ "μετονομάστε το αρχείο  'tempBackupDatabase.sqlite' σε 'database.sqlite'."
+
+#~ msgctxt "QObject|"
+#~ msgid "Database Restore Failure"
+#~ msgstr "Αποτυχία επαναφοράς βάσης δεδομένων"
+
+#, qt-format
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to restore the backup database. Navigate to '%1' and rename "
+#~ "'tempBackupDatabase.sqlite' to 'database.sqlite'."
+#~ msgstr ""
+#~ "Αποτυχία επαναφοράς βάσης δεδομένων   Πηγαίνετε στο φάκελο  '%1'  και "
+#~ "μετονομάστε το αρχείο 'tempBackupDatabase.sqlite' σε 'database.sqlite'."
 
 msgctxt "QObject|"
 msgid "Grain"
@@ -1848,6 +2121,44 @@ msgstr "Φάκελος"
 
 msgctxt "QObject|"
 msgid "Failed to update the database"
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Error attempting to create directory \"%1\""
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Data directory \"%1\" is missing.  Some features will be unavaliable."
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Fly Sparge"
+msgstr ""
+
+#, fuzzy
+msgctxt "QObject|"
+msgid "Batch Sparge"
+msgstr "τμηματικός ψεκασμός"
+
+msgctxt "QObject|"
+msgid "Connection Test"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Connection to database was successful"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Plaintext"
+msgstr ""
+
+msgctxt "QObject|"
+msgid ""
+"Passwords are saved in plaintext. We make no effort to hide, obscure or "
+"otherwise protect the password. By enabling this option, you take full "
+"responsibility for any potential problems."
 msgstr ""
 
 msgctxt "Recipe|"
@@ -2369,21 +2680,24 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "κροκίδωση"
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr ""
+msgstr "Διάφορα"
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr ""
+msgstr "Μαγιές"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Θερμίδες κατά προσέγγιση"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
@@ -2391,6 +2705,34 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Target"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Total"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Port"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Database"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Username"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Saved Password"
 msgstr ""
 
 msgctxt "RefractoDialog|"
@@ -2457,6 +2799,154 @@ msgctxt "StyleEditor|"
 msgid "Style name:"
 msgstr "Όνομασία στυλ:"
 
+msgctxt "TimerDialog|"
+msgid "Addition Timer"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Addition Time(min):"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Time Remaining:"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes: "
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Alarm sound"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Stop Alarm"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerDialog|"
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+msgctxt "TimerListDialog|"
+msgid "Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Main Boil Timer"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add Timer"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Start"
+msgstr "Έναρξη"
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Stop"
+msgstr "Διακοπή"
+
+msgctxt "TimerMainDialog|"
+msgid "Reset"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Hide Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Show Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Cancel Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Load Current Recipe"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Timer (mins):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Time Here"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Limit Alarm Ring Time "
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Alarm Ring Time (secs):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are currently no timers to show."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "KNOCKOUT"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Active Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid ""
+"You currently have active timers, would you like to replace them or add to "
+"them?"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Replace"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 of %2"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop addition is already timed and has been ignored."
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop additions are already timed and have been ignored."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Duplicate Timers Ignored"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are no boil addition, no timers generated."
+msgstr ""
+
 msgctxt "TimerWidget|"
 msgid "Open Sound"
 msgstr "Εισάγετε ήχο"
@@ -2465,37 +2955,53 @@ msgctxt "TimerWidget|"
 msgid "Audio Files (*.wav *.ogg *.mp3 *.aiff)"
 msgstr "Αρχεία ήχου  (*.wav *.ogg *.mp3 *.aiff)"
 
-msgctxt "TimerWidget|"
-msgid "Stop"
-msgstr "Διακοπή"
+#~ msgctxt "TimerWidget|"
+#~ msgid "Stop"
+#~ msgstr "Διακοπή"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start"
+#~ msgstr "Έναρξη"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set the timer to the specified value"
+#~ msgstr "Ρύθμισε το χρονόμετρο στην επιλεγμένη τιμή"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "HH:MM:SS"
+#~ msgstr "ΩΩ:ΛΛ:ΔΔ"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start/Stop timer"
+#~ msgstr "Έναρξη/Τέλος χρονόμετρου"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set a sound as the alarm"
+#~ msgstr "Όρισε ένα ήχο για ξυπνητήρι"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set"
+#~ msgstr "Ορισμός"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Sound"
+#~ msgstr "Ήχος"
 
 msgctxt "TimerWidget|"
-msgid "Start"
-msgstr "Έναρξη"
+msgid "Notes..."
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Set the timer to the specified value"
-msgstr "Ρύθμισε το χρονόμετρο στην επιλεγμένη τιμή"
+msgid " and "
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "HH:MM:SS"
-msgstr "ΩΩ:ΛΛ:ΔΔ"
+msgid "Error"
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Start/Stop timer"
-msgstr "Έναρξη/Τέλος χρονόμετρου"
-
-msgctxt "TimerWidget|"
-msgid "Set a sound as the alarm"
-msgstr "Όρισε ένα ήχο για ξυπνητήρι"
-
-msgctxt "TimerWidget|"
-msgid "Set"
-msgstr "Ορισμός"
-
-msgctxt "TimerWidget|"
-msgid "Sound"
-msgstr "Ήχος"
+msgid "Addition time cannot be longer than remaining boil time"
+msgstr ""
 
 #, qt-format
 msgctxt "WaterTableModel|"
@@ -3718,29 +4224,33 @@ msgctxt "mainWindow|"
 msgid "Export to &BBCode"
 msgstr ""
 
+msgctxt "mainWindow|"
+msgid "Hydrometer Temp Adjustment"
+msgstr ""
+
 msgctxt "mashDesigner|"
 msgid "Mash Designer"
 msgstr "Σχεδιασμός σακχ/σης"
 
-msgctxt "mashDesigner|"
-msgid "Name"
-msgstr "Ονομασία"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Name"
+#~ msgstr "Ονομασία"
 
-msgctxt "mashDesigner|"
-msgid "Type"
-msgstr "Είδος"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Type"
+#~ msgstr "Είδος"
 
-msgctxt "mashDesigner|"
-msgid "Target temp."
-msgstr "Επιθυμητή θερμ."
+#~ msgctxt "mashDesigner|"
+#~ msgid "Target temp."
+#~ msgstr "Επιθυμητή θερμ."
 
 msgctxt "mashDesigner|"
 msgid "Time"
 msgstr "Χρόνος"
 
-msgctxt "mashDesigner|"
-msgid "Batch Sparge"
-msgstr "τμηματικός ψεκασμός"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Batch Sparge"
+#~ msgstr "τμηματικός ψεκασμός"
 
 msgctxt "mashDesigner|"
 msgid "Next"
@@ -3789,6 +4299,18 @@ msgstr "όγκος σκεύους"
 msgctxt "mashDesigner|"
 msgid "thickness"
 msgstr "πάχος"
+
+msgctxt "mashDesigner|"
+msgid "&Name"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "&Type"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "Tar&get temp."
+msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Mash Editor"
@@ -3934,9 +4456,25 @@ msgctxt "mashWizard|"
 msgid "Mash thickness (L/kg)"
 msgstr "Πυκνότητα σακχαροποίησης (L/kg)"
 
+#~ msgctxt "mashWizard|"
+#~ msgid "Mash thickness (do not enter any units)"
+#~ msgstr "πυκνότητα σακχαροποίησης. ( μην εισάγετε στοιχεία)"
+
 msgctxt "mashWizard|"
-msgid "Mash thickness (do not enter any units)"
-msgstr "πυκνότητα σακχαροποίησης. ( μην εισάγετε στοιχεία)"
+msgid "No Spar&ge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Fl&y Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Ba&tch Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Batches"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Misc Editor"
@@ -4199,6 +4737,10 @@ msgctxt "ogAdjuster|"
 msgid "Calculate"
 msgstr "Υπολογισμός"
 
+msgctxt "ogAdjuster|"
+msgid "ogAdjuster"
+msgstr ""
+
 msgctxt "optionsDialog|"
 msgid "Options"
 msgstr "Επιλογές"
@@ -4211,29 +4753,29 @@ msgctxt "optionsDialog|"
 msgid "Weight"
 msgstr "Βάρος"
 
-msgctxt "optionsDialog|"
-msgid "Use SI units"
-msgstr "Διεθνές μετρικό σύστημα"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use SI units"
+#~ msgstr "Διεθνές μετρικό σύστημα"
 
-msgctxt "optionsDialog|"
-msgid "Use US traditional units"
-msgstr "μετρικό σύστημα ΗΠΑ"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use US traditional units"
+#~ msgstr "μετρικό σύστημα ΗΠΑ"
 
-msgctxt "optionsDialog|"
-msgid "Use British imperial units"
-msgstr "Βρετανικό μετρικό σύστημα"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use British imperial units"
+#~ msgstr "Βρετανικό μετρικό σύστημα"
 
 msgctxt "optionsDialog|"
 msgid "Temperature"
 msgstr "Θερμοκρασία"
 
-msgctxt "optionsDialog|"
-msgid "Celsius"
-msgstr "Κελσίου"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Celsius"
+#~ msgstr "Κελσίου"
 
-msgctxt "optionsDialog|"
-msgid "Fahrenheit"
-msgstr "Φάρεναϊτ"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Fahrenheit"
+#~ msgstr "Φάρεναϊτ"
 
 msgctxt "optionsDialog|"
 msgid "Volume"
@@ -4243,89 +4785,89 @@ msgctxt "optionsDialog|"
 msgid "Gravity"
 msgstr "Πυκνότητα"
 
-msgctxt "optionsDialog|"
-msgid "20C/20C Specific Gravity"
-msgstr "20C/20C ειδικό βάρος"
+#~ msgctxt "optionsDialog|"
+#~ msgid "20C/20C Specific Gravity"
+#~ msgstr "20C/20C ειδικό βάρος"
 
-msgctxt "optionsDialog|"
-msgid "Plato/Brix/Balling"
-msgstr "Plato/Brix/Balling"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Plato/Brix/Balling"
+#~ msgstr "Plato/Brix/Balling"
 
 msgctxt "optionsDialog|"
 msgid "Color"
 msgstr "Χρώμα"
 
-msgctxt "optionsDialog|"
-msgid "Use SRM"
-msgstr "Χρήση SRM"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use SRM"
+#~ msgstr "Χρήση SRM"
 
-msgctxt "optionsDialog|"
-msgid "Use EBC"
-msgstr "Χρήση EBC"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use EBC"
+#~ msgstr "Χρήση EBC"
 
 msgctxt "optionsDialog|"
 msgid "Formulas"
 msgstr "Φόρμουλες"
 
-msgctxt "optionsDialog|"
-msgid "Mosher's approximation"
-msgstr "Προσέγγιση κατά Mosher"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Mosher's approximation"
+#~ msgstr "Προσέγγιση κατά Mosher"
 
-msgctxt "optionsDialog|"
-msgid "Daniels' approximation"
-msgstr "Προσέγγιση κατά Daniel"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Daniels' approximation"
+#~ msgstr "Προσέγγιση κατά Daniel"
 
-msgctxt "optionsDialog|"
-msgid "Morey's approximation"
-msgstr "Προσέγγιση κατά Morey"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Morey's approximation"
+#~ msgstr "Προσέγγιση κατά Morey"
 
 msgctxt "optionsDialog|"
 msgid "IBU"
 msgstr "IBU"
 
-msgctxt "optionsDialog|"
-msgid "Tinseth's approximation"
-msgstr "Προσέγγιση κατά Tinseth"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Tinseth's approximation"
+#~ msgstr "Προσέγγιση κατά Tinseth"
 
-msgctxt "optionsDialog|"
-msgid "Rager's approximation"
-msgstr "Προσέγγιση κατά Rager"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Rager's approximation"
+#~ msgstr "Προσέγγιση κατά Rager"
 
 msgctxt "optionsDialog|"
 msgid "IBU Adjustments"
 msgstr "Προσαρμογή IBU"
 
-msgctxt "optionsDialog|"
-msgid "% IBU adjustment"
-msgstr "% Προσαρμογή IBU"
+#~ msgctxt "optionsDialog|"
+#~ msgid "% IBU adjustment"
+#~ msgstr "% Προσαρμογή IBU"
 
-msgctxt "optionsDialog|"
-msgid "Mash Hop"
-msgstr "Mash Hop"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Mash Hop"
+#~ msgstr "Mash Hop"
 
-msgctxt "optionsDialog|"
-msgid "First Wort"
-msgstr "Πρίν το βράσιμο"
+#~ msgctxt "optionsDialog|"
+#~ msgid "First Wort"
+#~ msgstr "Πρίν το βράσιμο"
 
-msgctxt "optionsDialog|"
-msgid "Directories"
-msgstr "Κατάλογοι"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Directories"
+#~ msgstr "Κατάλογοι"
 
-msgctxt "optionsDialog|"
-msgid "Database Directory"
-msgstr "Κατάλογος βάσης δεδομένων"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Database Directory"
+#~ msgstr "Κατάλογος βάσης δεδομένων"
 
-msgctxt "optionsDialog|"
-msgid "Where your brewtarget .xml files are."
-msgstr "Που βρίσκονται τα .xml αρχεία του  brewtarget"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Where your brewtarget .xml files are."
+#~ msgstr "Που βρίσκονται τα .xml αρχεία του  brewtarget"
 
 msgctxt "optionsDialog|"
 msgid "Browse"
 msgstr "Πλοήγηση"
 
-msgctxt "optionsDialog|"
-msgid "Default"
-msgstr "Προεπιλογή"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Default"
+#~ msgstr "Προεπιλογή"
 
 msgctxt "optionsDialog|"
 msgid "Language"
@@ -4355,19 +4897,123 @@ msgid "Date"
 msgstr "Ημερομηνία"
 
 msgctxt "optionsDialog|"
-msgid "mm-dd-YYYY"
+msgid "Forumulas"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "dd-mm-YYYY"
+msgid "Mash Hop (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "YYYY-dd-mm"
+msgid "First Wort (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "Noonan's approximation"
+msgid "Databases"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Engines"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "RDBMS Engine"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Test Connection"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Configuration"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Restore defaults"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Username"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Save password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Data Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Backup Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Frequency of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "PostgresSQL's host name or IP address"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port the PostgreSQL is listening on"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The schema containing the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "User with create/delete table access"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password for the user"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The name of the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where your database file is"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where to save your backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of backups to keep: -1 means never remove, 0 means never backup"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "How frequently a backup is made: 1 means always backup"
 msgstr ""
 
 msgctxt "pitchDialog|"
@@ -4891,9 +5537,34 @@ msgctxt "styleEditor|"
 msgid "Cancel"
 msgstr "Ακύρωση"
 
+#~ msgctxt "timerListDialog|"
+#~ msgid "Timers"
+#~ msgstr "Χρονόμετρα"
+
 msgctxt "timerListDialog|"
-msgid "Timers"
-msgstr "Χρονόμετρα"
+msgid "Addition Timers"
+msgstr ""
+
+#, fuzzy
+msgctxt "timerWidget|"
+msgid "Form"
+msgstr "Μορφή"
+
+msgctxt "timerWidget|"
+msgid "Add:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "At:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "mins"
+msgstr ""
 
 msgctxt "waterEditor|"
 msgid "Dialog"

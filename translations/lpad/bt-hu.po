@@ -1,18 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2016-06-05 13:29+0000\n"
-"Last-Translator: Titusz Feher <titusz.feher@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-17 13:52+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: hu\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -123,9 +116,10 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
+#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Becsült kalóriatartalom (354ml)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -425,6 +419,15 @@ msgctxt "BtTreeModel|"
 msgid "FULLPATH"
 msgstr "Teljes útvonal"
 
+msgctxt "BtTreeModel|"
+msgid "Could not copy"
+msgstr ""
+
+#, qt-format
+msgctxt "BtTreeModel|"
+msgid "There was an unexpected error creating %1"
+msgstr ""
+
 msgctxt "BtTreeView|"
 msgid "New"
 msgstr "Új"
@@ -526,6 +529,14 @@ msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
 msgstr "Üres név esetén %1 nem lesz lemásolva."
 
+msgctxt "BtTreeView|"
+msgid "To XML"
+msgstr ""
+
+msgctxt "BtTreeView|"
+msgid "To HTML"
+msgstr ""
+
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
 msgstr "Mértékegység átváltó"
@@ -570,18 +581,35 @@ msgstr ""
 "Új alkotóelemek és receptek elérhetőek. Szeretné ezeket az adatbázisba "
 "illeszteni?"
 
+msgctxt "Database|"
+msgid "Database password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Connection failed"
+msgstr ""
+
+#, qt-format
+msgctxt "Database|"
+msgid "Could not connect to %1 : %2"
+msgstr ""
+
 #, qt-format
 msgctxt "EquipmentEditor|"
 msgid "Grain absorption (%1/%2)"
 msgstr "Törköly folyadékelvonása (%1/%2)"
 
-msgctxt "EquipmentEditor|"
-msgid "Tun Volume Warning"
-msgstr "Figyelmeztetés - edény méret"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Tun Volume Warning"
+#~ msgstr "Figyelmeztetés - edény méret"
 
-msgctxt "EquipmentEditor|"
-msgid "Batch Size Warning"
-msgstr "Figyelmeztetés - adag mennyiség"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Batch Size Warning"
+#~ msgstr "Figyelmeztetés - adag mennyiség"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name"
@@ -591,26 +619,26 @@ msgctxt "EquipmentEditor|"
 msgid "Equipment name:"
 msgstr "Felszerelés neve:"
 
-msgctxt "EquipmentEditor|"
-msgid "The tun volume you entered is 0. This may cause problems"
-msgstr ""
-"Az edény megadott űrtartalma 0. Ez az érték számítási problémát okozhat."
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The tun volume you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "Az edény megadott űrtartalma 0. Ez az érték számítási problémát okozhat."
 
-msgctxt "EquipmentEditor|"
-msgid "The batch size you entered is 0. This may cause problems"
-msgstr ""
-"Az adag megadott mennyisége 0. Ez az érték számítási problémát okozhat."
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The batch size you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "Az adag megadott mennyisége 0. Ez az érték számítási problémát okozhat."
 
-msgctxt "EquipmentEditor|"
-msgid "Hop Utilization Warning"
-msgstr "Figyelmeztetés - komló használat"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Hop Utilization Warning"
+#~ msgstr "Figyelmeztetés - komló használat"
 
-msgctxt "EquipmentEditor|"
-msgid ""
-"The hop utilization percentage you entered is 0. This may cause problems"
-msgstr ""
-"A felhasznált komló megadott mennyisége 0%. Ez az érték számítási problémát "
-"okozhat."
+#~ msgctxt "EquipmentEditor|"
+#~ msgid ""
+#~ "The hop utilization percentage you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "A felhasznált komló megadott mennyisége 0%. Ez az érték számítási "
+#~ "problémát okozhat."
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment Editor"
@@ -748,9 +776,34 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Mégsem"
 
+msgctxt "EquipmentEditor|"
+msgid "This equipment profile may break brewtarget's maths"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "The following values are not set:"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "mash tun volume (all-grain and BIAB only)"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "batch size"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "hop utilization"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "Calculation Warnings"
+msgstr ""
+
+#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr ""
+msgstr "Cefrézve"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
@@ -760,9 +813,10 @@ msgctxt "Fermentable|"
 msgid "Not mashed"
 msgstr ""
 
+#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr ""
+msgstr "Később hozzáadott"
 
 msgctxt "Fermentable|"
 msgid "Normal"
@@ -824,9 +878,10 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Adalék"
 
+#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr ""
+msgstr "Cefrézve"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
@@ -840,9 +895,10 @@ msgctxt "FermentableItemDelegate|"
 msgid "Normal"
 msgstr "Normál"
 
+#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr ""
+msgstr "Később hozzáadott"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1021,6 +1077,36 @@ msgstr "Forma"
 msgctxt "HopTableModel|"
 msgid "Inventory"
 msgstr "Készlet"
+
+msgctxt "HydrometerTool|"
+msgid "Hydrometer Tool"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "SG Reading"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Temperature"
+msgstr "Hőmérséklet"
+
+msgctxt "HydrometerTool|"
+msgid "Adjust SG"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Convert"
+msgstr "Átváltás"
+
+msgctxt "HydrometerTool|"
+msgid "Measured gravity"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "Corrected gravity"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Cloying"
@@ -1230,6 +1316,15 @@ msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
 msgstr "A mappa nevének tartalmaznia kell egy számot vagy írásjelet"
 
+msgctxt "MainWindow|"
+msgid "Error copying recipe"
+msgstr ""
+
+#, qt-format
+msgctxt "MainWindow|"
+msgid "An error was returned while creating %1"
+msgstr ""
+
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "Nincs erjeszthető anyag"
@@ -1372,57 +1467,77 @@ msgstr ""
 "Tún nagy a színlé mennyisége a várt forralási mennyiséghez képest. Vagy "
 "növeld a forralási időt, vagy csökkentsd a cefre sűrűségét."
 
+#, qt-format
+msgctxt "MashWizard|"
+msgid "Batch Sparge %1"
+msgstr ""
+
+msgctxt "MashWizard|"
+msgid "Fly Sparge"
+msgstr ""
+
 msgctxt "Misc|"
 msgid "Spice"
 msgstr "Fűszer"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr ""
+msgstr "Derítőszer"
 
 msgctxt "Misc|"
 msgid "Water Agent"
 msgstr "Vízkezelő anyag"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr ""
+msgstr "Gyógynövény"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr ""
+msgstr "Ízanyag"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Egyéb anyag"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Forralás"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Mash"
-msgstr ""
+msgstr "Cefre"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr ""
+msgstr "Elsődleges"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr ""
+msgstr "Másodlagos"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr ""
+msgstr "Palackozás"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr ""
+msgstr "Súly"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr ""
+msgstr "Mennyiség"
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1504,13 +1619,15 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Palackozás"
 
+#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr ""
+msgstr "Súly"
 
+#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr ""
+msgstr "Mennyiség"
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -1614,6 +1731,159 @@ msgctxt "OptionDialog|"
 msgid "Chinese"
 msgstr "kínai"
 
+msgctxt "OptionDialog|"
+msgid "SI units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "US traditional units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "British imperial units"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Celsius"
+msgstr "Celsius"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Fahrenheit"
+msgstr "Fahrenheit"
+
+msgctxt "OptionDialog|"
+msgid "20C/20C Specific Gravity"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Plato/Brix/Balling"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "mm-dd-YYYY"
+msgstr "hh-nn-ÉÉÉÉ"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "dd-mm-YYYY"
+msgstr "nn-hh-ÉÉÉÉ"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "YYYY-mm-dd"
+msgstr "ÉÉÉÉ-hh-nn"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "SRM"
+msgstr "Szín (SRM)"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "EBC"
+msgstr "Szín (EBC)"
+
+msgctxt "OptionDialog|"
+msgid "Tinseth's approximation"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Rager's approximation"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Noonan's approximation"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Mosher's approximation"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Daniel's approximation"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Morey's approximation"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "SQLite (default)"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "PostgreSQL"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Danish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Estonian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Basque"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Galician"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Hungarian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Latvian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Norwegian Bokmål"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Serbian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Swedish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Turkish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Test connection or cancel"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Saving the options without testing the connection can cause brewtarget to "
+"not restart. Your changes have been discarded, which is likely really, "
+"really crappy UX. Please open a bug explaining exactly how you got to this "
+"message."
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Would you like brewtarget to transfer your data to the new database? NOTE: "
+"If you've already loaded the data, say No"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Transfer database"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Please restart brewtarget to connect to the new database"
+msgstr ""
+
 #, qt-format
 msgctxt "QObject|"
 msgid "Invalid color formula type: %1"
@@ -1655,68 +1925,69 @@ msgctxt "QObject|"
 msgid "Failed to open the database '%1'."
 msgstr "'%1' adatbázis nem megnyitható"
 
-msgctxt "QObject|"
-msgid "Save Database Changes"
-msgstr "Adatbázis változások mentése"
+#~ msgctxt "QObject|"
+#~ msgid "Save Database Changes"
+#~ msgstr "Adatbázis változások mentése"
 
-msgctxt "QObject|"
-msgid "Would you like to save the changes you made?"
-msgstr "El akarod menteni a változásokat?"
+#~ msgctxt "QObject|"
+#~ msgid "Would you like to save the changes you made?"
+#~ msgstr "El akarod menteni a változásokat?"
 
-msgctxt "QObject|"
-msgid "Multiple Databases Found"
-msgstr "Több adatbázist találtam."
+#~ msgctxt "QObject|"
+#~ msgid "Multiple Databases Found"
+#~ msgstr "Több adatbázist találtam."
 
-msgctxt "QObject|"
-msgid ""
-"Multiple databases were found.  Do you want to restore the changes you made "
-"during your last Brewtarget session, or rollback to before last session's "
-"changes?"
-msgstr ""
-"Több adatbázist találtam. Szeretnéd visszaállítani a változásokat, amelyeket "
-"a legutóbb használtál, vagy az utolsó előtti használat idején aktuális "
-"állapotot állítsam vissza (visszagörgetés)?"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Multiple databases were found.  Do you want to restore the changes you "
+#~ "made during your last Brewtarget session, or rollback to before last "
+#~ "session's changes?"
+#~ msgstr ""
+#~ "Több adatbázist találtam. Szeretnéd visszaállítani a változásokat, "
+#~ "amelyeket a legutóbb használtál, vagy az utolsó előtti használat idején "
+#~ "aktuális állapotot állítsam vissza (visszagörgetés)?"
 
-msgctxt "QObject|"
-msgid "Restore"
-msgstr "Visszaállítás"
+#~ msgctxt "QObject|"
+#~ msgid "Restore"
+#~ msgstr "Visszaállítás"
 
-msgctxt "QObject|"
-msgid "Rollback"
-msgstr "Visszagörgetés"
-
-#, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to remove the temporary backup database.  Navigate to '%1' and remove "
-"'tempBackupDatabase.sqlite'."
-msgstr ""
-"Az ideiglenes biztonsági adatbázis visszaállítása nem sikerült. Navigálj a "
-"következő helyre: '%1' és töröld a 'tempBackupDatabase.sqlite'."
+#~ msgctxt "QObject|"
+#~ msgid "Rollback"
+#~ msgstr "Visszagörgetés"
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to rollback to the backup database.  Navigate to '%1', remove "
-"'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
-"'database.sqlite'."
-msgstr ""
-"Nem sikerült az adatbázist visszaállítani. Navigálj a következő címre: '%1', "
-"távolítsd el a 'database.sqlite' fájlt ha létezik és nevezd át a "
-"'tempBackupDatabase.sqlite' fájlt 'database.sqlite'-ra."
-
-msgctxt "QObject|"
-msgid "Database Restore Failure"
-msgstr "Adatbázis helyreállítási hiba"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to remove the temporary backup database.  Navigate to '%1' and "
+#~ "remove 'tempBackupDatabase.sqlite'."
+#~ msgstr ""
+#~ "Az ideiglenes biztonsági adatbázis visszaállítása nem sikerült. Navigálj "
+#~ "a következő helyre: '%1' és töröld a 'tempBackupDatabase.sqlite'."
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to restore the backup database. Navigate to '%1' and rename "
-"'tempBackupDatabase.sqlite' to 'database.sqlite'."
-msgstr ""
-"Nem sikerült az adatbázist visszaállítani. Navigálj a következő címre: '%1' "
-"és nevezd át a 'tempBackupDatabase.sqlite' fájlt 'database.sqlite'-ra."
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to rollback to the backup database.  Navigate to '%1', remove "
+#~ "'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
+#~ "'database.sqlite'."
+#~ msgstr ""
+#~ "Nem sikerült az adatbázist visszaállítani. Navigálj a következő címre: "
+#~ "'%1', távolítsd el a 'database.sqlite' fájlt ha létezik és nevezd át a "
+#~ "'tempBackupDatabase.sqlite' fájlt 'database.sqlite'-ra."
+
+#~ msgctxt "QObject|"
+#~ msgid "Database Restore Failure"
+#~ msgstr "Adatbázis helyreállítási hiba"
+
+#, qt-format
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to restore the backup database. Navigate to '%1' and rename "
+#~ "'tempBackupDatabase.sqlite' to 'database.sqlite'."
+#~ msgstr ""
+#~ "Nem sikerült az adatbázist visszaállítani. Navigálj a következő címre: "
+#~ "'%1' és nevezd át a 'tempBackupDatabase.sqlite' fájlt "
+#~ "'database.sqlite'-ra."
 
 msgctxt "QObject|"
 msgid "Grain"
@@ -1836,6 +2107,44 @@ msgstr "Mappa"
 
 msgctxt "QObject|"
 msgid "Failed to update the database"
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Error attempting to create directory \"%1\""
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Data directory \"%1\" is missing.  Some features will be unavaliable."
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Fly Sparge"
+msgstr ""
+
+#, fuzzy
+msgctxt "QObject|"
+msgid "Batch Sparge"
+msgstr "Felöntéses máslás"
+
+msgctxt "QObject|"
+msgid "Connection Test"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Connection to database was successful"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Plaintext"
+msgstr ""
+
+msgctxt "QObject|"
+msgid ""
+"Passwords are saved in plaintext. We make no effort to hide, obscure or "
+"otherwise protect the password. By enabling this option, you take full "
+"responsibility for any potential problems."
 msgstr ""
 
 msgctxt "Recipe|"
@@ -2355,21 +2664,24 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "ülepedés"
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr ""
+msgstr "Egyebek"
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr ""
+msgstr "Élesztők"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Becsült kalóriatartalom (354ml)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
@@ -2377,6 +2689,34 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Target"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Total"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Port"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Database"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Username"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Saved Password"
 msgstr ""
 
 msgctxt "RefractoDialog|"
@@ -2441,6 +2781,154 @@ msgctxt "StyleEditor|"
 msgid "Style name:"
 msgstr "Stílus neve:"
 
+msgctxt "TimerDialog|"
+msgid "Addition Timer"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Addition Time(min):"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Time Remaining:"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes: "
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Alarm sound"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Stop Alarm"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerDialog|"
+msgid "Cancel"
+msgstr "Mégsem"
+
+msgctxt "TimerListDialog|"
+msgid "Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Main Boil Timer"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add Timer"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Start"
+msgstr "Kezdés"
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Stop"
+msgstr "Leállítás"
+
+msgctxt "TimerMainDialog|"
+msgid "Reset"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Hide Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Show Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Cancel Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Load Current Recipe"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Timer (mins):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Time Here"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Limit Alarm Ring Time "
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Alarm Ring Time (secs):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are currently no timers to show."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "KNOCKOUT"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Active Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid ""
+"You currently have active timers, would you like to replace them or add to "
+"them?"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Replace"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 of %2"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop addition is already timed and has been ignored."
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop additions are already timed and have been ignored."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Duplicate Timers Ignored"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are no boil addition, no timers generated."
+msgstr ""
+
 msgctxt "TimerWidget|"
 msgid "Open Sound"
 msgstr "Hang megnyitása"
@@ -2449,36 +2937,28 @@ msgctxt "TimerWidget|"
 msgid "Audio Files (*.wav *.ogg *.mp3 *.aiff)"
 msgstr "Audio fájl (*.wav *.ogg *.mp3*.aiff)"
 
-msgctxt "TimerWidget|"
-msgid "Stop"
-msgstr "Leállítás"
+#~ msgctxt "TimerWidget|"
+#~ msgid "Stop"
+#~ msgstr "Leállítás"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start"
+#~ msgstr "Kezdés"
 
 msgctxt "TimerWidget|"
-msgid "Start"
-msgstr "Kezdés"
-
-msgctxt "TimerWidget|"
-msgid "Set the timer to the specified value"
+msgid "Notes..."
 msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "HH:MM:SS"
+msgid " and "
 msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Start/Stop timer"
+msgid "Error"
 msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Set a sound as the alarm"
-msgstr ""
-
-msgctxt "TimerWidget|"
-msgid "Set"
-msgstr ""
-
-msgctxt "TimerWidget|"
-msgid "Sound"
+msgid "Addition time cannot be longer than remaining boil time"
 msgstr ""
 
 #, qt-format
@@ -3651,8 +4131,7 @@ msgstr "&Összefésülés"
 
 msgctxt "mainWindow|"
 msgid "Merge another set of recipes, ingredients, etc. into the current set"
-msgstr ""
-"Másik recept, összetevő, stb. adathalmaz összefésülése a jelenlegivel"
+msgstr "Másik recept, összetevő, stb. adathalmaz összefésülése a jelenlegivel"
 
 msgctxt "mainWindow|"
 msgid "&New Recipe"
@@ -3702,29 +4181,33 @@ msgctxt "mainWindow|"
 msgid "Export to &BBCode"
 msgstr ""
 
+msgctxt "mainWindow|"
+msgid "Hydrometer Temp Adjustment"
+msgstr ""
+
 msgctxt "mashDesigner|"
 msgid "Mash Designer"
 msgstr "Cefrézés szerkesztő"
 
-msgctxt "mashDesigner|"
-msgid "Name"
-msgstr "Név"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Name"
+#~ msgstr "Név"
 
-msgctxt "mashDesigner|"
-msgid "Type"
-msgstr "Fajta"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Type"
+#~ msgstr "Fajta"
 
-msgctxt "mashDesigner|"
-msgid "Target temp."
-msgstr "Hőmérséklet célérték"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Target temp."
+#~ msgstr "Hőmérséklet célérték"
 
 msgctxt "mashDesigner|"
 msgid "Time"
 msgstr "Idõ"
 
-msgctxt "mashDesigner|"
-msgid "Batch Sparge"
-msgstr "Felöntéses máslás"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Batch Sparge"
+#~ msgstr "Felöntéses máslás"
 
 msgctxt "mashDesigner|"
 msgid "Next"
@@ -3773,6 +4256,18 @@ msgstr "Edény űrtartalom"
 msgctxt "mashDesigner|"
 msgid "thickness"
 msgstr "sűrűség"
+
+msgctxt "mashDesigner|"
+msgid "&Name"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "&Type"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "Tar&get temp."
+msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Mash Editor"
@@ -3921,7 +4416,19 @@ msgid "Mash thickness (L/kg)"
 msgstr ""
 
 msgctxt "mashWizard|"
-msgid "Mash thickness (do not enter any units)"
+msgid "No Spar&ge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Fl&y Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Ba&tch Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Batches"
 msgstr ""
 
 msgctxt "miscEditor|"
@@ -4185,6 +4692,10 @@ msgctxt "ogAdjuster|"
 msgid "Calculate"
 msgstr ""
 
+msgctxt "ogAdjuster|"
+msgid "ogAdjuster"
+msgstr ""
+
 msgctxt "optionsDialog|"
 msgid "Options"
 msgstr ""
@@ -4198,28 +4709,16 @@ msgid "Weight"
 msgstr "Súly"
 
 msgctxt "optionsDialog|"
-msgid "Use SI units"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Use US traditional units"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Use British imperial units"
-msgstr ""
-
-msgctxt "optionsDialog|"
 msgid "Temperature"
 msgstr "Hőmérséklet"
 
-msgctxt "optionsDialog|"
-msgid "Celsius"
-msgstr "Celsius"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Celsius"
+#~ msgstr "Celsius"
 
-msgctxt "optionsDialog|"
-msgid "Fahrenheit"
-msgstr "Fahrenheit"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Fahrenheit"
+#~ msgstr "Fahrenheit"
 
 msgctxt "optionsDialog|"
 msgid "Volume"
@@ -4230,39 +4729,11 @@ msgid "Gravity"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "20C/20C Specific Gravity"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Plato/Brix/Balling"
-msgstr ""
-
-msgctxt "optionsDialog|"
 msgid "Color"
 msgstr "Szín"
 
 msgctxt "optionsDialog|"
-msgid "Use SRM"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Use EBC"
-msgstr ""
-
-msgctxt "optionsDialog|"
 msgid "Formulas"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Mosher's approximation"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Daniels' approximation"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Morey's approximation"
 msgstr ""
 
 msgctxt "optionsDialog|"
@@ -4270,48 +4741,20 @@ msgid "IBU"
 msgstr "Keserűség (IBU)"
 
 msgctxt "optionsDialog|"
-msgid "Tinseth's approximation"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Rager's approximation"
-msgstr ""
-
-msgctxt "optionsDialog|"
 msgid "IBU Adjustments"
 msgstr ""
 
-msgctxt "optionsDialog|"
-msgid "% IBU adjustment"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Mash Hop"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "First Wort"
-msgstr "Színlé komlózása (forralás előtt)"
-
-msgctxt "optionsDialog|"
-msgid "Directories"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Database Directory"
-msgstr ""
-
-msgctxt "optionsDialog|"
-msgid "Where your brewtarget .xml files are."
-msgstr ""
+#~ msgctxt "optionsDialog|"
+#~ msgid "First Wort"
+#~ msgstr "Színlé komlózása (forralás előtt)"
 
 msgctxt "optionsDialog|"
 msgid "Browse"
 msgstr ""
 
-msgctxt "optionsDialog|"
-msgid "Default"
-msgstr "Alapértelmezett"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Default"
+#~ msgstr "Alapértelmezett"
 
 msgctxt "optionsDialog|"
 msgid "Language"
@@ -4333,19 +4776,123 @@ msgid "Date"
 msgstr "Időpont"
 
 msgctxt "optionsDialog|"
-msgid "mm-dd-YYYY"
+msgid "Forumulas"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "dd-mm-YYYY"
+msgid "Mash Hop (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "YYYY-dd-mm"
+msgid "First Wort (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "Noonan's approximation"
+msgid "Databases"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Engines"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "RDBMS Engine"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Test Connection"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Configuration"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Restore defaults"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Username"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Save password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Data Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Backup Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Frequency of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "PostgresSQL's host name or IP address"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port the PostgreSQL is listening on"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The schema containing the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "User with create/delete table access"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password for the user"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The name of the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where your database file is"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where to save your backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of backups to keep: -1 means never remove, 0 means never backup"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "How frequently a backup is made: 1 means always backup"
 msgstr ""
 
 msgctxt "pitchDialog|"
@@ -4868,9 +5415,34 @@ msgctxt "styleEditor|"
 msgid "Cancel"
 msgstr "Mégsem"
 
+#~ msgctxt "timerListDialog|"
+#~ msgid "Timers"
+#~ msgstr "Időzítők"
+
 msgctxt "timerListDialog|"
-msgid "Timers"
-msgstr "Időzítők"
+msgid "Addition Timers"
+msgstr ""
+
+#, fuzzy
+msgctxt "timerWidget|"
+msgid "Form"
+msgstr "Forma"
+
+msgctxt "timerWidget|"
+msgid "Add:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "At:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "mins"
+msgstr ""
 
 msgctxt "waterEditor|"
 msgid "Dialog"
