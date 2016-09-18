@@ -755,11 +755,32 @@ private:
          //Put this in the <ing_type>_children table.
          if( childTableName != "instruction_children" ) {
 
+            /*
+             * The parent to link to depends on where the ingredient is copied from:
+             * - A fermentable from the fermentable tabel -> the ID of the fermentable.
+             * - An ingredient from another recipe -> the ID of the ingredient's parent.
+             *
+             * This is required for:
+             * - Getting the proper link to the inventory table, else the new record
+             *   will have no inventory.
+             * - When deleting the ingredient from the original recipe no longer fails.
+             *   Else if fails due to a foreign key constrain.
+             */
+            int key = ing->key();
+            q.prepare(QString("SELECT parent_id FROM %1 WHERE child_id=%2")
+                  .arg(childTableName)
+                  .arg(key));
+            if (q.exec() && q.next())
+            {
+               key = q.record().value("parent_id").toInt();
+            }
+            q.finish();
+
             insert = QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
                   .arg(childTableName);
 
             q.prepare(insert);
-            q.bindValue(":parent", ing->key());
+            q.bindValue(":parent", key);
             q.bindValue(":child", newIng->key());
 
             if ( ! q.exec() )
