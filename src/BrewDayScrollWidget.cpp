@@ -137,7 +137,7 @@ bool BrewDayScrollWidget::loadComplete(bool ok)
    return ok;
 }
 
-void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
+void BrewDayScrollWidget::print(QPrinter *mainPrinter,
       int action, QFile* outFile)
 {
    QString pDoc;
@@ -149,13 +149,6 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
    if ( action == PRINT )
    {
       printer = mainPrinter;
-      // connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
-      //
-      // GSG: QTextBrowser doesn't have a loadFinished signal.
-
-      dialog->setWindowTitle(tr("Print Document"));
-      if (dialog->exec() != QDialog::Accepted)
-         return;
    }
 
    // Start building the document to be printed.  The HTML doesn't work with

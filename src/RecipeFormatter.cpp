@@ -1524,7 +1524,7 @@ bool RecipeFormatter::loadComplete(bool ok)
    return ok;
 }
 
-void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog, 
+void RecipeFormatter::print(QPrinter* mainPrinter,
       int action, QFile* outFile)
 {
    if( rec == 0 )
@@ -1542,9 +1542,6 @@ void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog,
    if ( action == PRINT )
    {
       printer = mainPrinter;
-      dialog->setWindowTitle(tr("Print Document"));
-      if (dialog->exec() != QDialog::Accepted)
-         return;
       //connect( doc, SIGNAL((bool)), this, SLOT(loadComplete(bool)) );
       //
       //GSG: My guess is that we used QWebView in the past and updated to QTextBrowser.

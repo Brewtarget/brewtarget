@@ -56,7 +56,7 @@ public:
     *  \brief Prints a paper version of the info in this dialog.
     *  Should be moved to its own view class.
     */
-   void print(QPrinter* mainPrinter, QPrintDialog *dialog, int action = PRINT, QFile* outFile = 0);
+   void print(QPrinter* mainPrinter, int action = PRINT, QFile* outFile = 0);
 
 public slots:
    //! Automatically generate a new list of instructions.

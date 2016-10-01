@@ -40,6 +40,8 @@ class MainWindow;
 #include <QTimer>
 #include "ui_mainWindow.h"
 
+#include <functional>
+
 // Forward Declarations
 class FermentableDialog;
 class HopDialog;
@@ -214,12 +216,26 @@ public slots:
    void exportSelected();
    void exportSelectedHtml();
 
-   //! \brief Prints the right thing, depending on the signal sender.
-   void print();
    //! \brief Backup the database.
    void backup();
    //! \brief Restore the database.
    void restoreFromBackup();
+
+   /*!
+    * \brief Prints a document.
+    *
+    * Asks the user to select a printer and then calls the @p functor with the
+    * selected printer.
+    */
+   void print(std::function<void(QPrinter* printer)> functor);
+
+   /*!
+    * \brief Exports a HTML document.
+    *
+    * Asks the user to select a file and then calls the @p functor with the
+    * selected file.
+    */
+   void exportHTML(std::function<void(QFile* file)> functor);
 
    //! \brief draws a context menu, the exact nature of which depends on which
    //tree is focused
