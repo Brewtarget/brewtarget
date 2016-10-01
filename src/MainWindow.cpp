@@ -85,6 +85,7 @@
 #include "EquipmentEditor.h"
 #include "FermentableDialog.h"
 #include "HopDialog.h"
+#include "InventoryFormatter.h"
 #include "MashWizard.h"
 #include "MiscDialog.h"
 #include "StyleEditor.h"
@@ -463,6 +464,16 @@ MainWindow::MainWindow(QWidget* parent)
          brewDayScrollWidget->print(
                printer,  BrewDayScrollWidget::PRINT);
       });
+   });
+   connect(actionInventoryPrint, &QAction::triggered, [this]() {
+      print(
+            [](QPrinter* printer) { InventoryFormatter::print(printer); });
+   });
+   connect(actionInventoryPreview, &QAction::triggered,
+         []() { InventoryFormatter::printPreview(); });
+   connect(actionInventoryHTML, &QAction::triggered, [this]() {
+      exportHTML(
+            [](QFile* file) { InventoryFormatter::exportHTML(file); });
    });
 
    // Connect up all the labels. I really need to find a better way.

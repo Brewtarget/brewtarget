@@ -105,6 +105,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/IbuGuSlider.cpp
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
+    ${SRCDIR}/InventoryFormatter.cpp
     ${SRCDIR}/InstructionWidget.cpp
     ${SRCDIR}/Log.cpp
     ${SRCDIR}/MainWindow.cpp
