@@ -1774,7 +1774,34 @@ void Database::newInventory(Brewtarget::DBTable invForTable, int invForID) {
    }
 
    QSqlQuery q( queryString, sqlDatabase() );
+}
 
+QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
+{
+   QMap<int, double> result;
+
+   const QString id = tableNames[table] + "_id";
+   const QString amount = table == Brewtarget::YEASTTABLE ? "quanta" : "amount";
+
+   QString query = QString("SELECT %1,%2 FROM %3 WHERE %2 > 0")
+                         .arg(id)
+                         .arg(amount)
+                         .arg(tableNames[tableToInventoryTable[table]]);
+
+   QSqlQuery sql(query, sqlDatabase());
+   if (!sql.isActive())
+   {
+      throw QString("Failed to get the inventory.\nQuery:\n%1\nError:\n%2")
+            .arg(sql.lastQuery())
+            .arg(sql.lastError().text());
+   }
+
+   while (sql.next())
+   {
+      result[sql.value(id).toInt()] = sql.value(amount).toDouble();
+   }
+
+   return result;
 }
 
 // Add to recipe ==============================================================
