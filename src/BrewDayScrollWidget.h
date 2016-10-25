@@ -86,7 +86,6 @@ private:
    QString buildTitleTable(bool includeImage = true);
    QString buildInstructionTable();
    QString buildFooterTable();
-   QString getCSS();
    
    Recipe* recObs;
    QPrinter* printer;

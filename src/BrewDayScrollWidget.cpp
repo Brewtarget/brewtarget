@@ -22,6 +22,7 @@
 #include "brewtarget.h"
 #include "BrewDayScrollWidget.h"
 #include "database.h"
+#include "Html.h"
 #include <QListWidgetItem>
 #include <QPrinter>
 #include <QPrintDialog>
@@ -298,24 +299,6 @@ void BrewDayScrollWidget::repopulateListWidget()
       listWidget->setCurrentRow(-1);
 }
 
-QString BrewDayScrollWidget::getCSS() 
-{
-   if ( cssName == NULL )
-       cssName = ":/css/brewday.css";
-
-   QFile cssInput(cssName);
-   QString css;
-
-   if (cssInput.open(QFile::ReadOnly)) {
-      QTextStream inStream(&cssInput);
-      while ( ! inStream.atEnd() )
-      {
-         css += inStream.readLine();
-      }
-   }
-   return css;
-}
-
 static QString styleName(Style* style)
 {
    if ( ! style )
@@ -346,12 +329,12 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
    QString body;
 
    // Do the style sheet first
-   header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
-   header += "</style></head>";
+   if (cssName == NULL)
+      cssName = ":/css/brewday.css";
 
-   body   = "<body>";
-   body += QString("<h1>%1</h1>").arg(recObs->name());
+   header = Html::createHeader(BrewDayScrollWidget::tr("Brewday"), cssName);
+
+   body = QString("<h1>%1</h1>").arg(recObs->name());
    if ( includeImage )
       body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
 
