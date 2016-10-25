@@ -123,6 +123,9 @@ void BtLabel::initializeMenu()
       case DATE:
          _menu = Brewtarget::setupDateMenu(btParent,unit); // unit only
          break;
+      case DIASTATIC_POWER:
+         _menu = Brewtarget::setupDiastaticPowerMenu(btParent,unit);
+         break;
       default:
          return;
    }
@@ -231,5 +234,10 @@ BtTimeLabel::BtTimeLabel(QWidget *parent)
 
 BtVolumeLabel::BtVolumeLabel(QWidget *parent)
    : BtLabel(parent,VOLUME)
+{
+}
+
+BtDiastaticPowerLabel::BtDiastaticPowerLabel(QWidget *parent)
+   : BtLabel(parent,DIASTATIC_POWER)
 {
 }

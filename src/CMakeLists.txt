@@ -81,6 +81,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/CustomComboBox.cpp
     ${SRCDIR}/database.cpp
     ${SRCDIR}/DatabaseSchemaHelper.cpp
+    ${SRCDIR}/DiastaticPowerUnitSystem.cpp
     ${SRCDIR}/equipment.cpp
     ${SRCDIR}/EbcColorUnitSystem.cpp
     ${SRCDIR}/EquipmentButton.cpp

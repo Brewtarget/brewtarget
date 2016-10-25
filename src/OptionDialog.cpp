@@ -33,6 +33,7 @@
 #include "SrmColorUnitSystem.h"
 #include "PlatoDensityUnitSystem.h"
 #include "SgDensityUnitSystem.h"
+#include "DiastaticPowerUnitSystem.h"
 #include "CelsiusTempUnitSystem.h"
 #include "database.h"
 #include <QMessageBox>
@@ -136,6 +137,9 @@ OptionDialog::OptionDialog(QWidget* parent)
 
    colorComboBox->addItem(tr("SRM"), QVariant(Brewtarget::SRM));
    colorComboBox->addItem(tr("EBC"), QVariant(Brewtarget::EBC));
+
+   diastaticPowerComboBox->addItem(tr("Lintner"), QVariant(Brewtarget::LINTNER));
+   diastaticPowerComboBox->addItem(tr("WK"), QVariant(Brewtarget::WK));
 
    // Populate combo boxes on the "Formulas" tab
    ibuFormulaComboBox->addItem(tr("Tinseth's approximation"), QVariant(Brewtarget::TINSETH));
@@ -388,6 +392,19 @@ void OptionDialog::saveAndClose()
          break;
    }
 
+   switch (diastaticPowerComboBox->itemData(diastaticPowerComboBox->currentIndex()).toInt(&okay))
+   {
+      case Brewtarget::LINTNER:
+      default:
+         Brewtarget::thingToUnitSystem.insert(Unit::DiastaticPower,UnitSystems::lintnerDiastaticPowerUnitSystem());
+         Brewtarget::diastaticPowerUnit = Brewtarget::LINTNER;
+         break;
+      case Brewtarget::WK:
+         Brewtarget::thingToUnitSystem.insert(Unit::DiastaticPower,UnitSystems::wkDiastaticPowerUnitSystem());
+         Brewtarget::diastaticPowerUnit = Brewtarget::WK;
+         break;
+   }
+
    int ndx = ibuFormulaComboBox->itemData(ibuFormulaComboBox->currentIndex()).toInt(&okay);
    Brewtarget::ibuFormula = static_cast<Brewtarget::IbuType>(ndx);
    ndx = colorFormulaComboBox->itemData(colorFormulaComboBox->currentIndex()).toInt(&okay);
@@ -460,6 +477,7 @@ void OptionDialog::showChanges()
    gravityComboBox->setCurrentIndex(gravityComboBox->findData(Brewtarget::densityUnit));
    dateComboBox->setCurrentIndex(dateComboBox->findData(Brewtarget::dateFormat));
    colorComboBox->setCurrentIndex(colorComboBox->findData(Brewtarget::colorUnit));
+   diastaticPowerComboBox->setCurrentIndex(diastaticPowerComboBox->findData(Brewtarget::diastaticPowerUnit));
 
    colorFormulaComboBox->setCurrentIndex(colorFormulaComboBox->findData(Brewtarget::colorFormula));
    ibuFormulaComboBox->setCurrentIndex(ibuFormulaComboBox->findData(Brewtarget::ibuFormula));
