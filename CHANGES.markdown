@@ -40,6 +40,7 @@ for consumption by the typical end-user.
 * New ingredient can't be created into a folder [#117](https://github.com/Brewtarget/brewtarget/issues/117)
 * ibu/color formulas do not persist [#133](https://github.com/Brewtarget/brewtarget/issues/133)
 * Two running Brewtargets Resets Database [#73](https://github.com/Brewtarget/brewtarget/issues/73)
+* Keep inventory when copying a recipe [#72] (https://github.com/Brewtarget/brewtarget/issues/72)
 
 ## v2.3.1
 
