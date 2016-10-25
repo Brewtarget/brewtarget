@@ -99,6 +99,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/HopEditor.cpp
     ${SRCDIR}/HopSortFilterProxyModel.cpp
     ${SRCDIR}/HopTableModel.cpp
+    ${SRCDIR}/Html.cpp
     ${SRCDIR}/HydrometerTool.cpp
     ${SRCDIR}/instruction.cpp
     ${SRCDIR}/IbuGuSlider.cpp
