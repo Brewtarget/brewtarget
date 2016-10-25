@@ -22,6 +22,7 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QMessageBox>
 #include "config.h"
 #include "brewtarget.h"
 #include "database.h"
@@ -66,8 +67,30 @@ int main(int argc, char **argv)
 
    if (parser.isSet(importFromXmlOption)) importFromXml(parser.value(importFromXmlOption));
    if (parser.isSet(createBlankDBOption)) createBlankDb(parser.value(createBlankDBOption));
-   
-   return Brewtarget::run(parser.value(userDirectoryOption));
+
+   try
+   {
+      return Brewtarget::run(parser.value(userDirectoryOption));
+   }
+   catch (const QString &error)
+   {
+      QMessageBox::critical(0,
+            QApplication::tr("Application terminates"),
+            QApplication::tr("The application encountered a fatal error.\nError message:\n%1").arg(error));
+   }
+   catch (std::exception &exception)
+   {
+      QMessageBox::critical(0,
+            QApplication::tr("Application terminates"),
+            QApplication::tr("The application encountered a fatal error.\nError message:\n%1").arg(exception.what()));
+   }
+   catch (...)
+   {
+      QMessageBox::critical(0,
+            QApplication::tr("Application terminates"),
+            QApplication::tr("The application encountered a fatal error."));
+   }
+   return EXIT_FAILURE;
 }
 
 /*!

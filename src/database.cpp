@@ -539,10 +539,11 @@ QSqlDatabase Database::sqlDatabase()
 
 void Database::unload()
 {
-   // The postgres driver wants nothing to do with this. Core gets dumped if
-   // we try it. Since we don't need to copy things about for postgres...
 
 
+   // selectSome saves context. If we close the database before we tear that
+   // context down, core gets dumped
+   selectSome.clear();
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
@@ -1594,7 +1595,7 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
       QString command = QString("UPDATE %1 set %2=:value where id=%3")
                            .arg(tableName)
                            .arg(col_name)
-                           .arg(object->_key);
+                           .arg(key);
 
       update.prepare( command );
       update.bindValue(":value", value);
@@ -1640,11 +1641,14 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
 
       while (nameq.next()) {
          QString name = nameq.record().value(0).toString();
-         queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC LIMIT 1")
+         queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC LIMIT 1")
                      .arg(tableNames[table])
-                     .arg(name)
                      .arg(Brewtarget::dbTrue());
-         QSqlQuery parentq( queryString, sqlDatabase() );
+         QSqlQuery parentq( sqlDatabase() );
+
+         parentq.prepare(queryString);
+         parentq.bindValue(":name", name);
+         parentq.exec();
 
          if ( !parentq.isActive() )
             throw QString("%1 %2").arg(parentq.lastQuery()).arg(parentq.lastError().text());
@@ -1652,11 +1656,13 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
          parentq.first();
          QString parentID = parentq.record().value("id").toString();
 
-         queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC")
+         queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC")
                      .arg(tableNames[table])
-                     .arg(name)
                      .arg(Brewtarget::dbFalse());
-         QSqlQuery childrenq( queryString, sqlDatabase() );
+         QSqlQuery childrenq( sqlDatabase() );
+         childrenq.prepare(queryString);
+         childrenq.bindValue(":name", name);
+         childrenq.exec();
 
          if ( !childrenq.isActive() )
             throw QString("%1 %2").arg(childrenq.lastQuery()).arg(childrenq.lastError().text());

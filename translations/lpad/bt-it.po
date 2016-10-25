@@ -1,22 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-10-04 22:03+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
-"X-Generator: Launchpad (build 17881)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: it\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
-msgstr "Chi è Brewtaget"
+msgstr "Cos'è Brewtarget"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Style"
@@ -32,7 +25,7 @@ msgstr "Tempo di bollitura"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Efficiency"
-msgstr "Efficenza"
+msgstr "Efficienza"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Boil Volume"
@@ -40,7 +33,7 @@ msgstr "Volume di bollitura"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Preboil Gravity"
-msgstr "Densità Iniziale"
+msgstr "Densità Pre-Bollitura"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Final Volume"
@@ -96,11 +89,11 @@ msgstr "Volume dopo Bollitura"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "PostBoil Gravity"
-msgstr "Densità dopo Bollitura"
+msgstr "Densità post Bollitura"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Volume into fermenter"
-msgstr "Volume dentro al fermentatore"
+msgstr "Volume nel fermentatore"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Print Document"
@@ -125,11 +118,11 @@ msgstr "Calore dell'acqua"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calorie Stimate (per 33cl)"
 
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Calorie Stimate(per 340 gr circa)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -145,7 +138,7 @@ msgstr "Volume di bollitura"
 
 msgctxt "BrewDayWidget|"
 msgid "Preboil Gravity"
-msgstr "Densità Iniziale"
+msgstr "Densità Pre-Bollitura"
 
 msgctxt "BrewDayWidget|"
 msgid "Final Volume"
@@ -153,7 +146,7 @@ msgstr "Volume Finale"
 
 msgctxt "BrewDayWidget|"
 msgid "Starting Gravity"
-msgstr "OG"
+msgstr "Densità Iniziale"
 
 msgctxt "BrewDayWidget|"
 msgid "Boil Time"
@@ -205,7 +198,7 @@ msgstr "Densità dopo Bollitura:"
 
 msgctxt "BrewDayWidget|"
 msgid "Volume in fermenter:"
-msgstr "Volume dentro al fermentatore:"
+msgstr "Volume nel fermentatore"
 
 msgctxt "BrewDayWidget|"
 msgid "Print Document"
@@ -213,7 +206,7 @@ msgstr "stampa documento"
 
 msgctxt "BrewDayWidget|"
 msgid "Notes"
-msgstr "Note"
+msgstr "Appunti"
 
 #, qt-format
 msgctxt "BrewDayWidget|"
@@ -222,7 +215,7 @@ msgstr "Passo %1: %2"
 
 msgctxt "BrewDayWidget|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calorie Stimate (per 33cl)"
 
 msgctxt "Brewtarget|"
 msgid "Default"
@@ -272,7 +265,7 @@ msgstr "oncia"
 
 msgctxt "Brewtarget|"
 msgid "Pounds"
-msgstr "libra"
+msgstr "Libbre"
 
 msgctxt "Brewtarget|"
 msgid "Celsius"
@@ -316,43 +309,43 @@ msgstr "Galloni"
 
 msgctxt "Brewtarget|"
 msgid "Unknown"
-msgstr ""
+msgstr "Sconosciuto"
 
 msgctxt "Brewtarget|"
 msgid "YYYY-mm-dd"
-msgstr ""
+msgstr "anno-mese-giorno"
 
 msgctxt "Brewtarget|"
 msgid "dd-mm-YYYY"
-msgstr ""
+msgstr "giorno-mese-anno"
 
 msgctxt "Brewtarget|"
 msgid "mm-dd-YYYY"
-msgstr ""
+msgstr "mese-giorno-anno"
 
 msgctxt "Brewtarget|"
 msgid "Seconds"
-msgstr ""
+msgstr "Secondi"
 
 msgctxt "Brewtarget|"
 msgid "Minutes"
-msgstr ""
+msgstr "Minuti"
 
 msgctxt "Brewtarget|"
 msgid "Hours"
-msgstr ""
+msgstr "Ore"
 
 msgctxt "Brewtarget|"
 msgid "Days"
-msgstr ""
+msgstr "Giorni"
 
 msgctxt "Brewtarget|"
 msgid "Barrels"
-msgstr ""
+msgstr "Botti"
 
 msgctxt "Brewtarget|"
 msgid "Scale"
-msgstr ""
+msgstr "Ridimensiona"
 
 msgctxt "BtDigitWidget|"
 msgid "Too low for style."
@@ -360,7 +353,7 @@ msgstr "Troopo basso per lo stile."
 
 msgctxt "BtDigitWidget|"
 msgid "In range for style."
-msgstr "Nel range per lo stile."
+msgstr "Adeguato per lo stile."
 
 msgctxt "BtDigitWidget|"
 msgid "Too high for style."
@@ -369,11 +362,11 @@ msgstr "Troppo alto per lo stile."
 #, qt-format
 msgctxt "BtLabel|"
 msgid "Color (%1)"
-msgstr ""
+msgstr "Colore (%1)"
 
 msgctxt "BtSplashScreen|"
 msgid "Loading..."
-msgstr ""
+msgstr "Caricamento in corso..."
 
 msgctxt "BtTreeModel|"
 msgid "Name"
@@ -413,7 +406,7 @@ msgstr "Categoria"
 
 msgctxt "BtTreeModel|"
 msgid "Number"
-msgstr ""
+msgstr "Numero"
 
 msgctxt "BtTreeModel|"
 msgid "Letter"
@@ -421,14 +414,23 @@ msgstr ""
 
 msgctxt "BtTreeModel|"
 msgid "Guide"
-msgstr ""
+msgstr "Guida"
 
 msgctxt "BtTreeModel|"
 msgid "PATH"
-msgstr ""
+msgstr "Percorso"
 
 msgctxt "BtTreeModel|"
 msgid "FULLPATH"
+msgstr "Percorso Completo"
+
+msgctxt "BtTreeModel|"
+msgid "Could not copy"
+msgstr ""
+
+#, qt-format
+msgctxt "BtTreeModel|"
+msgid "There was an unexpected error creating %1"
 msgstr ""
 
 msgctxt "BtTreeView|"
@@ -441,23 +443,23 @@ msgstr "Ricetta"
 
 msgctxt "BtTreeView|"
 msgid "Brew It!"
-msgstr ""
+msgstr "Birrifica!"
 
 msgctxt "BtTreeView|"
 msgid "Brew Again"
-msgstr ""
+msgstr "Producila ancora"
 
 msgctxt "BtTreeView|"
 msgid "Change date"
-msgstr ""
+msgstr "Cambia Data"
 
 msgctxt "BtTreeView|"
 msgid "Recalculate eff"
-msgstr ""
+msgstr "Ricalcola Eff"
 
 msgctxt "BtTreeView|"
 msgid "Delete"
-msgstr ""
+msgstr "Elimina"
 
 msgctxt "BtTreeView|"
 msgid "Equipment"
@@ -465,15 +467,15 @@ msgstr "Attrezzatura"
 
 msgctxt "BtTreeView|"
 msgid "Fermentable"
-msgstr ""
+msgstr "Fermentabili"
 
 msgctxt "BtTreeView|"
 msgid "Hop"
-msgstr ""
+msgstr "Luppolo"
 
 msgctxt "BtTreeView|"
 msgid "Misc"
-msgstr "Aggiunta"
+msgstr "Varie"
 
 msgctxt "BtTreeView|"
 msgid "Style"
@@ -485,37 +487,37 @@ msgstr "Lievito"
 
 msgctxt "BtTreeView|"
 msgid "Folder"
-msgstr ""
+msgstr "Cartella"
 
 msgctxt "BtTreeView|"
 msgid "Copy"
-msgstr ""
+msgstr "Copia"
 
 msgctxt "BtTreeView|"
 msgid "Export"
-msgstr ""
+msgstr "Esporta"
 
 msgctxt "BtTreeView|"
 msgid "Import"
-msgstr ""
+msgstr "Importa"
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Delete %1"
-msgstr ""
+msgstr "Rimuovi %1"
 
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "Delete %1 %2?"
-msgstr ""
+msgstr "Rimuovere %1 %2 ?"
 
 msgctxt "BtTreeView|"
 msgid "BrewNote"
-msgstr ""
+msgstr "Appunti di cotta"
 
 msgctxt "BtTreeView|"
 msgid "Cancel All"
-msgstr ""
+msgstr "Annulla tutto"
 
 #, qt-format
 msgctxt "BtTreeView|"
@@ -530,11 +532,19 @@ msgstr "Inserisci un unico nome per la copia di %1."
 #, qt-format
 msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
+msgstr "Un nome vuoto farà saltare la copia di %1"
+
+msgctxt "BtTreeView|"
+msgid "To XML"
+msgstr ""
+
+msgctxt "BtTreeView|"
+msgid "To HTML"
 msgstr ""
 
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
-msgstr "Tool per conversione"
+msgstr "Strumento di conversione"
 
 msgctxt "ConverterTool|"
 msgid "Input"
@@ -550,7 +560,7 @@ msgstr "Produzione"
 
 msgctxt "ConverterTool|"
 msgid "Convert"
-msgstr "convertire"
+msgstr "Convertire"
 
 msgctxt "ConverterTool|"
 msgid "Amount and units to convert"
@@ -576,18 +586,35 @@ msgstr ""
 "Ci possono essere nuovi ingredienti e ricette disponibili. Vuoi aggiungere "
 "questi al database?"
 
+msgctxt "Database|"
+msgid "Database password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Connection failed"
+msgstr ""
+
+#, qt-format
+msgctxt "Database|"
+msgid "Could not connect to %1 : %2"
+msgstr ""
+
 #, qt-format
 msgctxt "EquipmentEditor|"
 msgid "Grain absorption (%1/%2)"
 msgstr "Assorbimento del grano (%1/%2)"
 
-msgctxt "EquipmentEditor|"
-msgid "Tun Volume Warning"
-msgstr "Avvertimento di volume di Tun"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Tun Volume Warning"
+#~ msgstr "Avvertimento di volume di Tun"
 
-msgctxt "EquipmentEditor|"
-msgid "Batch Size Warning"
-msgstr "Avvertimento della misura"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Batch Size Warning"
+#~ msgstr "Avvertimento della misura"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name"
@@ -597,24 +624,25 @@ msgctxt "EquipmentEditor|"
 msgid "Equipment name:"
 msgstr "Nome attrezzatura:"
 
-msgctxt "EquipmentEditor|"
-msgid "The tun volume you entered is 0. This may cause problems"
-msgstr ""
-"Il volume della botte che hai inserito è 0. Ciò potrebbe causare problemi."
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The tun volume you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "Il volume della botte che hai inserito è 0. Ciò potrebbe causare problemi."
 
-msgctxt "EquipmentEditor|"
-msgid "The batch size you entered is 0. This may cause problems"
-msgstr "La quantità inserita è 0. Ciò potrebbe causare problemi"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The batch size you entered is 0. This may cause problems"
+#~ msgstr "La quantità inserita è 0. Ciò potrebbe causare problemi"
 
-msgctxt "EquipmentEditor|"
-msgid "Hop Utilization Warning"
-msgstr "Avviso Utilizzo del Luppolo"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Hop Utilization Warning"
+#~ msgstr "Avviso Utilizzo del Luppolo"
 
-msgctxt "EquipmentEditor|"
-msgid ""
-"The hop utilization percentage you entered is 0. This may cause problems"
-msgstr ""
-"La percentuale di luppolo che hai inserito è 0. Ciò potrebbe causare problemi"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid ""
+#~ "The hop utilization percentage you entered is 0. This may cause problems"
+#~ msgstr ""
+#~ "La percentuale di luppolo che hai inserito è 0. Ciò potrebbe causare "
+#~ "problemi"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment Editor"
@@ -626,7 +654,7 @@ msgstr "Attrezzatura"
 
 msgctxt "EquipmentEditor|"
 msgid "Set as Default"
-msgstr "Imposta come default"
+msgstr "Imposta come predefinito"
 
 msgctxt "EquipmentEditor|"
 msgid "Required Fields"
@@ -646,11 +674,11 @@ msgstr "Calcolare il volume di pre-ebollizione"
 
 msgctxt "EquipmentEditor|"
 msgid "Batch size"
-msgstr "Dimensione lotto"
+msgstr "Dimensione cotta"
 
 msgctxt "EquipmentEditor|"
 msgid "Boiling && Water"
-msgstr "Bollendo && Acqua"
+msgstr "Bollitura && Acqua"
 
 msgctxt "EquipmentEditor|"
 msgid "Boil time"
@@ -670,11 +698,11 @@ msgstr "Finale rabbocco acqua"
 
 msgctxt "EquipmentEditor|"
 msgid "Grain Absorption (L/kg)"
-msgstr "Assorbimento grano (L/kg)"
+msgstr "Assorbimento grani (L/kg)"
 
 msgctxt "EquipmentEditor|"
 msgid "Default Absorption"
-msgstr "Assorbimento di default"
+msgstr "Assorbimento predefinito"
 
 msgctxt "EquipmentEditor|"
 msgid "Hop Utilization "
@@ -686,7 +714,7 @@ msgstr "Punto di ebollizione dell'acqua"
 
 msgctxt "EquipmentEditor|"
 msgid "Mash Tun"
-msgstr "Mash di tun"
+msgstr "Tino di Ammostamento"
 
 msgctxt "EquipmentEditor|"
 msgid "Volume"
@@ -743,7 +771,7 @@ msgstr "Volume di mosto perso separando lo spazio morto"
 
 msgctxt "EquipmentEditor|"
 msgid "New equipment"
-msgstr "Nuovi Ingredienti"
+msgstr "Nuova attrezzatura"
 
 msgctxt "EquipmentEditor|"
 msgid "Save"
@@ -751,27 +779,51 @@ msgstr "Salva"
 
 msgctxt "EquipmentEditor|"
 msgid "Cancel"
-msgstr "Cancella"
+msgstr "Annulla"
+
+msgctxt "EquipmentEditor|"
+msgid "This equipment profile may break brewtarget's maths"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "The following values are not set:"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "mash tun volume (all-grain and BIAB only)"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "batch size"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "hop utilization"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "Calculation Warnings"
+msgstr ""
 
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr ""
+msgstr "Usato in Mash"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
-msgstr ""
+msgstr "Immerso"
 
 msgctxt "Fermentable|"
 msgid "Not mashed"
-msgstr ""
+msgstr "Non usato in Mash"
 
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr ""
+msgstr "Tardivo"
 
 msgctxt "Fermentable|"
 msgid "Normal"
-msgstr ""
+msgstr "Normale"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable name"
@@ -783,11 +835,11 @@ msgstr "Nome del Fermentabile:"
 
 msgctxt "FermentableDialog|"
 msgid "Fermentable Database"
-msgstr "Database Fermentabile"
+msgstr "Database del Fermentabile"
 
 msgctxt "FermentableDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Aggiungi alla Ricetta"
 
 msgctxt "FermentableDialog|"
 msgid "New"
@@ -799,15 +851,15 @@ msgstr "Aggiungi ingredienti selezionati alla ricetta"
 
 msgctxt "FermentableDialog|"
 msgid "Create new ingredient"
-msgstr "Crea nuovo ingrediente"
+msgstr "Crea un nuovo ingrediente"
 
 msgctxt "FermentableDialog|"
 msgid "Edit selected ingredient"
-msgstr "Edit ingrediente selezionato"
+msgstr "Modifica un ingrediente selezionato"
 
 msgctxt "FermentableDialog|"
 msgid "Remove selected ingredient"
-msgstr "Rimuovi ingerdiente selezionato"
+msgstr "Rimuovi l'ingerdiente selezionato"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Grain"
@@ -831,23 +883,23 @@ msgstr "Aggiunta"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr ""
+msgstr "Usato in Mash"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
-msgstr ""
+msgstr "Immerso"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Not mashed"
-msgstr ""
+msgstr "Non usato in Mash"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Normal"
-msgstr ""
+msgstr "Normale"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr ""
+msgstr "Tardivo"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -877,7 +929,7 @@ msgstr "Prodotto"
 
 msgctxt "FermentableTableModel|"
 msgid "Inventory"
-msgstr ""
+msgstr "Magazzino"
 
 msgctxt "FermentableTableModel|"
 msgid "Color"
@@ -885,11 +937,11 @@ msgstr "Colore"
 
 msgctxt "FermentableTableModel|"
 msgid "Method"
-msgstr ""
+msgstr "Metodo"
 
 msgctxt "FermentableTableModel|"
 msgid "Addition"
-msgstr ""
+msgstr "Aggiungi"
 
 msgctxt "Hop|"
 msgid "Mash"
@@ -917,11 +969,11 @@ msgstr "Amarezza"
 
 msgctxt "Hop|"
 msgid "Both"
-msgstr "entrambi"
+msgstr "Entrambi"
 
 msgctxt "Hop|"
 msgid "Leaf"
-msgstr "foglia"
+msgstr "Foglia"
 
 msgctxt "Hop|"
 msgid "Pellet"
@@ -945,7 +997,7 @@ msgstr "Database Luppolo"
 
 msgctxt "HopDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Aggiungi alla ricetta"
 
 msgctxt "HopDialog|"
 msgid "New"
@@ -977,7 +1029,7 @@ msgstr "Dry Hop"
 
 msgctxt "HopItemDelegate|"
 msgid "Mash"
-msgstr "Mash"
+msgstr "Ammostamento"
 
 msgctxt "HopItemDelegate|"
 msgid "First Wort"
@@ -1005,7 +1057,7 @@ msgstr "Nome"
 
 msgctxt "HopTableModel|"
 msgid "Alpha %"
-msgstr "Alpha"
+msgstr "Alpha %"
 
 msgctxt "HopTableModel|"
 msgid "Amount"
@@ -1025,35 +1077,65 @@ msgstr "Forma"
 
 msgctxt "HopTableModel|"
 msgid "Inventory"
+msgstr "Magazzino"
+
+msgctxt "HydrometerTool|"
+msgid "Hydrometer Tool"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "SG Reading"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Temperature"
+msgstr "Temperatura"
+
+msgctxt "HydrometerTool|"
+msgid "Adjust SG"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Convert"
+msgstr "Convertire"
+
+msgctxt "HydrometerTool|"
+msgid "Measured gravity"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "Corrected gravity"
 msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Cloying"
-msgstr ""
+msgstr "Stucchevole"
 
 msgctxt "IbuGuSlider|"
 msgid "Extra Malty"
-msgstr ""
+msgstr "Super Maltato"
 
 msgctxt "IbuGuSlider|"
 msgid "Slightly Malty"
-msgstr ""
+msgstr "Leggermente Maltato"
 
 msgctxt "IbuGuSlider|"
 msgid "Balanced"
-msgstr ""
+msgstr "Bilanciato"
 
 msgctxt "IbuGuSlider|"
 msgid "Slightly Hoppy"
-msgstr ""
+msgstr "Leggermente Luppolato"
 
 msgctxt "IbuGuSlider|"
 msgid "Extra Hoppy"
-msgstr ""
+msgstr "Super Luppolato"
 
 msgctxt "IbuGuSlider|"
 msgid "Way Hoppy"
-msgstr ""
+msgstr "Giustamente Luppolato"
 
 msgctxt "MainWindow|"
 msgid "Open"
@@ -1169,7 +1251,7 @@ msgstr "Si prega di dare il nome al tuo mash prima di salvare."
 
 msgctxt "MainWindow|"
 msgid "Restart"
-msgstr "Riavviare"
+msgstr "Riavvia"
 
 msgctxt "MainWindow|"
 msgid "Please restart Brewtarget."
@@ -1177,12 +1259,13 @@ msgstr "Si prega di riavviare Brewtarget."
 
 msgctxt "MainWindow|"
 msgid "No equipment"
-msgstr "1"
+msgstr "Nessuna attrezzatura"
 
 msgctxt "MainWindow|"
 msgid "You must select or define an equipment profile first."
 msgstr ""
-"È necessario selezionare o definire un profilo di primo equipaggiamento."
+"Per prima cosa è necessario selezionare o definire un profilo di "
+"attrezzatura."
 
 msgctxt "MainWindow|"
 msgid "No style"
@@ -1218,22 +1301,31 @@ msgstr ""
 
 msgctxt "MainWindow|"
 msgid "Folder name"
-msgstr ""
+msgstr "Nome cartella"
 
 msgctxt "MainWindow|"
 msgid "Folder name:"
-msgstr ""
+msgstr "Nome cartella:"
 
 msgctxt "MainWindow|"
 msgid "Bad Name"
-msgstr ""
+msgstr "Nome non corretto"
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-whitespace character in it"
-msgstr ""
+msgstr "Una cartella deve avere almeno un carattere diverso da spazio"
 
 msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
+msgstr "Una cartella deve avere almeno un carattere diverso da /"
+
+msgctxt "MainWindow|"
+msgid "Error copying recipe"
+msgstr ""
+
+#, qt-format
+msgctxt "MainWindow|"
+msgid "An error was returned while creating %1"
 msgstr ""
 
 msgctxt "MashDesigner|"
@@ -1246,7 +1338,7 @@ msgstr "La ricetta deve essere fermentabile per progettare un mosto."
 
 msgctxt "MashDesigner|"
 msgid "No Equipment"
-msgstr "No attrezzatura"
+msgstr "Nessuna attrezzatura"
 
 msgctxt "MashDesigner|"
 msgid ""
@@ -1345,7 +1437,7 @@ msgstr "Il mosto è troppo spesso per desiderare la temp. al primo passo."
 
 msgctxt "MashWizard|"
 msgid "Decoction error"
-msgstr "Errore Decotto"
+msgstr "Errore Decozione"
 
 msgctxt "MashWizard|"
 msgid "Something went wrong in decoction calculation."
@@ -1378,57 +1470,66 @@ msgstr ""
 "delle dimensioni ebollizione aumentando il tempo di ebollizione, o ridurre "
 "lo spessore mash."
 
+#, qt-format
+msgctxt "MashWizard|"
+msgid "Batch Sparge %1"
+msgstr ""
+
+msgctxt "MashWizard|"
+msgid "Fly Sparge"
+msgstr ""
+
 msgctxt "Misc|"
 msgid "Spice"
-msgstr ""
+msgstr "Spezia"
 
 msgctxt "Misc|"
 msgid "Fining"
-msgstr ""
+msgstr "Affinamento"
 
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr ""
+msgstr "Agente dell'acqua"
 
 msgctxt "Misc|"
 msgid "Herb"
-msgstr ""
+msgstr "Erba"
 
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr ""
+msgstr "Gusto"
 
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Altro"
 
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Bollire"
 
 msgctxt "Misc|"
 msgid "Mash"
-msgstr ""
+msgstr "Mash"
 
 msgctxt "Misc|"
 msgid "Primary"
-msgstr ""
+msgstr "Primario"
 
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr ""
+msgstr "Secondario"
 
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr ""
+msgstr "Imbottigliamento"
 
 msgctxt "Misc|"
 msgid "Weight"
-msgstr ""
+msgstr "Peso"
 
 msgctxt "Misc|"
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1444,7 +1545,7 @@ msgstr "Database Misc"
 
 msgctxt "MiscDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Aggiungi alla ricetta"
 
 msgctxt "MiscDialog|"
 msgid "New"
@@ -1512,11 +1613,11 @@ msgstr "Imbottigliamento"
 
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr ""
+msgstr "Peso"
 
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -1544,15 +1645,15 @@ msgstr "Tipo di Quantità"
 
 msgctxt "MiscTableModel|"
 msgid "Inventory"
-msgstr ""
+msgstr "Magazzino"
 
 msgctxt "OptionDialog|"
 msgid "Open Directory"
-msgstr "Apri directory"
+msgstr "Apri Cartella"
 
 msgctxt "OptionDialog|"
 msgid "Copy Data"
-msgstr "Copia Dta"
+msgstr "Copia Dati"
 
 msgctxt "OptionDialog|"
 msgid ""
@@ -1564,7 +1665,7 @@ msgstr ""
 
 msgctxt "OptionDialog|"
 msgid "Restart"
-msgstr "Riavviare"
+msgstr "Riavvia"
 
 msgctxt "OptionDialog|"
 msgid "Please restart Brewtarget."
@@ -1572,54 +1673,214 @@ msgstr "Si prega di riavviare Brewtarget."
 
 msgctxt "OptionDialog|"
 msgid "Catalan"
-msgstr ""
+msgstr "Catalano"
 
 msgctxt "OptionDialog|"
 msgid "Czech"
-msgstr ""
+msgstr "Ceco"
 
 msgctxt "OptionDialog|"
 msgid "German"
-msgstr ""
+msgstr "Tedesco"
 
 msgctxt "OptionDialog|"
 msgid "English"
-msgstr ""
+msgstr "Inglese"
 
 msgctxt "OptionDialog|"
 msgid "Greek"
-msgstr ""
+msgstr "Greco"
 
 msgctxt "OptionDialog|"
 msgid "Spanish"
-msgstr ""
+msgstr "Spagnolo"
 
 msgctxt "OptionDialog|"
 msgid "French"
-msgstr ""
+msgstr "Francese"
 
 msgctxt "OptionDialog|"
 msgid "Italian"
-msgstr ""
+msgstr "Italiano"
 
 msgctxt "OptionDialog|"
 msgid "Dutch"
-msgstr ""
+msgstr "Olandese"
 
 msgctxt "OptionDialog|"
 msgid "Polish"
-msgstr ""
+msgstr "Polacco"
 
 msgctxt "OptionDialog|"
 msgid "Portuguese"
-msgstr ""
+msgstr "Portoghese"
 
 msgctxt "OptionDialog|"
 msgid "Russian"
-msgstr ""
+msgstr "Russo"
 
 msgctxt "OptionDialog|"
 msgid "Chinese"
+msgstr "Cinese"
+
+msgctxt "OptionDialog|"
+msgid "SI units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "US traditional units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "British imperial units"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Celsius"
+msgstr "Celsius"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Fahrenheit"
+msgstr "Fahrenheit"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "20C/20C Specific Gravity"
+msgstr "20C/20C Densità Specifica"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Plato/Brix/Balling"
+msgstr "Plato/Brix/Balling"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "mm-dd-YYYY"
+msgstr "mese-giorno-anno"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "dd-mm-YYYY"
+msgstr "giorno-mese-anno"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "YYYY-mm-dd"
+msgstr "anno-mese-giorno"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "SRM"
+msgstr "SRM"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "EBC"
+msgstr "EBC"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Tinseth's approximation"
+msgstr "Approssimazione di Tinseth"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Rager's approximation"
+msgstr "Approssimazione di Rager"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Noonan's approximation"
+msgstr "Approssimazione di Noonan"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Mosher's approximation"
+msgstr "Approssimazione di Mosher"
+
+msgctxt "OptionDialog|"
+msgid "Daniel's approximation"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Morey's approximation"
+msgstr "Approsimazione di Morey"
+
+msgctxt "OptionDialog|"
+msgid "SQLite (default)"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "PostgreSQL"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Danish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Estonian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Basque"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Galician"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Hungarian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Latvian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Norwegian Bokmål"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Serbian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Swedish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Turkish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Test connection or cancel"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Saving the options without testing the connection can cause brewtarget to "
+"not restart. Your changes have been discarded, which is likely really, "
+"really crappy UX. Please open a bug explaining exactly how you got to this "
+"message."
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Would you like brewtarget to transfer your data to the new database? NOTE: "
+"If you've already loaded the data, say No"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Transfer database"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Please restart brewtarget to connect to the new database"
 msgstr ""
 
 #, qt-format
@@ -1634,7 +1895,7 @@ msgstr "Formula tipo IBU non riconosciuta. %1"
 
 msgctxt "QObject|"
 msgid "Directory Problem"
-msgstr "Problema Directory"
+msgstr "Problema Cartella"
 
 #, qt-format
 msgctxt "QObject|"
@@ -1663,68 +1924,68 @@ msgctxt "QObject|"
 msgid "Failed to open the database '%1'."
 msgstr "Errore del database %1'."
 
-msgctxt "QObject|"
-msgid "Save Database Changes"
-msgstr "Salva le modifiche del database"
+#~ msgctxt "QObject|"
+#~ msgid "Save Database Changes"
+#~ msgstr "Salva le modifiche del database"
 
-msgctxt "QObject|"
-msgid "Would you like to save the changes you made?"
-msgstr "Vuoi salvare le modifiche apportate?"
+#~ msgctxt "QObject|"
+#~ msgid "Would you like to save the changes you made?"
+#~ msgstr "Vuoi salvare le modifiche apportate?"
 
-msgctxt "QObject|"
-msgid "Multiple Databases Found"
-msgstr "Più database trovati"
+#~ msgctxt "QObject|"
+#~ msgid "Multiple Databases Found"
+#~ msgstr "Più database trovati"
 
-msgctxt "QObject|"
-msgid ""
-"Multiple databases were found.  Do you want to restore the changes you made "
-"during your last Brewtarget session, or rollback to before last session's "
-"changes?"
-msgstr ""
-"Più database sono stati trovati. Vuoi ripristinare le modifiche apportate "
-"durante l'ultima sessione Brewtarget o torna indietro di prima che le "
-"modifiche della sessione ?"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Multiple databases were found.  Do you want to restore the changes you "
+#~ "made during your last Brewtarget session, or rollback to before last "
+#~ "session's changes?"
+#~ msgstr ""
+#~ "Più database sono stati trovati. Vuoi ripristinare le modifiche apportate "
+#~ "durante l'ultima sessione Brewtarget o torna indietro di prima che le "
+#~ "modifiche della sessione ?"
 
-msgctxt "QObject|"
-msgid "Restore"
-msgstr "Ripristinare"
+#~ msgctxt "QObject|"
+#~ msgid "Restore"
+#~ msgstr "Ripristinare"
 
-msgctxt "QObject|"
-msgid "Rollback"
-msgstr "torna indietro"
-
-#, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to remove the temporary backup database.  Navigate to '%1' and remove "
-"'tempBackupDatabase.sqlite'."
-msgstr ""
-"Impossibile rimuovere il database temporaneo di backup. Passare a '%1' e "
-"rimuovere 'tempBackupDatabase.sqlite'."
+#~ msgctxt "QObject|"
+#~ msgid "Rollback"
+#~ msgstr "torna indietro"
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to rollback to the backup database.  Navigate to '%1', remove "
-"'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
-"'database.sqlite'."
-msgstr ""
-"Impossibile tornare indietro al database di backup. Passare a '%1', togliere "
-"'database.sqlite' se esiste, e rinominare 'tempBackupDatabase.sqlite' a "
-"'database.sqlite'."
-
-msgctxt "QObject|"
-msgid "Database Restore Failure"
-msgstr "Errore del database di ripristino"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to remove the temporary backup database.  Navigate to '%1' and "
+#~ "remove 'tempBackupDatabase.sqlite'."
+#~ msgstr ""
+#~ "Impossibile rimuovere il database temporaneo di backup. Passare a '%1' e "
+#~ "rimuovere 'tempBackupDatabase.sqlite'."
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to restore the backup database. Navigate to '%1' and rename "
-"'tempBackupDatabase.sqlite' to 'database.sqlite'."
-msgstr ""
-"Impossibile ripristinare il database di backup. Passare a '%1' e rinominare "
-"'tempBackupDatabase.sqlite' a 'database.sqlite'."
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to rollback to the backup database.  Navigate to '%1', remove "
+#~ "'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
+#~ "'database.sqlite'."
+#~ msgstr ""
+#~ "Impossibile tornare indietro al database di backup. Passare a '%1', "
+#~ "togliere 'database.sqlite' se esiste, e rinominare "
+#~ "'tempBackupDatabase.sqlite' a 'database.sqlite'."
+
+#~ msgctxt "QObject|"
+#~ msgid "Database Restore Failure"
+#~ msgstr "Errore del database di ripristino"
+
+#, qt-format
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to restore the backup database. Navigate to '%1' and rename "
+#~ "'tempBackupDatabase.sqlite' to 'database.sqlite'."
+#~ msgstr ""
+#~ "Impossibile ripristinare il database di backup. Passare a '%1' e "
+#~ "rinominare 'tempBackupDatabase.sqlite' a 'database.sqlite'."
 
 msgctxt "QObject|"
 msgid "Grain"
@@ -1840,10 +2101,48 @@ msgstr "Stile"
 
 msgctxt "QObject|"
 msgid "Folder"
-msgstr ""
+msgstr "Cartella"
 
 msgctxt "QObject|"
 msgid "Failed to update the database"
+msgstr "Errore in aggiornamento del database"
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Error attempting to create directory \"%1\""
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Data directory \"%1\" is missing.  Some features will be unavaliable."
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Fly Sparge"
+msgstr ""
+
+#, fuzzy
+msgctxt "QObject|"
+msgid "Batch Sparge"
+msgstr "Partita di Saprge"
+
+msgctxt "QObject|"
+msgid "Connection Test"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Connection to database was successful"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Plaintext"
+msgstr ""
+
+msgctxt "QObject|"
+msgid ""
+"Passwords are saved in plaintext. We make no effort to hide, obscure or "
+"otherwise protect the password. By enabling this option, you take full "
+"responsibility for any potential problems."
 msgstr ""
 
 msgctxt "Recipe|"
@@ -1856,7 +2155,7 @@ msgstr "Aggiunta "
 
 msgctxt "Recipe|"
 msgid "to the mash tun."
-msgstr "al mash tun."
+msgstr "al tino di ammostamento."
 
 msgctxt "Recipe|"
 msgid "Heat water"
@@ -1864,7 +2163,7 @@ msgstr "Calore dell'acqua"
 
 msgctxt "Recipe|"
 msgid "Bring "
-msgstr "Prtare "
+msgstr "Porta "
 
 #, qt-format
 msgctxt "Recipe|"
@@ -1889,13 +2188,12 @@ msgstr "Riscaldare Mosto a %1."
 msgctxt "Recipe|"
 msgid ""
 "Bring %1 of the mash to a boil and return to the mash tun to bring it to %2."
-msgstr ""
-"Porta %1 del mosto a bollore e tornare al mash tun per portarla a %2."
+msgstr "Porta %1 del mosto a bollore e tornare al mash tun per portarla a %2."
 
 #, qt-format
 msgctxt "Recipe|"
 msgid " Hold for %1."
-msgstr " Mantenere la posizione per %1."
+msgstr " Mantenere per %1."
 
 #, qt-format
 msgctxt "Recipe|"
@@ -1976,11 +2274,11 @@ msgstr ""
 
 msgctxt "Recipe|"
 msgid "Pre-boil"
-msgstr "Prima della bollitura"
+msgstr "Pre-bollitura"
 
 msgctxt "Recipe|"
 msgid "Boil or steep "
-msgstr "Bollitura o steep "
+msgstr "Bollitura o infusione "
 
 msgctxt "Recipe|"
 msgid "Boil/steep fermentables"
@@ -1997,7 +2295,7 @@ msgstr "aggiungi eliminazione diretta"
 #, qt-format
 msgctxt "Recipe|"
 msgid "You should have %1 wort post-boil."
-msgstr "Si dovrebbe avere %1 nel mosto dopo boollitura."
+msgstr "Si dovrebbe avere %1 nel mosto post-boollitura."
 
 #, qt-format
 msgctxt "Recipe|"
@@ -2028,7 +2326,7 @@ msgstr ""
 
 msgctxt "Recipe|"
 msgid "Post boil"
-msgstr "Dopo Bollitura"
+msgstr "Post Bollitura"
 
 msgctxt "Recipe|"
 msgid "Boil time"
@@ -2100,8 +2398,7 @@ msgstr "Aggiungi %1 %2 per bollire a %3."
 
 msgctxt "Recipe|"
 msgid "Raise water to boil and then remove from heat. Stir in  "
-msgstr ""
-"Sollevare l'acqua ad ebollizione e poi togliere dal fuoco. Mescolare  "
+msgstr "Sollevare l'acqua ad ebollizione e poi togliere dal fuoco. Mescolare  "
 
 msgctxt "Recipe|"
 msgid "Add Extracts to water"
@@ -2186,7 +2483,7 @@ msgstr "Mashed"
 
 msgctxt "RecipeFormatter|"
 msgid "Late"
-msgstr "Tardi"
+msgstr "Tardivo"
 
 msgctxt "RecipeFormatter|"
 msgid "Yield"
@@ -2206,7 +2503,7 @@ msgstr "Luppoli"
 
 msgctxt "RecipeFormatter|"
 msgid "Alpha"
-msgstr "Alpha"
+msgstr "Alfa"
 
 msgctxt "RecipeFormatter|"
 msgid "Use"
@@ -2234,7 +2531,7 @@ msgstr "Lievito"
 
 msgctxt "RecipeFormatter|"
 msgid "Stage"
-msgstr "fase"
+msgstr "Fase"
 
 msgctxt "RecipeFormatter|"
 msgid "Secondary"
@@ -2246,7 +2543,7 @@ msgstr "Primario"
 
 msgctxt "RecipeFormatter|"
 msgid "Mash"
-msgstr "Mash"
+msgstr "Ammostamento"
 
 msgctxt "RecipeFormatter|"
 msgid "Temp"
@@ -2258,7 +2555,7 @@ msgstr "Temperatura Obiettivo"
 
 msgctxt "RecipeFormatter|"
 msgid "Notes"
-msgstr "Note"
+msgstr "Appunti"
 
 msgctxt "RecipeFormatter|"
 msgid "Instructions"
@@ -2270,7 +2567,7 @@ msgstr "Data di birrificazione"
 
 msgctxt "RecipeFormatter|"
 msgid "Preboil"
-msgstr "Prima della bollitura"
+msgstr "Pre-bollitura"
 
 msgctxt "RecipeFormatter|"
 msgid "SG"
@@ -2294,19 +2591,19 @@ msgstr "Efficenza in BK"
 
 msgctxt "RecipeFormatter|"
 msgid "Projected OG"
-msgstr "OG Stimato"
+msgstr "OG Programmata"
 
 msgctxt "RecipeFormatter|"
 msgid "Postboil"
-msgstr "Dopo Bollitura"
+msgstr "Post-Bollitura"
 
 msgctxt "RecipeFormatter|"
 msgid "Postboil Volume"
-msgstr "Volume dopo Bollitura"
+msgstr "Volume post-Bollitura"
 
 msgctxt "RecipeFormatter|"
 msgid "Volume Into Fermenter"
-msgstr "Volume dentro al fermentatore"
+msgstr "Volume nel al fermentatore"
 
 msgctxt "RecipeFormatter|"
 msgid "Brewhouse Eff"
@@ -2314,7 +2611,7 @@ msgstr "Efficenza Birrificio"
 
 msgctxt "RecipeFormatter|"
 msgid "Projected ABV"
-msgstr "ABV Stimato"
+msgstr "ABV Programmato"
 
 msgctxt "RecipeFormatter|"
 msgid "Postferment"
@@ -2334,19 +2631,19 @@ msgstr "Categoria"
 
 msgctxt "RecipeFormatter|"
 msgid "Code"
-msgstr ""
+msgstr "Codice"
 
 msgctxt "RecipeFormatter|"
 msgid "Guide"
-msgstr ""
+msgstr "Guida"
 
 msgctxt "RecipeFormatter|"
 msgid "BoilTime"
-msgstr ""
+msgstr "Tempo di Bollitura"
 
 msgctxt "RecipeFormatter|"
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 msgctxt "RecipeFormatter|"
 msgid "Lab"
@@ -2354,11 +2651,11 @@ msgstr "Laboratorio"
 
 msgctxt "RecipeFormatter|"
 msgid "Attenuation"
-msgstr ""
+msgstr "Attenuazione"
 
 msgctxt "RecipeFormatter|"
 msgid "Id"
-msgstr ""
+msgstr "Id"
 
 msgctxt "RecipeFormatter|"
 msgid "Flocculation"
@@ -2366,26 +2663,54 @@ msgstr "Flocculazione"
 
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr ""
+msgstr "Varie"
 
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr ""
+msgstr "Lieviti"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
-msgstr ""
+msgstr "Calorie Stimate (per 33 cl)"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Calorie Stimate(per 340 gr circa)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
-msgstr ""
+msgstr "Grado di Amaro"
 
 msgctxt "RecipeFormatter|"
 msgid "Target"
+msgstr "Obiettivo"
+
+msgctxt "RecipeFormatter|"
+msgid "Total"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Port"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Database"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Username"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Saved Password"
 msgstr ""
 
 msgctxt "RefractoDialog|"
@@ -2403,25 +2728,27 @@ msgstr ""
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "Select Equipment"
-msgstr ""
+msgstr "Seleziona attrezzatura"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid ""
 "The recipe will be scaled to match the batch size and efficiency of the "
 "selected equipment"
 msgstr ""
+"La ricetta sarà ricalcolata in accordo alla quantità scelta ed alla "
+"efficienza della attrezzatura selezionata"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Equipment"
-msgstr ""
+msgstr "Nuova Attrezzatura"
 
 msgctxt "ScaleRecipeEquipmentPage|"
 msgid "New Efficiency (%)"
-msgstr ""
+msgstr "Nuova Efficienza (%)"
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid "Scale Recipe"
-msgstr ""
+msgstr "Ricalcola Ricetta"
 
 msgctxt "ScaleRecipeIntroPage|"
 msgid ""
@@ -2429,6 +2756,10 @@ msgid ""
 "efficiency.Select another equipment with the new batch size and/or "
 "efficiency andthe wizard will scale the recipe ingredients automatically."
 msgstr ""
+"Questa procedura guidata ti aiuterà a ricalcolare la ricetta per un'altra "
+"quantità o efficienza. Seleziona un'altra attrezzatura con la nuova quantità "
+"e/o efficienza e la procedura guidata ricalcolerà gli ingredienti della "
+"ricetta automaticamente"
 
 msgctxt "ScaleRecipeTool|"
 msgid "Recipe Scaled"
@@ -2451,6 +2782,153 @@ msgctxt "StyleEditor|"
 msgid "Style name:"
 msgstr "Nome dello Stile:"
 
+msgctxt "TimerDialog|"
+msgid "Addition Timer"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Addition Time(min):"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Time Remaining:"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes: "
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Alarm sound"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Stop Alarm"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "TimerListDialog|"
+msgid "Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Main Boil Timer"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add Timer"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Start"
+msgstr "Partenza"
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Stop"
+msgstr "Stop"
+
+msgctxt "TimerMainDialog|"
+msgid "Reset"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Hide Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Show Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Cancel Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Load Current Recipe"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Timer (mins):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Time Here"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Limit Alarm Ring Time "
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Alarm Ring Time (secs):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are currently no timers to show."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "KNOCKOUT"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Active Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid ""
+"You currently have active timers, would you like to replace them or add to "
+"them?"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Replace"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 of %2"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop addition is already timed and has been ignored."
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop additions are already timed and have been ignored."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Duplicate Timers Ignored"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are no boil addition, no timers generated."
+msgstr ""
+
 msgctxt "TimerWidget|"
 msgid "Open Sound"
 msgstr "Apri Suono"
@@ -2459,37 +2937,53 @@ msgctxt "TimerWidget|"
 msgid "Audio Files (*.wav *.ogg *.mp3 *.aiff)"
 msgstr "Audio Files (*.wav *.ogg *.mp3 *.aiff)"
 
-msgctxt "TimerWidget|"
-msgid "Stop"
-msgstr "Stop"
+#~ msgctxt "TimerWidget|"
+#~ msgid "Stop"
+#~ msgstr "Stop"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start"
+#~ msgstr "Partenza"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set the timer to the specified value"
+#~ msgstr "Impostare il timer al valore specificato"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "HH:MM:SS"
+#~ msgstr "HH:MM:SS"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start/Stop timer"
+#~ msgstr "Inizia/Ferma timer"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set a sound as the alarm"
+#~ msgstr "Imposta il suono per l'allarme"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set"
+#~ msgstr "Imposta"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Sound"
+#~ msgstr "Suono"
 
 msgctxt "TimerWidget|"
-msgid "Start"
-msgstr "Partenza"
-
-msgctxt "TimerWidget|"
-msgid "Set the timer to the specified value"
-msgstr "Impostare il timer al valore specificato"
-
-msgctxt "TimerWidget|"
-msgid "HH:MM:SS"
-msgstr "HH:MM:SS"
-
-msgctxt "TimerWidget|"
-msgid "Start/Stop timer"
+msgid "Notes..."
 msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Set a sound as the alarm"
-msgstr "Setta il suono per l'allarme"
+msgid " and "
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Set"
-msgstr "Setta"
+msgid "Error"
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Sound"
-msgstr "Suono"
+msgid "Addition time cannot be longer than remaining boil time"
+msgstr ""
 
 #, qt-format
 msgctxt "WaterTableModel|"
@@ -2547,7 +3041,7 @@ msgstr "Database Lievito"
 
 msgctxt "YeastDialog|"
 msgid "Add to Recipe"
-msgstr ""
+msgstr "Aggiungi alla ricetta"
 
 msgctxt "YeastDialog|"
 msgid "New"
@@ -2641,7 +3135,7 @@ msgstr "ID Prodotto"
 
 msgctxt "YeastTableModel|"
 msgid "Inventory"
-msgstr ""
+msgstr "Magazzino"
 
 msgctxt "brewDayScrollWidget|"
 msgid "Form"
@@ -2677,7 +3171,7 @@ msgstr "Inserisci nuovo step"
 
 msgctxt "brewDayScrollWidget|"
 msgid "Move steps"
-msgstr "Muovi steps"
+msgstr "Sposta steps"
 
 msgctxt "brewDayScrollWidget|"
 msgid "Move currently selected step up"
@@ -2877,15 +3371,15 @@ msgstr "ABV"
 
 msgctxt "brewNoteWidget|"
 msgid "Notes"
-msgstr "Note"
+msgstr "Appunti"
 
 msgctxt "brewNoteWidget|"
 msgid "brewNote"
-msgstr ""
+msgstr "Appunti di birrificazione"
 
 msgctxt "brewNoteWidget|"
 msgid "yyyy-dd-MM"
-msgstr ""
+msgstr "anno-giorno-mese"
 
 msgctxt "equipmentEditor|"
 msgid "Specific heat (cal/(g*K))"
@@ -2901,11 +3395,11 @@ msgstr "Bollitore a fermentatore"
 
 msgctxt "equipmentEditor|"
 msgid "Lauter deadspace"
-msgstr "Separare spazio maorto"
+msgstr "Spazio morto pentola"
 
 msgctxt "equipmentEditor|"
 msgid "equipmentEditor"
-msgstr ""
+msgstr "Editor attrezzatura"
 
 msgctxt "fermentableEditor|"
 msgid "Fermentable Editor"
@@ -2961,11 +3455,11 @@ msgstr "Valutazione Lovibond"
 
 msgctxt "fermentableEditor|"
 msgid "Add After Boil"
-msgstr "Aggiungi dopo bollitura"
+msgstr "Aggiungi dopo la bollitura"
 
 msgctxt "fermentableEditor|"
 msgid "This ingredient is added post boil."
-msgstr "Questo ingrediente è stato aggiunto dopo bollitura."
+msgstr "Questo ingrediente è stato aggiunto dopo la bollitura."
 
 msgctxt "fermentableEditor|"
 msgid "Origin"
@@ -3009,7 +3503,7 @@ msgstr "Perecntuale Proteine per massa"
 
 msgctxt "fermentableEditor|"
 msgid "Max In Batch (%)"
-msgstr "Max in Lotto (%)"
+msgstr "Max nella cotta (%)"
 
 msgctxt "fermentableEditor|"
 msgid "Maximum recommended percentage of total grist"
@@ -3021,15 +3515,15 @@ msgstr "Mash raccomandato"
 
 msgctxt "fermentableEditor|"
 msgid "Recommend this be mashed"
-msgstr "Consiglio questo essere mah"
+msgstr "Raccomandato in ammostamento"
 
 msgctxt "fermentableEditor|"
 msgid "Is Mashed"
-msgstr "Is Mashed"
+msgstr "Ammostato"
 
 msgctxt "fermentableEditor|"
 msgid "Checked if it is present in mash"
-msgstr "Controllato se presente nel mash"
+msgstr "Controllato se presente nell'ammostamento"
 
 msgctxt "fermentableEditor|"
 msgid "Bitterness (IBU*gal/lb)"
@@ -3045,15 +3539,15 @@ msgstr "Note:"
 
 msgctxt "fermentableEditor|"
 msgid "Default Amount"
-msgstr ""
+msgstr "Quantità di default"
 
 msgctxt "fermentableEditor|"
 msgid "Amount in Inventory"
-msgstr ""
+msgstr "Quantità in Magazzino"
 
 msgctxt "fermentableEditor|"
 msgid "Amount in inventory"
-msgstr ""
+msgstr "Quantità in Magazzino"
 
 msgctxt "fermentableEditor|"
 msgid "Color"
@@ -3073,11 +3567,11 @@ msgstr "Nome"
 
 msgctxt "hopEditor|"
 msgid "Alpha (%)"
-msgstr "Alpha (%)"
+msgstr "Alfa (%)"
 
 msgctxt "hopEditor|"
 msgid "Alpha acids as percent by mass"
-msgstr "Alpha Acidi come percentuale in massa"
+msgstr "Alfa Acidi come percentuale in massa"
 
 msgctxt "hopEditor|"
 msgid "Amount"
@@ -3089,7 +3583,7 @@ msgstr "Usa"
 
 msgctxt "hopEditor|"
 msgid "Mash"
-msgstr "Mash"
+msgstr "Ammostamento"
 
 msgctxt "hopEditor|"
 msgid "First Wort"
@@ -3097,7 +3591,7 @@ msgstr "Primo mosto"
 
 msgctxt "hopEditor|"
 msgid "Boil"
-msgstr "Bollire"
+msgstr "Bollitura"
 
 msgctxt "hopEditor|"
 msgid "Aroma"
@@ -3201,15 +3695,15 @@ msgstr "Note:"
 
 msgctxt "hopEditor|"
 msgid "Default Amount "
-msgstr ""
+msgstr "Quantità di default "
 
 msgctxt "hopEditor|"
 msgid "Amount in Inventory"
-msgstr ""
+msgstr "Quantità in Magazzino"
 
 msgctxt "hopEditor|"
 msgid "Amount in inventory"
-msgstr ""
+msgstr "Quantità in Magazzino"
 
 msgctxt "instructionWidget|"
 msgid "Form"
@@ -3249,7 +3743,7 @@ msgstr "Luppoli"
 
 msgctxt "mainWindow|"
 msgid "Miscs"
-msgstr "Miscs"
+msgstr "Varie"
 
 msgctxt "mainWindow|"
 msgid "Yeasts"
@@ -3277,11 +3771,11 @@ msgstr "Efficenza (%)"
 
 msgctxt "mainWindow|"
 msgid "Calculated Boil Size"
-msgstr "Calcolato la misura di bollitura"
+msgstr "Misura di bollitura calcolata"
 
 msgctxt "mainWindow|"
 msgid "Calculated Batch Size"
-msgstr "Calcolato la misura del lotto"
+msgstr "Misura della cotta calcolata"
 
 msgctxt "mainWindow|"
 msgid "The extraction efficiency you expect"
@@ -3297,11 +3791,11 @@ msgstr "Tempo di bollitura"
 
 msgctxt "mainWindow|"
 msgid "Target batch size"
-msgstr "Obiettivo Lotto Misura"
+msgstr "Obiettivo dimensione cotta"
 
 msgctxt "mainWindow|"
 msgid "Target Batch Size"
-msgstr "Obiettivo Lotto Misura"
+msgstr "Obiettivo dimensione cotta"
 
 msgctxt "mainWindow|"
 msgid "Equipment"
@@ -3309,7 +3803,7 @@ msgstr "Attrezzatura"
 
 msgctxt "mainWindow|"
 msgid "Target Boil Size"
-msgstr "Obiettivo misura bollitura"
+msgstr "Obiettivo dimensione cotta"
 
 msgctxt "mainWindow|"
 msgid "OG"
@@ -3349,7 +3843,7 @@ msgstr "Extra"
 
 msgctxt "mainWindow|"
 msgid "Brewday"
-msgstr "Giorno di Birrificazione"
+msgstr "Giornata di Birrificazione"
 
 msgctxt "mainWindow|"
 msgid "Add a fermentable"
@@ -3377,11 +3871,11 @@ msgstr "Edit luppolo selezionato"
 
 msgctxt "mainWindow|"
 msgid "Miscellaneous"
-msgstr "Aggiunta"
+msgstr "Varie"
 
 msgctxt "mainWindow|"
 msgid "Add misc"
-msgstr "Aggiungi misc"
+msgstr "Aggiungi varie"
 
 msgctxt "mainWindow|"
 msgid "Remove selected misc"
@@ -3409,27 +3903,27 @@ msgstr "Edit lievito selezionato"
 
 msgctxt "mainWindow|"
 msgid "Mash"
-msgstr "Mash"
+msgstr "Ammostamento"
 
 msgctxt "mainWindow|"
 msgid "Add mash step"
-msgstr "Aggiungi step mash"
+msgstr "Aggiungi step di ammostamento"
 
 msgctxt "mainWindow|"
 msgid "Remove selected mash step"
-msgstr "Rimuovi mash step selezionato"
+msgstr "Rimuovi step selezionato di ammostamento"
 
 msgctxt "mainWindow|"
 msgid "Edit selected mash step"
-msgstr "Rimuovi mash step selezionato"
+msgstr "Rimuovi step di ammostamento selezionato"
 
 msgctxt "mainWindow|"
 msgid "Edit mash properties"
-msgstr "Rimuovi mash step selezionato"
+msgstr "Modifica proprietà di ammostamento"
 
 msgctxt "mainWindow|"
 msgid "Edit mash"
-msgstr "Edit mash"
+msgstr "Modifica ammostamento"
 
 msgctxt "mainWindow|"
 msgid "Mash Des"
@@ -3437,7 +3931,7 @@ msgstr "Mash Des"
 
 msgctxt "mainWindow|"
 msgid "Invoke the mash wizard"
-msgstr "Richiamare la procedura guidata mosto"
+msgstr "Richiamare la procedura guidata del mosto"
 
 msgctxt "mainWindow|"
 msgid "Mash wiz"
@@ -3445,15 +3939,15 @@ msgstr "Mask wiz"
 
 msgctxt "mainWindow|"
 msgid "Mashs"
-msgstr "Mash"
+msgstr "Ammostamenti"
 
 msgctxt "mainWindow|"
 msgid "Mash step up"
-msgstr "Intensificare Mash"
+msgstr "Prosegui ammostamento"
 
 msgctxt "mainWindow|"
 msgid "Mash step down"
-msgstr "Dimettere Mash"
+msgstr "Regredisci ammostamento"
 
 msgctxt "mainWindow|"
 msgid "Save this mash profile"
@@ -3489,7 +3983,7 @@ msgstr "&View"
 
 msgctxt "mainWindow|"
 msgid "&Tools"
-msgstr "&Tools"
+msgstr "&Strumenti"
 
 msgctxt "mainWindow|"
 msgid "toolBar"
@@ -3525,7 +4019,7 @@ msgstr "Ctrl+H"
 
 msgctxt "mainWindow|"
 msgid "&Miscs"
-msgstr "&Miscellanea"
+msgstr "&Varie"
 
 msgctxt "mainWindow|"
 msgid "Ctrl+M"
@@ -3577,7 +4071,7 @@ msgstr "&Manuale"
 
 msgctxt "mainWindow|"
 msgid "&Scale Recipe"
-msgstr ""
+msgstr "&Scala Ricetta"
 
 msgctxt "mainWindow|"
 msgid "Recipe to Clipboard as &Text"
@@ -3605,7 +4099,7 @@ msgstr "&Copia Ricetta"
 
 msgctxt "mainWindow|"
 msgid "Pr&iming Calculator"
-msgstr ""
+msgstr "Calcolatore per Pr&iming"
 
 msgctxt "mainWindow|"
 msgid "&Refractometer Tools"
@@ -3613,7 +4107,7 @@ msgstr "Strumenti &Refrattometro"
 
 msgctxt "mainWindow|"
 msgid "&Pitch Rate Calculator"
-msgstr ""
+msgstr "Calcolatore pitch"
 
 msgctxt "mainWindow|"
 msgid "Merge Databases"
@@ -3701,39 +4195,43 @@ msgstr "1.0"
 
 msgctxt "mainWindow|"
 msgid "Strike Water Calculator"
-msgstr ""
+msgstr "Calcolatore per acqua di Mash"
 
 msgctxt "mainWindow|"
 msgid "tab_recipe"
-msgstr ""
+msgstr "tab_recetta"
 
 msgctxt "mainWindow|"
 msgid "Export to &BBCode"
+msgstr "Esporta in &BBCode"
+
+msgctxt "mainWindow|"
+msgid "Hydrometer Temp Adjustment"
 msgstr ""
 
 msgctxt "mashDesigner|"
 msgid "Mash Designer"
 msgstr "Progettazione Ammostamenti"
 
-msgctxt "mashDesigner|"
-msgid "Name"
-msgstr "Nome"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Name"
+#~ msgstr "Nome"
 
-msgctxt "mashDesigner|"
-msgid "Type"
-msgstr "Tipologia"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Type"
+#~ msgstr "Tipologia"
 
-msgctxt "mashDesigner|"
-msgid "Target temp."
-msgstr "Temperatura Obiettivo."
+#~ msgctxt "mashDesigner|"
+#~ msgid "Target temp."
+#~ msgstr "Temperatura Obiettivo."
 
 msgctxt "mashDesigner|"
 msgid "Time"
 msgstr "Tempo"
 
-msgctxt "mashDesigner|"
-msgid "Batch Sparge"
-msgstr "Partita di Saprge"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Batch Sparge"
+#~ msgstr "Partita di Saprge"
 
 msgctxt "mashDesigner|"
 msgid "Next"
@@ -3773,15 +4271,27 @@ msgstr "Vol"
 
 msgctxt "mashDesigner|"
 msgid "Tun Fullness"
-msgstr "Pienezza di Tun"
+msgstr "Pienezza del tino"
 
 msgctxt "mashDesigner|"
 msgid "tunVol"
-msgstr "VolBotte"
+msgstr "Vol tino"
 
 msgctxt "mashDesigner|"
 msgid "thickness"
 msgstr "Spessore"
+
+msgctxt "mashDesigner|"
+msgid "&Name"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "&Type"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "Tar&get temp."
+msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Mash Editor"
@@ -3813,7 +4323,7 @@ msgstr "Note"
 
 msgctxt "mashEditor|"
 msgid "Tun"
-msgstr "Tun"
+msgstr "Tino"
 
 msgctxt "mashEditor|"
 msgid "Initial tun temp"
@@ -3829,15 +4339,15 @@ msgstr "Da attrezzatura"
 
 msgctxt "mashEditor|"
 msgid "Tun mass"
-msgstr "Massa Tun"
+msgstr "Massa Tino"
 
 msgctxt "mashEditor|"
 msgid "Tun sp. heat"
-msgstr "Tun sp.Calore"
+msgstr "Tino sp.Calore"
 
 msgctxt "mashEditor|"
 msgid "Tun specific heat (cal/(g*K))"
-msgstr "Calore specifico di tun (Cal/(g*K))"
+msgstr "Calore specifico del tino(Cal/(g*K))"
 
 msgctxt "mashStepEditor|"
 msgid "Mash Step Editor"
@@ -3861,7 +4371,7 @@ msgstr "Temperatura"
 
 msgctxt "mashStepEditor|"
 msgid "Decoction"
-msgstr "Decotto"
+msgstr "Decozione"
 
 msgctxt "mashStepEditor|"
 msgid "Target temp."
@@ -3893,7 +4403,7 @@ msgstr "Quantità decotta"
 
 msgctxt "mashStepEditor|"
 msgid "Amount of mash to decoct"
-msgstr "Quantità di mash da decotto"
+msgstr "Quantità di ammostamento da decotto"
 
 msgctxt "mashStepEditor|"
 msgid "Time"
@@ -3927,9 +4437,25 @@ msgctxt "mashWizard|"
 msgid "Mash thickness (L/kg)"
 msgstr "Spessore Mash (L/kg)"
 
+#~ msgctxt "mashWizard|"
+#~ msgid "Mash thickness (do not enter any units)"
+#~ msgstr "Mash spessore (non inserire alcuna unità)"
+
 msgctxt "mashWizard|"
-msgid "Mash thickness (do not enter any units)"
-msgstr "Mash spessore (non inserire alcuna unità)"
+msgid "No Spar&ge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Fl&y Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Ba&tch Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Batches"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Misc Editor"
@@ -4005,7 +4531,7 @@ msgstr "Controllare se l'importo indicato è in kg invece di L."
 
 msgctxt "miscEditor|"
 msgid "Amount is weight?"
-msgstr "Importo è il peso?"
+msgstr "Ammonta al peso?"
 
 msgctxt "miscEditor|"
 msgid "Checked if the given amount is weight instead of volume"
@@ -4021,15 +4547,15 @@ msgstr "Note:"
 
 msgctxt "miscEditor|"
 msgid "Default Amount"
-msgstr ""
+msgstr "Quantità di default"
 
 msgctxt "miscEditor|"
 msgid "Amount in Inventory"
-msgstr ""
+msgstr "Quantità in Magazzino"
 
 msgctxt "miscEditor|"
 msgid "Amount in inventory"
-msgstr ""
+msgstr "Quantità in Magazzino"
 
 msgctxt "namedMashEditor|"
 msgid "Named Mash Editor"
@@ -4069,7 +4595,7 @@ msgstr "Note"
 
 msgctxt "namedMashEditor|"
 msgid "Tun"
-msgstr "Botte"
+msgstr "Tino"
 
 msgctxt "namedMashEditor|"
 msgid "Initial tun temp"
@@ -4101,11 +4627,11 @@ msgstr "Rimuovi mash step selezionato"
 
 msgctxt "namedMashEditor|"
 msgid "Mash step up"
-msgstr "Intensificare Mash"
+msgstr "Procedi con l'ammostamento"
 
 msgctxt "namedMashEditor|"
 msgid "Mash step down"
-msgstr "Dimettere Mash"
+msgstr "Regredisci Ammostamento"
 
 msgctxt "ogAdjuster|"
 msgid "Adjust Volume to Hit OG"
@@ -4194,6 +4720,10 @@ msgctxt "ogAdjuster|"
 msgid "Calculate"
 msgstr "Calcola"
 
+msgctxt "ogAdjuster|"
+msgid "ogAdjuster"
+msgstr ""
+
 msgctxt "optionsDialog|"
 msgid "Options"
 msgstr "Opzioni"
@@ -4206,29 +4736,29 @@ msgctxt "optionsDialog|"
 msgid "Weight"
 msgstr "peso"
 
-msgctxt "optionsDialog|"
-msgid "Use SI units"
-msgstr "Usa unità SI"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use SI units"
+#~ msgstr "Usa unità SI"
 
-msgctxt "optionsDialog|"
-msgid "Use US traditional units"
-msgstr "Usa Unità US tradizionali"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use US traditional units"
+#~ msgstr "Usa Unità US tradizionali"
 
-msgctxt "optionsDialog|"
-msgid "Use British imperial units"
-msgstr "Usa unità British imperial"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use British imperial units"
+#~ msgstr "Usa unità British imperial"
 
 msgctxt "optionsDialog|"
 msgid "Temperature"
 msgstr "Temperatura"
 
-msgctxt "optionsDialog|"
-msgid "Celsius"
-msgstr "Celsius"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Celsius"
+#~ msgstr "Celsius"
 
-msgctxt "optionsDialog|"
-msgid "Fahrenheit"
-msgstr "Fahrenheit"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Fahrenheit"
+#~ msgstr "Fahrenheit"
 
 msgctxt "optionsDialog|"
 msgid "Volume"
@@ -4238,89 +4768,89 @@ msgctxt "optionsDialog|"
 msgid "Gravity"
 msgstr "Densità"
 
-msgctxt "optionsDialog|"
-msgid "20C/20C Specific Gravity"
-msgstr "20C/20C Densità Specifica"
+#~ msgctxt "optionsDialog|"
+#~ msgid "20C/20C Specific Gravity"
+#~ msgstr "20C/20C Densità Specifica"
 
-msgctxt "optionsDialog|"
-msgid "Plato/Brix/Balling"
-msgstr "Plato/Brix/Balling"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Plato/Brix/Balling"
+#~ msgstr "Plato/Brix/Balling"
 
 msgctxt "optionsDialog|"
 msgid "Color"
 msgstr "Colore"
 
-msgctxt "optionsDialog|"
-msgid "Use SRM"
-msgstr "Usa SRM"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use SRM"
+#~ msgstr "Usa SRM"
 
-msgctxt "optionsDialog|"
-msgid "Use EBC"
-msgstr "Usa EBC"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use EBC"
+#~ msgstr "Usa EBC"
 
 msgctxt "optionsDialog|"
 msgid "Formulas"
 msgstr "Formula"
 
-msgctxt "optionsDialog|"
-msgid "Mosher's approximation"
-msgstr "Approssimazione di Mosher"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Mosher's approximation"
+#~ msgstr "Approssimazione di Mosher"
 
-msgctxt "optionsDialog|"
-msgid "Daniels' approximation"
-msgstr "Approssimazione di Daniel"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Daniels' approximation"
+#~ msgstr "Approssimazione di Daniel"
 
-msgctxt "optionsDialog|"
-msgid "Morey's approximation"
-msgstr "Approsimazione di Morey"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Morey's approximation"
+#~ msgstr "Approsimazione di Morey"
 
 msgctxt "optionsDialog|"
 msgid "IBU"
 msgstr "IBU"
 
-msgctxt "optionsDialog|"
-msgid "Tinseth's approximation"
-msgstr "Approssimazione di Tinseth"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Tinseth's approximation"
+#~ msgstr "Approssimazione di Tinseth"
 
-msgctxt "optionsDialog|"
-msgid "Rager's approximation"
-msgstr "Approssimazione di Rager"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Rager's approximation"
+#~ msgstr "Approssimazione di Rager"
 
 msgctxt "optionsDialog|"
 msgid "IBU Adjustments"
-msgstr ""
+msgstr "Correzione IBU"
 
-msgctxt "optionsDialog|"
-msgid "% IBU adjustment"
-msgstr ""
+#~ msgctxt "optionsDialog|"
+#~ msgid "% IBU adjustment"
+#~ msgstr "Correzione % IBU"
 
-msgctxt "optionsDialog|"
-msgid "Mash Hop"
-msgstr ""
+#~ msgctxt "optionsDialog|"
+#~ msgid "Mash Hop"
+#~ msgstr "Luppolo in Ammostamento"
 
-msgctxt "optionsDialog|"
-msgid "First Wort"
-msgstr "Primo mosto"
+#~ msgctxt "optionsDialog|"
+#~ msgid "First Wort"
+#~ msgstr "Primo mosto"
 
-msgctxt "optionsDialog|"
-msgid "Directories"
-msgstr "Elenchi"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Directories"
+#~ msgstr "Elenchi"
 
-msgctxt "optionsDialog|"
-msgid "Database Directory"
-msgstr "Elenchi Database"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Database Directory"
+#~ msgstr "Elenchi Database"
 
-msgctxt "optionsDialog|"
-msgid "Where your brewtarget .xml files are."
-msgstr "Sove sono i vostri Files Brewtarget.xml ."
+#~ msgctxt "optionsDialog|"
+#~ msgid "Where your brewtarget .xml files are."
+#~ msgstr "Sove sono i vostri Files Brewtarget.xml ."
 
 msgctxt "optionsDialog|"
 msgid "Browse"
 msgstr "Sfogliare"
 
-msgctxt "optionsDialog|"
-msgid "Default"
-msgstr "Default"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Default"
+#~ msgstr "Predefinito"
 
 msgctxt "optionsDialog|"
 msgid "Language"
@@ -4348,20 +4878,140 @@ msgctxt "optionsDialog|"
 msgid "Date"
 msgstr "Data"
 
+#~ msgctxt "optionsDialog|"
+#~ msgid "mm-dd-YYYY"
+#~ msgstr "mese-giorno-anno"
+
+#~ msgctxt "optionsDialog|"
+#~ msgid "dd-mm-YYYY"
+#~ msgstr "giorno-mese-anno"
+
+#~ msgctxt "optionsDialog|"
+#~ msgid "YYYY-dd-mm"
+#~ msgstr "anno-giorno-mese"
+
+#~ msgctxt "optionsDialog|"
+#~ msgid "Noonan's approximation"
+#~ msgstr "Approssimazione di Noonan"
+
 msgctxt "optionsDialog|"
-msgid "mm-dd-YYYY"
+msgid "Forumulas"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "dd-mm-YYYY"
+msgid "Mash Hop (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "YYYY-dd-mm"
+msgid "First Wort (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "Noonan's approximation"
+msgid "Databases"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Engines"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "RDBMS Engine"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Test Connection"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Configuration"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Restore defaults"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Username"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Save password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Data Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Backup Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Frequency of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "PostgresSQL's host name or IP address"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port the PostgreSQL is listening on"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The schema containing the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "User with create/delete table access"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password for the user"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The name of the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where your database file is"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where to save your backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of backups to keep: -1 means never remove, 0 means never backup"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "How frequently a backup is made: 1 means always backup"
 msgstr ""
 
 msgctxt "pitchDialog|"
@@ -4423,7 +5073,7 @@ msgstr "%"
 
 msgctxt "pitchDialog|"
 msgid "TextLabel"
-msgstr ""
+msgstr "Etichetta"
 
 msgctxt "pitchDialog|"
 msgid "Calculate Viability From Date"
@@ -4435,7 +5085,7 @@ msgstr "# Fiale/Confezioni Inclinate"
 
 msgctxt "pitchDialog|"
 msgid "Output"
-msgstr "Produzione"
+msgstr "Risultato"
 
 msgctxt "pitchDialog|"
 msgid "Billions of Yeast Cells Required"
@@ -4455,47 +5105,49 @@ msgstr "Volume di partenza"
 
 msgctxt "pitchDialog|"
 msgid "Volume of wort"
-msgstr ""
+msgstr "Volume del mosto"
 
 msgctxt "pitchDialog|"
 msgid "Starting gravity of the wort"
-msgstr ""
+msgstr "Gravità iniziale del mosto"
 
 msgctxt "pitchDialog|"
 msgid "Aeration method"
-msgstr ""
+msgstr "Metodo di ossigenazione"
 
 msgctxt "pitchDialog|"
 msgid "Production date (Best By date less three months)"
-msgstr ""
+msgstr "Data di produzione"
 
 msgctxt "pitchDialog|"
 msgid "Estimated viability of the yeast"
-msgstr ""
+msgstr "Vitalità del lievito stimata"
 
 msgctxt "pitchDialog|"
 msgid "Desired pitch rate"
-msgstr ""
+msgstr "Pitch desiderato"
 
 msgctxt "pitchDialog|"
 msgid "Number of vials/smack packs added to starter"
-msgstr ""
+msgstr "Numero di fiale/confezioni aggiute allo starter"
 
 msgctxt "pitchDialog|"
 msgid "How much yeast you will need"
-msgstr ""
+msgstr "Quanto lievito hai bisogno"
 
 msgctxt "pitchDialog|"
 msgid "How many smack packs or vials required to reach pitch rate"
 msgstr ""
+"quanti smack packs o virali sono richiesti per raggiungere il picth rate"
 
 msgctxt "pitchDialog|"
 msgid "Amount of dry yeast needed to reach pitch rate"
 msgstr ""
+"Quantità di lievito secco necessario per raggiungere il valore desiderato"
 
 msgctxt "pitchDialog|"
 msgid "Starter size to reach pitch rate"
-msgstr ""
+msgstr "Dimensione dello starter per raggiungere il valore desiderato"
 
 msgctxt "primingDialog|"
 msgid "Priming Calculator"
@@ -4515,7 +5167,7 @@ msgstr "Importo di birra a serata"
 
 msgctxt "primingDialog|"
 msgid "Beer Temperature"
-msgstr "Tmperatura birra"
+msgstr "Temperatura birra"
 
 msgctxt "primingDialog|"
 msgid "Temp of the beer"
@@ -4659,7 +5311,7 @@ msgstr "Produzione"
 
 msgctxt "refractoDialog|"
 msgid "SG (20C)"
-msgstr ""
+msgstr "SG (20C)"
 
 msgctxt "refractoDialog|"
 msgid "ABV"
@@ -4667,7 +5319,7 @@ msgstr "ABV"
 
 msgctxt "refractoDialog|"
 msgid "ABW"
-msgstr ""
+msgstr "ABW"
 
 msgctxt "refractoDialog|"
 msgid "Refractive Index"
@@ -4683,59 +5335,59 @@ msgstr "OG (20 C)"
 
 msgctxt "refractoDialog|"
 msgid "Measured original plato"
-msgstr ""
+msgstr "Valore iniziale Plato misurato"
 
 msgctxt "refractoDialog|"
 msgid "Measured original gravity"
-msgstr ""
+msgstr "Gravità iniziale misurata"
 
 msgctxt "refractoDialog|"
 msgid "Current measured plato"
-msgstr ""
+msgstr "Valore Plato attuale misurato"
 
 msgctxt "strikeWaterDialog|"
 msgid "Strike Water Calculator"
-msgstr ""
+msgstr "Calcolatore per acqua di Mash"
 
 msgctxt "strikeWaterDialog|"
 msgid "Initial Infusion"
-msgstr ""
+msgstr "Infusione iniziale"
 
 msgctxt "strikeWaterDialog|"
 msgid "Original Grain Temperature"
-msgstr ""
+msgstr "Temperatura iniziale dei grani"
 
 msgctxt "strikeWaterDialog|"
 msgid "Target Mash Temperature"
-msgstr ""
+msgstr "Temperatura di ammostamento programmata"
 
 msgctxt "strikeWaterDialog|"
 msgid "Weight of Grain"
-msgstr ""
+msgstr "Peso dei grani"
 
 msgctxt "strikeWaterDialog|"
 msgid "Volume of Water"
-msgstr ""
+msgstr "Volume di acqua"
 
 msgctxt "strikeWaterDialog|"
 msgid "Mash Infusion"
-msgstr ""
+msgstr "ammostamento in infusione"
 
 msgctxt "strikeWaterDialog|"
 msgid "Total Volume of Water"
-msgstr ""
+msgstr "Volume totale di acqua"
 
 msgctxt "strikeWaterDialog|"
 msgid "Grain Weight"
-msgstr ""
+msgstr "Peso dei grani"
 
 msgctxt "strikeWaterDialog|"
 msgid "Actual Mash Temperature"
-msgstr ""
+msgstr "Temperatura reale di ammostamento"
 
 msgctxt "strikeWaterDialog|"
 msgid "Infusion Water Temperature"
-msgstr ""
+msgstr "Temperatura dell'acqua di infusione"
 
 msgctxt "strikeWaterDialog|"
 msgid "Calculate"
@@ -4743,15 +5395,15 @@ msgstr "Calcola"
 
 msgctxt "strikeWaterDialog|"
 msgid "Strike Water Temperature"
-msgstr ""
+msgstr "Temperatura dell'acqua preferita"
 
 msgctxt "strikeWaterDialog|"
 msgid "Volume to add"
-msgstr ""
+msgstr "Volume da aggiungere"
 
 msgctxt "strikeWaterDialog|"
 msgid "Note: This calculator assumes a preheated mash tun."
-msgstr ""
+msgstr "Nota: Questo cacolatore assume una entola preriscaldata"
 
 msgctxt "styleEditor|"
 msgid "Style Editor"
@@ -4843,7 +5495,7 @@ msgstr "FG"
 
 msgctxt "styleEditor|"
 msgid "IBUs"
-msgstr ""
+msgstr "IBU"
 
 msgctxt "styleEditor|"
 msgid "Color (SRM)"
@@ -4851,11 +5503,11 @@ msgstr "Colore (SRM)"
 
 msgctxt "styleEditor|"
 msgid "Carb (vols)"
-msgstr ""
+msgstr "Carb (vols)"
 
 msgctxt "styleEditor|"
 msgid "ABV (pct)"
-msgstr ""
+msgstr "ABV (pct)"
 
 msgctxt "styleEditor|"
 msgid "Profile"
@@ -4885,9 +5537,34 @@ msgctxt "styleEditor|"
 msgid "Cancel"
 msgstr "Cancella"
 
+#~ msgctxt "timerListDialog|"
+#~ msgid "Timers"
+#~ msgstr "Timers"
+
 msgctxt "timerListDialog|"
-msgid "Timers"
-msgstr "Timers"
+msgid "Addition Timers"
+msgstr ""
+
+#, fuzzy
+msgctxt "timerWidget|"
+msgid "Form"
+msgstr "Forma"
+
+msgctxt "timerWidget|"
+msgid "Add:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "At:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "mins"
+msgstr ""
 
 msgctxt "waterEditor|"
 msgid "Dialog"
@@ -5031,7 +5708,7 @@ msgstr "Riattivato"
 
 msgctxt "yeastEditor|"
 msgid "Times this yeast has been recultured"
-msgstr "Illievito è stato riattivato"
+msgstr "Il lievito è stato riattivato"
 
 msgctxt "yeastEditor|"
 msgid "Max Recultures"
@@ -5059,12 +5736,12 @@ msgstr "Note:"
 
 msgctxt "yeastEditor|"
 msgid "Default Amount"
-msgstr ""
+msgstr "Quantità predefinita"
 
 msgctxt "yeastEditor|"
 msgid "Quanta in Inventory"
-msgstr ""
+msgstr "Quantità in magazzino"
 
 msgctxt "yeastEditor|"
 msgid "Quanta in inventory"
-msgstr ""
+msgstr "Quantità in magazzino"

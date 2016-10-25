@@ -475,9 +475,12 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_11">
        <item>
-        <widget class="QLabel" name="label_diastaticPower">
+        <widget class="BtDiastaticPowerLabel" name="label_diastaticPower">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="text">
-          <string>DP (Lintner)</string>
+          <string>Diastatic power</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_diastaticPower</cstring>
@@ -485,7 +488,7 @@
         </widget>
        </item>
        <item>
-        <widget class="BtGenericEdit" name="lineEdit_diastaticPower">
+        <widget class="BtDiastaticPowerEdit" name="lineEdit_diastaticPower">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -499,7 +502,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Diastatic power in Lintner</string>
+          <string>Diastatic power</string>
          </property>
          <property name="editField" stdset="0">
           <string notr="true">diastaticPower_lintner</string>
@@ -767,6 +770,22 @@
     <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
+  <customwidget>
+   <class>BtDiastaticPowerEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDiastaticPowerLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>lineEdit_name</tabstop>
@@ -868,6 +887,38 @@
     <hint type="destinationlabel">
      <x>169</x>
      <y>133</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_diastaticPower</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>lineEdit_diastaticPower</receiver>
+   <slot>cut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>393</x>
+     <y>49</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_diastaticPower</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>lineEdit_diastaticPower</receiver>
+   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>346</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>48</y>
     </hint>
    </hints>
   </connection>

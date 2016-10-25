@@ -32,6 +32,8 @@ class EbcColorUnitSystem;
 class SrmColorUnitSystem;
 class SgDensityUnitSystem;
 class PlatoDensityUnitSystem;
+class LintnerDiastaticPowerUnitSystem;
+class WkDiastaticPowerUnitSystem;
 
 class UnitSystems
 {
@@ -54,6 +56,9 @@ public:
 
    static SgDensityUnitSystem* sgDensityUnitSystem();
    static PlatoDensityUnitSystem* platoDensityUnitSystem();
+
+   static LintnerDiastaticPowerUnitSystem* lintnerDiastaticPowerUnitSystem();
+   static WkDiastaticPowerUnitSystem* wkDiastaticPowerUnitSystem();
 };
 
 #endif /*UNITSYSTEMS_H*/

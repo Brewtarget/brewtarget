@@ -70,6 +70,9 @@ EBCUnit* Units::ebc = new EBCUnit();
 // == density ===
 SgUnit* Units::sp_grav = new SgUnit();
 PlatoUnit* Units::plato = new PlatoUnit();
+// == diastatic power ==
+LintnerUnit* Units::lintner = new LintnerUnit();;
+WKUnit* Units::wk = new WKUnit();
 
 QString Unit::unitFromString(QString qstr)
 {
@@ -228,6 +231,9 @@ void Unit::setupMap()
 
    Unit::nameToUnit.insert(Units::sp_grav->getUnitName(), Units::sp_grav);
    Unit::nameToUnit.insert(Units::plato->getUnitName(), Units::plato);
+
+   Unit::nameToUnit.insert(Units::lintner->getUnitName(), Units::lintner);
+   Unit::nameToUnit.insert(Units::wk->getUnitName(), Units::wk);
 
    Unit::isMapSetup = true;
 }
@@ -798,3 +804,39 @@ double PlatoUnit::fromSI(double amt) const
    return Algorithms::SG_20C20C_toPlato(amt);
 }
 
+// == diastatic power ==
+LintnerUnit::LintnerUnit()
+{
+   unitName   = "L";
+   SIUnitName = "L";
+   _type = DiastaticPower;
+   _unitSystem = Any;
+}
+
+double LintnerUnit::toSI( double amt ) const
+{
+   return amt;
+}
+
+double LintnerUnit::fromSI( double amt ) const
+{
+   return amt;
+}
+
+WKUnit::WKUnit()
+{
+   unitName = "WK";
+   SIUnitName = "L";
+   _type = DiastaticPower;
+   _unitSystem = Any;
+}
+
+double WKUnit::toSI( double amt ) const
+{
+   return (amt + 16) / 3.5;
+}
+
+double WKUnit::fromSI(double amt) const
+{
+   return 3.5 * amt - 16;
+}

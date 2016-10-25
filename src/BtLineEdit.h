@@ -34,6 +34,7 @@ class BtTimeEdit;
 class BtDensityEdit;
 class BtColorEdit;
 class BtMixedEdit;
+class BtDiastaticPowerEdit;
 class BtStringEdit;
 
 /*!
@@ -189,4 +190,13 @@ public slots:
    void setIsWeight(bool state);
 
 };
+
+class BtDiastaticPowerEdit : public BtLineEdit
+{
+   Q_OBJECT
+
+public:
+   BtDiastaticPowerEdit(QWidget* parent);
+};
+
 #endif
