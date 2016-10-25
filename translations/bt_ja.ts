@@ -1,436 +1,1079 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="lv">
+<TS version="2.1">
+<context>
+    <name></name>
+    <message>
+        <source>About Brewtarget</source>
+        <comment>AboutDialog|</comment>
+        <translation type="vanished">ブルーターギットについて</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">スタイル</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">日付</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">茹で時間</translation>
+    </message>
+    <message>
+        <source>Efficiency</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">能率</translation>
+    </message>
+    <message>
+        <source>Boil Volume</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">茹でる容量</translation>
+    </message>
+    <message>
+        <source>Preboil Gravity</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">茹でる前の比重</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">最終容量</translation>
+    </message>
+    <message>
+        <source>Final Gravity</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">最終比重</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">アルコール容積</translation>
+    </message>
+    <message>
+        <source>Instructions</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">手順</translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">完了</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">時間</translation>
+    </message>
+    <message>
+        <source>Step</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">ステップ</translation>
+    </message>
+    <message>
+        <source>Actual PreBoil Volume</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">実際の茹でる前の容量</translation>
+    </message>
+    <message>
+        <source>Actual PreBoil Gravity</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">実際の茹でる前の比重</translation>
+    </message>
+    <message>
+        <source>PostBoil Volume</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">実際の茹でる後の容量</translation>
+    </message>
+    <message>
+        <source>PostBoil Gravity</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">実際の茹でる後の比重</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">発酵容器の容量</translation>
+    </message>
+    <message>
+        <source>Print Document</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">ドキュメントの印刷</translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">ノート</translation>
+    </message>
+    <message>
+        <source>Step %1: %2</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">ステップ %1: %2</translation>
+    </message>
+    <message>
+        <source>Add grains</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">穀物を追加</translation>
+    </message>
+    <message>
+        <source>Heat water</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">沸かし湯</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <comment>BrewDayScrollWidget|</comment>
+        <translation type="vanished">カロリー検討 (354mlの分)</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">スタイル</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">日付</translation>
+    </message>
+    <message>
+        <source>Boil Volume</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">茹でる容量</translation>
+    </message>
+    <message>
+        <source>Preboil Gravity</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">茹でる前の比重</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">最終容量</translation>
+    </message>
+    <message>
+        <source>Starting Gravity</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">初期比重</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">茹で時間</translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">苦味（IBU)</translation>
+    </message>
+    <message>
+        <source>Predicted Efficiency</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">予報の能率</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">カロリー検討 (354mlの分)</translation>
+    </message>
+    <message>
+        <source>Instructions</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">手順</translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">完了</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">時間</translation>
+    </message>
+    <message>
+        <source>Step</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">ステップ</translation>
+    </message>
+    <message>
+        <source>Actual Pre-boil Volume:</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">実際の茹でる前の容量</translation>
+    </message>
+    <message>
+        <source>Actual Pre-boil Gravity:</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">実際の茹でる前の比重</translation>
+    </message>
+    <message>
+        <source>Post-boil Volume:</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">茹でる後の容量</translation>
+    </message>
+    <message>
+        <source>Post-boil Gravity:</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">茹でる後の比重</translation>
+    </message>
+    <message>
+        <source>Volume in fermenter:</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">発酵容器の容量</translation>
+    </message>
+    <message>
+        <source>Print Document</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">ドキュメントの印刷</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">メモ</translation>
+    </message>
+    <message>
+        <source>Step %1: %2</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">ステップ %1: %2</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <comment>BrewDayWidget|</comment>
+        <translation type="vanished">カロリー予報 (33clに対して）</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">デフォルト</translation>
+    </message>
+    <message>
+        <source>EBC</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">EBC</translation>
+    </message>
+    <message>
+        <source>SRM</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">標準参照法（SRM)</translation>
+    </message>
+    <message>
+        <source>Plato</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">プラート</translation>
+    </message>
+    <message>
+        <source>Specific Gravity</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">比重</translation>
+    </message>
+    <message>
+        <source>SI</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">SI基本単位</translation>
+    </message>
+    <message>
+        <source>US Customary</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">アメリカ伝統単位</translation>
+    </message>
+    <message>
+        <source>Milligrams</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">ミリグラム</translation>
+    </message>
+    <message>
+        <source>Grams</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">グラム</translation>
+    </message>
+    <message>
+        <source>Kilograms</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">キログラム</translation>
+    </message>
+    <message>
+        <source>Ounces</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">オンス</translation>
+    </message>
+    <message>
+        <source>Pounds</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">ポンド</translation>
+    </message>
+    <message>
+        <source>Celsius</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">摂氏 (℃)</translation>
+    </message>
+    <message>
+        <source>Fahrenheit</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">華氏(℉)</translation>
+    </message>
+    <message>
+        <source>British Imperial</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">イギリス皇室システム</translation>
+    </message>
+    <message>
+        <source>MilliLiters</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">ミリリットル</translation>
+    </message>
+    <message>
+        <source>Liters</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">リットル</translation>
+    </message>
+    <message>
+        <source>Teaspoons</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">小さじ</translation>
+    </message>
+    <message>
+        <source>Tablespoons</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">大さじ</translation>
+    </message>
+    <message>
+        <source>Cups</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">カップ</translation>
+    </message>
+    <message>
+        <source>Quarts</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">クォート</translation>
+    </message>
+    <message>
+        <source>Gallons</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">ガロン</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">不明</translation>
+    </message>
+    <message>
+        <source>YYYY-mm-dd</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">年ー月ー日　(YYYY-mm-dd)</translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">日ー月ー年　(dd-mm-YYYY)</translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">月ー日ー年　(mm-dd-YYYY）</translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">秒</translation>
+    </message>
+    <message>
+        <source>Minutes</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">分間</translation>
+    </message>
+    <message>
+        <source>Hours</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">時間</translation>
+    </message>
+    <message>
+        <source>Days</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">日数</translation>
+    </message>
+    <message>
+        <source>Barrels</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">樽 (バレル)</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <comment>Brewtarget|</comment>
+        <translation type="vanished">拡大縮小</translation>
+    </message>
+    <message>
+        <source>Too low for style.</source>
+        <comment>BtDigitWidget|</comment>
+        <translation type="vanished">このスタイルによって低過ぎ</translation>
+    </message>
+    <message>
+        <source>In range for style.</source>
+        <comment>BtDigitWidget|</comment>
+        <translation type="vanished">このスタイルの範囲</translation>
+    </message>
+    <message>
+        <source>Too high for style.</source>
+        <comment>BtDigitWidget|</comment>
+        <translation type="vanished">このスタイルによって高過ぎ</translation>
+    </message>
+    <message>
+        <source>Color (%1)</source>
+        <comment>BtLabel|</comment>
+        <translation type="vanished">色 (%1)</translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <comment>BtSplashScreen|</comment>
+        <translation type="vanished">読み込み中...</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">名前</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">醸成日付</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">スタイル</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">茹で時間</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">色</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">種類</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">使用</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">フォーム</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">カテゴリー</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">番号</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">手紙</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">ガイド</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">パス</translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <comment>BtTreeModel|</comment>
+        <translation type="vanished">フルパス</translation>
+    </message>
+    <message>
+        <source>New</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">新規</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">レシピ</translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">醸造!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">再び醸造</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">日付を変わる</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">能率を再計算</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">削除</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">設備</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">発酵の材料</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">ホップ</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">その他</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">スタイル</translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">酵母（イースト）</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">フォルダ</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">コピー</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">書き出し</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">取り込む</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">%1 を削除</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">取り消し %1 %2?</translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">ブルーメモ</translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">すべてキャンセル</translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">%1 をコピー</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">%1 のコピーは別の名前を入力してください。</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <comment>BtTreeView|</comment>
+        <translation type="vanished">名前なしは%1をコピーすることはキャンセルとしてる。</translation>
+    </message>
+    <message>
+        <source>Converter Tool</source>
+        <comment>ConverterTool|</comment>
+        <translation type="vanished">変化ツール</translation>
+    </message>
+    <message>
+        <source>Input</source>
+        <comment>ConverterTool|</comment>
+        <translation type="vanished">入力</translation>
+    </message>
+    <message>
+        <source>Output Units</source>
+        <comment>ConverterTool|</comment>
+        <translation type="vanished">出力単位</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <comment>ConverterTool|</comment>
+        <translation type="vanished">出力</translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <comment>ConverterTool|</comment>
+        <translation type="vanished">変換</translation>
+    </message>
+</context>
 <context>
     <name>AboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ブルーターギットについて</translation>
     </message>
 </context>
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
-        <source>Style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Datums</translation>
-    </message>
-    <message>
-        <source>Boil Time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Efficiency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Boil Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Preboil Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Final Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starting Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IBU</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Final Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ABV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Instructions</source>
-        <translation>Instrukcijas</translation>
-    </message>
-    <message>
-        <source>Completed</source>
-        <translation>Pabeigts</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Laiks</translation>
-    </message>
-    <message>
-        <source>Step</source>
-        <translation>Solis</translation>
-    </message>
-    <message>
-        <source>Actual PreBoil Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Actual PreBoil Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PostBoil Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PostBoil Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Volume into fermenter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Print Document</source>
-        <translation>Drukāt dokumentu</translation>
+        <translation type="unfinished">ドキュメントの印刷</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation>&lt;h2&gt;Piezīmes&lt;/h2&gt;</translation>
+        <translation type="unfinished">ノート</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation>Solis %1: %2</translation>
+        <translation type="unfinished">ステップ %1: %2</translation>
     </message>
     <message>
-        <source>Add grains</source>
-        <translation type="unfinished"></translation>
+        <source>Style</source>
+        <translation type="unfinished">スタイル</translation>
     </message>
     <message>
-        <source>Heat water</source>
-        <translation type="unfinished"></translation>
+        <source>Date</source>
+        <translation type="unfinished">日付</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">茹で時間</translation>
+    </message>
+    <message>
+        <source>Efficiency</source>
+        <translation type="unfinished">能率</translation>
+    </message>
+    <message>
+        <source>Boil Volume</source>
+        <translation type="unfinished">茹でる容量</translation>
+    </message>
+    <message>
+        <source>Preboil Gravity</source>
+        <translation type="unfinished">茹でる前の比重</translation>
+    </message>
+    <message>
+        <source>Final Volume</source>
+        <translation type="unfinished">最終容量</translation>
+    </message>
+    <message>
+        <source>Starting Gravity</source>
+        <translation type="unfinished">初期比重</translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation type="unfinished">苦味（IBU)</translation>
+    </message>
+    <message>
+        <source>Final Gravity</source>
+        <translation type="unfinished">最終比重</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished">アルコール容積</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">カロリー予報 (33clに対して）</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">カロリー検討 (354mlの分)</translation>
+    </message>
+    <message>
+        <source>Instructions</source>
+        <translation type="unfinished">手順</translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <translation type="unfinished">完了</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">時間</translation>
+    </message>
+    <message>
+        <source>Step</source>
+        <translation type="unfinished">ステップ</translation>
+    </message>
+    <message>
+        <source>Add grains</source>
+        <translation type="unfinished">穀物を追加</translation>
+    </message>
+    <message>
+        <source>Heat water</source>
+        <translation type="unfinished">沸かし湯</translation>
+    </message>
+    <message>
+        <source>Actual PreBoil Volume</source>
+        <translation type="unfinished">実際の茹でる前の容量</translation>
+    </message>
+    <message>
+        <source>Actual PreBoil Gravity</source>
+        <translation type="unfinished">実際の茹でる前の比重</translation>
+    </message>
+    <message>
+        <source>PostBoil Volume</source>
+        <translation type="unfinished">実際の茹でる後の容量</translation>
+    </message>
+    <message>
+        <source>PostBoil Gravity</source>
+        <translation type="unfinished">実際の茹でる後の比重</translation>
+    </message>
+    <message>
+        <source>Volume into fermenter</source>
+        <translation type="unfinished">発酵容器の容量</translation>
     </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">スタイル</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Datums</translation>
+        <translation type="unfinished">日付</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">茹でる容量</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">茹でる前の比重</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">最終容量</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">初期比重</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">茹で時間</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">苦味（IBU)</translation>
     </message>
     <message>
         <source>Predicted Efficiency</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Instructions</source>
-        <translation>Instrukcijas</translation>
-    </message>
-    <message>
-        <source>Completed</source>
-        <translation>Pabeigts</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Laiks</translation>
-    </message>
-    <message>
-        <source>Step</source>
-        <translation>Solis</translation>
-    </message>
-    <message>
-        <source>Actual Pre-boil Volume:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Actual Pre-boil Gravity:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-boil Volume:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Post-boil Gravity:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Volume in fermenter:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Print Document</source>
-        <translation>Drukāt dokumentu</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation>Piezīmes</translation>
-    </message>
-    <message>
-        <source>Step %1: %2</source>
-        <translation>Solis %1: %2</translation>
+        <translation type="unfinished">予報の能率</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">カロリー予報 (33clに対して）</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">カロリー検討 (354mlの分)</translation>
+    </message>
+    <message>
+        <source>Instructions</source>
+        <translation type="unfinished">手順</translation>
+    </message>
+    <message>
+        <source>Completed</source>
+        <translation type="unfinished">完了</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">時間</translation>
+    </message>
+    <message>
+        <source>Step</source>
+        <translation type="unfinished">ステップ</translation>
+    </message>
+    <message>
+        <source>Actual Pre-boil Volume:</source>
+        <translation type="unfinished">実際の茹でる前の容量</translation>
+    </message>
+    <message>
+        <source>Actual Pre-boil Gravity:</source>
+        <translation type="unfinished">実際の茹でる前の比重</translation>
+    </message>
+    <message>
+        <source>Post-boil Volume:</source>
+        <translation type="unfinished">茹でる後の容量</translation>
+    </message>
+    <message>
+        <source>Post-boil Gravity:</source>
+        <translation type="unfinished">茹でる後の比重</translation>
+    </message>
+    <message>
+        <source>Volume in fermenter:</source>
+        <translation type="unfinished">発酵容器の容量</translation>
+    </message>
+    <message>
+        <source>Print Document</source>
+        <translation type="unfinished">ドキュメントの印刷</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">メモ</translation>
+    </message>
+    <message>
+        <source>Step %1: %2</source>
+        <translation type="unfinished">ステップ %1: %2</translation>
     </message>
 </context>
 <context>
     <name>Brewtarget</name>
     <message>
+        <source>Unknown</source>
+        <translation type="unfinished">不明</translation>
+    </message>
+    <message>
         <source>Default</source>
-        <translation>Noklusējuma</translation>
+        <translation type="unfinished">デフォルト</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">EBC</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Specific Gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>US Customary</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Milligrams</source>
-        <translation>Miligrami</translation>
-    </message>
-    <message>
-        <source>Grams</source>
-        <translation>Grami</translation>
-    </message>
-    <message>
-        <source>Kilograms</source>
-        <translation>Kilogrami</translation>
-    </message>
-    <message>
-        <source>Ounces</source>
-        <translation>Unces</translation>
-    </message>
-    <message>
-        <source>Pounds</source>
-        <translation>Mārciņas</translation>
-    </message>
-    <message>
-        <source>Celsius</source>
-        <translation>Celsija</translation>
-    </message>
-    <message>
-        <source>Fahrenheit</source>
-        <translation>Fārenheita</translation>
-    </message>
-    <message>
-        <source>British Imperial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MilliLiters</source>
-        <translation>Mililitri</translation>
-    </message>
-    <message>
-        <source>Liters</source>
-        <translation>Litri</translation>
-    </message>
-    <message>
-        <source>Teaspoons</source>
-        <translation>Tējkarotes</translation>
-    </message>
-    <message>
-        <source>Tablespoons</source>
-        <translation>Ēdamkarotes</translation>
-    </message>
-    <message>
-        <source>Cups</source>
-        <translation>Krūzes</translation>
-    </message>
-    <message>
-        <source>Quarts</source>
-        <translation>Kvarti</translation>
-    </message>
-    <message>
-        <source>Gallons</source>
-        <translation>Galoni</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation>Nezināms</translation>
+        <translation type="unfinished">標準参照法（SRM)</translation>
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">年ー月ー日　(YYYY-mm-dd)</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">日ー月ー年　(dd-mm-YYYY)</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">月ー日ー年　(mm-dd-YYYY）</translation>
     </message>
     <message>
-        <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <source>Plato</source>
+        <translation type="unfinished">プラート</translation>
     </message>
     <message>
-        <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <source>Specific Gravity</source>
+        <translation type="unfinished">比重</translation>
     </message>
     <message>
-        <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <source>SI</source>
+        <translation type="unfinished">SI基本単位</translation>
     </message>
     <message>
-        <source>Days</source>
-        <translation type="unfinished"></translation>
+        <source>US Customary</source>
+        <translation type="unfinished">アメリカ伝統単位</translation>
     </message>
     <message>
-        <source>Barrels</source>
-        <translation type="unfinished"></translation>
+        <source>Milligrams</source>
+        <translation type="unfinished">ミリグラム</translation>
+    </message>
+    <message>
+        <source>Grams</source>
+        <translation type="unfinished">グラム</translation>
+    </message>
+    <message>
+        <source>Kilograms</source>
+        <translation type="unfinished">キログラム</translation>
+    </message>
+    <message>
+        <source>Ounces</source>
+        <translation type="unfinished">オンス</translation>
+    </message>
+    <message>
+        <source>Pounds</source>
+        <translation type="unfinished">ポンド</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">拡大縮小</translation>
+    </message>
+    <message>
+        <source>Celsius</source>
+        <translation type="unfinished">摂氏 (℃)</translation>
+    </message>
+    <message>
+        <source>Fahrenheit</source>
+        <translation type="unfinished">華氏(℉)</translation>
+    </message>
+    <message>
+        <source>Seconds</source>
+        <translation type="unfinished">秒</translation>
+    </message>
+    <message>
+        <source>Minutes</source>
+        <translation type="unfinished">分間</translation>
+    </message>
+    <message>
+        <source>Hours</source>
+        <translation type="unfinished">時間</translation>
+    </message>
+    <message>
+        <source>Days</source>
+        <translation type="unfinished">日数</translation>
+    </message>
+    <message>
+        <source>British Imperial</source>
+        <translation type="unfinished">イギリス皇室システム</translation>
+    </message>
+    <message>
+        <source>MilliLiters</source>
+        <translation type="unfinished">ミリリットル</translation>
+    </message>
+    <message>
+        <source>Liters</source>
+        <translation type="unfinished">リットル</translation>
+    </message>
+    <message>
+        <source>Teaspoons</source>
+        <translation type="unfinished">小さじ</translation>
+    </message>
+    <message>
+        <source>Tablespoons</source>
+        <translation type="unfinished">大さじ</translation>
+    </message>
+    <message>
+        <source>Cups</source>
+        <translation type="unfinished">カップ</translation>
+    </message>
+    <message>
+        <source>Quarts</source>
+        <translation type="unfinished">クォート</translation>
+    </message>
+    <message>
+        <source>Gallons</source>
+        <translation type="unfinished">ガロン</translation>
+    </message>
+    <message>
+        <source>Barrels</source>
+        <translation type="unfinished">樽 (バレル)</translation>
     </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">このスタイルによって低過ぎ</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">このスタイルの範囲</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">このスタイルによって高過ぎ</translation>
     </message>
 </context>
 <context>
     <name>BtLabel</name>
     <message>
         <source>Color (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">色 (%1)</translation>
     </message>
 </context>
 <context>
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">読み込み中...</translation>
     </message>
 </context>
 <context>
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Brūvēšanas datums</translation>
+        <translation type="unfinished">醸成日付</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">スタイル</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">茹で時間</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Krāsa</translation>
+        <translation type="unfinished">色</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Lietot</translation>
+        <translation type="unfinished">使用</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Kategorija</translation>
+        <translation type="unfinished">カテゴリー</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation>Numurs</translation>
+        <translation type="unfinished">番号</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">手紙</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ガイド</translation>
     </message>
     <message>
         <source>PATH</source>
-        <translation>Ceļš</translation>
+        <translation type="unfinished">パス</translation>
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation>Pilns ceļš</translation>
+        <translation type="unfinished">フルパス</translation>
     </message>
     <message>
         <source>Could not copy</source>
@@ -445,99 +1088,67 @@
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation>Jauns</translation>
+        <translation type="unfinished">新規</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Recepte</translation>
+        <translation type="unfinished">レシピ</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation>Brūvē!</translation>
+        <translation type="unfinished">醸造!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation>Brūvēt velreiz</translation>
+        <translation type="unfinished">再び醸造</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation>Mainīt datumu</translation>
+        <translation type="unfinished">日付を変わる</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">能率を再計算</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Dzēst</translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Iekārtas</translation>
+        <translation type="unfinished">設備</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">発酵の材料</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ホップ</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">その他</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">スタイル</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酵母（イースト）</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォルダ</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">コピー</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete %1 %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BrewNote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">書き出し</translation>
     </message>
     <message>
         <source>To XML</source>
@@ -547,28 +1158,60 @@
         <source>To HTML</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">取り込む</translation>
+    </message>
+    <message>
+        <source>Cancel All</source>
+        <translation type="unfinished">すべてキャンセル</translation>
+    </message>
+    <message>
+        <source>Copy %1</source>
+        <translation type="unfinished">%1 をコピー</translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy of %1.</source>
+        <translation type="unfinished">%1 のコピーは別の名前を入力してください。</translation>
+    </message>
+    <message>
+        <source>An empty name will skip copying this %1.</source>
+        <translation type="unfinished">名前なしは%1をコピーすることはキャンセルとしてる。</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">%1 を削除</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">取り消し %1 %2?</translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished">ブルーメモ</translation>
+    </message>
 </context>
 <context>
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">変化ツール</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">入力</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">出力単位</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">出力</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">変換</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
@@ -586,19 +1229,19 @@
 <context>
     <name>Database</name>
     <message>
-        <source>Merge Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Database password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -617,20 +1260,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Equipment name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equipment name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Equipment Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Iekārtas</translation>
+        <translation type="unfinished">設備</translation>
     </message>
     <message>
         <source>Set as Default</source>
@@ -642,7 +1277,7 @@
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
@@ -780,6 +1415,14 @@
         <source>Calculation Warnings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Equipment name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equipment name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Fermentable</name>
@@ -807,14 +1450,6 @@
 <context>
     <name>FermentableDialog</name>
     <message>
-        <source>Fermentable name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentable name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fermentable Database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -824,7 +1459,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation>Jauns</translation>
+        <translation type="unfinished">新規</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -840,6 +1475,14 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentable name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentable name:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -898,27 +1541,19 @@
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yield %</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Color</source>
-        <translation>Krāsa</translation>
+        <source>Amount</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Method</source>
@@ -927,6 +1562,14 @@
     <message>
         <source>Addition</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yield %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">色</translation>
     </message>
 </context>
 <context>
@@ -975,14 +1618,6 @@
 <context>
     <name>HopDialog</name>
     <message>
-        <source>Hop name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hop name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hop Database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -992,7 +1627,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation>Jauns</translation>
+        <translation type="unfinished">新規</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -1010,17 +1645,17 @@
         <source>Remove selected ingredient</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Hop name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HopItemDelegate</name>
-    <message>
-        <source>Boil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Mash</source>
         <translation type="unfinished"></translation>
@@ -1030,7 +1665,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Boil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Aroma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1050,10 +1693,14 @@
     <name>HopTableModel</name>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Alpha %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1062,19 +1709,15 @@
     </message>
     <message>
         <source>Use</source>
-        <translation>Lietot</translation>
+        <translation type="unfinished">使用</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Laiks</translation>
+        <translation type="unfinished">時間</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
 </context>
 <context>
@@ -1097,7 +1740,7 @@
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">変換</translation>
     </message>
     <message>
         <source>Measured gravity</source>
@@ -1162,31 +1805,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>HTML files (*.html)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select Database File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Brewtarget Database (*.sqlite)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Recipe name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recipe name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error copying recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error was returned while creating %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-whitespace character in it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A folder name must have at least one non-/ character in it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1210,7 +1861,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Choose File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SQLite (*.sqlite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>For some reason, the operation failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1238,11 +1905,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Restart</source>
+        <source>HTML files (*.html)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please restart Brewtarget.</source>
+        <source>Database Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Database File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brewtarget Database (*.sqlite)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1262,14 +1941,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Choose File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The database has been converted/upgraded.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1279,34 +1950,6 @@
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Folder name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Folder name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A folder name must have at least one non-/ character in it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error copying recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>An error was returned while creating %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1357,11 +2000,11 @@
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -1377,13 +2020,29 @@
     </message>
     <message>
         <source>Time</source>
-        <translation>Laiks</translation>
+        <translation type="unfinished">時間</translation>
     </message>
 </context>
 <context>
     <name>MashWizard</name>
     <message>
+        <source>No steps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There must be at least one mash step to run the wizard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Mash thickness (%1/%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decoction error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Something went wrong in decoction calculation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1392,14 +2051,6 @@
     </message>
     <message>
         <source>You must have a positive mash thickness.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No steps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There must be at least one mash step to run the wizard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1419,14 +2070,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Decoction error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Something went wrong in decoction calculation.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sparge temp.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1435,19 +2078,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Too much wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Batch Sparge %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fly Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Too much wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1509,14 +2152,6 @@
 <context>
     <name>MiscDialog</name>
     <message>
-        <source>Misc name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Misc name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Misc Database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1526,7 +2161,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation>Jauns</translation>
+        <translation type="unfinished">新規</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -1542,6 +2177,14 @@
     </message>
     <message>
         <source>Remove selected ingredient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc name:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1604,19 +2247,23 @@
     <name>MiscTableModel</name>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Lietot</translation>
+        <translation type="unfinished">使用</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Laiks</translation>
+        <translation type="unfinished">時間</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Amount</source>
@@ -1626,85 +2273,9 @@
         <source>Amount Type</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>OptionDialog</name>
-    <message>
-        <source>Open Directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy Data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restart</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please restart Brewtarget.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Catalan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dutch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Portuguese</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>SI units</source>
         <translation type="unfinished"></translation>
@@ -1719,11 +2290,11 @@
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Celsija</translation>
+        <translation type="unfinished">摂氏 (℃)</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Fārenheita</translation>
+        <translation type="unfinished">華氏(℉)</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
@@ -1735,23 +2306,23 @@
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">月ー日ー年　(mm-dd-YYYY）</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">日ー月ー年　(dd-mm-YYYY)</translation>
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">年ー月ー日　(YYYY-mm-dd)</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">標準参照法（SRM)</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">EBC</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -1786,7 +2357,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Catalan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Danish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spanish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1798,6 +2393,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Galician</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1806,11 +2405,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Latvian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Norwegian Bokmål</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1823,6 +2442,14 @@
     </message>
     <message>
         <source>Turkish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1842,18 +2469,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Please restart brewtarget to connect to the new database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source>Invalid color formula type: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unrecognized IBU formula type. %1</source>
+        <source>Error attempting to create directory &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1865,15 +2504,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New Version</source>
+        <source>Data directory &quot;%1&quot; is missing.  Some features will be unavaliable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Version %1 is now available. Download it?</source>
+        <source>Recipes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Stop bothering you about new versions?</source>
+        <source>Equipment</source>
+        <translation type="unfinished">設備</translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished">酵母（イースト）</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">スタイル</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished">フォルダ</translation>
+    </message>
+    <message>
+        <source>Invalid color formula type: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1882,6 +2549,10 @@
     </message>
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to update the database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1905,6 +2576,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Unrecognized IBU formula type. %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version %1 is now available. Download it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop bothering you about new versions?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Infusion</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1914,6 +2601,30 @@
     </message>
     <message>
         <source>Decoction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fly Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection to database was successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plaintext</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1968,80 +2679,12 @@
         <source>Very High</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Recipes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>Iekārtas</translation>
-    </message>
-    <message>
-        <source>Fermentables</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hops</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to update the database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error attempting to create directory &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Data directory &quot;%1&quot; is missing.  Some features will be unavaliable.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fly Sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Batch Sparge</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection Test</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection to database was successful</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Plaintext</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">穀物を追加</translation>
     </message>
     <message>
         <source>Add </source>
@@ -2053,14 +2696,10 @@
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">沸かし湯</translation>
     </message>
     <message>
         <source>Bring </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 water to %2, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2160,6 +2799,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Raise water to boil and then remove from heat. Stir in  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Extracts to water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>to the boil at knockout.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2251,11 +2898,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Raise water to boil and then remove from heat. Stir in  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Extracts to water</source>
+        <source>%1 water to %2, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2274,28 +2917,32 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Brewer</source>
+        <source>Fermentables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation>Datums</translation>
-    </message>
-    <message>
-        <source>Batch Size</source>
+        <source>Hops</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Boil Size</source>
+        <source>Miscs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Boil Time</source>
+        <source>Yeasts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Efficiency</source>
+        <source>Mash</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">メモ</translation>
+    </message>
+    <message>
+        <source>Instructions</source>
+        <translation type="unfinished">手順</translation>
     </message>
     <message>
         <source>OG</source>
@@ -2306,43 +2953,39 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>ABV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Color</source>
-        <translation>Krāsa</translation>
+        <translation type="unfinished">色</translation>
     </message>
     <message>
-        <source>Fermentables</source>
+        <source>IBU</source>
+        <translation type="unfinished">苦味（IBU)</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished">カテゴリー</translation>
+    </message>
+    <message>
+        <source>Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Total grain:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation>Nosaukums</translation>
+        <source>Guide</source>
+        <translation type="unfinished">ガイド</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
-        <source>Amount</source>
+        <source>Preboil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BoilTime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Late</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yield</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2354,7 +2997,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hops</source>
+        <source>Yield</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2362,28 +3005,104 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use</source>
-        <translation>Lietot</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation>Laiks</translation>
+        <source>Beta</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Form</source>
+        <translation type="unfinished">フォーム</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation type="unfinished">使用</translation>
+    </message>
+    <message>
+        <source>Lab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>IBU</source>
+        <source>Attenuation</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flocculation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">日付</translation>
+    </message>
+    <message>
+        <source>Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">茹で時間</translation>
+    </message>
+    <message>
+        <source>Efficiency</source>
+        <translation type="unfinished">能率</translation>
+    </message>
+    <message>
+        <source>ABV</source>
+        <translation type="unfinished">アルコール容積</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 33 cl)</source>
+        <translation type="unfinished">カロリー予報 (33clに対して）</translation>
+    </message>
+    <message>
+        <source>Estimated calories (per 12 oz)</source>
+        <translation type="unfinished">カロリー検討 (354mlの分)</translation>
+    </message>
+    <message>
+        <source>Bitterness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">名前</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Late</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total grain:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">時間</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">その他</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酵母（イースト）</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -2398,10 +3117,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Temp</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2410,20 +3125,12 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Notes</source>
-        <translation>Piezīmes</translation>
-    </message>
-    <message>
-        <source>Instructions</source>
-        <translation>Instrukcijas</translation>
+        <source>Target</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Brūvēšanas datums</translation>
-    </message>
-    <message>
-        <source>Preboil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">醸成日付</translation>
     </message>
     <message>
         <source>SG</source>
@@ -2478,74 +3185,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Print Document</source>
-        <translation>Drukāt dokumentu</translation>
-    </message>
-    <message>
-        <source>Category</source>
-        <translation>Kategorija</translation>
-    </message>
-    <message>
-        <source>Code</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BoilTime</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Beta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attenuation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Flocculation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Miscs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeasts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bitterness</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Target</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Hostname</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2568,6 +3207,10 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Saved Password</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print Document</source>
+        <translation type="unfinished">ドキュメントの印刷</translation>
     </message>
 </context>
 <context>
@@ -2785,19 +3428,19 @@ The final volume in the primary is %1.</source>
 <context>
     <name>TimerWidget</name>
     <message>
-        <source>Open Sound</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Notes...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source> and </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2821,7 +3464,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -2855,14 +3498,6 @@ The final volume in the primary is %1.</source>
 <context>
     <name>YeastDialog</name>
     <message>
-        <source>Yeast name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yeast Database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2872,7 +3507,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>New</source>
-        <translation>Jauns</translation>
+        <translation type="unfinished">新規</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -2888,6 +3523,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Remove selected ingredient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast name:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2942,14 +3585,18 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Form</source>
+        <translation type="unfinished">フォーム</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2964,16 +3611,12 @@ The final volume in the primary is %1.</source>
         <source>Product ID</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
@@ -2985,7 +3628,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -3028,7 +3671,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Instrukcijas</translation>
+        <translation type="unfinished">手順</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
@@ -3060,7 +3703,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Name of new step</source>
@@ -3085,6 +3728,10 @@ The final volume in the primary is %1.</source>
 </context>
 <context>
     <name>brewNoteWidget</name>
+    <message>
+        <source>brewNote</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Preboil</source>
         <translation type="unfinished"></translation>
@@ -3147,7 +3794,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">発酵容器の容量</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
@@ -3167,6 +3814,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>yyyy-dd-MM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3207,19 +3858,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">アルコール容積</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Piezīmes</translation>
-    </message>
-    <message>
-        <source>brewNote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">メモ</translation>
     </message>
 </context>
 <context>
@@ -3233,15 +3876,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>equipmentEditor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Kettle to fermenter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>equipmentEditor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3257,11 +3900,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Grain</source>
@@ -3284,6 +3927,10 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3296,6 +3943,10 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Color</source>
+        <translation type="unfinished">色</translation>
+    </message>
+    <message>
         <source>Lovibond rating</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3305,6 +3956,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3381,23 +4040,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Piezīmes:</translation>
-    </message>
-    <message>
-        <source>Default Amount</source>
-        <translation>Noklusējuma daudzums</translation>
-    </message>
-    <message>
-        <source>Amount in Inventory</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Krāsa</translation>
     </message>
 </context>
 <context>
@@ -3412,7 +4055,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
@@ -3423,12 +4066,16 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Default Amount </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Lietot</translation>
+        <translation type="unfinished">使用</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -3452,11 +4099,19 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation>Laiks</translation>
+        <translation type="unfinished">時間</translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Bittering</source>
@@ -3468,7 +4123,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>Leaf</source>
@@ -3540,18 +4195,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Piezīmes:</translation>
-    </message>
-    <message>
-        <source>Default Amount </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amount in inventory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3559,7 +4202,7 @@ The final volume in the primary is %1.</source>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>Show a timer</source>
@@ -3605,15 +4248,23 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>tab_recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Recipe</source>
-        <translation>Recepte</translation>
+        <translation type="unfinished">レシピ</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Name of recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Boil Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3638,30 +4289,26 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">スタイル</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">茹で時間</translation>
     </message>
     <message>
         <source>Target batch size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Equipment</source>
+        <translation type="unfinished">設備</translation>
+    </message>
+    <message>
         <source>Target Batch Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Equipment</source>
-        <translation>Iekārtas</translation>
-    </message>
-    <message>
-        <source>Target Boil Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OG</source>
+        <source>Calories/12oz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3669,27 +4316,31 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>FG</source>
+        <source>1.0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">アルコール容積</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">色</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Color</source>
-        <translation>Krāsa</translation>
-    </message>
-    <message>
-        <source>IBU/GU</source>
+        <source>OG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Calories/12oz</source>
+        <source>FG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IBU/GU</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3742,7 +4393,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">酵母（イースト）</translation>
     </message>
     <message>
         <source>Add yeast</source>
@@ -3850,7 +4501,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ブルーターギットについて</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -4045,15 +4696,7 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>1.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>tab_recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4072,16 +4715,20 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Nosaukums</translation>
+        <source>&amp;Name</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation type="vanished">Veids</translation>
+        <source>&amp;Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tar&amp;get temp.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Laiks</translation>
+        <translation type="unfinished">時間</translation>
     </message>
     <message>
         <source>Next</source>
@@ -4131,18 +4778,6 @@ The final volume in the primary is %1.</source>
         <source>thickness</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>&amp;Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tar&amp;get temp.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>mashEditor</name>
@@ -4152,7 +4787,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -4172,7 +4807,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Piezīmes</translation>
+        <translation type="unfinished">メモ</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -4211,11 +4846,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -4263,7 +4898,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation>Laiks</translation>
+        <translation type="unfinished">時間</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
@@ -4293,10 +4928,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Mash thickness (L/kg)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>No Spar&amp;ge</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4306,6 +4937,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Ba&amp;tch Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash thickness (L/kg)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4321,11 +4956,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Spice</source>
@@ -4353,7 +4988,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Use</source>
-        <translation>Lietot</translation>
+        <translation type="unfinished">使用</translation>
     </message>
     <message>
         <source>Boil</source>
@@ -4377,7 +5012,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Time</source>
-        <translation>Laiks</translation>
+        <translation type="unfinished">時間</translation>
+    </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Amount</source>
@@ -4396,23 +5035,19 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use for:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes:</source>
-        <translation>Piezīmes:</translation>
-    </message>
-    <message>
-        <source>Default Amount</source>
-        <translation>Noklusējuma daudzums</translation>
-    </message>
-    <message>
         <source>Amount in Inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use for:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4432,7 +5067,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -4452,7 +5087,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Piezīmes</translation>
+        <translation type="unfinished">メモ</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -4503,7 +5138,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">入力</translation>
     </message>
     <message>
         <source>SG</source>
@@ -4535,7 +5170,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Plato</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">プラート</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
@@ -4551,6 +5186,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Output</source>
+        <translation type="unfinished">出力</translation>
+    </message>
+    <message>
+        <source>ogAdjuster</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4581,10 +5220,6 @@ The final volume in the primary is %1.</source>
         <source>Calculate</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>ogAdjuster</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>optionsDialog</name>
@@ -4605,14 +5240,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Celsius</source>
-        <translation type="vanished">Celsija</translation>
-    </message>
-    <message>
-        <source>Fahrenheit</source>
-        <translation type="vanished">Fārenheita</translation>
-    </message>
-    <message>
         <source>Volume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4621,28 +5248,36 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Date</source>
+        <translation type="unfinished">日付</translation>
+    </message>
+    <message>
         <source>Color</source>
-        <translation>Krāsa</translation>
+        <translation type="unfinished">色</translation>
     </message>
     <message>
         <source>Formulas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>IBU</source>
+        <source>Forumulas</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IBU</source>
+        <translation type="unfinished">苦味（IBU)</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Browse</source>
+        <source>Mash Hop (%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="vanished">Noklusējuma</translation>
+        <source>First Wort (%)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Language</source>
@@ -4656,22 +5291,6 @@ The final volume in the primary is %1.</source>
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Datums</translation>
-    </message>
-    <message>
-        <source>Forumulas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort (%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4728,6 +5347,10 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Data Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4791,14 +5414,22 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">入力</translation>
     </message>
     <message>
         <source>Wort Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Volume of wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>OG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starting gravity of the wort</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4822,6 +5453,10 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Aeration method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4834,11 +5469,23 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Production date (Best By date less three months)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>MM/dd/yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Estimated viability of the yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desired pitch rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4854,51 +5501,15 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Output</source>
+        <source>Number of vials/smack packs added to starter</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation type="unfinished">出力</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source># Vials/Smack Packs w/o Starter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dry Yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starter Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Aeration method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of vials/smack packs added to starter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4906,11 +5517,23 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source># Vials/Smack Packs w/o Starter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Dry Yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starter Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4926,7 +5549,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">入力</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
@@ -4970,7 +5593,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">出力</translation>
     </message>
     <message>
         <source>Prime with</source>
@@ -4989,7 +5612,7 @@ The final volume in the primary is %1.</source>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>Brewer</source>
@@ -5053,7 +5676,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Piezīmes</translation>
+        <translation type="unfinished">メモ</translation>
     </message>
 </context>
 <context>
@@ -5071,11 +5694,23 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Measured original plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>OG (20 C)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Measured original gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Current Plato</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current measured plato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5092,7 +5727,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">アルコール容積</translation>
     </message>
     <message>
         <source>ABW</source>
@@ -5108,18 +5743,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG (20C)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Current measured plato</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5194,7 +5817,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">スタイル</translation>
     </message>
     <message>
         <source>Delete selected style</source>
@@ -5206,11 +5829,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Kategorija</translation>
+        <translation type="unfinished">カテゴリー</translation>
     </message>
     <message>
         <source>Category number</source>
@@ -5226,7 +5849,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Type of beverage</source>
@@ -5306,11 +5929,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Piezīmes</translation>
+        <translation type="unfinished">メモ</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Jauns</translation>
+        <translation type="unfinished">新規</translation>
     </message>
     <message>
         <source>Save</source>
@@ -5332,7 +5955,7 @@ The final volume in the primary is %1.</source>
     <name>timerWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>Add:</source>
@@ -5359,11 +5982,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Piezīmes</translation>
+        <translation type="unfinished">メモ</translation>
     </message>
 </context>
 <context>
@@ -5378,11 +6001,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nosaukums</translation>
+        <translation type="unfinished">名前</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Veids</translation>
+        <translation type="unfinished">種類</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -5406,7 +6029,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>Liquid</source>
@@ -5425,6 +6048,10 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5438,6 +6065,14 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5522,18 +6157,6 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Piezīmes:</translation>
-    </message>
-    <message>
-        <source>Default Amount</source>
-        <translation>Noklusējuma daudzums</translation>
-    </message>
-    <message>
-        <source>Quanta in Inventory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Quanta in inventory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1,19 +1,12 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 20:57+0000\n"
-"PO-Revision-Date: 2015-10-04 21:57+0000\n"
-"Last-Translator: Philip <Unknown>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-01-10 19:56+0000\n"
-"X-Generator: Launchpad (build 17881)\n"
-"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
 "X-Language: cs_CZ\n"
 "X-Source-Language: en\n"
+"X-Qt-Contexts: true\n"
 
 msgctxt "AboutDialog|"
 msgid "About Brewtarget"
@@ -124,9 +117,10 @@ msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
+#, fuzzy
 msgctxt "BrewDayScrollWidget|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Kalorická hodnota (na 340 g)"
 
 msgctxt "BrewDayWidget|"
 msgid "Style"
@@ -426,6 +420,15 @@ msgctxt "BtTreeModel|"
 msgid "FULLPATH"
 msgstr ""
 
+msgctxt "BtTreeModel|"
+msgid "Could not copy"
+msgstr ""
+
+#, qt-format
+msgctxt "BtTreeModel|"
+msgid "There was an unexpected error creating %1"
+msgstr ""
+
 msgctxt "BtTreeView|"
 msgid "New"
 msgstr "Nový"
@@ -527,6 +530,14 @@ msgctxt "BtTreeView|"
 msgid "An empty name will skip copying this %1."
 msgstr ""
 
+msgctxt "BtTreeView|"
+msgid "To XML"
+msgstr ""
+
+msgctxt "BtTreeView|"
+msgid "To HTML"
+msgstr ""
+
 msgctxt "ConverterTool|"
 msgid "Converter Tool"
 msgstr "Převodník"
@@ -571,18 +582,35 @@ msgstr ""
 "Možná jsou k dispozici nové přísady a recepty. Chcete je přidat do své "
 "databáze?"
 
+msgctxt "Database|"
+msgid "Database password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Password"
+msgstr ""
+
+msgctxt "Database|"
+msgid "Connection failed"
+msgstr ""
+
+#, qt-format
+msgctxt "Database|"
+msgid "Could not connect to %1 : %2"
+msgstr ""
+
 #, qt-format
 msgctxt "EquipmentEditor|"
 msgid "Grain absorption (%1/%2)"
 msgstr "Nasákavost sladu (%1/%2)"
 
-msgctxt "EquipmentEditor|"
-msgid "Tun Volume Warning"
-msgstr "Varování objemu kádě"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Tun Volume Warning"
+#~ msgstr "Varování objemu kádě"
 
-msgctxt "EquipmentEditor|"
-msgid "Batch Size Warning"
-msgstr "Varování objemu várky"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Batch Size Warning"
+#~ msgstr "Varování objemu várky"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment name"
@@ -592,22 +620,22 @@ msgctxt "EquipmentEditor|"
 msgid "Equipment name:"
 msgstr "Název vybavení:"
 
-msgctxt "EquipmentEditor|"
-msgid "The tun volume you entered is 0. This may cause problems"
-msgstr "Zadaný objem pánve je nulový což může způsobit potíže"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The tun volume you entered is 0. This may cause problems"
+#~ msgstr "Zadaný objem pánve je nulový což může způsobit potíže"
 
-msgctxt "EquipmentEditor|"
-msgid "The batch size you entered is 0. This may cause problems"
-msgstr "Zadaná velikost várky je nulová což může způsobit potíže"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "The batch size you entered is 0. This may cause problems"
+#~ msgstr "Zadaná velikost várky je nulová což může způsobit potíže"
 
-msgctxt "EquipmentEditor|"
-msgid "Hop Utilization Warning"
-msgstr "Varování výtěžnosti chmele"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid "Hop Utilization Warning"
+#~ msgstr "Varování výtěžnosti chmele"
 
-msgctxt "EquipmentEditor|"
-msgid ""
-"The hop utilization percentage you entered is 0. This may cause problems"
-msgstr "Zadaná výtěžnost chmele je nulová což může způsobit potíže"
+#~ msgctxt "EquipmentEditor|"
+#~ msgid ""
+#~ "The hop utilization percentage you entered is 0. This may cause problems"
+#~ msgstr "Zadaná výtěžnost chmele je nulová což může způsobit potíže"
 
 msgctxt "EquipmentEditor|"
 msgid "Equipment Editor"
@@ -745,9 +773,34 @@ msgctxt "EquipmentEditor|"
 msgid "Cancel"
 msgstr "Zrušit"
 
+msgctxt "EquipmentEditor|"
+msgid "This equipment profile may break brewtarget's maths"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "The following values are not set:"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "mash tun volume (all-grain and BIAB only)"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "batch size"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "hop utilization"
+msgstr ""
+
+msgctxt "EquipmentEditor|"
+msgid "Calculation Warnings"
+msgstr ""
+
+#, fuzzy
 msgctxt "Fermentable|"
 msgid "Mashed"
-msgstr ""
+msgstr "Šrotovaný"
 
 msgctxt "Fermentable|"
 msgid "Steeped"
@@ -757,9 +810,10 @@ msgctxt "Fermentable|"
 msgid "Not mashed"
 msgstr ""
 
+#, fuzzy
 msgctxt "Fermentable|"
 msgid "Late"
-msgstr ""
+msgstr "Pozdní"
 
 msgctxt "Fermentable|"
 msgid "Normal"
@@ -821,9 +875,10 @@ msgctxt "FermentableItemDelegate|"
 msgid "Adjunct"
 msgstr "Surogát"
 
+#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Mashed"
-msgstr ""
+msgstr "Šrotovaný"
 
 msgctxt "FermentableItemDelegate|"
 msgid "Steeped"
@@ -837,9 +892,10 @@ msgctxt "FermentableItemDelegate|"
 msgid "Normal"
 msgstr ""
 
+#, fuzzy
 msgctxt "FermentableItemDelegate|"
 msgid "Late"
-msgstr ""
+msgstr "Pozdní"
 
 #, qt-format
 msgctxt "FermentableTableModel|"
@@ -1018,6 +1074,36 @@ msgstr "Forma"
 msgctxt "HopTableModel|"
 msgid "Inventory"
 msgstr "Sklad"
+
+msgctxt "HydrometerTool|"
+msgid "Hydrometer Tool"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "SG Reading"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Temperature"
+msgstr "Teplota"
+
+msgctxt "HydrometerTool|"
+msgid "Adjust SG"
+msgstr ""
+
+#, fuzzy
+msgctxt "HydrometerTool|"
+msgid "Convert"
+msgstr "Převést"
+
+msgctxt "HydrometerTool|"
+msgid "Measured gravity"
+msgstr ""
+
+msgctxt "HydrometerTool|"
+msgid "Corrected gravity"
+msgstr ""
 
 msgctxt "IbuGuSlider|"
 msgid "Cloying"
@@ -1224,6 +1310,15 @@ msgctxt "MainWindow|"
 msgid "A folder name must have at least one non-/ character in it"
 msgstr "Název adresáře musí obsahovat alespoň jeden nelomítkový znak"
 
+msgctxt "MainWindow|"
+msgid "Error copying recipe"
+msgstr ""
+
+#, qt-format
+msgctxt "MainWindow|"
+msgid "An error was returned while creating %1"
+msgstr ""
+
 msgctxt "MashDesigner|"
 msgid "No Fermentables"
 msgstr "Žádné suroviny"
@@ -1240,8 +1335,7 @@ msgctxt "MashDesigner|"
 msgid ""
 "You have not set an equipment for this recipe. We really cannot continue "
 "without one."
-msgstr ""
-"Tento recept nemá stanovné žádné vybavení. Bez něj to opravdu nepůjde."
+msgstr "Tento recept nemá stanovné žádné vybavení. Bez něj to opravdu nepůjde."
 
 msgctxt "MashDesigner|"
 msgid "Tun Temp"
@@ -1364,57 +1458,78 @@ msgstr ""
 "Doporučujeme zvýšit  odpar prodloužením času vaření nebo snížit hustotu "
 "rmutu."
 
+#, qt-format
+msgctxt "MashWizard|"
+msgid "Batch Sparge %1"
+msgstr ""
+
+msgctxt "MashWizard|"
+msgid "Fly Sparge"
+msgstr ""
+
+#, fuzzy
 msgctxt "Misc|"
 msgid "Spice"
-msgstr ""
+msgstr "Koření"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Fining"
-msgstr ""
+msgstr "Čeření"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Water Agent"
-msgstr ""
+msgstr "Úprava vody"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Herb"
-msgstr ""
+msgstr "Bylina"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Flavor"
-msgstr ""
+msgstr "Příchuť"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Other"
-msgstr ""
+msgstr "Jiný"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Boil"
-msgstr ""
+msgstr "Chmelovar"
 
 msgctxt "Misc|"
 msgid "Mash"
 msgstr ""
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Primary"
-msgstr ""
+msgstr "Hlavní kvašení"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Secondary"
-msgstr ""
+msgstr "Dokvašování"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Bottling"
-msgstr ""
+msgstr "Stáčení"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Weight"
-msgstr ""
+msgstr "Hmotnost"
 
+#, fuzzy
 msgctxt "Misc|"
 msgid "Volume"
-msgstr ""
+msgstr "Objem"
 
 msgctxt "MiscDialog|"
 msgid "Misc name"
@@ -1496,13 +1611,15 @@ msgctxt "MiscItemDelegate|"
 msgid "Bottling"
 msgstr "Stáčení"
 
+#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Weight"
-msgstr ""
+msgstr "Hmotnost"
 
+#, fuzzy
 msgctxt "MiscItemDelegate|"
 msgid "Volume"
-msgstr ""
+msgstr "Objem"
 
 msgctxt "MiscTableModel|"
 msgid "Name"
@@ -1607,6 +1724,162 @@ msgctxt "OptionDialog|"
 msgid "Chinese"
 msgstr "Čínština"
 
+msgctxt "OptionDialog|"
+msgid "SI units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "US traditional units"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "British imperial units"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Celsius"
+msgstr "Stupně Celsia"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Fahrenheit"
+msgstr "Fahrenheity"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "20C/20C Specific Gravity"
+msgstr "Poměr hustot 20C/20C"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Plato/Brix/Balling"
+msgstr "Plato/Brix/Balling"
+
+msgctxt "OptionDialog|"
+msgid "mm-dd-YYYY"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "dd-mm-YYYY"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "YYYY-mm-dd"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "SRM"
+msgstr "SRM"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "EBC"
+msgstr "EBC"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Tinseth's approximation"
+msgstr "Tinsethův odhad"
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Rager's approximation"
+msgstr "Ragerův odhad"
+
+msgctxt "OptionDialog|"
+msgid "Noonan's approximation"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Mosher's approximation"
+msgstr "Mosherův odhad"
+
+msgctxt "OptionDialog|"
+msgid "Daniel's approximation"
+msgstr ""
+
+#, fuzzy
+msgctxt "OptionDialog|"
+msgid "Morey's approximation"
+msgstr "Moreyho odhad"
+
+msgctxt "OptionDialog|"
+msgid "SQLite (default)"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "PostgreSQL"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Danish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Estonian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Basque"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Galician"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Hungarian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Latvian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Norwegian Bokmål"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Serbian"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Swedish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Turkish"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Test connection or cancel"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Saving the options without testing the connection can cause brewtarget to "
+"not restart. Your changes have been discarded, which is likely really, "
+"really crappy UX. Please open a bug explaining exactly how you got to this "
+"message."
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid ""
+"Would you like brewtarget to transfer your data to the new database? NOTE: "
+"If you've already loaded the data, say No"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Transfer database"
+msgstr ""
+
+msgctxt "OptionDialog|"
+msgid "Please restart brewtarget to connect to the new database"
+msgstr ""
+
 #, qt-format
 msgctxt "QObject|"
 msgid "Invalid color formula type: %1"
@@ -1648,67 +1921,67 @@ msgctxt "QObject|"
 msgid "Failed to open the database '%1'."
 msgstr "Nepodařilo se otevřít databázi '%1'."
 
-msgctxt "QObject|"
-msgid "Save Database Changes"
-msgstr "Uložit změny databáze"
+#~ msgctxt "QObject|"
+#~ msgid "Save Database Changes"
+#~ msgstr "Uložit změny databáze"
 
-msgctxt "QObject|"
-msgid "Would you like to save the changes you made?"
-msgstr "Chcete uložit změny, které jste provedli?"
+#~ msgctxt "QObject|"
+#~ msgid "Would you like to save the changes you made?"
+#~ msgstr "Chcete uložit změny, které jste provedli?"
 
-msgctxt "QObject|"
-msgid "Multiple Databases Found"
-msgstr "Nalezeno více databází"
+#~ msgctxt "QObject|"
+#~ msgid "Multiple Databases Found"
+#~ msgstr "Nalezeno více databází"
 
-msgctxt "QObject|"
-msgid ""
-"Multiple databases were found.  Do you want to restore the changes you made "
-"during your last Brewtarget session, or rollback to before last session's "
-"changes?"
-msgstr ""
-"Bylo nalezeno více databází.  Chcete obnovit změny, které jste provedli při "
-"posledním použití Brewtargetu nebo je vrátit zpět?"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Multiple databases were found.  Do you want to restore the changes you "
+#~ "made during your last Brewtarget session, or rollback to before last "
+#~ "session's changes?"
+#~ msgstr ""
+#~ "Bylo nalezeno více databází.  Chcete obnovit změny, které jste provedli "
+#~ "při posledním použití Brewtargetu nebo je vrátit zpět?"
 
-msgctxt "QObject|"
-msgid "Restore"
-msgstr "Obnovit"
+#~ msgctxt "QObject|"
+#~ msgid "Restore"
+#~ msgstr "Obnovit"
 
-msgctxt "QObject|"
-msgid "Rollback"
-msgstr "Vrátit zpět"
-
-#, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to remove the temporary backup database.  Navigate to '%1' and remove "
-"'tempBackupDatabase.sqlite'."
-msgstr ""
-"Nepodařilo se odstranit dočasnou záložní databázi.  Přejděte do '%1' a "
-"odstraňte 'tempBackupDatabase.sqlite' ručně."
+#~ msgctxt "QObject|"
+#~ msgid "Rollback"
+#~ msgstr "Vrátit zpět"
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to rollback to the backup database.  Navigate to '%1', remove "
-"'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
-"'database.sqlite'."
-msgstr ""
-"Nepodařilo se vrátit zpět dočasnou záložní databázi.  Přejděte do '%1' a "
-"odstraňte 'database.sqlite', pokud existuje. Poté přejmenujete "
-"'tempBackupDatabase.sqlite' na 'database.sqlite'."
-
-msgctxt "QObject|"
-msgid "Database Restore Failure"
-msgstr "Obnovení databáze selhalo"
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to remove the temporary backup database.  Navigate to '%1' and "
+#~ "remove 'tempBackupDatabase.sqlite'."
+#~ msgstr ""
+#~ "Nepodařilo se odstranit dočasnou záložní databázi.  Přejděte do '%1' a "
+#~ "odstraňte 'tempBackupDatabase.sqlite' ručně."
 
 #, qt-format
-msgctxt "QObject|"
-msgid ""
-"Failed to restore the backup database. Navigate to '%1' and rename "
-"'tempBackupDatabase.sqlite' to 'database.sqlite'."
-msgstr ""
-"Nepodařilo se obnovit záložní databázi. Přejděte do '%1' a přejmenujte "
-"'tempBackupDatabase.sqlite' na 'database.sqlite' ručně."
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to rollback to the backup database.  Navigate to '%1', remove "
+#~ "'database.sqlite' if it exists, and rename 'tempBackupDatabase.sqlite' to "
+#~ "'database.sqlite'."
+#~ msgstr ""
+#~ "Nepodařilo se vrátit zpět dočasnou záložní databázi.  Přejděte do '%1' a "
+#~ "odstraňte 'database.sqlite', pokud existuje. Poté přejmenujete "
+#~ "'tempBackupDatabase.sqlite' na 'database.sqlite'."
+
+#~ msgctxt "QObject|"
+#~ msgid "Database Restore Failure"
+#~ msgstr "Obnovení databáze selhalo"
+
+#, qt-format
+#~ msgctxt "QObject|"
+#~ msgid ""
+#~ "Failed to restore the backup database. Navigate to '%1' and rename "
+#~ "'tempBackupDatabase.sqlite' to 'database.sqlite'."
+#~ msgstr ""
+#~ "Nepodařilo se obnovit záložní databázi. Přejděte do '%1' a přejmenujte "
+#~ "'tempBackupDatabase.sqlite' na 'database.sqlite' ručně."
 
 msgctxt "QObject|"
 msgid "Grain"
@@ -1828,6 +2101,44 @@ msgstr "Adresář"
 
 msgctxt "QObject|"
 msgid "Failed to update the database"
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Error attempting to create directory \"%1\""
+msgstr ""
+
+#, qt-format
+msgctxt "QObject|"
+msgid "Data directory \"%1\" is missing.  Some features will be unavaliable."
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Fly Sparge"
+msgstr ""
+
+#, fuzzy
+msgctxt "QObject|"
+msgid "Batch Sparge"
+msgstr "Vyslazení"
+
+msgctxt "QObject|"
+msgid "Connection Test"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Connection to database was successful"
+msgstr ""
+
+msgctxt "QObject|"
+msgid "Plaintext"
+msgstr ""
+
+msgctxt "QObject|"
+msgid ""
+"Passwords are saved in plaintext. We make no effort to hide, obscure or "
+"otherwise protect the password. By enabling this option, you take full "
+"responsibility for any potential problems."
 msgstr ""
 
 msgctxt "Recipe|"
@@ -2347,21 +2658,24 @@ msgctxt "RecipeFormatter|"
 msgid "Flocculation"
 msgstr "Flokulace"
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Miscs"
-msgstr ""
+msgstr "Přípravky"
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Yeasts"
-msgstr ""
+msgstr "Kvasnice"
 
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 33 cl)"
 msgstr ""
 
+#, fuzzy
 msgctxt "RecipeFormatter|"
 msgid "Estimated calories (per 12 oz)"
-msgstr ""
+msgstr "Kalorická hodnota (na 340 g)"
 
 msgctxt "RecipeFormatter|"
 msgid "Bitterness"
@@ -2369,6 +2683,34 @@ msgstr ""
 
 msgctxt "RecipeFormatter|"
 msgid "Target"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Total"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Port"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Database"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Username"
+msgstr ""
+
+msgctxt "RecipeFormatter|"
+msgid "Saved Password"
 msgstr ""
 
 msgctxt "RefractoDialog|"
@@ -2433,6 +2775,154 @@ msgctxt "StyleEditor|"
 msgid "Style name:"
 msgstr "Název stylu:"
 
+msgctxt "TimerDialog|"
+msgid "Addition Timer"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Addition Time(min):"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Time Remaining:"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes: "
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Set Alarm sound"
+msgstr ""
+
+msgctxt "TimerDialog|"
+msgid "Stop Alarm"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerDialog|"
+msgid "Cancel"
+msgstr "Zrušit"
+
+msgctxt "TimerListDialog|"
+msgid "Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Main Boil Timer"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add Timer"
+msgstr ""
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Start"
+msgstr "Spustit"
+
+#, fuzzy
+msgctxt "TimerMainDialog|"
+msgid "Stop"
+msgstr "Zastavit"
+
+msgctxt "TimerMainDialog|"
+msgid "Reset"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Hide Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Show Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Cancel Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Load Current Recipe"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Timer (mins):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Set Boil Time Here"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Limit Alarm Ring Time "
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Alarm Ring Time (secs):"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are currently no timers to show."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "KNOCKOUT"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Active Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid ""
+"You currently have active timers, would you like to replace them or add to "
+"them?"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Replace"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Add"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 of %2"
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop addition is already timed and has been ignored."
+msgstr ""
+
+#, qt-format
+msgctxt "TimerMainDialog|"
+msgid "%1 hop additions are already timed and have been ignored."
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "Duplicate Timers Ignored"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "No Addition Timers"
+msgstr ""
+
+msgctxt "TimerMainDialog|"
+msgid "There are no boil addition, no timers generated."
+msgstr ""
+
 msgctxt "TimerWidget|"
 msgid "Open Sound"
 msgstr "Otevřít zvuk"
@@ -2441,37 +2931,53 @@ msgctxt "TimerWidget|"
 msgid "Audio Files (*.wav *.ogg *.mp3 *.aiff)"
 msgstr "Zvukové soubory (*.wav *.ogg *.mp3 *.aiff)"
 
-msgctxt "TimerWidget|"
-msgid "Stop"
-msgstr "Zastavit"
+#~ msgctxt "TimerWidget|"
+#~ msgid "Stop"
+#~ msgstr "Zastavit"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start"
+#~ msgstr "Spustit"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set the timer to the specified value"
+#~ msgstr "Nastavit časovač na určenou hodnotu"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "HH:MM:SS"
+#~ msgstr "HH:MM:SS"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Start/Stop timer"
+#~ msgstr "Spustit/zastavit časovač"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set a sound as the alarm"
+#~ msgstr "Nastavit zvukové upozornění"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Set"
+#~ msgstr "Nastavit"
+
+#~ msgctxt "TimerWidget|"
+#~ msgid "Sound"
+#~ msgstr "Zvuk"
 
 msgctxt "TimerWidget|"
-msgid "Start"
-msgstr "Spustit"
+msgid "Notes..."
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Set the timer to the specified value"
-msgstr "Nastavit časovač na určenou hodnotu"
+msgid " and "
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "HH:MM:SS"
-msgstr "HH:MM:SS"
+msgid "Error"
+msgstr ""
 
 msgctxt "TimerWidget|"
-msgid "Start/Stop timer"
-msgstr "Spustit/zastavit časovač"
-
-msgctxt "TimerWidget|"
-msgid "Set a sound as the alarm"
-msgstr "Nastavit zvukové upozornění"
-
-msgctxt "TimerWidget|"
-msgid "Set"
-msgstr "Nastavit"
-
-msgctxt "TimerWidget|"
-msgid "Sound"
-msgstr "Zvuk"
+msgid "Addition time cannot be longer than remaining boil time"
+msgstr ""
 
 #, qt-format
 msgctxt "WaterTableModel|"
@@ -3694,29 +4200,33 @@ msgctxt "mainWindow|"
 msgid "Export to &BBCode"
 msgstr ""
 
+msgctxt "mainWindow|"
+msgid "Hydrometer Temp Adjustment"
+msgstr ""
+
 msgctxt "mashDesigner|"
 msgid "Mash Designer"
 msgstr "Návrhář rmutování"
 
-msgctxt "mashDesigner|"
-msgid "Name"
-msgstr "Název"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Name"
+#~ msgstr "Název"
 
-msgctxt "mashDesigner|"
-msgid "Type"
-msgstr "Druh"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Type"
+#~ msgstr "Druh"
 
-msgctxt "mashDesigner|"
-msgid "Target temp."
-msgstr "Cílová tepl."
+#~ msgctxt "mashDesigner|"
+#~ msgid "Target temp."
+#~ msgstr "Cílová tepl."
 
 msgctxt "mashDesigner|"
 msgid "Time"
 msgstr "Čas"
 
-msgctxt "mashDesigner|"
-msgid "Batch Sparge"
-msgstr "Vyslazení"
+#~ msgctxt "mashDesigner|"
+#~ msgid "Batch Sparge"
+#~ msgstr "Vyslazení"
 
 msgctxt "mashDesigner|"
 msgid "Next"
@@ -3765,6 +4275,18 @@ msgstr "objNád"
 msgctxt "mashDesigner|"
 msgid "thickness"
 msgstr "hustota"
+
+msgctxt "mashDesigner|"
+msgid "&Name"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "&Type"
+msgstr ""
+
+msgctxt "mashDesigner|"
+msgid "Tar&get temp."
+msgstr ""
 
 msgctxt "mashEditor|"
 msgid "Mash Editor"
@@ -3910,9 +4432,25 @@ msgctxt "mashWizard|"
 msgid "Mash thickness (L/kg)"
 msgstr "Tloušťka rmutu (L/kg)"
 
+#~ msgctxt "mashWizard|"
+#~ msgid "Mash thickness (do not enter any units)"
+#~ msgstr "Tloušťka rmutu (nezadávejte jednotky)"
+
 msgctxt "mashWizard|"
-msgid "Mash thickness (do not enter any units)"
-msgstr "Tloušťka rmutu (nezadávejte jednotky)"
+msgid "No Spar&ge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Fl&y Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Ba&tch Sparge"
+msgstr ""
+
+msgctxt "mashWizard|"
+msgid "Batches"
+msgstr ""
 
 msgctxt "miscEditor|"
 msgid "Misc Editor"
@@ -4177,6 +4715,10 @@ msgctxt "ogAdjuster|"
 msgid "Calculate"
 msgstr "Spočítat"
 
+msgctxt "ogAdjuster|"
+msgid "ogAdjuster"
+msgstr ""
+
 msgctxt "optionsDialog|"
 msgid "Options"
 msgstr "Možnosti"
@@ -4189,29 +4731,29 @@ msgctxt "optionsDialog|"
 msgid "Weight"
 msgstr "Hmotnost"
 
-msgctxt "optionsDialog|"
-msgid "Use SI units"
-msgstr "Použít jednotky SI"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use SI units"
+#~ msgstr "Použít jednotky SI"
 
-msgctxt "optionsDialog|"
-msgid "Use US traditional units"
-msgstr "Použití americké jednotky"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use US traditional units"
+#~ msgstr "Použití americké jednotky"
 
-msgctxt "optionsDialog|"
-msgid "Use British imperial units"
-msgstr "Použít britské jednotky"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use British imperial units"
+#~ msgstr "Použít britské jednotky"
 
 msgctxt "optionsDialog|"
 msgid "Temperature"
 msgstr "Teplota"
 
-msgctxt "optionsDialog|"
-msgid "Celsius"
-msgstr "Stupně Celsia"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Celsius"
+#~ msgstr "Stupně Celsia"
 
-msgctxt "optionsDialog|"
-msgid "Fahrenheit"
-msgstr "Fahrenheity"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Fahrenheit"
+#~ msgstr "Fahrenheity"
 
 msgctxt "optionsDialog|"
 msgid "Volume"
@@ -4221,89 +4763,89 @@ msgctxt "optionsDialog|"
 msgid "Gravity"
 msgstr "Hustota"
 
-msgctxt "optionsDialog|"
-msgid "20C/20C Specific Gravity"
-msgstr "Poměr hustot 20C/20C"
+#~ msgctxt "optionsDialog|"
+#~ msgid "20C/20C Specific Gravity"
+#~ msgstr "Poměr hustot 20C/20C"
 
-msgctxt "optionsDialog|"
-msgid "Plato/Brix/Balling"
-msgstr "Plato/Brix/Balling"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Plato/Brix/Balling"
+#~ msgstr "Plato/Brix/Balling"
 
 msgctxt "optionsDialog|"
 msgid "Color"
 msgstr "Barva"
 
-msgctxt "optionsDialog|"
-msgid "Use SRM"
-msgstr "Použít SRM"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use SRM"
+#~ msgstr "Použít SRM"
 
-msgctxt "optionsDialog|"
-msgid "Use EBC"
-msgstr "Použít EBC"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Use EBC"
+#~ msgstr "Použít EBC"
 
 msgctxt "optionsDialog|"
 msgid "Formulas"
 msgstr "Vzorce"
 
-msgctxt "optionsDialog|"
-msgid "Mosher's approximation"
-msgstr "Mosherův odhad"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Mosher's approximation"
+#~ msgstr "Mosherův odhad"
 
-msgctxt "optionsDialog|"
-msgid "Daniels' approximation"
-msgstr "Danielův odhad"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Daniels' approximation"
+#~ msgstr "Danielův odhad"
 
-msgctxt "optionsDialog|"
-msgid "Morey's approximation"
-msgstr "Moreyho odhad"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Morey's approximation"
+#~ msgstr "Moreyho odhad"
 
 msgctxt "optionsDialog|"
 msgid "IBU"
 msgstr "IBU"
 
-msgctxt "optionsDialog|"
-msgid "Tinseth's approximation"
-msgstr "Tinsethův odhad"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Tinseth's approximation"
+#~ msgstr "Tinsethův odhad"
 
-msgctxt "optionsDialog|"
-msgid "Rager's approximation"
-msgstr "Ragerův odhad"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Rager's approximation"
+#~ msgstr "Ragerův odhad"
 
 msgctxt "optionsDialog|"
 msgid "IBU Adjustments"
 msgstr "Úpravy IBU"
 
-msgctxt "optionsDialog|"
-msgid "% IBU adjustment"
-msgstr "% úprava IBU"
+#~ msgctxt "optionsDialog|"
+#~ msgid "% IBU adjustment"
+#~ msgstr "% úprava IBU"
 
-msgctxt "optionsDialog|"
-msgid "Mash Hop"
-msgstr "Mash Hop (do vystírky)"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Mash Hop"
+#~ msgstr "Mash Hop (do vystírky)"
 
-msgctxt "optionsDialog|"
-msgid "First Wort"
-msgstr "First wort (do předku)"
+#~ msgctxt "optionsDialog|"
+#~ msgid "First Wort"
+#~ msgstr "First wort (do předku)"
 
-msgctxt "optionsDialog|"
-msgid "Directories"
-msgstr "Adresáře"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Directories"
+#~ msgstr "Adresáře"
 
-msgctxt "optionsDialog|"
-msgid "Database Directory"
-msgstr "Výchozí adresář"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Database Directory"
+#~ msgstr "Výchozí adresář"
 
-msgctxt "optionsDialog|"
-msgid "Where your brewtarget .xml files are."
-msgstr "Kde jsou vaše XML soubory Brewtargetu"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Where your brewtarget .xml files are."
+#~ msgstr "Kde jsou vaše XML soubory Brewtargetu"
 
 msgctxt "optionsDialog|"
 msgid "Browse"
 msgstr "Procházet"
 
-msgctxt "optionsDialog|"
-msgid "Default"
-msgstr "Výchozí"
+#~ msgctxt "optionsDialog|"
+#~ msgid "Default"
+#~ msgstr "Výchozí"
 
 msgctxt "optionsDialog|"
 msgid "Language"
@@ -4332,19 +4874,123 @@ msgid "Date"
 msgstr "Datum"
 
 msgctxt "optionsDialog|"
-msgid "mm-dd-YYYY"
+msgid "Forumulas"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "dd-mm-YYYY"
+msgid "Mash Hop (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "YYYY-dd-mm"
+msgid "First Wort (%)"
 msgstr ""
 
 msgctxt "optionsDialog|"
-msgid "Noonan's approximation"
+msgid "Databases"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Engines"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "RDBMS Engine"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Test Connection"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Configuration"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Restore defaults"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Hostname"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Schema"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Username"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Save password"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Data Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Backup Directory"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Frequency of Backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "PostgresSQL's host name or IP address"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Port the PostgreSQL is listening on"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The schema containing the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "User with create/delete table access"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Password for the user"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "The name of the database"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where your database file is"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Where to save your backups"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "Number of backups to keep: -1 means never remove, 0 means never backup"
+msgstr ""
+
+msgctxt "optionsDialog|"
+msgid "How frequently a backup is made: 1 means always backup"
 msgstr ""
 
 msgctxt "pitchDialog|"
@@ -4867,9 +5513,33 @@ msgctxt "styleEditor|"
 msgid "Cancel"
 msgstr "Zrušit"
 
+#~ msgctxt "timerListDialog|"
+#~ msgid "Timers"
+#~ msgstr "Časovače"
+
 msgctxt "timerListDialog|"
-msgid "Timers"
-msgstr "Časovače"
+msgid "Addition Timers"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Form"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Add:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "Notes..."
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "At:"
+msgstr ""
+
+msgctxt "timerWidget|"
+msgid "mins"
+msgstr ""
 
 msgctxt "waterEditor|"
 msgid "Dialog"

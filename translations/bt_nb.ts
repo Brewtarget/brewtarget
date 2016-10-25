@@ -432,6 +432,14 @@
         <source>FULLPATH</source>
         <translation>HEL STI</translation>
     </message>
+    <message>
+        <source>Could not copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There was an unexpected error creating %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BtTreeView</name>
@@ -531,6 +539,14 @@
         <source>An empty name will skip copying this %1.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>To XML</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To HTML</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConverterTool</name>
@@ -577,6 +593,22 @@
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
         <translation>Det kan være nye in indegrienser og oppskrifter tilgjegelig. Ønsker du å legge disse til databasen?</translation>
     </message>
+    <message>
+        <source>Database password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not connect to %1 : %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>EquipmentEditor</name>
@@ -586,11 +618,11 @@
     </message>
     <message>
         <source>Tun Volume Warning</source>
-        <translation>Tønnevolum advarsel</translation>
+        <translation type="vanished">Tønnevolum advarsel</translation>
     </message>
     <message>
         <source>Batch Size Warning</source>
-        <translation>Bryggevolum advarsel</translation>
+        <translation type="vanished">Bryggevolum advarsel</translation>
     </message>
     <message>
         <source>Equipment name</source>
@@ -602,19 +634,19 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation>Tønnevolumet ble satt til 0. Dette kan skape problemer</translation>
+        <translation type="vanished">Tønnevolumet ble satt til 0. Dette kan skape problemer</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation>Bryggevolumet ble satt til 0. Dette kan skape problemer</translation>
+        <translation type="vanished">Bryggevolumet ble satt til 0. Dette kan skape problemer</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation>Humleutnyttelse advarsel</translation>
+        <translation type="vanished">Humleutnyttelse advarsel</translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation>Prosentvis utnyttelse av humlen ble satt til 0. Dette kan skape problemer</translation>
+        <translation type="vanished">Prosentvis utnyttelse av humlen ble satt til 0. Dette kan skape problemer</translation>
     </message>
     <message>
         <source>Equipment Editor</source>
@@ -747,6 +779,30 @@
     <message>
         <source>Cancel</source>
         <translation>Avbryt</translation>
+    </message>
+    <message>
+        <source>This equipment profile may break brewtarget&apos;s maths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The following values are not set:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mash tun volume (all-grain and BIAB only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>batch size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hop utilization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculation Warnings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1046,6 +1102,37 @@
     </message>
 </context>
 <context>
+    <name>HydrometerTool</name>
+    <message>
+        <source>Hydrometer Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SG Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature</source>
+        <translation type="unfinished">Temperatur</translation>
+    </message>
+    <message>
+        <source>Adjust SG</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <translation type="unfinished">Konverter</translation>
+    </message>
+    <message>
+        <source>Measured gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Corrected gravity</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>IbuGuSlider</name>
     <message>
         <source>Cloying</source>
@@ -1238,6 +1325,14 @@
         <source>A folder name must have at least one non-/ character in it</source>
         <translation>Et mappenavn må ha minst et ikke-/  tegn</translation>
     </message>
+    <message>
+        <source>Error copying recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error was returned while creating %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MashDesigner</name>
@@ -1370,6 +1465,14 @@
     <message>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
         <translation>Du har for mye vørter fra meskingen for kokemengden din. Jeg foreslår å øke kokemengden ved å øke koketiden eller redusere mesketykkelsen.</translation>
+    </message>
+    <message>
+        <source>Batch Sparge %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fly Sparge</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1626,6 +1729,146 @@
         <source>Chinese</source>
         <translation>Kinesisk</translation>
     </message>
+    <message>
+        <source>SI units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>US traditional units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>British imperial units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Celsius</source>
+        <translation type="unfinished">Celsius</translation>
+    </message>
+    <message>
+        <source>Fahrenheit</source>
+        <translation type="unfinished">Fahrenheit</translation>
+    </message>
+    <message>
+        <source>20C/20C Specific Gravity</source>
+        <translation type="unfinished">20C/20C Spesifikk Gravitasjon</translation>
+    </message>
+    <message>
+        <source>Plato/Brix/Balling</source>
+        <translation type="unfinished">Plato/Brix/Balling</translation>
+    </message>
+    <message>
+        <source>mm-dd-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dd-mm-YYYY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YYYY-mm-dd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SRM</source>
+        <translation type="unfinished">SRM</translation>
+    </message>
+    <message>
+        <source>EBC</source>
+        <translation type="unfinished">EBC</translation>
+    </message>
+    <message>
+        <source>Tinseth&apos;s approximation</source>
+        <translation type="unfinished">Tineth&apos;s tilnærming</translation>
+    </message>
+    <message>
+        <source>Rager&apos;s approximation</source>
+        <translation type="unfinished">Roger&apos;s tilnærming</translation>
+    </message>
+    <message>
+        <source>Noonan&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mosher&apos;s approximation</source>
+        <translation type="unfinished">Mosher&apos;s tilnærming</translation>
+    </message>
+    <message>
+        <source>Daniel&apos;s approximation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Morey&apos;s approximation</source>
+        <translation type="unfinished">Morey&apos;s tilnærming</translation>
+    </message>
+    <message>
+        <source>SQLite (default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PostgreSQL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Danish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Estonian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Basque</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Galician</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latvian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Norwegian Bokmål</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Serbian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Turkish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test connection or cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Transfer database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart brewtarget to connect to the new database</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1667,43 +1910,43 @@
     </message>
     <message>
         <source>Save Database Changes</source>
-        <translation>Lagre databaseendringer</translation>
+        <translation type="vanished">Lagre databaseendringer</translation>
     </message>
     <message>
         <source>Would you like to save the changes you made?</source>
-        <translation>Vil du lagre endringene du gjorde?</translation>
+        <translation type="vanished">Vil du lagre endringene du gjorde?</translation>
     </message>
     <message>
         <source>Multiple Databases Found</source>
-        <translation>Flere databaser funnet</translation>
+        <translation type="vanished">Flere databaser funnet</translation>
     </message>
     <message>
         <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
-        <translation>Flere databaser ble funnet. Vil du gjenopprette endringene du gjorde under din forrige Brewtarget-økt eller tilbakestille til før forrige økts endringer?</translation>
+        <translation type="vanished">Flere databaser ble funnet. Vil du gjenopprette endringene du gjorde under din forrige Brewtarget-økt eller tilbakestille til før forrige økts endringer?</translation>
     </message>
     <message>
         <source>Restore</source>
-        <translation>Gjenopprett</translation>
+        <translation type="vanished">Gjenopprett</translation>
     </message>
     <message>
         <source>Rollback</source>
-        <translation>Tilbakestill</translation>
+        <translation type="vanished">Tilbakestill</translation>
     </message>
     <message>
         <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
-        <translation>Kunne ikke fjerne den midlertidige sikkerhetskopien av databasen. Naviger til &apos;%1&apos; og fjern &apos;tempBackupDatabase.sqlite&apos;.</translation>
+        <translation type="vanished">Kunne ikke fjerne den midlertidige sikkerhetskopien av databasen. Naviger til &apos;%1&apos; og fjern &apos;tempBackupDatabase.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Failed to rollback to the backup database.  Navigate to &apos;%1&apos;, remove &apos;database.sqlite&apos; if it exists, and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation>Kunne ikke tilbakestille til sikkerhetskopien av databasen. Naviger til &apos;%1&apos;, fjern &apos;database.sqlite&apos; hvis den eksisterer og endre navnet på &apos;tempBackupDatabase.sqlite&apos; til &apos;database.sqlite&apos;.</translation>
+        <translation type="vanished">Kunne ikke tilbakestille til sikkerhetskopien av databasen. Naviger til &apos;%1&apos;, fjern &apos;database.sqlite&apos; hvis den eksisterer og endre navnet på &apos;tempBackupDatabase.sqlite&apos; til &apos;database.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Database Restore Failure</source>
-        <translation>Feil i tilbakestilling av database</translation>
+        <translation type="vanished">Feil i tilbakestilling av database</translation>
     </message>
     <message>
         <source>Failed to restore the backup database. Navigate to &apos;%1&apos; and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation>Kunne ikke gjenopprette sikkerhetskopien av databasen. Naviger til &apos;%1&apos; og endre navnet på &apos;tempBackupDatabase.sqlite&apos; til &apos;database.sqlite&apos;.</translation>
+        <translation type="vanished">Kunne ikke gjenopprette sikkerhetskopien av databasen. Naviger til &apos;%1&apos; og endre navnet på &apos;tempBackupDatabase.sqlite&apos; til &apos;database.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Grain</source>
@@ -1823,6 +2066,38 @@
     </message>
     <message>
         <source>Failed to update the database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error attempting to create directory &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data directory &quot;%1&quot; is missing.  Some features will be unavaliable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fly Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch Sparge</source>
+        <translation type="unfinished">Skylling</translation>
+    </message>
+    <message>
+        <source>Connection Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connection to database was successful</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plaintext</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2333,6 +2608,34 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Target</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Total</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hostname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saved Password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
@@ -2398,6 +2701,155 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
 </context>
 <context>
+    <name>TimerDialog</name>
+    <message>
+        <source>Addition Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Addition Time(min):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time Remaining:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Alarm sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop Alarm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Avbryt</translation>
+    </message>
+</context>
+<context>
+    <name>TimerListDialog</name>
+    <message>
+        <source>Addition Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TimerMainDialog</name>
+    <message>
+        <source>Main Boil Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation type="unfinished">Start</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished">Stopp</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load Current Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Boil Timer (mins):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set Boil Time Here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit Alarm Ring Time </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alarm Ring Time (secs):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are currently no timers to show.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>KNOCKOUT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You currently have active timers, would you like to replace them or add to them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hop addition is already timed and has been ignored.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hop additions are already timed and have been ignored.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duplicate Timers Ignored</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No Addition Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are no boil addition, no timers generated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TimerWidget</name>
     <message>
         <source>Open Sound</source>
@@ -2409,35 +2861,51 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Stopp</translation>
+        <translation type="vanished">Stopp</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Start</translation>
+        <translation type="vanished">Start</translation>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation>Sett tidtaker til spesifisert tid</translation>
+        <translation type="vanished">Sett tidtaker til spesifisert tid</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
-        <translation>HH:MM:SS</translation>
+        <translation type="vanished">HH:MM:SS</translation>
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation>Start/Stop tidtaker</translation>
+        <translation type="vanished">Start/Stop tidtaker</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation>Sett en lyd som alarmlyd</translation>
+        <translation type="vanished">Sett en lyd som alarmlyd</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation>Sett</translation>
+        <translation type="vanished">Sett</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation>Lyd</translation>
+        <translation type="vanished">Lyd</translation>
+    </message>
+    <message>
+        <source>Notes...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> and </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Addition time cannot be longer than remaining boil time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3691,6 +4159,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Export to &amp;BBCode</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Hydrometer Temp Adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -3700,15 +4172,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="vanished">Type</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Måltemp.</translation>
+        <translation type="vanished">Måltemp.</translation>
     </message>
     <message>
         <source>Time</source>
@@ -3716,7 +4188,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
-        <translation>Skylling</translation>
+        <translation type="vanished">Skylling</translation>
     </message>
     <message>
         <source>Next</source>
@@ -3765,6 +4237,18 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <message>
         <source>thickness</source>
         <translation>tykkelse</translation>
+    </message>
+    <message>
+        <source>&amp;Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tar&amp;get temp.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3921,7 +4405,23 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Mash thickness (do not enter any units)</source>
-        <translation>Mesketetthet (ikke skriv inn enhet)</translation>
+        <translation type="vanished">Mesketetthet (ikke skriv inn enhet)</translation>
+    </message>
+    <message>
+        <source>No Spar&amp;ge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fl&amp;y Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ba&amp;tch Sparge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batches</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4192,6 +4692,10 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <source>Calculate</source>
         <translation>Beregn</translation>
     </message>
+    <message>
+        <source>ogAdjuster</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>optionsDialog</name>
@@ -4209,15 +4713,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Use SI units</source>
-        <translation>Bruk metriske enheter</translation>
+        <translation type="vanished">Bruk metriske enheter</translation>
     </message>
     <message>
         <source>Use US traditional units</source>
-        <translation>Bruk amerikanske enheter</translation>
+        <translation type="vanished">Bruk amerikanske enheter</translation>
     </message>
     <message>
         <source>Use British imperial units</source>
-        <translation>Bruk engelske enheter</translation>
+        <translation type="vanished">Bruk engelske enheter</translation>
     </message>
     <message>
         <source>Temperature</source>
@@ -4225,11 +4729,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation type="vanished">Celsius</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation type="vanished">Fahrenheit</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -4241,11 +4745,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
-        <translation>20C/20C Spesifikk Gravitasjon</translation>
+        <translation type="vanished">20C/20C Spesifikk Gravitasjon</translation>
     </message>
     <message>
         <source>Plato/Brix/Balling</source>
-        <translation>Plato/Brix/Balling</translation>
+        <translation type="vanished">Plato/Brix/Balling</translation>
     </message>
     <message>
         <source>Color</source>
@@ -4253,11 +4757,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Use SRM</source>
-        <translation>Bruk SRM</translation>
+        <translation type="vanished">Bruk SRM</translation>
     </message>
     <message>
         <source>Use EBC</source>
-        <translation>Bruk EBC</translation>
+        <translation type="vanished">Bruk EBC</translation>
     </message>
     <message>
         <source>Formulas</source>
@@ -4265,15 +4769,15 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
-        <translation>Mosher&apos;s tilnærming</translation>
+        <translation type="vanished">Mosher&apos;s tilnærming</translation>
     </message>
     <message>
         <source>Daniels&apos; approximation</source>
-        <translation>Daniel&apos;s tilnærming</translation>
+        <translation type="vanished">Daniel&apos;s tilnærming</translation>
     </message>
     <message>
         <source>Morey&apos;s approximation</source>
-        <translation>Morey&apos;s tilnærming</translation>
+        <translation type="vanished">Morey&apos;s tilnærming</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -4281,11 +4785,11 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
-        <translation>Tineth&apos;s tilnærming</translation>
+        <translation type="vanished">Tineth&apos;s tilnærming</translation>
     </message>
     <message>
         <source>Rager&apos;s approximation</source>
-        <translation>Roger&apos;s tilnærming</translation>
+        <translation type="vanished">Roger&apos;s tilnærming</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
@@ -4293,27 +4797,27 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>% IBU adjustment</source>
-        <translation>% IBU-justering</translation>
+        <translation type="vanished">% IBU-justering</translation>
     </message>
     <message>
         <source>Mash Hop</source>
-        <translation>Meskehumle</translation>
+        <translation type="vanished">Meskehumle</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Skylling</translation>
+        <translation type="vanished">Skylling</translation>
     </message>
     <message>
         <source>Directories</source>
-        <translation>Mapper</translation>
+        <translation type="vanished">Mapper</translation>
     </message>
     <message>
         <source>Database Directory</source>
-        <translation>Databasemappe</translation>
+        <translation type="vanished">Databasemappe</translation>
     </message>
     <message>
         <source>Where your brewtarget .xml files are.</source>
-        <translation>Hvor dine Brewtarget .xml filer er lokalisert.</translation>
+        <translation type="vanished">Hvor dine Brewtarget .xml filer er lokalisert.</translation>
     </message>
     <message>
         <source>Browse</source>
@@ -4321,7 +4825,7 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Forvalg</translation>
+        <translation type="vanished">Forvalg</translation>
     </message>
     <message>
         <source>Language</source>
@@ -4347,19 +4851,123 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
         <translation>Dato</translation>
     </message>
     <message>
-        <source>mm-dd-YYYY</source>
+        <source>Forumulas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>dd-mm-YYYY</source>
+        <source>Mash Hop (%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>YYYY-dd-mm</source>
+        <source>First Wort (%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Noonan&apos;s approximation</source>
+        <source>Databases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Engines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RDBMS Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test Connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hostname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Backup Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of Backups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frequency of Backups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PostgresSQL&apos;s host name or IP address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port the PostgreSQL is listening on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The schema containing the database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User with create/delete table access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password for the user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The name of the database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Where your database file is</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Where to save your backups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of backups to keep: -1 means never remove, 0 means never backup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How frequently a backup is made: 1 means always backup</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4905,7 +5513,34 @@ Sluttvolumet i primærgjæringskaret er %1.</translation>
     <name>timerListDialog</name>
     <message>
         <source>Timers</source>
-        <translation>Tidtakere</translation>
+        <translation type="vanished">Tidtakere</translation>
+    </message>
+    <message>
+        <source>Addition Timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>timerWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notes...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>At:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>mins</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
