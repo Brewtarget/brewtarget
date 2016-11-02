@@ -85,6 +85,7 @@
 #include "EquipmentEditor.h"
 #include "FermentableDialog.h"
 #include "HopDialog.h"
+#include "InventoryFormatter.h"
 #include "MashWizard.h"
 #include "MiscDialog.h"
 #include "StyleEditor.h"
@@ -119,6 +120,8 @@
 #if defined(Q_OS_WIN)
    #include <windows.h>
 #endif
+
+#include <memory>
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -430,13 +433,48 @@ MainWindow::MainWindow(QWidget* parent)
    }
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
-   connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(print()));
-   connect( actionRecipePreview, SIGNAL(triggered()), this, SLOT(print()));
-   connect( actionRecipeHTML, SIGNAL(triggered()), this, SLOT(print()));
-   connect( actionRecipeBBCode, SIGNAL(triggered()), this, SLOT(print()));
-   connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(print()));
-   connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(print()));
-   connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
+   connect(actionRecipePrint, &QAction::triggered, [this]() {
+      print([this](QPrinter* printer) {
+         recipeFormatter->print(
+               printer,  RecipeFormatter::PRINT);
+      });
+   });
+   connect(actionRecipePreview, &QAction::triggered, [this]() {
+      recipeFormatter->print(printer, RecipeFormatter::PREVIEW);
+   });
+   connect(actionRecipeHTML, &QAction::triggered, this, [this]() {
+      exportHTML([this](QFile* file) {
+         recipeFormatter->print(printer, RecipeFormatter::HTML, file);
+      });
+   });
+   connect(actionRecipeBBCode, &QAction::triggered, [this]() {
+      QApplication::clipboard()->setText(recipeFormatter->getBBCodeFormat());
+   });
+   connect(actionBrewdayPrint, &QAction::triggered, [this]() {
+      print([this](QPrinter* printer) {
+         brewDayScrollWidget->print(
+               printer,  BrewDayScrollWidget::PRINT);
+      });
+   });
+   connect(actionBrewdayPreview, &QAction::triggered, [this]() {
+      brewDayScrollWidget->print(printer, RecipeFormatter::PREVIEW);
+   });
+   connect(actionBrewdayHTML, &QAction::triggered, this, [this]() {
+      exportHTML([this](QFile* file) {
+         brewDayScrollWidget->print(
+               printer,  BrewDayScrollWidget::PRINT);
+      });
+   });
+   connect(actionInventoryPrint, &QAction::triggered, [this]() {
+      print(
+            [](QPrinter* printer) { InventoryFormatter::print(printer); });
+   });
+   connect(actionInventoryPreview, &QAction::triggered,
+         []() { InventoryFormatter::printPreview(); });
+   connect(actionInventoryHTML, &QAction::triggered, [this]() {
+      exportHTML(
+            [](QFile* file) { InventoryFormatter::exportHTML(file); });
+   });
 
    // Connect up all the labels. I really need to find a better way.
    // BWAHAHAHAHAHAHAHA. I did, I did find a better way to do it.
@@ -1985,39 +2023,34 @@ void MainWindow::openManual()
    QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir().filePath("manual-en.pdf")));
 }
 
-// One print function to rule them all. Now we just need to make the menuing
-// system make sense
-void MainWindow::print()
+void MainWindow::print(std::function<void(QPrinter* printer)> functor)
 {
-   QObject* selection = sender();
+   if (!functor)
+   {
+      Brewtarget::logE("The print function is called with an empty functor");
+   }
 
-   if ( selection == actionRecipePrint || selection == actionBrewdayPrint )
+   QPrintDialog dialogue(printer, this);
+   dialogue.setWindowTitle(tr("Print Document"));
+   if (dialogue.exec() == QDialog::Accepted)
    {
-      QPrintDialog printerDialog(printer, this);
-      selection == actionRecipePrint ?  recipeFormatter->print( printer, &printerDialog, RecipeFormatter::PRINT) :
-                                        brewDayScrollWidget->print( printer, &printerDialog, BrewDayScrollWidget::PRINT);
+      functor(printer);
    }
-   else if ( selection == actionRecipePreview )
-   {
-      recipeFormatter->print(printer, 0, RecipeFormatter::PREVIEW);
-   }
-   else if ( selection == actionBrewdayPreview )
-   {
-      brewDayScrollWidget->print(printer, 0, RecipeFormatter::PREVIEW);
-   }
-   else if ( selection == actionRecipeHTML || selection == actionBrewdayHTML)
-   {
-      QFile* outfile = openForWrite(tr("HTML files (*.html)"), QString("html"));
+}
 
-      if (! outfile )
-         return;
-      selection == actionRecipeHTML ? recipeFormatter->print(printer, 0, RecipeFormatter::HTML, outfile) :
-                                      brewDayScrollWidget->print(printer, 0, BrewDayScrollWidget::HTML, outfile);
-      delete outfile;
-   }
-   else if ( selection == actionRecipeBBCode )
+void MainWindow::exportHTML(std::function<void(QFile* file)> functor)
+{
+   if (!functor)
    {
-      QApplication::clipboard()->setText(recipeFormatter->getBBCodeFormat());
+      Brewtarget::logE(
+            "The export HTML function is called with an empty functor");
+   }
+
+   std::unique_ptr<QFile> file{
+         openForWrite(tr("HTML files (*.html)"), QString("html"))};
+   if (file)
+   {
+      functor(file.get());
    }
 }
 

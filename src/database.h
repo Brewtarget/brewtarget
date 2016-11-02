@@ -236,6 +236,8 @@ public:
    Brewtarget::DBTable getInventoryTable(Brewtarget::DBTable table);
    //! Inserts an new inventory row in the appropriate table
    void newInventory(Brewtarget::DBTable invForTable, int invForID);
+   //! \returns The entire inventory for a table.
+   QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
 
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

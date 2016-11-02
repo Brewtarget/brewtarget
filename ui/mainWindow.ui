@@ -1693,6 +1693,14 @@
      <addaction name="actionRestore_Database"/>
      <addaction name="actionMergeDatabases"/>
     </widget>
+    <widget class="QMenu" name="menuInventory">
+     <property name="title">
+      <string>I&amp;nventory</string>
+     </property>
+     <addaction name="actionInventoryPreview"/>
+     <addaction name="actionInventoryPrint"/>
+     <addaction name="actionInventoryHTML"/>
+    </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>
@@ -1702,6 +1710,8 @@
     <addaction name="separator"/>
     <addaction name="menuBrewday"/>
     <addaction name="menuRecipe"/>
+    <addaction name="separator"/>
+    <addaction name="menuInventory"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -2192,6 +2202,33 @@
   <action name="actionHydrometer_Temp_Adjustment">
    <property name="text">
     <string>Hydrometer Temp Adjustment</string>
+   </property>
+  </action>
+  <action name="actionInventoryPreview">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print Pre&amp;view</string>
+   </property>
+  </action>
+  <action name="actionInventoryPrint">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print</string>
+   </property>
+  </action>
+  <action name="actionInventoryHTML">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Export to HTML</string>
    </property>
   </action>
  </widget>
