@@ -915,7 +915,7 @@ void Brewtarget::readSystemOptions()
       Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
 
    //=======================Diastatic power unit===================
-   text = option("diastatic_power_unit", "Linter").toString();
+   text = option("diastatic_power_unit", "Lintner").toString();
    if( text == "Lintner" )
    {
       diastaticPowerUnit = LINTNER;
