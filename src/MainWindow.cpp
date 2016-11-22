@@ -129,16 +129,15 @@ MainWindow::MainWindow(QWidget* parent)
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
 
-   /* PLEASE DO NOT REMOVE. 
+   /* PLEASE DO NOT REMOVE.
     This code is left here, commented out, intentionally. The only way I can
     test internationalization is by forcing the locale manually. I am tired
-    of having to figure this out every time I need to test. 
+    of having to figure this out every time I need to test.
     PLEASE DO NOT REMOVE.
    QLocale german(QLocale::German,QLocale::Germany);
    QLocale::setDefault(german);
    */
 
-   QDesktopWidget *desktop = QApplication::desktop();
 
    // If the database doesn't load, we bail
    if (! Database::instance().loadSuccessful() )
@@ -147,6 +146,59 @@ MainWindow::MainWindow(QWidget* parent)
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
 
+   // Null out the recipe
+   recipeObs = 0;
+
+   // Set up the printer
+   printer = new QPrinter;
+   printer->setPageSize(QPrinter::Letter);
+
+   setupCSS();
+   // initialize all of the dialog windows
+   setupDialogs();
+   // initialize the ranged sliders
+   setupRanges();
+   // the dialogs have to be setup before this is called
+   setupComboBoxes();
+   // do all the work to configure the tables models and their proxies
+   setupTables();
+   // Create the keyboard shortcuts
+   setupShortCuts();
+   // Once more with the context menus too
+   setupContextMenu();
+   // Breaks the naming convention, doesn't it?
+   restoreSavedState();
+   // Connect slots to triggered() signals
+   setupTriggers();
+   // Connect slots to clicked() signals
+   setupClicks();
+   // connect slots to activate() signals
+   setupActivate();
+   // connect signal/slots for labels
+   setupLabels();
+   // connect signal slots for the text editors
+   setupTextEdit();
+   // connect the remaining labels
+   setupLabels();
+   // and (finally) set up the drag/drop parts
+   setupDrops();
+
+   // No connections from the database yet? Oh FSM, that probably means I'm
+   // doing it wrong again.
+   connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+}
+
+// Setup the keyboard shortcuts
+void MainWindow::setupShortCuts()
+{
+   actionNewRecipe->setShortcut(QKeySequence::New);
+   actionCopy_Recipe->setShortcut(QKeySequence::Copy);
+   actionDeleteSelected->setShortcut(QKeySequence::Delete);
+}
+
+// Any manipulation of CSS for the MainWindow should be in here
+void MainWindow::setupCSS()
+{
    // Different palettes for some text. This is all done via style sheets now.
    QColor wPalette = tabWidget_recipeView->palette().color(QPalette::Active,QPalette::Base);
 
@@ -157,10 +209,12 @@ MainWindow::MainWindow(QWidget* parent)
 
    // The bold style sheet doesn't change, so set it here once.
    lineEdit_boilSg->setStyleSheet(boldSS);
+}
 
-   // Null out the recipe
-   recipeObs = 0;
-
+// Any dialogs should be initialized in here. That should include any initial
+// configurations as well
+void MainWindow::setupDialogs()
+{
    dialog_about = new AboutDialog(this);
    equipEditor = new EquipmentEditor(this);
    singleEquipEditor = new EquipmentEditor(this, true);
@@ -191,6 +245,24 @@ MainWindow::MainWindow(QWidget* parent)
    pitchDialog = new PitchDialog(this);
    btDatePopup = new BtDatePopup(this);
 
+   // Set up the fileOpener dialog.
+   fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
+   fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
+   fileOpener->setFileMode(QFileDialog::ExistingFiles);
+   fileOpener->setViewMode(QFileDialog::List);
+
+   // Set up the fileSaver dialog.
+   fileSaver = new QFileDialog(this, tr("Save"), QDir::homePath(), tr("BeerXML files (*.xml)") );
+   fileSaver->setAcceptMode(QFileDialog::AcceptSave);
+   fileSaver->setFileMode(QFileDialog::AnyFile);
+   fileSaver->setViewMode(QFileDialog::List);
+   fileSaver->setDefaultSuffix(QString("xml"));
+
+}
+
+// Configures the range widgets for the bubbles
+void MainWindow::setupRanges()
+{
    styleRangeWidget_og->setRange(1.000, 1.120);
    styleRangeWidget_og->setPrecision(3);
    styleRangeWidget_og->setTickMarks(0.010, 2);
@@ -236,7 +308,12 @@ MainWindow::MainWindow(QWidget* parent)
       grad.setColorAt( 1, QColor(255,255,255,0) );
       styleRangeWidget_srm->setMarkerBrush(grad);
    }
+}
 
+// Any new combo boxes, along with their list models, should be initialized
+// here
+void MainWindow::setupComboBoxes()
+{
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
    equipmentComboBox->setModel(equipmentListModel);
@@ -257,6 +334,12 @@ MainWindow::MainWindow(QWidget* parent)
    // I don't think this is used yet
    singleNamedMashEditor = new NamedMashEditor(this,mashStepEditor,true);
 
+}
+
+// Anything creating new tables models, filter proxies and configuring the two
+// should go in here
+void MainWindow::setupTables()
+{
    // Set table models.
    // Fermentables
    fermTableModel = new FermentableTableModel(fermentableTable);
@@ -308,33 +391,12 @@ MainWindow::MainWindow(QWidget* parent)
    yeastTable->horizontalHeader()->setSortIndicator( YEASTNAMECOL, Qt::DescendingOrder );
    yeastTable->setSortingEnabled(true);
    yeastTableProxy->setDynamicSortFilter(true);
+}
 
-   // Create the keyboard shortcuts
-   setupShortCuts();
-
-   // Set up the printer
-   printer = new QPrinter;
-   printer->setPageSize(QPrinter::Letter);
-
-   // Set up the fileOpener dialog.
-   fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
-   fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
-   fileOpener->setFileMode(QFileDialog::ExistingFiles);
-   fileOpener->setViewMode(QFileDialog::List);
-
-   // Set up the fileSaver dialog.
-   fileSaver = new QFileDialog(this, tr("Save"), QDir::homePath(), tr("BeerXML files (*.xml)") );
-   fileSaver->setAcceptMode(QFileDialog::AcceptSave);
-   fileSaver->setFileMode(QFileDialog::AnyFile);
-   fileSaver->setViewMode(QFileDialog::List);
-   fileSaver->setDefaultSuffix(QString("xml"));
-
-   // Do some magic on the splitter widget to keep the tree from expanding
-   splitter_vertical->setStretchFactor(0,0);
-   splitter_vertical->setStretchFactor(1,1);
-
-   // Once more with the context menus too
-   setupContextMenu();
+// Anything resulting in a restoreState() should go in here
+void MainWindow::restoreSavedState()
+{
+   QDesktopWidget *desktop = QApplication::desktop();
 
    // If we saved a size the last time we ran, use it
    if ( Brewtarget::hasOption("geometry"))
@@ -389,8 +451,11 @@ MainWindow::MainWindow(QWidget* parent)
       treeView_yeast->header()->restoreState(Brewtarget::option("MainWindow/treeView_yeast_headerState").toByteArray());
    if (Brewtarget::hasOption("MainWindow/mashStepTableWidget_headerState"))
       mashStepTableWidget->horizontalHeader()->restoreState(Brewtarget::option("MainWindow/mashStepTableWidget_headerState").toByteArray());
+}
 
-   // Connect signals.
+// anything with a SIGNAL of triggered() should go in here.
+void MainWindow::setupTriggers()
+{
    // actions
    connect( actionExit, SIGNAL( triggered() ), this, SLOT( close() ) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
@@ -475,29 +540,14 @@ MainWindow::MainWindow(QWidget* parent)
       exportHTML(
             [](QFile* file) { InventoryFormatter::exportHTML(file); });
    });
+}
 
-   // Connect up all the labels. I really need to find a better way.
-   // BWAHAHAHAHAHAHAHA. I did, I did find a better way to do it.
-
-   // These are the sliders. I need to consider these harder, but small steps
-   connect(oGLabel, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
-   connect(fGLabel, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
-   connect(colorSRMLabel,SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(redisplayLabel(Unit::unitDisplay,Unit::unitScale)));
-
-   connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
+// anything with a SIGNAL of clicked() should go in here.
+void MainWindow::setupClicks()
+{
    connect( equipmentButton, SIGNAL( clicked() ), this, SLOT(showEquipmentEditor()));
-
-   connect( styleComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeStyle()) );
    connect( styleButton, SIGNAL( clicked() ), this, SLOT(showStyleEditor()) );
-
-   connect( mashComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeMash()) );
    connect( mashButton, SIGNAL( clicked() ), mashEditor, SLOT( showEditor() ) );
-
-   connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
-   connect( lineEdit_batchSize, SIGNAL( textModified() ), this, SLOT( updateRecipeBatchSize() ) );
-   connect( lineEdit_boilSize, SIGNAL( textModified() ), this, SLOT( updateRecipeBoilSize() ) );
-   connect( lineEdit_boilTime, SIGNAL( textModified() ), this, SLOT( updateRecipeBoilTime() ) );
-   connect( lineEdit_efficiency, SIGNAL( textModified() ), this, SLOT( updateRecipeEfficiency() ) );
    connect( pushButton_addFerm, SIGNAL( clicked() ), fermDialog, SLOT( show() ) );
    connect( pushButton_addHop, SIGNAL( clicked() ), hopDialog, SLOT( show() ) );
    connect( pushButton_addMisc, SIGNAL( clicked() ), miscDialog, SLOT( show() ) );
@@ -520,26 +570,57 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashUp, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepUp() ) );
    connect( pushButton_mashDown, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepDown() ) );
    connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
-
-   // drag and drop. maybe
-   connect( tabWidget_recipeView, SIGNAL( setRecipe(Recipe*) ), this, SLOT( setRecipe(Recipe*)));
-   connect( tabWidget_recipeView, SIGNAL( setEquipment(Equipment*) ), this, SLOT(droppedRecipeEquipment(Equipment*)));
-   connect( tabWidget_recipeView, SIGNAL( setStyle(Style*) ), this, SLOT(droppedRecipeStyle(Style*)));
-   connect( tabWidget_ingredients, SIGNAL( setFermentables(QList<Fermentable*>) ), this, SLOT(droppedRecipeFermentable(QList<Fermentable*>)));
-   connect( tabWidget_ingredients, SIGNAL( setHops(QList<Hop*>) ), this, SLOT(droppedRecipeHop(QList<Hop*>)));
-   connect( tabWidget_ingredients, SIGNAL( setMiscs(QList<Misc*>) ), this, SLOT(droppedRecipeMisc(QList<Misc*>)));
-   connect( tabWidget_ingredients, SIGNAL( setYeasts(QList<Yeast*>) ), this, SLOT(droppedRecipeYeast(QList<Yeast*>)));
-
-   // No connections from the database yet? Oh FSM, that probably means I'm
-   // doing it wrong again.
-   connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
 }
 
-void MainWindow::setupShortCuts()
+// anything with a SIGNAL of activated() should go in here.
+void MainWindow::setupActivate()
 {
-   actionNewRecipe->setShortcut(QKeySequence::New);
-   actionCopy_Recipe->setShortcut(QKeySequence::Copy);
-   actionDeleteSelected->setShortcut(QKeySequence::Delete);
+   connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
+   connect( styleComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeStyle()) );
+   connect( mashComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeMash()) );
+}
+
+// anything with either an editingFinished() or a textModified() should go in
+// here
+void MainWindow::setupTextEdit()
+{
+   connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
+   connect( lineEdit_batchSize, SIGNAL( textModified() ), this, SLOT( updateRecipeBatchSize() ) );
+   connect( lineEdit_boilSize, SIGNAL( textModified() ), this, SLOT( updateRecipeBoilSize() ) );
+   connect( lineEdit_boilTime, SIGNAL( textModified() ), this, SLOT( updateRecipeBoilTime() ) );
+   connect( lineEdit_efficiency, SIGNAL( textModified() ), this, SLOT( updateRecipeEfficiency() ) );
+}
+
+// anything using a BtLabel::labelChanged signal should go in here
+void MainWindow::setupLabels()
+{
+   // These are the sliders. I need to consider these harder, but small steps
+   connect(oGLabel,       &BtLabel::labelChanged,
+           this,          &MainWindow::redisplayLabel);
+   connect(fGLabel,       &BtLabel::labelChanged,
+           this,          &MainWindow::redisplayLabel);
+   connect(colorSRMLabel, &BtLabel::labelChanged,
+           this,          &MainWindow::redisplayLabel);
+}
+
+// anything with a BtTabWidget::set* signal should go in here
+void MainWindow::setupDrops()
+{
+   // drag and drop. maybe
+   connect( tabWidget_recipeView,  &BtTabWidget::setRecipe,
+            this,                  &MainWindow::setRecipe);
+   connect( tabWidget_recipeView,  &BtTabWidget::setEquipment,
+            this,                  &MainWindow::droppedRecipeEquipment);
+   connect( tabWidget_recipeView,  &BtTabWidget::setStyle,
+            this,                  &MainWindow::droppedRecipeStyle);
+   connect( tabWidget_ingredients, &BtTabWidget::setFermentables,
+            this,                  &MainWindow::droppedRecipeFermentable);
+   connect( tabWidget_ingredients, &BtTabWidget::setHops,
+            this,                  &MainWindow::droppedRecipeHop);
+   connect( tabWidget_ingredients, &BtTabWidget::setMiscs,
+            this,                  &MainWindow::droppedRecipeMisc);
+   connect( tabWidget_ingredients, &BtTabWidget::setYeasts,
+            this,                  &MainWindow::droppedRecipeYeast);
 }
 
 void MainWindow::deleteSelected()
@@ -558,7 +639,7 @@ void MainWindow::deleteSelected()
    if ( first.isValid() )
    {
       if (active->type(first) == BtTreeItem::RECIPE)
-         setRecipe(first);
+         setRecipe(treeView_recipe->recipe(first));
       setTreeSelection(first);
    }
 
@@ -589,7 +670,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
    switch( active->type(index))
    {
       case BtTreeItem::RECIPE:
-         setRecipe(index);
+         setRecipe(treeView_recipe->recipe(index));
          break;
       case BtTreeItem::EQUIPMENT:
          kit = active->equipment(index);
@@ -720,13 +801,6 @@ void MainWindow::setBrewNote(BrewNote* bNote)
 
    tabWidget_recipeView->addTab(ni,bNote->brewDate_short());
    tabWidget_recipeView->setCurrentWidget(ni);
-}
-
-void MainWindow::setRecipe(const QModelIndex &index)
-{
-   Recipe *rec = treeView_recipe->recipe(index);
-   if( rec )
-      setRecipe(rec);
 }
 
 // Can handle null recipes.
@@ -1445,7 +1519,7 @@ void MainWindow::newRecipe()
 
    // bad things happened -- let somebody know
    if ( ! newRec ) {
-      QMessageBox::warning(this,tr("Error copying recipe"), 
+      QMessageBox::warning(this,tr("Error copying recipe"),
                            tr("An error was returned while creating %1").arg(name));
       return;
    }
@@ -1979,7 +2053,7 @@ void MainWindow::copyRecipe()
       return;
 
    Recipe* newRec = Database::instance().newRecipe(recipeObs); // Create a deep copy.
-   if ( newRec ) 
+   if ( newRec )
       newRec->setName(name);
 }
 
@@ -2175,7 +2249,7 @@ void MainWindow::exportSelectedHtml() {
    if( selected.count() == 0 )
       return;
 
-   foreach( QModelIndex ndx, selected) 
+   foreach( QModelIndex ndx, selected)
       targets.append( treeView_recipe->recipe(ndx) );
 
    // and write it all
