@@ -64,10 +64,10 @@ void MiscEditor::save()
    m->setName(lineEdit_name->text());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
    m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
-   // TODO: fill in the rest of the "set" methods.
    m->setTime(lineEdit_time->toSI());
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
    m->setAmount( lineEdit_amount->toSI());
+   m->setInventoryAmount(lineEdit_inventory->toSI());
    m->setUseFor(textEdit_useFor->toPlainText());
    m->setNotes( textEdit_notes->toPlainText() );
 
