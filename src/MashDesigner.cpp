@@ -213,18 +213,24 @@ double MashDesigner::minAmt_l()
 // However much more we can add at this step.
 double MashDesigner::maxAmt_l()
 {
+   double amt = 0;
+
    if ( equip == 0 )
-      return 0;
+      return amt;
 
    // However much more we can fit in the tun.
    if( ! isSparge() )
    {
-      return equip->tunVolume_l() - mashVolume_l();
+      amt = equip->tunVolume_l() - mashVolume_l();
    }
    else
    {
-      return equip->tunVolume_l() - grainVolume_l();
+      amt = equip->tunVolume_l() - grainVolume_l();
    }
+
+   amt = std::min(amt, maxFromRecipe_l());
+
+   return amt;
 }
 
 // Returns the required volume of water to infuse if the strike water is
@@ -700,5 +706,19 @@ void MashDesigner::typeChanged(int t)
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);
    }
+}
+
+double MashDesigner::maxFromRecipe_l() {
+
+   if ( recObs == 0 )
+      return 0.0;
+
+   double absorption_lKg;
+   if( equip )
+      absorption_lKg = equip->grainAbsorption_LKg();
+   else
+      absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+
+   return recObs->boilSize_l() - addedWater_l + absorption_lKg * recObs->grainsInMash_kg();
 }
 
