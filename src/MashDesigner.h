@@ -78,6 +78,7 @@ private:
    double volFromTemp_l( double temp_c );
    double getDecoctionAmount_l();
    double waterFromMash_l();
+   double maxFromRecipe_l();
 
    // I have developed a distaste for "getBlah"
    double selectedAmount_l();
