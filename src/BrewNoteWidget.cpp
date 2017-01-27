@@ -32,26 +32,26 @@ BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent)
    bNoteObs = 0;
    setObjectName("BrewNoteWidget");
 
-   connect(lineEdit_SG,SIGNAL(textModified()),this,SLOT(updateSG()));
-   connect(lineEdit_volIntoBK,SIGNAL(textModified()),this,SLOT(updateVolumeIntoBK_l()));
-   connect(lineEdit_strikeTemp,SIGNAL(textModified()),this,SLOT(updateStrikeTemp_c()));
-   connect(lineEdit_mashFinTemp,SIGNAL(textModified()),this,SLOT(updateMashFinTemp_c()));
+   connect(lineEdit_SG, &BtLineEdit::textModified, this, &BrewNoteWidget::updateSG);
+   connect(lineEdit_volIntoBK, &BtLineEdit::textModified, this, &BrewNoteWidget::updateVolumeIntoBK_l);
+   connect(lineEdit_strikeTemp, &BtLineEdit::textModified, this, &BrewNoteWidget::updateStrikeTemp_c);
+   connect(lineEdit_mashFinTemp, &BtLineEdit::textModified, this, &BrewNoteWidget::updateMashFinTemp_c);
 
-   connect(lineEdit_OG,SIGNAL(textModified()),this,SLOT(updateOG()));
-   connect(lineEdit_postBoilVol,SIGNAL(textModified()),this,SLOT(updatePostBoilVolume_l()));
-   connect(lineEdit_volIntoFerm,SIGNAL(textModified()),this,SLOT(updateVolumeIntoFerm_l()));
-   connect(lineEdit_pitchTemp,SIGNAL(textModified()),this,SLOT(updatePitchTemp_c()));
+   connect(lineEdit_OG, &BtLineEdit::textModified, this, &BrewNoteWidget::updateOG);
+   connect(lineEdit_postBoilVol, &BtLineEdit::textModified, this, &BrewNoteWidget::updatePostBoilVolume_l);
+   connect(lineEdit_volIntoFerm, &BtLineEdit::textModified, this, &BrewNoteWidget::updateVolumeIntoFerm_l);
+   connect(lineEdit_pitchTemp, &BtLineEdit::textModified, this, &BrewNoteWidget::updatePitchTemp_c);
 
-   connect(lineEdit_FG,SIGNAL(textModified()),this,SLOT(updateFG()));
-   connect(lineEdit_finalVol,SIGNAL(textModified()),this,SLOT(updateFinalVolume_l()));
-   connect(lineEdit_fermentDate,SIGNAL(dateTimeChanged(const QDateTime&)),this,SLOT(updateFermentDate(const QDateTime&)));
+   connect(lineEdit_FG, &BtLineEdit::textModified, this, &BrewNoteWidget::updateFG);
+   connect(lineEdit_finalVol, &BtLineEdit::textModified, this, &BrewNoteWidget::updateFinalVolume_l);
+   connect(lineEdit_fermentDate, &QDateTimeEdit::dateTimeChanged, this, &BrewNoteWidget::updateFermentDate);
 
-   connect(btTextEdit_brewNotes,SIGNAL(textModified()), this, SLOT(updateNotes()));
+   connect(btTextEdit_brewNotes, &BtTextEdit::textModified, this, &BrewNoteWidget::updateNotes);
 
    // A few labels on this page need special handling, so I connect them here
    // instead of how we would normally do this.
-   connect(btLabel_projectedOg, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(updateProjOg(Unit::unitDisplay,Unit::unitScale)));
-   connect(btLabel_fermentDate, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), this, SLOT(updateDateFormat(Unit::unitDisplay,Unit::unitScale)));
+   connect(btLabel_projectedOg, &BtLabel::labelChanged, this, &BrewNoteWidget::updateProjOg);
+   connect(btLabel_fermentDate, &BtLabel::labelChanged, this, &BrewNoteWidget::updateDateFormat);
 
    // I think this might work
    updateDateFormat(Unit::noUnit, Unit::noScale);
@@ -115,7 +115,7 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
    if ( bNote )
    {
       bNoteObs = bNote;
-      connect( bNoteObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( bNoteObs, &BeerXMLElement::changed, this, &BrewNoteWidget::changed );
 
       // Set the highs and the lows for the lcds
       lcdnumber_effBK->setLowLim(bNoteObs->projEff_pct() * low);

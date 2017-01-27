@@ -37,7 +37,7 @@ void EquipmentButton::setRecipe(Recipe* rec)
    _rec = rec;
    if( _rec )
    {
-      connect( _rec, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(recChanged(QMetaProperty,QVariant)) );
+      connect( _rec, &BeerXMLElement::changed, this, &EquipmentButton::recChanged );
       setEquipment( _rec->equipment() );
    }
    else
@@ -52,7 +52,7 @@ void EquipmentButton::setEquipment(Equipment* equip)
    _equip = equip;
    if( _equip )
    {
-      connect( _equip, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
+      connect( _equip, &BeerXMLElement::changed, this, &EquipmentButton::equipChanged );
       setText( _equip->name() );
    }
    else

@@ -235,7 +235,7 @@ void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/)
          disconnect( ins, 0, this, 0 );
       recIns = recObs->instructions(); // Already sorted by instruction numbers.
       foreach( Instruction* ins, recIns )
-         connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptInsChanges(QMetaProperty,QVariant)) );
+         connect( ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges );
       showChanges();
    }
 }

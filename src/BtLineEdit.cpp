@@ -42,10 +42,10 @@ BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type) :
    _forceScale = Unit::noScale;
    */
    
-   connect(this,SIGNAL(editingFinished()),this,SLOT(lineChanged()));
+   connect(this,&QLineEdit::editingFinished,this,&BtLineEdit::onLineChanged);
 }
 
-void BtLineEdit::lineChanged()
+void BtLineEdit::onLineChanged()
 {
    lineChanged(Unit::noUnit,Unit::noScale);
 }
@@ -393,7 +393,7 @@ void BtMixedEdit::setIsWeight(bool state)
    }
 
    // maybe? My head hurts now
-   lineChanged();
+   onLineChanged();
 }
 
 BtDiastaticPowerEdit::BtDiastaticPowerEdit(QWidget *parent)
