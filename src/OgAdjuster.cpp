@@ -30,7 +30,7 @@ OgAdjuster::OgAdjuster( QWidget* parent ) : QDialog(parent)
 
    recObs = 0;
 
-   connect( pushButton_calculate, SIGNAL( clicked() ), this, SLOT( calculate() ) );
+   connect( pushButton_calculate, &QAbstractButton::clicked, this, &OgAdjuster::calculate );
 }
 
 

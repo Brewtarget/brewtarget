@@ -47,8 +47,8 @@ MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 //   radioButton_batchSparge->setChecked(true);
 
    connect(bGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(toggleSpinBox(QAbstractButton*)));
-   connect(buttonBox, SIGNAL(accepted()), this, SLOT(wizardry()) );
-   connect(buttonBox, SIGNAL(rejected()), this, SLOT(close()) );
+   connect(buttonBox, &QDialogButtonBox::accepted, this, &MashWizard::wizardry );
+   connect(buttonBox, &QDialogButtonBox::rejected, this, &QWidget::close );
 }
 
 void MashWizard::toggleSpinBox(QAbstractButton* button)

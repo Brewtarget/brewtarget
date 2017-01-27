@@ -34,7 +34,7 @@ PrimingDialog::PrimingDialog(QWidget* parent) : QDialog(parent)
    sugarGroup->addButton(radioButton_sucrose);
    sugarGroup->addButton(radioButton_dme);
    
-   connect( pushButton_calculate, SIGNAL( clicked() ), this, SLOT( calculate() ) );
+   connect( pushButton_calculate, &QAbstractButton::clicked, this, &PrimingDialog::calculate );
 }
 
 PrimingDialog::~PrimingDialog()

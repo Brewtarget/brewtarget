@@ -46,7 +46,7 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
    parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     parentTableWidget->setWordWrap(false);
 
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
+   connect(headerView, &QWidget::customContextMenuRequested, this, &MiscTableModel::contextMenu);
 }
 
 void MiscTableModel::observeRecipe(Recipe* rec)
@@ -60,7 +60,7 @@ void MiscTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( recObs, &BeerXMLElement::changed, this, &MiscTableModel::changed );
       addMiscs( recObs->miscs() );
    }
 }
@@ -71,7 +71,7 @@ void MiscTableModel::observeDatabase(bool val)
    {
       observeRecipe(0);
       removeAll();
-      connect( &(Database::instance()), SIGNAL(newMiscSignal(Misc*)), this, SLOT(addMisc(Misc*)) );
+      connect( &(Database::instance()), &Database::newMiscSignal, this, &MiscTableModel::addMisc );
       connect( &(Database::instance()), SIGNAL(deletedSignal(Misc*)), this, SLOT(removeMisc(Misc*)) );
       addMiscs( Database::instance().miscs() );
    }
@@ -100,7 +100,7 @@ void MiscTableModel::addMisc(Misc* misc)
    int size = miscObs.size();
    beginInsertRows( QModelIndex(), size, size );
    miscObs.append(misc);
-   connect( misc, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   connect( misc, &BeerXMLElement::changed, this, &MiscTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
@@ -123,7 +123,7 @@ void MiscTableModel::addMiscs(QList<Misc*> miscs)
       miscObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+         connect( *i, &BeerXMLElement::changed, this, &MiscTableModel::changed );
 
       endInsertRows();
    }
