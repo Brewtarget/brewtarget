@@ -43,7 +43,7 @@ BeerColorWidget::BeerColorWidget(QWidget* parent) : QWidget(parent)
 void BeerColorWidget::setRecipe( Recipe* rec )
 {
    if( recObs )
-      disconnect( recObs, &Recipie::changed, this, &BeerColorWidget::parseChanges );
+      disconnect( recObs, &Recipe::changed, this, &BeerColorWidget::parseChanges );
    
    recObs = rec;
    if( recObs )
