@@ -54,7 +54,7 @@ void WaterTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( recObs, &BeerXMLElement::changed, this, &WaterTableModel::changed );
       addWaters( recObs->waters() );
    }
 }
@@ -65,7 +65,7 @@ void WaterTableModel::observeDatabase(bool val)
    {
       observeRecipe(0);
       removeAll();
-      connect( &(Database::instance()), SIGNAL(newWaterSignal(Water*)), this, SLOT(addWater(Water*)) );
+      connect( &(Database::instance()), &Database::newWaterSignal, this, &WaterTableModel::addWater );
       connect( &(Database::instance()), SIGNAL(deletedSignal(Water*)), this, SLOT(removeWater(Water*)) );
       addWaters( Database::instance().waters() );
    }
@@ -93,7 +93,7 @@ void WaterTableModel::addWater(Water* water)
    
    beginInsertRows( QModelIndex(), waterObs.size(), waterObs.size() );
    waterObs.append(water);
-   connect( water, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   connect( water, &BeerXMLElement::changed, this, &WaterTableModel::changed );
    endInsertRows();
    
    if(parentTableWidget)
@@ -121,7 +121,7 @@ void WaterTableModel::addWaters(QList<Water*> waters)
       waterObs.append(tmp);
       
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+         connect( *i, &BeerXMLElement::changed, this, &WaterTableModel::changed );
       
       endInsertRows();
    }

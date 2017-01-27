@@ -48,11 +48,11 @@ YeastDialog::YeastDialog(MainWindow* parent)
    yeastTableProxy->setFilterKeyColumn(1);
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addYeast() ) );
-   connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
+   connect( pushButton_edit, &QAbstractButton::clicked, this, &YeastDialog::editSelected );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
-   connect( pushButton_remove, SIGNAL(clicked()), this, SLOT( removeYeast() ) );
-   connect( tableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addYeast(const QModelIndex&) ) );
-   connect( qLineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterYeasts(QString)));
+   connect( pushButton_remove, &QAbstractButton::clicked, this, &YeastDialog::removeYeast );
+   connect( tableWidget, &QAbstractItemView::doubleClicked, this, &YeastDialog::addYeast );
+   connect( qLineEdit_searchBox, &QLineEdit::textEdited, this, &YeastDialog::filterYeasts);
 
    yeastTableModel->observeDatabase(true);
 

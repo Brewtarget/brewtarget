@@ -36,7 +36,7 @@ void WaterEditor::setWater(Water *water)
    obs = water;
    if( obs )
    {
-      connect( obs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( obs, &BeerXMLElement::changed, this, &WaterEditor::changed );
       showChanges();
    }
 }
