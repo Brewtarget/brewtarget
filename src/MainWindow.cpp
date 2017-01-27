@@ -493,8 +493,8 @@ void MainWindow::setupTriggers()
       label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
    }
    else {
-      connect( actionBackup_Database, SIGNAL( triggered() ), this, SLOT( backup() ) );
-      connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
+      connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );
+      connect( actionRestore_Database, &QAction::triggered, this, &MainWindow::restoreFromBackup );
    }
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
@@ -545,31 +545,31 @@ void MainWindow::setupTriggers()
 // anything with a SIGNAL of clicked() should go in here.
 void MainWindow::setupClicks()
 {
-   connect( equipmentButton, SIGNAL( clicked() ), this, SLOT(showEquipmentEditor()));
-   connect( styleButton, SIGNAL( clicked() ), this, SLOT(showStyleEditor()) );
-   connect( mashButton, SIGNAL( clicked() ), mashEditor, SLOT( showEditor() ) );
-   connect( pushButton_addFerm, SIGNAL( clicked() ), fermDialog, SLOT( show() ) );
-   connect( pushButton_addHop, SIGNAL( clicked() ), hopDialog, SLOT( show() ) );
-   connect( pushButton_addMisc, SIGNAL( clicked() ), miscDialog, SLOT( show() ) );
-   connect( pushButton_addYeast, SIGNAL( clicked() ), yeastDialog, SLOT( show() ) );
-   connect( pushButton_removeFerm, SIGNAL( clicked() ), this, SLOT( removeSelectedFermentable() ) );
-   connect( pushButton_removeHop, SIGNAL( clicked() ), this, SLOT( removeSelectedHop() ) );
-   connect( pushButton_removeMisc, SIGNAL( clicked() ), this, SLOT( removeSelectedMisc() ) );
-   connect( pushButton_removeYeast, SIGNAL( clicked() ), this, SLOT( removeSelectedYeast() ) );
-   connect( pushButton_editFerm, SIGNAL(clicked()), this, SLOT( editSelectedFermentable() ) );
-   connect( pushButton_editMisc, SIGNAL( clicked() ), this, SLOT( editSelectedMisc() ) );
-   connect( pushButton_editHop, SIGNAL( clicked() ), this, SLOT( editSelectedHop() ) );
-   connect( pushButton_editYeast, SIGNAL( clicked() ), this, SLOT( editSelectedYeast() ) );
-   connect( pushButton_editMash, SIGNAL( clicked() ), mashEditor, SLOT( showEditor() ) );
-   connect( pushButton_addMashStep, SIGNAL( clicked() ), this, SLOT(addMashStep()) );
-   connect( pushButton_removeMashStep, SIGNAL( clicked() ), this, SLOT(removeSelectedMashStep()) );
-   connect( pushButton_editMashStep, SIGNAL( clicked() ), this, SLOT(editSelectedMashStep()) );
-   connect( pushButton_mashWizard, SIGNAL( clicked() ), mashWizard, SLOT( show() ) );
-   connect( pushButton_saveMash, SIGNAL( clicked() ), this, SLOT( saveMash() ) );
-   connect( pushButton_mashDes, SIGNAL( clicked() ), mashDesigner, SLOT( show() ) );
-   connect( pushButton_mashUp, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepUp() ) );
-   connect( pushButton_mashDown, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepDown() ) );
-   connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
+   connect( equipmentButton, &QAbstractButton::clicked, this, &MainWindow::showEquipmentEditor);
+   connect( styleButton, &QAbstractButton::clicked, this, &MainWindow::showStyleEditor );
+   connect( mashButton, &QAbstractButton::clicked, mashEditor, &MashEditor::showEditor );
+   connect( pushButton_addFerm, &QAbstractButton::clicked, fermDialog, &QWidget::show );
+   connect( pushButton_addHop, &QAbstractButton::clicked, hopDialog, &QWidget::show );
+   connect( pushButton_addMisc, &QAbstractButton::clicked, miscDialog, &QWidget::show );
+   connect( pushButton_addYeast, &QAbstractButton::clicked, yeastDialog, &QWidget::show );
+   connect( pushButton_removeFerm, &QAbstractButton::clicked, this, &MainWindow::removeSelectedFermentable );
+   connect( pushButton_removeHop, &QAbstractButton::clicked, this, &MainWindow::removeSelectedHop );
+   connect( pushButton_removeMisc, &QAbstractButton::clicked, this, &MainWindow::removeSelectedMisc );
+   connect( pushButton_removeYeast, &QAbstractButton::clicked, this, &MainWindow::removeSelectedYeast );
+   connect( pushButton_editFerm, &QAbstractButton::clicked, this, &MainWindow::editSelectedFermentable );
+   connect( pushButton_editMisc, &QAbstractButton::clicked, this, &MainWindow::editSelectedMisc );
+   connect( pushButton_editHop, &QAbstractButton::clicked, this, &MainWindow::editSelectedHop );
+   connect( pushButton_editYeast, &QAbstractButton::clicked, this, &MainWindow::editSelectedYeast );
+   connect( pushButton_editMash, &QAbstractButton::clicked, mashEditor, &MashEditor::showEditor );
+   connect( pushButton_addMashStep, &QAbstractButton::clicked, this, &MainWindow::addMashStep );
+   connect( pushButton_removeMashStep, &QAbstractButton::clicked, this, &MainWindow::removeSelectedMashStep );
+   connect( pushButton_editMashStep, &QAbstractButton::clicked, this, &MainWindow::editSelectedMashStep );
+   connect( pushButton_mashWizard, &QAbstractButton::clicked, mashWizard, &MashWizard::show );
+   connect( pushButton_saveMash, &QAbstractButton::clicked, this, &MainWindow::saveMash );
+   connect( pushButton_mashDes, &QAbstractButton::clicked, mashDesigner, &MashDesigner::show );
+   connect( pushButton_mashUp, &QAbstractButton::clicked, this, &MainWindow::moveSelectedMashStepUp );
+   connect( pushButton_mashDown, &QAbstractButton::clicked, this, &MainWindow::moveSelectedMashStepDown );
+   connect( pushButton_mashRemove, &QAbstractButton::clicked, this, &MainWindow::removeMash );
 }
 
 // anything with a SIGNAL of activated() should go in here.
@@ -584,11 +584,11 @@ void MainWindow::setupActivate()
 // here
 void MainWindow::setupTextEdit()
 {
-   connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
-   connect( lineEdit_batchSize, SIGNAL( textModified() ), this, SLOT( updateRecipeBatchSize() ) );
-   connect( lineEdit_boilSize, SIGNAL( textModified() ), this, SLOT( updateRecipeBoilSize() ) );
-   connect( lineEdit_boilTime, SIGNAL( textModified() ), this, SLOT( updateRecipeBoilTime() ) );
-   connect( lineEdit_efficiency, SIGNAL( textModified() ), this, SLOT( updateRecipeEfficiency() ) );
+   connect( lineEdit_name, &QLineEdit::editingFinished, this, &MainWindow::updateRecipeName );
+   connect( lineEdit_batchSize, &BtLineEdit::textModified, this, &MainWindow::updateRecipeBatchSize );
+   connect( lineEdit_boilSize, &BtLineEdit::textModified, this, &MainWindow::updateRecipeBoilSize );
+   connect( lineEdit_boilTime, &BtLineEdit::textModified, this, &MainWindow::updateRecipeBoilTime );
+   connect( lineEdit_efficiency, &BtLineEdit::textModified, this, &MainWindow::updateRecipeEfficiency );
 }
 
 // anything using a BtLabel::labelChanged signal should go in here
@@ -2170,26 +2170,26 @@ void MainWindow::setupContextMenu()
    treeView_yeast->setupContextMenu(this,yeastDialog);
 
    // TreeView for clicks, both double and right
-   connect( treeView_recipe, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_recipe, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
+   connect( treeView_recipe, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
+   connect( treeView_recipe, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 
-   connect( treeView_equip, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_equip, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+   connect( treeView_equip, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
+   connect( treeView_equip, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 
-   connect( treeView_ferm, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_ferm, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+   connect( treeView_ferm, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
+   connect( treeView_ferm, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 
-   connect( treeView_hops, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_hops, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+   connect( treeView_hops, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
+   connect( treeView_hops, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 
-   connect( treeView_misc, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_misc, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+   connect( treeView_misc, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
+   connect( treeView_misc, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 
-   connect( treeView_yeast, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_yeast, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+   connect( treeView_yeast, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
+   connect( treeView_yeast, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 
-   connect( treeView_style, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_style, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+   connect( treeView_style, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
+   connect( treeView_style, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 
 }
 

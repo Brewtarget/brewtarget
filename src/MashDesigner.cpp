@@ -46,30 +46,30 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    label_zeroWort->setText(Brewtarget::displayAmount(0, Units::liters));
 
    // Update temp slider when we move amount slider.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateTempSlider()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTempSlider );
    // Update amount slider when we move temp slider.
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateAmtSlider()) );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmtSlider );
    // Update tun fullness bar when either slider moves.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateFullness()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateFullness()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness );
    // Update amount/temp text when sliders move.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateAmt()) );
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateTemp()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateAmt()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateTemp()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp );
    // Update collected wort when sliders move.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort );
    // Save the target temp whenever it's changed.
-   connect( lineEdit_temp, SIGNAL(textModified()), this, SLOT(saveTargetTemp()) );
+   connect( lineEdit_temp, &BtLineEdit::textModified, this, &MashDesigner::saveTargetTemp );
    // Move to next step.
-   connect( pushButton_next, SIGNAL(clicked()), this, SLOT(proceed()) );
+   connect( pushButton_next, &QAbstractButton::clicked, this, &MashDesigner::proceed );
    // Do correct calcs when the mash step type is selected.
    connect( comboBox_type, SIGNAL(activated(int)), this, SLOT(typeChanged(int)) );
 
    // I still dislike this part. But I also need to "fix" the form
    // connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
-   connect( pushButton_finish, SIGNAL(clicked()), this, SLOT(saveAndClose()) );
+   connect( pushButton_finish, &QAbstractButton::clicked, this, &MashDesigner::saveAndClose );
 
 }
 
