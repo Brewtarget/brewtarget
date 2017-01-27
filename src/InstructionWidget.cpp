@@ -28,10 +28,9 @@ InstructionWidget::InstructionWidget(QWidget* parent) :
    setupUi(this);
    timer->setVisible(false);
 
-   connect( checkBox_showTimer, SIGNAL(stateChanged(int)), this, SLOT(setHasTimer()) );
-   connect( checkBox_completed, SIGNAL(stateChanged(int)), this, SLOT(setCompleted()) );
+   connect( checkBox_completed, &QCheckBox::stateChanged, this, &InstructionWidget::setCompleted );
    connect( timer, SIGNAL(timerSet(QString)), this, SLOT(setTimerValue(QString)) );
-   connect( textEdit, SIGNAL(textChanged()), this, SLOT(setDirections()) );
+   connect( textEdit, &QTextEdit::textChanged, this, &InstructionWidget::setDirections );
 }
 
 InstructionWidget::~InstructionWidget()

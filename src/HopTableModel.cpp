@@ -70,7 +70,7 @@ HopTableModel::HopTableModel(QTableView* parent, bool editable)
    parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->setWordWrap(false);
 
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
+   connect(headerView, &QWidget::customContextMenuRequested, this, &HopTableModel::contextMenu);
 }
 
 HopTableModel::~HopTableModel()
@@ -89,7 +89,7 @@ void HopTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( recObs, &BeerXMLElement::changed, this, &HopTableModel::changed );
       addHops( recObs->hops() );
    }
 }
@@ -100,7 +100,7 @@ void HopTableModel::observeDatabase(bool val)
    {
       observeRecipe(0);
       removeAll();
-      connect( &(Database::instance()), SIGNAL(newHopSignal(Hop*)), this, SLOT(addHop(Hop*)) );
+      connect( &(Database::instance()), &Database::newHopSignal, this, &HopTableModel::addHop );
       connect( &(Database::instance()), SIGNAL(deletedSignal(Hop*)), this, SLOT(removeHop(Hop*)) );
       addHops( Database::instance().hops() );
    }

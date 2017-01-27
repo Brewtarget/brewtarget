@@ -457,33 +457,33 @@ void MainWindow::restoreSavedState()
 void MainWindow::setupTriggers()
 {
    // actions
-   connect( actionExit, SIGNAL( triggered() ), this, SLOT( close() ) );
-   connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
-   connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
-   connect( actionImport_Recipes, SIGNAL( triggered() ), this, SLOT( importFiles() ) );
-   connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
-   connect( actionEquipments, SIGNAL( triggered() ), equipEditor, SLOT( show() ) );
-   connect( actionMashs, SIGNAL( triggered() ), namedMashEditor, SLOT( show() ) );
-   connect( actionStyles, SIGNAL( triggered() ), styleEditor, SLOT( show() ) );
-   connect( actionFermentables, SIGNAL( triggered() ), fermDialog, SLOT( show() ) );
-   connect( actionHops, SIGNAL( triggered() ), hopDialog, SLOT( show() ) );
-   connect( actionMiscs, SIGNAL( triggered() ), miscDialog, SLOT( show() ) );
-   connect( actionYeasts, SIGNAL( triggered() ), yeastDialog, SLOT( show() ) );
-   connect( actionOptions, SIGNAL( triggered() ), optionDialog, SLOT( show() ) );
-   connect( actionManual, SIGNAL( triggered() ), this, SLOT( openManual() ) );
-   connect( actionScale_Recipe, SIGNAL( triggered() ), recipeScaler, SLOT( show() ) );
-   connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
-   connect( actionConvert_Units, SIGNAL( triggered() ), converterTool, SLOT( show() ) );
-   connect( actionHydrometer_Temp_Adjustment, SIGNAL( triggered() ), hydrometerTool, SLOT( show() ) );
-   connect( actionOG_Correction_Help, SIGNAL( triggered() ), ogAdjuster, SLOT( show() ) );
-   connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
-   connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
-   connect( actionStrikeWater_Calculator, SIGNAL( triggered() ), strikeWaterDialog, SLOT( show() ) );
-   connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
-   connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), this, SLOT(showPitchDialog()));
-   connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );
-   connect( actionTimers, SIGNAL(triggered()), timerMainDialog, SLOT(show()) );
-   connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
+   connect( actionExit, &QAction::triggered, this, &QWidget::close );
+   connect( actionAbout_BrewTarget, &QAction::triggered, dialog_about, &QWidget::show );
+   connect( actionNewRecipe, &QAction::triggered, this, &MainWindow::newRecipe );
+   connect( actionImport_Recipes, &QAction::triggered, this, &MainWindow::importFiles );
+   connect( actionExportRecipe, &QAction::triggered, this, &MainWindow::exportRecipe );
+   connect( actionEquipments, &QAction::triggered, equipEditor, &QWidget::show );
+   connect( actionMashs, &QAction::triggered, namedMashEditor, &QWidget::show );
+   connect( actionStyles, &QAction::triggered, styleEditor, &QWidget::show );
+   connect( actionFermentables, &QAction::triggered, fermDialog, &QWidget::show );
+   connect( actionHops, &QAction::triggered, hopDialog, &QWidget::show );
+   connect( actionMiscs, &QAction::triggered, miscDialog, &QWidget::show );
+   connect( actionYeasts, &QAction::triggered, yeastDialog, &QWidget::show );
+   connect( actionOptions, &QAction::triggered, optionDialog, &OptionDialog::show );
+   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual );
+   connect( actionScale_Recipe, &QAction::triggered, recipeScaler, &QWidget::show );
+   connect( action_recipeToTextClipboard, &QAction::triggered, recipeFormatter, &RecipeFormatter::toTextClipboard );
+   connect( actionConvert_Units, &QAction::triggered, converterTool, &QWidget::show );
+   connect( actionHydrometer_Temp_Adjustment, &QAction::triggered, hydrometerTool, &QWidget::show );
+   connect( actionOG_Correction_Help, &QAction::triggered, ogAdjuster, &QWidget::show );
+   connect( actionCopy_Recipe, &QAction::triggered, this, &MainWindow::copyRecipe );
+   connect( actionPriming_Calculator, &QAction::triggered, primingDialog, &QWidget::show );
+   connect( actionStrikeWater_Calculator, &QAction::triggered, strikeWaterDialog, &QWidget::show );
+   connect( actionRefractometer_Tools, &QAction::triggered, refractoDialog, &QWidget::show );
+   connect( actionPitch_Rate_Calculator, &QAction::triggered, this, &MainWindow::showPitchDialog);
+   connect( actionMergeDatabases, &QAction::triggered, this, &MainWindow::updateDatabase );
+   connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );
+   connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable

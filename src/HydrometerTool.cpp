@@ -30,10 +30,10 @@ HydrometerTool::HydrometerTool(QWidget* parent) : QDialog(parent)
 {
    doLayout();
    
-   connect( pushButton_convert, SIGNAL(clicked()), this, SLOT(convert()) );
-   connect(label_inputTemp, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_inputTemp, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_inputSg, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_inputSg, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_outputSg, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_outputSg, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect( pushButton_convert, &QAbstractButton::clicked, this, &HydrometerTool::convert );
+   connect(label_inputTemp, &BtLabel::labelChanged, lineEdit_inputTemp, &BtLineEdit::lineChanged);
+   connect(label_inputSg, &BtLabel::labelChanged, lineEdit_inputSg, &BtLineEdit::lineChanged);
+   connect(label_outputSg, &BtLabel::labelChanged, lineEdit_outputSg, &BtLineEdit::lineChanged);
 
    QMetaObject::connectSlotsByName(this);
 
