@@ -282,7 +282,6 @@ QString BrewDayWidget::buildFooterTable()
 bool BrewDayWidget::loadComplete(bool ok) 
 {
    doc->print(printer);
-   disconnect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
    return ok;
 }
 
@@ -290,11 +289,6 @@ void BrewDayWidget::pushInstructionPrint()
 {
    QString pDoc;
    QPrintDialog *dialog = new QPrintDialog(printer, this);
-
-   /* Instantiate the TextBrowser and then connect its signal */
-   // connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
-   // GSG: QTextBrowser does not have a loadFinished signal.
-   // Also don't see where this is called anywhere else.
 
    dialog->setWindowTitle(tr("Print Document"));
    if (dialog->exec() != QDialog::Accepted)
