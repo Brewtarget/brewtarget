@@ -21,13 +21,9 @@
 
 #include "database.h"
 #include "MashDesigner.h"
-#include "equipment.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "brewtarget.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
-#include "unit.h"
+#include "fermentable.h"
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -228,7 +224,7 @@ double MashDesigner::maxAmt_l()
       amt = equip->tunVolume_l() - grainVolume_l();
    }
 
-   amt = std::min(amt, maxFromRecipe_l());
+   amt = std::min(amt, targetTotalMashVol_l() - addedWater_l);
 
    return amt;
 }
@@ -348,7 +344,7 @@ bool MashDesigner::initializeMash()
    grain_kg = recObs->grainsInMash_kg();
 
    label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), Units::liters));
-   label_wortMax->setText(Brewtarget::displayAmount(recObs->boilSize_l(), Units::liters));
+   label_wortMax->setText(Brewtarget::displayAmount(targetCollectedWortVol_l(), Units::liters));
 
    updateMinAmt();
    updateMaxAmt();
@@ -415,7 +411,7 @@ void MashDesigner::updateCollectedWort()
    // double wort_l = recObs->wortFromMash_l();
    double wort_l = waterFromMash_l();
 
-   double ratio = wort_l / recObs->boilSize_l();
+   double ratio = wort_l / targetCollectedWortVol_l();
    if( ratio < 0 )
      ratio = 0;
    if( ratio > 1 )
@@ -666,7 +662,7 @@ MashStep::Type MashDesigner::type() const
    return static_cast<MashStep::Type>(curIdx);
 }
 
-void MashDesigner::typeChanged(int t)
+void MashDesigner::typeChanged()
 {
    MashStep::Type _type = type();
 
@@ -708,7 +704,29 @@ void MashDesigner::typeChanged(int t)
    }
 }
 
-double MashDesigner::maxFromRecipe_l() {
+double MashDesigner::targetCollectedWortVol_l() {
+
+   if ( recObs == 0 )
+      return 0.0;
+
+   // Need to account for extract/sugar volume also.
+   float postMashAdditionVolume_l = 0;
+   QList<Fermentable*> ferms = recObs->fermentables();
+         foreach( Fermentable* f, ferms )
+      {
+         Fermentable::Type type = f->type();
+         if( type == Fermentable::Extract )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
+         else if( type == Fermentable::Sugar )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
+         else if( type == Fermentable::Dry_Extract )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
+      }
+
+   return recObs->boilSize_l() - equip->topUpKettle_l() - postMashAdditionVolume_l;
+}
+
+double MashDesigner::targetTotalMashVol_l() {
 
    if ( recObs == 0 )
       return 0.0;
@@ -719,6 +737,7 @@ double MashDesigner::maxFromRecipe_l() {
    else
       absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
 
-   return recObs->boilSize_l() - addedWater_l + absorption_lKg * recObs->grainsInMash_kg();
+
+   return targetCollectedWortVol_l() + absorption_lKg * recObs->grainsInMash_kg();
 }
 
