@@ -53,11 +53,11 @@ HopDialog::HopDialog(MainWindow* parent) :
    hopTableProxy->setFilterKeyColumn(1);
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addHop() ) );
-   connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
+   connect( pushButton_edit, &QAbstractButton::clicked, this, &HopDialog::editSelected );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
-   connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
-   connect( tableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
-   connect( qLineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterHops(QString)));
+   connect( pushButton_remove, &QAbstractButton::clicked, this, &HopDialog::removeHop);
+   connect( tableWidget, &QAbstractItemView::doubleClicked, this, &HopDialog::addHop );
+   connect( qLineEdit_searchBox, &QLineEdit::textEdited, this, &HopDialog::filterHops);
 
    hopTableModel->observeDatabase(true);
 }

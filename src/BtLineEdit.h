@@ -98,7 +98,7 @@ public:
    void setForcedScale(QString forcedScale);
 
 public slots:
-   void lineChanged();
+   void onLineChanged();
    void lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
 
 signals:

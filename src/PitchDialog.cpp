@@ -34,18 +34,18 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
    dateEdit_ProductionDate->setDate(QDate::currentDate());
    updateViabilityFromDate(QDate::currentDate());
 
-   connect( lineEdit_vol, SIGNAL(textModified()), this, SLOT(calculate()));
-   connect( lineEdit_OG, SIGNAL(textModified()), this, SLOT(calculate()));
-   connect( slider_pitchRate, SIGNAL(valueChanged(int)), this, SLOT(calculate()) );
-   connect( slider_pitchRate, SIGNAL(valueChanged(int)), this, SLOT(updateShownPitchRate(int)) );
+   connect( lineEdit_vol, &BtLineEdit::textModified, this, &PitchDialog::calculate);
+   connect( lineEdit_OG, &BtLineEdit::textModified, this, &PitchDialog::calculate);
+   connect( slider_pitchRate, &QAbstractSlider::valueChanged, this, &PitchDialog::calculate );
+   connect( slider_pitchRate, &QAbstractSlider::valueChanged, this, &PitchDialog::updateShownPitchRate );
    connect( spinBox_Viability, SIGNAL(valueChanged(int)), this, SLOT(calculate()));
    connect( spinBox_VialsPitched, SIGNAL(valueChanged(int)), this, SLOT(calculate()));
    connect( comboBox_AerationMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(calculate()));
-   connect( dateEdit_ProductionDate, SIGNAL(dateChanged(QDate)), this, SLOT(updateViabilityFromDate(QDate)));
-   connect( checkBox_CalculateViability, SIGNAL(stateChanged(int)), this, SLOT(toggleViabilityFromDate(int)));
+   connect( dateEdit_ProductionDate, &QDateTimeEdit::dateChanged, this, &PitchDialog::updateViabilityFromDate);
+   connect( checkBox_CalculateViability, &QCheckBox::stateChanged, this, &PitchDialog::toggleViabilityFromDate);
 
    // Dates are a little more cranky
-   connect(label_productionDate,SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)),this,SLOT(updateProductionDate(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_productionDate,&BtLabel::labelChanged,this,&PitchDialog::updateProductionDate);
    updateProductionDate(Unit::noUnit,Unit::noScale);
    updateShownPitchRate(0);
 }

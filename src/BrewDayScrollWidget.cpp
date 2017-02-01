@@ -42,14 +42,14 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
    setObjectName("BrewDayScrollWidget");
    recObs = 0;
 
-   connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
-   // connect( plainTextEdit, SIGNAL(textChanged()), this, SLOT(saveInstruction()) );
-   connect(btTextEdit,SIGNAL(textModified()), this, SLOT(saveInstruction()));
-   connect( pushButton_insert, SIGNAL(clicked()), this, SLOT(insertInstruction()) );
-   connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
-   connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
-   connect( pushButton_down, SIGNAL(clicked()), this, SLOT(pushInstructionDown()) );
-   connect( pushButton_generateInstructions, SIGNAL(clicked()), this, SLOT(generateInstructions()) );
+   connect( listWidget, &QListWidget::currentRowChanged, this, &BrewDayScrollWidget::showInstruction);
+   // connect( plainTextEdit, &QPlainTextEdit::textChanged, this, &BrewDayScrollWidget::saveInstruction );
+   connect(btTextEdit, &BtTextEdit::textModified, this, &BrewDayScrollWidget::saveInstruction);
+   connect( pushButton_insert, &QAbstractButton::clicked, this, &BrewDayScrollWidget::insertInstruction );
+   connect( pushButton_remove, &QAbstractButton::clicked, this, &BrewDayScrollWidget::removeSelectedInstruction );
+   connect( pushButton_up, &QAbstractButton::clicked, this, &BrewDayScrollWidget::pushInstructionUp );
+   connect( pushButton_down, &QAbstractButton::clicked, this, &BrewDayScrollWidget::pushInstructionDown );
+   connect( pushButton_generateInstructions, &QAbstractButton::clicked, this, &BrewDayScrollWidget::generateInstructions );
 }
 
 void BrewDayScrollWidget::saveInstruction()
@@ -133,7 +133,6 @@ void BrewDayScrollWidget::pushInstructionDown()
 bool BrewDayScrollWidget::loadComplete(bool ok) 
 {
    doc->print(printer);
-   disconnect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
    return ok;
 }
 
@@ -182,14 +181,14 @@ void BrewDayScrollWidget::setRecipe(Recipe* rec)
 {
    // Disconnect old notifier.
    if( recObs )
-      disconnect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
+      disconnect( recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges );
    
    recObs = rec;
-   connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
+   connect( recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges );
    
    recIns = recObs->instructions();
    foreach( Instruction* ins, recIns )
-         connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptInsChanges(QMetaProperty,QVariant)) );
+         connect( ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges );
    
    btTextEdit->clear();
    if(recIns.isEmpty())
@@ -236,7 +235,7 @@ void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/)
          disconnect( ins, 0, this, 0 );
       recIns = recObs->instructions(); // Already sorted by instruction numbers.
       foreach( Instruction* ins, recIns )
-         connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptInsChanges(QMetaProperty,QVariant)) );
+         connect( ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges );
       showChanges();
    }
 }

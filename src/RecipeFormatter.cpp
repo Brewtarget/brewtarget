@@ -1518,9 +1518,6 @@ QString RecipeFormatter::getLabelToolTip() {
 bool RecipeFormatter::loadComplete(bool ok)
 {
    doc->print(printer);
-   // disconnect( doc, SIGNAL((bool)), this, SLOT(loadComplete(bool)) );
-   //
-   // GSG: Part of fix for #263
    return ok;
 }
 
@@ -1542,10 +1539,6 @@ void RecipeFormatter::print(QPrinter* mainPrinter,
    if ( action == PRINT )
    {
       printer = mainPrinter;
-      //connect( doc, SIGNAL((bool)), this, SLOT(loadComplete(bool)) );
-      //
-      //GSG: My guess is that we used QWebView in the past and updated to QTextBrowser.
-      // QTextBrowser doesn't have a  signal.
       doc->setHtml(getHTMLFormat());
       loadComplete(true);
    }

@@ -64,16 +64,16 @@ NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool s
    connect(equipmentComboBox, SIGNAL(activated(const QString&)), this, SLOT(fromEquipment(const QString&)));
 
    // ok and cancel buttons
-   connect(pushButton_save,           SIGNAL(clicked()), this, SLOT(saveAndClose()) );
-   connect(pushButton_cancel,         SIGNAL(clicked()), this, SLOT(closeEditor()) );
+   connect(pushButton_save,           &QAbstractButton::clicked, this, &NamedMashEditor::saveAndClose );
+   connect(pushButton_cancel,         &QAbstractButton::clicked, this, &NamedMashEditor::closeEditor );
    // new mash step, delete mash step, move mash step up and down
-   connect(pushButton_addMashStep,    SIGNAL(clicked()), this, SLOT(addMashStep()));
-   connect(pushButton_removeMashStep, SIGNAL(clicked()), this, SLOT(removeMashStep()));
-   connect(pushButton_mashUp,         SIGNAL(clicked()), this, SLOT(moveMashStepUp()));
-   connect(pushButton_mashDown,       SIGNAL(clicked()), this, SLOT(moveMashStepDown()));
+   connect(pushButton_addMashStep,    &QAbstractButton::clicked, this, &NamedMashEditor::addMashStep);
+   connect(pushButton_removeMashStep, &QAbstractButton::clicked, this, &NamedMashEditor::removeMashStep);
+   connect(pushButton_mashUp,         &QAbstractButton::clicked, this, &NamedMashEditor::moveMashStepUp);
+   connect(pushButton_mashDown,       &QAbstractButton::clicked, this, &NamedMashEditor::moveMashStepDown);
    // finally, the combo box and the remove mash button
    connect(mashComboBox, SIGNAL(activated(const QString&)), this, SLOT(mashSelected(const QString&)));
-   connect(pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMash()));
+   connect(pushButton_remove, &QAbstractButton::clicked, this, &NamedMashEditor::removeMash);
 
    setMash(mashListModel->at(mashComboBox->currentIndex()));
 
@@ -120,7 +120,7 @@ void NamedMashEditor::setMash(Mash* mash)
 
    if( mashObs )
    {
-      connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( mashObs, &BeerXMLElement::changed, this, &NamedMashEditor::changed );
       showChanges();
    }
 }

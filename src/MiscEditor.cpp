@@ -33,8 +33,8 @@ MiscEditor::MiscEditor( QWidget* parent )
 {
    setupUi(this);
    
-   connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
-   connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
+   connect( buttonBox, &QDialogButtonBox::accepted, this, &MiscEditor::save);
+   connect( buttonBox, &QDialogButtonBox::rejected, this, &MiscEditor::clearAndClose);
 
 }
 

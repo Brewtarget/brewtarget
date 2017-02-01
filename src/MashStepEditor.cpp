@@ -30,8 +30,8 @@ MashStepEditor::MashStepEditor(QWidget* parent)
 
    comboBox_type->setCurrentIndex(-1);
 
-   connect( buttonBox, SIGNAL( accepted() ), this, SLOT(saveAndClose()) );
-   connect( buttonBox, SIGNAL( rejected() ), this, SLOT(close()) );
+   connect( buttonBox, &QDialogButtonBox::accepted, this, &MashStepEditor::saveAndClose );
+   connect( buttonBox, &QDialogButtonBox::rejected, this, &MashStepEditor::close );
    connect( comboBox_type, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(grayOutStuff(const QString &)) );
 
 }

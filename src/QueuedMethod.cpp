@@ -104,7 +104,7 @@ void QueuedMethod::dequeueMyself()
 QSharedPointer<QueuedMethod> QueuedMethod::chainWith( QSharedPointer<QueuedMethod> other )
 {
    _chainedMethod = other;
-   connect( this, SIGNAL(done(bool)), this, SLOT(startChained()) );
+   connect( this, &QueuedMethod::done, this, &QueuedMethod::startChained );
    return other;
 }
 

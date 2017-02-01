@@ -72,7 +72,7 @@ BtTreeView::BtTreeView(QWidget *parent, BtTreeModel::TypeMasks type) :
    resizeColumnToContents(0);
 
    // and one wee connection
-   connect( _model, SIGNAL(expandFolder(BtTreeModel::TypeMasks, QModelIndex)), this, SLOT(expandFolder(BtTreeModel::TypeMasks, QModelIndex)));
+   connect( _model, &BtTreeModel::expandFolder, this, &BtTreeView::expandFolder);
 }
 
 BtTreeModel* BtTreeView::model()

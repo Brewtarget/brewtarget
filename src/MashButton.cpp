@@ -40,7 +40,7 @@ void MashButton::setRecipe(Recipe* rec)
    _rec = rec;
    if( _rec )
    {
-      connect( _rec, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(recChanged(QMetaProperty,QVariant)) );
+      connect( _rec, &BeerXMLElement::changed, this, &MashButton::recChanged );
       setMash( _rec->mash() );
    }
    else
@@ -55,7 +55,7 @@ void MashButton::setMash(Mash* mash)
    _mash = mash;
    if( _mash )
    {
-      connect( _mash, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
+      connect( _mash, &BeerXMLElement::changed, this, &MashButton::mashChanged );
       setText( _mash->name() );
    }
    else

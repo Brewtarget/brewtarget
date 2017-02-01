@@ -186,7 +186,7 @@ void Brewtarget::checkForNewVersion(MainWindow* mw)
    QNetworkAccessManager manager;
    QUrl url("http://brewtarget.sourceforge.net/version");
    QNetworkReply* reply = manager.get( QNetworkRequest(url) );
-   QObject::connect( reply, SIGNAL(finished()), mw, SLOT(finishCheckingVersion()) );
+   QObject::connect( reply, &QNetworkReply::finished, mw, &MainWindow::finishCheckingVersion );
 }
 
 bool Brewtarget::copyDataFiles(const QDir newPath)
@@ -536,7 +536,7 @@ int Brewtarget::run(const QString &userDirectory)
    _mainWindow = new MainWindow();
    _mainWindow->setVisible(true);
    splashScreen.finish(_mainWindow);
-   QObject::connect( &log, SIGNAL(wroteEntry(const QString)), _mainWindow, SLOT(updateStatus(const QString)) );
+   QObject::connect( &log, &Log::wroteEntry, _mainWindow, &MainWindow::updateStatus );
 
    checkForNewVersion(_mainWindow);
    do {

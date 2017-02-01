@@ -40,7 +40,7 @@ void StyleButton::setRecipe(Recipe* rec)
    _rec = rec;
    if( _rec )
    {
-      connect( _rec, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(recChanged(QMetaProperty,QVariant)) );
+      connect( _rec, &BeerXMLElement::changed, this, &StyleButton::recChanged );
       setStyle( _rec->style() );
    }
    else
@@ -55,7 +55,7 @@ void StyleButton::setStyle(Style* style)
    _style = style;
    if( _style )
    {
-      connect( _style, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(styleChanged(QMetaProperty,QVariant)) );
+      connect( _style, &BeerXMLElement::changed, this, &StyleButton::styleChanged );
       setText( _style->name() );
    }
    else

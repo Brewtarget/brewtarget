@@ -28,7 +28,7 @@ BtTextEdit::BtTextEdit(QWidget *parent)
    wasModified = false;
 
    // We will see if this works...
-   connect(this,SIGNAL(textChanged()),this,SLOT(textChanged()));
+   connect(this, &BtTextEdit::textChanged, this, &BtTextEdit::textChanged);
 
 }
 
@@ -39,7 +39,7 @@ BtTextEdit::BtTextEdit(const QString &text, QWidget *parent)
    wasModified = false;
 
    // We will see if this works...
-   connect(this,SIGNAL(textChanged()),this,SLOT(textChanged()));
+   connect(this, &BtTextEdit::textChanged, this, &BtTextEdit::textChanged);
 
 }
 

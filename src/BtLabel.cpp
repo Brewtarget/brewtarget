@@ -38,7 +38,7 @@ BtLabel::BtLabel(QWidget *parent, LabelType lType) :
    btParent = parent;
    _menu = 0;
 
-   connect(this,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(popContextMenu(const QPoint&)));
+   connect(this, &QWidget::customContextMenuRequested, this, &BtLabel::popContextMenu);
 
 }
 

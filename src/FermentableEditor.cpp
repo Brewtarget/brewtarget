@@ -33,8 +33,8 @@ FermentableEditor::FermentableEditor( QWidget* parent )
 {
    setupUi(this);
 
-   connect( this, SIGNAL( accepted() ), this, SLOT( save() ));
-   connect( this, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
+   connect( this, &QDialog::accepted, this, &FermentableEditor::save);
+   connect( this, &QDialog::rejected, this, &FermentableEditor::clearAndClose);
 
 }
 
