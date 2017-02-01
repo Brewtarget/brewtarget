@@ -296,23 +296,18 @@ public:
    {
       if ( list.empty() )
          return;
+      
+      QMetaObject *meta;
+      int ndx;
+      bool emitSignal;
+      
+      foreach(T* toBeDeleted, list) {
+         meta = (QMetaObject *)toBeDeleted->metaObject();
+         ndx = meta->indexOfClassInfo("signal");
+         emitSignal = ndx != -1 ? true : false;
 
-      const QMetaObject *meta = list[0]->metaObject();
-      Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
-      QString propName;
-
-      int ndx = meta->indexOfClassInfo("signal");
-      if ( ndx != -1 ) {
-         propName = meta->classInfo(ndx).value();
+         remove(toBeDeleted, emitSignal);
       }
-      else
-         throw QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className());
-
-      foreach( T* dead, list ) {
-         deleteRecord(ingTable,dead);
-      }
-
-      emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
    }
 
    template <class T>void remove(T* ing, bool emitSignal = true)
