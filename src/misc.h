@@ -130,7 +130,7 @@ signals:
    */
    
 private:
-   Misc();
+   Misc(Brewtarget::DBTable table, int key);
    Misc(Misc const& other);
    
    bool isValidType( const QString &var );

@@ -178,7 +178,7 @@ signals:
    void brewDateChanged(const QDateTime&);
 
 private:
-   BrewNote();
+   BrewNote(Brewtarget::DBTable table, int key);
    BrewNote(BrewNote const& other);
    bool loading;
 

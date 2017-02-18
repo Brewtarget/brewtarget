@@ -160,7 +160,7 @@ signals:
    */
    
 private:
-   Hop();
+   Hop(Brewtarget::DBTable table, int key);
    Hop( Hop const& other );
    
    void setDefaults();

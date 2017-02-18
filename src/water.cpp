@@ -54,8 +54,8 @@ bool operator==(Water &w1, Water &w2)
    return w1.name() == w2.name();
 }
 
-Water::Water()
-   : BeerXMLElement()
+Water::Water(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

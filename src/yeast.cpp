@@ -66,8 +66,8 @@ bool operator==(Yeast &y1, Yeast &y2)
 }
 
 //============================CONSTRUCTORS======================================
-Yeast::Yeast()
-   : BeerXMLElement()
+Yeast::Yeast(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

@@ -50,7 +50,7 @@ QHash<QString,QString> Misc::tagToPropHash()
    return propHash;
 }
 //============================CONSTRUCTORS======================================
-Misc::Misc() : BeerXMLElement()
+Misc::Misc(Brewtarget::DBTable table, int key) : BeerXMLElement(table, key)
 {
 }
 

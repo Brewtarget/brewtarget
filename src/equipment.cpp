@@ -90,8 +90,8 @@ void Equipment::setDefaults()
 }
 */
 
-Equipment::Equipment()
-   : BeerXMLElement()
+Equipment::Equipment(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

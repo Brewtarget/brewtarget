@@ -38,8 +38,8 @@ QHash<QString,QString> Instruction::tagToPropHash()
    return propHash;
 }
 
-Instruction::Instruction()
-   : BeerXMLElement()
+Instruction::Instruction(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
    setObjectName("Instruction"); 
 }

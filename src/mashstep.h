@@ -116,7 +116,7 @@ signals:
    */
    
 private:
-   MashStep();
+   MashStep(Brewtarget::DBTable table, int key);
    MashStep( MashStep const& other );
    
    bool isValidType( const QString &str ) const;

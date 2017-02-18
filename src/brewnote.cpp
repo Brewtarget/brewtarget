@@ -87,8 +87,8 @@ bool operator==(BrewNote const& lhs, BrewNote const& rhs)
 }
 
 // Initializers
-BrewNote::BrewNote()
-   : BeerXMLElement()
+BrewNote::BrewNote(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
    loading = false;
 }

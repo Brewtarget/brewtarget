@@ -197,7 +197,7 @@ signals:
    */
    
 private:
-   Fermentable();
+   Fermentable(Brewtarget::DBTable table, int key);
    Fermentable( Fermentable const& other );
    
    static bool isValidType( const QString& str );

@@ -63,8 +63,8 @@ bool operator==(Style &s1, Style &s2)
    return s1.key() == s2.key();
 }
 
-Style::Style()
-   : BeerXMLElement()
+Style::Style(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

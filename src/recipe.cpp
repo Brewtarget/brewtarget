@@ -110,8 +110,8 @@ void Recipe::clear()
    */
 }
 
-Recipe::Recipe()
-   : BeerXMLElement(),
+Recipe::Recipe(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key),
      _ABV_pct(0),
      _color_srm(0),
      _boilGrav(1.000),

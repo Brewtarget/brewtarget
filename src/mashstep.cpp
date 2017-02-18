@@ -53,8 +53,8 @@ bool operator==(MashStep &m1, MashStep &m2)
 
 //==============================CONSTRUCTORS====================================
 
-MashStep::MashStep()
-   : BeerXMLElement()
+MashStep::MashStep(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

@@ -169,7 +169,7 @@ signals:
    */
 
 private:
-   Style();
+   Style(Brewtarget::DBTable table, int key);
    Style( Style const& other );
    
    bool isValidType( const QString &str );

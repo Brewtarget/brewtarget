@@ -67,8 +67,8 @@ bool operator==(Fermentable &f1, Fermentable &f2)
    return f1.name() == f2.name();
 }
 
-Fermentable::Fermentable()
-   : BeerXMLElement()
+Fermentable::Fermentable(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

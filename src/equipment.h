@@ -141,7 +141,7 @@ signals:
    void changedBoilingPoint_c(double);
    
 private:
-   Equipment();
+   Equipment(Brewtarget::DBTable table, int key);
    Equipment( Equipment const& other);
    
    // Calculate the boil size.

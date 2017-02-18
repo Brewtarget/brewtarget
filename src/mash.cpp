@@ -56,8 +56,8 @@ bool operator==(Mash &m1, Mash &m2)
    return m1.name() == m2.name();
 }
 
-Mash::Mash()
-   : BeerXMLElement()
+Mash::Mash(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

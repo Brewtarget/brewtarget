@@ -149,7 +149,7 @@ signals:
    void changedName(QString);
 
 private:
-   Yeast();
+   Yeast(Brewtarget::DBTable table, int key);
    Yeast(Yeast const& other);
    
    static QStringList types;

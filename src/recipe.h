@@ -354,7 +354,7 @@ public slots:
    
 private:
    
-   Recipe();
+   Recipe(Brewtarget::DBTable table, int key);
    Recipe(Recipe const& other);
    
    // Calculated properties.

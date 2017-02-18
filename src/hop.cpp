@@ -80,8 +80,8 @@ bool Hop::isValidForm(const QString& str)
    return (forms.indexOf(str) >= 0);
 }
 
-Hop::Hop()
-   : BeerXMLElement()
+Hop::Hop(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 
