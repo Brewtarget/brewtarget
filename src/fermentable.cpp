@@ -31,9 +31,7 @@
 
 #define SUPER BeerXMLElement
 
-QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
-QHash<QString,QString> Fermentable::tagToProp = Fermentable::tagToPropHash();
-
+/************* Columns *************/
 static const QString kAmount("amount");
 static const QString kYield("yield");
 static const QString kColor("color");
@@ -51,29 +49,52 @@ static const QString kNotes("notes");
 static const QString kRecomendMash("recommend_mash");
 static const QString kIsMashed("is_mashed");
 
+/************** Props **************/
+static const QString kNameProp("name");
+static const QString kTypeProp("type");
+static const QString kAmountProp("amount_kg");
+static const QString kInventoryProp("inventory");
+static const QString kYieldProp("yield_pct");
+static const QString kColorProp("color_srm");
+static const QString kAddAfterBoilProp("addAfterBoil");
+static const QString kOriginProp("origin");
+static const QString kSupplierProp("supplier");
+static const QString kNotesProp("notes");
+static const QString kCoarseFineDiffProp("coarseFineDiff_pct");
+static const QString kMoistureProp("moisture_pct");
+static const QString kDiastaticPowerProp("diastaticPower_lintner");
+static const QString kProteinProp("protein_pct");
+static const QString kMaxInBatchProp("maxInBatch_pct");
+static const QString kRecommendedMashProp("recommendMash");
+static const QString kIsMashedProp("isMashed");
+static const QString kIBUGalPerLbProp("ibuGalPerLb");
+
+QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
+QHash<QString,QString> Fermentable::tagToProp = Fermentable::tagToPropHash();
+
 QHash<QString,QString> Fermentable::tagToPropHash()
 {
    QHash<QString,QString> propHash;
    
-   propHash["NAME"] = "name";
+   propHash["NAME"] = kNameProp;
    // NOTE: since type is actually stored as a string (not integer), have to handle separately.
-   //propHash["TYPE"] = "type";
-   propHash["AMOUNT"] = "amount_kg";
-   propHash["INVENTORY"] = "inventory";
-   propHash["YIELD"] = "yield_pct";
-   propHash["COLOR"] = "color_srm";
-   propHash["ADD_AFTER_BOIL"] = "addAfterBoil";
-   propHash["ORIGIN"] = "origin";
-   propHash["SUPPLIER"] = "supplier";
-   propHash["NOTES"] = "notes";
-   propHash["COARSE_FINE_DIFF"] = "coarseFineDiff_pct";
-   propHash["MOISTURE"] = "moisture_pct";
-   propHash["DIASTATIC_POWER"] = "diastaticPower_lintner";
-   propHash["PROTEIN"] = "protein_pct";
-   propHash["MAX_IN_BATCH"] = "maxInBatch_pct";
-   propHash["RECOMMEND_MASH"] = "recommendMash";
-   propHash["IS_MASHED"] = "isMashed";
-   propHash["IBU_GAL_PER_LB"] = "ibuGalPerLb";
+   //propHash["TYPE"] = kTypeProp
+   propHash["AMOUNT"] = kAmountProp;
+   propHash["INVENTORY"] = kInventoryProp;
+   propHash["YIELD"] = kYieldProp;
+   propHash["COLOR"] = kColorProp;
+   propHash["ADD_AFTER_BOIL"] = kAddAfterBoilProp;
+   propHash["ORIGIN"] = kOriginProp;
+   propHash["SUPPLIER"] = kSupplierProp;
+   propHash["NOTES"] = kNotesProp;
+   propHash["COARSE_FINE_DIFF"] = kCoarseFineDiffProp;
+   propHash["MOISTURE"] = kMoistureProp;
+   propHash["DIASTATIC_POWER"] = kDiastaticPowerProp;
+   propHash["PROTEIN"] = kProteinProp;
+   propHash["MAX_IN_BATCH"] = kMaxInBatchProp;
+   propHash["RECOMMEND_MASH"] = kRecommendedMashProp;
+   propHash["IS_MASHED"] = kIsMashedProp;
+   propHash["IBU_GAL_PER_LB"] = kIBUGalPerLbProp;
    return propHash;
 }
 
@@ -161,10 +182,12 @@ const Fermentable::AdditionTime Fermentable::additionTime() const
 
    return additionTime;
 }
+
 const QString Fermentable::typeString() const
 {
    return types.at(type());
 }
+
 const QString Fermentable::typeStringTr() const
 {
    static QStringList typesTr = QStringList () << QObject::tr("Grain") << QObject::tr("Sugar") << QObject::tr("Extract") << QObject::tr("Dry Extract") << QObject::tr("Adjunct");

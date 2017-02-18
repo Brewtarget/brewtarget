@@ -297,8 +297,8 @@ public:
    PreInstruction boilFermentablesPre(double timeRemaining);
    bool hasBoilFermentable();
    bool hasBoilExtract();
-   bool isFermentableSugar(Fermentable*);
-   PreInstruction addExtracts(double timeRemaining);
+   static bool isFermentableSugar(Fermentable*);
+   PreInstruction addExtracts(double timeRemaining) const;
    
    // Helpers
    //! \brief Get the ibus from a given \c hop.
