@@ -86,12 +86,6 @@ void FermentableEditor::clearAndClose()
    setVisible(false); // Hide the window.
 }
 
-void FermentableEditor::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() == obsFerm )
-      showChanges(&prop);
-}
-
 void FermentableEditor::showChanges(QMetaProperty* metaProp)
 {
    if( !obsFerm )
