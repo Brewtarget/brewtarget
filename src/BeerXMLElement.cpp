@@ -27,7 +27,6 @@
 #include "brewtarget.h"
 #include "database.h"
 
-BeerXMLElement::BeerXMLElement()
 BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key)
    : QObject(0),
      _key(key),
