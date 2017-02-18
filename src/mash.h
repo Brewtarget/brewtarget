@@ -103,6 +103,8 @@ public:
    // NOTE: should this be completely in Database?
    void removeAllMashSteps();
 
+   static QString classNameStr();
+
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
    

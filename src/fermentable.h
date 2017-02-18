@@ -170,6 +170,8 @@ public:
    bool isSugar();
    void setIsMashed(bool var);
 
+   static QString classNameStr();
+
 signals:
    
    //! \brief Emitted when \c name() changes.

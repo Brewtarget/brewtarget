@@ -142,6 +142,8 @@ public:
    int timesCultured() const;
    int maxReuse() const;
    bool addToSecondary() const;
+
+   static QString classNameStr();
    
 signals:
 

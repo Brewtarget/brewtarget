@@ -38,6 +38,12 @@ QHash<QString,QString> Instruction::tagToPropHash()
    return propHash;
 }
 
+QString Instruction::classNameStr()
+{
+   static const QString name("Instruction");
+   return name;
+}
+
 Instruction::Instruction(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key)
 {

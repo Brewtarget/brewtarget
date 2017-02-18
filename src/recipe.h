@@ -306,6 +306,8 @@ public:
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
    QHash<QString,double> calcTotalPoints();
    
+   static QString classNameStr();
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(const QString&);

@@ -85,6 +85,8 @@ public:
    void setMagnesium_ppm( double var );
    void setPh( double var );
    void setNotes( const QString &var );
+
+   static QString classNameStr();
    
 signals:
    

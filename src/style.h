@@ -140,6 +140,8 @@ public:
    QString ingredients() const;
    QString examples() const;
 
+   static QString classNameStr();
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);

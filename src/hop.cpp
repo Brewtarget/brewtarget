@@ -80,6 +80,12 @@ bool Hop::isValidForm(const QString& str)
    return (forms.indexOf(str) >= 0);
 }
 
+QString Hop::classNameStr()
+{
+   static const QString name("Hop");
+   return name;
+}
+
 Hop::Hop(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key)
 {

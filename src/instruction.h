@@ -72,6 +72,9 @@ public:
    double interval();
 
    int instructionNumber() const;
+
+   static QString classNameStr();
+
 signals:
    /*
    void changedName(QString);

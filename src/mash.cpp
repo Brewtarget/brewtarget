@@ -56,6 +56,12 @@ bool operator==(Mash &m1, Mash &m2)
    return m1.name() == m2.name();
 }
 
+QString Mash::classNameStr()
+{
+   static const QString name("Mash");
+   return name;
+}
+
 Mash::Mash(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key)
 {

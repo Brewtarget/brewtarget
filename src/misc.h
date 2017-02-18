@@ -113,6 +113,8 @@ public:
    bool amountIsWeight() const;
    QString useFor() const;
    QString notes() const;
+
+   static QString classNameStr();
    
 signals:
    

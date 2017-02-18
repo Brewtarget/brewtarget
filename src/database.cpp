@@ -1100,7 +1100,7 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 
 BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 {
-   BrewNote* tmp = copy<BrewNote>(other, true, &allBrewNotes);
+   BrewNote* tmp = copy<BrewNote>(other, &allBrewNotes);
 
    if ( tmp ) {
       if ( signal )
@@ -1148,7 +1148,7 @@ Equipment* Database::newEquipment(Equipment* other)
    Equipment* tmp;
 
    if (other)
-      tmp = copy(other, true, &allEquipments);
+      tmp = copy(other, &allEquipments);
    else
       tmp = newIngredient(&allEquipments);
 
@@ -1168,7 +1168,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
    Fermentable* tmp;
 
    if (other)
-      tmp = copy(other, true, &allFermentables);
+      tmp = copy(other, &allFermentables);
    else
       tmp = newIngredient(&allFermentables);
 
@@ -1188,7 +1188,7 @@ Hop* Database::newHop(Hop* other)
    Hop* tmp;
 
    if ( other )
-      tmp = copy(other, true, &allHops);
+      tmp = copy(other, &allHops);
    else
       tmp = newIngredient(&allHops);
 
@@ -1257,7 +1257,7 @@ Mash* Database::newMash(Mash* other, bool displace)
 
    try {
       if ( other )
-         tmp = copy<Mash>(other, true, &allMashs);
+         tmp = copy<Mash>(other, &allMashs);
       else
          tmp = newIngredient(&allMashs);
 
@@ -1377,7 +1377,7 @@ Misc* Database::newMisc(Misc* other)
    Misc* tmp;
 
    if ( other )
-     tmp = copy(other, true, &allMiscs);
+     tmp = copy(other, &allMiscs);
    else
       tmp = newIngredient(&allMiscs);
 
@@ -1427,7 +1427,7 @@ Recipe* Database::newRecipe(Recipe* other)
 
    sqlDatabase().transaction();
    try {
-      tmp = copy<Recipe>(other, true, &allRecipes);
+      tmp = copy<Recipe>(other, &allRecipes);
 
       // Copy fermentables, hops, miscs and yeasts. We've the convenience
       // methods, so use them? And now I have to instruct all of them to not do
@@ -1462,7 +1462,7 @@ Style* Database::newStyle(Style* other)
 
    try {
       if ( other )
-         tmp = copy(other, true, &allStyles);
+         tmp = copy(other, &allStyles);
       else
          tmp = newIngredient(&allStyles);
    }
@@ -1484,7 +1484,7 @@ Water* Database::newWater(Water* other)
 
    try {
       if ( other )
-         tmp = copy(other,true,&allWaters);
+         tmp = copy(other,&allWaters);
       else
          tmp = newIngredient(&allWaters);
    }
@@ -1506,7 +1506,7 @@ Yeast* Database::newYeast(Yeast* other)
 
    try {
       if (other)
-         tmp = copy(other, true, &allYeasts);
+         tmp = copy(other, &allYeasts);
       else
          tmp = newIngredient(&allYeasts);
    }
@@ -1551,7 +1551,7 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
       for( ms=tmpMS.begin(); ms != tmpMS.end(); ++ms)
       {
          // Copy the old mash step.
-         MashStep* newStep = copy<MashStep>(*ms,true,&allMashSteps);
+         MashStep* newStep = copy<MashStep>(*ms,&allMashSteps);
 
          // Put it in the new mash.
          sqlUpdate( Brewtarget::MASHSTEPTABLE,
@@ -1818,7 +1818,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
    try {
       // Make a copy of equipment.
       if ( ! noCopy ) {
-         newEquip = copy<Equipment>(e,false,&allEquipments);
+         newEquip = copy<Equipment>(e, &allEquipments, false);
       }
 
       // Update equipment_id
@@ -1959,7 +1959,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
    try {
       if ( ! noCopy )
       {
-         newMash = copy<Mash>(m, false, &allMashs);
+         newMash = copy<Mash>(m, &allMashs, false);
          duplicateMashSteps(m,newMash);
       }
 
@@ -2053,7 +2053,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
 
    try {
       if ( ! noCopy )
-         newStyle = copy<Style>(s,false,&allStyles);
+         newStyle = copy<Style>(s, &allStyles, false);
 
       sqlUpdate(Brewtarget::RECTABLE,
                 QString("style_id=%1").arg(newStyle->key()),

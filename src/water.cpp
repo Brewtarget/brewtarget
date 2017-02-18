@@ -54,6 +54,12 @@ bool operator==(Water &w1, Water &w2)
    return w1.name() == w2.name();
 }
 
+QString Water::classNameStr()
+{
+   static const QString name("Water");
+   return name;
+}
+
 Water::Water(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key)
 {

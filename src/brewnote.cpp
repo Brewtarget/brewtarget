@@ -38,6 +38,12 @@
 
 QHash<QString,QString> BrewNote::tagToProp = BrewNote::tagToPropHash();
 
+QString BrewNote::classNameStr()
+{
+   static const QString name("BrewNote");
+   return name;
+}
+
 QHash<QString,QString> BrewNote::tagToPropHash()
 {
    QHash<QString,QString> propHash;

@@ -63,6 +63,12 @@ bool operator==(Style &s1, Style &s2)
    return s1.key() == s2.key();
 }
 
+QString Style::classNameStr()
+{
+   static const QString name("Style");
+   return name;
+}
+
 Style::Style(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key)
 {

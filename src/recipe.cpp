@@ -110,6 +110,12 @@ void Recipe::clear()
    */
 }
 
+QString Recipe::classNameStr()
+{
+   static const QString name("Recipe");
+   return name;
+}
+
 Recipe::Recipe(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key),
      _ABV_pct(0),

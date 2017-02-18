@@ -162,9 +162,8 @@ public:
    // maybe I should have never learned templates?
    template<class T> T* newIngredient(QHash<int,T*>* all) {
       int key;
-      T* tmp = new T();
       // To quote the talking heads, my god what have I done?
-      Brewtarget::DBTable table = classNameToTable[ tmp->metaObject()->className() ];
+      Brewtarget::DBTable table = classNameToTable[ T::classNameStr() ];
       QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(tableNames[table]);
 
       QSqlQuery q(sqlDatabase());
@@ -183,9 +182,7 @@ public:
          throw; // rethrow the error until somebody cares
       }
 
-      tmp->_key = key;
-      tmp->_table = table;
-
+      T* tmp = new T(table, key);
       all->insert(tmp->_key,tmp);
 
       return tmp;
@@ -542,7 +539,6 @@ private:
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       int key;
-      BeerXMLElement* e;
       T* et;
 
       QSqlQuery q(sqlDatabase());
@@ -564,11 +560,7 @@ private:
       {
          key = q.record().value("id").toInt();
 
-         e = new T();
-         et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
-         et->_key = key;
-         et->_table = table;
-
+         et = new T(table, key);
          if( ! hash.contains(key) )
             hash.insert(key,et);
       }
@@ -731,7 +723,7 @@ private:
          }
          else
          {
-            newIng = copy<T>(ing, false, keyHash);
+            newIng = copy<T>(ing, keyHash, false);
             if ( newIng == 0 )
                throw QString("error copying ingredient");
          }
@@ -816,12 +808,11 @@ private:
     * \param displayed is true if you want the \em displayed column set to true.
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
-   template<class T> T* copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0 )
+   template<class T> T* copy( BeerXMLElement const* object, QHash<int,T*>* keyHash, bool displayed = true )
    {
       int newKey;
       int i;
-      T* newOne = new T();
-      QString holder,fields;
+      QString holder, fields;
 
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
 
@@ -892,14 +883,8 @@ private:
 
       q.finish();
 
-      // Update the hash if need be.
-      if( keyHash )
-      {
-         BeerXMLElement* newOneCast = qobject_cast<BeerXMLElement*>(newOne);
-         newOneCast->_key = newKey;
-         newOneCast->_table = t;
-         keyHash->insert( newKey, newOne );
-      }
+      T* newOne = new T(t, newKey);
+      keyHash->insert( newKey, newOne );
 
       return newOne;
    }

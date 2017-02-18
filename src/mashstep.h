@@ -100,6 +100,8 @@ public:
    bool isTemperature() const;
    bool isDecoction() const;
 
+   static QString classNameStr();
+
 signals:
 
    //! \brief Emitted when \c name() changes.
