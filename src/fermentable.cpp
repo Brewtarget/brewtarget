@@ -96,7 +96,7 @@ QString Fermentable::classNameStr()
 Fermentable::Fermentable(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key)
 {
-   setType( static_cast<Fermentable::Type>(get(kType).toInt()) );
+   setType( static_cast<Fermentable::Type>(types.indexOf(get(kType).toString())) );
    setAmount_kg( get(kAmount).toDouble() );
    setInventoryAmount( getInventory(kAmount).toDouble() );
    setYield_pct( get(kYield).toDouble() );

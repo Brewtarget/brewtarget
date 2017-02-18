@@ -1625,13 +1625,13 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
 }
 
-void Database::updateColumns(Brewtarget::DBTable table, int key, QVariantMap colValMap)
+void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap)
 {
    // Assumes the table has a column called 'deleted'.
    QString tableName = tableNames[table];
    try {
 
-      static const QString kSetStr("%1=:value, ");
+      static const QString kSetStr("%1=?, ");
       static const QString kSetStrLast("%1=?");
       QStringList cols = colValMap.keys();
       QString setValsStr;

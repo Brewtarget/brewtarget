@@ -60,6 +60,7 @@ void FermentableEditor::save()
    // NOTE: the following assumes that Fermentable::Type is enumerated in the same
    // order as the combobox.
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
+
    obsFerm->setAmount_kg(lineEdit_amount->toSI());
    obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
    obsFerm->setYield_pct(lineEdit_yield->toSI());
@@ -76,6 +77,7 @@ void FermentableEditor::save()
    obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->toSI() );
    obsFerm->setNotes( textEdit_notes->toPlainText() );
+   obsFerm->save();
 
    setVisible(false);
 }

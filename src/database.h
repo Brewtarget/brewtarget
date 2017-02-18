@@ -440,7 +440,7 @@ public:
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
 
-   void updateColumns(Brewtarget::DBTable table, int key, QVariantMap colValMap);
+   void updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap);
 
 signals:
    void changed(QMetaProperty prop, QVariant value);
