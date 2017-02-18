@@ -439,6 +439,9 @@ public:
    void convertDatabase(QString const& Hostname, QString const& DbName,
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
+
+   void updateColumns(Brewtarget::DBTable table, int key, QVariantMap colValMap);
+
 signals:
    void changed(QMetaProperty prop, QVariant value);
    void newEquipmentSignal(Equipment*);
@@ -538,9 +541,6 @@ private:
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
-      int key;
-      T* et;
-
       QSqlQuery q(sqlDatabase());
       q.setForwardOnly(true);
       QString queryString = QString("SELECT id FROM %1").arg(tableNames[table]);
@@ -558,11 +558,11 @@ private:
 
       while( q.next() )
       {
-         key = q.record().value("id").toInt();
+         int key = q.record().value("id").toInt();
 
-         et = new T(table, key);
+         T* e = new T(table, key);
          if( ! hash.contains(key) )
-            hash.insert(key,et);
+            hash.insert(key, e);
       }
 
       q.finish();
@@ -571,7 +571,6 @@ private:
    //! Helper to populate the list using the given filter.
    template <class T> bool getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
    {
-      int key;
       QSqlQuery q(sqlDatabase());
       q.setForwardOnly(true);
       QString queryString;
@@ -596,7 +595,7 @@ private:
 
       while( q.next() )
       {
-         key = q.record().value("id").toInt();
+         int key = q.record().value("id").toInt();
          if( allElements.contains(key) )
             list.append( allElements[key] );
       }

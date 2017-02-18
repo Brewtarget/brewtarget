@@ -27,6 +27,9 @@
 #include "brewtarget.h"
 #include "database.h"
 
+static const QString kFolder("folder");
+static const QString kName("name");
+
 BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key)
    : QObject(0),
      _key(key),
@@ -84,14 +87,14 @@ void BeerXMLElement::setDisplay(bool var)
 QString BeerXMLElement::folder() const
 {
    if ( _folder.isEmpty() )
-      _folder = get("folder").toString();
+      _folder = get(kFolder).toString();
 
    return _folder;
 }
 
 void BeerXMLElement::setFolder(const QString var, bool signal)
 {
-   set( "folder", "folder", var );
+   set( kFolder, kFolder, var );
    _folder = var;
    if ( signal )
       emit changedFolder(var);
@@ -107,7 +110,7 @@ QString BeerXMLElement::name() const
 
 void BeerXMLElement::setName(const QString var)
 {
-   set( "name", "name", var );
+   set( kName, kName, var );
    _name = var;
    emit changedName(var);
 }
@@ -258,9 +261,19 @@ void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant 
    }
 }
 
+void BeerXMLElement::set(const QString &prop_name, const QString &col_name, const QVariant &value, bool notify)
+{
+   set(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
+}
+
 QVariant BeerXMLElement::get( const char* col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
+}
+
+QVariant BeerXMLElement::get( const QString& col_name ) const
+{
+   return get(col_name.toUtf8().constData());
 }
 
 void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
@@ -277,6 +290,11 @@ void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, 
     Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
 }
 
+void BeerXMLElement::setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify )
+{
+   setInventory(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
+}
+
 QVariant BeerXMLElement::getInventory( const char* col_name ) const
 {
    int invkey = Database::instance().getInventoryID(_table, _key);
@@ -288,6 +306,11 @@ QVariant BeerXMLElement::getInventory( const char* col_name ) const
    return val;
 }
 
+QVariant BeerXMLElement::getInventory( const QString& col_name ) const
+{
+   return getInventory(col_name.toUtf8().constData());
+}
+
 bool BeerXMLElement::isValid()
 {
    return _valid;
@@ -296,4 +319,12 @@ bool BeerXMLElement::isValid()
 void BeerXMLElement::invalidate()
 {
    _valid = false;
+}
+
+QVariantMap BeerXMLElement::getColumnValueMap() const
+{
+   QVariantMap map;
+   map.insert(kFolder, folder());
+   map.insert(kName, name());
+   return map;
 }

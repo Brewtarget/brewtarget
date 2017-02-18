@@ -29,7 +29,7 @@
 #include "brewtarget.h"
 
 FermentableEditor::FermentableEditor( QWidget* parent )
-        : QDialog(parent), obsFerm(0)
+        : QDialog(parent), obsFerm(nullptr)
 {
    setupUi(this);
 
@@ -38,22 +38,18 @@ FermentableEditor::FermentableEditor( QWidget* parent )
 
 }
 
-void FermentableEditor::setFermentable( Fermentable* f )
+void FermentableEditor::setFermentable( Fermentable* newFerm )
 {
-   if( obsFerm )
-      disconnect( obsFerm, 0, this, 0 );
-
-   obsFerm = f;
-   if( obsFerm )
+   if(newFerm)
    {
-      connect( obsFerm, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      obsFerm = newFerm;
       showChanges();
    }
 }
 
 void FermentableEditor::save()
 {
-   if( obsFerm == 0 )
+   if( !obsFerm )
    {
       setVisible(false);
       return;
@@ -98,7 +94,7 @@ void FermentableEditor::changed(QMetaProperty prop, QVariant /*val*/)
 
 void FermentableEditor::showChanges(QMetaProperty* metaProp)
 {
-   if( obsFerm == 0 )
+   if( !obsFerm )
       return;
 
    QString propName;

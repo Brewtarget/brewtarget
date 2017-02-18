@@ -1624,6 +1624,51 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
 }
 
+void Database::updateColumns(Brewtarget::DBTable table, int key, QVariantMap colValMap)
+{
+   // Assumes the table has a column called 'deleted'.
+   QString tableName = tableNames[table];
+   try {
+
+      static const QString kSetStr("%1=:value, ");
+      static const QString kSetStrLast("%1=?");
+      QStringList cols = colValMap.keys();
+      QString setValsStr;
+      for(int i = 0; i < cols.length(); i++ )
+      {
+         if(i < cols.length() - 1)
+            setValsStr += kSetStr.arg(cols[i]);
+         else
+            setValsStr += kSetStrLast.arg(cols[i]);
+      }
+
+      QString command = QString("UPDATE %1 set %2 where id=%3")
+                           .arg(tableName)
+                           .arg(setValsStr)
+                           .arg(key);
+      QSqlQuery query( sqlDatabase() );
+      query.prepare( command );
+
+      for(int i = 0; i < cols.length(); i++)
+      {
+         const QString key(cols[i]);
+         query.addBindValue(colValMap[key]);
+      }
+
+
+      if ( ! query.exec() )
+         throw QString("Could not update %1: %4 %5")
+                  .arg( tableName )
+                  .arg( query.lastQuery() )
+                  .arg( query.lastError().text() );
+
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      throw;
+   }
+}
+
 // Inventory functions ========================================================
 
 //This links ingredients with the same name.
