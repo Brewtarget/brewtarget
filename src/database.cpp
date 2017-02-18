@@ -99,10 +99,7 @@ Database::Database()
    //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
-
    converted = false;
-
-   loadWasSuccessful = load();
 }
 
 Database::~Database()
@@ -279,6 +276,7 @@ bool Database::load()
 
    createFromScratch=false;
    schemaUpdated=false;
+   loadWasSuccessful = false;
 
    if ( Brewtarget::dbType() == Brewtarget::PGSQL )
    {
@@ -411,7 +409,8 @@ bool Database::load()
          connect( *n, SIGNAL(changed(QMetaProperty,QVariant)), *m, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
 
-   return true;
+   loadWasSuccessful = true;
+   return loadWasSuccessful;
 }
 
 bool Database::createBlank(QString const& filename)
@@ -649,8 +648,10 @@ Database& Database::instance()
    {
       mutex.lock();
 
-      if( ! dbInstance )
+      if( ! dbInstance ) {
          dbInstance = new Database();
+         dbInstance->load();
+      }
 
       mutex.unlock();
    }
@@ -1667,6 +1668,9 @@ void Database::updateColumns(Brewtarget::DBTable table, int key, QVariantMap col
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
       throw;
    }
+
+   /*if ( notify )
+      emit object->changed(prop,value);*/
 }
 
 // Inventory functions ========================================================
