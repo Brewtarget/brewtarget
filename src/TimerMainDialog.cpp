@@ -37,8 +37,8 @@ TimerMainDialog::TimerMainDialog(MainWindow* parent) : QDialog(parent),
    updateTime();
 
    //Connections
-   connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTimer()));
-   connect(boilTime, SIGNAL(timesUp()), this, SLOT(timesUp()));
+   connect(boilTime, &BoilTime::BoilTimeChanged, this, &TimerMainDialog::decrementTimer);
+   connect(boilTime, &BoilTime::timesUp, this, &TimerMainDialog::timesUp);
 
    retranslateUi(this);
 }

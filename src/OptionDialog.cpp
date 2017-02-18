@@ -150,31 +150,31 @@ OptionDialog::OptionDialog(QWidget* parent)
    colorFormulaComboBox->addItem(tr("Daniel's approximation"), QVariant(Brewtarget::DANIEL));
    colorFormulaComboBox->addItem(tr("Morey's approximation"), QVariant(Brewtarget::MOREY));
 
-   connect( buttonBox, SIGNAL( accepted() ), this, SLOT( saveAndClose() ) );
-   connect( buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
+   connect( buttonBox, &QDialogButtonBox::accepted, this, &OptionDialog::saveAndClose );
+   connect( buttonBox, &QDialogButtonBox::rejected, this, &OptionDialog::cancel );
 
    // database panel stuff
    comboBox_engine->addItem( tr("SQLite (default)"), QVariant(Brewtarget::SQLITE));
    comboBox_engine->addItem( tr("PostgreSQL"), QVariant(Brewtarget::PGSQL));
    connect( comboBox_engine, SIGNAL( currentIndexChanged(int) ), this, SLOT( setEngine(int) ) );
-   connect( pushButton_testConnection, SIGNAL( clicked() ), this, SLOT(testConnection()));
+   connect( pushButton_testConnection, &QAbstractButton::clicked, this, &OptionDialog::testConnection);
 
    // figure out which database we have
    setDbDialog((Brewtarget::DBTypes)Brewtarget::option("dbType", Brewtarget::SQLITE).toInt());
 
    // Set the signals
-   connect( checkBox_savePassword, SIGNAL(clicked(bool)), this, SLOT(savePassword(bool)));
+   connect( checkBox_savePassword, &QAbstractButton::clicked, this, &OptionDialog::savePassword);
 
-   connect( btStringEdit_hostname, SIGNAL( textModified() ), this, SLOT(testRequired()));
-   connect( btStringEdit_portnum, SIGNAL( textModified() ), this, SLOT(testRequired()));
-   connect( btStringEdit_schema, SIGNAL( textModified() ), this, SLOT(testRequired()));
-   connect( btStringEdit_dbname, SIGNAL( textModified() ), this, SLOT(testRequired()));
-   connect( btStringEdit_username, SIGNAL( textModified() ), this, SLOT(testRequired()));
-   connect( btStringEdit_password, SIGNAL( textModified() ), this, SLOT(testRequired()));
+   connect( btStringEdit_hostname, &BtLineEdit::textModified, this, &OptionDialog::testRequired);
+   connect( btStringEdit_portnum, &BtLineEdit::textModified, this, &OptionDialog::testRequired);
+   connect( btStringEdit_schema, &BtLineEdit::textModified, this, &OptionDialog::testRequired);
+   connect( btStringEdit_dbname, &BtLineEdit::textModified, this, &OptionDialog::testRequired);
+   connect( btStringEdit_username, &BtLineEdit::textModified, this, &OptionDialog::testRequired);
+   connect( btStringEdit_password, &BtLineEdit::textModified, this, &OptionDialog::testRequired);
 
-   connect( pushButton_browseDataDir, SIGNAL( clicked() ), this, SLOT( setDataDir() ) );
-   connect( pushButton_browseBackupDir, SIGNAL( clicked() ), this, SLOT( setBackupDir() ) );
-   connect( pushButton_resetToDefault, SIGNAL( clicked() ), this, SLOT( resetToDefault() ) );
+   connect( pushButton_browseDataDir, &QAbstractButton::clicked, this, &OptionDialog::setDataDir );
+   connect( pushButton_browseBackupDir, &QAbstractButton::clicked, this, &OptionDialog::setBackupDir );
+   connect( pushButton_resetToDefault, &QAbstractButton::clicked, this, &OptionDialog::resetToDefault );
    pushButton_testConnection->setEnabled(false);
 
 }

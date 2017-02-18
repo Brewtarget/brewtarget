@@ -28,7 +28,7 @@
 MashListModel::MashListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)
 {
-   connect( &(Database::instance()), SIGNAL(newMashSignal(Mash*)), this, SLOT(addMash(Mash*)) );
+   connect( &(Database::instance()), &Database::newMashSignal, this, &MashListModel::addMash );
    connect( &(Database::instance()), SIGNAL(deletedSignal(Mash*)), this, SLOT(removeMash(Mash*)) );
    repopulateList();
 }
@@ -43,7 +43,7 @@ void MashListModel::addMash(Mash* m)
       int size = mashes.size();
       beginInsertRows( QModelIndex(), size, size );
       mashes.append(m);
-      connect( m, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
+      connect( m, &BeerXMLElement::changed, this, &MashListModel::mashChanged );
       endInsertRows();
    }
 }
@@ -66,7 +66,7 @@ void MashListModel::addMashes(QList<Mash*> m)
       mashes.append(tmp);
       
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
+         connect( *i, &BeerXMLElement::changed, this, &MashListModel::mashChanged );
       
       endInsertRows();
    }

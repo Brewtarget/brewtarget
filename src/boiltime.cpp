@@ -26,7 +26,7 @@ BoilTime::BoilTime(QObject* parent): QObject(parent),
 { 
     timer = new QTimer(this);
     timer->setInterval(1000);
-    connect(timer, SIGNAL(timeout()), this, SLOT(decrementTime()));
+    connect(timer, &QTimer::timeout, this, &BoilTime::decrementTime);
 }
 
 void BoilTime::setBoilTime(int boilTime)

@@ -383,9 +383,9 @@ bool Database::load()
       Equipment* e = equipment(*i);
       if( e )
       {
-         connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
-         connect( e, SIGNAL(changedBoilSize_l(double)), *i, SLOT(setBoilSize_l(double)));
-         connect( e, SIGNAL(changedBoilTime_min(double)), *i, SLOT(setBoilTime_min(double)));
+         connect( e, &BeerXMLElement::changed, *i, &Recipe::acceptEquipChange );
+         connect( e, &Equipment::changedBoilSize_l, *i, &Recipe::setBoilSize_l);
+         connect( e, &Equipment::changedBoilTime_min, *i, &Recipe::setBoilTime_min);
       }
 
       QList<Fermentable*> tmpF = fermentables(*i);
@@ -1559,8 +1559,8 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
                       QString("id=%1").arg(newStep->key())
                   );
          // Make the new mash pay attention to the new step.
-         connect( newStep, SIGNAL(changed(QMetaProperty,QVariant)),
-                  newMash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
+         connect( newStep, &BeerXMLElement::changed,
+                  newMash, &Mash::acceptMashStepChange );
       }
    }
    catch (QString e) {
@@ -1839,11 +1839,11 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
       sqlDatabase().commit();
    }
    // NOTE: need to disconnect the recipe's old equipment?
-   connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+   connect( newEquip, &BeerXMLElement::changed, rec, &Recipe::acceptEquipChange );
    // NOTE: If we don't reconnect these signals, bad things happen when
    // changing boil times on the mainwindow
-   connect( newEquip, SIGNAL(changedBoilSize_l(double)), rec, SLOT(setBoilSize_l(double)));
-   connect( newEquip, SIGNAL(changedBoilTime_min(double)), rec, SLOT(setBoilTime_min(double)));
+   connect( newEquip, &Equipment::changedBoilSize_l, rec, &Recipe::setBoilSize_l);
+   connect( newEquip, &Equipment::changedBoilTime_min, rec, &Recipe::setBoilTime_min);
 
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );

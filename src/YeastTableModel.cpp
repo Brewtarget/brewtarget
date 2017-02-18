@@ -56,7 +56,7 @@ YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
    parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->setWordWrap(false);
 
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
+   connect(headerView, &QWidget::customContextMenuRequested, this, &YeastTableModel::contextMenu);
 }
 
 void YeastTableModel::addYeast(Yeast* yeast)
@@ -76,7 +76,7 @@ void YeastTableModel::addYeast(Yeast* yeast)
    int size = yeastObs.size();
    beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);
-   connect( yeast, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   connect( yeast, &BeerXMLElement::changed, this, &YeastTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
@@ -92,7 +92,7 @@ void YeastTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( recObs, &BeerXMLElement::changed, this, &YeastTableModel::changed );
       addYeasts( recObs->yeasts() );
    }
 }
@@ -104,7 +104,7 @@ void YeastTableModel::observeDatabase(bool val)
       observeRecipe(0);
 
       removeAll();
-      connect( &(Database::instance()), SIGNAL(newYeastSignal(Yeast*)), this, SLOT(addYeast(Yeast*)) );
+      connect( &(Database::instance()), &Database::newYeastSignal, this, &YeastTableModel::addYeast );
       connect( &(Database::instance()), SIGNAL(deletedSignal(Yeast*)), this, SLOT(removeYeast(Yeast*)) );
       addYeasts( Database::instance().yeasts() );
    }
@@ -133,7 +133,7 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
       yeastObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+         connect( *i, &BeerXMLElement::changed, this, &YeastTableModel::changed );
 
       endInsertRows();
    }

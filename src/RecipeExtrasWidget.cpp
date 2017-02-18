@@ -35,25 +35,25 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
 
    ratingChanged = false;
 
-   connect( lineEdit_age,        SIGNAL(textModified()), this, SLOT(updateAge()));
-   connect( lineEdit_ageTemp,    SIGNAL(textModified()), this, SLOT(updateAgeTemp()));
-   connect( lineEdit_asstBrewer, SIGNAL(textModified()), this, SLOT(updateBrewerAsst()) );
-   connect( lineEdit_brewer,     SIGNAL(textModified()), this, SLOT(updateBrewer()) );
-   connect( lineEdit_carbVols,   SIGNAL(textModified()), this, SLOT(updateCarbonation()) );
-   connect( lineEdit_primaryAge, SIGNAL(textModified()), this, SLOT(updatePrimaryAge()) );
-   connect( lineEdit_primaryTemp,SIGNAL(textModified()), this, SLOT(updatePrimaryTemp()) );
-   connect( lineEdit_secAge,     SIGNAL(textModified()), this, SLOT(updateSecondaryAge()) );
-   connect( lineEdit_secTemp,    SIGNAL(textModified()), this, SLOT(updateSecondaryTemp()) );
-   connect( lineEdit_tertAge,    SIGNAL(textModified()), this, SLOT(updateTertiaryAge()) );
-   connect( lineEdit_tertTemp,   SIGNAL(textModified()), this, SLOT(updateTertiaryTemp()) );
+   connect( lineEdit_age,        &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateAge);
+   connect( lineEdit_ageTemp,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateAgeTemp);
+   connect( lineEdit_asstBrewer, &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateBrewerAsst );
+   connect( lineEdit_brewer,     &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateBrewer );
+   connect( lineEdit_carbVols,   &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateCarbonation );
+   connect( lineEdit_primaryAge, &BtLineEdit::textModified, this, &RecipeExtrasWidget::updatePrimaryAge );
+   connect( lineEdit_primaryTemp,&BtLineEdit::textModified, this, &RecipeExtrasWidget::updatePrimaryTemp );
+   connect( lineEdit_secAge,     &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateSecondaryAge );
+   connect( lineEdit_secTemp,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateSecondaryTemp );
+   connect( lineEdit_tertAge,    &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateTertiaryAge );
+   connect( lineEdit_tertTemp,   &BtLineEdit::textModified, this, &RecipeExtrasWidget::updateTertiaryTemp );
 
    connect( spinBox_tasteRating, SIGNAL(valueChanged(int)), this, SLOT(changeRatings(int)) );
-   connect( spinBox_tasteRating, SIGNAL(editingFinished()), this, SLOT(updateTasteRating()) );
+   connect( spinBox_tasteRating, &QAbstractSpinBox::editingFinished, this, &RecipeExtrasWidget::updateTasteRating );
 
-   connect( dateEdit_date, SIGNAL(dateChanged(const QDate& )), this, SLOT(updateDate(const QDate&)) );
+   connect( dateEdit_date, &QDateTimeEdit::dateChanged, this, &RecipeExtrasWidget::updateDate );
 
-   connect(btTextEdit_notes, SIGNAL(textModified()), this, SLOT(updateNotes()));
-   connect(btTextEdit_tasteNotes, SIGNAL(textModified()), this, SLOT(updateTasteNotes()));
+   connect(btTextEdit_notes, &BtTextEdit::textModified, this, &RecipeExtrasWidget::updateNotes);
+   connect(btTextEdit_tasteNotes, &BtTextEdit::textModified, this, &RecipeExtrasWidget::updateTasteNotes);
 
 }
 
@@ -65,7 +65,7 @@ void RecipeExtrasWidget::setRecipe(Recipe* rec)
    if( rec )
    {
       recipe = rec;
-      connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( recipe, &BeerXMLElement::changed, this, &RecipeExtrasWidget::changed );
       showChanges();
    }
 }
