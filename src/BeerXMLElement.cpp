@@ -28,9 +28,10 @@
 #include "database.h"
 
 BeerXMLElement::BeerXMLElement()
+BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key)
    : QObject(0),
-     _key(-1),
-     _table(Brewtarget::NOTABLE),
+     _key(key),
+     _table(table),
      _folder(QString()),
      _name(QString()),
      _display(QVariant()),
