@@ -264,6 +264,8 @@ public:
    double boilGrav();
    double IBU();
    QColor SRMColor();
+   double targetCollectedWortVol_l();
+   double targetTotalMashVol_l();
    double wortFromMash_l();
    double boilVolume_l();
    double postBoilVolume_l();
