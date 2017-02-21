@@ -1,9 +1,10 @@
 /*
  * Algorithms.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2017
  * - Eric Tamme <etamme@gmail.com>
  * - Maxime Lavigne (malavv) <duguigne@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Jonathon Harding <github@jrhardin.net>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,7 +72,7 @@ public:
    }
    
    //! \brief Get the polynomial's order (highest exponent)
-   size_t order() const { return _coeffs.size()-1; }
+   unsigned int order() const { return static_cast<unsigned int>( _coeffs.size()-1 ); }
    
    //! \brief Get coefficient of x^n where \c n <= \c order()
    double operator[] (size_t n) const
@@ -91,9 +92,9 @@ public:
    double eval(double x) const
    {
       double ret = 0.0;
-      size_t i;
+      unsigned int i;
       
-      for( i = order(); i > 0; --i )
+      for( i = order() ; i > 0; --i )
          ret += _coeffs[i] * intPow( x, i );
       ret += _coeffs[0];
 
