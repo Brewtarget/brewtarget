@@ -1,10 +1,9 @@
 /*
  * MashDesigner.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2017
+ * authors 2009-2014
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Jonathon Harding <github@jrhardin.net>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +26,6 @@
 #include "fermentable.h"
 #include <QMessageBox>
 #include <QInputDialog>
-#include "Algorithms.h"
 
 MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
 {
@@ -118,8 +116,8 @@ bool MashDesigner::nextStep(int step)
    prevStep = mashStep;
    if( mashStep != 0 )
    {
-      // This now calculates the mass of water added (based on the temperature of the infusion)
-      MC += mashStep->infuseAmount_l() * Algorithms::getWaterDensity_kgL(mashStep->infuseTemp_c()) * HeatCalculations::Cw_calGC;
+      // NOTE: This needs to be changed. Assumes 1L of water is 1 kg.
+      MC += mashStep->infuseAmount_l() * HeatCalculations::Cw_calGC;
       addedWater_l += mashStep->infuseAmount_l();
 
       if( prevStep == 0 ) // If the last step is null, we need to add the influence of the tun.
