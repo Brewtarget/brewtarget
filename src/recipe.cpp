@@ -786,6 +786,7 @@ void Recipe::addHop( Hop *var )
 
 void Recipe::addFermentable( Fermentable* var )
 {
+   connect(var, &Fermentable::saved, this, &Recipe::onFermentableChanged);
    Database::instance().addToRecipe( this, var );
 }
 
@@ -2061,7 +2062,7 @@ void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
    recalcAll();
 }
 
-void Recipe::acceptFermChange(Fermentable *ferm)
+void Recipe::onFermentableChanged()
 {
    recalcAll();
 }

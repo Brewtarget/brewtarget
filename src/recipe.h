@@ -319,7 +319,7 @@ public slots:
    void acceptYeastChange(QMetaProperty prop, QVariant val);
    void acceptMashChange(QMetaProperty prop, QVariant val);
 
-   void acceptFermChange(Fermentable* ferm);
+   void onFermentableChanged();
    void acceptHopChange(Hop* hop);
    void acceptYeastChange(Yeast* yeast);
    void acceptMashChange(Mash* mash);

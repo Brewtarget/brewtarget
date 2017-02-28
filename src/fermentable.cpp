@@ -401,5 +401,6 @@ void Fermentable::save()
    Database::instance().updateColumns( _table, _key, map);
 
    setInventory("", kAmount, inventory());
+   emit saved();
 
 }
