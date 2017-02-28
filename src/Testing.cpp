@@ -120,6 +120,7 @@ void Testing::recipeCalcTest_allGrain()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
+   twoRow->save();
    rec->addFermentable(twoRow);
 
    // Add mash
@@ -202,6 +203,7 @@ void Testing::postBoilLossOgTest()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
+   twoRow->save();
    recNoLoss->addFermentable(twoRow);
    recLoss->addFermentable(twoRow);
 
