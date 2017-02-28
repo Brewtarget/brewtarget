@@ -120,7 +120,7 @@ void Testing::recipeCalcTest_allGrain()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   Database::instance().addToRecipe(rec, twoRow);
+   rec->addFermentable(twoRow);
 
    // Add mash
    Database::instance().addToRecipe(rec, singleConversion);
@@ -202,8 +202,8 @@ void Testing::postBoilLossOgTest()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   Database::instance().addToRecipe(recNoLoss, twoRow);
-   Database::instance().addToRecipe(recLoss, twoRow);
+   recNoLoss->addFermentable(twoRow);
+   recLoss->addFermentable(twoRow);
 
    // Single conversion, no sparge
    Mash* singleConversion = Database::instance().newMash();
