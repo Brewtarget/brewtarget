@@ -186,18 +186,41 @@ bool MashDesigner::heating()
 
 double MashDesigner::maxTemp_c()
 {
-   if ( recObs && recObs->equipment())
+   double max_t;
+
+   if ( heating() )
    {
-      return recObs->equipment()->boilingPoint_c();
+      if (recObs && recObs->equipment())
+      {
+         max_t = recObs->equipment()->boilingPoint_c();
+      }
+      else
+         max_t = 100;
    }
    else
-      return 100;
+   {
+      // If we're cooling down, then the max temp actually
+      // corresponds to the maximum volume added!
+      max_t = tempFromVolume_c( maxAmt_l() );
+   }
+   max_t = std::min( max_t, 100.0 );
+   max_t = std::max( max_t, 0.0 );
+
+   return max_t;
 }
 
 double MashDesigner::minTemp_c()
 {
-   // The minimum temp depends on how much more water we can fit in the tun.
-   return tempFromVolume_c( maxAmt_l() );
+   double min_t;
+
+   if ( heating() )
+      min_t = tempFromVolume_c( maxAmt_l() );
+   else
+      min_t = 0.0;
+   min_t = std::min( min_t, 100.0 );
+   min_t = std::max( min_t, 0.0 );
+
+   return min_t;
 }
 
 // The mash volume up to and not including the step currently being edited.
@@ -208,8 +231,23 @@ double MashDesigner::mashVolume_l()
 
 double MashDesigner::minAmt_l()
 {
-   // Minimum amount occurs with maximum temperature.
-   return volFromTemp_l( maxTemp_c() );
+   double minVol_l;
+
+   if (heating())
+      minVol_l = volFromTemp_l( maxTemp_c() );
+   else
+      minVol_l = volFromTemp_l( minTemp_c() );
+
+   // minAmt_l should always be less then maxAmt_l, but might not be if user requests an impossible
+   // temperature
+   if (minVol_l > maxAmt_l())
+   {
+      // TODO: Pop up a warning dialog?
+      minVol_l = maxAmt_l();
+   }
+
+   minVol_l = std::max( minVol_l, 0. );
+   return minVol_l;
 }
 
 // However much more we can add at this step.
@@ -230,7 +268,9 @@ double MashDesigner::maxAmt_l()
       amt = equip->tunVolume_l() - grainVolume_l();
    }
 
-   amt = std::min(amt, targetTotalMashVol_l() - addedWater_l);
+   // How much more can we fit in the brew pot
+   amt = std::min( amt, targetTotalMashVol_l() - addedWater_l );
+   amt = std::max( amt, 0. );
 
    return amt;
 }
