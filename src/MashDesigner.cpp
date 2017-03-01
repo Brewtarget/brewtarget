@@ -433,10 +433,12 @@ void MashDesigner::updateFullness()
    label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + (isInfusion() ? selectedAmount_l() : 0) )/grain_kg ));
 }
 
+// How much water will be released from the mash?
 double MashDesigner::waterFromMash_l()
 {
    double waterAdded_l = mash->totalMashWater_l();
    double absorption_lKg;
+   double amt;
 
    if ( recObs == 0 )
       return 0.0;
@@ -446,7 +448,10 @@ double MashDesigner::waterFromMash_l()
    else
       absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
 
-   return (waterAdded_l - absorption_lKg * recObs->grainsInMash_kg());
+   amt = (waterAdded_l - absorption_lKg * recObs->grainsInMash_kg());
+
+   // Not possible to get negative volume from the mash
+   return std::max(0.0, amt);
 }
 
 void MashDesigner::updateCollectedWort()
