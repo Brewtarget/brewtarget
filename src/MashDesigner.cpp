@@ -663,7 +663,7 @@ MashStep::Type MashDesigner::type() const
    return static_cast<MashStep::Type>(curIdx);
 }
 
-void MashDesigner::typeChanged()
+void MashDesigner::typeChanged( int _ )
 {
    MashStep::Type _type = type();
 
