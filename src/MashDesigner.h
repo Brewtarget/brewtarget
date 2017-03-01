@@ -80,6 +80,7 @@ private:
    double waterFromMash_l();
    double targetCollectedWortVol_l();
    double targetTotalMashVol_l();
+   bool heating();
 
    // I have developed a distaste for "getBlah"
    double selectedAmount_l();

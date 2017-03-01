@@ -179,6 +179,11 @@ double MashDesigner::stepTemp_c()
    return lineEdit_temp->toSI();
 }
 
+bool MashDesigner::heating()
+{
+   return stepTemp_c() > ((prevStep) ? prevStep->stepTemp_c() : mash->grainTemp_c());
+}
+
 double MashDesigner::maxTemp_c()
 {
    if ( recObs && recObs->equipment())
