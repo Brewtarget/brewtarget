@@ -729,11 +729,11 @@ void MashDesigner::typeChanged( int _ )
    else if ( ! pushButton_next->isEnabled() )
       pushButton_next->setEnabled(true);
 
-   if( isInfusion() )
+   if( isInfusion() || isSparge() )
    {
       horizontalSlider_amount->setEnabled(true);
       horizontalSlider_temp->setEnabled(true);
-      updateMaxAmt();
+      saveTargetTemp();
    }
    else if( isDecoction() )
    {
