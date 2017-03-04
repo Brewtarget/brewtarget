@@ -284,7 +284,6 @@ double MashDesigner::volFromTemp_l( double temp_c )
 
    double tw = temp_c;
    // Final temp is target temp.
-   // double tf = mashStep->stepTemp_c();
    double tf = stepTemp_c();
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
    double t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c();
@@ -310,7 +309,6 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    else
       absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
 
-   // double tf = mashStep->stepTemp_c();
    double tf = stepTemp_c();
 
    // NOTE: This needs to be changed. Assumes 1L = 1 kg.
@@ -321,8 +319,8 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
    double t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c();
    // When batch sparging, you lose about 10C from previous step.
-   if( isSparge() )
-      t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c() - 10;
+   if ( isSparge() && (prevStep != 0) )
+      t1 -= 10;
    double mt = mash->tunSpecificHeat_calGC();
    double ct = mash->tunWeight_kg();
 
@@ -485,9 +483,6 @@ void MashDesigner::updateMaxAmt()
 void MashDesigner::updateMinTemp()
 {
    double minTemp = minTemp_c();
-
-   if ( minTemp > 100 )
-      minTemp = maxTemp_c();
 
    label_tempMin->setText(Brewtarget::displayAmount(minTemp, Units::celsius));
 }
