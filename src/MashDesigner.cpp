@@ -186,41 +186,30 @@ bool MashDesigner::heating()
 
 double MashDesigner::maxTemp_c()
 {
-   double max_t;
+   double maxT = (recObs && recObs->equipment()) ? recObs->equipment()->boilingPoint_c() : 100.;
 
-   if ( heating() )
-   {
-      if (recObs && recObs->equipment())
-      {
-         max_t = recObs->equipment()->boilingPoint_c();
-      }
-      else
-         max_t = 100;
-   }
-   else
-   {
-      // If we're cooling down, then the max temp actually
-      // corresponds to the maximum volume added!
-      max_t = tempFromVolume_c( maxAmt_l() );
-   }
-   max_t = std::min( max_t, 100.0 );
-   max_t = std::max( max_t, 0.0 );
+   // If cooling down, maxT is limited by temperature from the max amount of water added
+   if (!heating())
+      maxT = std::min(tempFromVolume_c(maxAmt_l()), maxT);
 
-   return max_t;
+   // Make sure maxT isn't below freezing
+   maxT = std::max(maxT, 0.0);
+
+   return maxT;
 }
 
 double MashDesigner::minTemp_c()
 {
-   double min_t;
+   double minT = 0.0;
 
-   if ( heating() )
-      min_t = tempFromVolume_c( maxAmt_l() );
-   else
-      min_t = 0.0;
-   min_t = std::min( min_t, 100.0 );
-   min_t = std::max( min_t, 0.0 );
+   // If heating, minT is limited by the temperature from the max amount of water added
+   if (heating())
+      minT = std::max(tempFromVolume_c(maxAmt_l()), minT);
 
-   return min_t;
+   // Make sure minT doesn't exceed boiling
+   minT = std::min(minT, (recObs && recObs->equipment()) ? recObs->equipment()->boilingPoint_c() : 100.);
+
+   return minT;
 }
 
 // The mash volume up to and not including the step currently being edited.
@@ -231,22 +220,11 @@ double MashDesigner::mashVolume_l()
 
 double MashDesigner::minAmt_l()
 {
-   double minVol_l;
+   double minVol_l = (heating()) ? volFromTemp_l(maxTemp_c()) : volFromTemp_l(minTemp_c());
 
-   if (heating())
-      minVol_l = volFromTemp_l( maxTemp_c() );
-   else
-      minVol_l = volFromTemp_l( minTemp_c() );
-
-   // minAmt_l should always be less then maxAmt_l, but might not be if user requests an impossible
-   // temperature
-   if (minVol_l > maxAmt_l())
-   {
-      // TODO: Pop up a warning dialog?
-      minVol_l = maxAmt_l();
-   }
-
-   minVol_l = std::max( minVol_l, 0. );
+   // minAmt_l might exceed maxAmt_l if the user requests an impossible temperature
+   minVol_l = std::min(minVol_l, maxAmt_l());
+   minVol_l = std::max( minVol_l, 0. );  // Cannot have negative volumes
    return minVol_l;
 }
 
@@ -256,21 +234,17 @@ double MashDesigner::maxAmt_l()
    double amt = 0;
 
    if ( equip == 0 )
-      return amt;
+      return amt;  // If we have no equipment, give up
 
    // However much more we can fit in the tun.
    if( ! isSparge() )
-   {
       amt = equip->tunVolume_l() - mashVolume_l();
-   }
    else
-   {
       amt = equip->tunVolume_l() - grainVolume_l();
-   }
 
    // How much more can we fit in the brew pot
    amt = std::min( amt, recObs->targetTotalMashVol_l() - addedWater_l );
-   amt = std::max( amt, 0. );
+   amt = std::max( amt, 0. );  // Cannot have negative volumes
 
    return amt;
 }
