@@ -635,19 +635,44 @@ void MashDesigner::updateTemp()
 void MashDesigner::saveTargetTemp()
 {
    double temp = stepTemp_c();
-   double maxT = maxTemp_c();
+   double initVol_l, ratio;
 
-   if ( temp > maxT ) 
-      temp = maxT;
+   // Sanity check for an empty text box and do nothing
+   if ((temp == 0) && (lineEdit_temp->text().isEmpty()))
+      return;
 
+   temp = heating() ? std::min( temp, maxTemp_c() ) : std::max( temp, minTemp_c() );
    // be nice and reset the field so it displays in proper units
-   lineEdit_temp->setText(temp);
-   if( mashStep != 0 )
-      mashStep->setStepTemp_c(temp);
+   lineEdit_temp->setText( temp );
 
-   if( isDecoction() )
+   if (isInfusion() || isSparge())
    {
-      if( mashStep != 0 )
+      // Do a sanity check the make sure the max volume available can actually hit the temperature we want
+      double tempNeeded_c = tempFromVolume_c( maxAmt_l() );
+      if ((tempNeeded_c > maxTemp_c()) || (tempNeeded_c < minTemp_c()))
+         lineEdit_temp->setText( maxTargetTemp() );
+   }
+
+   if ( mashStep != 0 )
+      mashStep->setStepTemp_c(stepTemp_c());
+   
+   if (isInfusion() || isSparge())
+   {
+      if (isSparge()) // Usually want to fill the brewpot on sparge
+         initVol_l = maxAmt_l();
+      else if (!prevStep) // Assign the target volume to a mash of 1.0 qt/lb = 2.086 l/kg
+         initVol_l = 2.086 * recObs->grainsInMash_kg();
+      else // Add as little water as possible by default on later steps
+         initVol_l = minAmt_l();
+      ratio = (initVol_l - minAmt_l()) / (maxAmt_l() - minAmt_l());
+      horizontalSlider_amount->setValue( ratio * horizontalSlider_amount->maximum() );
+      updateTempSlider();
+      updateTemp();
+      updateAmt();
+   }
+   else if (isDecoction())
+   {
+      if (mashStep != 0)
          mashStep->setDecoctionAmount_l( getDecoctionAmount_l() );
 
       updateAmtSlider();
