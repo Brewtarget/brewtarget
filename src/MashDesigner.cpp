@@ -269,7 +269,7 @@ double MashDesigner::maxAmt_l()
    }
 
    // How much more can we fit in the brew pot
-   amt = std::min( amt, targetTotalMashVol_l() - addedWater_l );
+   amt = std::min( amt, recObs->targetTotalMashVol_l() - addedWater_l );
    amt = std::max( amt, 0. );
 
    return amt;
@@ -421,7 +421,7 @@ bool MashDesigner::initializeMash()
    grain_kg = recObs->grainsInMash_kg();
 
    label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), Units::liters));
-   label_wortMax->setText(Brewtarget::displayAmount(targetCollectedWortVol_l(), Units::liters));
+   label_wortMax->setText(Brewtarget::displayAmount(recObs->targetCollectedWortVol_l(), Units::liters));
 
    updateMinAmt();
    updateMaxAmt();
@@ -493,7 +493,7 @@ void MashDesigner::updateCollectedWort()
    // double wort_l = recObs->wortFromMash_l();
    double wort_l = waterFromMash_l();
 
-   double ratio = wort_l / targetCollectedWortVol_l();
+   double ratio = wort_l / recObs->targetCollectedWortVol_l();
    if( ratio < 0 )
      ratio = 0;
    if( ratio > 1 )
@@ -804,41 +804,3 @@ void MashDesigner::typeChanged( int _ )
       horizontalSlider_temp->setEnabled(false);
    }
 }
-
-double MashDesigner::targetCollectedWortVol_l() {
-
-   if ( recObs == 0 )
-      return 0.0;
-
-   // Need to account for extract/sugar volume also.
-   float postMashAdditionVolume_l = 0;
-   QList<Fermentable*> ferms = recObs->fermentables();
-         foreach( Fermentable* f, ferms )
-      {
-         Fermentable::Type type = f->type();
-         if( type == Fermentable::Extract )
-            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
-         else if( type == Fermentable::Sugar )
-            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
-         else if( type == Fermentable::Dry_Extract )
-            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
-      }
-
-   return recObs->boilSize_l() - equip->topUpKettle_l() - postMashAdditionVolume_l;
-}
-
-double MashDesigner::targetTotalMashVol_l() {
-
-   if ( recObs == 0 )
-      return 0.0;
-
-   double absorption_lKg;
-   if( equip )
-      absorption_lKg = equip->grainAbsorption_LKg();
-   else
-      absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
-
-
-   return targetCollectedWortVol_l() + absorption_lKg * recObs->grainsInMash_kg();
-}
-

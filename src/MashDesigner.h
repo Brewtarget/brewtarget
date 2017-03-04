@@ -78,8 +78,6 @@ private:
    double volFromTemp_l( double temp_c );
    double getDecoctionAmount_l();
    double waterFromMash_l();
-   double targetCollectedWortVol_l();
-   double targetTotalMashVol_l();
    double maxTargetTemp();
    bool heating();
 
