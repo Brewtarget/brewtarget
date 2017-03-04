@@ -576,7 +576,7 @@ void MashDesigner::updateAmt()
 
 void MashDesigner::updateTemp()
 {
-   double temp,maxT;
+   double temp;
 
    if( mashStep == 0 )
       return;
@@ -584,21 +584,19 @@ void MashDesigner::updateTemp()
    if( isInfusion() )
    {
       temp = horizontalSlider_temp->sliderPosition() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
-      maxT = maxTemp_c();
-      if ( temp > maxT )
-         temp = maxT;
 
-      label_temp->setText(Brewtarget::displayAmount( temp, Units::celsius));
+      // Not sure how temp could ever be outside these bounds, but a similar check was already here
+      temp = heating() ? std::min( temp, maxTemp_c() ) : std::max( temp, minTemp_c() );
 
       if( mashStep != 0 )
          mashStep->setInfuseTemp_c( temp );
    }
-   else if( isDecoction() )
-      label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), Units::celsius));
+   else if (isDecoction())
+      temp = maxTemp_c();
    else {
-   
-      label_temp->setText(Brewtarget::displayAmount( stepTemp_c(), Units::celsius));
+      temp = stepTemp_c();
    }
+   label_temp->setText( Brewtarget::displayAmount( temp, Units::celsius ) );
 }
 
 void MashDesigner::saveTargetTemp()
