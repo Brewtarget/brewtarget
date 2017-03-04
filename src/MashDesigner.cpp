@@ -333,6 +333,39 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    return tw;
 }
 
+// Returns the maximum possible target temperature that can currently be reached.
+// If cooling, returns the minimum possible target temp
+double MashDesigner::maxTargetTemp()
+{
+   if (mashStep == 0 || mash == 0)
+      return 0.0;
+
+   double mw = maxAmt_l();
+   double tw = (heating()) ? maxTemp_c() : minTemp_c();
+   // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
+   double t1 = (prevStep == 0) ? mash->grainTemp_c() : prevStep->stepTemp_c();
+   // When batch sparging, you lose about 10C from previous step.
+   if (isSparge() && (prevStep != 0))
+      t1 -= 10;
+
+   double cw = HeatCalculations::Cw_calGC;
+   double absorption_LKg = (equip != 0) ? equip->grainAbsorption_LKg() : PhysicalConstants::grainAbsorption_Lkg;
+   double mt = mash->tunSpecificHeat_calGC();
+   double ct = mash->tunWeight_kg();
+   double batchMC = grain_kg * HeatCalculations::Cgrain_calGC
+      + absorption_LKg * grain_kg * HeatCalculations::Cw_calGC
+      + mash->tunWeight_kg() * mash->tunSpecificHeat_calGC();
+   double thisMC = isSparge() ? batchMC : MC;
+
+   double MC1 = isSparge() ? batchMC : MC;
+   double MCw = mw * cw;
+   double MCt = (prevStep==0) ? mt * ct : 0.;
+   double tt = mash->tunTemp_c();
+
+   double tf = (tw * MCw + t1 * MC1 + tt * MCt) / (MC1 + MCw + MCt);
+   return tf;
+}
+
 // How many liters of grain are in the tun.
 double MashDesigner::grainVolume_l()
 {
