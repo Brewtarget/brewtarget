@@ -560,19 +560,18 @@ void MashDesigner::updateAmt()
    if( mashStep == 0 )
       return;
 
-   if( isInfusion() )
+   double vol;
+   if (isInfusion())
    {
-      double vol = horizontalSlider_amount->sliderPosition() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
-
-      label_amt->setText(Brewtarget::displayAmount( vol, Units::liters));
-
-      if( mashStep != 0 )
+      vol = horizontalSlider_amount->sliderPosition() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
+      if (mashStep != 0)
          mashStep->setInfuseAmount_l( vol );
    }
-   else if( isDecoction() )
-      label_amt->setText(Brewtarget::displayAmount(mashStep->decoctionAmount_l(), Units::liters));
+   else if (isDecoction())
+      vol = mashStep->decoctionAmount_l();
    else
-      label_amt->setText(Brewtarget::displayAmount(0, Units::liters));
+      vol = 0;
+   label_amt->setText( Brewtarget::displayAmount( vol, Units::liters ) );
 }
 
 void MashDesigner::updateTemp()
