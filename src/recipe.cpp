@@ -110,8 +110,14 @@ void Recipe::clear()
    */
 }
 
-Recipe::Recipe()
-   : BeerXMLElement(),
+QString Recipe::classNameStr()
+{
+   static const QString name("Recipe");
+   return name;
+}
+
+Recipe::Recipe(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key),
      _ABV_pct(0),
      _color_srm(0),
      _boilGrav(1.000),
@@ -780,6 +786,7 @@ void Recipe::addHop( Hop *var )
 
 void Recipe::addFermentable( Fermentable* var )
 {
+   connect(var, &Fermentable::saved, this, &Recipe::onFermentableChanged);
    Database::instance().addToRecipe( this, var );
 }
 
@@ -2055,7 +2062,7 @@ void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
    recalcAll();
 }
 
-void Recipe::acceptFermChange(Fermentable *ferm)
+void Recipe::onFermentableChanged()
 {
    recalcAll();
 }

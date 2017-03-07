@@ -38,6 +38,12 @@
 
 QHash<QString,QString> BrewNote::tagToProp = BrewNote::tagToPropHash();
 
+QString BrewNote::classNameStr()
+{
+   static const QString name("BrewNote");
+   return name;
+}
+
 QHash<QString,QString> BrewNote::tagToPropHash()
 {
    QHash<QString,QString> propHash;
@@ -87,8 +93,8 @@ bool operator==(BrewNote const& lhs, BrewNote const& rhs)
 }
 
 // Initializers
-BrewNote::BrewNote()
-   : BeerXMLElement()
+BrewNote::BrewNote(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
    loading = false;
 }

@@ -65,9 +65,15 @@ bool operator==(Yeast &y1, Yeast &y2)
    return y1.name() == y2.name();
 }
 
+QString Yeast::classNameStr()
+{
+   static const QString name("Yeast");
+   return name;
+}
+
 //============================CONSTRUCTORS======================================
-Yeast::Yeast()
-   : BeerXMLElement()
+Yeast::Yeast(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

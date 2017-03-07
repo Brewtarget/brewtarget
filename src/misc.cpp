@@ -49,8 +49,15 @@ QHash<QString,QString> Misc::tagToPropHash()
    propHash["NOTES"] = "notes";
    return propHash;
 }
+
+QString Misc::classNameStr()
+{
+   static const QString name("Misc");
+   return name;
+}
+
 //============================CONSTRUCTORS======================================
-Misc::Misc() : BeerXMLElement()
+Misc::Misc(Brewtarget::DBTable table, int key) : BeerXMLElement(table, key)
 {
 }
 
