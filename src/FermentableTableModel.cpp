@@ -645,6 +645,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return false;
    }
+   row->save();
    return retVal;
 }
 

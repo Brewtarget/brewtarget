@@ -51,10 +51,16 @@ bool operator==(MashStep &m1, MashStep &m2)
    return m1.name() == m2.name();
 }
 
+QString MashStep::classNameStr()
+{
+   static const QString name("MashStep");
+   return name;
+}
+
 //==============================CONSTRUCTORS====================================
 
-MashStep::MashStep()
-   : BeerXMLElement()
+MashStep::MashStep(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

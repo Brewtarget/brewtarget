@@ -113,6 +113,8 @@ public:
    bool amountIsWeight() const;
    QString useFor() const;
    QString notes() const;
+
+   static QString classNameStr();
    
 signals:
    
@@ -130,7 +132,7 @@ signals:
    */
    
 private:
-   Misc();
+   Misc(Brewtarget::DBTable table, int key);
    Misc(Misc const& other);
    
    bool isValidType( const QString &var );

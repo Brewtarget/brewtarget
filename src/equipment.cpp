@@ -90,8 +90,14 @@ void Equipment::setDefaults()
 }
 */
 
-Equipment::Equipment()
-   : BeerXMLElement()
+QString Equipment::classNameStr()
+{
+   static const QString name("Equipment");
+   return name;
+}
+
+Equipment::Equipment(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 

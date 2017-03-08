@@ -100,6 +100,8 @@ public:
    bool isTemperature() const;
    bool isDecoction() const;
 
+   static QString classNameStr();
+
 signals:
 
    //! \brief Emitted when \c name() changes.
@@ -116,7 +118,7 @@ signals:
    */
    
 private:
-   MashStep();
+   MashStep(Brewtarget::DBTable table, int key);
    MashStep( MashStep const& other );
    
    bool isValidType( const QString &str ) const;

@@ -264,6 +264,8 @@ public:
    double boilGrav();
    double IBU();
    QColor SRMColor();
+   double targetCollectedWortVol_l();
+   double targetTotalMashVol_l();
    double wortFromMash_l();
    double boilVolume_l();
    double postBoilVolume_l();
@@ -306,6 +308,8 @@ public:
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
    QHash<QString,double> calcTotalPoints();
    
+   static QString classNameStr();
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(const QString&);
@@ -317,7 +321,7 @@ public slots:
    void acceptYeastChange(QMetaProperty prop, QVariant val);
    void acceptMashChange(QMetaProperty prop, QVariant val);
 
-   void acceptFermChange(Fermentable* ferm);
+   void onFermentableChanged();
    void acceptHopChange(Hop* hop);
    void acceptYeastChange(Yeast* yeast);
    void acceptMashChange(Mash* mash);
@@ -354,7 +358,7 @@ public slots:
    
 private:
    
-   Recipe();
+   Recipe(Brewtarget::DBTable table, int key);
    Recipe(Recipe const& other);
    
    // Calculated properties.

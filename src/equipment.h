@@ -119,6 +119,8 @@ public:
    //! \brief Calculate how much wort is left immediately at knockout.
    double wortEndOfBoil_l( double kettleWort_l ) const;
 
+   static QString classNameStr();
+
 signals:
    
    void changedName(QString);
@@ -141,7 +143,7 @@ signals:
    void changedBoilingPoint_c(double);
    
 private:
-   Equipment();
+   Equipment(Brewtarget::DBTable table, int key);
    Equipment( Equipment const& other);
    
    // Calculate the boil size.

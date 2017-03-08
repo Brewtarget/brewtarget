@@ -110,8 +110,14 @@ void Recipe::clear()
    */
 }
 
-Recipe::Recipe()
-   : BeerXMLElement(),
+QString Recipe::classNameStr()
+{
+   static const QString name("Recipe");
+   return name;
+}
+
+Recipe::Recipe(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key),
      _ABV_pct(0),
      _color_srm(0),
      _boilGrav(1.000),
@@ -780,6 +786,7 @@ void Recipe::addHop( Hop *var )
 
 void Recipe::addFermentable( Fermentable* var )
 {
+   connect(var, &Fermentable::saved, this, &Recipe::onFermentableChanged);
    Database::instance().addToRecipe( this, var );
 }
 
@@ -2055,7 +2062,7 @@ void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
    recalcAll();
 }
 
-void Recipe::acceptFermChange(Fermentable *ferm)
+void Recipe::onFermentableChanged()
 {
    recalcAll();
 }
@@ -2096,4 +2103,35 @@ void Recipe::acceptMashChange(Mash* newMash)
 {
    if ( newMash == mash() )
       recalcAll();
+}
+
+double Recipe::targetCollectedWortVol_l() {
+
+   // Need to account for extract/sugar volume also.
+   float postMashAdditionVolume_l = 0;
+   QList<Fermentable*> ferms = fermentables();
+         foreach( Fermentable* f, ferms )
+      {
+         Fermentable::Type type = f->type();
+         if( type == Fermentable::Extract )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
+         else if( type == Fermentable::Sugar )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
+         else if( type == Fermentable::Dry_Extract )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
+      }
+
+   return boilSize_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
+}
+
+double Recipe::targetTotalMashVol_l() {
+
+   double absorption_lKg;
+   if( equipment() )
+      absorption_lKg = equipment()->grainAbsorption_LKg();
+   else
+      absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+
+
+   return targetCollectedWortVol_l() + absorption_lKg * grainsInMash_kg();
 }
