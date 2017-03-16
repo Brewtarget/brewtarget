@@ -29,6 +29,10 @@
 
 static const QString kFolder("folder");
 static const QString kName("name");
+static const QString kDeleted("deleted");
+static const QString kDisplay("display");
+
+static const char* kVersion = "version";
 
 BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key)
    : QObject(0),
@@ -58,7 +62,7 @@ bool BeerXMLElement::deleted() const
 {
 
    if ( ! _deleted.isValid() )
-      _deleted = get("deleted");
+      _deleted = get(kDeleted);
 
    return _deleted.toBool();
 }
@@ -66,7 +70,7 @@ bool BeerXMLElement::deleted() const
 bool BeerXMLElement::display() const
 {
    if ( ! _display.isValid() )
-      _display = get("display");
+      _display = get(kDisplay);
 
    return _display.toBool();
 }
@@ -74,13 +78,13 @@ bool BeerXMLElement::display() const
 // Sigh. New databases, more complexity
 void BeerXMLElement::setDeleted(const bool var)
 {
-   set("deleted", "deleted", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   set(kDeleted, kDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
    _deleted = var;
 }
 
 void BeerXMLElement::setDisplay(bool var)
 {
-   set("display", "display", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   set(kDisplay, kDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
    _display = var;
 }
 
@@ -103,7 +107,7 @@ void BeerXMLElement::setFolder(const QString var, bool signal)
 QString BeerXMLElement::name() const
 {
    if ( _name.isEmpty() )
-      _name = get("name").toString();
+      _name = get(kName).toString();
 
    return _name;
 }
@@ -115,11 +119,21 @@ void BeerXMLElement::setName(const QString var)
    emit changedName(var);
 }
 
-int BeerXMLElement::key() const { return _key; }
+int BeerXMLElement::key() const
+{
+   return _key;
+}
 
-Brewtarget::DBTable BeerXMLElement::table() const{ return _table; }
+Brewtarget::DBTable BeerXMLElement::table() const
+{
+   return _table;
+}
 
-int BeerXMLElement::version() const { return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
+
+int BeerXMLElement::version() const
+{
+   return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo(kVersion)).value()).toInt();
+}
 
 QMetaProperty BeerXMLElement::metaProperty(const char* name) const
 {
