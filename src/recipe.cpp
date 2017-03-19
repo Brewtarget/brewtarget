@@ -1964,7 +1964,7 @@ void Recipe::recalcOgFg()
    double ratio = 0.0;
    double ferm_kg = 0.0;
    double attenuation_pct = 0.0;
-   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts;
+   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts, tmp_nonferm_pnts;
    Yeast* yeast;
    QHash<QString,double> sugars;
   
@@ -2022,12 +2022,12 @@ void Recipe::recalcOgFg()
       plato = Algorithms::getPlato( ferm_kg, _finalVolumeNoLosses_l);  // Plato from fermentable sugars
       _og_fermentable = Algorithms::PlatoToSG_20C20C( plato );  // og from only fermentable sugars
       plato = Algorithms::getPlato( nonFermentableSugars_kg, _finalVolumeNoLosses_l);  // Plate from non-fermentable sugars 
-      tmp_ferm_pnts = ((Algorithms::PlatoToSG_20C20C( plato ))-1)*1000.0;  // og points from non-fermentable sugars
+      tmp_nonferm_pnts = ((Algorithms::PlatoToSG_20C20C( plato ))-1)*1000.0;  // og points from non-fermentable sugars
    }
    else
    {
       _og_fermentable = tmp_og;
-      tmp_ferm_pnts = 0;
+      tmp_nonferm_pnts = 0;
    }
 
    // Calculage FG
@@ -2044,8 +2044,9 @@ void Recipe::recalcOgFg()
    
    if ( nonFermentableSugars_kg != 0.0 )
    {
-      tmp_ferm_pnts = (tmp_pnts-tmp_ferm_pnts) * (1.0 - attenuation_pct/100.0);  // fg points from fermentable sugars
-      tmp_pnts *= (1.0 - attenuation_pct/100.0);  // WTF, this completely ignores all the calculations about non-fermentable sugars and just converts everything!
+      tmp_ferm_pnts = (tmp_pnts-tmp_nonferm_pnts) * (1.0 - attenuation_pct/100.0);  // fg points from fermentable sugars
+      tmp_pnts = tmp_ferm_pnts + tmp_nonferm_pnts;  // FG points from both fermentable and non-fermentable sugars
+      //tmp_pnts *= (1.0 - attenuation_pct/100.0);  // WTF, this completely ignores all the calculations about non-fermentable sugars and just converts everything!
       tmp_fg =  1 + tmp_pnts/1000.0;  // new FG value
       _fg_fermentable =  1 + tmp_ferm_pnts/1000.0;  // FG from fermentables only
    }
