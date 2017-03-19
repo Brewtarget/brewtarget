@@ -261,7 +261,7 @@ void MashWizard::wizardry()
          steps.append(mashStep);
       }
 
-      int lastMashStep = steps.size()-1;
+      int lastMashStep = steps.size()-2;
       tf = mash->spargeTemp_c();
       if( lastMashStep >= 0 )
          t1 = steps[lastMashStep]->stepTemp_c() - 10.0; // You will lose about 10C from last step.
