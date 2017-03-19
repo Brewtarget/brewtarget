@@ -26,31 +26,74 @@
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 
+/************* Columns *************/
+const QString kName("name");
+const QString kBoilSize("boil_size");
+const QString kBatchSize("batch_size");
+const QString kTunVolume("tun_volume");
+const QString kTunWeight("tun_weight");
+const QString kTunSpecificHeat("tun_specific_heat");
+const QString kTopUpWater("top_up_water");
+const QString kTrubChillerLoss("trub_chiller_loss");
+const QString kEvaporationRate("evap_rate");
+const QString kRealEvaporationRate("real_evap_rate");
+const QString kBoilTime("boil_time");
+const QString kCalcBoilVolume("calc_boil_volume");
+const QString kLauterDeadspace("lauter_deadspace");
+const QString kTopUpKettle("top_up_kettle");
+const QString kHopUtilization("hop_utilization");
+const QString kNotes("notes");
+const QString kAbsorption("absorption");
+const QString kBoilingPoint("boiling_point");
+
+/************** Props **************/
+
+const QString kNameProp("name");
+const QString kBoilSizeProp("boilSize_l");
+const QString kBatchSizeProp("batchSize_l");
+const QString kTunVolumeProp("tunVolume_l");
+const QString kTunWeightProp("tunWeight_kg");
+const QString kTunSpecificHeatProp("tunSpecificHeat_calGC");
+const QString kTopUpWaterProp("topUpWater_l");
+const QString kTrubChillerLossProp("trubChillerLoss_l");
+const QString kEvaporationRateProp("evapRate_pctHr");
+const QString kRealEvaporationRateProp("evapRate_lHr");
+const QString kBoilTimeProp("boilTime_min");
+const QString kCalcBoilVolumeProp("calcBoilVolume");
+const QString kLauterDeadspaceProp("lauterDeadspace_l");
+const QString kTopUpKettleProp("topUpKettle_l");
+const QString kHopUtilizationProp("hopUtilization_pct");
+const QString kNotesProp("notes");
+const QString kGrainAbsorptionProp("grainAbsorption_LKg");
+const QString kAbsorptionProp("absorption_LKg");
+const QString kBoildPointProp("boilingPoint_c");
+
+
 QHash<QString,QString> Equipment::tagToProp = Equipment::tagToPropHash();
 
 QHash<QString,QString> Equipment::tagToPropHash()
 {
    QHash<QString,QString> propHash;
-   
-   propHash["NAME"] = "name";
-   propHash["BOIL_SIZE"] = "boilSize_l";
-   propHash["BATCH_SIZE"] = "batchSize_l";
-   propHash["TUN_VOLUME"] = "tunVolume_l";
-   propHash["TUN_WEIGHT"] = "tunWeight_kg";
-   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
-   propHash["TOP_UP_WATER"] = "topUpWater_l";
-   propHash["TRUB_CHILLER_LOSS"] = "trubChillerLoss_l";
-   propHash["EVAP_RATE"] = "evapRate_pctHr";
-   propHash["REAL_EVAP_RATE"] = "evapRate_lHr";
-   propHash["BOIL_TIME"] = "boilTime_min";
-   propHash["CALC_BOIL_VOLUME"] = "calcBoilVolume";
-   propHash["LAUTER_DEADSPACE"] = "lauterDeadspace_l";
-   propHash["TOP_UP_KETTLE"] = "topUpKettle_l";
-   propHash["HOP_UTILIZATION"] = "hopUtilization_pct";
-   propHash["NOTES"] = "notes";
-   propHash["ABSORPTION"] = "grainAbsorption_LKg";
-   propHash["BOILING_POINT"] = "boilingPoint_c";
-   
+
+   propHash["NAME"] = kNameProp;
+   propHash["BOIL_SIZE"] = kBoilSizeProp;
+   propHash["BATCH_SIZE"] = kBatchSizeProp;
+   propHash["TUN_VOLUME"] = kTunVolumeProp;
+   propHash["TUN_WEIGHT"] = kTunWeightProp;
+   propHash["TUN_SPECIFIC_HEAT"] = kTunSpecificHeatProp;
+   propHash["TOP_UP_WATER"] = kTopUpWaterProp;
+   propHash["TRUB_CHILLER_LOSS"] = kTrubChillerLossProp;
+   propHash["EVAP_RATE"] = kEvaporationRateProp;
+   propHash["REAL_EVAP_RATE"] = kRealEvaporationRateProp;
+   propHash["BOIL_TIME"] = kBoilTimeProp;
+   propHash["CALC_BOIL_VOLUME"] = kCalcBoilVolumeProp;
+   propHash["LAUTER_DEADSPACE"] = kLauterDeadspaceProp;
+   propHash["TOP_UP_KETTLE"] = kTopUpKettleProp;
+   propHash["HOP_UTILIZATION"] = kHopUtilizationProp;
+   propHash["NOTES"] = kNotesProp;
+   propHash["ABSORPTION"] = kGrainAbsorptionProp;
+   propHash["BOILING_POINT"] = kBoildPointProp;
+
    return propHash;
 }
 
@@ -65,39 +108,20 @@ bool operator==(Equipment &e1, Equipment &e2)
 }
 
 //=============================CONSTRUCTORS=====================================
-
-/*
-void Equipment::setDefaults()
-{
-   name = "";
-   boilSize_l = 0.0;
-   batchSize_l = 0.0;
-   tunVolume_l = 0.0;
-   tunWeight_kg = 0.0;
-   tunSpecificHeat_calGC = 0.0;
-   topUpWater_l = 0.0;
-   trubChillerLoss_l = 0.0;
-   evapRate_pctHr = 0.0;
-   evapRate_lHr = 0.0;
-   boilTime_min = 0.0;
-   calcBoilVolume = false;
-   lauterDeadspace_l = 0.0;
-   topUpKettle_l = 0.0;
-   hopUtilization_pct = 0.0;
-   notes = "";
-   absorption_LKg = HeatCalculations::absorption_LKg;
-   boilingPoint_c = 100.0;
-}
-*/
-
-Equipment::Equipment()
-   : BeerXMLElement()
+Equipment::Equipment(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 
 Equipment::Equipment( Equipment const& other )
    : BeerXMLElement(other)
 {
+}
+
+QString Equipment::classNameStr()
+{
+   static const QString name("Equipment");
+   return name;
 }
 
 //============================"SET" METHODS=====================================
@@ -111,7 +135,7 @@ void Equipment::setBoilSize_l( double var )
    }
    else
    {
-      set("boilSize_l", "boil_size", var);
+      set(kBoilSizeProp, kBoilSize, var);
       emit changedBoilSize_l(var);
    }
 }
@@ -125,7 +149,7 @@ void Equipment::setBatchSize_l( double var )
    }
    else
    {
-      set("batchSize_l", "batch_size", var);
+      set(kBatchSizeProp, kBatchSize, var);
       doCalculations();
    }
 }
@@ -139,7 +163,7 @@ void Equipment::setTunVolume_l( double var )
    }
    else
    {
-      set("tunVolume_l", "tun_volume", var);
+      set(kTunVolumeProp, kTunVolume, var);
    }
 }
 
@@ -152,7 +176,7 @@ void Equipment::setTunWeight_kg( double var )
    }
    else
    {
-      set("tunWeight_kg", "tun_weight", var);
+      set(kTunWeightProp, kTunWeight, var);
    }
 }
 
@@ -165,7 +189,7 @@ void Equipment::setTunSpecificHeat_calGC( double var )
    }
    else
    {
-      set("tunSpecificHeat_calGC", "tun_specific_heat", var);
+      set(kTunSpecificHeatProp, kTunSpecificHeat, var);
    }
 }
 
@@ -178,7 +202,7 @@ void Equipment::setTopUpWater_l( double var )
    }
    else
    {
-      set("topUpWater_l", "top_up_water", var);
+      set(kTopUpWaterProp, kTopUpWater, var);
       doCalculations();
    }
 }
@@ -192,7 +216,7 @@ void Equipment::setTrubChillerLoss_l( double var )
    }
    else
    {
-      set("trubChillerLoss_l", "trub_chiller_loss", var);
+      set(kTrubChillerLossProp, kTrubChillerLoss, var);
       doCalculations();
    }
 }
@@ -206,8 +230,8 @@ void Equipment::setEvapRate_pctHr( double var )
    }
    else
    {
-      set("evapRate_pctHr", "evap_rate", var);
-      set("evapRate_lHr", "real_evap_rate", var/100.0 * batchSize_l() ); // We always use this one, so set it.
+      set(kEvaporationRateProp, kEvaporationRate, var);
+      set(kRealEvaporationRateProp, kRealEvaporationRate, var/100.0 * batchSize_l() ); // We always use this one, so set it.
       doCalculations();
    }
 }
@@ -221,7 +245,7 @@ void Equipment::setEvapRate_lHr( double var )
    }
    else
    {
-      set("evapRate_lHr", "real_evap_rate", var);
+      set(kRealEvaporationRateProp, kRealEvaporationRate, var);
       setEvapRate_pctHr( var/batchSize_l() * 100.0 ); // We don't use it, but keep it current.
       doCalculations();
    }
@@ -236,7 +260,7 @@ void Equipment::setBoilTime_min( double var )
    }
    else
    {
-      set("boilTime_min", "boil_time", var);
+      set(kBoilTimeProp, kBoilTime, var);
       emit changedBoilTime_min(var);
       doCalculations();
    }
@@ -244,7 +268,7 @@ void Equipment::setBoilTime_min( double var )
 
 void Equipment::setCalcBoilVolume( bool var )
 {
-   set("calcBoilVolume", "calc_boil_volume", var);
+   set(kCalcBoilVolumeProp, kCalcBoilVolume, var);
    if( var )
       doCalculations();
 }
@@ -258,7 +282,7 @@ void Equipment::setLauterDeadspace_l( double var )
    }
    else
    {
-      set("lauterDeadspace_l", "lauter_deadspace", var);
+      set(kLauterDeadspaceProp, kLauterDeadspace, var);
    }
 }
 
@@ -271,7 +295,7 @@ void Equipment::setTopUpKettle_l( double var )
    }
    else
    {
-      set("topUpKettle_l", "top_up_kettle", var);
+      set(kTopUpKettleProp, kTopUpKettle, var);
    }
 }
 
@@ -284,13 +308,13 @@ void Equipment::setHopUtilization_pct( double var )
    }
    else
    {
-      set("hopUtilization_pct", "hop_utilization", var);
+      set(kHopUtilizationProp, kHopUtilization, var);
    }
 }
 
 void Equipment::setNotes( const QString &var )
 {
-   set("notes", "notes", var);
+   set(kNotesProp, kNotes, var);
 }
 
 void Equipment::setGrainAbsorption_LKg(double var)
@@ -302,7 +326,7 @@ void Equipment::setGrainAbsorption_LKg(double var)
    }
    else
    {
-      set("absorption_LKg", "absorption", var);
+      set(kAbsorptionProp, kAbsorption, var);
    }
 }
 
@@ -315,30 +339,96 @@ void Equipment::setBoilingPoint_c(double var)
    }
    else 
    {
-      set("boilingPoint_c", "boiling_point", var);
+      set(kBoildPointProp, kBoilingPoint, var);
    }
 }
 
 //============================"GET" METHODS=====================================
 
-QString Equipment::notes() const { return get("notes").toString(); }
-bool Equipment::calcBoilVolume() const { return get("calc_boil_volume").toBool(); }
+QString Equipment::notes() const
+{
+   return get(kNotes).toString();
+}
 
-double Equipment::boilSize_l() const            { return get("boil_size").toDouble(); }
-double Equipment::batchSize_l() const           { return get("batch_size").toDouble(); }
-double Equipment::tunVolume_l() const           { return get("tun_volume").toDouble(); }
-double Equipment::tunWeight_kg() const          { return get("tun_weight").toDouble(); }
-double Equipment::tunSpecificHeat_calGC() const { return get("tun_specific_heat").toDouble(); }
-double Equipment::topUpWater_l() const          { return get("top_up_water").toDouble(); }
-double Equipment::trubChillerLoss_l() const     { return get("trub_chiller_loss").toDouble(); }
-double Equipment::evapRate_pctHr() const        { return get("evap_rate").toDouble(); }
-double Equipment::evapRate_lHr() const          { return get("real_evap_rate").toDouble(); }
-double Equipment::boilTime_min() const          { return get("boil_time").toDouble(); }
-double Equipment::lauterDeadspace_l() const     { return get("lauter_deadspace").toDouble(); }
-double Equipment::topUpKettle_l() const         { return get("top_up_kettle").toDouble(); }
-double Equipment::hopUtilization_pct() const    { return get("hop_utilization").toDouble(); }
-double Equipment::grainAbsorption_LKg()         { return get("absorption").toDouble(); }
-double Equipment::boilingPoint_c() const        { return get("boiling_point").toDouble(); }
+bool Equipment::calcBoilVolume() const
+{
+   return get(kCalcBoilVolume).toBool();
+}
+
+double Equipment::boilSize_l() const
+{
+   return get(kBoilSize).toDouble();
+}
+
+double Equipment::batchSize_l() const
+{
+   return get(kBatchSize).toDouble();
+}
+
+double Equipment::tunVolume_l() const
+{
+   return get(kTunVolume).toDouble();
+}
+
+double Equipment::tunWeight_kg() const
+{
+   return get(kTunWeight).toDouble();
+}
+
+double Equipment::tunSpecificHeat_calGC() const
+{
+   return get(kTunSpecificHeat).toDouble();
+}
+
+double Equipment::topUpWater_l() const
+{
+   return get(kTopUpWater).toDouble();
+}
+
+double Equipment::trubChillerLoss_l() const
+{
+   return get(kTrubChillerLoss).toDouble();
+}
+
+double Equipment::evapRate_pctHr() const
+{
+   return get(kEvaporationRate).toDouble();
+}
+
+double Equipment::evapRate_lHr() const
+{
+   return get(kRealEvaporationRate).toDouble();
+}
+
+double Equipment::boilTime_min() const
+{
+   return get(kBoilTime).toDouble();
+}
+
+double Equipment::lauterDeadspace_l() const
+{
+   return get(kLauterDeadspace).toDouble();
+}
+
+double Equipment::topUpKettle_l() const
+{
+   return get(kTopUpKettle).toDouble();
+}
+
+double Equipment::hopUtilization_pct() const
+{
+   return get(kHopUtilization).toDouble();
+}
+
+double Equipment::grainAbsorption_LKg()
+{
+   return get(kAbsorption).toDouble();
+}
+
+double Equipment::boilingPoint_c() const
+{
+   return get(kBoilingPoint).toDouble();
+}
 
 void Equipment::doCalculations()
 {

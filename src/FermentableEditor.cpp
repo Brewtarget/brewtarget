@@ -29,7 +29,7 @@
 #include "brewtarget.h"
 
 FermentableEditor::FermentableEditor( QWidget* parent )
-        : QDialog(parent), obsFerm(0)
+        : QDialog(parent), obsFerm(nullptr)
 {
    setupUi(this);
 
@@ -38,22 +38,18 @@ FermentableEditor::FermentableEditor( QWidget* parent )
 
 }
 
-void FermentableEditor::setFermentable( Fermentable* f )
+void FermentableEditor::setFermentable( Fermentable* newFerm )
 {
-   if( obsFerm )
-      disconnect( obsFerm, 0, this, 0 );
-
-   obsFerm = f;
-   if( obsFerm )
+   if(newFerm)
    {
-      connect( obsFerm, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      obsFerm = newFerm;
       showChanges();
    }
 }
 
 void FermentableEditor::save()
 {
-   if( obsFerm == 0 )
+   if( !obsFerm )
    {
       setVisible(false);
       return;
@@ -64,6 +60,7 @@ void FermentableEditor::save()
    // NOTE: the following assumes that Fermentable::Type is enumerated in the same
    // order as the combobox.
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
+
    obsFerm->setAmount_kg(lineEdit_amount->toSI());
    obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
    obsFerm->setYield_pct(lineEdit_yield->toSI());
@@ -80,6 +77,7 @@ void FermentableEditor::save()
    obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->toSI() );
    obsFerm->setNotes( textEdit_notes->toPlainText() );
+   obsFerm->save();
 
    setVisible(false);
 }
@@ -90,15 +88,9 @@ void FermentableEditor::clearAndClose()
    setVisible(false); // Hide the window.
 }
 
-void FermentableEditor::changed(QMetaProperty prop, QVariant /*val*/)
-{
-   if( sender() == obsFerm )
-      showChanges(&prop);
-}
-
 void FermentableEditor::showChanges(QMetaProperty* metaProp)
 {
-   if( obsFerm == 0 )
+   if( !obsFerm )
       return;
 
    QString propName;

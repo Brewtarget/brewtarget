@@ -22,34 +22,87 @@
 #include "style.h"
 #include <QDebug>
 
+
+
+
+/************* Columns *************/
+const QString kName("name");
+const QString kCategory("category");
+const QString kCategoryNumber("category_number");
+const QString kStyleLetter("style_letter");
+const QString kStyleGuide("style_guide");
+const QString kType("s_type");
+const QString kOGMin("og_min");
+const QString kOGMax("og_max");
+const QString kFGMin("fg_min");
+const QString kFGMax("fg_max");
+const QString kIBUMin("ibu_min");
+const QString kIBUMax("ibu_max");
+const QString kColorMin("color_min");
+const QString kColorMax("color_max");
+const QString kCarbMin("carb_min");
+const QString kCarbMax("carb_max");
+const QString kABVMin("abv_min");
+const QString kABVMax("abv_max");
+const QString kNotes("notes");
+const QString kProfile("profile");
+const QString kIngredients("ingredients");
+const QString kExamples("examples");
+
+
+/************** Props **************/
+const QString kNameProp("name");
+const QString kCategoryProp("category");
+const QString kCategoryNumberProp("categoryNumber");
+const QString kStyleLetterProp("styleLetter");
+const QString kStyleGuideProp("styleGuide");
+const QString kTypeProp("type");
+const QString kOGMinProp("ogMin");
+const QString kOGMaxProp("ogMax");
+const QString kFGMinProp("fgMin");
+const QString kFGMaxProp("fgMax");
+const QString kIBUMinProp("ibuMin");
+const QString kIBUMaxProp("ibuMax");
+const QString kColorMinProp("colorMin_srm");
+const QString kColorMaxProp("colorMax_srm");
+const QString kCarbMinProp("carbMin_vol");
+const QString kCarbMaxProp("carbMax_vol");
+const QString kABVMinProp("abvMin_pct");
+const QString kABVMaxProp("abvMax_pct");
+const QString kNotesProp("notes");
+const QString kProfileProp("profile");
+const QString kIngredientsProp("ingredients");
+const QString kExamplesProp("examples");
+
+
 QStringList Style::types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 QHash<QString,QString> Style::tagToProp = Style::tagToPropHash();
 
 QHash<QString,QString> Style::tagToPropHash()
 {
    QHash<QString,QString> propHash;
-   propHash["NAME"] = "name";
-   propHash["CATEGORY"] = "category";
-   propHash["CATEGORY_NUMBER"] = "categoryNumber";
-   propHash["STYLE_LETTER"] = "styleLetter";
-   propHash["STYLE_GUIDE"] = "styleGuide";
-   //propHash["TYPE"] = "type";
-   propHash["OG_MIN"] = "ogMin";
-   propHash["OG_MAX"] = "ogMax";
-   propHash["FG_MIN"] = "fgMin";
-   propHash["FG_MAX"] = "fgMax";
-   propHash["IBU_MIN"] = "ibuMin";
-   propHash["IBU_MAX"] = "ibuMax";
-   propHash["COLOR_MIN"] = "colorMin_srm";
-   propHash["COLOR_MAX"] = "colorMax_srm";
-   propHash["CARB_MIN"] = "carbMin_vol";
-   propHash["CARB_MAX"] = "carbMax_vol";
-   propHash["ABV_MIN"] = "abvMin_pct";
-   propHash["ABV_MAX"] = "abvMax_pct";
-   propHash["NOTES"] = "notes";
-   propHash["PROFILE"] = "profile";
-   propHash["INGREDIENTS"] = "ingredients";
-   propHash["EXAMPLES"] = "examples";
+   propHash["NAME"] = kNameProp;
+   propHash["CATEGORY"] = kCategoryProp;
+   propHash["CATEGORY_NUMBER"] = kCategoryNumberProp;
+   propHash["STYLE_LETTER"] = kStyleLetterProp;
+   propHash["STYLE_GUIDE"] = kStyleGuideProp;
+   //propHash["TYPE"] = kTypeProp;
+   propHash["OG_MIN"] = kOGMinProp;
+   propHash["OG_MAX"] = kOGMaxProp;
+   propHash["FG_MIN"] = kFGMinProp;
+   propHash["FG_MAX"] = kFGMaxProp;
+   propHash["IBU_MIN"] = kIBUMinProp;
+   propHash["IBU_MAX"] = kIBUMaxProp;
+   propHash["COLOR_MIN"] = kColorMinProp;
+   propHash["COLOR_MAX"] = kColorMaxProp;
+   propHash["CARB_MIN"] = kCarbMinProp;
+   propHash["CARB_MAX"] = kCarbMaxProp;
+   propHash["ABV_MIN"] = kABVMinProp;
+   propHash["ABV_MAX"] = kABVMaxProp;
+   propHash["NOTES"] = kNotesProp;
+   propHash["PROFILE"] = kProfileProp;
+   propHash["INGREDIENTS"] = kIngredientsProp;
+   propHash["EXAMPLES"] = kExamplesProp;
    return propHash;
 }
 
@@ -63,35 +116,41 @@ bool operator==(Style &s1, Style &s2)
    return s1.key() == s2.key();
 }
 
-Style::Style()
-   : BeerXMLElement()
+QString Style::classNameStr()
+{
+   static const QString name("Style");
+   return name;
+}
+
+Style::Style(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 
 //==============================="SET" METHODS==================================
 void Style::setCategory( const QString& var )
 {
-   set( "category", "category", var );
+   set( kCategoryProp, kCategory, var );
 }
 
 void Style::setCategoryNumber( const QString& var )
 {
-   set( "categoryNumber", "category_number", var );
+   set( kCategoryNumberProp, kCategoryNumber, var );
 }
 
 void Style::setStyleLetter( const QString& var )
 {
-   set( "styleLetter", "style_letter", var );
+   set( kStyleLetterProp, kStyleLetter, var );
 }
 
 void Style::setStyleGuide( const QString& var )
 {
-   set( "styleGuide", "style_guide", var );
+   set( kStyleGuideProp, kStyleGuide, var );
 }
 
 void Style::setType( Type t )
 {
-   set( "type", "s_type", types.at(t) );
+   set( kTypeProp, kType, types.at(t) );
 }
 
 void Style::setOgMin( double var )
@@ -100,7 +159,7 @@ void Style::setOgMin( double var )
       return;
    else
    {
-      set("ogMin", "og_min", var);
+      set(kOGMinProp, kOGMin, var);
    }
 }
 
@@ -110,7 +169,7 @@ void Style::setOgMax( double var )
       return;
    else
    {
-      set("ogMax", "og_max", var);
+      set(kOGMaxProp, kOGMax, var);
    }
 }
 
@@ -120,7 +179,7 @@ void Style::setFgMin( double var )
       return;
    else
    {
-      set("fgMin", "fg_min", var);
+      set(kFGMinProp, kFGMin, var);
    }
 }
 
@@ -130,7 +189,7 @@ void Style::setFgMax( double var )
       return;
    else
    {
-      set("fgMax", "fg_max", var);
+      set(kFGMaxProp, kFGMax, var);
    }
 }
 
@@ -140,7 +199,7 @@ void Style::setIbuMin( double var )
       return;
    else
    {
-      set("ibuMin", "ibu_min", var);
+      set(kIBUMinProp, kIBUMin, var);
    }
 }
 
@@ -150,7 +209,7 @@ void Style::setIbuMax( double var )
       return;
    else
    {
-      set("ibuMax", "ibu_max", var);
+      set(kIBUMaxProp, kIBUMax, var);
    }
 }
 
@@ -160,7 +219,7 @@ void Style::setColorMin_srm( double var )
       return;
    else
    {
-      set("colorMin_srm", "color_min", var);
+      set(kColorMinProp, kColorMin, var);
    }
 }
 
@@ -170,7 +229,7 @@ void Style::setColorMax_srm( double var )
       return;
    else
    {
-      set("colorMax_srm", "color_max", var);
+      set(kColorMaxProp, kColorMax, var);
    }
 }
 
@@ -180,7 +239,7 @@ void Style::setCarbMin_vol( double var )
       return;
    else
    {
-      set("carbMin_vol", "carb_min", var);
+      set(kCarbMinProp, kCarbMin, var);
    }
 }
 
@@ -190,7 +249,7 @@ void Style::setCarbMax_vol( double var )
       return;
    else
    {
-      set("carbMax_vol", "carb_max", var);
+      set(kCarbMaxProp, kCarbMax, var);
    }
 }
 
@@ -200,7 +259,7 @@ void Style::setAbvMin_pct( double var )
       return;
    else
    {
-      set("abvMin_pct", "abv_min", var);
+      set(kABVMinProp, kABVMin, var);
    }
 }
 
@@ -210,55 +269,143 @@ void Style::setAbvMax_pct( double var )
       return;
    else
    {
-      set("abvMax_pct", "abv_max", var);
+      set(kABVMaxProp, kABVMax, var);
    }
 }
 
 void Style::setNotes( const QString& var )
 {
-   set("notes", "notes", var);
+   set(kNotesProp, kNotes, var);
 }
 
 void Style::setProfile( const QString& var )
 {
-   set("profile", "profile", var);
+   set(kProfileProp, kProfile, var);
 }
 
 void Style::setIngredients( const QString& var )
 {
-   set("ingredients", "ingredients", var);
+   set(kIngredientsProp, kIngredients, var);
 }
 
 void Style::setExamples( const QString& var )
 {
-   set("examples", "examples", var);
+   set(kExamplesProp, kExamples, var);
 }
 
 //============================="GET" METHODS====================================
-QString Style::category() const { return get("category").toString(); }
-QString Style::categoryNumber() const { return get("category_number").toString(); }
-QString Style::styleLetter() const { return get("style_letter").toString(); }
-QString Style::styleGuide() const { return get("style_guide").toString(); }
-QString Style::notes() const { return get("notes").toString(); }
-QString Style::profile() const { return get("profile").toString(); }
-QString Style::ingredients() const { return get("ingredients").toString(); }
-QString Style::examples() const { return get("examples").toString(); }
+QString Style::category() const
+{
+   return get(kCategory).toString();
+}
 
-const Style::Type Style::type() const { return static_cast<Style::Type>(types.indexOf(get("s_type").toString())); }
-const QString Style::typeString() const { return types.at(type()); }
+QString Style::categoryNumber() const
+{
+   return get(kCategoryNumber).toString();
+}
 
-double Style::ogMin()        const { return get("og_min").toDouble(); }
-double Style::ogMax()        const { return get("og_max").toDouble(); }
-double Style::fgMin()        const { return get("fg_min").toDouble(); }
-double Style::fgMax()        const { return get("fg_max").toDouble(); }
-double Style::ibuMin()       const { return get("ibu_min").toDouble(); }
-double Style::ibuMax()       const { return get("ibu_max").toDouble(); }
-double Style::colorMin_srm() const { return get("color_min").toDouble(); }
-double Style::colorMax_srm() const { return get("color_max").toDouble(); }
-double Style::carbMin_vol()  const { return get("carb_min").toDouble(); }
-double Style::carbMax_vol()  const { return get("carb_max").toDouble(); }
-double Style::abvMin_pct()   const { return get("abv_min").toDouble(); }
-double Style::abvMax_pct()   const { return get("abv_max").toDouble(); }
+QString Style::styleLetter() const
+{
+   return get(kStyleLetter).toString();
+}
 
-bool Style::isValidType( const QString &str ) { return types.contains( str ); }
+QString Style::styleGuide() const
+{
+   return get(kStyleGuide).toString();
+}
+
+QString Style::notes() const
+{
+   return get(kNotes).toString();
+}
+
+QString Style::profile() const
+{
+   return get(kProfile).toString();
+}
+
+QString Style::ingredients() const
+{
+   return get(kIngredients).toString();
+}
+
+QString Style::examples() const
+{
+   return get(kExamples).toString();
+}
+
+const Style::Type Style::type() const
+{
+   return static_cast<Style::Type>(types.indexOf(get(kType).toString()));
+}
+
+const QString Style::typeString() const
+{
+   return types.at(type());
+}
+
+double Style::ogMin() const
+{
+   return get(kOGMin).toDouble();
+}
+
+double Style::ogMax() const
+{
+   return get(kOGMax).toDouble();
+}
+
+double Style::fgMin() const
+{
+   return get(kFGMin).toDouble();
+}
+
+double Style::fgMax() const
+{
+   return get(kFGMax).toDouble();
+}
+
+double Style::ibuMin() const
+{
+   return get(kIBUMin).toDouble();
+}
+
+double Style::ibuMax() const
+{
+   return get(kIBUMax).toDouble();
+}
+
+double Style::colorMin_srm() const
+{
+   return get(kColorMin).toDouble();
+}
+
+double Style::colorMax_srm() const
+{
+   return get(kColorMax).toDouble();
+}
+
+double Style::carbMin_vol() const
+{
+   return get(kCarbMin).toDouble();
+}
+
+double Style::carbMax_vol() const
+{
+   return get(kCarbMax).toDouble();
+}
+
+double Style::abvMin_pct() const
+{
+   return get(kABVMin).toDouble();
+}
+
+double Style::abvMax_pct() const
+{
+   return get(kABVMax).toDouble();
+}
+
+bool Style::isValidType( const QString &str )
+{
+   return types.contains( str );
+}
 
