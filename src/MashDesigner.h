@@ -62,7 +62,7 @@ private slots:
    void saveTargetTemp();
    void proceed(); // Go to next step.
    void saveAndClose();
-   void typeChanged();
+   void typeChanged( int _ );
 
 private:
    bool nextStep(int step);
@@ -78,6 +78,8 @@ private:
    double volFromTemp_l( double temp_c );
    double getDecoctionAmount_l();
    double waterFromMash_l();
+   double maxTargetTemp();
+   bool heating();
 
    // I have developed a distaste for "getBlah"
    double selectedAmount_l();
