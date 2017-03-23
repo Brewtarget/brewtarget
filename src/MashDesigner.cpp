@@ -753,10 +753,15 @@ void MashDesigner::typeChanged()
    else if ( ! pushButton_next->isEnabled() )
       pushButton_next->setEnabled(true);
 
-   if( isInfusion() || isSparge() )
+   if ( isInfusion() || isSparge() )
    {
       horizontalSlider_amount->setEnabled(true);
       horizontalSlider_temp->setEnabled(true);
+      if (isSparge())
+      {
+         lineEdit_temp->setText(mash->spargeTemp_c());
+         lineEdit_time->setText(15.0);
+      }
       saveTargetTemp();
    }
    else if( isDecoction() )
