@@ -315,6 +315,30 @@ static QString boilTime(Equipment* equipment)
    }
 }
 
+static QString styleName(Style* style)
+{
+   if ( ! style )
+   {
+      return "unknown";
+   }
+   else
+   {
+      return style->name();
+   }
+}
+
+static QString boilTime(Equipment* equipment)
+{
+   if ( ! equipment )
+   {
+      return "unknown";
+   }
+   else
+   {
+      return Brewtarget::displayAmount(equipment->boilTime_min(), "tab_recipe", "boilTime_min", Units::minutes);
+   }
+}
+
 QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
 {
    QString header;
