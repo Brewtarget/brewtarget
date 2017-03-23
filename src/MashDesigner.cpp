@@ -309,7 +309,7 @@ double MashDesigner::tempFromVolume_c( double vol_l )
 
 // Returns the maximum possible target temperature that can currently be reached.
 // If cooling, returns the minimum possible target temp
-double MashDesigner::maxTargetTemp()
+double MashDesigner::maxTargetTemp_c()
 {
    if (mashStep == 0 || mash == 0)
       return 0.0;
@@ -624,7 +624,7 @@ void MashDesigner::saveTargetTemp()
       // Do a sanity check the make sure the max volume available can actually hit the temperature we want
       double tempNeeded_c = tempFromVolume_c( maxAmt_l() );
       if ((tempNeeded_c > maxTemp_c()) || (tempNeeded_c < minTemp_c()))
-         lineEdit_temp->setText( maxTargetTemp() );
+         lineEdit_temp->setText( maxTargetTemp_c() );
    }
 
    if ( mashStep != 0 )
