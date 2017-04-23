@@ -24,6 +24,7 @@
 #include "fermentable.h"
 #include "equipment.h"
 #include "hop.h"
+#include "Html.h"
 #include "instruction.h"
 #include "misc.h"
 #include "yeast.h"
@@ -150,25 +151,9 @@ QString RecipeFormatter::getTextSeparator()
    return *textSeparator;
 }
 
-QString RecipeFormatter::buildHTMLHeader() {
-    QString header;
-
-   header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/1998/REC-html40-19980424/strict.dtd\">"
-            "<html>";
-   header += "<head>";
-   // NOTE: the meta tag is not closed, because we need HTML4 compliance, and that's just the way it is.
-   header += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
-   // The head tag requires a title.
-   // TODO: think of a title
-   header += "<title></title>";
-
-   header += "<style type=\"text/css\">";
-   header += getCSS(":css/recipe.css");
-   header += "</style></head>";
-
-   header += "<body>";
-
-   return header;
+QString RecipeFormatter::buildHTMLHeader()
+{
+   return Html::createHeader(RecipeFormatter::tr("Recipe"), ":css/recipe.css");
 }
 
 QString RecipeFormatter::buildHTMLFooter() {
@@ -304,7 +289,7 @@ QString RecipeFormatter::getToolTip(Recipe* rec)
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS(":/css/tooltip.css");
+   header += Html::getCss(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -350,7 +335,7 @@ QString RecipeFormatter::getToolTip(Style* style)
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS(":/css/tooltip.css");
+   header += Html::getCss(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -393,7 +378,7 @@ QString RecipeFormatter::getToolTip(Equipment* kit)
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS(":/css/tooltip.css");
+   header += Html::getCss(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -428,7 +413,7 @@ QString RecipeFormatter::getToolTip(Fermentable* ferm)
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS(":/css/tooltip.css");
+   header += Html::getCss(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -469,7 +454,7 @@ QString RecipeFormatter::getToolTip(Hop* hop)
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS(":/css/tooltip.css");
+   header += Html::getCss(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -511,7 +496,7 @@ QString RecipeFormatter::getToolTip(Misc* misc)
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS(":/css/tooltip.css");
+   header += Html::getCss(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -545,7 +530,7 @@ QString RecipeFormatter::getToolTip(Yeast* yeast)
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS(":/css/tooltip.css");
+   header += Html::getCss(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -658,22 +643,6 @@ QString RecipeFormatter::wrapText( const QString &text, int wrapLength )
           wrappedText += "\n";
    }
    return wrappedText;
-}
-
-QString RecipeFormatter::getCSS(QString resourceName)
-{
-
-   QFile cssInput(resourceName);
-   QString css;
-
-   if (cssInput.open(QFile::ReadOnly)) {
-      QTextStream inStream(&cssInput);
-      while ( ! inStream.atEnd() )
-      {
-         css += inStream.readLine();
-      }
-   }
-   return css;
 }
 
 QString RecipeFormatter::buildStatTableHtml()
@@ -1506,7 +1475,7 @@ QString RecipeFormatter::getLabelToolTip() {
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
-   header += getCSS(":/css/tooltip.css");
+   header += Html::getCss(":/css/tooltip.css");
    header += "</style></head>";
 
    body   = "<body>";
@@ -1549,13 +1518,10 @@ QString RecipeFormatter::getLabelToolTip() {
 bool RecipeFormatter::loadComplete(bool ok)
 {
    doc->print(printer);
-   // disconnect( doc, SIGNAL((bool)), this, SLOT(loadComplete(bool)) );
-   //
-   // GSG: Part of fix for #263
    return ok;
 }
 
-void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog, 
+void RecipeFormatter::print(QPrinter* mainPrinter,
       int action, QFile* outFile)
 {
    if( rec == 0 )
@@ -1573,13 +1539,6 @@ void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog,
    if ( action == PRINT )
    {
       printer = mainPrinter;
-      dialog->setWindowTitle(tr("Print Document"));
-      if (dialog->exec() != QDialog::Accepted)
-         return;
-      //connect( doc, SIGNAL((bool)), this, SLOT(loadComplete(bool)) );
-      //
-      //GSG: My guess is that we used QWebView in the past and updated to QTextBrowser.
-      // QTextBrowser doesn't have a  signal.
       doc->setHtml(getHTMLFormat());
       loadComplete(true);
    }

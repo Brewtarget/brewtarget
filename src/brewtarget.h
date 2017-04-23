@@ -82,6 +82,8 @@ public:
    enum ColorUnitType {SRM, EBC};
    //! \brief Units for density
    enum DensityUnitType {SG,PLATO};
+   //! \brief The units for the diastatic power.
+   enum DiastaticPowerUnitType {LINTNER, WK};
    //! \brief The formula used to get IBUs.
    enum IbuType {TINSETH, RAGER, NOONAN};
    //! \brief Controls how units and scales are stored in the options file
@@ -263,6 +265,7 @@ public:
    // One method to rule them all, and in darkness bind them
    static UnitSystem* findUnitSystem(Unit* unit, Unit::unitDisplay display);
    static QString colorUnitName(Unit::unitDisplay display);
+   static QString diastaticPowerUnitName(Unit::unitDisplay display);
 
    //! \return true iff the string has a valid unit substring at the end.
    static bool hasUnits(QString qstr);
@@ -318,6 +321,7 @@ public:
    static QMenu* setupMassMenu(QWidget* parent, Unit::unitDisplay unit, Unit::unitScale scale = Unit::noScale, bool generateScale = true);
    static QMenu* setupTemperatureMenu(QWidget* parent, Unit::unitDisplay unit);
    static QMenu* setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit::unitScale scale = Unit::noScale, bool generateScale = true);
+   static QMenu* setupDiastaticPowerMenu(QWidget* parent, Unit::unitDisplay unit);
    static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
 
@@ -378,6 +382,7 @@ private:
    static ColorType colorFormula;
    static ColorUnitType colorUnit;
    static DensityUnitType densityUnit;
+   static DiastaticPowerUnitType diastaticPowerUnit;
    static IbuType ibuFormula;
    static Unit::unitDisplay dateFormat;
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -449,6 +454,8 @@ private:
    static TempScale getTemperatureScale();
    //! \return the color units
    static Unit::unitDisplay getColorUnit();
+   //! \return the diastatic power units
+   static Unit::unitDisplay getDiastaticPowerUnit();
 };
 
 Q_DECLARE_METATYPE( Brewtarget::DBTable )

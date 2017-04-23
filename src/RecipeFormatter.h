@@ -77,7 +77,7 @@ public:
    QString wrapText( const QString &text, int wrapLength );
    
    //! Send a printable version to the printer.
-   void print(QPrinter *mainPrinter, QPrintDialog* dialog, int action = PRINT, QFile* outFile=0);
+   void print(QPrinter *mainPrinter, int action = PRINT, QFile* outFile=0);
 
 public slots:
    //! Put the plaintext view onto the clipboard.
@@ -105,7 +105,6 @@ private:
    QString buildBrewNotesHtml();
    QString buildBrewNotesTxt();
    QString buildHTMLFooter();
-   QString getCSS(QString resourceName);
 
    QList<Hop*> sortHopsByTime(Recipe* rec);
    QList<Fermentable*> sortFermentablesByWeight(Recipe* rec);

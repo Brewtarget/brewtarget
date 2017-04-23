@@ -38,7 +38,7 @@ BtLabel::BtLabel(QWidget *parent, LabelType lType) :
    btParent = parent;
    _menu = 0;
 
-   connect(this,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(popContextMenu(const QPoint&)));
+   connect(this, &QWidget::customContextMenuRequested, this, &BtLabel::popContextMenu);
 
 }
 
@@ -122,6 +122,9 @@ void BtLabel::initializeMenu()
          break;
       case DATE:
          _menu = Brewtarget::setupDateMenu(btParent,unit); // unit only
+         break;
+      case DIASTATIC_POWER:
+         _menu = Brewtarget::setupDiastaticPowerMenu(btParent,unit);
          break;
       default:
          return;
@@ -231,5 +234,10 @@ BtTimeLabel::BtTimeLabel(QWidget *parent)
 
 BtVolumeLabel::BtVolumeLabel(QWidget *parent)
    : BtLabel(parent,VOLUME)
+{
+}
+
+BtDiastaticPowerLabel::BtDiastaticPowerLabel(QWidget *parent)
+   : BtLabel(parent,DIASTATIC_POWER)
 {
 }

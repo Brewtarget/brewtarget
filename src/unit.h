@@ -51,6 +51,8 @@ class EBCUnit;
 class SRMUnit;
 class PlatoUnit;
 class SgUnit;
+class LintnerUnit;
+class WKUnit;
 
 #include <QString>
 #include <QObject>
@@ -75,7 +77,7 @@ enum TempScale
     Kelvin
 };
 
-// TODO: implement ppm, percent, diastatic power, ibuGalPerLb,
+// TODO: implement ppm, percent, ibuGalPerLb,
 
 /*!
  * \class Unit
@@ -96,15 +98,17 @@ class Unit : public QObject
       // Qt to see them?
       enum unitDisplay
       {
-         noUnit       = -1,
-         displayDef   = 0x000,
-         displaySI    = 0x100,
-         displayUS    = 0x101,
-         displayImp   = 0x102,
-         displaySrm   = 0x200,
-         displayEbc   = 0x201,
-         displaySg    = 0x300,
-         displayPlato = 0x301
+         noUnit         = -1,
+         displayDef     = 0x000,
+         displaySI      = 0x100,
+         displayUS      = 0x101,
+         displayImp     = 0x102,
+         displaySrm     = 0x200,
+         displayEbc     = 0x201,
+         displaySg      = 0x300,
+         displayPlato   = 0x301,
+         displayLintner = 0x400,
+         displayWK      = 0x401
       };
 
       enum unitScale
@@ -121,15 +125,16 @@ class Unit : public QObject
 
       enum UnitType
       {
-         Mass     = 0x100000,
-         Volume   = 0x200000,
-         Time     = 0x300000,
-         Temp     = 0x400000,
-         Color    = 0x500000,
-         Density  = 0x600000,
-         String   = 0x700000,
-         Mixed    = 0x800000,
-         None     = 0x000000
+         Mass           = 0x100000,
+         Volume         = 0x200000,
+         Time           = 0x300000,
+         Temp           = 0x400000,
+         Color          = 0x500000,
+         Density        = 0x600000,
+         String         = 0x700000,
+         Mixed          = 0x800000,
+         DiastaticPower = 0x900000,
+         None           = 0x000000
       };
 
       virtual ~Unit() {}
@@ -486,6 +491,31 @@ public:
    double fromSI( double amt ) const;
 };
 
+// == diastatic power ==
+// Lintner will be the standard unit, since that is how we store things in the
+// database.
+//
+class LintnerUnit : public Unit
+{
+public:
+   LintnerUnit();
+
+   // Inherited methods.
+   double toSI( double amt ) const;
+   double fromSI( double amt ) const;
+};
+
+class WKUnit : public Unit
+{
+public:
+   WKUnit();
+
+   // Inherited methods.
+   double toSI( double amt ) const;
+   double fromSI( double amt ) const;
+};
+
+
 class Units
 {
 public:
@@ -527,6 +557,9 @@ public:
    // == Density ===
    static SgUnit *sp_grav;
    static PlatoUnit *plato;
+   // == diastatic power ==
+   static LintnerUnit *lintner;
+   static WKUnit *wk;
 };
 
 #endif // _UNIT_H

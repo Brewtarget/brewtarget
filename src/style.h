@@ -140,6 +140,8 @@ public:
    QString ingredients() const;
    QString examples() const;
 
+   static QString classNameStr();
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
@@ -169,7 +171,7 @@ signals:
    */
 
 private:
-   Style();
+   Style(Brewtarget::DBTable table, int key);
    Style( Style const& other );
    
    bool isValidType( const QString &str );

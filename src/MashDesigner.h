@@ -62,7 +62,7 @@ private slots:
    void saveTargetTemp();
    void proceed(); // Go to next step.
    void saveAndClose();
-   void typeChanged(int t);
+   void typeChanged();
 
 private:
    bool nextStep(int step);

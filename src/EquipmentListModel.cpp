@@ -27,7 +27,7 @@
 EquipmentListModel::EquipmentListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)
 {
-   connect( &(Database::instance()), SIGNAL(newEquipmentSignal(Equipment*)), this, SLOT(addEquipment(Equipment*)) );
+   connect( &(Database::instance()), &Database::newEquipmentSignal, this, &EquipmentListModel::addEquipment );
    connect( &(Database::instance()), SIGNAL(deletedSignal(Equipment*)), this, SLOT(removeEquipment(Equipment*)) );
    repopulateList();
 }
@@ -44,7 +44,7 @@ void EquipmentListModel::addEquipment(Equipment* equipment)
    int size = equipments.size();
    beginInsertRows( QModelIndex(), size, size );
    equipments.append(equipment);
-   connect( equipment, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
+   connect( equipment, &BeerXMLElement::changed, this, &EquipmentListModel::equipChanged );
    endInsertRows();
 }
 
@@ -71,7 +71,7 @@ void EquipmentListModel::addEquipments(QList<Equipment*> equips)
       equipments.append(tmp);
    
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
+         connect( *i, &BeerXMLElement::changed, this, &EquipmentListModel::equipChanged );
    
       endInsertRows();
    }
@@ -166,7 +166,7 @@ void EquipmentListModel::observeRecipe(Recipe* rec)
    recipe = rec;
    
    if( recipe )
-      connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(recChanged(QMetaProperty,QVariant)) );
+      connect( recipe, &BeerXMLElement::changed, this, &EquipmentListModel::recChanged );
 }
 
 int EquipmentListModel::rowCount( QModelIndex const& parent ) const

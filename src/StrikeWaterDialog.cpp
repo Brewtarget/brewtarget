@@ -29,7 +29,7 @@ const double StrikeWaterDialog::specificHeatBarley = 0.41;
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent)
 {
    setupUi(this);
-   connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
+   connect(pushButton_calculate, &QAbstractButton::clicked, this, &StrikeWaterDialog::calculate);
 }
 
 StrikeWaterDialog::~StrikeWaterDialog() {}

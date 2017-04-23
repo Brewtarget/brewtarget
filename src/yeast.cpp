@@ -27,6 +27,45 @@
 #include "yeast.h"
 #include "brewtarget.h"
 
+/************* Columns *************/
+const QString kName("name");
+const QString kType("ytype");
+const QString kForm("form");
+const QString kAmount("amount");
+const QString kInventory("quanta");
+const QString kAmountIsWeight("amount_is_weight");
+const QString kLab("laboratory");
+const QString kProductID("product_id");
+const QString kMinTemp("min_temperature");
+const QString kMaxTemp("max_temperature");
+const QString kFlocculation("flocculation");
+const QString kAttenuation("attenuation");
+const QString kNotes("notes");
+const QString kBestFor("best_for");
+const QString kTimesCultured("times_cultured");
+const QString kMaxReuse("max_reuse");
+const QString kAddToSecondary("add_to_secondary");
+
+/************** Props **************/
+const QString kNameProp("name");
+const QString kTypeProp("type");
+const QString kFormProp("form");
+const QString kAmountProp("amount");
+const QString kInventoryProp("inventory");
+const QString kAmountIsWeightProp("amountIsWeight");
+const QString kLabProp("laboratory");
+const QString kProductIDProp("productID");
+const QString kMinTempProp("minTemperature_c");
+const QString kMaxTempProp("maxTemperature_c");
+const QString kFlocculationProp("flocculation");
+const QString kAttenuationProp("attenuation_pct");
+const QString kNotesProp("notes");
+const QString kBestForProp("bestFor");
+const QString kTimesCulturedProp("timesCultured");
+const QString kMaxReuseProp("maxReuse");
+const QString kAddToSecondaryProp("addToSecondary");
+
+
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
 QStringList Yeast::flocculations = QStringList() << "Low" << "Medium" << "High" << "Very High";
@@ -35,23 +74,23 @@ QHash<QString,QString> Yeast::tagToProp = Yeast::tagToPropHash();
 QHash<QString,QString> Yeast::tagToPropHash()
 {
    QHash<QString,QString> propHash;
-   propHash["NAME"] = "name";
-   //propHash["TYPE"] = "type";
-   //propHash["FORM"] = "form";
-   propHash["AMOUNT"] = "amount";
-   propHash["INVENTORY"] = "inventory";
-   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
-   propHash["LABORATORY"] = "laboratory";
-   propHash["PRODUCT_ID"] = "productID";
-   propHash["MIN_TEMPERATURE"] = "minTemperature_c";
-   propHash["MAX_TEMPERATURE"] = "maxTemperature_c";
-   //propHash["FLOCCULATION"] = "flocculation";
-   propHash["ATTENUATION"] = "attenuation_pct";
-   propHash["NOTES"] = "notes";
-   propHash["BEST_FOR"] = "bestFor";
-   propHash["TIMES_CULTURED"] = "timesCultured";
-   propHash["MAX_REUSE"] = "maxReuse";
-   propHash["ADD_TO_SECONDARY"] = "addToSecondary";
+   propHash["NAME"] = kNameProp;
+   //propHash["TYPE"] = kTypeProp;
+   //propHash["FORM"] = kFormProp";
+   propHash["AMOUNT"] = kAmountProp;
+   propHash["INVENTORY"] = kInventoryProp;
+   propHash["AMOUNT_IS_WEIGHT"] = kAmountIsWeightProp;
+   propHash["LABORATORY"] = kLabProp;
+   propHash["PRODUCT_ID"] = kProductIDProp;
+   propHash["MIN_TEMPERATURE"] = kMinTempProp;
+   propHash["MAX_TEMPERATURE"] = kMaxTempProp;
+   //propHash["FLOCCULATION"] = kFlocculationProp;
+   propHash["ATTENUATION"] = kAttenuationProp;
+   propHash["NOTES"] = kNotesProp;
+   propHash["BEST_FOR"] = kBestForProp;
+   propHash["TIMES_CULTURED"] = kTimesCulturedProp;
+   propHash["MAX_REUSE"] = kMaxReuseProp;
+   propHash["ADD_TO_SECONDARY"] = kAddToSecondaryProp;
    return propHash;
 }
 
@@ -65,9 +104,15 @@ bool operator==(Yeast &y1, Yeast &y2)
    return y1.name() == y2.name();
 }
 
+QString Yeast::classNameStr()
+{
+   static const QString name("Yeast");
+   return name;
+}
+
 //============================CONSTRUCTORS======================================
-Yeast::Yeast()
-   : BeerXMLElement()
+Yeast::Yeast(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 
@@ -76,30 +121,101 @@ Yeast::Yeast(Yeast const& other) : BeerXMLElement(other)
 }
 
 //============================="GET" METHODS====================================
-QString Yeast::laboratory() const { return get("laboratory").toString();; }
-QString Yeast::productID() const { return get("product_id").toString(); }
-QString Yeast::notes() const { return get("notes").toString(); }
-QString Yeast::bestFor() const { return get("best_for").toString(); }
+QString Yeast::laboratory() const
+{
+   return get(kLab).toString();
+}
 
-const QString Yeast::typeString() const { return types.at(type()); }
-const QString Yeast::formString() const { return forms.at(form()); }
-const QString Yeast::flocculationString() const { return flocculations.at(flocculation()); }
+QString Yeast::productID() const
+{
+   return get(kProductID).toString();
+}
 
-double Yeast::amount() const { return get("amount").toDouble(); }
-double Yeast::minTemperature_c() const { return get("min_temperature").toDouble(); }
-double Yeast::maxTemperature_c() const { return get("max_temperature").toDouble(); }
-double Yeast::attenuation_pct() const { return get("attenuation").toDouble(); }
+QString Yeast::notes() const
+{
+   return get(kNotes).toString();
+}
 
-int Yeast::inventory() const { return getInventory("quanta").toInt(); }
-int Yeast::timesCultured() const { return get("times_cultured").toInt(); }
-int Yeast::maxReuse() const { return get("max_reuse").toInt(); }
+QString Yeast::bestFor() const
+{
+   return get(kBestFor).toString();
+}
 
-bool Yeast::addToSecondary() const { return get("add_to_secondary").toBool(); }
-bool Yeast::amountIsWeight() const { return get("amount_is_weight").toBool(); }
+const QString Yeast::typeString() const
+{
+   return types.at(type());
+}
 
-Yeast::Form Yeast::form() const { return static_cast<Yeast::Form>( forms.indexOf(get("form").toString())); }
-Yeast::Flocculation Yeast::flocculation() const { return static_cast<Yeast::Flocculation>( flocculations.indexOf(get("flocculation").toString())); }
-Yeast::Type Yeast::type() const { return static_cast<Yeast::Type>( types.indexOf(get("ytype").toString())); }
+const QString Yeast::formString() const
+{
+   return forms.at(form());
+}
+
+const QString Yeast::flocculationString() const
+{
+   return flocculations.at(flocculation());
+}
+
+double Yeast::amount() const
+{
+   return get(kAmount).toDouble();
+}
+
+double Yeast::minTemperature_c() const
+{
+   return get(kMinTemp).toDouble();
+}
+
+double Yeast::maxTemperature_c() const
+{
+   return get(kMaxTemp).toDouble();
+}
+
+double Yeast::attenuation_pct() const
+{
+   return get(kAttenuation).toDouble();
+}
+
+int Yeast::inventory() const
+{
+   return getInventory(kInventory).toInt();
+}
+
+int Yeast::timesCultured() const
+{
+   return get(kTimesCultured).toInt();
+}
+
+int Yeast::maxReuse() const
+{
+   return get(kMaxReuse).toInt();
+}
+
+bool Yeast::addToSecondary() const
+{
+   return get(kAddToSecondary).toBool();
+}
+
+bool Yeast::amountIsWeight() const
+{
+   return get(kAmountIsWeight).toBool();
+}
+
+Yeast::Form Yeast::form() const
+{
+   return static_cast<Yeast::Form>( forms.indexOf(get(kForm).toString()));
+}
+
+Yeast::Flocculation Yeast::flocculation() const
+{
+   return static_cast<Yeast::Flocculation>( flocculations.indexOf(get(kFlocculation).toString()));
+}
+
+Yeast::Type Yeast::type() const
+{
+   return static_cast<Yeast::Type>( types.indexOf(get(kType).toString()));
+}
+
 const QString Yeast::typeStringTr() const
 {
    static QStringList typesTr = QStringList() << QObject::tr("Ale")
@@ -131,12 +247,12 @@ const QString Yeast::flocculationStringTr() const
 //============================="SET" METHODS====================================
 void Yeast::setType( Yeast::Type t )
 {
-   set("type", "ytype", types.at(t));
+   set(kTypeProp, kType, types.at(t));
 }
 
 void Yeast::setForm( Yeast::Form f )
 {
-   set("form", "form", forms.at(f));
+   set(kFormProp, kForm, forms.at(f));
 }
 
 void Yeast::setAmount( double var )
@@ -144,7 +260,7 @@ void Yeast::setAmount( double var )
    if( var < 0.0 )
       Brewtarget::logW( QString("Yeast: amount < 0: %1").arg(var) );
    else
-      set("amount", "amount", var);
+      set(kAmountProp, kAmount, var);
 }
 
 void Yeast::setInventoryQuanta( int var )
@@ -152,22 +268,22 @@ void Yeast::setInventoryQuanta( int var )
    if( var < 0.0 )
       Brewtarget::logW( QString("Yeast: inventory < 0: %1").arg(var) );
    else
-      setInventory("inventory", "quanta", var);
+      setInventory(kInventoryProp, kInventory, var);
 }
 
 void Yeast::setAmountIsWeight( bool var )
 {
-   set("amountIsWeight", "amount_is_weight", var);
+   set(kAmountIsWeightProp, kAmountIsWeight, var);
 }
 
 void Yeast::setLaboratory( const QString& var )
 {
-   set("laboratory", "laboratory", var);
+   set(kLabProp, kLab, var);
 }
 
 void Yeast::setProductID( const QString& var )
 {
-   set("productID", "product_id", var);
+   set(kProductIDProp, kProductID, var);
 }
 
 void Yeast::setMinTemperature_c( double var )
@@ -175,7 +291,7 @@ void Yeast::setMinTemperature_c( double var )
    if( var < -273.15 )
       return;
    else
-      set("minTemperature_c", "min_temperature", var);
+      set(kMinTempProp, kMinTemp, var);
 }
 
 void Yeast::setMaxTemperature_c( double var )
@@ -183,12 +299,12 @@ void Yeast::setMaxTemperature_c( double var )
    if( var < -273.15 )
       return;
    else
-      set("maxTemperature_c", "max_temperature", var);
+      set(kMaxTempProp, kMaxTemp, var);
 }
 
 void Yeast::setFlocculation( Yeast::Flocculation f )
 {
-   set("flocculation", "flocculation", flocculations.at(f));
+   set(kFlocculationProp, kFlocculation, flocculations.at(f));
 }
 
 void Yeast::setAttenuation_pct( double var )
@@ -196,17 +312,17 @@ void Yeast::setAttenuation_pct( double var )
    if( var < 0.0 || var > 100.0 )
       return;
    else
-      set("attenuation", "attenuation", var);
+      set(kAttenuationProp, kAttenuation, var);
 }
 
 void Yeast::setNotes( const QString& var )
 {
-   set("notes", "notes", var);
+   set(kNotesProp, kNotes, var);
 }
 
 void Yeast::setBestFor( const QString& var )
 {
-   set("bestFor", "best_for", var);
+   set(kBestForProp, kBestFor, var);
 }
 
 void Yeast::setTimesCultured( int var )
@@ -214,7 +330,7 @@ void Yeast::setTimesCultured( int var )
    if( var < 0 )
       return;
    else
-      set("timesCultured", "times_cultured", var);
+      set(kTimesCulturedProp, kTimesCultured, var);
 }
 
 void Yeast::setMaxReuse( int var )
@@ -222,12 +338,12 @@ void Yeast::setMaxReuse( int var )
    if( var < 0 )
       return;
    else
-      set("maxReuse", "max_reuse", var);
+      set(kMaxReuseProp, kMaxReuse, var);
 }
 
 void Yeast::setAddToSecondary( bool var )
 {
-   set("addToSecondary", "add_to_secondary", var);
+   set(kAddToSecondaryProp, kAddToSecondary, var);
 }
 
 //========================OTHER METHODS=========================================

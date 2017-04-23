@@ -43,14 +43,12 @@ BeerColorWidget::BeerColorWidget(QWidget* parent) : QWidget(parent)
 void BeerColorWidget::setRecipe( Recipe* rec )
 {
    if( recObs )
-      disconnect( recObs, SIGNAL(changed(QMetaProperty, QVariant)),
-                  this, SLOT(parseChanges(QMetaProperty, QVariant)) );
+      disconnect( recObs, &Recipe::changed, this, &BeerColorWidget::parseChanges );
    
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, SIGNAL(changed(QMetaProperty, QVariant)),
-               this, SLOT(parseChanges(QMetaProperty, QVariant)) );
+      connect( recObs, &Recipe::changed, this, &BeerColorWidget::parseChanges );
       setColor( recObs->SRMColor() );
    }
 }

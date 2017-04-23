@@ -72,6 +72,9 @@ public:
    double interval();
 
    int instructionNumber() const;
+
+   static QString classNameStr();
+
 signals:
    /*
    void changedName(QString);
@@ -85,7 +88,7 @@ signals:
 
 private:
    //! Only database gets to construct instances.
-   Instruction();
+   Instruction(Brewtarget::DBTable table, int key);
    Instruction( Instruction const& other );
    /*
    Instruction( const QString& name,

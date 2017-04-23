@@ -21,13 +21,9 @@
 
 #include "database.h"
 #include "MashDesigner.h"
-#include "equipment.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "brewtarget.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
-#include "unit.h"
+#include "fermentable.h"
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -46,30 +42,30 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    label_zeroWort->setText(Brewtarget::displayAmount(0, Units::liters));
 
    // Update temp slider when we move amount slider.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateTempSlider()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTempSlider );
    // Update amount slider when we move temp slider.
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateAmtSlider()) );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmtSlider );
    // Update tun fullness bar when either slider moves.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateFullness()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateFullness()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness );
    // Update amount/temp text when sliders move.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateAmt()) );
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateTemp()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateAmt()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateTemp()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp );
    // Update collected wort when sliders move.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort );
    // Save the target temp whenever it's changed.
-   connect( lineEdit_temp, SIGNAL(textModified()), this, SLOT(saveTargetTemp()) );
+   connect( lineEdit_temp, &BtLineEdit::textModified, this, &MashDesigner::saveTargetTemp );
    // Move to next step.
-   connect( pushButton_next, SIGNAL(clicked()), this, SLOT(proceed()) );
+   connect( pushButton_next, &QAbstractButton::clicked, this, &MashDesigner::proceed );
    // Do correct calcs when the mash step type is selected.
    connect( comboBox_type, SIGNAL(activated(int)), this, SLOT(typeChanged(int)) );
 
    // I still dislike this part. But I also need to "fix" the form
    // connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
-   connect( pushButton_finish, SIGNAL(clicked()), this, SLOT(saveAndClose()) );
+   connect( pushButton_finish, &QAbstractButton::clicked, this, &MashDesigner::saveAndClose );
 
 }
 
@@ -213,18 +209,24 @@ double MashDesigner::minAmt_l()
 // However much more we can add at this step.
 double MashDesigner::maxAmt_l()
 {
+   double amt = 0;
+
    if ( equip == 0 )
-      return 0;
+      return amt;
 
    // However much more we can fit in the tun.
    if( ! isSparge() )
    {
-      return equip->tunVolume_l() - mashVolume_l();
+      amt = equip->tunVolume_l() - mashVolume_l();
    }
    else
    {
-      return equip->tunVolume_l() - grainVolume_l();
+      amt = equip->tunVolume_l() - grainVolume_l();
    }
+
+   amt = std::min(amt, recObs->targetTotalMashVol_l() - addedWater_l);
+
+   return amt;
 }
 
 // Returns the required volume of water to infuse if the strike water is
@@ -342,7 +344,7 @@ bool MashDesigner::initializeMash()
    grain_kg = recObs->grainsInMash_kg();
 
    label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), Units::liters));
-   label_wortMax->setText(Brewtarget::displayAmount(recObs->boilSize_l(), Units::liters));
+   label_wortMax->setText(Brewtarget::displayAmount(recObs->targetCollectedWortVol_l(), Units::liters));
 
    updateMinAmt();
    updateMaxAmt();
@@ -409,7 +411,7 @@ void MashDesigner::updateCollectedWort()
    // double wort_l = recObs->wortFromMash_l();
    double wort_l = waterFromMash_l();
 
-   double ratio = wort_l / recObs->boilSize_l();
+   double ratio = wort_l / recObs->targetCollectedWortVol_l();
    if( ratio < 0 )
      ratio = 0;
    if( ratio > 1 )
@@ -660,7 +662,7 @@ MashStep::Type MashDesigner::type() const
    return static_cast<MashStep::Type>(curIdx);
 }
 
-void MashDesigner::typeChanged(int t)
+void MashDesigner::typeChanged()
 {
    MashStep::Type _type = type();
 
@@ -701,4 +703,3 @@ void MashDesigner::typeChanged(int t)
       horizontalSlider_temp->setEnabled(false);
    }
 }
-

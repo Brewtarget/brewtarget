@@ -70,8 +70,8 @@ TimerWidget::TimerWidget(TimerMainDialog *parent, BoilTime* bt) :
     retranslateUi(this);
 
     //Connections
-    connect(boilTime, SIGNAL(BoilTimeChanged()), this, SLOT(decrementTime()));
-    connect(boilTime, SIGNAL(timesUp()), this, SLOT(decrementTime()));
+    connect(boilTime, &BoilTime::BoilTimeChanged, this, &TimerWidget::decrementTime);
+    connect(boilTime, &BoilTime::timesUp, this, &TimerWidget::decrementTime);
 }
 
 TimerWidget::~TimerWidget()

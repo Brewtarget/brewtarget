@@ -137,6 +137,7 @@ public:
    void setCohumulone_pct( double num );
    void setMyrcene_pct( double num );
 
+   static QString classNameStr();
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
@@ -160,7 +161,7 @@ signals:
    */
    
 private:
-   Hop();
+   Hop(Brewtarget::DBTable table, int key);
    Hop( Hop const& other );
    
    void setDefaults();

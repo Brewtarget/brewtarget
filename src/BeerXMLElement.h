@@ -57,7 +57,7 @@ class BeerXMLElement : public QObject
 
    friend class Database;
 public:
-   BeerXMLElement();
+   BeerXMLElement(Brewtarget::DBTable table, int key);
    BeerXMLElement( BeerXMLElement const& other );
 
    // Everything that inherits from BeerXML has a name, delete, display and a folder
@@ -156,15 +156,22 @@ protected:
     * 2) Call the NOTIFY method associated with \c prop_name if \c notify == true.
     */
    void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
+   void set( const QString& prop_name, const QString& col_name, const QVariant& value, bool notify = true );
 
    /*!
     * \param col_name - The database column of the attribute we want to get.
     * Returns the value of the attribute specified by key/table/col_name.
     */
    QVariant get( const char* col_name ) const;
+   QVariant get( const QString& col_name ) const;
 
    void setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
+   void setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify = true );
    QVariant getInventory( const char* col_name ) const;
+   QVariant getInventory( const QString& col_name ) const;
+
+
+   QVariantMap getColumnValueMap() const;
 
 private:
    /*!

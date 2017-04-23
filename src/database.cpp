@@ -99,10 +99,7 @@ Database::Database()
    //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
-
    converted = false;
-
-   loadWasSuccessful = load();
 }
 
 Database::~Database()
@@ -279,6 +276,7 @@ bool Database::load()
 
    createFromScratch=false;
    schemaUpdated=false;
+   loadWasSuccessful = false;
 
    if ( Brewtarget::dbType() == Brewtarget::PGSQL )
    {
@@ -383,9 +381,9 @@ bool Database::load()
       Equipment* e = equipment(*i);
       if( e )
       {
-         connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
-         connect( e, SIGNAL(changedBoilSize_l(double)), *i, SLOT(setBoilSize_l(double)));
-         connect( e, SIGNAL(changedBoilTime_min(double)), *i, SLOT(setBoilTime_min(double)));
+         connect( e, &BeerXMLElement::changed, *i, &Recipe::acceptEquipChange );
+         connect( e, &Equipment::changedBoilSize_l, *i, &Recipe::setBoilSize_l);
+         connect( e, &Equipment::changedBoilTime_min, *i, &Recipe::setBoilTime_min);
       }
 
       QList<Fermentable*> tmpF = fermentables(*i);
@@ -411,7 +409,8 @@ bool Database::load()
          connect( *n, SIGNAL(changed(QMetaProperty,QVariant)), *m, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
 
-   return true;
+   loadWasSuccessful = true;
+   return loadWasSuccessful;
 }
 
 bool Database::createBlank(QString const& filename)
@@ -539,10 +538,11 @@ QSqlDatabase Database::sqlDatabase()
 
 void Database::unload()
 {
-   // The postgres driver wants nothing to do with this. Core gets dumped if
-   // we try it. Since we don't need to copy things about for postgres...
 
 
+   // selectSome saves context. If we close the database before we tear that
+   // context down, core gets dumped
+   selectSome.clear();
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
@@ -648,8 +648,10 @@ Database& Database::instance()
    {
       mutex.lock();
 
-      if( ! dbInstance )
+      if( ! dbInstance ) {
          dbInstance = new Database();
+         dbInstance->load();
+      }
 
       mutex.unlock();
    }
@@ -1099,7 +1101,7 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 
 BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 {
-   BrewNote* tmp = copy<BrewNote>(other, true, &allBrewNotes);
+   BrewNote* tmp = copy<BrewNote>(other, &allBrewNotes);
 
    if ( tmp ) {
       if ( signal )
@@ -1147,7 +1149,7 @@ Equipment* Database::newEquipment(Equipment* other)
    Equipment* tmp;
 
    if (other)
-      tmp = copy(other, true, &allEquipments);
+      tmp = copy(other, &allEquipments);
    else
       tmp = newIngredient(&allEquipments);
 
@@ -1167,7 +1169,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
    Fermentable* tmp;
 
    if (other)
-      tmp = copy(other, true, &allFermentables);
+      tmp = copy(other, &allFermentables);
    else
       tmp = newIngredient(&allFermentables);
 
@@ -1187,7 +1189,7 @@ Hop* Database::newHop(Hop* other)
    Hop* tmp;
 
    if ( other )
-      tmp = copy(other, true, &allHops);
+      tmp = copy(other, &allHops);
    else
       tmp = newIngredient(&allHops);
 
@@ -1256,7 +1258,7 @@ Mash* Database::newMash(Mash* other, bool displace)
 
    try {
       if ( other )
-         tmp = copy<Mash>(other, true, &allMashs);
+         tmp = copy<Mash>(other, &allMashs);
       else
          tmp = newIngredient(&allMashs);
 
@@ -1376,7 +1378,7 @@ Misc* Database::newMisc(Misc* other)
    Misc* tmp;
 
    if ( other )
-     tmp = copy(other, true, &allMiscs);
+     tmp = copy(other, &allMiscs);
    else
       tmp = newIngredient(&allMiscs);
 
@@ -1426,7 +1428,7 @@ Recipe* Database::newRecipe(Recipe* other)
 
    sqlDatabase().transaction();
    try {
-      tmp = copy<Recipe>(other, true, &allRecipes);
+      tmp = copy<Recipe>(other, &allRecipes);
 
       // Copy fermentables, hops, miscs and yeasts. We've the convenience
       // methods, so use them? And now I have to instruct all of them to not do
@@ -1461,7 +1463,7 @@ Style* Database::newStyle(Style* other)
 
    try {
       if ( other )
-         tmp = copy(other, true, &allStyles);
+         tmp = copy(other, &allStyles);
       else
          tmp = newIngredient(&allStyles);
    }
@@ -1483,7 +1485,7 @@ Water* Database::newWater(Water* other)
 
    try {
       if ( other )
-         tmp = copy(other,true,&allWaters);
+         tmp = copy(other,&allWaters);
       else
          tmp = newIngredient(&allWaters);
    }
@@ -1505,7 +1507,7 @@ Yeast* Database::newYeast(Yeast* other)
 
    try {
       if (other)
-         tmp = copy(other, true, &allYeasts);
+         tmp = copy(other, &allYeasts);
       else
          tmp = newIngredient(&allYeasts);
    }
@@ -1550,7 +1552,7 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
       for( ms=tmpMS.begin(); ms != tmpMS.end(); ++ms)
       {
          // Copy the old mash step.
-         MashStep* newStep = copy<MashStep>(*ms,true,&allMashSteps);
+         MashStep* newStep = copy<MashStep>(*ms,&allMashSteps);
 
          // Put it in the new mash.
          sqlUpdate( Brewtarget::MASHSTEPTABLE,
@@ -1558,8 +1560,8 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
                       QString("id=%1").arg(newStep->key())
                   );
          // Make the new mash pay attention to the new step.
-         connect( newStep, SIGNAL(changed(QMetaProperty,QVariant)),
-                  newMash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
+         connect( newStep, &BeerXMLElement::changed,
+                  newMash, &Mash::acceptMashStepChange );
       }
    }
    catch (QString e) {
@@ -1594,7 +1596,7 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
       QString command = QString("UPDATE %1 set %2=:value where id=%3")
                            .arg(tableName)
                            .arg(col_name)
-                           .arg(object->_key);
+                           .arg(key);
 
       update.prepare( command );
       update.bindValue(":value", value);
@@ -1623,6 +1625,54 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
 }
 
+void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap)
+{
+   // Assumes the table has a column called 'deleted'.
+   QString tableName = tableNames[table];
+   try {
+
+      static const QString kSetStr("%1=?, ");
+      static const QString kSetStrLast("%1=?");
+      QStringList cols = colValMap.keys();
+      QString setValsStr;
+      for(int i = 0; i < cols.length(); i++ )
+      {
+         if(i < cols.length() - 1)
+            setValsStr += kSetStr.arg(cols[i]);
+         else
+            setValsStr += kSetStrLast.arg(cols[i]);
+      }
+
+      QString command = QString("UPDATE %1 set %2 where id=%3")
+                           .arg(tableName)
+                           .arg(setValsStr)
+                           .arg(key);
+      QSqlQuery query( sqlDatabase() );
+      query.prepare( command );
+
+      for(int i = 0; i < cols.length(); i++)
+      {
+         const QString key(cols[i]);
+         query.addBindValue(colValMap[key]);
+      }
+
+
+      if ( ! query.exec() )
+         throw QString("Could not update %1: %4 %5")
+                  .arg( tableName )
+                  .arg( query.lastQuery() )
+                  .arg( query.lastError().text() );
+
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      throw;
+   }
+
+   /*if ( notify )
+      emit object->changed(prop,value);*/
+}
+
 // Inventory functions ========================================================
 
 //This links ingredients with the same name.
@@ -1640,11 +1690,14 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
 
       while (nameq.next()) {
          QString name = nameq.record().value(0).toString();
-         queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC LIMIT 1")
+         queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC LIMIT 1")
                      .arg(tableNames[table])
-                     .arg(name)
                      .arg(Brewtarget::dbTrue());
-         QSqlQuery parentq( queryString, sqlDatabase() );
+         QSqlQuery parentq( sqlDatabase() );
+
+         parentq.prepare(queryString);
+         parentq.bindValue(":name", name);
+         parentq.exec();
 
          if ( !parentq.isActive() )
             throw QString("%1 %2").arg(parentq.lastQuery()).arg(parentq.lastError().text());
@@ -1652,11 +1705,13 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
          parentq.first();
          QString parentID = parentq.record().value("id").toString();
 
-         queryString = QString( "SELECT id FROM %1 WHERE ( name='%2' AND display=%3 ) ORDER BY id ASC")
+         queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC")
                      .arg(tableNames[table])
-                     .arg(name)
                      .arg(Brewtarget::dbFalse());
-         QSqlQuery childrenq( queryString, sqlDatabase() );
+         QSqlQuery childrenq( sqlDatabase() );
+         childrenq.prepare(queryString);
+         childrenq.bindValue(":name", name);
+         childrenq.exec();
 
          if ( !childrenq.isActive() )
             throw QString("%1 %2").arg(childrenq.lastQuery()).arg(childrenq.lastError().text());
@@ -1768,7 +1823,34 @@ void Database::newInventory(Brewtarget::DBTable invForTable, int invForID) {
    }
 
    QSqlQuery q( queryString, sqlDatabase() );
+}
 
+QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
+{
+   QMap<int, double> result;
+
+   const QString id = tableNames[table] + "_id";
+   const QString amount = table == Brewtarget::YEASTTABLE ? "quanta" : "amount";
+
+   QString query = QString("SELECT %1,%2 FROM %3 WHERE %2 > 0")
+                         .arg(id)
+                         .arg(amount)
+                         .arg(tableNames[tableToInventoryTable[table]]);
+
+   QSqlQuery sql(query, sqlDatabase());
+   if (!sql.isActive())
+   {
+      throw QString("Failed to get the inventory.\nQuery:\n%1\nError:\n%2")
+            .arg(sql.lastQuery())
+            .arg(sql.lastError().text());
+   }
+
+   while (sql.next())
+   {
+      result[sql.value(id).toInt()] = sql.value(amount).toDouble();
+   }
+
+   return result;
 }
 
 // Add to recipe ==============================================================
@@ -1785,7 +1867,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
    try {
       // Make a copy of equipment.
       if ( ! noCopy ) {
-         newEquip = copy<Equipment>(e,false,&allEquipments);
+         newEquip = copy<Equipment>(e, &allEquipments, false);
       }
 
       // Update equipment_id
@@ -1806,11 +1888,11 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
       sqlDatabase().commit();
    }
    // NOTE: need to disconnect the recipe's old equipment?
-   connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+   connect( newEquip, &BeerXMLElement::changed, rec, &Recipe::acceptEquipChange );
    // NOTE: If we don't reconnect these signals, bad things happen when
    // changing boil times on the mainwindow
-   connect( newEquip, SIGNAL(changedBoilSize_l(double)), rec, SLOT(setBoilSize_l(double)));
-   connect( newEquip, SIGNAL(changedBoilTime_min(double)), rec, SLOT(setBoilTime_min(double)));
+   connect( newEquip, &Equipment::changedBoilSize_l, rec, &Recipe::setBoilSize_l);
+   connect( newEquip, &Equipment::changedBoilTime_min, rec, &Recipe::setBoilTime_min);
 
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
@@ -1926,7 +2008,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
    try {
       if ( ! noCopy )
       {
-         newMash = copy<Mash>(m, false, &allMashs);
+         newMash = copy<Mash>(m, &allMashs, false);
          duplicateMashSteps(m,newMash);
       }
 
@@ -2020,7 +2102,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
 
    try {
       if ( ! noCopy )
-         newStyle = copy<Style>(s,false,&allStyles);
+         newStyle = copy<Style>(s, &allStyles, false);
 
       sqlUpdate(Brewtarget::RECTABLE,
                 QString("style_id=%1").arg(newStyle->key()),

@@ -81,6 +81,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/CustomComboBox.cpp
     ${SRCDIR}/database.cpp
     ${SRCDIR}/DatabaseSchemaHelper.cpp
+    ${SRCDIR}/DiastaticPowerUnitSystem.cpp
     ${SRCDIR}/equipment.cpp
     ${SRCDIR}/EbcColorUnitSystem.cpp
     ${SRCDIR}/EquipmentButton.cpp
@@ -98,11 +99,13 @@ SET( brewtarget_SRCS
     ${SRCDIR}/HopEditor.cpp
     ${SRCDIR}/HopSortFilterProxyModel.cpp
     ${SRCDIR}/HopTableModel.cpp
+    ${SRCDIR}/Html.cpp
     ${SRCDIR}/HydrometerTool.cpp
     ${SRCDIR}/instruction.cpp
     ${SRCDIR}/IbuGuSlider.cpp
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
+    ${SRCDIR}/InventoryFormatter.cpp
     ${SRCDIR}/InstructionWidget.cpp
     ${SRCDIR}/Log.cpp
     ${SRCDIR}/MainWindow.cpp

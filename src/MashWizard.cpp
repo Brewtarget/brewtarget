@@ -22,17 +22,15 @@
  */
 
 #include "database.h"
-#include "brewtarget.h"
-#include "unit.h"
 #include "MashWizard.h"
 #include "mash.h"
 #include "mashstep.h"
 #include "fermentable.h"
 #include <QMessageBox>
 #include "HeatCalculations.h"
-#include "brewtarget.h"
 #include "equipment.h"
 #include "PhysicalConstants.h"
+#include "Algorithms.h"
 
 MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 {
@@ -47,8 +45,8 @@ MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 //   radioButton_batchSparge->setChecked(true);
 
    connect(bGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(toggleSpinBox(QAbstractButton*)));
-   connect(buttonBox, SIGNAL(accepted()), this, SLOT(wizardry()) );
-   connect(buttonBox, SIGNAL(rejected()), this, SLOT(close()) );
+   connect(buttonBox, &QDialogButtonBox::accepted, this, &MashWizard::wizardry );
+   connect(buttonBox, &QDialogButtonBox::rejected, this, &QWidget::close );
 }
 
 void MashWizard::toggleSpinBox(QAbstractButton* button)
@@ -180,25 +178,6 @@ void MashWizard::wizardry()
       boilingPoint_c = 100.0;
    }
 
-   grainMass = recObs->grainsInMash_kg();
-   if ( bGroup->checkedButton() != radioButton_noSparge ) {
-      thickNum = doubleSpinBox_thickness->value();
-      thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
-   }
-   // No sparge is mostly heat calculations. I think this could work
-   else {
-      thickNum = mash->totalMashWater_l()/grainMass;
-      // We don't need to adjust for units, since we are already using kg of
-      // grains and L of water
-      thickness_LKg = thickNum;
-   }
-
-   if( thickness_LKg <= 0.0 )
-   {
-      QMessageBox::information(this, tr("Bad thickness"), tr("You must have a positive mash thickness."));
-      return;
-   }
-
    QList<MashStep*> steps = mash->mashSteps();
    // We ensured that there was at least one mash step when we displayed the thickness dialog in show().
    mashStep = steps.at(0);
@@ -223,6 +202,26 @@ void MashWizard::wizardry()
       // must be allowed. No matter how much we desire otherwise.
       if( step->isSparge() || step->name() == "Final Batch Sparge" )
          Database::instance().removeFrom(mash,step);
+   }
+
+   grainMass = recObs->grainsInMash_kg();
+   if ( bGroup->checkedButton() != radioButton_noSparge ) {
+      thickNum = doubleSpinBox_thickness->value();
+      thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
+   }
+   else {
+      if (steps.size() == 1){
+         steps.front()->setInfuseAmount_l(recObs->targetTotalMashVol_l());
+      }
+      // For no sparge, get the thickness of the first mash step
+      thickNum = mash->mashSteps().front()->infuseAmount_l()/grainMass;
+      thickness_LKg = thickNum;
+   }
+
+   if( thickness_LKg <= 0.0 )
+   {
+      QMessageBox::information(this, tr("Bad thickness"), tr("You must have a positive mash thickness."));
+      return;
    }
 
    steps = mash->mashSteps();
@@ -304,33 +303,47 @@ void MashWizard::wizardry()
       }
    }
 
+   // if no sparge, adjust volume of last step to meet target runoff volume
+   if ( bGroup->checkedButton() == radioButton_noSparge  && steps.size() > 1) {
+      double otherMashStepTotal = 0.0f;
+      for( i = 0; i < steps.size()-1; ++i )
+      {
+         otherMashStepTotal += steps[i]->infuseAmount_l();
+      }
+
+      mashStep = steps.back();
+
+      if (steps.size() > 1 ) {
+         t1 = steps[steps.size()-2]->stepTemp_c();
+      } else {
+         t1 = mash->grainTemp_c();
+      }
+
+      double targetWortFromMash= recObs->targetTotalMashVol_l();
+
+      massWater = (targetWortFromMash - otherMashStepTotal)*Algorithms::getWaterDensity_kgL(0);
+
+      tf = mashStep->stepTemp_c();
+      MC += massWater * HeatCalculations::Cw_calGC; // Add thermal mass of last addition.
+
+
+      tw = (MC*(tf-t1))/massWater/HeatCalculations::Cw_calGC + tf;
+
+      if(tw > boilingPoint_c)
+         QMessageBox::information(this,
+                                  tr("Infusion temp."),
+                                  tr("In order to hit your target temp on the final step, the infusion water must be above boiling. Lower your initial infusion volume."));
+
+      mashStep->setInfuseAmount_l(massWater);
+      mashStep->setInfuseTemp_c(tw);
+   }
+
    // Now, do a sparge step, using just enough water that the total
    // volume sums up to the target pre-boil size.
-   double spargeWater_l = recObs->boilSize_l() - recObs->wortFromMash_l();
-
-   if( recObs->equipment() != 0 )
-   {
-      // These variables are part of the boil size but not the wort
-      // size and the wizard should account for that.
-      spargeWater_l += recObs->equipment()->lauterDeadspace_l();
-      spargeWater_l -= recObs->equipment()->topUpKettle_l();
-   }
-
-   // Need to account for extract/sugar volume also.
-   QList<Fermentable*> ferms = recObs->fermentables();
-   foreach( Fermentable* f, ferms )
-   {
-      Fermentable::Type type = f->type();
-      if( type == Fermentable::Extract )
-         spargeWater_l -= f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
-      else if( type == Fermentable::Sugar )
-         spargeWater_l -= f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
-      else if( type == Fermentable::Dry_Extract )
-         spargeWater_l -= f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
-   }
+   double spargeWater_l = recObs->targetTotalMashVol_l() - recObs->mash()->totalMashWater_l();
 
    // If I've done my math right, we should never get here on nosparge
-   if( spargeWater_l >= 0.0 )
+   if( spargeWater_l >= 0.001 )
    {
       int lastMashStep = steps.size()-1;
       tf = mash->spargeTemp_c();

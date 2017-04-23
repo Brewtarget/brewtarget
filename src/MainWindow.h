@@ -40,6 +40,8 @@ class MainWindow;
 #include <QTimer>
 #include "ui_mainWindow.h"
 
+#include <functional>
+
 // Forward Declarations
 class FermentableDialog;
 class HopDialog;
@@ -120,8 +122,6 @@ public slots:
    void changed(QMetaProperty,QVariant);
 
    void treeActivated(const QModelIndex &index);
-   //! \brief Set recipe given an QModelIndex
-   void setRecipe(const QModelIndex &index);
    //! \brief View the given recipe.
    void setRecipe(Recipe* recipe);
 
@@ -214,12 +214,26 @@ public slots:
    void exportSelected();
    void exportSelectedHtml();
 
-   //! \brief Prints the right thing, depending on the signal sender.
-   void print();
    //! \brief Backup the database.
    void backup();
    //! \brief Restore the database.
    void restoreFromBackup();
+
+   /*!
+    * \brief Prints a document.
+    *
+    * Asks the user to select a printer and then calls the @p functor with the
+    * selected printer.
+    */
+   void print(std::function<void(QPrinter* printer)> functor);
+
+   /*!
+    * \brief Exports a HTML document.
+    *
+    * Asks the user to select a file and then calls the @p functor with the
+    * selected file.
+    */
+   void exportHTML(std::function<void(QFile* file)> functor);
 
    //! \brief draws a context menu, the exact nature of which depends on which
    //tree is focused
@@ -350,6 +364,32 @@ private:
    void setupShortCuts();
    //! \brief Set the context menus.
    void setupContextMenu();
+   //! \brief Create the CSS strings
+   void setupCSS();
+   //! \brief Create the dialogs, including the file dialogs
+   void setupDialogs();
+   //! \brief Configure the range sliders
+   void setupRanges();
+   //! \brief Configure combo boxes and their list models
+   void setupComboBoxes();
+   //! \brief Configure the tables and their proxies
+   void setupTables();
+   //! \brief Restore any saved states
+   void restoreSavedState();
+   //! \brief Connect the signal/slots for actions
+   void setupTriggers();
+   //! \brief Connect signal/slots for buttons
+   void setupClicks();
+   //! \brief Connect signal/slots for combo boxes
+   void setupActivate();
+   //! \brief Connect signal/slots for combo boxes
+   void setupLabels();
+   //! \brief Connect signal/slots for text edits
+   void setupTextEdit();
+   //! \brief Connect signal/slots drag/drop
+   void setupDrops();
+
+
 
    void updateDensitySlider(QString attribute, RangedSlider* slider, double max);
    void updateColorSlider(QString attribute, RangedSlider* slider);

@@ -23,8 +23,6 @@
 #include "brewtarget.h"
 #include "database.h"
 
-//#include <algorithm>
-//#include <ctime>
 #include <cmath> // For pow/log
 
 #include <QList>
@@ -52,40 +50,124 @@
 #include "PhysicalConstants.h"
 #include "QueuedMethod.h"
 
+
+
+/************* Columns *************/
+const QString kName("name");
+const QString kType("type");
+const QString kBrewer("brewer");
+const QString kBatchSize("batch_size");
+const QString kBoilSize("boil_size");
+const QString kBoilTime("boil_time");
+const QString kEfficiency("efficiency");
+const QString kAsstBrewer("assistant_brewer");
+const QString kNotes("notes");
+const QString kTasteNotes("taste_notes");
+const QString kTasteRating("taste_rating");
+const QString kOG("og");
+const QString kFG("fg");
+const QString kFermentationStages("fermentation_stages");
+const QString kPrimaryAgeDays("primary_age");
+const QString kPrimaryTemp("primary_temp");
+const QString kSecondaryAgeDays("secondary_age");
+const QString kSecondaryTemp("secondary_temp");
+const QString kTertiaryAgeDays("tertiary_age");
+const QString kTertiaryTemp("tertiary_temp");
+const QString kAge("age");
+const QString kAgeTemp("age_temp");
+const QString kDate("date");
+const QString kCarbonationVols("carb_volume");
+const QString kForcedCarbonation("forced_carb");
+const QString kPrimingSugarName("priming_sugar_name");
+const QString kCarbonationTemp("carbonationTemp_c");
+const QString kPrimingSugarEquiv("priming_sugar_equiv");
+const QString kKegPrimingFactor("keg_priming_factor");
+
+
+/************** Props **************/
+const QString kNameProp("name");
+const QString kTypeProp("type");
+const QString kBrewerProp("brewer");
+const QString kBatchSizeProp("batchSize_l");
+const QString kBoilSizeProp("boilSize_l");
+const QString kBoilTimeProp("boilTime_min");
+const QString kEfficiencyProp("efficiency_pct");
+const QString kAsstBrewerProp("asstBrewer");
+const QString kNotesProp("notes");
+const QString kTasteNotesProp("tasteNotes");
+const QString kTasteRatingProp("tasteRating");
+const QString kOGProp("og");
+const QString kFGProp("fg");
+const QString kFermentationStagesProp("fermentationStages");
+const QString kPrimaryAgeDaysProp("primaryAge_days");
+const QString kPrimaryTempProp("primaryTemp_c");
+const QString kSecondaryAgeDaysProp("secondaryAge_days");
+const QString kSecondaryTempProp("secondaryTemp_c");
+const QString kTertiaryAgeDaysProp("tertiaryAge_days");
+const QString kTertiaryTempProp("tertiaryTemp_c");
+const QString kAgeProp("age");
+const QString kAgeTempProp("ageTemp_c");
+const QString kDateProp("date");
+const QString kCarbonationVolsProp("carbonation_vols");
+const QString kForcedCarbonationProp("forcedCarbonation");
+const QString kPrimingSugarNameProp("primingSugarName");
+const QString kCarbonationTempProp("carbonationTemp_c");
+const QString kPrimingSugarEquivProp("primingSugarEquiv");
+const QString kKegPrimingFactorProp("kegPrimingFactor");
+
+
+static const QString kMashStepSection("mashStepTableModel");
+static const QString kMiscTableSection("miscTableModel");
+static const QString kFermentableTableSection("fermentableTable");
+static const QString kHopTableSection("hopTable");
+static const QString kTabRecipeSection("tab_recipe");
+
+static const QString kTimeAttr("time");
+static const QString kAmountKgAttr("amount_kg");
+static const QString kAmountAttr("amount");
+static const QString kInfuseAmountAttr("infuseAmount_l");
+static const QString kInfuseTempAttr("infuseTemp_c");
+static const QString kStepTempAttr("stepTemp_c");
+static const QString kDecoctionAmountAttr("decoctionAmount_l");
+static const QString kStepTimeAttr("stepTime_min");
+static const QString kBoilSizeAttr("boilSize_l");
+static const QString kBatchSizeAttr("batchSize_l");
+
+
 QHash<QString,QString> Recipe::tagToProp = Recipe::tagToPropHash();
 
 QHash<QString,QString> Recipe::tagToPropHash()
 {
    QHash<QString,QString> propHash;
-   propHash["NAME"] = "name";
-   propHash["TYPE"] = "type";
-   propHash["BREWER"] = "brewer";
-   propHash["BATCH_SIZE"] = "batchSize_l";
-   propHash["BOIL_SIZE"] = "boilSize_l";
-   propHash["BOIL_TIME"] = "boilTime_min";
-   propHash["EFFICIENCY"] = "efficiency_pct";
-   propHash["ASST_BREWER"] = "asstBrewer";
-   propHash["NOTES"] = "notes";
-   propHash["TASTE_NOTES"] = "tasteNotes";
-   propHash["TASTE_RATING"] = "tasteRating";
-   propHash["OG"] = "og";
-   propHash["FG"] = "fg";
-   propHash["FERMENTATION_STAGES"] = "fermentationStages";
-   propHash["PRIMARY_AGE"] = "primaryAge_days";
-   propHash["PRIMARY_TEMP"] = "primaryTemp_c";
-   propHash["SECONDARY_AGE"] = "secondaryAge_days";
-   propHash["SECONDARY_TEMP"] = "secondaryTemp_c";
-   propHash["TERTIARY_AGE"] = "tertiaryAge_days";
-   propHash["TERTIARY_TEMP"] = "tertiaryTemp_c";
-   propHash["AGE"] = "age";
-   propHash["AGE_TEMP"] = "ageTemp_c";
-   propHash["DATE"] = "date";
-   propHash["CARBONATION"] = "carbonation_vols";
-   propHash["FORCED_CARBONATION"] = "forcedCarbonation";
-   propHash["PRIMING_SUGAR_NAME"] = "primingSugarName";
-   propHash["CARBONATION_TEMP"] = "carbonationTemp_c";
-   propHash["PRIMING_SUGAR_EQUIV"] = "primingSugarEquiv";
-   propHash["KEG_PRIMING_FACTOR"] = "kegPrimingFactor";
+   propHash["NAME"] = kNameProp;
+   propHash["TYPE"] = kTypeProp;
+   propHash["BREWER"] = kBrewerProp;
+   propHash["BATCH_SIZE"] = kBatchSizeProp;
+   propHash["BOIL_SIZE"] = kBoilSizeProp;
+   propHash["BOIL_TIME"] = kBoilTimeProp;
+   propHash["EFFICIENCY"] = kEfficiencyProp;
+   propHash["ASST_BREWER"] = kAsstBrewerProp;
+   propHash["NOTES"] = kNotesProp;
+   propHash["TASTE_NOTES"] = kTasteNotesProp;
+   propHash["TASTE_RATING"] = kTasteRatingProp;
+   propHash["OG"] = kOGProp;
+   propHash["FG"] = kFGProp;
+   propHash["FERMENTATION_STAGES"] = kFermentationStagesProp;
+   propHash["PRIMARY_AGE"] = kPrimaryAgeDaysProp;
+   propHash["PRIMARY_TEMP"] = kPrimaryTempProp;
+   propHash["SECONDARY_AGE"] = kSecondaryAgeDaysProp;
+   propHash["SECONDARY_TEMP"] = kSecondaryTempProp;
+   propHash["TERTIARY_AGE"] = kTertiaryAgeDaysProp;
+   propHash["TERTIARY_TEMP"] = kTertiaryTempProp;
+   propHash["AGE"] = kAgeProp;
+   propHash["AGE_TEMP"] = kAgeTempProp;
+   propHash["DATE"] = kDateProp;
+   propHash["CARBONATION"] = kCarbonationVolsProp;
+   propHash["FORCED_CARBONATION"] = kForcedCarbonationProp;
+   propHash["PRIMING_SUGAR_NAME"] = kPrimingSugarNameProp;
+   propHash["CARBONATION_TEMP"] = kCarbonationTempProp;
+   propHash["PRIMING_SUGAR_EQUIV"] = kPrimingSugarEquivProp;
+   propHash["KEG_PRIMING_FACTOR"] = kKegPrimingFactorProp;
    return propHash;
 }
 
@@ -110,8 +192,14 @@ void Recipe::clear()
    */
 }
 
-Recipe::Recipe()
-   : BeerXMLElement(),
+QString Recipe::classNameStr()
+{
+   static const QString name("Recipe");
+   return name;
+}
+
+Recipe::Recipe(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key),
      _ABV_pct(0),
      _color_srm(0),
      _boilGrav(1.000),
@@ -230,23 +318,23 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double to
       if( mstep->isInfusion() )
       {
          str = tr("Add %1 water at %2 to mash to bring it to %3.")
-               .arg(Brewtarget::displayAmount(mstep->infuseAmount_l(), "mashStepTableModel", "infuseAmount_l", Units::liters))
-               .arg(Brewtarget::displayAmount(mstep->infuseTemp_c(), "mashStepTableModel", "infuseTemp_c", Units::celsius))
-               .arg(Brewtarget::displayAmount(mstep->stepTemp_c(), "mashStepTableModel", "stepTemp_c", Units::celsius));
+               .arg(Brewtarget::displayAmount(mstep->infuseAmount_l(), kMashStepSection, kInfuseAmountAttr, Units::liters))
+               .arg(Brewtarget::displayAmount(mstep->infuseTemp_c(), kMashStepSection, kInfuseTempAttr, Units::celsius))
+               .arg(Brewtarget::displayAmount(mstep->stepTemp_c(), kMashStepSection, kStepTempAttr, Units::celsius));
          totalWaterAdded_l += mstep->infuseAmount_l();
       }
       else if( mstep->isTemperature() )
       {
-         str = tr("Heat mash to %1.").arg(Brewtarget::displayAmount(mstep->stepTemp_c(), "mashStepTableModel", "stepTemp_c", Units::celsius));
+         str = tr("Heat mash to %1.").arg(Brewtarget::displayAmount(mstep->stepTemp_c(), kMashStepSection, kStepTempAttr, Units::celsius));
       }
       else if( mstep->isDecoction() )
       {
          str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
-               .arg(Brewtarget::displayAmount(mstep->decoctionAmount_l(), "mashStepTableModel", "decoctionAmount_l", Units::liters))
-               .arg(Brewtarget::displayAmount(mstep->stepTemp_c(), "mashStepTableModel", "stepTemp_c", Units::celsius));
+               .arg(Brewtarget::displayAmount(mstep->decoctionAmount_l(), kMashStepSection, kDecoctionAmountAttr, Units::liters))
+               .arg(Brewtarget::displayAmount(mstep->stepTemp_c(), kMashStepSection, kStepTempAttr, Units::celsius));
       }
 
-      str += tr(" Hold for %1.").arg(Brewtarget::displayAmount(mstep->stepTime_min(), "mashStepTableModel", "stepTime_min", Units::minutes));
+      str += tr(" Hold for %1.").arg(Brewtarget::displayAmount(mstep->stepTime_min(), kMashStepSection, kStepTimeAttr, Units::minutes));
 
       preins.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->typeStringTr()).arg(mstep->name()),
                   timeRemaining));
@@ -286,9 +374,9 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type)
             str = tr("Use %1 %2 for %3");
          }
 
-         str = str.arg(Brewtarget::displayAmount(hop->amount_kg(), "hopTable", "amount_kg", Units::kilograms))
+         str = str.arg(Brewtarget::displayAmount(hop->amount_kg(), kHopTableSection, kAmountKgAttr, Units::kilograms))
                   .arg(hop->name())
-                  .arg(Brewtarget::displayAmount(hop->time_min(),"hopTable", "time",  Units::minutes));
+                  .arg(Brewtarget::displayAmount(hop->time_min(),kHopTableSection, kTimeAttr,  Units::minutes));
 
          preins.push_back(PreInstruction(str, tr("Hop addition"), hop->time_min()));
       }
@@ -328,9 +416,9 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type)
          }
 
          kindOf = misc->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
-         str = str .arg(Brewtarget::displayAmount(misc->amount(), "miscTableModel", "amount", kindOf))
+         str = str .arg(Brewtarget::displayAmount(misc->amount(), kMiscTableSection, kAmountKgAttr, kindOf))
                    .arg(misc->name())
-                   .arg(Brewtarget::displayAmount(misc->time(), "miscTableModel", "time", Units::minutes));
+                   .arg(Brewtarget::displayAmount(misc->time(), kMiscTableSection, kTimeAttr, Units::minutes));
 
          preins.push_back(PreInstruction(str, tr("Misc addition"), misc->time()));
       }
@@ -373,13 +461,13 @@ Instruction* Recipe::topOffIns()
    {
       wortInBoil_l = wortFromMash_l() - e->lauterDeadspace_l();
       str = tr("You should now have %1 wort.")
-         .arg(Brewtarget::displayAmount( wortInBoil_l, "tab_recipe", "boilSize_l", Units::liters));
+         .arg(Brewtarget::displayAmount( wortInBoil_l, kTabRecipeSection, kBoilSizeAttr, Units::liters));
       if ( e->topUpKettle_l() != 0 )
       {
          wortInBoil_l += e->topUpKettle_l();
          tmp = tr(" Add %1 water to the kettle, bringing pre-boil volume to %2.")
-            .arg(Brewtarget::displayAmount(e->topUpKettle_l(), "tab_recipe", "boilSize_l",  Units::liters))
-            .arg(Brewtarget::displayAmount(wortInBoil_l, "tab_recipe", "boilSize_l",  Units::liters));
+            .arg(Brewtarget::displayAmount(e->topUpKettle_l(), kTabRecipeSection, kBoilSizeAttr,  Units::liters))
+            .arg(Brewtarget::displayAmount(wortInBoil_l, kTabRecipeSection, kBoilSizeAttr,  Units::liters));
 
          str += tmp;
 
@@ -437,7 +525,7 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
        continue;
 
      str += QString("%1 %2, ")
-          .arg(Brewtarget::displayAmount(ferm->amount_kg(), "fermentableTable", "amount_kg", Units::kilograms))
+          .arg(Brewtarget::displayAmount(ferm->amount_kg(), kFermentableTableSection, kAmountKgAttr, Units::kilograms))
           .arg(ferm->name());
    }
    str += ".";
@@ -453,22 +541,22 @@ bool Recipe::isFermentableSugar(Fermentable *fermy)
     return true;
 }
 
-PreInstruction Recipe::addExtracts(double timeRemaining)
+PreInstruction Recipe::addExtracts(double timeRemaining) const
 {
    QString str;
    unsigned int i;
    int size;
 
    str = tr("Raise water to boil and then remove from heat. Stir in  ");
-   QList<Fermentable*> flist = fermentables();
+   const QList<Fermentable*> flist = fermentables();
    size = flist.size();
    for( i = 0; static_cast<int>(i) < size; ++i )
    {
-      Fermentable* ferm = flist[i];
+      const Fermentable* ferm = flist[i];
       if ( ferm->isExtract() )
       {
          str += QString("%1 %2, ")
-            .arg(Brewtarget::displayAmount(ferm->amount_kg(), "fermentableTable", "amount_kg", Units::kilograms))
+            .arg(Brewtarget::displayAmount(ferm->amount_kg(), kFermentableTableSection, kAmountKgAttr, Units::kilograms))
             .arg(ferm->name());
       }
    }
@@ -496,7 +584,7 @@ Instruction* Recipe::postboilFermentablesIns()
 
       hasFerms = true;
       tmp = QString("%1 %2, ")
-             .arg(Brewtarget::displayAmount(ferm->amount_kg(), "fermentableTable", "amount_kg", Units::kilograms))
+             .arg(Brewtarget::displayAmount(ferm->amount_kg(), kFermentableTableSection, kAmountKgAttr, Units::kilograms))
              .arg(ferm->name());
       str += tmp;
    }
@@ -532,16 +620,16 @@ Instruction* Recipe::postboilIns()
 
       wort_l = e->wortEndOfBoil_l(wortInBoil_l);
       str = tr("You should have %1 wort post-boil.")
-            .arg(Brewtarget::displayAmount( wort_l, "tab_recipe", "batchSize_l", Units::liters));
+            .arg(Brewtarget::displayAmount( wort_l, kTabRecipeSection, kBatchSizeAttr, Units::liters));
       str += tr("\nYou anticipate losing %1 to trub and chiller loss.")
-            .arg(Brewtarget::displayAmount( e->trubChillerLoss_l(),"tab_recipe", "batchSize_l",  Units::liters));
+            .arg(Brewtarget::displayAmount( e->trubChillerLoss_l(), kTabRecipeSection, kBatchSizeAttr,  Units::liters));
       wort_l -= e->trubChillerLoss_l();
       if( e->topUpWater_l() > 0.0 )
           str += tr("\nAdd %1 top up water into primary.")
-               .arg(Brewtarget::displayAmount( e->topUpWater_l(),"tab_recipe", "batchSize_l",  Units::liters));
+               .arg(Brewtarget::displayAmount( e->topUpWater_l(), kTabRecipeSection, kBatchSizeAttr,  Units::liters));
       wort_l += e->topUpWater_l();
       str += tr("\nThe final volume in the primary is %1.")
-             .arg(Brewtarget::displayAmount(wort_l,"tab_recipe", "batchSize_l",  Units::liters));
+             .arg(Brewtarget::displayAmount(wort_l, kTabRecipeSection, kBatchSizeAttr,  Units::liters));
 
       ins = Database::instance().newInstruction(this);
       ins->setName(tr("Post boil"));
@@ -736,9 +824,9 @@ QString Recipe::nextAddToBoil(double& time)
       if( h->time_min() < time && h->time_min() > max )
       {
          ret = tr("Add %1 %2 to boil at %3.")
-               .arg(Brewtarget::displayAmount(h->amount_kg(), "hopTable", "amount_kg", Units::kilograms))
+               .arg(Brewtarget::displayAmount(h->amount_kg(), kHopTableSection, kAmountKgAttr, Units::kilograms))
                .arg(h->name())
-               .arg(Brewtarget::displayAmount(h->time_min(),"hopTable", "time",  Units::minutes));
+               .arg(Brewtarget::displayAmount(h->time_min(), kHopTableSection, kTimeAttr,  Units::minutes));
 
          max = h->time_min();
          foundSomething = true;
@@ -756,12 +844,12 @@ QString Recipe::nextAddToBoil(double& time)
       {
          ret = tr("Add %1 %2 to boil at %3.");
          if( m->amountIsWeight() )
-            ret = ret.arg(Brewtarget::displayAmount(m->amount(), "miscTableModel", "amount", Units::kilograms));
+            ret = ret.arg(Brewtarget::displayAmount(m->amount(), kMiscTableSection, kAmountAttr, Units::kilograms));
          else
-            ret = ret.arg(Brewtarget::displayAmount(m->amount(), "miscTableModel", "amount",  Units::liters));
+            ret = ret.arg(Brewtarget::displayAmount(m->amount(), kMiscTableSection, kAmountAttr,  Units::liters));
 
          ret = ret.arg(m->name());
-         ret = ret.arg(Brewtarget::displayAmount(m->time(), "miscTableModel", "time", Units::minutes));
+         ret = ret.arg(Brewtarget::displayAmount(m->time(), kMiscTableSection, kTimeAttr, Units::minutes));
          max = m->time();
          foundSomething = true;
       }
@@ -780,6 +868,7 @@ void Recipe::addHop( Hop *var )
 
 void Recipe::addFermentable( Fermentable* var )
 {
+   connect(var, &Fermentable::saved, this, &Recipe::onFermentableChanged);
    Database::instance().addToRecipe( this, var );
 }
 
@@ -812,12 +901,12 @@ void Recipe::setType( const QString &var )
       tmp = QString(var);
    }
 
-   set( "type", "type", tmp );
+   set( kTypeProp, kType, tmp );
 }
 
 void Recipe::setBrewer( const QString &var )
 {
-   set( "brewer", "brewer", var );
+   set( kBrewerProp, kBrewer, var );
 }
 
 void Recipe::setBatchSize_l( double var )
@@ -833,7 +922,7 @@ void Recipe::setBatchSize_l( double var )
       tmp = var;
    }
 
-   set( "batchSize_l", "batch_size", tmp );
+   set( kBatchSizeProp, kBatchSize, tmp );
    
    // NOTE: this is bad, but we have to call recalcAll(), because the estimated
    // boil/batch volumes depend on the target volumes when there are no mash
@@ -854,7 +943,7 @@ void Recipe::setBoilSize_l( double var )
       tmp = var;
    }
 
-   set( "boilSize_l", "boil_size", tmp );
+   set( kBoilSizeProp, kBoilSize, tmp );
    
    // NOTE: this is bad, but we have to call recalcAll(), because the estimated
    // boil/batch volumes depend on the target volumes when there are no mash
@@ -875,7 +964,7 @@ void Recipe::setBoilTime_min( double var )
       tmp = var;
    }
 
-   set( "boilTime_min", "boil_time", tmp);
+   set( kBoilTimeProp, kBoilTime, tmp);
 }
 
 void Recipe::setEfficiency_pct( double var )
@@ -892,7 +981,7 @@ void Recipe::setEfficiency_pct( double var )
    }
 
 
-   set( "efficiency_pct", "efficiency", tmp );
+   set( kEfficiencyProp, kEfficiency, tmp );
 
    // If you change the efficency, you really should recalc. And I'm afraid it
    // means recalc all, since og and fg will change, which means your ratios
@@ -902,17 +991,17 @@ void Recipe::setEfficiency_pct( double var )
 
 void Recipe::setAsstBrewer( const QString &var )
 {
-   set( "asstBrewer", "assistant_brewer", var );
+   set( kAsstBrewerProp, kAsstBrewer, var );
 }
 
 void Recipe::setNotes( const QString &var )
 {
-   set( "notes", "notes", var );
+   set( kNotesProp, kNotes, var );
 }
 
 void Recipe::setTasteNotes( const QString &var )
 {
-   set( "tasteNotes", "taste_notes", var );
+   set( kTasteNotesProp, kTasteNotes, var );
 }
 
 void Recipe::setTasteRating( double var )
@@ -928,7 +1017,7 @@ void Recipe::setTasteRating( double var )
       tmp = var;
    }
 
-   set( "tasteRating", "taste_rating", tmp );
+   set( kTasteRatingProp, kTasteRating, tmp );
 }
 
 void Recipe::setOg( double var )
@@ -944,7 +1033,7 @@ void Recipe::setOg( double var )
       tmp = var;
    }
 
-   set( "og", "og", tmp );
+   set( kOGProp, kOG, tmp );
 }
 
 void Recipe::setFg( double var )
@@ -960,7 +1049,7 @@ void Recipe::setFg( double var )
       tmp = var;
    }
 
-   set( "fg", "fg", tmp );
+   set( kFGProp, kFG, tmp );
 }
 
 void Recipe::setFermentationStages( int var )
@@ -976,7 +1065,7 @@ void Recipe::setFermentationStages( int var )
       tmp = var;
    }
 
-   set( "fermentationStages", "fermentation_stages", tmp );
+   set( kFermentationStagesProp, kFermentationStages, tmp );
 }
 
 void Recipe::setPrimaryAge_days( double var )
@@ -992,12 +1081,12 @@ void Recipe::setPrimaryAge_days( double var )
       tmp = var;
    }
 
-   set( "primaryAge_days", "primary_age", tmp );
+   set( kPrimaryAgeDaysProp, kPrimaryAgeDays, tmp );
 }
 
 void Recipe::setPrimaryTemp_c( double var )
 {
-   set( "primaryTemp_c", "primary_temp", var );
+   set( kPrimaryTempProp, kPrimaryTemp, var );
 }
 
 void Recipe::setSecondaryAge_days( double var )
@@ -1013,12 +1102,12 @@ void Recipe::setSecondaryAge_days( double var )
       tmp = var;
    }
 
-   set( "secondaryAge_days", "secondary_age", tmp );
+   set( kSecondaryAgeDaysProp, kSecondaryAgeDays, tmp );
 }
 
 void Recipe::setSecondaryTemp_c( double var )
 {
-   set( "secondaryTemp_c", "secondary_temp", var );
+   set( kSecondaryTempProp, kSecondaryTemp, var );
 }
 
 void Recipe::setTertiaryAge_days( double var )
@@ -1034,12 +1123,12 @@ void Recipe::setTertiaryAge_days( double var )
       tmp = var;
    }
 
-   set( "tertiaryAge_days", "tertiary_age", tmp );
+   set( kTertiaryAgeDaysProp, kTertiaryAgeDays, tmp );
 }
 
 void Recipe::setTertiaryTemp_c( double var )
 {
-   set( "tertiaryTemp_c", "tertiary_temp", var );
+   set( kTertiaryTempProp, kTertiaryTemp, var );
 }
 
 void Recipe::setAge_days( double var )
@@ -1055,17 +1144,18 @@ void Recipe::setAge_days( double var )
       tmp = var;
    }
 
-   set( "age", "age", tmp );
+   set( kAgeProp, kAge, tmp );
 }
 
 void Recipe::setAgeTemp_c( double var )
 {
-   set( "ageTemp_c", "age_temp", var );
+   set( kAgeTempProp, kAgeTemp, var );
 }
 
 void Recipe::setDate( const QDate &var )
 {
-   set( "date", "date", var.toString("d/M/yyyy") );
+   static const QString dateFormat("d/M/yyyy");
+   set( kDateProp, kDate, var.toString(dateFormat) );
 }
 
 void Recipe::setCarbonation_vols( double var )
@@ -1081,22 +1171,22 @@ void Recipe::setCarbonation_vols( double var )
       tmp = var;
    }
 
-   set( "carbonation_vols", "carb_volume", tmp );
+   set( kCarbonationVolsProp, kCarbonationVols, tmp );
 }
 
 void Recipe::setForcedCarbonation( bool var )
 {
-   set( "forcedCarbonation", "forced_carb", var );
+   set( kForcedCarbonationProp, kForcedCarbonation, var );
 }
 
 void Recipe::setPrimingSugarName( const QString &var )
 {
-   set( "primingSugarName", "priming_sugar_name", var );
+   set( kPrimingSugarNameProp, kPrimingSugarName, var );
 }
 
 void Recipe::setCarbonationTemp_c( double var )
 {
-   set( "carbonationTemp_c", "carbonationTemp_c", var );
+   set( kCarbonationTempProp, kCarbonationTemp, var );
 }
 
 void Recipe::setPrimingSugarEquiv( double var )
@@ -1112,7 +1202,7 @@ void Recipe::setPrimingSugarEquiv( double var )
       tmp = var;
    }
 
-   set( "primingSugarEquiv", "priming_sugar_equiv", tmp );
+   set( kPrimingSugarEquivProp, kPrimingSugarEquiv, tmp );
 }
 
 void Recipe::setKegPrimingFactor( double var )
@@ -1129,7 +1219,7 @@ void Recipe::setKegPrimingFactor( double var )
       tmp = var;
    }
 
-   set( "kegPrimingFactor", "keg_priming_factor", tmp );
+   set( kKegPrimingFactorProp, kKegPrimingFactor, tmp );
 }
 
 //==========================Calculated Getters============================
@@ -1305,42 +1395,143 @@ QList<Water*> Recipe::waters() const
 }
 
 //==============================Getters===================================
-QString Recipe::type()             const { return get("type").toString(); }
-QString Recipe::brewer()           const { return get("brewer").toString(); }
-QString Recipe::asstBrewer()       const { return get("assistant_brewer").toString(); }
-QString Recipe::notes()            const { return get("notes").toString(); }
-QString Recipe::tasteNotes()       const { return get("taste_notes").toString(); }
-QString Recipe::primingSugarName() const { return get("priming_sugar_name").toString(); }
+QString Recipe::type() const
+{
+   return get(kType).toString();
+}
 
-bool Recipe::forcedCarbonation()   const { return get("forced_carb").toBool(); }
+QString Recipe::brewer() const
+{
+   return get(kBrewer).toString();
+}
 
-double Recipe::batchSize_l()       const { return get("batch_size").toDouble(); }
-double Recipe::boilSize_l()        const { return get("boil_size").toDouble(); }
-double Recipe::boilTime_min()      const { return get("boil_time").toDouble(); }
-double Recipe::efficiency_pct()    const { return get("efficiency").toDouble(); }
-double Recipe::tasteRating()       const { return get("taste_rating").toDouble(); }
-double Recipe::primaryAge_days()   const { return get("primary_age").toDouble(); }
-double Recipe::primaryTemp_c()     const { return get("primary_temp").toDouble(); }
-double Recipe::secondaryAge_days() const { return get("secondary_age").toDouble(); }
-double Recipe::secondaryTemp_c()   const { return get("secondary_temp").toDouble(); }
-double Recipe::tertiaryAge_days()  const { return get("tertiary_age").toDouble(); }
-double Recipe::tertiaryTemp_c()    const { return get("tertiary_temp").toDouble(); }
-double Recipe::age_days()          const { return get("age").toDouble(); }
-double Recipe::ageTemp_c()         const { return get("age_temp").toDouble(); }
-double Recipe::carbonation_vols()  const { return get("carb_volume").toDouble(); }
-double Recipe::carbonationTemp_c() const { return get("carbonationTemp_c").toDouble(); }
-double Recipe::primingSugarEquiv() const { return get("priming_sugar_equiv").toDouble(); }
-double Recipe::kegPrimingFactor()  const { return get("keg_priming_factor").toDouble(); }
+QString Recipe::asstBrewer() const
+{
+   return get(kAsstBrewer).toString();
+}
 
-int Recipe::fermentationStages()   const { return get("fermentation_stages").toInt(); }
-QDate Recipe::date()               const { return QDate::fromString( get("date").toString(), "d/M/yyyy"); }
+QString Recipe::notes() const
+{
+   return get(kNotes).toString();
+}
+
+QString Recipe::tasteNotes() const
+{
+   return get(kTasteNotes).toString();
+}
+
+QString Recipe::primingSugarName() const
+{
+   return get(kPrimingSugarName).toString();
+}
+
+bool Recipe::forcedCarbonation() const
+{
+   return get(kForcedCarbonation).toBool();
+}
+
+double Recipe::batchSize_l() const
+{
+   return get(kBatchSize).toDouble();
+}
+
+double Recipe::boilSize_l() const
+{
+   return get(kBoilSize).toDouble();
+}
+
+double Recipe::boilTime_min() const
+{
+   return get(kBoilTime).toDouble();
+}
+
+double Recipe::efficiency_pct() const
+{
+   return get(kEfficiency).toDouble();
+}
+
+double Recipe::tasteRating() const
+{
+   return get(kTasteRating).toDouble();
+}
+
+double Recipe::primaryAge_days() const
+{
+   return get(kPrimaryAgeDays).toDouble();
+}
+
+double Recipe::primaryTemp_c() const
+{
+   return get(kPrimaryTemp).toDouble();
+}
+
+double Recipe::secondaryAge_days() const
+{
+   return get(kSecondaryAgeDays).toDouble();
+}
+
+double Recipe::secondaryTemp_c() const
+{
+   return get(kSecondaryTemp).toDouble();
+}
+
+double Recipe::tertiaryAge_days() const
+{
+   return get(kTertiaryAgeDays).toDouble();
+}
+
+double Recipe::tertiaryTemp_c() const
+{
+   return get(kTertiaryTemp).toDouble();
+}
+
+double Recipe::age_days() const
+{
+   return get(kAge).toDouble();
+}
+
+double Recipe::ageTemp_c() const
+{
+   return get(kAgeTemp).toDouble();
+}
+
+double Recipe::carbonation_vols() const
+{
+   return get(kCarbonationVols).toDouble();
+}
+
+double Recipe::carbonationTemp_c() const
+{
+   return get(kCarbonationTemp).toDouble();
+}
+
+double Recipe::primingSugarEquiv() const
+{
+   return get(kPrimingSugarEquiv).toDouble();
+}
+
+double Recipe::kegPrimingFactor() const
+{
+   return get(kKegPrimingFactor).toDouble();
+}
+
+int Recipe::fermentationStages() const
+{
+   return get(kFermentationStages).toInt();
+}
+
+QDate Recipe::date() const
+{
+   static const QString dateFormat("d/M/yyyy");
+   return QDate::fromString( get(kDate).toString(), dateFormat);
+}
 //=============================Removers========================================
 
 // Returns true if var is found and removed.
 void Recipe::remove( BeerXMLElement *var )
 {
    // brewnotes a bit odd
-   if ( var->metaObject()->className() == QString("BrewNote") )
+   if ( dynamic_cast<BrewNote*>(var) )
       // the cast is required to force the template to gets it thing right
       Database::instance().remove(qobject_cast<BrewNote*>(var));
    else
@@ -1789,8 +1980,8 @@ void Recipe::recalcOgFg()
    // to calculate.
    if ( _uninitializedCalcs )
    {
-      _og = Brewtarget::toDouble(this,"og","Recipe::recalcOgFg()");
-      _fg = Brewtarget::toDouble(this,"fg","Recipe::recalcOgFg()");
+      _og = Brewtarget::toDouble(this, kOG, "Recipe::recalcOgFg()");
+      _fg = Brewtarget::toDouble(this, kFG, "Recipe::recalcOgFg()");
    }
 
    // Find out how much sugar we have.
@@ -1877,8 +2068,8 @@ void Recipe::recalcOgFg()
       // these functions in the first place.
       if (!_uninitializedCalcs)
       {
-        set( "og", "og", _og, false );
-        emit changed( metaProperty("og"), _og );
+        set( kOGProp, kOG, _og, false );
+        emit changed( metaProperty(kOGProp), _og );
         emit changed( metaProperty("points"), (_og-1.0)*1e3 );
       }
    }
@@ -1888,8 +2079,8 @@ void Recipe::recalcOgFg()
       _fg     = tmp_fg;
       if (!_uninitializedCalcs)
       {
-        set( "fg", "fg", _fg, false );
-        emit changed( metaProperty("fg"), _fg );
+        set( kFGProp, kFG, _fg, false );
+        emit changed( metaProperty(kFGProp), _fg );
       }
    }
 }
@@ -1982,13 +2173,13 @@ QList<QString> Recipe::getReagents( QList<Fermentable*> ferms )
          if ( i+1 < ferms.size() )
          {
             tmp = QString("%1 %2, ")
-                  .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(), "fermentableTable", "amount_kg", Units::kilograms))
+                  .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(), kFermentableTableSection, kAmountKgAttr, Units::kilograms))
                   .arg(ferms[i]->name());
          }
          else
          {
             tmp = QString("%1 %2 ")
-                  .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(),"fermentableTable", "amount_kg",  Units::kilograms))
+                  .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(), kFermentableTableSection, kAmountKgAttr,  Units::kilograms))
                   .arg(ferms[i]->name());
          }
          reagents.append(tmp);
@@ -2008,7 +2199,7 @@ QList<QString> Recipe::getReagents(QList<Hop*> hops, bool firstWort)
          (hops[i]->use() == Hop::First_Wort) )
       {
          tmp = QString("%1 %2,")
-               .arg(Brewtarget::displayAmount(hops[i]->amount_kg(), "hopTable", "amount_kg",  Units::kilograms))
+               .arg(Brewtarget::displayAmount(hops[i]->amount_kg(), kHopTableSection, kAmountKgAttr,  Units::kilograms))
                .arg(hops[i]->name());
          reagents.append(tmp);
       }
@@ -2029,14 +2220,14 @@ QList<QString> Recipe::getReagents( QList<MashStep*> msteps )
       if ( i+1 < msteps.size() ) 
       {
          tmp = tr("%1 water to %2, ")
-                .arg(Brewtarget::displayAmount(msteps[i]->infuseAmount_l(), "mashStepTableModel", "infuseAmount_l", Units::liters))
-                .arg(Brewtarget::displayAmount(msteps[i]->infuseTemp_c(),"mashStepTableModel", "infuseTemp_c",  Units::celsius));
+                .arg(Brewtarget::displayAmount(msteps[i]->infuseAmount_l(), kMashStepSection, kInfuseAmountAttr, Units::liters))
+                .arg(Brewtarget::displayAmount(msteps[i]->infuseTemp_c(), kMashStepSection, kInfuseTempAttr,  Units::celsius));
       }
       else 
       {
          tmp = tr("%1 water to %2 ")
-                .arg(Brewtarget::displayAmount(msteps[i]->infuseAmount_l(), "mashStepTableModel", "infuseAmount_l", Units::liters))
-                .arg(Brewtarget::displayAmount(msteps[i]->infuseTemp_c(), "mashStepTableModel", "infuseTemp_c", Units::celsius));
+                .arg(Brewtarget::displayAmount(msteps[i]->infuseAmount_l(), kMashStepSection, kInfuseAmountAttr, Units::liters))
+                .arg(Brewtarget::displayAmount(msteps[i]->infuseTemp_c(), kMashStepSection, kInfuseTempAttr, Units::celsius));
       }
       reagents.append(tmp);
    }
@@ -2055,7 +2246,7 @@ void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
    recalcAll();
 }
 
-void Recipe::acceptFermChange(Fermentable *ferm)
+void Recipe::onFermentableChanged()
 {
    recalcAll();
 }
@@ -2096,4 +2287,35 @@ void Recipe::acceptMashChange(Mash* newMash)
 {
    if ( newMash == mash() )
       recalcAll();
+}
+
+double Recipe::targetCollectedWortVol_l() {
+
+   // Need to account for extract/sugar volume also.
+   float postMashAdditionVolume_l = 0;
+   QList<Fermentable*> ferms = fermentables();
+         foreach( Fermentable* f, ferms )
+      {
+         Fermentable::Type type = f->type();
+         if( type == Fermentable::Extract )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
+         else if( type == Fermentable::Sugar )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
+         else if( type == Fermentable::Dry_Extract )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
+      }
+
+   return boilSize_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
+}
+
+double Recipe::targetTotalMashVol_l() {
+
+   double absorption_lKg;
+   if( equipment() )
+      absorption_lKg = equipment()->grainAbsorption_LKg();
+   else
+      absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+
+
+   return targetCollectedWortVol_l() + absorption_lKg * grainsInMash_kg();
 }

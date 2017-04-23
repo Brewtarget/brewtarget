@@ -34,6 +34,7 @@ class BtTimeEdit;
 class BtDensityEdit;
 class BtColorEdit;
 class BtMixedEdit;
+class BtDiastaticPowerEdit;
 class BtStringEdit;
 
 /*!
@@ -97,7 +98,7 @@ public:
    void setForcedScale(QString forcedScale);
 
 public slots:
-   void lineChanged();
+   void onLineChanged();
    void lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
 
 signals:
@@ -189,4 +190,13 @@ public slots:
    void setIsWeight(bool state);
 
 };
+
+class BtDiastaticPowerEdit : public BtLineEdit
+{
+   Q_OBJECT
+
+public:
+   BtDiastaticPowerEdit(QWidget* parent);
+};
+
 #endif

@@ -142,6 +142,8 @@ public:
    int timesCultured() const;
    int maxReuse() const;
    bool addToSecondary() const;
+
+   static QString classNameStr();
    
 signals:
 
@@ -149,7 +151,7 @@ signals:
    void changedName(QString);
 
 private:
-   Yeast();
+   Yeast(Brewtarget::DBTable table, int key);
    Yeast(Yeast const& other);
    
    static QStringList types;

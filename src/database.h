@@ -162,9 +162,8 @@ public:
    // maybe I should have never learned templates?
    template<class T> T* newIngredient(QHash<int,T*>* all) {
       int key;
-      T* tmp = new T();
       // To quote the talking heads, my god what have I done?
-      Brewtarget::DBTable table = classNameToTable[ tmp->metaObject()->className() ];
+      Brewtarget::DBTable table = classNameToTable[ T::classNameStr() ];
       QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(tableNames[table]);
 
       QSqlQuery q(sqlDatabase());
@@ -183,9 +182,7 @@ public:
          throw; // rethrow the error until somebody cares
       }
 
-      tmp->_key = key;
-      tmp->_table = table;
-
+      T* tmp = new T(table, key);
       all->insert(tmp->_key,tmp);
 
       return tmp;
@@ -236,6 +233,8 @@ public:
    Brewtarget::DBTable getInventoryTable(Brewtarget::DBTable table);
    //! Inserts an new inventory row in the appropriate table
    void newInventory(Brewtarget::DBTable invForTable, int invForID);
+   //! \returns The entire inventory for a table.
+   QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
 
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -294,23 +293,18 @@ public:
    {
       if ( list.empty() )
          return;
+      
+      QMetaObject *meta;
+      int ndx;
+      bool emitSignal;
+      
+      foreach(T* toBeDeleted, list) {
+         meta = (QMetaObject *)toBeDeleted->metaObject();
+         ndx = meta->indexOfClassInfo("signal");
+         emitSignal = ndx != -1 ? true : false;
 
-      const QMetaObject *meta = list[0]->metaObject();
-      Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
-      QString propName;
-
-      int ndx = meta->indexOfClassInfo("signal");
-      if ( ndx != -1 ) {
-         propName = meta->classInfo(ndx).value();
+         remove(toBeDeleted, emitSignal);
       }
-      else
-         throw QString("%1 cannot find signal property on %2").arg(Q_FUNC_INFO).arg(meta->className());
-
-      foreach( T* dead, list ) {
-         deleteRecord(ingTable,dead);
-      }
-
-      emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
    }
 
    template <class T>void remove(T* ing, bool emitSignal = true)
@@ -440,6 +434,9 @@ public:
    void convertDatabase(QString const& Hostname, QString const& DbName,
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
+
+   void updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap);
+
 signals:
    void changed(QMetaProperty prop, QVariant value);
    void newEquipmentSignal(Equipment*);
@@ -539,10 +536,6 @@ private:
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
-      int key;
-      BeerXMLElement* e;
-      T* et;
-
       QSqlQuery q(sqlDatabase());
       q.setForwardOnly(true);
       QString queryString = QString("SELECT id FROM %1").arg(tableNames[table]);
@@ -560,15 +553,11 @@ private:
 
       while( q.next() )
       {
-         key = q.record().value("id").toInt();
+         int key = q.record().value("id").toInt();
 
-         e = new T();
-         et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
-         et->_key = key;
-         et->_table = table;
-
+         T* e = new T(table, key);
          if( ! hash.contains(key) )
-            hash.insert(key,et);
+            hash.insert(key, e);
       }
 
       q.finish();
@@ -577,7 +566,6 @@ private:
    //! Helper to populate the list using the given filter.
    template <class T> bool getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
    {
-      int key;
       QSqlQuery q(sqlDatabase());
       q.setForwardOnly(true);
       QString queryString;
@@ -602,7 +590,7 @@ private:
 
       while( q.next() )
       {
-         key = q.record().value("id").toInt();
+         int key = q.record().value("id").toInt();
          if( allElements.contains(key) )
             list.append( allElements[key] );
       }
@@ -729,7 +717,7 @@ private:
          }
          else
          {
-            newIng = copy<T>(ing, false, keyHash);
+            newIng = copy<T>(ing, keyHash, false);
             if ( newIng == 0 )
                throw QString("error copying ingredient");
          }
@@ -755,11 +743,32 @@ private:
          //Put this in the <ing_type>_children table.
          if( childTableName != "instruction_children" ) {
 
+            /*
+             * The parent to link to depends on where the ingredient is copied from:
+             * - A fermentable from the fermentable tabel -> the ID of the fermentable.
+             * - An ingredient from another recipe -> the ID of the ingredient's parent.
+             *
+             * This is required for:
+             * - Getting the proper link to the inventory table, else the new record
+             *   will have no inventory.
+             * - When deleting the ingredient from the original recipe no longer fails.
+             *   Else if fails due to a foreign key constrain.
+             */
+            int key = ing->key();
+            q.prepare(QString("SELECT parent_id FROM %1 WHERE child_id=%2")
+                  .arg(childTableName)
+                  .arg(key));
+            if (q.exec() && q.next())
+            {
+               key = q.record().value("parent_id").toInt();
+            }
+            q.finish();
+
             insert = QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
                   .arg(childTableName);
 
             q.prepare(insert);
-            q.bindValue(":parent", ing->key());
+            q.bindValue(":parent", key);
             q.bindValue(":child", newIng->key());
 
             if ( ! q.exec() )
@@ -793,12 +802,11 @@ private:
     * \param displayed is true if you want the \em displayed column set to true.
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
-   template<class T> T* copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0 )
+   template<class T> T* copy( BeerXMLElement const* object, QHash<int,T*>* keyHash, bool displayed = true )
    {
       int newKey;
       int i;
-      T* newOne = new T();
-      QString holder,fields;
+      QString holder, fields;
 
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
 
@@ -869,14 +877,8 @@ private:
 
       q.finish();
 
-      // Update the hash if need be.
-      if( keyHash )
-      {
-         BeerXMLElement* newOneCast = qobject_cast<BeerXMLElement*>(newOne);
-         newOneCast->_key = newKey;
-         newOneCast->_table = t;
-         keyHash->insert( newKey, newOne );
-      }
+      T* newOne = new T(t, newKey);
+      keyHash->insert( newKey, newOne );
 
       return newOne;
    }

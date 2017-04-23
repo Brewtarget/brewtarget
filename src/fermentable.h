@@ -113,37 +113,38 @@ public:
    //! \brief Whether this fermentable is a sugar. Somewhat redundant, but it makes for nice symetry elsewhere
    Q_PROPERTY( bool isSugar                  READ isSugar STORED false)
    
-   const Type type() const;
-   const QString typeString() const;
+   const Type type() const { return _type; }
+   double amount_kg() const { return _amountKg; }
+   double inventory() const { return _inventoryAmt; }
+   double yield_pct() const { return _yieldPct; }
+   double color_srm() const { return _colorSrm; }
+   bool addAfterBoil() const { return _isAfterBoil; }
+   const QString origin() const { return _origin; }
+   const QString supplier() const { return _supplier; }
+   const QString notes() const { return _notes; }
+   double coarseFineDiff_pct() const { return _coarseFineDiff; }
+   double moisture_pct() const { return _moisturePct; }
+   double diastaticPower_lintner() const { return _diastaticPower; }
+   double protein_pct() const { return _proteinPct; }
+   double maxInBatch_pct() const { return _maxInBatchPct; }
+   bool recommendMash() const { return _recommendMash; }
+   double ibuGalPerLb() const { return _ibuGalPerLb; }
+   bool isMashed() const { return _isMashed; }
 
+   const QString typeString() const;
    //! Returns a translated type string.
    const QString typeStringTr() const;
    const AdditionMethod additionMethod() const;
-
    //! Returns a translated addition method string.
    const QString additionMethodStringTr() const;
    const AdditionTime additionTime() const;
-
    //! Returns a translated addition time string.
    const QString additionTimeStringTr() const;
-   double amount_kg() const;
-   double inventory() const;
-   double yield_pct() const;
-   double color_srm() const;
-   bool addAfterBoil() const;
-   const QString origin() const;
-   const QString supplier() const;
-   const QString notes() const;
-   double coarseFineDiff_pct() const;
-   double moisture_pct() const;
-   double diastaticPower_lintner() const;
-   double protein_pct() const;
-   double maxInBatch_pct() const;
-   bool recommendMash() const;
-   double ibuGalPerLb() const;
-
    // Calculated getters.
    double equivSucrose_kg() const;
+   bool isExtract() const;
+   bool isSugar() const;
+
 
    void setType( Type t );
    void setAdditionMethod( AdditionMethod m );
@@ -151,8 +152,7 @@ public:
    void setAmount_kg( double num );
    void setInventoryAmount( double num );
    void setYield_pct( double num );
-   void setColor_srm( double num );
-   
+   void setColor_srm( double num );   
    void setAddAfterBoil( bool b );
    void setOrigin( const QString& str );
    void setSupplier( const QString& str);
@@ -164,40 +164,20 @@ public:
    void setMaxInBatch_pct( double num );
    void setRecommendMash( bool b );
    void setIbuGalPerLb( double num );
-   
-   bool isMashed() const;
-   bool isExtract();
-   bool isSugar();
    void setIsMashed(bool var);
+
+   void save();
+
+   static QString classNameStr();
 
 signals:
    
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   /*
-   void changedType( Type newType );
-   void changedTypeString( QString newTypeString );
-   void changedTypeStringTr( QString newTypeStringTr );
-   void changedAmount_kg( double newAmount_kg );
-   void changedInventory( double newInventory );
-   void changedYield_pct( double newYield_pct );
-   void changedColor_srm( double newColor_srm );
-   void changedAddAfterBoil( bool newAddAfterBoil );
-   void changedOrigin( QString newOrigin );
-   void changedSupplier( QString newSupplier );
-   void changedNotes( QString newNotes );
-   void changedCoarseFineDiff_pct( double newCoarseFineDiff_pct );
-   void changedMoisture_pct( double newMoisture_pct );
-   void changedDiastaticPower_lintner( double newDiastaticPower_lintner );
-   void changedProtein_pct( double newProtein_pct );
-   void changedMaxInBatch_pct( double newMaxInBatch_pct );
-   void changedRecommendMash( bool newRecommendMash );
-   void changedIbuGalPerLb( double newIbuGalPerLb );
-   void changedIsMashed( bool newIsMashed );
-   */
+   void saved();
    
 private:
-   Fermentable();
+   Fermentable(Brewtarget::DBTable table, int key);
    Fermentable( Fermentable const& other );
    
    static bool isValidType( const QString& str );
@@ -205,6 +185,24 @@ private:
    
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
+
+   Type _type;
+   double _amountKg;
+   double _inventoryAmt;
+   double _yieldPct;
+   double _colorSrm;
+   bool _isAfterBoil;
+   QString _origin;
+   QString _supplier;
+   QString _notes;
+   double _coarseFineDiff;
+   double _moisturePct;
+   double _diastaticPower;
+   double _proteinPct;
+   double _maxInBatchPct;
+   bool _recommendMash;
+   double _ibuGalPerLb;
+   bool _isMashed;
 };
 
 Q_DECLARE_METATYPE( QList<Fermentable*> )

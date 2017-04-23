@@ -30,6 +30,7 @@
 #include "SrmColorUnitSystem.h"
 #include "SgDensityUnitSystem.h"
 #include "PlatoDensityUnitSystem.h"
+#include "DiastaticPowerUnitSystem.h"
 #include "unit.h"
 #include <QDebug>
 
@@ -103,5 +104,17 @@ PlatoDensityUnitSystem* UnitSystems::platoDensityUnitSystem()
 {
    static PlatoDensityUnitSystem* p = new PlatoDensityUnitSystem();
    return p;
+}
+
+LintnerDiastaticPowerUnitSystem* UnitSystems::lintnerDiastaticPowerUnitSystem()
+{
+   static LintnerDiastaticPowerUnitSystem* result = new LintnerDiastaticPowerUnitSystem();
+   return result;
+}
+
+WkDiastaticPowerUnitSystem* UnitSystems::wkDiastaticPowerUnitSystem()
+{
+   static WkDiastaticPowerUnitSystem* result = new WkDiastaticPowerUnitSystem();
+   return result;
 }
 

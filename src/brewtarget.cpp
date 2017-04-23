@@ -69,6 +69,7 @@
 #include "SrmColorUnitSystem.h"
 #include "SgDensityUnitSystem.h"
 #include "PlatoDensityUnitSystem.h"
+#include "DiastaticPowerUnitSystem.h"
 
 #include "BtSplashScreen.h"
 #include "MainWindow.h"
@@ -107,6 +108,7 @@ Brewtarget::ColorType Brewtarget::colorFormula = Brewtarget::MOREY;
 Brewtarget::IbuType Brewtarget::ibuFormula = Brewtarget::TINSETH;
 Brewtarget::ColorUnitType Brewtarget::colorUnit = Brewtarget::SRM;
 Brewtarget::DensityUnitType Brewtarget::densityUnit = Brewtarget::SG;
+Brewtarget::DiastaticPowerUnitType Brewtarget::diastaticPowerUnit = Brewtarget::LINTNER;
 
 QHash<int, UnitSystem*> Brewtarget::thingToUnitSystem;
 
@@ -184,7 +186,7 @@ void Brewtarget::checkForNewVersion(MainWindow* mw)
    QNetworkAccessManager manager;
    QUrl url("http://brewtarget.sourceforge.net/version");
    QNetworkReply* reply = manager.get( QNetworkRequest(url) );
-   QObject::connect( reply, SIGNAL(finished()), mw, SLOT(finishCheckingVersion()) );
+   QObject::connect( reply, &QNetworkReply::finished, mw, &MainWindow::finishCheckingVersion );
 }
 
 bool Brewtarget::copyDataFiles(const QDir newPath)
@@ -251,6 +253,14 @@ Unit::unitDisplay Brewtarget::getColorUnit()
       return Unit::displaySrm;
 
    return Unit::displayEbc;
+}
+
+Unit::unitDisplay Brewtarget::getDiastaticPowerUnit()
+{
+   if ( diastaticPowerUnit == Brewtarget::LINTNER )
+      return Unit::displayLintner;
+
+   return Unit::displayWK;
 }
 
 Unit::unitDisplay Brewtarget::getDateFormat()
@@ -526,7 +536,7 @@ int Brewtarget::run(const QString &userDirectory)
    _mainWindow = new MainWindow();
    _mainWindow->setVisible(true);
    splashScreen.finish(_mainWindow);
-   QObject::connect( &log, SIGNAL(wroteEntry(const QString)), _mainWindow, SLOT(updateStatus(const QString)) );
+   QObject::connect( &log, &Log::wroteEntry, _mainWindow, &MainWindow::updateStatus );
 
    checkForNewVersion(_mainWindow);
    do {
@@ -714,6 +724,26 @@ void Brewtarget::convertPersistentOptions()
          Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
    }
 
+   //=======================Diastatic power unit===================
+   text = getOptionValue(*optionsDoc, "diastatic_power_unit", &hasOption);
+   if( hasOption )
+   {
+      if( text == "Lintner" )
+      {
+         diastaticPowerUnit = LINTNER;
+         thingToUnitSystem.insert(Unit::DiastaticPower,UnitSystems::lintnerDiastaticPowerUnitSystem());
+      }
+      else if( text == "WK" )
+      {
+         diastaticPowerUnit = WK;
+         thingToUnitSystem.insert(Unit::DiastaticPower,UnitSystems::wkDiastaticPowerUnitSystem());
+      }
+      else
+      {
+         Brewtarget::logW(QString("Bad diastatic_power_unit type: %1").arg(text));
+      }
+   }
+
    delete optionsDoc;
    optionsDoc = 0;
    xmlFile.close();
@@ -884,6 +914,23 @@ void Brewtarget::readSystemOptions()
    else
       Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
 
+   //=======================Diastatic power unit===================
+   text = option("diastatic_power_unit", "Lintner").toString();
+   if( text == "Lintner" )
+   {
+      diastaticPowerUnit = LINTNER;
+      thingToUnitSystem.insert(Unit::DiastaticPower,UnitSystems::lintnerDiastaticPowerUnitSystem());
+   }
+   else if( text == "WK" )
+   {
+      diastaticPowerUnit = WK;
+      thingToUnitSystem.insert(Unit::DiastaticPower,UnitSystems::wkDiastaticPowerUnitSystem());
+   }
+   else
+   {
+      Brewtarget::logW(QString("Bad diastatic_power_unit type: %1").arg(text));
+   }
+
    //=======================Date format===================
    dateFormat = (Unit::unitDisplay)option("date_format",Unit::displaySI).toInt();
 
@@ -941,6 +988,16 @@ void Brewtarget::saveSystemOptions()
          setOption("color_unit", "ebc");
          break;
    }
+
+   switch(diastaticPowerUnit)
+   {
+      case LINTNER:
+         setOption("diastatic_power_unit", "Lintner");
+         break;
+      case EBC:
+         setOption("diastatic_power_unit", "WK");
+         break;
+   }
 }
 
 // the defaults come from readSystemOptions. This just fleshes out the hash
@@ -970,6 +1027,10 @@ void Brewtarget::loadMap()
    // ==== density ====
    thingToUnitSystem.insert(Unit::Density | Unit::displaySg,   UnitSystems::sgDensityUnitSystem() );
    thingToUnitSystem.insert(Unit::Density | Unit::displayPlato,UnitSystems::platoDensityUnitSystem() );
+
+   // ==== diastatic power ====
+   thingToUnitSystem.insert(Unit::DiastaticPower | Unit::displayLintner,UnitSystems::lintnerDiastaticPowerUnitSystem() );
+   thingToUnitSystem.insert(Unit::DiastaticPower | Unit::displayWK,UnitSystems::wkDiastaticPowerUnitSystem() );
 }
 
 void Brewtarget::logE( QString message )
@@ -1248,6 +1309,17 @@ QString Brewtarget::colorUnitName(Unit::unitDisplay display)
       return QString("SRM");
    else
       return QString("EBC");
+}
+
+QString Brewtarget::diastaticPowerUnitName(Unit::unitDisplay display)
+{
+   if ( display == Unit::noUnit )
+      display = getDiastaticPowerUnit();
+
+   if ( display == Unit::displayLintner )
+      return QString("Lintner");
+   else
+      return QString("WK");
 }
 
 bool Brewtarget::hasUnits(QString qstr)
@@ -1554,6 +1626,18 @@ QMenu* Brewtarget::setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit
    }
    sMenu->setTitle(tr("Scale"));
    menu->addMenu(sMenu);
+
+   return menu;
+}
+
+QMenu* Brewtarget::setupDiastaticPowerMenu(QWidget* parent, Unit::unitDisplay unit)
+{
+   QMenu* menu = new QMenu(parent);
+   QActionGroup* qgrp = new QActionGroup(parent);
+
+   generateAction(menu, tr("Default"), Unit::noUnit, unit, qgrp);
+   generateAction(menu, tr("WK"), Unit::displayWK, unit, qgrp);
+   generateAction(menu, tr("Lintner"), Unit::displayLintner, unit, qgrp);
 
    return menu;
 }
