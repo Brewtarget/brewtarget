@@ -93,6 +93,7 @@
 #include "OgAdjuster.h"
 #include "ConverterTool.h"
 #include "HydrometerTool.h"
+#include "AlcoholTool.h"
 #include "TimerMainDialog.h"
 #include "RecipeFormatter.h"
 #include "PrimingDialog.h"
@@ -237,6 +238,7 @@ void MainWindow::setupDialogs()
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
    hydrometerTool = new HydrometerTool(this);
+   alcoholTool = new AlcoholTool(this);
    timerMainDialog = new TimerMainDialog(this);
    primingDialog = new PrimingDialog(this);
    strikeWaterDialog = new StrikeWaterDialog(this);
@@ -475,6 +477,7 @@ void MainWindow::setupTriggers()
    connect( action_recipeToTextClipboard, &QAction::triggered, recipeFormatter, &RecipeFormatter::toTextClipboard );
    connect( actionConvert_Units, &QAction::triggered, converterTool, &QWidget::show );
    connect( actionHydrometer_Temp_Adjustment, &QAction::triggered, hydrometerTool, &QWidget::show );
+   connect( actionAlcohol_Percentage_Tool, &QAction::triggered, alcoholTool, &QWidget::show );
    connect( actionOG_Correction_Help, &QAction::triggered, ogAdjuster, &QWidget::show );
    connect( actionCopy_Recipe, &QAction::triggered, this, &MainWindow::copyRecipe );
    connect( actionPriming_Calculator, &QAction::triggered, primingDialog, &QWidget::show );

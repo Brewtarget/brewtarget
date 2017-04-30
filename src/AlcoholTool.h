@@ -50,9 +50,6 @@ public:
    BtLineEdit* lineEdit_og;
    QLabel* label_fg;
    BtLineEdit* lineEdit_fg;
- //  QLabel* inputTempLabel;
- //  BtTemperatureEdit* lineEdit_inputTemp;
-
    QLabel *label_result;
    QLineEdit *lineEdit_result;
    //! @}

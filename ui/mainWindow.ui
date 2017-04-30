@@ -239,8 +239,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>386</height>
+           <width>676</width>
+           <height>437</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1102,8 +1102,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>337</height>
+           <width>692</width>
+           <height>313</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1655,7 +1655,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>19</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1746,6 +1746,7 @@
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
     <addaction name="actionHydrometer_Temp_Adjustment"/>
+    <addaction name="actionAlcohol_Percentage_Tool"/>
     <addaction name="actionStrikeWater_Calculator"/>
     <addaction name="actionTimers"/>
     <addaction name="separator"/>
@@ -2235,6 +2236,11 @@
    </property>
    <property name="text">
     <string>&amp;Export to HTML</string>
+   </property>
+  </action>
+  <action name="actionAlcohol_Percentage_Tool">
+   <property name="text">
+    <string>Alcohol Percentage Tool</string>
    </property>
   </action>
  </widget>
