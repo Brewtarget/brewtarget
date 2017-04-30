@@ -30,10 +30,7 @@
 AlcoholTool::AlcoholTool(QWidget* parent) : QDialog(parent)
 {
    doLayout();
-
    connect( pushButton_convert, SIGNAL(clicked()), this, SLOT(convert()) );
-   //connect(label_inputTemp, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_inputTemp, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-
 }
 
 void AlcoholTool::doLayout()
@@ -63,10 +60,6 @@ void AlcoholTool::doLayout()
             lineEdit_result->setReadOnly(true);
             lineEdit_result->setObjectName(QStringLiteral("lineEdit_result"));
 
-        // label_inputTemp->setBuddy(lineEdit_inputTemp);
-
-
-         //   lineEdit_fg->setReadOnly(true);
 
          formLayout->setWidget(0, QFormLayout::LabelRole, label_og);
          formLayout->setWidget(0, QFormLayout::FieldRole, lineEdit_og);
@@ -77,7 +70,7 @@ void AlcoholTool::doLayout()
 
 
          formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
-      QVBoxLayout* vLayout = new QVBoxLayout();
+         QVBoxLayout* vLayout = new QVBoxLayout();
          QSpacerItem* verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
          pushButton_convert = new QPushButton(this);
             pushButton_convert->setAutoDefault(false);

@@ -94,6 +94,7 @@
 #include "OgAdjuster.h"
 #include "ConverterTool.h"
 #include "HydrometerTool.h"
+#include "AlcoholTool.h"
 #include "TimerMainDialog.h"
 #include "RecipeFormatter.h"
 #include "PrimingDialog.h"
@@ -444,6 +445,7 @@ void MainWindow::setupDialogs()
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
    hydrometerTool = new HydrometerTool(this);
+   alcoholTool = new AlcoholTool(this);
    timerMainDialog = new TimerMainDialog(this);
    primingDialog = new PrimingDialog(this);
    strikeWaterDialog = new StrikeWaterDialog(this);

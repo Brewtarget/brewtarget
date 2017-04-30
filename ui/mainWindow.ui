@@ -1754,6 +1754,7 @@
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
     <addaction name="actionHydrometer_Temp_Adjustment"/>
+    <addaction name="actionAlcohol_Percentage_Tool"/>
     <addaction name="actionStrikeWater_Calculator"/>
     <addaction name="actionWater_Chemistry"/>
     <addaction name="actionTimers"/>
