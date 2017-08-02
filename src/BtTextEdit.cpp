@@ -28,7 +28,7 @@ BtTextEdit::BtTextEdit(QWidget *parent)
    wasModified = false;
 
    // We will see if this works...
-   connect(this, &BtTextEdit::textChanged, this, &BtTextEdit::textChanged);
+   connect(this, &BtTextEdit::textChanged, this, &BtTextEdit::setTextChanged);
 
 }
 
@@ -39,7 +39,7 @@ BtTextEdit::BtTextEdit(const QString &text, QWidget *parent)
    wasModified = false;
 
    // We will see if this works...
-   connect(this, &BtTextEdit::textChanged, this, &BtTextEdit::textChanged);
+   connect(this, &BtTextEdit::textChanged, this, &BtTextEdit::setTextChanged);
 
 }
 
@@ -62,4 +62,4 @@ void BtTextEdit::focusOutEvent(QFocusEvent *e)
 }
 
 bool BtTextEdit::isModified()  { return wasModified; }
-void BtTextEdit::textChanged() { wasModified = true; }
+void BtTextEdit::setTextChanged() { wasModified = true; }
