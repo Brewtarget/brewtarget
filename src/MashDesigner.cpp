@@ -1,9 +1,10 @@
 /*
  * MashDesigner.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2017
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Jonathon Harding <github@jrhardin.net>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,13 +22,9 @@
 
 #include "database.h"
 #include "MashDesigner.h"
-#include "equipment.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "brewtarget.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
-#include "unit.h"
+#include "fermentable.h"
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -65,7 +62,7 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    // Move to next step.
    connect( pushButton_next, SIGNAL(clicked()), this, SLOT(proceed()) );
    // Do correct calcs when the mash step type is selected.
-   connect( comboBox_type, SIGNAL(activated(int)), this, SLOT(typeChanged(int)) );
+   connect( comboBox_type, SIGNAL(activated(int)), this, SLOT(typeChanged()) );
 
    // I still dislike this part. But I also need to "fix" the form
    // connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
@@ -182,20 +179,37 @@ double MashDesigner::stepTemp_c()
    return lineEdit_temp->toSI();
 }
 
+bool MashDesigner::heating()
+{
+   return stepTemp_c() > ((prevStep) ? prevStep->stepTemp_c() : mash->grainTemp_c());
+}
+
 double MashDesigner::maxTemp_c()
 {
-   if ( recObs && recObs->equipment())
-   {
-      return recObs->equipment()->boilingPoint_c();
-   }
-   else
-      return 100;
+   double maxT = (recObs && recObs->equipment()) ? recObs->equipment()->boilingPoint_c() : 100.;
+
+   // If cooling down, maxT is limited by temperature from the max amount of water added
+   if (!heating())
+      maxT = std::min(tempFromVolume_c(maxAmt_l()), maxT);
+
+   // Make sure maxT isn't below freezing
+   maxT = std::max(maxT, 0.0);
+
+   return maxT;
 }
 
 double MashDesigner::minTemp_c()
 {
-   // The minimum temp depends on how much more water we can fit in the tun.
-   return tempFromVolume_c( maxAmt_l() );
+   double minT = 0.0;
+
+   // If heating, minT is limited by the temperature from the max amount of water added
+   if (heating())
+      minT = std::max(tempFromVolume_c(maxAmt_l()), minT);
+
+   // Make sure minT doesn't exceed boiling
+   minT = std::min(minT, (recObs && recObs->equipment()) ? recObs->equipment()->boilingPoint_c() : 100.);
+
+   return minT;
 }
 
 // The mash volume up to and not including the step currently being edited.
@@ -206,25 +220,33 @@ double MashDesigner::mashVolume_l()
 
 double MashDesigner::minAmt_l()
 {
-   // Minimum amount occurs with maximum temperature.
-   return volFromTemp_l( maxTemp_c() );
+   double minVol_l = (heating()) ? volFromTemp_l(maxTemp_c()) : volFromTemp_l(minTemp_c());
+
+   // minAmt_l might exceed maxAmt_l if the user requests an impossible temperature
+   minVol_l = std::min(minVol_l, maxAmt_l());
+   minVol_l = std::max( minVol_l, 0. );  // Cannot have negative volumes
+   return minVol_l;
 }
 
 // However much more we can add at this step.
 double MashDesigner::maxAmt_l()
 {
+   double amt = 0;
+
    if ( equip == 0 )
-      return 0;
+      return amt;  // If we have no equipment, give up
 
    // However much more we can fit in the tun.
    if( ! isSparge() )
-   {
-      return equip->tunVolume_l() - mashVolume_l();
-   }
+      amt = equip->tunVolume_l() - mashVolume_l();
    else
-   {
-      return equip->tunVolume_l() - grainVolume_l();
-   }
+      amt = equip->tunVolume_l() - grainVolume_l();
+
+   // How much more can we fit in the brew pot
+   amt = std::min( amt, targetTotalMashVol_l() - addedWater_l );
+   amt = std::max( amt, 0. );  // Cannot have negative volumes
+
+   return amt;
 }
 
 // Returns the required volume of water to infuse if the strike water is
@@ -236,7 +258,6 @@ double MashDesigner::volFromTemp_l( double temp_c )
 
    double tw = temp_c;
    // Final temp is target temp.
-   // double tf = mashStep->stepTemp_c();
    double tf = stepTemp_c();
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
    double t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c();
@@ -262,7 +283,6 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    else
       absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
 
-   // double tf = mashStep->stepTemp_c();
    double tf = stepTemp_c();
 
    // NOTE: This needs to be changed. Assumes 1L = 1 kg.
@@ -273,8 +293,8 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
    double t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c();
    // When batch sparging, you lose about 10C from previous step.
-   if( isSparge() )
-      t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c() - 10;
+   if ( isSparge() && (prevStep != 0) )
+      t1 -= 10;
    double mt = mash->tunSpecificHeat_calGC();
    double ct = mash->tunWeight_kg();
 
@@ -285,6 +305,39 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    double tw = 1/(mw*cw) * ( (isSparge()? batchMC : MC) * (tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->tunTemp_c()) : 0) ) + tf;
 
    return tw;
+}
+
+// Returns the maximum possible target temperature that can currently be reached.
+// If cooling, returns the minimum possible target temp
+double MashDesigner::maxTargetTemp_c()
+{
+   if (mashStep == 0 || mash == 0)
+      return 0.0;
+
+   double mw = maxAmt_l();
+   double tw = (heating()) ? maxTemp_c() : minTemp_c();
+   // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
+   double t1 = (prevStep == 0) ? mash->grainTemp_c() : prevStep->stepTemp_c();
+   // When batch sparging, you lose about 10C from previous step.
+   if (isSparge() && (prevStep != 0))
+      t1 -= 10;
+
+   double cw = HeatCalculations::Cw_calGC;
+   double absorption_LKg = (equip != 0) ? equip->grainAbsorption_LKg() : PhysicalConstants::grainAbsorption_Lkg;
+   double mt = mash->tunSpecificHeat_calGC();
+   double ct = mash->tunWeight_kg();
+   double batchMC = grain_kg * HeatCalculations::Cgrain_calGC
+      + absorption_LKg * grain_kg * HeatCalculations::Cw_calGC
+      + mash->tunWeight_kg() * mash->tunSpecificHeat_calGC();
+   double thisMC = isSparge() ? batchMC : MC;
+
+   double MC1 = isSparge() ? batchMC : MC;
+   double MCw = mw * cw;
+   double MCt = (prevStep==0) ? mt * ct : 0.;
+   double tt = mash->tunTemp_c();
+
+   double tf = (tw * MCw + t1 * MC1 + tt * MCt) / (MC1 + MCw + MCt);
+   return tf;
 }
 
 // How many liters of grain are in the tun.
@@ -342,7 +395,7 @@ bool MashDesigner::initializeMash()
    grain_kg = recObs->grainsInMash_kg();
 
    label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), Units::liters));
-   label_wortMax->setText(Brewtarget::displayAmount(recObs->boilSize_l(), Units::liters));
+   label_wortMax->setText(Brewtarget::displayAmount(targetCollectedWortVol_l(), Units::liters));
 
    updateMinAmt();
    updateMaxAmt();
@@ -385,10 +438,12 @@ void MashDesigner::updateFullness()
    label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + (isInfusion() ? selectedAmount_l() : 0) )/grain_kg ));
 }
 
+// How much water will be released from the mash?
 double MashDesigner::waterFromMash_l()
 {
    double waterAdded_l = mash->totalMashWater_l();
    double absorption_lKg;
+   double amt;
 
    if ( recObs == 0 )
       return 0.0;
@@ -398,7 +453,10 @@ double MashDesigner::waterFromMash_l()
    else
       absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
 
-   return (waterAdded_l - absorption_lKg * recObs->grainsInMash_kg());
+   amt = (waterAdded_l - absorption_lKg * recObs->grainsInMash_kg());
+
+   // Not possible to get negative volume from the mash
+   return std::max(0.0, amt);
 }
 
 void MashDesigner::updateCollectedWort()
@@ -409,7 +467,7 @@ void MashDesigner::updateCollectedWort()
    // double wort_l = recObs->wortFromMash_l();
    double wort_l = waterFromMash_l();
 
-   double ratio = wort_l / recObs->boilSize_l();
+   double ratio = wort_l / targetCollectedWortVol_l();
    if( ratio < 0 )
      ratio = 0;
    if( ratio > 1 )
@@ -432,9 +490,6 @@ void MashDesigner::updateMaxAmt()
 void MashDesigner::updateMinTemp()
 {
    double minTemp = minTemp_c();
-
-   if ( minTemp > 100 )
-      minTemp = maxTemp_c();
 
    label_tempMin->setText(Brewtarget::displayAmount(minTemp, Units::celsius));
 }
@@ -512,24 +567,23 @@ void MashDesigner::updateAmt()
    if( mashStep == 0 )
       return;
 
-   if( isInfusion() )
+   double vol;
+   if (isInfusion())
    {
-      double vol = horizontalSlider_amount->sliderPosition() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
-
-      label_amt->setText(Brewtarget::displayAmount( vol, Units::liters));
-
-      if( mashStep != 0 )
+      vol = horizontalSlider_amount->sliderPosition() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
+      if (mashStep != 0)
          mashStep->setInfuseAmount_l( vol );
    }
-   else if( isDecoction() )
-      label_amt->setText(Brewtarget::displayAmount(mashStep->decoctionAmount_l(), Units::liters));
+   else if (isDecoction())
+      vol = mashStep->decoctionAmount_l();
    else
-      label_amt->setText(Brewtarget::displayAmount(0, Units::liters));
+      vol = 0;
+   label_amt->setText( Brewtarget::displayAmount( vol, Units::liters ) );
 }
 
 void MashDesigner::updateTemp()
 {
-   double temp,maxT;
+   double temp;
 
    if( mashStep == 0 )
       return;
@@ -537,39 +591,62 @@ void MashDesigner::updateTemp()
    if( isInfusion() )
    {
       temp = horizontalSlider_temp->sliderPosition() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
-      maxT = maxTemp_c();
-      if ( temp > maxT )
-         temp = maxT;
 
-      label_temp->setText(Brewtarget::displayAmount( temp, Units::celsius));
+      // Not sure how temp could ever be outside these bounds, but a similar check was already here
+      temp = heating() ? std::min( temp, maxTemp_c() ) : std::max( temp, minTemp_c() );
 
       if( mashStep != 0 )
          mashStep->setInfuseTemp_c( temp );
    }
-   else if( isDecoction() )
-      label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), Units::celsius));
+   else if (isDecoction())
+      temp = maxTemp_c();
    else {
-   
-      label_temp->setText(Brewtarget::displayAmount( stepTemp_c(), Units::celsius));
+      temp = stepTemp_c();
    }
+   label_temp->setText( Brewtarget::displayAmount( temp, Units::celsius ) );
 }
 
 void MashDesigner::saveTargetTemp()
 {
    double temp = stepTemp_c();
-   double maxT = maxTemp_c();
+   double initVol_l, ratio;
 
-   if ( temp > maxT ) 
-      temp = maxT;
+   // Sanity check for an empty text box and do nothing
+   if ((temp == 0) && (lineEdit_temp->text().isEmpty()))
+      return;
 
+   temp = heating() ? std::min( temp, maxTemp_c() ) : std::max( temp, minTemp_c() );
    // be nice and reset the field so it displays in proper units
-   lineEdit_temp->setText(temp);
-   if( mashStep != 0 )
-      mashStep->setStepTemp_c(temp);
+   lineEdit_temp->setText( temp );
 
-   if( isDecoction() )
+   if (isInfusion() || isSparge())
    {
-      if( mashStep != 0 )
+      // Do a sanity check the make sure the max volume available can actually hit the temperature we want
+      double tempNeeded_c = tempFromVolume_c( maxAmt_l() );
+      if ((tempNeeded_c > maxTemp_c()) || (tempNeeded_c < minTemp_c()))
+         lineEdit_temp->setText( maxTargetTemp_c() );
+   }
+
+   if ( mashStep != 0 )
+      mashStep->setStepTemp_c(stepTemp_c());
+   
+   if (isInfusion() || isSparge())
+   {
+      if (isSparge()) // Usually want to fill the brewpot on sparge
+         initVol_l = maxAmt_l();
+      else if (!prevStep) // Assign the target volume to a mash of 1.0 qt/lb = 2.086 l/kg
+         initVol_l = 2.086 * recObs->grainsInMash_kg();
+      else // Add as little water as possible by default on later steps
+         initVol_l = minAmt_l();
+      ratio = (initVol_l - minAmt_l()) / (maxAmt_l() - minAmt_l());
+      horizontalSlider_amount->setValue( ratio * horizontalSlider_amount->maximum() );
+      updateTempSlider();
+      updateTemp();
+      updateAmt();
+   }
+   else if (isDecoction())
+   {
+      if (mashStep != 0)
          mashStep->setDecoctionAmount_l( getDecoctionAmount_l() );
 
       updateAmtSlider();
@@ -660,7 +737,7 @@ MashStep::Type MashDesigner::type() const
    return static_cast<MashStep::Type>(curIdx);
 }
 
-void MashDesigner::typeChanged(int t)
+void MashDesigner::typeChanged()
 {
    MashStep::Type _type = type();
 
@@ -676,11 +753,16 @@ void MashDesigner::typeChanged(int t)
    else if ( ! pushButton_next->isEnabled() )
       pushButton_next->setEnabled(true);
 
-   if( isInfusion() )
+   if ( isInfusion() || isSparge() )
    {
       horizontalSlider_amount->setEnabled(true);
       horizontalSlider_temp->setEnabled(true);
-      updateMaxAmt();
+      if (isSparge())
+      {
+         lineEdit_temp->setText(mash->spargeTemp_c());
+         lineEdit_time->setText(15.0);
+      }
+      saveTargetTemp();
    }
    else if( isDecoction() )
    {
@@ -700,5 +782,42 @@ void MashDesigner::typeChanged(int t)
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);
    }
+}
+
+double MashDesigner::targetCollectedWortVol_l() {
+
+   if ( recObs == 0 )
+      return 0.0;
+
+   // Need to account for extract/sugar volume also.
+   float postMashAdditionVolume_l = 0;
+   QList<Fermentable*> ferms = recObs->fermentables();
+         foreach( Fermentable* f, ferms )
+      {
+         Fermentable::Type type = f->type();
+         if( type == Fermentable::Extract )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
+         else if( type == Fermentable::Sugar )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
+         else if( type == Fermentable::Dry_Extract )
+            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
+      }
+
+   return recObs->boilSize_l() - equip->topUpKettle_l() - postMashAdditionVolume_l;
+}
+
+double MashDesigner::targetTotalMashVol_l() {
+
+   if ( recObs == 0 )
+      return 0.0;
+
+   double absorption_lKg;
+   if( equip )
+      absorption_lKg = equip->grainAbsorption_LKg();
+   else
+      absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+
+
+   return targetCollectedWortVol_l() + absorption_lKg * recObs->grainsInMash_kg();
 }
 
