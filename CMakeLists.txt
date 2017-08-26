@@ -99,8 +99,8 @@ ELSE()
 ENDIF()
 
 IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
-   SET( CMAKE_OSX_ARCHITECTURES x86_64 ) # Build intel 64-bit binary. 
-   #SET( CMAKE_OSX_ARCHITECTURES i386 x86_64 ) # Build intel binary. 
+   SET( CMAKE_OSX_ARCHITECTURES x86_64 ) # Build intel 64-bit binary.
+   #SET( CMAKE_OSX_ARCHITECTURES i386 x86_64 ) # Build intel binary.
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
 
@@ -220,23 +220,13 @@ IF( GZIP_CMD )
    ADD_CUSTOM_TARGET(changelog ALL DEPENDS ${CHANGELOG})
 ENDIF()
 
-#=========================Detect Debian======================================== 
-IF( EXISTS "/etc/debian_version" )
-  MESSAGE( STATUS "Debian detected..." )
-
-  IF( NOT ${CMAKE_INSTALL_PREFIX} STREQUAL "/usr" )
-    MESSAGE( WARNING "Debian system, but CMAKE_INSTALL_PREFIX != /usr" )
-    MESSAGE( WARNING "CMAKE_INSTALL_PREFIX = \"${CMAKE_INSTALL_PREFIX}\"" )
-  ENDIF()
-ENDIF()
-
 #========================Construct the directories=============================
 
 # Debian standard directories.
 IF( NOT EXEC_PREFIX )
    SET( EXEC_PREFIX ${CMAKE_INSTALL_PREFIX} )
 ENDIF()
-   
+
 SET( DATAROOTDIR "${EXEC_PREFIX}/share" )
 SET( BINDIR "${EXEC_PREFIX}/bin" )
 IF( NOT DOCDIR )
@@ -254,7 +244,7 @@ ELSEIF( WIN32 )
   #SET( DATAPATH "brewtarget-${brewtarget_VERSION_STRING}" )
   #SET( TARGETPATH "brewtarget-${brewtarget_VERSION_STRING}" )
   #SET( DOCPATH "brewtarget-${brewtarget_VERSION_STRING}/doc" )
-  
+
   # For some damn reason, for the NSIS installer,
   # the prefix needs to be empty. Also, seems that the .exe
   # needs to be in bin/. Fucking piece of shit CPack...
@@ -486,7 +476,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET(CPACK_SET_DESTDIR "on")
   SET(CPACK_PACKAGING_INSTALL_PREFIX "/tmp")
   SET(CPACK_SOURCE_GENERATOR "TBZ2;")
-  SET(CPACK_SOURCE_IGNORE_FILES 
+  SET(CPACK_SOURCE_IGNORE_FILES
       "/.svn/"
       "~$"
       "/CMakeFiles/"
@@ -550,7 +540,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   ELSEIF(WIN32)
     # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
     SET( CPACK_GENERATOR "NSIS" )
-   
+
     SET( CPACK_RESOURCE_FILE_LICENSE "${ROOTDIR}/COPYING.GPLv3" )
 
     SET( CPACK_NSIS_PACKAGE_NAME "Brewtarget-${brewtarget_VERSION_STRING}" )
@@ -645,5 +635,3 @@ ELSE()
    MESSAGE( STATUS "Building Brewtarget." )
    ADD_SUBDIRECTORY(${SRCDIR})
 ENDIF()
-
-
