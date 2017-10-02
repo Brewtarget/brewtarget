@@ -52,6 +52,8 @@ public:
 
    BtTemperatureLabel *label_inputTemp;
    BtTemperatureEdit *lineEdit_inputTemp;
+   BtTemperatureLabel *label_calibratedTemp;
+   BtTemperatureEdit *lineEdit_calibratedTemp;
    QGroupBox *groupBox_inputSg;
    //! @}
 
