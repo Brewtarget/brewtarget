@@ -72,7 +72,7 @@ On Debian systems like Ubuntu, the packages for dependencies are:
 * qtmultimedia5-dev
 * libqt5webkit5-dev
 * libqt5sql5-sqlite
-* libqt5sql-psql
+* libqt5sql5-psql
 * libqt5svg5-dev
 * libqt5multimedia5-plugins
 * doxygen (optional, for source documentation)
