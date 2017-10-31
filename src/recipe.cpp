@@ -1878,7 +1878,7 @@ QHash<QString,double> Recipe::calcTotalPoints()
    int i;
    double sugar_kg_ignoreEfficiency = 0.0;
    double sugar_kg                  = 0.0;
-   double nonFermetableSugars_kg    = 0.0;
+   double nonFermentableSugars_kg    = 0.0;
    double lateAddition_kg           = 0.0;
    double lateAddition_kg_ignoreEff = 0.0;
 
@@ -1900,7 +1900,7 @@ QHash<QString,double> Recipe::calcTotalPoints()
             lateAddition_kg_ignoreEff += ferm->equivSucrose_kg();
 
          if ( !isFermentableSugar(ferm) )
-           nonFermetableSugars_kg += ferm->equivSucrose_kg();
+           nonFermentableSugars_kg += ferm->equivSucrose_kg();
       }
       else
       {
@@ -1912,7 +1912,7 @@ QHash<QString,double> Recipe::calcTotalPoints()
    }   
    
    ret.insert("sugar_kg", sugar_kg);
-   ret.insert("nonFermetableSugars_kg", nonFermetableSugars_kg);
+   ret.insert("nonFermentableSugars_kg", nonFermentableSugars_kg);
    ret.insert("sugar_kg_ignoreEfficiency", sugar_kg_ignoreEfficiency);
    ret.insert("lateAddition_kg", lateAddition_kg);
    ret.insert("lateAddition_kg_ignoreEff", lateAddition_kg_ignoreEff);
@@ -1958,13 +1958,13 @@ void Recipe::recalcOgFg()
    double plato;
    double sugar_kg = 0;
    double sugar_kg_ignoreEfficiency = 0.0;
-   double nonFermetableSugars_kg = 0.0;
+   double nonFermentableSugars_kg = 0.0;
    double kettleWort_l = 0.0;
    double postBoilWort_l = 0.0;
    double ratio = 0.0;
    double ferm_kg = 0.0;
    double attenuation_pct = 0.0;
-   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts;
+   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts, tmp_nonferm_pnts;
    Yeast* yeast;
    QHash<QString,double> sugars;
   
@@ -1986,9 +1986,9 @@ void Recipe::recalcOgFg()
 
    // Find out how much sugar we have.
    sugars = calcTotalPoints();
-   sugar_kg                  = sugars.value("sugar_kg");
-   sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
-   nonFermetableSugars_kg    = sugars.value("nonFermetableSugars_kg");
+   sugar_kg                  = sugars.value("sugar_kg");  // Mass of sugar that *is* affected by mash efficiency
+   sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");  // Mass of sugar that *is not* affected by mash efficiency
+   nonFermentableSugars_kg    = sugars.value("nonFermentableSugars_kg");  // Mass of sugar that is not fermentable (also counted in sugar_kg_ignoreEfficiency)
 
    // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
    if( equipment() != 0 )
@@ -2006,27 +2006,28 @@ void Recipe::recalcOgFg()
       // Ignore this again since it should be included in efficiency.
       //sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
-      if ( nonFermetableSugars_kg != 0.0 )
-         nonFermetableSugars_kg *= ratio;
+      if ( nonFermentableSugars_kg != 0.0 )
+         nonFermentableSugars_kg *= ratio;
    }
 
+   // Total sugars after accounting for efficiency and mash losses. Implicitly includes non-fermentable sugars
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
    plato = Algorithms::getPlato( sugar_kg, _finalVolumeNoLosses_l);
 
-   tmp_og = Algorithms::PlatoToSG_20C20C( plato );
-   tmp_pnts = (tmp_og-1)*1000.0;
-   if ( nonFermetableSugars_kg != 0.0 )
+   tmp_og = Algorithms::PlatoToSG_20C20C( plato );  // og from all sugars
+   tmp_pnts = (tmp_og-1)*1000.0;  // points from all sugars
+   if ( nonFermentableSugars_kg != 0.0 )
    {
-      ferm_kg = sugar_kg - nonFermetableSugars_kg;
-      plato = Algorithms::getPlato( ferm_kg, _finalVolumeNoLosses_l);
-      _og_fermentable = Algorithms::PlatoToSG_20C20C( plato );
-      plato = Algorithms::getPlato( nonFermetableSugars_kg, _finalVolumeNoLosses_l); 
-      tmp_ferm_pnts = ((Algorithms::PlatoToSG_20C20C( plato ))-1)*1000.0;
+      ferm_kg = sugar_kg - nonFermentableSugars_kg;  // Mass of only fermentable sugars
+      plato = Algorithms::getPlato( ferm_kg, _finalVolumeNoLosses_l);  // Plato from fermentable sugars
+      _og_fermentable = Algorithms::PlatoToSG_20C20C( plato );  // og from only fermentable sugars
+      plato = Algorithms::getPlato( nonFermentableSugars_kg, _finalVolumeNoLosses_l);  // Plate from non-fermentable sugars 
+      tmp_nonferm_pnts = ((Algorithms::PlatoToSG_20C20C( plato ))-1)*1000.0;  // og points from non-fermentable sugars
    }
    else
    {
       _og_fermentable = tmp_og;
-      tmp_ferm_pnts = 0;
+      tmp_nonferm_pnts = 0;
    }
 
    // Calculage FG
@@ -2041,12 +2042,13 @@ void Recipe::recalcOgFg()
    if( yeasties.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
       attenuation_pct = 75.0; // 75% is an average attenuation.
    
-   if ( nonFermetableSugars_kg != 0.0 )
+   if ( nonFermentableSugars_kg != 0.0 )
    {
-      tmp_ferm_pnts = (tmp_pnts-tmp_ferm_pnts) * (1.0 - attenuation_pct/100.0);
-      tmp_pnts *= (1.0 - attenuation_pct/100.0);
-      tmp_fg =  1 + tmp_pnts/1000.0;
-      _fg_fermentable =  1 + tmp_ferm_pnts/1000.0;
+      tmp_ferm_pnts = (tmp_pnts-tmp_nonferm_pnts) * (1.0 - attenuation_pct/100.0);  // fg points from fermentable sugars
+      tmp_pnts = tmp_ferm_pnts + tmp_nonferm_pnts;  // FG points from both fermentable and non-fermentable sugars
+      //tmp_pnts *= (1.0 - attenuation_pct/100.0);  // WTF, this completely ignores all the calculations about non-fermentable sugars and just converts everything!
+      tmp_fg =  1 + tmp_pnts/1000.0;  // new FG value
+      _fg_fermentable =  1 + tmp_ferm_pnts/1000.0;  // FG from fermentables only
    }
    else
    {
