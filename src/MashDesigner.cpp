@@ -600,6 +600,9 @@ void MashDesigner::saveTargetTemp()
    updateMaxAmt();
    updateMinTemp();
    updateMaxTemp();
+   updateAmt();
+   updateTempSlider();
+   updateTemp();
    updateFullness();
    updateCollectedWort();
 }
