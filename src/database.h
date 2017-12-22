@@ -309,6 +309,9 @@ public:
 
    template <class T>void remove(T* ing, bool emitSignal = true)
    {
+      if (!ing)
+          return;
+
       const QMetaObject *meta = ing->metaObject();
       Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
       QString propName;
