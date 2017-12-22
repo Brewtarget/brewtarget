@@ -2449,7 +2449,7 @@ void MainWindow::showEquipmentEditor()
 
 void MainWindow::showStyleEditor()
 {
-   if ( ! recipeObs->style() )
+   if ( recipeObs && ! recipeObs->style() )
    {
       QMessageBox::warning( this, tr("No style"), tr("You must select a style first."));
    }
