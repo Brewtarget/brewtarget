@@ -2437,7 +2437,7 @@ void MainWindow::showPitchDialog()
 
 void MainWindow::showEquipmentEditor()
 {
-   if ( ! recipeObs->equipment() )
+   if ( recipeObs && ! recipeObs->equipment() )
    {
       QMessageBox::warning( this, tr("No equipment"), tr("You must select or define an equipment profile first."));
    }
