@@ -781,6 +781,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 
    }
 
+   rec->recalcAll();
    sqlDatabase().commit();
 
    q.finish();
