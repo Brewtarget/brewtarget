@@ -2437,7 +2437,7 @@ void MainWindow::showPitchDialog()
 
 void MainWindow::showEquipmentEditor()
 {
-   if ( ! recipeObs->equipment() )
+   if ( recipeObs && ! recipeObs->equipment() )
    {
       QMessageBox::warning( this, tr("No equipment"), tr("You must select or define an equipment profile first."));
    }
@@ -2449,7 +2449,7 @@ void MainWindow::showEquipmentEditor()
 
 void MainWindow::showStyleEditor()
 {
-   if ( ! recipeObs->style() )
+   if ( recipeObs && ! recipeObs->style() )
    {
       QMessageBox::warning( this, tr("No style"), tr("You must select a style first."));
    }
