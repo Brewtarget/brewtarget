@@ -465,7 +465,7 @@
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation>Herbereken eff</translation>
+        <translation>Herbereken rndmt</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -2430,11 +2430,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished">Brouwdatum</translation>
+        <translation>Brouwdatum</translation>
     </message>
     <message>
         <source>Preboil</source>
-        <translation type="unfinished"></translation>
+        <translation>Voor het koken</translation>
     </message>
     <message>
         <source>SG</source>
@@ -2442,47 +2442,47 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Volume into BK</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume naar kook</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Maisch water start temperatuur</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Eind Temperatuur</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation type="unfinished"></translation>
+        <translation>Eff naar kook</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschatte OG</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation type="unfinished"></translation>
+        <translation>Na het koken</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume na het koken</translation>
     </message>
     <message>
         <source>Volume Into Fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume in het vergistingsvat</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation type="unfinished"></translation>
+        <translation>Brouwerij Eff</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschatte ABV</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation type="unfinished"></translation>
+        <translation>Na het vergisten</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -2498,19 +2498,19 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Code</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Handleiding</translation>
+        <translation>Handleiding</translation>
     </message>
     <message>
         <source>BoilTime</source>
-        <translation type="unfinished"></translation>
+        <translation>Kook Tijd</translation>
     </message>
     <message>
         <source>Beta</source>
-        <translation type="unfinished"></translation>
+        <translation>Beta</translation>
     </message>
     <message>
         <source>Lab</source>
@@ -2518,11 +2518,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation>Vergisting</translation>
     </message>
     <message>
         <source>Id</source>
-        <translation type="unfinished"></translation>
+        <translation>Id</translation>
     </message>
     <message>
         <source>Flocculation</source>
@@ -2530,55 +2530,55 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished">Diversen</translation>
+        <translation>Diversen</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished">Gist</translation>
+        <translation>Gisten</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished">Verwachte calorieën (per 33 cl)</translation>
+        <translation>Verwachte calorieën (per 33 cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwachte calorieën (per 35.5 cl)</translation>
     </message>
     <message>
         <source>Bitterness</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitterheid</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation>Doel</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"></translation>
+        <translation>Totaal</translation>
     </message>
     <message>
         <source>Hostname</source>
-        <translation type="unfinished"></translation>
+        <translation>Hostname</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Poort</translation>
     </message>
     <message>
         <source>Schema</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema</translation>
     </message>
     <message>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Database</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikersnaam</translation>
     </message>
     <message>
         <source>Saved Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Opgeslagen wachtwoord</translation>
     </message>
 </context>
 <context>
@@ -2596,19 +2596,19 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
         <source>Select Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer Apparatuur</translation>
     </message>
     <message>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Het recept zal geschaald worden naar de batch grootte en rendement van de geselecteerde apparatuur</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieuwe Apparatuur</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieuw Rendement (%)</translation>
     </message>
 </context>
 <context>
