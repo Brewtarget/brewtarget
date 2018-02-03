@@ -4863,7 +4863,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>OG</source>
-        <translation>Oorspronkelijkl SG</translation>
+        <translation>Oorspronkelijk SG</translation>
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
