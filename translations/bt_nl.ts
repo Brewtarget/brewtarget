@@ -24,7 +24,7 @@
     </message>
     <message>
         <source>Efficiency</source>
-        <translation>Efficiëntie</translation>
+        <translation>Rendement</translation>
     </message>
     <message>
         <source>Boil Volume</source>
@@ -3661,7 +3661,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
-        <translation>Efficiëntie (%)</translation>
+        <translation>Rendement (%)</translation>
     </message>
     <message>
         <source>Calculated Boil Size</source>
