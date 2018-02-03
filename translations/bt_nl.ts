@@ -91,10 +91,6 @@
         <translation>Volume in het vergistingsvat</translation>
     </message>
     <message>
-        <source>Print Document</source>
-        <translation>Print Document</translation>
-    </message>
-    <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;Aantekeningen&lt;/h2&gt;</translation>
     </message>
@@ -117,6 +113,10 @@
     <message>
         <source>Estimated calories (per 12 oz)</source>
         <translation>Verwachte calorieën (per 12oz)</translation>
+    </message>
+    <message>
+        <source>Brewday</source>
+        <translation>Brouwdag</translation>
     </message>
 </context>
 <context>
@@ -343,6 +343,14 @@
     <message>
         <source>Scale</source>
         <translation>Schaal</translation>
+    </message>
+    <message>
+        <source>WK</source>
+        <translation>WK</translation>
+    </message>
+    <message>
+        <source>Lintner</source>
+        <translation>Lintner</translation>
     </message>
 </context>
 <context>
@@ -615,14 +623,6 @@
     <message>
         <source>Grain absorption (%1/%2)</source>
         <translation>Graan absorptie (%1/%2)</translation>
-    </message>
-    <message>
-        <source>Tun Volume Warning</source>
-        <translation type="vanished">Vat Volume Waarschuwing</translation>
-    </message>
-    <message>
-        <source>Batch Size Warning</source>
-        <translation type="vanished">Batch Grootte Waarschuwing</translation>
     </message>
     <message>
         <source>Equipment name</source>
@@ -1115,6 +1115,10 @@
         <source>Corrected gravity</source>
         <translation>Gecorrigeerde SG</translation>
     </message>
+    <message>
+        <source>Hydrometer Calibration</source>
+        <translation>Hydrometer Gereedschap</translation>
+    </message>
 </context>
 <context>
     <name>IbuGuSlider</name>
@@ -1317,6 +1321,10 @@
         <source>An error was returned while creating %1</source>
         <translation>Een foutmelding was teruggegeven bij het creëren van %1</translation>
     </message>
+    <message>
+        <source>Print Document</source>
+        <translation>Document Afdrukken</translation>
+    </message>
 </context>
 <context>
     <name>MashDesigner</name>
@@ -1457,6 +1465,14 @@
     <message>
         <source>Fly Sparge</source>
         <translation>Fly uitspoelen</translation>
+    </message>
+    <message>
+        <source>Infusion temp.</source>
+        <translation>Infusie temp.</translation>
+    </message>
+    <message>
+        <source>In order to hit your target temp on the final step, the infusion water must be above boiling. Lower your initial infusion volume.</source>
+        <translation>Om de richt temperatuur in de laatste stap te halen, moet het infusie water boven het kookpunt zijn. Verlaag de initiele infusie volume.</translation>
     </message>
 </context>
 <context>
@@ -1853,6 +1869,33 @@
         <source>Please restart brewtarget to connect to the new database</source>
         <translation>Start Brewtarget opnieuw op om verbinding te maken met de nieuwe database</translation>
     </message>
+    <message>
+        <source>Lintner</source>
+        <translation>Lintner</translation>
+    </message>
+    <message>
+        <source>WK</source>
+        <translation>WK</translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <source>Application terminates</source>
+        <translation>De applicatie stopt</translation>
+    </message>
+    <message>
+        <source>The application encountered a fatal error.
+Error message:
+%1</source>
+        <translation>The applicatie kreeg een fatale fout.
+Foutmelding:
+%1</translation>
+    </message>
+    <message>
+        <source>The application encountered a fatal error.</source>
+        <translation>The applicatie kreeg een fatale fout.</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -2043,6 +2086,26 @@
     <message>
         <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
         <translation>Wachtwoorden worden in plaintext opgeslagen. We doen geen poging om het wachtwoord te verbergen of anderzins het wachtwoord te beveiliging. Door deze optie te kiezen neem je volledige verantwoordelijkheid voor problemen die hier uit voort kunnen komen.</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation>Inventaris</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Naam</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation>Hoeveelheid</translation>
+    </message>
+    <message>
+        <source>No inventory available.</source>
+        <translation>Geen inventaris beschikbaar.</translation>
+    </message>
+    <message>
+        <source>Print Preview</source>
+        <translation>Print Voorbeeld</translation>
     </message>
 </context>
 <context>
@@ -2489,10 +2552,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>Volume</translation>
     </message>
     <message>
-        <source>Print Document</source>
-        <translation>Print Document</translation>
-    </message>
-    <message>
         <source>Category</source>
         <translation>Categorie</translation>
     </message>
@@ -2579,6 +2638,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Saved Password</source>
         <translation>Opgeslagen wachtwoord</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation>Recept</translation>
     </message>
 </context>
 <context>
@@ -2802,34 +2865,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
         <translation>Audio Files (*.wav *.ogg *.mp3 *.aiff)</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Stop</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Start</translation>
-    </message>
-    <message>
-        <source>Set the timer to the specified value</source>
-        <translation type="vanished">Zet de timer op de gespecificeerde waarde</translation>
-    </message>
-    <message>
-        <source>Start/Stop timer</source>
-        <translation type="vanished">Start/Stop timer</translation>
-    </message>
-    <message>
-        <source>Set a sound as the alarm</source>
-        <translation type="vanished">Zet een geluid als alarm</translation>
-    </message>
-    <message>
-        <source>Set</source>
-        <translation type="vanished">Instellen</translation>
-    </message>
-    <message>
-        <source>Sound</source>
-        <translation type="vanished">Geluid</translation>
     </message>
     <message>
         <source>Notes...</source>
@@ -3371,14 +3406,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>Vocht percentage bij massa</translation>
     </message>
     <message>
-        <source>DP (Lintner)</source>
-        <translation>DP (Lintner)</translation>
-    </message>
-    <message>
-        <source>Diastatic power in Lintner</source>
-        <translation>Diastatische kracht in Lintner</translation>
-    </message>
-    <message>
         <source>Protein (%)</source>
         <translation>Proteïne (%)</translation>
     </message>
@@ -3437,6 +3464,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Color</source>
         <translation>Kleur</translation>
+    </message>
+    <message>
+        <source>Diastatic power</source>
+        <translation>Diastatische kracht</translation>
     </message>
 </context>
 <context>
@@ -3648,10 +3679,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>Recept</translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation>Naam</translation>
-    </message>
-    <message>
         <source>Name of recipe</source>
         <translation>Naam van het recept</translation>
     </message>
@@ -3662,10 +3689,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Efficiency (%)</source>
         <translation>Rendement (%)</translation>
-    </message>
-    <message>
-        <source>Calculated Boil Size</source>
-        <translation>Berekende Kook grootte</translation>
     </message>
     <message>
         <source>Calculated Batch Size</source>
@@ -3686,18 +3709,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Target batch size</source>
         <translation>Streef Batch grootte</translation>
-    </message>
-    <message>
-        <source>Target Batch Size</source>
-        <translation>Streef Batch grootte</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>Apparatuur</translation>
-    </message>
-    <message>
-        <source>Target Boil Size</source>
-        <translation>Streef Kook grootte</translation>
     </message>
     <message>
         <source>OG</source>
@@ -3912,10 +3923,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <source>&amp;Miscs</source>
-        <translation>&amp;Diversen</translation>
-    </message>
-    <message>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
@@ -3944,20 +3951,12 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <source>&amp;Exit</source>
-        <translation>&amp;Einde</translation>
-    </message>
-    <message>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
         <translation>&amp;Importeer Recepten</translation>
-    </message>
-    <message>
-        <source>&amp;Options</source>
-        <translation>&amp;Opties</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
@@ -4056,10 +4055,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>&amp;Nieuw recept</translation>
     </message>
     <message>
-        <source>Timers</source>
-        <translation>Timers</translation>
-    </message>
-    <message>
         <source>Show timers</source>
         <translation>Toon timer</translation>
     </message>
@@ -4088,10 +4083,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>1.0</translation>
     </message>
     <message>
-        <source>Strike Water Calculator</source>
-        <translation>Maischwater Rekenhulp</translation>
-    </message>
-    <message>
         <source>tab_recipe</source>
         <translation>tab_recipe</translation>
     </message>
@@ -4100,8 +4091,52 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>Exporteer als &amp;BBCode</translation>
     </message>
     <message>
-        <source>Hydrometer Temp Adjustment</source>
-        <translation>Hydrometer Temp Correctie</translation>
+        <source>&amp;Name</source>
+        <translation>&amp;Naam</translation>
+    </message>
+    <message>
+        <source>Tar&amp;get Boil Size</source>
+        <translation>Streef Kook &amp;Grootte</translation>
+    </message>
+    <message>
+        <source>Calc&amp;ulated Boil Size</source>
+        <translation>&amp;Berekende Kook Grootte</translation>
+    </message>
+    <message>
+        <source>E&amp;quipment</source>
+        <translation>&amp;Apparatuur</translation>
+    </message>
+    <message>
+        <source>Target Batch Si&amp;ze</source>
+        <translation>&amp;Streef Batch grootte</translation>
+    </message>
+    <message>
+        <source>In&amp;ventory</source>
+        <translation>&amp;Inventaris</translation>
+    </message>
+    <message>
+        <source>M&amp;iscs</source>
+        <translation>&amp;Diversen</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation>&amp;Afsluiten</translation>
+    </message>
+    <message>
+        <source>Optio&amp;ns</source>
+        <translation>&amp;Opties</translation>
+    </message>
+    <message>
+        <source>Ti&amp;mers</source>
+        <translation>&amp;Timers</translation>
+    </message>
+    <message>
+        <source>Strike &amp;Water Calculator</source>
+        <translation>&amp;Maischwater Rekenhulp</translation>
+    </message>
+    <message>
+        <source>&amp;Hydrometer Temp Adjustment</source>
+        <translation>&amp;Hydrometer Temp Correctie</translation>
     </message>
 </context>
 <context>
@@ -4111,24 +4146,8 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>Maisch Ontwerper</translation>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="vanished">Naam</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="vanished">Type</translation>
-    </message>
-    <message>
-        <source>Target temp.</source>
-        <translation type="vanished">Beoogde temp.</translation>
-    </message>
-    <message>
         <source>Time</source>
         <translation>Tijd</translation>
-    </message>
-    <message>
-        <source>Batch Sparge</source>
-        <translation type="vanished">Batch uitspoelen</translation>
     </message>
     <message>
         <source>Next</source>
@@ -4342,10 +4361,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>Mash thickness (L/kg)</source>
         <translation>Maisch dikte (L/kg)</translation>
-    </message>
-    <message>
-        <source>Mash thickness (do not enter any units)</source>
-        <translation type="vanished">Maisch dikte (voer geen eenheden in)</translation>
     </message>
     <message>
         <source>No Spar&amp;ge</source>
@@ -4652,28 +4667,8 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>Gewicht</translation>
     </message>
     <message>
-        <source>Use SI units</source>
-        <translation type="vanished">Gebruik SI eenheden</translation>
-    </message>
-    <message>
-        <source>Use US traditional units</source>
-        <translation type="vanished">Gebruik US traditional units</translation>
-    </message>
-    <message>
-        <source>Use British imperial units</source>
-        <translation type="vanished">Gebruik British imperial units</translation>
-    </message>
-    <message>
         <source>Temperature</source>
         <translation>Temperatuur</translation>
-    </message>
-    <message>
-        <source>Celsius</source>
-        <translation type="vanished">Celsius</translation>
-    </message>
-    <message>
-        <source>Fahrenheit</source>
-        <translation type="vanished">Fahrenheit</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -4684,76 +4679,24 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation>SG</translation>
     </message>
     <message>
-        <source>20C/20C Specific Gravity</source>
-        <translation type="vanished">20°C/20°C SG</translation>
-    </message>
-    <message>
-        <source>Plato/Brix/Balling</source>
-        <translation type="vanished">Plato/Brix/Balling</translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Kleur</translation>
-    </message>
-    <message>
-        <source>Use SRM</source>
-        <translation type="vanished">Gebruik SRM</translation>
-    </message>
-    <message>
-        <source>Use EBC</source>
-        <translation type="vanished">Gebruik EBC</translation>
     </message>
     <message>
         <source>Formulas</source>
         <translation>Formules</translation>
     </message>
     <message>
-        <source>Mosher&apos;s approximation</source>
-        <translation type="vanished">Mosher&apos;s approximation</translation>
-    </message>
-    <message>
-        <source>Daniels&apos; approximation</source>
-        <translation type="vanished">Daniels&apos; approximation</translation>
-    </message>
-    <message>
-        <source>Morey&apos;s approximation</source>
-        <translation type="vanished">Morey&apos;s approximation</translation>
-    </message>
-    <message>
         <source>IBU</source>
         <translation>IBU</translation>
-    </message>
-    <message>
-        <source>Tinseth&apos;s approximation</source>
-        <translation type="vanished">Tinseth&apos;s approximation</translation>
-    </message>
-    <message>
-        <source>Rager&apos;s approximation</source>
-        <translation type="vanished">Rager&apos;s approximation</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
         <translation>IBU Correcties</translation>
     </message>
     <message>
-        <source>First Wort</source>
-        <translation type="vanished">Eerste Wort</translation>
-    </message>
-    <message>
-        <source>Directories</source>
-        <translation type="vanished">Directories</translation>
-    </message>
-    <message>
-        <source>Database Directory</source>
-        <translation type="vanished">Directory van de database</translation>
-    </message>
-    <message>
         <source>Browse</source>
         <translation>Zoeken</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="vanished">Standaard</translation>
     </message>
     <message>
         <source>Language</source>
@@ -4898,6 +4841,10 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <source>How frequently a backup is made: 1 means always backup</source>
         <translation>Hoe vaak een backup wordt gemaakt (1: altijd backuppen)</translation>
+    </message>
+    <message>
+        <source>Diastatic power</source>
+        <translation>Diastatische kracht</translation>
     </message>
 </context>
 <context>
@@ -5440,10 +5387,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
 </context>
 <context>
     <name>timerListDialog</name>
-    <message>
-        <source>Timers</source>
-        <translation type="vanished">Timers</translation>
-    </message>
     <message>
         <source>Addition Timers</source>
         <translation>Toevoeg Timers</translation>
