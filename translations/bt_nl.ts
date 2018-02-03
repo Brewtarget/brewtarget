@@ -2239,7 +2239,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Pitch yeast</source>
-        <translation>Voeg gist toe</translation>
+        <translation>Gistgift</translation>
     </message>
     <message>
         <source>Let ferment until FG is %1.</source>
@@ -2306,7 +2306,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation>Efficiëntie</translation>
+        <translation>Rendement</translation>
     </message>
     <message>
         <source>OG</source>
@@ -2454,7 +2454,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>Eff naar kook</translation>
+        <translation>Rndmnt naar kook</translation>
     </message>
     <message>
         <source>Projected OG</source>
@@ -2474,7 +2474,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Brouwerij Eff</translation>
+        <translation>Brouwerij Rndmnt</translation>
     </message>
     <message>
         <source>Projected ABV</source>
@@ -2615,11 +2615,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaal Recept</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>Deze wizard zal u helpen met schalen van het recept naar een aandere grootte of rendement. Selecteer andere apparatuur met de nieuwe batch grootte en/of rendement, de wizard zal dan de ingredienten automatisch aanpassen.</translation>
     </message>
 </context>
 <context>
@@ -2648,149 +2648,149 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>TimerDialog</name>
     <message>
         <source>Addition Timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoeg Timer</translation>
     </message>
     <message>
         <source>Set Addition Time(min):</source>
-        <translation type="unfinished"></translation>
+        <translation>Stel toevoeg tijd in (min):</translation>
     </message>
     <message>
         <source>Time Remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation>Resterende Tijd:</translation>
     </message>
     <message>
         <source>Notes: </source>
-        <translation type="unfinished"></translation>
+        <translation>Aantekeningen: </translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantekeningen...</translation>
     </message>
     <message>
         <source>Set Alarm sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Stel alarm geluid in</translation>
     </message>
     <message>
         <source>Stop Alarm</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop Alarm</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annuleren</translation>
+        <translation>Annuleren</translation>
     </message>
 </context>
 <context>
     <name>TimerListDialog</name>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoeg Timers</translation>
     </message>
 </context>
 <context>
     <name>TimerMainDialog</name>
     <message>
         <source>Main Boil Timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoofd Kook Timer</translation>
     </message>
     <message>
         <source>Add Timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoeg Timer</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Start</translation>
+        <translation>Start</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished">Stop</translation>
+        <translation>Stop</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Reset</translation>
     </message>
     <message>
         <source>Hide Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Verberg Timers</translation>
     </message>
     <message>
         <source>Show Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Timers naar voorgrond</translation>
     </message>
     <message>
         <source>Cancel Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuleer Timers</translation>
     </message>
     <message>
         <source>Load Current Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Laad Huidige Recept</translation>
     </message>
     <message>
         <source>Set Boil Timer (mins):</source>
-        <translation type="unfinished"></translation>
+        <translation>Stel kook timer in (min):</translation>
     </message>
     <message>
         <source>Set Boil Time Here</source>
-        <translation type="unfinished"></translation>
+        <translation>Kook tijd</translation>
     </message>
     <message>
         <source>Limit Alarm Ring Time </source>
-        <translation type="unfinished"></translation>
+        <translation>Limiteer Alarm Tijd </translation>
     </message>
     <message>
         <source>Alarm Ring Time (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation>Alarm Tijd (s):</translation>
     </message>
     <message>
         <source>No Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen Timers</translation>
     </message>
     <message>
         <source>There are currently no timers to show.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er zijn timers om te laten zien.</translation>
     </message>
     <message>
         <source>KNOCKOUT</source>
-        <translation type="unfinished"></translation>
+        <translation>KNOCKOUT</translation>
     </message>
     <message>
         <source>Active Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Active Timers</translation>
     </message>
     <message>
         <source>You currently have active timers, would you like to replace them or add to them?</source>
-        <translation type="unfinished"></translation>
+        <translation>U hebt op het moment active timers, wilt u deze vervangen of de timers hier aan toevoegen?</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Vervangen</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoegen</translation>
     </message>
     <message>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 van %2</translation>
     </message>
     <message>
         <source>%1 hop addition is already timed and has been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 hop toevoeging wordt reeds getimed and wordt genegeerd.</translation>
     </message>
     <message>
         <source>%1 hop additions are already timed and have been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 hop toevoegingen worden reeds getimed and worden genegeerd.</translation>
     </message>
     <message>
         <source>Duplicate Timers Ignored</source>
-        <translation type="unfinished"></translation>
+        <translation>Dubbele Timers Genegeerd</translation>
     </message>
     <message>
         <source>No Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen Toevoeg Timers</translation>
     </message>
     <message>
         <source>There are no boil addition, no timers generated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er zijn geen kook toevoegingen, geen timers gegeneerd.</translation>
     </message>
 </context>
 <context>
@@ -2833,19 +2833,19 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation>Notities...</translation>
     </message>
     <message>
         <source> and </source>
-        <translation type="unfinished"></translation>
+        <translation> en </translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fout</translation>
     </message>
     <message>
         <source>Addition time cannot be longer than remaining boil time</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoeg tijd kan niet langer zijn dan de resterende kook tijd</translation>
     </message>
 </context>
 <context>
@@ -2907,7 +2907,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg toe aan recept</translation>
     </message>
     <message>
         <source>New</source>
@@ -2915,7 +2915,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg geselecteerde ingredient toe aan het recept</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
@@ -3005,7 +3005,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Inventaris</translation>
     </message>
 </context>
 <context>
@@ -3126,7 +3126,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <name>brewNoteWidget</name>
     <message>
         <source>Preboil</source>
-        <translation type="unfinished"></translation>
+        <translation>Voor het koken</translation>
     </message>
     <message>
         <source>SG</source>
@@ -3134,7 +3134,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>SG voor het koken</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -3142,27 +3142,27 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzamelde wort volume</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Maisch water start temperatuur</translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatuur van de maisch na inmaischen</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Eind Temp</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
-        <translation type="unfinished"></translation>
+        <translation>Maisch temperatuur voor het uitmaischen</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation type="unfinished"></translation>
+        <translation>Na het koken</translation>
     </message>
     <message>
         <source>OG</source>
@@ -3170,19 +3170,19 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>SG na het koken</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume na het koken</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Wortvolume in kook ketel na het koken</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid wort overgeheveld naar de vergister</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
@@ -3190,59 +3190,59 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation type="unfinished"></translation>
+        <translation> Gistgift temp</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation type="unfinished"></translation>
+        <translation>Wort temperatuur tijdens de gistgift</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation type="unfinished"></translation>
+        <translation>Na het vergisten</translation>
     </message>
     <message>
         <source>Final gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Eind SG</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation type="unfinished"></translation>
+        <translation>Biervolume naar vat/flessen</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation>rendement naar kook ketel</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation type="unfinished"></translation>
+        <translation>Rndmnt naar kook</translation>
     </message>
     <message>
         <source>Expected OG, based on measure fg</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwachtte OG, gebaseerd op gemeten FG</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschatte OG</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation>Brouwerij rendement</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation type="unfinished"></translation>
+        <translation>Brouwerij Rndmnt</translation>
     </message>
     <message>
         <source>Expected ABV based on OG</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwachtte ABV gebaseerd op OG</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschatte ABV</translation>
     </message>
     <message>
         <source>ABV based on FG</source>
-        <translation type="unfinished"></translation>
+        <translation>ABV gebaseerd op de FG</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -3254,11 +3254,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>brewNote</source>
-        <translation type="unfinished"></translation>
+        <translation>brewNote</translation>
     </message>
     <message>
         <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
+        <translation>jjjj-dd-MM</translation>
     </message>
 </context>
 <context>
@@ -3281,7 +3281,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>equipmentEditor</source>
-        <translation type="unfinished"></translation>
+        <translation>apparatuurEditor</translation>
     </message>
 </context>
 <context>
@@ -3364,7 +3364,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
-        <translation>Vleostof (%1)</translation>
+        <translation>Vloeistof (%)</translation>
     </message>
     <message>
         <source>Moisture percentage by mass</source>
@@ -3380,7 +3380,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Protein (%)</source>
-        <translation>Proteïne (%1)</translation>
+        <translation>Proteïne (%)</translation>
     </message>
     <message>
         <source>Protein percentage by mass</source>
@@ -3424,15 +3424,15 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard Hoeveelheid</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid in de Inventaris</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid in de inventaris</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3583,15 +3583,15 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Default Amount </source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard Hoeveelheid </translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid in de Inventaris</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid in de inventaris</translation>
     </message>
 </context>
 <context>
@@ -4634,7 +4634,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>ogAdjuster</source>
-        <translation type="unfinished">ogAdjuster</translation>
+        <translation>ogAdjuster</translation>
     </message>
 </context>
 <context>
@@ -4733,7 +4733,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU Correcties</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -4781,123 +4781,123 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Forumulas</source>
-        <translation type="unfinished"></translation>
+        <translation>Formules</translation>
     </message>
     <message>
         <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Maish Hop (%)</translation>
     </message>
     <message>
         <source>First Wort (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Eerste Wort (%)</translation>
     </message>
     <message>
         <source>Databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Databases</translation>
     </message>
     <message>
         <source>Engines</source>
-        <translation type="unfinished"></translation>
+        <translation>Engines</translation>
     </message>
     <message>
         <source>RDBMS Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>RDBMS Engine</translation>
     </message>
     <message>
         <source>Test Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Test Connectie</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuratie</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Herstel standaard instellingen</translation>
     </message>
     <message>
         <source>Hostname</source>
-        <translation type="unfinished"></translation>
+        <translation>Hostname</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Poort</translation>
     </message>
     <message>
         <source>Schema</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema</translation>
     </message>
     <message>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Database</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikersnaam</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtwoord</translation>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished"></translation>
+        <translation>Opslaan wachtwoord</translation>
     </message>
     <message>
         <source>Data Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Data Directory</translation>
     </message>
     <message>
         <source>Backup Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Backup Directory</translation>
     </message>
     <message>
         <source>Number of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal Backups</translation>
     </message>
     <message>
         <source>Frequency of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Frequentie van de Backups</translation>
     </message>
     <message>
         <source>PostgresSQL&apos;s host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>PostgreSQL&apos;s hostname of IP adres</translation>
     </message>
     <message>
         <source>Port the PostgreSQL is listening on</source>
-        <translation type="unfinished"></translation>
+        <translation>Poort waar PostgreSQL op luisterd</translation>
     </message>
     <message>
         <source>The schema containing the database</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema waar de database in zit</translation>
     </message>
     <message>
         <source>User with create/delete table access</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruiker met create/delete tabel toegang</translation>
     </message>
     <message>
         <source>Password for the user</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruikers wachtwoord</translation>
     </message>
     <message>
         <source>The name of the database</source>
-        <translation type="unfinished"></translation>
+        <translation>De naam van de database</translation>
     </message>
     <message>
         <source>Where your database file is</source>
-        <translation type="unfinished"></translation>
+        <translation>Waar de database file is</translation>
     </message>
     <message>
         <source>Where to save your backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Waar de backups worden opgeslagen</translation>
     </message>
     <message>
         <source>Number of backups to keep: -1 means never remove, 0 means never backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal backups behouden (-1: nooit weggooien; 0: nooit backuppen)</translation>
     </message>
     <message>
         <source>How frequently a backup is made: 1 means always backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoe vaak een backup wordt gemaakt (1: altijd backuppen)</translation>
     </message>
 </context>
 <context>
@@ -4920,43 +4920,43 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation>0.75-1 voor ales. 1.5-2 voor pils</translation>
+        <translation>0.75-1 voor ales. 1.5-2 voor pils.</translation>
     </message>
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gistgift (M cellen)/(mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Beluchtings Methode</translation>
     </message>
     <message>
         <source>Yeast Production Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Gist Productie Datum</translation>
     </message>
     <message>
         <source>Yeast Viability</source>
-        <translation type="unfinished"></translation>
+        <translation>Gist Viabiliteit</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>None</translation>
     </message>
     <message>
         <source>O2 At Start</source>
-        <translation type="unfinished"></translation>
+        <translation>O2 aan het begin</translation>
     </message>
     <message>
         <source>Stir Plate</source>
-        <translation type="unfinished"></translation>
+        <translation>Roer Plaat</translation>
     </message>
     <message>
         <source>MM/dd/yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation>MM/dd/jjjj</translation>
     </message>
     <message>
         <source>%</source>
-        <translation type="unfinished"></translation>
+        <translation>%</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -4964,11 +4964,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Bereken Viabiliteit van Datum</translation>
     </message>
     <message>
         <source># Vials/Smack Packs Pitched</source>
-        <translation type="unfinished"></translation>
+        <translation># Buisjes/Smack Packs toegevoegd</translation>
     </message>
     <message>
         <source>Output</source>
@@ -4980,7 +4980,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
-        <translation type="unfinished"></translation>
+        <translation># Buisjes/Smack Packs zonder Starter</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
@@ -4992,47 +4992,47 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
+        <translation>Wort volume</translation>
     </message>
     <message>
         <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
+        <translation>Begin SG van de wort</translation>
     </message>
     <message>
         <source>Aeration method</source>
-        <translation type="unfinished"></translation>
+        <translation>Beluchtings Methode</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
+        <translation>Productie datum (THT min 3 maanden)</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschatte viabiliteit van de gist</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewenste gistgift hoeveelheid</translation>
     </message>
     <message>
         <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal buisjes/smack packs toegevoegd aan de starter</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveel gist u nodig heeft</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveel buisjes of smack packs nodig zijn om de benodigde gistgift hoeveelheid te behalen</translation>
     </message>
     <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveel droge gist nodig is om de gistgift hoeveelheid te behalen</translation>
     </message>
     <message>
         <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Starter grootte om de gistgift hoeveelheid te behalen</translation>
     </message>
 </context>
 <context>
@@ -5229,62 +5229,62 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Gemeten oorspronkelijke Plato</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Gemeten oorspronkelijk SG</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Huidige gemeten plato</translation>
     </message>
 </context>
 <context>
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Maischwater Rekenhulp</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation>Initiële Infusie</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Oorspronkelijke Graan Temperatuur</translation>
     </message>
     <message>
         <source>Target Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Richt Maisch Temperatuur</translation>
     </message>
     <message>
         <source>Weight of Grain</source>
-        <translation type="unfinished"></translation>
+        <translation>Graangewicht</translation>
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Watervolume</translation>
     </message>
     <message>
         <source>Mash Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation>Maisch Infusie</translation>
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Totaal Watervolume</translation>
     </message>
     <message>
         <source>Grain Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Graangewicht</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenlijke Maisch Temperatuur</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusie Water Temperatuur</translation>
     </message>
     <message>
         <source>Calculate</source>
@@ -5292,15 +5292,15 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Maischwater Temperatuur</translation>
     </message>
     <message>
         <source>Volume to add</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume om toe te voegen</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation>NB: Deze rekenhulp gaat uit van een voorverwarmde maisch ketel.</translation>
     </message>
 </context>
 <context>
@@ -5319,7 +5319,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Basic Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Basis Informatie</translation>
     </message>
     <message>
         <source>Name</source>
@@ -5375,15 +5375,15 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Vital Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Vitale Statistieken</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Max</translation>
     </message>
     <message>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>Min</translation>
     </message>
     <message>
         <source>OG</source>
@@ -5391,11 +5391,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation>eind SG</translation>
+        <translation>Eind SG</translation>
     </message>
     <message>
         <source>IBUs</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU&apos;s</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
@@ -5403,11 +5403,11 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
-        <translation type="unfinished"></translation>
+        <translation>Koolzuur (vol)</translation>
     </message>
     <message>
         <source>ABV (pct)</source>
-        <translation type="unfinished"></translation>
+        <translation>ABV(%)</translation>
     </message>
     <message>
         <source>Profile</source>
@@ -5446,30 +5446,30 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Toevoeg Timers</translation>
     </message>
 </context>
 <context>
     <name>timerWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorm</translation>
     </message>
     <message>
         <source>Add:</source>
-        <translation type="unfinished"></translation>
+        <translation>Voeg toe:</translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation>Notities...</translation>
     </message>
     <message>
         <source>At:</source>
-        <translation type="unfinished"></translation>
+        <translation>Op:</translation>
     </message>
     <message>
         <source>mins</source>
-        <translation type="unfinished"></translation>
+        <translation>min</translation>
     </message>
 </context>
 <context>
@@ -5647,15 +5647,15 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard Hoeveelheid</translation>
     </message>
     <message>
         <source>Quanta in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid in de Inventaris</translation>
     </message>
     <message>
         <source>Quanta in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid in de inventaris</translation>
     </message>
 </context>
 </TS>
