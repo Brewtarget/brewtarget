@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>ABV</source>
-        <translation>Alc (vol%)</translation>
+        <translation>ABV (%)</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -346,7 +346,7 @@
     </message>
     <message>
         <source>WK</source>
-        <translation>WK</translation>
+        <translation>°WK</translation>
     </message>
     <message>
         <source>Lintner</source>
@@ -1875,7 +1875,7 @@
     </message>
     <message>
         <source>WK</source>
-        <translation>WK</translation>
+        <translation>°WK</translation>
     </message>
 </context>
 <context>
@@ -2381,7 +2381,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>Alc (vol%)</translation>
+        <translation>ABV (%)</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3281,7 +3281,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>Alc (vol%)</translation>
+        <translation>ABV (%)</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -3724,7 +3724,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>Alc (vol%)</translation>
+        <translation>ABV (%)</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
@@ -4605,7 +4605,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation>Plato(massa percentage van sucrose equivalent)</translation>
+        <translation>Plato (massa percentage van sucrose equivalent)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
@@ -4715,7 +4715,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
           &lt;br&gt;&lt;br&gt;
          Of, zou u een vertaling willen verbeteren? Help ons en
        &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
-     lever een vertaling&lt;/a&gt; zo dat uw vrienden brewtarget kunnen gebruiken!
+     lever een vertaling&lt;/a&gt; zodat uw vrienden brewtarget kunnen gebruiken!
      &lt;/qt&gt;</translation>
     </message>
     <message>
@@ -5156,7 +5156,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>ABV</source>
-        <translation>Alc (vol%)</translation>
+        <translation>ABV (%)</translation>
     </message>
     <message>
         <source>ABW</source>
