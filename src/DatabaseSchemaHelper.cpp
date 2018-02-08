@@ -223,6 +223,7 @@ QString DatabaseSchemaHelper::colMashStepNumber("step_number");
 // Brewnotes table
 QString DatabaseSchemaHelper::tableBrewnote("brewnote");
 QString DatabaseSchemaHelper::colBNoteBrewDate("brewDate");
+QString DatabaseSchemaHelper::colBNoteAttenuation("attenuation");
 QString DatabaseSchemaHelper::colBNoteFermentDate("fermentDate");
 QString DatabaseSchemaHelper::colBNoteSg("sg");
 QString DatabaseSchemaHelper::colBNoteBkVolume("volume_into_bk");
@@ -1056,6 +1057,7 @@ bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
       colBNoteBrewDate        + SEP + TYPEDATETIME + SEP + DEFAULT + SEP + THENOW + COMMA +
       colBNoteFermentDate     + SEP + TYPEDATETIME + SEP + DEFAULT + SEP + THENOW + COMMA +
       colBNoteSg              + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
+      colBNoteAttenuation     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
       colBNoteBkVolume        + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
       colBNoteStrikeTemp      + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
       colBNoteFinalMashTemp   + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "67.0" + COMMA +

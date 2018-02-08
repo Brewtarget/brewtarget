@@ -2628,6 +2628,11 @@ void Database::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    bNode.appendChild(tmpElement);
 
+   tmpElement = doc.createElement("ATTENUATION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->attenuation()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
    tmpElement = doc.createElement("PROJECTED_BOIL_GRAV");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->projBoilGrav()));
    tmpElement.appendChild(tmpText);
