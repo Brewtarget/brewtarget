@@ -40,6 +40,7 @@ bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left,
    double leftDouble, rightDouble;
 
    Unit* unit = Units::kilograms;
+   Unit* colorunit = Units::srm;
 
    switch( left.column() )
    {
@@ -67,8 +68,8 @@ bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left,
          else
             return leftDouble < rightDouble;
       case FERMCOLORCOL:
-         leftDouble = toDouble(leftFermentable);
-         rightDouble = toDouble(rightFermentable);
+         leftDouble = Brewtarget::qStringToSI(leftFermentable.toString(),colorunit);
+         rightDouble = Brewtarget::qStringToSI(rightFermentable.toString(),colorunit);
 
          if (leftDouble == rightDouble)
             return getName(right) < getName(left);
