@@ -243,6 +243,7 @@ private:
    
    // Brewnote table
    static QString tableBrewnote;
+   static QString colBNoteAttenuation;
    static QString colBNoteBrewDate;
    static QString colBNoteFermentDate;
    static QString colBNoteSg;

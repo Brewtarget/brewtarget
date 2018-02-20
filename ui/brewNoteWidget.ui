@@ -706,6 +706,40 @@
                </property>
               </widget>
              </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="btLabel_yeastProjAtten">
+               <property name="statusTip">
+                <string>Yeast attenuation based on yeast specified in recipe</string>
+               </property>
+               <property name="text">
+                <string>Projected yeast attenuation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="BtDigitWidget" name="lcdnumber_projAtten">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="btLabel_yeastAtten">
+               <property name="statusTip">
+                <string>Yeast attentuation based on user-reported OG and FG</string>
+               </property>
+               <property name="text">
+                <string>Measured yeast attenuation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="BtDigitWidget" name="lcdnumber_atten">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>
