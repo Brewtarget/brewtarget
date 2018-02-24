@@ -27,7 +27,7 @@
 #include <QDebug>
 #include <QSqlError>
 
-const int DatabaseSchemaHelper::dbVersion = 6;
+const int DatabaseSchemaHelper::dbVersion = 7;
 
 // Commands and keywords
 QString DatabaseSchemaHelper::CREATETABLE("CREATE TABLE");
@@ -459,6 +459,9 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
          break;
       case 5:
          ret &= migrate_to_6(q);
+         break;
+      case 6:
+         ret &= migrate_to_7(q);
          break;
       default:
          Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
@@ -1556,6 +1559,18 @@ bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q) {
    ret &= insert_meta(q,tableHopInventory,  Brewtarget::HOPINVTABLE);
    ret &= insert_meta(q,tableMiscInventory, Brewtarget::MISCINVTABLE);
    ret &= insert_meta(q,tableYeastInventory,Brewtarget::YEASTINVTABLE);
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q) {
+   bool ret = true;
+
+   // Add "attenuation" to brewnote table
+   ret &= q.exec(
+      ALTERTABLE + SEP + tableBrewnote + SEP +
+      ADDCOLUMN + SEP + "attenuation" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"
+   );
 
    return ret;
 }

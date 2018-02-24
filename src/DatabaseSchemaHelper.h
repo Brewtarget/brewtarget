@@ -429,5 +429,5 @@ private:
    static bool migrate_to_4(QSqlQuery q);
    static bool migrate_to_5(QSqlQuery q);
    static bool migrate_to_6(QSqlQuery q);
-   
+   static bool migrate_to_7(QSqlQuery q);
 };
