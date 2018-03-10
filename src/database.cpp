@@ -781,6 +781,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 
    }
 
+   rec->recalcAll();
    sqlDatabase().commit();
 
    q.finish();
@@ -2624,6 +2625,11 @@ void Database::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
 
    tmpElement = doc.createElement("ACTUAL_ABV");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->abv()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("ATTENUATION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->attenuation()));
    tmpElement.appendChild(tmpText);
    bNode.appendChild(tmpElement);
 

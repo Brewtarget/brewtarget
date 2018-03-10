@@ -49,7 +49,7 @@ public:
    void setPlainText( const QString& text);
 
 public slots:
-   void textChanged();
+   void setTextChanged();
 
 signals:
    void textModified();

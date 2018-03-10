@@ -27,7 +27,6 @@
         - qt5-default
         - libqt5sql5-psql
         - libqt5svg5-dev
-        - libqt5webkit5-dev
         - libqt5multimedia5
         - qtmultimedia5-dev
         - qttools5-dev

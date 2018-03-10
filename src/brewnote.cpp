@@ -37,6 +37,7 @@
 #include "yeast.h"
 
 const QString kBrewDate("brewDate");
+const QString kAttenuation("attenuation");
 const QString kFermentDate("fermentDate");
 const QString kNotes("notes");
 const QString kSpecificGravity("sg");
@@ -77,6 +78,7 @@ const QString kSpecificGravityProp("sg");
 const QString kOriginalGravityProp("og");
 const QString kFinalGravityProp("fg");
 const QString kABVProp("abv");
+const QString kAttenuationProp("attenuation");
 const QString kEfficiencyIntoBoilProp("effIntoBK_pct");
 const QString kStrikeTempProp("strikeTemp_c");
 const QString kMashFinalTempProp("mashFinTemp_c");
@@ -126,6 +128,7 @@ QHash<QString,QString> BrewNote::tagToPropHash()
    propHash["PREDICTED_OG"] = kProjectedOGProp;
    propHash["BREWHOUSE_EFF"] = kBrewhouseEfficiencyProp;
    propHash["ACTUAL_ABV"] = kABVProp;
+   propHash["ATTENUATION"] = kAttenuationProp;
    propHash["PROJECTED_BOIL_GRAV"] = kProjectedBoilGravityProp;
    propHash["PROJECTED_STRIKE_TEMP"] = kProjectedStrikeTempProp;
    propHash["PROJECTED_MASH_FIN_TEMP"] = kProjectedMashFinishTempProp;
@@ -328,6 +331,7 @@ void BrewNote::setOg(double var)
    calculateBrewHouseEff_pct();
    calculateABV_pct();
    calculateActualABV_pct();
+   calculateAttenuation_pct();
 }
 
 void BrewNote::setVolumeIntoFerm_l(double var)
@@ -348,6 +352,7 @@ void BrewNote::setFg(double var)
       return;
 
    calculateActualABV_pct();
+   calculateAttenuation_pct();
 }
 
 // This one is a bit of an odd ball. We need to convert to pure glucose points
@@ -389,6 +394,11 @@ void BrewNote::setProjFermPoints(double var)
 void BrewNote::setABV(double var)
 {
    set(kABVProp, kABV, var);
+}
+
+void BrewNote::setAttenuation(double var)
+{
+   set(kAttenuationProp, kAttenuation, var);
 }
 
 void BrewNote::setEffIntoBK_pct(double var)
@@ -525,6 +535,11 @@ double BrewNote::sg() const
 double BrewNote::abv() const
 {
    return get(kABV).toDouble();
+}
+
+double BrewNote::attenuation() const
+{
+    return get(kAttenuation).toDouble();
 }
 
 double BrewNote::volumeIntoBK_l() const
@@ -742,3 +757,13 @@ double BrewNote::calculateActualABV_pct()
    return abv;
 }
 
+double BrewNote::calculateAttenuation_pct()
+{
+    // Calculate measured attenuation based on user-reported values for
+    // post-boil OG and post-ferment FG
+    double attenuation = ((og() - fg()) / (og() - 1)) * 100;
+
+    setAttenuation(attenuation);
+
+    return attenuation;
+}
