@@ -81,6 +81,7 @@ private:
    double waterFromMash_l();
    bool heating();
    double boilingTemp_c();
+   double bound_temp_c(double temp_c);
 
    // I have developed a distaste for "getBlah"
    double selectedAmount_l();

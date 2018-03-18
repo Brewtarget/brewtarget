@@ -150,13 +150,8 @@ void MashDesigner::saveStep()
    MashStep::Type type = static_cast<MashStep::Type>(comboBox_type->currentIndex());
    double temp = lineEdit_temp->toSI();
 
-   // TODO: Make this test actually check for the max/min *achievable*
-   // temperature. The max target temp must always be (often much) lower
-   // than the max temperature of water to add...
-   if (heating())
-      temp = std::min(temp, maxTemp_c());
-   else
-      temp = std::max(temp, minTemp_c());
+   // Bound the target temperature to what can be achieved
+   temp = bound_temp_c(temp);
 
    mashStep->setName( lineEdit_name->text() );
    mashStep->setType( type );
@@ -202,6 +197,12 @@ double MashDesigner::maxTemp_c()
 double MashDesigner::minTemp_c()
 {
    return (heating())? tempFromVolume_c(maxAmt_l()) : 0.0;
+}
+
+double MashDesigner::bound_temp_c(double temp_c)
+{
+   // Returns the closest achievable temperature to temp_c
+   return (heating()) ? std::min(temp_c, maxTemp_c()) : std::max(temp_c, minTemp_c());
 }
 
 // The mash volume up to and not including the step currently being edited.
@@ -410,7 +411,7 @@ void MashDesigner::updateFullness()
 double MashDesigner::waterFromMash_l()
 {
    double waterAdded_l = mash->totalMashWater_l();
-   double absorption_lKg, amt;
+   double absorption_lKg;
 
    if ( recObs == 0 )
       return 0.0;
@@ -420,9 +421,7 @@ double MashDesigner::waterFromMash_l()
    else
       absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
 
-   amt = (waterAdded_l - absorption_lKg * recObs->grainsInMash_kg());
-   
-   return amt;
+   return (waterAdded_l - absorption_lKg * recObs->grainsInMash_kg());
 }
 
 void MashDesigner::updateCollectedWort()
@@ -575,10 +574,7 @@ void MashDesigner::saveTargetTemp()
 {
    double temp = stepTemp_c();
 
-   if (heating())
-      temp = std::min(temp, maxTemp_c());
-   else
-      temp = std::max(temp, minTemp_c());
+   temp = bound_temp_c(temp);
 
    // be nice and reset the field so it displays in proper units
    lineEdit_temp->setText(temp);
