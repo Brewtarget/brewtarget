@@ -1,9 +1,10 @@
 /*
  * MashDesigner.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2017
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Jonathon Harding <github@jrhardin.net>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,14 +147,11 @@ bool MashDesigner::nextStep(int step)
 
 void MashDesigner::saveStep()
 {
-   double temp,maxT;
-
    MashStep::Type type = static_cast<MashStep::Type>(comboBox_type->currentIndex());
+   double temp = lineEdit_temp->toSI();
 
-   temp = lineEdit_temp->toSI();
-   maxT = maxTemp_c();
-   if ( temp > maxT ) 
-      temp = maxT;
+   // Bound the target temperature to what can be achieved
+   temp = bound_temp_c(temp);
 
    mashStep->setName( lineEdit_name->text() );
    mashStep->setType( type );
@@ -166,8 +164,6 @@ void MashDesigner::saveStep()
    {
       mashStep->setInfuseAmount_l( selectedAmount_l() );
       temp = selectedTemp_c();
-      if ( temp > maxT ) 
-         temp = maxT;
       mashStep->setInfuseTemp_c( temp );
    }
    emit mash->mashStepsChanged();
@@ -178,20 +174,35 @@ double MashDesigner::stepTemp_c()
    return lineEdit_temp->toSI();
 }
 
-double MashDesigner::maxTemp_c()
+bool MashDesigner::heating()
 {
-   if ( recObs && recObs->equipment())
-   {
+   // Returns true if the current step is hottern than the previous step
+   return stepTemp_c() >= ((prevStep) ? prevStep->stepTemp_c() : mash->grainTemp_c());
+}
+
+double MashDesigner::boilingTemp_c()
+{
+   // Returns the equipment boiling point if available, otherwise 100.0
+   if (recObs && recObs->equipment())
       return recObs->equipment()->boilingPoint_c();
-   }
    else
       return 100;
 }
 
+double MashDesigner::maxTemp_c()
+{
+   return (heating())? boilingTemp_c() : tempFromVolume_c(maxAmt_l());
+}
+
 double MashDesigner::minTemp_c()
 {
-   // The minimum temp depends on how much more water we can fit in the tun.
-   return tempFromVolume_c( maxAmt_l() );
+   return (heating())? tempFromVolume_c(maxAmt_l()) : 0.0;
+}
+
+double MashDesigner::bound_temp_c(double temp_c)
+{
+   // Returns the closest achievable temperature to temp_c
+   return (heating()) ? std::min(temp_c, maxTemp_c()) : std::max(temp_c, minTemp_c());
 }
 
 // The mash volume up to and not including the step currently being edited.
@@ -202,8 +213,13 @@ double MashDesigner::mashVolume_l()
 
 double MashDesigner::minAmt_l()
 {
-   // Minimum amount occurs with maximum temperature.
-   return volFromTemp_l( maxTemp_c() );
+   double minVol_l = volFromTemp_l( (heating())? maxTemp_c() : minTemp_c() );
+   
+   // Sanity checks
+   // TODO: If minVol_l > maxAmt_l(), change the target temp?
+   minVol_l = std::min(minVol_l, maxAmt_l());
+   
+   return minVol_l;
 }
 
 // However much more we can add at this step.
@@ -238,7 +254,6 @@ double MashDesigner::volFromTemp_l( double temp_c )
 
    double tw = temp_c;
    // Final temp is target temp.
-   // double tf = mashStep->stepTemp_c();
    double tf = stepTemp_c();
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
    double t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c();
@@ -246,6 +261,9 @@ double MashDesigner::volFromTemp_l( double temp_c )
    double ct = mash->tunWeight_kg();
 
    double mw = 1/(HeatCalculations::Cw_calGC * (tw-tf)) * (MC*(tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->tunTemp_c()) : 0) );
+
+   // Sanity check for unlikely edge cases
+   mw = std::max(0., mw);
 
    // NOTE: This needs to be changed. Assumes 1L of water is 1 kg.
    return mw;
@@ -264,7 +282,6 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    else
       absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
 
-   // double tf = mashStep->stepTemp_c();
    double tf = stepTemp_c();
 
    // NOTE: This needs to be changed. Assumes 1L = 1 kg.
@@ -285,6 +302,10 @@ double MashDesigner::tempFromVolume_c( double vol_l )
                     + mash->tunWeight_kg() * mash->tunSpecificHeat_calGC();
 
    double tw = 1/(mw*cw) * ( (isSparge()? batchMC : MC) * (tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->tunTemp_c()) : 0) ) + tf;
+   
+   // Sanity check this value
+   tw = std::min( tw, boilingTemp_c() );  // Can't add water above boiling
+   tw = std::max( tw, 0.0 );  // (Probably) won't add water below freezing
 
    return tw;
 }
@@ -433,19 +454,12 @@ void MashDesigner::updateMaxAmt()
 
 void MashDesigner::updateMinTemp()
 {
-   double minTemp = minTemp_c();
-
-   if ( minTemp > 100 )
-      minTemp = maxTemp_c();
-
-   label_tempMin->setText(Brewtarget::displayAmount(minTemp, Units::celsius));
+   label_tempMin->setText(Brewtarget::displayAmount(minTemp_c(), Units::celsius));
 }
 
 void MashDesigner::updateMaxTemp()
 {
-   double maxTemp = maxTemp_c();
-
-   label_tempMax->setText(Brewtarget::displayAmount(maxTemp, Units::celsius));
+   label_tempMax->setText(Brewtarget::displayAmount(maxTemp_c(), Units::celsius));
 }
 
 double MashDesigner::selectedAmount_l()
@@ -559,10 +573,8 @@ void MashDesigner::updateTemp()
 void MashDesigner::saveTargetTemp()
 {
    double temp = stepTemp_c();
-   double maxT = maxTemp_c();
 
-   if ( temp > maxT ) 
-      temp = maxT;
+   temp = bound_temp_c(temp);
 
    // be nice and reset the field so it displays in proper units
    lineEdit_temp->setText(temp);
@@ -584,6 +596,9 @@ void MashDesigner::saveTargetTemp()
    updateMaxAmt();
    updateMinTemp();
    updateMaxTemp();
+   updateAmt();
+   updateTempSlider();
+   updateTemp();
    updateFullness();
    updateCollectedWort();
 }
