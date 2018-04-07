@@ -488,7 +488,7 @@ void EquipmentEditor::retranslateUi()
    groupBox_mashTun->setTitle(tr("Mash Tun"));
    label_tunVolume->setText(tr("Volume"));
    label_tunWeight->setText(tr("Mass"));
-   label_tunSpecificHeat->setText(QApplication::translate("equipmentEditor", "Specific heat (cal/(g*K))", 0));
+   label_tunSpecificHeat->setText(QApplication::translate("equipmentEditor", "Specific heat (Cal/(g*C))", 0));
    groupBox_losses->setTitle(QApplication::translate("equipmentEditor", "Losses", 0));
    groupBox_losses->setProperty("configSection", QVariant(QApplication::translate("equipmentEditor", "equipmentEditor", 0)));
    label_trubChillerLoss->setText(QApplication::translate("equipmentEditor", "Kettle to fermenter", 0));
