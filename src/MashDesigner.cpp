@@ -62,7 +62,7 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    // Move to next step.
    connect( pushButton_next, &QAbstractButton::clicked, this, &MashDesigner::proceed );
    // Do correct calcs when the mash step type is selected.
-   connect( comboBox_type, SIGNAL(activated(int)), this, SLOT(typeChanged(int)) );
+   connect( comboBox_type, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &MashDesigner::typeChanged );
 
    // I still dislike this part. But I also need to "fix" the form
    // connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
