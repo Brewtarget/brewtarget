@@ -404,11 +404,12 @@ bool Brewtarget::initialize(const QString &userDirectory)
       userDataDir = QDir(userDirectory).canonicalPath();
    }
    // Use directory from app settings.
-   else if (hasOption("user_data_dir")) {
+   else if (hasOption("user_data_dir") && QDir(option("user_data_dir","").toString()).exists()) {
       userDataDir = QDir(option("user_data_dir","").toString()).canonicalPath();
    }
    // Guess where to put it.
    else {
+      logW(QString("User data directory not specified or doesn't exist - using default."));
       userDataDir = getConfigDir();
    }
 
