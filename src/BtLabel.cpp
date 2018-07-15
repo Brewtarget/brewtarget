@@ -246,6 +246,6 @@ BtDiastaticPowerLabel::BtDiastaticPowerLabel(QWidget *parent)
 }
 
 BtLengthLabel::BtLengthLabel(QWidget *parent)
-   : BtLabel(parent,VOLUME)
+   : BtLabel(parent,LENGTH)
 {
 }
