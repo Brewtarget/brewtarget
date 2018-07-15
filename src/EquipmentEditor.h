@@ -115,9 +115,7 @@ public:
    QGroupBox *groupBox_mashTun;
    QFormLayout *formLayout_mashTun;
    BtVolumeLabel *label_tunVolume;
-   BtLengthLabel *label_tunDiameter;
    BtVolumeEdit *lineEdit_tunVolume;
-   BtLengthEdit *lineEdit_tunDiameter;
    BtMassLabel *label_tunWeight;
    BtMassEdit *lineEdit_tunWeight;
    QLabel *label_tunSpecificHeat;
@@ -138,6 +136,12 @@ public:
    QPushButton *pushButton_new;
    QPushButton *pushButton_save;
    QPushButton *pushButton_cancel;
+   BtLengthLabel *label_tunDiameter;
+   BtLengthEdit *lineEdit_tunDiameter;
+   QLabel *label_hopEstWhirlpool;
+   QCheckBox *checkBox_hopEstWhirlpool;
+   BtTimeLabel *label_whirlpoolTime;
+   BtTimeEdit *lineEdit_whirlpoolTime;
    //! @}
 
    //! Edit the given equipment.
@@ -165,7 +169,8 @@ public slots:
    void updateCheckboxRecord();
    //! \brief set the default equipment, or unset the current equipment as the default
    void updateDefaultEquipment(int state);
-
+   //! \brief enable or not hop estimation for whirlpool
+   void updateHopEstWhirlpool();
    void changed(QMetaProperty,QVariant);
 
    double calcBatchSize();

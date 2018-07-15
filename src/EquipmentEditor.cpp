@@ -88,6 +88,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    // Check boxen
    connect(checkBox_calcBoilVolume, &QCheckBox::stateChanged, this, &EquipmentEditor::updateCheckboxRecord);
    connect(checkBox_defaultEquipment, &QCheckBox::stateChanged, this, &EquipmentEditor::updateDefaultEquipment);
+   connect(checkBox_hopEstWhirlpool, &QCheckBox::stateChanged, this, &EquipmentEditor::updateHopEstWhirlpool);
 
    // Labels
    connect(label_boilSize, &BtLabel::labelChanged, lineEdit_boilSize, &BtLineEdit::lineChanged);
@@ -102,6 +103,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(label_topUpKettle, &BtLabel::labelChanged, lineEdit_topUpKettle, &BtLineEdit::lineChanged);
    connect(label_boilTime, &BtLabel::labelChanged, lineEdit_boilTime, &BtLineEdit::lineChanged);
    connect(label_tunDiameter, &BtLabel::labelChanged, lineEdit_tunDiameter, &BtLineEdit::lineChanged);
+   connect(label_whirlpoolTime, &BtLabel::labelChanged, lineEdit_whirlpoolTime, &BtLineEdit::lineChanged);
 
    QMetaObject::connectSlotsByName(this);
 
@@ -352,6 +354,24 @@ void EquipmentEditor::doLayout()
                      lineEdit_tunSpecificHeat->setMinimumSize(QSize(100, 0));
                      lineEdit_tunSpecificHeat->setMaximumSize(QSize(100, 16777215));
                      lineEdit_tunSpecificHeat->setProperty("editField", QVariant(QStringLiteral("tunSpecificHeat_calGC")));
+                  label_hopEstWhirlpool = new QLabel(groupBox_required);
+                     label_hopEstWhirlpool->setObjectName(QStringLiteral("label_hopEstWhirlpool"));
+                     sizePolicy1.setHeightForWidth(label_hopEstWhirlpool->sizePolicy().hasHeightForWidth());
+                     label_hopEstWhirlpool->setSizePolicy(sizePolicy1);
+                  checkBox_hopEstWhirlpool = new QCheckBox(groupBox_required);
+                     checkBox_hopEstWhirlpool->setObjectName(QStringLiteral("checkBox_hopEstWhirlpool"));
+                  label_whirlpoolTime = new BtTimeLabel(groupBox_mashTun);
+                     label_whirlpoolTime->setObjectName(QStringLiteral("label_whirlpoolTime"));
+                     sizePolicy1.setHeightForWidth(label_whirlpoolTime->sizePolicy().hasHeightForWidth());
+                     label_whirlpoolTime->setSizePolicy(sizePolicy1);
+                     label_whirlpoolTime->setContextMenuPolicy(Qt::CustomContextMenu);
+                  lineEdit_whirlpoolTime = new BtTimeEdit(groupBox_mashTun);
+                     lineEdit_whirlpoolTime->setObjectName(QStringLiteral("lineEdit_whirlpoolTime"));
+                     sizePolicy2.setHeightForWidth(lineEdit_whirlpoolTime->sizePolicy().hasHeightForWidth());
+                     lineEdit_whirlpoolTime->setSizePolicy(sizePolicy2);
+                     lineEdit_whirlpoolTime->setMinimumSize(QSize(100, 0));
+                     lineEdit_whirlpoolTime->setMaximumSize(QSize(100, 16777215));
+                     lineEdit_whirlpoolTime->setProperty("editField", QVariant(QStringLiteral("whirlpoolTime_min")));
                   formLayout_mashTun->setWidget(0, QFormLayout::LabelRole, label_tunVolume);
                   formLayout_mashTun->setWidget(0, QFormLayout::FieldRole, lineEdit_tunVolume);
                   formLayout_mashTun->setWidget(1, QFormLayout::LabelRole, label_tunDiameter);
@@ -360,6 +380,10 @@ void EquipmentEditor::doLayout()
                   formLayout_mashTun->setWidget(2, QFormLayout::FieldRole, lineEdit_tunWeight);
                   formLayout_mashTun->setWidget(3, QFormLayout::LabelRole, label_tunSpecificHeat);
                   formLayout_mashTun->setWidget(3, QFormLayout::FieldRole, lineEdit_tunSpecificHeat);
+                  formLayout_mashTun->setWidget(4, QFormLayout::LabelRole, label_hopEstWhirlpool);
+                  formLayout_mashTun->setWidget(4, QFormLayout::FieldRole, checkBox_hopEstWhirlpool);
+                  formLayout_mashTun->setWidget(5, QFormLayout::LabelRole, label_whirlpoolTime);
+                  formLayout_mashTun->setWidget(5, QFormLayout::FieldRole, lineEdit_whirlpoolTime);
             groupBox_losses = new QGroupBox(this);
                groupBox_losses->setProperty("configSection", QVariant(QStringLiteral("equipmentEditor")));
                formLayout_losses = new QFormLayout(groupBox_losses);
@@ -451,6 +475,7 @@ void EquipmentEditor::doLayout()
    label_tunSpecificHeat->setBuddy(lineEdit_tunSpecificHeat);
    label_trubChillerLoss->setBuddy(lineEdit_trubChillerLoss);
    label_lauterDeadspace->setBuddy(lineEdit_lauterDeadspace);
+   label_whirlpoolTime->setBuddy(lineEdit_whirlpoolTime);
 #endif // QT_NO_SHORTCUT
 
    QWidget::setTabOrder(equipmentComboBox, pushButton_remove);
@@ -471,7 +496,9 @@ void EquipmentEditor::doLayout()
    QWidget::setTabOrder(lineEdit_tunVolume, lineEdit_tunDiameter);
    QWidget::setTabOrder(lineEdit_tunDiameter, lineEdit_tunWeight);
    QWidget::setTabOrder(lineEdit_tunWeight, lineEdit_tunSpecificHeat);
-   QWidget::setTabOrder(lineEdit_tunSpecificHeat, lineEdit_trubChillerLoss);
+   QWidget::setTabOrder(lineEdit_tunSpecificHeat, checkBox_hopEstWhirlpool);
+   QWidget::setTabOrder(checkBox_hopEstWhirlpool, lineEdit_whirlpoolTime);
+   QWidget::setTabOrder(lineEdit_whirlpoolTime, lineEdit_trubChillerLoss);
    QWidget::setTabOrder(lineEdit_trubChillerLoss, lineEdit_lauterDeadspace);
    QWidget::setTabOrder(lineEdit_lauterDeadspace, textEdit_notes);
    QWidget::setTabOrder(textEdit_notes, pushButton_new);
@@ -507,6 +534,8 @@ void EquipmentEditor::retranslateUi()
    label_tunDiameter->setText(tr("Diameter"));
    label_tunWeight->setText(tr("Mass"));
    label_tunSpecificHeat->setText(QApplication::translate("equipmentEditor", "Specific heat (Cal/(g*C))", 0));
+   label_hopEstWhirlpool->setText(tr("Hop utilization in whirlpool"));
+   label_whirlpoolTime->setText(tr("Whirlpool time (above 85C)"));
    groupBox_losses->setTitle(QApplication::translate("equipmentEditor", "Losses", 0));
    groupBox_losses->setProperty("configSection", QVariant(QApplication::translate("equipmentEditor", "equipmentEditor", 0)));
    label_trubChillerLoss->setText(QApplication::translate("equipmentEditor", "Kettle to fermenter", 0));
@@ -526,8 +555,10 @@ void EquipmentEditor::retranslateUi()
    lineEdit_topUpKettle->setToolTip(tr("How much water is added to kettle immediately pre-boil"));
    lineEdit_topUpWater->setToolTip(tr("Water added to fermenter"));
    lineEdit_tunVolume->setToolTip(tr("Volume of mash tun"));
-   lineEdit_tunDiameter->setToolTip(tr("Diameter of mash tun"));
+   lineEdit_tunDiameter->setToolTip(tr("Diameter of mash tun (only required for whirlpool time)"));
    lineEdit_tunWeight->setToolTip(tr("Mass or weight of mash tun"));
+   checkBox_hopEstWhirlpool->setToolTip(tr("If checked, the whirlpool time will be considered in IBU calculation"));
+   lineEdit_whirlpoolTime->setToolTip(tr("Whirlpool time to be considered in IBU calculation"));
    lineEdit_trubChillerLoss->setToolTip(tr("Wort lost between kettle and fermenter"));
    lineEdit_lauterDeadspace->setToolTip(tr("Volume of wort lost to lauter deadspace"));
    pushButton_new->setToolTip(tr("New equipment"));
@@ -573,6 +604,8 @@ void EquipmentEditor::clear()
    lineEdit_tunDiameter->setText(QString(""));
    lineEdit_tunWeight->setText(QString(""));
    lineEdit_tunSpecificHeat->setText(QString(""));
+   checkBox_hopEstWhirlpool->setCheckState( Qt::Unchecked );
+   lineEdit_whirlpoolTime->setText(QString(""));
 
    lineEdit_boilTime->setText(QString(""));
    lineEdit_evaporationRate->setText(QString(""));
@@ -670,9 +703,9 @@ void EquipmentEditor::save()
    obsEquip->setBatchSize_l( lineEdit_batchSize->toSI() );
    obsEquip->setTunVolume_l( lineEdit_tunVolume->toSI() );
    obsEquip->setTunDiameter_cm( lineEdit_tunDiameter->toSI() );
-
    obsEquip->setTunWeight_kg( lineEdit_tunWeight->toSI() );
-
+   obsEquip->setHopEstWhirlpool(checkBox_hopEstWhirlpool->checkState() == Qt::Checked );
+   obsEquip->setWhirlpoolTime_min( lineEdit_whirlpoolTime->toSI() );
    obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->toSI() );
    obsEquip->setBoilTime_min( lineEdit_boilTime->toSI());
    obsEquip->setEvapRate_lHr(  lineEdit_evaporationRate->toSI() );
@@ -769,6 +802,11 @@ void EquipmentEditor::showChanges()
    lineEdit_tunDiameter->setText(e);
    lineEdit_tunWeight->setText(e);
    lineEdit_tunSpecificHeat->setText(e);
+   checkBox_calcBoilVolume->blockSignals(true);
+   checkBox_hopEstWhirlpool->setCheckState( (e->hopEstWhirlpool())? Qt::Checked : Qt::Unchecked );
+   checkBox_calcBoilVolume->blockSignals(false);
+   lineEdit_whirlpoolTime->setText(e);
+   updateHopEstWhirlpool();
 
    lineEdit_boilTime->setText(e);
    lineEdit_evaporationRate->setText(e);
@@ -804,6 +842,11 @@ void EquipmentEditor::updateCheckboxRecord()
       lineEdit_boilSize->setEnabled(false);
    }
    else lineEdit_boilSize->setEnabled(true);
+}
+
+void EquipmentEditor::updateHopEstWhirlpool()
+{
+  lineEdit_whirlpoolTime->setEnabled(  checkBox_hopEstWhirlpool->checkState() == Qt::Checked );
 }
 
 double EquipmentEditor::calcBatchSize()
