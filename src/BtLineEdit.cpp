@@ -409,3 +409,9 @@ BtDiastaticPowerEdit::BtDiastaticPowerEdit(QWidget *parent)
    _units = Units::lintner;
 }
 
+BtLengthEdit::BtLengthEdit(QWidget *parent)
+   : BtLineEdit(parent,Unit::Volume)
+{
+   _units = Units::cm;
+}
+

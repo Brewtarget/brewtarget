@@ -126,6 +126,9 @@ void BtLabel::initializeMenu()
       case DIASTATIC_POWER:
          _menu = Brewtarget::setupDiastaticPowerMenu(btParent,unit);
          break;
+      case LENGTH:
+         _menu = Brewtarget::setupLengthMenu(btParent,unit);;
+         break;
       default:
          return;
    }
@@ -239,5 +242,10 @@ BtVolumeLabel::BtVolumeLabel(QWidget *parent)
 
 BtDiastaticPowerLabel::BtDiastaticPowerLabel(QWidget *parent)
    : BtLabel(parent,DIASTATIC_POWER)
+{
+}
+
+BtLengthLabel::BtLengthLabel(QWidget *parent)
+   : BtLabel(parent,VOLUME)
 {
 }

@@ -40,6 +40,7 @@ public:
     * \param wort_grav in specific gravity at around 60F I guess.
     * \param minutes - minutes that the hops are in the boil
     */
+   static double getIbusForWhirlpool(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
    static double getIbus(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
 private:
    static double tinseth(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);

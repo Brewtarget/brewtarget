@@ -116,6 +116,9 @@ private:
    static QString colEquipRealEvapRate;
    static QString colEquipBoilingPoint;
    static QString colEquipAbsorption;
+   static QString colEquipTunDiameter;
+   static QString colEquipWhirlpoolTime;
+   static QString colEquipHopEstWhirlpool;
    
    // Fermentable table
    static QString tableFermentable;
@@ -430,4 +433,5 @@ private:
    static bool migrate_to_5(QSqlQuery q);
    static bool migrate_to_6(QSqlQuery q);
    static bool migrate_to_7(QSqlQuery q);
+   static bool migrate_to_8(QSqlQuery q);
 };

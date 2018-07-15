@@ -101,6 +101,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(label_trubChillerLoss, &BtLabel::labelChanged, lineEdit_trubChillerLoss, &BtLineEdit::lineChanged);
    connect(label_topUpKettle, &BtLabel::labelChanged, lineEdit_topUpKettle, &BtLineEdit::lineChanged);
    connect(label_boilTime, &BtLabel::labelChanged, lineEdit_boilTime, &BtLineEdit::lineChanged);
+   connect(label_tunDiameter, &BtLabel::labelChanged, lineEdit_tunDiameter, &BtLineEdit::lineChanged);
 
    QMetaObject::connectSlotsByName(this);
 
@@ -316,6 +317,18 @@ void EquipmentEditor::doLayout()
                      lineEdit_tunVolume->setMinimumSize(QSize(100, 0));
                      lineEdit_tunVolume->setMaximumSize(QSize(100, 16777215));
                      lineEdit_tunVolume->setProperty("editField", QVariant(QStringLiteral("tunVolume_l")));
+                  label_tunDiameter = new BtLengthLabel(groupBox_mashTun);
+                     label_tunDiameter->setObjectName(QStringLiteral("label_tunDiameter"));
+                     sizePolicy1.setHeightForWidth(label_tunDiameter->sizePolicy().hasHeightForWidth());
+                     label_tunDiameter->setSizePolicy(sizePolicy1);
+                     label_tunDiameter->setContextMenuPolicy(Qt::CustomContextMenu);
+                  lineEdit_tunDiameter = new BtLengthEdit(groupBox_mashTun);
+                     lineEdit_tunDiameter->setObjectName(QStringLiteral("lineEdit_tunDiameter"));
+                     sizePolicy2.setHeightForWidth(lineEdit_tunDiameter->sizePolicy().hasHeightForWidth());
+                     lineEdit_tunDiameter->setSizePolicy(sizePolicy2);
+                     lineEdit_tunDiameter->setMinimumSize(QSize(100, 0));
+                     lineEdit_tunDiameter->setMaximumSize(QSize(100, 16777215));
+                     lineEdit_tunDiameter->setProperty("editField", QVariant(QStringLiteral("tunDiameter_cm")));
                   label_tunWeight = new BtMassLabel(groupBox_mashTun);
                      label_tunWeight->setObjectName(QStringLiteral("label_tunWeight"));
                      sizePolicy1.setHeightForWidth(label_tunWeight->sizePolicy().hasHeightForWidth());
@@ -341,10 +354,12 @@ void EquipmentEditor::doLayout()
                      lineEdit_tunSpecificHeat->setProperty("editField", QVariant(QStringLiteral("tunSpecificHeat_calGC")));
                   formLayout_mashTun->setWidget(0, QFormLayout::LabelRole, label_tunVolume);
                   formLayout_mashTun->setWidget(0, QFormLayout::FieldRole, lineEdit_tunVolume);
-                  formLayout_mashTun->setWidget(1, QFormLayout::LabelRole, label_tunWeight);
-                  formLayout_mashTun->setWidget(1, QFormLayout::FieldRole, lineEdit_tunWeight);
-                  formLayout_mashTun->setWidget(2, QFormLayout::LabelRole, label_tunSpecificHeat);
-                  formLayout_mashTun->setWidget(2, QFormLayout::FieldRole, lineEdit_tunSpecificHeat);
+                  formLayout_mashTun->setWidget(1, QFormLayout::LabelRole, label_tunDiameter);
+                  formLayout_mashTun->setWidget(1, QFormLayout::FieldRole, lineEdit_tunDiameter);
+                  formLayout_mashTun->setWidget(2, QFormLayout::LabelRole, label_tunWeight);
+                  formLayout_mashTun->setWidget(2, QFormLayout::FieldRole, lineEdit_tunWeight);
+                  formLayout_mashTun->setWidget(3, QFormLayout::LabelRole, label_tunSpecificHeat);
+                  formLayout_mashTun->setWidget(3, QFormLayout::FieldRole, lineEdit_tunSpecificHeat);
             groupBox_losses = new QGroupBox(this);
                groupBox_losses->setProperty("configSection", QVariant(QStringLiteral("equipmentEditor")));
                formLayout_losses = new QFormLayout(groupBox_losses);
@@ -431,6 +446,7 @@ void EquipmentEditor::doLayout()
    label_hopUtilization->setBuddy(lineEdit_hopUtilization);
    label_boilingPoint->setBuddy(lineEdit_boilingPoint);
    label_tunVolume->setBuddy(lineEdit_tunVolume);
+   label_tunDiameter->setBuddy(lineEdit_tunDiameter);
    label_tunWeight->setBuddy(lineEdit_tunWeight);
    label_tunSpecificHeat->setBuddy(lineEdit_tunSpecificHeat);
    label_trubChillerLoss->setBuddy(lineEdit_trubChillerLoss);
@@ -452,7 +468,8 @@ void EquipmentEditor::doLayout()
    QWidget::setTabOrder(pushButton_absorption, lineEdit_boilingPoint);
    QWidget::setTabOrder(lineEdit_boilingPoint, lineEdit_hopUtilization);
    QWidget::setTabOrder(lineEdit_hopUtilization, lineEdit_tunVolume);
-   QWidget::setTabOrder(lineEdit_tunVolume, lineEdit_tunWeight);
+   QWidget::setTabOrder(lineEdit_tunVolume, lineEdit_tunDiameter);
+   QWidget::setTabOrder(lineEdit_tunDiameter, lineEdit_tunWeight);
    QWidget::setTabOrder(lineEdit_tunWeight, lineEdit_tunSpecificHeat);
    QWidget::setTabOrder(lineEdit_tunSpecificHeat, lineEdit_trubChillerLoss);
    QWidget::setTabOrder(lineEdit_trubChillerLoss, lineEdit_lauterDeadspace);
@@ -487,6 +504,7 @@ void EquipmentEditor::retranslateUi()
    label_boilingPoint->setText(tr("Boiling Point of Water"));
    groupBox_mashTun->setTitle(tr("Mash Tun"));
    label_tunVolume->setText(tr("Volume"));
+   label_tunDiameter->setText(tr("Diameter"));
    label_tunWeight->setText(tr("Mass"));
    label_tunSpecificHeat->setText(QApplication::translate("equipmentEditor", "Specific heat (Cal/(g*C))", 0));
    groupBox_losses->setTitle(QApplication::translate("equipmentEditor", "Losses", 0));
@@ -508,6 +526,7 @@ void EquipmentEditor::retranslateUi()
    lineEdit_topUpKettle->setToolTip(tr("How much water is added to kettle immediately pre-boil"));
    lineEdit_topUpWater->setToolTip(tr("Water added to fermenter"));
    lineEdit_tunVolume->setToolTip(tr("Volume of mash tun"));
+   lineEdit_tunDiameter->setToolTip(tr("Diameter of mash tun"));
    lineEdit_tunWeight->setToolTip(tr("Mass or weight of mash tun"));
    lineEdit_trubChillerLoss->setToolTip(tr("Wort lost between kettle and fermenter"));
    lineEdit_lauterDeadspace->setToolTip(tr("Volume of wort lost to lauter deadspace"));
@@ -551,6 +570,7 @@ void EquipmentEditor::clear()
    lineEdit_batchSize->setText(QString(""));
 
    lineEdit_tunVolume->setText(QString(""));
+   lineEdit_tunDiameter->setText(QString(""));
    lineEdit_tunWeight->setText(QString(""));
    lineEdit_tunSpecificHeat->setText(QString(""));
 
@@ -613,6 +633,11 @@ void EquipmentEditor::save()
       inform = inform + QString("<li>%1</li>").arg(tr("mash tun volume (all-grain and BIAB only)"));
    }
 
+  if ( qFuzzyCompare(lineEdit_tunDiameter->toSI(),0.0) ) {
+      problems = true;
+      inform = inform + QString("<li>%1</li>").arg(tr("mash tun diameter"));
+   }
+
    if ( qFuzzyCompare(lineEdit_batchSize->toSI(), 0.0) ) {
       problems = true;
       inform = inform + QString("<li>%1</li>").arg(tr("batch size"));
@@ -644,6 +669,7 @@ void EquipmentEditor::save()
    obsEquip->setBoilSize_l( lineEdit_boilSize->toSI() );
    obsEquip->setBatchSize_l( lineEdit_batchSize->toSI() );
    obsEquip->setTunVolume_l( lineEdit_tunVolume->toSI() );
+   obsEquip->setTunDiameter_cm( lineEdit_tunDiameter->toSI() );
 
    obsEquip->setTunWeight_kg( lineEdit_tunWeight->toSI() );
 
@@ -740,6 +766,7 @@ void EquipmentEditor::showChanges()
    lineEdit_batchSize->setText(e);
 
    lineEdit_tunVolume->setText(e);
+   lineEdit_tunDiameter->setText(e);
    lineEdit_tunWeight->setText(e);
    lineEdit_tunSpecificHeat->setText(e);
 
