@@ -48,6 +48,8 @@ class BtTimeLabel;
 class BtTimeEdit;
 class BtVolumeLabel;
 class BtVolumeEdit;
+class BtLengthLabel;
+class BtLengthEdit;
 class Equipment;
 class EquipmentListModel;
 class BeerXMLSortProxyModel;
@@ -113,7 +115,9 @@ public:
    QGroupBox *groupBox_mashTun;
    QFormLayout *formLayout_mashTun;
    BtVolumeLabel *label_tunVolume;
+   BtLengthLabel *label_tunDiameter;
    BtVolumeEdit *lineEdit_tunVolume;
+   BtLengthEdit *lineEdit_tunDiameter;
    BtMassLabel *label_tunWeight;
    BtMassEdit *lineEdit_tunWeight;
    QLabel *label_tunSpecificHeat;

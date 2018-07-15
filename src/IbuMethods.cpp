@@ -32,6 +32,11 @@ IbuMethods::~IbuMethods()
 {
 }
 
+double IbuMethods::getIbusForWhirlpool(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes)
+{
+    return AArating*hops_grams*minutes;
+}
+
 double IbuMethods::getIbus(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes)
 {
    switch( Brewtarget::ibuFormula )

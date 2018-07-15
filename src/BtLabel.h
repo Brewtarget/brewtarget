@@ -36,6 +36,7 @@ class BtDensityLabel;
 class BtMassLabel;
 class BtTemperatureLabel;
 class BtVolumeLabel;
+class BtLengthLabel;
 class BtTimeLabel;
 class BtMixedLabel;
 class BtDateLabel;
@@ -65,7 +66,8 @@ public:
       TIME,
       MIXED,
       DATE,
-      DIASTATIC_POWER
+      DIASTATIC_POWER,
+      LENGTH
    };
 
    BtLabel(QWidget* parent = 0, LabelType lType = NONE);
@@ -153,6 +155,13 @@ class BtDiastaticPowerLabel : public BtLabel
    Q_OBJECT
 public:
    BtDiastaticPowerLabel(QWidget* parent = 0);
+};
+
+class BtLengthLabel : public BtLabel
+{
+   Q_OBJECT
+public:
+   BtLengthLabel(QWidget* parent = 0);
 };
 
 #endif

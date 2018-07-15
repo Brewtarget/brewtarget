@@ -2125,6 +2125,8 @@ double Recipe::ibuFromHop(Hop const* hop)
       ibus = fwhAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime );
    else if( hop->use() == Hop::Mash && mashHopAdjust > 0.0 )
       ibus = mashHopAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime );
+   else if( hop->use() == Hop::Whirlpool )
+      ibus = IbuMethods::getIbusForWhirlpool( AArating, grams, _finalVolumeNoLosses_l, _og, minutes );
 
    // Adjust for hop form. Tinseth's table was created from whole cone data,
    // and it seems other formulae are optimized that way as well. So, the

@@ -575,6 +575,7 @@ QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
       box->addItem(tr("Boil"));
       box->addItem(tr("Aroma"));
       box->addItem(tr("Dry Hop"));
+      box->addItem(tr("Whirlpool"));
       box->setMinimumWidth(box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
