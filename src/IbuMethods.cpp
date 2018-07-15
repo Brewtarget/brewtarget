@@ -32,9 +32,30 @@ IbuMethods::~IbuMethods()
 {
 }
 
-double IbuMethods::getIbusForWhirlpool(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes)
+// https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/
+double IbuMethods::getIbusWhirlpool(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double boil_minutes, double whirlpool_minutes, double tunDiameter_cm)
 {
-    return AArating*hops_grams*minutes;
+   double integrationTime = 0.001;
+   double decimalAArating = 0.0;
+   double openingDiameter_cm = tunDiameter_cm; // for most cases, we are using an approximation
+   double dU, openingArea_cm2, temp_degK, degreeOfUtilization, effectiveArea_cm2, surfaceArea_cm2, combinedValue, b;
+
+   for (double t = boil_minutes; t < boil_minutes + whirlpool_minutes; t = t + integrationTime)
+   {
+      dU = -1.65 * pow(0.000125, (wort_grav-1.0)) * -0.04 * exp(-0.04*t) / 4.15;
+      surfaceArea_cm2 = 3.14159 * (tunDiameter_cm/2.0) * (tunDiameter_cm/2.0);
+      openingArea_cm2 = 3.14159 * (openingDiameter_cm/2.0) * (openingDiameter_cm/2.0);
+      effectiveArea_cm2 = sqrt(surfaceArea_cm2 * openingArea_cm2);
+      b = (0.0002925 * effectiveArea_cm2 / finalVolume_liters) + 0.00538;
+      temp_degK = 53.70 * exp(-1.0 * b * (t - boil_minutes)) + 319.55;
+      degreeOfUtilization = 2.39*pow(10.0,11.0)*exp(-9773.0/temp_degK);
+      if (t < 5.0)
+         degreeOfUtilization = 1.0;  // account for nonIAA components
+      combinedValue = dU * degreeOfUtilization;
+      decimalAArating = decimalAArating + (combinedValue * integrationTime);
+   }
+
+   return( (decimalAArating*AArating*hops_grams*1000) / finalVolume_liters );
 }
 
 double IbuMethods::getIbus(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes)
