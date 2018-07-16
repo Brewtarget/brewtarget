@@ -35,7 +35,7 @@ IbuMethods::~IbuMethods()
 // https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/
 double IbuMethods::getIbusWhirlpool(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double boil_minutes, double whirlpool_minutes, double tunDiameter_cm)
 {
-   double integrationTime = 0.001;
+   double integrationTime = 0.01;
    double decimalAArating = 0.0;
    double openingDiameter_cm = tunDiameter_cm; // for most cases, we are using an approximation
    double dU, openingArea_cm2, temp_degK, degreeOfUtilization, effectiveArea_cm2, surfaceArea_cm2, combinedValue, b;
