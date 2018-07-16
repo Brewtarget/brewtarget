@@ -2139,9 +2139,13 @@ double Recipe::ibuFromHop(Hop const* hop)
 
    if(hopEstWhirlpool)
    {
-      printf("Usando metodo novo\n");
-      printf("AA=%f\nGR=%f\nVL=%f\nOG=%f\nBT%f\nWT=%f\nTD%f\n",AArating, grams, _finalVolumeNoLosses_l, _og, boilTime, whirlpoolTime, tunDiameter_cm );
-      ibus += IbuMethods::getIbusWhirlpool( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime, whirlpoolTime, tunDiameter_cm );
+      if( hop->use() == Hop::Whirlpool )
+         ibus += IbuMethods::getIbusWhirlpool( AArating, grams, _finalVolumeNoLosses_l, _og, 0, whirlpoolTime, tunDiameter_cm );
+      else
+         ibus += IbuMethods::getIbusWhirlpool( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime, whirlpoolTime, tunDiameter_cm );
+      // static int v = 0;
+      // printf("Usando metodo novo\n");
+      // printf("[%d]\nAA=%f\nGR=%f\nVL=%f\nOG=%f\nBT%f\nWT=%f\nTD=%f\n",v++,AArating, grams, _finalVolumeNoLosses_l, _og, boilTime, whirlpoolTime, tunDiameter_cm );
    }
    else
    {
