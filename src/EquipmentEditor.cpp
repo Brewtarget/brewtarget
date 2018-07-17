@@ -698,13 +698,11 @@ void EquipmentEditor::save()
          return;
    }
 
+   obsEquip->blockSignals(true);
    obsEquip->setName( lineEdit_name->text() );
    obsEquip->setBoilSize_l( lineEdit_boilSize->toSI() );
    obsEquip->setBatchSize_l( lineEdit_batchSize->toSI() );
    obsEquip->setTunVolume_l( lineEdit_tunVolume->toSI() );
-   obsEquip->setTunDiameter_cm( lineEdit_tunDiameter->toSI() );
-   obsEquip->setTunWeight_kg( lineEdit_tunWeight->toSI() );
-   obsEquip->setHopEstWhirlpool(checkBox_hopEstWhirlpool->checkState() == Qt::Checked );
    obsEquip->setWhirlpoolTime_min( lineEdit_whirlpoolTime->toSI() );
    obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->toSI() );
    obsEquip->setBoilTime_min( lineEdit_boilTime->toSI());
@@ -716,9 +714,12 @@ void EquipmentEditor::save()
    obsEquip->setGrainAbsorption_LKg( ga_LKg );
    obsEquip->setBoilingPoint_c( lineEdit_boilingPoint->toSI() );
    obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->toSI() );
-
    obsEquip->setNotes(textEdit_notes->toPlainText());
    obsEquip->setCalcBoilVolume(checkBox_calcBoilVolume->checkState() == Qt::Checked);
+   obsEquip->setTunDiameter_cm( lineEdit_tunDiameter->toSI() );
+   obsEquip->setTunWeight_kg( lineEdit_tunWeight->toSI() );
+   obsEquip->blockSignals(false);
+   obsEquip->setHopEstWhirlpool(checkBox_hopEstWhirlpool->checkState() == Qt::Checked );
 
    setVisible(false);
    return;

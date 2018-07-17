@@ -368,6 +368,8 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type)
             str = tr("Put %1 %2 into mash for %3.");
          else if( type == Hop::UseAroma )
             str = tr("Steep %1 %2 in wort for %3.");
+         else if( type == Hop::Whirlpool )
+            str = tr("Put %1 %2 after flameout for %3.");
          else
          {
             Brewtarget::logW("Recipe::hopSteps(): Unrecognized hop use.");
@@ -749,11 +751,16 @@ void Recipe::generateInstructions()
    ins->setName(tr("Flameout"));
    ins->setDirections(tr("Stop boiling the wort."));
 
+   // Whirlpool hops
+   preinstructions.clear();
+   preinstructions += hopSteps(Hop::Whirlpool);
+   addPreinstructions(preinstructions);
+
    // Steeped aroma hops
    preinstructions.clear();
    preinstructions += hopSteps(Hop::UseAroma);
    addPreinstructions(preinstructions);
-   
+
    // Fermentation instructions
    preinstructions.clear();
 
