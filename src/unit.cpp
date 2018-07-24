@@ -71,7 +71,7 @@ EBCUnit* Units::ebc = new EBCUnit();
 SgUnit* Units::sp_grav = new SgUnit();
 PlatoUnit* Units::plato = new PlatoUnit();
 // == diastatic power ==
-LintnerUnit* Units::lintner = new LintnerUnit();;
+LintnerUnit* Units::lintner = new LintnerUnit();
 WKUnit* Units::wk = new WKUnit();
 // == length ==
 CmUnit* Units::cm = new CmUnit();
