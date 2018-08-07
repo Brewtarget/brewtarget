@@ -36,7 +36,7 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
 {
     QVariant leftHop = sourceModel()->data(left);
     QVariant rightHop = sourceModel()->data(right);
-    QStringList uses = QStringList() << "Dry Hop" << "Aroma" << "Boil" << "First Wort" << "Mash";
+    QStringList uses = QStringList() << "Dry Hop" << "Aroma" << "Boil" << "First Wort" << "Mash" << "Whirlpool";
     QModelIndex lSibling, rSibling;
     int lUse, rUse;
     double lAlpha, rAlpha;

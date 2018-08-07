@@ -368,6 +368,8 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type)
             str = tr("Put %1 %2 into mash for %3.");
          else if( type == Hop::UseAroma )
             str = tr("Steep %1 %2 in wort for %3.");
+         else if( type == Hop::Whirlpool )
+            str = tr("Put %1 %2 after flameout for %3.");
          else
          {
             Brewtarget::logW("Recipe::hopSteps(): Unrecognized hop use.");
@@ -749,11 +751,16 @@ void Recipe::generateInstructions()
    ins->setName(tr("Flameout"));
    ins->setDirections(tr("Stop boiling the wort."));
 
+   // Whirlpool hops
+   preinstructions.clear();
+   preinstructions += hopSteps(Hop::Whirlpool);
+   addPreinstructions(preinstructions);
+
    // Steeped aroma hops
    preinstructions.clear();
    preinstructions += hopSteps(Hop::UseAroma);
    addPreinstructions(preinstructions);
-   
+
    // Fermentation instructions
    preinstructions.clear();
 
@@ -2105,7 +2112,10 @@ double Recipe::ibuFromHop(Hop const* hop)
    // Assume 100% utilization until further notice
    double hopUtilization = 1.0;
    // Assume 60 min boil until further notice
-   int boilTime = 60;
+   double boilTime = 60;
+   double whirlpoolTime = 0;
+   double tunDiameter_cm = 35;
+   bool hopEstWhirlpool = false;
 
    // NOTE: we used to carefully calculate the average boil gravity and use it in the
    // IBU calculations. However, due to John Palmer
@@ -2117,14 +2127,30 @@ double Recipe::ibuFromHop(Hop const* hop)
    {
       hopUtilization = equip->hopUtilization_pct() / 100.0;
       boilTime = equip->boilTime_min();
+      whirlpoolTime = equip->whirlpoolTime_min();
+      hopEstWhirlpool = equip->hopEstWhirlpool();
+      tunDiameter_cm = equip->tunDiameter_cm();
    }
    
+   if( hop->use() == Hop::Boil )
+      boilTime = minutes;
+
    if( hop->use() == Hop::Boil)
-      ibus = IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, minutes );
+      ibus = IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime );
    else if( hop->use() == Hop::First_Wort )
       ibus = fwhAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime );
    else if( hop->use() == Hop::Mash && mashHopAdjust > 0.0 )
       ibus = mashHopAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime );
+   else if( hop->use() == Hop::Whirlpool )
+      ibus = 0.0;
+
+   if(hopEstWhirlpool)
+   {
+      if( hop->use() == Hop::Whirlpool )
+         ibus += IbuMethods::getIbusWhirlpool( AArating, grams, _finalVolumeNoLosses_l, _og, 0, whirlpoolTime, tunDiameter_cm );
+      else
+         ibus += IbuMethods::getIbusWhirlpool( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime, whirlpoolTime, tunDiameter_cm );
+   }
 
    // Adjust for hop form. Tinseth's table was created from whole cone data,
    // and it seems other formulae are optimized that way as well. So, the

@@ -1643,6 +1643,18 @@ QMenu* Brewtarget::setupDiastaticPowerMenu(QWidget* parent, Unit::unitDisplay un
    return menu;
 }
 
+QMenu* Brewtarget::setupLengthMenu(QWidget* parent, Unit::unitDisplay unit)
+{
+   QMenu* menu = new QMenu(parent);
+   QActionGroup* qgrp = new QActionGroup(parent);
+
+   generateAction(menu, tr("Default"), Unit::noUnit, unit, qgrp);
+   generateAction(menu, tr("cm"), Unit::displaySI, unit, qgrp);
+   generateAction(menu, tr("in"), Unit::displayUS, unit, qgrp);
+
+   return menu;
+}
+
 void Brewtarget::generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp)
 {
    QAction* action = new QAction(menu);

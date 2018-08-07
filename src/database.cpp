@@ -2739,6 +2739,21 @@ void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
 
+   tmpNode = doc.createElement("WHIRLPOOL_TIME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->whirlpoolTime_min()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("HOP_EST_WHIRLPOOL");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->hopEstWhirlpool()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("TUN_DIAMETER");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunDiameter_cm()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+
    tmpNode = doc.createElement("TUN_WEIGHT");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->tunWeight_kg()));
    tmpNode.appendChild(tmpText);
@@ -4789,6 +4804,7 @@ QList<TableParams> Database::makeTableParams()
       "tun_specific_heat" << "top_up_water" << "trub_chiller_loss" <<
       "evap_rate" << "real_evap_rate" << "boil_time" << "calc_boil_volume" <<
       "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
+      "tun_diameter" << "whirlpool_time" << "hop_est_whirlpool" <<
       "notes";
    tmp.newElement = [&]() { return this->newEquipment(); };
 
