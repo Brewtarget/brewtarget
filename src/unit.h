@@ -53,6 +53,8 @@ class PlatoUnit;
 class SgUnit;
 class LintnerUnit;
 class WKUnit;
+class CmUnit;
+class InUnit;
 
 #include <QString>
 #include <QObject>
@@ -134,6 +136,7 @@ class Unit : public QObject
          String         = 0x700000,
          Mixed          = 0x800000,
          DiastaticPower = 0x900000,
+         Length         = 0xA00000,
          None           = 0x000000
       };
 
@@ -516,6 +519,26 @@ public:
 };
 
 
+class CmUnit : public Unit
+{
+   public:
+      CmUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+};
+
+class InUnit : public Unit
+{
+   public:
+      InUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+};
+
 class Units
 {
 public:
@@ -560,6 +583,9 @@ public:
    // == diastatic power ==
    static LintnerUnit *lintner;
    static WKUnit *wk;
+   // == length
+   static CmUnit *cm;
+   static InUnit *in;
 };
 
 #endif // _UNIT_H

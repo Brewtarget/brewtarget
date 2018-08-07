@@ -27,7 +27,7 @@
 #include <QDebug>
 #include <QSqlError>
 
-const int DatabaseSchemaHelper::dbVersion = 7;
+const int DatabaseSchemaHelper::dbVersion = 8;
 
 // Commands and keywords
 QString DatabaseSchemaHelper::CREATETABLE("CREATE TABLE");
@@ -100,6 +100,9 @@ QString DatabaseSchemaHelper::colEquipNotes("notes");
 QString DatabaseSchemaHelper::colEquipRealEvapRate("real_evap_rate");
 QString DatabaseSchemaHelper::colEquipBoilingPoint("boiling_point");
 QString DatabaseSchemaHelper::colEquipAbsorption("absorption");
+QString DatabaseSchemaHelper::colEquipTunDiameter("tun_diameter");
+QString DatabaseSchemaHelper::colEquipWhirlpoolTime("whirlpool_time");
+QString DatabaseSchemaHelper::colEquipHopEstWhirlpool("hop_est_whirlpool");
 
 QString DatabaseSchemaHelper::tableFermentable("fermentable");
 QString DatabaseSchemaHelper::colFermFtype("ftype");
@@ -463,6 +466,9 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
       case 6:
          ret &= migrate_to_7(q);
          break;
+      case 7:
+         ret &= migrate_to_8(q);
+         break;
       default:
          Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
          return false;
@@ -787,7 +793,7 @@ bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
       colEquipTrubChillerLoss + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
       colEquipEvapRate        + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
       colEquipBoilTime        + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
-      colEquipCalcBoilVolume  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE    + COMMA +
+      colEquipCalcBoilVolume  + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE   + COMMA +
       colEquipLauterDeadspace + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
       colEquipTopUpKettle     + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
       colEquipHopUtilization  + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
@@ -796,6 +802,9 @@ bool DatabaseSchemaHelper::create_equipment(QSqlQuery q)
       colEquipRealEvapRate    + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "0.0"   + COMMA +
       colEquipBoilingPoint    + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "100.0" + COMMA +
       colEquipAbsorption      + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "1.085" + COMMA +
+      colEquipTunDiameter     + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "30.0"  + COMMA +
+      colEquipWhirlpoolTime   + SEP + TYPEREAL    + SEP + DEFAULT + SEP + "20.0"  + COMMA +
+      colEquipHopEstWhirlpool + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE   + COMMA +
       // Metadata
       deleted                                                                     + COMMA +
       display                                                                     + COMMA +
@@ -1570,6 +1579,30 @@ bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q) {
    ret &= q.exec(
       ALTERTABLE + SEP + tableBrewnote + SEP +
       ADDCOLUMN + SEP + "attenuation" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"
+   );
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q) {
+   bool ret = true;
+
+   // Add tun diameter, whirlpool time and hop estimation to equipment table.
+   // These new variables are useful for calculating IBU after flameout.
+
+   ret &= q.exec(
+      ALTERTABLE + SEP + tableEquipment + SEP +
+      ADDCOLUMN + SEP + "tun_diameter" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "30.0"
+   );
+
+   ret &= q.exec(
+      ALTERTABLE + SEP + tableEquipment + SEP +
+      ADDCOLUMN + SEP + "whirlpool_time" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "20.0"
+   );
+
+   ret &= q.exec(
+      ALTERTABLE + SEP + tableEquipment + SEP +
+      ADDCOLUMN + SEP + "hop_est_whirlpool" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE
    );
 
    return ret;
