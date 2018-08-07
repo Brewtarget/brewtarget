@@ -2150,13 +2150,6 @@ double Recipe::ibuFromHop(Hop const* hop)
          ibus += IbuMethods::getIbusWhirlpool( AArating, grams, _finalVolumeNoLosses_l, _og, 0, whirlpoolTime, tunDiameter_cm );
       else
          ibus += IbuMethods::getIbusWhirlpool( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime, whirlpoolTime, tunDiameter_cm );
-      // static int v = 0;
-      // printf("Usando metodo novo\n");
-      // printf("[%d]\nAA=%f\nGR=%f\nVL=%f\nOG=%f\nBT%f\nWT=%f\nTD=%f\n",v++,AArating, grams, _finalVolumeNoLosses_l, _og, boilTime, whirlpoolTime, tunDiameter_cm );
-   }
-   else
-   {
-     printf("Usando metodo antigo\n");
    }
 
    // Adjust for hop form. Tinseth's table was created from whole cone data,
