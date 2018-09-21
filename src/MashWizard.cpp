@@ -27,6 +27,7 @@
 #include "mashstep.h"
 #include "fermentable.h"
 #include <QMessageBox>
+#include <QButtonGroup>
 #include "HeatCalculations.h"
 #include "equipment.h"
 #include "PhysicalConstants.h"
@@ -164,7 +165,7 @@ void MashWizard::wizardry()
    double grainMass = 0.0, massWater = 0.0;
    double grainDensity = PhysicalConstants::grainDensity_kgL;
    double absorption_LKg;
-   double boilingPoint_c; 
+   double boilingPoint_c;
 
    // If we have an equipment, utilize the custom absorption and boiling temp.
    if( recObs->equipment() != 0 )
