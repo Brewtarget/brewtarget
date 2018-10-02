@@ -2336,6 +2336,7 @@ void MainWindow::showEquipmentEditor()
    }
    else
    {
+      singleEquipEditor->setEquipment(recipeObs->equipment());
       singleEquipEditor->show();
    }
 }
@@ -2348,6 +2349,7 @@ void MainWindow::showStyleEditor()
    }
    else
    {
+      singleStyleEditor->setStyle(recipeObs->style());
       singleStyleEditor->show();
    }
 }
