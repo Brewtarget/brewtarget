@@ -42,7 +42,6 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
    recObs = 0;
 
    connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
-   // connect( plainTextEdit, SIGNAL(textChanged()), this, SLOT(saveInstruction()) );
    connect(btTextEdit,SIGNAL(textModified()), this, SLOT(saveInstruction()));
    connect( pushButton_insert, SIGNAL(clicked()), this, SLOT(insertInstruction()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
@@ -132,7 +131,6 @@ void BrewDayScrollWidget::pushInstructionDown()
 bool BrewDayScrollWidget::loadComplete(bool ok) 
 {
    doc->print(printer);
-   disconnect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
    return ok;
 }
 
