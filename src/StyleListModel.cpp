@@ -26,7 +26,7 @@
 StyleListModel::StyleListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)
 {
-   connect( &(Database::instance()), SIGNAL(newStyleSignal(Style*)), this, SLOT(addStyle(Style*)) );
+   connect( &(Database::instance()), &Database::newStyleSignal, this, &StyleListModel::addStyle );
    connect( &(Database::instance()), SIGNAL(deletedSignal(Style*)), this, SLOT(removeStyle(Style*)) );
    repopulateList();
 }
@@ -41,7 +41,7 @@ void StyleListModel::addStyle(Style* s)
       int size = styles.size();
       beginInsertRows( QModelIndex(), size, size );
       styles.append(s);
-      connect( s, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(styleChanged(QMetaProperty,QVariant)) );
+      connect( s, &BeerXMLElement::changed, this, &StyleListModel::styleChanged );
       endInsertRows();
    }
 }
@@ -64,7 +64,7 @@ void StyleListModel::addStyles(QList<Style*> s)
       styles.append(tmp);
       
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(styleChanged(QMetaProperty,QVariant)) );
+         connect( *i, &BeerXMLElement::changed, this, &StyleListModel::styleChanged );
       
       endInsertRows();
    }

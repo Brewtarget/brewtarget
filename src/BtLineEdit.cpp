@@ -41,11 +41,11 @@ BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type) :
    _forceUnit = Unit::noUnit;
    _forceScale = Unit::noScale;
    */
-   
-   connect(this,SIGNAL(editingFinished()),this,SLOT(lineChanged()));
+    
+   connect(this,&QLineEdit::editingFinished,this,&BtLineEdit::onLineChanged);
 }
 
-void BtLineEdit::lineChanged()
+void BtLineEdit::onLineChanged()
 {
    lineChanged(Unit::noUnit,Unit::noScale);
 }
@@ -90,6 +90,10 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
          break;
       case Unit::String:
          amt = text();
+         break;
+      case Unit::DiastaticPower:
+         val = toSI(oldUnit,oldScale,force);
+         amt = displayAmount(val,3);
          break;
       case Unit::None:
       default:
@@ -142,7 +146,7 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
 
       // get the qstringToSI() from the unit system, using the found unit.
       // Force the issue in qstringToSI() unless dspScale is Unit::noScale.
-      
+
       return temp->qstringToSI(text(), works, dspScale != Unit::noScale, dspScale);
    }
    else if ( _type == Unit::String )
@@ -179,7 +183,7 @@ double BtLineEdit::toDouble(bool* ok)
 {
    QRegExp amtUnit;
 
-   if ( ok ) 
+   if ( ok )
       *ok = true;
    // Make sure we get the right decimal point (. or ,) and the right grouping
    // separator (, or .). Some locales write 1.000,10 and other write
@@ -215,12 +219,19 @@ void BtLineEdit::setText( BeerXMLElement* element, int precision )
       display = element->property(_editField.toLatin1().constData()).toString();
    else if ( element->property(_editField.toLatin1().constData()).canConvert(QVariant::Double) )
    {
-      // Get the amount
       bool ok = false;
-      QString tmp = element->property(_editField.toLatin1().constData()).toString();
-      amount = Brewtarget::toDouble(tmp, &ok);
-      if ( !ok )
-         Brewtarget::logW( QString("%1 could not convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(tmp).arg(_section).arg(_editField) );
+      // Get the value from the element, and put it in a QVariant
+      QVariant tmp = element->property(_editField.toLatin1().constData());
+      // It is important here to use QVariant::toDouble() instead of going
+      // through toString() and then Brewtarget::toDouble().
+      amount = tmp.toDouble(&ok);
+      if ( !ok ) {
+         Brewtarget::logW( QString("%1 could not convert %2 (%3:%4) to double")
+                              .arg(Q_FUNC_INFO)
+                              .arg(tmp.toString())
+                              .arg(_section)
+                              .arg(_editField) );
+      }
 
       display = displayAmount(amount, precision);
    }
@@ -256,7 +267,7 @@ void BtLineEdit::setText( QVariant amount, int precision)
 int BtLineEdit::type() const { return (int)_type; }
 QString BtLineEdit::editField() const { return _editField; }
 QString BtLineEdit::configSection()
-{ 
+{
    if ( _section.isEmpty() ) {
       setConfigSection("");
    }
@@ -266,8 +277,8 @@ QString BtLineEdit::configSection()
 
 // Once we require >qt5.5, we can replace this noise with
 // QMetaEnum::fromType()
-QString BtLineEdit::forcedUnit() const 
-{ 
+QString BtLineEdit::forcedUnit() const
+{
    const QMetaObject &mo = Unit::staticMetaObject;
    int index = mo.indexOfEnumerator("unitDisplay");
    QMetaEnum unitEnum = mo.enumerator(index);
@@ -276,7 +287,7 @@ QString BtLineEdit::forcedUnit() const
 }
 
 QString BtLineEdit::forcedScale() const
-{ 
+{
    const QMetaObject &mo = Unit::staticMetaObject;
    int index = mo.indexOfEnumerator("unitScale");
    QMetaEnum scaleEnum = mo.enumerator(index);
@@ -288,20 +299,20 @@ void BtLineEdit::setType(int type) { _type = (Unit::UnitType)type;}
 void BtLineEdit::setEditField( QString editField) { _editField = editField; }
 
 // The cascade looks a little odd, but it is intentional.
-void BtLineEdit::setConfigSection( QString configSection) 
+void BtLineEdit::setConfigSection( QString configSection)
 {
-   _section = configSection; 
+   _section = configSection;
 
    if ( _section.isEmpty() )
       _section = btParent->property("configSection").toString();
 
-   if ( _section.isEmpty() ) 
+   if ( _section.isEmpty() )
       _section = btParent->objectName();
 }
 
 // previous comment about qt5.5 applies
-void BtLineEdit::setForcedUnit( QString forcedUnit ) 
-{ 
+void BtLineEdit::setForcedUnit( QString forcedUnit )
+{
    const QMetaObject &mo = Unit::staticMetaObject;
    int index = mo.indexOfEnumerator("unitDisplay");
    QMetaEnum unitEnum = mo.enumerator(index);
@@ -309,8 +320,8 @@ void BtLineEdit::setForcedUnit( QString forcedUnit )
    _forceUnit = (Unit::unitDisplay)unitEnum.keyToValue(forcedUnit.toStdString().c_str());
 }
 
-void BtLineEdit::setForcedScale( QString forcedScale ) 
-{ 
+void BtLineEdit::setForcedScale( QString forcedScale )
+{
    const QMetaObject &mo = Unit::staticMetaObject;
    int index = mo.indexOfEnumerator("unitScale");
    QMetaEnum unitEnum = mo.enumerator(index);
@@ -389,6 +400,12 @@ void BtMixedEdit::setIsWeight(bool state)
    }
 
    // maybe? My head hurts now
-   lineChanged();
+   onLineChanged();
+}
+
+BtDiastaticPowerEdit::BtDiastaticPowerEdit(QWidget *parent)
+   : BtLineEdit(parent,Unit::DiastaticPower)
+{
+   _units = Units::lintner;
 }
 

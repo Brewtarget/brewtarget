@@ -22,6 +22,7 @@
 #include "brewtarget.h"
 #include "BrewDayScrollWidget.h"
 #include "database.h"
+#include "Html.h"
 #include <QListWidgetItem>
 #include <QPrinter>
 #include <QPrintDialog>
@@ -40,6 +41,7 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
    setupUi(this);
    setObjectName("BrewDayScrollWidget");
    recObs = 0;
+
 
    connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
    connect(btTextEdit,SIGNAL(textModified()), this, SLOT(saveInstruction()));
@@ -134,7 +136,7 @@ bool BrewDayScrollWidget::loadComplete(bool ok)
    return ok;
 }
 
-void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
+void BrewDayScrollWidget::print(QPrinter *mainPrinter,
       int action, QFile* outFile)
 {
    QString pDoc;
@@ -146,13 +148,6 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
    if ( action == PRINT )
    {
       printer = mainPrinter;
-      // connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
-      //
-      // GSG: QTextBrowser doesn't have a loadFinished signal.
-
-      dialog->setWindowTitle(tr("Print Document"));
-      if (dialog->exec() != QDialog::Accepted)
-         return;
    }
 
    // Start building the document to be printed.  The HTML doesn't work with
@@ -186,14 +181,14 @@ void BrewDayScrollWidget::setRecipe(Recipe* rec)
 {
    // Disconnect old notifier.
    if( recObs )
-      disconnect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
+      disconnect( recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges );
    
    recObs = rec;
-   connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
+   connect( recObs, &Recipe::changed, this, &BrewDayScrollWidget::acceptChanges );
    
    recIns = recObs->instructions();
    foreach( Instruction* ins, recIns )
-         connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptInsChanges(QMetaProperty,QVariant)) );
+         connect( ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges );
    
    btTextEdit->clear();
    if(recIns.isEmpty())
@@ -240,7 +235,7 @@ void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/)
          disconnect( ins, 0, this, 0 );
       recIns = recObs->instructions(); // Already sorted by instruction numbers.
       foreach( Instruction* ins, recIns )
-         connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptInsChanges(QMetaProperty,QVariant)) );
+         connect( ins, &Instruction::changed, this, &BrewDayScrollWidget::acceptInsChanges );
       showChanges();
    }
 }
@@ -296,24 +291,6 @@ void BrewDayScrollWidget::repopulateListWidget()
       listWidget->setCurrentRow(-1);
 }
 
-QString BrewDayScrollWidget::getCSS() 
-{
-   if ( cssName == NULL )
-       cssName = ":/css/brewday.css";
-
-   QFile cssInput(cssName);
-   QString css;
-
-   if (cssInput.open(QFile::ReadOnly)) {
-      QTextStream inStream(&cssInput);
-      while ( ! inStream.atEnd() )
-      {
-         css += inStream.readLine();
-      }
-   }
-   return css;
-}
-
 static QString styleName(Style* style)
 {
    if ( ! style )
@@ -344,12 +321,12 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
    QString body;
 
    // Do the style sheet first
-   header = "<html><head><style type=\"text/css\">";
-   header += getCSS();
-   header += "</style></head>";
+   if (cssName == NULL)
+      cssName = ":/css/brewday.css";
 
-   body   = "<body>";
-   body += QString("<h1>%1</h1>").arg(recObs->name());
+   header = Html::createHeader(BrewDayScrollWidget::tr("Brewday"), cssName);
+
+   body = QString("<h1>%1</h1>").arg(recObs->name());
    if ( includeImage )
       body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
 

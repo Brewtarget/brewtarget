@@ -54,6 +54,8 @@ public:
 
    virtual ~BrewNote() {}
 
+   static QString classNameStr();
+
    Q_PROPERTY( QDateTime brewDate READ brewDate WRITE setBrewDate /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( QDateTime fermentDate READ fermentDate  WRITE setFermentDate /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ STORED false )
@@ -86,6 +88,7 @@ public:
 
    // Setters
    void setABV(double var);
+   void setAttenuation(double var);
    void setBrewDate(QDateTime const& date = QDateTime::currentDateTime());
    void setFermentDate(QDateTime const& date);
    void setNotes(const QString& var, bool notify = true);
@@ -120,6 +123,7 @@ public:
    QString   fermentDate_short() const;
    double sg() const;
    double abv() const;
+   double attenuation() const;
    double volumeIntoBK_l() const;
    double effIntoBK_pct() const;
    double brewhouseEff_pct() const;
@@ -146,6 +150,8 @@ public:
    double calculateABV_pct();
    //! Actual ABV after we have measured og/fg.
    double calculateActualABV_pct();
+   //! Actual attenuation, based on measured og/fg
+   double calculateAttenuation_pct();
 
    // Projected values
    void setProjBoilGrav(double var);
@@ -178,7 +184,7 @@ signals:
    void brewDateChanged(const QDateTime&);
 
 private:
-   BrewNote();
+   BrewNote(Brewtarget::DBTable table, int key);
    BrewNote(BrewNote const& other);
    bool loading;
 

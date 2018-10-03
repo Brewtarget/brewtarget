@@ -3,6 +3,12 @@
 This changelog is for high-level user-visible changes to Brewtarget, intended
 for consumption by the typical end-user.
 
+## v2.5.0
+
+### New Features
+
+* It is now possible to print and export your inventory.
+
 ## v2.4.0
 
 ### New Features
@@ -40,6 +46,7 @@ for consumption by the typical end-user.
 * New ingredient can't be created into a folder [#117](https://github.com/Brewtarget/brewtarget/issues/117)
 * ibu/color formulas do not persist [#133](https://github.com/Brewtarget/brewtarget/issues/133)
 * Two running Brewtargets Resets Database [#73](https://github.com/Brewtarget/brewtarget/issues/73)
+* Keep inventory when copying a recipe [#72] (https://github.com/Brewtarget/brewtarget/issues/72)
 
 ## v2.3.1
 

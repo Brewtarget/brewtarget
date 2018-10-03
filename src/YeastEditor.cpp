@@ -32,8 +32,8 @@ YeastEditor::YeastEditor( QWidget* parent )
 {
    setupUi(this);
    
-   connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
-   connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
+   connect( buttonBox, &QDialogButtonBox::accepted, this, &YeastEditor::save);
+   connect( buttonBox, &QDialogButtonBox::rejected, this, &YeastEditor::clearAndClose);
 }
 
 void YeastEditor::setYeast( Yeast* y )

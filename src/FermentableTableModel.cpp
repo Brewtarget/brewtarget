@@ -66,7 +66,7 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
    parentTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->setWordWrap(false);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
+   connect(headerView, &QWidget::customContextMenuRequested, this, &FermentableTableModel::contextMenu);
 }
 
 void FermentableTableModel::observeRecipe(Recipe* rec)
@@ -80,7 +80,7 @@ void FermentableTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( recObs, &BeerXMLElement::changed, this, &FermentableTableModel::changed );
       addFermentables( recObs->fermentables() );
    }
 }
@@ -93,7 +93,7 @@ void FermentableTableModel::observeDatabase(bool val)
       observeRecipe(0);
 
       removeAll();
-      connect( &(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)), this, SLOT(addFermentable(Fermentable*)) );
+      connect( &(Database::instance()), &Database::newFermentableSignal, this, &FermentableTableModel::addFermentable );
       connect( &(Database::instance()), SIGNAL(deletedSignal(Fermentable*)), this, SLOT(removeFermentable(Fermentable*)) );
       addFermentables( Database::instance().fermentables() );
    }
@@ -123,7 +123,7 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    int size = fermObs.size();
    beginInsertRows( QModelIndex(), size, size );
    fermObs.append(ferm);
-   connect( ferm, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   connect( ferm, &BeerXMLElement::changed, this, &FermentableTableModel::changed );
    totalFermMass_kg += ferm->amount_kg();
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
@@ -148,7 +148,7 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
       {
-         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+         connect( *i, &BeerXMLElement::changed, this, &FermentableTableModel::changed );
          totalFermMass_kg += (*i)->amount_kg();
       }
 
@@ -645,6 +645,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return false;
    }
+   row->save();
    return retVal;
 }
 

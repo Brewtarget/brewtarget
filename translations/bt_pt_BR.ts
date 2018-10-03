@@ -3635,7 +3635,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Substitutes:</source>
-        <translation>Substituintes</translation>
+        <translation>Substitutos:</translation>
     </message>
     <message>
         <source>Notes:</source>
@@ -3693,11 +3693,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Lúlupos</translation>
+        <translation>Lúpulos</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation>Adjunto</translation>
+        <translation>Adjuntos</translation>
     </message>
     <message>
         <source>Yeasts</source>
@@ -5234,11 +5234,11 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation>Idade de Garrafa/Barril (dias)</translation>
+        <translation>Idade da Garrafa/Barril (dias)</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation>Temperatura de Garrafa/Barril</translation>
+        <translation>Temperatura da Garrafa/Barril</translation>
     </message>
     <message>
         <source>Date First Brewed</source>

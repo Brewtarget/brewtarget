@@ -52,10 +52,10 @@ MiscDialog::MiscDialog(MainWindow* parent) :
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
-   connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
-   connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMisc()) );
-   connect( tableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addMisc(const QModelIndex&) ) );
-   connect( qLineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterMisc(QString)));
+   connect( pushButton_edit, &QAbstractButton::clicked, this, &MiscDialog::editSelected );
+   connect( pushButton_remove, &QAbstractButton::clicked, this, &MiscDialog::removeMisc );
+   connect( tableWidget, &QAbstractItemView::doubleClicked, this, &MiscDialog::addMisc );
+   connect( qLineEdit_searchBox, &QLineEdit::textEdited, this, &MiscDialog::filterMisc);
 
    miscTableModel->observeDatabase(true);
 }

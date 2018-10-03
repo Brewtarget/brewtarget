@@ -39,7 +39,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="widget_tree" native="true">
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
          <widget class="QLabel" name="label_Brewtarget">
@@ -218,6 +218,12 @@
        </layout>
       </widget>
       <widget class="QSplitter" name="splitter_horizontal">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>1</verstretch>
+        </sizepolicy>
+       </property>
        <property name="acceptDrops">
         <bool>true</bool>
        </property>
@@ -233,8 +239,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>637</width>
-           <height>437</height>
+           <width>636</width>
+           <height>386</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -271,7 +277,7 @@
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Name</string>
+                   <string>&amp;Name</string>
                   </property>
                   <property name="buddy">
                    <cstring>lineEdit_name</cstring>
@@ -326,7 +332,7 @@
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
                       <property name="text">
-                       <string>Target Boil Size</string>
+                       <string>Tar&amp;get Boil Size</string>
                       </property>
                       <property name="buddy">
                        <cstring>lineEdit_boilSize</cstring>
@@ -431,7 +437,7 @@
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
                       <property name="text">
-                       <string>Calculated Boil Size</string>
+                       <string>Calc&amp;ulated Boil Size</string>
                       </property>
                       <property name="buddy">
                        <cstring>lineEdit_calcBoilSize</cstring>
@@ -566,7 +572,7 @@
                        </sizepolicy>
                       </property>
                       <property name="text">
-                       <string>Equipment</string>
+                       <string>E&amp;quipment</string>
                       </property>
                       <property name="buddy">
                        <cstring>equipmentButton</cstring>
@@ -616,7 +622,7 @@
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
                       <property name="text">
-                       <string>Target Batch Size</string>
+                       <string>Target Batch Si&amp;ze</string>
                       </property>
                       <property name="buddy">
                        <cstring>lineEdit_batchSize</cstring>
@@ -1096,8 +1102,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>653</width>
-           <height>313</height>
+           <width>636</width>
+           <height>337</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1649,7 +1655,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-      <height>19</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1693,6 +1699,14 @@
      <addaction name="actionRestore_Database"/>
      <addaction name="actionMergeDatabases"/>
     </widget>
+    <widget class="QMenu" name="menuInventory">
+     <property name="title">
+      <string>In&amp;ventory</string>
+     </property>
+     <addaction name="actionInventoryPreview"/>
+     <addaction name="actionInventoryPrint"/>
+     <addaction name="actionInventoryHTML"/>
+    </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>
@@ -1702,6 +1716,8 @@
     <addaction name="separator"/>
     <addaction name="menuBrewday"/>
     <addaction name="menuRecipe"/>
+    <addaction name="separator"/>
+    <addaction name="menuInventory"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1826,7 +1842,7 @@
      <normaloff>:/images/smallQuestion.svg</normaloff>:/images/smallQuestion.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Miscs</string>
+    <string>M&amp;iscs</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
@@ -1874,7 +1890,7 @@
      <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Exit</string>
+    <string>E&amp;xit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -1895,7 +1911,7 @@
      <normaloff>:/images/preferences-other.png</normaloff>:/images/preferences-other.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Options</string>
+    <string>Optio&amp;ns</string>
    </property>
   </action>
   <action name="actionManual">
@@ -2132,7 +2148,7 @@
      <normaloff>:/images/clock.svg</normaloff>:/images/clock.svg</iconset>
    </property>
    <property name="text">
-    <string>Timers</string>
+    <string>Ti&amp;mers</string>
    </property>
    <property name="toolTip">
     <string>Show timers</string>
@@ -2177,7 +2193,7 @@
   </action>
   <action name="actionStrikeWater_Calculator">
    <property name="text">
-    <string>Strike Water Calculator</string>
+    <string>Strike &amp;Water Calculator</string>
    </property>
   </action>
   <action name="actionRecipeBBCode">
@@ -2191,7 +2207,34 @@
   </action>
   <action name="actionHydrometer_Temp_Adjustment">
    <property name="text">
-    <string>Hydrometer Temp Adjustment</string>
+    <string>&amp;Hydrometer Temp Adjustment</string>
+   </property>
+  </action>
+  <action name="actionInventoryPreview">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print Pre&amp;view</string>
+   </property>
+  </action>
+  <action name="actionInventoryPrint">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print</string>
+   </property>
+  </action>
+  <action name="actionInventoryHTML">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Export to HTML</string>
    </property>
   </action>
  </widget>

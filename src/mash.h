@@ -103,6 +103,8 @@ public:
    // NOTE: should this be completely in Database?
    void removeAllMashSteps();
 
+   static QString classNameStr();
+
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
    
@@ -114,7 +116,7 @@ signals:
    void mashStepsChanged();
    
 private:
-   Mash();
+   Mash(Brewtarget::DBTable table, int key);
    Mash( Mash const& other );
    
    // Get via the relational relationship.

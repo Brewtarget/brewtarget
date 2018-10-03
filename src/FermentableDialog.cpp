@@ -53,11 +53,11 @@ FermentableDialog::FermentableDialog(MainWindow* parent) :
    fermTableProxy->setFilterKeyColumn(1);
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addFermentable() ) );
-   connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
-   connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeFermentable() ) );
+   connect( pushButton_edit, &QAbstractButton::clicked, this, &FermentableDialog::editSelected );
+   connect( pushButton_remove, &QAbstractButton::clicked, this, &FermentableDialog::removeFermentable );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newFermentable() ) );
-   connect( tableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT(addFermentable(const QModelIndex&)) );
-   connect( qLineEdit_searchBox, SIGNAL(textEdited(QString)), this, SLOT(filterFermentables(QString)));
+   connect( tableWidget, &QAbstractItemView::doubleClicked, this, &FermentableDialog::addFermentable );
+   connect( qLineEdit_searchBox, &QLineEdit::textEdited, this, &FermentableDialog::filterFermentables);
    // Let me see if this works
    fermTableModel->observeDatabase(true);
 }

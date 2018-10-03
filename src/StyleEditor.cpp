@@ -49,10 +49,10 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    styleProxyModel->setSourceModel(styleListModel);
    styleComboBox->setModel(styleProxyModel);
    
-   connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
+   connect( pushButton_save, &QAbstractButton::clicked, this, &StyleEditor::save );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
-   connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
-   connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT(removeStyle()) );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &StyleEditor::clearAndClose );
+   connect( pushButton_remove, &QAbstractButton::clicked, this, &StyleEditor::removeStyle );
    connect( styleComboBox, SIGNAL(activated( const QString& )), this, SLOT( styleSelected(const QString&) ) );
 
    setStyle( styleListModel->at(styleComboBox->currentIndex()));
@@ -66,7 +66,7 @@ void StyleEditor::setStyle( Style* s )
    obsStyle = s;
    if( obsStyle )
    {
-      connect( obsStyle, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( obsStyle, &BeerXMLElement::changed, this, &StyleEditor::changed );
       showChanges();
    }
  

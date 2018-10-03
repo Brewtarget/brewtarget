@@ -52,7 +52,6 @@ public:
 
 public slots:
    void setDirections();
-   //void setHasTimer();
    void setTimerValue(QString value);
    void setCompleted();
 

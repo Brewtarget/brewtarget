@@ -1,5 +1,12 @@
 ---
 - hosts: all
+  gather_facts: False
+
+  tasks:
+  - name: Install Python 2
+    raw: test -e /usr/bin/python || (sudo apt -y update && sudo apt install -y python-minimal)
+
+- hosts: all
   become: true
 
   tasks:
@@ -27,7 +34,6 @@
         - qt5-default
         - libqt5sql5-psql
         - libqt5svg5-dev
-        - libqt5webkit5-dev
         - libqt5multimedia5
         - qtmultimedia5-dev
         - qttools5-dev
@@ -59,15 +65,15 @@
     - name: Create config directories
       file:
         state=directory
-        path=/home/vagrant/.config/brewtarget/
+        path=/home/ubuntu/.config/brewtarget/
         recurse=yes
-        owner=vagrant
+        owner=ubuntu
 
     - name: Install default config
       copy:
         src=brewtarget.conf
-        dest=/home/vagrant/.config/brewtarget/brewtarget.conf
-        owner=vagrant
+        dest=/home/ubuntu/.config/brewtarget/brewtarget.conf
+        owner=ubuntu
         mode=0644
 
 # vim: ft=ansible

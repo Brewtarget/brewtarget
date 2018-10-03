@@ -30,6 +30,30 @@
 #include <QObject>
 #include <QDebug>
 
+
+/************* Columns *************/
+const QString kName("name");
+const QString kType("mtype");
+const QString kUse("use");
+const QString kTime("time");
+const QString kAmount("amount");
+const QString kAmountIsWeight("amount_is_weight");
+const QString kInventory("inventory");
+const QString kUseFor("use_for");
+const QString kNotes("notes");
+
+
+/************** Props **************/
+const QString kNameProp("name");
+const QString kTypeProp("type");
+const QString kUseProp("use");
+const QString kTimeProp("time");
+const QString kAmountProp("amount");
+const QString kAmountIsWeightProp("amountIsWeight");
+const QString kInventoryProp("inventory");
+const QString kUseForProp("useFor");
+const QString kNotesProp("notes");
+
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
 QStringList Misc::amountTypes = QStringList() << "Weight" << "Volume";
@@ -38,19 +62,26 @@ QHash<QString,QString> Misc::tagToProp = Misc::tagToPropHash();
 QHash<QString,QString> Misc::tagToPropHash()
 {
    QHash<QString,QString> propHash;
-   propHash["NAME"] = "name";
-   //propHash["TYPE"] = "type";
-   //propHash["USE"] = "use";
-   propHash["TIME"] = "time";
-   propHash["AMOUNT"] = "amount";
-   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
-   propHash["INVENTORY"] = "inventory";
-   propHash["USE_FOR"] = "useFor";
-   propHash["NOTES"] = "notes";
+   propHash["NAME"] = kNameProp;
+   //propHash["TYPE"] = kTypeProp;
+   //propHash["USE"] = kUseProp";
+   propHash["TIME"] = kTimeProp;
+   propHash["AMOUNT"] = kAmountProp;
+   propHash["AMOUNT_IS_WEIGHT"] = kAmountIsWeightProp;
+   propHash["INVENTORY"] = kInventoryProp;
+   propHash["USE_FOR"] = kUseForProp;
+   propHash["NOTES"] = kNotesProp;
    return propHash;
 }
+
+QString Misc::classNameStr()
+{
+   static const QString name("Misc");
+   return name;
+}
+
 //============================CONSTRUCTORS======================================
-Misc::Misc() : BeerXMLElement()
+Misc::Misc(Brewtarget::DBTable table, int key) : BeerXMLElement(table, key)
 {
 }
 
@@ -59,18 +90,65 @@ Misc::Misc(Misc const& other) : BeerXMLElement(other)
 }
 
 //============================"GET" METHODS=====================================
-Misc::Type Misc::type() const { return static_cast<Misc::Type>(types.indexOf(get("mtype").toString())); }
-const QString Misc::typeString() const { return types.at(type()); }
-Misc::Use Misc::use() const { return static_cast<Misc::Use>(uses.indexOf(get("use").toString())); }
-const QString Misc::useString() const { return uses.at(use()); }
-double Misc::amount()    const { return get("amount").toDouble(); }
-double Misc::time()      const { return get("time").toDouble(); }
-bool Misc::amountIsWeight() const { return get("amount_is_weight").toBool(); }
-QString Misc::useFor() const { return get("use_for").toString(); }
-QString Misc::notes() const { return get("notes").toString(); }
-double Misc::inventory() const { return getInventory("amount").toDouble(); }
-Misc::AmountType Misc::amountType() const { return amountIsWeight() ? AmountType_Weight : AmountType_Volume; }
-const QString Misc::amountTypeString() const { return amountTypes.at(amountType()); }
+Misc::Type Misc::type() const
+{
+   return static_cast<Misc::Type>(types.indexOf(get(kType).toString()));
+}
+
+const QString Misc::typeString() const
+{
+   return types.at(type());
+}
+
+Misc::Use Misc::use() const
+{
+   return static_cast<Misc::Use>(uses.indexOf(get(kUse).toString()));
+}
+
+const QString Misc::useString() const
+{
+   return uses.at(use());
+}
+
+double Misc::amount()    const
+{
+   return get(kAmount).toDouble();
+}
+
+double Misc::time()      const
+{
+   return get(kTime).toDouble();
+}
+
+bool Misc::amountIsWeight() const
+{
+   return get(kAmountIsWeight).toBool();
+}
+
+QString Misc::useFor() const
+{
+   return get(kUseFor).toString();
+}
+
+QString Misc::notes() const
+{
+   return get(kNotes).toString();
+}
+
+double Misc::inventory() const
+{
+   return getInventory(kAmount).toDouble();
+}
+
+Misc::AmountType Misc::amountType() const
+{
+   return amountIsWeight() ? AmountType_Weight : AmountType_Volume;
+}
+
+const QString Misc::amountTypeString() const
+{
+   return amountTypes.at(amountType());
+}
 
 const QString Misc::typeStringTr() const
 {
@@ -91,19 +169,42 @@ const QString Misc::amountTypeStringTr() const
 }
 
 //============================"SET" METHODS=====================================
-void Misc::setType( Type t ) { set( "type", "mtype", types.at(t) ); }
-void Misc::setUse( Use u ) { set( "use", "use", uses.at(u) ); }
-void Misc::setAmountType( AmountType t ) { setAmountIsWeight(t == AmountType_Weight ? true : false); }
-void Misc::setUseFor( const QString& var ) { set( "useFor", "use_for", var ); }
-void Misc::setNotes( const QString& var ) { set( "notes", "notes", var ); }
-void Misc::setAmountIsWeight( bool var ) { set( "amountIsWeight", "amount_is_weight", var ); }
+void Misc::setType( Type t )
+{
+   set( kTypeProp, kType, types.at(t) );
+}
+
+void Misc::setUse( Use u )
+{
+   set( kUseProp, kUse, uses.at(u) );
+}
+
+void Misc::setUseFor( const QString& var )
+{
+   set( kUseForProp, kUseFor, var );
+}
+
+void Misc::setNotes( const QString& var )
+{
+   set( kNotesProp, kNotes, var );
+}
+
+void Misc::setAmountType( AmountType t )
+{
+   setAmountIsWeight(t == AmountType_Weight ? true : false);
+}
+
+void Misc::setAmountIsWeight( bool var )
+{
+   set( kAmountIsWeightProp, kAmountIsWeight, var );
+}
 
 void Misc::setAmount( double var )
 {
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
    else
-      set( "amount", "amount", var );
+      set( kAmountProp, kAmount, var );
 }
 
 void Misc::setInventoryAmount( double var )
@@ -111,7 +212,7 @@ void Misc::setInventoryAmount( double var )
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: inventory < 0: %1").arg(var) );
    else
-      setInventory("inventory", "amount", var );
+      setInventory(kInventoryProp, kAmount, var );
 }
 
 void Misc::setTime( double var )
@@ -119,7 +220,7 @@ void Misc::setTime( double var )
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
    else
-      set( "time", "time", var );
+      set( kTimeProp, kTime, var );
 }
 
 //========================OTHER METHODS=========================================

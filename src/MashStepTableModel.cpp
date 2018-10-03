@@ -45,7 +45,7 @@ MashStepTableModel::MashStepTableModel(QTableView* parent)
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint&)));
+   connect(headerView, &QWidget::customContextMenuRequested, this, &MashStepTableModel::contextMenu);
 }
 
 void MashStepTableModel::setMash( Mash* m )
@@ -67,7 +67,7 @@ void MashStepTableModel::setMash( Mash* m )
    {
       // This has to happen outside of the if{} block to make sure the mash
       // signal is connected. Otherwise, empty mashes will never be not empty.
-      connect( mashObs, SIGNAL(mashStepsChanged()), this, SLOT(mashChanged()) );
+      connect( mashObs, &Mash::mashStepsChanged, this, &MashStepTableModel::mashChanged );
 
       QList<MashStep*> tmpSteps = mashObs->mashSteps();
       if(tmpSteps.size() > 0){

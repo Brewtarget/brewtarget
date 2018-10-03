@@ -3,6 +3,7 @@
  * authors 2009-2014
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Jonathon Harding <github@jrhardin.net>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +63,7 @@ private slots:
    void saveTargetTemp();
    void proceed(); // Go to next step.
    void saveAndClose();
-   void typeChanged(int t);
+   void typeChanged();
 
 private:
    bool nextStep(int step);
@@ -78,6 +79,9 @@ private:
    double volFromTemp_l( double temp_c );
    double getDecoctionAmount_l();
    double waterFromMash_l();
+   bool heating();
+   double boilingTemp_c();
+   double bound_temp_c(double temp_c);
 
    // I have developed a distaste for "getBlah"
    double selectedAmount_l();

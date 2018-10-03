@@ -29,20 +29,42 @@
 #include <QDomText>
 #include <QObject>
 
+/************* Columns *************/
+const QString kNotes("notes");
+const QString kGrainTemp("grain_temp");
+const QString kTunTemp("tun_temp");
+const QString kSpargeTemp("sparge_temp");
+const QString kPH("ph");
+const QString kTunWeight("tun_weight");
+const QString kTunSpecificHeat("tun_specific_heat");
+const QString kEquipAdjust("equip_adjust");
+
+/************** Props **************/
+const QString kNameProp("name");
+const QString kGrainTempProp("grainTemp_c");
+const QString kNotesProp("notes");
+const QString kTunTempProp("tunTemp_c");
+const QString kSpargeTempProp("spargeTemp_c");
+const QString kPHProp("ph");
+const QString kTunWeightProp("tunWeight_kg");
+const QString kTunSpecificHeatProp("tunSpecificHeat_calGC");
+const QString kEquipAdjustProp("equipAdjust");
+
+
 QHash<QString,QString> Mash::tagToProp = Mash::tagToPropHash();
 
 QHash<QString,QString> Mash::tagToPropHash()
 {
    QHash<QString,QString> propHash;
-   propHash["NAME"] = "name";
-   propHash["GRAIN_TEMP"] = "grainTemp_c";
-   propHash["NOTES"] = "notes";
-   propHash["TUN_TEMP"] = "tunTemp_c";
-   propHash["SPARGE_TEMP"] = "spargeTemp_c";
-   propHash["PH"] = "ph";
-   propHash["TUN_WEIGHT"] = "tunWeight_kg";
-   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
-   propHash["EQUIP_ADJUST"] = "equipAdjust";
+   propHash["NAME"] = kNameProp;
+   propHash["GRAIN_TEMP"] = kGrainTempProp;
+   propHash["NOTES"] = kNotesProp;
+   propHash["TUN_TEMP"] = kTunTempProp;
+   propHash["SPARGE_TEMP"] = kSpargeTempProp;
+   propHash["PH"] = kPHProp;
+   propHash["TUN_WEIGHT"] = kTunWeightProp;
+   propHash["TUN_SPECIFIC_HEAT"] = kTunSpecificHeatProp;
+   propHash["EQUIP_ADJUST"] = kEquipAdjustProp;
    return propHash;
 }
 
@@ -56,16 +78,41 @@ bool operator==(Mash &m1, Mash &m2)
    return m1.name() == m2.name();
 }
 
-Mash::Mash()
-   : BeerXMLElement()
+QString Mash::classNameStr()
+{
+   static const QString name("Mash");
+   return name;
+}
+
+Mash::Mash(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 
-void Mash::setGrainTemp_c( double var ) { set("grainTemp_c", "grain_temp", var); }
-void Mash::setNotes( const QString& var ) { set("notes", "notes", var); }
-void Mash::setTunTemp_c( double var ) { set("tunTemp_c", "tun_temp", var); }
-void Mash::setSpargeTemp_c( double var ) { set("spargeTemp_c", "sparge_temp", var); }
-void Mash::setEquipAdjust( bool var ) { set("equipAdjust", "equip_adjust", var); }
+void Mash::setGrainTemp_c( double var )
+{
+   set(kGrainTempProp, kGrainTemp, var);
+}
+
+void Mash::setNotes( const QString& var )
+{
+   set(kNotesProp, kNotes, var);
+}
+
+void Mash::setTunTemp_c( double var )
+{
+   set(kTunTempProp, kTunTemp, var);
+}
+
+void Mash::setSpargeTemp_c( double var )
+{
+   set(kSpargeTempProp, kSpargeTemp, var);
+}
+
+void Mash::setEquipAdjust( bool var )
+{
+   set(kEquipAdjustProp, kEquipAdjust, var);
+}
 
 void Mash::setPh( double var )
 {
@@ -76,7 +123,7 @@ void Mash::setPh( double var )
    }
    else
    {
-      set("ph", "ph", var);
+      set(kPHProp, kPH, var);
    }
 }
 
@@ -89,7 +136,7 @@ void Mash::setTunWeight_kg( double var )
    }
    else
    {
-      set("tunWeight_kg", "tun_weight", var);
+      set(kTunWeightProp, kTunWeight, var);
    }
 }
 
@@ -102,7 +149,7 @@ void Mash::setTunSpecificHeat_calGC( double var )
    }
    else
    {
-      set("tunSpecificHeat_calGC", "tun_specific_heat", var);
+      set(kTunSpecificHeatProp, kTunSpecificHeat, var);
    }
 }
 
@@ -117,14 +164,45 @@ void Mash::removeAllMashSteps()
 }
 
 //============================="GET" METHODS====================================
-QString Mash::notes()                const { return get("notes").toString(); }
-double Mash::grainTemp_c()           const { return get("grain_temp").toDouble(); }
-double Mash::tunTemp_c()             const { return get("tun_temp").toDouble(); }
-double Mash::spargeTemp_c()          const { return get("sparge_temp").toDouble(); }
-double Mash::ph()                    const { return get("ph").toDouble(); }
-double Mash::tunWeight_kg()          const { return get("tun_weight").toDouble(); }
-double Mash::tunSpecificHeat_calGC() const { return get("tun_specific_heat").toDouble(); }
-bool Mash::equipAdjust()             const { return get("equip_adjust").toBool(); }
+QString Mash::notes() const
+{
+   return get(kNotes).toString();
+}
+
+double Mash::grainTemp_c() const
+{
+   return get(kGrainTemp).toDouble();
+}
+
+double Mash::tunTemp_c() const
+{
+   return get(kTunTemp).toDouble();
+}
+
+double Mash::spargeTemp_c() const
+{
+   return get(kSpargeTemp).toDouble();
+}
+
+double Mash::ph() const
+{
+   return get(kPH).toDouble();
+}
+
+double Mash::tunWeight_kg() const
+{
+   return get(kTunWeight).toDouble();
+}
+
+double Mash::tunSpecificHeat_calGC() const
+{
+   return get(kTunSpecificHeat).toDouble();
+}
+
+bool Mash::equipAdjust() const
+{
+   return get(kEquipAdjust).toBool();
+}
 
 // === other methods ===
 double Mash::totalMashWater_l()

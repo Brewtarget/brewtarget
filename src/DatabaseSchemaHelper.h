@@ -243,6 +243,7 @@ private:
    
    // Brewnote table
    static QString tableBrewnote;
+   static QString colBNoteAttenuation;
    static QString colBNoteBrewDate;
    static QString colBNoteFermentDate;
    static QString colBNoteSg;
@@ -428,5 +429,5 @@ private:
    static bool migrate_to_4(QSqlQuery q);
    static bool migrate_to_5(QSqlQuery q);
    static bool migrate_to_6(QSqlQuery q);
-   
+   static bool migrate_to_7(QSqlQuery q);
 };

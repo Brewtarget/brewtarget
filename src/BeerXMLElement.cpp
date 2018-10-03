@@ -27,10 +27,17 @@
 #include "brewtarget.h"
 #include "database.h"
 
-BeerXMLElement::BeerXMLElement()
+static const QString kFolder("folder");
+static const QString kName("name");
+static const QString kDeleted("deleted");
+static const QString kDisplay("display");
+
+static const char* kVersion = "version";
+
+BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key)
    : QObject(0),
-     _key(-1),
-     _table(Brewtarget::NOTABLE),
+     _key(key),
+     _table(table),
      _folder(QString()),
      _name(QString()),
      _display(QVariant()),
@@ -55,7 +62,7 @@ bool BeerXMLElement::deleted() const
 {
 
    if ( ! _deleted.isValid() )
-      _deleted = get("deleted");
+      _deleted = get(kDeleted);
 
    return _deleted.toBool();
 }
@@ -63,7 +70,7 @@ bool BeerXMLElement::deleted() const
 bool BeerXMLElement::display() const
 {
    if ( ! _display.isValid() )
-      _display = get("display");
+      _display = get(kDisplay);
 
    return _display.toBool();
 }
@@ -71,27 +78,27 @@ bool BeerXMLElement::display() const
 // Sigh. New databases, more complexity
 void BeerXMLElement::setDeleted(const bool var)
 {
-   set("deleted", "deleted", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   set(kDeleted, kDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
    _deleted = var;
 }
 
 void BeerXMLElement::setDisplay(bool var)
 {
-   set("display", "display", var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   set(kDisplay, kDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
    _display = var;
 }
 
 QString BeerXMLElement::folder() const
 {
    if ( _folder.isEmpty() )
-      _folder = get("folder").toString();
+      _folder = get(kFolder).toString();
 
    return _folder;
 }
 
 void BeerXMLElement::setFolder(const QString var, bool signal)
 {
-   set( "folder", "folder", var );
+   set( kFolder, kFolder, var );
    _folder = var;
    if ( signal )
       emit changedFolder(var);
@@ -100,23 +107,33 @@ void BeerXMLElement::setFolder(const QString var, bool signal)
 QString BeerXMLElement::name() const
 {
    if ( _name.isEmpty() )
-      _name = get("name").toString();
+      _name = get(kName).toString();
 
    return _name;
 }
 
 void BeerXMLElement::setName(const QString var)
 {
-   set( "name", "name", var );
+   set( kName, kName, var );
    _name = var;
    emit changedName(var);
 }
 
-int BeerXMLElement::key() const { return _key; }
+int BeerXMLElement::key() const
+{
+   return _key;
+}
 
-Brewtarget::DBTable BeerXMLElement::table() const{ return _table; }
+Brewtarget::DBTable BeerXMLElement::table() const
+{
+   return _table;
+}
 
-int BeerXMLElement::version() const { return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
+
+int BeerXMLElement::version() const
+{
+   return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo(kVersion)).value()).toInt();
+}
 
 QMetaProperty BeerXMLElement::metaProperty(const char* name) const
 {
@@ -258,9 +275,19 @@ void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant 
    }
 }
 
+void BeerXMLElement::set(const QString &prop_name, const QString &col_name, const QVariant &value, bool notify)
+{
+   set(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
+}
+
 QVariant BeerXMLElement::get( const char* col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
+}
+
+QVariant BeerXMLElement::get( const QString& col_name ) const
+{
+   return get(col_name.toUtf8().constData());
 }
 
 void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
@@ -277,6 +304,11 @@ void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, 
     Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
 }
 
+void BeerXMLElement::setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify )
+{
+   setInventory(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
+}
+
 QVariant BeerXMLElement::getInventory( const char* col_name ) const
 {
    int invkey = Database::instance().getInventoryID(_table, _key);
@@ -288,6 +320,11 @@ QVariant BeerXMLElement::getInventory( const char* col_name ) const
    return val;
 }
 
+QVariant BeerXMLElement::getInventory( const QString& col_name ) const
+{
+   return getInventory(col_name.toUtf8().constData());
+}
+
 bool BeerXMLElement::isValid()
 {
    return _valid;
@@ -296,4 +333,12 @@ bool BeerXMLElement::isValid()
 void BeerXMLElement::invalidate()
 {
    _valid = false;
+}
+
+QVariantMap BeerXMLElement::getColumnValueMap() const
+{
+   QVariantMap map;
+   map.insert(kFolder, folder());
+   map.insert(kName, name());
+   return map;
 }

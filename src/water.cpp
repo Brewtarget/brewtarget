@@ -26,21 +26,46 @@
 #include "water.h"
 #include "brewtarget.h"
 
+/************* Columns *************/
+const QString kName("name");
+const QString kAmount("amount");
+const QString kCalcium("calcium");
+const QString kBiCarbonate("bicarbonate");
+const QString kSulfate("sulfate");
+const QString kChloride("chloride");
+const QString kSodium("sodium");
+const QString kMagnesium("magnesium");
+const QString kPh("ph");
+const QString kNotes("notes");
+
+/************** Props **************/
+const QString kNameProp("name");
+const QString kAmountProp("amount_l");
+const QString kCalciumProp("calcium_ppm");
+const QString kBiCarbonateProp("bicarbonate_ppm");
+const QString kSulfateProp("sulfate_ppm");
+const QString kChlorideProp("chloride_ppm");
+const QString kSodiumProp("sodium_ppm");
+const QString kMagnesiumProp("magnesium_ppm");
+const QString kPhProp("ph");
+const QString kNotesProp("notes");
+
+
 QHash<QString,QString> Water::tagToProp = Water::tagToPropHash();
 
 QHash<QString,QString> Water::tagToPropHash()
 {
    QHash<QString,QString> propHash;
-   propHash["NAME"] = "name";
-   propHash["AMOUNT"] = "amount_l";
-   propHash["CALCIUM"] = "calcium_ppm";
-   propHash["BICARBONATE"] = "bicarbonate_ppm";
-   propHash["SULFATE"] = "sulfate_ppm";
-   propHash["CHLORIDE"] = "chloride_ppm";
-   propHash["SODIUM"] = "sodium_ppm";
-   propHash["MAGNESIUM"] = "magnesium_ppm";
-   propHash["PH"] = "ph";
-   propHash["NOTES"] = "notes";
+   propHash["NAME"] = kNameProp;
+   propHash["AMOUNT"] = kAmountProp;
+   propHash["CALCIUM"] = kCalciumProp;
+   propHash["BICARBONATE"] = kBiCarbonateProp;
+   propHash["SULFATE"] = kSulfateProp;
+   propHash["CHLORIDE"] = kChlorideProp;
+   propHash["SODIUM"] = kSodiumProp;
+   propHash["MAGNESIUM"] = kMagnesiumProp;
+   propHash["PH"] = kPhProp;
+   propHash["NOTES"] = kNotesProp;
    return propHash;
 }
 
@@ -54,65 +79,105 @@ bool operator==(Water &w1, Water &w2)
    return w1.name() == w2.name();
 }
 
-Water::Water()
-   : BeerXMLElement()
+QString Water::classNameStr()
+{
+   static const QString name("Water");
+   return name;
+}
+
+Water::Water(Brewtarget::DBTable table, int key)
+   : BeerXMLElement(table, key)
 {
 }
 
 //================================"SET" METHODS=================================
 void Water::setAmount_l( double var )
 {
-   set("amount_l", "amount", var);
+   set(kAmountProp, kAmount, var);
 }
 
 void Water::setCalcium_ppm( double var )
 {
-   set("calcium_ppm", "calcium", var);
+   set(kCalciumProp, kCalcium, var);
 }
 
 void Water::setBicarbonate_ppm( double var )
 {
-   set("bicarbonate_ppm", "bicarbonate", var);
+   set(kBiCarbonateProp, kBiCarbonate, var);
 }
 
 void Water::setChloride_ppm( double var )
 {
-   set("chloride_ppm", "chloride", var);
+   set(kChlorideProp, kChloride, var);
 }
 
 void Water::setSodium_ppm( double var )
 {
-   set("sodium_ppm", "sodium", var);
+   set(kSodiumProp, kSodium, var);
 }
 
 void Water::setMagnesium_ppm( double var )
 {
-   set("magnesium_ppm", "magnesium", var);
+   set(kMagnesiumProp, kMagnesium, var);
 }
 
 void Water::setPh( double var )
 {
-   set("ph", "ph", var);
+   set(kPhProp, kPh, var);
 }
 
 void Water::setSulfate_ppm( double var )
 {
-   set("sulfate_ppm", "sulfate", var);
+   set(kSulfateProp, kSulfate, var);
 }
 
 void Water::setNotes( const QString &var )
 {
-   set("notes", "notes", var);
+   set(kNotesProp, kNotes, var);
 }
 
 //=========================="GET" METHODS=======================================
-QString Water::notes() const { return get("notes").toString(); }
+QString Water::notes() const
+{
+   return get(kNotes).toString();
+}
 
-double Water::sulfate_ppm() const { return get("sulfate").toDouble(); }
-double Water::amount_l() const { return get("amount").toDouble(); }
-double Water::calcium_ppm() const { return get("calcium").toDouble(); }
-double Water::bicarbonate_ppm() const { return get("bicarbonate").toDouble(); }
-double Water::chloride_ppm() const { return get("chloride").toDouble(); }
-double Water::sodium_ppm() const { return get("sodium").toDouble(); }
-double Water::magnesium_ppm() const { return get("magnesium").toDouble(); }
-double Water::ph() const { return get("ph").toDouble(); }
+double Water::sulfate_ppm() const
+{
+   return get(kSulfate).toDouble();
+}
+
+double Water::amount_l() const
+{
+   return get(kAmount).toDouble();
+}
+
+double Water::calcium_ppm() const
+{
+   return get(kCalcium).toDouble();
+}
+
+double Water::bicarbonate_ppm() const
+{
+   return get(kBiCarbonate).toDouble();
+}
+
+double Water::chloride_ppm() const
+{
+   return get(kChloride).toDouble();
+}
+
+double Water::sodium_ppm() const
+{
+   return get(kSodium).toDouble();
+}
+
+double Water::magnesium_ppm() const
+{
+   return get(kMagnesium).toDouble();
+}
+
+double Water::ph() const
+{
+   return get(kPh).toDouble();
+}

@@ -1,9 +1,10 @@
 /*
  * MashDesigner.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2017
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Jonathon Harding <github@jrhardin.net>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,13 +22,9 @@
 
 #include "database.h"
 #include "MashDesigner.h"
-#include "equipment.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "brewtarget.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
-#include "unit.h"
+#include "fermentable.h"
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -46,30 +43,30 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    label_zeroWort->setText(Brewtarget::displayAmount(0, Units::liters));
 
    // Update temp slider when we move amount slider.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateTempSlider()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTempSlider );
    // Update amount slider when we move temp slider.
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateAmtSlider()) );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmtSlider );
    // Update tun fullness bar when either slider moves.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateFullness()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateFullness()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateFullness );
    // Update amount/temp text when sliders move.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateAmt()) );
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateTemp()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateAmt()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateTemp()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateAmt );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTemp );
    // Update collected wort when sliders move.
-   connect( horizontalSlider_amount, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
-   connect( horizontalSlider_temp, SIGNAL(sliderMoved(int)), this, SLOT(updateCollectedWort()) );
+   connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort );
+   connect( horizontalSlider_temp, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateCollectedWort );
    // Save the target temp whenever it's changed.
-   connect( lineEdit_temp, SIGNAL(textModified()), this, SLOT(saveTargetTemp()) );
+   connect( lineEdit_temp, &BtLineEdit::textModified, this, &MashDesigner::saveTargetTemp );
    // Move to next step.
-   connect( pushButton_next, SIGNAL(clicked()), this, SLOT(proceed()) );
+   connect( pushButton_next, &QAbstractButton::clicked, this, &MashDesigner::proceed );
    // Do correct calcs when the mash step type is selected.
-   connect( comboBox_type, SIGNAL(activated(int)), this, SLOT(typeChanged(int)) );
+   connect( comboBox_type, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &MashDesigner::typeChanged );
 
    // I still dislike this part. But I also need to "fix" the form
    // connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
-   connect( pushButton_finish, SIGNAL(clicked()), this, SLOT(saveAndClose()) );
+   connect( pushButton_finish, &QAbstractButton::clicked, this, &MashDesigner::saveAndClose );
 
 }
 
@@ -150,14 +147,11 @@ bool MashDesigner::nextStep(int step)
 
 void MashDesigner::saveStep()
 {
-   double temp,maxT;
-
    MashStep::Type type = static_cast<MashStep::Type>(comboBox_type->currentIndex());
+   double temp = lineEdit_temp->toSI();
 
-   temp = lineEdit_temp->toSI();
-   maxT = maxTemp_c();
-   if ( temp > maxT ) 
-      temp = maxT;
+   // Bound the target temperature to what can be achieved
+   temp = bound_temp_c(temp);
 
    mashStep->setName( lineEdit_name->text() );
    mashStep->setType( type );
@@ -170,8 +164,6 @@ void MashDesigner::saveStep()
    {
       mashStep->setInfuseAmount_l( selectedAmount_l() );
       temp = selectedTemp_c();
-      if ( temp > maxT ) 
-         temp = maxT;
       mashStep->setInfuseTemp_c( temp );
    }
    emit mash->mashStepsChanged();
@@ -182,20 +174,35 @@ double MashDesigner::stepTemp_c()
    return lineEdit_temp->toSI();
 }
 
-double MashDesigner::maxTemp_c()
+bool MashDesigner::heating()
 {
-   if ( recObs && recObs->equipment())
-   {
+   // Returns true if the current step is hottern than the previous step
+   return stepTemp_c() >= ((prevStep) ? prevStep->stepTemp_c() : mash->grainTemp_c());
+}
+
+double MashDesigner::boilingTemp_c()
+{
+   // Returns the equipment boiling point if available, otherwise 100.0
+   if (recObs && recObs->equipment())
       return recObs->equipment()->boilingPoint_c();
-   }
    else
       return 100;
 }
 
+double MashDesigner::maxTemp_c()
+{
+   return (heating())? boilingTemp_c() : tempFromVolume_c(maxAmt_l());
+}
+
 double MashDesigner::minTemp_c()
 {
-   // The minimum temp depends on how much more water we can fit in the tun.
-   return tempFromVolume_c( maxAmt_l() );
+   return (heating())? tempFromVolume_c(maxAmt_l()) : 0.0;
+}
+
+double MashDesigner::bound_temp_c(double temp_c)
+{
+   // Returns the closest achievable temperature to temp_c
+   return (heating()) ? std::min(temp_c, maxTemp_c()) : std::max(temp_c, minTemp_c());
 }
 
 // The mash volume up to and not including the step currently being edited.
@@ -206,25 +213,36 @@ double MashDesigner::mashVolume_l()
 
 double MashDesigner::minAmt_l()
 {
-   // Minimum amount occurs with maximum temperature.
-   return volFromTemp_l( maxTemp_c() );
+   double minVol_l = volFromTemp_l( (heating())? maxTemp_c() : minTemp_c() );
+   
+   // Sanity checks
+   // TODO: If minVol_l > maxAmt_l(), change the target temp?
+   minVol_l = std::min(minVol_l, maxAmt_l());
+   
+   return minVol_l;
 }
 
 // However much more we can add at this step.
 double MashDesigner::maxAmt_l()
 {
+   double amt = 0;
+
    if ( equip == 0 )
-      return 0;
+      return amt;
 
    // However much more we can fit in the tun.
    if( ! isSparge() )
    {
-      return equip->tunVolume_l() - mashVolume_l();
+      amt = equip->tunVolume_l() - mashVolume_l();
    }
    else
    {
-      return equip->tunVolume_l() - grainVolume_l();
+      amt = equip->tunVolume_l() - grainVolume_l();
    }
+
+   amt = std::min(amt, recObs->targetTotalMashVol_l() - addedWater_l);
+
+   return amt;
 }
 
 // Returns the required volume of water to infuse if the strike water is
@@ -236,7 +254,6 @@ double MashDesigner::volFromTemp_l( double temp_c )
 
    double tw = temp_c;
    // Final temp is target temp.
-   // double tf = mashStep->stepTemp_c();
    double tf = stepTemp_c();
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
    double t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c();
@@ -244,6 +261,9 @@ double MashDesigner::volFromTemp_l( double temp_c )
    double ct = mash->tunWeight_kg();
 
    double mw = 1/(HeatCalculations::Cw_calGC * (tw-tf)) * (MC*(tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->tunTemp_c()) : 0) );
+
+   // Sanity check for unlikely edge cases
+   mw = std::max(0., mw);
 
    // NOTE: This needs to be changed. Assumes 1L of water is 1 kg.
    return mw;
@@ -262,7 +282,6 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    else
       absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
 
-   // double tf = mashStep->stepTemp_c();
    double tf = stepTemp_c();
 
    // NOTE: This needs to be changed. Assumes 1L = 1 kg.
@@ -283,6 +302,10 @@ double MashDesigner::tempFromVolume_c( double vol_l )
                     + mash->tunWeight_kg() * mash->tunSpecificHeat_calGC();
 
    double tw = 1/(mw*cw) * ( (isSparge()? batchMC : MC) * (tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->tunTemp_c()) : 0) ) + tf;
+   
+   // Sanity check this value
+   tw = std::min( tw, boilingTemp_c() );  // Can't add water above boiling
+   tw = std::max( tw, 0.0 );  // (Probably) won't add water below freezing
 
    return tw;
 }
@@ -342,7 +365,7 @@ bool MashDesigner::initializeMash()
    grain_kg = recObs->grainsInMash_kg();
 
    label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), Units::liters));
-   label_wortMax->setText(Brewtarget::displayAmount(recObs->boilSize_l(), Units::liters));
+   label_wortMax->setText(Brewtarget::displayAmount(recObs->targetCollectedWortVol_l(), Units::liters));
 
    updateMinAmt();
    updateMaxAmt();
@@ -409,7 +432,7 @@ void MashDesigner::updateCollectedWort()
    // double wort_l = recObs->wortFromMash_l();
    double wort_l = waterFromMash_l();
 
-   double ratio = wort_l / recObs->boilSize_l();
+   double ratio = wort_l / recObs->targetCollectedWortVol_l();
    if( ratio < 0 )
      ratio = 0;
    if( ratio > 1 )
@@ -431,19 +454,12 @@ void MashDesigner::updateMaxAmt()
 
 void MashDesigner::updateMinTemp()
 {
-   double minTemp = minTemp_c();
-
-   if ( minTemp > 100 )
-      minTemp = maxTemp_c();
-
-   label_tempMin->setText(Brewtarget::displayAmount(minTemp, Units::celsius));
+   label_tempMin->setText(Brewtarget::displayAmount(minTemp_c(), Units::celsius));
 }
 
 void MashDesigner::updateMaxTemp()
 {
-   double maxTemp = maxTemp_c();
-
-   label_tempMax->setText(Brewtarget::displayAmount(maxTemp, Units::celsius));
+   label_tempMax->setText(Brewtarget::displayAmount(maxTemp_c(), Units::celsius));
 }
 
 double MashDesigner::selectedAmount_l()
@@ -557,10 +573,8 @@ void MashDesigner::updateTemp()
 void MashDesigner::saveTargetTemp()
 {
    double temp = stepTemp_c();
-   double maxT = maxTemp_c();
 
-   if ( temp > maxT ) 
-      temp = maxT;
+   temp = bound_temp_c(temp);
 
    // be nice and reset the field so it displays in proper units
    lineEdit_temp->setText(temp);
@@ -582,6 +596,9 @@ void MashDesigner::saveTargetTemp()
    updateMaxAmt();
    updateMinTemp();
    updateMaxTemp();
+   updateAmt();
+   updateTempSlider();
+   updateTemp();
    updateFullness();
    updateCollectedWort();
 }
@@ -660,7 +677,7 @@ MashStep::Type MashDesigner::type() const
    return static_cast<MashStep::Type>(curIdx);
 }
 
-void MashDesigner::typeChanged(int t)
+void MashDesigner::typeChanged()
 {
    MashStep::Type _type = type();
 
@@ -701,4 +718,3 @@ void MashDesigner::typeChanged(int t)
       horizontalSlider_temp->setEnabled(false);
    }
 }
-

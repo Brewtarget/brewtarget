@@ -34,8 +34,8 @@ HopEditor::HopEditor( QWidget* parent )
 {
    setupUi(this);
    
-   connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
-   connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
+   connect( buttonBox, &QDialogButtonBox::accepted, this, &HopEditor::save);
+   connect( buttonBox, &QDialogButtonBox::rejected, this, &HopEditor::clearAndClose);
 }
 
 void HopEditor::setHop( Hop* h )
@@ -46,7 +46,7 @@ void HopEditor::setHop( Hop* h )
    obsHop = h;
    if( obsHop )
    {
-      connect( obsHop, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( obsHop, &BeerXMLElement::changed, this, &HopEditor::changed );
       showChanges();
    }
 }

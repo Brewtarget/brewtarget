@@ -34,6 +34,7 @@ BtDatePopup::BtDatePopup(QWidget* parent) : QDialog(parent, Qt::Popup)
    calendar = new QCalendarWidget(widget);
    calendar->setObjectName(QString("btDatePopup_calendar"));
    calendar->setNavigationBarVisible(true);
+   calendar->setSelectedDate(QDate::currentDate());
 
 
    buttonbox = new QDialogButtonBox(widget);
@@ -48,8 +49,8 @@ BtDatePopup::BtDatePopup(QWidget* parent) : QDialog(parent, Qt::Popup)
    vertical->addWidget(calendar);
    vertical->addWidget(buttonbox);
 
-   connect(buttonbox, SIGNAL(accepted()), this, SLOT(accept()));
-   connect(buttonbox, SIGNAL(rejected()), this, SLOT(reject()));
+   connect(buttonbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+   connect(buttonbox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 QDateTime BtDatePopup::selectedDate() const

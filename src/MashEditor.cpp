@@ -32,9 +32,9 @@ MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(0)
 {
    setupUi(this);
 
-   connect(pushButton_fromEquipment, SIGNAL(clicked()), this, SLOT(fromEquipment()) );
-   connect(this, SIGNAL(accepted()), this, SLOT(saveAndClose()) );
-   connect(this, SIGNAL(rejected()), this, SLOT(closeEditor()) );
+   connect(pushButton_fromEquipment, &QAbstractButton::clicked, this, &MashEditor::fromEquipment );
+   connect(this, &QDialog::accepted, this, &MashEditor::saveAndClose );
+   connect(this, &QDialog::rejected, this, &MashEditor::closeEditor );
 
 }
 

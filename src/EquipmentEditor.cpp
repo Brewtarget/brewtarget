@@ -71,36 +71,36 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    obsEquip = 0;
 
    // Connect all the edit boxen
-   connect(lineEdit_boilTime,SIGNAL(textModified()),this,SLOT(updateCheckboxRecord()));
-   connect(lineEdit_evaporationRate,SIGNAL(textModified()),this,SLOT(updateCheckboxRecord()));
-   connect(lineEdit_topUpWater,SIGNAL(textModified()),this,SLOT(updateCheckboxRecord()));
-   connect(lineEdit_trubChillerLoss,SIGNAL(textModified()),this,SLOT(updateCheckboxRecord()));
-   connect(lineEdit_batchSize, SIGNAL( editingFinished() ), this,SLOT(updateCheckboxRecord()));
+   connect(lineEdit_boilTime,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_evaporationRate,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_topUpWater,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_trubChillerLoss,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_batchSize, &QLineEdit::editingFinished, this,&EquipmentEditor::updateCheckboxRecord);
                      
    // Set up the buttons
-   connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
+   connect( pushButton_save, &QAbstractButton::clicked, this, &EquipmentEditor::save );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
-   connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( cancel() ) );
-   connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeEquipment() ) );
-   connect( pushButton_absorption, SIGNAL( clicked() ), this, SLOT( resetAbsorption() ) );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &EquipmentEditor::cancel );
+   connect( pushButton_remove, &QAbstractButton::clicked, this, &EquipmentEditor::removeEquipment );
+   connect( pushButton_absorption, &QAbstractButton::clicked, this, &EquipmentEditor::resetAbsorption );
    connect( equipmentComboBox, SIGNAL(activated(const QString&)), this, SLOT( equipmentSelected() ) );
 
    // Check boxen
-   connect(checkBox_calcBoilVolume, SIGNAL(stateChanged(int)), this, SLOT(updateCheckboxRecord()));
-   connect(checkBox_defaultEquipment, SIGNAL(stateChanged(int)), this, SLOT(updateDefaultEquipment(int)));
+   connect(checkBox_calcBoilVolume, &QCheckBox::stateChanged, this, &EquipmentEditor::updateCheckboxRecord);
+   connect(checkBox_defaultEquipment, &QCheckBox::stateChanged, this, &EquipmentEditor::updateDefaultEquipment);
 
    // Labels
-   connect(label_boilSize, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_boilSize, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_batchSize, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_batchSize, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_evaporationRate, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_evaporationRate, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_topUpWater, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_topUpWater, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_boilingPoint, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_boilingPoint, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_tunVolume, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_tunVolume, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_tunWeight, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_tunWeight, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_lauterDeadspace, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_lauterDeadspace, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_trubChillerLoss, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_trubChillerLoss, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_topUpKettle, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_topUpKettle, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
-   connect(label_boilTime, SIGNAL(labelChanged(Unit::unitDisplay,Unit::unitScale)), lineEdit_boilTime, SLOT(lineChanged(Unit::unitDisplay,Unit::unitScale)));
+   connect(label_boilSize, &BtLabel::labelChanged, lineEdit_boilSize, &BtLineEdit::lineChanged);
+   connect(label_batchSize, &BtLabel::labelChanged, lineEdit_batchSize, &BtLineEdit::lineChanged);
+   connect(label_evaporationRate, &BtLabel::labelChanged, lineEdit_evaporationRate, &BtLineEdit::lineChanged);
+   connect(label_topUpWater, &BtLabel::labelChanged, lineEdit_topUpWater, &BtLineEdit::lineChanged);
+   connect(label_boilingPoint, &BtLabel::labelChanged, lineEdit_boilingPoint, &BtLineEdit::lineChanged);
+   connect(label_tunVolume, &BtLabel::labelChanged, lineEdit_tunVolume, &BtLineEdit::lineChanged);
+   connect(label_tunWeight, &BtLabel::labelChanged, lineEdit_tunWeight, &BtLineEdit::lineChanged);
+   connect(label_lauterDeadspace, &BtLabel::labelChanged, lineEdit_lauterDeadspace, &BtLineEdit::lineChanged);
+   connect(label_trubChillerLoss, &BtLabel::labelChanged, lineEdit_trubChillerLoss, &BtLineEdit::lineChanged);
+   connect(label_topUpKettle, &BtLabel::labelChanged, lineEdit_topUpKettle, &BtLineEdit::lineChanged);
+   connect(label_boilTime, &BtLabel::labelChanged, lineEdit_boilTime, &BtLineEdit::lineChanged);
 
    QMetaObject::connectSlotsByName(this);
 
@@ -488,7 +488,7 @@ void EquipmentEditor::retranslateUi()
    groupBox_mashTun->setTitle(tr("Mash Tun"));
    label_tunVolume->setText(tr("Volume"));
    label_tunWeight->setText(tr("Mass"));
-   label_tunSpecificHeat->setText(QApplication::translate("equipmentEditor", "Specific heat (cal/(g*K))", 0));
+   label_tunSpecificHeat->setText(QApplication::translate("equipmentEditor", "Specific heat (Cal/(g*C))", 0));
    groupBox_losses->setTitle(QApplication::translate("equipmentEditor", "Losses", 0));
    groupBox_losses->setProperty("configSection", QVariant(QApplication::translate("equipmentEditor", "equipmentEditor", 0)));
    label_trubChillerLoss->setText(QApplication::translate("equipmentEditor", "Kettle to fermenter", 0));

@@ -28,7 +28,7 @@ ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent)
 {
    doLayout();
    
-   connect( pushButton_convert, SIGNAL(clicked()), this, SLOT(convert()) );
+   connect( pushButton_convert, &QAbstractButton::clicked, this, &ConverterTool::convert );
 }
 
 void ConverterTool::doLayout()
