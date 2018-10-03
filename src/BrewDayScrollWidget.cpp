@@ -42,14 +42,14 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
    setObjectName("BrewDayScrollWidget");
    recObs = 0;
 
-   connect( listWidget, &QListWidget::currentRowChanged, this, &BrewDayScrollWidget::showInstruction);
-   // connect( plainTextEdit, &QPlainTextEdit::textChanged, this, &BrewDayScrollWidget::saveInstruction );
-   connect(btTextEdit, &BtTextEdit::textModified, this, &BrewDayScrollWidget::saveInstruction);
-   connect( pushButton_insert, &QAbstractButton::clicked, this, &BrewDayScrollWidget::insertInstruction );
-   connect( pushButton_remove, &QAbstractButton::clicked, this, &BrewDayScrollWidget::removeSelectedInstruction );
-   connect( pushButton_up, &QAbstractButton::clicked, this, &BrewDayScrollWidget::pushInstructionUp );
-   connect( pushButton_down, &QAbstractButton::clicked, this, &BrewDayScrollWidget::pushInstructionDown );
-   connect( pushButton_generateInstructions, &QAbstractButton::clicked, this, &BrewDayScrollWidget::generateInstructions );
+
+   connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
+   connect(btTextEdit,SIGNAL(textModified()), this, SLOT(saveInstruction()));
+   connect( pushButton_insert, SIGNAL(clicked()), this, SLOT(insertInstruction()) );
+   connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
+   connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
+   connect( pushButton_down, SIGNAL(clicked()), this, SLOT(pushInstructionDown()) );
+   connect( pushButton_generateInstructions, SIGNAL(clicked()), this, SLOT(generateInstructions()) );
 }
 
 void BrewDayScrollWidget::saveInstruction()

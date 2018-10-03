@@ -211,7 +211,7 @@
                 </size>
                </property>
                <property name="toolTip">
-                <string>Temperature of mash after dough in</string>
+                <string>Temperature of strike water before dough in</string>
                </property>
                <property name="editField" stdset="0">
                 <string notr="true">strikeTemp_c</string>
