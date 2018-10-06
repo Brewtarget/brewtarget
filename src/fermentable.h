@@ -115,7 +115,7 @@ public:
    
    const Type type() const { return _type; }
    double amount_kg() const { return _amountKg; }
-   double inventory() const { return _inventoryAmt; }
+   double inventory() const;
    double yield_pct() const { return _yieldPct; }
    double color_srm() const { return _colorSrm; }
    bool addAfterBoil() const { return _isAfterBoil; }

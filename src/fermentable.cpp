@@ -318,9 +318,14 @@ void Fermentable::setInventoryAmount( double num )
    }
    else
    {
-      _inventoryAmt = num;
+      setInventory(kInventoryProp, kAmount, num);
    }
 }
+double Fermentable::inventory() const
+{
+   return getInventory(kAmount).toDouble();
+}
+
 void Fermentable::setYield_pct( double num )
 {
    if( num >= 0.0 && num <= 100.0 )
@@ -423,7 +428,6 @@ void Fermentable::save()
 
    Database::instance().updateColumns( _table, _key, map);
 
-   setInventory("", kAmount, inventory());
    emit saved();
 
 }
