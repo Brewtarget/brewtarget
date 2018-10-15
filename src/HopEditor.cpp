@@ -67,7 +67,6 @@ void HopEditor::save()
 
    h->setName(lineEdit_name->text());
    h->setAlpha_pct(lineEdit_alpha->toSI());
-   h->setAmount_kg(lineEdit_amount->toSI());
    h->setInventoryAmount(lineEdit_inventory->toSI());
    h->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
    h->setTime_min(lineEdit_time->toSI());
@@ -122,11 +121,6 @@ void HopEditor::showChanges(QMetaProperty* prop)
    }
    if( propName == "alpha_pct" || updateAll ) {
       lineEdit_alpha->setText(obsHop);
-      if( ! updateAll )
-         return;
-   }
-   if( propName == "amount_kg" || updateAll ) {
-      lineEdit_amount->setText(obsHop);
       if( ! updateAll )
          return;
    }

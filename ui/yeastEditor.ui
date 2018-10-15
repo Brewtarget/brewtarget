@@ -181,45 +181,6 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="BtMixedLabel" name="label_amount">
-              <property name="contextMenuPolicy">
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="text">
-               <string>Default Amount</string>
-              </property>
-              <property name="buddy">
-               <cstring>lineEdit_amount</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="BtMixedEdit" name="lineEdit_amount">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Amount</string>
-              </property>
-              <property name="editField" stdset="0">
-               <string notr="true">amount</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QLabel" name="label_amountIsWeight">
@@ -719,14 +680,6 @@
    <header>BtLineEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>BtTemperatureEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
    <class>BtTemperatureLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
@@ -735,20 +688,11 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtMixedLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMixedEdit</class>
+   <class>BtTemperatureEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
    <slots>
     <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-    <slot>setIsWeight(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -787,22 +731,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>label_amount</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_amount</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>48</x>
-     <y>114</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>140</x>
-     <y>114</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>label_minTemperature</sender>
    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    <receiver>lineEdit_minTemperature</receiver>
@@ -831,22 +759,6 @@
     <hint type="destinationlabel">
      <x>143</x>
      <y>275</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_amountIsWeight</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lineEdit_amount</receiver>
-   <slot>setIsWeight(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>200</x>
-     <y>171</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>171</x>
-     <y>143</y>
     </hint>
    </hints>
   </connection>

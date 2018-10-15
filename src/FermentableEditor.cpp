@@ -61,7 +61,6 @@ void FermentableEditor::save()
    // order as the combobox.
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
 
-   obsFerm->setAmount_kg(lineEdit_amount->toSI());
    obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
    obsFerm->setYield_pct(lineEdit_yield->toSI());
    obsFerm->setColor_srm(lineEdit_color->toSI());
@@ -115,12 +114,6 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
        if( ! updateAll )
          return;
    }
-   if( propName == "amount_kg" || updateAll) {
-      lineEdit_amount->setText(obsFerm);
-      if( ! updateAll )
-         return;
-   }
-
    if( propName == "inventory" || updateAll) {
       lineEdit_inventory->setText(obsFerm);
       if( ! updateAll )

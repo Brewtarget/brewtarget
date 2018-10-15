@@ -63,7 +63,6 @@ void YeastEditor::save()
    y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
-   y->setAmount( lineEdit_amount->toSI());
    y->setInventoryQuanta( lineEdit_inventory->text().toInt() );
 
 
@@ -125,11 +124,6 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
    }
    if( propName == "form" || updateAll ) {
       comboBox_form->setCurrentIndex(obsYeast->form());
-      if( ! updateAll )
-         return;
-   }
-   if( propName == "amount" || updateAll ) {
-      lineEdit_amount->setText( obsYeast );
       if( ! updateAll )
          return;
    }
