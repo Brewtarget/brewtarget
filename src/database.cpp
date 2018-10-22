@@ -3827,26 +3827,35 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
 // calling method has the transactions
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
-   BrewNote* ret = newBrewNote(parent);
+    BrewNote* ret = newBrewNote(parent);
+    try {
+        if ( ! ret )
+        {
+            QString error = "Could not create new brewnote.";
+            Brewtarget::logE(QString(error));
+            QMessageBox::critical(0, tr("Import error."),
+                error.append("\nUnable to create brew note."));
+            return ret;
+        }
+        // Need to tell the brewnote not to perform the calculations
+        ret->setLoading(true);
+        fromXml( ret, BrewNote::tagToProp, node);
+        ret->invalidate();//debug code
+        if ( ! ret->isValid() )
+        {
+            QString error = "Could not create new brewnote.";
+            Brewtarget::logE(QString(error));
+            QMessageBox::critical(0, tr("Import error."),
+                error.append("\nError loading brewnote from XML."));
+            return ret;
+        }
 
-   try {
-      if ( ! ret )
-         throw QString("Could not create new brewnote");
-
-      // Need to tell the brewnote not to perform the calculations
-      ret->setLoading(true);
-      fromXml( ret, BrewNote::tagToProp, node);
-      if ( ! ret->isValid() )
-         throw QString("Error loading brewnote from XML");
-
-      ret->setLoading(false);
-   }
-   catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      throw;
-   }
-
-   return ret;
+        ret->setLoading(false);
+    }
+    catch (QString e) {
+        Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+    }
+    return ret;
 }
 
 Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
@@ -3981,7 +3990,6 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
       if ( ! parent )
          sqlDatabase().rollback();
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      throw;
    }
 
    if ( ! parent )
@@ -4218,8 +4226,12 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
       for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       {
          MashStep* temp = mashStepFromXml( n, ret );
-         if ( ! temp->isValid() )
-            throw;
+         if ( ! temp->isValid() ) {
+             QString error = QString("Error importing mash step %1").arg(temp->name());
+             Brewtarget::logE(error);
+             QMessageBox::critical(0, tr("Import error."),
+                 error.append("\nImporting as \"Infusion\"."));
+         }
       }
    }
    catch (QString e) {
@@ -4540,7 +4552,6 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
       blockSignals(false);
-      throw;
    }
 }
 
