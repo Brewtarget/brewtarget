@@ -5,14 +5,10 @@ import json
 import sqlite3
 
 def addIng(cursor, x, tableName):
-   columnList = x.keys()
-   valueList = x.values()
-   cvList = zip(columnList, valueList)
-   
    setClause = ''
-   for c,v in cvList[:-1]:
+   for c, v in x.items():
       setClause = setClause + '{0} = "{1}", '.format(c,v)
-   setClause = setClause + '{0} = "{1}"'.format(cvList[-1][0], cvList[-1][1])
+   setClause = setClause[:-2]
    
    cursor.execute('INSERT INTO {0} DEFAULT VALUES'.format(tableName))
    newId = cursor.lastrowid
@@ -48,16 +44,16 @@ if __name__ == "__main__" :
    
    with open(jsonFilename) as jsonFile:
       bigDict = json.load(jsonFile)
-      ferm = bigDict['fermentable']
+      ferm = bigDict.get('fermentable', [])
       for f in ferm:
          addFermentable(c,f)
-      hop = bigDict['hop']
+      hop = bigDict.get('hop', [])
       for h in hop:
          addHop(c,h)
-      misc = bigDict['misc']
+      misc = bigDict.get('misc', [])
       for m in misc:
          addMisc(c,m)
-      yeast = bigDict['yeast']
+      yeast = bigDict.get('yeast', [])
       for y in yeast:
          addYeast(c, y)
 
