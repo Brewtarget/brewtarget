@@ -105,6 +105,16 @@
            <string>Decoction</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>Fly Sparge</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Batch Sparge</string>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>
