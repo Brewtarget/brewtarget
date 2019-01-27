@@ -133,6 +133,12 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
       lcdnumber_abv->setLowLim( bNoteObs->projABV_pct() * low);
       lcdnumber_abv->setHighLim( bNoteObs->projABV_pct() * high);
 
+      lcdnumber_atten->setLowLim( bNoteObs->projAtten() * low );
+      lcdnumber_atten->setHighLim( bNoteObs->projAtten() * high );
+
+      lcdnumber_projAtten->setLowLim( bNoteObs->projAtten() * low );
+      lcdnumber_projAtten->setHighLim( bNoteObs->projAtten() * high );
+
       showChanges();
    }
 }
@@ -299,7 +305,8 @@ void BrewNoteWidget::showChanges(QString field)
    lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);
    lcdnumber_abv->display(bNoteObs->abv(),2);
-   
+   lcdnumber_atten->display(bNoteObs->attenuation(),2);
+   lcdnumber_projAtten->display(bNoteObs->projAtten(),2);
 }
 
 void BrewNoteWidget::focusOutEvent(QFocusEvent *e)

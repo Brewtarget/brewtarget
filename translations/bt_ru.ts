@@ -112,7 +112,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Приблизительно калорий (на 0,33л)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
@@ -179,23 +179,23 @@
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
-        <translation>Фактический объём перед кипячением</translation>
+        <translation>Фактический объём перед кипячением:</translation>
     </message>
     <message>
         <source>Actual Pre-boil Gravity:</source>
-        <translation>Фактическая плотность перед кипячением</translation>
+        <translation type="unfinished">Фактическая плотность перед кипячением:</translation>
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation>Объём после кипячения</translation>
+        <translation type="unfinished">Объём после кипячения:</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation>Плотность после кипячения</translation>
+        <translation type="unfinished">Плотность после кипячения:</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation>Объём в бродильном баке</translation>
+        <translation>Объём в бродильном баке:</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -211,7 +211,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Приблизительно калорий (на 0,33л)</translation>
     </message>
 </context>
 <context>
@@ -310,61 +310,61 @@
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
+        <translation>гггг-мм-дд</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>дд-мм-гггг</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation>мм-дд-гггг</translation>
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Секунды</translation>
     </message>
     <message>
         <source>Minutes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Минуты</translation>
     </message>
     <message>
         <source>Hours</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Часы</translation>
     </message>
     <message>
         <source>Days</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дни</translation>
     </message>
     <message>
         <source>Barrels</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Бочки</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Шкала</translation>
     </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>Слишком низко для стиля</translation>
+        <translation>Слишком низко для стиля.</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>В пределах стиля</translation>
+        <translation>В пределах стиля.</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>Слишком высоко для стиля</translation>
+        <translation>Слишком высоко для стиля.</translation>
     </message>
 </context>
 <context>
     <name>BtLabel</name>
     <message>
         <source>Color (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет (%1)</translation>
     </message>
 </context>
 <context>
@@ -414,11 +414,11 @@
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Число</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Буква</translation>
     </message>
     <message>
         <source>Guide</source>
@@ -430,15 +430,15 @@
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation type="unfinished"></translation>
+        <translation>Полный путь</translation>
     </message>
     <message>
         <source>Could not copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось скопировать</translation>
     </message>
     <message>
         <source>There was an unexpected error creating %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не ожидаемая ошибка при создании %1</translation>
     </message>
 </context>
 <context>
@@ -465,7 +465,7 @@
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished"></translation>
+        <translation>Пересчитать эффективность</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -525,7 +525,7 @@
     </message>
     <message>
         <source>Cancel All</source>
-        <translation type="unfinished"></translation>
+        <translation>Отменить всё</translation>
     </message>
     <message>
         <source>Copy %1</source>
@@ -541,11 +541,11 @@
     </message>
     <message>
         <source>To XML</source>
-        <translation type="unfinished"></translation>
+        <translation>В XML</translation>
     </message>
     <message>
         <source>To HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>В HTML</translation>
     </message>
 </context>
 <context>
@@ -595,11 +595,11 @@
     </message>
     <message>
         <source>Database password</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль БД</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <source>Connection failed</source>
@@ -1247,7 +1247,7 @@
     </message>
     <message>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
-        <translation>Попытка добавить этап затора без самого затора. Пожалуйста, создайте сначала затор</translation>
+        <translation>Попытка добавить этап затора без самого затора. Пожалуйста, создайте сначала затор.</translation>
     </message>
     <message>
         <source>Copy Recipe</source>
@@ -1259,7 +1259,7 @@
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Пожалуйста, назовите ваш затор прежде чем его сохранять</translation>
+        <translation>Пожалуйста, назовите ваш затор прежде чем его сохранять.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -1283,7 +1283,7 @@
     </message>
     <message>
         <source>You must select a style first.</source>
-        <translation>Сначала выберите стиль</translation>
+        <translation>Сначала выберите стиль.</translation>
     </message>
     <message>
         <source>Choose File</source>
@@ -1323,15 +1323,15 @@
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя папки должно содержать хотя-бы один символ, отличающийся от /</translation>
     </message>
     <message>
         <source>Error copying recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при копировании рецепта</translation>
     </message>
     <message>
         <source>An error was returned while creating %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при создании %1</translation>
     </message>
 </context>
 <context>
@@ -1731,27 +1731,27 @@
     </message>
     <message>
         <source>SI units</source>
-        <translation type="unfinished"></translation>
+        <translation>Единицы СИ</translation>
     </message>
     <message>
         <source>US traditional units</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Единицы измерения США</translation>
     </message>
     <message>
         <source>British imperial units</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Единицы измерения Великобритании</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished"></translation>
+        <translation>Градусы Цельсия</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished"></translation>
+        <translation>Градусы Фаренгейта</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
-        <translation type="unfinished">20C/20C Текущая Плотность</translation>
+        <translation>20C/20C Текущая плотность</translation>
     </message>
     <message>
         <source>Plato/Brix/Balling</source>
@@ -1759,23 +1759,23 @@
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">мм-дд-гггг</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">дд-мм-гггг</translation>
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">гггг-мм-дд</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished">Цвет пива по SRM</translation>
+        <translation>по SRM</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished">Цвет пива по EBC</translation>
+        <translation>по EBC</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
@@ -1803,7 +1803,7 @@
     </message>
     <message>
         <source>SQLite (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>SQLite (по умолчанию)</translation>
     </message>
     <message>
         <source>PostgreSQL</source>
@@ -2074,7 +2074,7 @@
     </message>
     <message>
         <source>Data directory &quot;%1&quot; is missing.  Some features will be unavaliable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог с данными &quot;%1&quot; отсутствует. Некоторые функции будут недоступны.</translation>
     </message>
     <message>
         <source>Fly Sparge</source>
@@ -2094,7 +2094,7 @@
     </message>
     <message>
         <source>Plaintext</source>
-        <translation type="unfinished"></translation>
+        <translation>Простой текст</translation>
     </message>
     <message>
         <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
@@ -4841,7 +4841,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Date</source>
-        <translation>Дата</translation>
+        <translation>Формат даты</translation>
     </message>
     <message>
         <source>Forumulas</source>
@@ -4857,7 +4857,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Базы данных</translation>
     </message>
     <message>
         <source>Engines</source>

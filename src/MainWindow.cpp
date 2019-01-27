@@ -349,6 +349,11 @@ void MainWindow::setupTables()
    fermentableTable->setModel(fermTableProxy);
    // Make the fermentable table show grain percentages in row headers.
    fermTableModel->setDisplayPercentages(true);
+   // Double clicking the name column pops up an edit dialog for the selected item
+   connect( fermentableTable, &QTableView::doubleClicked, this, [&](const QModelIndex &idx) {
+       if (idx.column() == 0)
+           MainWindow::editSelectedFermentable();
+   });
 
    // Hops
    hopTableModel = new HopTableModel(hopTable);
@@ -358,6 +363,10 @@ void MainWindow::setupTables()
    hopTable->setModel(hopTableProxy);
    // Hop table show IBUs in row headers.
    hopTableModel->setShowIBUs(true);
+   connect( hopTable, &QTableView::doubleClicked, this, [&](const QModelIndex &idx) {
+       if (idx.column() == 0)
+           MainWindow::editSelectedHop();
+   });
 
    // Misc
    miscTableModel = new MiscTableModel(miscTable);
@@ -365,6 +374,10 @@ void MainWindow::setupTables()
    miscTableProxy->setSourceModel(miscTableModel);
    miscTable->setItemDelegate(new MiscItemDelegate(miscTable));
    miscTable->setModel(miscTableProxy);
+   connect( miscTable, &QTableView::doubleClicked, this, [&](const QModelIndex &idx) {
+       if (idx.column() == 0)
+           MainWindow::editSelectedMisc();
+   });
 
    // Yeast
    yeastTableModel = new YeastTableModel(yeastTable);
@@ -372,11 +385,19 @@ void MainWindow::setupTables()
    yeastTableProxy->setSourceModel(yeastTableModel);
    yeastTable->setItemDelegate(new YeastItemDelegate(yeastTable));
    yeastTable->setModel(yeastTableProxy);
+   connect( yeastTable, &QTableView::doubleClicked, this, [&](const QModelIndex &idx) {
+       if (idx.column() == 0)
+           MainWindow::editSelectedYeast();
+   });
 
    // Mashes
    mashStepTableModel = new MashStepTableModel(mashStepTableWidget);
    mashStepTableWidget->setItemDelegate(new MashStepItemDelegate());
    mashStepTableWidget->setModel(mashStepTableModel);
+   connect( mashStepTableWidget, &QTableView::doubleClicked, this, [&](const QModelIndex &idx) {
+       if (idx.column() == 0)
+           MainWindow::editSelectedMashStep();
+   });
 
    // Enable sorting in the main tables.
    fermentableTable->horizontalHeader()->setSortIndicator( FERMAMOUNTCOL, Qt::DescendingOrder );
@@ -2437,24 +2458,26 @@ void MainWindow::showPitchDialog()
 
 void MainWindow::showEquipmentEditor()
 {
-   if ( ! recipeObs->equipment() )
+   if ( recipeObs && ! recipeObs->equipment() )
    {
       QMessageBox::warning( this, tr("No equipment"), tr("You must select or define an equipment profile first."));
    }
    else
    {
+      singleEquipEditor->setEquipment(recipeObs->equipment());
       singleEquipEditor->show();
    }
 }
 
 void MainWindow::showStyleEditor()
 {
-   if ( ! recipeObs->style() )
+   if ( recipeObs && ! recipeObs->style() )
    {
       QMessageBox::warning( this, tr("No style"), tr("You must select a style first."));
    }
    else
    {
+      singleStyleEditor->setStyle(recipeObs->style());
       singleStyleEditor->show();
    }
 }
