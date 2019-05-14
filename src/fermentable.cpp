@@ -139,23 +139,23 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key)
 Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
-   setType( static_cast<Fermentable::Type>(types.indexOf(get(kType).toString())) );
-   setAmount_kg( get(kAmount).toDouble() );
-   setInventoryAmount( getInventory(kAmount).toDouble() );
-   setYield_pct( get(kYield).toDouble() );
-   setColor_srm( get(kColor).toDouble() );
-   setAddAfterBoil( get(kAddAfterBoil).toBool() );
-   setOrigin( get(kOrigin).toString() );
-   setSupplier( get(kSupplier).toString() );
-   setNotes( get(kNotes).toString() );
-   setCoarseFineDiff_pct( get(kCoarseFineDiff).toDouble() );
-   setMoisture_pct( get(kMoisture).toDouble() );
-   setDiastaticPower_lintner( get(kDiastaticPower).toDouble() );
-   setProtein_pct( get(kProtein).toDouble() );
-   setMaxInBatch_pct( get(kMaxInBatch).toDouble() );
-   setRecommendMash( get(kRecommendMash).toBool() );
-   setIbuGalPerLb( get(kIBUGalPerLb).toDouble() );
-   setIsMashed( get(kIsMashed).toBool() );
+   setType( static_cast<Fermentable::Type>(types.indexOf(rec.value(kType).toString())) );
+   setAmount_kg( rec.value(kAmount).toDouble() );
+   // setInventoryAmount( getInventory(kAmount).toDouble() ); // This one sucks
+   setYield_pct( rec.value(kYield).toDouble() );
+   setColor_srm( rec.value(kColor).toDouble() );
+   setAddAfterBoil( rec.value(kAddAfterBoil).toBool() );
+   setOrigin( rec.value(kOrigin).toString() );
+   setSupplier( rec.value(kSupplier).toString() );
+   setNotes( rec.value(kNotes).toString() );
+   setCoarseFineDiff_pct( rec.value(kCoarseFineDiff).toDouble() );
+   setMoisture_pct( rec.value(kMoisture).toDouble() );
+   setDiastaticPower_lintner( rec.value(kDiastaticPower).toDouble() );
+   setProtein_pct( rec.value(kProtein).toDouble() );
+   setMaxInBatch_pct( rec.value(kMaxInBatch).toDouble() );
+   setRecommendMash( rec.value(kRecommendMash).toBool() );
+   setIbuGalPerLb( rec.value(kIBUGalPerLb).toDouble() );
+   setIsMashed( rec.value(kIsMashed).toBool() );
 }
 
 Fermentable::Fermentable( Fermentable const& other )

@@ -540,7 +540,7 @@ private:
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       QSqlQuery q(sqlDatabase());
-      // q.setForwardOnly(true);
+      q.setForwardOnly(true);
       QString queryString = QString("SELECT * FROM %1").arg(tableNames[table]);
       q.prepare( queryString );
 
