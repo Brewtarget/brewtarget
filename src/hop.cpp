@@ -127,6 +127,11 @@ Hop::Hop(Brewtarget::DBTable table, int key)
 {
 }
 
+Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+}
+
 Hop::Hop( Hop const& other )
    : BeerXMLElement(other)
 {

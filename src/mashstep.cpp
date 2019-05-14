@@ -90,6 +90,11 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
 {
 }
 
+MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+}
+
 //================================"SET" METHODS=================================
 void MashStep::setInfuseTemp_c(double var)
 {

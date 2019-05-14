@@ -50,6 +50,12 @@ Instruction::Instruction(Brewtarget::DBTable table, int key)
    setObjectName("Instruction"); 
 }
 
+Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+   setObjectName("Instruction"); 
+}
+
 // Setters ====================================================================
 void Instruction::setDirections(const QString& dir)
 {

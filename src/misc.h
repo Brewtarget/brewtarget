@@ -133,6 +133,7 @@ signals:
    
 private:
    Misc(Brewtarget::DBTable table, int key);
+   Misc(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Misc(Misc const& other);
    
    bool isValidType( const QString &var );

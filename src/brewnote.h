@@ -185,6 +185,7 @@ signals:
 
 private:
    BrewNote(Brewtarget::DBTable table, int key);
+   BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec);
    BrewNote(BrewNote const& other);
    bool loading;
 

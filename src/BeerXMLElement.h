@@ -31,6 +31,7 @@
 #include <QMetaProperty>
 #include <QVariant>
 #include <QDateTime>
+#include <QSqlRecord>
 #include "brewtarget.h"
 // For uintptr_t.
 #if HAVE_STDINT_H

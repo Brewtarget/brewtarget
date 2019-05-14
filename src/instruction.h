@@ -87,8 +87,8 @@ signals:
    */
 
 private:
-   //! Only database gets to construct instances.
    Instruction(Brewtarget::DBTable table, int key);
+   Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Instruction( Instruction const& other );
    /*
    Instruction( const QString& name,

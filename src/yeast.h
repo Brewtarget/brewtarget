@@ -152,6 +152,7 @@ signals:
 
 private:
    Yeast(Brewtarget::DBTable table, int key);
+   Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Yeast(Yeast const& other);
    
    static QStringList types;

@@ -116,6 +116,11 @@ Yeast::Yeast(Brewtarget::DBTable table, int key)
 {
 }
 
+Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+}
+
 Yeast::Yeast(Yeast const& other) : BeerXMLElement(other)
 {
 }

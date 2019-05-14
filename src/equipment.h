@@ -144,6 +144,7 @@ signals:
    
 private:
    Equipment(Brewtarget::DBTable table, int key);
+   Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Equipment( Equipment const& other);
    
    // Calculate the boil size.

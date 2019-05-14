@@ -162,6 +162,7 @@ signals:
    
 private:
    Hop(Brewtarget::DBTable table, int key);
+   Hop(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Hop( Hop const& other );
    
    void setDefaults();

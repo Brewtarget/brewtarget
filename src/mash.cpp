@@ -89,6 +89,11 @@ Mash::Mash(Brewtarget::DBTable table, int key)
 {
 }
 
+Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+}
+
 void Mash::setGrainTemp_c( double var )
 {
    set(kGrainTempProp, kGrainTemp, var);

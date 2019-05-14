@@ -600,12 +600,12 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMNAMECOL:
          retVal = value.canConvert(QVariant::String);
          if ( retVal )
-            row->setName(value.toString());
+            row->setName(value.toString()); // Write changes to db immediately
          break;
       case FERMTYPECOL:
          retVal = value.canConvert(QVariant::Int);
          if ( retVal )
-            row->setType( static_cast<Fermentable::Type>(value.toInt()));
+            row->setType( static_cast<Fermentable::Type>(value.toInt()), false);
          break;
       case FERMINVENTORYCOL:
          retVal = value.canConvert(QVariant::String);
@@ -616,7 +616,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          retVal = value.canConvert(QVariant::String);
          if( retVal )
          {
-            row->setAmount_kg(Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl));
+            row->setAmount_kg(Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl), false);
             if( rowCount() > 0 )
                headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
          }
@@ -624,28 +624,28 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMISMASHEDCOL:
          retVal = value.canConvert(QVariant::Int);
          if( retVal )
-            row->setAdditionMethod(static_cast<Fermentable::AdditionMethod>(value.toInt()));
+            row->setAdditionMethod(static_cast<Fermentable::AdditionMethod>(value.toInt()), false);
          break;
       case FERMAFTERBOIL:
          retVal = value.canConvert(QVariant::Int);
          if( retVal )
-            row->setAdditionTime(static_cast<Fermentable::AdditionTime>(value.toInt()));
+            row->setAdditionTime(static_cast<Fermentable::AdditionTime>(value.toInt()), false);
          break;
       case FERMYIELDCOL:
          retVal = value.canConvert(QVariant::Double);
          if( retVal )
-            row->setYield_pct( value.toDouble() );
+            row->setYield_pct( value.toDouble(), false );
          break;
       case FERMCOLORCOL:
          retVal = value.canConvert(QVariant::Double);
          if( retVal )
-            row->setColor_srm(Brewtarget::qStringToSI(value.toString(), Units::srm, dspUnit, dspScl));
+            row->setColor_srm(Brewtarget::qStringToSI(value.toString(), Units::srm, dspUnit, dspScl), false);
          break;
       default:
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return false;
    }
-   row->save();
+//   row->save();
    return retVal;
 }
 

@@ -540,8 +540,8 @@ private:
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       QSqlQuery q(sqlDatabase());
-      q.setForwardOnly(true);
-      QString queryString = QString("SELECT id FROM %1").arg(tableNames[table]);
+      // q.setForwardOnly(true);
+      QString queryString = QString("SELECT * FROM %1").arg(tableNames[table]);
       q.prepare( queryString );
 
       try {
@@ -558,7 +558,7 @@ private:
       {
          int key = q.record().value("id").toInt();
 
-         T* e = new T(table, key);
+         T* e = new T(table, key, q.record());
          if( ! hash.contains(key) )
             hash.insert(key, e);
       }

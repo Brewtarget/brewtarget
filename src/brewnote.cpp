@@ -165,6 +165,12 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key)
    loading = false;
 }
 
+BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+   loading = false;
+}
+
 void BrewNote::populateNote(Recipe* parent)
 {
 

@@ -90,6 +90,11 @@ Water::Water(Brewtarget::DBTable table, int key)
 {
 }
 
+Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+}
+
 //================================"SET" METHODS=================================
 void Water::setAmount_l( double var )
 {

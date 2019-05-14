@@ -220,6 +220,28 @@ Recipe::Recipe(Brewtarget::DBTable table, int key)
    setObjectName("Recipe"); 
 }
 
+Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key),
+     _ABV_pct(0),
+     _color_srm(0),
+     _boilGrav(1.000),
+     _IBU(0),
+     _wortFromMash_l(1.0),
+     _boilVolume_l(1.0),
+     _postBoilVolume_l(1.0),
+     _finalVolume_l(1.0),
+     _finalVolumeNoLosses_l(1.0),
+     _calories(0),
+     _grainsInMash_kg(0),
+     _grains_kg(0),
+     _SRMColor(255,255,0),
+     _og(1.000),
+     _fg(1.000),
+     _uninitializedCalcs(true)
+{
+   setObjectName("Recipe"); 
+}
+
 Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other)
 {
    setObjectName("Recipe"); 

@@ -117,6 +117,7 @@ signals:
    
 private:
    Mash(Brewtarget::DBTable table, int key);
+   Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Mash( Mash const& other );
    
    // Get via the relational relationship.

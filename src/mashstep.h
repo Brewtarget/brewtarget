@@ -119,6 +119,7 @@ signals:
    
 private:
    MashStep(Brewtarget::DBTable table, int key);
+   MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
    MashStep( MashStep const& other );
    
    bool isValidType( const QString &str ) const;

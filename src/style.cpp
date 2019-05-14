@@ -127,6 +127,11 @@ Style::Style(Brewtarget::DBTable table, int key)
 {
 }
 
+Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+}
+
 //==============================="SET" METHODS==================================
 void Style::setCategory( const QString& var )
 {

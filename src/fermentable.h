@@ -146,25 +146,25 @@ public:
    bool isSugar() const;
 
 
-   void setType( Type t );
-   void setAdditionMethod( AdditionMethod m );
-   void setAdditionTime( AdditionTime t );
-   void setAmount_kg( double num );
-   void setInventoryAmount( double num );
-   void setYield_pct( double num );
-   void setColor_srm( double num );   
-   void setAddAfterBoil( bool b );
-   void setOrigin( const QString& str );
-   void setSupplier( const QString& str);
-   void setNotes( const QString& str );
-   void setCoarseFineDiff_pct( double num );
-   void setMoisture_pct( double num );
-   void setDiastaticPower_lintner( double num );
-   void setProtein_pct( double num );
-   void setMaxInBatch_pct( double num );
-   void setRecommendMash( bool b );
-   void setIbuGalPerLb( double num );
-   void setIsMashed(bool var);
+   void setType( Type t, bool cacheOnly = true );
+   void setAdditionMethod( AdditionMethod m, bool cacheOnly = true );
+   void setAdditionTime( AdditionTime t, bool cacheOnly = true );
+   void setAmount_kg( double num, bool cacheOnly = true );
+   void setInventoryAmount( double num, bool cacheOnly = true );
+   void setYield_pct( double num, bool cacheOnly = true );
+   void setColor_srm( double num, bool cacheOnly = true );   
+   void setAddAfterBoil( bool b, bool cacheOnly = true );
+   void setOrigin( const QString& str, bool cacheOnly = true );
+   void setSupplier( const QString& str, bool cacheOnly = true);
+   void setNotes( const QString& str, bool cacheOnly = true );
+   void setCoarseFineDiff_pct( double num, bool cacheOnly = true );
+   void setMoisture_pct( double num, bool cacheOnly = true );
+   void setDiastaticPower_lintner( double num, bool cacheOnly = true );
+   void setProtein_pct( double num, bool cacheOnly = true );
+   void setMaxInBatch_pct( double num, bool cacheOnly = true );
+   void setRecommendMash( bool b, bool cacheOnly = true );
+   void setIbuGalPerLb( double num, bool cacheOnly = true );
+   void setIsMashed(bool var, bool cacheOnly = true);
 
    void save();
 
@@ -178,6 +178,7 @@ signals:
    
 private:
    Fermentable(Brewtarget::DBTable table, int key);
+   Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Fermentable( Fermentable const& other );
    
    static bool isValidType( const QString& str );

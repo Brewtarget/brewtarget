@@ -172,6 +172,7 @@ signals:
 
 private:
    Style(Brewtarget::DBTable table, int key);
+   Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
    
    bool isValidType( const QString &str );

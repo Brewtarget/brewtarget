@@ -113,6 +113,11 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 {
 }
 
+Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
+{
+}
+
 Equipment::Equipment( Equipment const& other )
    : BeerXMLElement(other)
 {

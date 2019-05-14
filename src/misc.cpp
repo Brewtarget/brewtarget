@@ -81,7 +81,13 @@ QString Misc::classNameStr()
 }
 
 //============================CONSTRUCTORS======================================
-Misc::Misc(Brewtarget::DBTable table, int key) : BeerXMLElement(table, key)
+Misc::Misc(Brewtarget::DBTable table, int key) 
+   : BeerXMLElement(table, key)
+{
+}
+
+Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key)
 {
 }
 

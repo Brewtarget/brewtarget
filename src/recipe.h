@@ -359,6 +359,7 @@ public slots:
 private:
    
    Recipe(Brewtarget::DBTable table, int key);
+   Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Recipe(Recipe const& other);
    
    // Calculated properties.

@@ -106,6 +106,7 @@ signals:
    
 private:
    Water(Brewtarget::DBTable table, int key);
+   Water(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Water( Water const& other );
    
    static QHash<QString,QString> tagToProp;
