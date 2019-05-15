@@ -71,6 +71,7 @@ public:
    Q_PROPERTY( double volumeIntoFerm_l READ volumeIntoFerm_l WRITE setVolumeIntoFerm_l /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double pitchTemp_c READ pitchTemp_c WRITE setPitchTemp_c /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double fg READ fg WRITE setFg /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double attenuation READ attenuation WRITE setAttenuation /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double finalVolume_l READ finalVolume_l WRITE setFinalVolume_l /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double boilOff_l READ boilOff_l WRITE setBoilOff_l /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double projBoilGrav READ projBoilGrav WRITE setProjBoilGrav /*NOTIFY changed*/ STORED false )
@@ -87,24 +88,24 @@ public:
    Q_PROPERTY( double projAtten READ projAtten WRITE setProjAtten /*NOTIFY changed*/ STORED false )
 
    // Setters
-   void setABV(double var);
-   void setAttenuation(double var);
-   void setBrewDate(QDateTime const& date = QDateTime::currentDateTime());
-   void setFermentDate(QDateTime const& date);
-   void setNotes(const QString& var, bool notify = true);
-   void setSg(double var);
-   void setVolumeIntoBK_l(double var);
-   void setBrewhouseEff_pct(double var);
-   void setEffIntoBK_pct(double var);
-   void setStrikeTemp_c(double var);
-   void setMashFinTemp_c(double var);
-   void setOg(double var);
-   void setPostBoilVolume_l(double var);
-   void setVolumeIntoFerm_l(double var);
-   void setPitchTemp_c(double var);
-   void setFg(double var);
-   void setFinalVolume_l(double var);  
-   void setBoilOff_l(double var);
+   void setABV(double var, bool cacheOnly = false);
+   void setAttenuation(double var, bool cacheOnly = false);
+   void setBrewDate(QDateTime const& date = QDateTime::currentDateTime(), bool cacheOnly = false);
+   void setFermentDate(QDateTime const& date, bool cacheOnly = false);
+   void setNotes(const QString& var, bool cacheOnly = false);
+   void setSg(double var, bool cacheOnly = false);
+   void setVolumeIntoBK_l(double var, bool cacheOnly = false);
+   void setBrewhouseEff_pct(double var, bool cacheOnly = false);
+   void setEffIntoBK_pct(double var, bool cacheOnly = false);
+   void setStrikeTemp_c(double var, bool cacheOnly = false);
+   void setMashFinTemp_c(double var, bool cacheOnly = false);
+   void setOg(double var, bool cacheOnly = false);
+   void setPostBoilVolume_l(double var, bool cacheOnly = false);
+   void setVolumeIntoFerm_l(double var, bool cacheOnly = false);
+   void setPitchTemp_c(double var, bool cacheOnly = false);
+   void setFg(double var, bool cacheOnly = false);
+   void setFinalVolume_l(double var, bool cacheOnly = false);  
+   void setBoilOff_l(double var, bool cacheOnly = false);
    // Metasetter
    void populateNote(Recipe* parent);
    void recalculateEff(Recipe* parent);
@@ -116,7 +117,7 @@ public:
    QString   brewDate_str() const;
    //! Convenience method.
    QString   brewDate_short() const;
-   QDateTime fermentDate() const;
+    QDateTime fermentDate() const;
    //! Convenience method.
    QString   fermentDate_str() const;
    //! Convenience method.
@@ -154,18 +155,18 @@ public:
    double calculateAttenuation_pct();
 
    // Projected values
-   void setProjBoilGrav(double var);
-   void setProjVolIntoBK_l(double var);
-   void setProjStrikeTemp_c(double var);
-   void setProjMashFinTemp_c(double var);
-   void setProjOg(double var);
-   void setProjVolIntoFerm_l(double var);
-   void setProjFg(double var);
-   void setProjEff_pct(double var);
-   void setProjABV_pct(double var);
-   void setProjPoints(double var);
-   void setProjFermPoints(double var);
-   void setProjAtten(double var);
+   void setProjBoilGrav(double var, bool cacheOnly = false);
+   void setProjVolIntoBK_l(double var, bool cacheOnly = false);
+   void setProjStrikeTemp_c(double var, bool cacheOnly = false);
+   void setProjMashFinTemp_c(double var, bool cacheOnly = false);
+   void setProjOg(double var, bool cacheOnly = false);
+   void setProjVolIntoFerm_l(double var, bool cacheOnly = false);
+   void setProjFg(double var, bool cacheOnly = false);
+   void setProjEff_pct(double var, bool cacheOnly = false);
+   void setProjABV_pct(double var, bool cacheOnly = false);
+   void setProjPoints(double var, bool cacheOnly = false);
+   void setProjFermPoints(double var, bool cacheOnly = false);
+   void setProjAtten(double var, bool cacheOnly = false);
 
    double projBoilGrav() const;
    double projVolIntoBK_l() const;
@@ -188,6 +189,37 @@ private:
    BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec);
    BrewNote(BrewNote const& other);
    bool loading;
+
+   QDateTime _brewDate;
+   QDateTime _fermentDate;
+   QString _notes;
+   double _sg;
+   double _abv;
+   double _effIntoBK_pct;
+   double _brewhouseEff_pct;
+   double _volumeIntoBK_l;
+   double _strikeTemp_c;
+   double _mashFinTemp_c;
+   double _og;
+   double _postBoilVolume_l;
+   double _volumeIntoFerm_l;
+   double _pitchTemp_c;
+   double _fg;
+   double _attenuation;
+   double _finalVolume_l;
+   double _boilOff_l;
+   double _projBoilGrav;
+   double _projVolIntoBK_l;
+   double _projStrikeTemp_c;
+   double _projMashFinTemp_c;
+   double _projOg;
+   double _projVolIntoFerm_l;
+   double _projFg;
+   double _projEff_pct;
+   double _projABV_pct;
+   double _projPoints;
+   double _projFermPoints;
+   double _projAtten;
 
    QHash<QString,double> info;
    QHash<QString,QString> XMLTagToName();

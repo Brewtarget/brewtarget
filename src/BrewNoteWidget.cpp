@@ -243,7 +243,7 @@ void BrewNoteWidget::updateNotes()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText(), false);
+   bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText() );
 }
 
 void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
