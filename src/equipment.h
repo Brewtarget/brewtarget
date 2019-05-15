@@ -79,23 +79,23 @@ public:
    Q_PROPERTY( double boilingPoint_c        READ boilingPoint_c        WRITE setBoilingPoint_c        NOTIFY changedBoilingPoint_c )
 
    // Set
-   void setBoilSize_l( double var );
-   void setBatchSize_l( double var );
-   void setTunVolume_l( double var );
-   void setTunWeight_kg( double var );
-   void setTunSpecificHeat_calGC( double var );
-   void setTopUpWater_l( double var );
-   void setTrubChillerLoss_l( double var );
-   void setEvapRate_pctHr( double var );
-   void setEvapRate_lHr( double var );
-   void setBoilTime_min( double var );
-   void setCalcBoilVolume( bool var );
-   void setLauterDeadspace_l( double var );
-   void setTopUpKettle_l( double var );
-   void setHopUtilization_pct( double var );
-   void setNotes( const QString &var );
-   void setGrainAbsorption_LKg(double var);
-   void setBoilingPoint_c(double var);
+   void setBoilSize_l( double var, bool cacheOnly = false );
+   void setBatchSize_l( double var, bool cacheOnly = false );
+   void setTunVolume_l( double var, bool cacheOnly = false );
+   void setTunWeight_kg( double var, bool cacheOnly = false );
+   void setTunSpecificHeat_calGC( double var, bool cacheOnly = false );
+   void setTopUpWater_l( double var, bool cacheOnly = false );
+   void setTrubChillerLoss_l( double var, bool cacheOnly = false );
+   void setEvapRate_pctHr( double var, bool cacheOnly = false );
+   void setEvapRate_lHr( double var, bool cacheOnly = false );
+   void setBoilTime_min( double var, bool cacheOnly = false );
+   void setCalcBoilVolume( bool var, bool cacheOnly = false );
+   void setLauterDeadspace_l( double var, bool cacheOnly = false );
+   void setTopUpKettle_l( double var, bool cacheOnly = false );
+   void setHopUtilization_pct( double var, bool cacheOnly = false );
+   void setNotes( const QString &var, bool cacheOnly = false );
+   void setGrainAbsorption_LKg(double var, bool cacheOnly = false);
+   void setBoilingPoint_c(double var, bool cacheOnly = false);
 
    // Get
    double boilSize_l() const;
@@ -147,6 +147,24 @@ private:
    Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Equipment( Equipment const& other);
    
+   double _boilSize_l;
+   double _batchSize_l;
+   double _tunVolume_l;
+   double _tunWeight_kg;
+   double _tunSpecificHeat_calGC;
+   double _topUpWater_l;
+   double _trubChillerLoss_l;
+   double _evapRate_pctHr;
+   double _evapRate_lHr;
+   double _boilTime_min;
+   bool _calcBoilVolume;
+   double _lauterDeadspace_l;
+   double _topUpKettle_l;
+   double _hopUtilization_pct;
+   QString _notes;
+   double _grainAbsorption_LKg;
+   double _boilingPoint_c;
+
    // Calculate the boil size.
    void doCalculations();
    

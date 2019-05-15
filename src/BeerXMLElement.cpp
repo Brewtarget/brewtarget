@@ -112,11 +112,14 @@ QString BeerXMLElement::name() const
    return _name;
 }
 
-void BeerXMLElement::setName(const QString var)
+void BeerXMLElement::setName(const QString var, bool cachedOnly)
 {
-   set( kName, kName, var );
+   
    _name = var;
-   emit changedName(var);
+   if ( ! cachedOnly ) {
+      set( kName, kName, var );
+      emit changedName(var);
+   }
 }
 
 int BeerXMLElement::key() const

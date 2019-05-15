@@ -85,7 +85,7 @@ public:
    virtual void setFolder(const QString var, bool signal=true);
 
    //!
-   void setName(const QString var);
+   void setName(const QString var, bool cachedOnly = false);
 
    //! \returns our key in the table we are stored in.
    int key() const;
