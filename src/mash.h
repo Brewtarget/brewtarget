@@ -120,9 +120,17 @@ private:
    Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Mash( Mash const& other );
    
-   // Get via the relational relationship.
-   //QVector<MashStep *> mashSteps;
-   
+   double _grainTemp_c;
+   QString _notes;
+   double _tunTemp_c;
+   double _spargeTemp_c;
+   double _ph;
+   double _tunWeight_kg;
+   double _tunSpecificHeat_calGC;
+   bool _equipAdjust;
+
+   QList<MashStep*> _mashSteps;
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 
