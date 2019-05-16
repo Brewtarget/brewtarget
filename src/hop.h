@@ -142,29 +142,30 @@ signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
 
-   /*
-   void changedAlpha_pct(double);
-   void changedAmount_kg(double);
-   void changedUse(Use);
-   void changedTime_min(double);
-   void changedNotes(QString);
-   void changedType(Type);
-   void changedForm(Form);
-   void changedBeta_pct(double);
-   void changedHsi_pct(double);
-   void changedOrigin(QString);
-   void changedSubstitutes(QString);
-   void changedHumulene_pct(double);
-   void changedCaryophyllene_pct(double);
-   void changedCohumulone_pct(double);
-   void changedMyrcene_pct(double);
-   */
-   
 private:
    Hop(Brewtarget::DBTable table, int key);
    Hop(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Hop( Hop const& other );
    
+   double _alpha_pct;
+   double _amount_kg;
+   Use _use;
+   QString _useStr;
+   double _time_min;
+   QString _notes;
+   Type _type;
+   QString _typeStr;
+   Form _form;
+   QString _formStr;
+   double _beta_pct;
+   double _hsi_pct;
+   QString _origin;
+   QString _substitutes;
+   double _humulene_pct;
+   double _caryophyllene_pct;
+   double _cohumulone_pct;
+   double _myrcene_pct;
+
    void setDefaults();
 
    static bool isValidUse(const QString& str);

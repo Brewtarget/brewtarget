@@ -76,26 +76,18 @@ public:
    static QString classNameStr();
 
 signals:
-   /*
-   void changedName(QString);
-   void changedDirections(QString);
-   void changedHasTimer(bool);
-   void changedTimerValue(QString);
-   void changedCompleted(bool);
-   void changedInterval(double);
-   void changedReagents(QVector<QString>);
-   */
 
 private:
    Instruction(Brewtarget::DBTable table, int key);
    Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Instruction( Instruction const& other );
-   /*
-   Instruction( const QString& name,
-                const QString& directions,
-                bool hasTimer = false,
-                const QString& timerVal = "0" );
-   */
+
+   QString _directions;
+   bool    _hasTimer;
+   QString _timerValue;
+   bool    _completed;
+   double  _interval;
+
    QList<QString> _reagents;
    
    static QHash<QString,QString> tagToProp;
