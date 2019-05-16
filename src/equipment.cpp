@@ -116,24 +116,23 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
-   setName( rec.value(kName).toString(), true );
-   setBoilSize_l( rec.value(kBoilSize).toDouble(), true);
-   setBatchSize_l( rec.value(kBatchSize).toDouble(), true);
-   setTunVolume_l( rec.value(kTunVolume).toDouble(), true);
-   setTunWeight_kg( rec.value(kTunWeight).toDouble(), true);
-   setTunSpecificHeat_calGC( rec.value(kTunSpecificHeat).toDouble(), true);
-   setTopUpWater_l( rec.value(kTopUpWater).toDouble(), true);
-   setTrubChillerLoss_l( rec.value(kTrubChillerLoss).toDouble(), true);
-   setEvapRate_pctHr( rec.value(kEvaporationRate).toDouble(), true);
-   setEvapRate_lHr( rec.value(kRealEvaporationRate).toDouble(), true);
-   setBoilTime_min( rec.value(kBoilTime).toDouble(), true);
-   setCalcBoilVolume( rec.value(kCalcBoilVolume).toBool(), true);
-   setLauterDeadspace_l( rec.value(kLauterDeadspace).toDouble(), true);
-   setTopUpKettle_l( rec.value(kTopUpKettle).toDouble(), true);
-   setHopUtilization_pct( rec.value(kHopUtilization).toDouble(), true);
-   setNotes( rec.value(kNotes).toString(), true);
-   setGrainAbsorption_LKg(rec.value(kAbsorption).toDouble(), true);
-   setBoilingPoint_c(rec.value(kBoilingPoint).toDouble(), true);
+   _boilSize_l = rec.value(kBoilSize).toDouble();
+   _batchSize_l = rec.value(kBatchSize).toDouble();
+   _tunVolume_l = rec.value(kTunVolume).toDouble();
+   _tunWeight_kg = rec.value(kTunWeight).toDouble();
+   _tunSpecificHeat_calGC = rec.value(kTunSpecificHeat).toDouble();
+   _topUpWater_l = rec.value(kTopUpWater).toDouble();
+   _trubChillerLoss_l = rec.value(kTrubChillerLoss).toDouble();
+   _evapRate_pctHr = rec.value(kEvaporationRate).toDouble();
+   _evapRate_lHr = rec.value(kRealEvaporationRate).toDouble();
+   _boilTime_min = rec.value(kBoilTime).toDouble();
+   _calcBoilVolume = rec.value(kCalcBoilVolume).toBool();
+   _lauterDeadspace_l = rec.value(kLauterDeadspace).toDouble();
+   _topUpKettle_l = rec.value(kTopUpKettle).toDouble();
+   _hopUtilization_pct = rec.value(kHopUtilization).toDouble();
+   _notes = rec.value(kNotes).toString();
+   _grainAbsorption_LKg =rec.value(kAbsorption).toDouble();
+   _boilingPoint_c =rec.value(kBoilingPoint).toDouble();
 }
 
 Equipment::Equipment( Equipment const& other )

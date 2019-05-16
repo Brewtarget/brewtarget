@@ -168,36 +168,36 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key)
 BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
-   setBrewDate( QDateTime::fromString(rec.value(kBrewDate).toString(),Qt::ISODate), true );
-   setFermentDate( QDateTime::fromString(rec.value(kFermentDate).toString(),Qt::ISODate), true );
-   setNotes( rec.value(kNotes).toString(), true );
-   setSg(rec.value(kSpecificGravity).toDouble(), true);
-   setABV( rec.value(kABV).toDouble(), true);
-   setEffIntoBK_pct( rec.value(kEfficiencyIntoBoil).toDouble(), true );
-   setBrewhouseEff_pct(rec.value(kBrewhouseEfficiency).toDouble(), true );
-   setVolumeIntoBK_l(rec.value(kVolumeIntoBoil).toDouble(), true );
-   setStrikeTemp_c(rec.value(kStrikeTemp).toDouble(), true );
-   setMashFinTemp_c(rec.value(kMashFinalTemp).toDouble(), true );
-   setOg(rec.value(kOriginalGravity).toDouble(), true );
-   setPostBoilVolume_l(rec.value(kPostBoilVolume).toDouble(), true );
-   setVolumeIntoFerm_l(rec.value(kVolumeIntoFermenter).toDouble(), true );
-   setPitchTemp_c(rec.value(kPitchTemp).toDouble(), true );
-   setFg(rec.value(kFinalGravity).toDouble(), true );
-   setAttenuation(rec.value(kAttenuation).toDouble(), true );
-   setFinalVolume_l(rec.value(kFinalVolume).toDouble(), true );
-   setBoilOff_l(rec.value(kBoilOff).toDouble(), true );
-   setProjBoilGrav(rec.value(kProjectedBoilGravity).toDouble(), true );
-   setProjVolIntoBK_l(rec.value(kProjectedVolumeIntoBoil).toDouble(), true );
-   setProjStrikeTemp_c(rec.value(kProjectedStrikeTemp).toDouble(), true );
-   setProjMashFinTemp_c(rec.value(kProjectedMashFinishTemp).toDouble(), true );
-   setProjOg(rec.value(kProjectedOG).toDouble(), true );
-   setProjVolIntoFerm_l(rec.value(kProjectedVolumeIntoFermenter).toDouble(), true );
-   setProjFg(rec.value(kProjectedFG).toDouble(), true );
-   setProjEff_pct(rec.value(kProjectedEfficiency).toDouble(), true );
-   setProjABV_pct(rec.value(kProjectedABV).toDouble(), true );
-   setProjPoints(rec.value(kProjectedPoints).toDouble(), true );
-   setProjFermPoints(rec.value(kProjectedFermentationPoints).toDouble(), true );
-   setProjAtten(rec.value(kProjectedAttenuation).toDouble(), true );
+   _brewDate = QDateTime::fromString(rec.value(kBrewDate).toString(), Qt::ISODate);
+   _fermentDate = QDateTime::fromString(rec.value(kFermentDate).toString(), Qt::ISODate);
+   _notes = rec.value(kNotes).toString();
+   _sg =rec.value(kSpecificGravity).toDouble();
+   _abv = rec.value(kABV).toDouble();
+   _effIntoBK_pct = rec.value(kEfficiencyIntoBoil).toDouble();
+   _brewhouseEff_pct =rec.value(kBrewhouseEfficiency).toDouble();
+   _volumeIntoBK_l =rec.value(kVolumeIntoBoil).toDouble();
+   _strikeTemp_c =rec.value(kStrikeTemp).toDouble();
+   _mashFinTemp_c =rec.value(kMashFinalTemp).toDouble();
+   _og =rec.value(kOriginalGravity).toDouble();
+   _postBoilVolume_l =rec.value(kPostBoilVolume).toDouble();
+   _volumeIntoFerm_l =rec.value(kVolumeIntoFermenter).toDouble();
+   _pitchTemp_c =rec.value(kPitchTemp).toDouble();
+   _fg =rec.value(kFinalGravity).toDouble();
+   _attenuation =rec.value(kAttenuation).toDouble();
+   _finalVolume_l =rec.value(kFinalVolume).toDouble();
+   _boilOff_l =rec.value(kBoilOff).toDouble();
+   _projBoilGrav =rec.value(kProjectedBoilGravity).toDouble();
+   _projVolIntoBK_l =rec.value(kProjectedVolumeIntoBoil).toDouble();
+   _projStrikeTemp_c =rec.value(kProjectedStrikeTemp).toDouble();
+   _projMashFinTemp_c =rec.value(kProjectedMashFinishTemp).toDouble();
+   _projOg =rec.value(kProjectedOG).toDouble();
+   _projVolIntoFerm_l =rec.value(kProjectedVolumeIntoFermenter).toDouble();
+   _projFg =rec.value(kProjectedFG).toDouble();
+   _projEff_pct =rec.value(kProjectedEfficiency).toDouble();
+   _projABV_pct =rec.value(kProjectedABV).toDouble();
+   _projPoints =rec.value(kProjectedPoints).toDouble();
+   _projFermPoints =rec.value(kProjectedFermentationPoints).toDouble();
+   _projAtten =rec.value(kProjectedAttenuation).toDouble();
 }
 
 void BrewNote::populateNote(Recipe* parent)
