@@ -175,6 +175,29 @@ private:
    Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
    
+   QString _category;
+   QString _categoryNumber;
+   QString _styleLetter;
+   QString _styleGuide;
+   QString _typeStr;
+   Type _type;
+   double _ogMin;
+   double _ogMax;
+   double _fgMin;
+   double _fgMax;
+   double _ibuMin;
+   double _ibuMax;
+   double _colorMin_srm;
+   double _colorMax_srm;
+   double _carbMin_vol;
+   double _carbMax_vol;
+   double _abvMin_pct;
+   double _abvMax_pct;
+   QString _notes;
+   QString _profile;
+   QString _ingredients;
+   QString _examples;
+   
    bool isValidType( const QString &str );
    static QStringList types;
    

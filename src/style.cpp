@@ -130,32 +130,62 @@ Style::Style(Brewtarget::DBTable table, int key)
 Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   _typeStr = rec.value(kType).toString();
+   _type = static_cast<Style::Type>(types.indexOf(_typeStr));
+
+   _category = rec.value(kCategory).toString();
+   _categoryNumber = rec.value(kCategoryNumber).toString();
+   _styleLetter = rec.value(kStyleLetter).toString();
+   _styleGuide = rec.value(kStyleGuide).toString();
+
+   _ogMin = rec.value(kOGMin).toDouble();
+   _ogMax = rec.value(kOGMax).toDouble();
+   _fgMin = rec.value(kFGMin).toDouble();
+   _fgMax = rec.value(kFGMax).toDouble();
+   _ibuMin = rec.value(kIBUMin).toDouble();
+   _ibuMax = rec.value(kIBUMax).toDouble();
+   _colorMin_srm = rec.value(kColorMin).toDouble();
+   _colorMax_srm = rec.value(kColorMax).toDouble();
+   _carbMin_vol = rec.value(kCarbMin).toDouble();
+   _carbMax_vol = rec.value(kCarbMax).toDouble();
+   _abvMin_pct = rec.value(kABVMin).toDouble();
+   _abvMax_pct = rec.value(kABVMax).toDouble();
+   _notes = rec.value(kNotes).toString();
+   _profile = rec.value(kProfile).toString();
+   _ingredients = rec.value(kIngredients).toString();
+   _examples = rec.value(kExamples).toString();
 }
 
 //==============================="SET" METHODS==================================
 void Style::setCategory( const QString& var )
 {
+   _category = var;
    set( kCategoryProp, kCategory, var );
 }
 
 void Style::setCategoryNumber( const QString& var )
 {
+   _categoryNumber = var;
    set( kCategoryNumberProp, kCategoryNumber, var );
 }
 
 void Style::setStyleLetter( const QString& var )
 {
+   _styleLetter = var;
    set( kStyleLetterProp, kStyleLetter, var );
 }
 
 void Style::setStyleGuide( const QString& var )
 {
+   _styleGuide = var;
    set( kStyleGuideProp, kStyleGuide, var );
 }
 
 void Style::setType( Type t )
 {
-   set( kTypeProp, kType, types.at(t) );
+   _type = t;
+   _typeStr = types.at(t);
+   set( kTypeProp, kType, _typeStr);
 }
 
 void Style::setOgMin( double var )
@@ -164,6 +194,7 @@ void Style::setOgMin( double var )
       return;
    else
    {
+      _ogMin = var;
       set(kOGMinProp, kOGMin, var);
    }
 }
@@ -174,6 +205,7 @@ void Style::setOgMax( double var )
       return;
    else
    {
+      _ogMax = var;
       set(kOGMaxProp, kOGMax, var);
    }
 }
@@ -184,6 +216,7 @@ void Style::setFgMin( double var )
       return;
    else
    {
+      _fgMin = var;
       set(kFGMinProp, kFGMin, var);
    }
 }
@@ -194,6 +227,7 @@ void Style::setFgMax( double var )
       return;
    else
    {
+      _fgMax = var;
       set(kFGMaxProp, kFGMax, var);
    }
 }
@@ -204,6 +238,7 @@ void Style::setIbuMin( double var )
       return;
    else
    {
+      _ibuMin = var;
       set(kIBUMinProp, kIBUMin, var);
    }
 }
@@ -214,6 +249,7 @@ void Style::setIbuMax( double var )
       return;
    else
    {
+      _ibuMax = var;
       set(kIBUMaxProp, kIBUMax, var);
    }
 }
@@ -224,6 +260,7 @@ void Style::setColorMin_srm( double var )
       return;
    else
    {
+      _colorMin_srm = var;
       set(kColorMinProp, kColorMin, var);
    }
 }
@@ -234,6 +271,7 @@ void Style::setColorMax_srm( double var )
       return;
    else
    {
+      _colorMax_srm = var;
       set(kColorMaxProp, kColorMax, var);
    }
 }
@@ -244,6 +282,7 @@ void Style::setCarbMin_vol( double var )
       return;
    else
    {
+      _carbMin_vol = var;
       set(kCarbMinProp, kCarbMin, var);
    }
 }
@@ -254,6 +293,7 @@ void Style::setCarbMax_vol( double var )
       return;
    else
    {
+      _carbMax_vol = var;
       set(kCarbMaxProp, kCarbMax, var);
    }
 }
@@ -264,6 +304,7 @@ void Style::setAbvMin_pct( double var )
       return;
    else
    {
+      _abvMin_pct = var;
       set(kABVMinProp, kABVMin, var);
    }
 }
@@ -274,140 +315,59 @@ void Style::setAbvMax_pct( double var )
       return;
    else
    {
+      _abvMax_pct = var;
       set(kABVMaxProp, kABVMax, var);
    }
 }
 
 void Style::setNotes( const QString& var )
 {
+   _notes = var;
    set(kNotesProp, kNotes, var);
 }
 
 void Style::setProfile( const QString& var )
 {
+   _profile = var;
    set(kProfileProp, kProfile, var);
 }
 
 void Style::setIngredients( const QString& var )
 {
+   _ingredients = var;
    set(kIngredientsProp, kIngredients, var);
 }
 
 void Style::setExamples( const QString& var )
 {
+   _examples = var;
    set(kExamplesProp, kExamples, var);
 }
 
 //============================="GET" METHODS====================================
-QString Style::category() const
-{
-   return get(kCategory).toString();
-}
+QString Style::category() const { return _category; }
+QString Style::categoryNumber() const { return _categoryNumber; }
+QString Style::styleLetter() const { return _styleLetter; }
+QString Style::styleGuide() const { return _styleGuide; }
+QString Style::notes() const { return _notes; }
+QString Style::profile() const { return _profile; }
+QString Style::ingredients() const { return _ingredients; }
+QString Style::examples() const { return _examples; }
+const Style::Type Style::type() const { return _type; }
+const QString Style::typeString() const { return _typeStr; }
 
-QString Style::categoryNumber() const
-{
-   return get(kCategoryNumber).toString();
-}
-
-QString Style::styleLetter() const
-{
-   return get(kStyleLetter).toString();
-}
-
-QString Style::styleGuide() const
-{
-   return get(kStyleGuide).toString();
-}
-
-QString Style::notes() const
-{
-   return get(kNotes).toString();
-}
-
-QString Style::profile() const
-{
-   return get(kProfile).toString();
-}
-
-QString Style::ingredients() const
-{
-   return get(kIngredients).toString();
-}
-
-QString Style::examples() const
-{
-   return get(kExamples).toString();
-}
-
-const Style::Type Style::type() const
-{
-   return static_cast<Style::Type>(types.indexOf(get(kType).toString()));
-}
-
-const QString Style::typeString() const
-{
-   return types.at(type());
-}
-
-double Style::ogMin() const
-{
-   return get(kOGMin).toDouble();
-}
-
-double Style::ogMax() const
-{
-   return get(kOGMax).toDouble();
-}
-
-double Style::fgMin() const
-{
-   return get(kFGMin).toDouble();
-}
-
-double Style::fgMax() const
-{
-   return get(kFGMax).toDouble();
-}
-
-double Style::ibuMin() const
-{
-   return get(kIBUMin).toDouble();
-}
-
-double Style::ibuMax() const
-{
-   return get(kIBUMax).toDouble();
-}
-
-double Style::colorMin_srm() const
-{
-   return get(kColorMin).toDouble();
-}
-
-double Style::colorMax_srm() const
-{
-   return get(kColorMax).toDouble();
-}
-
-double Style::carbMin_vol() const
-{
-   return get(kCarbMin).toDouble();
-}
-
-double Style::carbMax_vol() const
-{
-   return get(kCarbMax).toDouble();
-}
-
-double Style::abvMin_pct() const
-{
-   return get(kABVMin).toDouble();
-}
-
-double Style::abvMax_pct() const
-{
-   return get(kABVMax).toDouble();
-}
+double Style::ogMin() const { return _ogMin; }
+double Style::ogMax() const { return _ogMax; }
+double Style::fgMin() const { return _fgMin; }
+double Style::fgMax() const { return _fgMax; }
+double Style::ibuMin() const { return _ibuMin; }
+double Style::ibuMax() const { return _ibuMax; }
+double Style::colorMin_srm() const { return _colorMin_srm; }
+double Style::colorMax_srm() const { return _colorMax_srm; }
+double Style::carbMin_vol() const { return _carbMin_vol; }
+double Style::carbMax_vol() const { return _carbMax_vol; }
+double Style::abvMin_pct() const { return _abvMin_pct; }
+double Style::abvMax_pct() const { return _abvMax_pct; }
 
 bool Style::isValidType( const QString &str )
 {

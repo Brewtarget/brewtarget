@@ -93,17 +93,30 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
 MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   QString _typeStr = rec.value(kType).toString();
+   _type = static_cast<MashStep::Type>(types.indexOf(_typeStr));
+   _infuseAmount_l = rec.value(kInfuseAmount).toDouble();
+   _stepTemp_c = rec.value(kStepTemp).toDouble();
+   _stepTime_min = rec.value(kStepTime).toDouble();
+   _rampTime_min = rec.value(kRampTime).toDouble();
+   _endTemp_c = rec.value(kEndTemp).toDouble();
+   _infuseTemp_c = rec.value(kInfuseTemp).toDouble();
+   _decoctionAmount_l = rec.value(kDecoctionAmount).toDouble();
+   _stepNumber = rec.value(kStepNumber).toInt();
 }
 
 //================================"SET" METHODS=================================
 void MashStep::setInfuseTemp_c(double var)
 {
+   _infuseTemp_c = var;
    set(kInfuseTempProp, kInfuseTemp, var);
 }
 
 void MashStep::setType( Type t )
 {
-   set(kTypeProp, kType, types.at(t));
+   _type = t;
+   _typeStr = types.at(t);
+   set(kTypeProp, kType, _typeStr);
 }
 
 void MashStep::setInfuseAmount_l( double var )
@@ -115,6 +128,7 @@ void MashStep::setInfuseAmount_l( double var )
    }
    else
    {
+      _infuseAmount_l = var;
       set(kInfuseAmountProp, kInfuseAmount, var);
    }
 }
@@ -128,6 +142,7 @@ void MashStep::setStepTemp_c( double var )
    }
    else
    {
+      _stepTemp_c = var;
       set(kStepTempProp, kStepTemp, var);
    }
 }
@@ -141,6 +156,7 @@ void MashStep::setStepTime_min( double var )
    }
    else
    {
+      _stepTime_min = var;
       set(kStepTimeProp, kStepTime, var);
    }
 }
@@ -155,6 +171,7 @@ void MashStep::setRampTime_min( double var )
    }
    else
    {
+      _rampTime_min = var;
       set(kRampTimeProp, kRampTime, var);
    }
 }
@@ -168,70 +185,29 @@ void MashStep::setEndTemp_c( double var )
    }
    else
    {
+      _endTemp_c = var;
       set(kEndTempProp, kEndTemp, var);
    }
 }
 
 void MashStep::setDecoctionAmount_l(double var)
 {
+   _decoctionAmount_l = var;
    set(kDecoctionAmountProp, kDecoctionAmount, var);
 }
 
 //============================="GET" METHODS====================================
-MashStep::Type MashStep::type() const
-{
-   return static_cast<MashStep::Type>(types.indexOf(typeString()));
-}
-
-const QString MashStep::typeString() const
-{
-   return get(kType).toString();
-}
-
-const QString MashStep::typeStringTr() const
-{
-   return typesTr.at(type());
-}
-
-double MashStep::infuseTemp_c() const
-{
-   return get(kInfuseTemp).toDouble();
-}
-
-double MashStep::infuseAmount_l() const
-{
-   return get(kInfuseAmount).toDouble();
-}
-
-double MashStep::stepTemp_c() const
-{
-   return get(kStepTemp).toDouble();
-}
-
-double MashStep::stepTime_min() const
-{
-   return get(kStepTime).toDouble();
-}
-
-double MashStep::rampTime_min() const
-{
-   return get(kRampTime).toDouble();
-}
-
-double MashStep::endTemp_c() const
-{
-   return get(kEndTemp).toDouble();
-}
-
-double MashStep::decoctionAmount_l() const
-{
-   return get(kDecoctionAmount).toDouble();
-}
-
-int MashStep::stepNumber() const
-{
-   return get(kStepNumber).toInt();
-}
+MashStep::Type MashStep::type() const { return _type; }
+const QString MashStep::typeString() const { return _typeStr; }
+const QString MashStep::typeStringTr() const { return typesTr.at(_type); }
+double MashStep::infuseTemp_c() const { return _infuseTemp_c; }
+double MashStep::infuseAmount_l() const { return _infuseAmount_l; }
+double MashStep::stepTemp_c() const { return _stepTemp_c; }
+double MashStep::stepTime_min() const { return _stepTime_min; }
+double MashStep::rampTime_min() const { return _rampTime_min; }
+double MashStep::endTemp_c() const { return _endTemp_c; }
+double MashStep::decoctionAmount_l() const { return _decoctionAmount_l; }
+int MashStep::stepNumber() const { return _stepNumber; }
 
 bool MashStep::isInfusion() const
 {

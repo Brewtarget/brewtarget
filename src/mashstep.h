@@ -106,21 +106,22 @@ signals:
 
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   /*
-   void changedType(Type);
-   void changedInfuseAmount_l(double);
-   void changedStepTemp_c(double);
-   void changedStepTime_min(double);
-   void changedRampTime_min(double);
-   void changedEndTemp_c(double);
-   void changedInfuseTemp_c(double);
-   void changedDecoctionAmount_l(double);
-   */
    
 private:
    MashStep(Brewtarget::DBTable table, int key);
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
    MashStep( MashStep const& other );
+   
+   Type _type;
+   QString _typeStr;
+   double _infuseAmount_l;
+   double _stepTemp_c;
+   double _stepTime_min;
+   double _rampTime_min;
+   double _endTemp_c;
+   double _infuseTemp_c;
+   double _decoctionAmount_l;
+   int _stepNumber;
    
    bool isValidType( const QString &str ) const;
 
