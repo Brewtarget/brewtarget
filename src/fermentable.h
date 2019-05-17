@@ -187,6 +187,7 @@ private:
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 
+   QString _typeStr;
    Type _type;
    double _amountKg;
    double _inventoryAmt;
