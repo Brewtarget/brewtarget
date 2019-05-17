@@ -1048,6 +1048,14 @@ Style* Database::style(Recipe const* parent)
       return 0;
 }
 
+Style* Database::styleById(int styleId ) 
+{
+   if( allStyles.contains(styleId) )
+      return allStyles[styleId];
+   else
+      return 0;
+}
+
 Mash* Database::mash( Recipe const* parent )
 {
    int mashId = get( Brewtarget::RECTABLE, parent->key(), "mash_id" ).toInt();
@@ -1794,6 +1802,30 @@ int Database::getInventoryID(Brewtarget::DBTable table, int key){
    ret = q.record().value("id").toInt();
    return ret;
 }
+QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key) {
+   QVariant val = QVariant(0.0);
+   QString queryString = QString("select %2.%1 from %2, %3, %4 where %3.id = %5 and %3.id = %4.child_id and %4.parent_id = %2.%3_id")
+        .arg(col_name)
+        .arg(tableNames[tableToInventoryTable[table]])
+        .arg(tableNames[table])
+        .arg(tableNames[tableToChildTable[table]])
+        .arg(key);
+  /* 
+   QString queryString = QString("select %1 from %2 where %3_id = %4")
+        .arg(col_name)
+        .arg(tableNames[tableToInventoryTable[table]])
+        .arg(tableNames[table])
+        .arg(key);
+   */
+   // qDebug() << "Query = " << queryString;
+   QSqlQuery q( queryString, sqlDatabase() );
+   
+   if ( q.first() ) {
+      val = q.record().value(col_name);
+   }
+   return val;
+}
+
 //Returns the parent table number from the hash
 Brewtarget::DBTable Database::getChildTable(Brewtarget::DBTable table){
    return tableToChildTable[table];
@@ -2120,6 +2152,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
       sqlDatabase().commit();
    }
    // Emit a changed signal.
+   rec->_style_id = newStyle->key();
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
 }
 

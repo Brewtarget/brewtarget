@@ -79,10 +79,10 @@ public:
    QString name() const;
 
    //! And ways to set those flags
-   void setDeleted(const bool var);
-   void setDisplay(const bool var);
+   void setDeleted(const bool var, bool cachedOnly = false);
+   void setDisplay(const bool var, bool cachedOnly = false);
    //! and a way to set the folder
-   virtual void setFolder(const QString var, bool signal=true);
+   virtual void setFolder(const QString var, bool signal=true, bool cachedOnly = false);
 
    //!
    void setName(const QString var, bool cachedOnly = false);

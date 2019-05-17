@@ -50,8 +50,6 @@
 #include "PhysicalConstants.h"
 #include "QueuedMethod.h"
 
-
-
 /************* Columns *************/
 const QString kName("name");
 const QString kType("type");
@@ -83,6 +81,13 @@ const QString kCarbonationTemp("carbonationTemp_c");
 const QString kPrimingSugarEquiv("priming_sugar_equiv");
 const QString kKegPrimingFactor("keg_priming_factor");
 
+// these are defined in the parent, but I need them here too
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
+
+// this is probably wrong, but I will do a lot for performance
+const QString kStyleId("style_id");
 
 /************** Props **************/
 const QString kNameProp("name");
@@ -239,6 +244,12 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
    setObjectName("Recipe"); 
 
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
+   setFolder( rec.value(kFolder).toString(),false,  true);
+
+   // this is ok
    _type = rec.value(kType).toString();
    _brewer = rec.value(kBrewer).toString();
    _asstBrewer = rec.value(kAsstBrewer).toString();
@@ -267,6 +278,8 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
    _notes = rec.value(kNotes).toString();
    _tasteNotes = rec.value(kTasteNotes).toString();
    _tasteRating = rec.value(kTasteRating).toDouble();
+   // this is not ok
+   _style_id = rec.value(kStyleId).toInt();
 }
 
 Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other)
@@ -1420,9 +1433,17 @@ double Recipe::points()
 }
 
 //=========================Relational Getters=============================
-Style* Recipe::style() const
+Style* Recipe::style()
 {
-   return Database::instance().style(this);
+   Style *tmp;
+   if ( _style_id != 0 ) {
+      tmp =  Database::instance().styleById(_style_id);
+   }
+   else {
+      tmp = Database::instance().style(this);
+      _style_id = tmp->key();
+   }
+   return tmp;
 }
 
 Mash* Recipe::mash() const

@@ -43,6 +43,11 @@ const QString kCaryophyllene("caryophyllene");
 const QString kCohumulone("cohumulone");
 const QString kMyrcene("myrcene");
 
+// these are defined in the parent, but I need them here too
+const QString kName("name");
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
 /************** Props **************/
 const QString kNameProp("name");
 const QString kAlphaProp("alpha_pct");
@@ -130,6 +135,10 @@ Hop::Hop(Brewtarget::DBTable table, int key)
 Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
+   setFolder( rec.value(kFolder).toString(), false, true);
    // set the strings before the types
    _useStr = rec.value(kUse).toString();
    _use = static_cast<Hop::Use>(uses.indexOf(_useStr));

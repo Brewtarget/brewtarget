@@ -236,6 +236,7 @@ public:
    //! \returns The entire inventory for a table.
    QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
 
+   QVariant getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key);
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash
@@ -402,6 +403,7 @@ public:
    Mash* mash( Recipe const* parent );
    //! Get recipe's style.
    Style* style(Recipe const* parent);
+   Style* styleById(int styleId );
    //! Return a list of all the steps in a mash.
    QList<MashStep*> mashSteps(Mash const* parent);
 

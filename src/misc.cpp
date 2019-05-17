@@ -42,6 +42,10 @@ const QString kInventory("inventory");
 const QString kUseFor("use_for");
 const QString kNotes("notes");
 
+// these are defined in the parent, but I need them here too
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
 
 /************** Props **************/
 const QString kNameProp("name");
@@ -89,6 +93,10 @@ Misc::Misc(Brewtarget::DBTable table, int key)
 Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
+   setFolder( rec.value(kFolder).toString(), false, true);
    _typeString = rec.value(kType).toString();
    _type = static_cast<Misc::Type>(types.indexOf(_typeString));
    _useString = rec.value(kUse).toString();

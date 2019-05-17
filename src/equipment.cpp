@@ -46,6 +46,10 @@ const QString kNotes("notes");
 const QString kAbsorption("absorption");
 const QString kBoilingPoint("boiling_point");
 
+// these are defined in the parent, but I need them here too
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
 /************** Props **************/
 
 const QString kNameProp("name");
@@ -116,6 +120,10 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
+   setFolder( rec.value(kFolder).toString(), false, true);
    _boilSize_l = rec.value(kBoilSize).toDouble();
    _batchSize_l = rec.value(kBatchSize).toDouble();
    _tunVolume_l = rec.value(kTunVolume).toDouble();

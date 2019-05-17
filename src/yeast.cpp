@@ -46,6 +46,10 @@ const QString kTimesCultured("times_cultured");
 const QString kMaxReuse("max_reuse");
 const QString kAddToSecondary("add_to_secondary");
 
+// these are defined in the parent, but I need them here too
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
 /************** Props **************/
 const QString kNameProp("name");
 const QString kTypeProp("type");
@@ -119,6 +123,10 @@ Yeast::Yeast(Brewtarget::DBTable table, int key)
 Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
+   setFolder( rec.value(kFolder).toString(), false, true);
    _typeString = rec.value(kType).toString();
    _type = static_cast<Yeast::Type>(types.indexOf(_typeString));
    _formString = rec.value(kForm).toString();

@@ -29,6 +29,11 @@ const QString kTimerValue("timervalue");
 const QString kCompleted("completed");
 const QString kInterval("interval");
 
+// these are defined in the parent, but I need them here too
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
+
 const QString kNameProp("name");
 const QString kDirectionsProp("directions");
 const QString kHasTimerProp("hastimer");
@@ -67,6 +72,9 @@ Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
    setObjectName("Instruction"); 
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
    _directions = rec.value(kDirections).toString();
    _timerValue = rec.value(kTimerValue).toString();
    _hasTimer   = rec.value(kHasTimer).toBool();

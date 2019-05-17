@@ -34,6 +34,10 @@ const QString kInfuseTemp("infuse_temp");
 const QString kDecoctionAmount("decoction_amount");
 const QString kStepNumber("step_number");
 
+// these are defined in the parent, but I need them here too
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
 
 /************** Props **************/
 const QString kNameProp("name");
@@ -93,6 +97,10 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
 MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
+   setFolder( rec.value(kFolder).toString(), false, true);
    QString _typeStr = rec.value(kType).toString();
    _type = static_cast<MashStep::Type>(types.indexOf(_typeStr));
    _infuseAmount_l = rec.value(kInfuseAmount).toDouble();

@@ -61,54 +61,46 @@ BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
 bool BeerXMLElement::deleted() const
 {
 
-   if ( ! _deleted.isValid() )
-      _deleted = get(kDeleted);
-
    return _deleted.toBool();
 }
 
 bool BeerXMLElement::display() const
 {
-   if ( ! _display.isValid() )
-      _display = get(kDisplay);
-
    return _display.toBool();
 }
 
 // Sigh. New databases, more complexity
-void BeerXMLElement::setDeleted(const bool var)
+void BeerXMLElement::setDeleted(const bool var, bool cachedOnly)
 {
-   set(kDeleted, kDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
    _deleted = var;
+   if ( ! cachedOnly )
+      set(kDeleted, kDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
-void BeerXMLElement::setDisplay(bool var)
+void BeerXMLElement::setDisplay(bool var, bool cachedOnly)
 {
-   set(kDisplay, kDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
    _display = var;
+   if ( ! cachedOnly )
+      set(kDisplay, kDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
 QString BeerXMLElement::folder() const
 {
-   if ( _folder.isEmpty() )
-      _folder = get(kFolder).toString();
-
    return _folder;
 }
 
-void BeerXMLElement::setFolder(const QString var, bool signal)
+void BeerXMLElement::setFolder(const QString var, bool signal, bool cachedOnly)
 {
-   set( kFolder, kFolder, var );
    _folder = var;
+   if ( ! cachedOnly )
+      set( kFolder, kFolder, var );
+   // not sure if I should only signal when not caching?
    if ( signal )
       emit changedFolder(var);
 }
 
 QString BeerXMLElement::name() const
 {
-   if ( _name.isEmpty() )
-      _name = get(kName).toString();
-
    return _name;
 }
 
@@ -314,12 +306,19 @@ void BeerXMLElement::setInventory( const QString& prop_name, const QString& col_
 
 QVariant BeerXMLElement::getInventory( const char* col_name ) const
 {
+   QVariant val = 0.0;
+/*
    int invkey = Database::instance().getInventoryID(_table, _key);
    Brewtarget::DBTable invtable = Database::instance().getInventoryTable(_table);
-   QVariant val = 0.0;
    if(invkey != 0){
       val = Database::instance().get( invtable , invkey, col_name );
    }
+
+   if ( val > 0.0 ) {
+      QVariant wtf = Database::instance().getInventoryAmt(col_name, _table, _key);
+   }
+*/
+   val = Database::instance().getInventoryAmt(col_name, _table, _key);
    return val;
 }
 

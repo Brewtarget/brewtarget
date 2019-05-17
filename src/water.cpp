@@ -38,6 +38,10 @@ const QString kMagnesium("magnesium");
 const QString kPh("ph");
 const QString kNotes("notes");
 
+// these are defined in the parent, but I need them here too
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
 /************** Props **************/
 const QString kNameProp("name");
 const QString kAmountProp("amount_l");
@@ -93,6 +97,10 @@ Water::Water(Brewtarget::DBTable table, int key)
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
+   setFolder( rec.value(kFolder).toString(), false, true);
    _amount_l = rec.value(kAmount).toDouble();
    _calcium_ppm = rec.value(kCalcium).toDouble();
    _bicarbonate_ppm = rec.value(kBiCarbonate).toDouble();

@@ -287,7 +287,7 @@ public:
    
    Mash* mash() const;
    Equipment* equipment() const;
-   Style* style() const;
+   Style* style();
    
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
@@ -389,6 +389,9 @@ private:
    double _carbonationTemp_c;
    double _primingSugarEquiv;
    double _kegPrimingFactor;
+   
+   // this is a bad idea, but caching the style id could be a big time savings when loading the db
+   int _style_id;
   
    // Calculated properties.
    double _ABV_pct;

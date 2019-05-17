@@ -49,6 +49,11 @@ static const QString kNotes("notes");
 static const QString kRecommendMash("recommend_mash");
 static const QString kIsMashed("is_mashed");
 
+// these are defined in the parent, but I need them here too
+const QString kName("name");
+const QString kDeleted("deleted");
+const QString kDisplay("display");
+const QString kFolder("folder");
 /************** Props **************/
 static const QString kNameProp("name");
 static const QString kTypeProp("type");
@@ -139,6 +144,10 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key)
 Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   setName( rec.value(kName).toString(), true );
+   setDisplay( rec.value(kDisplay).toBool(), true);
+   setDeleted( rec.value(kDeleted).toBool(), true);
+   setFolder( rec.value(kFolder).toString(), false, true);
    _typeStr = rec.value(kType).toString();
    _type = static_cast<Fermentable::Type>(types.indexOf(_typeStr));
    _amountKg = rec.value(kAmount).toDouble();
