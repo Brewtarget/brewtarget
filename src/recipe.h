@@ -361,7 +361,35 @@ private:
    Recipe(Brewtarget::DBTable table, int key);
    Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Recipe(Recipe const& other);
-   
+  
+   // Cached properties that are written directly to db on update
+   QString _type;
+   QString _brewer;
+   double _batchSize_l;
+   double _boilSize_l;
+   double _boilTime_min;
+   double _efficiency_pct;
+   QString _asstBrewer;
+   QString _notes;
+   QString _tasteNotes;
+   double _tasteRating;
+   int _fermentationStages;
+   double _primaryAge_days;
+   double _primaryTemp_c;
+   double _secondaryAge_days;
+   double _secondaryTemp_c;
+   double _tertiaryAge_days;
+   double _tertiaryTemp_c;
+   double _age;
+   double _ageTemp_c;
+   QDate _date;
+   double _carbonation_vols;
+   bool _forcedCarbonation;
+   QString _primingSugarName;
+   double _carbonationTemp_c;
+   double _primingSugarEquiv;
+   double _kegPrimingFactor;
+  
    // Calculated properties.
    double _ABV_pct;
    double _color_srm;

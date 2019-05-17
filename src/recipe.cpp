@@ -235,11 +235,38 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
      _grainsInMash_kg(0),
      _grains_kg(0),
      _SRMColor(255,255,0),
-     _og(1.000),
-     _fg(1.000),
      _uninitializedCalcs(true)
 {
    setObjectName("Recipe"); 
+
+   _type = rec.value(kType).toString();
+   _brewer = rec.value(kBrewer).toString();
+   _asstBrewer = rec.value(kAsstBrewer).toString();
+   _batchSize_l = rec.value(kBatchSize).toDouble();
+   _boilSize_l = rec.value(kBoilSize).toDouble();
+   _boilTime_min = rec.value(kBoilTime).toDouble();
+   _efficiency_pct = rec.value(kEfficiency).toDouble();
+   _og = rec.value(kOG).toDouble();
+   _fg = rec.value(kFG).toDouble();
+   _fermentationStages = rec.value(kFermentationStages).toInt();
+   _primaryAge_days = rec.value(kPrimaryAgeDays).toDouble();
+   _primaryTemp_c = rec.value(kPrimaryTemp).toDouble();
+   _secondaryAge_days = rec.value(kSecondaryAgeDays).toDouble();
+   _secondaryTemp_c = rec.value(kSecondaryTemp).toDouble();
+   _tertiaryAge_days = rec.value(kTertiaryAgeDays).toDouble();
+   _tertiaryTemp_c = rec.value(kTertiaryTemp).toDouble();
+   _age = rec.value(kAge).toDouble();
+   _ageTemp_c = rec.value(kAgeTemp).toDouble();
+   _date = QDate::fromString(rec.value(kDate).toString(), QString("d/M/yyyy"));
+   _carbonation_vols = rec.value(kCarbonationVols).toDouble();
+   _forcedCarbonation = rec.value(kForcedCarbonation).toBool();
+   _primingSugarName = rec.value(kPrimingSugarName).toString();
+   _carbonationTemp_c = rec.value(kCarbonationTemp).toDouble();
+   _primingSugarEquiv = rec.value(kPrimingSugarEquiv).toDouble();
+   _kegPrimingFactor = rec.value(kKegPrimingFactor).toDouble();
+   _notes = rec.value(kNotes).toString();
+   _tasteNotes = rec.value(kTasteNotes).toString();
+   _tasteRating = rec.value(kTasteRating).toDouble();
 }
 
 Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other)
@@ -922,12 +949,13 @@ void Recipe::setType( const QString &var )
    {
       tmp = QString(var);
    }
-
+   _type = tmp;
    set( kTypeProp, kType, tmp );
 }
 
 void Recipe::setBrewer( const QString &var )
 {
+   _brewer = var;
    set( kBrewerProp, kBrewer, var );
 }
 
@@ -944,6 +972,7 @@ void Recipe::setBatchSize_l( double var )
       tmp = var;
    }
 
+   _batchSize_l = tmp;
    set( kBatchSizeProp, kBatchSize, tmp );
    
    // NOTE: this is bad, but we have to call recalcAll(), because the estimated
@@ -965,6 +994,7 @@ void Recipe::setBoilSize_l( double var )
       tmp = var;
    }
 
+   _boilSize_l = tmp;
    set( kBoilSizeProp, kBoilSize, tmp );
    
    // NOTE: this is bad, but we have to call recalcAll(), because the estimated
@@ -986,6 +1016,7 @@ void Recipe::setBoilTime_min( double var )
       tmp = var;
    }
 
+   _boilTime_min = tmp;
    set( kBoilTimeProp, kBoilTime, tmp);
 }
 
@@ -1002,7 +1033,7 @@ void Recipe::setEfficiency_pct( double var )
       tmp = var;
    }
 
-
+   _efficiency_pct = tmp;
    set( kEfficiencyProp, kEfficiency, tmp );
 
    // If you change the efficency, you really should recalc. And I'm afraid it
@@ -1013,16 +1044,19 @@ void Recipe::setEfficiency_pct( double var )
 
 void Recipe::setAsstBrewer( const QString &var )
 {
+   _asstBrewer = var;
    set( kAsstBrewerProp, kAsstBrewer, var );
 }
 
 void Recipe::setNotes( const QString &var )
 {
+   _notes = var;
    set( kNotesProp, kNotes, var );
 }
 
 void Recipe::setTasteNotes( const QString &var )
 {
+   _tasteNotes = var;
    set( kTasteNotesProp, kTasteNotes, var );
 }
 
@@ -1039,6 +1073,7 @@ void Recipe::setTasteRating( double var )
       tmp = var;
    }
 
+   _tasteRating = tmp;
    set( kTasteRatingProp, kTasteRating, tmp );
 }
 
@@ -1055,6 +1090,7 @@ void Recipe::setOg( double var )
       tmp = var;
    }
 
+   _og = tmp;
    set( kOGProp, kOG, tmp );
 }
 
@@ -1071,6 +1107,7 @@ void Recipe::setFg( double var )
       tmp = var;
    }
 
+   _fg = tmp;
    set( kFGProp, kFG, tmp );
 }
 
@@ -1087,6 +1124,7 @@ void Recipe::setFermentationStages( int var )
       tmp = var;
    }
 
+   _fermentationStages = tmp;
    set( kFermentationStagesProp, kFermentationStages, tmp );
 }
 
@@ -1103,11 +1141,13 @@ void Recipe::setPrimaryAge_days( double var )
       tmp = var;
    }
 
+   _primaryAge_days = tmp;
    set( kPrimaryAgeDaysProp, kPrimaryAgeDays, tmp );
 }
 
 void Recipe::setPrimaryTemp_c( double var )
 {
+   _primaryTemp_c = var;
    set( kPrimaryTempProp, kPrimaryTemp, var );
 }
 
@@ -1124,11 +1164,13 @@ void Recipe::setSecondaryAge_days( double var )
       tmp = var;
    }
 
+   _secondaryAge_days = tmp;
    set( kSecondaryAgeDaysProp, kSecondaryAgeDays, tmp );
 }
 
 void Recipe::setSecondaryTemp_c( double var )
 {
+   _secondaryTemp_c = var;
    set( kSecondaryTempProp, kSecondaryTemp, var );
 }
 
@@ -1145,11 +1187,13 @@ void Recipe::setTertiaryAge_days( double var )
       tmp = var;
    }
 
+   _tertiaryAge_days = tmp;
    set( kTertiaryAgeDaysProp, kTertiaryAgeDays, tmp );
 }
 
 void Recipe::setTertiaryTemp_c( double var )
 {
+   _tertiaryTemp_c = var;
    set( kTertiaryTempProp, kTertiaryTemp, var );
 }
 
@@ -1166,16 +1210,20 @@ void Recipe::setAge_days( double var )
       tmp = var;
    }
 
+   _age = tmp;
    set( kAgeProp, kAge, tmp );
 }
 
 void Recipe::setAgeTemp_c( double var )
 {
+   _ageTemp_c = var;
    set( kAgeTempProp, kAgeTemp, var );
 }
 
 void Recipe::setDate( const QDate &var )
 {
+   _date = var;
+   // do not like this. I thought we had everything in ISO format
    static const QString dateFormat("d/M/yyyy");
    set( kDateProp, kDate, var.toString(dateFormat) );
 }
@@ -1193,21 +1241,25 @@ void Recipe::setCarbonation_vols( double var )
       tmp = var;
    }
 
+   _carbonation_vols = tmp;
    set( kCarbonationVolsProp, kCarbonationVols, tmp );
 }
 
 void Recipe::setForcedCarbonation( bool var )
 {
+   _forcedCarbonation = var;
    set( kForcedCarbonationProp, kForcedCarbonation, var );
 }
 
 void Recipe::setPrimingSugarName( const QString &var )
 {
+   _primingSugarName = var;
    set( kPrimingSugarNameProp, kPrimingSugarName, var );
 }
 
 void Recipe::setCarbonationTemp_c( double var )
 {
+   _carbonationTemp_c = var;
    set( kCarbonationTempProp, kCarbonationTemp, var );
 }
 
@@ -1224,6 +1276,7 @@ void Recipe::setPrimingSugarEquiv( double var )
       tmp = var;
    }
 
+   _primingSugarEquiv = tmp;
    set( kPrimingSugarEquivProp, kPrimingSugarEquiv, tmp );
 }
 
@@ -1241,6 +1294,7 @@ void Recipe::setKegPrimingFactor( double var )
       tmp = var;
    }
 
+   _kegPrimingFactor = tmp;
    set( kKegPrimingFactorProp, kKegPrimingFactor, tmp );
 }
 
@@ -1419,133 +1473,132 @@ QList<Water*> Recipe::waters() const
 //==============================Getters===================================
 QString Recipe::type() const
 {
-   return get(kType).toString();
+   return _type;
 }
 
 QString Recipe::brewer() const
 {
-   return get(kBrewer).toString();
+   return _brewer;
 }
 
 QString Recipe::asstBrewer() const
 {
-   return get(kAsstBrewer).toString();
+   return _asstBrewer;
 }
 
 QString Recipe::notes() const
 {
-   return get(kNotes).toString();
+   return _notes;
 }
 
 QString Recipe::tasteNotes() const
 {
-   return get(kTasteNotes).toString();
+   return _tasteNotes;
 }
 
 QString Recipe::primingSugarName() const
 {
-   return get(kPrimingSugarName).toString();
+   return _primingSugarName;
 }
 
 bool Recipe::forcedCarbonation() const
 {
-   return get(kForcedCarbonation).toBool();
+   return _forcedCarbonation;
 }
 
 double Recipe::batchSize_l() const
 {
-   return get(kBatchSize).toDouble();
+   return _batchSize_l;
 }
 
 double Recipe::boilSize_l() const
 {
-   return get(kBoilSize).toDouble();
+   return _boilSize_l;
 }
 
 double Recipe::boilTime_min() const
 {
-   return get(kBoilTime).toDouble();
+   return _boilTime_min;
 }
 
 double Recipe::efficiency_pct() const
 {
-   return get(kEfficiency).toDouble();
+   return _efficiency_pct;
 }
 
 double Recipe::tasteRating() const
 {
-   return get(kTasteRating).toDouble();
+   return _tasteRating;
 }
 
 double Recipe::primaryAge_days() const
 {
-   return get(kPrimaryAgeDays).toDouble();
+   return _primaryAge_days;
 }
 
 double Recipe::primaryTemp_c() const
 {
-   return get(kPrimaryTemp).toDouble();
+   return _primaryTemp_c;
 }
 
 double Recipe::secondaryAge_days() const
 {
-   return get(kSecondaryAgeDays).toDouble();
+   return _secondaryAge_days;
 }
 
 double Recipe::secondaryTemp_c() const
 {
-   return get(kSecondaryTemp).toDouble();
+   return _secondaryTemp_c;
 }
 
 double Recipe::tertiaryAge_days() const
 {
-   return get(kTertiaryAgeDays).toDouble();
+   return _tertiaryAge_days;
 }
 
 double Recipe::tertiaryTemp_c() const
 {
-   return get(kTertiaryTemp).toDouble();
+   return _tertiaryTemp_c;
 }
 
 double Recipe::age_days() const
 {
-   return get(kAge).toDouble();
+   return _age;
 }
 
 double Recipe::ageTemp_c() const
 {
-   return get(kAgeTemp).toDouble();
+   return _ageTemp_c;
 }
 
 double Recipe::carbonation_vols() const
 {
-   return get(kCarbonationVols).toDouble();
+   return _carbonation_vols;
 }
 
 double Recipe::carbonationTemp_c() const
 {
-   return get(kCarbonationTemp).toDouble();
+   return _carbonationTemp_c;
 }
 
 double Recipe::primingSugarEquiv() const
 {
-   return get(kPrimingSugarEquiv).toDouble();
+   return _primingSugarEquiv;
 }
 
 double Recipe::kegPrimingFactor() const
 {
-   return get(kKegPrimingFactor).toDouble();
+   return _kegPrimingFactor;
 }
 
 int Recipe::fermentationStages() const
 {
-   return get(kFermentationStages).toInt();
+   return _fermentationStages;
 }
 
 QDate Recipe::date() const
 {
-   static const QString dateFormat("d/M/yyyy");
-   return QDate::fromString( get(kDate).toString(), dateFormat);
+   return _date;
 }
 //=============================Removers========================================
 
