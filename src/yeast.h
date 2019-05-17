@@ -155,6 +155,25 @@ private:
    Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Yeast(Yeast const& other);
    
+   Type _type;
+   QString _typeString;
+   Form _form;
+   QString _formString;
+   double _amount;
+   bool _amountIsWeight;
+   QString _laboratory;
+   QString _productID;
+   double _minTemperature_c;
+   double _maxTemperature_c;
+   Flocculation _flocculation;
+   QString _flocculationString;
+   double _attenuation_pct;
+   QString _notes;
+   QString _bestFor;
+   int _timesCultured;
+   int _maxReuse;
+   bool _addToSecondary;
+
    static QStringList types;
    static QStringList forms;
    static QStringList flocculations;

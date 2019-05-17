@@ -121,21 +121,21 @@ signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
 
-   /*
-   void changedType(Type);
-   void changedUse(Use);
-   void changedTime(double);
-   void changedAmount(double);
-   void changedAmountIsWeight(bool);
-   void changedUseFor(QString);
-   void changedNotes(QString);
-   */
-   
 private:
    Misc(Brewtarget::DBTable table, int key);
    Misc(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Misc(Misc const& other);
    
+   Type _type;
+   QString _typeString;
+   Use _use;
+   QString _useString;
+   double _time;
+   double _amount;
+   bool _amountIsWeight;
+   QString _useFor;
+   QString _notes;
+
    bool isValidType( const QString &var );
    bool isValidUse( const QString &var );
    

@@ -89,6 +89,15 @@ Misc::Misc(Brewtarget::DBTable table, int key)
 Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {
+   _typeString = rec.value(kType).toString();
+   _type = static_cast<Misc::Type>(types.indexOf(_typeString));
+   _useString = rec.value(kUse).toString();
+   _use = static_cast<Misc::Use>(uses.indexOf(_useString));
+   _time = rec.value(kTime).toDouble();
+   _amount = rec.value(kAmount).toDouble();
+   _amountIsWeight = rec.value(kAmountIsWeight).toBool();
+   _useFor = rec.value(kUseFor).toString();
+   _notes = rec.value(kNotes).toString();
 }
 
 Misc::Misc(Misc const& other) : BeerXMLElement(other)
@@ -96,65 +105,32 @@ Misc::Misc(Misc const& other) : BeerXMLElement(other)
 }
 
 //============================"GET" METHODS=====================================
-Misc::Type Misc::type() const
-{
-   return static_cast<Misc::Type>(types.indexOf(get(kType).toString()));
-}
+Misc::Type Misc::type() const { return _type; }
 
-const QString Misc::typeString() const
-{
-   return types.at(type());
-}
+const QString Misc::typeString() const { return _typeString; }
 
-Misc::Use Misc::use() const
-{
-   return static_cast<Misc::Use>(uses.indexOf(get(kUse).toString()));
-}
+Misc::Use Misc::use() const { return _use; }
 
-const QString Misc::useString() const
-{
-   return uses.at(use());
-}
+const QString Misc::useString() const { return _useString; }
 
-double Misc::amount()    const
-{
-   return get(kAmount).toDouble();
-}
+double Misc::amount()    const { return _amount; }
 
-double Misc::time()      const
-{
-   return get(kTime).toDouble();
-}
+double Misc::time()      const { return _time; }
 
-bool Misc::amountIsWeight() const
-{
-   return get(kAmountIsWeight).toBool();
-}
+bool Misc::amountIsWeight() const { return _amountIsWeight; }
 
-QString Misc::useFor() const
-{
-   return get(kUseFor).toString();
-}
+QString Misc::useFor() const { return _useFor; }
 
-QString Misc::notes() const
-{
-   return get(kNotes).toString();
-}
+QString Misc::notes() const { return _notes; }
 
 double Misc::inventory() const
 {
    return getInventory(kAmount).toDouble();
 }
 
-Misc::AmountType Misc::amountType() const
-{
-   return amountIsWeight() ? AmountType_Weight : AmountType_Volume;
-}
+Misc::AmountType Misc::amountType() const { return _amountIsWeight ? AmountType_Weight : AmountType_Volume; }
 
-const QString Misc::amountTypeString() const
-{
-   return amountTypes.at(amountType());
-}
+const QString Misc::amountTypeString() const { return amountTypes.at(amountType()); }
 
 const QString Misc::typeStringTr() const
 {
@@ -177,31 +153,39 @@ const QString Misc::amountTypeStringTr() const
 //============================"SET" METHODS=====================================
 void Misc::setType( Type t )
 {
-   set( kTypeProp, kType, types.at(t) );
+   _type = t;
+   _typeString = types.at(t);
+   set( kTypeProp, kType, _typeString );
 }
 
 void Misc::setUse( Use u )
 {
-   set( kUseProp, kUse, uses.at(u) );
+   _use = u;
+   _useString = uses.at(u);
+   set( kUseProp, kUse, _useString );
 }
 
 void Misc::setUseFor( const QString& var )
 {
+   _useFor = var;
    set( kUseForProp, kUseFor, var );
 }
 
 void Misc::setNotes( const QString& var )
 {
+   _notes = var;
    set( kNotesProp, kNotes, var );
 }
 
 void Misc::setAmountType( AmountType t )
 {
-   setAmountIsWeight(t == AmountType_Weight ? true : false);
+   _amountIsWeight = t == AmountType_Weight;
+   setAmountIsWeight(_amountIsWeight);
 }
 
 void Misc::setAmountIsWeight( bool var )
 {
+   _amountIsWeight = var;
    set( kAmountIsWeightProp, kAmountIsWeight, var );
 }
 
@@ -209,8 +193,10 @@ void Misc::setAmount( double var )
 {
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
-   else
+   else {
+      _amount = var;
       set( kAmountProp, kAmount, var );
+   }
 }
 
 void Misc::setInventoryAmount( double var )
@@ -225,8 +211,10 @@ void Misc::setTime( double var )
 {
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
-   else
+   else {
+      _time = var;
       set( kTimeProp, kTime, var );
+   }
 }
 
 //========================OTHER METHODS=========================================
