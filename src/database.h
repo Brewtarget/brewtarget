@@ -168,7 +168,7 @@ public:
 
       QSqlQuery q(sqlDatabase());
 
-      q.setForwardOnly(true);
+      // q.setForwardOnly(true);
 
       try {
          if ( ! q.exec(insert) )
@@ -537,7 +537,7 @@ private:
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       QSqlQuery q(sqlDatabase());
-      q.setForwardOnly(true);
+      // q.setForwardOnly(true);
       QString queryString = QString("SELECT id FROM %1").arg(tableNames[table]);
       q.prepare( queryString );
 
@@ -567,7 +567,7 @@ private:
    template <class T> bool getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
    {
       QSqlQuery q(sqlDatabase());
-      q.setForwardOnly(true);
+      // q.setForwardOnly(true);
       QString queryString;
 
       if ( id.isEmpty() )
@@ -723,7 +723,7 @@ private:
          }
 
          // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
-         q.setForwardOnly(true);
+         // q.setForwardOnly(true);
 
          QString insert = QString("INSERT INTO %1 (%2, recipe_id) VALUES (:ingredient, :recipe)")
                   .arg(relTableName)

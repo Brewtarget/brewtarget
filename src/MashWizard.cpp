@@ -27,6 +27,7 @@
 #include "mashstep.h"
 #include "fermentable.h"
 #include <QMessageBox>
+#include <QButtonGroup>
 #include "HeatCalculations.h"
 #include "equipment.h"
 #include "PhysicalConstants.h"
