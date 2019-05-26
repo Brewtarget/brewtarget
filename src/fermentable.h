@@ -146,25 +146,25 @@ public:
    bool isSugar() const;
 
 
-   void setType( Type t, bool cacheOnly = true );
-   void setAdditionMethod( AdditionMethod m, bool cacheOnly = true );
-   void setAdditionTime( AdditionTime t, bool cacheOnly = true );
-   void setAmount_kg( double num, bool cacheOnly = true );
-   void setInventoryAmount( double num, bool cacheOnly = true );
-   void setYield_pct( double num, bool cacheOnly = true );
-   void setColor_srm( double num, bool cacheOnly = true );   
-   void setAddAfterBoil( bool b, bool cacheOnly = true );
-   void setOrigin( const QString& str, bool cacheOnly = true );
-   void setSupplier( const QString& str, bool cacheOnly = true);
-   void setNotes( const QString& str, bool cacheOnly = true );
-   void setCoarseFineDiff_pct( double num, bool cacheOnly = true );
-   void setMoisture_pct( double num, bool cacheOnly = true );
-   void setDiastaticPower_lintner( double num, bool cacheOnly = true );
-   void setProtein_pct( double num, bool cacheOnly = true );
-   void setMaxInBatch_pct( double num, bool cacheOnly = true );
-   void setRecommendMash( bool b, bool cacheOnly = true );
-   void setIbuGalPerLb( double num, bool cacheOnly = true );
-   void setIsMashed(bool var, bool cacheOnly = true);
+   void setType( Type t, bool cacheOnly = false );
+   void setAdditionMethod( AdditionMethod m, bool cacheOnly = false );
+   void setAdditionTime( AdditionTime t, bool cacheOnly = false );
+   void setAmount_kg( double num, bool cacheOnly = false );
+   void setInventoryAmount( double num, bool cacheOnly = false );
+   void setYield_pct( double num, bool cacheOnly = false );
+   void setColor_srm( double num, bool cacheOnly = false );
+   void setAddAfterBoil( bool b, bool cacheOnly = false );
+   void setOrigin( const QString& str, bool cacheOnly = false );
+   void setSupplier( const QString& str, bool cacheOnly = false);
+   void setNotes( const QString& str, bool cacheOnly = false );
+   void setCoarseFineDiff_pct( double num, bool cacheOnly = false );
+   void setMoisture_pct( double num, bool cacheOnly = false );
+   void setDiastaticPower_lintner( double num, bool cacheOnly = false );
+   void setProtein_pct( double num, bool cacheOnly = false );
+   void setMaxInBatch_pct( double num, bool cacheOnly = false );
+   void setRecommendMash( bool b, bool cacheOnly = false );
+   void setIbuGalPerLb( double num, bool cacheOnly = false );
+   void setIsMashed(bool var, bool cacheOnly = false );
 
    void save();
 
@@ -174,7 +174,6 @@ signals:
    
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   void saved();
    
 private:
    Fermentable(Brewtarget::DBTable table, int key);

@@ -204,6 +204,7 @@ const Fermentable::AdditionMethod Fermentable::additionMethod() const
    }
    return additionMethod;
 }
+
 const Fermentable::AdditionTime Fermentable::additionTime() const
 {
    Fermentable::AdditionTime additionTime;
@@ -217,13 +218,19 @@ const Fermentable::AdditionTime Fermentable::additionTime() const
 
 const QString Fermentable::typeString() const
 {
+   if ( _type > types.length()) {
+      return "";
+   }
    return types.at(type());
 }
 
 const QString Fermentable::typeStringTr() const
 {
    static QStringList typesTr = QStringList () << QObject::tr("Grain") << QObject::tr("Sugar") << QObject::tr("Extract") << QObject::tr("Dry Extract") << QObject::tr("Adjunct");
-   return typesTr.at(type());
+   if ( _type > typesTr.length()) {
+      return "";
+   }
+   return typesTr.at(_type);
 }
 
 const QString Fermentable::additionMethodStringTr() const
@@ -486,7 +493,7 @@ void Fermentable::setMaxInBatch_pct( double num, bool cacheOnly )
       Brewtarget::logW( QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num) );
    }
 }
-
+/*
 void Fermentable::save()
 {
    QVariantMap map = SUPER::getColumnValueMap();
@@ -512,3 +519,4 @@ void Fermentable::save()
    emit saved();
 
 }
+*/

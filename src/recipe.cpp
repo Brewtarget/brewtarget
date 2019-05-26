@@ -930,7 +930,6 @@ void Recipe::addHop( Hop *var )
 
 void Recipe::addFermentable( Fermentable* var )
 {
-   connect(var, &Fermentable::saved, this, &Recipe::onFermentableChanged);
    Database::instance().addToRecipe( this, var );
 }
 

@@ -376,8 +376,8 @@ void MashWizard::wizardry()
             mashStep = Database::instance().newMashStep(mash);
             steps.append(mashStep);
 
-            mashStep->setName(tr("Batch Sparge %1").arg(i+1));
             mashStep->setType(MashStep::batchSparge);
+            mashStep->setName(tr("Batch Sparge %1").arg(i+1));
             mashStep->setInfuseAmount_l(volPerBatch);
             mashStep->setInfuseTemp_c(tw);
             mashStep->setEndTemp_c(tw);

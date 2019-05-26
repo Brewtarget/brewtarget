@@ -175,6 +175,7 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
    setDisplay( rec.value(kDisplay).toBool(), true);
    setDeleted( rec.value(kDeleted).toBool(), true);
    setFolder( rec.value(kFolder).toString(), false, true);
+
    _brewDate = QDateTime::fromString(rec.value(kBrewDate).toString(), Qt::ISODate);
    _fermentDate = QDateTime::fromString(rec.value(kFermentDate).toString(), Qt::ISODate);
    _notes = rec.value(kNotes).toString();
@@ -238,7 +239,6 @@ void BrewNote::populateNote(Recipe* parent)
    sugars = parent->calcTotalPoints();
    setProjPoints(sugars.value(kSugarKg) + sugars.value(kSugarKg_IgnoreEff));
 
-   sugars = parent->calcTotalPoints();
    setProjFermPoints(sugars.value(kSugarKg) + sugars.value(kSugarKg_IgnoreEff));
 
    // Out of the gate, we expect projected to be the measured.
@@ -351,20 +351,29 @@ void BrewNote::setLoading(bool flag) { loading = flag; }
 // the brewnote.
 void BrewNote::setSg(double var, bool cacheOnly)
 {
+   // I REALLY dislike this logic. It is too bloody intertwined
    _sg = var;
+
    if ( ! cacheOnly ) {
       set(kSpecificGravityProp, kSpecificGravity, var);
+   }
+   // write the value to the DB if requested
+   if ( ! loading ) {
       calculateEffIntoBK_pct();
       calculateOg();
    }
+
 }
 
 void BrewNote::setVolumeIntoBK_l(double var, bool cacheOnly)
 {
    _volumeIntoBK_l = var;
+
    if ( ! cacheOnly ) {
       set(kVolumeIntoBoilProp, kVolumeIntoBoil, var);
+   }
 
+   if ( ! loading ) {
       calculateEffIntoBK_pct();
       calculateOg();
       calculateBrewHouseEff_pct();
@@ -374,9 +383,12 @@ void BrewNote::setVolumeIntoBK_l(double var, bool cacheOnly)
 void BrewNote::setOg(double var, bool cacheOnly)
 {
    _og = var;
+
    if ( ! cacheOnly ) {
       set(kOriginalGravityProp, kOriginalGravity, var);
+   }
 
+   if ( ! loading ) {
       calculateBrewHouseEff_pct();
       calculateABV_pct();
       calculateActualABV_pct();
@@ -387,9 +399,12 @@ void BrewNote::setOg(double var, bool cacheOnly)
 void BrewNote::setVolumeIntoFerm_l(double var, bool cacheOnly)
 {
    _volumeIntoFerm_l = var;
+
    if ( ! cacheOnly ) {
       set(kVolumeIntoFermenterProp, kVolumeIntoFermenter, var);
+   }
 
+   if ( ! loading ) {
       calculateBrewHouseEff_pct();
    }
 }
@@ -399,45 +414,58 @@ void BrewNote::setFg(double var, bool cacheOnly)
    _fg = var;
    if ( ! cacheOnly ) {
       set(kFinalGravityProp, kFinalGravity, var);
+   }
 
+   if ( !loading ) {
       calculateActualABV_pct();
       calculateAttenuation_pct();
    }
 }
 
 // This one is a bit of an odd ball. We need to convert to pure glucose points
-// before we store it in the database. TODO: Prove this works. I've modified
-// the logic to ignore the "loading" flag. I am not sure it will get the right
-// thing done.
+// before we store it in the database. 
+// DO NOT ignore the loading flag. Just. Don't. 
 void BrewNote::setProjPoints(double var, bool cacheOnly)
 {
-   _projPoints = var;
-   if ( ! cacheOnly ) {
+
+   if ( loading ) {
+      _projPoints = var;
+   }
+   else {
       double convertPnts;
       double plato, total_g;
 
-      plato = Algorithms::getPlato(var, projVolIntoBK_l());
+      plato = Algorithms::getPlato(var, _projVolIntoBK_l);
       total_g = Algorithms::PlatoToSG_20C20C( plato );
       convertPnts = (total_g - 1.0 ) * 1000;
 
-      set(kProjectedPointsProp, kProjectedPoints, convertPnts);
+      _projPoints = convertPnts;
+      if ( ! cacheOnly ) {
+         set(kProjectedPointsProp, kProjectedPoints, convertPnts);
+      }
+
    }
 
 }
 
 void BrewNote::setProjFermPoints(double var, bool cacheOnly)
 {
-   _projFermPoints = var;
 
-   if ( ! cacheOnly ) {
+   if ( loading ) {
+      _projFermPoints = var;
+   }
+   else {
       double convertPnts;
       double plato, total_g;
 
-      plato = Algorithms::getPlato(var, projVolIntoFerm_l());
+      plato = Algorithms::getPlato(var, _projVolIntoFerm_l);
       total_g = Algorithms::PlatoToSG_20C20C( plato );
       convertPnts = (total_g - 1.0 ) * 1000;
 
-      set(kProjectedPointsProp, kProjectedFermentationPoints, convertPnts);
+      _projFermPoints = convertPnts;
+      if ( ! cacheOnly ) {
+         set(kProjectedPointsProp, kProjectedFermentationPoints, convertPnts);
+      }
    }
 }
 

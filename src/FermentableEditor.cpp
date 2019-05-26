@@ -77,7 +77,6 @@ void FermentableEditor::save()
    obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->toSI() );
    obsFerm->setNotes( textEdit_notes->toPlainText() );
-   obsFerm->save();
 
    setVisible(false);
 }

@@ -18,6 +18,7 @@
  */
 
 #include <QVector>
+#include <QDebug>
 #include "mashstep.h"
 #include "brewtarget.h"
 
@@ -207,7 +208,7 @@ void MashStep::setDecoctionAmount_l(double var)
 //============================="GET" METHODS====================================
 MashStep::Type MashStep::type() const { return _type; }
 const QString MashStep::typeString() const { return _typeStr; }
-const QString MashStep::typeStringTr() const { return typesTr.at(_type); }
+const QString MashStep::typeStringTr() const { if ( _type > typesTr.length() ) { return ""; } return typesTr.at(_type); }
 double MashStep::infuseTemp_c() const { return _infuseTemp_c; }
 double MashStep::infuseAmount_l() const { return _infuseAmount_l; }
 double MashStep::stepTemp_c() const { return _stepTemp_c; }
@@ -219,7 +220,6 @@ int MashStep::stepNumber() const { return _stepNumber; }
 
 bool MashStep::isInfusion() const
 {
-   MashStep::Type _type = type();
    return ( _type == MashStep::Infusion    ||
             _type == MashStep::batchSparge ||
             _type == MashStep::flySparge );
@@ -227,7 +227,6 @@ bool MashStep::isInfusion() const
 
 bool MashStep::isSparge() const
 {
-   MashStep::Type _type = type();
    return ( _type == MashStep::batchSparge ||
             _type == MashStep::flySparge   || 
             name() == "Final Batch Sparge" );
@@ -235,13 +234,11 @@ bool MashStep::isSparge() const
 
 bool MashStep::isTemperature() const
 {
-   MashStep::Type _type = type();
    return ( _type == MashStep::Temperature );
 }
 
 bool MashStep::isDecoction() const
 {
-   MashStep::Type _type = type();
    return ( _type == MashStep::Decoction );
 }
 

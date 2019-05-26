@@ -178,7 +178,7 @@ public:
          q.finish();
       }
       catch (QString e) {
-         Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
          throw; // rethrow the error until somebody cares
       }
 

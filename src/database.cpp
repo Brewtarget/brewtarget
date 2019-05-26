@@ -1144,6 +1144,7 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
    }
 
    sqlDatabase().commit();
+   tmp->setDisplay(true);
    if ( signal )
    {
       emit changed( metaProperty("brewNotes"), QVariant() );
@@ -1817,7 +1818,6 @@ QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable tab
         .arg(tableNames[table])
         .arg(key);
    */
-   // qDebug() << "Query = " << queryString;
    QSqlQuery q( queryString, sqlDatabase() );
    
    if ( q.first() ) {
@@ -2469,7 +2469,7 @@ bool Database::importFromXML(const QString& filename)
       for(int i = 0; i < list.count(); ++i )
       {
          Recipe* temp = recipeFromXml( list.at(i) );
-         if ( ! temp->isValid() )
+         if ( ! temp || ! temp->isValid() )
             ret = false;
       }
    }
@@ -4490,6 +4490,9 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       // This works, strangely enough.
       Recipe* ret = newIngredient(&allRecipes);
 
+      if ( ! ret ) {
+         return nullptr;
+      }
       // Get standard properties.
       fromXml( ret, Recipe::tagToProp, node);
 
