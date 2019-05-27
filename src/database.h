@@ -812,6 +812,7 @@ private:
       int newKey;
       int i;
       QString holder, fields;
+      T* newOne;
 
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
 
@@ -873,6 +874,9 @@ private:
             throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
 
          newKey = insert.lastInsertId().toInt();
+         // This is a mess and wont' play nice w/ the caching
+         newOne = new T(t, newKey, oldRecord);
+         keyHash->insert( newKey, newOne );
       }
       catch (QString e) {
          Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -882,8 +886,6 @@ private:
 
       q.finish();
 
-      T* newOne = new T(t, newKey);
-      keyHash->insert( newKey, newOne );
 
       return newOne;
    }

@@ -23,6 +23,7 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include <QDebug>
 #include "hop.h"
 #include "brewtarget.h"
 
@@ -382,18 +383,33 @@ double Hop::inventory() const
 const QString Hop::useStringTr() const
 {
    static QStringList usesTr = QStringList() << tr("Mash") << tr("First Wort") << tr("Boil") << tr("Aroma") << tr("Dry Hop") ;
-   return usesTr.at(use());
+   if ( _use < usesTr.size() ) {
+      return usesTr.at(_use);
+   }
+   else {
+      return "";
+   }
 }
 
 const QString Hop::typeStringTr() const
 {
    static QStringList typesTr = QStringList() << tr("Bittering") << tr("Aroma") << tr("Both");
-   return typesTr.at(type());
+   if ( _type < typesTr.size() ) {
+      return typesTr.at(_type);
+   }
+   else {
+      return "";
+   }
 }
 
 const QString Hop::formStringTr() const
 {
    static QStringList formsTr = QStringList() << tr("Leaf") << tr("Pellet") << tr("Plug");
-   return formsTr.at(form());
+   if ( _form < formsTr.size() ) {
+      return formsTr.at(_form);
+   }
+   else {
+      return "";
+   }
 }
 
