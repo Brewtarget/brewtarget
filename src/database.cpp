@@ -4552,6 +4552,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
       blockSignals(false);
+      throw;
    }
 }
 
