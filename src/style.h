@@ -44,6 +44,7 @@ class Style : public BeerXMLElement
    Q_CLASSINFO("prefix", "style")
    
    friend class Database;
+   friend class StyleEditor;
 public:
 
    virtual ~Style() {}
@@ -146,34 +147,11 @@ signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
 
-   /*
-   void changedCategory(QString);
-   void changedCategoryNumber(QString);
-   void changedStyleLetter(QString);
-   void changedStyleGuide(QString);
-   void changedType(Type);
-   void changedOgMin(double);
-   void changedOgMax(double);
-   void changedFgMin(double);
-   void changedFgMax(double);
-   void changedIbuMin(double);
-   void changedIbuMax(double);
-   void changedColorMin_srm(double);
-   void changedColorMax_srm(double);
-   void changedCarbMin_vol(double);
-   void changedCarbMax_vol(double);
-   void changedAbvMin_pct(double);
-   void changedAbvMax_pct(double);
-   void changedNotes(QString);
-   void changedProfile(QString);
-   void changedIngredients(QString);
-   void changedExamples(QString);
-   */
-
 private:
    Style(Brewtarget::DBTable table, int key);
    Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
+   Style( QString name );
    
    QString _category;
    QString _categoryNumber;

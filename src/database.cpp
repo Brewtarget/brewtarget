@@ -37,6 +37,7 @@
 #include <QTextCodec>
 #include <QObject>
 #include <QString>
+#include <QStringBuilder>
 #include <QFileInfo>
 #include <QFile>
 #include <QMessageBox>
@@ -1484,10 +1485,7 @@ Style* Database::newStyle(Style* other)
    Style* tmp;
 
    try {
-      if ( other )
-         tmp = copy(other, &allStyles);
-      else
-         tmp = newIngredient(&allStyles);
+      tmp = copy(other, &allStyles);
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -1499,6 +1497,101 @@ Style* Database::newStyle(Style* other)
    emit newStyleSignal(tmp);
 
    return tmp;
+}
+
+Style* Database::newStyle(QString name)
+{
+   Style* tmp;
+
+   try {
+      tmp = newIngredient(name, &allStyles);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
+   
+   try {
+      // setting it in the DB doesn't set it in the cache. This makes sure the
+      // name is in the cache before we throw the signal
+      tmp->setName(name,true);
+      tmp->setDisplay(true);
+      tmp->setDeleted(false);
+   }
+
+   catch (QString e ) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      throw;
+   }
+
+   emit changed( metaProperty("styles"), QVariant() );
+   emit newStyleSignal(tmp);
+
+   return tmp;
+}
+
+int Database::insertStyle(Style* ins) {
+   int key;
+   
+   QStringList propNames = QStringList() <<
+      "name" << "display" << "deleted" << "folder" << "s_type" << "category" << 
+      "category_number" << "style_letter" << "style_guide" << "og_min" << 
+      "og_max" << "fg_min" << "fg_max" << "ibu_min" << "ibu_max" << 
+      "color_min" << "color_max" << "abv_min" << "abv_max" << "carb_min" << 
+      "carb_max" << "notes" << "profile" << "ingredients" << "examples";
+  
+   // Being building this gnarly insert statement
+   QString insert = QString("insert into style (");
+   insert = insert % propNames.join(",") % ") values (:" % propNames.join(",:") % ");";
+
+   QSqlQuery q( sqlDatabase() );
+   q.prepare(insert);
+   q.bindValue(":name", ins->name());
+   q.bindValue(":folder", ins->folder());
+   q.bindValue(":display", ins->display() ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   q.bindValue(":deleted", ins->deleted() ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   q.bindValue(":s_type", ins->typeString());
+   q.bindValue(":category", ins->category());
+   q.bindValue(":category_number", ins->categoryNumber());
+   q.bindValue(":style_letter", ins->styleLetter());
+   q.bindValue(":style_guide", ins->styleGuide());
+   q.bindValue(":ogMin", ins->ogMin());
+   q.bindValue(":ogMax", ins->ogMax());
+   q.bindValue(":fgMin", ins->fgMin());
+   q.bindValue(":fgMax", ins->fgMax());
+   q.bindValue(":ibu_min", ins->ibuMin());
+   q.bindValue(":ibu_max", ins->ibuMax());
+   q.bindValue(":color_min", ins->colorMin_srm());
+   q.bindValue(":color_max", ins->colorMax_srm());
+   q.bindValue(":abv_min", ins->abvMin_pct());
+   q.bindValue(":abv_max", ins->abvMax_pct());
+   q.bindValue(":carb_min", ins->carbMin_vol());
+   q.bindValue(":carb_max", ins->carbMax_vol());
+   q.bindValue(":notes", ins->notes());
+   q.bindValue(":profile", ins->profile());
+   q.bindValue(":ingredients", ins->ingredients());
+   q.bindValue(":examples", ins->examples());
+   
+   try {
+      if ( ! q.exec() ) {
+         throw QString("could not insert a record into");
+      }
+
+      key = q.lastInsertId().toInt();
+      q.finish();
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
+      throw; // rethrow the error until somebody cares
+   }
+   ins->_key = key;
+   
+   emit changed( metaProperty("styles"), QVariant() );
+   emit newStyleSignal(ins);
+
+   return key;
+   
 }
 
 Water* Database::newWater(Water* other)
@@ -4611,16 +4704,14 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Style*> matching;
 
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
    try {
       // If we are just importing a style by itself, need to do some dupe-checking.
-      n = node.firstChildElement("NAME");
-      name = n.firstChild().toText().nodeValue();
       if( parent == 0 )
       {
          // Check to see if there is a hop already in the DB with the same name.
          sqlDatabase().transaction();
-         n = node.firstChildElement("NAME");
-         name = n.firstChild().toText().nodeValue();
          getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
 
          if( matching.length() > 0 )
@@ -4629,10 +4720,10 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
             ret = matching.first();
          }
          else
-            ret = newStyle();
+            ret = newStyle(name);
       }
       else
-         ret = newStyle();
+         ret = newStyle(name);
 
       fromXml( ret, Style::tagToProp, node );
 
@@ -4850,7 +4941,7 @@ QList<TableParams> Database::makeTableParams()
       "evap_rate" << "real_evap_rate" << "boil_time" << "calc_boil_volume" <<
       "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
       "notes";
-   tmp.newElement = [&]() { return this->newEquipment(); };
+   tmp.newElement = [&](QString name) { return this->newEquipment(); };
 
    ret.append(tmp);
    //==============================Fermentables================================
@@ -4861,7 +4952,7 @@ QList<TableParams> Database::makeTableParams()
       "add_after_boil" << "origin" << "supplier" << "notes" <<
       "coarse_fine_diff" << "moisture" << "diastatic_power" << "protein" <<
       "max_in_batch" << "recommend_mash" << "ibu_gal_per_lb";
-   tmp.newElement = [&]() { return this->newFermentable(); };
+   tmp.newElement = [&](QString name) { return this->newFermentable(); };
 
    //==============================Hops=============================
    tmp.tableName = "hop";
@@ -4871,7 +4962,7 @@ QList<TableParams> Database::makeTableParams()
       "caryophyllene" << "cohumulone" << "myrcene",
    // First cast specifies which newHop() I want, since it is overloaded.
    // Second cast is to force the conversion of the function pointer.
-   tmp.newElement = [&]() { return this->newHop(); };
+   tmp.newElement = [&](QString name) { return this->newHop(); };
 
    ret.append(tmp);
 
@@ -4881,7 +4972,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "mtype" << "use" << "time" << "amount" << "amount_is_weight" <<
       "use_for" << "notes";
-   tmp.newElement = [&]() { return this->newMisc(); };
+   tmp.newElement = [&](QString name) { return this->newMisc(); };
 
    ret.append(tmp);
    //==================================Styles==================================
@@ -4893,7 +4984,7 @@ QList<TableParams> Database::makeTableParams()
       "fg_max" << "ibu_min" << "ibu_max" << "color_min" << "color_max" <<
       "abv_min" << "abv_max" << "carb_min" << "carb_max" << "notes" <<
       "profile" << "ingredients" << "examples";
-   tmp.newElement = [&]() { return this->newStyle(); };
+   tmp.newElement = [&](QString name) { return this->newStyle(name); };
 
    ret.append(tmp);
 
@@ -4905,7 +4996,7 @@ QList<TableParams> Database::makeTableParams()
       "laboratory" << "product_id" << "min_temperature" << "max_temperature" <<
       "flocculation" << "attenuation" << "notes" << "best_for" <<
       "times_cultured" << "max_reuse" << "add_to_secondary";
-   tmp.newElement = [&]() { return this->newYeast(); };
+   tmp.newElement = [&](QString name) { return this->newYeast(); };
 
    ret.append(tmp);
 
@@ -4915,7 +5006,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "amount" << "calcium" << "bicarbonate" << "sulfate" <<
       "chloride" << "sodium" << "magnesium" << "ph" << "notes";
-   tmp.newElement = [&]() { return this->newWater(); };
+   tmp.newElement = [&](QString name) { return this->newWater(); };
 
    ret.append(tmp);
 
@@ -4961,9 +5052,7 @@ void Database::updateDatabase(QString const& filename)
 
       foreach( TableParams tp, tableParams)
       {
-         QSqlQuery qNewBtIng(
-            QString("SELECT * FROM bt_%1").arg(tp.tableName),
-            newSqldb );
+         QSqlQuery qNewBtIng( QString("SELECT * FROM bt_%1").arg(tp.tableName), newSqldb );
 
          QSqlQuery qNewIng( newSqldb );
          qNewIng.prepare(QString("SELECT * FROM %1 WHERE id=:id").arg(tp.tableName));
@@ -4972,8 +5061,10 @@ void Database::updateDatabase(QString const& filename)
          QSqlQuery qUpdateOldIng( sqlDatabase() );
          QString updateString = QString("UPDATE %1 SET ").arg(tp.tableName);
          varAndHolder.clear();
+         
          foreach( QString pn, tp.propName)
-            varAndHolder.append(QString("%1=:%2").arg(pn).arg(pn));
+            varAndHolder.append(QString("%1=:%1").arg(pn));
+         
          updateString.append(varAndHolder.join(", "));
 
          // Un-delete it if it is somehow deleted.
@@ -4985,8 +5076,7 @@ void Database::updateDatabase(QString const& filename)
          qOldBtIng.prepare( QString("SELECT * FROM bt_%1 WHERE id=:btid").arg(tp.tableName) );
 
          QSqlQuery qOldBtIngInsert( sqlDatabase() );
-         qOldBtIngInsert.prepare(
-            QString("INSERT INTO bt_%1 (id,%1_id) values (:id,:%1_id)").arg(tp.tableName) );
+         qOldBtIngInsert.prepare( QString("INSERT INTO bt_%1 (id,%1_id) values (:id,:%1_id)").arg(tp.tableName) );
 
          // Resize propVal appropriately for current table.
          propVal.clear();
@@ -5010,9 +5100,7 @@ void Database::updateDatabase(QString const& filename)
                // Get new value.
                *it = qNewIng.record().value(pn);
                // Bind it to the old ingredient.
-               qUpdateOldIng.bindValue(
-                  QString(":%1").arg(pn),
-                  *it );
+               qUpdateOldIng.bindValue( QString(":%1").arg(pn), *it );
                ++it;
             }
 
@@ -5043,11 +5131,11 @@ void Database::updateDatabase(QString const& filename)
 
             }
             // If the btid doesn't exist in the old bt_hop table, do an insert into
-            // the old hop table, then into the old bt_hop table.
+            // the new hop table, then into the new bt_hop table.
             else
             {
                // Create a new ingredient.
-               oldid = tp.newElement()->_key;
+               oldid = tp.newElement(qNewBtIng.record().value("name").toString())->_key;
 
                // Copy in the new data.
                qUpdateOldIng.bindValue( ":id", oldid );

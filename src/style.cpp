@@ -131,6 +131,36 @@ Style::Style(Brewtarget::DBTable table, int key)
 {
 }
 
+Style::Style(QString name)
+   : BeerXMLElement(Brewtarget::STYLETABLE, -1),
+   _typeStr(QString("")),
+   _type(static_cast<Style::Type>(0)),
+   _styleLetter(QString("")),
+   _styleGuide(QString("")),
+   _notes(QString("")),
+   _profile(QString("")),
+   _ingredients(QString("")),
+   _examples(QString("")),
+   _category(QString("")),
+   _categoryNumber(QString("")),
+   _ogMin(0.0),
+   _ogMax(0.0),
+   _fgMin(0.0),
+   _fgMax(0.0),
+   _ibuMin(0.0),
+   _ibuMax(0.0),
+   _colorMin_srm(0.0),
+   _colorMax_srm(0.0),
+   _carbMin_vol(0.0),
+   _carbMax_vol(0.0),
+   _abvMin_pct(0.0),
+   _abvMax_pct(0.0)
+{
+   setName( name, true );
+   setDisplay( true, true);
+   setDeleted( false, true);
+}
+
 Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key)
 {

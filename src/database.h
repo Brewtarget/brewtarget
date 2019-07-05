@@ -69,7 +69,7 @@ typedef struct
 {
    QString tableName; // Name of the table.
    QStringList propName; // List of BeerXML column names.
-   std::function<BeerXMLElement*()> newElement;
+   std::function<BeerXMLElement*(QString name)> newElement;
 
    // BeerXMLElement* (Database::*newElement)(int); // Function to make a new ingredient in this table.
 } TableParams;
@@ -244,7 +244,11 @@ public:
     * parent recipe unless \b displace is false.
     */
    Misc* newMisc(Misc* other = 0);
-   Style* newStyle(Style* other = 0);
+   
+   Style* newStyle(Style* other);
+   Style* newStyle(QString name);
+   int    insertStyle(Style* ins);
+   
    Water* newWater(Water* other = 0);
    Yeast* newYeast(Yeast* other = 0);
 

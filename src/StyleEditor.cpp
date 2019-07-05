@@ -96,29 +96,38 @@ void StyleEditor::save()
       setVisible(false);
       return;
    }
-   
-   s->setName( lineEdit_name->text() );
-   s->setCategory( lineEdit_category->text() );
-   s->setCategoryNumber( lineEdit_categoryNumber->text() );
-   s->setStyleLetter( lineEdit_styleLetter->text() );
-   s->setStyleGuide( lineEdit_styleGuide->text() );
-   s->setType( static_cast<Style::Type>(comboBox_type->currentIndex()) );
-   s->setOgMin( lineEdit_ogMin->toSI() );
-   s->setOgMax( lineEdit_ogMax->toSI() );
-   s->setFgMin( lineEdit_fgMin->toSI() );
-   s->setFgMax( lineEdit_fgMax->toSI() );
-   s->setIbuMin( lineEdit_ibuMin->toSI() );
-   s->setIbuMax( lineEdit_ibuMax->toSI() );
-   s->setColorMin_srm( lineEdit_colorMin->toSI() );
-   s->setColorMax_srm( lineEdit_colorMax->toSI() );
-   s->setCarbMin_vol( lineEdit_carbMin->toSI() );
-   s->setCarbMax_vol( lineEdit_carbMax->toSI() );
-   s->setAbvMin_pct( lineEdit_abvMin->toSI() );
-   s->setAbvMax_pct( lineEdit_abvMax->toSI() );
-   s->setProfile( textEdit_profile->toPlainText() );
-   s->setIngredients( textEdit_ingredients->toPlainText() );
-   s->setExamples( textEdit_examples->toPlainText() );
-   s->setNotes( textEdit_notes->toPlainText() );
+
+   // Well, this got clever. If we are creating a new record, we need to
+   // set the cache values only and then write it all one go. As it happens,
+   // using isNew to decide if we are caching or not does EXACTLY what I need.
+   s->setName( lineEdit_name->text(), isNew );
+   s->setCategory( lineEdit_category->text(), isNew );
+   s->setCategoryNumber( lineEdit_categoryNumber->text(), isNew );
+   s->setStyleLetter( lineEdit_styleLetter->text(), isNew );
+   s->setStyleGuide( lineEdit_styleGuide->text(), isNew );
+   s->setType( static_cast<Style::Type>(comboBox_type->currentIndex()), isNew );
+   s->setOgMin( lineEdit_ogMin->toSI(), isNew );
+   s->setOgMax( lineEdit_ogMax->toSI(), isNew );
+   s->setFgMin( lineEdit_fgMin->toSI(), isNew );
+   s->setFgMax( lineEdit_fgMax->toSI(), isNew );
+   s->setIbuMin( lineEdit_ibuMin->toSI(), isNew );
+   s->setIbuMax( lineEdit_ibuMax->toSI(), isNew );
+   s->setColorMin_srm( lineEdit_colorMin->toSI(), isNew );
+   s->setColorMax_srm( lineEdit_colorMax->toSI(), isNew );
+   s->setCarbMin_vol( lineEdit_carbMin->toSI(), isNew );
+   s->setCarbMax_vol( lineEdit_carbMax->toSI(), isNew );
+   s->setAbvMin_pct( lineEdit_abvMin->toSI(), isNew );
+   s->setAbvMax_pct( lineEdit_abvMax->toSI(), isNew );
+   s->setProfile( textEdit_profile->toPlainText(), isNew );
+   s->setIngredients( textEdit_ingredients->toPlainText(), isNew );
+   s->setExamples( textEdit_examples->toPlainText(), isNew );
+   s->setNotes( textEdit_notes->toPlainText(), isNew );
+
+   if ( isNew ) {
+      int retKey = Database::instance().insertStyle(s);
+      qDebug() << "s->key = " << s->key() << " retKey =" << retKey;
+      isNew = false;
+   }
 
    setVisible(false);
 }
@@ -135,12 +144,13 @@ void StyleEditor::newStyle(QString folder)
    if( name.isEmpty() )
       return;
 
-   Style *s = Database::instance().newStyle();
+   Style *s = new Style(name);
    s->setName( name );
    if ( ! folder.isEmpty() ) 
       s->setFolder(folder);
 
    setStyle(s);
+   isNew = true;
    show();
 }
 
