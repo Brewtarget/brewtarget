@@ -166,191 +166,233 @@ Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 //==============================="SET" METHODS==================================
-void Style::setCategory( const QString& var )
+void Style::setCategory( const QString& var, bool cacheOnly )
 {
    _category = var;
-   set( kCategoryProp, kCategory, var );
+   if ( ! cacheOnly ) {
+      set( kCategoryProp, kCategory, var );
+   }
 }
 
-void Style::setCategoryNumber( const QString& var )
+void Style::setCategoryNumber( const QString& var, bool cacheOnly )
 {
    _categoryNumber = var;
-   set( kCategoryNumberProp, kCategoryNumber, var );
+   if ( ! cacheOnly ) {
+      set( kCategoryNumberProp, kCategoryNumber, var );
+   }
 }
 
-void Style::setStyleLetter( const QString& var )
+void Style::setStyleLetter( const QString& var, bool cacheOnly )
 {
    _styleLetter = var;
-   set( kStyleLetterProp, kStyleLetter, var );
+   if ( ! cacheOnly ) {
+      set( kStyleLetterProp, kStyleLetter, var );
+   }
 }
 
-void Style::setStyleGuide( const QString& var )
+void Style::setStyleGuide( const QString& var, bool cacheOnly )
 {
    _styleGuide = var;
-   set( kStyleGuideProp, kStyleGuide, var );
+   if ( ! cacheOnly ) {
+      set( kStyleGuideProp, kStyleGuide, var );
+   }
 }
 
-void Style::setType( Type t )
+void Style::setType( Type t, bool cacheOnly )
 {
    _type = t;
    _typeStr = types.at(t);
-   set( kTypeProp, kType, _typeStr);
+   if ( ! cacheOnly ) {
+      set( kTypeProp, kType, _typeStr);
+   }
 }
 
-void Style::setOgMin( double var )
+void Style::setOgMin( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _ogMin = var;
-      set(kOGMinProp, kOGMin, var);
+      if ( ! cacheOnly ) {
+         set(kOGMinProp, kOGMin, var);
+      }
    }
 }
 
-void Style::setOgMax( double var )
+void Style::setOgMax( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _ogMax = var;
-      set(kOGMaxProp, kOGMax, var);
+      if ( ! cacheOnly ) {
+         set(kOGMaxProp, kOGMax, var);
+      }
    }
 }
 
-void Style::setFgMin( double var )
+void Style::setFgMin( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _fgMin = var;
-      set(kFGMinProp, kFGMin, var);
+      if ( ! cacheOnly ) {
+         set(kFGMinProp, kFGMin, var);
+      }
    }
 }
 
-void Style::setFgMax( double var )
+void Style::setFgMax( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _fgMax = var;
-      set(kFGMaxProp, kFGMax, var);
+      if ( ! cacheOnly ) {
+         set(kFGMaxProp, kFGMax, var);
+      }
    }
 }
 
-void Style::setIbuMin( double var )
+void Style::setIbuMin( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _ibuMin = var;
-      set(kIBUMinProp, kIBUMin, var);
+      if ( ! cacheOnly ) {
+         set(kIBUMinProp, kIBUMin, var);
+      }
    }
 }
 
-void Style::setIbuMax( double var )
+void Style::setIbuMax( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _ibuMax = var;
-      set(kIBUMaxProp, kIBUMax, var);
+      if ( ! cacheOnly ) {
+         set(kIBUMaxProp, kIBUMax, var);
+      }
    }
 }
 
-void Style::setColorMin_srm( double var )
+void Style::setColorMin_srm( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _colorMin_srm = var;
-      set(kColorMinProp, kColorMin, var);
+      if ( ! cacheOnly ) {
+         set(kColorMinProp, kColorMin, var);
+      }
    }
 }
 
-void Style::setColorMax_srm( double var )
+void Style::setColorMax_srm( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _colorMax_srm = var;
-      set(kColorMaxProp, kColorMax, var);
+      if ( ! cacheOnly ) {
+         set(kColorMaxProp, kColorMax, var);
+      }
    }
 }
 
-void Style::setCarbMin_vol( double var )
+void Style::setCarbMin_vol( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _carbMin_vol = var;
-      set(kCarbMinProp, kCarbMin, var);
+      if ( ! cacheOnly ) {
+         set(kCarbMinProp, kCarbMin, var);
+      }
    }
 }
 
-void Style::setCarbMax_vol( double var )
+void Style::setCarbMax_vol( double var, bool cacheOnly )
 {
    if( var < 0.0 )
       return;
    else
    {
       _carbMax_vol = var;
-      set(kCarbMaxProp, kCarbMax, var);
+      if ( ! cacheOnly ) {
+         set(kCarbMaxProp, kCarbMax, var);
+      }
    }
 }
 
-void Style::setAbvMin_pct( double var )
+void Style::setAbvMin_pct( double var, bool cacheOnly )
 {
    if( var < 0.0 || var > 100.0 )
       return;
    else
    {
       _abvMin_pct = var;
-      set(kABVMinProp, kABVMin, var);
+      if ( ! cacheOnly ) {
+         set(kABVMinProp, kABVMin, var);
+      }
    }
 }
 
-void Style::setAbvMax_pct( double var )
+void Style::setAbvMax_pct( double var, bool cacheOnly )
 {
    if( var < 0.0 || var > 100.0 )
       return;
    else
    {
       _abvMax_pct = var;
-      set(kABVMaxProp, kABVMax, var);
+      if ( ! cacheOnly ) {
+         set(kABVMaxProp, kABVMax, var);
+      }
    }
 }
 
-void Style::setNotes( const QString& var )
+void Style::setNotes( const QString& var, bool cacheOnly )
 {
    _notes = var;
-   set(kNotesProp, kNotes, var);
+   if ( ! cacheOnly ) {
+      set(kNotesProp, kNotes, var);
+   }
 }
 
-void Style::setProfile( const QString& var )
+void Style::setProfile( const QString& var, bool cacheOnly )
 {
    _profile = var;
-   set(kProfileProp, kProfile, var);
+   if ( ! cacheOnly ) {
+      set(kProfileProp, kProfile, var);
+   }
 }
 
-void Style::setIngredients( const QString& var )
+void Style::setIngredients( const QString& var, bool cacheOnly )
 {
    _ingredients = var;
-   set(kIngredientsProp, kIngredients, var);
+   if ( ! cacheOnly ) {
+      set(kIngredientsProp, kIngredients, var);
+   }
 }
 
-void Style::setExamples( const QString& var )
+void Style::setExamples( const QString& var, bool cacheOnly )
 {
    _examples = var;
-   set(kExamplesProp, kExamples, var);
+   if ( ! cacheOnly ) {
+      set(kExamplesProp, kExamples, var);
+   }
 }
 
 //============================="GET" METHODS====================================

@@ -95,27 +95,27 @@ public:
    //! \brief The commercial examples.
    Q_PROPERTY( QString examples READ examples WRITE setExamples /*NOTIFY changed*/ /*changedExamples*/ )
    
-   void setCategory( const QString& var );
-   void setCategoryNumber( const QString& var );
-   void setStyleLetter( const QString& var );
-   void setStyleGuide( const QString& var );
-   void setType( Type t );
-   void setOgMin( double var );
-   void setOgMax( double var );
-   void setFgMin( double var );
-   void setFgMax( double var );
-   void setIbuMin( double var );
-   void setIbuMax( double var );
-   void setColorMin_srm( double var );
-   void setColorMax_srm( double var );
-   void setCarbMin_vol( double var );
-   void setCarbMax_vol( double var );
-   void setAbvMin_pct( double var );
-   void setAbvMax_pct( double var );
-   void setNotes( const QString& var );
-   void setProfile( const QString& var );
-   void setIngredients( const QString& var );
-   void setExamples( const QString& var );
+   void setCategory( const QString& var, bool cacheOnly = false );
+   void setCategoryNumber( const QString& var, bool cacheOnly = false );
+   void setStyleLetter( const QString& var, bool cacheOnly = false );
+   void setStyleGuide( const QString& var, bool cacheOnly = false );
+   void setType( Type t, bool cacheOnly = false );
+   void setOgMin( double var, bool cacheOnly = false );
+   void setOgMax( double var, bool cacheOnly = false );
+   void setFgMin( double var, bool cacheOnly = false );
+   void setFgMax( double var, bool cacheOnly = false );
+   void setIbuMin( double var, bool cacheOnly = false );
+   void setIbuMax( double var, bool cacheOnly = false );
+   void setColorMin_srm( double var, bool cacheOnly = false );
+   void setColorMax_srm( double var, bool cacheOnly = false );
+   void setCarbMin_vol( double var, bool cacheOnly = false );
+   void setCarbMax_vol( double var, bool cacheOnly = false );
+   void setAbvMin_pct( double var, bool cacheOnly = false );
+   void setAbvMax_pct( double var, bool cacheOnly = false );
+   void setNotes( const QString& var, bool cacheOnly = false );
+   void setProfile( const QString& var, bool cacheOnly = false );
+   void setIngredients( const QString& var, bool cacheOnly = false );
+   void setExamples( const QString& var, bool cacheOnly = false );
 
    QString category() const;
    QString categoryNumber() const;
