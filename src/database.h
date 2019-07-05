@@ -188,6 +188,38 @@ public:
       return tmp;
    }
 
+   template<class T> T* newIngredient(QString name, QHash<int,T*>* all) {
+      int key;
+      // To quote the talking heads, my god what have I done?
+      Brewtarget::DBTable table = classNameToTable[ T::classNameStr() ];
+      QString insert = QString("INSERT INTO %1 (name) VALUES (:name)").arg(tableNames[table]);
+
+      QSqlQuery q(sqlDatabase());
+
+      q.prepare(insert);
+      q.bindValue(":name",name);
+
+      q.setForwardOnly(true);
+
+      try {
+         if ( ! q.exec() )
+            throw QString("could not insert a record into");
+
+         key = q.lastInsertId().toInt();
+         qDebug() << "key =" << key;
+         q.finish();
+      }
+      catch (QString e) {
+         Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
+         throw; // rethrow the error until somebody cares
+      }
+
+      T* tmp = new T(table, key);
+      all->insert(tmp->_key,tmp);
+
+      return tmp;
+   }
+
    BrewNote* newBrewNote(Recipe* parent, bool signal = true);
    //! Create new instruction attached to \b parent.
    Instruction* newInstruction(Recipe* parent);
@@ -197,7 +229,7 @@ public:
    Mash* newMash(Mash* other = 0, bool displace = true);
    Mash* newMash(Recipe* parent, bool transaction = true);
 
-   Recipe* newRecipe();
+   Recipe* newRecipe(QString name);
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    // Named copy constructors==================================================

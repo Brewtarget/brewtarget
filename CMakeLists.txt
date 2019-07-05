@@ -104,7 +104,7 @@ IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
 
-ADD_DEFINITIONS("-std=c++11")
+ADD_DEFINITIONS("-std=c++14")
 
 #============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")

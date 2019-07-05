@@ -251,9 +251,12 @@ void BrewNote::populateNote(Recipe* parent)
       if ( ! steps.isEmpty() )
       {
          mStep = steps.at(0);
+
          if ( mStep )
          {
             double endTemp = mStep->endTemp_c() > 0.0 ? mStep->endTemp_c() : mStep->stepTemp_c();
+
+            setStrikeTemp_c(mStep->infuseTemp_c());
             setProjStrikeTemp_c(mStep->infuseTemp_c());
 
             setMashFinTemp_c(endTemp);

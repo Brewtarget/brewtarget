@@ -1536,17 +1536,17 @@ void MainWindow::newRecipe()
    if( name.isEmpty() )
       return;
 
-   Recipe* newRec = Database::instance().newRecipe();
+   Recipe* newRec = Database::instance().newRecipe(name);
 
    // bad things happened -- let somebody know
    if ( ! newRec ) {
-      QMessageBox::warning(this,tr("Error copying recipe"),
+      QMessageBox::warning(this,tr("Error creating recipe"),
                            tr("An error was returned while creating %1").arg(name));
       return;
    }
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
-   newRec->setName(name);
+   // newRec->setName(name);
    newRec->setBatchSize_l(18.93); // 5 gallons
    newRec->setBoilSize_l(23.47);  // 6.2 gallons
    newRec->setEfficiency_pct(70.0);

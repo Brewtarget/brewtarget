@@ -1405,20 +1405,32 @@ Misc* Database::newMisc(Misc* other)
    return tmp;
 }
 
-Recipe* Database::newRecipe()
+Recipe* Database::newRecipe(QString name)
 {
    Recipe* tmp;
 
    sqlDatabase().transaction();
 
    try {
-      tmp = newIngredient(&allRecipes);
+      tmp = newIngredient(name,&allRecipes);
 
       newMash(tmp,false);
    }
    catch (QString e ) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
+      throw;
+   }
+
+   try {
+      // setting it in the DB doesn't set it in the cache. This makes sure the
+      // name is in the cache before we throw the signal
+      tmp->setName(name,true);
+      tmp->setDisplay(true);
+      tmp->setDeleted(false);
+   }
+   catch (QString e ) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       throw;
    }
 
@@ -1972,7 +1984,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
          connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
       }
    }
-   catch ( QString(e) ) {
+   catch ( QString e  ) {
       if ( transact ) {
          sqlDatabase().rollback();
       }
@@ -4479,6 +4491,7 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 Recipe* Database::recipeFromXml( QDomNode const& node )
 {
    QDomNode n;
+   Recipe *ret;
 
    try {
       // I was wrong. We need to block signals here. Weird things happen if you don't.
@@ -4488,7 +4501,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       sqlDatabase().transaction();
 
       // This works, strangely enough.
-      Recipe* ret = newIngredient(&allRecipes);
+      ret = newIngredient(&allRecipes);
 
       if ( ! ret ) {
          return nullptr;
@@ -4578,17 +4591,15 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       // Recalc everything, just for grins and giggles.
       ret->recalcAll();
       blockSignals(false);
-
-      emit newRecipeSignal(ret);
-
-      return ret;
    }
-
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
       blockSignals(false);
    }
+
+   emit newRecipeSignal(ret);
+   return ret;
 }
 
 Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
@@ -4602,6 +4613,8 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
    try {
       // If we are just importing a style by itself, need to do some dupe-checking.
+      n = node.firstChildElement("NAME");
+      name = n.firstChild().toText().nodeValue();
       if( parent == 0 )
       {
          // Check to see if there is a hop already in the DB with the same name.

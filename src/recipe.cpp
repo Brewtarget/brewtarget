@@ -1440,7 +1440,12 @@ Style* Recipe::style()
    }
    else {
       tmp = Database::instance().style(this);
-      _style_id = tmp->key();
+      if ( tmp ) {
+         _style_id = tmp->key();
+      }
+      else {
+         _style_id = 0;
+      }
    }
    return tmp;
 }
