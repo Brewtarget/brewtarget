@@ -322,7 +322,9 @@ void MainWindow::setupComboBoxes()
    styleListModel = new StyleListModel(styleComboBox);
    styleProxyModel = new StyleSortFilterProxyModel(styleComboBox);
    styleProxyModel->setDynamicSortFilter(true);
+   styleProxyModel->setSortLocaleAware(true);
    styleProxyModel->setSourceModel(styleListModel);
+   styleProxyModel->sort(0);
    styleComboBox->setModel(styleProxyModel);
 
    // Set the mash combo box
