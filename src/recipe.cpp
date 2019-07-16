@@ -234,7 +234,8 @@ Recipe::Recipe(Brewtarget::DBTable table, int key)
    m_tasteRating(0.0),
    m_style_id(0),
    m_og(1.0),
-   m_fg(1.0)
+   m_fg(1.0),
+   m_cacheOnly(false)
 {
 }
 
@@ -268,7 +269,8 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_tasteRating(rec.value(kTasteRating).toDouble()),
    m_style_id(rec.value(kStyleId).toInt()),
    m_og(rec.value(kOG).toDouble()),
-   m_fg(rec.value(kFG).toDouble())
+   m_fg(rec.value(kFG).toDouble()),
+   m_cacheOnly(false)
 {
 }
 
@@ -1300,6 +1302,8 @@ void Recipe::setKegPrimingFactor( double var )
    set( kKegPrimingFactorProp, kKegPrimingFactor, tmp );
 }
 
+void Recipe::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
+
 //==========================Calculated Getters============================
 
 double Recipe::og()
@@ -1440,181 +1444,46 @@ Style* Recipe::style()
    return tmp;
 }
 
-Mash* Recipe::mash() const
-{
-   return Database::instance().mash( this );
-}
+Mash* Recipe::mash() const { return Database::instance().mash( this ); }
+Equipment* Recipe::equipment() const { return Database::instance().equipment(this); }
 
-Equipment* Recipe::equipment() const
-{
-   return Database::instance().equipment(this);
-}
-
-QList<Instruction*> Recipe::instructions() const
-{
-   return Database::instance().instructions(this);
-}
-
-QList<BrewNote*> Recipe::brewNotes() const
-{
-   return Database::instance().brewNotes(this);
-}
-
-QList<Hop*> Recipe::hops() const
-{
-   return Database::instance().hops(this);
-}
-
-QList<Fermentable*> Recipe::fermentables() const
-{
-   return Database::instance().fermentables(this);
-}
-
-QList<Misc*> Recipe::miscs() const
-{
-   return Database::instance().miscs(this);
-}
-
-QList<Yeast*> Recipe::yeasts() const
-{
-   return Database::instance().yeasts(this);
-}
-
-QList<Water*> Recipe::waters() const
-{
-   return Database::instance().waters(this);
-}
+QList<Instruction*> Recipe::instructions() const { return Database::instance().instructions(this); }
+QList<BrewNote*> Recipe::brewNotes() const { return Database::instance().brewNotes(this); }
+QList<Hop*> Recipe::hops() const { return Database::instance().hops(this); }
+QList<Fermentable*> Recipe::fermentables() const { return Database::instance().fermentables(this); }
+QList<Misc*> Recipe::miscs() const { return Database::instance().miscs(this); }
+QList<Yeast*> Recipe::yeasts() const { return Database::instance().yeasts(this); }
+QList<Water*> Recipe::waters() const { return Database::instance().waters(this); }
 
 //==============================Getters===================================
-QString Recipe::type() const
-{
-   return m_type;
-}
+QString Recipe::type() const { return m_type; }
+QString Recipe::brewer() const { return m_brewer; }
+QString Recipe::asstBrewer() const { return m_asstBrewer; }
+QString Recipe::notes() const { return m_notes; }
+QString Recipe::tasteNotes() const { return m_tasteNotes; }
+QString Recipe::primingSugarName() const { return m_primingSugarName; }
+bool Recipe::forcedCarbonation() const { return m_forcedCarbonation; }
+double Recipe::batchSize_l() const { return m_batchSize_l; }
+double Recipe::boilSize_l() const { return m_boilSize_l; }
+double Recipe::boilTime_min() const { return m_boilTime_min; }
+double Recipe::efficiency_pct() const { return m_efficiency_pct; }
+double Recipe::tasteRating() const { return m_tasteRating; }
+double Recipe::primaryAge_days() const { return m_primaryAge_days; }
+double Recipe::primaryTemp_c() const { return m_primaryTemp_c; }
+double Recipe::secondaryAge_days() const { return m_secondaryAge_days; }
+double Recipe::secondaryTemp_c() const { return m_secondaryTemp_c; }
+double Recipe::tertiaryAge_days() const { return m_tertiaryAge_days; }
+double Recipe::tertiaryTemp_c() const { return m_tertiaryTemp_c; }
+double Recipe::age_days() const { return m_age; }
+double Recipe::ageTemp_c() const { return m_ageTemp_c; }
+double Recipe::carbonation_vols() const { return m_carbonation_vols; }
+double Recipe::carbonationTemp_c() const { return m_carbonationTemp_c; }
+double Recipe::primingSugarEquiv() const { return m_primingSugarEquiv; }
+double Recipe::kegPrimingFactor() const { return m_kegPrimingFactor; }
+int Recipe::fermentationStages() const { return m_fermentationStages; }
+QDate Recipe::date() const { return m_date; }
+bool Recipe::cacheOnly() const { return m_cacheOnly; }
 
-QString Recipe::brewer() const
-{
-   return m_brewer;
-}
-
-QString Recipe::asstBrewer() const
-{
-   return m_asstBrewer;
-}
-
-QString Recipe::notes() const
-{
-   return m_notes;
-}
-
-QString Recipe::tasteNotes() const
-{
-   return m_tasteNotes;
-}
-
-QString Recipe::primingSugarName() const
-{
-   return m_primingSugarName;
-}
-
-bool Recipe::forcedCarbonation() const
-{
-   return m_forcedCarbonation;
-}
-
-double Recipe::batchSize_l() const
-{
-   return m_batchSize_l;
-}
-
-double Recipe::boilSize_l() const
-{
-   return m_boilSize_l;
-}
-
-double Recipe::boilTime_min() const
-{
-   return m_boilTime_min;
-}
-
-double Recipe::efficiency_pct() const
-{
-   return m_efficiency_pct;
-}
-
-double Recipe::tasteRating() const
-{
-   return m_tasteRating;
-}
-
-double Recipe::primaryAge_days() const
-{
-   return m_primaryAge_days;
-}
-
-double Recipe::primaryTemp_c() const
-{
-   return m_primaryTemp_c;
-}
-
-double Recipe::secondaryAge_days() const
-{
-   return m_secondaryAge_days;
-}
-
-double Recipe::secondaryTemp_c() const
-{
-   return m_secondaryTemp_c;
-}
-
-double Recipe::tertiaryAge_days() const
-{
-   return m_tertiaryAge_days;
-}
-
-double Recipe::tertiaryTemp_c() const
-{
-   return m_tertiaryTemp_c;
-}
-
-double Recipe::age_days() const
-{
-   return m_age;
-}
-
-double Recipe::ageTemp_c() const
-{
-   return m_ageTemp_c;
-}
-
-double Recipe::carbonation_vols() const
-{
-   return m_carbonation_vols;
-}
-
-double Recipe::carbonationTemp_c() const
-{
-   return m_carbonationTemp_c;
-}
-
-double Recipe::primingSugarEquiv() const
-{
-   return m_primingSugarEquiv;
-}
-
-double Recipe::kegPrimingFactor() const
-{
-   return m_kegPrimingFactor;
-}
-
-int Recipe::fermentationStages() const
-{
-   return m_fermentationStages;
-}
-
-QDate Recipe::date() const
-{
-   return m_date;
-}
 //=============================Removers========================================
 
 // Returns true if var is found and removed.

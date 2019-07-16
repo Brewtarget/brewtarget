@@ -75,6 +75,7 @@ public:
    double magnesium_ppm() const;
    double ph() const;
    QString notes() const;
+   bool cacheOnly() const;
 
    void setAmount_l( double var );
    void setCalcium_ppm( double var );
@@ -85,6 +86,7 @@ public:
    void setMagnesium_ppm( double var );
    void setPh( double var );
    void setNotes( const QString &var );
+   void setCacheOnly( bool cache );
 
    static QString classNameStr();
    
@@ -118,6 +120,7 @@ private:
    double m_magnesium_ppm;
    double m_ph;
    QString m_notes;
+   bool m_cacheOnly;
 
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();

@@ -147,7 +147,8 @@ Hop::Hop(Brewtarget::DBTable table, int key)
      m_humulene_pct(0.0),
      m_caryophyllene_pct(0.0),
      m_cohumulone_pct(0.0),
-     m_myrcene_pct(0.0)
+     m_myrcene_pct(0.0),
+     m_cacheOnly(false)
 {
 }
 
@@ -170,7 +171,8 @@ Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_humulene_pct(rec.value(kHumulene).toDouble()),
      m_caryophyllene_pct(rec.value(kCaryophyllene).toDouble()),
      m_cohumulone_pct(rec.value(kCohumulone).toDouble()),
-     m_myrcene_pct(rec.value(kMyrcene).toDouble())
+     m_myrcene_pct(rec.value(kMyrcene).toDouble()),
+     m_cacheOnly(false)
 {
 }
 
@@ -180,7 +182,7 @@ Hop::Hop( Hop const& other )
 }
 
 //============================="SET" METHODS====================================
-void Hop::setAlpha_pct( double num, bool cacheOnly )
+void Hop::setAlpha_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -190,13 +192,13 @@ void Hop::setAlpha_pct( double num, bool cacheOnly )
    else
    {
       m_alpha_pct = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kAlphaProp, kAlpha, num);
       }
    }
 }
 
-void Hop::setAmount_kg( double num, bool cacheOnly )
+void Hop::setAmount_kg( double num )
 {
    if( num < 0.0 )
    {
@@ -206,13 +208,13 @@ void Hop::setAmount_kg( double num, bool cacheOnly )
    else
    {
       m_amount_kg = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kAmountProp, kAmount, num);
       }
    }
 }
 
-void Hop::setInventoryAmount( double num, bool cacheOnly )
+void Hop::setInventoryAmount( double num )
 {
    if( num < 0.0 )
    {
@@ -221,24 +223,24 @@ void Hop::setInventoryAmount( double num, bool cacheOnly )
    }
    else
    {
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setInventory(kInventoryProp, kAmount, num);
       }
    }
 }
 
-void Hop::setUse(Use u, bool cacheOnly)
+void Hop::setUse(Use u)
 {
    if ( u >= 0 and u < uses.size()) {
       m_use = u;
       m_useStr = uses.at(u);
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kUseProp, kUse, uses.at(u));
       }
    }
 }
 
-void Hop::setTime_min( double num, bool cacheOnly )
+void Hop::setTime_min( double num )
 {
    if( num < 0.0 )
    {
@@ -248,43 +250,43 @@ void Hop::setTime_min( double num, bool cacheOnly )
    else
    {
       m_time_min = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kTimeProp, kTime, num);
       }
    }
 }
       
-void Hop::setNotes( const QString& str, bool cacheOnly )
+void Hop::setNotes( const QString& str )
 {
    m_notes = str;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kNotesProp, kNotes, str);
    }
 }
 
-void Hop::setType(Type t, bool cacheOnly)
+void Hop::setType(Type t)
 {
   if ( t >= 0 and t < types.size() ) {
      m_type = t;
      m_typeStr = types.at(t);
-     if ( ! cacheOnly ) {
+     if ( ! m_cacheOnly ) {
       set(kTypeProp, kType, m_typeStr);
      }
   }
 }
 
-void Hop::setForm( Form f, bool cacheOnly )
+void Hop::setForm( Form f )
 {
    if ( f >= 0 and f < forms.size() ) {
       m_form = f;
       m_formStr = forms.at(f);
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kFormProp, kForm, m_formStr);
       }
    }
 }
 
-void Hop::setBeta_pct( double num, bool cacheOnly )
+void Hop::setBeta_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -294,13 +296,13 @@ void Hop::setBeta_pct( double num, bool cacheOnly )
    else
    {
       m_beta_pct = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kBetaProp, kBeta, num);
       }
    }
 }
 
-void Hop::setHsi_pct( double num, bool cacheOnly )
+void Hop::setHsi_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -310,29 +312,29 @@ void Hop::setHsi_pct( double num, bool cacheOnly )
    else
    {
       m_hsi_pct = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kHSIProp, kHSI, num);
       }
    }
 }
 
-void Hop::setOrigin( const QString& str, bool cacheOnly )
+void Hop::setOrigin( const QString& str )
 {
    m_origin = str;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kOriginProp, kOrigin, str);
    }
 }
 
-void Hop::setSubstitutes( const QString& str, bool cacheOnly )
+void Hop::setSubstitutes( const QString& str )
 {
    m_substitutes = str;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kSubstitutesProp, kSubstitutes, str);
    }
 }
 
-void Hop::setHumulene_pct( double num, bool cacheOnly )
+void Hop::setHumulene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -342,13 +344,13 @@ void Hop::setHumulene_pct( double num, bool cacheOnly )
    else
    {
       m_humulene_pct = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kHumuleneProp, kHumulene, num);
       }
    }
 }
 
-void Hop::setCaryophyllene_pct( double num, bool cacheOnly )
+void Hop::setCaryophyllene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -358,13 +360,13 @@ void Hop::setCaryophyllene_pct( double num, bool cacheOnly )
    else
    {
       m_caryophyllene_pct = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kCaryophylleneProp, kCaryophyllene, num);
       }
    }
 }
 
-void Hop::setCohumulone_pct( double num, bool cacheOnly )
+void Hop::setCohumulone_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -374,13 +376,13 @@ void Hop::setCohumulone_pct( double num, bool cacheOnly )
    else
    {
       m_cohumulone_pct = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kCohumuloneProp, kCohumulone, num);
       }
    }
 }
 
-void Hop::setMyrcene_pct( double num, bool cacheOnly )
+void Hop::setMyrcene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -390,11 +392,13 @@ void Hop::setMyrcene_pct( double num, bool cacheOnly )
    else
    {
       m_myrcene_pct = num;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kMyrceneProp, kMyrcene, num);
       }
    }
 }
+
+void Hop::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //============================="GET" METHODS====================================
 
@@ -416,6 +420,7 @@ double Hop::humulene_pct() const { return m_humulene_pct; }
 double Hop::caryophyllene_pct() const { return m_caryophyllene_pct; }
 double Hop::cohumulone_pct() const { return m_cohumulone_pct; }
 double Hop::myrcene_pct() const { return m_myrcene_pct; }
+bool   Hop::cacheOnly() const { return m_cacheOnly; }
 
 // inventory still must be handled separately, and I'm still annoyed.
 double Hop::inventory() const

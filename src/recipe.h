@@ -256,6 +256,7 @@ public:
    double carbonationTemp_c() const;
    double primingSugarEquiv() const;
    double kegPrimingFactor() const;
+   bool cacheOnly() const;
    
    // Calculated getters.
    double points();
@@ -339,6 +340,8 @@ public:
    void setCarbonationTemp_c( double var );
    void setPrimingSugarEquiv( double var );
    void setKegPrimingFactor( double var );
+   void setCacheOnly( bool cache );
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(const QString&);
@@ -392,7 +395,7 @@ private:
    Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Recipe(Recipe const& other);
   
-   // Cached properties that are written directly to db on update
+   // Cached properties that are written directly to db
    QString m_type;
    QString m_brewer;
    QString m_asstBrewer;
@@ -444,6 +447,7 @@ private:
    double m_og_fermentable;
    double m_fg_fermentable;
    
+   bool m_cacheOnly;
    // True when constructed, indicates whether recalcAll has been called.
    bool m_uninitializedCalcs;
    QMutex m_uninitializedCalcsMutex;

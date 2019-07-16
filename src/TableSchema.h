@@ -48,10 +48,15 @@ public:
 
    // get the type name for this column
    const QString propertyColumnType(QString prop) const;
+   // get teh XML tag for this column
+   const QString propertyToXml(QString prop) const;
    // get the default value for this column
    const QVariant propertyColumnDefault(QString prop) const;
    // get the column size of the property's column
    const int propertyColumnSize(QString prop) const;
+
+   // given an XML tag, get the associated property name
+   const QString xmlToProperty(QString xmlName) const;
 
    const QStringList allPropertyNames() const;
    const QStringList allColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;

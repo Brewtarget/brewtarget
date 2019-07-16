@@ -195,7 +195,8 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key)
      m_projABV_pct(0.0),
      m_projPoints(0.0),
      m_projFermPoints(0.0),
-     m_projAtten(0.0)
+     m_projAtten(0.0),
+     m_cacheOnly(false)
 {
 }
 
@@ -230,7 +231,8 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_projABV_pct(rec.value(kProjectedABV).toDouble()),
      m_projPoints(rec.value(kProjectedPoints).toDouble()),
      m_projFermPoints(rec.value(kProjectedFermentationPoints).toDouble()),
-     m_projAtten(rec.value(kProjectedAttenuation).toDouble())
+     m_projAtten(rec.value(kProjectedAttenuation).toDouble()),
+     m_cacheOnly(false)
 {
 }
 
@@ -348,27 +350,27 @@ BrewNote::BrewNote(BrewNote const& other)
 }
 
 // Setters=====================================================================
-void BrewNote::setBrewDate(QDateTime const& date, bool cacheOnly)
+void BrewNote::setBrewDate(QDateTime const& date)
 {
    m_brewDate = date;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kBrewDateProp, kBrewDate, date.toString(Qt::ISODate));
       emit brewDateChanged(date);
    }
 }
 
-void BrewNote::setFermentDate(QDateTime const& date, bool cacheOnly)
+void BrewNote::setFermentDate(QDateTime const& date)
 {
    m_fermentDate = date;
-   if (! cacheOnly ) {
+   if (! m_cacheOnly ) {
       set(kFermentDateProp, kFermentDate, date.toString(Qt::ISODate));
    }
 }
 
-void BrewNote::setNotes(QString const& var, bool cacheOnly)
+void BrewNote::setNotes(QString const& var)
 {
    m_notes = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kNotesProp, kNotes, var, false);
    }
 }
@@ -378,12 +380,12 @@ void BrewNote::setLoading(bool flag) { loading = flag; }
 // These five items cause the calculated fields to change. I should do this
 // with signals/slots, likely, but the *only* slot for the signal will be
 // the brewnote.
-void BrewNote::setSg(double var, bool cacheOnly)
+void BrewNote::setSg(double var)
 {
    // I REALLY dislike this logic. It is too bloody intertwined
    m_sg = var;
 
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kSpecificGravityProp, kSpecificGravity, var);
    }
    // write the value to the DB if requested
@@ -394,11 +396,11 @@ void BrewNote::setSg(double var, bool cacheOnly)
 
 }
 
-void BrewNote::setVolumeIntoBK_l(double var, bool cacheOnly)
+void BrewNote::setVolumeIntoBK_l(double var)
 {
    m_volumeIntoBK_l = var;
 
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kVolumeIntoBoilProp, kVolumeIntoBoil, var);
    }
 
@@ -409,11 +411,11 @@ void BrewNote::setVolumeIntoBK_l(double var, bool cacheOnly)
    }
 }
 
-void BrewNote::setOg(double var, bool cacheOnly)
+void BrewNote::setOg(double var)
 {
    m_og = var;
 
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kOriginalGravityProp, kOriginalGravity, var);
    }
 
@@ -425,11 +427,11 @@ void BrewNote::setOg(double var, bool cacheOnly)
    }
 }
 
-void BrewNote::setVolumeIntoFerm_l(double var, bool cacheOnly)
+void BrewNote::setVolumeIntoFerm_l(double var)
 {
    m_volumeIntoFerm_l = var;
 
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kVolumeIntoFermenterProp, kVolumeIntoFermenter, var);
    }
 
@@ -438,10 +440,10 @@ void BrewNote::setVolumeIntoFerm_l(double var, bool cacheOnly)
    }
 }
 
-void BrewNote::setFg(double var, bool cacheOnly)
+void BrewNote::setFg(double var)
 {
    m_fg = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kFinalGravityProp, kFinalGravity, var);
    }
 
@@ -454,7 +456,7 @@ void BrewNote::setFg(double var, bool cacheOnly)
 // This one is a bit of an odd ball. We need to convert to pure glucose points
 // before we store it in the database. 
 // DO NOT ignore the loading flag. Just. Don't. 
-void BrewNote::setProjPoints(double var, bool cacheOnly)
+void BrewNote::setProjPoints(double var)
 {
 
    if ( loading ) {
@@ -469,7 +471,7 @@ void BrewNote::setProjPoints(double var, bool cacheOnly)
       convertPnts = (total_g - 1.0 ) * 1000;
 
       m_projPoints = convertPnts;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kProjectedPointsProp, kProjectedPoints, convertPnts);
       }
 
@@ -477,7 +479,7 @@ void BrewNote::setProjPoints(double var, bool cacheOnly)
 
 }
 
-void BrewNote::setProjFermPoints(double var, bool cacheOnly)
+void BrewNote::setProjFermPoints(double var)
 {
 
    if ( loading ) {
@@ -492,171 +494,173 @@ void BrewNote::setProjFermPoints(double var, bool cacheOnly)
       convertPnts = (total_g - 1.0 ) * 1000;
 
       m_projFermPoints = convertPnts;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kProjectedPointsProp, kProjectedFermentationPoints, convertPnts);
       }
    }
 }
 
-void BrewNote::setABV(double var, bool cacheOnly)
+void BrewNote::setABV(double var)
 {
    m_abv = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kABVProp, kABV, var);
    }
 }
 
-void BrewNote::setAttenuation(double var, bool cacheOnly)
+void BrewNote::setAttenuation(double var)
 {
    m_attenuation = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kAttenuationProp, kAttenuation, var);
    }
 }
 
-void BrewNote::setEffIntoBK_pct(double var, bool cacheOnly)
+void BrewNote::setEffIntoBK_pct(double var)
 {
    m_effIntoBK_pct = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kEfficiencyIntoBoilProp, kEfficiencyIntoBoil, var);
    }
 }
 
-void BrewNote::setBrewhouseEff_pct(double var, bool cacheOnly)
+void BrewNote::setBrewhouseEff_pct(double var)
 {
    m_brewhouseEff_pct = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kBrewhouseEfficiencyProp, kBrewhouseEfficiency, var);
    }
 }
 
-void BrewNote::setStrikeTemp_c(double var, bool cacheOnly)
+void BrewNote::setStrikeTemp_c(double var)
 {
    m_strikeTemp_c = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kStrikeTempProp, kStrikeTemp, var);
    }
 }
 
-void BrewNote::setMashFinTemp_c(double var, bool cacheOnly)
+void BrewNote::setMashFinTemp_c(double var)
 {
    m_mashFinTemp_c = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kMashFinalTempProp, kMashFinalTemp, var);
    }
 }
 
-void BrewNote::setPostBoilVolume_l(double var, bool cacheOnly)
+void BrewNote::setPostBoilVolume_l(double var)
 {
    m_postBoilVolume_l = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kPostBoilVolumeProp, kPostBoilVolume, var);
    }
 }
 
-void BrewNote::setPitchTemp_c(double var, bool cacheOnly)
+void BrewNote::setPitchTemp_c(double var)
 {
    m_pitchTemp_c = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kPitchTempProp, kPitchTemp, var);
    }
 }
 
-void BrewNote::setFinalVolume_l(double var, bool cacheOnly)
+void BrewNote::setFinalVolume_l(double var)
 {
    m_finalVolume_l = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kFinalVolumeProp, kFinalVolume, var);
    }
 }
 
-void BrewNote::setProjBoilGrav(double var, bool cacheOnly)
+void BrewNote::setProjBoilGrav(double var)
 {
    m_projBoilGrav = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedBoilGravityProp, kProjectedBoilGravity, var);
    }
 }
 
-void BrewNote::setProjVolIntoBK_l(double var, bool cacheOnly)
+void BrewNote::setProjVolIntoBK_l(double var)
 {
    m_projVolIntoBK_l = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedVolumeIntoBoilProp, kProjectedVolumeIntoBoil, var);
    }
 }
 
-void BrewNote::setProjStrikeTemp_c(double var, bool cacheOnly)
+void BrewNote::setProjStrikeTemp_c(double var)
 {
    m_projStrikeTemp_c = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedStrikeTempProp, kProjectedStrikeTemp, var);
    }
 }
 
-void BrewNote::setProjMashFinTemp_c(double var, bool cacheOnly)
+void BrewNote::setProjMashFinTemp_c(double var)
 {
    m_projMashFinTemp_c = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedMashFinishTempProp, kProjectedMashFinishTemp, var);
    }
 }
 
-void BrewNote::setProjOg(double var, bool cacheOnly)
+void BrewNote::setProjOg(double var)
 {
    m_projOg = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedOGProp, kProjectedOG, var);
    }
 }
 
-void BrewNote::setProjVolIntoFerm_l(double var, bool cacheOnly)
+void BrewNote::setProjVolIntoFerm_l(double var)
 {
    m_projVolIntoFerm_l = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedVolumeIntoFermenterProp, kProjectedVolumeIntoFermenter, var);
    }
 }
 
-void BrewNote::setProjFg(double var, bool cacheOnly)
+void BrewNote::setProjFg(double var)
 {
    m_projFg = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedFGProp, kProjectedFG, var);
    }
 }
 
-void BrewNote::setProjEff_pct(double var, bool cacheOnly)
+void BrewNote::setProjEff_pct(double var)
 {
    m_projEff_pct = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedEfficiencyProp, kProjectedEfficiency, var);
    }
 }
 
-void BrewNote::setProjABV_pct(double var, bool cacheOnly)
+void BrewNote::setProjABV_pct(double var)
 {
    m_projABV_pct = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedABVProp, kProjectedABV, var);
    }
 }
 
-void BrewNote::setProjAtten(double var, bool cacheOnly)
+void BrewNote::setProjAtten(double var)
 {
    m_projAtten = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kProjectedAttenuationProp, kProjectedAttenuation, var);
    }
 }
 
-void BrewNote::setBoilOff_l(double var, bool cacheOnly)
+void BrewNote::setBoilOff_l(double var)
 {
    m_boilOff_l = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kBoilOffProp, kBoilOff, var);
    }
 }
+
+void BrewNote::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 // Getters
 QDateTime BrewNote::brewDate() const { return m_brewDate; }
@@ -668,6 +672,7 @@ QString BrewNote::fermentDate_str() const { return m_fermentDate.toString(); }
 QString BrewNote::fermentDate_short() const { return Brewtarget::displayDateUserFormated(m_fermentDate.date()); }
 
 QString BrewNote::notes() const { return m_notes; }
+bool BrewNote::cacheOnly() const { return m_cacheOnly; }
 
 double BrewNote::sg() const { return m_sg; }
 double BrewNote::abv() const { return m_abv; }

@@ -38,8 +38,8 @@ public:
    const QString propName() const;
    const QHash<Brewtarget::DBTypes,QString> colNames() const;
    const QString colName(Brewtarget::DBTypes type) const;
-   const QString colType() const;
    const QString xmlName() const;
+   const QString colType() const;
    const QVariant defaultValue() const;
    const int colSize() const;
 

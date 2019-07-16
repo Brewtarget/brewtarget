@@ -68,7 +68,8 @@ Instruction::Instruction(Brewtarget::DBTable table, int key)
      m_hasTimer  (false),
      m_timerValue(QString()),
      m_completed (false),
-     m_interval  (0.0)
+     m_interval  (0.0),
+     m_cacheOnly(false)
 {
 }
 
@@ -78,39 +79,40 @@ Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_hasTimer  (rec.value(kHasTimer).toBool()),
      m_timerValue(rec.value(kTimerValue).toString()),
      m_completed (rec.value(kCompleted).toBool()),
-     m_interval  (rec.value(kInterval).toDouble())
+     m_interval  (rec.value(kInterval).toDouble()),
+     m_cacheOnly(false)
 {
 }
 
 // Setters ====================================================================
-void Instruction::setDirections(const QString& dir, bool cacheOnly)
+void Instruction::setDirections(const QString& dir)
 {
    m_directions = dir;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kDirections, kDirectionsProp, dir);
    }
 }
 
-void Instruction::setHasTimer(bool has, bool cacheOnly)
+void Instruction::setHasTimer(bool has)
 {
    m_hasTimer = has;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kHasTimer, kHasTimerProp, has);
    }
 }
 
-void Instruction::setTimerValue(const QString& timerVal, bool cacheOnly)
+void Instruction::setTimerValue(const QString& timerVal)
 {
    m_timerValue = timerVal;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kTimerValue, kTimerValueProp, timerVal);
    }
 }
 
-void Instruction::setCompleted(bool comp, bool cacheOnly)
+void Instruction::setCompleted(bool comp)
 {
    m_completed = comp;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kCompleted, kCompletedProp, comp);
    }
 }
@@ -123,10 +125,10 @@ void Instruction::setReagent(const QString& reagent)
 }
 */
 
-void Instruction::setInterval(double time, bool cacheOnly) 
+void Instruction::setInterval(double time) 
 {
    m_interval = time;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kInterval, kIntervalProp, time);
    }
 }
@@ -136,6 +138,7 @@ void Instruction::addReagent(const QString& reagent)
    m_reagents.append(reagent);
 }
 
+void Instruction::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 // Accessors ==================================================================
 QString Instruction::directions() { return m_directions; }
 
@@ -150,3 +153,5 @@ QList<QString> Instruction::reagents() { return m_reagents; }
 double Instruction::interval() { return m_interval; }
 
 int Instruction::instructionNumber() const { return Database::instance().instructionNumber(this); }
+
+bool Instruction::cacheOnly() { return m_cacheOnly; }

@@ -113,23 +113,23 @@ public:
    //! \brief Whether this fermentable is a sugar. Somewhat redundant, but it makes for nice symetry elsewhere
    Q_PROPERTY( bool isSugar                  READ isSugar STORED false)
    
-   const Type type() const { return m_type; }
-   double amount_kg() const { return m_amountKg; }
+   const Type type() const;
+   double amount_kg() const;
    double inventory() const;
-   double yield_pct() const { return m_yieldPct; }
-   double color_srm() const { return m_colorSrm; }
-   bool addAfterBoil() const { return m_isAfterBoil; }
-   const QString origin() const { return m_origin; }
-   const QString supplier() const { return m_supplier; }
-   const QString notes() const { return m_notes; }
-   double coarseFineDiff_pct() const { return m_coarseFineDiff; }
-   double moisture_pct() const { return m_moisturePct; }
-   double diastaticPower_lintner() const { return m_diastaticPower; }
-   double protein_pct() const { return m_proteinPct; }
-   double maxInBatch_pct() const { return m_maxInBatchPct; }
-   bool recommendMash() const { return m_recommendMash; }
-   double ibuGalPerLb() const { return m_ibuGalPerLb; }
-   bool isMashed() const { return m_isMashed; }
+   double yield_pct() const;
+   double color_srm() const;
+   bool addAfterBoil() const;
+   const QString origin() const;
+   const QString supplier() const;
+   const QString notes() const;
+   double coarseFineDiff_pct() const;
+   double moisture_pct() const;
+   double diastaticPower_lintner() const;
+   double protein_pct() const;
+   double maxInBatch_pct() const;
+   bool recommendMash() const;
+   double ibuGalPerLb() const;
+   bool isMashed() const;
 
    const QString typeString() const;
    //! Returns a translated type string.
@@ -144,27 +144,29 @@ public:
    double equivSucrose_kg() const;
    bool isExtract() const;
    bool isSugar() const;
+   bool cacheOnly() const;
 
 
-   void setType( Type t, bool cacheOnly = false );
-   void setAdditionMethod( AdditionMethod m, bool cacheOnly = false );
-   void setAdditionTime( AdditionTime t, bool cacheOnly = false );
-   void setAmount_kg( double num, bool cacheOnly = false );
-   void setInventoryAmount( double num, bool cacheOnly = false );
-   void setYield_pct( double num, bool cacheOnly = false );
-   void setColor_srm( double num, bool cacheOnly = false );
-   void setAddAfterBoil( bool b, bool cacheOnly = false );
-   void setOrigin( const QString& str, bool cacheOnly = false );
-   void setSupplier( const QString& str, bool cacheOnly = false);
-   void setNotes( const QString& str, bool cacheOnly = false );
-   void setCoarseFineDiff_pct( double num, bool cacheOnly = false );
-   void setMoisture_pct( double num, bool cacheOnly = false );
-   void setDiastaticPower_lintner( double num, bool cacheOnly = false );
-   void setProtein_pct( double num, bool cacheOnly = false );
-   void setMaxInBatch_pct( double num, bool cacheOnly = false );
-   void setRecommendMash( bool b, bool cacheOnly = false );
-   void setIbuGalPerLb( double num, bool cacheOnly = false );
-   void setIsMashed(bool var, bool cacheOnly = false );
+   void setType( Type t );
+   void setAdditionMethod( AdditionMethod m );
+   void setAdditionTime( AdditionTime t );
+   void setAmount_kg( double num );
+   void setInventoryAmount( double num );
+   void setYield_pct( double num );
+   void setColor_srm( double num );
+   void setAddAfterBoil( bool b );
+   void setOrigin( const QString& str );
+   void setSupplier( const QString& str);
+   void setNotes( const QString& str );
+   void setCoarseFineDiff_pct( double num );
+   void setMoisture_pct( double num );
+   void setDiastaticPower_lintner( double num );
+   void setProtein_pct( double num );
+   void setMaxInBatch_pct( double num );
+   void setRecommendMash( bool b );
+   void setIbuGalPerLb( double num );
+   void setIsMashed(bool var );
+   void setCacheOnly(bool cache );
 
    void save();
 
@@ -203,6 +205,7 @@ private:
    bool m_recommendMash;
    double m_ibuGalPerLb;
    bool m_isMashed;
+   bool m_cacheOnly;
 };
 
 Q_DECLARE_METATYPE( QList<Fermentable*> )

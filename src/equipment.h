@@ -81,23 +81,24 @@ public:
    Q_PROPERTY( double boilingPoint_c        READ boilingPoint_c        WRITE setBoilingPoint_c        NOTIFY changedBoilingPoint_c )
 
    // Set
-   void setBoilSize_l( double var, bool cacheOnly = false );
-   void setBatchSize_l( double var, bool cacheOnly = false );
-   void setTunVolume_l( double var, bool cacheOnly = false );
-   void setTunWeight_kg( double var, bool cacheOnly = false );
-   void setTunSpecificHeat_calGC( double var, bool cacheOnly = false );
-   void setTopUpWater_l( double var, bool cacheOnly = false );
-   void setTrubChillerLoss_l( double var, bool cacheOnly = false );
-   void setEvapRate_pctHr( double var, bool cacheOnly = false );
-   void setEvapRate_lHr( double var, bool cacheOnly = false );
-   void setBoilTime_min( double var, bool cacheOnly = false );
-   void setCalcBoilVolume( bool var, bool cacheOnly = false );
-   void setLauterDeadspace_l( double var, bool cacheOnly = false );
-   void setTopUpKettle_l( double var, bool cacheOnly = false );
-   void setHopUtilization_pct( double var, bool cacheOnly = false );
-   void setNotes( const QString &var, bool cacheOnly = false );
-   void setGrainAbsorption_LKg(double var, bool cacheOnly = false);
-   void setBoilingPoint_c(double var, bool cacheOnly = false);
+   void setBoilSize_l( double var );
+   void setBatchSize_l( double var );
+   void setTunVolume_l( double var );
+   void setTunWeight_kg( double var );
+   void setTunSpecificHeat_calGC( double var );
+   void setTopUpWater_l( double var );
+   void setTrubChillerLoss_l( double var );
+   void setEvapRate_pctHr( double var );
+   void setEvapRate_lHr( double var );
+   void setBoilTime_min( double var );
+   void setCalcBoilVolume( bool var );
+   void setLauterDeadspace_l( double var );
+   void setTopUpKettle_l( double var );
+   void setHopUtilization_pct( double var );
+   void setNotes( const QString &var );
+   void setGrainAbsorption_LKg(double var);
+   void setBoilingPoint_c(double var);
+   void setCacheOnly(bool cache);
 
    // Get
    double boilSize_l() const;
@@ -117,6 +118,7 @@ public:
    QString notes() const;
    double grainAbsorption_LKg();
    double boilingPoint_c() const;
+   bool cacheOnly() const;
 
    //! \brief Calculate how much wort is left immediately at knockout.
    double wortEndOfBoil_l( double kettleWort_l ) const;
@@ -167,6 +169,7 @@ private:
    QString m_notes;
    double m_grainAbsorption_LKg;
    double m_boilingPoint_c;
+   bool m_cacheOnly;
 
    // Calculate the boil size.
    void doCalculations();

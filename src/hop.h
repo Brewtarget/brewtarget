@@ -117,25 +117,27 @@ public:
    double caryophyllene_pct() const;
    double cohumulone_pct() const;
    double myrcene_pct() const;
+   bool cacheOnly() const;
    
    //set
-   void setAlpha_pct( double num, bool cacheOnly = false);
-   void setAmount_kg( double num, bool cacheOnly = false);
-   void setInventoryAmount( double num, bool cacheOnly = false);
-   void setUse( Use u, bool cacheOnly = false);
-   void setTime_min( double num, bool cacheOnly = false);
+   void setAlpha_pct( double num);
+   void setAmount_kg( double num);
+   void setInventoryAmount( double num);
+   void setUse( Use u);
+   void setTime_min( double num);
    
-   void setNotes( const QString& str, bool cacheOnly = false);
-   void setType( Type t, bool cacheOnly = false);
-   void setForm( Form f, bool cacheOnly = false);
-   void setBeta_pct( double num, bool cacheOnly = false);
-   void setHsi_pct( double num, bool cacheOnly = false);
-   void setOrigin( const QString& str, bool cacheOnly = false);
-   void setSubstitutes( const QString& str, bool cacheOnly = false);
-   void setHumulene_pct( double num, bool cacheOnly = false);
-   void setCaryophyllene_pct( double num, bool cacheOnly = false);
-   void setCohumulone_pct( double num, bool cacheOnly = false);
-   void setMyrcene_pct( double num, bool cacheOnly = false);
+   void setNotes( const QString& str);
+   void setType( Type t);
+   void setForm( Form f);
+   void setBeta_pct( double num);
+   void setHsi_pct( double num);
+   void setOrigin( const QString& str);
+   void setSubstitutes( const QString& str);
+   void setHumulene_pct( double num);
+   void setCaryophyllene_pct( double num);
+   void setCohumulone_pct( double num);
+   void setMyrcene_pct( double num);
+   void setCacheOnly(bool cache);
 
    static QString classNameStr();
 signals:
@@ -165,6 +167,7 @@ private:
    double m_caryophyllene_pct;
    double m_cohumulone_pct;
    double m_myrcene_pct;
+   bool m_cacheOnly;
 
    void setDefaults();
 

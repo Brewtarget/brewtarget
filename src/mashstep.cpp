@@ -101,7 +101,8 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
      m_endTemp_c(0.0),
      m_infuseTemp_c(0.0),
      m_decoctionAmount_l(0.0),
-     m_stepNumber(0.0)
+     m_stepNumber(0.0),
+     m_cacheOnly(false)
 {
 }
 
@@ -116,29 +117,30 @@ MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_endTemp_c(rec.value(kEndTemp).toDouble()),
      m_infuseTemp_c(rec.value(kInfuseTemp).toDouble()),
      m_decoctionAmount_l(rec.value(kDecoctionAmount).toDouble()),
-     m_stepNumber(rec.value(kStepNumber).toInt())
+     m_stepNumber(rec.value(kStepNumber).toInt()),
+     m_cacheOnly(false)
 {
 }
 
 //================================"SET" METHODS=================================
-void MashStep::setInfuseTemp_c(double var, bool cacheOnly )
+void MashStep::setInfuseTemp_c(double var )
 {
    m_infuseTemp_c = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kInfuseTempProp, kInfuseTemp, var);
    }
 }
 
-void MashStep::setType( Type t, bool cacheOnly )
+void MashStep::setType( Type t )
 {
    m_type = t;
    m_typeStr = types.at(t);
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kTypeProp, kType, m_typeStr);
    }
 }
 
-void MashStep::setInfuseAmount_l( double var, bool cacheOnly )
+void MashStep::setInfuseAmount_l( double var )
 {
    if( var < 0.0 )
    {
@@ -148,13 +150,13 @@ void MashStep::setInfuseAmount_l( double var, bool cacheOnly )
    else
    {
       m_infuseAmount_l = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kInfuseAmountProp, kInfuseAmount, var);
       }
    }
 }
 
-void MashStep::setStepTemp_c( double var, bool cacheOnly )
+void MashStep::setStepTemp_c( double var )
 {
    if( var < -273.15 )
    {
@@ -164,13 +166,13 @@ void MashStep::setStepTemp_c( double var, bool cacheOnly )
    else
    {
       m_stepTemp_c = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kStepTempProp, kStepTemp, var);
       }
    }
 }
 
-void MashStep::setStepTime_min( double var, bool cacheOnly )
+void MashStep::setStepTime_min( double var )
 {
    if( var < 0.0 )
    {
@@ -180,13 +182,13 @@ void MashStep::setStepTime_min( double var, bool cacheOnly )
    else
    {
       m_stepTime_min = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kStepTimeProp, kStepTime, var);
       }
    }
 }
 
-void MashStep::setRampTime_min( double var, bool cacheOnly )
+void MashStep::setRampTime_min( double var )
 {
    if( var < 0.0 )
    {
@@ -197,13 +199,13 @@ void MashStep::setRampTime_min( double var, bool cacheOnly )
    else
    {
       m_rampTime_min = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kRampTimeProp, kRampTime, var);
       }
    }
 }
 
-void MashStep::setEndTemp_c( double var, bool cacheOnly )
+void MashStep::setEndTemp_c( double var )
 {
    if( var < -273.15 )
    {
@@ -213,19 +215,21 @@ void MashStep::setEndTemp_c( double var, bool cacheOnly )
    else
    {
       m_endTemp_c = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kEndTempProp, kEndTemp, var);
       }
    }
 }
 
-void MashStep::setDecoctionAmount_l(double var, bool cacheOnly )
+void MashStep::setDecoctionAmount_l(double var )
 {
    m_decoctionAmount_l = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kDecoctionAmountProp, kDecoctionAmount, var);
    }
 }
+
+void MashStep::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
 //============================="GET" METHODS====================================
 MashStep::Type MashStep::type() const { return m_type; }
@@ -239,6 +243,7 @@ double MashStep::rampTime_min() const { return m_rampTime_min; }
 double MashStep::endTemp_c() const { return m_endTemp_c; }
 double MashStep::decoctionAmount_l() const { return m_decoctionAmount_l; }
 int MashStep::stepNumber() const { return m_stepNumber; }
+bool MashStep::cacheOnly( ) const { return m_cacheOnly; }
 
 bool MashStep::isInfusion() const
 {

@@ -102,22 +102,23 @@ public:
    Q_PROPERTY( bool addToSecondary READ addToSecondary WRITE setAddToSecondary /*NOTIFY changed*/ /*changedAddToSecondary*/ )
    
    // Setters
-   void setType( Type t, bool cacheOnly = false);
-   void setForm( Form f, bool cacheOnly = false);
-   void setAmount( double var, bool cacheOnly = false);
-   void setInventoryQuanta( int var, bool cacheOnly = false);
-   void setAmountIsWeight( bool var, bool cacheOnly = false);
-   void setLaboratory( const QString& var, bool cacheOnly = false);
-   void setProductID( const QString& var, bool cacheOnly = false);
-   void setMinTemperature_c( double var, bool cacheOnly = false);
-   void setMaxTemperature_c( double var, bool cacheOnly = false);
-   void setFlocculation( Flocculation f, bool cacheOnly = false);
-   void setAttenuation_pct( double var, bool cacheOnly = false);
-   void setNotes( const QString& var, bool cacheOnly = false);
-   void setBestFor( const QString& var, bool cacheOnly = false);
-   void setTimesCultured( int var, bool cacheOnly = false);
-   void setMaxReuse( int var, bool cacheOnly = false);
-   void setAddToSecondary( bool var, bool cacheOnly = false);
+   void setType( Type t);
+   void setForm( Form f);
+   void setAmount( double var);
+   void setInventoryQuanta( int var);
+   void setAmountIsWeight( bool var);
+   void setLaboratory( const QString& var);
+   void setProductID( const QString& var);
+   void setMinTemperature_c( double var);
+   void setMaxTemperature_c( double var);
+   void setFlocculation( Flocculation f);
+   void setAttenuation_pct( double var);
+   void setNotes( const QString& var);
+   void setBestFor( const QString& var);
+   void setTimesCultured( int var);
+   void setMaxReuse( int var);
+   void setAddToSecondary( bool var);
+   void setCacheOnly( bool cache);
    
    // Getters
    Type type() const;
@@ -142,6 +143,7 @@ public:
    int timesCultured() const;
    int maxReuse() const;
    bool addToSecondary() const;
+   bool cacheOnly() const;
 
    static QString classNameStr();
    
@@ -173,6 +175,7 @@ private:
    int m_timesCultured;
    int m_maxReuse;
    bool m_addToSecondary;
+   bool m_cacheOnly;
 
    static QStringList types;
    static QStringList forms;

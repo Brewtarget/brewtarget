@@ -4734,6 +4734,167 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
    return ret;
 }
 
+void Database::fromXml(BeerXMLElement* element, QDomNode const& elementNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString xmlTag;
+   int intVal;
+   double doubleVal;
+   bool boolVal;
+   QString stringVal;
+   QDateTime dateTimeVal;
+   QDate dateVal;
+   TableSchema* schema = new TableSchema( element->table() );
+
+   for( node = elementNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      xmlTag = node.nodeName();
+      textNode = child.toText();
+      QString pTag = schema->xmlToProperty(xmlTag);
+
+      if( pTag.size() ) {
+         switch( element->metaProperty(pTag).type() )
+         {
+            case QVariant::Bool:
+               boolVal = BeerXMLElement::getBool(textNode);
+               element->setProperty(pTag.toStdString().c_str(), boolVal);
+               break;
+            case QVariant::Double:
+               doubleVal = BeerXMLElement::getDouble(textNode);
+               element->setProperty(pTag.toStdString().c_str(), doubleVal);
+               break;
+            case QVariant::Int:
+               intVal = BeerXMLElement::getInt(textNode);
+               element->setProperty(pTag.toStdString().c_str(), intVal);
+               break;
+            case QVariant::DateTime:
+               dateTimeVal = BeerXMLElement::getDateTime(textNode);
+               element->setProperty(pTag.toStdString().c_str(), dateTimeVal);
+               break;
+            case QVariant::Date:
+               dateVal = BeerXMLElement::getDate(textNode);
+               element->setProperty(pTag.toStdString().c_str(), dateVal);
+               break;
+            // NOTE: I believe that enum types like Fermentable::Type will go
+            // here since Q_ENUMS() converts enums to strings. So, need to make
+            // sure that the enums match exactly what we expect in the XML.
+            case QVariant::String:
+               stringVal = BeerXMLElement::getString(textNode);
+               element->setProperty(pTag.toStdString().c_str(), stringVal);
+               break;
+            default:
+               Brewtarget::logW("Database::fromXML: don't understand property type.");
+               break;
+         }
+         // Not sure if we should keep processing or just dump?
+         if ( ! element->isValid() ) {
+            Brewtarget::logE( QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag));
+            return;
+         }
+      }
+   }
+}
+
+Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
+{
+   QDomNode n;
+   bool createdNew = true;
+   blockSignals(true);
+   Style* ret;
+   QString name;
+   QList<Style*> matching;
+
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
+   try {
+      // If we are just importing a style by itself, need to do some dupe-checking.
+      if ( parent == nullptr ) {
+         // Check to see if there is a style already in the DB with the same name.
+         sqlDatabase().transaction();
+         getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
+
+         // If we found a match, use it.
+         if ( matching.length() > 0 ) {
+            createdNew = false;
+            ret = matching.first();
+         }
+         else {
+            // We could find no matching style in the db
+            ret = new Style(name,true);
+         }
+      }
+      else {
+         // If we are inserting this as part of a recipe, we can skip straight
+         // to creating a new one
+         ret = newStyle(name);
+      }
+
+      if ( createdNew ) {
+         fromXml( ret, node );
+
+         // Handle enums separately.
+         n = node.firstChildElement("TYPE");
+         if ( n.firstChild().isNull() ) {
+            ret->invalidate();
+         }
+         else {
+            int ndx = Style::m_types.indexOf( n.firstChild().toText().nodeValue());
+            if ( ndx != -1 )
+               ret->setType(static_cast<Style::Type>(ndx));
+            else
+               ret->invalidate();
+         }
+
+         // If translating the enums craps out, lets see if we can find
+         // something right in our DB already. Shouldn't this go further up?
+         if (! ret->isValid() ) {
+            name = ret->name();
+            getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE ,allStyles);
+            // If we find a match, discard what we just built and use what's in teh DB instead
+            if ( matching.length() > 0 ) {
+               createdNew = false;
+               ret = matching.first();
+            }
+         }
+         else {
+            // we need to poke this into the database
+            insertStyle(ret);
+         }
+      }
+      if ( parent ) {
+         addToRecipe( parent, ret );
+      }
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      if ( ! parent )
+         sqlDatabase().rollback();
+      blockSignals(false);
+      throw;
+   }
+
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("styles"), QVariant() );
+      emit newStyleSignal(ret);
+   }
+
+   return ret;
+}
+
+/* ORIGINAL AND UNTOUCHED. Easier to restore this way
 Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
@@ -4811,6 +4972,18 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
    return ret;
 }
+*/
+
+
+
+
+
+
+
+
+
+
+
 
 Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 {

@@ -98,7 +98,8 @@ Mash::Mash(Brewtarget::DBTable table, int key)
      m_ph(0.0),
      m_tunWeight_kg(0.0),
      m_tunSpecificHeat_calGC(0.0),
-     m_equipAdjust(true)
+     m_equipAdjust(true),
+     m_cacheOnly(false)
 {
 }
 
@@ -111,38 +112,49 @@ Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_ph(rec.value(kPH).toDouble()),
      m_tunWeight_kg(rec.value(kTunWeight).toDouble()),
      m_tunSpecificHeat_calGC(rec.value(kTunSpecificHeat).toDouble()),
-     m_equipAdjust(rec.value(kEquipAdjust).toBool())
+     m_equipAdjust(rec.value(kEquipAdjust).toBool()),
+     m_cacheOnly(false)
 {
 }
 
 void Mash::setGrainTemp_c( double var )
 {
    m_grainTemp_c = var;
-   set(kGrainTempProp, kGrainTemp, var);
+   if ( ! m_cacheOnly ) {
+      set(kGrainTempProp, kGrainTemp, var);
+   }
 }
 
 void Mash::setNotes( const QString& var )
 {
    m_notes = var;
-   set(kNotesProp, kNotes, var);
+   if ( ! m_cacheOnly ) {
+      set(kNotesProp, kNotes, var);
+   }
 }
 
 void Mash::setTunTemp_c( double var )
 {
    m_tunTemp_c = var;
-   set(kTunTempProp, kTunTemp, var);
+   if ( ! m_cacheOnly ) {
+      set(kTunTempProp, kTunTemp, var);
+   }
 }
 
 void Mash::setSpargeTemp_c( double var )
 {
    m_spargeTemp_c = var;
-   set(kSpargeTempProp, kSpargeTemp, var);
+   if ( ! m_cacheOnly ) {
+      set(kSpargeTempProp, kSpargeTemp, var);
+   }
 }
 
 void Mash::setEquipAdjust( bool var )
 {
    m_equipAdjust = var;
-   set(kEquipAdjustProp, kEquipAdjust, var);
+   if ( ! m_cacheOnly ) {
+      set(kEquipAdjustProp, kEquipAdjust, var);
+   }
 }
 
 void Mash::setPh( double var )
@@ -155,7 +167,9 @@ void Mash::setPh( double var )
    else
    {
       m_ph = var;
-      set(kPHProp, kPH, var);
+      if ( ! m_cacheOnly ) {
+         set(kPHProp, kPH, var);
+      }
    }
 }
 
@@ -169,7 +183,9 @@ void Mash::setTunWeight_kg( double var )
    else
    {
       m_tunWeight_kg = var;
-      set(kTunWeightProp, kTunWeight, var);
+      if ( ! m_cacheOnly ) {
+         set(kTunWeightProp, kTunWeight, var);
+      }
    }
 }
 
@@ -183,7 +199,9 @@ void Mash::setTunSpecificHeat_calGC( double var )
    else
    {
       m_tunSpecificHeat_calGC = var;
-      set(kTunSpecificHeatProp, kTunSpecificHeat, var);
+      if ( ! m_cacheOnly ) {
+         set(kTunSpecificHeatProp, kTunSpecificHeat, var);
+      }
    }
 }
 
@@ -196,6 +214,8 @@ void Mash::removeAllMashSteps()
       Database::instance().removeFrom(this, tmpSteps[i]);
    emit mashStepsChanged();
 }
+
+void Mash::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //============================="GET" METHODS====================================
 QString Mash::notes() const { return m_notes; }
@@ -213,6 +233,8 @@ double Mash::tunWeight_kg() const { return m_tunWeight_kg; }
 double Mash::tunSpecificHeat_calGC() const { return m_tunSpecificHeat_calGC; }
 
 bool Mash::equipAdjust() const { return m_equipAdjust; }
+
+bool Mash::cacheOnly() const { return m_cacheOnly; }
 
 // === other methods ===
 double Mash::totalMashWater_l()

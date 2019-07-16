@@ -86,7 +86,17 @@ QString Misc::classNameStr()
 
 //============================CONSTRUCTORS======================================
 Misc::Misc(Brewtarget::DBTable table, int key) 
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key),
+   m_typeString(QString()),
+   m_type(static_cast<Misc::Type>(0)),
+   m_useString(QString()),
+   m_use(static_cast<Misc::Use>(0)),
+   m_time(0.0),
+   m_amount(0.0),
+   m_amountIsWeight(false),
+   m_useFor(QString()),
+   m_notes(QString()),
+   m_cacheOnly(false)
 {
 }
 
@@ -100,7 +110,8 @@ Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_amount(rec.value(kAmount).toDouble()),
    m_amountIsWeight(rec.value(kAmountIsWeight).toBool()),
    m_useFor(rec.value(kUseFor).toString()),
-   m_notes(rec.value(kNotes).toString())
+   m_notes(rec.value(kNotes).toString()),
+   m_cacheOnly(false)
 {
 }
 
@@ -154,43 +165,57 @@ const QString Misc::amountTypeStringTr() const
    return amountTypesTr.at(amountType());
 }
 
+bool Misc::cacheOnly() const { return m_cacheOnly; }
+
 //============================"SET" METHODS=====================================
 void Misc::setType( Type t )
 {
    m_type = t;
    m_typeString = types.at(t);
-   set( kTypeProp, kType, m_typeString );
+   if ( ! m_cacheOnly ) {
+      set( kTypeProp, kType, m_typeString );
+   }
 }
 
 void Misc::setUse( Use u )
 {
    m_use = u;
    m_useString = uses.at(u);
-   set( kUseProp, kUse, m_useString );
+   if ( ! m_cacheOnly ) {
+      set( kUseProp, kUse, m_useString );
+   }
 }
 
 void Misc::setUseFor( const QString& var )
 {
    m_useFor = var;
-   set( kUseForProp, kUseFor, var );
+   if ( ! m_cacheOnly ) {
+      set( kUseForProp, kUseFor, var );
+   }
 }
 
 void Misc::setNotes( const QString& var )
 {
    m_notes = var;
-   set( kNotesProp, kNotes, var );
+   if ( ! m_cacheOnly ) {
+      set( kNotesProp, kNotes, var );
+   }
 }
 
 void Misc::setAmountType( AmountType t )
 {
    m_amountIsWeight = t == AmountType_Weight;
-   setAmountIsWeight(m_amountIsWeight);
+   if ( ! m_cacheOnly ) {
+      setAmountIsWeight(m_amountIsWeight);
+   }
 }
 
 void Misc::setAmountIsWeight( bool var )
 {
    m_amountIsWeight = var;
-   set( kAmountIsWeightProp, kAmountIsWeight, var );
+   if ( ! m_cacheOnly ) {
+      set( kAmountIsWeightProp, kAmountIsWeight, var );
+   }
 }
 
 void Misc::setAmount( double var )
@@ -199,7 +224,9 @@ void Misc::setAmount( double var )
       Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
    else {
       m_amount = var;
-      set( kAmountProp, kAmount, var );
+      if ( ! m_cacheOnly ) {
+         set( kAmountProp, kAmount, var );
+      }
    }
 }
 
@@ -207,8 +234,9 @@ void Misc::setInventoryAmount( double var )
 {
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: inventory < 0: %1").arg(var) );
-   else
+   else {
       setInventory(kInventoryProp, kAmount, var );
+   }
 }
 
 void Misc::setTime( double var )
@@ -217,9 +245,13 @@ void Misc::setTime( double var )
       Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
    else {
       m_time = var;
-      set( kTimeProp, kTime, var );
+      if ( ! m_cacheOnly ) {
+         set( kTimeProp, kTime, var );
+      }
    }
 }
+
+void Misc::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //========================OTHER METHODS=========================================
 

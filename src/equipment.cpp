@@ -130,7 +130,8 @@ Equipment::Equipment(QString t_name)
    m_hopUtilization_pct(0.0),
    m_notes(QString()),
    m_grainAbsorption_LKg(0.0),
-   m_boilingPoint_c(0.0)
+   m_boilingPoint_c(0.0),
+   m_cacheOnly(true)
 {
 }
 
@@ -152,7 +153,8 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
    m_hopUtilization_pct(0.0),
    m_notes(QString()),
    m_grainAbsorption_LKg(0.0),
-   m_boilingPoint_c(0.0)
+   m_boilingPoint_c(0.0),
+   m_cacheOnly(false)
 {
 }
 
@@ -174,7 +176,8 @@ Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_hopUtilization_pct(rec.value(kHopUtilization).toDouble()),
    m_notes(rec.value(kNotes).toString()),
    m_grainAbsorption_LKg(rec.value(kAbsorption).toDouble()),
-   m_boilingPoint_c(rec.value(kBoilingPoint).toDouble())
+   m_boilingPoint_c(rec.value(kBoilingPoint).toDouble()),
+   m_cacheOnly(false)
 {
 }
 
@@ -191,7 +194,7 @@ QString Equipment::classNameStr()
 
 //============================"SET" METHODS=====================================
 
-void Equipment::setBoilSize_l( double var, bool cachedOnly )
+void Equipment::setBoilSize_l( double var )
 {
    if( var < 0.0 )
    {
@@ -201,14 +204,14 @@ void Equipment::setBoilSize_l( double var, bool cachedOnly )
    else
    {
       m_boilSize_l = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kBoilSizeProp, kBoilSize, var);
          emit changedBoilSize_l(var);
       }
    }
 }
 
-void Equipment::setBatchSize_l( double var, bool cachedOnly )
+void Equipment::setBatchSize_l( double var )
 {
    if( var < 0.0 )
    {
@@ -218,14 +221,14 @@ void Equipment::setBatchSize_l( double var, bool cachedOnly )
    else
    {
       m_batchSize_l = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kBatchSizeProp, kBatchSize, var);
          doCalculations();
       }
    }
 }
 
-void Equipment::setTunVolume_l( double var, bool cachedOnly )
+void Equipment::setTunVolume_l( double var )
 {
    if( var < 0.0 )
    {
@@ -235,13 +238,13 @@ void Equipment::setTunVolume_l( double var, bool cachedOnly )
    else
    {
       m_tunVolume_l = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kTunVolumeProp, kTunVolume, var);
       }
    }
 }
 
-void Equipment::setTunWeight_kg( double var, bool cachedOnly )
+void Equipment::setTunWeight_kg( double var )
 {
    if( var < 0.0 )
    {
@@ -251,13 +254,13 @@ void Equipment::setTunWeight_kg( double var, bool cachedOnly )
    else
    {
       m_tunWeight_kg = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kTunWeightProp, kTunWeight, var);
       }
    }
 }
 
-void Equipment::setTunSpecificHeat_calGC( double var, bool cachedOnly )
+void Equipment::setTunSpecificHeat_calGC( double var )
 {
    if( var < 0.0 )
    {
@@ -267,13 +270,13 @@ void Equipment::setTunSpecificHeat_calGC( double var, bool cachedOnly )
    else
    {
       m_tunSpecificHeat_calGC = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kTunSpecificHeatProp, kTunSpecificHeat, var);
       }
    }
 }
 
-void Equipment::setTopUpWater_l( double var, bool cachedOnly )
+void Equipment::setTopUpWater_l( double var )
 {
    if( var < 0.0 )
    {
@@ -283,14 +286,14 @@ void Equipment::setTopUpWater_l( double var, bool cachedOnly )
    else
    {
       m_topUpWater_l = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kTopUpWaterProp, kTopUpWater, var);
          doCalculations();
       }
    }
 }
 
-void Equipment::setTrubChillerLoss_l( double var, bool cachedOnly )
+void Equipment::setTrubChillerLoss_l( double var )
 {
    if( var < 0.0 )
    {
@@ -300,14 +303,14 @@ void Equipment::setTrubChillerLoss_l( double var, bool cachedOnly )
    else
    {
       m_trubChillerLoss_l = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kTrubChillerLossProp, kTrubChillerLoss, var);
          doCalculations();
       }
    }
 }
 
-void Equipment::setEvapRate_pctHr( double var, bool cachedOnly )
+void Equipment::setEvapRate_pctHr( double var )
 {
    if( var < 0.0 || var > 100.0)
    {
@@ -319,7 +322,7 @@ void Equipment::setEvapRate_pctHr( double var, bool cachedOnly )
       m_evapRate_pctHr = var;
       m_evapRate_lHr = var/100.0 * m_batchSize_l;
 
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kEvaporationRateProp, kEvaporationRate, var);
          set(kRealEvaporationRateProp, kRealEvaporationRate, var/100.0 * batchSize_l() ); // We always use this one, so set it.
          doCalculations();
@@ -327,7 +330,7 @@ void Equipment::setEvapRate_pctHr( double var, bool cachedOnly )
    }
 }
 
-void Equipment::setEvapRate_lHr( double var, bool cachedOnly )
+void Equipment::setEvapRate_lHr( double var )
 {
    if( var < 0.0 )
    {
@@ -338,7 +341,7 @@ void Equipment::setEvapRate_lHr( double var, bool cachedOnly )
    {
       m_evapRate_lHr = var;
       m_evapRate_pctHr = var/batchSize_l() * 100.0;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kRealEvaporationRateProp, kRealEvaporationRate, var);
          setEvapRate_pctHr( var/batchSize_l() * 100.0 ); // We don't use it, but keep it current.
          doCalculations();
@@ -346,7 +349,7 @@ void Equipment::setEvapRate_lHr( double var, bool cachedOnly )
    }
 }
 
-void Equipment::setBoilTime_min( double var, bool cachedOnly )
+void Equipment::setBoilTime_min( double var )
 {
    if( var < 0.0 )
    {
@@ -356,7 +359,7 @@ void Equipment::setBoilTime_min( double var, bool cachedOnly )
    else
    {
       m_boilTime_min = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kBoilTimeProp, kBoilTime, var);
          emit changedBoilTime_min(var);
          doCalculations();
@@ -364,17 +367,17 @@ void Equipment::setBoilTime_min( double var, bool cachedOnly )
    }
 }
 
-void Equipment::setCalcBoilVolume( bool var, bool cachedOnly )
+void Equipment::setCalcBoilVolume( bool var )
 {
    m_calcBoilVolume = var;
-   if ( ! cachedOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kCalcBoilVolumeProp, kCalcBoilVolume, var);
       if( var )
          doCalculations();
    }
 }
 
-void Equipment::setLauterDeadspace_l( double var, bool cachedOnly )
+void Equipment::setLauterDeadspace_l( double var )
 {
    if( var < 0.0 )
    {
@@ -384,13 +387,13 @@ void Equipment::setLauterDeadspace_l( double var, bool cachedOnly )
    else
    {
       m_lauterDeadspace_l = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kLauterDeadspaceProp, kLauterDeadspace, var);
       }
    }
 }
 
-void Equipment::setTopUpKettle_l( double var, bool cachedOnly )
+void Equipment::setTopUpKettle_l( double var )
 {
    if( var < 0.0 )
    {
@@ -400,13 +403,13 @@ void Equipment::setTopUpKettle_l( double var, bool cachedOnly )
    else
    {
       m_topUpKettle_l = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kTopUpKettleProp, kTopUpKettle, var);
       }
    }
 }
 
-void Equipment::setHopUtilization_pct( double var, bool cachedOnly )
+void Equipment::setHopUtilization_pct( double var )
 {
    if( var < 0.0 )
    {
@@ -416,21 +419,21 @@ void Equipment::setHopUtilization_pct( double var, bool cachedOnly )
    else
    {
       m_hopUtilization_pct = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kHopUtilizationProp, kHopUtilization, var);
       }
    }
 }
 
-void Equipment::setNotes( const QString &var, bool cachedOnly )
+void Equipment::setNotes( const QString &var )
 {
    m_notes = var;
-   if ( ! cachedOnly ) {
+   if ( ! m_cacheOnly ) {
       set(kNotesProp, kNotes, var);
    }
 }
 
-void Equipment::setGrainAbsorption_LKg(double var, bool cachedOnly)
+void Equipment::setGrainAbsorption_LKg(double var)
 {
    if( var < 0.0 )
    {
@@ -440,13 +443,13 @@ void Equipment::setGrainAbsorption_LKg(double var, bool cachedOnly)
    else
    {
       m_grainAbsorption_LKg = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kAbsorptionProp, kAbsorption, var);
       }
    }
 }
 
-void Equipment::setBoilingPoint_c(double var, bool cachedOnly)
+void Equipment::setBoilingPoint_c(double var)
 {
    if ( var < 0.0 )
    {
@@ -456,11 +459,13 @@ void Equipment::setBoilingPoint_c(double var, bool cachedOnly)
    else 
    {
       m_boilingPoint_c = var;
-      if ( ! cachedOnly ) {
+      if ( ! m_cacheOnly ) {
          set(kBoildPointProp, kBoilingPoint, var);
       }
    }
 }
+
+void Equipment::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //============================"GET" METHODS=====================================
 
@@ -481,6 +486,7 @@ double Equipment::topUpKettle_l() const { return m_topUpKettle_l; }
 double Equipment::hopUtilization_pct() const { return m_hopUtilization_pct; }
 double Equipment::grainAbsorption_LKg() { return m_grainAbsorption_LKg; }
 double Equipment::boilingPoint_c() const { return m_boilingPoint_c; }
+bool Equipment::cacheOnly() const { return m_cacheOnly; }
 
 void Equipment::doCalculations()
 {

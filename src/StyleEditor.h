@@ -65,7 +65,6 @@ private:
    Style* obsStyle;
    StyleListModel* styleListModel;
    StyleSortFilterProxyModel* styleProxyModel;
-   bool isNew = false;
    void showChanges(QMetaProperty* prop = 0);
 };
 

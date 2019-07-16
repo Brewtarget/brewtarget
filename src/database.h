@@ -652,6 +652,7 @@ private:
     * \param elementNode is the root node of the element we are reading from.
     */
    void fromXml(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
+   void fromXml(BeerXMLElement* element, QDomNode const& elementNode);
 
    // Import from BeerXML =====================================================
    BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );

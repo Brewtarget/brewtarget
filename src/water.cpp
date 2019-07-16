@@ -90,7 +90,17 @@ QString Water::classNameStr()
 }
 
 Water::Water(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key),
+   m_amount_l(0.0),
+   m_calcium_ppm(0.0),
+   m_bicarbonate_ppm(0.0),
+   m_sulfate_ppm(0.0),
+   m_chloride_ppm(0.0),
+   m_sodium_ppm(0.0),
+   m_magnesium_ppm(0.0),
+   m_ph(0.0),
+   m_notes(QString()),
+   m_cacheOnly(false)
 {
 }
 
@@ -104,7 +114,8 @@ Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_sodium_ppm(rec.value(kSodium).toDouble()),
    m_magnesium_ppm(rec.value(kMagnesium).toDouble()),
    m_ph(rec.value(kPh).toDouble()),
-   m_notes(rec.value(kAmount).toString())
+   m_notes(rec.value(kAmount).toString()),
+   m_cacheOnly(false)
 {
 }
 
@@ -112,57 +123,76 @@ Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
 void Water::setAmount_l( double var )
 {
    m_amount_l = var;
-   set(kAmountProp, kAmount, var);
+   if ( ! m_cacheOnly ) {
+      set(kAmountProp, kAmount, var);
+   }
 }
 
 void Water::setCalcium_ppm( double var )
 {
    m_calcium_ppm = var;
-   set(kCalciumProp, kCalcium, var);
+   if ( ! m_cacheOnly ) {
+      set(kCalciumProp, kCalcium, var);
+   }
 }
 
 void Water::setBicarbonate_ppm( double var )
 {
    m_bicarbonate_ppm = var;
-   set(kBiCarbonateProp, kBiCarbonate, var);
+   if ( ! m_cacheOnly ) {
+      set(kBiCarbonateProp, kBiCarbonate, var);
+   }
 }
 
 void Water::setChloride_ppm( double var )
 {
    m_chloride_ppm = var;
-   set(kChlorideProp, kChloride, var);
+   if ( ! m_cacheOnly ) {
+      set(kChlorideProp, kChloride, var);
+   }
 }
 
 void Water::setSodium_ppm( double var )
 {
    m_sodium_ppm = var;
-   set(kSodiumProp, kSodium, var);
+   if ( ! m_cacheOnly ) {
+      set(kSodiumProp, kSodium, var);
+   }
 }
 
 void Water::setMagnesium_ppm( double var )
 {
    m_magnesium_ppm = var;
-   set(kMagnesiumProp, kMagnesium, var);
+   if ( ! m_cacheOnly ) {
+      set(kMagnesiumProp, kMagnesium, var);
+   }
 }
 
 void Water::setPh( double var )
 {
    m_ph = var;
-   set(kPhProp, kPh, var);
+   if ( ! m_cacheOnly ) {
+      set(kPhProp, kPh, var);
+   }
 }
 
 void Water::setSulfate_ppm( double var )
 {
    m_sulfate_ppm = var;
-   set(kSulfateProp, kSulfate, var);
+   if ( ! m_cacheOnly ) {
+      set(kSulfateProp, kSulfate, var);
+   }
 }
 
 void Water::setNotes( const QString &var )
 {
    m_notes = var;
-   set(kNotesProp, kNotes, var);
+   if ( ! m_cacheOnly ) {
+      set(kNotesProp, kNotes, var);
+   }
 }
 
+void Water::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 //=========================="GET" METHODS=======================================
 QString Water::notes() const { return m_notes; }
 
@@ -181,3 +211,5 @@ double Water::sodium_ppm() const { return m_sodium_ppm; }
 double Water::magnesium_ppm() const { return m_magnesium_ppm; }
 
 double Water::ph() const { return m_ph; }
+
+bool Water::cacheOnly() const { return m_cacheOnly; }

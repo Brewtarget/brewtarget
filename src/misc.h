@@ -95,6 +95,7 @@ public:
    void setAmountIsWeight( bool var );
    void setUseFor( const QString &var );
    void setNotes( const QString &var );
+   void setCacheOnly( bool cache );
    
    // Get
 //   QString name() const;
@@ -113,6 +114,7 @@ public:
    bool amountIsWeight() const;
    QString useFor() const;
    QString notes() const;
+   bool cacheOnly() const;
 
    static QString classNameStr();
    
@@ -135,6 +137,7 @@ private:
    bool m_amountIsWeight;
    QString m_useFor;
    QString m_notes;
+   bool m_cacheOnly;
 
    bool isValidType( const QString &var );
    bool isValidUse( const QString &var );

@@ -178,11 +178,12 @@ Style::Style(Brewtarget::DBTable table, int key)
      m_notes(QString()),
      m_profile(QString()),
      m_ingredients(QString()),
-     m_examples(QString())
+     m_examples(QString()),
+     m_cacheOnly(false)
 {
 }
 
-Style::Style(QString t_name)
+Style::Style(QString t_name, bool cache)
    : BeerXMLElement(Brewtarget::STYLETABLE, -1, t_name, true),
      m_category(QString()),
      m_categoryNumber(QString()),
@@ -205,7 +206,8 @@ Style::Style(QString t_name)
      m_notes(QString()),
      m_profile(QString()),
      m_ingredients(QString()),
-     m_examples(QString())
+     m_examples(QString()),
+     m_cacheOnly(cache)
 {
 }
 
@@ -232,53 +234,54 @@ Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_notes(rec.value(kNotes).toString()),
      m_profile(rec.value(kProfile).toString()),
      m_ingredients(rec.value(kIngredients).toString()),
-     m_examples(rec.value(kExamples).toString())
+     m_examples(rec.value(kExamples).toString()),
+     m_cacheOnly(false)
 {
 }
 
 //==============================="SET" METHODS==================================
-void Style::setCategory( const QString& var, bool cacheOnly )
+void Style::setCategory( const QString& var )
 {
    m_category = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy( kCategoryProp, var );
    }
 }
 
-void Style::setCategoryNumber( const QString& var, bool cacheOnly )
+void Style::setCategoryNumber( const QString& var )
 {
    m_categoryNumber = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy( kCategoryNumberProp, var );
    }
 }
 
-void Style::setStyleLetter( const QString& var, bool cacheOnly )
+void Style::setStyleLetter( const QString& var )
 {
    m_styleLetter = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy( kStyleLetterProp, var );
    }
 }
 
-void Style::setStyleGuide( const QString& var, bool cacheOnly )
+void Style::setStyleGuide( const QString& var )
 {
    m_styleGuide = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy( kStyleGuideProp, var );
    }
 }
 
-void Style::setType( Type t, bool cacheOnly )
+void Style::setType( Type t )
 {
    m_type = t;
    m_typeStr = m_types.at(t);
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy( kTypeProp, m_typeStr);
    }
 }
 
-void Style::setOgMin( double var, bool cacheOnly )
+void Style::setOgMin( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -286,13 +289,13 @@ void Style::setOgMin( double var, bool cacheOnly )
    else
    {
       m_ogMin = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kOGMinProp, var);
       }
    }
 }
 
-void Style::setOgMax( double var, bool cacheOnly )
+void Style::setOgMax( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -300,13 +303,13 @@ void Style::setOgMax( double var, bool cacheOnly )
    else
    {
       m_ogMax = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kOGMaxProp, var);
       }
    }
 }
 
-void Style::setFgMin( double var, bool cacheOnly )
+void Style::setFgMin( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -314,13 +317,13 @@ void Style::setFgMin( double var, bool cacheOnly )
    else
    {
       m_fgMin = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kFGMinProp, var);
       }
    }
 }
 
-void Style::setFgMax( double var, bool cacheOnly )
+void Style::setFgMax( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -328,13 +331,13 @@ void Style::setFgMax( double var, bool cacheOnly )
    else
    {
       m_fgMax = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kFGMaxProp, var);
       }
    }
 }
 
-void Style::setIbuMin( double var, bool cacheOnly )
+void Style::setIbuMin( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -342,13 +345,13 @@ void Style::setIbuMin( double var, bool cacheOnly )
    else
    {
       m_ibuMin = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kIBUMinProp, var);
       }
    }
 }
 
-void Style::setIbuMax( double var, bool cacheOnly )
+void Style::setIbuMax( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -356,13 +359,13 @@ void Style::setIbuMax( double var, bool cacheOnly )
    else
    {
       m_ibuMax = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kIBUMaxProp, var);
       }
    }
 }
 
-void Style::setColorMin_srm( double var, bool cacheOnly )
+void Style::setColorMin_srm( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -370,13 +373,13 @@ void Style::setColorMin_srm( double var, bool cacheOnly )
    else
    {
       m_colorMin_srm = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kColorMinProp, var);
       }
    }
 }
 
-void Style::setColorMax_srm( double var, bool cacheOnly )
+void Style::setColorMax_srm( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -384,13 +387,13 @@ void Style::setColorMax_srm( double var, bool cacheOnly )
    else
    {
       m_colorMax_srm = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kColorMaxProp, var);
       }
    }
 }
 
-void Style::setCarbMin_vol( double var, bool cacheOnly )
+void Style::setCarbMin_vol( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -398,13 +401,13 @@ void Style::setCarbMin_vol( double var, bool cacheOnly )
    else
    {
       m_carbMin_vol = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kCarbMinProp, var);
       }
    }
 }
 
-void Style::setCarbMax_vol( double var, bool cacheOnly )
+void Style::setCarbMax_vol( double var )
 {
    if( var < 0.0 ) {
       return;
@@ -412,13 +415,13 @@ void Style::setCarbMax_vol( double var, bool cacheOnly )
    else
    {
       m_carbMax_vol = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kCarbMaxProp, var);
       }
    }
 }
 
-void Style::setAbvMin_pct( double var, bool cacheOnly )
+void Style::setAbvMin_pct( double var )
 {
    if( var < 0.0 || var > 100.0 ) {
       return;
@@ -426,56 +429,58 @@ void Style::setAbvMin_pct( double var, bool cacheOnly )
    else
    {
       m_abvMin_pct = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kABVMinProp, var);
       }
    }
 }
 
-void Style::setAbvMax_pct( double var, bool cacheOnly )
+void Style::setAbvMax_pct( double var )
 {
    if( var < 0.0 || var > 100.0 )
       return;
    else
    {
         m_abvMax_pct = var;
-      if ( ! cacheOnly ) {
+      if ( ! m_cacheOnly ) {
          setEasy(kABVMaxProp, var);
       }
    }
 }
 
-void Style::setNotes( const QString& var, bool cacheOnly )
+void Style::setNotes( const QString& var )
 {
     m_notes = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy(kNotesProp, var);
    }
 }
 
-void Style::setProfile( const QString& var, bool cacheOnly )
+void Style::setProfile( const QString& var )
 {
     m_profile = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy(kProfileProp, var);
    }
 }
 
-void Style::setIngredients( const QString& var, bool cacheOnly )
+void Style::setIngredients( const QString& var )
 {
     m_ingredients = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy(kIngredientsProp, var);
    }
 }
 
-void Style::setExamples( const QString& var, bool cacheOnly )
+void Style::setExamples( const QString& var )
 {
     m_examples = var;
-   if ( ! cacheOnly ) {
+   if ( ! m_cacheOnly ) {
       setEasy(kExamplesProp, var);
    }
 }
+
+void Style::setCacheOnly( const bool cache ) { m_cacheOnly = cache; }
 
 //============================="GET" METHODS====================================
 QString Style::category() const { return m_category; }
@@ -489,6 +494,7 @@ QString Style::examples() const { return m_examples; }
 const Style::Type Style::type() const { return m_type; }
 const QString Style::typeString() const { return m_typeStr; }
 
+bool Style::cacheOnly() const { return m_cacheOnly; }
 double Style::ogMin() const { return m_ogMin; }
 double Style::ogMax() const { return m_ogMax; }
 double Style::fgMin() const { return m_fgMin; }

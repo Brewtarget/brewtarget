@@ -55,11 +55,12 @@ public:
    Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
    // "set" methods.
-   void setDirections(const QString& dir, bool cacheOnly = false);
-   void setHasTimer(bool has, bool cacheOnly = false);
-   void setTimerValue(const QString& timerVal, bool cacheOnly = false);
-   void setCompleted(bool comp, bool cacheOnly = false);
-   void setInterval(double interval, bool cacheOnly = false);
+   void setDirections(const QString& dir);
+   void setHasTimer(bool has);
+   void setTimerValue(const QString& timerVal);
+   void setCompleted(bool comp);
+   void setInterval(double interval);
+   void setCacheOnly(bool cache);
    void addReagent(const QString& reagent);
 
    // "get" methods.
@@ -70,6 +71,7 @@ public:
    //! This is a non-stored temporary in-memory set.
    QList<QString> reagents();
    double interval();
+   bool cacheOnly();
 
    int instructionNumber() const;
 
@@ -87,6 +89,7 @@ private:
    QString m_timerValue;
    bool    m_completed;
    double  m_interval;
+   bool    m_cacheOnly;
 
    QList<QString> m_reagents;
    

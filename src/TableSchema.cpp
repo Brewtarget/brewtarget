@@ -138,29 +138,29 @@ const QString kpropIngredients("ingredients");
 const QString kpropExamples("examples");
 
 // XML Properties
-const QString xmlNameProp("NAME");
+const QString kXmlNameProp("NAME");
 
 // style first
-const QString xmlCategoryProp("CATEGORY");
-const QString xmlCategoryNumberProp("CATEGORY_NUMBER");
-const QString xmlStyleLetterProp("STYLE_LETTER");
-const QString xmlStyleGuideProp("STYLE_GUIDE");
-const QString xmlOGMinProp("OG_MIN");
-const QString xmlOGMaxProp("OG_MAX");
-const QString xmlFGMinProp("FG_MIN");
-const QString xmlFGMaxProp("FG_MAX");
-const QString xmlIBUMinProp("IBU_MIN");
-const QString xmlIBUMaxProp("IBU_MAX");
-const QString xmlColorMinProp("COLOR_MIN");
-const QString xmlColorMaxProp("COLOR_MAX");
-const QString xmlCarbMinProp("CARB_MIN");
-const QString xmlCarbMaxProp("CARB_MAX");
-const QString xmlABVMinProp("ABV_MIN");
-const QString xmlABVMaxProp("ABV_MAX");
-const QString xmlNotesProp("NOTES");
-const QString xmlProfileProp("PROFILE");
-const QString xmlIngredientsProp("INGREDIENTS");
-const QString xmlExamplesProp("EXAMPLES");
+const QString kXmlCategoryProp("CATEGORY");
+const QString kXmlCategoryNumberProp("CATEGORY_NUMBER");
+const QString kXmlStyleLetterProp("STYLE_LETTER");
+const QString kXmlStyleGuideProp("STYLE_GUIDE");
+const QString kXmlOGMinProp("OG_MIN");
+const QString kXmlOGMaxProp("OG_MAX");
+const QString kXmlFGMinProp("FG_MIN");
+const QString kXmlFGMaxProp("FG_MAX");
+const QString kXmlIBUMinProp("IBU_MIN");
+const QString kXmlIBUMaxProp("IBU_MAX");
+const QString kXmlColorMinProp("COLOR_MIN");
+const QString kXmlColorMaxProp("COLOR_MAX");
+const QString kXmlCarbMinProp("CARB_MIN");
+const QString kXmlCarbMaxProp("CARB_MAX");
+const QString kXmlABVMinProp("ABV_MIN");
+const QString kXmlABVMaxProp("ABV_MAX");
+const QString kXmlNotesProp("NOTES");
+const QString kXmlProfileProp("PROFILE");
+const QString kXmlIngredientsProp("INGREDIENTS");
+const QString kXmlExamplesProp("EXAMPLES");
 
 // WE have to hard code this, because we cannot be certain the database is
 // available yet -- so not bt_alltables lookups can be allowed
@@ -266,6 +266,29 @@ const QString TableSchema::propertyToColumn(QString prop, Brewtarget::DBTypes ty
    }
 }
 
+const QString TableSchema::propertyToXml(QString prop) const
+{
+   if ( properties_.contains(prop) ) {
+      return properties_.value(prop)->xmlName();
+   }
+   else {
+      return QString();
+   }
+}
+
+const QString TableSchema::xmlToProperty(QString xmlName) const
+{
+   QString retval;
+
+   foreach ( PropertySchema* prop, properties_ ) {
+      if ( prop->xmlName() == xmlName ) {
+         retval = prop->propName();
+         break;
+      }
+   }
+   return retval;
+}
+
 const QString TableSchema::propertyColumnType(QString prop) const
 {
    if ( properties_.contains(prop) ) {
@@ -320,71 +343,69 @@ QMap<QString,PropertySchema*> TableSchema::defineStyleTable()
    QMap<QString,PropertySchema*> tmp;
    QHash<Brewtarget::DBTypes,QString> tmpNames;
 
-   // this is a special case -- name is name the DB over
    tmpNames[Brewtarget::NODB] = kpropName;
-   tmp[kpropName] = new PropertySchema( kpropName, tmpNames, xmlNameProp, QString("text"), QString(""));
+   tmp[kpropName] = new PropertySchema( kpropName, tmpNames , kXmlNameProp, QString("text"), QString(""));
   
    // All db use "category" as the column name
    tmpNames[Brewtarget::NODB] = kcolStyleType;
-   tmp[kpropType] = new PropertySchema( kpropType, tmpNames, QString("text"), QString("Ale"));
+   tmp[kpropType] = new PropertySchema( kpropType, tmpNames , QString(""), QString("text"), QString("Ale"));
   
    tmpNames[Brewtarget::NODB] = kcolStyleCatNum;
-   tmp[kpropCategoryNumber] = new PropertySchema( kpropCategoryNumber, tmpNames, QString("text"), QString(""));
+   tmp[kpropCategoryNumber] = new PropertySchema( kpropCategoryNumber, tmpNames, kXmlCategoryNumberProp, QString("text"), QString(""));
 
    tmpNames[Brewtarget::NODB] = kcolStyleLetter;
-   tmp[kpropStyleLetter] = new PropertySchema( kpropStyleLetter, tmpNames, QString("text"), QString("") );
+   tmp[kpropStyleLetter] = new PropertySchema( kpropStyleLetter, tmpNames, kXmlStyleLetterProp, QString("text"), QString("") );
 
    tmpNames[Brewtarget::NODB] = kcolStyleGuide;
-   tmp[kpropStyleGuide] = new PropertySchema( kpropStyleGuide, tmpNames, QString("text"), QString("") );
+   tmp[kpropStyleGuide] = new PropertySchema( kpropStyleGuide, tmpNames, kXmlStyleGuideProp, QString("text"), QString("") );
 
    tmpNames[Brewtarget::NODB] = kcolStyleOGMin;
-   tmp[kpropOGMin] = new PropertySchema( kpropOGMin, tmpNames);
+   tmp[kpropOGMin] = new PropertySchema( kpropOGMin, tmpNames, kXmlOGMinProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleOGMax;
-   tmp[kpropOGMax] = new PropertySchema( kpropOGMax, tmpNames);
+   tmp[kpropOGMax] = new PropertySchema( kpropOGMax, tmpNames, kXmlOGMaxProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleFGMin;
-   tmp[kpropFGMin] = new PropertySchema( kpropFGMin, tmpNames);
+   tmp[kpropFGMin] = new PropertySchema( kpropFGMin, tmpNames, kXmlFGMinProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleFGMax;
-   tmp[kpropFGMax] = new PropertySchema( kpropFGMax, tmpNames);
+   tmp[kpropFGMax] = new PropertySchema( kpropFGMax, tmpNames, kXmlFGMaxProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleIBUMin;
-   tmp[kpropIBUMin] = new PropertySchema( kpropIBUMin, tmpNames);
+   tmp[kpropIBUMin] = new PropertySchema( kpropIBUMin, tmpNames, kXmlIBUMinProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleIBUMax;
-   tmp[kpropIBUMax] = new PropertySchema( kpropIBUMax, tmpNames);
+   tmp[kpropIBUMax] = new PropertySchema( kpropIBUMax, tmpNames, kXmlIBUMaxProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleColorMin;
-   tmp[kpropColorMin] = new PropertySchema( kpropColorMin,tmpNames);
+   tmp[kpropColorMin] = new PropertySchema( kpropColorMin,tmpNames, kXmlColorMinProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleColorMax;
-   tmp[kpropColorMax] = new PropertySchema( kpropColorMax,tmpNames);
+   tmp[kpropColorMax] = new PropertySchema( kpropColorMax,tmpNames, kXmlColorMaxProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleABVMin;
-   tmp[kpropABVMin] = new PropertySchema( kpropABVMin, tmpNames);
+   tmp[kpropABVMin] = new PropertySchema( kpropABVMin, tmpNames, kXmlABVMinProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleABVMax;
-   tmp[kpropABVMax] = new PropertySchema( kpropABVMax, tmpNames);
+   tmp[kpropABVMax] = new PropertySchema( kpropABVMax, tmpNames, kXmlABVMaxProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleCarbMin;
-   tmp[kpropCarbMin] = new PropertySchema( kpropCarbMin, tmpNames);
+   tmp[kpropCarbMin] = new PropertySchema( kpropCarbMin, tmpNames, kXmlCarbMinProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleCarbMax;
-   tmp[kpropCarbMax] = new PropertySchema( kpropCarbMax, tmpNames);
+   tmp[kpropCarbMax] = new PropertySchema( kpropCarbMax, tmpNames, kXmlCarbMaxProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleNotes;
-   tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames );
+   tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames, kXmlNotesProp );
 
    tmpNames[Brewtarget::NODB] = kcolStyleProfile;
-   tmp[kpropProfile] = new PropertySchema( kpropProfile, tmpNames);
+   tmp[kpropProfile] = new PropertySchema( kpropProfile, tmpNames, kXmlProfileProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleIngredients;
-   tmp[kpropIngredients] = new PropertySchema( kpropIngredients, tmpNames);
+   tmp[kpropIngredients] = new PropertySchema( kpropIngredients, tmpNames, kXmlIngredientsProp);
 
    tmpNames[Brewtarget::NODB] = kcolStyleExamples;
-   tmp[kpropExamples] = new PropertySchema( kpropExamples, tmpNames);
-
+   tmp[kpropExamples] = new PropertySchema( kpropExamples, tmpNames, kXmlExamplesProp);
    return tmp;
 }
 
@@ -394,69 +415,6 @@ QMap<QString,PropertySchema*> TableSchema::defineEquipmentTable()
    QHash<Brewtarget::DBTypes,QString> tmpNames;
 
    // this is a special case -- name is name the DB over
-   tmpNames[Brewtarget::NODB] = kpropName;
-   tmp[kpropName] = new PropertySchema( kpropName, tmpNames , QString("text"), QString(""));
-  
-   // All db use "category" as the column name
-   tmpNames[Brewtarget::NODB] = kcolStyleType;
-   tmp[kpropType] = new PropertySchema( kpropType, tmpNames , QString("text"), QString("Ale"));
-  
-   tmpNames[Brewtarget::NODB] = kcolStyleCatNum;
-   tmp[kpropCategoryNumber] = new PropertySchema( kpropCategoryNumber, tmpNames, QString("text"), QString(""));
-
-   tmpNames[Brewtarget::NODB] = kcolStyleLetter;
-   tmp[kpropStyleLetter] = new PropertySchema( kpropStyleLetter, tmpNames, QString("text"), QString("") );
-
-   tmpNames[Brewtarget::NODB] = kcolStyleGuide;
-   tmp[kpropStyleGuide] = new PropertySchema( kpropStyleGuide, tmpNames, QString("text"), QString("") );
-
-   tmpNames[Brewtarget::NODB] = kcolStyleOGMin;
-   tmp[kpropOGMin] = new PropertySchema( kpropOGMin, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleOGMax;
-   tmp[kpropOGMax] = new PropertySchema( kpropOGMax, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleFGMin;
-   tmp[kpropFGMin] = new PropertySchema( kpropFGMin, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleFGMax;
-   tmp[kpropFGMax] = new PropertySchema( kpropFGMax, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleIBUMin;
-   tmp[kpropIBUMin] = new PropertySchema( kpropIBUMin, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleIBUMax;
-   tmp[kpropIBUMax] = new PropertySchema( kpropIBUMax, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleColorMin;
-   tmp[kpropColorMin] = new PropertySchema( kpropColorMin,tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleColorMax;
-   tmp[kpropColorMax] = new PropertySchema( kpropColorMax,tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleABVMin;
-   tmp[kpropABVMin] = new PropertySchema( kpropABVMin, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleABVMax;
-   tmp[kpropABVMax] = new PropertySchema( kpropABVMax, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleCarbMin;
-   tmp[kpropCarbMin] = new PropertySchema( kpropCarbMin, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleCarbMax;
-   tmp[kpropCarbMax] = new PropertySchema( kpropCarbMax, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleNotes;
-   tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames );
-
-   tmpNames[Brewtarget::NODB] = kcolStyleProfile;
-   tmp[kpropProfile] = new PropertySchema( kpropProfile, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleIngredients;
-   tmp[kpropIngredients] = new PropertySchema( kpropIngredients, tmpNames);
-
-   tmpNames[Brewtarget::NODB] = kcolStyleExamples;
-   tmp[kpropExamples] = new PropertySchema( kpropExamples, tmpNames);
 
    return tmp;
 }

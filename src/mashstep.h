@@ -71,14 +71,15 @@ public:
    //! \brief The step number in a sequence of other steps.
    Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
-   void setType( Type t, bool cacheOnly = false);
-   void setInfuseAmount_l( double var, bool cacheOnly = false);
-   void setStepTemp_c( double var, bool cacheOnly = false);
-   void setStepTime_min( double var, bool cacheOnly = false);
-   void setRampTime_min( double var, bool cacheOnly = false);
-   void setEndTemp_c( double var, bool cacheOnly = false);
-   void setInfuseTemp_c( double var, bool cacheOnly = false);
-   void setDecoctionAmount_l( double var, bool cacheOnly = false);
+   void setType( Type t);
+   void setInfuseAmount_l( double var);
+   void setStepTemp_c( double var);
+   void setStepTime_min( double var);
+   void setRampTime_min( double var);
+   void setEndTemp_c( double var);
+   void setInfuseTemp_c( double var);
+   void setDecoctionAmount_l( double var);
+   void setCacheOnly(bool cache);
    
    Type type() const;
    const QString typeString() const;
@@ -90,6 +91,7 @@ public:
    double endTemp_c() const;
    double infuseTemp_c() const;
    double decoctionAmount_l() const;
+   bool cacheOnly() const;
    
    //! What number this step is in the mash.
    int stepNumber() const;
@@ -122,6 +124,7 @@ private:
    double m_infuseTemp_c;
    double m_decoctionAmount_l;
    int m_stepNumber;
+   bool m_cacheOnly;
    
    bool isValidType( const QString &str ) const;
 
