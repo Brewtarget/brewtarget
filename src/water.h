@@ -109,15 +109,15 @@ private:
    Water(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Water( Water const& other );
    
-   double _amount_l;
-   double _calcium_ppm;
-   double _bicarbonate_ppm;
-   double _sulfate_ppm;
-   double _chloride_ppm;
-   double _sodium_ppm;
-   double _magnesium_ppm;
-   double _ph;
-   QString _notes;
+   double m_amount_l;
+   double m_calcium_ppm;
+   double m_bicarbonate_ppm;
+   double m_sulfate_ppm;
+   double m_chloride_ppm;
+   double m_sodium_ppm;
+   double m_magnesium_ppm;
+   double m_ph;
+   QString m_notes;
 
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();

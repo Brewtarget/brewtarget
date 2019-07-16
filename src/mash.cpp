@@ -90,54 +90,58 @@ QString Mash::classNameStr()
 }
 
 Mash::Mash(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, QString(), true),
+     m_grainTemp_c(0.0),
+     m_notes(QString()),
+     m_tunTemp_c(0.0),
+     m_spargeTemp_c(0.0),
+     m_ph(0.0),
+     m_tunWeight_kg(0.0),
+     m_tunSpecificHeat_calGC(0.0),
+     m_equipAdjust(true)
 {
 }
 
 Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool()),
+     m_grainTemp_c(rec.value(kGrainTemp).toDouble()),
+     m_notes(rec.value(kNotes).toString()),
+     m_tunTemp_c(rec.value(kTunTemp).toDouble()),
+     m_spargeTemp_c(rec.value(kSpargeTemp).toDouble()),
+     m_ph(rec.value(kPH).toDouble()),
+     m_tunWeight_kg(rec.value(kTunWeight).toDouble()),
+     m_tunSpecificHeat_calGC(rec.value(kTunSpecificHeat).toDouble()),
+     m_equipAdjust(rec.value(kEquipAdjust).toBool())
 {
-   setName( rec.value(kName).toString(), true );
-   setDisplay( rec.value(kDisplay).toBool(), true);
-   setDeleted( rec.value(kDeleted).toBool(), true);
-   setFolder( rec.value(kFolder).toString(), false, true);
-   _grainTemp_c = rec.value(kGrainTemp).toDouble();
-   _notes = rec.value(kNotes).toString();
-   _tunTemp_c = rec.value(kTunTemp).toDouble();
-   _spargeTemp_c = rec.value(kSpargeTemp).toDouble();
-   _ph = rec.value(kPH).toDouble();
-   _tunWeight_kg = rec.value(kTunWeight).toDouble();
-   _tunSpecificHeat_calGC = rec.value(kTunSpecificHeat).toDouble();
-   _equipAdjust = rec.value(kEquipAdjust).toBool();
 }
 
 void Mash::setGrainTemp_c( double var )
 {
-   _grainTemp_c = var;
+   m_grainTemp_c = var;
    set(kGrainTempProp, kGrainTemp, var);
 }
 
 void Mash::setNotes( const QString& var )
 {
-   _notes = var;
+   m_notes = var;
    set(kNotesProp, kNotes, var);
 }
 
 void Mash::setTunTemp_c( double var )
 {
-   _tunTemp_c = var;
+   m_tunTemp_c = var;
    set(kTunTempProp, kTunTemp, var);
 }
 
 void Mash::setSpargeTemp_c( double var )
 {
-   _spargeTemp_c = var;
+   m_spargeTemp_c = var;
    set(kSpargeTempProp, kSpargeTemp, var);
 }
 
 void Mash::setEquipAdjust( bool var )
 {
-   _equipAdjust = var;
+   m_equipAdjust = var;
    set(kEquipAdjustProp, kEquipAdjust, var);
 }
 
@@ -150,7 +154,7 @@ void Mash::setPh( double var )
    }
    else
    {
-      _ph = var;
+      m_ph = var;
       set(kPHProp, kPH, var);
    }
 }
@@ -164,7 +168,7 @@ void Mash::setTunWeight_kg( double var )
    }
    else
    {
-      _tunWeight_kg = var;
+      m_tunWeight_kg = var;
       set(kTunWeightProp, kTunWeight, var);
    }
 }
@@ -178,7 +182,7 @@ void Mash::setTunSpecificHeat_calGC( double var )
    }
    else
    {
-      _tunSpecificHeat_calGC = var;
+      m_tunSpecificHeat_calGC = var;
       set(kTunSpecificHeatProp, kTunSpecificHeat, var);
    }
 }
@@ -194,21 +198,21 @@ void Mash::removeAllMashSteps()
 }
 
 //============================="GET" METHODS====================================
-QString Mash::notes() const { return _notes; }
+QString Mash::notes() const { return m_notes; }
 
-double Mash::grainTemp_c() const { return _grainTemp_c; }
+double Mash::grainTemp_c() const { return m_grainTemp_c; }
 
-double Mash::tunTemp_c() const { return _tunTemp_c; }
+double Mash::tunTemp_c() const { return m_tunTemp_c; }
 
-double Mash::spargeTemp_c() const { return _spargeTemp_c; }
+double Mash::spargeTemp_c() const { return m_spargeTemp_c; }
 
-double Mash::ph() const { return _ph; }
+double Mash::ph() const { return m_ph; }
 
-double Mash::tunWeight_kg() const { return _tunWeight_kg; }
+double Mash::tunWeight_kg() const { return m_tunWeight_kg; }
 
-double Mash::tunSpecificHeat_calGC() const { return _tunSpecificHeat_calGC; }
+double Mash::tunSpecificHeat_calGC() const { return m_tunSpecificHeat_calGC; }
 
-bool Mash::equipAdjust() const { return _equipAdjust; }
+bool Mash::equipAdjust() const { return m_equipAdjust; }
 
 // === other methods ===
 double Mash::totalMashWater_l()

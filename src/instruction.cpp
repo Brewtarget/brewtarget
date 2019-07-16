@@ -63,48 +63,56 @@ QString Instruction::classNameStr()
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, QString(), true),
+     m_directions(QString()),
+     m_hasTimer  (false),
+     m_timerValue(QString()),
+     m_completed (false),
+     m_interval  (0.0)
 {
-   setObjectName("Instruction"); 
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool() ),
+     m_directions(rec.value(kDirections).toString()),
+     m_hasTimer  (rec.value(kHasTimer).toBool()),
+     m_timerValue(rec.value(kTimerValue).toString()),
+     m_completed (rec.value(kCompleted).toBool()),
+     m_interval  (rec.value(kInterval).toDouble())
 {
-   setObjectName("Instruction"); 
-   setName( rec.value(kName).toString(), true );
-   setDisplay( rec.value(kDisplay).toBool(), true);
-   setDeleted( rec.value(kDeleted).toBool(), true);
-   _directions = rec.value(kDirections).toString();
-   _timerValue = rec.value(kTimerValue).toString();
-   _hasTimer   = rec.value(kHasTimer).toBool();
-   _completed  = rec.value(kCompleted).toBool();;
-   _interval   = rec.value(kInterval).toDouble();
 }
 
 // Setters ====================================================================
-void Instruction::setDirections(const QString& dir)
+void Instruction::setDirections(const QString& dir, bool cacheOnly)
 {
-   _directions = dir;
-   set(kDirections, kDirectionsProp, dir);
+   m_directions = dir;
+   if ( ! cacheOnly ) {
+      set(kDirections, kDirectionsProp, dir);
+   }
 }
 
-void Instruction::setHasTimer(bool has)
+void Instruction::setHasTimer(bool has, bool cacheOnly)
 {
-   _hasTimer = has;
-   set(kHasTimer, kHasTimerProp, has);
+   m_hasTimer = has;
+   if ( ! cacheOnly ) {
+      set(kHasTimer, kHasTimerProp, has);
+   }
 }
 
-void Instruction::setTimerValue(const QString& timerVal)
+void Instruction::setTimerValue(const QString& timerVal, bool cacheOnly)
 {
-   _timerValue = timerVal;
-   set(kTimerValue, kTimerValueProp, timerVal);
+   m_timerValue = timerVal;
+   if ( ! cacheOnly ) {
+      set(kTimerValue, kTimerValueProp, timerVal);
+   }
 }
 
-void Instruction::setCompleted(bool comp)
+void Instruction::setCompleted(bool comp, bool cacheOnly)
 {
-   _completed = comp;
-   set(kCompleted, kCompletedProp, comp);
+   m_completed = comp;
+   if ( ! cacheOnly ) {
+      set(kCompleted, kCompletedProp, comp);
+   }
 }
 
 // TODO: figure out.
@@ -115,28 +123,30 @@ void Instruction::setReagent(const QString& reagent)
 }
 */
 
-void Instruction::setInterval(double time) 
+void Instruction::setInterval(double time, bool cacheOnly) 
 {
-   _interval = time;
-   set(kInterval, kIntervalProp, time);
+   m_interval = time;
+   if ( ! cacheOnly ) {
+      set(kInterval, kIntervalProp, time);
+   }
 }
 
 void Instruction::addReagent(const QString& reagent)
 {
-   _reagents.append(reagent);
+   m_reagents.append(reagent);
 }
 
 // Accessors ==================================================================
-QString Instruction::directions() { return _directions; }
+QString Instruction::directions() { return m_directions; }
 
-bool Instruction::hasTimer() { return _hasTimer; }
+bool Instruction::hasTimer() { return m_hasTimer; }
 
-QString Instruction::timerValue() { return _timerValue; }
+QString Instruction::timerValue() { return m_timerValue; }
 
-bool Instruction::completed() { return _completed; }
+bool Instruction::completed() { return m_completed; }
 
-QList<QString> Instruction::reagents() { return _reagents; }
+QList<QString> Instruction::reagents() { return m_reagents; }
 
-double Instruction::interval() { return _interval; }
+double Instruction::interval() { return m_interval; }
 
 int Instruction::instructionNumber() const { return Database::instance().instructionNumber(this); }

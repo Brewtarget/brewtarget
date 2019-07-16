@@ -113,23 +113,23 @@ public:
    //! \brief Whether this fermentable is a sugar. Somewhat redundant, but it makes for nice symetry elsewhere
    Q_PROPERTY( bool isSugar                  READ isSugar STORED false)
    
-   const Type type() const { return _type; }
-   double amount_kg() const { return _amountKg; }
+   const Type type() const { return m_type; }
+   double amount_kg() const { return m_amountKg; }
    double inventory() const;
-   double yield_pct() const { return _yieldPct; }
-   double color_srm() const { return _colorSrm; }
-   bool addAfterBoil() const { return _isAfterBoil; }
-   const QString origin() const { return _origin; }
-   const QString supplier() const { return _supplier; }
-   const QString notes() const { return _notes; }
-   double coarseFineDiff_pct() const { return _coarseFineDiff; }
-   double moisture_pct() const { return _moisturePct; }
-   double diastaticPower_lintner() const { return _diastaticPower; }
-   double protein_pct() const { return _proteinPct; }
-   double maxInBatch_pct() const { return _maxInBatchPct; }
-   bool recommendMash() const { return _recommendMash; }
-   double ibuGalPerLb() const { return _ibuGalPerLb; }
-   bool isMashed() const { return _isMashed; }
+   double yield_pct() const { return m_yieldPct; }
+   double color_srm() const { return m_colorSrm; }
+   bool addAfterBoil() const { return m_isAfterBoil; }
+   const QString origin() const { return m_origin; }
+   const QString supplier() const { return m_supplier; }
+   const QString notes() const { return m_notes; }
+   double coarseFineDiff_pct() const { return m_coarseFineDiff; }
+   double moisture_pct() const { return m_moisturePct; }
+   double diastaticPower_lintner() const { return m_diastaticPower; }
+   double protein_pct() const { return m_proteinPct; }
+   double maxInBatch_pct() const { return m_maxInBatchPct; }
+   bool recommendMash() const { return m_recommendMash; }
+   double ibuGalPerLb() const { return m_ibuGalPerLb; }
+   bool isMashed() const { return m_isMashed; }
 
    const QString typeString() const;
    //! Returns a translated type string.
@@ -186,24 +186,23 @@ private:
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 
-   QString _typeStr;
-   Type _type;
-   double _amountKg;
-   double _inventoryAmt;
-   double _yieldPct;
-   double _colorSrm;
-   bool _isAfterBoil;
-   QString _origin;
-   QString _supplier;
-   QString _notes;
-   double _coarseFineDiff;
-   double _moisturePct;
-   double _diastaticPower;
-   double _proteinPct;
-   double _maxInBatchPct;
-   bool _recommendMash;
-   double _ibuGalPerLb;
-   bool _isMashed;
+   QString m_typeStr;
+   Type m_type;
+   double m_amountKg;
+   double m_yieldPct;
+   double m_colorSrm;
+   bool m_isAfterBoil;
+   QString m_origin;
+   QString m_supplier;
+   QString m_notes;
+   double m_coarseFineDiff;
+   double m_moisturePct;
+   double m_diastaticPower;
+   double m_proteinPct;
+   double m_maxInBatchPct;
+   bool m_recommendMash;
+   double m_ibuGalPerLb;
+   bool m_isMashed;
 };
 
 Q_DECLARE_METATYPE( QList<Fermentable*> )

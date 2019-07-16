@@ -1531,48 +1531,24 @@ Style* Database::newStyle(QString name)
    return tmp;
 }
 
-int Database::insertStyle(Style* ins) {
+int Database::insertElement(BeerXMLElement* ins)
+{
    int key;
-   
-   QStringList propNames = QStringList() <<
-      "name" << "display" << "deleted" << "folder" << "s_type" << "category" << 
-      "category_number" << "style_letter" << "style_guide" << "og_min" << 
-      "og_max" << "fg_min" << "fg_max" << "ibu_min" << "ibu_max" << 
-      "color_min" << "color_max" << "abv_min" << "abv_max" << "carb_min" << 
-      "carb_max" << "notes" << "profile" << "ingredients" << "examples";
-  
-   // Being building this gnarly insert statement
-   QString insert = QString("insert into style (");
-   insert = insert % propNames.join(",") % ") values (:" % propNames.join(",:") % ");";
-
    QSqlQuery q( sqlDatabase() );
+
+   TableSchema* schema = new TableSchema(ins->table());
+   QString insert = QString("insert into %1 (").arg(schema->tableName());
+   QStringList allColumns = schema->allColumnNames(Brewtarget::dbType());
+   QStringList allProps = schema->allPropertyNames();
+
+   insert = insert % allColumns.join(",") % ") values (:" % allProps.join(",:") % ");";
    q.prepare(insert);
-   q.bindValue(":name", ins->name());
-   q.bindValue(":folder", ins->folder());
-   q.bindValue(":display", ins->display() ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
-   q.bindValue(":deleted", ins->deleted() ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
-   q.bindValue(":s_type", ins->typeString());
-   q.bindValue(":category", ins->category());
-   q.bindValue(":category_number", ins->categoryNumber());
-   q.bindValue(":style_letter", ins->styleLetter());
-   q.bindValue(":style_guide", ins->styleGuide());
-   q.bindValue(":ogMin", ins->ogMin());
-   q.bindValue(":ogMax", ins->ogMax());
-   q.bindValue(":fgMin", ins->fgMin());
-   q.bindValue(":fgMax", ins->fgMax());
-   q.bindValue(":ibu_min", ins->ibuMin());
-   q.bindValue(":ibu_max", ins->ibuMax());
-   q.bindValue(":color_min", ins->colorMin_srm());
-   q.bindValue(":color_max", ins->colorMax_srm());
-   q.bindValue(":abv_min", ins->abvMin_pct());
-   q.bindValue(":abv_max", ins->abvMax_pct());
-   q.bindValue(":carb_min", ins->carbMin_vol());
-   q.bindValue(":carb_max", ins->carbMax_vol());
-   q.bindValue(":notes", ins->notes());
-   q.bindValue(":profile", ins->profile());
-   q.bindValue(":ingredients", ins->ingredients());
-   q.bindValue(":examples", ins->examples());
-   
+
+   foreach (QString prop, allProps) {
+      q.bindValue( ":"%prop, ins->property(prop.toUtf8().data()));
+   }
+
+   sqlDatabase().transaction();
    try {
       if ( ! q.exec() ) {
          throw QString("could not insert a record into");
@@ -1582,16 +1558,37 @@ int Database::insertStyle(Style* ins) {
       q.finish();
    }
    catch (QString e) {
+      sqlDatabase().rollback();
       Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
       throw; // rethrow the error until somebody cares
    }
+   sqlDatabase().commit();
    ins->_key = key;
+    
+   return key;
    
+}
+
+// our signals SUCK. HATE them all. HATE HATE HATE HATE
+int Database::insertStyle(Style* ins) {
+
+   int key = insertElement(ins);
+
    emit changed( metaProperty("styles"), QVariant() );
    emit newStyleSignal(ins);
 
    return key;
-   
+}
+
+// our signals SUCK. HATE them all. HATE HATE HATE HATE
+int Database::insertEquipment(Equipment* ins) {
+
+   int key = insertElement(ins);
+
+   emit changed( metaProperty("equipment"), QVariant() );
+   emit newEquipmentSignal(ins);
+
+   return key;
 }
 
 Water* Database::newWater(Water* other)
@@ -1700,7 +1697,6 @@ QString Database::getDbFileName()
 // Cthulhu weeps (and we lose 2 SAN points)
 void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify, bool transact )
 {
-   // Assumes the table has a column called 'deleted'.
    QString tableName = tableNames[table];
 
    if ( transact )
@@ -1737,6 +1733,49 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
    if ( notify )
       emit object->changed(prop,value);
+
+}
+
+void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify, bool transact )
+{
+   TableSchema* schema = new TableSchema( object->table() );
+   int idx = object->metaObject()->indexOfProperty(propName.toUtf8().data());
+   QMetaProperty mProp = object->metaObject()->property(idx);
+
+   if ( transact )
+      sqlDatabase().transaction();
+
+   try {
+      QSqlQuery update( sqlDatabase() );
+      QString command = QString("UPDATE %1 set %2=:value where id=%3")
+                           .arg(schema->tableName())
+                           .arg(schema->propertyToColumn(propName,Brewtarget::dbType()))
+                           .arg(object->key());
+
+      update.prepare( command );
+      update.bindValue(":value", value);
+
+      if ( ! update.exec() )
+         throw QString("Could not update %1.%2 to %3: %4 %5")
+                  .arg( schema->tableName() )
+                  .arg(schema->propertyToColumn(propName,Brewtarget::dbType()))
+                  .arg( value.toString() )
+                  .arg( update.lastQuery() )
+                  .arg( update.lastError().text() );
+
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      if ( transact )
+         sqlDatabase().rollback();
+      throw;
+   }
+
+   if ( transact )
+      sqlDatabase().commit();
+
+   if ( notify )
+      emit object->changed(mProp,value);
 
 }
 
@@ -2257,7 +2296,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
       sqlDatabase().commit();
    }
    // Emit a changed signal.
-   rec->_style_id = newStyle->key();
+   rec->m_style_id = newStyle->key();
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
 }
 
@@ -4732,7 +4771,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
       if ( n.firstChild().isNull() )
          ret->invalidate();
       else {
-         int ndx = Style::types.indexOf( n.firstChild().toText().nodeValue());
+         int ndx = Style::m_types.indexOf( n.firstChild().toText().nodeValue());
          if ( ndx != -1 )
             ret->setType(static_cast<Style::Type>(ndx));
          else

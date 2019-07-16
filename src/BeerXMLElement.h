@@ -58,7 +58,7 @@ class BeerXMLElement : public QObject
 
    friend class Database;
 public:
-   BeerXMLElement(Brewtarget::DBTable table, int key);
+   BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name = QString(), bool t_display = false);
    BeerXMLElement( BeerXMLElement const& other );
 
    // Everything that inherits from BeerXML has a name, delete, display and a folder
@@ -158,6 +158,7 @@ protected:
     */
    void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    void set( const QString& prop_name, const QString& col_name, const QVariant& value, bool notify = true );
+   void setEasy( QString prop_name, QVariant value, bool notify = true );
 
    /*!
     * \param col_name - The database column of the attribute we want to get.

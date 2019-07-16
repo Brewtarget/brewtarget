@@ -126,15 +126,15 @@ private:
    Misc(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Misc(Misc const& other);
    
-   Type _type;
-   QString _typeString;
-   Use _use;
-   QString _useString;
-   double _time;
-   double _amount;
-   bool _amountIsWeight;
-   QString _useFor;
-   QString _notes;
+   QString m_typeString;
+   Type m_type;
+   QString m_useString;
+   Use m_use;
+   double m_time;
+   double m_amount;
+   bool m_amountIsWeight;
+   QString m_useFor;
+   QString m_notes;
 
    bool isValidType( const QString &var );
    bool isValidUse( const QString &var );

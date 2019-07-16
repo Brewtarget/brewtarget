@@ -34,28 +34,28 @@ static const QString kDisplay("display");
 
 static const char* kVersion = "version";
 
-BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key)
+BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name, bool t_display)
    : QObject(0),
      _key(key),
      _table(table),
+     _valid(true),
+     _folder(QString()),
+     _name(t_name),
+     _display(t_display),
+     _deleted(QVariant())
+{
+}
+
+BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
+   : QObject(0),
+     _key(other._key),
+     _table(other._table),
+     _valid(true),
      _folder(QString()),
      _name(QString()),
      _display(QVariant()),
      _deleted(QVariant())
 {
-   _valid = true;
-}
-
-BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
-   : QObject(0),
-   _key(other._key),
-   _table(other._table),
-   _folder(QString()),
-   _name(QString()),
-   _display(QVariant()),
-   _deleted(QVariant())
-{
-   _valid = true;
 }
 
 bool BeerXMLElement::deleted() const
@@ -273,6 +273,11 @@ void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant 
 void BeerXMLElement::set(const QString &prop_name, const QString &col_name, const QVariant &value, bool notify)
 {
    set(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
+}
+
+void BeerXMLElement::setEasy(QString prop_name, QVariant value, bool notify)
+{
+   Database::instance().updateEntry(this,prop_name,value,notify);
 }
 
 QVariant BeerXMLElement::get( const char* col_name ) const

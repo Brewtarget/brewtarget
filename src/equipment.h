@@ -39,6 +39,8 @@ class Equipment : public BeerXMLElement
    Q_CLASSINFO("prefix", "equipment")
    
    friend class Database;
+   friend class EquipmentEditor;
+
 public:
 
    virtual ~Equipment() {}
@@ -144,26 +146,27 @@ signals:
    
 private:
    Equipment(Brewtarget::DBTable table, int key);
+   Equipment(QString t_name);
    Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Equipment( Equipment const& other);
    
-   double _boilSize_l;
-   double _batchSize_l;
-   double _tunVolume_l;
-   double _tunWeight_kg;
-   double _tunSpecificHeat_calGC;
-   double _topUpWater_l;
-   double _trubChillerLoss_l;
-   double _evapRate_pctHr;
-   double _evapRate_lHr;
-   double _boilTime_min;
-   bool _calcBoilVolume;
-   double _lauterDeadspace_l;
-   double _topUpKettle_l;
-   double _hopUtilization_pct;
-   QString _notes;
-   double _grainAbsorption_LKg;
-   double _boilingPoint_c;
+   double m_boilSize_l;
+   double m_batchSize_l;
+   double m_tunVolume_l;
+   double m_tunWeight_kg;
+   double m_tunSpecificHeat_calGC;
+   double m_topUpWater_l;
+   double m_trubChillerLoss_l;
+   double m_evapRate_pctHr;
+   double m_evapRate_lHr;
+   double m_boilTime_min;
+   bool m_calcBoilVolume;
+   double m_lauterDeadspace_l;
+   double m_topUpKettle_l;
+   double m_hopUtilization_pct;
+   QString m_notes;
+   double m_grainAbsorption_LKg;
+   double m_boilingPoint_c;
 
    // Calculate the boil size.
    void doCalculations();

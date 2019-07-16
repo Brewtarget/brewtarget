@@ -49,6 +49,8 @@ class Database;
 #include "BeerXMLElement.h"
 #include "brewtarget.h"
 #include "recipe.h"
+#include "TableSchema.h"
+
 // Forward declarations
 class BrewNote;
 //class BeerXMLElement;
@@ -123,6 +125,7 @@ public:
     */
    void updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true, bool transact = false );
 
+   void updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify = true, bool transact = false );
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
    {
@@ -247,7 +250,9 @@ public:
    
    Style* newStyle(Style* other);
    Style* newStyle(QString name);
+   int    insertElement(BeerXMLElement* ins);
    int    insertStyle(Style* ins);
+   int    insertEquipment(Equipment* ins);
    
    Water* newWater(Water* other = 0);
    Yeast* newYeast(Yeast* other = 0);

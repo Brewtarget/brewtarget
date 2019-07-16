@@ -145,9 +145,8 @@ void StyleEditor::newStyle(QString folder)
       return;
 
    Style *s = new Style(name);
-   s->setName( name );
    if ( ! folder.isEmpty() ) 
-      s->setFolder(folder);
+      s->setFolder(folder,true);
 
    setStyle(s);
    isNew = true;

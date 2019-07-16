@@ -91,21 +91,17 @@ Misc::Misc(Brewtarget::DBTable table, int key)
 }
 
 Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool()),
+   m_typeString(rec.value(kType).toString()),
+   m_type(static_cast<Misc::Type>(types.indexOf(m_typeString))),
+   m_useString(rec.value(kUse).toString()),
+   m_use(static_cast<Misc::Use>(uses.indexOf(m_useString))),
+   m_time(rec.value(kTime).toDouble()),
+   m_amount(rec.value(kAmount).toDouble()),
+   m_amountIsWeight(rec.value(kAmountIsWeight).toBool()),
+   m_useFor(rec.value(kUseFor).toString()),
+   m_notes(rec.value(kNotes).toString())
 {
-   setName( rec.value(kName).toString(), true );
-   setDisplay( rec.value(kDisplay).toBool(), true);
-   setDeleted( rec.value(kDeleted).toBool(), true);
-   setFolder( rec.value(kFolder).toString(), false, true);
-   _typeString = rec.value(kType).toString();
-   _type = static_cast<Misc::Type>(types.indexOf(_typeString));
-   _useString = rec.value(kUse).toString();
-   _use = static_cast<Misc::Use>(uses.indexOf(_useString));
-   _time = rec.value(kTime).toDouble();
-   _amount = rec.value(kAmount).toDouble();
-   _amountIsWeight = rec.value(kAmountIsWeight).toBool();
-   _useFor = rec.value(kUseFor).toString();
-   _notes = rec.value(kNotes).toString();
 }
 
 Misc::Misc(Misc const& other) : BeerXMLElement(other)
@@ -113,30 +109,30 @@ Misc::Misc(Misc const& other) : BeerXMLElement(other)
 }
 
 //============================"GET" METHODS=====================================
-Misc::Type Misc::type() const { return _type; }
+Misc::Type Misc::type() const { return m_type; }
 
-const QString Misc::typeString() const { return _typeString; }
+const QString Misc::typeString() const { return m_typeString; }
 
-Misc::Use Misc::use() const { return _use; }
+Misc::Use Misc::use() const { return m_use; }
 
-const QString Misc::useString() const { return _useString; }
+const QString Misc::useString() const { return m_useString; }
 
-double Misc::amount()    const { return _amount; }
+double Misc::amount()    const { return m_amount; }
 
-double Misc::time()      const { return _time; }
+double Misc::time()      const { return m_time; }
 
-bool Misc::amountIsWeight() const { return _amountIsWeight; }
+bool Misc::amountIsWeight() const { return m_amountIsWeight; }
 
-QString Misc::useFor() const { return _useFor; }
+QString Misc::useFor() const { return m_useFor; }
 
-QString Misc::notes() const { return _notes; }
+QString Misc::notes() const { return m_notes; }
 
 double Misc::inventory() const
 {
    return getInventory(kAmount).toDouble();
 }
 
-Misc::AmountType Misc::amountType() const { return _amountIsWeight ? AmountType_Weight : AmountType_Volume; }
+Misc::AmountType Misc::amountType() const { return m_amountIsWeight ? AmountType_Weight : AmountType_Volume; }
 
 const QString Misc::amountTypeString() const { return amountTypes.at(amountType()); }
 
@@ -161,39 +157,39 @@ const QString Misc::amountTypeStringTr() const
 //============================"SET" METHODS=====================================
 void Misc::setType( Type t )
 {
-   _type = t;
-   _typeString = types.at(t);
-   set( kTypeProp, kType, _typeString );
+   m_type = t;
+   m_typeString = types.at(t);
+   set( kTypeProp, kType, m_typeString );
 }
 
 void Misc::setUse( Use u )
 {
-   _use = u;
-   _useString = uses.at(u);
-   set( kUseProp, kUse, _useString );
+   m_use = u;
+   m_useString = uses.at(u);
+   set( kUseProp, kUse, m_useString );
 }
 
 void Misc::setUseFor( const QString& var )
 {
-   _useFor = var;
+   m_useFor = var;
    set( kUseForProp, kUseFor, var );
 }
 
 void Misc::setNotes( const QString& var )
 {
-   _notes = var;
+   m_notes = var;
    set( kNotesProp, kNotes, var );
 }
 
 void Misc::setAmountType( AmountType t )
 {
-   _amountIsWeight = t == AmountType_Weight;
-   setAmountIsWeight(_amountIsWeight);
+   m_amountIsWeight = t == AmountType_Weight;
+   setAmountIsWeight(m_amountIsWeight);
 }
 
 void Misc::setAmountIsWeight( bool var )
 {
-   _amountIsWeight = var;
+   m_amountIsWeight = var;
    set( kAmountIsWeightProp, kAmountIsWeight, var );
 }
 
@@ -202,7 +198,7 @@ void Misc::setAmount( double var )
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
    else {
-      _amount = var;
+      m_amount = var;
       set( kAmountProp, kAmount, var );
    }
 }
@@ -220,7 +216,7 @@ void Misc::setTime( double var )
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
    else {
-      _time = var;
+      m_time = var;
       set( kTimeProp, kTime, var );
    }
 }

@@ -95,93 +95,89 @@ Water::Water(Brewtarget::DBTable table, int key)
 }
 
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool()),
+   m_amount_l(rec.value(kAmount).toDouble()),
+   m_calcium_ppm(rec.value(kCalcium).toDouble()),
+   m_bicarbonate_ppm(rec.value(kBiCarbonate).toDouble()),
+   m_sulfate_ppm(rec.value(kSulfate).toDouble()),
+   m_chloride_ppm(rec.value(kChloride).toDouble()),
+   m_sodium_ppm(rec.value(kSodium).toDouble()),
+   m_magnesium_ppm(rec.value(kMagnesium).toDouble()),
+   m_ph(rec.value(kPh).toDouble()),
+   m_notes(rec.value(kAmount).toString())
 {
-   setName( rec.value(kName).toString(), true );
-   setDisplay( rec.value(kDisplay).toBool(), true);
-   setDeleted( rec.value(kDeleted).toBool(), true);
-   setFolder( rec.value(kFolder).toString(), false, true);
-   _amount_l = rec.value(kAmount).toDouble();
-   _calcium_ppm = rec.value(kCalcium).toDouble();
-   _bicarbonate_ppm = rec.value(kBiCarbonate).toDouble();
-   _sulfate_ppm = rec.value(kSulfate).toDouble();
-   _chloride_ppm = rec.value(kChloride).toDouble();
-   _sodium_ppm = rec.value(kSodium).toDouble();
-   _magnesium_ppm = rec.value(kMagnesium).toDouble();
-   _ph = rec.value(kPh).toDouble();
-   _notes = rec.value(kAmount).toString();
 }
 
 //================================"SET" METHODS=================================
 void Water::setAmount_l( double var )
 {
-   _amount_l = var;
+   m_amount_l = var;
    set(kAmountProp, kAmount, var);
 }
 
 void Water::setCalcium_ppm( double var )
 {
-   _calcium_ppm = var;
+   m_calcium_ppm = var;
    set(kCalciumProp, kCalcium, var);
 }
 
 void Water::setBicarbonate_ppm( double var )
 {
-   _bicarbonate_ppm = var;
+   m_bicarbonate_ppm = var;
    set(kBiCarbonateProp, kBiCarbonate, var);
 }
 
 void Water::setChloride_ppm( double var )
 {
-   _chloride_ppm = var;
+   m_chloride_ppm = var;
    set(kChlorideProp, kChloride, var);
 }
 
 void Water::setSodium_ppm( double var )
 {
-   _sodium_ppm = var;
+   m_sodium_ppm = var;
    set(kSodiumProp, kSodium, var);
 }
 
 void Water::setMagnesium_ppm( double var )
 {
-   _magnesium_ppm = var;
+   m_magnesium_ppm = var;
    set(kMagnesiumProp, kMagnesium, var);
 }
 
 void Water::setPh( double var )
 {
-   _ph = var;
+   m_ph = var;
    set(kPhProp, kPh, var);
 }
 
 void Water::setSulfate_ppm( double var )
 {
-   _sulfate_ppm = var;
+   m_sulfate_ppm = var;
    set(kSulfateProp, kSulfate, var);
 }
 
 void Water::setNotes( const QString &var )
 {
-   _notes = var;
+   m_notes = var;
    set(kNotesProp, kNotes, var);
 }
 
 //=========================="GET" METHODS=======================================
-QString Water::notes() const { return _notes; }
+QString Water::notes() const { return m_notes; }
 
-double Water::sulfate_ppm() const { return _sulfate_ppm; }
+double Water::sulfate_ppm() const { return m_sulfate_ppm; }
 
-double Water::amount_l() const { return _amount_l; }
+double Water::amount_l() const { return m_amount_l; }
 
-double Water::calcium_ppm() const { return _calcium_ppm; }
+double Water::calcium_ppm() const { return m_calcium_ppm; }
 
-double Water::bicarbonate_ppm() const { return _bicarbonate_ppm; }
+double Water::bicarbonate_ppm() const { return m_bicarbonate_ppm; }
 
-double Water::chloride_ppm() const { return _chloride_ppm; }
+double Water::chloride_ppm() const { return m_chloride_ppm; }
 
-double Water::sodium_ppm() const { return _sodium_ppm; }
+double Water::sodium_ppm() const { return m_sodium_ppm; }
 
-double Water::magnesium_ppm() const { return _magnesium_ppm; }
+double Water::magnesium_ppm() const { return m_magnesium_ppm; }
 
-double Water::ph() const { return _ph; }
+double Water::ph() const { return m_ph; }

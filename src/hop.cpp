@@ -129,38 +129,49 @@ QString Hop::classNameStr()
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, QString()),
+     m_useStr(QString()),
+     m_use(static_cast<Hop::Use>(0)),
+     m_typeStr(QString()),
+     m_type(static_cast<Hop::Type>(0)),
+     m_formStr(QString()),
+     m_form(static_cast<Hop::Form>(0)),
+     m_alpha_pct(0.0),
+     m_amount_kg(0.0),
+     m_time_min(0.0),
+     m_notes(QString()),
+     m_beta_pct(0.0),
+     m_hsi_pct(0.0),
+     m_origin(QString()),
+     m_substitutes(QString()),
+     m_humulene_pct(0.0),
+     m_caryophyllene_pct(0.0),
+     m_cohumulone_pct(0.0),
+     m_myrcene_pct(0.0)
 {
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool()),
+     m_useStr(rec.value(kUse).toString()),
+     m_use(static_cast<Hop::Use>(uses.indexOf(m_useStr))),
+     m_typeStr(rec.value(kType).toString()),
+     m_type(static_cast<Hop::Type>(types.indexOf(m_typeStr))),
+     m_formStr(rec.value(kForm).toString()),
+     m_form(static_cast<Hop::Form>(forms.indexOf(m_formStr))),
+     m_alpha_pct(rec.value(kAlpha).toDouble()),
+     m_amount_kg(rec.value(kAmount).toDouble()),
+     m_time_min(rec.value(kTime).toDouble()),
+     m_notes(rec.value(kNotes).toString()),
+     m_beta_pct(rec.value(kBeta).toDouble()),
+     m_hsi_pct(rec.value(kHSI).toDouble()),
+     m_origin(rec.value(kOrigin).toString()),
+     m_substitutes(rec.value(kSubstitutes).toString()),
+     m_humulene_pct(rec.value(kHumulene).toDouble()),
+     m_caryophyllene_pct(rec.value(kCaryophyllene).toDouble()),
+     m_cohumulone_pct(rec.value(kCohumulone).toDouble()),
+     m_myrcene_pct(rec.value(kMyrcene).toDouble())
 {
-   setName( rec.value(kName).toString(), true );
-   setDisplay( rec.value(kDisplay).toBool(), true);
-   setDeleted( rec.value(kDeleted).toBool(), true);
-   setFolder( rec.value(kFolder).toString(), false, true);
-   // set the strings before the types
-   _useStr = rec.value(kUse).toString();
-   _use = static_cast<Hop::Use>(uses.indexOf(_useStr));
-   _typeStr = rec.value(kType).toString();
-   _type = static_cast<Hop::Type>(types.indexOf(_typeStr));
-   _formStr = rec.value(kForm).toString();
-   _form = static_cast<Hop::Form>(forms.indexOf(_formStr));
-
-   _alpha_pct = rec.value(kAlpha).toDouble();;
-   _amount_kg = rec.value(kAmount).toDouble();
-   _time_min = rec.value(kTime).toDouble();
-   _notes = rec.value(kNotes).toString();
-   _beta_pct = rec.value(kBeta).toDouble();
-   _hsi_pct = rec.value(kHSI).toDouble();
-   _origin = rec.value(kOrigin).toString();
-   _substitutes = rec.value(kSubstitutes).toString();
-   _humulene_pct = rec.value(kHumulene).toDouble();
-   _caryophyllene_pct = rec.value(kCaryophyllene).toDouble();
-   _cohumulone_pct = rec.value(kCohumulone).toDouble();
-   _myrcene_pct = rec.value(kMyrcene).toDouble();
-
 }
 
 Hop::Hop( Hop const& other )
@@ -169,7 +180,7 @@ Hop::Hop( Hop const& other )
 }
 
 //============================="SET" METHODS====================================
-void Hop::setAlpha_pct( double num )
+void Hop::setAlpha_pct( double num, bool cacheOnly )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -178,12 +189,14 @@ void Hop::setAlpha_pct( double num )
    }
    else
    {
-      _alpha_pct = num;
-      set(kAlphaProp, kAlpha, num);
+      m_alpha_pct = num;
+      if ( ! cacheOnly ) {
+         set(kAlphaProp, kAlpha, num);
+      }
    }
 }
 
-void Hop::setAmount_kg( double num )
+void Hop::setAmount_kg( double num, bool cacheOnly )
 {
    if( num < 0.0 )
    {
@@ -192,12 +205,14 @@ void Hop::setAmount_kg( double num )
    }
    else
    {
-      _amount_kg = num;
-      set(kAmountProp, kAmount, num);
+      m_amount_kg = num;
+      if ( ! cacheOnly ) {
+         set(kAmountProp, kAmount, num);
+      }
    }
 }
 
-void Hop::setInventoryAmount( double num )
+void Hop::setInventoryAmount( double num, bool cacheOnly )
 {
    if( num < 0.0 )
    {
@@ -206,20 +221,24 @@ void Hop::setInventoryAmount( double num )
    }
    else
    {
-      setInventory(kInventoryProp, kAmount, num);
+      if ( ! cacheOnly ) {
+         setInventory(kInventoryProp, kAmount, num);
+      }
    }
 }
 
-void Hop::setUse(Use u)
+void Hop::setUse(Use u, bool cacheOnly)
 {
-   if ( u >= 0 ) {
-      _use = u;
-      _useStr = uses.at(u);
-      set(kUseProp, kUse, uses.at(u));
+   if ( u >= 0 and u < uses.size()) {
+      m_use = u;
+      m_useStr = uses.at(u);
+      if ( ! cacheOnly ) {
+         set(kUseProp, kUse, uses.at(u));
+      }
    }
 }
 
-void Hop::setTime_min( double num )
+void Hop::setTime_min( double num, bool cacheOnly )
 {
    if( num < 0.0 )
    {
@@ -228,36 +247,44 @@ void Hop::setTime_min( double num )
    }
    else
    {
-      _time_min = num;
-      set(kTimeProp, kTime, num);
+      m_time_min = num;
+      if ( ! cacheOnly ) {
+         set(kTimeProp, kTime, num);
+      }
    }
 }
       
-void Hop::setNotes( const QString& str )
+void Hop::setNotes( const QString& str, bool cacheOnly )
 {
-   _notes = str;
-   set(kNotesProp, kNotes, str);
-}
-
-void Hop::setType(Type t)
-{
-  if ( t >= 0 ) {
-     _type = t;
-     _typeStr = types.at(t);
-     set(kTypeProp, kType, _typeStr);
-  }
-}
-
-void Hop::setForm( Form f )
-{
-   if ( f >= 0 ) {
-      _form = f;
-      _formStr = forms.at(f);
-      set(kFormProp, kForm, _formStr);
+   m_notes = str;
+   if ( ! cacheOnly ) {
+      set(kNotesProp, kNotes, str);
    }
 }
 
-void Hop::setBeta_pct( double num )
+void Hop::setType(Type t, bool cacheOnly)
+{
+  if ( t >= 0 and t < types.size() ) {
+     m_type = t;
+     m_typeStr = types.at(t);
+     if ( ! cacheOnly ) {
+      set(kTypeProp, kType, m_typeStr);
+     }
+  }
+}
+
+void Hop::setForm( Form f, bool cacheOnly )
+{
+   if ( f >= 0 and f < forms.size() ) {
+      m_form = f;
+      m_formStr = forms.at(f);
+      if ( ! cacheOnly ) {
+         set(kFormProp, kForm, m_formStr);
+      }
+   }
+}
+
+void Hop::setBeta_pct( double num, bool cacheOnly )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -266,12 +293,14 @@ void Hop::setBeta_pct( double num )
    }
    else
    {
-      _beta_pct = num;
-      set(kBetaProp, kBeta, num);
+      m_beta_pct = num;
+      if ( ! cacheOnly ) {
+         set(kBetaProp, kBeta, num);
+      }
    }
 }
 
-void Hop::setHsi_pct( double num )
+void Hop::setHsi_pct( double num, bool cacheOnly )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -280,24 +309,30 @@ void Hop::setHsi_pct( double num )
    }
    else
    {
-      _hsi_pct = num;
-      set(kHSIProp, kHSI, num);
+      m_hsi_pct = num;
+      if ( ! cacheOnly ) {
+         set(kHSIProp, kHSI, num);
+      }
    }
 }
 
-void Hop::setOrigin( const QString& str )
+void Hop::setOrigin( const QString& str, bool cacheOnly )
 {
-   _origin = str;
-   set(kOriginProp, kOrigin, str);
+   m_origin = str;
+   if ( ! cacheOnly ) {
+      set(kOriginProp, kOrigin, str);
+   }
 }
 
-void Hop::setSubstitutes( const QString& str )
+void Hop::setSubstitutes( const QString& str, bool cacheOnly )
 {
-   _substitutes = str;
-   set(kSubstitutesProp, kSubstitutes, str);
+   m_substitutes = str;
+   if ( ! cacheOnly ) {
+      set(kSubstitutesProp, kSubstitutes, str);
+   }
 }
 
-void Hop::setHumulene_pct( double num )
+void Hop::setHumulene_pct( double num, bool cacheOnly )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -306,12 +341,14 @@ void Hop::setHumulene_pct( double num )
    }
    else
    {
-      _humulene_pct = num;
-      set(kHumuleneProp, kHumulene, num);
+      m_humulene_pct = num;
+      if ( ! cacheOnly ) {
+         set(kHumuleneProp, kHumulene, num);
+      }
    }
 }
 
-void Hop::setCaryophyllene_pct( double num )
+void Hop::setCaryophyllene_pct( double num, bool cacheOnly )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -320,12 +357,14 @@ void Hop::setCaryophyllene_pct( double num )
    }
    else
    {
-      _caryophyllene_pct = num;
-      set(kCaryophylleneProp, kCaryophyllene, num);
+      m_caryophyllene_pct = num;
+      if ( ! cacheOnly ) {
+         set(kCaryophylleneProp, kCaryophyllene, num);
+      }
    }
 }
 
-void Hop::setCohumulone_pct( double num )
+void Hop::setCohumulone_pct( double num, bool cacheOnly )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -334,12 +373,14 @@ void Hop::setCohumulone_pct( double num )
    }
    else
    {
-      _cohumulone_pct = num;
-      set(kCohumuloneProp, kCohumulone, num);
+      m_cohumulone_pct = num;
+      if ( ! cacheOnly ) {
+         set(kCohumuloneProp, kCohumulone, num);
+      }
    }
 }
 
-void Hop::setMyrcene_pct( double num )
+void Hop::setMyrcene_pct( double num, bool cacheOnly )
 {
    if( num < 0.0 || num > 100.0 )
    {
@@ -348,31 +389,33 @@ void Hop::setMyrcene_pct( double num )
    }
    else
    {
-      _myrcene_pct = num;
-      set(kMyrceneProp, kMyrcene, num);
+      m_myrcene_pct = num;
+      if ( ! cacheOnly ) {
+         set(kMyrceneProp, kMyrcene, num);
+      }
    }
 }
 
 //============================="GET" METHODS====================================
 
-Hop::Use Hop::use() const { return _use; }
-const QString Hop::useString() const { return _useStr; }
-const QString Hop::notes() const { return _notes; }
-Hop::Type Hop::type() const { return _type; }
-const QString Hop::typeString() const { return _typeStr; }
-Hop::Form Hop::form() const { return _form; }
-const QString Hop::formString() const { return _formStr; }
-const QString Hop::origin() const { return _origin; }
-const QString Hop::substitutes() const { return _substitutes; }
-double Hop::alpha_pct() const { return _alpha_pct; }
-double Hop::amount_kg() const { return _amount_kg; }
-double Hop::time_min() const { return _time_min; }
-double Hop::beta_pct() const { return _beta_pct; }
-double Hop::hsi_pct() const { return _hsi_pct; }
-double Hop::humulene_pct() const { return _humulene_pct; }
-double Hop::caryophyllene_pct() const { return _caryophyllene_pct; }
-double Hop::cohumulone_pct() const { return _cohumulone_pct; }
-double Hop::myrcene_pct() const { return _myrcene_pct; }
+Hop::Use Hop::use() const { return m_use; }
+const QString Hop::useString() const { return m_useStr; }
+const QString Hop::notes() const { return m_notes; }
+Hop::Type Hop::type() const { return m_type; }
+const QString Hop::typeString() const { return m_typeStr; }
+Hop::Form Hop::form() const { return m_form; }
+const QString Hop::formString() const { return m_formStr; }
+const QString Hop::origin() const { return m_origin; }
+const QString Hop::substitutes() const { return m_substitutes; }
+double Hop::alpha_pct() const { return m_alpha_pct; }
+double Hop::amount_kg() const { return m_amount_kg; }
+double Hop::time_min() const { return m_time_min; }
+double Hop::beta_pct() const { return m_beta_pct; }
+double Hop::hsi_pct() const { return m_hsi_pct; }
+double Hop::humulene_pct() const { return m_humulene_pct; }
+double Hop::caryophyllene_pct() const { return m_caryophyllene_pct; }
+double Hop::cohumulone_pct() const { return m_cohumulone_pct; }
+double Hop::myrcene_pct() const { return m_myrcene_pct; }
 
 // inventory still must be handled separately, and I'm still annoyed.
 double Hop::inventory() const
@@ -383,8 +426,8 @@ double Hop::inventory() const
 const QString Hop::useStringTr() const
 {
    static QStringList usesTr = QStringList() << tr("Mash") << tr("First Wort") << tr("Boil") << tr("Aroma") << tr("Dry Hop") ;
-   if ( _use < usesTr.size() ) {
-      return usesTr.at(_use);
+   if ( m_use < usesTr.size() ) {
+      return usesTr.at(m_use);
    }
    else {
       return "";
@@ -394,8 +437,8 @@ const QString Hop::useStringTr() const
 const QString Hop::typeStringTr() const
 {
    static QStringList typesTr = QStringList() << tr("Bittering") << tr("Aroma") << tr("Both");
-   if ( _type < typesTr.size() ) {
-      return typesTr.at(_type);
+   if ( m_type < typesTr.size() ) {
+      return typesTr.at(m_type);
    }
    else {
       return "";
@@ -405,8 +448,8 @@ const QString Hop::typeStringTr() const
 const QString Hop::formStringTr() const
 {
    static QStringList formsTr = QStringList() << tr("Leaf") << tr("Pellet") << tr("Plug");
-   if ( _form < formsTr.size() ) {
-      return formsTr.at(_form);
+   if ( m_form < formsTr.size() ) {
+      return formsTr.at(m_form);
    }
    else {
       return "";

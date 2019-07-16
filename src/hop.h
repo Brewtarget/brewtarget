@@ -119,23 +119,23 @@ public:
    double myrcene_pct() const;
    
    //set
-   void setAlpha_pct( double num );
-   void setAmount_kg( double num );
-   void setInventoryAmount( double num );
-   void setUse( Use u );
-   void setTime_min( double num );
+   void setAlpha_pct( double num, bool cacheOnly = false);
+   void setAmount_kg( double num, bool cacheOnly = false);
+   void setInventoryAmount( double num, bool cacheOnly = false);
+   void setUse( Use u, bool cacheOnly = false);
+   void setTime_min( double num, bool cacheOnly = false);
    
-   void setNotes( const QString& str );
-   void setType( Type t );
-   void setForm( Form f );
-   void setBeta_pct( double num );
-   void setHsi_pct( double num );
-   void setOrigin( const QString& str );
-   void setSubstitutes( const QString& str );
-   void setHumulene_pct( double num );
-   void setCaryophyllene_pct( double num );
-   void setCohumulone_pct( double num );
-   void setMyrcene_pct( double num );
+   void setNotes( const QString& str, bool cacheOnly = false);
+   void setType( Type t, bool cacheOnly = false);
+   void setForm( Form f, bool cacheOnly = false);
+   void setBeta_pct( double num, bool cacheOnly = false);
+   void setHsi_pct( double num, bool cacheOnly = false);
+   void setOrigin( const QString& str, bool cacheOnly = false);
+   void setSubstitutes( const QString& str, bool cacheOnly = false);
+   void setHumulene_pct( double num, bool cacheOnly = false);
+   void setCaryophyllene_pct( double num, bool cacheOnly = false);
+   void setCohumulone_pct( double num, bool cacheOnly = false);
+   void setMyrcene_pct( double num, bool cacheOnly = false);
 
    static QString classNameStr();
 signals:
@@ -147,24 +147,24 @@ private:
    Hop(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Hop( Hop const& other );
    
-   double _alpha_pct;
-   double _amount_kg;
-   Use _use;
-   QString _useStr;
-   double _time_min;
-   QString _notes;
-   Type _type;
-   QString _typeStr;
-   Form _form;
-   QString _formStr;
-   double _beta_pct;
-   double _hsi_pct;
-   QString _origin;
-   QString _substitutes;
-   double _humulene_pct;
-   double _caryophyllene_pct;
-   double _cohumulone_pct;
-   double _myrcene_pct;
+   QString m_useStr;
+   Use m_use;
+   QString m_typeStr;
+   Type m_type;
+   QString m_formStr;
+   Form m_form;
+   double m_alpha_pct;
+   double m_amount_kg;
+   double m_time_min;
+   QString m_notes;
+   double m_beta_pct;
+   double m_hsi_pct;
+   QString m_origin;
+   QString m_substitutes;
+   double m_humulene_pct;
+   double m_caryophyllene_pct;
+   double m_cohumulone_pct;
+   double m_myrcene_pct;
 
    void setDefaults();
 

@@ -120,52 +120,47 @@ QString Fermentable::classNameStr()
 }
 
 Fermentable::Fermentable(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, QString(), true),
+     m_typeStr(QString()),
+     m_type(static_cast<Fermentable::Type>(0)),
+     m_amountKg(0.0),
+     m_yieldPct(0.0),
+     m_colorSrm(0.0),
+     m_isAfterBoil(0.0),
+     m_origin(QString()),
+     m_supplier(QString()),
+     m_notes(QString()),
+     m_coarseFineDiff(0.0),
+     m_moisturePct(0.0),
+     m_diastaticPower(0.0),
+     m_proteinPct(0.0),
+     m_maxInBatchPct(0.0),
+     m_recommendMash(true),
+     m_ibuGalPerLb(0.0),
+     m_isMashed(true)
 {
-   setType( static_cast<Fermentable::Type>(types.indexOf(get(kType).toString())) );
-   setAmount_kg( get(kAmount).toDouble() );
-   setInventoryAmount( getInventory(kAmount).toDouble() );
-   setYield_pct( get(kYield).toDouble() );
-   setColor_srm( get(kColor).toDouble() );
-   setAddAfterBoil( get(kAddAfterBoil).toBool() );
-   setOrigin( get(kOrigin).toString() );
-   setSupplier( get(kSupplier).toString() );
-   setNotes( get(kNotes).toString() );
-   setCoarseFineDiff_pct( get(kCoarseFineDiff).toDouble() );
-   setMoisture_pct( get(kMoisture).toDouble() );
-   setDiastaticPower_lintner( get(kDiastaticPower).toDouble() );
-   setProtein_pct( get(kProtein).toDouble() );
-   setMaxInBatch_pct( get(kMaxInBatch).toDouble() );
-   setRecommendMash( get(kRecommendMash).toBool() );
-   setIbuGalPerLb( get(kIBUGalPerLb).toDouble() );
-   setIsMashed( get(kIsMashed).toBool() );
 }
 
 Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool()),
+     m_typeStr(rec.value(kType).toString()),
+     m_type(static_cast<Fermentable::Type>(types.indexOf(m_typeStr))),
+     m_amountKg(rec.value(kAmount).toDouble()),
+     m_yieldPct(rec.value(kYield).toDouble()),
+     m_colorSrm(rec.value(kColor).toDouble()),
+     m_isAfterBoil(rec.value(kAddAfterBoil).toBool()),
+     m_origin(rec.value(kOrigin).toString()),
+     m_supplier(rec.value(kSupplier).toString()),
+     m_notes(rec.value(kNotes).toString()),
+     m_coarseFineDiff(rec.value(kCoarseFineDiff).toDouble()),
+     m_moisturePct(rec.value(kMoisture).toDouble()),
+     m_diastaticPower(rec.value(kDiastaticPower).toDouble()),
+     m_proteinPct(rec.value(kProtein).toDouble()),
+     m_maxInBatchPct(rec.value(kMaxInBatch).toDouble()),
+     m_recommendMash(rec.value(kRecommendMash).toBool()),
+     m_ibuGalPerLb(rec.value(kIBUGalPerLb).toDouble()),
+     m_isMashed(rec.value(kIsMashed).toBool())
 {
-   setName( rec.value(kName).toString(), true );
-   setDisplay( rec.value(kDisplay).toBool(), true);
-   setDeleted( rec.value(kDeleted).toBool(), true);
-   setFolder( rec.value(kFolder).toString(), false, true);
-   _typeStr = rec.value(kType).toString();
-   _type = static_cast<Fermentable::Type>(types.indexOf(_typeStr));
-   _amountKg = rec.value(kAmount).toDouble();
-   _yieldPct = rec.value(kYield).toDouble();
-   _colorSrm = rec.value(kColor).toDouble();
-   _isAfterBoil = rec.value(kAddAfterBoil).toBool();
-   _origin = rec.value(kOrigin).toString();
-   _supplier = rec.value(kSupplier).toString();
-   _notes = rec.value(kNotes).toString();
-   _coarseFineDiff = rec.value(kCoarseFineDiff).toDouble();
-   _isMashed = rec.value(kIsMashed).toBool();
-   _moisturePct = rec.value(kMoisture).toDouble();
-   _diastaticPower = rec.value(kDiastaticPower).toDouble();
-   _proteinPct = rec.value(kProtein).toDouble();
-   _maxInBatchPct = rec.value(kMaxInBatch).toDouble();
-   _recommendMash = rec.value(kRecommendMash).toBool();
-   _ibuGalPerLb = rec.value(kIBUGalPerLb).toDouble();
-
 }
 
 Fermentable::Fermentable( Fermentable const& other )
@@ -218,7 +213,7 @@ const Fermentable::AdditionTime Fermentable::additionTime() const
 
 const QString Fermentable::typeString() const
 {
-   if ( _type > types.length()) {
+   if ( m_type > types.length()) {
       return "";
    }
    return types.at(type());
@@ -227,10 +222,10 @@ const QString Fermentable::typeString() const
 const QString Fermentable::typeStringTr() const
 {
    static QStringList typesTr = QStringList () << QObject::tr("Grain") << QObject::tr("Sugar") << QObject::tr("Extract") << QObject::tr("Dry Extract") << QObject::tr("Adjunct");
-   if ( _type > typesTr.length()) {
+   if ( m_type > typesTr.length()) {
       return "";
    }
-   return typesTr.at(_type);
+   return typesTr.at(m_type);
 }
 
 const QString Fermentable::additionMethodStringTr() const
@@ -278,7 +273,7 @@ bool Fermentable::isValidType( const QString& str )
 
 void Fermentable::setType( Type t, bool cacheOnly )
 {
-   _type = t;
+   m_type = t;
    if ( ! cacheOnly ) {
       set(kTypeProp, kType, types.at(t));
    }
@@ -296,7 +291,7 @@ void Fermentable::setAdditionTime( Fermentable::AdditionTime t, bool cacheOnly )
 
 void Fermentable::setAddAfterBoil( bool b, bool cacheOnly )
 {
-   _isAfterBoil = b;
+   m_isAfterBoil = b;
    if ( ! cacheOnly ) {
       set(kAddAfterBoilProp, kAddAfterBoil, b);
    }
@@ -304,7 +299,7 @@ void Fermentable::setAddAfterBoil( bool b, bool cacheOnly )
 
 void Fermentable::setOrigin( const QString& str, bool cacheOnly )
 {
-   _origin = str;
+   m_origin = str;
    if ( ! cacheOnly ) {
       set(kOriginProp, kOrigin, str);
    }
@@ -312,7 +307,7 @@ void Fermentable::setOrigin( const QString& str, bool cacheOnly )
 
 void Fermentable::setSupplier( const QString& str, bool cacheOnly)
 {
-   _supplier = str;
+   m_supplier = str;
    if ( ! cacheOnly ) {
       set(kSupplierProp, kSupplier, str);
    }
@@ -320,7 +315,7 @@ void Fermentable::setSupplier( const QString& str, bool cacheOnly)
 
 void Fermentable::setNotes( const QString& str, bool cacheOnly )
 {
-   _notes = str;
+   m_notes = str;
    if ( ! cacheOnly ) {
       set(kNotesProp, kNotes, str);
    }
@@ -328,7 +323,7 @@ void Fermentable::setNotes( const QString& str, bool cacheOnly )
 
 void Fermentable::setRecommendMash( bool b, bool cacheOnly )
 {
-   _recommendMash = b;
+   m_recommendMash = b;
    if ( ! cacheOnly ) {
       set(kRecommendedMashProp, kRecommendMash, b);
    }
@@ -336,7 +331,7 @@ void Fermentable::setRecommendMash( bool b, bool cacheOnly )
 
 void Fermentable::setIsMashed(bool var, bool cacheOnly)
 {
-   _isMashed = var;
+   m_isMashed = var;
    if ( ! cacheOnly ) {
       set(kIsMashedProp, kIsMashed, var);
    }
@@ -344,7 +339,7 @@ void Fermentable::setIsMashed(bool var, bool cacheOnly)
 
 void Fermentable::setIbuGalPerLb( double num, bool cacheOnly )
 {
-   _ibuGalPerLb = num;
+   m_ibuGalPerLb = num;
    if ( ! cacheOnly ) {
       set(kIBUGalPerLbProp, kIBUGalPerLb, num);
    }
@@ -370,12 +365,13 @@ void Fermentable::setAmount_kg( double num, bool cacheOnly )
    }
    else
    {
-      _amountKg = num;
+      m_amountKg = num;
       if ( ! cacheOnly ) {
          set(kAmountProp, kAmount, num);
       }
    }
 }
+
 void Fermentable::setInventoryAmount( double num, bool cacheOnly )
 {
    if( num < 0.0 )
@@ -388,6 +384,7 @@ void Fermentable::setInventoryAmount( double num, bool cacheOnly )
       setInventory(kInventoryProp, kAmount, num);
    }
 }
+
 double Fermentable::inventory() const
 {
    return getInventory(kAmount).toDouble();
@@ -397,7 +394,7 @@ void Fermentable::setYield_pct( double num, bool cacheOnly )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
-      _yieldPct = num;
+      m_yieldPct = num;
       if ( ! cacheOnly ) {
          set(kYieldProp, kYield, num);
       }
@@ -407,6 +404,7 @@ void Fermentable::setYield_pct( double num, bool cacheOnly )
       Brewtarget::logW( QString("Fermentable: 0 < yield < 100: %1").arg(num) );
    }
 }
+
 void Fermentable::setColor_srm( double num, bool cacheOnly )
 {
    if( num < 0.0 )
@@ -416,17 +414,18 @@ void Fermentable::setColor_srm( double num, bool cacheOnly )
    }
    else
    {
-      _colorSrm = num;
+      m_colorSrm = num;
       if ( ! cacheOnly ) {
          set(kColorProp, kColor, num);
       }
    }
 }
+
 void Fermentable::setCoarseFineDiff_pct( double num, bool cacheOnly )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
-      _coarseFineDiff = num;
+      m_coarseFineDiff = num;
       if ( ! cacheOnly ) {
          set(kCoarseFineDiffProp, kCoarseFineDiff, num);
       }
@@ -436,11 +435,12 @@ void Fermentable::setCoarseFineDiff_pct( double num, bool cacheOnly )
       Brewtarget::logW( QString("Fermentable: 0 < coarsefinediff < 100: %1").arg(num) );
    }
 }
+
 void Fermentable::setMoisture_pct( double num, bool cacheOnly )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
-      _moisturePct = num;
+      m_moisturePct = num;
       if ( ! cacheOnly ) {
          set(kMoistureProp, kMoisture, num);
       }
@@ -450,6 +450,7 @@ void Fermentable::setMoisture_pct( double num, bool cacheOnly )
       Brewtarget::logW( QString("Fermentable: 0 < moisture < 100: %1").arg(num) );
    }
 }
+
 void Fermentable::setDiastaticPower_lintner( double num, bool cacheOnly )
 {
    if( num < 0.0 )
@@ -459,17 +460,18 @@ void Fermentable::setDiastaticPower_lintner( double num, bool cacheOnly )
    }
    else
    {
-      _diastaticPower = num;
+      m_diastaticPower = num;
       if ( ! cacheOnly ) {
          set(kDiastaticPowerProp, kDiastaticPower, num);
       }
    }
 }
+
 void Fermentable::setProtein_pct( double num, bool cacheOnly )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
-      _proteinPct = num;
+      m_proteinPct = num;
       if ( ! cacheOnly ) {
          set(kProteinProp, kProtein, num);
       }
@@ -479,11 +481,12 @@ void Fermentable::setProtein_pct( double num, bool cacheOnly )
       Brewtarget::logW( QString("Fermentable: 0 < protein < 100: %1").arg(num) );
    }
 }
+
 void Fermentable::setMaxInBatch_pct( double num, bool cacheOnly )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
-      _maxInBatchPct = num;
+      m_maxInBatchPct = num;
       if ( ! cacheOnly ) {
          set(kMaxInBatchProp, kMaxInBatch, num);
       }
@@ -493,6 +496,7 @@ void Fermentable::setMaxInBatch_pct( double num, bool cacheOnly )
       Brewtarget::logW( QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num) );
    }
 }
+
 /*
 void Fermentable::save()
 {

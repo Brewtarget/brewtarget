@@ -55,11 +55,11 @@ public:
    Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
    // "set" methods.
-   void setDirections(const QString& dir);
-   void setHasTimer(bool has);
-   void setTimerValue(const QString& timerVal);
-   void setCompleted(bool comp);
-   void setInterval(double interval);
+   void setDirections(const QString& dir, bool cacheOnly = false);
+   void setHasTimer(bool has, bool cacheOnly = false);
+   void setTimerValue(const QString& timerVal, bool cacheOnly = false);
+   void setCompleted(bool comp, bool cacheOnly = false);
+   void setInterval(double interval, bool cacheOnly = false);
    void addReagent(const QString& reagent);
 
    // "get" methods.
@@ -82,13 +82,13 @@ private:
    Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Instruction( Instruction const& other );
 
-   QString _directions;
-   bool    _hasTimer;
-   QString _timerValue;
-   bool    _completed;
-   double  _interval;
+   QString m_directions;
+   bool    m_hasTimer;
+   QString m_timerValue;
+   bool    m_completed;
+   double  m_interval;
 
-   QList<QString> _reagents;
+   QList<QString> m_reagents;
    
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();

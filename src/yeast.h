@@ -102,22 +102,22 @@ public:
    Q_PROPERTY( bool addToSecondary READ addToSecondary WRITE setAddToSecondary /*NOTIFY changed*/ /*changedAddToSecondary*/ )
    
    // Setters
-   void setType( Type t );
-   void setForm( Form f );
-   void setAmount( double var );
-   void setInventoryQuanta( int var );
-   void setAmountIsWeight( bool var );
-   void setLaboratory( const QString& var );
-   void setProductID( const QString& var );
-   void setMinTemperature_c( double var );
-   void setMaxTemperature_c( double var );
-   void setFlocculation( Flocculation f );
-   void setAttenuation_pct( double var );
-   void setNotes( const QString& var );
-   void setBestFor( const QString& var );
-   void setTimesCultured( int var );
-   void setMaxReuse( int var );
-   void setAddToSecondary( bool var );
+   void setType( Type t, bool cacheOnly = false);
+   void setForm( Form f, bool cacheOnly = false);
+   void setAmount( double var, bool cacheOnly = false);
+   void setInventoryQuanta( int var, bool cacheOnly = false);
+   void setAmountIsWeight( bool var, bool cacheOnly = false);
+   void setLaboratory( const QString& var, bool cacheOnly = false);
+   void setProductID( const QString& var, bool cacheOnly = false);
+   void setMinTemperature_c( double var, bool cacheOnly = false);
+   void setMaxTemperature_c( double var, bool cacheOnly = false);
+   void setFlocculation( Flocculation f, bool cacheOnly = false);
+   void setAttenuation_pct( double var, bool cacheOnly = false);
+   void setNotes( const QString& var, bool cacheOnly = false);
+   void setBestFor( const QString& var, bool cacheOnly = false);
+   void setTimesCultured( int var, bool cacheOnly = false);
+   void setMaxReuse( int var, bool cacheOnly = false);
+   void setAddToSecondary( bool var, bool cacheOnly = false);
    
    // Getters
    Type type() const;
@@ -155,24 +155,24 @@ private:
    Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Yeast(Yeast const& other);
    
-   Type _type;
-   QString _typeString;
-   Form _form;
-   QString _formString;
-   double _amount;
-   bool _amountIsWeight;
-   QString _laboratory;
-   QString _productID;
-   double _minTemperature_c;
-   double _maxTemperature_c;
-   Flocculation _flocculation;
-   QString _flocculationString;
-   double _attenuation_pct;
-   QString _notes;
-   QString _bestFor;
-   int _timesCultured;
-   int _maxReuse;
-   bool _addToSecondary;
+   QString m_typeString;
+   Type m_type;
+   QString m_formString;
+   Form m_form;
+   QString m_flocculationString;
+   Flocculation m_flocculation;
+   double m_amount;
+   bool m_amountIsWeight;
+   QString m_laboratory;
+   QString m_productID;
+   double m_minTemperature_c;
+   double m_maxTemperature_c;
+   double m_attenuation_pct;
+   QString m_notes;
+   QString m_bestFor;
+   int m_timesCultured;
+   int m_maxReuse;
+   bool m_addToSecondary;
 
    static QStringList types;
    static QStringList forms;

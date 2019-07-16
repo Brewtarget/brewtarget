@@ -169,6 +169,8 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtDigitWidget.cpp
     ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/RecipeExtrasWidget.cpp
+    ${SRCDIR}/PropertySchema.cpp
+    ${SRCDIR}/TableSchema.cpp
 )
 
 # List of all the *.ui.
@@ -297,6 +299,8 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/style.h
     ${SRCDIR}/water.h
     ${SRCDIR}/yeast.h
+    ${SRCDIR}/PropertySchema.h
+    ${SRCDIR}/TableSchema.h
 )
 
 SET( FILES_TO_TRANSLATE

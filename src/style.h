@@ -151,36 +151,38 @@ private:
    Style(Brewtarget::DBTable table, int key);
    Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
-   Style( QString name );
+   Style( QString t_name );
    
-   QString _category;
-   QString _categoryNumber;
-   QString _styleLetter;
-   QString _styleGuide;
-   QString _typeStr;
-   Type _type;
-   double _ogMin;
-   double _ogMax;
-   double _fgMin;
-   double _fgMax;
-   double _ibuMin;
-   double _ibuMax;
-   double _colorMin_srm;
-   double _colorMax_srm;
-   double _carbMin_vol;
-   double _carbMax_vol;
-   double _abvMin_pct;
-   double _abvMax_pct;
-   QString _notes;
-   QString _profile;
-   QString _ingredients;
-   QString _examples;
+   QString m_category;
+   QString m_categoryNumber;
+   QString m_styleLetter;
+   QString m_styleGuide;
+   QString m_typeStr;
+   Type m_type;
+   double m_ogMin;
+   double m_ogMax;
+   double m_fgMin;
+   double m_fgMax;
+   double m_ibuMin;
+   double m_ibuMax;
+   double m_colorMin_srm;
+   double m_colorMax_srm;
+   double m_carbMin_vol;
+   double m_carbMax_vol;
+   double m_abvMin_pct;
+   double m_abvMax_pct;
+   QString m_notes;
+   QString m_profile;
+   QString m_ingredients;
+   QString m_examples;
    
    bool isValidType( const QString &str );
-   static QStringList types;
+   static QStringList m_types;
    
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
+   static QHash<QString,QString> columnToProp;
+   static QHash<QString,QString> columnToPropHash();
 };
 
 Q_DECLARE_METATYPE( Style* )

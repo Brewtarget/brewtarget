@@ -71,14 +71,14 @@ public:
    //! \brief The step number in a sequence of other steps.
    Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
-   void setType( Type t );
-   void setInfuseAmount_l( double var );
-   void setStepTemp_c( double var );
-   void setStepTime_min( double var );
-   void setRampTime_min( double var );
-   void setEndTemp_c( double var );
-   void setInfuseTemp_c( double var );
-   void setDecoctionAmount_l( double var );
+   void setType( Type t, bool cacheOnly = false);
+   void setInfuseAmount_l( double var, bool cacheOnly = false);
+   void setStepTemp_c( double var, bool cacheOnly = false);
+   void setStepTime_min( double var, bool cacheOnly = false);
+   void setRampTime_min( double var, bool cacheOnly = false);
+   void setEndTemp_c( double var, bool cacheOnly = false);
+   void setInfuseTemp_c( double var, bool cacheOnly = false);
+   void setDecoctionAmount_l( double var, bool cacheOnly = false);
    
    Type type() const;
    const QString typeString() const;
@@ -112,16 +112,16 @@ private:
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
    MashStep( MashStep const& other );
    
-   Type _type;
-   QString _typeStr;
-   double _infuseAmount_l;
-   double _stepTemp_c;
-   double _stepTime_min;
-   double _rampTime_min;
-   double _endTemp_c;
-   double _infuseTemp_c;
-   double _decoctionAmount_l;
-   int _stepNumber;
+   QString m_typeStr;
+   Type m_type;
+   double m_infuseAmount_l;
+   double m_stepTemp_c;
+   double m_stepTime_min;
+   double m_rampTime_min;
+   double m_endTemp_c;
+   double m_infuseTemp_c;
+   double m_decoctionAmount_l;
+   int m_stepNumber;
    
    bool isValidType( const QString &str ) const;
 

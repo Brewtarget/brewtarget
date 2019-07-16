@@ -120,16 +120,16 @@ private:
    Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Mash( Mash const& other );
    
-   double _grainTemp_c;
-   QString _notes;
-   double _tunTemp_c;
-   double _spargeTemp_c;
-   double _ph;
-   double _tunWeight_kg;
-   double _tunSpecificHeat_calGC;
-   bool _equipAdjust;
+   double m_grainTemp_c;
+   QString m_notes;
+   double m_tunTemp_c;
+   double m_spargeTemp_c;
+   double m_ph;
+   double m_tunWeight_kg;
+   double m_tunSpecificHeat_calGC;
+   bool m_equipAdjust;
 
-   QList<MashStep*> _mashSteps;
+   QList<MashStep*> m_mashSteps;
 
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
