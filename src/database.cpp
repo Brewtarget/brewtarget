@@ -1580,12 +1580,11 @@ int Database::insertStyle(Style* ins) {
    return key;
 }
 
-// our signals SUCK. HATE them all. HATE HATE HATE HATE
 int Database::insertEquipment(Equipment* ins) {
 
    int key = insertElement(ins);
 
-   emit changed( metaProperty("equipment"), QVariant() );
+   emit changed( metaProperty("equipments"), QVariant() );
    emit newEquipmentSignal(ins);
 
    return key;
@@ -4037,70 +4036,64 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 
 Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
-   // When loading from XML, we need to delay the signals until after
-   // everything is done. This should significantly speed up the load times
-   blockSignals(true);
+    // When loading from XML, we need to delay the signals until after
+    // everything is done. This should significantly speed up the load times
 
-   Equipment* ret;
-   QList<Equipment*> matchingEquips;
-   QDomNode n;
-   bool createdNew = true;
+    QDomNode n;
+    bool createdNew = true;
+    blockSignals(true);
+    Equipment* ret;
+    QString name;
+    QList<Equipment*> matchingEquips;
 
-   try {
+    n = node.firstChildElement("NAME");
+    name = n.firstChild().toText().nodeValue();
+    try {
       // If we are just importing an equip by itself, need to do some dupe-checking.
-      if( parent == 0 )
-      {
-         // No parent means we handle the transaction
-         sqlDatabase().transaction();
-         // Check to see if there is a hop already in the DB with the same name.
-         n = node.firstChildElement("NAME");
-         QString name = n.firstChild().toText().nodeValue();
+        if( parent == nullptr ) {
+            // Check to see if there is an equip already in the DB with the same name.
+            getElements<Equipment>( matchingEquips, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
 
-         getElements<Equipment>( matchingEquips, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
+            // If we find a match, use it
+            if( matchingEquips.length() > 0 ) {
+                createdNew = false;
+                ret = matchingEquips.first();
+            }
+            else {
+                ret = new Equipment(name,true);
+            }
+        }
+        else {
+            ret = new Equipment(name,true);
+        }
 
-         if( matchingEquips.length() > 0 )
-         {
-            createdNew = false;
-            ret = matchingEquips.first();
-         }
-         else
-            ret = newEquipment();
-      }
-      else
-         ret = newEquipment();
+        if ( createdNew ) {
+            fromXml(ret, node);
+            if ( ! ret->isValid() )
+                throw QString("There was an error loading equipment profile from XML");
 
-      if ( ! ret )
-         throw QString("Could not create new equipment profile");
+            // If we are importing one of our beerXML files, the utilization is always
+            // 0%. We need to fix that.
+            if ( ret->hopUtilization_pct() == 0.0 )
+                ret->setHopUtilization_pct(100.0);
 
-      fromXml( ret, Equipment::tagToProp, node );
-      if ( ! ret->isValid() )
-         throw QString("There was an error loading equipment profile from XML");
+            insertEquipment(ret);
+        }
 
-      // If we are importing one of our beerXML files, the utilization is always
-      // 0%. We need to fix that.
-      if ( ret->hopUtilization_pct() == 0.0 )
-         ret->setHopUtilization_pct(100.0);
-
-      if( parent )
-      {
-         ret->setDisplay(false);
-         addToRecipe( parent, ret, true );
-      }
+        if( parent ) {
+            ret->setDisplay(false);
+            addToRecipe( parent, ret, true );
+        }
    }
    catch (QString e) {
-      if ( ! parent )
-         sqlDatabase().rollback();
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      blockSignals(false);
-      throw;
+        Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+        blockSignals(false);
+        throw;
    }
 
    blockSignals(false);
-   if ( ! parent )
-      sqlDatabase().commit();
 
-   if( createdNew )
-   {
+   if ( createdNew ) {
       emit changed( metaProperty("equipments"), QVariant() );
       emit newEquipmentSignal(ret);
    }
@@ -4820,8 +4813,9 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    try {
       // If we are just importing a style by itself, need to do some dupe-checking.
       if ( parent == nullptr ) {
-         // Check to see if there is a style already in the DB with the same name.
+         // No parent means we handle the transaction
          sqlDatabase().transaction();
+         // Check to see if there is a style already in the DB with the same name.
          getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
 
          // If we found a match, use it.
@@ -4893,97 +4887,6 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
    return ret;
 }
-
-/* ORIGINAL AND UNTOUCHED. Easier to restore this way
-Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   bool createdNew = true;
-   blockSignals(true);
-   Style* ret;
-   QString name;
-   QList<Style*> matching;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-   try {
-      // If we are just importing a style by itself, need to do some dupe-checking.
-      if( parent == 0 )
-      {
-         // Check to see if there is a hop already in the DB with the same name.
-         sqlDatabase().transaction();
-         getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
-
-         if( matching.length() > 0 )
-         {
-            createdNew = false;
-            ret = matching.first();
-         }
-         else
-            ret = newStyle(name);
-      }
-      else
-         ret = newStyle(name);
-
-      fromXml( ret, Style::tagToProp, node );
-
-      // Handle enums separately.
-      n = node.firstChildElement("TYPE");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else {
-         int ndx = Style::m_types.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 )
-            ret->setType(static_cast<Style::Type>(ndx));
-         else
-            ret->invalidate();
-      }
-
-      // let's see if I can be clever and find this style in our db
-      if (! ret->isValid() )
-      {
-         name = ret->name();
-         getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE ,allStyles);
-         // If we find a match, discard what we just built and use what's in teh DB instead
-         if( matching.length() > 0 )
-         {
-            createdNew = false;
-            ret = matching.first();
-         }
-
-      }
-      if( parent )
-         addToRecipe( parent, ret );
-   }
-   catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      if ( ! parent )
-         sqlDatabase().rollback();
-      blockSignals(false);
-      throw;
-   }
-
-   blockSignals(false);
-   if( createdNew )
-   {
-      emit changed( metaProperty("styles"), QVariant() );
-      emit newStyleSignal(ret);
-   }
-
-   return ret;
-}
-*/
-
-
-
-
-
-
-
-
-
-
-
 
 Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 {

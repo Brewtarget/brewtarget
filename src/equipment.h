@@ -148,7 +148,7 @@ signals:
    
 private:
    Equipment(Brewtarget::DBTable table, int key);
-   Equipment(QString t_name);
+   Equipment(QString t_name, bool cacheOnly = true);
    Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Equipment( Equipment const& other);
    

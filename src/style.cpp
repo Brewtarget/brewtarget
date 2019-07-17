@@ -22,58 +22,9 @@
 #include "style.h"
 #include <QDebug>
 
-/************* Columns *************/
-const QString kName("name");
-const QString kCategory("category");
-const QString kCategoryNumber("category_number");
-const QString kStyleLetter("style_letter");
-const QString kStyleGuide("style_guide");
-const QString kType("s_type");
-const QString kOGMin("og_min");
-const QString kOGMax("og_max");
-const QString kFGMin("fg_min");
-const QString kFGMax("fg_max");
-const QString kIBUMin("ibu_min");
-const QString kIBUMax("ibu_max");
-const QString kColorMin("color_min");
-const QString kColorMax("color_max");
-const QString kCarbMin("carb_min");
-const QString kCarbMax("carb_max");
-const QString kABVMin("abv_min");
-const QString kABVMax("abv_max");
-const QString kNotes("notes");
-const QString kProfile("profile");
-const QString kIngredients("ingredients");
-const QString kExamples("examples");
-
-// these are defined in the parent, but I need them here too
-const QString kDeleted("deleted");
-const QString kDisplay("display");
-const QString kFolder("folder");
-
-/************** Props **************/
-const QString kNameProp("name");
-const QString kCategoryProp("category");
-const QString kCategoryNumberProp("categoryNumber");
-const QString kStyleLetterProp("styleLetter");
-const QString kStyleGuideProp("styleGuide");
-const QString kTypeProp("type");
-const QString kOGMinProp("ogMin");
-const QString kOGMaxProp("ogMax");
-const QString kFGMinProp("fgMin");
-const QString kFGMaxProp("fgMax");
-const QString kIBUMinProp("ibuMin");
-const QString kIBUMaxProp("ibuMax");
-const QString kColorMinProp("colorMin_srm");
-const QString kColorMaxProp("colorMax_srm");
-const QString kCarbMinProp("carbMin_vol");
-const QString kCarbMaxProp("carbMax_vol");
-const QString kABVMinProp("abvMin_pct");
-const QString kABVMaxProp("abvMax_pct");
-const QString kNotesProp("notes");
-const QString kProfileProp("profile");
-const QString kIngredientsProp("ingredients");
-const QString kExamplesProp("examples");
+#include "TableSchema.h"
+#include "TableSchemaConst.h"
+#include "StyleTableSchema.h"
 
 QStringList Style::m_types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 
@@ -212,29 +163,29 @@ Style::Style(QString t_name, bool cache)
 }
 
 Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool()),
-     m_category(rec.value(kCategory).toString()),
-     m_categoryNumber(rec.value(kCategoryNumber).toString()),
-     m_styleLetter(rec.value(kStyleLetter).toString()),
-     m_styleGuide(rec.value(kStyleGuide).toString()),
-     m_typeStr(rec.value(kType).toString()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+     m_category(rec.value(kcolCategory).toString()),
+     m_categoryNumber(rec.value(kcolCategoryNumber).toString()),
+     m_styleLetter(rec.value(kcolStyleLetter).toString()),
+     m_styleGuide(rec.value(kcolStyleGuide).toString()),
+     m_typeStr(rec.value(kcolType).toString()),
      m_type(static_cast<Style::Type>(m_types.indexOf(m_typeStr))),
-     m_ogMin(rec.value(kOGMin).toDouble()),
-     m_ogMax(rec.value(kOGMax).toDouble()),
-     m_fgMin(rec.value(kFGMin).toDouble()),
-     m_fgMax(rec.value(kFGMax).toDouble()),
-     m_ibuMin(rec.value(kIBUMin).toDouble()),
-     m_ibuMax(rec.value(kIBUMax).toDouble()),
-     m_colorMin_srm(rec.value(kColorMin).toDouble()),
-     m_colorMax_srm(rec.value(kColorMax).toDouble()),
-     m_carbMin_vol(rec.value(kCarbMin).toDouble()),
-     m_carbMax_vol(rec.value(kCarbMax).toDouble()),
-     m_abvMin_pct(rec.value(kABVMin).toDouble()),
-     m_abvMax_pct(rec.value(kABVMax).toDouble()),
-     m_notes(rec.value(kNotes).toString()),
-     m_profile(rec.value(kProfile).toString()),
-     m_ingredients(rec.value(kIngredients).toString()),
-     m_examples(rec.value(kExamples).toString()),
+     m_ogMin(rec.value(kcolOGMin).toDouble()),
+     m_ogMax(rec.value(kcolOGMax).toDouble()),
+     m_fgMin(rec.value(kcolFGMin).toDouble()),
+     m_fgMax(rec.value(kcolFGMax).toDouble()),
+     m_ibuMin(rec.value(kcolIBUMin).toDouble()),
+     m_ibuMax(rec.value(kcolIBUMax).toDouble()),
+     m_colorMin_srm(rec.value(kcolColorMin).toDouble()),
+     m_colorMax_srm(rec.value(kcolColorMax).toDouble()),
+     m_carbMin_vol(rec.value(kcolCarbMin).toDouble()),
+     m_carbMax_vol(rec.value(kcolCarbMax).toDouble()),
+     m_abvMin_pct(rec.value(kcolABVMin).toDouble()),
+     m_abvMax_pct(rec.value(kcolABVMax).toDouble()),
+     m_notes(rec.value(kcolNotes).toString()),
+     m_profile(rec.value(kcolProfile).toString()),
+     m_ingredients(rec.value(kcolIngredients).toString()),
+     m_examples(rec.value(kcolExamples).toString()),
      m_cacheOnly(false)
 {
 }
@@ -244,7 +195,7 @@ void Style::setCategory( const QString& var )
 {
    m_category = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kCategoryProp, var );
+      setEasy( kpropCategory, var );
    }
 }
 
@@ -252,7 +203,7 @@ void Style::setCategoryNumber( const QString& var )
 {
    m_categoryNumber = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kCategoryNumberProp, var );
+      setEasy( kpropCategoryNumber, var );
    }
 }
 
@@ -260,7 +211,7 @@ void Style::setStyleLetter( const QString& var )
 {
    m_styleLetter = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kStyleLetterProp, var );
+      setEasy( kpropStyleLetter, var );
    }
 }
 
@@ -268,7 +219,7 @@ void Style::setStyleGuide( const QString& var )
 {
    m_styleGuide = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kStyleGuideProp, var );
+      setEasy( kpropStyleGuide, var );
    }
 }
 
@@ -277,7 +228,7 @@ void Style::setType( Type t )
    m_type = t;
    m_typeStr = m_types.at(t);
    if ( ! m_cacheOnly ) {
-      setEasy( kTypeProp, m_typeStr);
+      setEasy( kpropType, m_typeStr);
    }
 }
 
@@ -290,7 +241,7 @@ void Style::setOgMin( double var )
    {
       m_ogMin = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kOGMinProp, var);
+         setEasy( kpropOGMin, var);
       }
    }
 }
@@ -304,7 +255,7 @@ void Style::setOgMax( double var )
    {
       m_ogMax = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kOGMaxProp, var);
+         setEasy( kpropOGMax, var);
       }
    }
 }
@@ -318,7 +269,7 @@ void Style::setFgMin( double var )
    {
       m_fgMin = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kFGMinProp, var);
+         setEasy( kpropFGMin, var);
       }
    }
 }
@@ -332,7 +283,7 @@ void Style::setFgMax( double var )
    {
       m_fgMax = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kFGMaxProp, var);
+         setEasy( kpropFGMax, var);
       }
    }
 }
@@ -346,7 +297,7 @@ void Style::setIbuMin( double var )
    {
       m_ibuMin = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kIBUMinProp, var);
+         setEasy( kpropIBUMin, var);
       }
    }
 }
@@ -360,7 +311,7 @@ void Style::setIbuMax( double var )
    {
       m_ibuMax = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kIBUMaxProp, var);
+         setEasy( kpropIBUMax, var);
       }
    }
 }
@@ -374,7 +325,7 @@ void Style::setColorMin_srm( double var )
    {
       m_colorMin_srm = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kColorMinProp, var);
+         setEasy( kpropColorMin, var);
       }
    }
 }
@@ -388,7 +339,7 @@ void Style::setColorMax_srm( double var )
    {
       m_colorMax_srm = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kColorMaxProp, var);
+         setEasy( kpropColorMax, var);
       }
    }
 }
@@ -402,7 +353,7 @@ void Style::setCarbMin_vol( double var )
    {
       m_carbMin_vol = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kCarbMinProp, var);
+         setEasy( kpropCarbMin, var);
       }
    }
 }
@@ -416,7 +367,7 @@ void Style::setCarbMax_vol( double var )
    {
       m_carbMax_vol = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kCarbMaxProp, var);
+         setEasy( kpropCarbMax, var);
       }
    }
 }
@@ -430,7 +381,7 @@ void Style::setAbvMin_pct( double var )
    {
       m_abvMin_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kABVMinProp, var);
+         setEasy( kpropABVMin, var);
       }
    }
 }
@@ -443,7 +394,7 @@ void Style::setAbvMax_pct( double var )
    {
         m_abvMax_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kABVMaxProp, var);
+         setEasy( kpropABVMax, var);
       }
    }
 }
@@ -452,7 +403,7 @@ void Style::setNotes( const QString& var )
 {
     m_notes = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kNotesProp, var);
+      setEasy( kpropNotes, var);
    }
 }
 
@@ -460,7 +411,7 @@ void Style::setProfile( const QString& var )
 {
     m_profile = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kProfileProp, var);
+      setEasy( kpropProfile, var);
    }
 }
 
@@ -468,7 +419,7 @@ void Style::setIngredients( const QString& var )
 {
     m_ingredients = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kIngredientsProp, var);
+      setEasy( kpropIngredients, var);
    }
 }
 
@@ -476,7 +427,7 @@ void Style::setExamples( const QString& var )
 {
     m_examples = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kExamplesProp, var);
+      setEasy( kpropExamples, var);
    }
 }
 

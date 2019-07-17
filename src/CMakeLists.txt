@@ -301,6 +301,8 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/yeast.h
     ${SRCDIR}/PropertySchema.h
     ${SRCDIR}/TableSchema.h
+    ${SRCDIR}/StyleTableSchema.h
+    ${SRCDIR}/EquipmentTableSchema.h
 )
 
 SET( FILES_TO_TRANSLATE

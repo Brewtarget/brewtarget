@@ -661,6 +661,10 @@ void EquipmentEditor::save()
    obsEquip->setNotes(textEdit_notes->toPlainText());
    obsEquip->setCalcBoilVolume(checkBox_calcBoilVolume->checkState() == Qt::Checked);
 
+   if ( obsEquip->cacheOnly() ) {
+      Database::instance().insertEquipment(obsEquip);
+      obsEquip->setCacheOnly(false);
+   }
    setVisible(false);
    return;
 }
@@ -677,8 +681,7 @@ void EquipmentEditor::newEquipment(QString folder)
    if( name.isEmpty() )
       return;
 
-   Equipment* e = Database::instance().newEquipment();
-   e->setName( name );
+   Equipment* e = new Equipment(name);
 
    if ( ! folder.isEmpty() )
       e->setFolder(folder);
