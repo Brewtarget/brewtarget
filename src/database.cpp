@@ -72,6 +72,8 @@
 #include "brewtarget.h"
 #include "QueuedMethod.h"
 #include "DatabaseSchemaHelper.h"
+#include "TableSchema.h"
+#include "TableSchemaConst.h"
 
 // Static members.
 Database* Database::dbInstance = 0;
@@ -1590,6 +1592,16 @@ int Database::insertEquipment(Equipment* ins) {
    return key;
 }
 
+int Database::insertFermentable(Fermentable* ins) {
+
+   int key = insertElement(ins);
+
+   emit changed( metaProperty("fermentables"), QVariant() );
+   emit newFermentableSignal(ins);
+
+   return key;
+}
+
 Water* Database::newWater(Water* other)
 {
    Water* tmp;
@@ -1830,7 +1842,8 @@ void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantM
 
 //This links ingredients with the same name.
 //The first displayed ingredient in the database is assumed to be the parent.
-void Database::populateChildTablesByName(Brewtarget::DBTable table){
+void Database::populateChildTablesByName(Brewtarget::DBTable table)
+{
    Brewtarget::logW( "Populating Children Ingredient Links" );
 
    try {
@@ -1896,8 +1909,10 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table){
       throw QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
 }
+
 // populate ingredient tables
-void Database::populateChildTablesByName(){
+void Database::populateChildTablesByName()
+{
 
    try {
       // I really dislike this. It counts as spooky action at a distance, but
@@ -1919,34 +1934,44 @@ void Database::populateChildTablesByName(){
 }
 
 //Returns the key of the parent ingredient
-int Database::getParentID(Brewtarget::DBTable table, int childKey){
+int Database::getParentID(TableSchema* table, int childKey)
+{
    int ret;
-   //child_id is expected to be unique in table
-   QString queryString = QString(
-      "SELECT parent_id FROM %1 WHERE child_id = %2 LIMIT 1"
-   ).arg(tableNames[tableToChildTable[table]]).arg(childKey);
 
-   QSqlQuery q( queryString, sqlDatabase() );
+   //child_id is expected to be unique in table
+   QString query = QString("SELECT parent_id FROM %1 WHERE child_id = %2 LIMIT 1")
+      .arg(tableNames[tableToChildTable[table->dbTable()]])
+      .arg(childKey);
+
+   QSqlQuery q( query, sqlDatabase() );
    q.first();
+
    ret = q.record().value("parent_id").toInt();
-   if(ret==0){
+
+   if ( ret == 0 ) {
       return childKey;
-   }else{
+   }
+   else {
       return ret;
    }
 }
+
 //Returns the key to the inventory table for a given ingredient
-int Database::getInventoryID(Brewtarget::DBTable table, int key){
-   int ret;
-   QString queryString = QString(
-      "SELECT id FROM %1 WHERE %2_id = %3 LIMIT 1"
-   ).arg(tableNames[tableToInventoryTable[table]]).arg(tableNames[table]).arg(getParentID(table, key));
-   QSqlQuery q( queryString, sqlDatabase() );
+int Database::getInventoryID(TableSchema* table, int key)
+{
+   QString query = QString("SELECT id FROM %1 WHERE %2_id = %3 LIMIT 1")
+         .arg( tableNames[ tableToInventoryTable[table->dbTable()]])
+         .arg(table->tableName())
+         .arg(getParentID(table, key));
+
+   QSqlQuery q( query, sqlDatabase() );
    q.first();
-   ret = q.record().value("id").toInt();
-   return ret;
+
+   return q.record().value("id").toInt();
 }
-QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key) {
+
+QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key)
+{
    QVariant val = QVariant(0.0);
    QString queryString = QString("select %2.%1 from %2, %3, %4 where %3.id = %5 and %3.id = %4.child_id and %4.parent_id = %2.%3_id")
         .arg(col_name)
@@ -1970,16 +1995,14 @@ QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable tab
 }
 
 //Returns the parent table number from the hash
-Brewtarget::DBTable Database::getChildTable(Brewtarget::DBTable table){
-   return tableToChildTable[table];
-}
+Brewtarget::DBTable Database::getChildTable(Brewtarget::DBTable table){ return tableToChildTable[table]; }
+
 //Returns the inventory table number from the hash
-Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table) {
-   return tableToInventoryTable[table];
-}
+Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table) { return tableToInventoryTable[table]; }
+
 //create a new inventory row
-void Database::newInventory(Brewtarget::DBTable invForTable, int invForID) {
-   QString invTable = tableNames[tableToInventoryTable[invForTable]];
+int Database::newInventory(TableSchema* schema, int invForID) {
+   QString invTable = tableNames[tableToInventoryTable[schema->dbTable()]];
 
    QString queryString;
 
@@ -1988,17 +2011,18 @@ void Database::newInventory(Brewtarget::DBTable invForTable, int invForID) {
       case Brewtarget::PGSQL:
          queryString = QString("INSERT INTO %1 (%2_id) VALUES(%3) ON CONFLICT(%2_id) DO UPDATE set %2_id = EXCLUDED.%2_id")
                      .arg(invTable)
-                     .arg(tableNames[invForTable])
-                     .arg(getParentID(invForTable, invForID));
+                     .arg(tableNames[schema->dbTable()])
+                     .arg(getParentID(schema, invForID));
          break;
       default:
          queryString = QString("INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)")
                      .arg(invTable)
-                     .arg(tableNames[invForTable])
-                     .arg(getParentID(invForTable, invForID));
+                     .arg(tableNames[schema->dbTable()])
+                     .arg(getParentID(schema, invForID));
    }
 
    QSqlQuery q( queryString, sqlDatabase() );
+   return q.lastInsertId().toInt();
 }
 
 QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
@@ -4044,7 +4068,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
     blockSignals(true);
     Equipment* ret;
     QString name;
-    QList<Equipment*> matchingEquips;
+    QList<Equipment*> matching;
 
     n = node.firstChildElement("NAME");
     name = n.firstChild().toText().nodeValue();
@@ -4052,12 +4076,12 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
       // If we are just importing an equip by itself, need to do some dupe-checking.
         if( parent == nullptr ) {
             // Check to see if there is an equip already in the DB with the same name.
-            getElements<Equipment>( matchingEquips, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
+            getElements<Equipment>( matching, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
 
             // If we find a match, use it
-            if( matchingEquips.length() > 0 ) {
+            if( matching.length() > 0 ) {
                 createdNew = false;
-                ret = matchingEquips.first();
+                ret = matching.first();
             }
             else {
                 ret = new Equipment(name,true);
@@ -4104,70 +4128,77 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   Fermentable* ret;
    bool createdNew = true;
    blockSignals(true);
+   Fermentable* ret;
+   QString name;
+   QList<Fermentable*> matching;
 
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
    try {
       // If we are just importing a ferm by itself, need to do some dupe-checking.
-      if( parent == 0 )
+      if ( parent == nullptr )
       {
-         // Check to see if there is a ferm already in the DB with the same name.
+         // No parent means we handle the transaction
          sqlDatabase().transaction();
-         n = node.firstChildElement("NAME");
-         QString name = n.firstChild().toText().nodeValue();
-         QList<Fermentable*> matchingFerms;
-         getElements<Fermentable>( matchingFerms, QString("name='%1'").arg(name), Brewtarget::FERMTABLE, allFermentables );
+         // Check to see if we already have a Fermentable with this name
+         getElements<Fermentable>( matching, QString("name='%1'").arg(name), Brewtarget::FERMTABLE, allFermentables );
 
-         if( matchingFerms.length() > 0 )
-         {
+         if ( matching.length() > 0 ) {
             createdNew = false;
-            ret = matchingFerms.first();
+            ret = matching.first();
          }
-         else
-            ret = newFermentable();
+         else {
+            ret = new Fermentable(name);
+         }
       }
-      else
-         ret = newFermentable();
-
-      if ( ! ret )
-         throw QString("Could not create new fermentable");
-
-      fromXml( ret, Fermentable::tagToProp, node );
-      if ( ! ret->isValid() )
-         throw QString("Error reading fermentable from XML");
-
-
-      // Handle enums separately.
-      n = node.firstChildElement("TYPE");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
       else {
-         int ndx = Fermentable::types.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 )
-            ret->setType( static_cast<Fermentable::Type>(ndx));
-         else
-            ret->invalidate();
+         ret = new Fermentable(name);
       }
 
-      if ( ! ret->isValid() )
-         throw QString("Could not change the type of the fermentable");
+      if ( createdNew ) {
+         fromXml( ret, node );
+         if ( ! ret->isValid() )
+            throw QString("Error reading fermentable from XML");
 
-      if( parent )
+
+         // Handle enums separately.
+         n = node.firstChildElement("TYPE");
+         if ( n.firstChild().isNull() )
+            ret->invalidate();
+         else {
+            int ndx = Fermentable::types.indexOf( n.firstChild().toText().nodeValue());
+            if ( ndx != -1 )
+               ret->setType( static_cast<Fermentable::Type>(ndx));
+            else
+               ret->invalidate();
+         }
+
+         if ( ! ret->isValid() ) {
+            Brewtarget::logW( QString("Could convert a recognized type") );
+         }
+         insertFermentable(ret);
+      }
+
+      if ( parent ) {
+         ret->setDisplay(false);
          addToRecipe( parent, ret, true );
+      }
    }
    catch (QString e) {
-      if ( ! parent )
+      if ( parent == nullptr ) {
          sqlDatabase().rollback();
+      }
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
    }
 
-   if ( ! parent )
+   if ( parent == nullptr ) {
       sqlDatabase().commit();
+   }
 
    blockSignals(false);
-   if( createdNew )
-   {
+   if ( createdNew ) {
       emit changed( metaProperty("fermentables"), QVariant() );
       emit newFermentableSignal(ret);
    }
@@ -4850,24 +4881,15 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
                ret->invalidate();
          }
 
-         // If translating the enums craps out, lets see if we can find
-         // something right in our DB already. Shouldn't this go further up?
+         // If translating the enums craps out, give a warning
          if (! ret->isValid() ) {
-            name = ret->name();
-            getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE ,allStyles);
-            // If we find a match, discard what we just built and use what's in teh DB instead
-            if ( matching.length() > 0 ) {
-               createdNew = false;
-               ret = matching.first();
-            }
+            Brewtarget::logW(QString("Could convert %1 to a recognized type"));
          }
-         else {
-            // we need to poke this into the database
-            insertStyle(ret);
-         }
+         // we need to poke this into the database
+         insertStyle(ret);
       }
       if ( parent ) {
-         addToRecipe( parent, ret );
+         addToRecipe( parent, ret, true );
       }
    }
    catch (QString e) {
@@ -4879,8 +4901,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    }
 
    blockSignals(false);
-   if( createdNew )
-   {
+   if ( createdNew ) {
       emit changed( metaProperty("styles"), QVariant() );
       emit newStyleSignal(ret);
    }
@@ -5041,6 +5062,25 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify ) 
+{
+   TableSchema* schema = new TableSchema(ins->table());
+   Brewtarget::DBTable invtable = Database::instance().getInventoryTable(schema->dbTable());
+
+   int ndx = ins->metaObject()->indexOfProperty(kcolInventory.toUtf8().constData());
+   int invkey = getInventoryID(schema, ins->key());
+
+   if ( ! value.isValid() || value.isNull() ) {
+      value = 0.0;
+   }
+
+   if ( invkey == 0 ) { //no inventory row in the database so lets make one
+      invkey = newInventory(schema,ins->key());
+   }
+   updateEntry( invtable, invkey, kcolInventory.toUtf8().constData(), 
+                value, ins->metaObject()->property(ndx), ins, notify );
+}
 
 QList<TableParams> Database::makeTableParams()
 {

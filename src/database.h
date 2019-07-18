@@ -253,6 +253,7 @@ public:
    int    insertElement(BeerXMLElement* ins);
    int    insertStyle(Style* ins);
    int    insertEquipment(Equipment* ins);
+   int    insertFermentable(Fermentable* ins);
    
    Water* newWater(Water* other = 0);
    Yeast* newYeast(Yeast* other = 0);
@@ -262,22 +263,32 @@ public:
    * The first displayed ingredient in the database is assumed to be the parent.
    */
    void populateChildTablesByName(Brewtarget::DBTable table);
+
    // Runs populateChildTablesByName for each
    void populateChildTablesByName();
+
    //! \returns the key of the parent ingredient
-   int getParentID(Brewtarget::DBTable table, int childKey);
+   int getParentID(TableSchema* table, int childKey);
+
    //! \returns the key to the inventory table for a given ingredient
-   int getInventoryID(Brewtarget::DBTable table, int key);
+   int getInventoryID(TableSchema* table, int key);
+
    //! \returns the parent table number from the hash
    Brewtarget::DBTable getChildTable(Brewtarget::DBTable table);
+
    //! \returns the inventory table number from the hash
    Brewtarget::DBTable getInventoryTable(Brewtarget::DBTable table);
+
    //! Inserts an new inventory row in the appropriate table
-   void newInventory(Brewtarget::DBTable invForTable, int invForID);
+   // void newInventory(Brewtarget::DBTable invForTable, int invForID);
+   int newInventory(TableSchema* schema, int invForID);
+
    //! \returns The entire inventory for a table.
    QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
 
    QVariant getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key);
+
+   void setInventory( BeerXMLElement* ins, QVariant value, bool notify=true );
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash

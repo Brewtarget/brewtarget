@@ -51,10 +51,12 @@ static QString ktableYeastInventory("yeast_in_inventory");
 // once and be done with it
 const QString kpropName("name");
 const QString kpropNotes("notes");
+const QString kpropType("type");
 const QString kpropDeleted("deleted");
 const QString kpropDisplay("display");
 const QString kpropFolder("folder");
 
+const QString kpropInventory("inventory");
 // Same for these column names. Yes, but I think the consistency is better
 // this way
 const QString kcolName("name");
@@ -62,6 +64,7 @@ const QString kcolNotes("notes");
 const QString kcolDeleted("deleted");
 const QString kcolDisplay("display");
 const QString kcolFolder("folder");
+const QString kcolInventory("amount");
 
 const QString kxmlPropName("NAME");
 const QString kxmlPropNotes("NOTES");

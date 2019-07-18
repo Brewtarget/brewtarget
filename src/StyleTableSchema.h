@@ -22,35 +22,35 @@
 
 // Columns for the style table
 // These are defined in the main constants file
-// const QString kcolName("name");
-// const QString kcolNotes("notes");
+// const QString kcolStyleName("name");
+// const QString kcolStyleNotes("notes");
 static QString ktableStyle("style");
-static QString kcolType("s_type");
-static QString kcolCategory("category");
-static QString kcolCategoryNumber("category_number");
-static QString kcolStyleLetter("style_letter");
-static QString kcolStyleGuide("style_guide");
-static QString kcolOGMin("og_min");
-static QString kcolOGMax("og_max");
-static QString kcolFGMin("fg_min");
-static QString kcolFGMax("fg_max");
-static QString kcolIBUMin("ibu_min");
-static QString kcolIBUMax("ibu_max");
-static QString kcolColorMin("color_min");
-static QString kcolColorMax("color_max");
-static QString kcolABVMin("abv_min");
-static QString kcolABVMax("abv_max");
-static QString kcolCarbMin("carb_min");
-static QString kcolCarbMax("carb_max");
-static QString kcolProfile("profile");
-static QString kcolIngredients("ingredients");
-static QString kcolExamples("examples");
+static QString kcolStyleType("s_type");
+static QString kcolStyleCategory("category");
+static QString kcolStyleCategoryNumber("category_number");
+static QString kcolStyleStyleLetter("style_letter");
+static QString kcolStyleStyleGuide("style_guide");
+static QString kcolStyleOGMin("og_min");
+static QString kcolStyleOGMax("og_max");
+static QString kcolStyleFGMin("fg_min");
+static QString kcolStyleFGMax("fg_max");
+static QString kcolStyleIBUMin("ibu_min");
+static QString kcolStyleIBUMax("ibu_max");
+static QString kcolStyleColorMin("color_min");
+static QString kcolStyleColorMax("color_max");
+static QString kcolStyleABVMin("abv_min");
+static QString kcolStyleABVMax("abv_max");
+static QString kcolStyleCarbMin("carb_min");
+static QString kcolStyleCarbMax("carb_max");
+static QString kcolStyleProfile("profile");
+static QString kcolStyleIngredients("ingredients");
+static QString kcolStyleExamples("examples");
 
 // properties for objects
 // These are defined in the main constants file
 // const QString kpropName("name");
 // const QString kpropNotes("notes");
-const QString kpropType("type");
+// const QString kpropType("type");
 const QString kpropCategory("category");
 const QString kpropCategoryNumber("categoryNumber");
 const QString kpropStyleLetter("styleLetter");

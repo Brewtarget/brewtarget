@@ -62,7 +62,6 @@ void FermentableEditor::save()
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
 
    obsFerm->setAmount_kg(lineEdit_amount->toSI());
-   obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
    obsFerm->setYield_pct(lineEdit_yield->toSI());
    obsFerm->setColor_srm(lineEdit_color->toSI());
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
@@ -77,6 +76,15 @@ void FermentableEditor::save()
    obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->toSI() );
    obsFerm->setNotes( textEdit_notes->toPlainText() );
+
+   if ( obsFerm->cacheOnly() ) {
+      Database::instance().insertFermentable(obsFerm);
+      obsFerm->setCacheOnly(false);
+   }
+
+   // we need to set inventory late, because we don't know if the row exists
+   // in the DB yet
+   obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
 
    setVisible(false);
 }

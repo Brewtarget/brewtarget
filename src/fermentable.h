@@ -48,6 +48,7 @@ class Fermentable : public BeerXMLElement
 
    friend class Brewtarget;
    friend class Database;
+   friend class FermentableDialog;
 public:
 
    //! \brief The type of Fermentable.
@@ -181,6 +182,7 @@ private:
    Fermentable(Brewtarget::DBTable table, int key);
    Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Fermentable( Fermentable const& other );
+   Fermentable( QString name, bool cache = true );
    
    static bool isValidType( const QString& str );
    static QStringList types;

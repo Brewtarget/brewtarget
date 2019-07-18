@@ -73,6 +73,7 @@ private:
    QMap<QString,PropertySchema*> defineTable(Brewtarget::DBTable table);
    QMap<QString,PropertySchema*> defineStyleTable();
    QMap<QString,PropertySchema*> defineEquipmentTable();
+   QMap<QString,PropertySchema*> defineFermentableTable();
 };
 
 #endif

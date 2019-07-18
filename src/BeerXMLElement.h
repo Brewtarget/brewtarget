@@ -169,6 +169,8 @@ protected:
 
    void setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    void setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify = true );
+   void setInventoryEasier( const QVariant& value, bool notify=true );
+
    QVariant getInventory( const char* col_name ) const;
    QVariant getInventory( const QString& col_name ) const;
 

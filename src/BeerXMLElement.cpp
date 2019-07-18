@@ -292,21 +292,29 @@ QVariant BeerXMLElement::get( const QString& col_name ) const
 
 void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
 {
+   /*
     // Get the meta property.
     int ndx = metaObject()->indexOfProperty(prop_name);
 
     int invkey = Database::instance().getInventoryID(_table, _key);
     Brewtarget::DBTable invtable = Database::instance().getInventoryTable(_table);
     if(invkey == 0){ //no inventory row in the database so lets make one
-      Database::instance().newInventory(_table,_key);
-      invkey = Database::instance().getInventoryID(_table, _key);
+      invkey = Database::instance().newInventory(_table,_key);
     }
     Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
+    */
+
+    Database::instance().setInventory( this, value, notify );
 }
 
 void BeerXMLElement::setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify )
 {
-   setInventory(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
+    Database::instance().setInventory( this, value, notify );
+}
+
+void BeerXMLElement::setInventoryEasier( const QVariant& value, bool notify )
+{
+    Database::instance().setInventory( this, value, notify );
 }
 
 QVariant BeerXMLElement::getInventory( const char* col_name ) const

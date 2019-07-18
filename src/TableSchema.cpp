@@ -25,6 +25,7 @@
 #include "TableSchemaConst.h"
 #include "StyleTableSchema.h"
 #include "EquipmentTableSchema.h"
+#include "FermentableTableSchema.h"
 
 // We have to hard code this, because we cannot be certain the database is
 // available yet -- so no bt_alltables lookups can be allowed
@@ -199,6 +200,9 @@ QMap<QString,PropertySchema*> TableSchema::defineTable(Brewtarget::DBTable table
       case Brewtarget::EQUIPTABLE:
          retVal = defineEquipmentTable();
          break;
+      case Brewtarget::FERMTABLE:
+         retVal = defineFermentableTable();
+         break;
       default:
          qDebug() << tableName_ << " not implemented yet";
    }
@@ -216,64 +220,64 @@ QMap<QString,PropertySchema*> TableSchema::defineStyleTable()
    tmp[kpropName] = new PropertySchema( kpropName, tmpNames , kxmlPropName, QString("text"), QString(""));
   
    // All db use "category" as the column name
-   tmpNames[Brewtarget::NODB] = kcolType;
+   tmpNames[Brewtarget::NODB] = kcolStyleType;
    tmp[kpropType] = new PropertySchema( kpropType, tmpNames , QString(""), QString("text"), QString("Ale"));
   
-   tmpNames[Brewtarget::NODB] = kcolCategoryNumber;
+   tmpNames[Brewtarget::NODB] = kcolStyleCategoryNumber;
    tmp[kpropCategoryNumber] = new PropertySchema( kpropCategoryNumber, tmpNames, kxmlPropCategoryNumber, QString("text"), QString(""));
 
-   tmpNames[Brewtarget::NODB] = kcolStyleLetter;
+   tmpNames[Brewtarget::NODB] = kcolStyleStyleLetter;
    tmp[kpropStyleLetter] = new PropertySchema( kpropStyleLetter, tmpNames, kxmlPropStyleLetter, QString("text"), QString("") );
 
-   tmpNames[Brewtarget::NODB] = kcolStyleGuide;
+   tmpNames[Brewtarget::NODB] = kcolStyleStyleGuide;
    tmp[kpropStyleGuide] = new PropertySchema( kpropStyleGuide, tmpNames, kxmlPropStyleGuide, QString("text"), QString("") );
 
-   tmpNames[Brewtarget::NODB] = kcolOGMin;
+   tmpNames[Brewtarget::NODB] = kcolStyleOGMin;
    tmp[kpropOGMin] = new PropertySchema( kpropOGMin, tmpNames, kxmlPropOGMin);
 
-   tmpNames[Brewtarget::NODB] = kcolOGMax;
+   tmpNames[Brewtarget::NODB] = kcolStyleOGMax;
    tmp[kpropOGMax] = new PropertySchema( kpropOGMax, tmpNames, kxmlPropOGMax);
 
-   tmpNames[Brewtarget::NODB] = kcolFGMin;
+   tmpNames[Brewtarget::NODB] = kcolStyleFGMin;
    tmp[kpropFGMin] = new PropertySchema( kpropFGMin, tmpNames, kxmlPropFGMin);
 
-   tmpNames[Brewtarget::NODB] = kcolFGMax;
+   tmpNames[Brewtarget::NODB] = kcolStyleFGMax;
    tmp[kpropFGMax] = new PropertySchema( kpropFGMax, tmpNames, kxmlPropFGMax);
 
-   tmpNames[Brewtarget::NODB] = kcolIBUMin;
+   tmpNames[Brewtarget::NODB] = kcolStyleIBUMin;
    tmp[kpropIBUMin] = new PropertySchema( kpropIBUMin, tmpNames, kxmlPropIBUMin);
 
-   tmpNames[Brewtarget::NODB] = kcolIBUMax;
+   tmpNames[Brewtarget::NODB] = kcolStyleIBUMax;
    tmp[kpropIBUMax] = new PropertySchema( kpropIBUMax, tmpNames, kxmlPropIBUMax);
 
-   tmpNames[Brewtarget::NODB] = kcolColorMin;
+   tmpNames[Brewtarget::NODB] = kcolStyleColorMin;
    tmp[kpropColorMin] = new PropertySchema( kpropColorMin,tmpNames, kxmlPropColorMin);
 
-   tmpNames[Brewtarget::NODB] = kcolColorMax;
+   tmpNames[Brewtarget::NODB] = kcolStyleColorMax;
    tmp[kpropColorMax] = new PropertySchema( kpropColorMax,tmpNames, kxmlPropColorMax);
 
-   tmpNames[Brewtarget::NODB] = kcolABVMin;
+   tmpNames[Brewtarget::NODB] = kcolStyleABVMin;
    tmp[kpropABVMin] = new PropertySchema( kpropABVMin, tmpNames, kxmlPropABVMin);
 
-   tmpNames[Brewtarget::NODB] = kcolABVMax;
+   tmpNames[Brewtarget::NODB] = kcolStyleABVMax;
    tmp[kpropABVMax] = new PropertySchema( kpropABVMax, tmpNames, kxmlPropABVMax);
 
-   tmpNames[Brewtarget::NODB] = kcolCarbMin;
+   tmpNames[Brewtarget::NODB] = kcolStyleCarbMin;
    tmp[kpropCarbMin] = new PropertySchema( kpropCarbMin, tmpNames, kxmlPropCarbMin);
 
-   tmpNames[Brewtarget::NODB] = kcolCarbMax;
+   tmpNames[Brewtarget::NODB] = kcolStyleCarbMax;
    tmp[kpropCarbMax] = new PropertySchema( kpropCarbMax, tmpNames, kxmlPropCarbMax);
 
    tmpNames[Brewtarget::NODB] = kcolNotes;
    tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames, kxmlPropNotes);
 
-   tmpNames[Brewtarget::NODB] = kcolProfile;
+   tmpNames[Brewtarget::NODB] = kcolStyleProfile;
    tmp[kpropProfile] = new PropertySchema( kpropProfile, tmpNames, kxmlPropProfile);
 
-   tmpNames[Brewtarget::NODB] = kcolIngredients;
+   tmpNames[Brewtarget::NODB] = kcolStyleIngredients;
    tmp[kpropIngredients] = new PropertySchema( kpropIngredients, tmpNames, kxmlPropIngredients);
 
-   tmpNames[Brewtarget::NODB] = kcolExamples;
+   tmpNames[Brewtarget::NODB] = kcolStyleExamples;
    tmp[kpropExamples] = new PropertySchema( kpropExamples, tmpNames, kxmlPropExamples);
    return tmp;
 }
@@ -340,3 +344,67 @@ QMap<QString,PropertySchema*> TableSchema::defineEquipmentTable()
 
    return tmp;
 }
+
+// Finally, the method to create the actual object
+QMap<QString,PropertySchema*> TableSchema::defineFermentableTable()
+{
+   QMap<QString,PropertySchema*> tmp;
+   QHash<Brewtarget::DBTypes,QString> tmpNames;
+
+   tmpNames[Brewtarget::NODB] = kcolName;
+   tmp[kpropName] = new PropertySchema( kpropName, tmpNames , kxmlPropName, QString("text"), QString(""));
+ 
+   tmpNames[Brewtarget::NODB] = kcolNotes;
+   tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames , kxmlPropNotes, QString("text"), QString(""));
+
+   // Apparently, there is no equipment type in the beerXML spec
+   tmpNames[Brewtarget::NODB] = kcolFermType;
+   tmp[kpropType] = new PropertySchema( kpropType, tmpNames , QString(""), QString("text"), QString("Grain"));
+
+   tmpNames[Brewtarget::NODB] = kcolFermAmount;
+   tmp[kpropAmount] = new PropertySchema( kpropAmount, tmpNames , kxmlPropAmount, QString("real"), QVariant(0.0));
+
+   // NOTE: We skip inventory, because that's a weird one and always calculated.
+
+   tmpNames[Brewtarget::NODB] = kcolFermYield;
+   tmp[kpropYield] = new PropertySchema( kpropYield, tmpNames , kxmlPropYield, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolFermColor;
+   tmp[kpropColor] = new PropertySchema( kpropColor, tmpNames , kxmlPropColor, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolFermAddAfterBoil;
+   tmp[kpropAddAfterBoil] = new PropertySchema( kpropAddAfterBoil, tmpNames , kxmlPropAddAfterBoil, QString("boolean"), QVariant(false));
+
+   tmpNames[Brewtarget::NODB] = kcolFermOrigin;
+   tmp[kpropOrigin] = new PropertySchema( kpropOrigin, tmpNames , kxmlPropOrigin, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolFermSupplier;
+   tmp[kpropSupplier] = new PropertySchema( kpropSupplier, tmpNames , kxmlPropSupplier, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolFermCoarseFineDiff;
+   tmp[kpropCoarseFineDiff] = new PropertySchema( kpropCoarseFineDiff, tmpNames , kxmlPropCoarseFineDiff, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolFermMoisture;
+   tmp[kpropMoisture] = new PropertySchema( kpropMoisture, tmpNames , kxmlPropMoisture, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolFermDiastaticPower;
+   tmp[kpropDiastaticPower] = new PropertySchema( kpropDiastaticPower, tmpNames , kxmlPropDiastaticPower, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolFermProtein;
+   tmp[kpropProtein] = new PropertySchema( kpropProtein, tmpNames , kxmlPropProtein, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolFermMaxInBatch;
+   tmp[kpropMaxInBatch] = new PropertySchema( kpropMaxInBatch, tmpNames , kxmlPropMaxInBatch, QString("real"), QVariant(100.0));
+
+   tmpNames[Brewtarget::NODB] = kcolFermRecommendMash;
+   tmp[kpropRecommendMash] = new PropertySchema( kpropRecommendMash, tmpNames, kxmlPropRecommendMash, QString("boolean"), QVariant(false));
+
+   tmpNames[Brewtarget::NODB] = kcolFermIsMashed;
+   tmp[kpropIsMashed] = new PropertySchema( kpropIsMashed, tmpNames , kxmlPropIsMashed, QString("boolean"), QVariant(false));
+
+   tmpNames[Brewtarget::NODB] = kcolFermIBUGalPerLb;
+   tmp[kpropIBUGalPerLb] = new PropertySchema( kpropIBUGalPerLb, tmpNames , kxmlPropIBUGalPerLb, QString("real"), QVariant(0.0));
+
+   return tmp;
+}
+
