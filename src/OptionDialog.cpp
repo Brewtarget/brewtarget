@@ -100,7 +100,7 @@ OptionDialog::OptionDialog(QWidget* parent)
       /*hu*/ QIcon() <<
       /*it*/ QIcon(":images/flagItaly.svg") <<
       /*lv*/ QIcon() <<
-      /*nb*/ QIcon() <<
+      /*nb*/ QIcon(":images/flagNorway.svg") <<
       /*nl*/ QIcon(":images/flagNetherlands.svg") <<
       /*pl*/ QIcon(":images/flagPoland.svg") <<
       /*pt*/ QIcon(":images/flagBrazil.svg") <<
