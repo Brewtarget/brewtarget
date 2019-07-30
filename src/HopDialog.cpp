@@ -208,6 +208,7 @@ void HopDialog::newHop()
 {
    newHop(QString());
 }
+
 void HopDialog::newHop(QString folder) 
 {
    QString name = QInputDialog::getText(this, tr("Hop name"),
@@ -215,8 +216,7 @@ void HopDialog::newHop(QString folder)
    if( name.isEmpty() )
       return;
 
-   Hop* hop = Database::instance().newHop();
-   hop->setName(name);
+   Hop* hop = new Hop(name,true);
    if ( ! folder.isEmpty() )
       hop->setFolder(folder);
 

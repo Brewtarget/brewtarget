@@ -254,6 +254,8 @@ public:
    int    insertStyle(Style* ins);
    int    insertEquipment(Equipment* ins);
    int    insertFermentable(Fermentable* ins);
+   int    insertHop(Hop* ins);
+   int    insertMisc(Misc* ins);
    
    Water* newWater(Water* other = 0);
    Yeast* newYeast(Yeast* other = 0);

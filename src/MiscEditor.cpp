@@ -71,6 +71,9 @@ void MiscEditor::save()
    m->setUseFor(textEdit_useFor->toPlainText());
    m->setNotes( textEdit_notes->toPlainText() );
 
+   if ( m->cacheOnly() ) {
+      Database::instance().insertMisc(m);
+   }
    setVisible(false);
 }
 

@@ -1544,6 +1544,7 @@ int Database::insertElement(BeerXMLElement* ins)
    QStringList allProps = schema->allPropertyNames();
 
    insert = insert % allColumns.join(",") % ") values (:" % allProps.join(",:") % ");";
+
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
@@ -1575,6 +1576,7 @@ int Database::insertElement(BeerXMLElement* ins)
 int Database::insertStyle(Style* ins) {
 
    int key = insertElement(ins);
+   ins->setCacheOnly(false);
 
    emit changed( metaProperty("styles"), QVariant() );
    emit newStyleSignal(ins);
@@ -1585,6 +1587,7 @@ int Database::insertStyle(Style* ins) {
 int Database::insertEquipment(Equipment* ins) {
 
    int key = insertElement(ins);
+   ins->setCacheOnly(false);
 
    emit changed( metaProperty("equipments"), QVariant() );
    emit newEquipmentSignal(ins);
@@ -1595,9 +1598,32 @@ int Database::insertEquipment(Equipment* ins) {
 int Database::insertFermentable(Fermentable* ins) {
 
    int key = insertElement(ins);
+   ins->setCacheOnly(false);
 
    emit changed( metaProperty("fermentables"), QVariant() );
    emit newFermentableSignal(ins);
+
+   return key;
+}
+
+int Database::insertHop(Hop* ins) {
+
+   int key = insertElement(ins);
+   ins->setCacheOnly(false);
+
+   emit changed( metaProperty("hops"), QVariant() );
+   emit newHopSignal(ins);
+
+   return key;
+}
+
+int Database::insertMisc(Misc* ins) {
+
+   int key = insertElement(ins);
+   ins->setCacheOnly(false);
+
+   emit changed( metaProperty("miscs"), QVariant() );
+   emit newMiscSignal(ins);
 
    return key;
 }
@@ -4261,82 +4287,87 @@ int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
 Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   Hop* ret;
    bool createdNew = true;
    blockSignals(true);
+   Hop* ret;
+   QString name;
+   QList<Hop*> matching;
 
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
    try {
       // If we are just importing a hop by itself, need to do some dupe-checking.
-      if( parent == 0 )
+      if( parent == nullptr )
       {
          // as always, start the transaction if no parent
          sqlDatabase().transaction();
          // Check to see if there is a hop already in the DB with the same name.
-         n = node.firstChildElement("NAME");
-         QString name = n.firstChild().toText().nodeValue();
-         QList<Hop*> matchingHops;
-         getElements<Hop>( matchingHops, QString("name='%1'").arg(name), Brewtarget::HOPTABLE, allHops );
+         getElements<Hop>( matching, QString("name='%1'").arg(name), Brewtarget::HOPTABLE, allHops );
 
-         if( matchingHops.length() > 0 )
-         {
+         if( matching.length() > 0 ) {
             createdNew = false;
-            ret = matchingHops.first();
-         }
-         else
-            ret = newHop();
-      }
-      else
-         ret = newHop();
-
-      fromXml( ret, Hop::tagToProp, node );
-
-      // Handle enums separately.
-      n = node.firstChildElement("USE");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else {
-         int ndx = getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret);
-         if ( ndx != -1 )
-            ret->setUse( static_cast<Hop::Use>(ndx));
-         else
-            ret->invalidate();
-      }
-
-      n = node.firstChildElement("TYPE");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else {
-         int ndx = getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret);
-         if ( ndx != -1 )
-            ret->setType( static_cast<Hop::Type>(ndx) );
-         else
-            ret->invalidate();
-      }
-
-      n = node.firstChildElement("FORM");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else {
-         int ndx = Hop::forms.indexOf(n.firstChild().toText().nodeValue());
-         if ( ndx != -1 )
-            ret->setForm( static_cast<Hop::Form>(ndx));
-         else
-            ret->invalidate();
-      }
-
-      if ( ! ret->isValid() )
-      {
-         QString name = ret->name();
-         QList<Hop*> matching;
-         getElements<Hop>( matching, QString("name like '%1'").arg(name), Brewtarget::HOPTABLE, allHops );
-
-         if( matching.length() > 0 )
-         {
-            createdNew = false;
-            Hop* temp = ret;
             ret = matching.first();
-            ret->setAmount_kg(temp->amount_kg());
          }
+         else {
+            ret = new Hop(name);
+         }
+      }
+      else {
+         ret = new Hop(name);
+      }
+
+      if ( createdNew ) {
+         fromXml( ret, node );
+         if ( ! ret->isValid() ) {
+            throw QString("Error reading fermentable from XML");
+         }
+
+         // Handle enums separately.
+         n = node.firstChildElement("USE");
+         if ( n.firstChild().isNull() )
+            ret->invalidate();
+         else {
+            int ndx = getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret);
+            if ( ndx != -1 ) {
+               ret->setUse( static_cast<Hop::Use>(ndx));
+            }
+            else {
+               ret->invalidate();
+            }
+         }
+
+         n = node.firstChildElement("TYPE");
+         if ( n.firstChild().isNull() ) {
+            ret->invalidate();
+         }
+         else {
+            int ndx = getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret);
+            if ( ndx != -1 ) {
+               ret->setType( static_cast<Hop::Type>(ndx) );
+            }
+            else {
+               ret->invalidate();
+            }
+         }
+
+         n = node.firstChildElement("FORM");
+         if ( n.firstChild().isNull() ) {
+            ret->invalidate();
+         }
+         else {
+            int ndx = Hop::forms.indexOf(n.firstChild().toText().nodeValue());
+            if ( ndx != -1 ) {
+               ret->setForm( static_cast<Hop::Form>(ndx));
+            }
+            else {
+               ret->invalidate();
+            }
+         }
+
+         if ( ! ret->isValid() ) {
+            Brewtarget::logW(QString("Could convert %1 to a recognized type"));
+         }
+         insertHop(ret);
       }
 
       if( parent )
@@ -4351,12 +4382,12 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
       throw;
    }
 
-   if ( ! parent )
+   if ( ! parent ) {
       sqlDatabase().commit();
+   }
 
    blockSignals(false);
-   if( createdNew )
-   {
+   if( createdNew ) {
       emit changed( metaProperty("hops"), QVariant() );
       emit newHopSignal(ret);
    }
@@ -4568,60 +4599,58 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    bool createdNew = true;
    blockSignals(true);
    Misc* ret;
+   QString name;
+   QList<Misc*> matching;
 
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
    try {
       // If we are just importing a misc by itself, need to do some dupe-checking.
-      if( parent == 0 )
-      {
+      if( parent == nullptr ) {
          // Check to see if there is a hop already in the DB with the same name.
          sqlDatabase().transaction();
 
-         n = node.firstChildElement("NAME");
-         QString name = n.firstChild().toText().nodeValue();
-         QList<Misc*> matchingMiscs;
-         getElements<Misc>( matchingMiscs, QString("name='%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
+         getElements<Misc>( matching, QString("name='%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
 
-         if( matchingMiscs.length() > 0 )
-         {
+         if( matching.length() > 0 ) {
             createdNew = false;
-            ret = matchingMiscs.first();
-         }
-         else
-            ret = newMisc();
-      }
-      else
-         ret = newMisc();
-
-      fromXml( ret, Misc::tagToProp, node );
-
-      // Handle enums separately.
-      n = node.firstChildElement("TYPE");
-      // Assuming these return anything is a bad idea. So far, several other brewing programs are not generating
-      // valid XML.
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else
-         ret->setType( static_cast<Misc::Type>(getQualifiedMiscTypeIndex(n.firstChild().toText().nodeValue(), ret)));
-
-      n = node.firstChildElement("USE");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else
-         ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
-
-      if ( ! ret->isValid() )
-      {
-         QString name = ret->name();
-         QList<Misc*> matching;
-         getElements<Misc>( matching, QString("name like '%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
-
-         if( matching.length() > 0 )
-         {
-            createdNew = false;
-            Misc* temp = ret;
             ret = matching.first();
-            ret->setAmount( temp->amount() );
          }
+         else {
+            ret = new Misc(name);
+         }
+      }
+      else {
+         ret = new Misc(name);
+      }
+
+      if ( createdNew ) {
+
+         fromXml( ret, node );
+
+         // Handle enums separately.
+         n = node.firstChildElement("TYPE");
+         // Assuming these return anything is a bad idea. So far, several other brewing programs are not generating
+         // valid XML.
+         if ( n.firstChild().isNull() ) {
+            ret->invalidate();
+         }
+         else {
+            ret->setType( static_cast<Misc::Type>(getQualifiedMiscTypeIndex(n.firstChild().toText().nodeValue(), ret)));
+         }
+
+         n = node.firstChildElement("USE");
+         if ( n.firstChild().isNull() ) {
+            ret->invalidate();
+         }
+         else {
+            ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
+         }
+
+         if ( ! ret->isValid() ) {
+            Brewtarget::logW(QString("Could convert %1 to a recognized type"));
+         }
+         insertMisc(ret);
       }
 
       if( parent )

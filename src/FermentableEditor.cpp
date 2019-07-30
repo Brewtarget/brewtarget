@@ -79,7 +79,6 @@ void FermentableEditor::save()
 
    if ( obsFerm->cacheOnly() ) {
       Database::instance().insertFermentable(obsFerm);
-      obsFerm->setCacheOnly(false);
    }
 
    // we need to set inventory late, because we don't know if the row exists

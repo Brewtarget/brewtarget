@@ -46,6 +46,7 @@ class Hop : public BeerXMLElement
    Q_CLASSINFO("prefix", "hop")
    
    friend class Database;
+   friend class HopDialog;
 public:
 
    //! \brief The type of hop, meaning for what properties it is used.
@@ -147,6 +148,7 @@ signals:
 private:
    Hop(Brewtarget::DBTable table, int key);
    Hop(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Hop(QString name, bool cache = true);
    Hop( Hop const& other );
    
    QString m_useStr;

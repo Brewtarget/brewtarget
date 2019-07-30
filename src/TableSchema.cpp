@@ -26,6 +26,8 @@
 #include "StyleTableSchema.h"
 #include "EquipmentTableSchema.h"
 #include "FermentableTableSchema.h"
+#include "HopTableSchema.h"
+#include "MiscTableSchema.h"
 
 // We have to hard code this, because we cannot be certain the database is
 // available yet -- so no bt_alltables lookups can be allowed
@@ -203,6 +205,12 @@ QMap<QString,PropertySchema*> TableSchema::defineTable(Brewtarget::DBTable table
       case Brewtarget::FERMTABLE:
          retVal = defineFermentableTable();
          break;
+      case Brewtarget::HOPTABLE:
+         retVal = defineHopTable();
+         break;
+      case Brewtarget::MISCTABLE:
+         retVal = defineMiscTable();
+         break;
       default:
          qDebug() << tableName_ << " not implemented yet";
    }
@@ -361,7 +369,7 @@ QMap<QString,PropertySchema*> TableSchema::defineFermentableTable()
    tmpNames[Brewtarget::NODB] = kcolFermType;
    tmp[kpropType] = new PropertySchema( kpropType, tmpNames , QString(""), QString("text"), QString("Grain"));
 
-   tmpNames[Brewtarget::NODB] = kcolFermAmount;
+   tmpNames[Brewtarget::NODB] = kcolAmount;
    tmp[kpropAmount] = new PropertySchema( kpropAmount, tmpNames , kxmlPropAmount, QString("real"), QVariant(0.0));
 
    // NOTE: We skip inventory, because that's a weird one and always calculated.
@@ -404,6 +412,99 @@ QMap<QString,PropertySchema*> TableSchema::defineFermentableTable()
 
    tmpNames[Brewtarget::NODB] = kcolFermIBUGalPerLb;
    tmp[kpropIBUGalPerLb] = new PropertySchema( kpropIBUGalPerLb, tmpNames , kxmlPropIBUGalPerLb, QString("real"), QVariant(0.0));
+
+   return tmp;
+}
+
+QMap<QString,PropertySchema*> TableSchema::defineHopTable()
+{
+   QMap<QString,PropertySchema*> tmp;
+   QHash<Brewtarget::DBTypes,QString> tmpNames;
+
+   // These are defined in the global file. 
+   tmpNames[Brewtarget::NODB] = kcolName;
+   tmp[kpropName] = new PropertySchema( kpropName, tmpNames , kxmlPropName, QString("text"), QString(""));
+ 
+   tmpNames[Brewtarget::NODB] = kcolNotes;
+   tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames , kxmlPropNotes, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolAmount;
+   tmp[kpropAmount] = new PropertySchema( kpropAmount, tmpNames , kxmlPropAmount, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolUse;
+   tmp[kpropUse] = new PropertySchema( kpropUse, tmpNames , QString(""), QString("text"), QString("Boil"));
+
+   tmpNames[Brewtarget::NODB] = kcolTime;
+   tmp[kpropAmount] = new PropertySchema( kpropTime, tmpNames , kxmlPropTime, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolOrigin;
+   tmp[kpropOrigin] = new PropertySchema( kpropOrigin, tmpNames , QString(""), QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolSubstitutes;
+   tmp[kpropSubstitutes] = new PropertySchema( kpropSubstitutes, tmpNames , QString(""), QString("text"), QString(""));
+
+   // NOTE: We skip inventory, because that's a weird one and always calculated.
+
+   tmpNames[Brewtarget::NODB] = kcolHopAlpha;
+   tmp[kpropAlpha] = new PropertySchema( kpropAlpha, tmpNames , kxmlPropAlpha, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolHopType;
+   tmp[kpropType] = new PropertySchema( kpropType, tmpNames , QString(""), QString("text"), QString("Boil"));
+
+   tmpNames[Brewtarget::NODB] = kcolHopForm;
+   tmp[kpropForm] = new PropertySchema( kpropForm, tmpNames , QString(""), QString("text"), QString("Pellet"));
+
+   tmpNames[Brewtarget::NODB] = kcolHopBeta;
+   tmp[kpropAmount] = new PropertySchema( kpropBeta, tmpNames , kxmlPropBeta, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolHopHSI;
+   tmp[kpropAmount] = new PropertySchema( kpropHSI, tmpNames , kxmlPropHSI, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolHopHumulene;
+   tmp[kpropAmount] = new PropertySchema( kpropHumulene, tmpNames , kxmlPropHumulene, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolHopCaryophyllene;
+   tmp[kpropAmount] = new PropertySchema( kpropCaryophyllene, tmpNames , kxmlPropCaryophyllene, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolHopCohumulone;
+   tmp[kpropAmount] = new PropertySchema( kpropCohumulone, tmpNames , kxmlPropCohumulone, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolHopMyrcene;
+   tmp[kpropAmount] = new PropertySchema( kpropMyrcene, tmpNames , kxmlPropMyrcene, QString("real"), QVariant(0.0));
+
+   return tmp;
+}
+
+QMap<QString,PropertySchema*> TableSchema::defineMiscTable()
+{
+   QMap<QString,PropertySchema*> tmp;
+   QHash<Brewtarget::DBTypes,QString> tmpNames;
+
+   // These are defined in the global file. 
+   tmpNames[Brewtarget::NODB] = kcolName;
+   tmp[kpropName] = new PropertySchema( kpropName, tmpNames , kxmlPropName, QString("text"), QString(""));
+ 
+   tmpNames[Brewtarget::NODB] = kcolNotes;
+   tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames , kxmlPropNotes, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolAmount;
+   tmp[kpropAmount] = new PropertySchema( kpropAmount, tmpNames , kxmlPropAmount, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolUse;
+   tmp[kpropUse] = new PropertySchema( kpropUse, tmpNames , QString(""), QString("text"), QString("Boil"));
+
+   tmpNames[Brewtarget::NODB] = kcolTime;
+   tmp[kpropAmount] = new PropertySchema( kpropTime, tmpNames , kxmlPropTime, QString("real"), QVariant(0.0));
+
+   // type is always weird, and I wish we hadn't done it this way
+   tmpNames[Brewtarget::NODB] = kcolMiscType;
+   tmp[kpropType] = new PropertySchema( kpropType, tmpNames , QString(""), QString("text"), QString("Other"));
+
+   tmpNames[Brewtarget::NODB] = kcolMiscAmountIsWeight;
+   tmp[kpropAmountIsWeight] = new PropertySchema( kpropAmountIsWeight, tmpNames , kxmlPropAmountIsWeight, QString("boolean"), QString("Boil"));
+
+   tmpNames[Brewtarget::NODB] = kcolMiscUseFor;
+   tmp[kpropUseFor] = new PropertySchema( kpropUseFor, tmpNames , kxmlPropUseFor, QString("text"), QString(""));
 
    return tmp;
 }

@@ -47,11 +47,11 @@ static const QString kcolFermIBUGalPerLb("ibu_gal_per_lb");
 // const QString kpropNotes("notes");
 // const QString kpropType("type");
 // const QString kpropInventory("inventory");
-static const QString kpropAmount("amount_kg");
+// static const QString kpropAmount("amount_kg");
+// static const QString kpropOrigin("origin");
 static const QString kpropYield("yield_pct");
 static const QString kpropColor("color_srm");
 static const QString kpropAddAfterBoil("addAfterBoil");
-static const QString kpropOrigin("origin");
 static const QString kpropSupplier("supplier");
 static const QString kpropCoarseFineDiff("coarseFineDiff_pct");
 static const QString kpropMoisture("moisture_pct");
@@ -65,8 +65,8 @@ static const QString kpropIBUGalPerLb("ibuGalPerLb");
 // XML prop names
 // const QString kXmlNameProp("NAME");
 // const QString kXmlNotesProp("NOTES");
+// static const QString kxmlPropAmount("AMOUNT");
 
-static const QString kxmlPropAmount("AMOUNT");
 static const QString kxmlPropInventory("INVENTORY");
 static const QString kxmlPropYield("YIELD");
 static const QString kxmlPropColor("COLOR");

@@ -42,6 +42,7 @@ class Misc : public BeerXMLElement
    Q_CLASSINFO("prefix", "misc")
    
    friend class Database;
+   friend class MiscDialog;
 public:
   
    //! \brief The type of ingredient.
@@ -126,6 +127,7 @@ signals:
 private:
    Misc(Brewtarget::DBTable table, int key);
    Misc(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Misc(QString name, bool cache = true);
    Misc(Misc const& other);
    
    QString m_typeString;

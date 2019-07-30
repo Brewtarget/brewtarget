@@ -61,10 +61,6 @@ void HopEditor::save()
       return;
    }
 
-   // TODO: check this out with 1.2.5.
-   // Need to disable notification since every "set" method will cause a "showChanges" that
-   // will revert any changes made.
-
    h->setName(lineEdit_name->text());
    h->setAlpha_pct(lineEdit_alpha->toSI());
    h->setAmount_kg(lineEdit_amount->toSI());
@@ -83,6 +79,10 @@ void HopEditor::save()
 
    h->setSubstitutes(textEdit_substitutes->toPlainText());
    h->setNotes(textEdit_notes->toPlainText());
+
+   if ( h->cacheOnly() ) {
+      Database::instance().insertHop(h);
+   }
 
    setVisible(false);
 }
