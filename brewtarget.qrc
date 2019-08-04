@@ -18,6 +18,7 @@
         <file alias="images/flagBrazil.svg">images/flagBrazil.svg</file>
         <file alias="images/flagCatalonia.svg">images/flagCatalonia.svg</file>
         <file alias="images/flagChina.svg">images/flagChina.svg</file>
+        <file alias="images/flagDenmark.svg">images/flagDenmark.svg</file>
         <file alias="images/flagFrance.svg">images/flagFrance.svg</file>
         <file alias="images/flagGermany.svg">images/flagGermany.svg</file>
         <file alias="images/flagGreece.svg">images/flagGreece.svg</file>
@@ -25,8 +26,10 @@
         <file alias="images/flagPoland.svg">images/flagPoland.svg</file>
         <file alias="images/flagPortugal.svg">images/flagPortugal.svg</file>
         <file alias="images/flagNetherlands.svg">images/flagNetherlands.svg</file>
+        <file alias="images/flagNorway.svg">images/flagNorway.svg</file>
         <file alias="images/flagRussia.svg">images/flagRussia.svg</file>
         <file alias="images/flagSpain.svg">images/flagSpain.svg</file>
+        <file alias="images/flagSweden.svg">images/flagSweden.svg</file>
         <file alias="images/flagUK.svg">images/flagUK.svg</file>
         <file alias="images/flagCzech.svg">images/flagCzech.svg</file>
         <file alias="images/folder.png">images/folder.png</file>

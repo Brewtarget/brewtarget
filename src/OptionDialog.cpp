@@ -88,7 +88,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    langIcons <<
       /*ca*/ QIcon(":images/flagCatalonia.svg") <<
       /*cs*/ QIcon(":images/flagCzech.svg") <<
-      /*da*/ QIcon() <<
+      /*da*/ QIcon(":images/flagDenmark.svg") <<
       /*de*/ QIcon(":images/flagGermany.svg") <<
       /*el*/ QIcon(":images/flagGreece.svg") <<
       /*en*/ QIcon(":images/flagUK.svg") <<
@@ -100,13 +100,13 @@ OptionDialog::OptionDialog(QWidget* parent)
       /*hu*/ QIcon() <<
       /*it*/ QIcon(":images/flagItaly.svg") <<
       /*lv*/ QIcon() <<
-      /*nb*/ QIcon() <<
+      /*nb*/ QIcon(":images/flagNorway.svg") <<
       /*nl*/ QIcon(":images/flagNetherlands.svg") <<
       /*pl*/ QIcon(":images/flagPoland.svg") <<
       /*pt*/ QIcon(":images/flagBrazil.svg") <<
       /*ru*/ QIcon(":images/flagRussia.svg") <<
       /*sr*/ QIcon() <<
-      /*sv*/ QIcon() <<
+      /*sv*/ QIcon(":images/flagSweden.svg") <<
       /*tr*/ QIcon() <<
       /*zh*/ QIcon(":images/flagChina.svg");
    // Set icons.
