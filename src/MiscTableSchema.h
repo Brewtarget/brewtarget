@@ -26,9 +26,7 @@ static const QString kcolMiscType("mtype");
 static const QString kcolMiscAmountIsWeight("amount_is_weight");
 static const QString kcolMiscUseFor("use_for");
 
-static const QString kpropAmountIsWeight("amountIsWeight");
 static const QString kpropUseFor("useFor");
 
-static const QString kxmlPropAmountIsWeight("AMOUNT_IS_WEIGHT");
 static const QString kxmlPropUseFor("USE_FOR");
 #endif // _MISCTABLESCHEMA_H

@@ -47,7 +47,7 @@ static const QString kcolFermIBUGalPerLb("ibu_gal_per_lb");
 // const QString kpropNotes("notes");
 // const QString kpropType("type");
 // const QString kpropInventory("inventory");
-// static const QString kpropAmount("amount_kg");
+// static const QString kpropAmountKg("amount_kg");
 // static const QString kpropOrigin("origin");
 static const QString kpropYield("yield_pct");
 static const QString kpropColor("color_srm");

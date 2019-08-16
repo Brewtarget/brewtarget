@@ -170,7 +170,7 @@ void Hop::setAmount_kg( double num )
    {
       m_amount_kg = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropAmount,num);
+         setEasy(kpropAmountKg,num);
       }
    }
 }
@@ -386,7 +386,7 @@ bool   Hop::cacheOnly() const { return m_cacheOnly; }
 // inventory still must be handled separately, and I'm still annoyed.
 double Hop::inventory() const
 {
-   return getInventory(kpropAmount).toDouble();
+   return getInventory(kpropAmountKg).toDouble();
 }
 
 const QString Hop::useStringTr() const

@@ -1535,6 +1535,50 @@ Style* Database::newStyle(QString name)
    return tmp;
 }
 
+Water* Database::newWater(Water* other)
+{
+   Water* tmp;
+
+   try {
+      if ( other )
+         tmp = copy(other,&allWaters);
+      else
+         tmp = newIngredient(&allWaters);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
+
+   emit changed( metaProperty("waters"), QVariant() );
+   emit newWaterSignal(tmp);
+
+   return tmp;
+}
+
+Yeast* Database::newYeast(Yeast* other)
+{
+   Yeast* tmp;
+
+   try {
+      if (other)
+         tmp = copy(other, &allYeasts);
+      else
+         tmp = newIngredient(&allYeasts);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
+
+   emit changed( metaProperty("yeasts"), QVariant() );
+   emit newYeastSignal(tmp);
+
+   return tmp;
+}
+
 int Database::insertElement(BeerXMLElement* ins)
 {
    int key;
@@ -1573,7 +1617,9 @@ int Database::insertElement(BeerXMLElement* ins)
    
 }
 
-// our signals SUCK. HATE them all. HATE HATE HATE HATE
+// I need to break each of these out because of our signals. I will someday
+// find a way to determine which signals are sent, when, from what and then
+// there will come a Purge
 int Database::insertStyle(Style* ins) {
 
    int key = insertElement(ins);
@@ -1691,48 +1737,16 @@ int Database::insertMisc(Misc* ins) {
    return key;
 }
 
-Water* Database::newWater(Water* other)
-{
-   Water* tmp;
+int Database::insertYeast(Yeast* ins) {
 
-   try {
-      if ( other )
-         tmp = copy(other,&allWaters);
-      else
-         tmp = newIngredient(&allWaters);
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      sqlDatabase().rollback();
-      throw;
-   }
+   int key = insertElement(ins);
+   ins->setCacheOnly(false);
 
-   emit changed( metaProperty("waters"), QVariant() );
-   emit newWaterSignal(tmp);
-
-   return tmp;
-}
-
-Yeast* Database::newYeast(Yeast* other)
-{
-   Yeast* tmp;
-
-   try {
-      if (other)
-         tmp = copy(other, &allYeasts);
-      else
-         tmp = newIngredient(&allYeasts);
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      sqlDatabase().rollback();
-      throw;
-   }
-
+   allYeasts.insert(key,ins);
    emit changed( metaProperty("yeasts"), QVariant() );
-   emit newYeastSignal(tmp);
+   emit newYeastSignal(ins);
 
-   return tmp;
+   return key;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -5058,80 +5072,105 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Yeast*> matching;
 
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
    try {
       // If we are just importing a yeast by itself, need to do some dupe-checking.
-      if( parent == 0 )
-      {
-         // Check to see if there is a hop already in the DB with the same name.
+      if ( parent == nullptr ) {
+         // start the transaction, just in case
          sqlDatabase().transaction();
-         n = node.firstChildElement("NAME");
-         name = n.firstChild().toText().nodeValue();
+         // Check to see if there is a yeast already in the DB with the same name.
          getElements<Yeast>( matching, QString("name='%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
 
-         if( matching.length() > 0 )
-         {
+         if ( matching.length() > 0 ) {
             createdNew = false;
             ret = matching.first();
          }
-         else
-            ret = newYeast();
-      }
-      else
-         ret = newYeast();
-
-      fromXml( ret, Yeast::tagToProp, node );
-
-      // Handle enums separately.
-      n = node.firstChildElement("TYPE");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else {
-         int ndx = Yeast::types.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1)
-            ret->setType( static_cast<Yeast::Type>(ndx) );
-         else
-            ret->invalidate();
-      }
-      // Handle enums separately.
-      n = node.firstChildElement("FORM");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else {
-         int ndx = Yeast::forms.indexOf( n.firstChild().toText().nodeValue());
-         if ( ndx != -1 )
-            ret->setForm( static_cast<Yeast::Form>(ndx) );
-         else
-            ret->invalidate();
-      }
-      // Handle enums separately.
-      n = node.firstChildElement("FLOCCULATION");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else {
-         int ndx = Yeast::flocculations.indexOf( n.firstChild().toText().nodeValue());
-         if (ndx != -1)
-            ret->setFlocculation( static_cast<Yeast::Flocculation>(ndx) );
-         else
-            ret->invalidate();
-      }
-
-      // If we cannot import the yeast, we find the nearest possible match in
-      // the database and just use that? With absolutely no feed back to the
-      // user saying "Hey! That didn't work!"? No sir, I don't like it.
-      if ( ! ret->isValid() )
-      {
-         name = ret->name();
-         getElements<Yeast>( matching, QString("name like '%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
-
-         if( matching.length() > 0 )
-         {
-            createdNew = false;
-            ret = matching.first();
+         else {
+            ret = new Yeast(name);
          }
       }
+      else {
+         ret = new Yeast(name);
+      }
 
-      if( parent )
-         addToRecipe( parent, ret, true );
+      if ( createdNew ) {
+         fromXml( ret, node );
+
+         // Handle type enums separately.
+         n = node.firstChildElement("TYPE");
+         if ( n.firstChild().isNull() ) {
+            Brewtarget::logE( 
+                  QString("Could not find TYPE in %1.  Please select an appropriate value once the yeast is imported").arg(name)
+            );
+         }
+         else {
+            QString tname = n.firstChild().toText().nodeValue();
+            int ndx = Yeast::types.indexOf( tname );
+            if ( ndx != -1) {
+               ret->setType( static_cast<Yeast::Type>(ndx) );
+            }
+            else {
+               ret->setType(static_cast<Yeast::Type>(0));
+               Brewtarget::logE( 
+                     QString("Could not translate the type %1 in %2.  Please select an appropriate value once the yeast is imported")
+                     .arg(tname)
+                     .arg(name));
+            }
+         }
+         // Handle form enums separately.
+         n = node.firstChildElement("FORM");
+         if ( n.firstChild().isNull() ) {
+            Brewtarget::logE( 
+                  QString("Could not find FORM in %1.  Please select an appropriate value once the yeast is imported").arg(name)
+            );
+         }
+         else {
+            QString tname = n.firstChild().toText().nodeValue();
+            int ndx = Yeast::forms.indexOf( tname );
+            if ( ndx != -1 ) {
+               ret->setForm( static_cast<Yeast::Form>(ndx) );
+            }
+            else {
+               ret->setForm( static_cast<Yeast::Form>(0) );
+               Brewtarget::logE( 
+                     QString("Could not translate the form %1 in %2.  Please select an appropriate value once the yeast is imported")
+                     .arg(tname)
+                     .arg(name));
+            }
+         }
+         // Handle flocc enums separately.
+         n = node.firstChildElement("FLOCCULATION");
+         if ( n.firstChild().isNull() ) {
+            Brewtarget::logE( 
+                  QString("Could not find FLOCCULATION in %1.  Please select an appropriate value once the yeast is imported").arg(name)
+            );
+         }
+         else {
+            QString tname = n.firstChild().toText().nodeValue();
+            int ndx = Yeast::flocculations.indexOf( tname );
+            if (ndx != -1) {
+               ret->setFlocculation( static_cast<Yeast::Flocculation>(ndx) );
+            }
+            else {
+               ret->setFlocculation( static_cast<Yeast::Flocculation>(0) );
+               Brewtarget::logE( 
+                     QString("Could not translate the flocculation %1 in %2.  Please select an appropriate value once the yeast is imported")
+                     .arg(tname)
+                     .arg(name));
+            }
+         }
+
+         insertYeast(ret);
+      }
+
+      if( parent ) {
+         // we are in a transaction boundary, so tell addToRecipe not to start
+         // another
+         addToRecipe( parent, ret, false );
+         parent->recalcOgFg();
+         parent->recalcABV_pct();
+      }
    }
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -5141,6 +5180,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
       throw;
    }
 
+   sqlDatabase().commit();
    blockSignals(false);
    if( createdNew )
    {
@@ -5172,6 +5212,11 @@ void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
                 value, ins->metaObject()->property(ndx), ins, notify );
 }
 
+// This method and the one that follows need to be 'fixed' to use the
+// TableSchema objects. It will take some study to figure it all out, but I
+// think this method will be significantly reduced. I am probably going to
+// have to create and "updateElement" method like insertElement and then we
+// can remove this.
 QList<TableParams> Database::makeTableParams()
 {
    QList<TableParams> ret;

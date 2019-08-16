@@ -258,6 +258,7 @@ public:
    int    insertMash(Mash* ins);
    int    insertMashStep(MashStep* ins, Mash *parent);
    int    insertMisc(Misc* ins);
+   int    insertYeast(Yeast* ins);
    
    Water* newWater(Water* other = 0);
    Yeast* newYeast(Yeast* other = 0);

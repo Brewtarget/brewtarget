@@ -346,7 +346,7 @@ void Fermentable::setAmount_kg( double num )
    {
       m_amountKg = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropAmount, num);
+         setEasy( kpropAmountKg, num);
       }
    }
 }
@@ -367,7 +367,7 @@ void Fermentable::setInventoryAmount( double num )
 
 double Fermentable::inventory() const
 {
-   return getInventory(kpropAmount).toDouble();
+   return getInventory(kpropAmountKg).toDouble();
 }
 
 void Fermentable::setYield_pct( double num )

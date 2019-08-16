@@ -114,7 +114,7 @@ QString Misc::notes() const { return m_notes; }
 
 double Misc::inventory() const
 {
-   return getInventory(kpropAmount).toDouble();
+   return getInventory(kpropAmountKg).toDouble();
 }
 
 Misc::AmountType Misc::amountType() const { return m_amountIsWeight ? AmountType_Weight : AmountType_Volume; }
@@ -214,7 +214,7 @@ void Misc::setAmount( double var )
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropAmount, var );
+         setEasy( kpropAmountKg, var );
       }
    }
 }

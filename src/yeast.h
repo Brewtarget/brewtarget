@@ -45,6 +45,7 @@ class Yeast : public BeerXMLElement
    Q_CLASSINFO("prefix", "yeast")
    
    friend class Database;
+   friend class YeastDialog;
 public:
    //! \brief What beverage the yeast is for.
    enum Type {Ale, Lager, Wheat, Wine, Champagne};
@@ -155,6 +156,7 @@ signals:
 private:
    Yeast(Brewtarget::DBTable table, int key);
    Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Yeast(QString name, bool cache = true);
    Yeast(Yeast const& other);
    
    QString m_typeString;

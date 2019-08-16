@@ -79,6 +79,9 @@ void YeastEditor::save()
    y->setBestFor(textEdit_bestFor->toPlainText());
    y->setNotes(textEdit_notes->toPlainText()); 
 
+   if ( y->cacheOnly() ) {
+      Database::instance().insertYeast(y);
+   }
    setVisible(false);
 }
 

@@ -44,14 +44,13 @@ static const QString kcolHopMyrcene("myrcene");
 // static const QString kpropName("name");
 // static const QString kpropNotes("notes");
 // static const QString kpropType("type");
-// static const QString kpropAmount("amount_kg");
+// static const QString kpropAmountKg("amount_kg");
 // static const QString kpropInventory("inventory");
 // static const QString kpropOrigin("origin");
 // static const QString kpropUse("use");
 // static const QString kpropTime("time_min");
 
 static const QString kpropAlpha("alpha_pct");
-static const QString kpropForm("form");
 static const QString kpropBeta("beta_pct");
 static const QString kpropHSI("hsi_pct");
 static const QString kpropSubstitutes("substitutes");

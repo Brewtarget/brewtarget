@@ -53,7 +53,7 @@ static const QString kpropName("name");
 static const QString kpropNotes("notes");
 static const QString kpropType("type");
 static const QString kpropDeleted("deleted");
-static const QString kpropAmount("amount_kg");
+static const QString kpropAmountKg("amount_kg");
 static const QString kpropDisplay("display");
 static const QString kpropFolder("folder");
 static const QString kpropOrigin("origin");
@@ -64,6 +64,12 @@ static const QString kpropTime("time_min");
 // needed by both mash and equipment
 static const QString kpropTunWeight("tunWeight_kg");
 static const QString kpropTunSpecificHeat("tunSpecificHeat_calGC");
+
+// needed by both misc and yeast
+static const QString kpropAmountIsWeight("amountIsWeight");
+
+/// used by both hops and yeast
+static const QString kpropForm("form");
 
 // Same for these column names. Yes, but I think the consistency is better
 // this way
@@ -79,6 +85,7 @@ static const QString kcolUse("use");
 static const QString kcolSubstitutes("substitutes");
 static const QString kcolTime("time");
 
+
 // And things that are identical in beerxml
 static const QString kxmlPropName("NAME");
 static const QString kxmlPropNotes("NOTES");
@@ -89,3 +96,6 @@ static const QString kxmlPropTime("TIME");
 // needed by both equipment and mash
 const QString kxmlPropTunWeight("TUN_WEIGHT");
 const QString kxmlPropTunSpecificHeat("TUN_SPECIFIC_HEAT");
+
+// needed by both misc and yeast
+static const QString kxmlPropAmountIsWeight("AMOUNT_IS_WEIGHT");
