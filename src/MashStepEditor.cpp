@@ -22,6 +22,7 @@
 #include "brewtarget.h"
 #include "MashStepEditor.h"
 #include "mashstep.h"
+#include "database.h"
 
 MashStepEditor::MashStepEditor(QWidget* parent)
    : QDialog(parent), obs(0)
@@ -48,6 +49,7 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
    QVariant value;
    bool updateAll = false;
 
+   qDebug() << "showChanges";
    if( metaProp == 0 )
       updateAll = true;
    else
@@ -128,8 +130,14 @@ void MashStepEditor::setMashStep(MashStep* step)
    }
 }
 
+void MashStepEditor::setParentMash(Mash *parent)
+{
+   m_parent = parent;
+}
+
 void MashStepEditor::saveAndClose()
 {
+   qDebug() << "saveAndClose()";
    obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI());
@@ -139,6 +147,10 @@ void MashStepEditor::saveAndClose()
    obs->setStepTime_min(lineEdit_stepTime->toSI());
    obs->setRampTime_min(lineEdit_rampTime->toSI());
    obs->setEndTemp_c(lineEdit_endTemp->toSI());
+
+   if ( obs->cacheOnly() ) {
+      Database::instance().insertMashStep(obs,m_parent);
+   }
 
    setVisible(false);
 }

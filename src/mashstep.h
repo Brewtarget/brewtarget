@@ -42,6 +42,8 @@ class MashStep : public BeerXMLElement
    
    friend class Database;
    friend class MashStepItemDelegate;
+   friend class MashWizard;
+   friend class MainWindow;
 public:
 
    //! \brief The type of step.
@@ -113,6 +115,7 @@ private:
    MashStep(Brewtarget::DBTable table, int key);
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
    MashStep( MashStep const& other );
+   MashStep(bool cache);
    
    QString m_typeStr;
    Type m_type;

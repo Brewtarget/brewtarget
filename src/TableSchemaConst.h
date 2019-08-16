@@ -61,6 +61,10 @@ static const QString kpropUse("use");
 static const QString kpropInventory("inventory");
 static const QString kpropTime("time_min");
 
+// needed by both mash and equipment
+static const QString kpropTunWeight("tunWeight_kg");
+static const QString kpropTunSpecificHeat("tunSpecificHeat_calGC");
+
 // Same for these column names. Yes, but I think the consistency is better
 // this way
 static const QString kcolName("name");
@@ -82,3 +86,6 @@ static const QString kxmlPropAmount("AMOUNT");
 static const QString kxmlPropSubstitutes("SUBSTITUTES");
 static const QString kxmlPropTime("TIME");
 
+// needed by both equipment and mash
+const QString kxmlPropTunWeight("TUN_WEIGHT");
+const QString kxmlPropTunSpecificHeat("TUN_SPECIFIC_HEAT");

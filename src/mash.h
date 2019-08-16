@@ -121,6 +121,7 @@ private:
    Mash(Brewtarget::DBTable table, int key);
    Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Mash( Mash const& other );
+   Mash( QString name, bool cache = true );
    
    double m_grainTemp_c;
    QString m_notes;

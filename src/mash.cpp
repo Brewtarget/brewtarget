@@ -29,49 +29,8 @@
 #include <QDomText>
 #include <QObject>
 
-/************* Columns *************/
-const QString kNotes("notes");
-const QString kGrainTemp("grain_temp");
-const QString kTunTemp("tun_temp");
-const QString kSpargeTemp("sparge_temp");
-const QString kPH("ph");
-const QString kTunWeight("tun_weight");
-const QString kTunSpecificHeat("tun_specific_heat");
-const QString kEquipAdjust("equip_adjust");
-
-// these are defined in the parent, but I need them here too
-const QString kName("name");
-const QString kDeleted("deleted");
-const QString kDisplay("display");
-const QString kFolder("folder");
-/************** Props **************/
-const QString kNameProp("name");
-const QString kGrainTempProp("grainTemp_c");
-const QString kNotesProp("notes");
-const QString kTunTempProp("tunTemp_c");
-const QString kSpargeTempProp("spargeTemp_c");
-const QString kPHProp("ph");
-const QString kTunWeightProp("tunWeight_kg");
-const QString kTunSpecificHeatProp("tunSpecificHeat_calGC");
-const QString kEquipAdjustProp("equipAdjust");
-
-
-QHash<QString,QString> Mash::tagToProp = Mash::tagToPropHash();
-
-QHash<QString,QString> Mash::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   propHash["NAME"] = kNameProp;
-   propHash["GRAIN_TEMP"] = kGrainTempProp;
-   propHash["NOTES"] = kNotesProp;
-   propHash["TUN_TEMP"] = kTunTempProp;
-   propHash["SPARGE_TEMP"] = kSpargeTempProp;
-   propHash["PH"] = kPHProp;
-   propHash["TUN_WEIGHT"] = kTunWeightProp;
-   propHash["TUN_SPECIFIC_HEAT"] = kTunSpecificHeatProp;
-   propHash["EQUIP_ADJUST"] = kEquipAdjustProp;
-   return propHash;
-}
+#include "TableSchemaConst.h"
+#include "MashTableSchema.h"
 
 bool operator<(Mash &m1, Mash &m2)
 {
@@ -103,16 +62,30 @@ Mash::Mash(Brewtarget::DBTable table, int key)
 {
 }
 
+Mash::Mash(QString name, bool cache)
+   : BeerXMLElement(Brewtarget::MISCTABLE, -1, name, true),
+     m_grainTemp_c(0.0),
+     m_notes(QString()),
+     m_tunTemp_c(0.0),
+     m_spargeTemp_c(0.0),
+     m_ph(0.0),
+     m_tunWeight_kg(0.0),
+     m_tunSpecificHeat_calGC(0.0),
+     m_equipAdjust(true),
+     m_cacheOnly(cache)
+{
+}
+
 Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool()),
-     m_grainTemp_c(rec.value(kGrainTemp).toDouble()),
-     m_notes(rec.value(kNotes).toString()),
-     m_tunTemp_c(rec.value(kTunTemp).toDouble()),
-     m_spargeTemp_c(rec.value(kSpargeTemp).toDouble()),
-     m_ph(rec.value(kPH).toDouble()),
-     m_tunWeight_kg(rec.value(kTunWeight).toDouble()),
-     m_tunSpecificHeat_calGC(rec.value(kTunSpecificHeat).toDouble()),
-     m_equipAdjust(rec.value(kEquipAdjust).toBool()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+     m_grainTemp_c(rec.value(kcolMashGrainTemp).toDouble()),
+     m_notes(rec.value(kcolNotes).toString()),
+     m_tunTemp_c(rec.value(kcolMashTunTemp).toDouble()),
+     m_spargeTemp_c(rec.value(kcolMashSpargeTemp).toDouble()),
+     m_ph(rec.value(kcolMashPH).toDouble()),
+     m_tunWeight_kg(rec.value(kcolMashTunWeight).toDouble()),
+     m_tunSpecificHeat_calGC(rec.value(kcolMashTunSpecificHeat).toDouble()),
+     m_equipAdjust(rec.value(kcolMashEquipAdjust).toBool()),
      m_cacheOnly(false)
 {
 }
@@ -121,7 +94,7 @@ void Mash::setGrainTemp_c( double var )
 {
    m_grainTemp_c = var;
    if ( ! m_cacheOnly ) {
-      set(kGrainTempProp, kGrainTemp, var);
+      setEasy(kpropGrainTemp, var);
    }
 }
 
@@ -129,7 +102,7 @@ void Mash::setNotes( const QString& var )
 {
    m_notes = var;
    if ( ! m_cacheOnly ) {
-      set(kNotesProp, kNotes, var);
+      setEasy(kpropNotes, var);
    }
 }
 
@@ -137,7 +110,7 @@ void Mash::setTunTemp_c( double var )
 {
    m_tunTemp_c = var;
    if ( ! m_cacheOnly ) {
-      set(kTunTempProp, kTunTemp, var);
+      setEasy(kpropTunTemp, var);
    }
 }
 
@@ -145,7 +118,7 @@ void Mash::setSpargeTemp_c( double var )
 {
    m_spargeTemp_c = var;
    if ( ! m_cacheOnly ) {
-      set(kSpargeTempProp, kSpargeTemp, var);
+      setEasy(kpropSpargeTemp, var);
    }
 }
 
@@ -153,7 +126,7 @@ void Mash::setEquipAdjust( bool var )
 {
    m_equipAdjust = var;
    if ( ! m_cacheOnly ) {
-      set(kEquipAdjustProp, kEquipAdjust, var);
+      setEasy(kpropEquipAdjust, var);
    }
 }
 
@@ -168,7 +141,7 @@ void Mash::setPh( double var )
    {
       m_ph = var;
       if ( ! m_cacheOnly ) {
-         set(kPHProp, kPH, var);
+         setEasy(kpropPH, var);
       }
    }
 }
@@ -184,7 +157,7 @@ void Mash::setTunWeight_kg( double var )
    {
       m_tunWeight_kg = var;
       if ( ! m_cacheOnly ) {
-         set(kTunWeightProp, kTunWeight, var);
+         setEasy(kpropTunWeight, var);
       }
    }
 }
@@ -200,7 +173,7 @@ void Mash::setTunSpecificHeat_calGC( double var )
    {
       m_tunSpecificHeat_calGC = var;
       if ( ! m_cacheOnly ) {
-         set(kTunSpecificHeatProp, kTunSpecificHeat, var);
+         setEasy(kpropTunSpecificHeat, var);
       }
    }
 }

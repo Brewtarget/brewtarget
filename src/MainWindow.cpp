@@ -1912,8 +1912,10 @@ void MainWindow::addMashStep()
       return;
    }
 
-   MashStep* step = Database::instance().newMashStep(mash);
+   // MashStep* step = Database::instance().newMashStep(mash);
+   MashStep* step = new MashStep(true);
    mashStepEditor->setMashStep(step);
+   mashStepEditor->setParentMash(mash);
    mashStepEditor->setVisible(true);
 }
 

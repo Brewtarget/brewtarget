@@ -75,6 +75,8 @@ private:
    QMap<QString,PropertySchema*> defineEquipmentTable();
    QMap<QString,PropertySchema*> defineFermentableTable();
    QMap<QString,PropertySchema*> defineHopTable();
+   QMap<QString,PropertySchema*> defineMashTable();
+   QMap<QString,PropertySchema*> defineMashstepTable();
    QMap<QString,PropertySchema*> defineMiscTable();
 };
 

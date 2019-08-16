@@ -124,19 +124,34 @@ const QString Misc::amountTypeString() const { return amountTypes.at(amountType(
 const QString Misc::typeStringTr() const
 {
    QStringList typesTr = QStringList() << tr("Spice") << tr("Fining") << tr("Water Agent") << tr("Herb") << tr("Flavor") << tr("Other");
-   return typesTr.at(type());
+   if ( m_type >= 0 && m_type < typesTr.size()  ) {
+      return typesTr.at(m_type);
+   }
+   else {
+      return QString("Spice");
+   }
 }
 
 const QString Misc::useStringTr() const
 {
    QStringList usesTr = QStringList() << tr("Boil") << tr("Mash") << tr("Primary") << tr("Secondary") << tr("Bottling");
-   return usesTr.at(use());
+   if ( m_use >= 0 && m_use < usesTr.size() ) {
+      return usesTr.at(use());
+   }
+   else {
+      return QString("Boil");
+   }
 }
 
 const QString Misc::amountTypeStringTr() const
 {
    QStringList amountTypesTr = QStringList() << tr("Weight") << tr("Volume");
-   return amountTypesTr.at(amountType());
+   if ( amountType() ) {
+      return amountTypesTr.at(amountType());
+   }
+   else {
+      return QString("Weight");
+   }
 }
 
 bool Misc::cacheOnly() const { return m_cacheOnly; }

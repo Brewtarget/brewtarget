@@ -1265,15 +1265,14 @@ Mash* Database::newMash(Mash* other, bool displace)
 {
    Mash* tmp;
 
-   if ( other ) {
-      sqlDatabase().transaction();
-   }
-
    try {
-      if ( other )
+      if ( other ) {
+         sqlDatabase().transaction();
          tmp = copy<Mash>(other, &allMashs);
-      else
+      }
+      else {
          tmp = newIngredient(&allMashs);
+      }
 
       if ( other ) {
          // Just copying the Mash isn't enough. We need to copy the mashsteps too
@@ -1296,8 +1295,10 @@ Mash* Database::newMash(Mash* other, bool displace)
       throw;
    }
 
-   if ( other )
+   if ( other ) {
       sqlDatabase().commit();
+   }
+
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
 
@@ -1308,8 +1309,9 @@ Mash* Database::newMash(Recipe* parent, bool transact)
 {
    Mash* tmp;
 
-   if ( transact )
+   if ( transact ) {
       sqlDatabase().transaction();
+   }
 
    try {
       tmp = newIngredient(&allMashs);
@@ -1326,8 +1328,9 @@ Mash* Database::newMash(Recipe* parent, bool transact)
       throw;
    }
 
-   if ( transact )
+   if ( transact ) {
       sqlDatabase().commit();
+   }
 
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
@@ -1340,7 +1343,6 @@ Mash* Database::newMash(Recipe* parent, bool transact)
 // mash steps?
 MashStep* Database::newMashStep(Mash* mash, bool connected)
 {
-   // TODO: encapsulate in QUndoCommand.
    // NOTE: we have unique(mash_id,step_number) constraints on this table,
    // so may have to pay special attention when creating the new record.
    MashStep* tmp;
@@ -1545,13 +1547,13 @@ int Database::insertElement(BeerXMLElement* ins)
 
    insert = insert % allColumns.join(",") % ") values (:" % allProps.join(",:") % ");";
 
+   qDebug() << "insert = " << insert;
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
       q.bindValue( ":"%prop, ins->property(prop.toUtf8().data()));
    }
 
-   sqlDatabase().transaction();
    try {
       if ( ! q.exec() ) {
          throw QString("could not insert a record into");
@@ -1565,7 +1567,6 @@ int Database::insertElement(BeerXMLElement* ins)
       Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
       throw; // rethrow the error until somebody cares
    }
-   sqlDatabase().commit();
    ins->_key = key;
     
    return key;
@@ -1578,6 +1579,8 @@ int Database::insertStyle(Style* ins) {
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
+   allStyles.insert(key,ins);
+
    emit changed( metaProperty("styles"), QVariant() );
    emit newStyleSignal(ins);
 
@@ -1589,6 +1592,7 @@ int Database::insertEquipment(Equipment* ins) {
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
+   allEquipments.insert(key,ins);
    emit changed( metaProperty("equipments"), QVariant() );
    emit newEquipmentSignal(ins);
 
@@ -1600,6 +1604,7 @@ int Database::insertFermentable(Fermentable* ins) {
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
+   allFermentables.insert(key,ins);
    emit changed( metaProperty("fermentables"), QVariant() );
    emit newFermentableSignal(ins);
 
@@ -1611,8 +1616,65 @@ int Database::insertHop(Hop* ins) {
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
+   allHops.insert(key,ins);
    emit changed( metaProperty("hops"), QVariant() );
    emit newHopSignal(ins);
+
+   return key;
+}
+
+int Database::insertMash(Mash* ins) {
+
+   int key = insertElement(ins);
+   ins->setCacheOnly(false);
+
+   allMashs.insert(key,ins);
+   emit changed( metaProperty("mashs"), QVariant() );
+   emit newMashSignal(ins);
+
+   return key;
+}
+
+// this one will be harder, because we have to link the mashstep to the parent
+// mash
+int Database::insertMashStep(MashStep* ins, Mash* parent) {
+   QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
+                        .arg(tableNames[Brewtarget::MASHSTEPTABLE])
+                        .arg(Brewtarget::dbFalse())
+                        .arg(parent->_key);
+   int key;
+
+//   sqlDatabase().transaction();
+   try {
+
+      // we need to insert the mashstep into the db first to get the key
+      key = insertElement(ins);
+      ins->setCacheOnly(false);
+
+      sqlUpdate( Brewtarget::MASHSTEPTABLE,
+                 QString("mash_id=%1 ").arg(parent->_key),
+                 QString("id=%1").arg(key)
+               );
+
+      // Just sets the step number within the mash to the next available number.
+      // we need coalesce here instead of isnull. coalesce is SQL standard, so
+      // should be more widely supported than isnull
+      sqlUpdate( Brewtarget::MASHSTEPTABLE, coalesce, QString("id=%1").arg(key) );
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
+
+   sqlDatabase().commit();
+
+   allMashSteps.insert(key,ins);
+   connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), parent, 
+                 SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
+
+   emit changed( metaProperty("mashs"), QVariant() );
+   emit parent->mashStepsChanged();
 
    return key;
 }
@@ -1622,6 +1684,7 @@ int Database::insertMisc(Misc* ins) {
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
+   allMiscs.insert(key,ins);
    emit changed( metaProperty("miscs"), QVariant() );
    emit newMiscSignal(ins);
 
@@ -2232,8 +2295,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
    // Making a copy of the mash isn't enough. We need a copy of the mashsteps
    // too.
    try {
-      if ( ! noCopy )
-      {
+      if ( ! noCopy ) {
          newMash = copy<Mash>(m, &allMashs, false);
          duplicateMashSteps(m,newMash);
       }
@@ -4419,63 +4481,65 @@ Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent 
 Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
+   Mash* ret;
+   QString name;
+   QList<Mash*> matching;
 
    blockSignals(true);
-   Mash* ret;
 
    // Mashes are weird. We need to know if this is a duplicate, but we need to
    // make a copy of it anyway.
    n = node.firstChildElement("NAME");
-   QString name = n.firstChild().toText().nodeValue();
+   name = n.firstChild().toText().nodeValue();
 
    try {
-      if( parent )
-         ret = newMash(parent);
-      else {
-         sqlDatabase().transaction();
-         ret = newMash();
-      }
+      ret = new Mash(name);
 
       // If the mash has a name
       if ( ! name.isEmpty() )
       {
-         QList<Mash*> matchingMash;
-         getElements<Mash>( matchingMash, QString("name='%1'").arg(name), Brewtarget::MASHTABLE, allMashs );
+         getElements<Mash>( matching, QString("name='%1'").arg(name), Brewtarget::MASHTABLE, allMashs );
 
          // If there are no other matches in the database
-         if( matchingMash.isEmpty() )
+         if( matching.isEmpty() )
+         {
             ret->setDisplay(true);
+         }
       }
       // First, get all the standard properties.
-      fromXml( ret, Mash::tagToProp, node );
+      fromXml( ret, node );
 
       // Now, get the individual mash steps.
       n = node.firstChildElement("MASH_STEPS");
-      if( n.isNull() )
-         return ret;
-
-      // Iterate through all the mash steps.
-      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      {
-         MashStep* temp = mashStepFromXml( n, ret );
-         if ( ! temp->isValid() ) {
-             QString error = QString("Error importing mash step %1").arg(temp->name());
-             Brewtarget::logE(error);
-             QMessageBox::critical(0, tr("Import error."),
-                 error.append("\nImporting as \"Infusion\"."));
+      if( ! n.isNull() ) {
+         // Iterate through all the mash steps.
+         for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+         {
+            MashStep* temp = mashStepFromXml( n, ret );
+            if ( ! temp->isValid() ) {
+               QString error = QString("Error importing mash step %1").arg(temp->name());
+               Brewtarget::logE(error);
+               QMessageBox::critical(0, tr("Import error."),
+                  error.append("\nImporting as \"Infusion\"."));
+            }
          }
       }
+
+      sqlDatabase().transaction();
+      insertMash(ret);
+      if ( parent ) {
+         addToRecipe( parent, ret, true, false);
+      }
+         
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       blockSignals(false);
-      if ( ! parent )
-         sqlDatabase().rollback();
+      sqlDatabase().rollback();
       throw;
    }
 
-   if ( ! parent )
-      sqlDatabase().commit();
+   sqlDatabase().commit();
 
    blockSignals(false);
 
@@ -4494,16 +4558,13 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    QString str;
    bool blocked = signalsBlocked();
 
-   if (! blocked )
-      blockSignals(true);
+//   if (! blocked )
+//      blockSignals(true);
 
    try {
-      MashStep* ret = newMashStep(parent);
-      // I am only doing this on mashsteps because they cause all sorts of
-      // expensive recalculations to happen
-      ret->blockSignals(true);
+      MashStep* ret = new MashStep(true);
 
-      fromXml(ret,MashStep::tagToProp,node);
+      fromXml(ret,node);
 
       // Handle enums separately.
       n = node.firstChildElement("TYPE");
@@ -4523,7 +4584,7 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
             ret->invalidate();
       }
 
-      ret->blockSignals(false);
+      insertMashStep(ret,parent);
       if (! blocked )
       {
          blockSignals(false);

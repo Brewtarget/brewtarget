@@ -2264,32 +2264,45 @@ void Recipe::acceptMashChange(Mash* newMash)
       recalcAll();
 }
 
-double Recipe::targetCollectedWortVol_l() {
+double Recipe::targetCollectedWortVol_l()
+{
 
    // Need to account for extract/sugar volume also.
    float postMashAdditionVolume_l = 0;
-   QList<Fermentable*> ferms = fermentables();
-         foreach( Fermentable* f, ferms )
-      {
-         Fermentable::Type type = f->type();
-         if( type == Fermentable::Extract )
-            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
-         else if( type == Fermentable::Sugar )
-            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
-         else if( type == Fermentable::Dry_Extract )
-            postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
-      }
 
-   return boilSize_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
+   QList<Fermentable*> ferms = fermentables();
+   foreach( Fermentable* f, ferms ) {
+      Fermentable::Type type = f->type();
+      if ( type == Fermentable::Extract ) {
+         postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
+      }
+      else if ( type == Fermentable::Sugar ) {
+         postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
+      }
+      else if ( type == Fermentable::Dry_Extract ) {
+         postMashAdditionVolume_l  += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
+      }
+   }
+
+   if ( equipment() ) {
+      return boilSize_l() - equipment()->topUpKettle_l() - postMashAdditionVolume_l;
+   }
+   else {
+      return boilSize_l() - postMashAdditionVolume_l;
+   }
 }
 
-double Recipe::targetTotalMashVol_l() {
+double Recipe::targetTotalMashVol_l()
+{
 
    double absorption_lKg;
-   if( equipment() )
+
+   if( equipment() ) {
       absorption_lKg = equipment()->grainAbsorption_LKg();
-   else
+   }
+   else {
       absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+   }
 
 
    return targetCollectedWortVol_l() + absorption_lKg * grainsInMash_kg();

@@ -255,6 +255,8 @@ public:
    int    insertEquipment(Equipment* ins);
    int    insertFermentable(Fermentable* ins);
    int    insertHop(Hop* ins);
+   int    insertMash(Mash* ins);
+   int    insertMashStep(MashStep* ins, Mash *parent);
    int    insertMisc(Misc* ins);
    
    Water* newWater(Water* other = 0);

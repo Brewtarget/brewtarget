@@ -180,24 +180,22 @@ void MashWizard::wizardry()
    }
 
    QList<MashStep*> steps = mash->mashSteps();
+
    // We ensured that there was at least one mash step when we displayed the thickness dialog in show().
    mashStep = steps.at(0);
-   if( mashStep == 0 )
-   {
+   if ( mashStep == nullptr ) {
       Brewtarget::logE( "MashWizard::wizardry(): first mash step was null." );
       return;
    }
 
    // Ensure first mash step is an infusion.
-   if( ! mashStep->isInfusion() && ! mashStep->isSparge() )
-   {
+   if ( ! mashStep->isInfusion() && ! mashStep->isSparge() ) {
       QMessageBox::information(this, tr("First step"), tr("Your first mash step must be an infusion."));
       return;
    }
 
    // Find any batch sparges and remove them for now.
-   for( i = 0; i < steps.size(); ++i)
-   {
+   for( i = 0; i < steps.size(); ++i) {
       MashStep* step = steps[i];
       // NOTE: For backwards compatibility, the Final Batch Sparge comparison
       // must be allowed. No matter how much we desire otherwise.
@@ -209,13 +207,15 @@ void MashWizard::wizardry()
    if ( bGroup->checkedButton() != radioButton_noSparge ) {
       thickNum = doubleSpinBox_thickness->value();
       thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
+      qDebug() << "radio button not clicked" << thickNum << "*" << volumeUnit->toSI(1) << "/" << weightUnit->toSI(1) << "=" << thickness_LKg;
    }
    else {
-      if (steps.size() == 1){
-         steps.front()->setInfuseAmount_l(recObs->targetTotalMashVol_l());
+      // not sure I like this. Why is this here and not somewhere later?
+      if (steps.size() == 1) {
+         mashStep->setInfuseAmount_l(recObs->targetTotalMashVol_l());
       }
       // For no sparge, get the thickness of the first mash step
-      thickNum = mash->mashSteps().front()->infuseAmount_l()/grainMass;
+      thickNum = mashStep->infuseAmount_l()/grainMass;
       thickness_LKg = thickNum;
    }
 
@@ -225,6 +225,7 @@ void MashWizard::wizardry()
       return;
    }
 
+   qDebug() << "we have found our expected thickness";
    steps = mash->mashSteps();
 
    // Do first step
@@ -371,10 +372,8 @@ void MashWizard::wizardry()
       if ( bGroup->checkedButton() == radioButton_batchSparge ) {
          int numSteps = spinBox_batches->value();
          double volPerBatch = spargeWater_l/numSteps; // its evil, but deal with it
-
          for(int i=0; i < numSteps; ++i ) {
-            mashStep = Database::instance().newMashStep(mash);
-            steps.append(mashStep);
+            mashStep = new MashStep(true);
 
             mashStep->setType(MashStep::batchSparge);
             mashStep->setName(tr("Batch Sparge %1").arg(i+1));
@@ -383,12 +382,14 @@ void MashWizard::wizardry()
             mashStep->setEndTemp_c(tw);
             mashStep->setStepTemp_c(tf);
             mashStep->setStepTime_min(15);
+
+            Database::instance().insertMashStep(mashStep,mash);
+            steps.append(mashStep);
          }
       }
       // fly sparge, I think
       else {
-         mashStep = Database::instance().newMashStep(mash);
-         steps.append(mashStep);
+         mashStep = new MashStep(true);
 
          mashStep->setName(tr("Fly Sparge"));
          mashStep->setType(MashStep::flySparge);
@@ -397,6 +398,9 @@ void MashWizard::wizardry()
          mashStep->setEndTemp_c(tw);
          mashStep->setStepTemp_c(tf);
          mashStep->setStepTime_min(15);
+
+         Database::instance().insertMashStep(mashStep,mash);
+         steps.append(mashStep);
       }
 
    }

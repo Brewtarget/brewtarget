@@ -27,6 +27,8 @@
 #include "EquipmentTableSchema.h"
 #include "FermentableTableSchema.h"
 #include "HopTableSchema.h"
+#include "MashTableSchema.h"
+#include "MashStepTableSchema.h"
 #include "MiscTableSchema.h"
 
 // We have to hard code this, because we cannot be certain the database is
@@ -207,6 +209,12 @@ QMap<QString,PropertySchema*> TableSchema::defineTable(Brewtarget::DBTable table
          break;
       case Brewtarget::HOPTABLE:
          retVal = defineHopTable();
+         break;
+      case Brewtarget::MASHTABLE:
+         retVal = defineMashTable();
+         break;
+      case Brewtarget::MASHSTEPTABLE:
+         retVal = defineMashstepTable();
          break;
       case Brewtarget::MISCTABLE:
          retVal = defineMiscTable();
@@ -471,6 +479,81 @@ QMap<QString,PropertySchema*> TableSchema::defineHopTable()
 
    tmpNames[Brewtarget::NODB] = kcolHopMyrcene;
    tmp[kpropAmount] = new PropertySchema( kpropMyrcene, tmpNames , kxmlPropMyrcene, QString("real"), QVariant(0.0));
+
+   return tmp;
+}
+
+QMap<QString,PropertySchema*> TableSchema::defineMashTable()
+{
+   QMap<QString,PropertySchema*> tmp;
+   QHash<Brewtarget::DBTypes,QString> tmpNames;
+
+   // These are defined in the global file. 
+   tmpNames[Brewtarget::NODB] = kcolName;
+   tmp[kpropName] = new PropertySchema( kpropName, tmpNames , kxmlPropName, QString("text"), QString(""));
+ 
+   tmpNames[Brewtarget::NODB] = kcolNotes;
+   tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames , kxmlPropNotes, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolMashGrainTemp;
+   tmp[kpropGrainTemp] = new PropertySchema( kpropGrainTemp, tmpNames , kxmlPropGrainTemp, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashTunTemp;
+   tmp[kpropTunTemp] = new PropertySchema( kpropTunTemp, tmpNames , kxmlPropTunTemp, QString("real"), QVariant(20.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashSpargeTemp;
+   tmp[kpropSpargeTemp] = new PropertySchema( kpropSpargeTemp, tmpNames , kxmlPropSpargeTemp, QString("real"), QVariant(74.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashPH;
+   tmp[kpropPH] = new PropertySchema( kpropPH, tmpNames , kxmlPropPH, QString("real"), QVariant(7.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashTunWeight;
+   tmp[kpropTunWeight] = new PropertySchema( kpropTunWeight, tmpNames , kxmlPropTunWeight, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashTunSpecificHeat;
+   tmp[kpropTunSpecificHeat] = new PropertySchema( kpropTunSpecificHeat, tmpNames , kxmlPropTunSpecificHeat, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashEquipAdjust;
+   tmp[kpropEquipAdjust] = new PropertySchema( kpropEquipAdjust, tmpNames , kxmlPropEquipAdjust, QString("boolean"), QVariant(true));
+
+   return tmp;
+}
+
+QMap<QString,PropertySchema*> TableSchema::defineMashstepTable()
+{
+   QMap<QString,PropertySchema*> tmp;
+   QHash<Brewtarget::DBTypes,QString> tmpNames;
+
+   tmpNames[Brewtarget::NODB] = kcolName;
+   tmp[kpropName] = new PropertySchema( kpropName, tmpNames , kxmlPropName, QString("text"), QString(""));
+ 
+   // type is always weird, and I wish we hadn't done it this way
+   tmpNames[Brewtarget::NODB] = kcolMashstepType;
+   tmp[kpropType] = new PropertySchema( kpropType, tmpNames , QString(""), QString("text"), QString("Infusion"));
+
+   tmpNames[Brewtarget::NODB] = kcolMashstepInfuseAmount;
+   tmp[kpropInfuseAmount] = new PropertySchema( kpropInfuseAmount, tmpNames , kxmlPropInfuseAmount, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashstepStepTemp;
+   tmp[kpropStepTemp] = new PropertySchema( kpropStepTemp, tmpNames , kxmlPropStepTemp, QString("real"), QVariant(67.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashstepStepTime;
+   tmp[kpropStepTime] = new PropertySchema( kpropStepTime, tmpNames , kxmlPropStepTime, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashstepRampTime;
+   tmp[kpropRampTime] = new PropertySchema( kpropRampTime, tmpNames , kxmlPropRampTime, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashstepEndTemp;
+   tmp[kpropEndTemp] = new PropertySchema( kpropEndTemp, tmpNames , kxmlPropEndTemp, QString("real"), QVariant(67.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashstepInfuseTemp;
+   tmp[kpropInfuseTemp] = new PropertySchema( kpropInfuseTemp, tmpNames , kxmlPropInfuseTemp, QString("real"), QVariant(67.0));
+
+   tmpNames[Brewtarget::NODB] = kcolMashstepDecoctionAmount;
+   tmp[kpropDecoctionAmount] = new PropertySchema( kpropDecoctionAmount, tmpNames , kxmlPropDecoctionAmount, QString("real"), QVariant(67.0));
+
+//   tmpNames[Brewtarget::NODB] = kcolMashStepStepNumber;
+//   tmp[kpropStepNumber] = new PropertySchema( kpropStepNumber, tmpNames , kxmlPropStepNumber, QString("real"), QVariant(67.0));
 
    return tmp;
 }
