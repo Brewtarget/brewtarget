@@ -1538,7 +1538,7 @@ void MainWindow::newRecipe()
    if( name.isEmpty() )
       return;
 
-   Recipe* newRec = Database::instance().newRecipe(name);
+   Recipe* newRec = new Recipe(name);
 
    // bad things happened -- let somebody know
    if ( ! newRec ) {
@@ -1553,15 +1553,19 @@ void MainWindow::newRecipe()
    newRec->setBoilSize_l(23.47);  // 6.2 gallons
    newRec->setEfficiency_pct(70.0);
 
+   // we need a valid key, so insert the recipe before we add equipment
+   Database::instance().insertRecipe(newRec);
    if ( defEquipKey != -1 )
    {
-      Equipment* e = Database::instance().equipment(defEquipKey.toInt());
+      Equipment *e = Database::instance().equipment(defEquipKey.toInt());
+      // I really want to do this before we've written the object to the
+      // database
       if ( e )
       {
-         Database::instance().addToRecipe(newRec, e);
          newRec->setBatchSize_l( e->batchSize_l() );
          newRec->setBoilSize_l( e->boilSize_l() );
          newRec->setBoilTime_min( e->boilTime_min() );
+         Database::instance().addToRecipe(newRec, e);
       }
    }
 

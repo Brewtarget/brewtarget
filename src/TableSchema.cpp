@@ -30,11 +30,13 @@
 #include "MashTableSchema.h"
 #include "MashStepTableSchema.h"
 #include "MiscTableSchema.h"
+#include "RecipeTableSchema.h"
 #include "YeastTableSchema.h"
 
 // We have to hard code this, because we cannot be certain the database is
 // available yet -- so no bt_alltables lookups can be allowed
-
+// These HAVE to be in the same order as they are listed in
+// Brewtarget::DBTable
 static QStringList dbTableToName  = QStringList() <<
    QString("none") <<  // need to handle the NOTABLE index
    ktableMeta <<
@@ -48,9 +50,10 @@ static QStringList dbTableToName  = QStringList() <<
    ktableWater <<
    ktableMash <<
    ktableMashStep <<
+   ktableRecipe <<
    ktableBrewnote <<
    ktableInstruction <<
-   ktableRecipe <<
+// Now for BT internal tables
    ktableBtEquipment <<
    ktableBtFermentable <<
    ktableBtHop <<
@@ -58,12 +61,14 @@ static QStringList dbTableToName  = QStringList() <<
    ktableBtStyle <<
    ktableBtYeast <<
    ktableBtWater <<
+// Now the in_recipe tables
    ktableFermInRec <<
    ktableHopInRec <<
    ktableMiscInRec <<
    ktableWaterInRec <<
    ktableYeastInRec <<
    ktableInsInRec <<
+// child tables next
    ktableEquipChildren <<
    ktableFermChildren <<
    ktableHopChildren <<
@@ -72,12 +77,11 @@ static QStringList dbTableToName  = QStringList() <<
    ktableStyleChildren <<
    ktableWaterChildren <<
    ktableYeastChildren <<
+// inventory tables last
    ktableFermInventory <<
    ktableHopInventory <<
    ktableMiscInventory <<
    ktableYeastInventory;
-
-// QHash<QString, Brewtarget::DBTable>nametoDbTable;
 
 TableSchema::TableSchema(QString tableName)
     : QObject(0), 
@@ -216,6 +220,9 @@ QMap<QString,PropertySchema*> TableSchema::defineTable(Brewtarget::DBTable table
          break;
       case Brewtarget::MISCTABLE:
          retVal = defineMiscTable();
+         break;
+      case Brewtarget::RECTABLE:
+         retVal = defineRecipeTable();
          break;
       case Brewtarget::YEASTTABLE:
          retVal = defineYeastTable();
@@ -588,6 +595,118 @@ QMap<QString,PropertySchema*> TableSchema::defineMiscTable()
 
    tmpNames[Brewtarget::NODB] = kcolMiscUseFor;
    tmp[kpropUseFor] = new PropertySchema( kpropUseFor, tmpNames , kxmlPropUseFor, QString("text"), QString(""));
+
+   return tmp;
+}
+
+QMap<QString,PropertySchema*> TableSchema::defineRecipeTable()
+{
+   QMap<QString,PropertySchema*> tmp;
+   QHash<Brewtarget::DBTypes,QString> tmpNames;
+
+   // These are defined in the global file. 
+   tmpNames[Brewtarget::NODB] = kcolName;
+   tmp[kpropName] = new PropertySchema( kpropName, tmpNames , kxmlPropName, QString("text"), QString(""));
+ 
+   tmpNames[Brewtarget::NODB] = kcolNotes;
+   tmp[kpropNotes] = new PropertySchema( kpropNotes, tmpNames , kxmlPropNotes, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeType;
+   tmp[kpropType] = new PropertySchema( kpropType, tmpNames , kxmlPropType, QString("text"), QString("All Grain"));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeBrewer;
+   tmp[kpropBrewer] = new PropertySchema( kpropBrewer, tmpNames , kxmlPropBrewer, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeAsstBrewer;
+   tmp[kpropAsstBrewer] = new PropertySchema( kpropAsstBrewer, tmpNames , kxmlPropAsstBrewer, QString("text"), QString("Brewtarget"));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeBatchSize;
+   tmp[kpropBatchSize] = new PropertySchema( kpropBatchSize, tmpNames , kxmlPropBatchSize, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeBoilSize;
+   tmp[kpropBoilSize] = new PropertySchema( kpropBoilSize, tmpNames , kxmlPropBoilSize, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeBoilTime;
+   tmp[kpropBoilTime] = new PropertySchema( kpropBoilTime, tmpNames , kxmlPropBoilTime, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeEfficiency;
+   tmp[kpropEfficiency] = new PropertySchema( kpropEfficiency, tmpNames , kxmlPropEfficiency, QString("real"), QVariant(70.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeOG;
+   tmp[kpropOG] = new PropertySchema( kpropOG, tmpNames , kxmlPropOG, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeFG;
+   tmp[kpropFG] = new PropertySchema( kpropFG, tmpNames , kxmlPropFG, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeFermentationStages;
+   tmp[kpropFermentationStages] = new PropertySchema( kpropFermentationStages, tmpNames , kxmlPropFermentationStages, QString("int"), QVariant(0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipePrimaryAgeDays;
+   tmp[kpropPrimaryAgeDays] = new PropertySchema( kpropPrimaryAgeDays, tmpNames , kxmlPropPrimaryAgeDays, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipePrimaryTemp;
+   tmp[kpropPrimaryTemp] = new PropertySchema( kpropPrimaryTemp, tmpNames , kxmlPropPrimaryTemp, QString("real"), QVariant(20.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeSecondaryAgeDays;
+   tmp[kpropSecondaryAgeDays] = new PropertySchema( kpropSecondaryAgeDays, tmpNames , kxmlPropSecondaryAgeDays, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeSecondaryTemp;
+   tmp[kpropSecondaryTemp] = new PropertySchema( kpropSecondaryTemp, tmpNames , kxmlPropSecondaryTemp, QString("real"), QVariant(20.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeTertiaryAgeDays;
+   tmp[kpropTertiaryAgeDays] = new PropertySchema( kpropTertiaryAgeDays, tmpNames , kxmlPropTertiaryAgeDays, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeTertiaryTemp;
+   tmp[kpropTertiaryTemp] = new PropertySchema( kpropTertiaryTemp, tmpNames , kxmlPropTertiaryTemp, QString("real"), QVariant(20.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeAge;
+   tmp[kpropAge] = new PropertySchema( kpropAge, tmpNames , kxmlPropAge, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeAgeTemp;
+   tmp[kpropAgeTemp] = new PropertySchema( kpropAgeTemp, tmpNames , kxmlPropAgeTemp, QString("real"), QVariant(20.0));
+
+   // This one is hard. Not sure about the default value, but I think I need
+   // it to be a string?
+   tmpNames[Brewtarget::NODB] = kcolRecipeDate;
+   tmp[kpropDate] = new PropertySchema( kpropDate, tmpNames , kxmlPropDate, QString("date"), QString("now()"));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeCarbonationVols;
+   tmp[kpropCarbonationVols] = new PropertySchema( kpropCarbonationVols, tmpNames , kxmlPropCarbonationVols, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeForcedCarbonation;
+   tmp[kpropForcedCarbonation] = new PropertySchema( kpropForcedCarbonation, tmpNames , kxmlPropForcedCarbonation, QString("boolean"), QVariant(false));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipePrimingSugarName;
+   tmp[kpropPrimingSugarName] = new PropertySchema( kpropPrimingSugarName, tmpNames , kxmlPropPrimingSugarName, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeCarbonationTemp;
+   tmp[kpropCarbonationTemp] = new PropertySchema( kpropCarbonationTemp, tmpNames , kxmlPropCarbonationTemp, QString("real"), QVariant(20.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipePrimingSugarEquiv;
+   tmp[kpropPrimingSugarEquiv] = new PropertySchema( kpropPrimingSugarEquiv, tmpNames , kxmlPropPrimingSugarEquiv, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeKegPrimingFactor;
+   tmp[kpropKegPrimingFactor] = new PropertySchema( kpropKegPrimingFactor, tmpNames , kxmlPropKegPrimingFactor, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeTasteNotes;
+   tmp[kpropTasteNotes] = new PropertySchema( kpropTasteNotes, tmpNames , kxmlPropTasteNotes, QString("text"), QString(""));
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeTasteRating;
+   tmp[kpropTasteRating] = new PropertySchema( kpropTasteRating, tmpNames , kxmlPropTasteRating, QString("real"), QVariant(20.0));
+
+   // Not sure about these, either
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeEquipmentId;
+   tmp[kpropEquipmentId] = new PropertySchema( kpropEquipmentId, tmpNames , QString(), QString("int"), QVariant());
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeMashId;
+   tmp[kpropMashId] = new PropertySchema( kpropMashId, tmpNames , QString(), QString("int"), QVariant());
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeStyleId;
+   tmp[kpropStyleId] = new PropertySchema( kpropStyleId, tmpNames , QString(), QString("int"), QVariant());
+
+   tmpNames[Brewtarget::NODB] = kcolRecipeAncestorId;
+   tmp[kpropAncestorId] = new PropertySchema( kpropAncestorId, tmpNames , QString(), QString("int"), QVariant());
 
    return tmp;
 }

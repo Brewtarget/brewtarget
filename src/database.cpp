@@ -1584,7 +1584,9 @@ int Database::insertElement(BeerXMLElement* ins)
    int key;
    QSqlQuery q( sqlDatabase() );
 
+   qDebug() << "ins->table() = " << ins->table();
    TableSchema* schema = new TableSchema(ins->table());
+   qDebug() << "schema->tableName() = " << schema->tableName();
    QString insert = QString("insert into %1 (").arg(schema->tableName());
    QStringList allColumns = schema->allColumnNames(Brewtarget::dbType());
    QStringList allProps = schema->allPropertyNames();
@@ -1600,7 +1602,7 @@ int Database::insertElement(BeerXMLElement* ins)
 
    try {
       if ( ! q.exec() ) {
-         throw QString("could not insert a record into");
+         throw QString("could not insert a record into %1").arg(ins->table());
       }
 
       key = q.lastInsertId().toInt();
@@ -1620,8 +1622,8 @@ int Database::insertElement(BeerXMLElement* ins)
 // I need to break each of these out because of our signals. I will someday
 // find a way to determine which signals are sent, when, from what and then
 // there will come a Purge
-int Database::insertStyle(Style* ins) {
-
+int Database::insertStyle(Style* ins)
+{
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
@@ -1633,8 +1635,8 @@ int Database::insertStyle(Style* ins) {
    return key;
 }
 
-int Database::insertEquipment(Equipment* ins) {
-
+int Database::insertEquipment(Equipment* ins)
+{
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
@@ -1645,8 +1647,8 @@ int Database::insertEquipment(Equipment* ins) {
    return key;
 }
 
-int Database::insertFermentable(Fermentable* ins) {
-
+int Database::insertFermentable(Fermentable* ins)
+{
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
@@ -1657,8 +1659,8 @@ int Database::insertFermentable(Fermentable* ins) {
    return key;
 }
 
-int Database::insertHop(Hop* ins) {
-
+int Database::insertHop(Hop* ins)
+{
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
@@ -1669,8 +1671,8 @@ int Database::insertHop(Hop* ins) {
    return key;
 }
 
-int Database::insertMash(Mash* ins) {
-
+int Database::insertMash(Mash* ins)
+{
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
@@ -1683,7 +1685,8 @@ int Database::insertMash(Mash* ins) {
 
 // this one will be harder, because we have to link the mashstep to the parent
 // mash
-int Database::insertMashStep(MashStep* ins, Mash* parent) {
+int Database::insertMashStep(MashStep* ins, Mash* parent)
+{
    QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
                         .arg(tableNames[Brewtarget::MASHSTEPTABLE])
                         .arg(Brewtarget::dbFalse())
@@ -1725,8 +1728,8 @@ int Database::insertMashStep(MashStep* ins, Mash* parent) {
    return key;
 }
 
-int Database::insertMisc(Misc* ins) {
-
+int Database::insertMisc(Misc* ins)
+{
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
@@ -1737,8 +1740,20 @@ int Database::insertMisc(Misc* ins) {
    return key;
 }
 
-int Database::insertYeast(Yeast* ins) {
+int Database::insertRecipe(Recipe* ins)
+{
+   int key = insertElement(ins);
+   ins->setCacheOnly(false);
 
+   allRecipes.insert(key,ins);
+   emit changed( metaProperty("recipes"), QVariant() );
+   emit newRecipeSignal(ins);
+
+   return key;
+}
+
+int Database::insertYeast(Yeast* ins)
+{
    int key = insertElement(ins);
    ins->setCacheOnly(false);
 
@@ -4125,6 +4140,78 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
 
 }
 
+void Database::fromXml(BeerXMLElement* element, QDomNode const& elementNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString xmlTag;
+   int intVal;
+   double doubleVal;
+   bool boolVal;
+   QString stringVal;
+   QDateTime dateTimeVal;
+   QDate dateVal;
+   TableSchema* schema = new TableSchema( element->table() );
+
+   for( node = elementNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      xmlTag = node.nodeName();
+      textNode = child.toText();
+      QString pTag = schema->xmlToProperty(xmlTag);
+
+      if( pTag.size() ) {
+         switch( element->metaProperty(pTag).type() )
+         {
+            case QVariant::Bool:
+               boolVal = BeerXMLElement::getBool(textNode);
+               element->setProperty(pTag.toStdString().c_str(), boolVal);
+               break;
+            case QVariant::Double:
+               doubleVal = BeerXMLElement::getDouble(textNode);
+               element->setProperty(pTag.toStdString().c_str(), doubleVal);
+               break;
+            case QVariant::Int:
+               intVal = BeerXMLElement::getInt(textNode);
+               element->setProperty(pTag.toStdString().c_str(), intVal);
+               break;
+            case QVariant::DateTime:
+               dateTimeVal = BeerXMLElement::getDateTime(textNode);
+               element->setProperty(pTag.toStdString().c_str(), dateTimeVal);
+               break;
+            case QVariant::Date:
+               dateVal = BeerXMLElement::getDate(textNode);
+               element->setProperty(pTag.toStdString().c_str(), dateVal);
+               break;
+            // NOTE: I believe that enum types like Fermentable::Type will go
+            // here since Q_ENUMS() converts enums to strings. So, need to make
+            // sure that the enums match exactly what we expect in the XML.
+            case QVariant::String:
+               stringVal = BeerXMLElement::getString(textNode);
+               element->setProperty(pTag.toStdString().c_str(), stringVal);
+               break;
+            default:
+               Brewtarget::logW("Database::fromXML: don't understand property type.");
+               break;
+         }
+         // Not sure if we should keep processing or just dump?
+         if ( ! element->isValid() ) {
+            Brewtarget::logE( QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag));
+            return;
+         }
+      }
+   }
+}
+
 // Brewnotes can never be created w/ a recipe, so we will always assume the
 // calling method has the transactions
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
@@ -4751,23 +4838,29 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 Recipe* Database::recipeFromXml( QDomNode const& node )
 {
    QDomNode n;
+   blockSignals(true);
    Recipe *ret;
+   QString name;
 
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
    try {
-      // I was wrong. We need to block signals here. Weird things happen if you don't.
-      blockSignals(true);
 
       // This is all one long, gnarly transaction.
       sqlDatabase().transaction();
 
-      // This works, strangely enough.
-      ret = newIngredient(&allRecipes);
+      // Oh sweet mercy
+      ret = new Recipe(name);
 
       if ( ! ret ) {
          return nullptr;
       }
       // Get standard properties.
-      fromXml( ret, Recipe::tagToProp, node);
+      fromXml( ret, node);
+
+      // I need to insert this now, because I need a valid key for adding
+      // things to the recipe
+      insertRecipe(ret);
 
       // Get style. Note: styleFromXml requires the entire node, not just the
       // firstchild of the node.
@@ -4860,78 +4953,6 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 
    emit newRecipeSignal(ret);
    return ret;
-}
-
-void Database::fromXml(BeerXMLElement* element, QDomNode const& elementNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString xmlTag;
-   int intVal;
-   double doubleVal;
-   bool boolVal;
-   QString stringVal;
-   QDateTime dateTimeVal;
-   QDate dateVal;
-   TableSchema* schema = new TableSchema( element->table() );
-
-   for( node = elementNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
-         continue;
-      }
-
-      child = node.firstChild();
-      if( child.isNull() || ! child.isText() )
-         continue;
-
-      xmlTag = node.nodeName();
-      textNode = child.toText();
-      QString pTag = schema->xmlToProperty(xmlTag);
-
-      if( pTag.size() ) {
-         switch( element->metaProperty(pTag).type() )
-         {
-            case QVariant::Bool:
-               boolVal = BeerXMLElement::getBool(textNode);
-               element->setProperty(pTag.toStdString().c_str(), boolVal);
-               break;
-            case QVariant::Double:
-               doubleVal = BeerXMLElement::getDouble(textNode);
-               element->setProperty(pTag.toStdString().c_str(), doubleVal);
-               break;
-            case QVariant::Int:
-               intVal = BeerXMLElement::getInt(textNode);
-               element->setProperty(pTag.toStdString().c_str(), intVal);
-               break;
-            case QVariant::DateTime:
-               dateTimeVal = BeerXMLElement::getDateTime(textNode);
-               element->setProperty(pTag.toStdString().c_str(), dateTimeVal);
-               break;
-            case QVariant::Date:
-               dateVal = BeerXMLElement::getDate(textNode);
-               element->setProperty(pTag.toStdString().c_str(), dateVal);
-               break;
-            // NOTE: I believe that enum types like Fermentable::Type will go
-            // here since Q_ENUMS() converts enums to strings. So, need to make
-            // sure that the enums match exactly what we expect in the XML.
-            case QVariant::String:
-               stringVal = BeerXMLElement::getString(textNode);
-               element->setProperty(pTag.toStdString().c_str(), stringVal);
-               break;
-            default:
-               Brewtarget::logW("Database::fromXML: don't understand property type.");
-               break;
-         }
-         // Not sure if we should keep processing or just dump?
-         if ( ! element->isValid() ) {
-            Brewtarget::logE( QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag));
-            return;
-         }
-      }
-   }
 }
 
 Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )

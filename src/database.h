@@ -256,8 +256,11 @@ public:
    int    insertFermentable(Fermentable* ins);
    int    insertHop(Hop* ins);
    int    insertMash(Mash* ins);
+   // Cannot insert a mashstep without a parent, so this one is a bit different
    int    insertMashStep(MashStep* ins, Mash *parent);
    int    insertMisc(Misc* ins);
+   // Do you know fear, because I do.
+   int    insertRecipe(Recipe* ins);
    int    insertYeast(Yeast* ins);
    
    Water* newWater(Water* other = 0);

@@ -39,7 +39,6 @@ static const QString kcolYeastMaxReuse("max_reuse");
 static const QString kcolYeastAddToSecondary("add_to_secondary");
 
 // properties for objects
-static const QString kpropAmount("amount");
 static const QString kpropLab("laboratory");
 static const QString kpropProductID("productID");
 static const QString kpropMinTemp("minTemperature_c");

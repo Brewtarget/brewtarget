@@ -69,13 +69,14 @@ class Recipe : public BeerXMLElement
    Q_CLASSINFO("prefix", "recipe")
    
    friend class Database;
+   friend class RecipeFormatter;
+   friend class MainWindow;
 public:
 
    virtual ~Recipe() {}
 
    friend bool operator<(Recipe &r1, Recipe &r2 );
    friend bool operator==(Recipe &r1, Recipe &r2 );
-   friend class RecipeFormatter;
    
    // NOTE: move to database?
    //! \brief Retains only the name, but sets everything else to defaults.
@@ -393,6 +394,7 @@ private:
    
    Recipe(Brewtarget::DBTable table, int key);
    Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Recipe(QString name, bool cache = true);
    Recipe(Recipe const& other);
   
    // Cached properties that are written directly to db

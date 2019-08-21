@@ -71,6 +71,14 @@ static const QString kpropAmountIsWeight("amountIsWeight");
 /// used by both hops and yeast
 static const QString kpropForm("form");
 
+// used by recipe and yeast
+static const QString kpropAmount("amount");
+
+// used by recipe and equipment
+static const QString kpropBatchSize("batchSize_l");
+static const QString kpropBoilSize("boilSize_l");
+static const QString kpropBoilTime("boilTime_min");
+
 // Same for these column names. Yes, but I think the consistency is better
 // this way
 static const QString kcolName("name");
@@ -99,3 +107,8 @@ const QString kxmlPropTunSpecificHeat("TUN_SPECIFIC_HEAT");
 
 // needed by both misc and yeast
 static const QString kxmlPropAmountIsWeight("AMOUNT_IS_WEIGHT");
+
+// needed by both recipe and equipment
+static const QString kxmlPropBatchSize("BATCH_SIZE");
+static const QString kxmlPropBoilSize("BOIL_SIZE");
+static const QString kxmlPropBoilTime("BOIL_TIME");

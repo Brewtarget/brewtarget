@@ -124,7 +124,6 @@ Brewtarget::DBTable BeerXMLElement::table() const
    return _table;
 }
 
-
 int BeerXMLElement::version() const
 {
    return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo(kVersion)).value()).toInt();

@@ -78,6 +78,7 @@ private:
    QMap<QString,PropertySchema*> defineMashTable();
    QMap<QString,PropertySchema*> defineMashstepTable();
    QMap<QString,PropertySchema*> defineMiscTable();
+   QMap<QString,PropertySchema*> defineRecipeTable();
    QMap<QString,PropertySchema*> defineYeastTable();
 };
 
