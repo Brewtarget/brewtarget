@@ -26,9 +26,8 @@
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 
-#include "TableSchema.h"
 #include "TableSchemaConst.h"
-#include "EquipmentTableSchema.h"
+#include "EquipmentSchema.h"
 
 bool operator<(Equipment &e1, Equipment &e2)
 {

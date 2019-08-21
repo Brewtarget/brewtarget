@@ -30,7 +30,7 @@
 #include <QObject>
 
 #include "TableSchemaConst.h"
-#include "MashTableSchema.h"
+#include "MashSchema.h"
 
 bool operator<(Mash &m1, Mash &m2)
 {

@@ -51,7 +51,7 @@
 #include "QueuedMethod.h"
 
 #include "TableSchemaConst.h"
-#include "RecipeTableSchema.h"
+#include "RecipeSchema.h"
 
 static const QString kMashStepSection("mashStepTableModel");
 static const QString kMiscTableSection("miscTableModel");

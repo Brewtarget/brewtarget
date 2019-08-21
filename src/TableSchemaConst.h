@@ -112,3 +112,6 @@ static const QString kxmlPropAmountIsWeight("AMOUNT_IS_WEIGHT");
 static const QString kxmlPropBatchSize("BATCH_SIZE");
 static const QString kxmlPropBoilSize("BOIL_SIZE");
 static const QString kxmlPropBoilTime("BOIL_TIME");
+
+// used by yeast and brewnote
+static const QString kxmlPropAttenuation("ATTENUATION");

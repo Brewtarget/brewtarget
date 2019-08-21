@@ -21,12 +21,6 @@
 #define _HOPTABLESCHEMA_H
 
 // Columns for the hop table
-// These are defined in the main constants file
-// static const QString kcolName("name");
-// static const QString kcolNotes("notes");
-// static const QString kcolUse("use");
-// static const QString kcolSubstitutes("substitutes");
-//
 static const QString kcolHopForm("form");
 static const QString kcolHopType("htype");
 static const QString kcolHopOrigin("origin");
@@ -40,16 +34,6 @@ static const QString kcolHopCohumulone("cohumulone");
 static const QString kcolHopMyrcene("myrcene");
 
 // properties for objects
-// These are defined in the main constants file
-// static const QString kpropName("name");
-// static const QString kpropNotes("notes");
-// static const QString kpropType("type");
-// static const QString kpropAmountKg("amount_kg");
-// static const QString kpropInventory("inventory");
-// static const QString kpropOrigin("origin");
-// static const QString kpropUse("use");
-// static const QString kpropTime("time_min");
-
 static const QString kpropAlpha("alpha_pct");
 static const QString kpropBeta("beta_pct");
 static const QString kpropHSI("hsi_pct");
@@ -60,15 +44,6 @@ static const QString kpropCohumulone("cohumulone_pct");
 static const QString kpropMyrcene("myrcene_pct");
 
 // these are also in the main constants file
-// static const QString kxmlNameProp("NAME");
-// static const QString kxmlNotesProp("NOTES");
-// static const QString kxmlPropName("NAME");
-// static const QString kxmlPropInventory("INVENTORY");
-// static const QString kxmlPropNotes("NOTES");
-// static const QString kxmlPropAmount("AMOUNT");
-// static const QString kxmlPropOrigin("ORIGIN");
-// static const QString kxmlPropSubstitutes("SUBSTITUTES");
-// static const QString kxmlPropTime("TIME");
 static const QString kxmlPropAlpha("ALPHA");
 static const QString kxmlPropBeta("BETA");
 static const QString kxmlPropHSI("HSI");

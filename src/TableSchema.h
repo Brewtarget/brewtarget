@@ -48,7 +48,7 @@ public:
 
    // get the type name for this column
    const QString propertyColumnType(QString prop) const;
-   // get teh XML tag for this column
+   // get the XML tag for this column
    const QString propertyToXml(QString prop) const;
    // get the default value for this column
    const QVariant propertyColumnDefault(QString prop) const;
@@ -80,6 +80,7 @@ private:
    QMap<QString,PropertySchema*> defineMiscTable();
    QMap<QString,PropertySchema*> defineRecipeTable();
    QMap<QString,PropertySchema*> defineYeastTable();
+   QMap<QString,PropertySchema*> defineBrewnoteTable();
 };
 
 #endif

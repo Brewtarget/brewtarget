@@ -28,7 +28,7 @@
 #include "brewtarget.h"
 
 #include "TableSchemaConst.h"
-#include "YeastTableSchema.h"
+#include "YeastSchema.h"
 
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
@@ -322,7 +322,7 @@ void Yeast::setAttenuation_pct( double var )
    else {
       m_attenuation_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropAttenuation, var);
+         setEasy(kpropAttenuationPct, var);
       }
    }
 }

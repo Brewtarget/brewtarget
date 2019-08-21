@@ -23,7 +23,7 @@
 #include "brewtarget.h"
 
 #include "TableSchemaConst.h"
-#include "MashStepTableSchema.h"
+#include "MashStepSchema.h"
 
 QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction" << "Fly Sparge" << "Batch Sparge";
 QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction") << QObject::tr("Fly Sparge") << QObject::tr("Batch Sparge");

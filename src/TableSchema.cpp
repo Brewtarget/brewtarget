@@ -23,15 +23,16 @@
 #include "TableSchema.h"
 
 #include "TableSchemaConst.h"
-#include "StyleTableSchema.h"
-#include "EquipmentTableSchema.h"
-#include "FermentableTableSchema.h"
-#include "HopTableSchema.h"
-#include "MashTableSchema.h"
-#include "MashStepTableSchema.h"
-#include "MiscTableSchema.h"
-#include "RecipeTableSchema.h"
-#include "YeastTableSchema.h"
+#include "StyleSchema.h"
+#include "EquipmentSchema.h"
+#include "FermentableSchema.h"
+#include "HopSchema.h"
+#include "MashSchema.h"
+#include "MashStepSchema.h"
+#include "MiscSchema.h"
+#include "RecipeSchema.h"
+#include "YeastSchema.h"
+#include "BrewnoteSchema.h"
 
 // We have to hard code this, because we cannot be certain the database is
 // available yet -- so no bt_alltables lookups can be allowed
@@ -199,6 +200,9 @@ QMap<QString,PropertySchema*> TableSchema::defineTable(Brewtarget::DBTable table
 
    switch( table ) {
       case Brewtarget::NOTABLE:
+         break;
+      case Brewtarget::BREWNOTETABLE:
+         retVal =  defineBrewnoteTable();
          break;
       case Brewtarget::STYLETABLE:
          retVal =  defineStyleTable();
@@ -694,7 +698,9 @@ QMap<QString,PropertySchema*> TableSchema::defineRecipeTable()
    tmpNames[Brewtarget::NODB] = kcolRecipeTasteRating;
    tmp[kpropTasteRating] = new PropertySchema( kpropTasteRating, tmpNames , kxmlPropTasteRating, QString("real"), QVariant(20.0));
 
-   // Not sure about these, either
+   // These require more thought. I think I may need another attribute on the
+   // PropertySchema object to indicate this is a foreignkey? For now, don't
+/*
 
    tmpNames[Brewtarget::NODB] = kcolRecipeEquipmentId;
    tmp[kpropEquipmentId] = new PropertySchema( kpropEquipmentId, tmpNames , QString(), QString("int"), QVariant());
@@ -707,7 +713,7 @@ QMap<QString,PropertySchema*> TableSchema::defineRecipeTable()
 
    tmpNames[Brewtarget::NODB] = kcolRecipeAncestorId;
    tmp[kpropAncestorId] = new PropertySchema( kpropAncestorId, tmpNames , QString(), QString("int"), QVariant());
-
+*/
    return tmp;
 }
 
@@ -751,7 +757,7 @@ QMap<QString,PropertySchema*> TableSchema::defineYeastTable()
    tmp[kpropFlocculation] = new PropertySchema( kpropFlocculation, tmpNames , QString(), QString("text"), QObject::tr("Medium"));
 
    tmpNames[Brewtarget::NODB] = kcolYeastAttenuation;
-   tmp[kpropAttenuation] = new PropertySchema( kpropAttenuation, tmpNames , kxmlPropAttenuation, QString("real"), QVariant(75.0));
+   tmp[kpropAttenuation] = new PropertySchema( kpropAttenuationPct, tmpNames , kxmlPropAttenuation, QString("real"), QVariant(75.0));
 
    tmpNames[Brewtarget::NODB] = kcolYeastBestFor;
    tmp[kpropBestFor] = new PropertySchema( kpropBestFor, tmpNames , kxmlPropBestFor, QString("text"), QString(""));
@@ -764,6 +770,109 @@ QMap<QString,PropertySchema*> TableSchema::defineYeastTable()
 
    tmpNames[Brewtarget::NODB] = kcolYeastAddToSecondary;
    tmp[kpropAddToSecondary] = new PropertySchema( kpropAddToSecondary, tmpNames , kxmlPropAddToSecondary, QString("boolean"), QVariant(false));
+
+   return tmp;
+}
+
+QMap<QString,PropertySchema*> TableSchema::defineBrewnoteTable()
+{
+   QMap<QString,PropertySchema*> tmp;
+   QHash<Brewtarget::DBTypes,QString> tmpNames;
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteBrewDate;
+   tmp[kpropBrewDate] = new PropertySchema( kpropBrewDate, tmpNames , kxmlPropBrewDate, QString("timestamp"), QDateTime());
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteFermentDate;
+   tmp[kpropFermentDate] = new PropertySchema( kpropFermentDate, tmpNames , kxmlPropFermentDate, QString("timestamp"), QDateTime());
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteSpecificGravity;
+   tmp[kpropSpecificGravity] = new PropertySchema( kpropSpecificGravity, tmpNames , kxmlPropSpecificGravity, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteVolumeIntoBoil;
+   tmp[kpropVolumeIntoBoil] = new PropertySchema( kpropVolumeIntoBoil, tmpNames , kxmlPropVolumeIntoBoil, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteStrikeTemp;
+   tmp[kpropStrikeTemp] = new PropertySchema( kpropStrikeTemp, tmpNames , kxmlPropStrikeTemp, QString("real"), QVariant(70.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteMashFinalTemp;
+   tmp[kpropMashFinalTemp] = new PropertySchema( kpropMashFinalTemp, tmpNames , kxmlPropMashFinalTemp, QString("real"), QVariant(67.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteOriginalGravity;
+   tmp[kpropOriginalGravity] = new PropertySchema( kpropOriginalGravity, tmpNames , kxmlPropOriginalGravity, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnotePostBoilVolume;
+   tmp[kpropPostBoilVolume] = new PropertySchema( kpropPostBoilVolume, tmpNames , kxmlPropPostBoilVolume, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteVolumeIntoFermenter;
+   tmp[kpropVolumeIntoFermenter] = new PropertySchema( kpropVolumeIntoFermenter, tmpNames , kxmlPropVolumeIntoFermenter, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnotePitchTemp;
+   tmp[kpropPitchTemp] = new PropertySchema( kpropPitchTemp, tmpNames , kxmlPropPitchTemp, QString("real"), QVariant(20.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteFinalGravity;
+   tmp[kpropFinalGravity] = new PropertySchema( kpropFinalGravity, tmpNames , kxmlPropFinalGravity, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteEfficiencyIntoBoil;
+   tmp[kpropEfficiencyIntoBoil] = new PropertySchema( kpropEfficiencyIntoBoil, tmpNames , kxmlPropEfficiencyIntoBoil, QString("real"), QVariant(70.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteABV;
+   tmp[kpropABV] = new PropertySchema( kpropABV, tmpNames , kxmlPropABV, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedOG;
+   tmp[kpropProjectedOG] = new PropertySchema( kpropProjectedOG, tmpNames , kxmlPropProjectedOG, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteBrewhouseEfficiency;
+   tmp[kpropBrewhouseEfficiency] = new PropertySchema( kpropBrewhouseEfficiency, tmpNames , kxmlPropBrewhouseEfficiency, QString("real"), QVariant(70.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedBoilGravity;
+   tmp[kpropProjectedBoilGravity] = new PropertySchema( kpropProjectedBoilGravity, tmpNames , kxmlPropProjectedBoilGravity, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedStrikeTemp;
+   tmp[kpropProjectedStrikeTemp] = new PropertySchema( kpropProjectedStrikeTemp, tmpNames , kxmlPropProjectedStrikeTemp, QString("real"), QVariant(70.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedMashFinishTemp;
+   tmp[kpropProjectedMashFinishTemp] = new PropertySchema( kpropProjectedMashFinishTemp, tmpNames , kxmlPropProjectedMashFinishTemp, QString("real"), QVariant(67.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedVolumeIntoBoil;
+   tmp[kpropProjectedVolumeIntoBoil] = new PropertySchema( kpropProjectedVolumeIntoBoil, tmpNames , kxmlPropProjectedVolumeIntoBoil, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedOG;
+   tmp[kpropProjectedOG] = new PropertySchema( kpropProjectedOG, tmpNames , kxmlPropProjectedOG, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedVolumeIntoFermenter;
+   tmp[kpropProjectedVolumeIntoFermenter] = new PropertySchema( kpropProjectedVolumeIntoFermenter, tmpNames , kxmlPropProjectedVolumeIntoFermenter, QString("real"), QVariant(0.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedFG;
+   tmp[kpropProjectedFG] = new PropertySchema( kpropProjectedFG, tmpNames , kxmlPropProjectedFG, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedEfficiency;
+   tmp[kpropProjectedEfficiency] = new PropertySchema( kpropProjectedEfficiency, tmpNames , kxmlPropProjectedEfficiency, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedABV;
+   tmp[kpropProjectedABV] = new PropertySchema( kpropProjectedABV, tmpNames , kxmlPropProjectedABV, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedAttenuation;
+   tmp[kpropProjectedAttenuation] = new PropertySchema( kpropProjectedAttenuation, tmpNames , kxmlPropProjectedAttenuation, QString("real"), QVariant(75.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedPoints;
+   tmp[kpropProjectedPoints] = new PropertySchema( kpropProjectedPoints, tmpNames , kxmlPropProjectedPoints, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteProjectedFermentationPoints;
+   tmp[kpropProjectedFermentationPoints] = new PropertySchema( kpropProjectedFermentationPoints, tmpNames , kxmlPropProjectedFermentationPoints, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteBoilOff;
+   tmp[kpropBoilOff] = new PropertySchema( kpropBoilOff, tmpNames , kxmlPropBoilOff, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteFinalVolume;
+   tmp[kpropFinalVolume] = new PropertySchema( kpropFinalVolume, tmpNames , kxmlPropFinalVolume, QString("real"), QVariant(1.0));
+
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteAttenuation;
+   tmp[kpropAttenuation] = new PropertySchema( kpropAttenuation, tmpNames , kxmlPropAttenuation, QString("real"), QVariant(1.0));
+
+   /*
+   tmpNames[Brewtarget::NODB] = kcolBrewnoteRecipeId;
+   tmp[kpropRecipeId] = new PropertySchema( kpropRecipeId, tmpNames , kxmlPropRecipeId, QString("real"), QVariant(1.0));
+   */
 
    return tmp;
 }

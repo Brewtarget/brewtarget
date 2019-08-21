@@ -28,7 +28,7 @@
 #include "brewtarget.h"
 
 #include "TableSchemaConst.h"
-#include "HopTableSchema.h"
+#include "HopSchema.h"
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";

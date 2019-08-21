@@ -189,6 +189,7 @@ signals:
 private:
    BrewNote(Brewtarget::DBTable table, int key);
    BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   BrewNote(QDateTime dateNow, bool cache = true);
    BrewNote(BrewNote const& other);
    bool loading;
 

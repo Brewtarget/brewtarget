@@ -1579,21 +1579,21 @@ Yeast* Database::newYeast(Yeast* other)
    return tmp;
 }
 
+// I am torn on if this should be transacted or not. My feeling on this
+// rewrite is that the transactions need to go higher -- to the places that
+// know if they are writing to multiple tables or not.
 int Database::insertElement(BeerXMLElement* ins)
 {
    int key;
    QSqlQuery q( sqlDatabase() );
 
-   qDebug() << "ins->table() = " << ins->table();
    TableSchema* schema = new TableSchema(ins->table());
-   qDebug() << "schema->tableName() = " << schema->tableName();
    QString insert = QString("insert into %1 (").arg(schema->tableName());
    QStringList allColumns = schema->allColumnNames(Brewtarget::dbType());
    QStringList allProps = schema->allPropertyNames();
 
    insert = insert % allColumns.join(",") % ") values (:" % allProps.join(",:") % ");";
 
-   qDebug() << "insert = " << insert;
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
@@ -1693,7 +1693,7 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
                         .arg(parent->_key);
    int key;
 
-//   sqlDatabase().transaction();
+   sqlDatabase().transaction();
    try {
 
       // we need to insert the mashstep into the db first to get the key
@@ -1764,6 +1764,36 @@ int Database::insertYeast(Yeast* ins)
    return key;
 }
 
+// This is more similar to a mashstep in that we need to link the brewnote to
+// the parent recipe.
+int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
+{
+   int key;
+   sqlDatabase().transaction();
+
+   try {
+      key = insertElement(ins);
+      ins->setCacheOnly(false);
+
+      sqlUpdate( Brewtarget::BREWNOTETABLE,
+               QString("recipe_id=%1").arg(parent->_key),
+               QString("id=%2").arg(key) );
+
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
+
+   sqlDatabase().commit();
+
+   allBrewNotes.insert(key,ins);
+   emit changed( metaProperty("brewNotes"), QVariant() );
+   emit newBrewNoteSignal(ins);
+
+   return key;
+}
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
@@ -4216,35 +4246,34 @@ void Database::fromXml(BeerXMLElement* element, QDomNode const& elementNode)
 // calling method has the transactions
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
-    BrewNote* ret = newBrewNote(parent);
-    try {
-        if ( ! ret )
-        {
-            QString error = "Could not create new brewnote.";
-            Brewtarget::logE(QString(error));
-            QMessageBox::critical(0, tr("Import error."),
-                error.append("\nUnable to create brew note."));
-            return ret;
-        }
-        // Need to tell the brewnote not to perform the calculations
-        ret->setLoading(true);
-        fromXml( ret, BrewNote::tagToProp, node);
-        ret->invalidate();//debug code
-        if ( ! ret->isValid() )
-        {
-            QString error = "Could not create new brewnote.";
-            Brewtarget::logE(QString(error));
-            QMessageBox::critical(0, tr("Import error."),
-                error.append("\nError loading brewnote from XML."));
-            return ret;
-        }
+   QDomNode n;
+   BrewNote* ret;
+   QDateTime theDate;
 
-        ret->setLoading(false);
-    }
-    catch (QString e) {
-        Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-    }
-    return ret;
+   n = node.firstChildElement("BREWDATE");
+   theDate = QDateTime::fromString(n.firstChild().toText().nodeValue(),Qt::ISODate);
+
+   try {
+      ret = new BrewNote(theDate);
+
+      if ( ! ret ) {
+         QString error = "Could not create new brewnote.";
+         Brewtarget::logE(QString(error));
+         QMessageBox::critical(0, tr("Import error."),
+               error.append("\nUnable to create brew note."));
+         return ret;
+      }
+      // Need to tell the brewnote not to perform the calculations
+      ret->setLoading(true);
+      fromXml(ret, node);
+      ret->setLoading(false);
+
+      insertBrewnote(ret,parent);
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+   }
+   return ret;
 }
 
 Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )

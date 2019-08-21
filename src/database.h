@@ -250,22 +250,23 @@ public:
    
    Style* newStyle(Style* other);
    Style* newStyle(QString name);
+   Water* newWater(Water* other = 0);
+   Yeast* newYeast(Yeast* other = 0);
+
    int    insertElement(BeerXMLElement* ins);
-   int    insertStyle(Style* ins);
    int    insertEquipment(Equipment* ins);
    int    insertFermentable(Fermentable* ins);
    int    insertHop(Hop* ins);
    int    insertMash(Mash* ins);
-   // Cannot insert a mashstep without a parent, so this one is a bit different
-   int    insertMashStep(MashStep* ins, Mash *parent);
    int    insertMisc(Misc* ins);
    // Do you know fear, because I do.
    int    insertRecipe(Recipe* ins);
+   int    insertStyle(Style* ins);
    int    insertYeast(Yeast* ins);
    
-   Water* newWater(Water* other = 0);
-   Yeast* newYeast(Yeast* other = 0);
-
+   // Brewnotes and mashsteps are both impossible without their parent objects
+   int    insertBrewnote(BrewNote* ins, Recipe *parent);
+   int    insertMashStep(MashStep* ins, Mash *parent);
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    /* This links ingredients with the same name.
    * The first displayed ingredient in the database is assumed to be the parent.

@@ -22,9 +22,8 @@
 #include "style.h"
 #include <QDebug>
 
-#include "TableSchema.h"
 #include "TableSchemaConst.h"
-#include "StyleTableSchema.h"
+#include "StyleSchema.h"
 
 QStringList Style::m_types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 

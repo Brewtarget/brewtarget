@@ -30,7 +30,7 @@
 #include "database.h"
 
 #include "TableSchemaConst.h"
-#include "FermentableTableSchema.h"
+#include "FermentableSchema.h"
 #define SUPER BeerXMLElement
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
