@@ -60,15 +60,21 @@ public:
 
    const QStringList allPropertyNames() const;
    const QStringList allColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
+
+   // I need to distinguish between columns that we would write to during an
+   // insert (like name or type) and ones we don't (like mash_id). This does
+   // that.
+   const QStringList allDataPropertyNames() const;
+   const QStringList allDataColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
 private:
 
    // You can create this either via tableName or DBTable
    TableSchema(QString tablename);
    TableSchema(Brewtarget::DBTable dbTable);
 
-   QString tableName_;
-   Brewtarget::DBTable dbTable_;
-   QMap<QString,PropertySchema*> properties_;
+   QString m_tableName;
+   Brewtarget::DBTable m_dbTable;
+   QMap<QString,PropertySchema*> m_properties;
 
    QMap<QString,PropertySchema*> defineTable(Brewtarget::DBTable table);
    QMap<QString,PropertySchema*> defineStyleTable();

@@ -42,6 +42,8 @@ public:
    const QString colType() const;
    const QVariant defaultValue() const;
    const int colSize() const;
+   const bool fKey() const;
+   const Brewtarget::DBTable fTable() const;
 
    // sets
    // NOTE: I am specifically not allowing the propName to be set. Do that
@@ -52,6 +54,8 @@ public:
    void setColType(QString type);
    void setDefaultValue(QVariant defVal);
    void setColSize(int size);
+   void setFKey(bool fkey);
+   void setFTable(Brewtarget::DBTable fTable);
 
 private:
    PropertySchema(QString propName);
@@ -60,14 +64,18 @@ private:
                   QString xmlName = QString(""),
                   QString colType = QString("double"), 
                   QVariant defaultValue = QVariant(0.0),
-                  int colSize=0);
+                  int colSize = 0,
+                  bool fKey = false,
+                  Brewtarget::DBTable fTable = Brewtarget::NOTABLE);
 
-   QString propName_;
-   QHash<Brewtarget::DBTypes,QString> colNames_;
-   QString xmlName_;
-   QString colType_;
-   QVariant defaultValue_;
-   int colSize_;
+   QString m_propName;
+   QHash<Brewtarget::DBTypes,QString> m_colNames;
+   QString m_xmlName;
+   QString m_colType;
+   QVariant m_defaultValue;
+   int m_colSize;
+   bool m_fkey;
+   Brewtarget::DBTable m_ftable;
 
 };
 

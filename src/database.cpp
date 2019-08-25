@@ -1589,8 +1589,8 @@ int Database::insertElement(BeerXMLElement* ins)
 
    TableSchema* schema = new TableSchema(ins->table());
    QString insert = QString("insert into %1 (").arg(schema->tableName());
-   QStringList allColumns = schema->allColumnNames(Brewtarget::dbType());
-   QStringList allProps = schema->allPropertyNames();
+   QStringList allColumns = schema->allDataColumnNames(Brewtarget::dbType());
+   QStringList allProps = schema->allDataPropertyNames();
 
    insert = insert % allColumns.join(",") % ") values (:" % allProps.join(",:") % ");";
 

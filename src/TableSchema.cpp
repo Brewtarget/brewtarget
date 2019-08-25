@@ -86,46 +86,70 @@ static QStringList dbTableToName  = QStringList() <<
 
 TableSchema::TableSchema(QString tableName)
     : QObject(0), 
-    tableName_(tableName),
-    dbTable_(static_cast<Brewtarget::DBTable>(0))
+    m_tableName(tableName),
+    m_dbTable(static_cast<Brewtarget::DBTable>(0))
 {
    for (int i = 1; i < dbTableToName.size(); ++i ) {
       if ( dbTableToName[i] == tableName ) {
-         dbTable_ = static_cast<Brewtarget::DBTable>(i);
+         m_dbTable = static_cast<Brewtarget::DBTable>(i);
          break;
       }
    }
-   properties_ = defineTable( dbTable_ );
+   m_properties = defineTable( m_dbTable );
 }
 
 TableSchema::TableSchema(Brewtarget::DBTable table) 
     : QObject(0), 
-      tableName_( dbTableToName[ static_cast<int>(table) ] ),
-      dbTable_(table),
-      properties_( defineTable(table) )
+      m_tableName( dbTableToName[ static_cast<int>(table) ] ),
+      m_dbTable(table),
+      m_properties( defineTable(table) )
 {
 }
 
-const QString TableSchema::tableName() { return tableName_; }
-const Brewtarget::DBTable TableSchema::dbTable() { return dbTable_; }
-const QMap<QString,PropertySchema*> TableSchema::properties() const { return properties_; }
+const QString TableSchema::tableName() { return m_tableName; }
+const Brewtarget::DBTable TableSchema::dbTable() { return m_dbTable; }
+const QMap<QString,PropertySchema*> TableSchema::properties() const { return m_properties; }
 
-const QStringList TableSchema::allPropertyNames() const { return properties_.keys(); }
+const QStringList TableSchema::allPropertyNames() const { return m_properties.keys(); }
 
 const QStringList TableSchema::allColumnNames(Brewtarget::DBTypes type) const
 {
    QStringList tmp;
 
-   foreach( PropertySchema* prop, properties_ ) {
+   foreach( PropertySchema* prop, m_properties ) {
       tmp.append(prop->colName(type));
+   }
+   return tmp;
+}
+
+const QStringList TableSchema::allDataPropertyNames() const
+{ 
+   QStringList ret;
+
+   foreach ( PropertySchema* prop, m_properties ) {
+      if ( ! prop->fKey() ) {
+         ret.append( prop->propName() );
+      }
+   }
+   return ret;
+}
+
+const QStringList TableSchema::allDataColumnNames(Brewtarget::DBTypes type) const
+{
+   QStringList tmp;
+
+   foreach( PropertySchema* prop, m_properties ) {
+      if ( ! prop->fKey() ) {
+         tmp.append(prop->colName(type));
+      }
    }
    return tmp;
 }
 
 const PropertySchema* TableSchema::property(QString prop) const
 {
-   if ( properties_.contains(prop) ) {
-      return properties_.value(prop);
+   if ( m_properties.contains(prop) ) {
+      return m_properties.value(prop);
    }
    
    return nullptr;
@@ -133,8 +157,8 @@ const PropertySchema* TableSchema::property(QString prop) const
 
 const QString TableSchema::propertyToColumn(QString prop, Brewtarget::DBTypes type) const
 {
-   if ( properties_.contains(prop) ) {
-      return properties_.value(prop)->colName(type);
+   if ( m_properties.contains(prop) ) {
+      return m_properties.value(prop)->colName(type);
    }
    else {
       return QString();
@@ -143,8 +167,8 @@ const QString TableSchema::propertyToColumn(QString prop, Brewtarget::DBTypes ty
 
 const QString TableSchema::propertyToXml(QString prop) const
 {
-   if ( properties_.contains(prop) ) {
-      return properties_.value(prop)->xmlName();
+   if ( m_properties.contains(prop) ) {
+      return m_properties.value(prop)->xmlName();
    }
    else {
       return QString();
@@ -155,7 +179,7 @@ const QString TableSchema::xmlToProperty(QString xmlName) const
 {
    QString retval;
 
-   foreach ( PropertySchema* prop, properties_ ) {
+   foreach ( PropertySchema* prop, m_properties ) {
       if ( prop->xmlName() == xmlName ) {
          retval = prop->propName();
          break;
@@ -166,8 +190,8 @@ const QString TableSchema::xmlToProperty(QString xmlName) const
 
 const QString TableSchema::propertyColumnType(QString prop) const
 {
-   if ( properties_.contains(prop) ) {
-      return properties_.value(prop)->colType();
+   if ( m_properties.contains(prop) ) {
+      return m_properties.value(prop)->colType();
    }
    else {
       return QString();
@@ -176,8 +200,8 @@ const QString TableSchema::propertyColumnType(QString prop) const
 
 const QVariant TableSchema::propertyColumnDefault(QString prop) const
 {
-   if ( properties_.contains(prop) ) {
-      return properties_.value(prop)->defaultValue();
+   if ( m_properties.contains(prop) ) {
+      return m_properties.value(prop)->defaultValue();
    }
    else {
       return QString();
@@ -186,8 +210,8 @@ const QVariant TableSchema::propertyColumnDefault(QString prop) const
 
 const int TableSchema::propertyColumnSize(QString prop) const
 {
-   if ( properties_.contains(prop) ) {
-      return properties_.value(prop)->colSize();
+   if ( m_properties.contains(prop) ) {
+      return m_properties.value(prop)->colSize();
    }
    else {
       return 0;
@@ -232,7 +256,7 @@ QMap<QString,PropertySchema*> TableSchema::defineTable(Brewtarget::DBTable table
          retVal = defineYeastTable();
          break;
       default:
-         qDebug() << tableName_ << " not implemented yet";
+         qDebug() << m_tableName << " not implemented yet";
    }
 
    return retVal;
@@ -698,22 +722,17 @@ QMap<QString,PropertySchema*> TableSchema::defineRecipeTable()
    tmpNames[Brewtarget::NODB] = kcolRecipeTasteRating;
    tmp[kpropTasteRating] = new PropertySchema( kpropTasteRating, tmpNames , kxmlPropTasteRating, QString("real"), QVariant(20.0));
 
-   // These require more thought. I think I may need another attribute on the
-   // PropertySchema object to indicate this is a foreignkey? For now, don't
-/*
-
    tmpNames[Brewtarget::NODB] = kcolRecipeEquipmentId;
-   tmp[kpropEquipmentId] = new PropertySchema( kpropEquipmentId, tmpNames , QString(), QString("int"), QVariant());
+   tmp[kpropEquipmentId] = new PropertySchema( kpropEquipmentId, tmpNames , QString(), QString("int"), QVariant(), 0, true, Brewtarget::EQUIPTABLE);
 
    tmpNames[Brewtarget::NODB] = kcolRecipeMashId;
-   tmp[kpropMashId] = new PropertySchema( kpropMashId, tmpNames , QString(), QString("int"), QVariant());
+   tmp[kpropMashId] = new PropertySchema( kpropMashId, tmpNames , QString(), QString("int"), QVariant(), 0, true, Brewtarget::MASHTABLE);
 
    tmpNames[Brewtarget::NODB] = kcolRecipeStyleId;
-   tmp[kpropStyleId] = new PropertySchema( kpropStyleId, tmpNames , QString(), QString("int"), QVariant());
+   tmp[kpropStyleId] = new PropertySchema( kpropStyleId, tmpNames , QString(), QString("int"), QVariant(), 0, true, Brewtarget::STYLETABLE);
 
    tmpNames[Brewtarget::NODB] = kcolRecipeAncestorId;
-   tmp[kpropAncestorId] = new PropertySchema( kpropAncestorId, tmpNames , QString(), QString("int"), QVariant());
-*/
+   tmp[kpropAncestorId] = new PropertySchema( kpropAncestorId, tmpNames , QString(), QString("int"), QVariant(), 0, true, Brewtarget::RECTABLE);
    return tmp;
 }
 
@@ -869,10 +888,8 @@ QMap<QString,PropertySchema*> TableSchema::defineBrewnoteTable()
    tmpNames[Brewtarget::NODB] = kcolBrewnoteAttenuation;
    tmp[kpropAttenuation] = new PropertySchema( kpropAttenuation, tmpNames , kxmlPropAttenuation, QString("real"), QVariant(1.0));
 
-   /*
    tmpNames[Brewtarget::NODB] = kcolBrewnoteRecipeId;
-   tmp[kpropRecipeId] = new PropertySchema( kpropRecipeId, tmpNames , kxmlPropRecipeId, QString("real"), QVariant(1.0));
-   */
+   tmp[kpropRecipeId] = new PropertySchema( kpropRecipeId, tmpNames , QString(), QString("int"), QVariant(), 0, true, Brewtarget::RECTABLE);
 
    return tmp;
 }
