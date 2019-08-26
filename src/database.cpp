@@ -390,26 +390,33 @@ bool Database::load()
       }
 
       QList<Fermentable*> tmpF = fermentables(*i);
-      for( j = tmpF.begin(); j != tmpF.end(); ++j )
+      for( j = tmpF.begin(); j != tmpF.end(); ++j ) {
          connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+      }
 
       QList<Hop*> tmpH = hops(*i);
-      for( k = tmpH.begin(); k != tmpH.end(); ++k )
+      for( k = tmpH.begin(); k != tmpH.end(); ++k ) {
          connect( *k, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptHopChange(QMetaProperty,QVariant)) );
+      }
 
       QList<Yeast*> tmpY = yeasts(*i);
-      for( l = tmpY.begin(); l != tmpY.end(); ++l )
+      for( l = tmpY.begin(); l != tmpY.end(); ++l ) {
          connect( *l, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptYeastChange(QMetaProperty,QVariant)) );
+      }
 
-      connect( mash(*i), SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
+      // a recipe may not have a mash. Can't connect what doesn't exist
+      if ( mash(*i) != nullptr ) {
+         connect( mash(*i), SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
+      }
    }
 
    QList<Mash*> tmpM = mashs();
    for( m = tmpM.begin(); m != tmpM.end(); ++m )
    {
       QList<MashStep*> tmpMS = mashSteps(*m);
-      for( n=tmpMS.begin(); n != tmpMS.end(); ++n)
+      for( n=tmpMS.begin(); n != tmpMS.end(); ++n) {
          connect( *n, SIGNAL(changed(QMetaProperty,QVariant)), *m, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
+      }
    }
 
    loadWasSuccessful = true;
@@ -1221,7 +1228,6 @@ Hop* Database::newHop(Hop* other)
 
 Instruction* Database::newInstruction(Recipe* rec)
 {
-   // TODO: encapsulate in QUndoCommand.
    Instruction* tmp;
 
    sqlDatabase().transaction();
@@ -1667,6 +1673,32 @@ int Database::insertHop(Hop* ins)
    allHops.insert(key,ins);
    emit changed( metaProperty("hops"), QVariant() );
    emit newHopSignal(ins);
+
+   return key;
+}
+
+int Database::insertInstruction(Instruction* ins, Recipe* parent)
+{
+   int key;
+   sqlDatabase().transaction();
+
+   try {
+      key = insertElement(ins);
+      ins->setCacheOnly(false);
+
+      ins = addIngredientToRecipe<Instruction>(parent,ins,true,0,false,false);
+
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
+
+   sqlDatabase().commit();
+
+   allInstructions.insert(key,ins);
+   emit changed( metaProperty("instructions"), QVariant() );
 
    return key;
 }
@@ -2303,6 +2335,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
 void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 {
    try {
+      qDebug() << "adding new hop  w/ addIngredientToRecipe() call";
       Hop* newHop = addIngredientToRecipe<Hop>( rec, hop, noCopy, &allHops, true, transact );
       // it's slightly dirty pool to put this all in the try block. Sue me.
       connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
@@ -2317,15 +2350,17 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 
 void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
 {
+    qDebug() << "addToRecipe with a list of Hops" << transact;
    if ( hops.size() == 0 )
       return;
 
-   if ( transact )
+   if ( transact ) {
+      qDebug() << "Starting transaction";
       sqlDatabase().transaction();
+   }
 
    try {
-      foreach (Hop* hop, hops )
-      {
+      foreach (Hop* hop, hops ) {
          Hop* newHop = addIngredientToRecipe<Hop>( rec, hop, false, &allHops, true, false );
          connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
       }
@@ -4590,22 +4625,31 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 // block
 Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent )
 {
+   QDomNode n;
+   QString name;
+   Instruction* ret;
+
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
 
    blockSignals(true);
    try {
-      Instruction* ret = newInstruction(parent);
+      ret = new Instruction(name);
 
-      fromXml( ret, Instruction::tagToProp, node );
-
-      blockSignals(false);
-      emit changed( metaProperty("instructions"), QVariant() );
-      return ret;
+      fromXml(ret, node);
+      
+      insertInstruction(ret, parent);
+      
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
       blockSignals(false);
       throw;
    }
+
+   blockSignals(false);
+   emit changed( metaProperty("instructions"), QVariant() );
+   return ret;
 }
 
 Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )

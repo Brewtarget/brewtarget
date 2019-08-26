@@ -82,6 +82,7 @@ signals:
 private:
    Instruction(Brewtarget::DBTable table, int key);
    Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Instruction( QString name, bool cache = true );
    Instruction( Instruction const& other );
 
    QString m_directions;

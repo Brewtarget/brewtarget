@@ -96,29 +96,6 @@ void InstructionWidget::setCompleted()
    }
 }
 
-/*void InstructionWidget::setHasTimer()
-{
-   if( insObs == 0 )
-      return;
-
-   insObs->setHasTimer( (checkBox_showTimer->checkState() == Qt::Checked)? true : false );
-
-   if( insObs->hasTimer() )
-   {
-      timer->setTimer(insObs->timerValue());
-      verticalLayout->insertWidget(1,timer);
-      timer->setVisible(true);
-      verticalLayout->update(); // Shouldn't have to do this, but if I don't,
-                                // then, the layout screws up.
-   }
-   else
-   {
-      verticalLayout->removeWidget(timer);
-      timer->setVisible(false);
-      verticalLayout->update();
-   }
-}*/
-
 void InstructionWidget::setTimerValue(QString value)
 {
    if( insObs == 0 )

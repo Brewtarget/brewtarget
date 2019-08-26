@@ -386,7 +386,7 @@ bool   Hop::cacheOnly() const { return m_cacheOnly; }
 // inventory still must be handled separately, and I'm still annoyed.
 double Hop::inventory() const
 {
-   return getInventory(kpropAmountKg).toDouble();
+   return getInventory(kpropAmount).toDouble();
 }
 
 const QString Hop::useStringTr() const

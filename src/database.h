@@ -264,9 +264,11 @@ public:
    int    insertStyle(Style* ins);
    int    insertYeast(Yeast* ins);
    
-   // Brewnotes and mashsteps are both impossible without their parent objects
+   // Brewnotes, instructions and mashsteps are impossible without their parent objects
    int    insertBrewnote(BrewNote* ins, Recipe *parent);
+   int    insertInstruction(Instruction* ins, Recipe *parent);
    int    insertMashStep(MashStep* ins, Mash *parent);
+
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    /* This links ingredients with the same name.
    * The first displayed ingredient in the database is assumed to be the parent.
@@ -758,24 +760,29 @@ private:
             ingKeyName = QString("%1_id").arg(prefix);
             childTableName = QString("%1_children").arg(prefix);
          }
-         else
+         else {
+            qDebug() << "throwing signals error";
             throw QString("could not locate classInfo for signal on %2").arg(meta->className());
+         }
          // Ensure this ingredient is not already in the recipe.
          QString select = QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
                               .arg(relTableName)
                               .arg(ingKeyName)
                               .arg(ing->_key)
                               .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key);
-         if (! q.exec(select) )
-            throw QString("Couldn't execute search");
+         qDebug() << "select string: " << select;
+         if (! q.exec(select) ) {
+            qDebug() << "throwing search for ingredients error";
+            throw QString("Couldn't execute ingredient in recipe search");
+         }
 
-         if( q.next() )
+         if ( q.next() ) {
             throw QString("Ingredient already exists in recipe." );
+         }
 
          q.finish();
 
-         if ( noCopy )
-         {
+         if ( noCopy ) {
             newIng = qobject_cast<T*>(ing);
             // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
             // Not sure I like this. It's a long call stack just to end up back
@@ -785,8 +792,9 @@ private:
          else
          {
             newIng = copy<T>(ing, keyHash, false);
-            if ( newIng == 0 )
+            if ( newIng == nullptr ) {
                throw QString("error copying ingredient");
+            }
          }
 
          // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
@@ -800,8 +808,9 @@ private:
          q.bindValue(":ingredient", newIng->key());
          q.bindValue(":recipe", rec->_key);
 
-         if ( ! q.exec() )
+         if ( ! q.exec() ) {
             throw QString("%2 : %1.").arg(q.lastQuery()).arg(q.lastError().text());
+         }
 
          emit rec->changed( rec->metaProperty(propName), QVariant() );
 
@@ -825,8 +834,7 @@ private:
             q.prepare(QString("SELECT parent_id FROM %1 WHERE child_id=%2")
                   .arg(childTableName)
                   .arg(key));
-            if (q.exec() && q.next())
-            {
+            if (q.exec() && q.next()) {
                key = q.record().value("parent_id").toInt();
             }
             q.finish();
@@ -838,8 +846,10 @@ private:
             q.bindValue(":parent", key);
             q.bindValue(":child", newIng->key());
 
-            if ( ! q.exec() )
+            if ( ! q.exec() ) {
+               qDebug() << "Could not do child table insert";
                throw QString("%1 %2.").arg(q.lastQuery()).arg(q.lastError().text());
+            }
 
             emit rec->changed( rec->metaProperty(propName), QVariant() );
          }

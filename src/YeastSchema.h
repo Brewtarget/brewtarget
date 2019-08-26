@@ -25,7 +25,7 @@
 static const QString kcolYeastType("ytype");
 static const QString kcolYeastForm("form");
 static const QString kcolYeastAmount("amount");
-static const QString kcolYeastInventory("quanta");
+static const QString kcolYeastQuanta("quanta");
 static const QString kcolYeastAmountIsWeight("amount_is_weight");
 static const QString kcolYeastLab("laboratory");
 static const QString kcolYeastProductID("product_id");
@@ -40,6 +40,7 @@ static const QString kcolYeastAddToSecondary("add_to_secondary");
 
 // properties for objects
 static const QString kpropLab("laboratory");
+static const QString kpropQuanta("quanta");
 static const QString kpropProductID("productID");
 static const QString kpropMinTemp("minTemperature_c");
 static const QString kpropMaxTemp("maxTemperature_c");

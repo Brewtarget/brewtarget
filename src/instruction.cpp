@@ -22,39 +22,8 @@
 #include "brewtarget.h"
 #include "database.h"
 
-const QString kName("name");
-const QString kDirections("directions");
-const QString kHasTimer("hastimer");
-const QString kTimerValue("timervalue");
-const QString kCompleted("completed");
-const QString kInterval("interval");
-
-// these are defined in the parent, but I need them here too
-const QString kDeleted("deleted");
-const QString kDisplay("display");
-const QString kFolder("folder");
-
-const QString kNameProp("name");
-const QString kDirectionsProp("directions");
-const QString kHasTimerProp("hastimer");
-const QString kTimerValueProp("timervalue");
-const QString kCompletedProp("completed");
-const QString kIntervalProp("interval");
-QHash<QString,QString> Instruction::tagToProp = Instruction::tagToPropHash();
-
-QHash<QString,QString> Instruction::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   
-   propHash["NAME"] = "name";
-   propHash["DIRECTIONS"] = "directions";
-   propHash["HAS_TIMER"] = "hasTimer";
-   propHash["TIMER_VALUE"] = "timerValue";
-   propHash["COMPLETED"] = "completed";
-   propHash["INTERVAL"] = "interval";
-   
-   return propHash;
-}
+#include "TableSchemaConst.h"
+#include "InstructionSchema.h"
 
 QString Instruction::classNameStr()
 {
@@ -73,13 +42,24 @@ Instruction::Instruction(Brewtarget::DBTable table, int key)
 {
 }
 
+Instruction::Instruction(QString name, bool cache)
+   : BeerXMLElement(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
+     m_directions(QString()),
+     m_hasTimer  (false),
+     m_timerValue(QString()),
+     m_completed (false),
+     m_interval  (0.0),
+     m_cacheOnly(cache)
+{
+}
+
 Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool() ),
-     m_directions(rec.value(kDirections).toString()),
-     m_hasTimer  (rec.value(kHasTimer).toBool()),
-     m_timerValue(rec.value(kTimerValue).toString()),
-     m_completed (rec.value(kCompleted).toBool()),
-     m_interval  (rec.value(kInterval).toDouble()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
+     m_directions(rec.value(kcolInstructionDirections).toString()),
+     m_hasTimer  (rec.value(kcolInstructionHasTimer).toBool()),
+     m_timerValue(rec.value(kcolInstructionTimerValue).toString()),
+     m_completed (rec.value(kcolInstructionCompleted).toBool()),
+     m_interval  (rec.value(kcolInstructionInterval).toDouble()),
      m_cacheOnly(false)
 {
 }
@@ -89,7 +69,7 @@ void Instruction::setDirections(const QString& dir)
 {
    m_directions = dir;
    if ( ! m_cacheOnly ) {
-      set(kDirections, kDirectionsProp, dir);
+      setEasy(kpropDirections,  dir);
    }
 }
 
@@ -97,7 +77,7 @@ void Instruction::setHasTimer(bool has)
 {
    m_hasTimer = has;
    if ( ! m_cacheOnly ) {
-      set(kHasTimer, kHasTimerProp, has);
+      setEasy(kpropHasTimer,  has);
    }
 }
 
@@ -105,7 +85,7 @@ void Instruction::setTimerValue(const QString& timerVal)
 {
    m_timerValue = timerVal;
    if ( ! m_cacheOnly ) {
-      set(kTimerValue, kTimerValueProp, timerVal);
+      setEasy(kpropTimerValue,  timerVal);
    }
 }
 
@@ -113,7 +93,7 @@ void Instruction::setCompleted(bool comp)
 {
    m_completed = comp;
    if ( ! m_cacheOnly ) {
-      set(kCompleted, kCompletedProp, comp);
+      setEasy(kpropCompleted,  comp);
    }
 }
 
@@ -129,7 +109,7 @@ void Instruction::setInterval(double time)
 {
    m_interval = time;
    if ( ! m_cacheOnly ) {
-      set(kInterval, kIntervalProp, time);
+      setEasy(kpropInterval,  time);
    }
 }
 

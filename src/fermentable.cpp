@@ -367,7 +367,7 @@ void Fermentable::setInventoryAmount( double num )
 
 double Fermentable::inventory() const
 {
-   return getInventory(kpropAmountKg).toDouble();
+   return getInventory(kpropAmount).toDouble();
 }
 
 void Fermentable::setYield_pct( double num )
