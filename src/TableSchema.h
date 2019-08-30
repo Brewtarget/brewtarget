@@ -36,13 +36,15 @@ class TableSchema : QObject
 public:
 
    const QString tableName();
-   const Brewtarget::DBTable dbTable();
+   Brewtarget::DBTable dbTable();
    const QMap<QString, PropertySchema*> properties() const;
+   const QMap<QString, PropertySchema*> foreignKeys() const;
 
    const PropertySchema* property(QString prop) const;
 
    // returns all of the column names
    const QStringList propertyToColumn(QString prop) const;
+
    // returns just one for the database type at hand
    const QString propertyToColumn(QString prop, Brewtarget::DBTypes type) const;
 
@@ -53,7 +55,7 @@ public:
    // get the default value for this column
    const QVariant propertyColumnDefault(QString prop) const;
    // get the column size of the property's column
-   const int propertyColumnSize(QString prop) const;
+   int propertyColumnSize(QString prop) const;
 
    // given an XML tag, get the associated property name
    const QString xmlToProperty(QString xmlName) const;
@@ -61,32 +63,50 @@ public:
    const QStringList allPropertyNames() const;
    const QStringList allColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
 
-   // I need to distinguish between columns that we would write to during an
-   // insert (like name or type) and ones we don't (like mash_id). This does
-   // that.
-   const QStringList allDataPropertyNames() const;
-   const QStringList allDataColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
+   const  QStringList allForeignKeyNames() const;
+   const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
+
 private:
 
-   // You can create this either via tableName or DBTable
-   TableSchema(QString tablename);
+   // I only allow table schema to be made with a DBTable constant
+   // It saves a lot of work, and I think the name to constant
+   // mapping doesn't belong here -- it belongs in DatabaseSchema
    TableSchema(Brewtarget::DBTable dbTable);
 
    QString m_tableName;
    Brewtarget::DBTable m_dbTable;
-   QMap<QString,PropertySchema*> m_properties;
 
-   QMap<QString,PropertySchema*> defineTable(Brewtarget::DBTable table);
-   QMap<QString,PropertySchema*> defineStyleTable();
-   QMap<QString,PropertySchema*> defineEquipmentTable();
-   QMap<QString,PropertySchema*> defineFermentableTable();
-   QMap<QString,PropertySchema*> defineHopTable();
-   QMap<QString,PropertySchema*> defineMashTable();
-   QMap<QString,PropertySchema*> defineMashstepTable();
-   QMap<QString,PropertySchema*> defineMiscTable();
-   QMap<QString,PropertySchema*> defineRecipeTable();
-   QMap<QString,PropertySchema*> defineYeastTable();
-   QMap<QString,PropertySchema*> defineBrewnoteTable();
+   QMap<QString,PropertySchema*> m_properties;
+   QMap<QString,PropertySchema*> m_foreignKeys;
+
+   void defineTable();
+   void defineStyleTable();
+   void defineEquipmentTable();
+   void defineFermentableTable();
+   void defineHopTable();
+   void defineMashTable();
+   void defineMashstepTable();
+   void defineMiscTable();
+   void defineRecipeTable();
+   void defineYeastTable();
+   void defineBrewnoteTable();
+
+   // and we can get away with one method for the child tables
+   void defineChildTable(Brewtarget::DBTable table);
+
+   // and one method for all the in_recipe tables
+   void defineInRecipeTable(QString childIdx, Brewtarget::DBTable table);
+
+   // one method for all the bt_tables
+   void defineBtTable(QString childIdx, Brewtarget::DBTable table);
+
+   // Inventory tables are strange and I didn't feel quite comfortable trying to make one
+   // method for all of them;
+   void defineFermInventoryTable();
+   void defineHopInventoryTable();
+   void defineMiscInventoryTable();
+   void defineYeastInventoryTable();
+
 };
 
 #endif

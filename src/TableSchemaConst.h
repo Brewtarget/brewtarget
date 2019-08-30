@@ -1,3 +1,4 @@
+#include <QString>
 
 // Define tables names first, because I need them first
 static const QString ktableMeta("bt_alltables");
@@ -79,6 +80,10 @@ static const QString kpropBatchSize("batchSize_l");
 static const QString kpropBoilSize("boilSize_l");
 static const QString kpropBoilTime("boilTime_min");
 
+// I am not sure this makes sense, but it is consistent
+static const QString kpropParentId("parent_id");
+static const QString kpropChildId("child_id");
+
 // Same for these column names. Yes, but I think the consistency is better
 // this way
 static const QString kcolName("name");
@@ -115,3 +120,21 @@ static const QString kxmlPropBoilTime("BOIL_TIME");
 
 // used by yeast and brewnote
 static const QString kxmlPropAttenuation("ATTENUATION");
+
+// Child information. We were really consisten on our naming here, so all the
+// *children tables will use these constants. The only thing that changes is
+// the table it points at
+
+static const QString kcolParentId("parent_id");
+static const QString kcolChildId("child_id");
+
+// _in_recipe key columns
+static const QString kcolRecipeId("recipe_id");
+static const QString kcolEquipmentId("equipment_id");
+static const QString kcolFermentableId("fermentable_id");
+static const QString kcolHopId("hop_id");
+static const QString kcolInstructionId("instruction_id");
+static const QString kcolMiscId("misc_id");
+static const QString kcolStyleId("style_id");
+static const QString kcolWaterId("water_id");
+static const QString kcolYeastId("yeast_id");

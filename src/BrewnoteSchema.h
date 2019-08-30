@@ -58,7 +58,6 @@ static const QString kcolBrewnoteProjectedAttenuation("projected_atten");
 static const QString kcolBrewnoteProjectedPoints("projected_points");
 static const QString kcolBrewnoteProjectedFermentationPoints("projected_ferm_points");
 
-static const QString kcolBrewnoteRecipeId("recipe_id");
 
 // Properties
 static const QString kpropBrewDate("brewDate");
