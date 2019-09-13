@@ -171,6 +171,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RecipeExtrasWidget.cpp
     ${SRCDIR}/PropertySchema.cpp
     ${SRCDIR}/TableSchema.cpp
+    ${SRCDIR}/DatabaseSchema.cpp
 )
 
 # List of all the *.ui.
@@ -306,6 +307,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/EquipmentTableSchema.h
     ${SRCDIR}/HopTableSchema.h
     ${SRCDIR}/MiscTableSchema.h
+    ${SRCDIR}/DatabaseSchema.h
 )
 
 SET( FILES_TO_TRANSLATE

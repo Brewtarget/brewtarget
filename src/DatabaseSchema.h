@@ -1,0 +1,76 @@
+/*
+ * DatabaseSchema.h is part of Brewtarget, and is Copyright the following
+ * authors 2019-2024
+ * - Mik Firestone <mikfire@fastmail.com>
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#ifndef _DATABASESCHEMA_H
+#define _DATABASESCHEMA_H
+
+#include "brewtarget.h"
+#include "TableSchema.h"
+
+#include <QString>
+
+/* A fundamental problem in all OO is when to stop abstracting.
+ *
+ * These three classes are intended to represent the database schema in a way
+ * that can be manipulated by the objects that need to, instead of the
+ * mess'o'hash and lists we have now.
+ *
+ * My goals are to:
+ *   1. Remove as many of the table hashes as I can.
+ *   2. Make it easier to add a column to the database
+ *   3. Make DatabaseSchemaHelper .. better.
+ *
+ * Removing the hashes
+ *   When the Database() object is created, it should get a static
+ *   DatabaseSchema object that defines *every* table (ugh, this means the
+ *   parent of tables, the inventory tables, etc.)
+ *
+ *   Anything that needs to know can query for a specific table/property and
+ *   get back what it needs. As a side effect, I think we can clean all the
+ *   set() methods up, which means we can delete a bunch of constants from the
+ *   file.
+ */
+class DatabaseSchema
+{
+   friend class Database;
+
+public:
+
+   virtual ~DatabaseSchema() {}
+
+   // For those that just want the TableSchema
+   TableSchema* table(QString tableName);
+   TableSchema* table(Brewtarget::DBTable table);
+
+   // These generate SQL strings
+   const QString generateCreateTable(Brewtarget::DBTable table);
+   const QString generateInsertRow(Brewtarget::DBTable table);
+
+private:
+   QMap<Brewtarget::DBTable,TableSchema*> m_tables;
+   Brewtarget::DBTypes m_type;
+   QString m_id;
+   QString m_name;
+
+   DatabaseSchema();
+
+   void loadTables();
+
+};
+
+#endif // _DATABASESCHEMA_H

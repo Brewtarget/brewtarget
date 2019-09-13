@@ -24,7 +24,6 @@
 // These are defined in the main constants file
 // const QString kcolStyleName("name");
 // const QString kcolStyleNotes("notes");
-static const QString ktableStyle("style");
 static const QString kcolStyleType("s_type");
 static const QString kcolStyleCategory("category");
 static const QString kcolStyleCategoryNumber("category_number");

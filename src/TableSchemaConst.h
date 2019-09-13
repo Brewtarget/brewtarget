@@ -7,6 +7,7 @@ static const QString ktableEquipment("equipment");
 static const QString ktableFermentable("fermentable");
 static const QString ktableHop("hop");
 static const QString ktableMisc("misc");
+static const QString ktableStyle("style");
 static const QString ktableYeast("yeast");
 static const QString ktableWater("water");
 static const QString ktableMash("mash");

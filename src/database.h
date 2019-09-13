@@ -50,6 +50,7 @@ class Database;
 #include "brewtarget.h"
 #include "recipe.h"
 #include "TableSchema.h"
+#include "DatabaseSchema.h"
 
 // Forward declarations
 class BrewNote;
@@ -229,7 +230,7 @@ public:
 
    MashStep* newMashStep(Mash* parent, bool connected = true);
 
-   Mash* newMash(Mash* other = 0, bool displace = true);
+   Mash* newMash(Mash* other = nullptr, bool displace = true);
    Mash* newMash(Recipe* parent, bool transaction = true);
 
    Recipe* newRecipe(QString name);
@@ -238,20 +239,20 @@ public:
    // Named copy constructors==================================================
    //! \returns a copy of the given note.
    BrewNote* newBrewNote(BrewNote* other, bool signal = true);
-   Equipment* newEquipment(Equipment* other = 0);
-   Fermentable* newFermentable(Fermentable* other = 0);
-   Hop* newHop(Hop* other = 0);
+   Equipment* newEquipment(Equipment* other = nullptr);
+   Fermentable* newFermentable(Fermentable* other = nullptr);
+   Hop* newHop(Hop* other = nullptr);
    //! \returns a copy of the given recipe.
    Recipe* newRecipe(Recipe* other);
    /*! \returns a copy of the given mash. Displaces the mash currently in the
     * parent recipe unless \b displace is false.
     */
-   Misc* newMisc(Misc* other = 0);
-   
+   Misc* newMisc(Misc* other = nullptr);
+
    Style* newStyle(Style* other);
    Style* newStyle(QString name);
-   Water* newWater(Water* other = 0);
-   Yeast* newYeast(Yeast* other = 0);
+   Water* newWater(Water* other = nullptr);
+   Yeast* newYeast(Yeast* other = nullptr);
 
    int    insertElement(BeerXMLElement* ins);
    int    insertEquipment(Equipment* ins);
@@ -263,7 +264,7 @@ public:
    int    insertRecipe(Recipe* ins);
    int    insertStyle(Style* ins);
    int    insertYeast(Yeast* ins);
-   
+
    // Brewnotes, instructions and mashsteps are impossible without their parent objects
    int    insertBrewnote(BrewNote* ins, Recipe *parent);
    int    insertInstruction(Instruction* ins, Recipe *parent);
@@ -357,13 +358,12 @@ public:
    {
       if ( list.empty() )
          return;
-      
-      QMetaObject *meta;
+
       int ndx;
       bool emitSignal;
-      
+
       foreach(T* toBeDeleted, list) {
-         meta = (QMetaObject *)toBeDeleted->metaObject();
+         const QMetaObject* meta = toBeDeleted->metaObject();
          ndx = meta->indexOfClassInfo("signal");
          emitSignal = ndx != -1 ? true : false;
 
@@ -498,7 +498,7 @@ public:
    bool isConverted();
 
    //! \brief Figures out what databases we are copying to and from, opens what
-   //   needs opens and then calls the appropriate workhorse to get it done. 
+   //   needs opens and then calls the appropriate workhorse to get it done.
    void convertDatabase(QString const& Hostname, QString const& DbName,
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
@@ -540,6 +540,7 @@ private slots:
 
 private:
    static Database* dbInstance; // The singleton object
+   DatabaseSchema* dbDefn;
 
    //QThread* _thread;
    // These are for SQLite databases
@@ -559,6 +560,7 @@ private:
    static QString dbPassword;
 
 //   static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
+   // I think many, many of these go away once I figure out how DatabaseSchema should work.
    static QHash<Brewtarget::DBTable,QString> tableNames;
    static QHash<Brewtarget::DBTable,QString> tableNamesHash();
    static QHash<QString,Brewtarget::DBTable> classNameToTable;
@@ -595,7 +597,6 @@ private:
    QHash< int, Style* > allStyles;
    QHash< int, Water* > allWaters;
    QHash< int, Yeast* > allYeasts;
-//   QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
    QHash<QString,QSqlQuery> selectSome;
 
    //! Get the right database connection for the calling thread.
@@ -678,17 +679,17 @@ private:
 
    // Import from BeerXML =====================================================
    BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );
-   Equipment* equipmentFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Hop* hopFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Equipment* equipmentFromXml( QDomNode const& node, Recipe* parent = nullptr );
+   Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = nullptr );
+   Hop* hopFromXml( QDomNode const& node, Recipe* parent = nullptr );
    Instruction* instructionFromXml( QDomNode const& node, Recipe* parent );
-   Mash* mashFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Mash* mashFromXml( QDomNode const& node, Recipe* parent = nullptr );
    MashStep* mashStepFromXml( QDomNode const& node, Mash* parent );
-   Misc* miscFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Misc* miscFromXml( QDomNode const& node, Recipe* parent = nullptr );
    Recipe* recipeFromXml( QDomNode const& node );
-   Style* styleFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Water* waterFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Yeast* yeastFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Style* styleFromXml( QDomNode const& node, Recipe* parent = nullptr );
+   Water* waterFromXml( QDomNode const& node, Recipe* parent = nullptr );
+   Yeast* yeastFromXml( QDomNode const& node, Recipe* parent = nullptr );
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! Hidden constructor.
@@ -737,13 +738,13 @@ private:
       bool transact = true
    )
    {
-      T* newIng = 0;
+      T* newIng = nullptr;
       QString propName, relTableName, ingKeyName, childTableName;
       const QMetaObject* meta = ing->metaObject();
       int ndx = meta->indexOfClassInfo("signal");
 
-      if( rec == 0 || ing == 0 )
-         return 0;
+      if( rec == nullptr || ing == nullptr )
+         return nullptr;
 
       // TRANSACTION BEGIN, but only if requested. Yeah. Had to go there.
       if ( transact ) {
@@ -897,7 +898,7 @@ private:
 
          if( !q.exec(select) )
             throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
-         else 
+         else
             q.next();
 
          QSqlRecord oldRecord = q.record();
@@ -977,7 +978,7 @@ private:
 
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.
-   bool updateSchema(bool* err = 0);
+   bool updateSchema(bool* err = nullptr);
 
    // May St. Stevens intercede on my behalf.
    //

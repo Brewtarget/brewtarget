@@ -71,12 +71,13 @@
 #include "config.h"
 #include "brewtarget.h"
 #include "QueuedMethod.h"
+#include "DatabaseSchema.h"
 #include "DatabaseSchemaHelper.h"
 #include "TableSchema.h"
 #include "TableSchemaConst.h"
 
 // Static members.
-Database* Database::dbInstance = 0;
+Database* Database::dbInstance = nullptr;
 QString Database::dbHostname;
 int Database::dbPortnum;
 QString Database::dbUsername;
@@ -103,6 +104,10 @@ Database::Database()
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
    converted = false;
+   dbDefn = new DatabaseSchema();
+
+   qDebug() << dbDefn->table(Brewtarget::RECTABLE)->tableName();
+   qDebug() << dbDefn->generateCreateTable(Brewtarget::RECTABLE);
 }
 
 Database::~Database()
@@ -180,7 +185,7 @@ bool Database::loadSQLite()
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
       if (Brewtarget::isInteractive()) {
          QMessageBox::critical(
-            0,
+            nullptr,
             QObject::tr("Database Failure"),
             QString(QObject::tr("Failed to open the database '%1'.").arg(dbFileName))
          );
@@ -236,7 +241,7 @@ bool Database::loadPgSQL()
       // prompt for the password until we get it? I don't think this is a good
       // idea?
       while ( ! isOk ) {
-         dbPassword = QInputDialog::getText(0,tr("Database password"),
+         dbPassword = QInputDialog::getText(nullptr,tr("Database password"),
                tr("Password"), QLineEdit::Password,QString(),&isOk);
          if ( isOk ) {
             isOk = verifyDbConnection( Brewtarget::PGSQL, dbHostname, dbPortnum, dbSchema,
@@ -257,7 +262,7 @@ bool Database::loadPgSQL()
 
    if( ! dbIsOpen ) {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
-      QMessageBox::critical(0,
+      QMessageBox::critical(nullptr,
                             QObject::tr("Database Failure"),
                             QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname))
                            );
@@ -321,7 +326,7 @@ bool Database::load()
    {
       if (Brewtarget::isInteractive()) {
          QMessageBox::critical(
-            0,
+            nullptr,
             QObject::tr("Database Failure"),
             QObject::tr("Failed to update the database")
          );
@@ -340,7 +345,7 @@ bool Database::load()
       if(
          Brewtarget::isInteractive() &&
          QMessageBox::question(
-            0,
+            nullptr,
             tr("Merge Database"),
             tr("There may be new ingredients and recipes available. Would you like to add these to your database?"),
             QMessageBox::Yes | QMessageBox::No,
@@ -676,7 +681,7 @@ void Database::dropInstance()
    mutex.lock();
    dbInstance->unload();
    delete dbInstance;
-   dbInstance=0;
+   dbInstance=nullptr;
    mutex.unlock();
 
 }
@@ -917,7 +922,7 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
                            .arg(q.lastQuery())
                            .arg(q.lastError().text()));
       q.finish();
-      throw;;
+      throw;
    }
 
    q.finish();
@@ -1045,7 +1050,7 @@ Equipment* Database::equipment(Recipe const* parent)
    if( allEquipments.contains(id) )
       return allEquipments[id];
    else
-      return 0;
+      return nullptr;
 }
 
 Style* Database::style(Recipe const* parent)
@@ -1055,15 +1060,15 @@ Style* Database::style(Recipe const* parent)
    if( allStyles.contains(id) )
       return allStyles[id];
    else
-      return 0;
+      return nullptr;
 }
 
-Style* Database::styleById(int styleId ) 
+Style* Database::styleById(int styleId )
 {
    if( allStyles.contains(styleId) )
       return allStyles[styleId];
    else
-      return 0;
+      return nullptr;
 }
 
 Mash* Database::mash( Recipe const* parent )
@@ -1073,7 +1078,7 @@ Mash* Database::mash( Recipe const* parent )
    if( allMashs.contains(mashId) )
       return allMashs[mashId];
    else
-      return 0;
+      return nullptr;
 }
 
 QList<MashStep*> Database::mashSteps(Mash const* parent)
@@ -1237,7 +1242,7 @@ Instruction* Database::newInstruction(Recipe* rec)
 
       // Add without copying to "instruction_in_recipe". We already have a
       // transaction open, so tell addIng to not worry about it
-      tmp = addIngredientToRecipe<Instruction>(rec,tmp,true,0,false,false);
+      tmp = addIngredientToRecipe<Instruction>(rec,tmp,true,nullptr,false,false);
    }
    catch ( QString e ) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -1521,7 +1526,7 @@ Style* Database::newStyle(QString name)
       sqlDatabase().rollback();
       throw;
    }
-   
+
    try {
       // setting it in the DB doesn't set it in the cache. This makes sure the
       // name is in the cache before we throw the signal
@@ -1620,9 +1625,9 @@ int Database::insertElement(BeerXMLElement* ins)
       throw; // rethrow the error until somebody cares
    }
    ins->_key = key;
-    
+
    return key;
-   
+
 }
 
 // I need to break each of these out because of our signals. I will someday
@@ -1686,7 +1691,7 @@ int Database::insertInstruction(Instruction* ins, Recipe* parent)
       key = insertElement(ins);
       ins->setCacheOnly(false);
 
-      ins = addIngredientToRecipe<Instruction>(parent,ins,true,0,false,false);
+      ins = addIngredientToRecipe<Instruction>(parent,ins,true,nullptr,false,false);
 
    }
    catch (QString e) {
@@ -1751,7 +1756,7 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
    sqlDatabase().commit();
 
    allMashSteps.insert(key,ins);
-   connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), parent, 
+   connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), parent,
                  SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
    emit changed( metaProperty("mashs"), QVariant() );
@@ -2159,7 +2164,7 @@ QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable tab
         .arg(tableNames[table])
         .arg(tableNames[tableToChildTable[table]])
         .arg(key);
-  /* 
+  /*
    QString queryString = QString("select %1 from %2 where %3_id = %4")
         .arg(col_name)
         .arg(tableNames[tableToInventoryTable[table]])
@@ -2167,7 +2172,7 @@ QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable tab
         .arg(key);
    */
    QSqlQuery q( queryString, sqlDatabase() );
-   
+
    if ( q.first() ) {
       val = q.record().value(col_name);
    }
@@ -2238,7 +2243,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
 {
    Equipment* newEquip = e;
 
-   if( e == 0 )
+   if( e == nullptr )
       return;
 
    if ( transact )
@@ -2286,7 +2291,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy, bool transact )
 {
-   if ( ferm == 0 )
+   if ( ferm == nullptr )
       return;
 
    try {
@@ -2476,7 +2481,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
 
    Style* newStyle = s;
 
-   if ( s == 0 )
+   if ( s == nullptr )
       return;
 
    if ( transact )
@@ -2618,7 +2623,7 @@ QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
    QSqlQuery q(query,sqlDatabase());
 
    while( q.next() ) {
-      tmp [ (Brewtarget::DBTable)q.value("table_id").toInt() ] = q.value("name").toString();
+      tmp [ static_cast<Brewtarget::DBTable>(q.value("table_id").toInt()) ] = q.value("name").toString();
    }
    return tmp;
 
@@ -2631,7 +2636,7 @@ QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
    QSqlQuery q(query,sqlDatabase());
 
    while( q.next() ) {
-      tmp [ q.value("class_name").toString() ] = (Brewtarget::DBTable)q.value("table_id").toInt();
+      tmp [ q.value("class_name").toString() ] = static_cast<Brewtarget::DBTable>(q.value("table_id").toInt());
    }
 
    return tmp;
@@ -2792,7 +2797,7 @@ bool Database::updateSchema(bool* err)
 
 bool Database::importFromXML(const QString& filename)
 {
-   unsigned int count;
+   int count;
    int line, col;
    QDomDocument xmlDoc;
    QDomElement root;
@@ -3648,7 +3653,7 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    recipeNode.appendChild(tmpNode);
 
    Style* style = a->style();
-   if( style != 0 )
+   if( style != nullptr )
       toXml( style, doc, recipeNode);
 
    tmpNode = doc.createElement("BREWER");
@@ -3707,7 +3712,7 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    recipeNode.appendChild(tmpNode);
 
    Mash* mash = a->mash();
-   if( mash != 0 )
+   if( mash != nullptr )
       toXml( mash, doc, recipeNode);
 
    tmpNode = doc.createElement("INSTRUCTIONS");
@@ -4294,7 +4299,7 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
       if ( ! ret ) {
          QString error = "Could not create new brewnote.";
          Brewtarget::logE(QString(error));
-         QMessageBox::critical(0, tr("Import error."),
+         QMessageBox::critical(nullptr, tr("Import error."),
                error.append("\nUnable to create brew note."));
          return ret;
       }
@@ -4637,9 +4642,9 @@ Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent 
       ret = new Instruction(name);
 
       fromXml(ret, node);
-      
+
       insertInstruction(ret, parent);
-      
+
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
@@ -4693,7 +4698,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
             if ( ! temp->isValid() ) {
                QString error = QString("Error importing mash step %1").arg(temp->name());
                Brewtarget::logE(error);
-               QMessageBox::critical(0, tr("Import error."),
+               QMessageBox::critical(nullptr, tr("Import error."),
                   error.append("\nImporting as \"Infusion\"."));
             }
          }
@@ -4704,7 +4709,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
       if ( parent ) {
          addToRecipe( parent, ret, true, false);
       }
-         
+
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -5116,7 +5121,7 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 
    try {
       // If we are just importing a style by itself, need to do some dupe-checking.
-      if( parent == 0 )
+      if( parent == nullptr )
       {
          // Check to see if there is a hop already in the DB with the same name.
          n = node.firstChildElement("NAME");
@@ -5194,7 +5199,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
          // Handle type enums separately.
          n = node.firstChildElement("TYPE");
          if ( n.firstChild().isNull() ) {
-            Brewtarget::logE( 
+            Brewtarget::logE(
                   QString("Could not find TYPE in %1.  Please select an appropriate value once the yeast is imported").arg(name)
             );
          }
@@ -5206,7 +5211,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->setType(static_cast<Yeast::Type>(0));
-               Brewtarget::logE( 
+               Brewtarget::logE(
                      QString("Could not translate the type %1 in %2.  Please select an appropriate value once the yeast is imported")
                      .arg(tname)
                      .arg(name));
@@ -5215,7 +5220,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
          // Handle form enums separately.
          n = node.firstChildElement("FORM");
          if ( n.firstChild().isNull() ) {
-            Brewtarget::logE( 
+            Brewtarget::logE(
                   QString("Could not find FORM in %1.  Please select an appropriate value once the yeast is imported").arg(name)
             );
          }
@@ -5227,7 +5232,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->setForm( static_cast<Yeast::Form>(0) );
-               Brewtarget::logE( 
+               Brewtarget::logE(
                      QString("Could not translate the form %1 in %2.  Please select an appropriate value once the yeast is imported")
                      .arg(tname)
                      .arg(name));
@@ -5236,7 +5241,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
          // Handle flocc enums separately.
          n = node.firstChildElement("FLOCCULATION");
          if ( n.firstChild().isNull() ) {
-            Brewtarget::logE( 
+            Brewtarget::logE(
                   QString("Could not find FLOCCULATION in %1.  Please select an appropriate value once the yeast is imported").arg(name)
             );
          }
@@ -5248,7 +5253,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->setFlocculation( static_cast<Yeast::Flocculation>(0) );
-               Brewtarget::logE( 
+               Brewtarget::logE(
                      QString("Could not translate the flocculation %1 in %2.  Please select an appropriate value once the yeast is imported")
                      .arg(tname)
                      .arg(name));
@@ -5287,7 +5292,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify ) 
+void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
 {
    TableSchema* schema = new TableSchema(ins->table());
    Brewtarget::DBTable invtable = Database::instance().getInventoryTable(schema->dbTable());
@@ -5302,7 +5307,7 @@ void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
    if ( invkey == 0 ) { //no inventory row in the database so lets make one
       invkey = newInventory(schema,ins->key());
    }
-   updateEntry( invtable, invkey, kcolInventory.toUtf8().constData(), 
+   updateEntry( invtable, invkey, kcolInventory.toUtf8().constData(),
                 value, ins->metaObject()->property(ndx), ins, notify );
 }
 
@@ -5343,7 +5348,7 @@ QList<TableParams> Database::makeTableParams()
    tmp.propName = QStringList() <<
       "name" << "alpha" << "amount" << "use" << "time" << "notes" << "htype" <<
       "form" << "beta" << "hsi" << "origin" << "substitutes" << "humulene" <<
-      "caryophyllene" << "cohumulone" << "myrcene",
+      "caryophyllene" << "cohumulone" << "myrcene";
    // First cast specifies which newHop() I want, since it is overloaded.
    // Second cast is to force the conversion of the function pointer.
    tmp.newElement = [&](QString name) { return this->newHop(); };
@@ -5415,7 +5420,7 @@ void Database::updateDatabase(QString const& filename)
       newSqldb.setDatabaseName(filename);
       if( ! newSqldb.open() )
       {
-         QMessageBox::critical(0,
+         QMessageBox::critical(nullptr,
                               QObject::tr("Database Failure"),
                               QString(QObject::tr("Failed to open the database '%1'.").arg(filename)));
          throw QString("Could not open %1 for reading.\n%2").arg(filename).arg(newSqldb.lastError().text());
@@ -5445,10 +5450,10 @@ void Database::updateDatabase(QString const& filename)
          QSqlQuery qUpdateOldIng( sqlDatabase() );
          QString updateString = QString("UPDATE %1 SET ").arg(tp.tableName);
          varAndHolder.clear();
-         
+
          foreach( QString pn, tp.propName)
             varAndHolder.append(QString("%1=:%1").arg(pn));
-         
+
          updateString.append(varAndHolder.join(", "));
 
          // Un-delete it if it is somehow deleted.
@@ -5590,7 +5595,7 @@ bool Database::verifyDbConnection(Brewtarget::DBTypes testDb, QString const& hos
    if ( results )
       connDb.close();
    else
-      QMessageBox::critical(0, tr("Connection failed"),
+      QMessageBox::critical(nullptr, tr("Connection failed"),
                QString(tr("Could not connect to %1 : %2")).arg(hostname).arg(connDb.lastError().text())
             );
    return results;
@@ -5650,7 +5655,7 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
 {
    QSqlDatabase newDb;
 
-   Brewtarget::DBTypes oldType = (Brewtarget::DBTypes)Brewtarget::option("dbType",Brewtarget::SQLITE).toInt();
+   Brewtarget::DBTypes oldType = static_cast<Brewtarget::DBTypes>(Brewtarget::option("dbType",Brewtarget::SQLITE).toInt());
 
    try {
       if ( newType == Brewtarget::NODB )

@@ -96,7 +96,9 @@ TableSchema::TableSchema(Brewtarget::DBTable table)
 
 const QString TableSchema::tableName() { return m_tableName; }
 Brewtarget::DBTable TableSchema::dbTable() { return m_dbTable; }
+
 const QMap<QString,PropertySchema*> TableSchema::properties() const { return m_properties; }
+const QMap<QString,PropertySchema*> TableSchema::foreignKeys() const { return m_foreignKeys; }
 
 const QStringList TableSchema::allPropertyNames() const { return m_properties.keys(); }
 const QStringList TableSchema::allForeignKeyNames() const { return m_foreignKeys.keys(); }
@@ -615,6 +617,10 @@ void TableSchema::defineMashstepTable()
 
    tmpNames[Brewtarget::NODB] = kcolMashstepDecoctionAmount;
    m_properties[kpropDecoctionAmount] = new PropertySchema( kpropDecoctionAmount, tmpNames , kxmlPropDecoctionAmount, QString("real"), QVariant(67.0));
+
+   // this is awkward, but it works
+   tmpNames[Brewtarget::NODB] = kcolRecipeMashId;
+   m_foreignKeys[kpropMashId] = new PropertySchema( kpropMashId, tmpNames , Brewtarget::MASHTABLE);
 
 }
 
