@@ -39,6 +39,7 @@ public:
    const QHash<Brewtarget::DBTypes,QString> colNames() const;
    const QString colName(Brewtarget::DBTypes type) const;
    const QString xmlName() const;
+   const QString constraint() const;
    const QString colType() const;
    const QVariant defaultValue() const;
    int colSize() const;
@@ -50,16 +51,20 @@ public:
    void setColNames(QHash<Brewtarget::DBTypes,QString> names);
    void setColName(Brewtarget::DBTypes type,QString column);
    void setXmlName(QString xmlName);
+   void setConstraint(QString constraint);
    void setColType(QString type);
    void setDefaultValue(QVariant defVal);
    void setColSize(int size);
    void setFTable(Brewtarget::DBTable fTable);
 
 private:
+   // NOTE: I am not allowing the constraint to be set on initialization. 
+   // So far, only name needs it, and I don't want to make ever other property
+   // harder just for this. I reserve the right to revisit later.
    PropertySchema(QString propName);
    PropertySchema(QString propName, 
                   QHash<Brewtarget::DBTypes,QString> colNames, 
-                  QString xmlName = QString(""),
+                  QString xmlName = QString(),
                   QString colType = QString("double"), 
                   QVariant defaultValue = QVariant(0.0),
                   int colSize = 0);
@@ -70,6 +75,7 @@ private:
    QString m_propName;
    QHash<Brewtarget::DBTypes,QString> m_colNames;
    QString m_xmlName;
+   QString m_constraint;
    QString m_colType;
    QVariant m_defaultValue;
    int m_colSize;

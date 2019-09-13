@@ -67,6 +67,7 @@ class Style;
 class Water;
 class Yeast;
 class QThread;
+class DatabaseSchema;
 
 typedef struct
 {

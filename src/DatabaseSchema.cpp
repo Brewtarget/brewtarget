@@ -81,14 +81,13 @@ static QStringList dbPrimaryKey  = QStringList() <<
       kPgSQLId;
 
 static const QString kDefault("DEFAULT");
-static const QString kNameColumn("name text not null DEFAULT '',");
+static const QString kNotNull("not null");
 
 DatabaseSchema::DatabaseSchema()
 {
    loadTables();
    m_type = Brewtarget::dbType();
    m_id = dbPrimaryKey[m_type];
-   m_name = kNameColumn;
 }
 
 void DatabaseSchema::loadTables()
@@ -129,21 +128,24 @@ const QString DatabaseSchema::generateCreateTable(Brewtarget::DBTable table)
    }
 
    TableSchema* tSchema = m_tables.value(table);
-   QString retVal = QString("CREATE TABLE %1 (%2 %3")
+   QString retVal = QString("CREATE TABLE %1 (%2 ")
                      .arg(tSchema->tableName())
-                     .arg( m_id )
-                     .arg( m_name );
+                     .arg( m_id );
 
    QMapIterator<QString, PropertySchema*> i(tSchema->properties());
    while ( i.hasNext() ) {
       i.next();
       PropertySchema* prop = i.value();
 
-      retVal.append( QString("%1 %2 %3 %4, ")
-                       .arg( prop->colName(Brewtarget::dbType()))
-                       .arg( prop->colType() )
-                       .arg( kDefault )
-                       .arg( prop->defaultValue().toString() )
+      // this isn't quite perfect, as you will get two spaces between the type
+      // and DEFAULT if there are no constraints. On the other hand, nobody
+      // will know that but me and anybody reading this comment.
+      retVal.append( QString("%1 %2 %5 %3 %4, ")
+                        .arg( prop->colName(Brewtarget::dbType()))
+                        .arg( prop->colType() )
+                        .arg( kDefault )
+                        .arg( prop->defaultValue().toString() )
+                        .arg( prop->constraint() )
       );
    }
 
@@ -158,8 +160,8 @@ const QString DatabaseSchema::generateCreateTable(Brewtarget::DBTable table)
       );
    }
 
-   // always have to worry about the damned trailing ,
-   retVal.chop(1);
+   // always have to worry about the trailing ', '
+   retVal.chop(2);
    retVal.append(");");
 
    return retVal;

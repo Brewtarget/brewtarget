@@ -26,6 +26,7 @@ PropertySchema::PropertySchema(QString propName)
     m_propName(propName),
     m_colNames(QHash<Brewtarget::DBTypes,QString>()),
     m_xmlName(QString()),
+    m_constraint(QString()),
     m_colType(QString()),
     m_defaultValue(QVariant()),
     m_colSize(0),
@@ -43,6 +44,7 @@ PropertySchema::PropertySchema(QString propName,
     m_propName(propName),
     m_colNames(colNames),
     m_xmlName(xmlName),
+    m_constraint(QString("")),
     m_colType(colType),
     m_defaultValue(defaultValue),
     m_colSize(colSize),
@@ -57,6 +59,7 @@ PropertySchema::PropertySchema(QString propName,
     m_propName(propName),
     m_colNames(colNames),
     m_xmlName(QString()),
+    m_constraint(QString()),
     m_colType(QString("int")),
     m_ftable(fTable)
 {
@@ -66,6 +69,7 @@ const QHash<Brewtarget::DBTypes,QString> PropertySchema::colNames() const { retu
 const QString PropertySchema::propName() const { return m_propName; }
 const QString PropertySchema::colType() const { return m_colType; }
 const QString PropertySchema::xmlName() const { return m_xmlName; }
+const QString PropertySchema::constraint() const { return m_constraint; }
 const QVariant PropertySchema::defaultValue() const { return m_defaultValue; }
 int PropertySchema::colSize() const { return m_colSize; }
 Brewtarget::DBTable PropertySchema::fTable() const { return m_ftable; }
@@ -102,6 +106,11 @@ void PropertySchema::setColName(Brewtarget::DBTypes type, QString name)
 void PropertySchema::setXmlName(QString xmlName)
 {
    m_xmlName = xmlName;
+}
+
+void PropertySchema::setConstraint(QString constraint)
+{
+   m_constraint = constraint;
 }
 
 void PropertySchema::setColType(QString type)
