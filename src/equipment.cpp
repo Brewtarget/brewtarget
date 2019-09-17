@@ -88,23 +88,23 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 
 Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
-   m_boilSize_l(rec.value(kcolBoilSize).toDouble()),
-   m_batchSize_l(rec.value(kcolBatchSize).toDouble()),
-   m_tunVolume_l(rec.value(kcolTunVolume).toDouble()),
-   m_tunWeight_kg(rec.value(kcolTunWeight).toDouble()),
-   m_tunSpecificHeat_calGC(rec.value(kcolTunSpecificHeat).toDouble()),
-   m_topUpWater_l(rec.value(kcolTopUpWater).toDouble()),
-   m_trubChillerLoss_l(rec.value(kcolTrubChillerLoss).toDouble()),
-   m_evapRate_pctHr(rec.value(kcolEvapRate).toDouble()),
-   m_evapRate_lHr(rec.value(kcolRealEvapRate).toDouble()),
-   m_boilTime_min(rec.value(kcolBoilTime).toDouble()),
-   m_calcBoilVolume(rec.value(kcolCalcBoilVolume).toBool()),
-   m_lauterDeadspace_l(rec.value(kcolLauterDeadspace).toDouble()),
-   m_topUpKettle_l(rec.value(kcolTopUpKettle).toDouble()),
-   m_hopUtilization_pct(rec.value(kcolHopUtilization).toDouble()),
+   m_boilSize_l(rec.value(kcolEquipBoilSize).toDouble()),
+   m_batchSize_l(rec.value(kcolEquipBatchSize).toDouble()),
+   m_tunVolume_l(rec.value(kcolEquipTunVolume).toDouble()),
+   m_tunWeight_kg(rec.value(kcolEquipTunWeight).toDouble()),
+   m_tunSpecificHeat_calGC(rec.value(kcolEquipTunSpecHeat).toDouble()),
+   m_topUpWater_l(rec.value(kcolEquipTopUpWater).toDouble()),
+   m_trubChillerLoss_l(rec.value(kcolEquipTrubChillLoss).toDouble()),
+   m_evapRate_pctHr(rec.value(kcolEquipEvapRate).toDouble()),
+   m_evapRate_lHr(rec.value(kcolEquipRealEvapRate).toDouble()),
+   m_boilTime_min(rec.value(kcolEquipBoilTime).toDouble()),
+   m_calcBoilVolume(rec.value(kcolEquipCalcBoilVol).toBool()),
+   m_lauterDeadspace_l(rec.value(kcolEquipLauterSpace).toDouble()),
+   m_topUpKettle_l(rec.value(kcolEquipTopUpKettle).toDouble()),
+   m_hopUtilization_pct(rec.value(kcolEquipHopUtil).toDouble()),
    m_notes(rec.value(kcolNotes).toString()),
-   m_grainAbsorption_LKg(rec.value(kcolAbsorption).toDouble()),
-   m_boilingPoint_c(rec.value(kcolBoilingPoint).toDouble()),
+   m_grainAbsorption_LKg(rec.value(kcolEquipAbsorption).toDouble()),
+   m_boilingPoint_c(rec.value(kcolEquipBoilingPoint).toDouble()),
    m_cacheOnly(false)
 {
 }
@@ -199,7 +199,7 @@ void Equipment::setTunSpecificHeat_calGC( double var )
    {
       m_tunSpecificHeat_calGC = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTunSpecificHeat, var);
+         setEasy(kpropTunSpecHeat, var);
       }
    }
 }
@@ -232,7 +232,7 @@ void Equipment::setTrubChillerLoss_l( double var )
    {
       m_trubChillerLoss_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTrubChillerLoss, var);
+         setEasy(kpropTrubChillLoss, var);
          doCalculations();
       }
    }
@@ -251,8 +251,8 @@ void Equipment::setEvapRate_pctHr( double var )
       m_evapRate_lHr = var/100.0 * m_batchSize_l;
 
       if ( ! m_cacheOnly ) {
-         setEasy(kpropEvaporationRate, var);
-         setEasy(kpropRealEvaporationRate, var/100.0 * batchSize_l() ); // We always use this one, so set it.
+         setEasy(kpropEvapRate, var);
+         setEasy(kpropRealEvapRate, var/100.0 * batchSize_l() ); // We always use this one, so set it.
       }
       // Right now, I am claiming this needs to happen regardless m_cacheOnly.
       // I could be wrong
@@ -272,8 +272,8 @@ void Equipment::setEvapRate_lHr( double var )
       m_evapRate_lHr = var;
       m_evapRate_pctHr = var/batchSize_l() * 100.0;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropRealEvaporationRate, var);
-         setEasy(kpropEvaporationRate, var/batchSize_l() * 100.0 ); // We don't use it, but keep it current.
+         setEasy(kpropRealEvapRate, var);
+         setEasy(kpropEvapRate, var/batchSize_l() * 100.0 ); // We don't use it, but keep it current.
       }
       doCalculations();
    }
@@ -301,7 +301,7 @@ void Equipment::setCalcBoilVolume( bool var )
 {
    m_calcBoilVolume = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropCalcBoilVolume, var);
+      setEasy(kpropCalcBoilVol, var);
    }
    if ( var ) {
       doCalculations();
@@ -319,7 +319,7 @@ void Equipment::setLauterDeadspace_l( double var )
    {
       m_lauterDeadspace_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropLauterDeadspace, var);
+         setEasy(kpropLauterSpace, var);
       }
    }
 }
@@ -351,7 +351,7 @@ void Equipment::setHopUtilization_pct( double var )
    {
       m_hopUtilization_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropHopUtilization, var);
+         setEasy(kpropHopUtil, var);
       }
    }
 }

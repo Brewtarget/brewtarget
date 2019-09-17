@@ -84,7 +84,7 @@ Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_spargeTemp_c(rec.value(kcolMashSpargeTemp).toDouble()),
      m_ph(rec.value(kcolMashPH).toDouble()),
      m_tunWeight_kg(rec.value(kcolMashTunWeight).toDouble()),
-     m_tunSpecificHeat_calGC(rec.value(kcolMashTunSpecificHeat).toDouble()),
+     m_tunSpecificHeat_calGC(rec.value(kcolMashTunSpecHeat).toDouble()),
      m_equipAdjust(rec.value(kcolMashEquipAdjust).toBool()),
      m_cacheOnly(false)
 {
@@ -173,7 +173,7 @@ void Mash::setTunSpecificHeat_calGC( double var )
    {
       m_tunSpecificHeat_calGC = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTunSpecificHeat, var);
+         setEasy(kpropTunSpecHeat, var);
       }
    }
 }

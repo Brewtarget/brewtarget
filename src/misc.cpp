@@ -67,7 +67,7 @@ Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_use(static_cast<Misc::Use>(uses.indexOf(m_useString))),
    m_time(rec.value(kcolTime).toDouble()),
    m_amount(rec.value(kcolAmount).toDouble()),
-   m_amountIsWeight(rec.value(kcolMiscAmountIsWeight).toBool()),
+   m_amountIsWeight(rec.value(kcolMiscAmtIsWgt).toBool()),
    m_useFor(rec.value(kcolMiscUseFor).toString()),
    m_notes(rec.value(kcolNotes).toString()),
    m_cacheOnly(false)
@@ -203,7 +203,7 @@ void Misc::setAmountIsWeight( bool var )
 {
    m_amountIsWeight = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropAmountIsWeight, var );
+      setEasy( kpropAmtIsWgt, var );
    }
 }
 

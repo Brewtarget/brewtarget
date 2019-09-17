@@ -65,10 +65,10 @@ static const QString kpropTime("time_min");
 
 // needed by both mash and equipment
 static const QString kpropTunWeight("tunWeight_kg");
-static const QString kpropTunSpecificHeat("tunSpecificHeat_calGC");
+static const QString kpropTunSpecHeat("tunSpecificHeat_calGC");
 
 // needed by both misc and yeast
-static const QString kpropAmountIsWeight("amountIsWeight");
+static const QString kpropAmtIsWgt("amountIsWeight");
 
 /// used by both hops and yeast
 static const QString kpropForm("form");
@@ -81,6 +81,9 @@ static const QString kpropBatchSize("batchSize_l");
 static const QString kpropBoilSize("boilSize_l");
 static const QString kpropBoilTime("boilTime_min");
 
+// A rename later, and both brewnotes and recipes use this
+static const QString kpropOG("og");
+static const QString kpropFG("fg");
 // I am not sure this makes sense, but it is consistent
 static const QString kpropParentId("parent_id");
 static const QString kpropChildId("child_id");
@@ -109,10 +112,10 @@ static const QString kxmlPropTime("TIME");
 
 // needed by both equipment and mash
 const QString kxmlPropTunWeight("TUN_WEIGHT");
-const QString kxmlPropTunSpecificHeat("TUN_SPECIFIC_HEAT");
+const QString kxmlPropTunSpecHeat("TUN_SPECIFIC_HEAT");
 
 // needed by both misc and yeast
-static const QString kxmlPropAmountIsWeight("AMOUNT_IS_WEIGHT");
+static const QString kxmlPropAmtIsWgt("AMOUNT_IS_WEIGHT");
 
 // needed by both recipe and equipment
 static const QString kxmlPropBatchSize("BATCH_SIZE");
@@ -120,7 +123,11 @@ static const QString kxmlPropBoilSize("BOIL_SIZE");
 static const QString kxmlPropBoilTime("BOIL_TIME");
 
 // used by yeast and brewnote
-static const QString kxmlPropAttenuation("ATTENUATION");
+static const QString kxmlPropAtten("ATTENUATION");
+
+// use by recipe and brewnote
+static const QString kxmlPropFG("FG");
+static const QString kxmlPropOG("OG");
 
 // Child information. We were really consisten on our naming here, so all the
 // *children tables will use these constants. The only thing that changes is

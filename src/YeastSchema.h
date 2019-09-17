@@ -26,17 +26,17 @@ static const QString kcolYeastType("ytype");
 static const QString kcolYeastForm("form");
 static const QString kcolYeastAmount("amount");
 static const QString kcolYeastQuanta("quanta");
-static const QString kcolYeastAmountIsWeight("amount_is_weight");
+static const QString kcolYeastAmtIsWgt("amount_is_weight");
 static const QString kcolYeastLab("laboratory");
 static const QString kcolYeastProductID("product_id");
 static const QString kcolYeastMinTemp("min_temperature");
 static const QString kcolYeastMaxTemp("max_temperature");
-static const QString kcolYeastFlocculation("flocculation");
-static const QString kcolYeastAttenuation("attenuation");
+static const QString kcolYeastFloc("flocculation");
+static const QString kcolYeastAtten("attenuation");
 static const QString kcolYeastBestFor("best_for");
-static const QString kcolYeastTimesCultured("times_cultured");
+static const QString kcolYeastTimesCultd("times_cultured");
 static const QString kcolYeastMaxReuse("max_reuse");
-static const QString kcolYeastAddToSecondary("add_to_secondary");
+static const QString kcolYeastAddToSec("add_to_secondary");
 
 // properties for objects
 static const QString kpropLab("laboratory");
@@ -44,12 +44,12 @@ static const QString kpropQuanta("quanta");
 static const QString kpropProductID("productID");
 static const QString kpropMinTemp("minTemperature_c");
 static const QString kpropMaxTemp("maxTemperature_c");
-static const QString kpropFlocculation("flocculation");
-static const QString kpropAttenuationPct("attenuation_pct");
+static const QString kpropFloc("flocculation");
+static const QString kpropAttenPct("attenuation_pct");
 static const QString kpropBestFor("bestFor");
-static const QString kpropTimesCultured("timesCultured");
+static const QString kpropTimesCultd("timesCultured");
 static const QString kpropMaxReuse("maxReuse");
-static const QString kpropAddToSecondary("addToSecondary");
+static const QString kpropAddToSec("addToSecondary");
 
 // XML properties
 // Note -- no XML props for type, form and flocculation
@@ -58,8 +58,8 @@ static const QString kxmlPropProductID("PRODUCT_ID");
 static const QString kxmlPropMinTemp("MIN_TEMPERATURE");
 static const QString kxmlPropMaxTemp("MAX_TEMPERATURE");
 static const QString kxmlPropBestFor("BEST_FOR");
-static const QString kxmlPropTimesCultured("TIMES_CULTURED");
+static const QString kxmlPropTimesCultd("TIMES_CULTURED");
 static const QString kxmlPropMaxReuse("MAX_REUSE");
-static const QString kxmlPropAddToSecondary("ADD_TO_SECONDARY");
+static const QString kxmlPropAddToSec("ADD_TO_SECONDARY");
 
 #endif // _YEASTTABLESCHEMA_H

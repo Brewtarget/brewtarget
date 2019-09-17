@@ -82,13 +82,13 @@ MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
      m_typeStr(rec.value(kcolMashstepType).toString()),
      m_type(static_cast<MashStep::Type>(types.indexOf(m_typeStr))),
-     m_infuseAmount_l(rec.value(kcolMashstepInfuseAmount).toDouble()),
+     m_infuseAmount_l(rec.value(kcolMashstepInfuseAmt).toDouble()),
      m_stepTemp_c(rec.value(kcolMashstepStepTemp).toDouble()),
      m_stepTime_min(rec.value(kcolMashstepStepTime).toDouble()),
      m_rampTime_min(rec.value(kcolMashstepRampTime).toDouble()),
      m_endTemp_c(rec.value(kcolMashstepEndTemp).toDouble()),
      m_infuseTemp_c(rec.value(kcolMashstepInfuseTemp).toDouble()),
-     m_decoctionAmount_l(rec.value(kcolMashstepDecoctionAmount).toDouble()),
+     m_decoctionAmount_l(rec.value(kcolMashstepDecoctAmt).toDouble()),
      m_stepNumber(rec.value(kcolMashstepStepNumber).toInt()),
      m_cacheOnly(false)
 {
@@ -123,7 +123,7 @@ void MashStep::setInfuseAmount_l( double var )
    {
       m_infuseAmount_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropInfuseAmount, var);
+         setEasy(kpropInfuseAmt, var);
       }
    }
 }
@@ -197,7 +197,7 @@ void MashStep::setDecoctionAmount_l(double var )
 {
    m_decoctionAmount_l = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropDecoctionAmount, var);
+      setEasy(kpropDecoctAmt, var);
    }
 }
 

@@ -26,7 +26,7 @@ static const QString kcolMashTunTemp("tun_temp");
 static const QString kcolMashSpargeTemp("sparge_temp");
 static const QString kcolMashPH("ph");
 static const QString kcolMashTunWeight("tun_weight");
-static const QString kcolMashTunSpecificHeat("tun_specific_heat");
+static const QString kcolMashTunSpecHeat("tun_specific_heat");
 static const QString kcolMashEquipAdjust("equip_adjust");
 
 static const QString kpropGrainTemp("grainTemp_c");

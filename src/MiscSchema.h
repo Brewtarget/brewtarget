@@ -23,7 +23,7 @@
 // Columns for the misc table
 // Everything else is globally defined. A little depressing, actually
 static const QString kcolMiscType("mtype");
-static const QString kcolMiscAmountIsWeight("amount_is_weight");
+static const QString kcolMiscAmtIsWgt("amount_is_weight");
 static const QString kcolMiscUseFor("use_for");
 
 static const QString kpropUseFor("useFor");

@@ -21,115 +21,196 @@
 #include <QString>
 #include "PropertySchema.h"
 
-PropertySchema::PropertySchema(QString propName)
+// this initializer is simple. It populates the m_properties QVector with
+// all the nullptr we need. Use this if initializing ALLDB doesn't present a
+// win
+PropertySchema::PropertySchema()
     : QObject(nullptr),
-    m_propName(propName),
-    m_colNames(QHash<Brewtarget::DBTypes,QString>()),
-    m_xmlName(QString()),
-    m_constraint(QString()),
-    m_colType(QString()),
-    m_defaultValue(QVariant()),
-    m_colSize(0),
-    m_ftable(Brewtarget::NOTABLE)
+    m_properties(QVector<dbProp*>(1 + static_cast<int>(Brewtarget::ALLDB),nullptr))
 {
 }
 
-PropertySchema::PropertySchema(QString propName,
-            QHash<Brewtarget::DBTypes,QString> colNames, 
-            QString xmlName,
-            QString colType,
-            QVariant defaultValue,
-            int colSize)
+// Normal property initializer, will set every DB to this definition
+PropertySchema::PropertySchema( QString propName, QString colName,
+                                QString xmlName,  QString colType,
+                                QVariant defaultValue, QString constraint, int colSize )
     : QObject(nullptr),
-    m_propName(propName),
-    m_colNames(colNames),
-    m_xmlName(xmlName),
-    m_constraint(QString("")),
-    m_colType(colType),
-    m_defaultValue(defaultValue),
-    m_colSize(colSize),
-    m_ftable(Brewtarget::NOTABLE)
+    m_properties(QVector<dbProp*>(1 + static_cast<int>(Brewtarget::ALLDB),nullptr))
 {
+   dbProp* tmp = new dbProp;
+
+   tmp->m_propName = propName;
+   tmp->m_colName = colName;
+   tmp->m_xmlName = xmlName;
+   tmp->m_constraint = constraint;
+   tmp->m_colType = colType;
+   tmp->m_defaultValue = defaultValue;
+   tmp->m_colSize = colSize;
+   tmp->m_ftable = Brewtarget::NOTABLE;
+
+   int i = static_cast<int>(Brewtarget::SQLITE);
+   while ( i < static_cast<int>(Brewtarget::ALLDB) ) {
+      m_properties[i] = tmp;
+      i++;
+   }
 }
 
-PropertySchema::PropertySchema(QString propName,
-            QHash<Brewtarget::DBTypes,QString> colNames,
-            Brewtarget::DBTable fTable )
+// Foreign key initializer, will set all the DB to this definition
+PropertySchema::PropertySchema(QString propName, QString colName, Brewtarget::DBTable fTable)
     : QObject(nullptr),
-    m_propName(propName),
-    m_colNames(colNames),
-    m_xmlName(QString()),
-    m_constraint(QString()),
-    m_colType(QString("int")),
-    m_ftable(fTable)
+    m_properties(QVector<dbProp*>(1 + static_cast<int>(Brewtarget::ALLDB),nullptr))
 {
+   dbProp* tmp = new dbProp;
+
+   tmp->m_propName = propName;
+   tmp->m_colName = colName;
+   tmp->m_xmlName = QString();
+   tmp->m_constraint = QString();
+   tmp->m_colType = QString();
+   tmp->m_defaultValue = QVariant();
+   tmp->m_colSize = 0;
+   tmp->m_ftable = fTable;
+
+   int i = static_cast<int>(Brewtarget::SQLITE);
+   while ( i < static_cast<int>(Brewtarget::ALLDB) ) {
+      m_properties[i] = tmp;
+      i++;
+   }
 }
 
-const QHash<Brewtarget::DBTypes,QString> PropertySchema::colNames() const { return m_colNames; }
-const QString PropertySchema::propName() const { return m_propName; }
-const QString PropertySchema::colType() const { return m_colType; }
-const QString PropertySchema::xmlName() const { return m_xmlName; }
-const QString PropertySchema::constraint() const { return m_constraint; }
-const QVariant PropertySchema::defaultValue() const { return m_defaultValue; }
-int PropertySchema::colSize() const { return m_colSize; }
-Brewtarget::DBTable PropertySchema::fTable() const { return m_ftable; }
-
-const QString PropertySchema::colName(Brewtarget::DBTypes type) const
+// The other property initializer does ALLDB. use this to add alternate
+// definitions
+void PropertySchema::addProperty( QString propName, Brewtarget::DBTypes dbType,
+                  QString colName, QString xmlName, QString colType,
+                  QVariant defaultValue, int colSize, QString constraint )
 {
-   QString retval = QString();
+   dbProp* tmp = new dbProp;
 
-   if ( m_colNames.contains(type) ) {
-      retval = m_colNames.value(type);
+   tmp->m_propName = propName;
+   tmp->m_colName = colName;
+   tmp->m_xmlName = xmlName;
+   tmp->m_constraint = constraint;
+   tmp->m_colType = colType;
+   tmp->m_defaultValue = defaultValue;
+   tmp->m_colSize = colSize;
+   tmp->m_ftable = Brewtarget::NOTABLE;
+
+   if ( dbType == Brewtarget::ALLDB ) {
+      int i = static_cast<int>(Brewtarget::SQLITE);
+      while ( i < static_cast<int>(Brewtarget::ALLDB) ) {
+         if ( m_properties[i] == nullptr ) {
+            m_properties[i] = tmp;
+         }
+         i++;
+      }
    }
    else {
-      retval = m_colNames.value(Brewtarget::NODB);
-   }
-
-   return retval;
-}
-
-void PropertySchema::setColNames(QHash<Brewtarget::DBTypes, QString> names)
-{
-   QHash<Brewtarget::DBTypes, QString>::const_iterator i = names.constBegin();
-   m_colNames.clear();
-
-   while ( i != names.constEnd() ) {
-      m_colNames.insert( i.key(), i.value());
+      m_properties[dbType] = tmp;
    }
 }
 
-void PropertySchema::setColName(Brewtarget::DBTypes type, QString name)
+// The other foreign key initializer does just ALLDB. use this to special case that
+void PropertySchema::addForeignKey(QString propName, Brewtarget::DBTypes dbType,
+                              QString colName, Brewtarget::DBTable fTable)
 {
-   m_colNames.insert(type, name);
+   dbProp* tmp = new dbProp;
+
+   tmp->m_propName = propName;
+   tmp->m_colName = colName;
+   tmp->m_xmlName = QString();
+   tmp->m_constraint = QString();
+   tmp->m_colType = QString();
+   tmp->m_defaultValue = QVariant();
+   tmp->m_colSize = 0;
+   tmp->m_ftable = fTable;
+
+   if ( dbType == Brewtarget::ALLDB ) {
+      int i = static_cast<int>(Brewtarget::SQLITE);
+      while ( i < static_cast<int>(Brewtarget::ALLDB) ) {
+         if ( m_properties[i] == nullptr ) {
+            m_properties[i] = tmp;
+         }
+         i++;
+      }
+   }
+   else {
+      m_properties[dbType] = tmp;
+   }
 }
 
-void PropertySchema::setXmlName(QString xmlName)
+
+const QString PropertySchema::colName(Brewtarget::DBTypes dbType) const
 {
-   m_xmlName = xmlName;
+   return m_properties[dbType]->m_colName;
 }
 
-void PropertySchema::setConstraint(QString constraint)
+const QString PropertySchema::propName(Brewtarget::DBTypes dbType) const
 {
-   m_constraint = constraint;
+   return m_properties[dbType]->m_propName;
 }
 
-void PropertySchema::setColType(QString type)
+const QString PropertySchema::colType(Brewtarget::DBTypes dbType) const
 {
-   m_colType = type;
+   return m_properties[dbType]->m_colType;
 }
 
-void PropertySchema::setDefaultValue(QVariant defVal)
+const QString PropertySchema::xmlName(Brewtarget::DBTypes dbType) const
 {
-   m_defaultValue = defVal;
+   return m_properties[dbType]->m_xmlName;
 }
 
-void PropertySchema::setColSize(int size)
+const QString PropertySchema::constraint(Brewtarget::DBTypes dbType) const
 {
-   m_colSize = size;
+   return m_properties[dbType]->m_constraint;
 }
 
-void PropertySchema::setFTable(Brewtarget::DBTable ftable) 
+const QVariant PropertySchema::defaultValue(Brewtarget::DBTypes dbType) const
 {
-   m_ftable = ftable;
+   return m_properties[dbType]->m_defaultValue;
+}
+
+int PropertySchema::colSize(Brewtarget::DBTypes dbType) const
+{
+   return m_properties[dbType]->m_colSize;
+}
+
+Brewtarget::DBTable PropertySchema::fTable(Brewtarget::DBTypes dbType) const
+{
+   return m_properties[dbType]->m_ftable;
+}
+
+void PropertySchema::setColName(QString colName, Brewtarget::DBTypes dbType)
+{
+   m_properties[dbType]->m_colName = colName;
+}
+
+void PropertySchema::setXmlName(QString xmlName, Brewtarget::DBTypes dbType)
+{
+   m_properties[dbType]->m_xmlName = xmlName;
+}
+
+void PropertySchema::setConstraint(QString constraint, Brewtarget::DBTypes dbType)
+{
+   m_properties[dbType]->m_constraint = constraint;
+}
+
+void PropertySchema::setColType(QString colType, Brewtarget::DBTypes dbType)
+{
+   m_properties[dbType]->m_colType = colType;
+}
+
+void PropertySchema::setDefaultValue(QVariant defVal, Brewtarget::DBTypes dbType)
+{
+   m_properties[dbType]->m_defaultValue = defVal;
+}
+
+void PropertySchema::setColSize(int size, Brewtarget::DBTypes dbType)
+{
+   m_properties[dbType]->m_colSize = size;
+}
+
+void PropertySchema::setFTable(Brewtarget::DBTable ftable, Brewtarget::DBTypes dbType)
+{
+   m_properties[dbType]->m_ftable = ftable;
 }
 

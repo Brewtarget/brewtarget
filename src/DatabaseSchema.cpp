@@ -92,10 +92,10 @@ DatabaseSchema::DatabaseSchema()
 
 void DatabaseSchema::loadTables()
 {
-   int iT;
+   int it;
 
-   for ( iT = Brewtarget::NOTABLE; iT <= Brewtarget::YEASTINVTABLE; iT++ ) {
-      Brewtarget::DBTable tab = static_cast<Brewtarget::DBTable>(iT);
+   for ( it = Brewtarget::NOTABLE; it <= Brewtarget::YEASTINVTABLE; it++ ) {
+      Brewtarget::DBTable tab = static_cast<Brewtarget::DBTable>(it);
       TableSchema* tmp = new TableSchema(tab);
       m_tables.insert(tab, tmp);
    }
@@ -165,5 +165,69 @@ const QString DatabaseSchema::generateCreateTable(Brewtarget::DBTable table)
    retVal.append(");");
 
    return retVal;
+}
+
+QVector<TableSchema*> DatabaseSchema::inventoryTables()
+{
+    QVector<TableSchema*> retVal;
+
+    QMapIterator<Brewtarget::DBTable,TableSchema*> i(m_tables);
+    while ( i.hasNext() ) {
+        i.next();
+        TableSchema *val = i.value();
+        if ( val->isInventoryTable() ) {
+            retVal.append(val);
+        }
+    }
+
+    return retVal;
+}
+
+QVector<TableSchema*> DatabaseSchema::childTables()
+{
+    QVector<TableSchema*> retVal;
+
+    QMapIterator<Brewtarget::DBTable,TableSchema*> i(m_tables);
+    while ( i.hasNext() ) {
+        i.next();
+        TableSchema *val = i.value();
+        if ( val->isChildTable() ) {
+            retVal.append(val);
+        }
+    }
+
+    return retVal;
+}
+
+QVector<TableSchema*> DatabaseSchema::inRecipeTables()
+{
+    QVector<TableSchema*> retVal;
+
+    QMapIterator<Brewtarget::DBTable,TableSchema*> i(m_tables);
+    while ( i.hasNext() ) {
+        i.next();
+        TableSchema *val = i.value();
+        if ( val->isInRecTable() ) {
+            retVal.append(val);
+        }
+    }
+
+    return retVal;
+}
+
+QVector<TableSchema*> DatabaseSchema::baseTables()
+{
+    QVector<TableSchema*> retVal;
+
+    QMapIterator<Brewtarget::DBTable,TableSchema*> i(m_tables);
+    while ( i.hasNext() ) {
+        i.next();
+        TableSchema *val = i.value();
+        if ( val->isBaseTable() ) {
+            retVal.append(val);
+        }
+    }
+
+    return retVal;
 }
 

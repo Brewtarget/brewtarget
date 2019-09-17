@@ -163,10 +163,10 @@ Style::Style(QString t_name, bool cache)
 
 Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
-     m_category(rec.value(kcolStyleCategory).toString()),
-     m_categoryNumber(rec.value(kcolStyleCategoryNumber).toString()),
-     m_styleLetter(rec.value(kcolStyleStyleLetter).toString()),
-     m_styleGuide(rec.value(kcolStyleStyleGuide).toString()),
+     m_category(rec.value(kcolStyleCat).toString()),
+     m_categoryNumber(rec.value(kcolStyleCatNum).toString()),
+     m_styleLetter(rec.value(kcolStyleLetter).toString()),
+     m_styleGuide(rec.value(kcolStyleGuide).toString()),
      m_typeStr(rec.value(kcolStyleType).toString()),
      m_type(static_cast<Style::Type>(m_types.indexOf(m_typeStr))),
      m_ogMin(rec.value(kcolStyleOGMin).toDouble()),
@@ -183,7 +183,7 @@ Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_abvMax_pct(rec.value(kcolStyleABVMax).toDouble()),
      m_notes(rec.value(kcolNotes).toString()),
      m_profile(rec.value(kcolStyleProfile).toString()),
-     m_ingredients(rec.value(kcolStyleIngredients).toString()),
+     m_ingredients(rec.value(kcolStyleIngreds).toString()),
      m_examples(rec.value(kcolStyleExamples).toString()),
      m_cacheOnly(false)
 {
@@ -194,7 +194,7 @@ void Style::setCategory( const QString& var )
 {
    m_category = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropCategory, var );
+      setEasy( kpropCat, var );
    }
 }
 
@@ -202,7 +202,7 @@ void Style::setCategoryNumber( const QString& var )
 {
    m_categoryNumber = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropCategoryNumber, var );
+      setEasy( kpropCatNum, var );
    }
 }
 
@@ -210,7 +210,7 @@ void Style::setStyleLetter( const QString& var )
 {
    m_styleLetter = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropStyleLetter, var );
+      setEasy( kpropLetter, var );
    }
 }
 
@@ -218,7 +218,7 @@ void Style::setStyleGuide( const QString& var )
 {
    m_styleGuide = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropStyleGuide, var );
+      setEasy( kpropGuide, var );
    }
 }
 
@@ -418,7 +418,7 @@ void Style::setIngredients( const QString& var )
 {
     m_ingredients = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropIngredients, var);
+      setEasy( kpropIngreds, var);
    }
 }
 

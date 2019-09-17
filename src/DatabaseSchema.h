@@ -61,6 +61,11 @@ public:
    const QString generateCreateTable(Brewtarget::DBTable table);
    const QString generateInsertRow(Brewtarget::DBTable table);
 
+   QVector<TableSchema*> inventoryTables();
+   QVector<TableSchema*> childTables();
+   QVector<TableSchema*> inRecipeTables();
+   QVector<TableSchema*> baseTables();
+
 private:
    QMap<Brewtarget::DBTable,TableSchema*> m_tables;
    Brewtarget::DBTypes m_type;

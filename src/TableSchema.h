@@ -19,6 +19,8 @@
 #ifndef _TABLESCHEMA_H
 #define _TABLESCHEMA_H
 
+class TableSchema;
+
 #include "PropertySchema.h"
 #include "brewtarget.h"
 #include "database.h"
@@ -34,6 +36,14 @@ class TableSchema : QObject
 
    Q_OBJECT
 public:
+
+   enum TableType {
+      BASE,
+      INV,
+      CHILD,
+      INREC,
+      BT
+   };
 
    const QString tableName();
    Brewtarget::DBTable dbTable();
@@ -63,8 +73,13 @@ public:
    const QStringList allPropertyNames() const;
    const QStringList allColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
 
-   const  QStringList allForeignKeyNames() const;
+   const QStringList allForeignKeyNames() const;
    const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
+
+   bool isInventoryTable();
+   bool isBaseTable();
+   bool isChildTable();
+   bool isInRecTable();
 
 private:
 
@@ -75,6 +90,7 @@ private:
 
    QString m_tableName;
    Brewtarget::DBTable m_dbTable;
+   TableType m_type;
 
    QMap<QString,PropertySchema*> m_properties;
    QMap<QString,PropertySchema*> m_foreignKeys;

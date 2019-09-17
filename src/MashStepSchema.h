@@ -22,28 +22,28 @@
 
 // Columns for the mash table
 static const QString kcolMashstepType("mstype");
-static const QString kcolMashstepInfuseAmount("infuse_amount");
+static const QString kcolMashstepInfuseAmt("infuse_amount");
 static const QString kcolMashstepStepTemp("step_temp");
 static const QString kcolMashstepStepTime("step_time");
 static const QString kcolMashstepRampTime("ramp_time");
 static const QString kcolMashstepEndTemp("end_temp");
 static const QString kcolMashstepInfuseTemp("infuse_temp");
-static const QString kcolMashstepDecoctionAmount("decoction_amount");
+static const QString kcolMashstepDecoctAmt("decoction_amount");
 static const QString kcolMashstepStepNumber("step_number");
 
-static const QString kpropInfuseAmount("infuseAmount_l");
+static const QString kpropInfuseAmt("infuseAmount_l");
 static const QString kpropStepTemp("stepTemp_c");
 static const QString kpropStepTime("stepTime_min");
 static const QString kpropRampTime("rampTime_min");
 static const QString kpropEndTemp("endTemp_c");
 static const QString kpropInfuseTemp("infuseTemp_c");
-static const QString kpropDecoctionAmount("decoctionAmount_l");
+static const QString kpropDecoctAmt("decoctionAmount_l");
 
-static const QString kxmlPropInfuseAmount("INFUSE_AMOUNT");
+static const QString kxmlPropInfuseAmt("INFUSE_AMOUNT");
 static const QString kxmlPropStepTemp("STEP_TEMP");
 static const QString kxmlPropStepTime("STEP_TIME");
 static const QString kxmlPropRampTime("RAMP_TIME");
 static const QString kxmlPropEndTemp("END_TEMP");
 static const QString kxmlPropInfuseTemp("INFUSE_TEMP");
-static const QString kxmlPropDecoctionAmount("DECOCTION_AMOUNT");
+static const QString kxmlPropDecoctAmt("DECOCTION_AMOUNT");
 #endif // _MASHSTEPTABLESCHEMA_H

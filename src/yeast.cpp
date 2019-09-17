@@ -105,20 +105,20 @@ Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_type(static_cast<Yeast::Type>(types.indexOf(m_typeString))),
      m_formString(rec.value(kcolYeastForm).toString()),
      m_form(static_cast<Yeast::Form>(forms.indexOf(m_formString))),
-     m_flocculationString(rec.value(kcolYeastFlocculation).toString()),
+     m_flocculationString(rec.value(kcolYeastFloc).toString()),
      m_flocculation(static_cast<Yeast::Flocculation>(flocculations.indexOf(m_flocculationString))),
      m_amount(rec.value(kcolYeastAmount).toDouble()),
-     m_amountIsWeight(rec.value(kcolYeastAmountIsWeight).toBool()),
+     m_amountIsWeight(rec.value(kcolYeastAmtIsWgt).toBool()),
      m_laboratory(rec.value(kcolYeastLab).toString()),
      m_productID(rec.value(kcolYeastProductID).toString()),
      m_minTemperature_c(rec.value(kcolYeastMinTemp).toDouble()),
      m_maxTemperature_c(rec.value(kcolYeastMaxTemp).toDouble()),
-     m_attenuation_pct(rec.value(kcolYeastAttenuation).toDouble()),
+     m_attenuation_pct(rec.value(kcolYeastAtten).toDouble()),
      m_notes(rec.value(kcolNotes).toString()),
      m_bestFor(rec.value(kcolYeastBestFor).toString()),
-     m_timesCultured(rec.value(kcolYeastTimesCultured).toInt()),
+     m_timesCultured(rec.value(kcolYeastTimesCultd).toInt()),
      m_maxReuse(rec.value(kcolYeastMaxReuse).toInt()),
-     m_addToSecondary(rec.value(kcolYeastAddToSecondary).toBool()),
+     m_addToSecondary(rec.value(kcolYeastAddToSec).toBool()),
      m_cacheOnly(false)
 {
 }
@@ -257,7 +257,7 @@ void Yeast::setAmountIsWeight( bool var )
 {
    m_amountIsWeight = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAmountIsWeight, var);
+      setEasy(kpropAmtIsWgt, var);
    }
 }
 
@@ -310,7 +310,7 @@ void Yeast::setFlocculation( Yeast::Flocculation f)
       m_flocculationString = flocculations.at(f);
 
       if ( ! m_cacheOnly ) {
-         setEasy(kpropFlocculation, flocculations.at(f));
+         setEasy(kpropFloc, flocculations.at(f));
       }
    }
 }
@@ -322,7 +322,7 @@ void Yeast::setAttenuation_pct( double var )
    else {
       m_attenuation_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropAttenuationPct, var);
+         setEasy(kpropAttenPct, var);
       }
    }
 }
@@ -350,7 +350,7 @@ void Yeast::setTimesCultured( int var )
    else {
       m_timesCultured = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTimesCultured, var);
+         setEasy(kpropTimesCultd, var);
       }
    }
 }
@@ -371,7 +371,7 @@ void Yeast::setAddToSecondary( bool var )
 {
    m_addToSecondary = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAddToSecondary, var);
+      setEasy(kpropAddToSec, var);
    }
 }
 

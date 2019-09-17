@@ -174,23 +174,23 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_batchSize_l(rec.value(kcolRecipeBatchSize).toDouble()),
    m_boilSize_l(rec.value(kcolRecipeBoilSize).toDouble()),
    m_boilTime_min(rec.value(kcolRecipeBoilTime).toDouble()),
-   m_efficiency_pct(rec.value(kcolRecipeEfficiency).toDouble()),
-   m_fermentationStages(rec.value(kcolRecipeFermentationStages).toInt()),
-   m_primaryAge_days(rec.value(kcolRecipePrimaryAgeDays).toDouble()),
-   m_primaryTemp_c(rec.value(kcolRecipePrimaryTemp).toDouble()),
-   m_secondaryAge_days(rec.value(kcolRecipeSecondaryAgeDays).toDouble()),
-   m_secondaryTemp_c(rec.value(kcolRecipeSecondaryTemp).toDouble()),
-   m_tertiaryAge_days(rec.value(kcolRecipeTertiaryAgeDays).toDouble()),
-   m_tertiaryTemp_c(rec.value(kcolRecipeTertiaryTemp).toDouble()),
+   m_efficiency_pct(rec.value(kcolRecipeEff).toDouble()),
+   m_fermentationStages(rec.value(kcolRecipeFermStages).toInt()),
+   m_primaryAge_days(rec.value(kcolRecipePrimAgeDays).toDouble()),
+   m_primaryTemp_c(rec.value(kcolRecipePrimTemp).toDouble()),
+   m_secondaryAge_days(rec.value(kcolRecipeSecAgeDays).toDouble()),
+   m_secondaryTemp_c(rec.value(kcolRecipeSecTemp).toDouble()),
+   m_tertiaryAge_days(rec.value(kcolRecipeTertAgeDays).toDouble()),
+   m_tertiaryTemp_c(rec.value(kcolRecipeTertTemp).toDouble()),
    m_age(rec.value(kcolRecipeAge).toDouble()),
    m_ageTemp_c(rec.value(kcolRecipeAgeTemp).toDouble()),
    m_date(QDate::fromString(rec.value(kcolRecipeDate).toString(), QString("d/M/yyyy"))),
-   m_carbonation_vols(rec.value(kcolRecipeCarbonationVols).toDouble()),
-   m_forcedCarbonation(rec.value(kcolRecipeForcedCarbonation).toBool()),
-   m_primingSugarName(rec.value(kcolRecipePrimingSugarName).toString()),
-   m_carbonationTemp_c(rec.value(kcolRecipeCarbonationTemp).toDouble()),
-   m_primingSugarEquiv(rec.value(kcolRecipePrimingSugarEquiv).toDouble()),
-   m_kegPrimingFactor(rec.value(kcolRecipeKegPrimingFactor).toDouble()),
+   m_carbonation_vols(rec.value(kcolRecipeCarbVols).toDouble()),
+   m_forcedCarbonation(rec.value(kcolRecipeForcedCarb).toBool()),
+   m_primingSugarName(rec.value(kcolRecipePrimSugName).toString()),
+   m_carbonationTemp_c(rec.value(kcolRecipeCarbTemp).toDouble()),
+   m_primingSugarEquiv(rec.value(kcolRecipePrimSugEquiv).toDouble()),
+   m_kegPrimingFactor(rec.value(kcolRecipeKegPrimFact).toDouble()),
    m_notes(rec.value(kcolNotes).toString()),
    m_tasteNotes(rec.value(kcolRecipeTasteNotes).toString()),
    m_tasteRating(rec.value(kcolRecipeTasteRating).toDouble()),
@@ -974,7 +974,7 @@ void Recipe::setEfficiency_pct( double var )
 
    m_efficiency_pct = tmp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropEfficiency, tmp );
+      setEasy(kpropEffPct, tmp );
    }
 
    // If you change the efficency, you really should recalc. And I'm afraid it
@@ -1079,7 +1079,7 @@ void Recipe::setFermentationStages( int var )
 
    m_fermentationStages = tmp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropFermentationStages, tmp );
+      setEasy(kpropFermStages, tmp );
    }
 }
 
@@ -1098,7 +1098,7 @@ void Recipe::setPrimaryAge_days( double var )
 
    m_primaryAge_days = tmp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropPrimaryAgeDays, tmp );
+      setEasy(kpropPrimAgeDays, tmp );
    }
 }
 
@@ -1106,7 +1106,7 @@ void Recipe::setPrimaryTemp_c( double var )
 {
    m_primaryTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropPrimaryTemp, var );
+      setEasy(kpropPrimTemp, var );
    }
 }
 
@@ -1125,7 +1125,7 @@ void Recipe::setSecondaryAge_days( double var )
 
    m_secondaryAge_days = tmp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropSecondaryAgeDays, tmp );
+      setEasy(kpropSecAgeDays, tmp );
    }
 }
 
@@ -1133,7 +1133,7 @@ void Recipe::setSecondaryTemp_c( double var )
 {
    m_secondaryTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropSecondaryTemp, var );
+      setEasy(kpropSecTemp, var );
    }
 }
 
@@ -1152,7 +1152,7 @@ void Recipe::setTertiaryAge_days( double var )
 
    m_tertiaryAge_days = tmp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropTertiaryAgeDays, tmp );
+      setEasy(kpropTertAgeDays, tmp );
    }
 }
 
@@ -1160,7 +1160,7 @@ void Recipe::setTertiaryTemp_c( double var )
 {
    m_tertiaryTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropTertiaryTemp, var );
+      setEasy(kpropTertTemp, var );
    }
 }
 
@@ -1216,7 +1216,7 @@ void Recipe::setCarbonation_vols( double var )
 
    m_carbonation_vols = tmp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropCarbonationVols, tmp );
+      setEasy(kpropCarbVols, tmp );
    }
 }
 
@@ -1224,7 +1224,7 @@ void Recipe::setForcedCarbonation( bool var )
 {
    m_forcedCarbonation = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropForcedCarbonation, var );
+      setEasy(kpropForcedCarb, var );
    }
 }
 
@@ -1232,7 +1232,7 @@ void Recipe::setPrimingSugarName( const QString &var )
 {
    m_primingSugarName = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropPrimingSugarName, var );
+      setEasy(kpropPrimSugName, var );
    }
 }
 
@@ -1240,7 +1240,7 @@ void Recipe::setCarbonationTemp_c( double var )
 {
    m_carbonationTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropCarbonationTemp, var );
+      setEasy(kpropCarbTemp, var );
    }
 }
 
@@ -1259,7 +1259,7 @@ void Recipe::setPrimingSugarEquiv( double var )
 
    m_primingSugarEquiv = tmp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropPrimingSugarEquiv, tmp );
+      setEasy(kpropPrimSugEquiv, tmp );
    }
 }
 
@@ -1279,7 +1279,7 @@ void Recipe::setKegPrimingFactor( double var )
 
    m_kegPrimingFactor = tmp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropKegPrimingFactor, tmp );
+      setEasy(kpropKegPrimFact, tmp );
    }
 }
 
@@ -2023,7 +2023,7 @@ void Recipe::recalcOgFg()
       {
         setEasy(kpropOG, m_og, false );
         emit changed( metaProperty(kpropOG), m_og );
-        emit changed( metaProperty(kPoints), (m_og-1.0)*1e3 );
+        emit changed( metaProperty(kpropPoints), (m_og-1.0)*1e3 );
       }
    }
 
