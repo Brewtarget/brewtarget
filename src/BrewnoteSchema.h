@@ -20,6 +20,7 @@
 #ifndef _BREWNOTETABLESCHEMA_H
 #define _BREWNOTETABLESCHEMA_H
 
+#include <QString>
 // I am putting this here in the vain hopes I do not forget about it. There
 // are two mystery columns defined in the DB for this table: predicted_abv and
 // projected_fin_temp. I have no idea what they were meant for, but they are
