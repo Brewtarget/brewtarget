@@ -31,6 +31,7 @@
 #include "MashSchema.h"
 #include "MashStepSchema.h"
 #include "MiscSchema.h"
+#include "InstructionSchema.h"
 #include "RecipeSchema.h"
 #include "YeastSchema.h"
 #include "BrewnoteSchema.h"
@@ -88,36 +89,68 @@ static QStringList dbTableToName  = QStringList() <<
 TableSchema::TableSchema(Brewtarget::DBTable table)
     : QObject(nullptr),
       m_tableName( dbTableToName[ static_cast<int>(table) ] ),
-      m_dbTable(table)
+      m_dbTable(table),
+      m_childTable(Brewtarget::NOTABLE),
+      m_inRecTable(Brewtarget::NOTABLE),
+      m_invTable(Brewtarget::NOTABLE)
 {
     // for this bit of ugly, I gain a lot of utility.
     defineTable();
 }
 
-const QString TableSchema::tableName() { return m_tableName; }
-Brewtarget::DBTable TableSchema::dbTable() { return m_dbTable; }
+const QString TableSchema::tableName() const { return m_tableName; }
+const QString TableSchema::className() const { return m_className; }
+Brewtarget::DBTable TableSchema::dbTable() const { return m_dbTable; }
+Brewtarget::DBTable TableSchema::childTable() const  { return m_childTable; }
+Brewtarget::DBTable TableSchema::inRecTable() const { return m_inRecTable; }
+Brewtarget::DBTable TableSchema::invTable() const { return m_invTable; }
 
 const QMap<QString,PropertySchema*> TableSchema::properties() const { return m_properties; }
 const QMap<QString,PropertySchema*> TableSchema::foreignKeys() const { return m_foreignKeys; }
 
-const QStringList TableSchema::allPropertyNames() const { return m_properties.keys(); }
-const QStringList TableSchema::allForeignKeyNames() const { return m_foreignKeys.keys(); }
+const QStringList TableSchema::allPropertyNames(Brewtarget::DBTypes type) const
+{
+    QMapIterator<QString,PropertySchema*> i(m_properties);
+    QStringList retval;
+    while ( i.hasNext() ) {
+        i.next();
+        retval.append( i.value()->colName(type));
+    }
+    return retval;
+}
+
+const QStringList TableSchema::allForeignKeyNames(Brewtarget::DBTypes type) const
+{
+    QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
+    QStringList retval;
+    while ( i.hasNext() ) {
+        i.next();
+        retval.append( i.value()->colName(type));
+    }
+    return retval;
+}
 
 const QStringList TableSchema::allColumnNames(Brewtarget::DBTypes type) const
 {
    QStringList tmp;
+   QMapIterator<QString,PropertySchema*> i(m_properties);
 
-   foreach( PropertySchema* prop, m_properties ) {
-      tmp.append(prop->colName(type));
+   while ( i.hasNext() ) {
+      i.next();
+      tmp.append(i.value()->colName(type));
    }
    return tmp;
 }
+
 const QStringList TableSchema::allForeignKeyColumnNames(Brewtarget::DBTypes type) const
 {
    QStringList tmp;
 
-   foreach( PropertySchema* prop, m_foreignKeys ) {
-      tmp.append(prop->colName(type));
+   QMapIterator<QString,PropertySchema*> i(m_properties);
+
+   while ( i.hasNext() ) {
+      i.next();
+      tmp.append(i.value()->colName(type));
    }
    return tmp;
 }
@@ -141,53 +174,56 @@ const QString TableSchema::propertyToColumn(QString prop, Brewtarget::DBTypes ty
    }
 }
 
-const QString TableSchema::propertyToXml(QString prop) const
+const QString TableSchema::propertyToXml(QString prop, Brewtarget::DBTypes type) const
 {
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->xmlName();
+      return m_properties.value(prop)->xmlName(type);
    }
    else {
       return QString();
    }
 }
 
-const QString TableSchema::xmlToProperty(QString xmlName) const
+const QString TableSchema::xmlToProperty(QString xmlName, Brewtarget::DBTypes type) const
 {
    QString retval;
 
-   foreach ( PropertySchema* prop, m_properties ) {
-      if ( prop->xmlName() == xmlName ) {
-         retval = prop->propName();
+   QMapIterator<QString,PropertySchema*> i(m_properties);
+
+   while ( i.hasNext() ) {
+      i.next();
+      if ( i.value()->xmlName() == xmlName ) {
+         retval = i.value()->propName(type);
          break;
       }
    }
    return retval;
 }
 
-const QString TableSchema::propertyColumnType(QString prop) const
+const QString TableSchema::propertyColumnType(QString prop, Brewtarget::DBTypes type) const
 {
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->colType();
+      return m_properties.value(prop)->colType(type);
    }
    else {
       return QString();
    }
 }
 
-const QVariant TableSchema::propertyColumnDefault(QString prop) const
+const QVariant TableSchema::propertyColumnDefault(QString prop, Brewtarget::DBTypes type) const
 {
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->defaultValue();
+      return m_properties.value(prop)->defaultValue(type);
    }
    else {
       return QString();
    }
 }
 
-int TableSchema::propertyColumnSize(QString prop) const
+int TableSchema::propertyColumnSize(QString prop, Brewtarget::DBTypes type) const
 {
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->colSize();
+      return m_properties.value(prop)->colSize(type);
    }
    else {
       return 0;
@@ -217,6 +253,9 @@ void TableSchema::defineTable()
          break;
       case Brewtarget::HOPTABLE:
          defineHopTable();
+         break;
+      case Brewtarget::INSTRUCTIONTABLE:
+         defineInstructionTable();
          break;
       case Brewtarget::MASHTABLE:
          defineMashTable();
@@ -314,6 +353,8 @@ void TableSchema::defineTable()
 void TableSchema::defineStyleTable()
 {
    m_type = BASE;
+   m_className = QString("Style");
+   m_childTable = Brewtarget::STYLECHILDTABLE;
 
    m_properties[kpropName]      = new PropertySchema( kpropName,     kpropName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
    m_properties[kpropType]      = new PropertySchema( kpropType,     kcolStyleType,     QString(""),      QString("text"), QString("'Ale'"));
@@ -346,6 +387,8 @@ void TableSchema::defineStyleTable()
 void TableSchema::defineEquipmentTable()
 {
    m_type = BASE;
+   m_className = QString("Equipment");
+   m_childTable = Brewtarget::EQUIPCHILDTABLE;
 
    m_properties[kpropName]          = new PropertySchema( kpropName,          kpropName,         kxmlPropName,            QString("text"), QString("''"), QString("not null"));
    m_properties[kpropBoilSize]      = new PropertySchema( kpropBoilSize,      kcolEquipBoilSize,      kxmlPropBoilSize,        QString("real"), QVariant(0.0));
@@ -375,6 +418,10 @@ void TableSchema::defineEquipmentTable()
 void TableSchema::defineFermentableTable()
 {
    m_type = BASE;
+   m_className = QString("Fermentable");
+   m_childTable = Brewtarget::FERMCHILDTABLE;
+   m_inRecTable = Brewtarget::FERMINRECTABLE;
+   m_invTable   = Brewtarget::FERMINVTABLE;
 
    m_properties[kpropName]           = new PropertySchema( kpropName,           kcolName,               kxmlPropName,           QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]          = new PropertySchema( kpropNotes,          kcolNotes,              kxmlPropNotes,          QString("text"), QString("''"));
@@ -402,6 +449,10 @@ void TableSchema::defineFermentableTable()
 void TableSchema::defineHopTable()
 {
    m_type = BASE;
+   m_className = QString("Hop");
+   m_childTable = Brewtarget::HOPCHILDTABLE;
+   m_inRecTable = Brewtarget::HOPINRECTABLE;
+   m_invTable   = Brewtarget::HOPINVTABLE;
 
    // These are defined in the global file.
    m_properties[kpropName]          = new PropertySchema( kpropName,          kcolName,             kxmlPropName,          QString("text"), QString("''"), QString("not null"));
@@ -426,10 +477,30 @@ void TableSchema::defineHopTable()
    m_properties[kpropFolder]        = new PropertySchema( kpropFolder,        kpropFolder,          QString(),             QString("text"), QString("''"));
 }
 
+void TableSchema::defineInstructionTable()
+{
+   m_type = BASE;
+   m_className = QString("Instruction");
+   m_inRecTable = Brewtarget::INSTINRECTABLE;
+
+   // These are defined in the global file.
+   m_properties[kpropName]          = new PropertySchema( kpropName,          kcolName,                  kxmlPropName,       QString("text"), QString("''"), QString("not null"));
+   m_properties[kpropDirections]    = new PropertySchema( kpropDirections,    kcolInstructionDirections, kxmlPropDirections, QString("text"), QString("''"));
+   m_properties[kpropHasTimer]      = new PropertySchema( kpropHasTimer,      kcolInstructionHasTimer,   kxmlPropHasTimer,   QString("boolean"), QVariant(false));
+   m_properties[kpropTimerValue]    = new PropertySchema( kpropTimerValue,    kcolInstructionTimerValue, kxmlPropTimerValue, QString("text"), QVariant("'00:00:00'"));
+   m_properties[kpropCompleted]     = new PropertySchema( kpropCompleted,     kcolInstructionCompleted,  kxmlPropCompleted,  QString("boolean"), QVariant(false));
+   m_properties[kpropInterval]      = new PropertySchema( kpropInterval,      kcolInstructionInterval,   kxmlPropInterval,   QString("real"), QVariant(0.0));
+
+   m_properties[kpropDisplay]       = new PropertySchema( kpropDisplay,       kcolDisplay,               QString(),          QString("boolean"), QVariant(true));
+   m_properties[kpropDeleted]       = new PropertySchema( kpropDeleted,       kcolDeleted,               QString(),          QString("boolean"), QVariant(false));
+}
+
 void TableSchema::defineMashTable()
 {
 
    m_type = BASE;
+   m_className = QString("Mash");
+
    // These are defined in the global file.
    m_properties[kpropName]        = new PropertySchema( kpropName,        kcolName,            kxmlPropName,        QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]       = new PropertySchema( kpropNotes,       kcolNotes,           kxmlPropNotes,       QString("text"), QString("''"));
@@ -450,6 +521,8 @@ void TableSchema::defineMashstepTable()
 {
 
    m_type = BASE;
+   m_className = QString("MashStep");
+
    m_properties[kpropName]       = new PropertySchema( kpropName,       kcolName,               kxmlPropName,       QString("text"), QString("''"),QString("not null"));
    m_properties[kpropType]       = new PropertySchema( kpropType,       kcolMashstepType,       QString(""),        QString("text"), QString("'Infusion'"));
    m_properties[kpropInfuseAmt]  = new PropertySchema( kpropInfuseAmt,  kcolMashstepInfuseAmt,  kxmlPropInfuseAmt,  QString("real"), QVariant(0.0));
@@ -472,6 +545,11 @@ void TableSchema::defineMiscTable()
 {
 
    m_type = BASE;
+   m_className = QString("Misc");
+   m_childTable = Brewtarget::MISCCHILDTABLE;
+   m_inRecTable = Brewtarget::MISCINRECTABLE;
+   m_invTable   = Brewtarget::MISCINVTABLE;
+
    // These are defined in the global file.
    m_properties[kpropName]     = new PropertySchema( kpropName,     kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]    = new PropertySchema( kpropNotes,    kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
@@ -491,6 +569,9 @@ void TableSchema::defineRecipeTable()
 {
 
    m_type = BASE;
+   m_className = QString("Recipe");
+   m_childTable = Brewtarget::RECIPECHILDTABLE;
+
    m_properties[kpropName]        = new PropertySchema( kpropName,        kcolName,               kxmlPropName,         QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]       = new PropertySchema( kpropNotes,       kcolNotes,              kxmlPropNotes,        QString("text"), QString("''"));
    m_properties[kpropType]        = new PropertySchema( kpropType,        kcolRecipeType,         kxmlPropType,         QString("text"), QString("'All Grain'"));
@@ -535,6 +616,10 @@ void TableSchema::defineRecipeTable()
 void TableSchema::defineYeastTable()
 {
    m_type = BASE;
+   m_className = QString("Yeast");
+   m_childTable = Brewtarget::YEASTCHILDTABLE;
+   m_inRecTable = Brewtarget::YEASTINRECTABLE;
+   m_invTable   = Brewtarget::YEASTINVTABLE;
 
    // These are defined in the global file.
    m_properties[kpropName]       = new PropertySchema( kpropName,       kcolName,            kxmlPropName,       QString("text"), QString("''"), QString("not null"));
@@ -563,6 +648,7 @@ void TableSchema::defineYeastTable()
 void TableSchema::defineBrewnoteTable()
 {
    m_type = BASE;
+   m_className = QString("BrewNote");
 
    m_properties[kpropBrewDate]        = new PropertySchema( kpropBrewDate,        kcolBNoteBrewDate,        kxmlPropBrewDate,        QString("timestamp"), QDateTime());
    m_properties[kpropFermDate]        = new PropertySchema( kpropFermDate,        kcolBNoteFermDate,        kxmlPropFermDate,        QString("timestamp"), QDateTime());
@@ -665,6 +751,7 @@ void TableSchema::defineYeastInventoryTable()
 
    m_type = INV;
    m_properties[kpropQuanta]  = new PropertySchema( kpropQuanta, kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[kpropAmount]  = new PropertySchema( kpropQuanta, kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
    m_foreignKeys[kcolYeastId] = new PropertySchema( kcolYeastId, kcolYeastId,     Brewtarget::YEASTTABLE);
 
 }

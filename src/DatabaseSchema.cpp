@@ -76,10 +76,6 @@ static QStringList dbTableToName  = QStringList() <<
 static const QString kPgSQLId("id SERIAL PRIMARY KEY,");
 static const QString kSQLiteId("id INTEGER PRIMARY KEY autoincrement,");
 
-static QStringList dbPrimaryKey  = QStringList() <<
-      kSQLiteId <<
-      kPgSQLId;
-
 static const QString kDefault("DEFAULT");
 static const QString kNotNull("not null");
 
@@ -87,7 +83,17 @@ DatabaseSchema::DatabaseSchema()
 {
    loadTables();
    m_type = Brewtarget::dbType();
-   m_id = dbPrimaryKey[m_type];
+
+   switch (m_type) {
+      case Brewtarget::PGSQL:
+         m_id = kPgSQLId;
+         break;
+      case Brewtarget::SQLITE:
+         m_id = kSQLiteId;
+         break;
+      default:
+         break;
+   }
 }
 
 void DatabaseSchema::loadTables()
@@ -118,6 +124,15 @@ TableSchema *DatabaseSchema::table(QString tableName)
    return nullptr;
 }
 
+QString DatabaseSchema::tableName(Brewtarget::DBTable table)
+{
+   if ( m_tables.contains( table ) ) {
+      return m_tables.value(table)->tableName();
+   }
+
+   return QString("");
+}
+
 // I believe one method replaces EVERY create_ method in DatabaseSchemaHelper.
 // It is so beautiful, it must be evil.
 const QString DatabaseSchema::generateCreateTable(Brewtarget::DBTable table)
@@ -141,7 +156,7 @@ const QString DatabaseSchema::generateCreateTable(Brewtarget::DBTable table)
       // and DEFAULT if there are no constraints. On the other hand, nobody
       // will know that but me and anybody reading this comment.
       retVal.append( QString("%1 %2 %5 %3 %4, ")
-                        .arg( prop->colName(Brewtarget::dbType()))
+                        .arg( prop->colName() )
                         .arg( prop->colType() )
                         .arg( kDefault )
                         .arg( prop->defaultValue().toString() )
@@ -231,3 +246,59 @@ QVector<TableSchema*> DatabaseSchema::baseTables()
     return retVal;
 }
 
+TableSchema* DatabaseSchema::childTable(Brewtarget::DBTable dbTable)
+{
+    TableSchema* tbl = table(dbTable);
+    TableSchema* retVal = nullptr;
+
+    if ( tbl != nullptr ) {
+       Brewtarget::DBTable idx = tbl->childTable();
+       retVal = table( idx );
+    }
+    return retVal;
+}
+
+TableSchema* DatabaseSchema::inRecTable(Brewtarget::DBTable dbTable)
+{
+    TableSchema* tbl = table(dbTable);
+    TableSchema* retVal = nullptr;
+
+    if ( tbl != nullptr ) {
+       Brewtarget::DBTable idx = tbl->inRecTable();
+       retVal = table( idx );
+    }
+    return retVal;
+}
+
+TableSchema* DatabaseSchema::invTable(Brewtarget::DBTable dbTable)
+{
+    TableSchema* tbl = table(dbTable);
+    TableSchema* retVal = nullptr;
+
+    if ( tbl != nullptr ) {
+       Brewtarget::DBTable idx = tbl->invTable();
+       retVal = table( idx );
+    }
+    return retVal;
+}
+
+const QString DatabaseSchema::childTableName(Brewtarget::DBTable dbTable)
+{
+    TableSchema* chld = childTable(dbTable);
+
+    return chld == nullptr ? QString() : chld->tableName();
+}
+
+const QString DatabaseSchema::inRecTableName(Brewtarget::DBTable dbTable)
+{
+    TableSchema* chld = inRecTable(dbTable);
+
+    return chld == nullptr ? QString() : chld->tableName();
+}
+
+const QString DatabaseSchema::invTableName(Brewtarget::DBTable dbTable)
+{
+    TableSchema* chld = invTable(dbTable);
+
+    return chld == nullptr ? QString() : chld->tableName();
+}

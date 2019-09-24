@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef _DATABASESCHEMA_H
 #define _DATABASESCHEMA_H
+
+// class DatabaseSchema;
 
 #include "brewtarget.h"
 #include "TableSchema.h"
@@ -56,6 +59,7 @@ public:
    // For those that just want the TableSchema
    TableSchema* table(QString tableName);
    TableSchema* table(Brewtarget::DBTable table);
+   QString tableName(Brewtarget::DBTable table);
 
    // These generate SQL strings
    const QString generateCreateTable(Brewtarget::DBTable table);
@@ -65,6 +69,20 @@ public:
    QVector<TableSchema*> childTables();
    QVector<TableSchema*> inRecipeTables();
    QVector<TableSchema*> baseTables();
+
+   // the idea here is to be able to give a base table and get back either its
+   // inRec, child or inventory table. U am thinking I will calculate these for
+   // now, but I am wondering if I shouldn't store that info in the table? If
+   // I change my mind later, these can all be pretty simple lookups
+   TableSchema* inRecTable(Brewtarget::DBTable dbTable);
+   TableSchema* childTable(Brewtarget::DBTable dbTable);
+   TableSchema* invTable(Brewtarget::DBTable dbTable);
+
+   // I seem to be needing these frequently, so lets take code from 100 places and put it here
+   // It can't go into the TableSchema because it doesn't know the db
+   const QString childTableName(Brewtarget::DBTable dbTable);
+   const QString inRecTableName(Brewtarget::DBTable dbTable);
+   const QString invTableName(Brewtarget::DBTable dbTable);
 
 private:
    QMap<Brewtarget::DBTable,TableSchema*> m_tables;

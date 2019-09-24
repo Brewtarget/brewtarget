@@ -132,12 +132,12 @@ public:
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
    {
       QSqlQuery q;
-      QString index = QString("%1_%2").arg(tableNames[table]).arg(col_name);
+      QString index = QString("%1_%2").arg(dbDefn->tableName(table)).arg(col_name);
 
       if ( ! selectSome.contains(index) ) {
          QString query = QString("SELECT %1 from %2 WHERE id=:id")
                            .arg(col_name)
-                           .arg(tableNames[table]);
+                           .arg(dbDefn->tableName(table));
          q = QSqlQuery( sqlDatabase() );
          q.prepare(query);
          selectSome.insert(index,q);
@@ -169,7 +169,7 @@ public:
       int key;
       // To quote the talking heads, my god what have I done?
       Brewtarget::DBTable table = classNameToTable[ T::classNameStr() ];
-      QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(tableNames[table]);
+      QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(dbDefn->tableName(table));
 
       QSqlQuery q(sqlDatabase());
 
@@ -197,7 +197,7 @@ public:
       int key;
       // To quote the talking heads, my god what have I done?
       Brewtarget::DBTable table = classNameToTable[ T::classNameStr() ];
-      QString insert = QString("INSERT INTO %1 (name) VALUES (:name)").arg(tableNames[table]);
+      QString insert = QString("INSERT INTO %1 (name) VALUES (:name)").arg(dbDefn->tableName(table));
 
       QSqlQuery q(sqlDatabase());
 
@@ -285,12 +285,6 @@ public:
 
    //! \returns the key to the inventory table for a given ingredient
    int getInventoryID(TableSchema* table, int key);
-
-   //! \returns the parent table number from the hash
-   Brewtarget::DBTable getChildTable(Brewtarget::DBTable table);
-
-   //! \returns the inventory table number from the hash
-   Brewtarget::DBTable getInventoryTable(Brewtarget::DBTable table);
 
    //! Inserts an new inventory row in the appropriate table
    // void newInventory(Brewtarget::DBTable invForTable, int invForID);
@@ -562,15 +556,8 @@ private:
 
 //   static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
    // I think many, many of these go away once I figure out how DatabaseSchema should work.
-   static QHash<Brewtarget::DBTable,QString> tableNames;
-   static QHash<Brewtarget::DBTable,QString> tableNamesHash();
    static QHash<QString,Brewtarget::DBTable> classNameToTable;
    static QHash<QString,Brewtarget::DBTable> classNameToTableHash();
-   static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToChildTable;
-   static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToChildTableHash();
-   static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTable;
-   static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTableHash();
-   static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
 
    // Each thread should have its own connection to QSqlDatabase.
    static QHash< QThread*, QString > _threadToConnection;
@@ -608,7 +595,7 @@ private:
    {
       QSqlQuery q(sqlDatabase());
       q.setForwardOnly(true);
-      QString queryString = QString("SELECT * FROM %1").arg(tableNames[table]);
+      QString queryString = QString("SELECT * FROM %1").arg(dbDefn->tableName(table));
       q.prepare( queryString );
 
       try {
@@ -644,9 +631,9 @@ private:
          id = "id";
 
       if( !filter.isEmpty() )
-         queryString = QString("SELECT %1 as id FROM %2 WHERE %3").arg(id).arg(tableNames[table]).arg(filter);
+         queryString = QString("SELECT %1 as id FROM %2 WHERE %3").arg(id).arg(dbDefn->tableName(table)).arg(filter);
       else
-         queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tableNames[table]);
+         queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(dbDefn->tableName(table));
 
       try {
          if ( ! q.exec(queryString) )
@@ -890,7 +877,7 @@ private:
 
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
 
-      QString tName = tableNames[t];
+      QString tName = dbDefn->tableName(t);
 
       QSqlQuery q(sqlDatabase());
 

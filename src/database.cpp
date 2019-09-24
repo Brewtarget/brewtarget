@@ -90,10 +90,7 @@ QString Database::dbFileName;
 QFile Database::dataDbFile;
 QString Database::dataDbFileName;
 QString Database::dbConName;
-QHash<Brewtarget::DBTable,QString> Database::tableNames;
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable;
-QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTable = Database::tableToChildTableHash();
-QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTable = Database::tableToInventoryTableHash();
 
 QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
@@ -316,11 +313,6 @@ bool Database::load()
    // else or we dump core
    bool schemaErr = false;
    schemaUpdated = updateSchema(&schemaErr);
-
-   // Since updateSchema could add new tables, we have to wait until this
-   // point to populate the tables.
-   Database::tableNames = tableNamesHash();
-   Database::classNameToTable = classNameToTableHash();
 
    if( schemaErr )
    {
@@ -734,7 +726,7 @@ bool Database::restoreFromFile(QString newDbFileStr)
 // removeFromRecipe ===========================================================
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 {
-   QString tableName = tableNames[classNameToTable[ing->metaObject()->className()]];
+   QString tableName = dbDefn->tableName(classNameToTable[ing->metaObject()->className()]);
    const QMetaObject* meta = ing->metaObject();
 
    int ndx = meta->indexOfClassInfo("signal");
@@ -1358,7 +1350,7 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
    // so may have to pay special attention when creating the new record.
    MashStep* tmp;
    QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
-                        .arg(tableNames[Brewtarget::MASHSTEPTABLE])
+                        .arg(dbDefn->tableName(Brewtarget::MASHSTEPTABLE))
                         .arg(Brewtarget::dbFalse())
                         .arg(mash->_key);
 
@@ -1725,7 +1717,7 @@ int Database::insertMash(Mash* ins)
 int Database::insertMashStep(MashStep* ins, Mash* parent)
 {
    QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
-                        .arg(tableNames[Brewtarget::MASHSTEPTABLE])
+                        .arg(dbDefn->tableName(Brewtarget::MASHSTEPTABLE))
                         .arg(Brewtarget::dbFalse())
                         .arg(parent->_key);
    int key;
@@ -1893,7 +1885,7 @@ QString Database::getDbFileName()
 // Cthulhu weeps (and we lose 2 SAN points)
 void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify, bool transact )
 {
-   QString tableName = tableNames[table];
+   QString tableName = dbDefn->tableName(table);
 
    if ( transact )
       sqlDatabase().transaction();
@@ -1978,7 +1970,7 @@ void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant v
 void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap)
 {
    // Assumes the table has a column called 'deleted'.
-   QString tableName = tableNames[table];
+   QString tableName = dbDefn->tableName(table);
    try {
 
       static const QString kSetStr("%1=?, ");
@@ -2032,7 +2024,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
    Brewtarget::logW( "Populating Children Ingredient Links" );
 
    try {
-      QString queryString = QString("SELECT DISTINCT name FROM %1").arg(tableNames[table]);
+      QString queryString = QString("SELECT DISTINCT name FROM %1").arg(dbDefn->tableName(table));
 
       QSqlQuery nameq( queryString, sqlDatabase() );
 
@@ -2042,7 +2034,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
       while (nameq.next()) {
          QString name = nameq.record().value(0).toString();
          queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC LIMIT 1")
-                     .arg(tableNames[table])
+                     .arg(dbDefn->tableName(table))
                      .arg(Brewtarget::dbTrue());
          QSqlQuery parentq( sqlDatabase() );
 
@@ -2057,7 +2049,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
          QString parentID = parentq.record().value("id").toString();
 
          queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC")
-                     .arg(tableNames[table])
+                     .arg(dbDefn->tableName(table))
                      .arg(Brewtarget::dbFalse());
          QSqlQuery childrenq( sqlDatabase() );
          childrenq.prepare(queryString);
@@ -2073,13 +2065,13 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
             switch( Brewtarget::dbType() ) {
                case Brewtarget::PGSQL:
                   queryString = QString("INSERT INTO %1 (parent_id, child_id) VALUES (%2, %3) ON CONFLICT(child_id) DO UPDATE set parent_id = EXCLUDED.parent_id")
-                        .arg(tableNames[tableToChildTable[table]])
+                        .arg( dbDefn->childTableName((table)))
                         .arg(parentID)
                         .arg(childID);
                   break;
                default:
                   queryString = QString("INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)")
-                              .arg(tableNames[tableToChildTable[table]])
+                              .arg(dbDefn->childTableName(table))
                               .arg(parentID)
                               .arg(childID);
             }
@@ -2104,7 +2096,6 @@ void Database::populateChildTablesByName()
       // the populateChildTablesByName methods need these hashes populated
       // early and there is no easy way to untangle them. Yes, this results in
       // the work being done twice. Such is life.
-      Database::tableNames = tableNamesHash();
       Database::classNameToTable = classNameToTableHash();
 
       populateChildTablesByName(Brewtarget::FERMTABLE);
@@ -2125,7 +2116,7 @@ int Database::getParentID(TableSchema* table, int childKey)
 
    //child_id is expected to be unique in table
    QString query = QString("SELECT parent_id FROM %1 WHERE child_id = %2 LIMIT 1")
-      .arg(tableNames[tableToChildTable[table->dbTable()]])
+      .arg(dbDefn->childTableName(table->dbTable()))
       .arg(childKey);
 
    QSqlQuery q( query, sqlDatabase() );
@@ -2145,7 +2136,7 @@ int Database::getParentID(TableSchema* table, int childKey)
 int Database::getInventoryID(TableSchema* table, int key)
 {
    QString query = QString("SELECT id FROM %1 WHERE %2_id = %3 LIMIT 1")
-         .arg( tableNames[ tableToInventoryTable[table->dbTable()]])
+         .arg(dbDefn->invTableName(table->dbTable()))
          .arg(table->tableName())
          .arg(getParentID(table, key));
 
@@ -2158,19 +2149,13 @@ int Database::getInventoryID(TableSchema* table, int key)
 QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key)
 {
    QVariant val = QVariant(0.0);
+   TableSchema* tbl = dbDefn->table(table);
    QString queryString = QString("select %2.%1 from %2, %3, %4 where %3.id = %5 and %3.id = %4.child_id and %4.parent_id = %2.%3_id")
         .arg(col_name)
-        .arg(tableNames[tableToInventoryTable[table]])
-        .arg(tableNames[table])
-        .arg(tableNames[tableToChildTable[table]])
+        .arg(dbDefn->invTableName(table))
+        .arg(tbl->tableName())
+        .arg(dbDefn->childTableName(table))
         .arg(key);
-  /*
-   QString queryString = QString("select %1 from %2 where %3_id = %4")
-        .arg(col_name)
-        .arg(tableNames[tableToInventoryTable[table]])
-        .arg(tableNames[table])
-        .arg(key);
-   */
    QSqlQuery q( queryString, sqlDatabase() );
 
    if ( q.first() ) {
@@ -2179,15 +2164,9 @@ QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable tab
    return val;
 }
 
-//Returns the parent table number from the hash
-Brewtarget::DBTable Database::getChildTable(Brewtarget::DBTable table){ return tableToChildTable[table]; }
-
-//Returns the inventory table number from the hash
-Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table) { return tableToInventoryTable[table]; }
-
 //create a new inventory row
 int Database::newInventory(TableSchema* schema, int invForID) {
-   QString invTable = tableNames[tableToInventoryTable[schema->dbTable()]];
+   QString invTable = dbDefn->invTableName(schema->dbTable());
 
    QString queryString;
 
@@ -2196,13 +2175,13 @@ int Database::newInventory(TableSchema* schema, int invForID) {
       case Brewtarget::PGSQL:
          queryString = QString("INSERT INTO %1 (%2_id) VALUES(%3) ON CONFLICT(%2_id) DO UPDATE set %2_id = EXCLUDED.%2_id")
                      .arg(invTable)
-                     .arg(tableNames[schema->dbTable()])
+                     .arg(schema->tableName())
                      .arg(getParentID(schema, invForID));
          break;
       default:
          queryString = QString("INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)")
                      .arg(invTable)
-                     .arg(tableNames[schema->dbTable()])
+                     .arg(schema->tableName())
                      .arg(getParentID(schema, invForID));
    }
 
@@ -2213,14 +2192,16 @@ int Database::newInventory(TableSchema* schema, int invForID) {
 QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
 {
    QMap<int, double> result;
-
-   const QString id = tableNames[table] + "_id";
-   const QString amount = table == Brewtarget::YEASTTABLE ? "quanta" : "amount";
+   TableSchema* tbl = dbDefn->childTable(table);
+   // this is a cheat, because I know these tables only have one foreign key
+   // in them. I am considering this, as I don't like cheats.
+   QString id     = tbl->allForeignKeyColumnNames().first();
+   QString amount = tbl->allColumnNames().first();
 
    QString query = QString("SELECT %1,%2 FROM %3 WHERE %2 > 0")
                          .arg(id)
                          .arg(amount)
-                         .arg(tableNames[tableToInventoryTable[table]]);
+                         .arg(tbl->tableName());
 
    QSqlQuery sql(query, sqlDatabase());
    if (!sql.isActive())
@@ -2559,7 +2540,7 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
 {
    QString update = QString("UPDATE %1 SET %2 WHERE %3")
-                .arg(tableNames[table])
+                .arg(dbDefn->tableName(table))
                 .arg(setClause)
                 .arg(whereClause);
 
@@ -2580,7 +2561,7 @@ void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, Q
 void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause )
 {
    QString del = QString("DELETE FROM %1 WHERE %2")
-                .arg(tableNames[table])
+                .arg(dbDefn->tableName(table))
                 .arg(whereClause);
 
    QSqlQuery q(sqlDatabase());
@@ -2615,20 +2596,6 @@ QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
 }
 */
 // Now the payoff for a lot of hard work elsewhere
-QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
-{
-
-   QHash<Brewtarget::DBTable,QString> tmp;
-   QString query = QString("SELECT name,table_id from bt_alltables");
-   QSqlQuery q(query,sqlDatabase());
-
-   while( q.next() ) {
-      tmp [ static_cast<Brewtarget::DBTable>(q.value("table_id").toInt()) ] = q.value("name").toString();
-   }
-   return tmp;
-
-}
-
 QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
 {
    QHash<QString,Brewtarget::DBTable> tmp;
@@ -2638,30 +2605,6 @@ QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
    while( q.next() ) {
       tmp [ q.value("class_name").toString() ] = static_cast<Brewtarget::DBTable>(q.value("table_id").toInt());
    }
-
-   return tmp;
-}
-
-QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTableHash()
-{
-   QHash<Brewtarget::DBTable,Brewtarget::DBTable> tmp;
-
-   tmp[Brewtarget::FERMTABLE] = Brewtarget::FERMCHILDTABLE;
-   tmp[Brewtarget::HOPTABLE] = Brewtarget::HOPCHILDTABLE;
-   tmp[Brewtarget::MISCTABLE] = Brewtarget::MISCCHILDTABLE;
-   tmp[Brewtarget::YEASTTABLE] = Brewtarget::YEASTCHILDTABLE;
-
-   return tmp;
-}
-
-QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTableHash()
-{
-   QHash<Brewtarget::DBTable,Brewtarget::DBTable> tmp;
-
-   tmp[Brewtarget::FERMTABLE] = Brewtarget::FERMINVTABLE;
-   tmp[Brewtarget::HOPTABLE] = Brewtarget::HOPINVTABLE;
-   tmp[Brewtarget::MISCTABLE] = Brewtarget::MISCINVTABLE;
-   tmp[Brewtarget::YEASTTABLE] = Brewtarget::YEASTINVTABLE;
 
    return tmp;
 }
@@ -5294,18 +5237,18 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
 {
-   TableSchema* schema = new TableSchema(ins->table());
-   Brewtarget::DBTable invtable = Database::instance().getInventoryTable(schema->dbTable());
+   TableSchema* tbl = dbDefn->table(ins->table());
+   Brewtarget::DBTable invtable = tbl->invTable();
 
    int ndx = ins->metaObject()->indexOfProperty(kcolInventory.toUtf8().constData());
-   int invkey = getInventoryID(schema, ins->key());
+   int invkey = getInventoryID(tbl, ins->key());
 
    if ( ! value.isValid() || value.isNull() ) {
       value = 0.0;
    }
 
    if ( invkey == 0 ) { //no inventory row in the database so lets make one
-      invkey = newInventory(schema,ins->key());
+      invkey = newInventory(tbl,ins->key());
    }
    updateEntry( invtable, invkey, kcolInventory.toUtf8().constData(),
                 value, ins->metaObject()->property(ndx), ins, notify );

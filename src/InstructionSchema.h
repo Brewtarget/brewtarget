@@ -20,6 +20,7 @@
 #ifndef _INSTRUCTIONTABLESCHEMA_H
 #define _INSTRUCTIONTABLESCHEMA_H
 
+#include <QString>
 // Columns for the instruction table
 static const QString kcolInstructionDirections("directions");
 static const QString kcolInstructionHasTimer("hastimer");

@@ -45,36 +45,47 @@ public:
       BT
    };
 
-   const QString tableName();
-   Brewtarget::DBTable dbTable();
+   const QString tableName() const;
+   const QString className() const;
+   Brewtarget::DBTable dbTable() const;
+   Brewtarget::DBTable childTable() const;
+   Brewtarget::DBTable inRecTable() const;
+   Brewtarget::DBTable invTable() const;
    const QMap<QString, PropertySchema*> properties() const;
    const QMap<QString, PropertySchema*> foreignKeys() const;
 
+   // Things to do for properties
+
+   // Get the property object. Try not to use this?
    const PropertySchema* property(QString prop) const;
-
-   // returns all of the column names
-   const QStringList propertyToColumn(QString prop) const;
-
-   // returns just one for the database type at hand
-   const QString propertyToColumn(QString prop, Brewtarget::DBTypes type) const;
-
-   // get the type name for this column
-   const QString propertyColumnType(QString prop) const;
+   // get the database column name for this property
+   const QString propertyToColumn(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   // get the database column type
+   const QString propertyColumnType(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    // get the XML tag for this column
-   const QString propertyToXml(QString prop) const;
+   const QString propertyToXml(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    // get the default value for this column
-   const QVariant propertyColumnDefault(QString prop) const;
+   const QVariant propertyColumnDefault(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    // get the column size of the property's column
-   int propertyColumnSize(QString prop) const;
-
+   int propertyColumnSize(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    // given an XML tag, get the associated property name
-   const QString xmlToProperty(QString xmlName) const;
+   const QString xmlToProperty(QString xmlName, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   const QStringList allPropertyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   const QStringList allColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
-   const QStringList allPropertyNames() const;
-   const QStringList allColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
+   // things to do on foreign keys
+   // get a specific foreign key column name
+   const QString foreignKeyToColumn(QString fkey, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   // a lot of tables have one foreign key. This is a nice shortcut for that
+   const QString foreignKeyToColumn(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
-   const QStringList allForeignKeyNames() const;
-   const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::NODB) const;
+   // which table does this foreign key point to
+   const QString foreignTable(QString fkey, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   // a lot of tables have one foreign key. This is a nice shortcut for that
+   const QString foreignTable(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+
+   const QStringList allForeignKeyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
    bool isInventoryTable();
    bool isBaseTable();
@@ -89,8 +100,14 @@ private:
    TableSchema(Brewtarget::DBTable dbTable);
 
    QString m_tableName;
+   QString m_className;
    Brewtarget::DBTable m_dbTable;
    TableType m_type;
+
+   // these are only set by the base tables
+   Brewtarget::DBTable m_childTable;
+   Brewtarget::DBTable m_inRecTable;
+   Brewtarget::DBTable m_invTable;
 
    QMap<QString,PropertySchema*> m_properties;
    QMap<QString,PropertySchema*> m_foreignKeys;
@@ -100,6 +117,7 @@ private:
    void defineEquipmentTable();
    void defineFermentableTable();
    void defineHopTable();
+   void defineInstructionTable();
    void defineMashTable();
    void defineMashstepTable();
    void defineMiscTable();

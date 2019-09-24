@@ -49,7 +49,7 @@ PropertySchema::PropertySchema( QString propName, QString colName,
    tmp->m_ftable = Brewtarget::NOTABLE;
 
    int i = static_cast<int>(Brewtarget::SQLITE);
-   while ( i < static_cast<int>(Brewtarget::ALLDB) ) {
+   while ( i <= static_cast<int>(Brewtarget::ALLDB) ) {
       m_properties[i] = tmp;
       i++;
    }
@@ -72,7 +72,7 @@ PropertySchema::PropertySchema(QString propName, QString colName, Brewtarget::DB
    tmp->m_ftable = fTable;
 
    int i = static_cast<int>(Brewtarget::SQLITE);
-   while ( i < static_cast<int>(Brewtarget::ALLDB) ) {
+   while ( i <= static_cast<int>(Brewtarget::ALLDB) ) {
       m_properties[i] = tmp;
       i++;
    }
