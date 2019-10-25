@@ -339,6 +339,7 @@ public:
     */
    static QString dbTrue(Brewtarget::DBTypes whichDb = Brewtarget::NODB);
    static QString dbFalse(Brewtarget::DBTypes whichDb = Brewtarget::NODB);
+   static QString dbBoolean(bool flag, Brewtarget::DBTypes whichDb = Brewtarget::NODB);
 
    //! \return the main window.
    static MainWindow* mainWindow();

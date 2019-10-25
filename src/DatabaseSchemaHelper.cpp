@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "DatabaseSchemaHelper.h"
 
 #include "brewtarget.h"
 #include <QSqlQuery>
@@ -27,13 +26,17 @@
 #include <QDebug>
 #include <QSqlError>
 
-const int DatabaseSchemaHelper::dbVersion = 7;
+#include "DatabaseSchemaHelper.h"
+#include "TableSchema.h"
+
+const int DatabaseSchemaHelper::dbVersion = 8;
 
 // Commands and keywords
 QString DatabaseSchemaHelper::CREATETABLE("CREATE TABLE");
 QString DatabaseSchemaHelper::ALTERTABLE("ALTER TABLE");
 QString DatabaseSchemaHelper::DROPTABLE("DROP TABLE");
 QString DatabaseSchemaHelper::ADDCOLUMN("ADD COLUMN");
+QString DatabaseSchemaHelper::DROPCOLUMN("DROP COLUMN");
 QString DatabaseSchemaHelper::UPDATE("UPDATE");
 QString DatabaseSchemaHelper::SET("SET");
 QString DatabaseSchemaHelper::INSERTINTO("INSERT INTO");
@@ -63,6 +66,7 @@ QString DatabaseSchemaHelper::TRUE;
 QString DatabaseSchemaHelper::id;
 QString DatabaseSchemaHelper::deleted;
 QString DatabaseSchemaHelper::display;
+QString DatabaseSchemaHelper::locked;
 
 QString DatabaseSchemaHelper::name("name " + TYPETEXT + " not null DEFAULT ''");
 QString DatabaseSchemaHelper::displayUnit("display_unit" + SEP + TYPEINTEGER + SEP + DEFAULT + " -1");
@@ -236,9 +240,7 @@ QString DatabaseSchemaHelper::colBNotePitchTemp("pitch_temp");
 QString DatabaseSchemaHelper::colBNoteFg("fg");
 QString DatabaseSchemaHelper::colBNoteBkEff("eff_into_bk");
 QString DatabaseSchemaHelper::colBNoteAbv("abv");
-QString DatabaseSchemaHelper::colBNotePredOg("predicted_og");
 QString DatabaseSchemaHelper::colBNoteEff("brewhouse_eff");
-QString DatabaseSchemaHelper::colBNotePredAbv("predicted_abv");
 QString DatabaseSchemaHelper::colBNoteProjBoilGrav("projected_boil_grav");
 QString DatabaseSchemaHelper::colBNoteProjStrikeTemp("projected_strike_temp");
 QString DatabaseSchemaHelper::colBNoteProjFinTemp("projected_fin_temp");
@@ -296,6 +298,7 @@ QString DatabaseSchemaHelper::colRecTasteRating("taste_rating");
 QString DatabaseSchemaHelper::colRecStyleId("style_id");
 QString DatabaseSchemaHelper::colRecMashId("mash_id");
 QString DatabaseSchemaHelper::colRecEquipId("equipment_id");
+QString DatabaseSchemaHelper::colRecAncestorId("ancestor_id");
 
 QString DatabaseSchemaHelper::tableBtEquipment("bt_equipment");
 
@@ -434,7 +437,7 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db, Brewtarget::DBTypes dbType)
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
+bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db )
 {
    QSqlQuery q(db);
    bool ret = true;
@@ -462,6 +465,9 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
          break;
       case 6:
          ret &= migrate_to_7(q);
+         break;
+      case 7:
+         ret &= migrate_to_8(q);
          break;
       default:
          Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
@@ -577,6 +583,7 @@ void DatabaseSchemaHelper::select_dbStrings(Brewtarget::DBTypes dbType)
 
    deleted = QString("deleted" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE );
    display = QString("display" + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + TRUE);
+   locked  = QString("locked " + SEP + TYPEBOOLEAN + SEP + DEFAULT + SEP + FALSE);
 }
 
 bool DatabaseSchemaHelper::create_table(QSqlQuery q, QString create, QString tableName, 
@@ -1071,9 +1078,7 @@ bool DatabaseSchemaHelper::create_brewnote(QSqlQuery q)
       colBNoteFg              + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
       colBNoteBkEff           + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
       colBNoteAbv             + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
-      colBNotePredOg          + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
       colBNoteEff             + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
-      colBNotePredAbv         + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "0.0"  + COMMA +
       colBNoteProjBoilGrav    + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "1.0"  + COMMA +
       colBNoteProjStrikeTemp  + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "70.0" + COMMA +
       colBNoteProjFinTemp     + SEP + TYPEREAL     + SEP + DEFAULT + SEP + "67.0" + COMMA +
@@ -1162,12 +1167,15 @@ bool DatabaseSchemaHelper::create_recipe(QSqlQuery q)
       colRecStyleId      + SEP + TYPEINTEGER                                                             + COMMA +
       colRecMashId       + SEP + TYPEINTEGER                                                             + COMMA +
       colRecEquipId      + SEP + TYPEINTEGER                                                             + COMMA +
+      colRecAncestorId   + SEP + TYPEINTEGER                                                             + COMMA +
       // Metadata--------------------------------------------------------------
       deleted                                                                                            + COMMA +
       display                                                                                            + COMMA +
       folder                                                                                             + COMMA +
+      locked                                                                                             + COMMA +
       foreignKey(colRecStyleId, tableStyle)                                                              + COMMA +
       foreignKey(colRecMashId, tableMash)                                                                + COMMA +
+      foreignKey(colRecAncestorId, tableRecipe)                                                          + COMMA +
       foreignKey(colRecEquipId, tableEquipment) + 
       CLOSEPAREN;
 
@@ -1512,7 +1520,8 @@ bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q)
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q) {
+bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q)
+{
    bool ret = true;
 
    ret = create_meta(q);
@@ -1563,7 +1572,8 @@ bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q) {
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q) {
+bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q)
+{
    bool ret = true;
 
    // Add "attenuation" to brewnote table
@@ -1574,3 +1584,56 @@ bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q) {
 
    return ret;
 }
+
+bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q )
+{
+   bool ret = true;
+
+   // these columns are used nowhere I can find and they are breaking things.
+   
+   // Fun fact. You can't drop a column in sqlite.
+   if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
+      ret &= q.exec (
+            ALTERTABLE + SEP + tableBrewnote + SEP + 
+            DROPCOLUMN + SEP + "predicted_og"
+         );
+            
+      ret &= q.exec (
+            ALTERTABLE + SEP + tableBrewnote + SEP + 
+            DROPCOLUMN + SEP + "predicted_abv"
+         );
+   }
+   else if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
+      q.exec( "PRAGMA foreign_keys=off");
+      TableSchema* tbl = new TableSchema(Brewtarget::BREWNOTETABLE);
+      // Create a temporary table
+      QString createTemp = tbl->generateCreateTable(Brewtarget::SQLITE, "tmpbrewnote");
+      qDebug() << "createTemp =" << createTemp;
+      ret = q.exec( createTemp );
+    
+      if ( ret ) {
+         QString copySql = tbl->generateCopyTable("tmpbrewnote", Brewtarget::SQLITE );
+         ret = q.exec( copySql );
+      }
+      else {
+         qDebug() << " No temp table" << q.lastError();
+      }
+
+      if ( ret ) {
+         ret = q.exec( "drop table brewnote");
+      }
+      else {
+         qDebug() << " No copy table" << q.lastError();
+      }
+
+      if ( ret ) {
+         ret = q.exec( "alter table tmpbrewnote rename to brewnote");
+      }
+      else {
+         qDebug() << " No drop table" << q.lastError();
+      }
+      q.exec( "PRAGMA foreign_keys=on");
+   }
+   return ret;
+}
+

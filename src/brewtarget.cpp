@@ -501,6 +501,27 @@ QString Brewtarget::dbFalse(Brewtarget::DBTypes type)
    return retval;
 }
 
+QString Brewtarget::dbBoolean(bool flag, Brewtarget::DBTypes type)
+{
+   Brewtarget::DBTypes whichDb = type;
+   QString retval;
+
+   if ( whichDb == Brewtarget::NODB )
+      whichDb = dbType();
+
+   switch( whichDb ) {
+      case SQLITE:
+         retval = flag ? QString("1") : QString("0");
+         break;
+      case PGSQL:
+         retval = flag ? QString("true") : QString("false");
+         break;
+      default:
+         retval = "notwhiskeytangofoxtrot";
+   }
+   return retval;
+}
+
 void Brewtarget::cleanup()
 {
    log.info("Brewtarget is cleaning up.");
@@ -513,11 +534,13 @@ void Brewtarget::cleanup()
 
 }
 
-bool Brewtarget::isInteractive() {
+bool Brewtarget::isInteractive()
+{
    return _isInteractive;
 }
 
-void Brewtarget::setInteractive(bool val) {
+void Brewtarget::setInteractive(bool val)
+{
    _isInteractive = val;
 }
 

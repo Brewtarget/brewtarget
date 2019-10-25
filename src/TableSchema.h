@@ -27,10 +27,12 @@ class TableSchema;
 #include <QString>
 
 class DatabaseSchema;
+class DatabaseSchemaHelper;
 
 class TableSchema : QObject
 {
 
+   friend DatabaseSchemaHelper;
    friend DatabaseSchema;
    friend Database;
 
@@ -42,7 +44,8 @@ public:
       INV,
       CHILD,
       INREC,
-      BT
+      BT,
+      META
    };
 
    const QString tableName() const;
@@ -51,8 +54,10 @@ public:
    Brewtarget::DBTable childTable() const;
    Brewtarget::DBTable inRecTable() const;
    Brewtarget::DBTable invTable() const;
+   Brewtarget::DBTable btTable() const;
    const QMap<QString, PropertySchema*> properties() const;
    const QMap<QString, PropertySchema*> foreignKeys() const;
+   const PropertySchema* key() const;
 
    // Things to do for properties
 
@@ -87,10 +92,20 @@ public:
    const QStringList allForeignKeyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
+   // Not sure these belong here yet, but maybe
+   const QString generateCreateTable(Brewtarget::DBTypes type, QString tmpName = QString("") );
+   const QString generateUpdateRow(int key, Brewtarget::DBTypes type);
+   const QString generateInsertRow(Brewtarget::DBTypes type);
+   const QString generateCopyTable( QString dest, Brewtarget::DBTypes type);
+
    bool isInventoryTable();
    bool isBaseTable();
    bool isChildTable();
    bool isInRecTable();
+   bool isBtTable();
+   bool isMetaTable();
+
+   const QString keyName(Brewtarget::DBTypes dbType = Brewtarget::ALLDB) const;
 
 private:
 
@@ -108,7 +123,9 @@ private:
    Brewtarget::DBTable m_childTable;
    Brewtarget::DBTable m_inRecTable;
    Brewtarget::DBTable m_invTable;
+   Brewtarget::DBTable m_btTable;
 
+   PropertySchema* m_key;
    QMap<QString,PropertySchema*> m_properties;
    QMap<QString,PropertySchema*> m_foreignKeys;
 
@@ -123,13 +140,18 @@ private:
    void defineMiscTable();
    void defineRecipeTable();
    void defineYeastTable();
+   void defineWaterTable();
    void defineBrewnoteTable();
+   void defineSettingsTable();
+   void defineBtAllTable();
 
    // and we can get away with one method for the child tables
    void defineChildTable(Brewtarget::DBTable table);
 
-   // and one method for all the in_recipe tables
+   // and almost one method for all the in_recipe tables
    void defineInRecipeTable(QString childIdx, Brewtarget::DBTable table);
+   // Instructions in recipe actually carry information. Sigh.
+   void defineInstructionInRecipeTable( QString childIdx, Brewtarget::DBTable table);
 
    // one method for all the bt_tables
    void defineBtTable(QString childIdx, Brewtarget::DBTable table);

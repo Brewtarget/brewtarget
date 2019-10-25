@@ -71,8 +71,8 @@
 #include "config.h"
 #include "brewtarget.h"
 #include "QueuedMethod.h"
-#include "DatabaseSchema.h"
 #include "DatabaseSchemaHelper.h"
+#include "DatabaseSchema.h"
 #include "TableSchema.h"
 #include "TableSchemaConst.h"
 
@@ -90,7 +90,6 @@ QString Database::dbFileName;
 QFile Database::dataDbFile;
 QString Database::dataDbFileName;
 QString Database::dbConName;
-QHash<QString,Brewtarget::DBTable> Database::classNameToTable;
 
 QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
@@ -103,8 +102,6 @@ Database::Database()
    converted = false;
    dbDefn = new DatabaseSchema();
 
-   qDebug() << dbDefn->table(Brewtarget::RECTABLE)->tableName();
-   qDebug() << dbDefn->generateCreateTable(Brewtarget::RECTABLE);
 }
 
 Database::~Database()
@@ -726,8 +723,8 @@ bool Database::restoreFromFile(QString newDbFileStr)
 // removeFromRecipe ===========================================================
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 {
-   QString tableName = dbDefn->tableName(classNameToTable[ing->metaObject()->className()]);
    const QMetaObject* meta = ing->metaObject();
+   QString tableName = dbDefn->classNameToTableName(meta->className());
 
    int ndx = meta->indexOfClassInfo("signal");
    QString propName, relTableName, ingKeyName, childTableName;
@@ -743,9 +740,9 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
          ingKeyName = QString("%1_id").arg(prefix);
          childTableName = QString("%1_children").arg(prefix);
       }
-      else
+      else {
          throw QString("could not locate classInfo for signal on %2").arg(meta->className());
-
+      }
 
       // We need to do many things -- remove the link in *in_recipe,
       // remove the entry from *_children
@@ -1793,6 +1790,18 @@ int Database::insertYeast(Yeast* ins)
    return key;
 }
 
+int Database::insertWater(Water* ins)
+{
+   int key = insertElement(ins);
+   ins->setCacheOnly(false);
+
+   allWaters.insert(key,ins);
+   emit changed( metaProperty("waters"), QVariant() );
+   emit newWaterSignal(ins);
+
+   return key;
+}
+
 // This is more similar to a mashstep in that we need to link the brewnote to
 // the parent recipe.
 int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
@@ -1926,7 +1935,7 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
 void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify, bool transact )
 {
-   TableSchema* schema = new TableSchema( object->table() );
+   TableSchema* schema =dbDefn->table( object->table() );
    int idx = object->metaObject()->indexOfProperty(propName.toUtf8().data());
    QMetaProperty mProp = object->metaObject()->property(idx);
 
@@ -2021,7 +2030,7 @@ void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantM
 //The first displayed ingredient in the database is assumed to be the parent.
 void Database::populateChildTablesByName(Brewtarget::DBTable table)
 {
-   Brewtarget::logW( "Populating Children Ingredient Links" );
+   Brewtarget::logW( QString("Populating Children Ingredient Links (%1)").arg(dbDefn->tableName(table)));
 
    try {
       QString queryString = QString("SELECT DISTINCT name FROM %1").arg(dbDefn->tableName(table));
@@ -2096,8 +2105,6 @@ void Database::populateChildTablesByName()
       // the populateChildTablesByName methods need these hashes populated
       // early and there is no easy way to untangle them. Yes, this results in
       // the work being done twice. Such is life.
-      Database::classNameToTable = classNameToTableHash();
-
       populateChildTablesByName(Brewtarget::FERMTABLE);
       populateChildTablesByName(Brewtarget::HOPTABLE);
       populateChildTablesByName(Brewtarget::MISCTABLE);
@@ -2321,7 +2328,6 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
 void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 {
    try {
-      qDebug() << "adding new hop  w/ addIngredientToRecipe() call";
       Hop* newHop = addIngredientToRecipe<Hop>( rec, hop, noCopy, &allHops, true, transact );
       // it's slightly dirty pool to put this all in the try block. Sue me.
       connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
@@ -2336,12 +2342,10 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 
 void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
 {
-    qDebug() << "addToRecipe with a list of Hops" << transact;
    if ( hops.size() == 0 )
       return;
 
    if ( transact ) {
-      qDebug() << "Starting transaction";
       sqlDatabase().transaction();
    }
 
@@ -2595,19 +2599,6 @@ QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
    return ret;
 }
 */
-// Now the payoff for a lot of hard work elsewhere
-QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
-{
-   QHash<QString,Brewtarget::DBTable> tmp;
-   QString query = QString("SELECT class_name,table_id from bt_alltables where class_name != ''");
-   QSqlQuery q(query,sqlDatabase());
-
-   while( q.next() ) {
-      tmp [ q.value("class_name").toString() ] = static_cast<Brewtarget::DBTable>(q.value("table_id").toInt());
-   }
-
-   return tmp;
-}
 
 QList<BrewNote*> Database::brewNotes()
 {
@@ -5057,19 +5048,20 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
 Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 {
+   QDomNode n;
    blockSignals(true);
    bool createdNew = true;
    Water* ret;
-   QDomNode n;
+   QString name;
+   QList<Water*> matching;
 
+   n = node.firstChildElement("NAME");
+   name = n.firstChild().toText().nodeValue();
    try {
       // If we are just importing a style by itself, need to do some dupe-checking.
-      if( parent == nullptr )
-      {
+      if( parent == nullptr ) {
+         sqlDatabase().transaction();
          // Check to see if there is a hop already in the DB with the same name.
-         n = node.firstChildElement("NAME");
-         QString name = n.firstChild().toText().nodeValue();
-         QList<Water*> matching;
          getElements<Water>( matching, QString("name='%1'").arg(name), Brewtarget::WATERTABLE, allWaters );
 
          if( matching.length() > 0 )
@@ -5078,18 +5070,22 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
             ret = matching.first();
          }
          else
-            ret = newWater();
+            ret = new Water(name);
       }
       else
-         ret = newWater();
+         ret = new Water(name);
 
-      fromXml( ret, Water::tagToProp, node );
-      if( parent )
-         addToRecipe( parent, ret, true );
+      if ( createdNew ) {
+         fromXml( ret, node );
+         insertWater(ret);
+         if( parent ) {
+            addToRecipe( parent, ret, false );
+         }
+      }
    }
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      if ( ! parent )
+      if ( parent == nullptr )
          sqlDatabase().rollback();
       blockSignals(false);
       throw;
@@ -5600,30 +5596,52 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
 
    Brewtarget::DBTypes oldType = static_cast<Brewtarget::DBTypes>(Brewtarget::option("dbType",Brewtarget::SQLITE).toInt());
 
-   try {
-      if ( newType == Brewtarget::NODB )
-         throw QString("No type found for the new database.");
+   qDebug() << "Entered convertDatabase()";
+   qDebug() << "Parameters: hostname = " << Hostname << "DbName = " << DbName;
+   qDebug() << "Parameters: Username = " << Username << "Password = " << Password;
+   qDebug() << "Parameters: Portnum = " << Portnum << "newType = " << newType;
 
-      if ( oldType == Brewtarget::NODB )
+   try {
+      if ( newType == Brewtarget::NODB ) {
+         throw QString("No type found for the new database.");
+      }
+
+      if ( oldType == Brewtarget::NODB ) {
          throw QString("No type found for the old database.");
+      }
 
       switch( newType ) {
          case Brewtarget::PGSQL:
+            qDebug() << "Opening pgsql";
             newDb = openPostgres(Hostname, DbName,Username, Password, Portnum);
             break;
          default:
+            qDebug() << "Opening sqlite";
             newDb = openSQLite();
       }
 
-      if ( ! newDb.isOpen() )
+      if ( ! newDb.isOpen() ) {
+          qDebug() << "Could not open database";
          throw QString("Could not open new database: %1").arg(newDb.lastError().text());
+      }
 
-      if( newDb.tables().contains(QLatin1String("settings")) )
+      // this is to prevent us from over-writing or doing heavens knows what to an existing db
+      if( newDb.tables().contains(QLatin1String("settings")) ) {
+         qDebug() << "Found a settings table";
          return;
+      }
 
-      if ( ! DatabaseSchemaHelper::create(newDb,newType) )
-         throw QString("DatabaseSchemaHelper::create() failed");
+      newDb.transaction();
+      foreach( TableSchema* table, dbDefn->allTables() ) {
+         QString createTable = table->generateCreateTable(newType);
+         QSqlQuery results( newDb );
+         if ( ! results.exec(createTable) ) {
+            throw QString("Could not open %1 : %2").arg(Hostname).arg(results.lastError().text());
+         }
+      }
+      newDb.commit();
 
+      qDebug() << "newType = " << newType << " and old Type = " << oldType;
       copyDatabase(oldType,newType,newDb);
    }
    catch (QString e) {
@@ -5681,8 +5699,8 @@ QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
       }
    }
    else if ( field.name() == "fermentDate" && field.value().toString() == "CURRENT_DATETIME" ) {
-         retVar = "'now()'";
-      }
+      retVar = "'now()'";
+   }
    return retVar;
 }
 
@@ -5703,21 +5721,16 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
    QSqlDatabase oldDb = sqlDatabase();
    QSqlQuery readOld(oldDb);
 
-   QStringList tables = allTablesInOrder(readOld);
-
    // There are a lot of tables to process
-   foreach( QString table, tables ) {
+   foreach( TableSchema* table, dbDefn->allTables() ) {
+      QString tname = table->tableName();
       QSqlField field;
       bool mustPrepare = true;
       int maxid = -1;
 
-      // bt_alltables don't get copied; metatables are created
-      // when the database is. I used to say this about settings. I was wrong
-      // about settings
-      if ( table == "bt_alltables" )
-         continue;
+      qDebug() << "table = " << tname;
 
-      QString findAllQuery = QString("SELECT * FROM %1").arg(table);
+      QString findAllQuery = QString("SELECT * FROM %1 order by %2 asc").arg(tname).arg(oldType);
       try {
 
          if (! readOld.exec(findAllQuery) )
@@ -5733,7 +5746,7 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
             QSqlRecord here = readOld.record();
             QString upsertQuery;
 
-            idx = here.indexOf("id");
+            idx = here.indexOf(table->keyName(oldType));
 
             // We are going to need this for resetting the indexes later. We only
             // need it for copying to postgresql, but .. meh, not worth the extra
@@ -5744,31 +5757,30 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
             // Prepare the insert for this table if required
             if ( mustPrepare ) {
-               if ( table == QStringLiteral("settings") ) {
-                  upsertQuery = makeUpdateString(here,table,here.value(idx).toInt());
-               }
-               else {
-                  upsertQuery = makeInsertString(here,table);
-               }
+               upsertQuery = table->generateInsertRow(newType);
+               if ( tname == "brewnote" ) qDebug() << "upsert = " << upsertQuery;
                upsertNew.prepare(upsertQuery);
                // but do it only once for this table
                mustPrepare = false;
             }
-            // All that's left is to bind
-            for(int i=0; i < here.count(); ++i) {
-               upsertNew.bindValue(i,
-                        convertValue(newType, here.field(i)),
-                        QSql::In
-               );
-            }
 
+            // All that's left is to bind
+            for(int i = 0; i < here.count(); ++i) {
+               if ( tname == "brewnote" && here.fieldName(i) == "brewdate" ) {
+                  QVariant helpme(here.field(i).value().toString());
+                  qDebug() << helpme << helpme.toString();
+                  upsertNew.bindValue(":brewdate",helpme);
+               }
+               upsertNew.bindValue(QString(":%1").arg(here.fieldName(i)), convertValue(newType, here.field(i)));
+            }
             // and execute
             if ( ! upsertNew.exec() )
                throw QString("Could not insert new row %1 : %2").arg(upsertNew.lastQuery()).arg(upsertNew.lastError().text());
          }
+         upsertNew.finish();
          // We need to manually reset the sequences
          if ( newType == Brewtarget::PGSQL && maxid > 0 ) {
-            QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(table).arg(maxid);
+            QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(tname).arg(maxid);
             QSqlQuery updateSeq(seq, newDb);
 
             if ( ! updateSeq.exec(seq) )

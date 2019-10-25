@@ -122,7 +122,6 @@ void StyleEditor::save()
 
    if ( s->cacheOnly() ) {
       int retKey = Database::instance().insertStyle(s);
-      qDebug() << "s->key = " << s->key() << " retKey =" << retKey;
       s->setCacheOnly(false);
    }
 

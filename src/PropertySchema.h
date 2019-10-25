@@ -97,6 +97,7 @@ private:
 
    PropertySchema( QString propName,
                    QString colName,
+                   QString colType,
                    Brewtarget::DBTable fTable
    );
 

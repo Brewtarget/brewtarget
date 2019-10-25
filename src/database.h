@@ -168,7 +168,7 @@ public:
    template<class T> T* newIngredient(QHash<int,T*>* all) {
       int key;
       // To quote the talking heads, my god what have I done?
-      Brewtarget::DBTable table = classNameToTable[ T::classNameStr() ];
+      Brewtarget::DBTable table = dbDefn->classNameToTable( T::classNameStr() );
       QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(dbDefn->tableName(table));
 
       QSqlQuery q(sqlDatabase());
@@ -196,7 +196,7 @@ public:
    template<class T> T* newIngredient(QString name, QHash<int,T*>* all) {
       int key;
       // To quote the talking heads, my god what have I done?
-      Brewtarget::DBTable table = classNameToTable[ T::classNameStr() ];
+      Brewtarget::DBTable table = dbDefn->classNameToTable( T::classNameStr() );
       QString insert = QString("INSERT INTO %1 (name) VALUES (:name)").arg(dbDefn->tableName(table));
 
       QSqlQuery q(sqlDatabase());
@@ -211,7 +211,6 @@ public:
             throw QString("could not insert a record into");
 
          key = q.lastInsertId().toInt();
-         qDebug() << "key =" << key;
          q.finish();
       }
       catch (QString e) {
@@ -261,10 +260,10 @@ public:
    int    insertHop(Hop* ins);
    int    insertMash(Mash* ins);
    int    insertMisc(Misc* ins);
-   // Do you know fear, because I do.
    int    insertRecipe(Recipe* ins);
    int    insertStyle(Style* ins);
    int    insertYeast(Yeast* ins);
+   int    insertWater(Water* ins);
 
    // Brewnotes, instructions and mashsteps are impossible without their parent objects
    int    insertBrewnote(BrewNote* ins, Recipe *parent);
@@ -372,7 +371,7 @@ public:
           return;
 
       const QMetaObject *meta = ing->metaObject();
-      Brewtarget::DBTable ingTable = classNameToTable[ meta->className() ];
+      Brewtarget::DBTable ingTable = dbDefn->classNameToTable( meta->className() );
       QString propName;
 
       if ( ingTable == Brewtarget::BREWNOTETABLE ) {
@@ -553,11 +552,6 @@ private:
    static QString dbSchema;
    static QString dbUsername;
    static QString dbPassword;
-
-//   static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
-   // I think many, many of these go away once I figure out how DatabaseSchema should work.
-   static QHash<QString,Brewtarget::DBTable> classNameToTable;
-   static QHash<QString,Brewtarget::DBTable> classNameToTableHash();
 
    // Each thread should have its own connection to QSqlDatabase.
    static QHash< QThread*, QString > _threadToConnection;
@@ -750,7 +744,6 @@ private:
             childTableName = QString("%1_children").arg(prefix);
          }
          else {
-            qDebug() << "throwing signals error";
             throw QString("could not locate classInfo for signal on %2").arg(meta->className());
          }
          // Ensure this ingredient is not already in the recipe.
@@ -759,9 +752,7 @@ private:
                               .arg(ingKeyName)
                               .arg(ing->_key)
                               .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key);
-         qDebug() << "select string: " << select;
          if (! q.exec(select) ) {
-            qDebug() << "throwing search for ingredients error";
             throw QString("Couldn't execute ingredient in recipe search");
          }
 
@@ -836,7 +827,6 @@ private:
             q.bindValue(":child", newIng->key());
 
             if ( ! q.exec() ) {
-               qDebug() << "Could not do child table insert";
                throw QString("%1 %2.").arg(q.lastQuery()).arg(q.lastError().text());
             }
 
@@ -875,7 +865,7 @@ private:
       QString holder, fields;
       T* newOne;
 
-      Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
+      Brewtarget::DBTable t = dbDefn->classNameToTable(object->metaObject()->className());
 
       QString tName = dbDefn->tableName(t);
 

@@ -109,7 +109,8 @@ signals:
 private:
    Water(Brewtarget::DBTable table, int key);
    Water(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   Water( Water const& other );
+   Water(Water const& other);
+   Water(QString name, bool cache = true);
    
    double m_amount_l;
    double m_calcium_ppm;

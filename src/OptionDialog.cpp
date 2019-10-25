@@ -52,7 +52,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    createPostgresElements();
    createSQLiteElements();
 
-   if( parent != 0 )
+   if( parent != nullptr )
    {
       setWindowIcon(parent->windowIcon());
    }
@@ -160,7 +160,8 @@ OptionDialog::OptionDialog(QWidget* parent)
    connect( pushButton_testConnection, &QAbstractButton::clicked, this, &OptionDialog::testConnection);
 
    // figure out which database we have
-   setDbDialog((Brewtarget::DBTypes)Brewtarget::option("dbType", Brewtarget::SQLITE).toInt());
+   int idx = comboBox_engine->findData(Brewtarget::option("dbType", Brewtarget::SQLITE).toInt());
+   setDbDialog(static_cast<Brewtarget::DBTypes>(idx));
 
    // Set the signals
    connect( checkBox_savePassword, &QAbstractButton::clicked, this, &OptionDialog::savePassword);
@@ -239,8 +240,7 @@ void OptionDialog::setBackupDir()
 
 void OptionDialog::resetToDefault()
 {
-
-   Brewtarget::DBTypes engine = (Brewtarget::DBTypes)comboBox_engine->currentIndex();
+   Brewtarget::DBTypes engine = static_cast<Brewtarget::DBTypes>(comboBox_engine->currentData().toInt());
    if ( engine == Brewtarget::PGSQL ) {
       btStringEdit_hostname->setText(QString("localhost"));
       btStringEdit_portnum->setText(QString("5432"));
@@ -265,7 +265,7 @@ void OptionDialog::saveAndClose()
 
    // TODO:: FIX THIS UI. I am really not sure what the best approach is here.
    if ( status == OptionDialog::NEEDSTEST || status == OptionDialog::TESTFAILED ) {
-      QMessageBox::critical(0,
+      QMessageBox::critical(nullptr,
             tr("Test connection or cancel"),
             tr("Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.")
             );
@@ -273,18 +273,20 @@ void OptionDialog::saveAndClose()
    }
 
    if ( status == OptionDialog::TESTPASSED ) {
-      // This got unpleasant. There are multiple possible transer paths.
+      // This got unpleasant. There are multiple possible transfer paths.
       // SQLite->Pgsql, Pgsql->Pgsql and Pgsql->SQLite. This will ensure we
       // preserve the information required.
       try {
          QString theQuestion = tr("Would you like brewtarget to transfer your data to the new database? NOTE: If you've already loaded the data, say No");
-         if ( QMessageBox::Yes == QMessageBox::question(this, tr("Transfer database"), theQuestion) )
+         if ( QMessageBox::Yes == QMessageBox::question(this, tr("Transfer database"), theQuestion) ) {
+             qDebug() << "Converting databases -- watch this space";
             Database::instance().convertDatabase(btStringEdit_hostname->text(), btStringEdit_dbname->text(),
                                                  btStringEdit_username->text(), btStringEdit_password->text(),
                                                  btStringEdit_portnum->text().toInt(),
-                                                 (Brewtarget::DBTypes)comboBox_engine->currentIndex());
+                                                 static_cast<Brewtarget::DBTypes>(comboBox_engine->currentData().toInt()));
+         }
          // Database engine stuff
-         Brewtarget::setOption("dbType", comboBox_engine->currentIndex());
+         Brewtarget::setOption("dbType", comboBox_engine->currentData().toInt());
          Brewtarget::setOption("dbHostname", btStringEdit_hostname->text());
          Brewtarget::setOption("dbPortnum", btStringEdit_portnum->text());
          Brewtarget::setOption("dbSchema", btStringEdit_schema->text());
@@ -414,7 +416,7 @@ void OptionDialog::saveAndClose()
    Brewtarget::setLanguage( ndxToLangCode[ comboBox_lang->currentIndex() ] );
 
    // Check the new userDataDir.
-   Brewtarget::DBTypes dbEngine = (Brewtarget::DBTypes)comboBox_engine->currentIndex();
+   Brewtarget::DBTypes dbEngine = static_cast<Brewtarget::DBTypes>(comboBox_engine->currentData().toInt());
    if ( dbEngine == Brewtarget::SQLITE ) {
       QString newUserDataDir = btStringEdit_dataDir->text();
       QDir userDirectory(newUserDataDir);
@@ -499,7 +501,7 @@ void OptionDialog::showChanges()
 
    // Database stuff -- this looks weird, but trust me. We want SQLITE to be
    // the default for this field
-   int tmp = (Brewtarget::DBTypes)Brewtarget::option("dbType",Brewtarget::SQLITE).toInt();
+   int tmp = Brewtarget::option("dbType",Brewtarget::SQLITE).toInt() - 1;
    comboBox_engine->setCurrentIndex(tmp);
 
    btStringEdit_hostname->setText(Brewtarget::option("dbHostname","localhost").toString());
@@ -549,7 +551,7 @@ void OptionDialog::sqliteVisible(bool canSee)
    spinBox_frequency->setVisible(canSee);
 }
 
-void OptionDialog::setDbDialog(Brewtarget::DBTypes db) 
+void OptionDialog::setDbDialog(Brewtarget::DBTypes db)
 {
    groupBox_dbConfig->setVisible(false);
 
@@ -577,7 +579,7 @@ void OptionDialog::setDbDialog(Brewtarget::DBTypes db)
       gridLayout->addWidget(btStringEdit_password,4,1);
 
       gridLayout->addWidget(checkBox_savePassword, 4, 4);
-      
+
    }
    else {
       postgresVisible(false);
@@ -604,7 +606,7 @@ void OptionDialog::clearLayout()
 {
    QLayoutItem *child;
 
-   while ( (child = gridLayout->takeAt(0)) != 0 ) {
+   while ( (child = gridLayout->takeAt(0)) != nullptr ) {
       gridLayout->removeItem(child);
    }
 }
@@ -704,34 +706,34 @@ void OptionDialog::createSQLiteElements()
 void OptionDialog::retranslateDbDialog(QDialog *optionsDialog)
 {
    //PostgreSQL stuff
-   label_hostname->setText(QApplication::translate("optionsDialog", "Hostname", 0));
-   label_portnum->setText(QApplication::translate("optionsDialog", "Port", 0));
-   label_schema->setText(QApplication::translate("optionsDialog", "Schema", 0));
-   label_dbName->setText(QApplication::translate("optionsDialog", "Database", 0));
-   label_username->setText(QApplication::translate("optionsDialog", "Username", 0));
-   label_password->setText(QApplication::translate("optionsDialog", "Password", 0));
-   checkBox_savePassword->setText(QApplication::translate("optionsDialog", "Save password", 0));
+   label_hostname->setText(QApplication::translate("optionsDialog", "Hostname", nullptr));
+   label_portnum->setText(QApplication::translate("optionsDialog", "Port", nullptr));
+   label_schema->setText(QApplication::translate("optionsDialog", "Schema", nullptr));
+   label_dbName->setText(QApplication::translate("optionsDialog", "Database", nullptr));
+   label_username->setText(QApplication::translate("optionsDialog", "Username", nullptr));
+   label_password->setText(QApplication::translate("optionsDialog", "Password", nullptr));
+   checkBox_savePassword->setText(QApplication::translate("optionsDialog", "Save password", nullptr));
 
    // SQLite things
-   label_dataDir->setText(QApplication::translate("optionsDialog", "Data Directory", 0));
-   pushButton_browseDataDir->setText(QApplication::translate("optionsDialog", "Browse", 0));
-   label_backupDir->setText(QApplication::translate("optionsDialog", "Backup Directory", 0));
-   pushButton_browseBackupDir->setText(QApplication::translate("optionsDialog", "Browse", 0));
-   label_numBackups->setText(QApplication::translate("optionsDialog", "Number of Backups", 0));
-   label_frequency->setText(QApplication::translate("optionsDialog", "Frequency of Backups", 0));
+   label_dataDir->setText(QApplication::translate("optionsDialog", "Data Directory", nullptr));
+   pushButton_browseDataDir->setText(QApplication::translate("optionsDialog", "Browse", nullptr));
+   label_backupDir->setText(QApplication::translate("optionsDialog", "Backup Directory", nullptr));
+   pushButton_browseBackupDir->setText(QApplication::translate("optionsDialog", "Browse", nullptr));
+   label_numBackups->setText(QApplication::translate("optionsDialog", "Number of Backups", nullptr));
+   label_frequency->setText(QApplication::translate("optionsDialog", "Frequency of Backups", nullptr));
 
    // set up the tooltips if we are using them
 #ifndef QT_NO_TOOLTIP
-   btStringEdit_hostname->setToolTip(QApplication::translate("optionsDialog", "PostgresSQL's host name or IP address", 0));
-   btStringEdit_portnum->setToolTip(QApplication::translate("optionsDialog", "Port the PostgreSQL is listening on", 0));
-   btStringEdit_schema->setToolTip(QApplication::translate("optionsDialog", "The schema containing the database", 0));
-   btStringEdit_username->setToolTip(QApplication::translate("optionsDialog", "User with create/delete table access", 0));
-   btStringEdit_password->setToolTip(QApplication::translate("optionsDialog", "Password for the user", 0));
-   btStringEdit_dbname->setToolTip(QApplication::translate("optionsDialog", "The name of the database", 0));
-   label_dataDir->setToolTip(QApplication::translate("optionsDialog", "Where your database file is",0));
-   label_backupDir->setToolTip(QApplication::translate("optionsDialog", "Where to save your backups",0));
-   label_numBackups->setToolTip(QApplication::translate("optionsDialog", "Number of backups to keep: -1 means never remove, 0 means never backup", 0));
-   label_frequency->setToolTip(QApplication::translate("optionsDialog", "How frequently a backup is made: 1 means always backup", 0));
+   btStringEdit_hostname->setToolTip(QApplication::translate("optionsDialog", "PostgresSQL's host name or IP address", nullptr));
+   btStringEdit_portnum->setToolTip(QApplication::translate("optionsDialog", "Port the PostgreSQL is listening on", nullptr));
+   btStringEdit_schema->setToolTip(QApplication::translate("optionsDialog", "The schema containing the database", nullptr));
+   btStringEdit_username->setToolTip(QApplication::translate("optionsDialog", "User with create/delete table access", nullptr));
+   btStringEdit_password->setToolTip(QApplication::translate("optionsDialog", "Password for the user", nullptr));
+   btStringEdit_dbname->setToolTip(QApplication::translate("optionsDialog", "The name of the database", nullptr));
+   label_dataDir->setToolTip(QApplication::translate("optionsDialog", "Where your database file is",nullptr));
+   label_backupDir->setToolTip(QApplication::translate("optionsDialog", "Where to save your backups",nullptr));
+   label_numBackups->setToolTip(QApplication::translate("optionsDialog", "Number of backups to keep: -1 means never remove, 0 means never backup", nullptr));
+   label_frequency->setToolTip(QApplication::translate("optionsDialog", "How frequently a backup is made: 1 means always backup", nullptr));
 #endif
 }
 
@@ -751,7 +753,9 @@ void OptionDialog::changeEvent(QEvent* e)
 
 void OptionDialog::setEngine(int selected)
 {
-   Brewtarget::DBTypes newEngine = (Brewtarget::DBTypes)selected;
+
+   QVariant data = comboBox_engine->currentData();
+   Brewtarget::DBTypes newEngine = static_cast<Brewtarget::DBTypes>(data.toInt());
 
    setDbDialog(newEngine);
    testRequired();
@@ -764,7 +768,7 @@ void OptionDialog::testConnection()
    QString hostname, schema, database, username, password;
    int port;
 
-   Brewtarget::DBTypes newType = (Brewtarget::DBTypes)comboBox_engine->currentIndex();
+   Brewtarget::DBTypes newType = static_cast<Brewtarget::DBTypes>(comboBox_engine->currentData().toInt());
    // Do nothing if nothing is required.
    if ( status == OptionDialog::NOCHANGE || status == OptionDialog::TESTPASSED)
    {
@@ -788,15 +792,15 @@ void OptionDialog::testConnection()
          success = Database::verifyDbConnection(newType,hostname);
    }
 
-   if ( success ) 
+   if ( success )
    {
-      QMessageBox::information(0,
+      QMessageBox::information(nullptr,
                            QObject::tr("Connection Test"),
                            QString(QObject::tr("Connection to database was successful"))
                            );
       status = OptionDialog::TESTPASSED;
    }
-   else 
+   else
    {
       // Database::testConnection already popped the dialog
       status = OptionDialog::TESTFAILED;
@@ -844,7 +848,7 @@ void OptionDialog::changeColors()
 void OptionDialog::savePassword(bool state)
 {
    if ( state ) {
-      QMessageBox::warning(0, QObject::tr("Plaintext"), 
+      QMessageBox::warning(nullptr, QObject::tr("Plaintext"),
                               QObject::tr("Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems."));
    }
 }

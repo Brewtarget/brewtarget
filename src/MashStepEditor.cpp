@@ -49,7 +49,6 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
    QVariant value;
    bool updateAll = false;
 
-   qDebug() << "showChanges";
    if( metaProp == 0 )
       updateAll = true;
    else
@@ -137,7 +136,6 @@ void MashStepEditor::setParentMash(Mash *parent)
 
 void MashStepEditor::saveAndClose()
 {
-   qDebug() << "saveAndClose()";
    obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI());

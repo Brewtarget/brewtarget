@@ -26,52 +26,8 @@
 #include "water.h"
 #include "brewtarget.h"
 
-/************* Columns *************/
-const QString kName("name");
-const QString kAmount("amount");
-const QString kCalcium("calcium");
-const QString kBiCarbonate("bicarbonate");
-const QString kSulfate("sulfate");
-const QString kChloride("chloride");
-const QString kSodium("sodium");
-const QString kMagnesium("magnesium");
-const QString kPh("ph");
-const QString kNotes("notes");
-
-// these are defined in the parent, but I need them here too
-const QString kDeleted("deleted");
-const QString kDisplay("display");
-const QString kFolder("folder");
-/************** Props **************/
-const QString kNameProp("name");
-const QString kAmountProp("amount_l");
-const QString kCalciumProp("calcium_ppm");
-const QString kBiCarbonateProp("bicarbonate_ppm");
-const QString kSulfateProp("sulfate_ppm");
-const QString kChlorideProp("chloride_ppm");
-const QString kSodiumProp("sodium_ppm");
-const QString kMagnesiumProp("magnesium_ppm");
-const QString kPhProp("ph");
-const QString kNotesProp("notes");
-
-
-QHash<QString,QString> Water::tagToProp = Water::tagToPropHash();
-
-QHash<QString,QString> Water::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   propHash["NAME"] = kNameProp;
-   propHash["AMOUNT"] = kAmountProp;
-   propHash["CALCIUM"] = kCalciumProp;
-   propHash["BICARBONATE"] = kBiCarbonateProp;
-   propHash["SULFATE"] = kSulfateProp;
-   propHash["CHLORIDE"] = kChlorideProp;
-   propHash["SODIUM"] = kSodiumProp;
-   propHash["MAGNESIUM"] = kMagnesiumProp;
-   propHash["PH"] = kPhProp;
-   propHash["NOTES"] = kNotesProp;
-   return propHash;
-}
+#include "TableSchemaConst.h"
+#include "WaterSchema.h"
 
 bool operator<(Water &w1, Water &w2)
 {
@@ -104,17 +60,32 @@ Water::Water(Brewtarget::DBTable table, int key)
 {
 }
 
+Water::Water(QString name, bool cache)
+   : BeerXMLElement(Brewtarget::WATERTABLE, -1, name, true),
+   m_amount_l(0.0),
+   m_calcium_ppm(0.0),
+   m_bicarbonate_ppm(0.0),
+   m_sulfate_ppm(0.0),
+   m_chloride_ppm(0.0),
+   m_sodium_ppm(0.0),
+   m_magnesium_ppm(0.0),
+   m_ph(0.0),
+   m_notes(QString()),
+   m_cacheOnly(cache)
+{
+}
+
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kName).toString(), rec.value(kDisplay).toBool()),
-   m_amount_l(rec.value(kAmount).toDouble()),
-   m_calcium_ppm(rec.value(kCalcium).toDouble()),
-   m_bicarbonate_ppm(rec.value(kBiCarbonate).toDouble()),
-   m_sulfate_ppm(rec.value(kSulfate).toDouble()),
-   m_chloride_ppm(rec.value(kChloride).toDouble()),
-   m_sodium_ppm(rec.value(kSodium).toDouble()),
-   m_magnesium_ppm(rec.value(kMagnesium).toDouble()),
-   m_ph(rec.value(kPh).toDouble()),
-   m_notes(rec.value(kAmount).toString()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   m_amount_l(rec.value(kcolAmount).toDouble()),
+   m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
+   m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),
+   m_sulfate_ppm(rec.value(kcolWaterSulfate).toDouble()),
+   m_chloride_ppm(rec.value(kcolWaterChloride).toDouble()),
+   m_sodium_ppm(rec.value(kcolWaterSodium).toDouble()),
+   m_magnesium_ppm(rec.value(kcolWaterMagnesium).toDouble()),
+   m_ph(rec.value(kcolPH).toDouble()),
+   m_notes(rec.value(kcolAmount).toString()),
    m_cacheOnly(false)
 {
 }
@@ -124,7 +95,7 @@ void Water::setAmount_l( double var )
 {
    m_amount_l = var;
    if ( ! m_cacheOnly ) {
-      set(kAmountProp, kAmount, var);
+      setEasy(kpropAmount, var);
    }
 }
 
@@ -132,7 +103,7 @@ void Water::setCalcium_ppm( double var )
 {
    m_calcium_ppm = var;
    if ( ! m_cacheOnly ) {
-      set(kCalciumProp, kCalcium, var);
+      setEasy(kpropCalcium, var);
    }
 }
 
@@ -140,7 +111,7 @@ void Water::setBicarbonate_ppm( double var )
 {
    m_bicarbonate_ppm = var;
    if ( ! m_cacheOnly ) {
-      set(kBiCarbonateProp, kBiCarbonate, var);
+      setEasy(kpropBiCarbonate, var);
    }
 }
 
@@ -148,7 +119,7 @@ void Water::setChloride_ppm( double var )
 {
    m_chloride_ppm = var;
    if ( ! m_cacheOnly ) {
-      set(kChlorideProp, kChloride, var);
+      setEasy(kpropChloride, var);
    }
 }
 
@@ -156,7 +127,7 @@ void Water::setSodium_ppm( double var )
 {
    m_sodium_ppm = var;
    if ( ! m_cacheOnly ) {
-      set(kSodiumProp, kSodium, var);
+      setEasy(kpropSodium, var);
    }
 }
 
@@ -164,7 +135,7 @@ void Water::setMagnesium_ppm( double var )
 {
    m_magnesium_ppm = var;
    if ( ! m_cacheOnly ) {
-      set(kMagnesiumProp, kMagnesium, var);
+      setEasy(kpropMagnesium, var);
    }
 }
 
@@ -172,7 +143,7 @@ void Water::setPh( double var )
 {
    m_ph = var;
    if ( ! m_cacheOnly ) {
-      set(kPhProp, kPh, var);
+      setEasy(kpropPH, var);
    }
 }
 
@@ -180,7 +151,7 @@ void Water::setSulfate_ppm( double var )
 {
    m_sulfate_ppm = var;
    if ( ! m_cacheOnly ) {
-      set(kSulfateProp, kSulfate, var);
+      setEasy(kpropSulfate, var);
    }
 }
 
@@ -188,7 +159,7 @@ void Water::setNotes( const QString &var )
 {
    m_notes = var;
    if ( ! m_cacheOnly ) {
-      set(kNotesProp, kNotes, var);
+      setEasy(kpropNotes, var);
    }
 }
 

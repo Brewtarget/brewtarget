@@ -17,10 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _DATABASESCHEMAHELPER_H
+#define _DATABASESCHEMAHELPER_H
+
 #include "brewtarget.h"
 #include <QString>
 #include <QSqlDatabase>
 
+
+   class DatabaseSchema;
 /*!
  * \brief Helper to Database that manages schema stuff
  * \author Philip G. Lee
@@ -47,6 +52,7 @@ private:
    static QString ALTERTABLE;
    static QString DROPTABLE;
    static QString ADDCOLUMN;
+   static QString DROPCOLUMN;
    static QString UPDATE;
    static QString SET;
    static QString INSERTINTO;
@@ -81,6 +87,7 @@ private:
    static QString deleted;
    static QString display;
    static QString folder;
+   static QString locked;
    
    // =============================Table Names/Columns=========================
    // the meta table
@@ -257,9 +264,7 @@ private:
    static QString colBNoteFg;
    static QString colBNoteBkEff;
    static QString colBNoteAbv;
-   static QString colBNotePredOg;
    static QString colBNoteEff;
-   static QString colBNotePredAbv;
    static QString colBNoteProjBoilGrav;
    static QString colBNoteProjStrikeTemp;
    static QString colBNoteProjFinTemp;
@@ -317,6 +322,7 @@ private:
    static QString colRecStyleId;
    static QString colRecMashId;
    static QString colRecEquipId;
+   static QString colRecAncestorId;
    
    static QString tableBtEquipment;
    static QString tableBtFermentable;
@@ -430,4 +436,7 @@ private:
    static bool migrate_to_5(QSqlQuery q);
    static bool migrate_to_6(QSqlQuery q);
    static bool migrate_to_7(QSqlQuery q);
+   static bool migrate_to_8(QSqlQuery q);
 };
+
+#endif

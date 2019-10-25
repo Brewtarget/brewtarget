@@ -82,7 +82,7 @@ Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_notes(rec.value(kcolNotes).toString()),
      m_tunTemp_c(rec.value(kcolMashTunTemp).toDouble()),
      m_spargeTemp_c(rec.value(kcolMashSpargeTemp).toDouble()),
-     m_ph(rec.value(kcolMashPH).toDouble()),
+     m_ph(rec.value(kcolPH).toDouble()),
      m_tunWeight_kg(rec.value(kcolMashTunWeight).toDouble()),
      m_tunSpecificHeat_calGC(rec.value(kcolMashTunSpecHeat).toDouble()),
      m_equipAdjust(rec.value(kcolMashEquipAdjust).toBool()),

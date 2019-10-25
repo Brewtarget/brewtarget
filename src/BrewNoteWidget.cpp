@@ -254,29 +254,6 @@ void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
    showChanges();
 }
 
-/*
-void BrewNoteWidget::saveAll()
-{
-   if ( ! bNoteObs )
-      return;
-   
-   updateSG();
-   updateVolumeIntoBK_l();
-   updateStrikeTemp_c();
-   updateMashFinTemp_c();
-   updateOG();
-   updatePostBoilVolume_l();
-   updateVolumeIntoFerm_l();
-   updatePitchTemp_c();
-   updateFG();
-   updateFinalVolume_l();
-   updateFermentDate();
-   updateNotes();
-
-   hide();
-}
-*/
-
 void BrewNoteWidget::showChanges(QString field)
 {
    if (bNoteObs == 0)

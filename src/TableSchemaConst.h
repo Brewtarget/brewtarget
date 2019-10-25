@@ -57,11 +57,13 @@ static const QString kpropType("type");
 static const QString kpropDeleted("deleted");
 static const QString kpropAmountKg("amount_kg");
 static const QString kpropDisplay("display");
+static const QString kpropLocked("locked");
 static const QString kpropFolder("folder");
 static const QString kpropOrigin("origin");
 static const QString kpropUse("use");
 static const QString kpropInventory("inventory");
 static const QString kpropTime("time_min");
+static const QString kpropKey("_key");
 
 // needed by both mash and equipment
 static const QString kpropTunWeight("tunWeight_kg");
@@ -88,6 +90,8 @@ static const QString kpropFG("fg");
 static const QString kpropParentId("parent_id");
 static const QString kpropChildId("child_id");
 
+// water and mash
+static const QString kpropPH("ph");
 // Same for these column names. Yes, but I think the consistency is better
 // this way
 static const QString kcolName("name");
@@ -95,14 +99,16 @@ static const QString kcolNotes("notes");
 static const QString kcolDeleted("deleted");
 static const QString kcolDisplay("display");
 static const QString kcolFolder("folder");
+static const QString kcolLocked("locked");
 static const QString kcolInventory("amount");
 static const QString kcolAmount("amount");
 static const QString kcolOrigin("origin");
 static const QString kcolUse("use");
 static const QString kcolSubstitutes("substitutes");
 static const QString kcolTime("time");
+static const QString kcolKey("id");
 
-
+static const QString kcolPH("ph");
 // And things that are identical in beerxml
 static const QString kxmlPropName("NAME");
 static const QString kxmlPropNotes("NOTES");
@@ -129,6 +135,8 @@ static const QString kxmlPropAtten("ATTENUATION");
 static const QString kxmlPropFG("FG");
 static const QString kxmlPropOG("OG");
 
+// water and mash
+static const QString kxmlPropPH("PH");
 // Child information. We were really consisten on our naming here, so all the
 // *children tables will use these constants. The only thing that changes is
 // the table it points at
@@ -142,6 +150,7 @@ static const QString kcolEquipmentId("equipment_id");
 static const QString kcolFermentableId("fermentable_id");
 static const QString kcolHopId("hop_id");
 static const QString kcolInstructionId("instruction_id");
+static const QString kcolMashId("mash_id");
 static const QString kcolMiscId("misc_id");
 static const QString kcolStyleId("style_id");
 static const QString kcolWaterId("water_id");

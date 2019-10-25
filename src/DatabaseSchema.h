@@ -62,30 +62,41 @@ public:
    QString tableName(Brewtarget::DBTable table);
 
    // These generate SQL strings
-   const QString generateCreateTable(Brewtarget::DBTable table);
+   const QString generateCreateTable(Brewtarget::DBTable table, QString name = QString());
    const QString generateInsertRow(Brewtarget::DBTable table);
+   const QString generateUpdateRow(Brewtarget::DBTable table, int key);
+   const QString generateCopyTable(Brewtarget::DBTable src, QString dest, Brewtarget::DBTypes type);
 
+   // these translate from a class to a table or its name
+   Brewtarget::DBTable classNameToTable(QString className) const;
+   const QString classNameToTableName(QString className) const;
+
+   // ways to get different types of tables
    QVector<TableSchema*> inventoryTables();
    QVector<TableSchema*> childTables();
    QVector<TableSchema*> inRecipeTables();
    QVector<TableSchema*> baseTables();
+   QVector<TableSchema*> btTables();
+   QVector<TableSchema*> allTables();
 
    // the idea here is to be able to give a base table and get back either its
-   // inRec, child or inventory table. U am thinking I will calculate these for
+   // inRec, child, inventory or bt table. I am thinking I will calculate these for
    // now, but I am wondering if I shouldn't store that info in the table? If
    // I change my mind later, these can all be pretty simple lookups
    TableSchema* inRecTable(Brewtarget::DBTable dbTable);
    TableSchema* childTable(Brewtarget::DBTable dbTable);
    TableSchema* invTable(Brewtarget::DBTable dbTable);
+   TableSchema* btTable(Brewtarget::DBTable dbTable);
 
    // I seem to be needing these frequently, so lets take code from 100 places and put it here
    // It can't go into the TableSchema because it doesn't know the db
    const QString childTableName(Brewtarget::DBTable dbTable);
    const QString inRecTableName(Brewtarget::DBTable dbTable);
    const QString invTableName(Brewtarget::DBTable dbTable);
+   const QString btTableName(Brewtarget::DBTable dbTable);
 
 private:
-   QMap<Brewtarget::DBTable,TableSchema*> m_tables;
+   QVector<TableSchema*> m_tables;
    Brewtarget::DBTypes m_type;
    QString m_id;
    QString m_name;

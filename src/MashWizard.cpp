@@ -207,7 +207,6 @@ void MashWizard::wizardry()
    if ( bGroup->checkedButton() != radioButton_noSparge ) {
       thickNum = doubleSpinBox_thickness->value();
       thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
-      qDebug() << "radio button not clicked" << thickNum << "*" << volumeUnit->toSI(1) << "/" << weightUnit->toSI(1) << "=" << thickness_LKg;
    }
    else {
       // not sure I like this. Why is this here and not somewhere later?
@@ -225,7 +224,6 @@ void MashWizard::wizardry()
       return;
    }
 
-   qDebug() << "we have found our expected thickness";
    steps = mash->mashSteps();
 
    // Do first step

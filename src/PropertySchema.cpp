@@ -17,8 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "brewtarget.h"
 #include <QString>
+#include <QDebug>
+#include "brewtarget.h"
 #include "PropertySchema.h"
 
 // this initializer is simple. It populates the m_properties QVector with
@@ -56,7 +57,7 @@ PropertySchema::PropertySchema( QString propName, QString colName,
 }
 
 // Foreign key initializer, will set all the DB to this definition
-PropertySchema::PropertySchema(QString propName, QString colName, Brewtarget::DBTable fTable)
+PropertySchema::PropertySchema(QString propName, QString colName, QString colType, Brewtarget::DBTable fTable)
     : QObject(nullptr),
     m_properties(QVector<dbProp*>(1 + static_cast<int>(Brewtarget::ALLDB),nullptr))
 {
@@ -66,7 +67,7 @@ PropertySchema::PropertySchema(QString propName, QString colName, Brewtarget::DB
    tmp->m_colName = colName;
    tmp->m_xmlName = QString();
    tmp->m_constraint = QString();
-   tmp->m_colType = QString();
+   tmp->m_colType = colType;
    tmp->m_defaultValue = QVariant();
    tmp->m_colSize = 0;
    tmp->m_ftable = fTable;
@@ -80,6 +81,8 @@ PropertySchema::PropertySchema(QString propName, QString colName, Brewtarget::DB
 
 // The other property initializer does ALLDB. use this to add alternate
 // definitions
+// If you use ALLDB with this, it will initialize anything not already set to
+// the value
 void PropertySchema::addProperty( QString propName, Brewtarget::DBTypes dbType,
                   QString colName, QString xmlName, QString colType,
                   QVariant defaultValue, int colSize, QString constraint )
@@ -137,7 +140,6 @@ void PropertySchema::addForeignKey(QString propName, Brewtarget::DBTypes dbType,
       m_properties[dbType] = tmp;
    }
 }
-
 
 const QString PropertySchema::colName(Brewtarget::DBTypes dbType) const
 {

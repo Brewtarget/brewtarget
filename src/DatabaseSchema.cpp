@@ -23,8 +23,7 @@
 #include "TableSchema.h"
 #include "TableSchemaConst.h"
 #include "DatabaseSchema.h"
-// We have to hard code this, because we cannot be certain the database is
-// available yet -- so no bt_alltables lookups can be allowed
+
 // These HAVE to be in the same order as they are listed in
 // Brewtarget::DBTable
 static QStringList dbTableToName  = QStringList() <<
@@ -73,27 +72,10 @@ static QStringList dbTableToName  = QStringList() <<
    ktableMiscInventory <<
    ktableYeastInventory;
 
-static const QString kPgSQLId("id SERIAL PRIMARY KEY,");
-static const QString kSQLiteId("id INTEGER PRIMARY KEY autoincrement,");
-
-static const QString kDefault("DEFAULT");
-static const QString kNotNull("not null");
-
 DatabaseSchema::DatabaseSchema()
 {
    loadTables();
    m_type = Brewtarget::dbType();
-
-   switch (m_type) {
-      case Brewtarget::PGSQL:
-         m_id = kPgSQLId;
-         break;
-      case Brewtarget::SQLITE:
-         m_id = kSQLiteId;
-         break;
-      default:
-         break;
-   }
 }
 
 void DatabaseSchema::loadTables()
@@ -103,14 +85,14 @@ void DatabaseSchema::loadTables()
    for ( it = Brewtarget::NOTABLE; it <= Brewtarget::YEASTINVTABLE; it++ ) {
       Brewtarget::DBTable tab = static_cast<Brewtarget::DBTable>(it);
       TableSchema* tmp = new TableSchema(tab);
-      m_tables.insert(tab, tmp);
+      m_tables.append(tmp);
    }
 }
 
 TableSchema *DatabaseSchema::table(Brewtarget::DBTable table)
 {
-   if ( m_tables.contains( table ) ) {
-      return m_tables.value(table);
+   if ( table > Brewtarget::NOTABLE && table < m_tables.size() ) {
+      return m_tables.at(table);
    }
 
    return nullptr;
@@ -126,8 +108,8 @@ TableSchema *DatabaseSchema::table(QString tableName)
 
 QString DatabaseSchema::tableName(Brewtarget::DBTable table)
 {
-   if ( m_tables.contains( table ) ) {
-      return m_tables.value(table)->tableName();
+   if ( table > Brewtarget::NOTABLE && table < m_tables.size() ) {
+      return m_tables.at(table)->tableName();
    }
 
    return QString("");
@@ -135,63 +117,69 @@ QString DatabaseSchema::tableName(Brewtarget::DBTable table)
 
 // I believe one method replaces EVERY create_ method in DatabaseSchemaHelper.
 // It is so beautiful, it must be evil.
-const QString DatabaseSchema::generateCreateTable(Brewtarget::DBTable table)
+const QString DatabaseSchema::generateCreateTable(Brewtarget::DBTable table, QString name)
 {
-
-   if ( ! m_tables.contains(table) ) {
+   if ( table <= Brewtarget::NOTABLE || table > m_tables.size() ) {
       return QString();
    }
 
+   TableSchema* tSchema = m_tables.at(table);
+
+   return tSchema->generateCreateTable(m_type);
+}
+
+// these two basically just pass the call to the proper table
+const QString DatabaseSchema::generateInsertRow(Brewtarget::DBTable table)
+{
    TableSchema* tSchema = m_tables.value(table);
-   QString retVal = QString("CREATE TABLE %1 (%2 ")
-                     .arg(tSchema->tableName())
-                     .arg( m_id );
+   return tSchema->generateInsertRow(m_type);
+}
 
-   QMapIterator<QString, PropertySchema*> i(tSchema->properties());
-   while ( i.hasNext() ) {
-      i.next();
-      PropertySchema* prop = i.value();
+const QString DatabaseSchema::generateCopyTable(Brewtarget::DBTable src, QString dest, Brewtarget::DBTypes type)
+{
+   TableSchema* tSchema = m_tables.value(src);
+   return tSchema->generateCopyTable(dest,type);
+}
 
-      // this isn't quite perfect, as you will get two spaces between the type
-      // and DEFAULT if there are no constraints. On the other hand, nobody
-      // will know that but me and anybody reading this comment.
-      retVal.append( QString("%1 %2 %5 %3 %4, ")
-                        .arg( prop->colName() )
-                        .arg( prop->colType() )
-                        .arg( kDefault )
-                        .arg( prop->defaultValue().toString() )
-                        .arg( prop->constraint() )
-      );
+const QString DatabaseSchema::generateUpdateRow(Brewtarget::DBTable table, int key)
+{
+   TableSchema* tSchema = m_tables.value(table);
+   return tSchema->generateUpdateRow(key, m_type);
+}
+
+Brewtarget::DBTable DatabaseSchema::classNameToTable(QString className) const
+{
+   Brewtarget::DBTable retval = Brewtarget::NOTABLE;
+
+   foreach( TableSchema* here, m_tables ) {
+      if ( here->className() == className ) {
+          retval = here->dbTable();
+          break;
+      }
    }
+   return retval;
+}
 
-   QMapIterator<QString, PropertySchema*> j(tSchema->foreignKeys());
-   while ( j.hasNext() ) {
-      j.next();
-      PropertySchema* key = j.value();
+const QString DatabaseSchema::classNameToTableName(QString className) const
+{
+   QString retval;
 
-      retVal.append( QString("FOREIGN KEY(%1) REFERENCES %2(id), ")
-                       .arg( key->colName(Brewtarget::dbType()) )
-                       .arg( dbTableToName[ key->fTable() ] )
-      );
+   foreach( TableSchema* here, m_tables ) {
+      if ( here->className() == className ) {
+          retval = here->tableName();
+          break;
+      }
    }
-
-   // always have to worry about the trailing ', '
-   retVal.chop(2);
-   retVal.append(");");
-
-   return retVal;
+   return retval;
 }
 
 QVector<TableSchema*> DatabaseSchema::inventoryTables()
 {
     QVector<TableSchema*> retVal;
 
-    QMapIterator<Brewtarget::DBTable,TableSchema*> i(m_tables);
-    while ( i.hasNext() ) {
-        i.next();
-        TableSchema *val = i.value();
-        if ( val->isInventoryTable() ) {
-            retVal.append(val);
+    foreach( TableSchema* here, m_tables ) {
+        if ( here->isInventoryTable() ) {
+            retVal.append(here);
         }
     }
 
@@ -202,12 +190,9 @@ QVector<TableSchema*> DatabaseSchema::childTables()
 {
     QVector<TableSchema*> retVal;
 
-    QMapIterator<Brewtarget::DBTable,TableSchema*> i(m_tables);
-    while ( i.hasNext() ) {
-        i.next();
-        TableSchema *val = i.value();
-        if ( val->isChildTable() ) {
-            retVal.append(val);
+    foreach( TableSchema* here, m_tables ) {
+        if ( here->isChildTable() ) {
+            retVal.append(here);
         }
     }
 
@@ -218,12 +203,9 @@ QVector<TableSchema*> DatabaseSchema::inRecipeTables()
 {
     QVector<TableSchema*> retVal;
 
-    QMapIterator<Brewtarget::DBTable,TableSchema*> i(m_tables);
-    while ( i.hasNext() ) {
-        i.next();
-        TableSchema *val = i.value();
-        if ( val->isInRecTable() ) {
-            retVal.append(val);
+    foreach( TableSchema* here, m_tables ) {
+        if ( here->isInRecTable() ) {
+            retVal.append(here);
         }
     }
 
@@ -234,16 +216,36 @@ QVector<TableSchema*> DatabaseSchema::baseTables()
 {
     QVector<TableSchema*> retVal;
 
-    QMapIterator<Brewtarget::DBTable,TableSchema*> i(m_tables);
-    while ( i.hasNext() ) {
-        i.next();
-        TableSchema *val = i.value();
-        if ( val->isBaseTable() ) {
-            retVal.append(val);
+    foreach( TableSchema* here, m_tables ) {
+        if ( here->isBaseTable() ) {
+            retVal.append(here);
         }
     }
 
     return retVal;
+}
+
+QVector<TableSchema*> DatabaseSchema::btTables()
+{
+    QVector<TableSchema*> retVal;
+
+    foreach( TableSchema* here, m_tables ) {
+        if ( here->isBtTable() ) {
+            retVal.append(here);
+        }
+    }
+
+    return retVal;
+}
+
+QVector<TableSchema*>  DatabaseSchema::allTables()
+{
+    QVector<TableSchema*> retval;
+
+    for( int i = 1; i < dbTableToName.size(); ++i ) {
+        retval.append( m_tables.value( static_cast<Brewtarget::DBTable>(i)) );
+    }
+    return retval;
 }
 
 TableSchema* DatabaseSchema::childTable(Brewtarget::DBTable dbTable)
@@ -282,6 +284,18 @@ TableSchema* DatabaseSchema::invTable(Brewtarget::DBTable dbTable)
     return retVal;
 }
 
+TableSchema* DatabaseSchema::btTable(Brewtarget::DBTable dbTable)
+{
+    TableSchema* tbl = table(dbTable);
+    TableSchema* retVal = nullptr;
+
+    if ( tbl != nullptr ) {
+       Brewtarget::DBTable idx = tbl->btTable();
+       retVal = table( idx );
+    }
+    return retVal;
+}
+
 const QString DatabaseSchema::childTableName(Brewtarget::DBTable dbTable)
 {
     TableSchema* chld = childTable(dbTable);
@@ -301,4 +315,11 @@ const QString DatabaseSchema::invTableName(Brewtarget::DBTable dbTable)
     TableSchema* chld = invTable(dbTable);
 
     return chld == nullptr ? QString() : chld->tableName();
+}
+
+const QString DatabaseSchema::btTableName(Brewtarget::DBTable dbTable)
+{
+   TableSchema* chld = btTable(dbTable);
+
+   return chld == nullptr ? QString() : chld->tableName();
 }

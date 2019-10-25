@@ -27,9 +27,9 @@
 // not exposed anywhere that I can find.
 // They should be removed from the db
 // Columns for the brewnote table
-static const QString kcolBNoteBrewDate("brewDate");
+static const QString kcolBNoteBrewDate("brewdate");
 static const QString kcolBNoteAtten("attenuation");
-static const QString kcolBNoteFermDate("fermentDate");
+static const QString kcolBNoteFermDate("fermentdate");
 static const QString kcolBNoteNotes("notes");
 static const QString kcolBNoteSG("sg");
 static const QString kcolBNoteVolIntoBoil("volume_into_bk");
@@ -38,7 +38,7 @@ static const QString kcolBNoteVolIntoFerm("volume_into_fermenter");
 static const QString kcolBNoteFG("fg");
 static const QString kcolBNoteABV("abv");
 static const QString kcolBNoteEffIntoBoil("eff_into_bk");
-static const QString kcolBNoteBrewhsEff("brewhs_eff");
+static const QString kcolBNoteBrewhsEff("brewhouse_eff");
 static const QString kcolBNoteStrikeTemp("strike_temp");
 static const QString kcolBNoteMashFinTemp("mash_final_temp");
 static const QString kcolBNotePostBoilVol("post_boil_volume");

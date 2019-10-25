@@ -34,7 +34,10 @@
 #include "InstructionSchema.h"
 #include "RecipeSchema.h"
 #include "YeastSchema.h"
+#include "WaterSchema.h"
 #include "BrewnoteSchema.h"
+#include "BtAllTableSchema.h"
+#include "SettingsSchema.h"
 
 // We have to hard code this, because we cannot be certain the database is
 // available yet -- so no bt_alltables lookups can be allowed
@@ -86,13 +89,16 @@ static QStringList dbTableToName  = QStringList() <<
    ktableMiscInventory <<
    ktableYeastInventory;
 
+static const QString kDefault("DEFAULT");
+
 TableSchema::TableSchema(Brewtarget::DBTable table)
     : QObject(nullptr),
       m_tableName( dbTableToName[ static_cast<int>(table) ] ),
       m_dbTable(table),
       m_childTable(Brewtarget::NOTABLE),
       m_inRecTable(Brewtarget::NOTABLE),
-      m_invTable(Brewtarget::NOTABLE)
+      m_invTable(Brewtarget::NOTABLE),
+      m_btTable(Brewtarget::NOTABLE)
 {
     // for this bit of ugly, I gain a lot of utility.
     defineTable();
@@ -104,9 +110,16 @@ Brewtarget::DBTable TableSchema::dbTable() const { return m_dbTable; }
 Brewtarget::DBTable TableSchema::childTable() const  { return m_childTable; }
 Brewtarget::DBTable TableSchema::inRecTable() const { return m_inRecTable; }
 Brewtarget::DBTable TableSchema::invTable() const { return m_invTable; }
+Brewtarget::DBTable TableSchema::btTable() const { return m_btTable; }
 
 const QMap<QString,PropertySchema*> TableSchema::properties() const { return m_properties; }
 const QMap<QString,PropertySchema*> TableSchema::foreignKeys() const { return m_foreignKeys; }
+const PropertySchema* TableSchema::key() const { return m_key; }
+
+const QString TableSchema::keyName( Brewtarget::DBTypes dbType ) const
+{ 
+   return m_key->colName(dbType);
+}
 
 const QStringList TableSchema::allPropertyNames(Brewtarget::DBTypes type) const
 {
@@ -234,11 +247,145 @@ bool TableSchema::isInventoryTable() { return m_type == INV; }
 bool TableSchema::isBaseTable()      { return m_type == BASE; }
 bool TableSchema::isChildTable()     { return m_type == CHILD; }
 bool TableSchema::isInRecTable()     { return m_type == INREC; }
+bool TableSchema::isBtTable()        { return m_type == BT; }
+bool TableSchema::isMetaTable()      { return m_type == META; }
+
+const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString tmpName)
+{
+   QString tname = tmpName.isEmpty() ? m_tableName : tmpName;
+   QString retVal = QString("CREATE TABLE %1 (%2 %3 ")
+                     .arg( tname )
+                     .arg( m_key->colName(type) )
+                     .arg( m_key->constraint(type)
+   );
+
+   QString retKeys;
+   QMapIterator<QString, PropertySchema*> i(m_properties);
+   while ( i.hasNext() ) {
+      i.next();
+      PropertySchema* prop = i.value();
+
+      // based on the different way a boolean is handled between sqlite and
+      // pgsql, I need to single them out. 
+      QVariant defVal = prop->defaultValue(type);
+      if ( defVal.isValid() ) {
+         QString tmp = defVal.toString();
+         if ( prop->colType() == "boolean" ) {
+            tmp = Brewtarget::dbBoolean(defVal.toBool(),type);
+         }
+
+         // this isn't quite perfect, as you will get two spaces between the type
+         // and DEFAULT if there are no constraints. On the other hand, nobody
+         // will know that but me and the person reading this comment.
+         retVal.append( QString(", %1 %2 %3 %4 %5")
+                           .arg( prop->colName() ).arg( prop->colType() )
+                           .arg( prop->constraint() ).arg( kDefault ).arg( tmp )
+         );
+      }
+      else {
+         retVal.append( QString("%1 %2 %3, ")
+               .arg( prop->colName() ).arg( prop->colType() ).arg( prop->constraint() ));
+      }
+   }
+
+   // SQLITE wants the foreign key declarations go at the end, and they cannot
+   // be intermixed with other column defs. This is an ugly hack to make it
+   // work
+   QMapIterator<QString, PropertySchema*> j(m_foreignKeys);
+   while ( j.hasNext() ) {
+      j.next();
+      PropertySchema* key = j.value();
+
+      retVal.append( QString(", %1 %2").arg( key->colName(type) ).arg( key->colType(type) ));
+
+      retKeys.append( QString(", FOREIGN KEY(%1) REFERENCES %2(id)")
+                       .arg( key->colName(type) )
+                       .arg( dbTableToName[ key->fTable() ] )
+      );
+   }
+
+   if ( ! retKeys.isEmpty() ) {
+      retVal.append( retKeys );
+   }
+   retVal.append(");");
+
+   return retVal;
+}
+
+const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
+{
+   QString columns = keyName(type);
+   QString binding = QString(":%1").arg(keyName(type));
+
+   QMapIterator<QString, PropertySchema*> i(m_properties);
+   while ( i.hasNext() ) {
+      i.next();
+      PropertySchema* prop = i.value();
+
+      columns += QString(",%1").arg( prop->colName());
+      binding += QString(",:%1").arg( prop->colName());
+   }
+
+   QMapIterator<QString, PropertySchema*> j(m_foreignKeys);
+   while ( j.hasNext() ) {
+      j.next();
+      PropertySchema* key = j.value();
+
+      columns += QString(",%1").arg(key->colName());
+      binding += QString(",:%1").arg(key->colName());
+   }
+   return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(m_tableName).arg(columns).arg(binding);
+
+}
+
+const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
+{
+   QString columns;
+
+   QMapIterator<QString, PropertySchema*> i(m_properties);
+   while ( i.hasNext() ) {
+      i.next();
+      PropertySchema* prop = i.value();
+      if ( ! columns.isEmpty() ) {
+         columns += QString(",%1=:%1").arg( prop->colName());
+      }
+      else {
+         columns = QString("%1=:%1").arg( prop->colName() );
+      }
+   }
+
+   return QString("UPDATE %1 SET %2 where %3=%4")
+           .arg(m_tableName)
+           .arg(columns)
+           .arg(keyName(type))
+           .arg(key);
+}
+
+const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes type ) 
+{
+   QString columns = keyName(type);
+
+   QMapIterator<QString, PropertySchema*> i(m_properties);
+   while ( i.hasNext() ) {
+      i.next();
+      PropertySchema* prop = i.value();
+
+      columns += QString(",%1").arg( prop->colName());
+   }
+   return QString("INSERT INTO %1 (%2) SELECT %2 FROM %3").arg(dest).arg(columns).arg(m_tableName);
+
+}
 
 // This got long. Not sure if there's a better way to do it.
 void TableSchema::defineTable()
 {
    switch( m_dbTable ) {
+      case Brewtarget::SETTINGTABLE:
+         defineSettingsTable();
+         break;
+      case Brewtarget::BTALLTABLE:
+         defineBtAllTable();
+         break;
       case Brewtarget::BREWNOTETABLE:
          defineBrewnoteTable();
          break;
@@ -272,26 +419,29 @@ void TableSchema::defineTable()
       case Brewtarget::YEASTTABLE:
          defineYeastTable();
          break;
+      case Brewtarget::WATERTABLE:
+         defineWaterTable();
+         break;
       case Brewtarget::BT_EQUIPTABLE:
-         defineInRecipeTable(kcolEquipmentId, Brewtarget::EQUIPTABLE);
+         defineBtTable(kcolEquipmentId, Brewtarget::EQUIPTABLE);
          break;
       case Brewtarget::BT_FERMTABLE:
-         defineInRecipeTable(kcolFermentableId, Brewtarget::FERMTABLE);
+         defineBtTable(kcolFermentableId, Brewtarget::FERMTABLE);
          break;
       case Brewtarget::BT_HOPTABLE:
-         defineInRecipeTable(kcolHopId, Brewtarget::HOPTABLE);
+         defineBtTable(kcolHopId, Brewtarget::HOPTABLE);
          break;
       case Brewtarget::BT_MISCTABLE:
-         defineInRecipeTable(kcolMiscId, Brewtarget::MISCTABLE);
+         defineBtTable(kcolMiscId, Brewtarget::MISCTABLE);
          break;
       case Brewtarget::BT_STYLETABLE:
-         defineInRecipeTable(kcolStyleId, Brewtarget::STYLETABLE);
+         defineBtTable(kcolStyleId, Brewtarget::STYLETABLE);
          break;
       case Brewtarget::BT_WATERTABLE:
-         defineInRecipeTable(kcolWaterId, Brewtarget::WATERTABLE);
+         defineBtTable(kcolWaterId, Brewtarget::WATERTABLE);
          break;
       case Brewtarget::BT_YEASTTABLE:
-         defineInRecipeTable(kcolYeastId, Brewtarget::YEASTTABLE);
+         defineBtTable(kcolYeastId, Brewtarget::YEASTTABLE);
          break;
       case Brewtarget::EQUIPCHILDTABLE:
          defineChildTable(Brewtarget::EQUIPTABLE);
@@ -323,6 +473,9 @@ void TableSchema::defineTable()
       case Brewtarget::HOPINRECTABLE:
          defineInRecipeTable(kcolHopId, Brewtarget::HOPTABLE);
          break;
+      case Brewtarget::INSTINRECTABLE:
+         defineInstructionInRecipeTable( kcolInstructionId, Brewtarget::INSTRUCTIONTABLE);
+         break;
       case Brewtarget::MISCINRECTABLE:
          defineInRecipeTable(kcolMiscId, Brewtarget::MISCTABLE);
          break;
@@ -350,11 +503,20 @@ void TableSchema::defineTable()
 }
 
 // Finally, the methods to define the properties and foreign keys
+static const QString kPgSQLConstraint("SERIAL PRIMARY KEY");
+static const QString kSQLiteConstraint("INTEGER PRIMARY KEY autoincrement");
+
 void TableSchema::defineStyleTable()
 {
    m_type = BASE;
    m_className = QString("Style");
    m_childTable = Brewtarget::STYLECHILDTABLE;
+   m_btTable = Brewtarget::BT_STYLETABLE;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropName]      = new PropertySchema( kpropName,     kpropName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
    m_properties[kpropType]      = new PropertySchema( kpropType,     kcolStyleType,     QString(""),      QString("text"), QString("'Ale'"));
@@ -389,6 +551,12 @@ void TableSchema::defineEquipmentTable()
    m_type = BASE;
    m_className = QString("Equipment");
    m_childTable = Brewtarget::EQUIPCHILDTABLE;
+   m_btTable = Brewtarget::BT_EQUIPTABLE;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropName]          = new PropertySchema( kpropName,          kpropName,         kxmlPropName,            QString("text"), QString("''"), QString("not null"));
    m_properties[kpropBoilSize]      = new PropertySchema( kpropBoilSize,      kcolEquipBoilSize,      kxmlPropBoilSize,        QString("real"), QVariant(0.0));
@@ -422,6 +590,12 @@ void TableSchema::defineFermentableTable()
    m_childTable = Brewtarget::FERMCHILDTABLE;
    m_inRecTable = Brewtarget::FERMINRECTABLE;
    m_invTable   = Brewtarget::FERMINVTABLE;
+   m_btTable    = Brewtarget::BT_FERMTABLE;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropName]           = new PropertySchema( kpropName,           kcolName,               kxmlPropName,           QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]          = new PropertySchema( kpropNotes,          kcolNotes,              kxmlPropNotes,          QString("text"), QString("''"));
@@ -430,8 +604,8 @@ void TableSchema::defineFermentableTable()
    m_properties[kpropYield]          = new PropertySchema( kpropYield,          kcolFermYield,          kxmlPropYield,          QString("real"), QVariant(0.0));
    m_properties[kpropColor]          = new PropertySchema( kpropColor,          kcolFermColor,          kxmlPropColor,          QString("real"), QVariant(0.0));
    m_properties[kpropAddAfterBoil]   = new PropertySchema( kpropAddAfterBoil,   kcolFermAddAfterBoil,   kxmlPropAddAfterBoil,   QString("boolean"), QVariant(false));
-   m_properties[kpropOrigin]         = new PropertySchema( kpropOrigin,         kcolFermOrigin,         kxmlPropOrigin,         QString("text"), QString(""));
-   m_properties[kpropSupplier]       = new PropertySchema( kpropSupplier,       kcolFermSupplier,       kxmlPropSupplier,       QString("text"), QString(""));
+   m_properties[kpropOrigin]         = new PropertySchema( kpropOrigin,         kcolFermOrigin,         kxmlPropOrigin,         QString("text"), QString("''"));
+   m_properties[kpropSupplier]       = new PropertySchema( kpropSupplier,       kcolFermSupplier,       kxmlPropSupplier,       QString("text"), QString("''"));
    m_properties[kpropCoarseFineDiff] = new PropertySchema( kpropCoarseFineDiff, kcolFermCoarseFineDiff, kxmlPropCoarseFineDiff, QString("real"), QVariant(0.0));
    m_properties[kpropMoisture]       = new PropertySchema( kpropMoisture,       kcolFermMoisture,       kxmlPropMoisture,       QString("real"), QVariant(0.0));
    m_properties[kpropDiastaticPower] = new PropertySchema( kpropDiastaticPower, kcolFermDiastaticPower, kxmlPropDiastaticPower, QString("real"), QVariant(0.0));
@@ -453,6 +627,12 @@ void TableSchema::defineHopTable()
    m_childTable = Brewtarget::HOPCHILDTABLE;
    m_inRecTable = Brewtarget::HOPINRECTABLE;
    m_invTable   = Brewtarget::HOPINVTABLE;
+   m_btTable    = Brewtarget::BT_HOPTABLE;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
    m_properties[kpropName]          = new PropertySchema( kpropName,          kcolName,             kxmlPropName,          QString("text"), QString("''"), QString("not null"));
@@ -483,6 +663,11 @@ void TableSchema::defineInstructionTable()
    m_className = QString("Instruction");
    m_inRecTable = Brewtarget::INSTINRECTABLE;
 
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
    // These are defined in the global file.
    m_properties[kpropName]          = new PropertySchema( kpropName,          kcolName,                  kxmlPropName,       QString("text"), QString("''"), QString("not null"));
    m_properties[kpropDirections]    = new PropertySchema( kpropDirections,    kcolInstructionDirections, kxmlPropDirections, QString("text"), QString("''"));
@@ -497,9 +682,13 @@ void TableSchema::defineInstructionTable()
 
 void TableSchema::defineMashTable()
 {
-
    m_type = BASE;
    m_className = QString("Mash");
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
    m_properties[kpropName]        = new PropertySchema( kpropName,        kcolName,            kxmlPropName,        QString("text"), QString("''"), QString("not null"));
@@ -507,7 +696,7 @@ void TableSchema::defineMashTable()
    m_properties[kpropGrainTemp]   = new PropertySchema( kpropGrainTemp,   kcolMashGrainTemp,   kxmlPropGrainTemp,   QString("real"), QVariant(0.0));
    m_properties[kpropTunTemp]     = new PropertySchema( kpropTunTemp,     kcolMashTunTemp,     kxmlPropTunTemp,     QString("real"), QVariant(20.0));
    m_properties[kpropSpargeTemp]  = new PropertySchema( kpropSpargeTemp,  kcolMashSpargeTemp,  kxmlPropSpargeTemp,  QString("real"), QVariant(74.0));
-   m_properties[kpropPH]          = new PropertySchema( kpropPH,          kcolMashPH,          kxmlPropPH,          QString("real"), QVariant(7.0));
+   m_properties[kpropPH]          = new PropertySchema( kpropPH,          kcolPH,              kxmlPropPH,          QString("real"), QVariant(7.0));
    m_properties[kpropTunWeight]   = new PropertySchema( kpropTunWeight,   kcolMashTunWeight,   kxmlPropTunWeight,   QString("real"), QVariant(0.0));
    m_properties[kpropTunSpecHeat] = new PropertySchema( kpropTunSpecHeat, kcolMashTunSpecHeat, kxmlPropTunSpecHeat, QString("real"), QVariant(0.0));
    m_properties[kpropEquipAdjust] = new PropertySchema( kpropEquipAdjust, kcolMashEquipAdjust, kxmlPropEquipAdjust, QString("boolean"), QVariant(true));
@@ -517,11 +706,16 @@ void TableSchema::defineMashTable()
    m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kpropFolder,         QString(),           QString("text"), QString("''"));
 }
 
+// property name, column name, xml property name, column type, column default, column constraint
 void TableSchema::defineMashstepTable()
 {
-
    m_type = BASE;
    m_className = QString("MashStep");
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropName]       = new PropertySchema( kpropName,       kcolName,               kxmlPropName,       QString("text"), QString("''"),QString("not null"));
    m_properties[kpropType]       = new PropertySchema( kpropType,       kcolMashstepType,       QString(""),        QString("text"), QString("'Infusion'"));
@@ -532,23 +726,29 @@ void TableSchema::defineMashstepTable()
    m_properties[kpropEndTemp]    = new PropertySchema( kpropEndTemp,    kcolMashstepEndTemp,    kxmlPropEndTemp,    QString("real"), QVariant(67.0));
    m_properties[kpropInfuseTemp] = new PropertySchema( kpropInfuseTemp, kcolMashstepInfuseTemp, kxmlPropInfuseTemp, QString("real"), QVariant(67.0));
    m_properties[kpropDecoctAmt]  = new PropertySchema( kpropDecoctAmt,  kcolMashstepDecoctAmt,  kxmlPropDecoctAmt,  QString("real"), QVariant(67.0));
+   m_properties[kpropStepNumber] = new PropertySchema( kpropStepNumber, kcolMashstepStepNumber, QString(),          QString("integer"), QVariant(0));
 
    m_properties[kpropDisplay]    = new PropertySchema( kpropDisplay,    kcolDisplay,            QString(),          QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]    = new PropertySchema( kpropDeleted,    kcolDeleted,            QString(),          QString("boolean"), QVariant(false));
    m_properties[kpropFolder]     = new PropertySchema( kpropFolder,     kpropFolder,            QString(),          QString("text"), QString("''"));
 
-   m_foreignKeys[kpropMashId]    = new PropertySchema( kpropMashId,     kcolRecipeMashId,       Brewtarget::MASHTABLE);
+   m_foreignKeys[kpropMashId]    = new PropertySchema( kpropMashId,     kcolMashId,       QString("integer"), Brewtarget::MASHTABLE);
 
 }
 
 void TableSchema::defineMiscTable()
 {
-
    m_type = BASE;
    m_className = QString("Misc");
    m_childTable = Brewtarget::MISCCHILDTABLE;
    m_inRecTable = Brewtarget::MISCINRECTABLE;
    m_invTable   = Brewtarget::MISCINVTABLE;
+   m_btTable    = Brewtarget::BT_MISCTABLE;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
    m_properties[kpropName]     = new PropertySchema( kpropName,     kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
@@ -567,10 +767,14 @@ void TableSchema::defineMiscTable()
 
 void TableSchema::defineRecipeTable()
 {
-
    m_type = BASE;
    m_className = QString("Recipe");
    m_childTable = Brewtarget::RECIPECHILDTABLE;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropName]        = new PropertySchema( kpropName,        kcolName,               kxmlPropName,         QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]       = new PropertySchema( kpropNotes,       kcolNotes,              kxmlPropNotes,        QString("text"), QString("''"));
@@ -592,7 +796,7 @@ void TableSchema::defineRecipeTable()
    m_properties[kpropTertTemp]    = new PropertySchema( kpropTertTemp,    kcolRecipeTertTemp,     kxmlPropTertTemp,     QString("real"), QVariant(20.0));
    m_properties[kpropAge]         = new PropertySchema( kpropAge,         kcolRecipeAge,          kxmlPropAge,          QString("real"), QVariant(0.0));
    m_properties[kpropAgeTemp]     = new PropertySchema( kpropAgeTemp,     kcolRecipeAgeTemp,      kxmlPropAgeTemp,      QString("real"), QVariant(20.0));
-   m_properties[kpropDate]        = new PropertySchema( kpropDate,        kcolRecipeDate,         kxmlPropDate,         QString("date"), QString("now()"));
+   m_properties[kpropDate]        = new PropertySchema( kpropDate,        kcolRecipeDate,         kxmlPropDate,         QString("date"), QString("CURRENT_TIMESTAMP"));
    m_properties[kpropCarbVols]    = new PropertySchema( kpropCarbVols,    kcolRecipeCarbVols,     kxmlPropCarbVols,     QString("real"), QVariant(0.0));
    m_properties[kpropForcedCarb]  = new PropertySchema( kpropForcedCarb,  kcolRecipeForcedCarb,   kxmlPropForcedCarb,   QString("boolean"), QVariant(false));
    m_properties[kpropPrimSugName] = new PropertySchema( kpropPrimSugName, kcolRecipePrimSugName,  kxmlPropPrimSugName,  QString("text"), QString("''"));
@@ -605,12 +809,14 @@ void TableSchema::defineRecipeTable()
    m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,            QString(),            QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,            QString(),            QString("boolean"), QVariant(false));
    m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kpropFolder,            QString(),            QString("text"), QString("''"));
+   m_properties[kpropLocked]      = new PropertySchema( kpropLocked,      kcolLocked,             QString(),            QString("boolean"), QVariant(false));
 
    // enough properties, now some foreign keys
-   m_foreignKeys[kpropEquipmentId] = new PropertySchema( kpropEquipmentId, kcolRecipeEquipmentId, Brewtarget::EQUIPTABLE);
-   m_foreignKeys[kpropMashId]      = new PropertySchema( kpropMashId,      kcolRecipeMashId,      Brewtarget::MASHTABLE);
-   m_foreignKeys[kpropStyleId]     = new PropertySchema( kpropStyleId,     kcolRecipeStyleId,     Brewtarget::STYLETABLE);
-   m_foreignKeys[kpropAncestorId]  = new PropertySchema( kpropAncestorId,  kcolRecipeAncestorId,  Brewtarget::RECTABLE);
+
+   m_foreignKeys[kpropEquipmentId] = new PropertySchema( kpropEquipmentId, kcolRecipeEquipmentId, QString("integer"), Brewtarget::EQUIPTABLE);
+   m_foreignKeys[kpropMashId]      = new PropertySchema( kpropMashId,      kcolMashId,            QString("integer"), Brewtarget::MASHTABLE);
+   m_foreignKeys[kpropStyleId]     = new PropertySchema( kpropStyleId,     kcolStyleId,           QString("integer"), Brewtarget::STYLETABLE);
+   m_foreignKeys[kpropAncestorId]  = new PropertySchema( kpropAncestorId,  kcolRecipeAncestorId,  QString("integer"), Brewtarget::RECTABLE);
 }
 
 void TableSchema::defineYeastTable()
@@ -620,6 +826,12 @@ void TableSchema::defineYeastTable()
    m_childTable = Brewtarget::YEASTCHILDTABLE;
    m_inRecTable = Brewtarget::YEASTINRECTABLE;
    m_invTable   = Brewtarget::YEASTINVTABLE;
+   m_btTable    = Brewtarget::BT_YEASTTABLE;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
    m_properties[kpropName]       = new PropertySchema( kpropName,       kcolName,            kxmlPropName,       QString("text"), QString("''"), QString("not null"));
@@ -634,7 +846,7 @@ void TableSchema::defineYeastTable()
    m_properties[kpropMaxTemp]    = new PropertySchema( kpropMaxTemp,    kcolYeastMaxTemp,    kxmlPropMaxTemp,    QString("real"), QVariant(0.0));
    m_properties[kpropFloc]       = new PropertySchema( kpropFloc,       kcolYeastFloc,       QString(),          QString("text"), QObject::tr("'Medium'"));
    m_properties[kpropAtten]      = new PropertySchema( kpropAttenPct,   kcolYeastAtten,      kxmlPropAtten,      QString("real"), QVariant(75.0));
-   m_properties[kpropBestFor]    = new PropertySchema( kpropBestFor,    kcolYeastBestFor,    kxmlPropBestFor,    QString("text"), QString(""));
+   m_properties[kpropBestFor]    = new PropertySchema( kpropBestFor,    kcolYeastBestFor,    kxmlPropBestFor,    QString("text"), QString("''"));
    m_properties[kpropTimesCultd] = new PropertySchema( kpropTimesCultd, kcolYeastTimesCultd, kxmlPropTimesCultd, QString("int"), QVariant(0));
    m_properties[kpropMaxReuse]   = new PropertySchema( kpropMaxReuse,   kcolYeastMaxReuse,   kxmlPropMaxReuse,   QString("int"), QVariant(10));
    m_properties[kpropAddToSec]   = new PropertySchema( kpropAddToSec,   kcolYeastAddToSec,   kxmlPropAddToSec,   QString("boolean"), QVariant(false));
@@ -650,8 +862,13 @@ void TableSchema::defineBrewnoteTable()
    m_type = BASE;
    m_className = QString("BrewNote");
 
-   m_properties[kpropBrewDate]        = new PropertySchema( kpropBrewDate,        kcolBNoteBrewDate,        kxmlPropBrewDate,        QString("timestamp"), QDateTime());
-   m_properties[kpropFermDate]        = new PropertySchema( kpropFermDate,        kcolBNoteFermDate,        kxmlPropFermDate,        QString("timestamp"), QDateTime());
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
+   m_properties[kpropBrewDate]        = new PropertySchema( kpropBrewDate,        kcolBNoteBrewDate,        kxmlPropBrewDate,        QString("timestamp"), QString("CURRENT_TIMESTAMP"));
+   m_properties[kpropFermDate]        = new PropertySchema( kpropFermDate,        kcolBNoteFermDate,        kxmlPropFermDate,        QString("timestamp"), QString("CURRENT_TIMESTAMP"));
    m_properties[kpropSG]              = new PropertySchema( kpropSG,              kcolBNoteSG,              kxmlPropSG,              QString("real"), QVariant(1.0));
    m_properties[kpropVolIntoBoil]     = new PropertySchema( kpropVolIntoBoil,     kcolBNoteVolIntoBoil,     kxmlPropVolIntoBoil,     QString("real"), QVariant(0.0));
    m_properties[kpropStrikeTemp]      = new PropertySchema( kpropStrikeTemp,      kcolBNoteStrikeTemp,      kxmlPropStrikeTemp,      QString("real"), QVariant(70.0));
@@ -685,7 +902,39 @@ void TableSchema::defineBrewnoteTable()
    m_properties[kpropDeleted]         = new PropertySchema( kpropDeleted,         kcolDeleted,              QString(),               QString("boolean"), QVariant(false));
    m_properties[kpropFolder]          = new PropertySchema( kpropFolder,          kpropFolder,              QString(),               QString("text"), QString("''"));
 
-   m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, Brewtarget::RECTABLE);
+   m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, QString("integer"), Brewtarget::RECTABLE);
+
+}
+
+void TableSchema::defineWaterTable()
+{
+   m_type = BASE;
+   m_className = QString("Water");
+   m_childTable = Brewtarget::WATERCHILDTABLE;
+   m_inRecTable = Brewtarget::WATERINRECTABLE;
+   m_btTable    = Brewtarget::BT_WATERTABLE;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
+   // These are defined in the global file.
+   m_properties[kpropName]        = new PropertySchema( kpropName,        kcolName,             kxmlPropName,        QString("text"),    QString("''"), QString("not null"));
+   m_properties[kpropNotes]       = new PropertySchema( kpropNotes,       kcolNotes,            kxmlPropNotes,       QString("text"),    QString("''"));
+   m_properties[kpropAmount]      = new PropertySchema( kpropAmount,      kcolAmount,           kxmlPropAmount,      QString("real"),    QVariant(0.0));
+
+   m_properties[kpropCalcium]     = new PropertySchema( kpropCalcium,     kcolWaterCalcium,     kxmlPropCalcium,     QString("real"),    QVariant(0.0));
+   m_properties[kpropBiCarbonate] = new PropertySchema( kpropBiCarbonate, kcolWaterBiCarbonate, kxmlPropBiCarbonate, QString("real"),    QVariant(0.0));
+   m_properties[kpropSulfate]     = new PropertySchema( kpropSulfate,     kcolWaterSulfate,     kxmlPropSulfate,     QString("real"),    QVariant(0.0));
+   m_properties[kpropSodium]      = new PropertySchema( kpropSodium,      kcolWaterSodium,      kxmlPropSodium,      QString("real"),    QVariant(0.0));
+   m_properties[kpropChloride]    = new PropertySchema( kpropChloride,    kcolWaterChloride,    kxmlPropChloride,    QString("real"),    QVariant(0.0));
+   m_properties[kpropMagnesium]   = new PropertySchema( kpropMagnesium,   kcolWaterMagnesium,   kxmlPropMagnesium,   QString("real"),    QVariant(0.0));
+   m_properties[kpropPH]          = new PropertySchema( kpropPH,          kcolPH,               kxmlPropPH,          QString("real"),    QVariant(0.0));
+
+   m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
+   m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));
+   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kpropFolder,          QString(),           QString("text"),    QString("''"));
 
 }
 
@@ -693,29 +942,60 @@ void TableSchema::defineChildTable(Brewtarget::DBTable table)
 {
    m_type = CHILD;
 
-   m_foreignKeys[kpropParentId] = new PropertySchema( kpropParentId, kcolParentId, table);
-   m_foreignKeys[kpropChildId]  = new PropertySchema( kpropChildId,  kcolChildId,  table);
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
+   m_foreignKeys[kpropChildId]  = new PropertySchema( kpropChildId,  kcolChildId,  QString("integer"), table);
 
 }
 
 void TableSchema::defineInRecipeTable(QString childIdx, Brewtarget::DBTable table)
 {
-
    m_type = INREC;
-   // this sort of breaks the rule -- I prefer to have a kcol and a kprop. But
-   // these aren't in any object, so they no property and I can reuse
-   // the kcol value
-   m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, Brewtarget::RECTABLE);
-   m_foreignKeys[childIdx]      = new PropertySchema( childIdx,      childIdx,     table);
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
+   m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, QString("integer"), Brewtarget::RECTABLE);
+   m_foreignKeys[childIdx]      = new PropertySchema( childIdx,      childIdx,     QString("integer"), table);
 
 }
 
+// instruction in rec has an extra field. I could have cheated, but we will try
+// playing it straight first.
+void TableSchema::defineInstructionInRecipeTable(QString childIdx, Brewtarget::DBTable table)
+{
+   m_type = INREC;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
+   // this sort of breaks the rule -- I prefer to have a kcol and a kprop. But
+   // these aren't in any object, so they no property and I can reuse
+   // the kcol value
+   m_properties[kcolInstructionNumber] = new PropertySchema( kcolInstructionNumber, kcolInstructionNumber, QString(""), QString("int"), QVariant(0));
+
+   m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, QString("integer"), Brewtarget::RECTABLE);
+   m_foreignKeys[childIdx]      = new PropertySchema( childIdx,      childIdx,     QString("integer"), table);
+
+}
 void TableSchema::defineBtTable(QString childIdx, Brewtarget::DBTable table)
 {
    m_type = BT;
 
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
    // What good is a rule followed to well?
-   m_foreignKeys[childIdx] = new PropertySchema( childIdx, childIdx, table);
+   m_foreignKeys[childIdx] = new PropertySchema( childIdx, childIdx, QString("integer"), table);
 
 }
 
@@ -723,35 +1003,86 @@ void TableSchema::defineFermInventoryTable()
 {
    m_type = INV;
 
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
    m_properties[kpropAmount]        = new PropertySchema( kpropAmount,       kcolAmount,        kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kcolFermentableId] = new PropertySchema( kcolFermentableId, kcolFermentableId, Brewtarget::FERMTABLE);
+   m_foreignKeys[kcolFermentableId] = new PropertySchema( kcolFermentableId, kcolFermentableId, QString("integer"), Brewtarget::FERMTABLE);
 
 }
 
 void TableSchema::defineHopInventoryTable()
 {
-
    m_type = INV;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
    m_properties[kpropAmount] = new PropertySchema( kpropAmount, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kcolHopId]  = new PropertySchema( kcolHopId,   kcolHopId,  Brewtarget::HOPTABLE);
+   m_foreignKeys[kcolHopId]  = new PropertySchema( kcolHopId,   kcolHopId,  QString("integer"), Brewtarget::HOPTABLE);
 
 }
 
 void TableSchema::defineMiscInventoryTable()
 {
-
    m_type = INV;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
    m_properties[kpropAmount] = new PropertySchema( kpropAmount, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kcolMiscId] = new PropertySchema( kcolMiscId,  kcolMiscId, Brewtarget::MISCTABLE);
+   m_foreignKeys[kcolMiscId] = new PropertySchema( kcolMiscId,  kcolMiscId, QString("integer"), Brewtarget::MISCTABLE);
 
 }
 
 void TableSchema::defineYeastInventoryTable()
 {
-
    m_type = INV;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
    m_properties[kpropQuanta]  = new PropertySchema( kpropQuanta, kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_properties[kpropAmount]  = new PropertySchema( kpropQuanta, kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kcolYeastId] = new PropertySchema( kcolYeastId, kcolYeastId,     Brewtarget::YEASTTABLE);
+   m_foreignKeys[kcolYeastId] = new PropertySchema( kcolYeastId, kcolYeastId,     QString("integer"), Brewtarget::YEASTTABLE);
 
 }
+
+void TableSchema::defineBtAllTable()
+{
+   m_type = META;
+  
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
+   m_properties[kpropName]                 = new PropertySchema( QString(), kcolName,                  QString(), QString("text"),      QString("''"), QString("not null"));
+   m_properties[kcolBtAllClassName]        = new PropertySchema( QString(), kcolBtAllClassName,        QString(), QString("text"),      QString("''"));
+   m_properties[kcolBtAllInventoryTableId] = new PropertySchema( QString(), kcolBtAllInventoryTableId, QString(), QString("integer"),   QVariant(0));
+   m_properties[kcolBtAllChildTableId]     = new PropertySchema( QString(), kcolBtAllChildTableId,     QString(), QString("integer"),   QVariant(0));
+   m_properties[kcolBtAllCreated]          = new PropertySchema( QString(), kcolBtAllCreated,          QString(), QString("timestamp"), QString("CURRENT_TIMESTAMP"));
+   m_properties[kcolBtAllVersion]          = new PropertySchema( QString(), kcolBtAllVersion,          QString(), QString("integer"),   QVariant(0));
+   m_properties[kcolBtAllTableId]          = new PropertySchema( QString(), kcolBtAllTableId,          QString(), QString("integer"),   QVariant(0));
+}
+
+void TableSchema::defineSettingsTable()
+{
+   m_type = META;
+
+   // Set up the ID field first. I think I will want a number of special methods for accessing this.
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
+   m_properties[kcolSettingsVersion]    = new PropertySchema( QString(), kcolSettingsVersion,    QString(), QString("integer"), QVariant(0));
+   m_properties[kcolSettingsRepopulate] = new PropertySchema( QString(), kcolSettingsRepopulate, QString(), QString("integer"), QVariant(0));
+}
+
