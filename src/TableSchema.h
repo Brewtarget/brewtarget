@@ -89,6 +89,8 @@ public:
 
    const QString inRecIndexName(Brewtarget::DBTypes type);
    const QString childIndexName(Brewtarget::DBTypes type);
+   const QString parentIndexName(Brewtarget::DBTypes type);
+
    // Not sure these belong here yet, but maybe
    const QString generateCreateTable(Brewtarget::DBTypes type, QString tmpName = QString("") );
    const QString generateUpdateRow(int key, Brewtarget::DBTypes type);

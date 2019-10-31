@@ -300,14 +300,24 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/style.h
     ${SRCDIR}/water.h
     ${SRCDIR}/yeast.h
-    ${SRCDIR}/PropertySchema.h
-    ${SRCDIR}/TableSchema.h
-    ${SRCDIR}/TableSchemaConst.h
-    ${SRCDIR}/StyleTableSchema.h
-    ${SRCDIR}/EquipmentTableSchema.h
-    ${SRCDIR}/HopTableSchema.h
-    ${SRCDIR}/MiscTableSchema.h
+    ${SRCDIR}/BrewnoteSchema.h
+    ${SRCDIR}/BtAllTableSchema.h
     ${SRCDIR}/DatabaseSchema.h
+    ${SRCDIR}/EquipmentSchema.h
+    ${SRCDIR}/FermentableSchema.h
+    ${SRCDIR}/HopSchema.h
+    ${SRCDIR}/InstructionSchema.h
+    ${SRCDIR}/MashSchema.h
+    ${SRCDIR}/MashStepSchema.h
+    ${SRCDIR}/MiscSchema.h
+    ${SRCDIR}/PropertySchema.h
+    ${SRCDIR}/RecipeSchema.h
+    ${SRCDIR}/SettingsSchema.h
+    ${SRCDIR}/StyleSchema.h
+    ${SRCDIR}/TableSchema.h
+    ${SRCDIR}/WaterSchema.h
+    ${SRCDIR}/YeastSchema.h
+
 )
 
 SET( FILES_TO_TRANSLATE

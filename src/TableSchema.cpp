@@ -286,6 +286,22 @@ const QString TableSchema::inRecIndexName(Brewtarget::DBTypes type)
    return cname;
 }
 
+const QString TableSchema::parentIndexName(Brewtarget::DBTypes type)
+{
+   QString cname;
+
+   QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
+
+   while ( i.hasNext() ) {
+      i.next();
+      if ( i.value()->colName(type) == kpropRecipeId ) {
+         cname = i.value()->colName(type);
+         break;
+      }
+   }
+   return cname;
+}
+
 const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString tmpName)
 {
    QString tname = tmpName.isEmpty() ? m_tableName : tmpName;
