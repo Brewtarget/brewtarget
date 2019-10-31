@@ -5596,11 +5596,6 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
 
    Brewtarget::DBTypes oldType = static_cast<Brewtarget::DBTypes>(Brewtarget::option("dbType",Brewtarget::SQLITE).toInt());
 
-   qDebug() << "Entered convertDatabase()";
-   qDebug() << "Parameters: hostname = " << Hostname << "DbName = " << DbName;
-   qDebug() << "Parameters: Username = " << Username << "Password = " << Password;
-   qDebug() << "Parameters: Portnum = " << Portnum << "newType = " << newType;
-
    try {
       if ( newType == Brewtarget::NODB ) {
          throw QString("No type found for the new database.");
@@ -5612,23 +5607,19 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
 
       switch( newType ) {
          case Brewtarget::PGSQL:
-            qDebug() << "Opening pgsql";
             newDb = openPostgres(Hostname, DbName,Username, Password, Portnum);
             break;
          default:
-            qDebug() << "Opening sqlite";
             newDb = openSQLite();
       }
 
       if ( ! newDb.isOpen() ) {
-          qDebug() << "Could not open database";
          throw QString("Could not open new database: %1").arg(newDb.lastError().text());
       }
 
       // this is to prevent us from over-writing or doing heavens knows what to an existing db
       if( newDb.tables().contains(QLatin1String("settings")) ) {
-         qDebug() << "Found a settings table";
-         return;
+         Brewtarget::logW( QString("Found a settings table in the target database. Doing nothing until it's gone"));
       }
 
       newDb.transaction();
@@ -5641,7 +5632,6 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
       }
       newDb.commit();
 
-      qDebug() << "newType = " << newType << " and old Type = " << oldType;
       copyDatabase(oldType,newType,newDb);
    }
    catch (QString e) {
@@ -5704,6 +5694,7 @@ QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
    return retVar;
 }
 
+/* -- Replace by databaseschema class, and can be removed once I are sure
 QStringList Database::allTablesInOrder(QSqlQuery q)
 {
    QString query = "SELECT name FROM bt_alltables ORDER BY table_id";
@@ -5715,7 +5706,7 @@ QStringList Database::allTablesInOrder(QSqlQuery q)
    }
    return tmp;
 }
-
+*/
 void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase newDb)
 {
    QSqlDatabase oldDb = sqlDatabase();
@@ -5727,8 +5718,6 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
       QSqlField field;
       bool mustPrepare = true;
       int maxid = -1;
-
-      qDebug() << "table = " << tname;
 
       QString findAllQuery = QString("SELECT * FROM %1 order by %2 asc").arg(tname).arg(oldType);
       try {
@@ -5758,7 +5747,6 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
             // Prepare the insert for this table if required
             if ( mustPrepare ) {
                upsertQuery = table->generateInsertRow(newType);
-               if ( tname == "brewnote" ) qDebug() << "upsert = " << upsertQuery;
                upsertNew.prepare(upsertQuery);
                // but do it only once for this table
                mustPrepare = false;
@@ -5768,7 +5756,6 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
             for(int i = 0; i < here.count(); ++i) {
                if ( tname == "brewnote" && here.fieldName(i) == "brewdate" ) {
                   QVariant helpme(here.field(i).value().toString());
-                  qDebug() << helpme << helpme.toString();
                   upsertNew.bindValue(":brewdate",helpme);
                }
                upsertNew.bindValue(QString(":%1").arg(here.fieldName(i)), convertValue(newType, here.field(i)));

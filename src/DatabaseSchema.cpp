@@ -83,8 +83,7 @@ void DatabaseSchema::loadTables()
    int it;
 
    for ( it = Brewtarget::NOTABLE; it <= Brewtarget::YEASTINVTABLE; it++ ) {
-      Brewtarget::DBTable tab = static_cast<Brewtarget::DBTable>(it);
-      TableSchema* tmp = new TableSchema(tab);
+      TableSchema* tmp = new TableSchema(static_cast<Brewtarget::DBTable>(it));
       m_tables.append(tmp);
    }
 }

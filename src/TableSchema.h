@@ -19,24 +19,19 @@
 #ifndef _TABLESCHEMA_H
 #define _TABLESCHEMA_H
 
-class TableSchema;
-
 #include "PropertySchema.h"
 #include "brewtarget.h"
-#include "database.h"
 #include <QString>
-
-class DatabaseSchema;
-class DatabaseSchemaHelper;
 
 class TableSchema : QObject
 {
 
-   friend DatabaseSchemaHelper;
-   friend DatabaseSchema;
-   friend Database;
-
    Q_OBJECT
+
+   friend class DatabaseSchemaHelper;
+   friend class DatabaseSchema;
+   friend class Database;
+
 public:
 
    enum TableType {
@@ -92,6 +87,8 @@ public:
    const QStringList allForeignKeyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
+   const QString inRecIndexName(Brewtarget::DBTypes type);
+   const QString childIndexName(Brewtarget::DBTypes type);
    // Not sure these belong here yet, but maybe
    const QString generateCreateTable(Brewtarget::DBTypes type, QString tmpName = QString("") );
    const QString generateUpdateRow(int key, Brewtarget::DBTypes type);

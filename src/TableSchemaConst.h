@@ -1,5 +1,7 @@
 #include <QString>
 
+#ifndef __TABLESCHEMACONSTH__
+#define __TABLESCHEMACONSTH__
 // Define tables names first, because I need them first
 static const QString ktableMeta("bt_alltables");
 static const QString ktableSettings("settings");
@@ -155,3 +157,5 @@ static const QString kcolMiscId("misc_id");
 static const QString kcolStyleId("style_id");
 static const QString kcolWaterId("water_id");
 static const QString kcolYeastId("yeast_id");
+
+#endif

@@ -49,8 +49,9 @@ class Database;
 #include "BeerXMLElement.h"
 #include "brewtarget.h"
 #include "recipe.h"
-#include "TableSchema.h"
 #include "DatabaseSchema.h"
+#include "TableSchema.h"
+#include "TableSchemaConst.h"
 
 // Forward declarations
 class BrewNote;
@@ -67,7 +68,6 @@ class Style;
 class Water;
 class Yeast;
 class QThread;
-class DatabaseSchema;
 
 typedef struct
 {
@@ -722,6 +722,9 @@ private:
    {
       T* newIng = nullptr;
       QString propName, relTableName, ingKeyName, childTableName;
+      TableSchema* table;
+      TableSchema* child;
+      TableSchema* inrec;
       const QMetaObject* meta = ing->metaObject();
       int ndx = meta->indexOfClassInfo("signal");
 
@@ -737,25 +740,28 @@ private:
       QSqlQuery q(sqlDatabase());
       try {
          if ( ndx != -1 ) {
-            QString prefix = meta->classInfo( meta->indexOfClassInfo("prefix")).value();
+            table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
+            child = dbDefn->table( table->childTable() );
+            inrec = dbDefn->table( table->inRecTable() );
+
             propName  = meta->classInfo(ndx).value();
-            relTableName = QString("%1_in_recipe").arg(prefix);
-            ingKeyName = QString("%1_id").arg(prefix);
-            childTableName = QString("%1_children").arg(prefix);
          }
          else {
             throw QString("could not locate classInfo for signal on %2").arg(meta->className());
          }
          // Ensure this ingredient is not already in the recipe.
-         QString select = QString("SELECT recipe_id from %1 WHERE %2=%3 AND recipe_id=%4")
-                              .arg(relTableName)
-                              .arg(ingKeyName)
+         QString select = QString("SELECT %5 from %1 WHERE %2=%3 AND %5=%4")
+                              .arg(inrec->tableName())
+                              .arg(inrec->inRecIndexName(Brewtarget::dbType()))
                               .arg(ing->_key)
-                              .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key);
+                              .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key)
+                              .arg(kcolRecipeId);
          if (! q.exec(select) ) {
-            throw QString("Couldn't execute ingredient in recipe search");
+            throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
+               .arg(q.lastQuery()).arg(q.lastError().text());
          }
 
+         // this probably should just be a warning, not a throw?
          if ( q.next() ) {
             throw QString("Ingredient already exists in recipe." );
          }
@@ -781,8 +787,8 @@ private:
          q.setForwardOnly(true);
 
          QString insert = QString("INSERT INTO %1 (%2, recipe_id) VALUES (:ingredient, :recipe)")
-                  .arg(relTableName)
-                  .arg(ingKeyName);
+                  .arg(inrec->tableName())
+                  .arg(inrec->inRecIndexName(Brewtarget::dbType()));
 
          q.prepare(insert);
          q.bindValue(":ingredient", newIng->key());
@@ -797,8 +803,7 @@ private:
          q.finish();
 
          //Put this in the <ing_type>_children table.
-         if( childTableName != "instruction_children" ) {
-
+         if( child->dbTable() != Brewtarget::INSTINRECTABLE) {
             /*
              * The parent to link to depends on where the ingredient is copied from:
              * - A fermentable from the fermentable tabel -> the ID of the fermentable.
@@ -812,7 +817,7 @@ private:
              */
             int key = ing->key();
             q.prepare(QString("SELECT parent_id FROM %1 WHERE child_id=%2")
-                  .arg(childTableName)
+                  .arg(child->tableName())
                   .arg(key));
             if (q.exec() && q.next()) {
                key = q.record().value("parent_id").toInt();
@@ -820,7 +825,7 @@ private:
             q.finish();
 
             insert = QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
-                  .arg(childTableName);
+                  .arg(child->tableName());
 
             q.prepare(insert);
             q.bindValue(":parent", key);
@@ -976,7 +981,9 @@ private:
    // wants
    QVariant convertValue(Brewtarget::DBTypes newType, QSqlField field);
 
+   /*
    QStringList allTablesInOrder(QSqlQuery q);
+   */
 
    //! \brief does the heavy lifting to copy the contents from one db to the
    //next

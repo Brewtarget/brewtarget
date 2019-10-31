@@ -23,7 +23,6 @@
 #include <QString>
 
 // Needs the forward declaration
-class TableSchema;
 
 struct dbProp {
    QString m_propName;
@@ -39,7 +38,7 @@ struct dbProp {
 class PropertySchema : QObject
 {
 
-   friend TableSchema;
+   friend class TableSchema;
 
    Q_OBJECT
 public:

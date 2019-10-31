@@ -117,7 +117,7 @@ const QMap<QString,PropertySchema*> TableSchema::foreignKeys() const { return m_
 const PropertySchema* TableSchema::key() const { return m_key; }
 
 const QString TableSchema::keyName( Brewtarget::DBTypes dbType ) const
-{ 
+{
    return m_key->colName(dbType);
 }
 
@@ -159,7 +159,7 @@ const QStringList TableSchema::allForeignKeyColumnNames(Brewtarget::DBTypes type
 {
    QStringList tmp;
 
-   QMapIterator<QString,PropertySchema*> i(m_properties);
+   QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
 
    while ( i.hasNext() ) {
       i.next();
@@ -250,6 +250,42 @@ bool TableSchema::isInRecTable()     { return m_type == INREC; }
 bool TableSchema::isBtTable()        { return m_type == BT; }
 bool TableSchema::isMetaTable()      { return m_type == META; }
 
+const QString TableSchema::childIndexName(Brewtarget::DBTypes type)
+{
+   QString cname;
+
+   if ( m_type == CHILD ) {
+      QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
+
+      while ( i.hasNext() ) {
+         i.next();
+         if ( i.value()->colName(type) != kpropRecipeId ) {
+            cname = i.value()->colName(type);
+            break;
+         }
+      }
+   }
+   return cname;
+}
+
+const QString TableSchema::inRecIndexName(Brewtarget::DBTypes type)
+{
+   QString cname;
+
+   if ( m_type == INREC ) {
+      QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
+
+      while ( i.hasNext() ) {
+         i.next();
+         if ( i.value()->colName(type) != kpropRecipeId ) {
+            cname = i.value()->colName(type);
+            break;
+         }
+      }
+   }
+   return cname;
+}
+
 const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString tmpName)
 {
    QString tname = tmpName.isEmpty() ? m_tableName : tmpName;
@@ -266,7 +302,7 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
       PropertySchema* prop = i.value();
 
       // based on the different way a boolean is handled between sqlite and
-      // pgsql, I need to single them out. 
+      // pgsql, I need to single them out.
       QVariant defVal = prop->defaultValue(type);
       if ( defVal.isValid() ) {
          QString tmp = defVal.toString();
@@ -361,7 +397,7 @@ const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
            .arg(key);
 }
 
-const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes type ) 
+const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes type )
 {
    QString columns = keyName(type);
 
@@ -948,6 +984,7 @@ void TableSchema::defineChildTable(Brewtarget::DBTable table)
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_foreignKeys[kpropChildId]  = new PropertySchema( kpropChildId,  kcolChildId,  QString("integer"), table);
+   m_foreignKeys[kpropParentId] = new PropertySchema( kpropParentId, kcolParentId, QString("integer"), table);
 
 }
 
@@ -985,6 +1022,7 @@ void TableSchema::defineInstructionInRecipeTable(QString childIdx, Brewtarget::D
    m_foreignKeys[childIdx]      = new PropertySchema( childIdx,      childIdx,     QString("integer"), table);
 
 }
+
 void TableSchema::defineBtTable(QString childIdx, Brewtarget::DBTable table)
 {
    m_type = BT;
@@ -1058,7 +1096,7 @@ void TableSchema::defineYeastInventoryTable()
 void TableSchema::defineBtAllTable()
 {
    m_type = META;
-  
+
    // Set up the ID field first. I think I will want a number of special methods for accessing this.
    m_key                        = new PropertySchema();
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
