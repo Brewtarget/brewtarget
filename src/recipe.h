@@ -66,7 +66,6 @@ class Recipe : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "recipes")
-   Q_CLASSINFO("prefix", "recipe")
    
    friend class Database;
    friend class RecipeFormatter;

@@ -36,7 +36,6 @@ class Equipment : public BeerXMLElement
    Q_OBJECT
 
    Q_CLASSINFO("signal", "equipments")
-   Q_CLASSINFO("prefix", "equipment")
    
    friend class Database;
    friend class EquipmentEditor;

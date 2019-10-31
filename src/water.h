@@ -40,7 +40,6 @@ class Water : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "waters")
-   Q_CLASSINFO("prefix", "water")
    
    friend class Database;
 public:

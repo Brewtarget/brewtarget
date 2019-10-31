@@ -41,7 +41,6 @@ class Mash : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashs")
-   Q_CLASSINFO("prefix", "mash")
    
    friend class Database;
 public:

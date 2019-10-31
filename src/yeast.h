@@ -42,7 +42,6 @@ class Yeast : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "yeasts")
-   Q_CLASSINFO("prefix", "yeast")
    
    friend class Database;
    friend class YeastDialog;
