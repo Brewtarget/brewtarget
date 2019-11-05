@@ -147,7 +147,7 @@ MainWindow::MainWindow(QWidget* parent)
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
 
    // Null out the recipe
-   recipeObs = 0;
+   recipeObs = nullptr;
 
    // Set up the printer
    printer = new QPrinter;
@@ -681,13 +681,13 @@ void MainWindow::treeActivated(const QModelIndex &index)
    BtTreeView* active;
 
    // Not sure how this could happen, but better safe the sigsegv'd
-   if ( calledBy == 0 )
+   if ( calledBy == nullptr )
       return;
 
    active = qobject_cast<BtTreeView*>(calledBy);
 
    // If the sender cannot be morphed into a BtTreeView object
-   if ( active == 0 )
+   if ( active == nullptr )
       return;
 
    switch( active->type(index))
@@ -805,7 +805,7 @@ BrewNoteWidget* MainWindow::findBrewNoteWidget(BrewNote* b)
             return ni;
       }
    }
-   return 0;
+   return nullptr;
 }
 
 void MainWindow::setBrewNote(BrewNote* bNote)
@@ -924,7 +924,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
 
 void MainWindow::updateDensitySlider(QString attribute, RangedSlider* slider, double max)
 {
-   Unit::unitDisplay dispUnit = (Unit::unitDisplay)Brewtarget::option(attribute, Unit::noUnit, "tab_recipe", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, Unit::noUnit, "tab_recipe", Brewtarget::UNIT).toInt());
 
    if ( dispUnit == Unit::noUnit )
       dispUnit = Brewtarget::densityUnit == Brewtarget::PLATO ? Unit::displayPlato : Unit::displaySg;
@@ -946,7 +946,7 @@ void MainWindow::updateDensitySlider(QString attribute, RangedSlider* slider, do
 
 void MainWindow::updateColorSlider(QString attribute, RangedSlider* slider)
 {
-   Unit::unitDisplay dispUnit = (Unit::unitDisplay)Brewtarget::option(attribute, Unit::noUnit, "tab_recipe", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay dispUnit = static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, Unit::noUnit, "tab_recipe", Brewtarget::UNIT).toInt());
 
    if ( dispUnit == Unit::noUnit )
       dispUnit = Brewtarget::colorUnit == Brewtarget::SRM ? Unit::displaySrm : Unit::displayEbc;
@@ -959,10 +959,10 @@ void MainWindow::updateColorSlider(QString attribute, RangedSlider* slider)
 
 void MainWindow::showChanges(QMetaProperty* prop)
 {
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
-   bool updateAll = (prop == 0);
+   bool updateAll = (prop == nullptr);
    QString propName;
 
    if( prop )
@@ -1037,7 +1037,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
 void MainWindow::updateRecipeName()
 {
-   if( recipeObs == 0 || ! lineEdit_name->isModified())
+   if( recipeObs == nullptr || ! lineEdit_name->isModified())
       return;
 
    recipeObs->setName(lineEdit_name->text());
@@ -1045,7 +1045,7 @@ void MainWindow::updateRecipeName()
 
 void MainWindow::updateRecipeStyle()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    QModelIndex proxyIndex( styleProxyModel->index(styleComboBox->currentIndex(),0) );
@@ -1066,7 +1066,7 @@ void MainWindow::updateRecipeStyle()
 
 void MainWindow::updateRecipeMash()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    Mash* selected = mashListModel->at(mashComboBox->currentIndex());
@@ -1085,11 +1085,11 @@ void MainWindow::updateRecipeEquipment()
 
 void MainWindow::droppedRecipeEquipment(Equipment *kit)
 {
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    // equip may be null.
-   if( kit == 0 )
+   if( kit == nullptr )
       return;
 
    // Notice that we are using a copy from the database.
@@ -1170,7 +1170,7 @@ void MainWindow::droppedRecipeYeast(QList<Yeast*>yeasts)
 
 void MainWindow::updateRecipeBatchSize()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    recipeObs->setBatchSize_l( lineEdit_batchSize->toSI() );
@@ -1178,7 +1178,7 @@ void MainWindow::updateRecipeBatchSize()
 
 void MainWindow::updateRecipeBoilSize()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    recipeObs->setBoilSize_l( lineEdit_boilSize->toSI() );
@@ -1189,7 +1189,7 @@ void MainWindow::updateRecipeBoilTime()
    double boilTime = 0.0;
    Equipment* kit;
 
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    kit = recipeObs->equipment();
@@ -1207,7 +1207,7 @@ void MainWindow::updateRecipeBoilTime()
 
 void MainWindow::updateRecipeEfficiency()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    recipeObs->setEfficiency_pct( lineEdit_efficiency->toSI() );
@@ -1242,7 +1242,7 @@ void MainWindow::exportRecipe()
    QFile* outFile;
    QDomDocument doc;
 
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    outFile = openForWrite();
@@ -1284,7 +1284,7 @@ Fermentable* MainWindow::selectedFermentable()
 
    size = selected.size();
    if( size == 0 )
-      return 0;
+      return nullptr;
 
    // Make sure only one row is selected.
    viewIndex = selected[0];
@@ -1292,7 +1292,7 @@ Fermentable* MainWindow::selectedFermentable()
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
-         return 0;
+         return nullptr;
    }
 
    modelIndex = fermTableProxy->mapToSource(viewIndex);
@@ -1309,7 +1309,7 @@ Hop* MainWindow::selectedHop()
 
    size = selected.size();
    if( size == 0 )
-      return 0;
+      return nullptr;
 
    // Make sure only one row is selected.
    viewIndex = selected[0];
@@ -1317,7 +1317,7 @@ Hop* MainWindow::selectedHop()
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
-         return 0;
+         return nullptr;
    }
 
    modelIndex = hopTableProxy->mapToSource(viewIndex);
@@ -1335,7 +1335,7 @@ Misc* MainWindow::selectedMisc()
 
    size = selected.size();
    if( size == 0 )
-      return 0;
+      return nullptr;
 
    // Make sure only one row is selected.
    viewIndex = selected[0];
@@ -1343,12 +1343,12 @@ Misc* MainWindow::selectedMisc()
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
-         return 0;
+         return nullptr;
    }
 
    modelIndex = miscTableProxy->mapToSource(viewIndex);
 
-   Misc* m = miscTableModel->getMisc(modelIndex.row());
+   Misc* m = miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row()));
 
    return m;
 }
@@ -1361,7 +1361,7 @@ Yeast* MainWindow::selectedYeast()
 
    size = selected.size();
    if( size == 0 )
-      return 0;
+      return nullptr;
 
    // Make sure only one row is selected.
    viewIndex = selected[0];
@@ -1369,12 +1369,12 @@ Yeast* MainWindow::selectedYeast()
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
-         return 0;
+         return nullptr;
    }
 
    modelIndex = yeastTableProxy->mapToSource(viewIndex);
 
-   Yeast* y = yeastTableModel->getYeast(modelIndex.row());
+   Yeast* y = yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row()));
 
    return y;
 }
@@ -1397,7 +1397,7 @@ void MainWindow::removeSelectedFermentable()
         viewIndex = selected.at(i);
         modelIndex = fermTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(fermTableModel->getFermentable(modelIndex.row()));
+        itemsToRemove.append(fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row())));
     }
 
     for(i = 0; i < itemsToRemove.size(); i++)
@@ -1411,7 +1411,7 @@ void MainWindow::removeSelectedFermentable()
 void MainWindow::editSelectedFermentable()
 {
    Fermentable* f = selectedFermentable();
-   if( f == 0 )
+   if( f == nullptr )
       return;
 
    fermEditor->setFermentable(f);
@@ -1421,7 +1421,7 @@ void MainWindow::editSelectedFermentable()
 void MainWindow::editSelectedMisc()
 {
    Misc* m = selectedMisc();
-   if( m == 0 )
+   if( m == nullptr )
       return;
 
    miscEditor->setMisc(m);
@@ -1431,7 +1431,7 @@ void MainWindow::editSelectedMisc()
 void MainWindow::editSelectedHop()
 {
    Hop* h = selectedHop();
-   if( h == 0 )
+   if( h == nullptr )
       return;
 
    hopEditor->setHop(h);
@@ -1441,7 +1441,7 @@ void MainWindow::editSelectedHop()
 void MainWindow::editSelectedYeast()
 {
    Yeast* y = selectedYeast();
-   if( y == 0 )
+   if( y == nullptr )
       return;
 
    yeastEditor->setYeast(y);
@@ -1494,7 +1494,7 @@ void MainWindow::removeSelectedMisc()
         viewIndex = selected.at(i);
         modelIndex = miscTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(miscTableModel->getMisc(modelIndex.row()));
+        itemsToRemove.append(miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row())));
     }
 
     for(i = 0; i < itemsToRemove.size(); i++)
@@ -1521,7 +1521,7 @@ void MainWindow::removeSelectedYeast()
         viewIndex = selected.at(i);
         modelIndex = yeastTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(yeastTableModel->getYeast(modelIndex.row()));
+        itemsToRemove.append(yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row())));
     }
 
     for(i = 0; i < itemsToRemove.size(); i++)
@@ -1653,7 +1653,7 @@ void MainWindow::renameFolder()
    QModelIndex starter;
 
    // If the sender cannot be morphed into a BtTreeView object
-   if ( active == 0 )
+   if ( active == nullptr )
       return;
 
    // I don't think I can figure out what the behavior will be if you select
@@ -1702,11 +1702,11 @@ void MainWindow::setTreeSelection(QModelIndex item)
    if (! item.isValid())
       return;
 
-   if ( active == 0 )
+   if ( active == nullptr )
       active = qobject_cast<BtTreeView*>(treeView_recipe);
 
    // Couldn't cast the active item to a BtTreeView
-   if ( active == 0 )
+   if ( active == nullptr )
       return;
 
    QModelIndex parent = active->parent(item);
@@ -1722,15 +1722,14 @@ void MainWindow::setTreeSelection(QModelIndex item)
 void MainWindow::reduceInventory(){
 
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
-      QModelIndex bIndex;
 
       foreach(QModelIndex selected, indexes)
       {
          Recipe*   rec   = treeView_recipe->recipe(selected);
-         if( rec == 0 ){
+         if( rec == nullptr ){
             //try the parent recipe
             rec = treeView_recipe->recipe(treeView_recipe->parent(selected));
-            if( rec == 0 ){
+            if( rec == nullptr ){
                continue;
             }
          }
@@ -1795,9 +1794,8 @@ void MainWindow::newBrewNote()
    foreach(QModelIndex selected, indexes)
    {
       Recipe*   rec   = treeView_recipe->recipe(selected);
-      QModelIndex newItem;
 
-      if( rec == 0 )
+      if( rec == nullptr )
          continue;
 
       // Make sure everything is properly set and selected
@@ -1909,7 +1907,7 @@ bool MainWindow::verifyImport(QString tag, QString name)
 void MainWindow::addMashStep()
 {
    Mash* mash;
-   if( recipeObs != 0 && recipeObs->mash() != 0 )
+   if( recipeObs != nullptr && recipeObs->mash() != nullptr )
    {
       mash = recipeObs->mash();
    }
@@ -1928,8 +1926,8 @@ void MainWindow::addMashStep()
 
 void MainWindow::removeSelectedMashStep()
 {
-   Mash* mash = recipeObs == 0 ? 0 : recipeObs->mash();
-   if( mash == 0 )
+   Mash* mash = recipeObs == nullptr ? nullptr : recipeObs->mash();
+   if( mash == nullptr )
       return;
 
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
@@ -1947,7 +1945,7 @@ void MainWindow::removeSelectedMashStep()
          return;
    }
 
-   MashStep* step = mashStepTableModel->getMashStep(row);
+   MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
    Database::instance().removeFrom(mash,step);
 }
 
@@ -1972,8 +1970,8 @@ void MainWindow::moveSelectedMashStepUp()
    if( row < 1 )
       return;
 
-   MashStep* m1 = mashStepTableModel->getMashStep(row);
-   MashStep* m2 = mashStepTableModel->getMashStep(row-1);
+   MashStep* m1 = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
+   MashStep* m2 = mashStepTableModel->getMashStep(static_cast<unsigned int>(row-1));
    Database::instance().swapMashStepOrder(m1,m2);
 }
 
@@ -1998,8 +1996,8 @@ void MainWindow::moveSelectedMashStepDown()
    if( row >= mashStepTableModel->rowCount() - 1 )
       return;
 
-   MashStep* m1 = mashStepTableModel->getMashStep(row);
-   MashStep* m2 = mashStepTableModel->getMashStep(row+1);
+   MashStep* m1 = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
+   MashStep* m2 = mashStepTableModel->getMashStep(static_cast<unsigned int>(row+1));
    Database::instance().swapMashStepOrder(m1,m2);
 }
 
@@ -2023,7 +2021,7 @@ void MainWindow::editSelectedMashStep()
          return;
    }
 
-   MashStep* step = mashStepTableModel->getMashStep(row);
+   MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
 }
@@ -2032,7 +2030,7 @@ void MainWindow::removeMash()
 {
    Mash *m = mashButton->mash();
 
-   if( m == 0)
+   if( m == nullptr)
       return;
    //due to way this is designed, we can't have a NULL mash, so
    //we need to remove all the mash steps and then remove the mash
@@ -2091,7 +2089,7 @@ void MainWindow::copyRecipe()
 
 void MainWindow::setMashToCurrentlySelected()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == nullptr )
       return;
 
    Mash* selected = mashListModel->at(mashComboBox->currentIndex());
@@ -2104,7 +2102,7 @@ void MainWindow::setMashToCurrentlySelected()
 
 void MainWindow::saveMash()
 {
-   if( recipeObs == 0 || recipeObs->mash() == 0 )
+   if( recipeObs == nullptr || recipeObs->mash() == nullptr )
       return;
 
    Mash* mash = recipeObs->mash();
@@ -2170,13 +2168,13 @@ void MainWindow::contextMenu(const QPoint &point)
    QMenu* tempMenu;
 
    // Not sure how this could happen, but better safe the sigsegv'd
-   if ( calledBy == 0 )
+   if ( calledBy == nullptr )
       return;
 
    active = qobject_cast<BtTreeView*>(calledBy);
 
    // If the sender cannot be morphed into a BtTreeView object
-   if ( active == 0 )
+   if ( active == nullptr )
       return;
 
    selected = active->indexAt(point);
@@ -2193,7 +2191,7 @@ void MainWindow::setupContextMenu()
 {
 
    treeView_recipe->setupContextMenu(this,this);
-   treeView_equip->setupContextMenu(this,equipEditor);
+   treeView_equip->setupContextMenu(this,singleEquipEditor);
 
    treeView_ferm->setupContextMenu(this,fermDialog);
    treeView_hops->setupContextMenu(this,hopDialog);
@@ -2248,11 +2246,11 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
       if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )
       {
          Brewtarget::logW(QString("MainWindow::openForWrite Could not open %1 for writing.").arg(filename));
-         outFile = 0;
+         outFile = nullptr;
       }
    }
    else
-     outFile = 0;
+     outFile = nullptr;
 
    return outFile;
 }
@@ -2263,7 +2261,7 @@ void MainWindow::exportSelectedHtml() {
    QList <Recipe*> targets;
    QFile* outFile;
 
-   if ( active == 0 )
+   if ( active == nullptr )
       return;
 
    // this only works for recipes
@@ -2301,7 +2299,7 @@ void MainWindow::exportSelected()
    bool didRecipe = false;
 
 
-   if ( active == 0 )
+   if ( active == nullptr )
       return;
 
    selected = active->selectionModel()->selectedRows();
@@ -2402,7 +2400,7 @@ void MainWindow::updateDatabase()
 void MainWindow::finishCheckingVersion()
 {
    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-   if( reply == 0 )
+   if( reply == nullptr )
       return;
 
    QString remoteVersion(reply->readAll());
