@@ -768,14 +768,17 @@ DELETE FROM fermentable where id=597;
                                  .arg(ing->_key);
       q.setForwardOnly(true);
 
-      if ( ! q.exec(deleteFromInRecipe) )
-         throw QString("failed to delete in_recipe.");
-
       // I don't really like this, but I can't think of a better solution. Of
       // all the ingredients, instructions don't have a _children table. Given
       // that it is only one table, I will try the easy way first
       if ( tableName != "instruction" && ! q.exec( deleteFromChildren ) )
          throw QString("failed to delete children.");
+
+      if ( ! q.exec(deleteFromInRecipe) )
+         throw QString("failed to delete in_recipe.");
+
+      if ( ! q.exec(deleteFromInInventory) )
+         throw QString("failed to delete in_inventory.");
 
       if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
