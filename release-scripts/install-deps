@@ -1,0 +1,25 @@
+#! /bin/bash -e
+__install_osx() {
+  HOMEBREW_NO_AUTO_UPDATE=1 brew install \
+    curl \
+    jq
+}
+
+__install_ubuntu() {
+  # These pacakges are preinstalled on Travis CI: curl, jq
+  echo "Nothing to do!"
+}
+
+case "$OSTYPE" in
+  darwin*)
+    echo "Setting up OSX (Homebrew) environment"
+    __install_osx
+  ;;
+  linux*)
+    echo "Setting up Ubuntu environment"
+    __install_ubuntu
+  ;;
+  *)
+    echo "unknown: $OSTYPE"
+  ;;
+esac
