@@ -59,8 +59,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    }
 
    // Set grain absorption label based on units.
-   Unit* weightUnit = 0;
-   Unit* volumeUnit = 0;
+   Unit* weightUnit = nullptr;
+   Unit* volumeUnit = nullptr;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
 
@@ -68,7 +68,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    equipmentSortProxyModel = new BeerXMLSortProxyModel(equipmentListModel);
    equipmentComboBox->setModel(equipmentSortProxyModel);
 
-   obsEquip = 0;
+   obsEquip = nullptr;
 
    // Connect all the edit boxen
    connect(lineEdit_boilTime,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
@@ -76,7 +76,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(lineEdit_topUpWater,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
    connect(lineEdit_trubChillerLoss,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
    connect(lineEdit_batchSize, &QLineEdit::editingFinished, this,&EquipmentEditor::updateCheckboxRecord);
-                     
+
    // Set up the buttons
    connect( pushButton_save, &QAbstractButton::clicked, this, &EquipmentEditor::save );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
@@ -187,7 +187,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_batchSize->setMinimumSize(QSize(100, 0));
                      lineEdit_batchSize->setMaximumSize(QSize(100, 16777215));
                      lineEdit_batchSize->setProperty("editField", QVariant(QStringLiteral("batchSize_l")));
-                     
+
                   formLayout->setWidget(0, QFormLayout::LabelRole, label_name);
                   formLayout->setWidget(0, QFormLayout::FieldRole, lineEdit_name);
                   formLayout->setWidget(1, QFormLayout::LabelRole, label_batchSize);
@@ -196,7 +196,7 @@ void EquipmentEditor::doLayout()
                   formLayout->setWidget(2, QFormLayout::FieldRole, lineEdit_boilSize);
                   formLayout->setWidget(3, QFormLayout::LabelRole, label_calcBoilVolume);
                   formLayout->setWidget(3, QFormLayout::FieldRole, checkBox_calcBoilVolume);
-                  
+
             groupBox_water = new QGroupBox(this);
                groupBox_water->setProperty("configSection", QVariant(QStringLiteral("equipmentEditor")));
                formLayout_water = new QFormLayout(groupBox_water);
@@ -488,11 +488,11 @@ void EquipmentEditor::retranslateUi()
    groupBox_mashTun->setTitle(tr("Mash Tun"));
    label_tunVolume->setText(tr("Volume"));
    label_tunWeight->setText(tr("Mass"));
-   label_tunSpecificHeat->setText(QApplication::translate("equipmentEditor", "Specific heat (Cal/(g*C))", 0));
-   groupBox_losses->setTitle(QApplication::translate("equipmentEditor", "Losses", 0));
-   groupBox_losses->setProperty("configSection", QVariant(QApplication::translate("equipmentEditor", "equipmentEditor", 0)));
-   label_trubChillerLoss->setText(QApplication::translate("equipmentEditor", "Kettle to fermenter", 0));
-   label_lauterDeadspace->setText(QApplication::translate("equipmentEditor", "Lauter deadspace", 0));
+   label_tunSpecificHeat->setText(QApplication::translate("equipmentEditor", "Specific heat (Cal/(g*C))", nullptr));
+   groupBox_losses->setTitle(QApplication::translate("equipmentEditor", "Losses", nullptr));
+   groupBox_losses->setProperty("configSection", QVariant(QApplication::translate("equipmentEditor", "equipmentEditor", nullptr)));
+   label_trubChillerLoss->setText(QApplication::translate("equipmentEditor", "Kettle to fermenter", nullptr));
+   label_lauterDeadspace->setText(QApplication::translate("equipmentEditor", "Lauter deadspace", nullptr));
    pushButton_new->setText(QString());
    pushButton_save->setText(QString());
    pushButton_cancel->setText(QString());
@@ -539,7 +539,7 @@ void EquipmentEditor::removeEquipment()
       Database::instance().remove(obsEquip);
 
    equipmentComboBox->setCurrentIndex(-1);
-   setEquipment(0);
+   setEquipment(nullptr);
 }
 
 void EquipmentEditor::clear()
@@ -582,14 +582,14 @@ void EquipmentEditor::equipmentSelected()
 
 void EquipmentEditor::save()
 {
-   if( obsEquip == 0 )
+   if( obsEquip == nullptr )
    {
       setVisible(false);
       return;
    }
 
-   Unit* weightUnit = 0;
-   Unit* volumeUnit = 0;
+   Unit* weightUnit = nullptr;
+   Unit* volumeUnit = nullptr;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    bool ok = false;
 
@@ -640,7 +640,7 @@ void EquipmentEditor::save()
          return;
    }
 
-   obsEquip->setName( lineEdit_name->text() );
+   obsEquip->setName( lineEdit_name->text(), obsEquip->cacheOnly() );
    obsEquip->setBoilSize_l( lineEdit_boilSize->toSI() );
    obsEquip->setBatchSize_l( lineEdit_batchSize->toSI() );
    obsEquip->setTunVolume_l( lineEdit_tunVolume->toSI() );
@@ -699,12 +699,12 @@ void EquipmentEditor::cancel()
 
 void EquipmentEditor::resetAbsorption()
 {
-   if( obsEquip == 0 )
+   if( obsEquip == nullptr )
       return;
 
    // Get weight and volume units for grain absorption.
-   Unit* weightUnit = 0;
-   Unit* volumeUnit = 0;
+   Unit* weightUnit = nullptr;
+   Unit* volumeUnit = nullptr;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    double gaCustomUnits = PhysicalConstants::grainAbsorption_Lkg * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
 
@@ -720,15 +720,15 @@ void EquipmentEditor::changed(QMetaProperty /*prop*/, QVariant /*val*/)
 void EquipmentEditor::showChanges()
 {
    Equipment *e = obsEquip;
-   if( e == 0 )
+   if( e == nullptr )
    {
       clear();
       return;
    }
 
    // Get weight and volume units for grain absorption.
-   Unit* weightUnit = 0;
-   Unit* volumeUnit = 0;
+   Unit* weightUnit = nullptr;
+   Unit* volumeUnit = nullptr;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
 

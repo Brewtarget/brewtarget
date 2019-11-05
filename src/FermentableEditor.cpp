@@ -55,7 +55,7 @@ void FermentableEditor::save()
       return;
    }
 
-   obsFerm->setName(lineEdit_name->text());
+   obsFerm->setName(lineEdit_name->text(), obsFerm->cacheOnly());
 
    // NOTE: the following assumes that Fermentable::Type is enumerated in the same
    // order as the combobox.

@@ -59,7 +59,7 @@ void YeastEditor::save()
       return;
    }
 
-   y->setName(lineEdit_name->text());
+   y->setName(lineEdit_name->text(), y->cacheOnly());
    y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );

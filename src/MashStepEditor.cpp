@@ -136,7 +136,7 @@ void MashStepEditor::setParentMash(Mash *parent)
 
 void MashStepEditor::saveAndClose()
 {
-   obs->setName(lineEdit_name->text());
+   obs->setName(lineEdit_name->text(),obs->cacheOnly());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI());
    obs->setInfuseTemp_c(lineEdit_infuseTemp->toSI());

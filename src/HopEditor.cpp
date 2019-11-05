@@ -61,7 +61,7 @@ void HopEditor::save()
       return;
    }
 
-   h->setName(lineEdit_name->text());
+   h->setName(lineEdit_name->text(), h->cacheOnly());
    h->setAlpha_pct(lineEdit_alpha->toSI());
    h->setAmount_kg(lineEdit_amount->toSI());
    h->setInventoryAmount(lineEdit_inventory->toSI());

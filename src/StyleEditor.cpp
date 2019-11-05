@@ -97,7 +97,7 @@ void StyleEditor::save()
       return;
    }
 
-   s->setName( lineEdit_name->text() );
+   s->setName( lineEdit_name->text(), s->cacheOnly());
    s->setCategory( lineEdit_category->text() );
    s->setCategoryNumber( lineEdit_categoryNumber->text() );
    s->setStyleLetter( lineEdit_styleLetter->text() );

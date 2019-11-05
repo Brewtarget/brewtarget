@@ -61,7 +61,7 @@ void MiscEditor::save()
       return;
    }
    
-   m->setName(lineEdit_name->text());
+   m->setName(lineEdit_name->text(),m->cacheOnly());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
    m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
    m->setTime(lineEdit_time->toSI());
