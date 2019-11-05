@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
-    <height>390</height>
+    <width>539</width>
+    <height>567</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -154,57 +154,6 @@
               </property>
               <property name="editField" stdset="0">
                <string notr="true">alpha_pct</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="BtMassLabel" name="label_amount">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="contextMenuPolicy">
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="text">
-               <string>Default Amount </string>
-              </property>
-              <property name="buddy">
-               <cstring>lineEdit_amount</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="BtMassEdit" name="lineEdit_amount">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>100</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>100</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Amount</string>
-              </property>
-              <property name="editField" stdset="0">
-               <string notr="true">amount_kg</string>
               </property>
              </widget>
             </item>
@@ -876,6 +825,15 @@
    </slots>
   </customwidget>
   <customwidget>
+   <class>BtMassLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <slot>popContextMenu(QPoint)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
    <class>BtTimeEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
@@ -889,15 +847,6 @@
    <header>BtLabel.h</header>
    <slots>
     <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-    <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -932,22 +881,6 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_amount</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_amount</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>87</x>
-     <y>91</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>168</x>
-     <y>93</y>
     </hint>
    </hints>
   </connection>
