@@ -740,12 +740,6 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       else
          throw QString("could not locate classInfo for signal on %2").arg(meta->className());
 
-/*
-DELETE FROM fermentable_children WHERE child_id = 597;
-DELETE FROM fermentable_in_recipe WHERE fermentable_id = 597;
-DELETE FROM fermentable_in_inventory WHERE fermentable_id = 597;
-DELETE FROM fermentable where id=597;
-*/
       // We need to do many things -- remove the link in *in_recipe,
       // remove the entry from *_children
       QString deleteFromChildren = QString("DELETE FROM %1 WHERE child_id=%2")
