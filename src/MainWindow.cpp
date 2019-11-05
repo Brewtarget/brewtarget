@@ -831,12 +831,12 @@ void MainWindow::setRecipe(Recipe* recipe)
 {
    int tabs = 0;
    // Don't like void pointers.
-   if( recipe == 0 )
+   if( recipe == nullptr )
       return;
 
    // Make sure this MainWindow is paying attention...
    if( recipeObs )
-      disconnect( recipeObs, 0, this, 0 );
+      disconnect( recipeObs, nullptr, this, nullptr );
    recipeObs = recipe;
 
    recStyle = recipe->style();
@@ -890,6 +890,9 @@ void MainWindow::setRecipe(Recipe* recipe)
    mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
+   // changes in how the data is loaded means we may not have fired all the signals we should have
+   // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.
+   recipe->recalcAll();
    // If you don't connect this late, every previous set of an attribute
    // causes this signal to be slotted, which then causes showChanges() to be
    // called.

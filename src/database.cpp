@@ -1901,15 +1901,16 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 
    try {
       QSqlQuery update( sqlDatabase() );
-      QString command = QString("UPDATE %1 set %2=:value where id=%3")
+      QString command = QString("UPDATE %1 set %2=%3 where id=%4")
                            .arg(tableName)
                            .arg(col_name)
+                           .arg(value.toString())
                            .arg(key);
 
-      update.prepare( command );
-      update.bindValue(":value", value);
+//      update.prepare( command );
+//      update.bindValue(":value", value);
 
-      if ( ! update.exec() )
+      if ( ! update.exec(command) )
          throw QString("Could not update %1.%2 to %3: %4 %5")
                   .arg( tableName )
                   .arg( col_name )
@@ -5235,8 +5236,11 @@ void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
 {
    TableSchema* tbl = dbDefn->table(ins->table());
    Brewtarget::DBTable invtable = tbl->invTable();
+   TableSchema* invTbl = dbDefn->table(invtable);
 
-   int ndx = ins->metaObject()->indexOfProperty(kcolInventory.toUtf8().constData());
+   QString invCol = invTbl->propertyToColumn(kpropAmount);
+
+   int ndx = ins->metaObject()->indexOfProperty(invCol.toUtf8().constData());
    int invkey = getInventoryID(tbl, ins->key());
 
    if ( ! value.isValid() || value.isNull() ) {
@@ -5246,7 +5250,7 @@ void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
    if ( invkey == 0 ) { //no inventory row in the database so lets make one
       invkey = newInventory(tbl,ins->key());
    }
-   updateEntry( invtable, invkey, kcolInventory.toUtf8().constData(),
+   updateEntry( invtable, invkey, invCol.toUtf8().constData(),
                 value, ins->metaObject()->property(ndx), ins, notify );
 }
 

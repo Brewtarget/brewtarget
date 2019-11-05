@@ -1608,7 +1608,6 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q )
       TableSchema* tbl = new TableSchema(Brewtarget::BREWNOTETABLE);
       // Create a temporary table
       QString createTemp = tbl->generateCreateTable(Brewtarget::SQLITE, "tmpbrewnote");
-      qDebug() << "createTemp =" << createTemp;
       ret = q.exec( createTemp );
     
       if ( ret ) {

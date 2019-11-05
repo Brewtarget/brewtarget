@@ -279,7 +279,6 @@ void OptionDialog::saveAndClose()
       try {
          QString theQuestion = tr("Would you like brewtarget to transfer your data to the new database? NOTE: If you've already loaded the data, say No");
          if ( QMessageBox::Yes == QMessageBox::question(this, tr("Transfer database"), theQuestion) ) {
-             qDebug() << "Converting databases -- watch this space";
             Database::instance().convertDatabase(btStringEdit_hostname->text(), btStringEdit_dbname->text(),
                                                  btStringEdit_username->text(), btStringEdit_password->text(),
                                                  btStringEdit_portnum->text().toInt(),

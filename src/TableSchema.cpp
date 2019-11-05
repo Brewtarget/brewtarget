@@ -1104,7 +1104,7 @@ void TableSchema::defineYeastInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropQuanta]  = new PropertySchema( kpropQuanta, kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[kpropAmount]  = new PropertySchema( kpropQuanta, kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
    m_foreignKeys[kcolYeastId] = new PropertySchema( kcolYeastId, kcolYeastId,     QString("integer"), Brewtarget::YEASTTABLE);
 
 }

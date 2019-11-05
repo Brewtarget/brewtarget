@@ -288,5 +288,4 @@ void BrewNoteWidget::showChanges(QString field)
 
 void BrewNoteWidget::focusOutEvent(QFocusEvent *e)
 {
-   //qDebug() << "Notes lost focus";
 }
