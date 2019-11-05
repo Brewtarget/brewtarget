@@ -723,7 +723,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
    const QMetaObject* meta = ing->metaObject();
 
    int ndx = meta->indexOfClassInfo("signal");
-   QString propName, relTableName, ingKeyName, childTableName;
+   QString propName, relTableName, inventoryTableName, ingKeyName, childTableName;
 
    sqlDatabase().transaction();
    QSqlQuery q(sqlDatabase());
@@ -733,37 +733,46 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
          QString prefix = meta->classInfo( meta->indexOfClassInfo("prefix")).value();
          propName  = meta->classInfo(ndx).value();
          relTableName = QString("%1_in_recipe").arg(prefix);
+         inventoryTableName = QString("%1_in_inventory").arg(prefix);
          ingKeyName = QString("%1_id").arg(prefix);
          childTableName = QString("%1_children").arg(prefix);
       }
       else
          throw QString("could not locate classInfo for signal on %2").arg(meta->className());
 
-
       // We need to do many things -- remove the link in *in_recipe,
       // remove the entry from *_children
-      // and DELETE THE COPY
+      QString deleteFromChildren = QString("DELETE FROM %1 WHERE child_id=%2")
+                           .arg(childTableName)
+                           .arg(ing->_key);
+      // remove the link in *in_recipe
       QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND recipe_id=%4")
                                  .arg(relTableName)
                                  .arg(ingKeyName)
                                  .arg(ing->_key)
                                  .arg(rec->_key);
-      QString deleteFromChildren = QString("DELETE FROM %1 WHERE child_id=%2")
-                                 .arg(childTableName)
+      // remove from inventory
+      QString deleteFromInInventory = QString("DELETE FROM %1 WHERE %2=%3")
+                                 .arg(inventoryTableName)
+                                 .arg(ingKeyName)
                                  .arg(ing->_key);
+      // and DELETE THE COPY
       QString deleteIngredient = QString("DELETE FROM %1 where id=%2")
                                  .arg(tableName)
                                  .arg(ing->_key);
       q.setForwardOnly(true);
-
-      if ( ! q.exec(deleteFromInRecipe) )
-         throw QString("failed to delete in_recipe.");
 
       // I don't really like this, but I can't think of a better solution. Of
       // all the ingredients, instructions don't have a _children table. Given
       // that it is only one table, I will try the easy way first
       if ( tableName != "instruction" && ! q.exec( deleteFromChildren ) )
          throw QString("failed to delete children.");
+
+      if ( ! q.exec(deleteFromInRecipe) )
+         throw QString("failed to delete in_recipe.");
+
+      if ( ! q.exec(deleteFromInInventory) )
+         throw QString("failed to delete in_inventory.");
 
       if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
