@@ -3,6 +3,11 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $DIR/common-vars
 
+if [[ "$#" -eq 1 ]]; then
+  TAG_NAME=$1
+  echo "Overriding tag, using ${TAG_NAME}"
+fi
+
 BUILD_PATH=/app/build
 
 if [[ "$TRAVIS" == "true" ]]; then
