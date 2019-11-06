@@ -3,6 +3,7 @@ dist: bionic
 os: linux
 services:
 - docker
+if: tag IS blank
 jobs:
   include:
   - stage: Create draft Github Release
