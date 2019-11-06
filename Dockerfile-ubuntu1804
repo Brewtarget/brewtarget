@@ -5,6 +5,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
+    git \
     libqt5webkit5-dev \
     libqt5sql5-sqlite \
     libqt5svg5 \
