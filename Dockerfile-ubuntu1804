@@ -1,4 +1,4 @@
-FROM cgspeck/brewtarget-build:ubuntu1804
+FROM ubuntu:18.04
 ENV TZ=Australia/Melbourne
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app

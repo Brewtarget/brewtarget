@@ -20,9 +20,7 @@ echo "Building for ${TARGET}"
 
 tag="${TARGET}"
 expanded_tag="${tag}-${SHORT_HASH}"
-set +e
-docker pull cgspeck/brewtarget-build:$tag
-set -e
+
 docker build -t cgspeck/brewtarget-build:$tag -f Dockerfile-$TARGET .
 for package in ${PACKAGES[*]}; do
   docker run --rm --entrypoint cat cgspeck/brewtarget-build:$tag $BUILD_PATH/$package > "packages/${TARGET}_${package}"
@@ -31,8 +29,6 @@ echo -e "\nPackages:"
 ls packages/
 echo -e "\nPushing new docker images"
 docker push cgspeck/brewtarget-build:$tag
-docker tag cgspeck/brewtarget-build:$tag cgspeck/brewtarget-build:$expanded_tag
-docker push cgspeck/brewtarget-build:$expanded_tag
 
 echo -e "\nDownloading github-releases tool"
 tmp_dir=$(mktemp -d)
