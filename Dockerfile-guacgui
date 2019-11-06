@@ -17,6 +17,10 @@ RUN \
     libqt4-svg \
     libqtwebkit4 \
     libqt4-xml \
+    libqt5multimedia5 \
+    libqt5printsupport5 \
+    libqt5sql5 \
+    libqt5xml5 \
     libqtcore4 \
     libqtgui4 \
     phonon \
