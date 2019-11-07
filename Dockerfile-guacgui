@@ -42,7 +42,7 @@ RUN \
     # for wait script
     xterm \
     # seems to be necessary part of guacgui start-up
-    libguac-client-rdp0 \
+    # libguac-client-rdp0 \
     python && \
   echo "**** clean up ****" && \
   rm -rf \
