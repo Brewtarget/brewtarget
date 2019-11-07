@@ -36,7 +36,12 @@ RUN \
     libqt5gui5 \
     libqt5sql5-psql \
     libqt5svg5 \
-    wget && \
+    # for set up script itself
+    wget \
+    # for wait script
+    xterm \
+    # seems to be necessary part of guacgui start-up
+    python && \
   echo "**** clean up ****" && \
   rm -rf \
   /tmp/* \
