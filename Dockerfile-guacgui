@@ -48,7 +48,11 @@ COPY /docker/guacgui /
 RUN chmod +x /usr/bin/setup-brewtarget
 RUN /usr/bin/setup-brewtarget $VERSION
 
+RUN mkdir /brewtarget
+RUN chown abc:abc /brewtarget
+
 # ports and volumes
 EXPOSE 3389
+VOLUME /brewtarget
 VOLUME /config
 
