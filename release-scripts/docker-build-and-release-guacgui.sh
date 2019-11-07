@@ -14,7 +14,7 @@ if [[ "$TRAVIS" == "true" ]]; then
   echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 fi
 
-echo "Building for ${TARGET}"
+echo "Building for ${TAG_NAME}"
 
 tag="latest"
 

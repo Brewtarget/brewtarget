@@ -11,4 +11,4 @@ tmp_deb=$(mktemp -d)/$deb_filename
 wget "https://github.com/cgspeck/brewtarget/releases/download/${1}/${deb_filename}" \
   -O $tmp_deb
 
-dpkg -i $tmp_deb
+dpkg --force-all -i $tmp_deb

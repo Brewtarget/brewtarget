@@ -11,19 +11,31 @@ RUN \
   echo "**** install deps ****" && \
   apt-get update && \
   apt-get install -qy --no-install-recommends \
-    libphonon4 \
-    libqt4-dbus \
-    libqt4-network \
-    libqt4-svg \
-    libqtwebkit4 \
-    libqt4-xml \
+    # this section is prescribed by the .dpkg package!
+    # libphonon4 \
+    # libphonon4qt5-4 \
+    # libqt4-dbus \
+    # libqt4-network \
+    # libqt4-svg \
+    # libqtwebkit4 \
+    # libqt4-xml \
+    # libqtcore4 \
+    # libqtgui4 \
+    # phonon \
+    # this section is what is actually used
+    libqt5dbus5 \
+    libqt5network5 \
     libqt5multimedia5 \
     libqt5printsupport5 \
+    libqt5webkit5 \
     libqt5sql5 \
     libqt5xml5 \
-    libqtcore4 \
-    libqtgui4 \
-    phonon \
+    libqt5sql5-sqlite \
+    libqt5xml5 \
+    libqt5core5a \
+    libqt5gui5 \
+    libqt5sql5-psql \
+    libqt5svg5 \
     wget && \
   echo "**** clean up ****" && \
   rm -rf \
