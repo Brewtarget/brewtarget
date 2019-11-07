@@ -6,6 +6,8 @@ You can read about the base image [here](https://www.linuxserver.io/).
 
 The version of Brewtarget is from [this repository](https://github.com/cgspeck/brewtarget), and may be from the devel branch or one of the other current branches.
 
+The latest tag is based on release `%TAG_NAME%` and git sha `%SHORT_HASH%`.
+
 ## Usage
 
 Here are some example snippets to help you get started creating a container.

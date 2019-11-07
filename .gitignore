@@ -8,3 +8,6 @@ build/*
 
 .vagrant
 *.user
+
+# docker update & test artefacts
+docker/guacgui/README.md.bak
