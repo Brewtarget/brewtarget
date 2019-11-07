@@ -25,5 +25,14 @@ docker build \
   --build-arg VERSION=$TAG_NAME \
   .
 
-echo -e "\nPushing new docker images"
-docker push cgspeck/brewtarget-guacgui:$tag
+if [[ "$TRAVIS" == "true" ]]; then
+  echo -e "\nPushing new docker images"
+  docker push cgspeck/brewtarget-guacgui:$tag
+  echo -e "\nUpdating Docker Hub Readme"
+  docker run -v $PWD/docker/guacgui:/workspace \
+    -e DOCKERHUB_USERNAME=$DOCKER_USERNAME \
+    -e DOCKERHUB_PASSWORD=$DOCKER_PASSWORD \
+    -e DOCKERHUB_REPOSITORY='cgspeck/brewtarget-guacgui' \
+    -e README_FILEPATH='/workspace/README.md' \
+    peterevans/dockerhub-description:2.1.0
+fi
