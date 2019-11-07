@@ -58,8 +58,6 @@ RUN /usr/bin/setup-brewtarget $VERSION
 RUN mkdir /brewtarget
 RUN chown abc:abc /brewtarget
 
-ENV XDG_RUNTIME_DIR=/tmp/runtime-abc
-
 # ports and volumes
 EXPOSE 3389
 VOLUME /brewtarget

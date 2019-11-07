@@ -20,7 +20,7 @@ jobs:
   - stage: Build GuacGUI Image
     name: Build GuacGUI Image
     script: ./release-scripts/docker-build-and-release-guacgui.sh
-    # if: branch = devel
+    if: branch = devel
 env:
   global:
   - secure: O0F2xZs8+4etWh7+q56T+G6KSQ23q4Tpoun9goBpkWlHeYknuk0tfPlP1+S3aqVsR3bi8mTZ4lQPz46dfMeGogVAJmAuwrHXqbzmoe2zXn50qxLXu7w0duh/23byn68d7cqGKLmm5Qd9WM4nuJwMnNuFKfQ/erLsXYNO4rwowNq3brwbZ/tKdawCdtc7CvYoZuDQFqJ06fGQHXMw3z6ETFqYgwmvHm0MZa3dRqpqFCYCwhlO+jWH9Sao2U37Rq0gAdzzwQm2B+nb/4ax48iDMs3xHNJRIfJnjIrYHmnVo7xciDawa5794wyeTUXSstsTAnFZ6dJVgvXL2MCDpLMUQMUzpI84uNCwKca8ShvRbPYXpPYiP8K089GLcWEhQuzJTOtb6mRBf51THQ3Z62zt/o+33KmSvbdNKfxh4/ZXyJM8gkQtRlxCMXCZbjjjcRn5O69C2rXlsaUIoimSJ38P+rSki2lCiATI7Pn+cG8c1xexj+6kcdDxaTHFOzF2TbtDvxowiFjK8Pq1jMjgfObVnHKrByf8SB01Edh9Tufyv2GpRyQ5SpTjXvf4XVDJw5LhxyOWxM7ZDvHtyalHclYAZKQFPjtKr6LR53EWS4pxkK2PkoUvHYLLPR6VAXa7CPFE7tiah/JmoexT73AlnZhHk0xPRzNtGnYKjp0ltYyN6m0=
