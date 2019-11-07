@@ -27,4 +27,3 @@ docker build \
 
 echo -e "\nPushing new docker images"
 docker push cgspeck/brewtarget-guacgui:$tag
-
