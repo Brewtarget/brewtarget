@@ -3,6 +3,7 @@ FROM lsiobase/guacgui
 # set version label
 ARG BUILD_DATE
 ARG VERSION
+ARG DEBIAN_FRONTEND=noninteractive
 LABEL build_version="Brewtarget Devel version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="cgspeck"
 ENV APPNAME="Brewtarget"
@@ -41,6 +42,7 @@ RUN \
     # for wait script
     xterm \
     # seems to be necessary part of guacgui start-up
+    libguac-client-rdp0 \
     python && \
   echo "**** clean up ****" && \
   rm -rf \
@@ -55,6 +57,8 @@ RUN /usr/bin/setup-brewtarget $VERSION
 
 RUN mkdir /brewtarget
 RUN chown abc:abc /brewtarget
+
+ENV XDG_RUNTIME_DIR=/tmp/runtime-abc
 
 # ports and volumes
 EXPOSE 3389

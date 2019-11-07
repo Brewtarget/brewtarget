@@ -68,7 +68,7 @@ Container images are configured using parameters passed at runtime (such as thos
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-e TZ=Australia/Melbourne` | Specify a timezone to use EG Australia/Melbourne |
-| `-e APPNAME=xclock` | Specify the graphical application name shown on RDP access. |
+| `-e APPNAME=brewtarget` | Specify the graphical application name shown on RDP access. |
 | `-e GUAC_USER=abc` | Specify the username for guacamole's web interface. |
 | `-e GUAC_PASS=900150983cd24fb0d6963f7d28e17f72` | Specify the password's md5 hash for guacamole's web interface. |
 | `-v /brewtarget` | Contains the Brewtarget user data. |
