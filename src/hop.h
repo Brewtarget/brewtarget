@@ -66,14 +66,20 @@ public:
    Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief The \c Use.
    Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
+   //! \brief The untranslated \c Use string.
+   Q_PROPERTY( QString useString READ useString /* WRITE setUse NOTIFY changed*/ /*changedUse*/ )
    //! \brief The time in minutes that the hop is used.
    Q_PROPERTY( double time_min READ time_min WRITE setTime_min /*NOTIFY changed*/ /*changedTime_min*/ )
    //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief The untranslated string type
+   Q_PROPERTY( QString typeString READ typeString /* WRITE setType NOTIFY changed*/ /*changedType*/ )
    //! \brief The \c Form.
    Q_PROPERTY( Form form READ form WRITE setForm /*NOTIFY changed*/ /*changedForm*/ )
+   //! \brief The untranslated \c Form string.
+   Q_PROPERTY( QString formString READ formString /* WRITE setForm NOTIFY changed*/ /*changedForm*/ )
    //! \brief The percent of beta acids.
    Q_PROPERTY( double beta_pct READ beta_pct WRITE setBeta_pct /*NOTIFY changed*/ /*changedBeta_pct*/ )
    //! \brief The hop stability index in percent.
@@ -94,21 +100,24 @@ public:
    double alpha_pct() const;
    double amount_kg() const;
    double inventory() const;
+   // Use in enumerated, untranslated and translated versions
    Use use() const;
    const QString useString() const;
-
-   //! \brief A translated use string.
    const QString useStringTr() const;
+
    double time_min() const;
    const QString notes() const;
+
+   // Type in enumerated, untranslated and translated versions
    Type type() const;
    const QString typeString() const;
-   //! \brief A translated type string.
    const QString typeStringTr() const;
+   
+   // Form in enumerated, untranslated and translated versions
    Form form() const;
    const QString formString() const;
-   //! \brief A translated form string.
    const QString formStringTr() const;
+
    double beta_pct() const;
    double hsi_pct() const;
    const QString origin() const;

@@ -43,6 +43,8 @@ static const QString kpropCaryophyllene("caryophyllene_pct");
 static const QString kpropCohumulone("cohumulone_pct");
 static const QString kpropMyrcene("myrcene_pct");
 
+static const QString kpropFormString("formString");
+
 // these are also in the main constants file
 static const QString kxmlPropAlpha("ALPHA");
 static const QString kxmlPropBeta("BETA");

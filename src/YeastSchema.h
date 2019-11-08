@@ -45,6 +45,7 @@ static const QString kpropProductID("productID");
 static const QString kpropMinTemp("minTemperature_c");
 static const QString kpropMaxTemp("maxTemperature_c");
 static const QString kpropFloc("flocculation");
+static const QString kpropFlocString("flocculationString");
 static const QString kpropAttenPct("attenuation_pct");
 static const QString kpropBestFor("bestFor");
 static const QString kpropTimesCultd("timesCultured");
