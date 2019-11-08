@@ -127,7 +127,7 @@ const QStringList TableSchema::allPropertyNames(Brewtarget::DBTypes type) const
     QStringList retval;
     while ( i.hasNext() ) {
         i.next();
-        retval.append( i.value()->colName(type));
+        retval.append( i.value()->propName(type));
     }
     return retval;
 }
@@ -374,8 +374,8 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
       i.next();
       PropertySchema* prop = i.value();
 
-      columns += QString(",%1").arg( prop->colName());
-      binding += QString(",:%1").arg( prop->colName());
+      columns += QString(",%1").arg( prop->colName(type));
+      binding += QString(",:%1").arg( prop->colName(type));
    }
 
    QMapIterator<QString, PropertySchema*> j(m_foreignKeys);
@@ -383,13 +383,40 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
       j.next();
       PropertySchema* key = j.value();
 
-      columns += QString(",%1").arg(key->colName());
-      binding += QString(",:%1").arg(key->colName());
+      columns += QString(",%1").arg(key->colName(type));
+      binding += QString(",:%1").arg(key->colName(type));
    }
+   return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(m_tableName).arg(columns).arg(binding);
+}
+
+// NOTE: This does NOT deal with foreign keys nor the primary key for the table. It assumes
+// any calling method will handle those relationships. In my rough design ideas, a table knows
+// of itself and foreign key *values* are part of the database.
+// To make other parts of the code easier, I am making certain that the bound values use the property name
+// and not the column name. It saves a call later.
+const QString TableSchema::generateInsertProperties(Brewtarget::DBTypes type)
+{
+   QString columns;
+   QString binding;
+
+   QMapIterator<QString, PropertySchema*> i(m_properties);
+   while ( i.hasNext() ) {
+      i.next();
+      PropertySchema* prop = i.value();
+
+      if ( columns.isEmpty() ) {
+         columns = QString("%1").arg( prop->colName(type));
+         binding = QString(":%1").arg( prop->propName(type));
+      }
+      else {
+         columns += QString(",%1").arg( prop->colName(type));
+         binding += QString(",:%1").arg( prop->propName(type));
+      }
+   }
+
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(m_tableName).arg(columns).arg(binding);
 
 }
-
 const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
 {
    QString columns;
@@ -399,10 +426,10 @@ const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
       i.next();
       PropertySchema* prop = i.value();
       if ( ! columns.isEmpty() ) {
-         columns += QString(",%1=:%1").arg( prop->colName());
+         columns += QString(",%1=:%1").arg( prop->colName(type));
       }
       else {
-         columns = QString("%1=:%1").arg( prop->colName() );
+         columns = QString("%1=:%1").arg( prop->colName(type) );
       }
    }
 
@@ -422,7 +449,7 @@ const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes 
       i.next();
       PropertySchema* prop = i.value();
 
-      columns += QString(",%1").arg( prop->colName());
+      columns += QString(",%1").arg( prop->colName(type));
    }
    return QString("INSERT INTO %1 (%2) SELECT %2 FROM %3").arg(dest).arg(columns).arg(m_tableName);
 
@@ -770,7 +797,7 @@ void TableSchema::defineMashstepTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropName]       = new PropertySchema( kpropName,       kcolName,               kxmlPropName,       QString("text"), QString("''"),QString("not null"));
-   m_properties[kpropType]       = new PropertySchema( kpropType,       kcolMashstepType,       QString(""),        QString("text"), QString("'Infusion'"));
+   m_properties[kpropType]       = new PropertySchema( kpropTypeString, kcolMashstepType,       QString(""),        QString("text"), QString("'Infusion'"));
    m_properties[kpropInfuseAmt]  = new PropertySchema( kpropInfuseAmt,  kcolMashstepInfuseAmt,  kxmlPropInfuseAmt,  QString("real"), QVariant(0.0));
    m_properties[kpropStepTemp]   = new PropertySchema( kpropStepTemp,   kcolMashstepStepTemp,   kxmlPropStepTemp,   QString("real"), QVariant(67.0));
    m_properties[kpropStepTime]   = new PropertySchema( kpropStepTime,   kcolMashstepStepTime,   kxmlPropStepTime,   QString("real"), QVariant(0.0));

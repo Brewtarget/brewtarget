@@ -1551,13 +1551,11 @@ void MainWindow::newRecipe()
    }
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
-   // newRec->setName(name);
    newRec->setBatchSize_l(18.93); // 5 gallons
    newRec->setBoilSize_l(23.47);  // 6.2 gallons
    newRec->setEfficiency_pct(70.0);
 
    // we need a valid key, so insert the recipe before we add equipment
-   Database::instance().insertRecipe(newRec);
    if ( defEquipKey != -1 )
    {
       Equipment *e = Database::instance().equipment(defEquipKey.toInt());
@@ -1571,6 +1569,8 @@ void MainWindow::newRecipe()
          Database::instance().addToRecipe(newRec, e);
       }
    }
+
+   Database::instance().insertRecipe(newRec);
 
    // a new recipe will be put in a folder if you right click on a recipe or
    // folder. Otherwise, it goes into the main window?

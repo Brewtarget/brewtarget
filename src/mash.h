@@ -41,12 +41,13 @@ class Mash : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashs")
-   
+
    friend class Database;
+   friend class MashDesigner;
 public:
 
    virtual ~Mash() {}
-   
+
    //! \brief The initial grain temp in Celsius.
    Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c /*NOTIFY changed*/ /*changedGrainTemp_c*/ )
    //! \brief The notes.
@@ -70,7 +71,7 @@ public:
   // Q_PROPERTY( double tunMass_kg READ tunMass_kg  WRITE setTunMass_kg /*NOTIFY changed*/ /*changedTotalTime*/ )
    //! \brief The individual mash steps.
    Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
-   
+
    // Setters
    void setGrainTemp_c( double var );
    void setNotes( const QString &var );
@@ -93,14 +94,14 @@ public:
    double tunSpecificHeat_calGC() const;
    bool equipAdjust() const;
    bool cacheOnly() const;
-   
+
    // Calculated getters
    double totalMashWater_l();
    double totalTime();
-   
+
    // Relational getters
    QList<MashStep*> mashSteps() const;
-   
+
    // NOTE: should this be completely in Database?
    void removeAllMashSteps();
 
@@ -108,20 +109,20 @@ public:
 
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
-   
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   
+
    // Emitted when the number of steps change, or when you should call mashSteps() again.
    void mashStepsChanged();
-   
+
 private:
    Mash(Brewtarget::DBTable table, int key);
    Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Mash( Mash const& other );
    Mash( QString name, bool cache = true );
-   
+
    double m_grainTemp_c;
    QString m_notes;
    double m_tunTemp_c;

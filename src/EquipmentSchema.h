@@ -51,9 +51,8 @@ static const QString kpropCalcBoilVol("calcBoilVolume");
 static const QString kpropLauterSpace("lauterDeadspace_l");
 static const QString kpropTopUpKettle("topUpKettle_l");
 static const QString kpropHopUtil("hopUtilization_pct");
-static const QString kpropGrainAbsorption("grainAbsorption_LKg");
+static const QString kpropAbsorption("grainAbsorption_LKg");
 static const QString kpropBoilingPoint("boilingPoint_c");
-static const QString kpropAbsorption("absorption_LKg");
 
 // XML prop names
 // const QString kXmlNameProp("NAME");

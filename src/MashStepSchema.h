@@ -31,6 +31,7 @@ static const QString kcolMashstepInfuseTemp("infuse_temp");
 static const QString kcolMashstepDecoctAmt("decoction_amount");
 static const QString kcolMashstepStepNumber("step_number");
 
+static const QString kpropTypeString("typeString");
 static const QString kpropInfuseAmt("infuseAmount_l");
 static const QString kpropStepTemp("stepTemp_c");
 static const QString kpropStepTime("stepTime_min");

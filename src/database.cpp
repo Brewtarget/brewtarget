@@ -1579,25 +1579,27 @@ Yeast* Database::newYeast(Yeast* other)
    return tmp;
 }
 
-// I am torn on if this should be transacted or not. My feeling on this
-// rewrite is that the transactions need to go higher -- to the places that
-// know if they are writing to multiple tables or not.
 int Database::insertElement(BeerXMLElement* ins)
 {
    int key;
    QSqlQuery q( sqlDatabase() );
 
-   TableSchema* schema = new TableSchema(ins->table());
-   QString insert = QString("insert into %1 (").arg(schema->tableName());
-   QStringList allColumns = schema->allColumnNames(Brewtarget::dbType());
-   QStringList allProps = schema->allPropertyNames();
-
-   insert = insert % allColumns.join(",") % ") values (:" % allProps.join(",:") % ");";
+   TableSchema* schema = dbDefn->table(ins->table());
+   QString insert = schema->generateInsertProperties(Brewtarget::dbType());
+   QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
-      q.bindValue( ":"%prop, ins->property(prop.toUtf8().data()));
+       if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == "brewdate" ) {
+           QVariant helpme( ins->property(prop.toUtf8().data()).toString());
+           q.bindValue(":brewdate",helpme);
+       }
+       else {
+          QVariant wtf = ins->property(prop.toUtf8().data() );
+          // I've arranged it such that the bindings are on the property names. It simplifies a lot
+          q.bindValue( QString(":%1").arg(prop), wtf);
+       }
    }
 
    try {
@@ -1639,6 +1641,9 @@ int Database::insertEquipment(Equipment* ins)
 {
    int key = insertElement(ins);
    ins->setCacheOnly(false);
+
+   TableSchema* schema = dbDefn->table(ins->table());
+   QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
    allEquipments.insert(key,ins);
    emit changed( metaProperty("equipments"), QVariant() );
@@ -1721,11 +1726,14 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
 
    sqlDatabase().transaction();
    try {
-
       // we need to insert the mashstep into the db first to get the key
       key = insertElement(ins);
       ins->setCacheOnly(false);
 
+      TableSchema* ts = dbDefn->table(Brewtarget::MASHSTEPTABLE);
+      foreach (QString p, ts->allPropertyNames()) {
+          qDebug() << Q_FUNC_INFO << p << ins->property( p.toUtf8().data());
+      }
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
                  QString("mash_id=%1 ").arg(parent->_key),
                  QString("id=%1").arg(key)
@@ -5762,7 +5770,9 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
                   QVariant helpme(here.field(i).value().toString());
                   upsertNew.bindValue(":brewdate",helpme);
                }
-               upsertNew.bindValue(QString(":%1").arg(here.fieldName(i)), convertValue(newType, here.field(i)));
+               else {
+                  upsertNew.bindValue(QString(":%1").arg(here.fieldName(i)), convertValue(newType, here.field(i)));
+               }
             }
             // and execute
             if ( ! upsertNew.exec() )

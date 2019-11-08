@@ -39,23 +39,27 @@ bool operator==(MashStep &m1, MashStep &m2);
 class MashStep : public BeerXMLElement
 {
    Q_OBJECT
-   
+
+   // this seems to be a class with a lot of friends
    friend class Database;
    friend class MashStepItemDelegate;
    friend class MashWizard;
+   friend class MashDesigner;
    friend class MainWindow;
 public:
 
    //! \brief The type of step.
    enum Type { Infusion, Temperature, Decoction, flySparge, batchSparge };
    Q_ENUMS( Type )
-   
+
    virtual ~MashStep() {}
 
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The translated \c Type string.
    Q_PROPERTY( QString typeStringTr READ typeStringTr )
+   //! \brief The untranslated \c Type string that we use in the database
+   Q_PROPERTY( QString typeString READ typeString )
    //! \brief The infusion amount in liters.
    Q_PROPERTY( double infuseAmount_l READ infuseAmount_l WRITE setInfuseAmount_l /*NOTIFY changed*/ /*changedInfuseAmount_l*/ )
    //! \brief The target temperature of this step in C.
@@ -72,7 +76,7 @@ public:
    Q_PROPERTY( double decoctionAmount_l READ decoctionAmount_l WRITE setDecoctionAmount_l /*NOTIFY changed*/ /*changedDecoctionAmount_l*/ )
    //! \brief The step number in a sequence of other steps.
    Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
-   
+
    void setType( Type t);
    void setInfuseAmount_l( double var);
    void setStepTemp_c( double var);
@@ -82,7 +86,7 @@ public:
    void setInfuseTemp_c( double var);
    void setDecoctionAmount_l( double var);
    void setCacheOnly(bool cache);
-   
+
    Type type() const;
    const QString typeString() const;
    const QString typeStringTr() const;
@@ -94,7 +98,7 @@ public:
    double infuseTemp_c() const;
    double decoctionAmount_l() const;
    bool cacheOnly() const;
-   
+
    //! What number this step is in the mash.
    int stepNumber() const;
 
@@ -110,13 +114,13 @@ signals:
 
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   
+
 private:
    MashStep(Brewtarget::DBTable table, int key);
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
    MashStep( MashStep const& other );
    MashStep(bool cache);
-   
+
    QString m_typeStr;
    Type m_type;
    double m_infuseAmount_l;
@@ -128,12 +132,12 @@ private:
    double m_decoctionAmount_l;
    int m_stepNumber;
    bool m_cacheOnly;
-   
+
    bool isValidType( const QString &str ) const;
 
    static QStringList types;
    static QStringList typesTr;
-   
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };

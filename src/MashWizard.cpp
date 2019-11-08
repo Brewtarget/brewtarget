@@ -37,7 +37,7 @@ MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 {
    setupUi(this);
    bGroup = new QButtonGroup();
-   recObs = 0;
+   recObs = nullptr;
 
    bGroup->addButton(radioButton_noSparge);
    bGroup->addButton(radioButton_batchSparge);
@@ -73,7 +73,7 @@ void MashWizard::setRecipe(Recipe* rec)
 
 void MashWizard::show()
 {
-   if( recObs == 0 || recObs->mash() == 0 )
+   if( recObs == nullptr || recObs->mash() == nullptr )
       return;
 
    // Ensure at least one mash step.
@@ -152,7 +152,7 @@ double MashWizard::calcDecoctionAmount( MashStep* step, Mash* mash, double water
 
 void MashWizard::wizardry()
 {
-   if( recObs == 0 || recObs->mash() == 0 )
+   if( recObs == nullptr || recObs->mash() == nullptr )
       return;
 
    Mash* mash = recObs->mash();
@@ -168,7 +168,7 @@ void MashWizard::wizardry()
    double boilingPoint_c;
 
    // If we have an equipment, utilize the custom absorption and boiling temp.
-   if( recObs->equipment() != 0 )
+   if( recObs->equipment() != nullptr )
    {
       absorption_LKg = recObs->equipment()->grainAbsorption_LKg();
       boilingPoint_c = recObs->equipment()->boilingPoint_c();
@@ -374,7 +374,7 @@ void MashWizard::wizardry()
             mashStep = new MashStep(true);
 
             mashStep->setType(MashStep::batchSparge);
-            mashStep->setName(tr("Batch Sparge %1").arg(i+1));
+            mashStep->setName(tr("Batch Sparge %1").arg(i+1),true);
             mashStep->setInfuseAmount_l(volPerBatch);
             mashStep->setInfuseTemp_c(tw);
             mashStep->setEndTemp_c(tw);
@@ -383,13 +383,19 @@ void MashWizard::wizardry()
 
             Database::instance().insertMashStep(mashStep,mash);
             steps.append(mashStep);
+            emit mashStep->changed(
+                        mashStep->metaObject()->property(
+                            mashStep->metaObject()->indexOfProperty(kpropType.toUtf8().data())
+                        )
+            );
          }
+         emit mash->mashStepsChanged();
       }
       // fly sparge, I think
       else {
          mashStep = new MashStep(true);
 
-         mashStep->setName(tr("Fly Sparge"));
+         mashStep->setName(tr("Fly Sparge"), true);
          mashStep->setType(MashStep::flySparge);
          mashStep->setInfuseAmount_l(spargeWater_l);
          mashStep->setInfuseTemp_c(tw);
@@ -399,6 +405,11 @@ void MashWizard::wizardry()
 
          Database::instance().insertMashStep(mashStep,mash);
          steps.append(mashStep);
+         emit mashStep->changed(
+                     mashStep->metaObject()->property(
+                         mashStep->metaObject()->indexOfProperty(kpropType.toUtf8().data())
+                     )
+         );
       }
 
    }

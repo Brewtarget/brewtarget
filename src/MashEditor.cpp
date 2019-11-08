@@ -28,7 +28,7 @@
 #include "equipment.h"
 #include "recipe.h"
 
-MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(0)
+MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(nullptr)
 {
    setupUi(this);
 
@@ -51,9 +51,9 @@ void MashEditor::closeEditor()
 
 void MashEditor::saveAndClose()
 {
-   if( mashObs == 0 )
+   if( mashObs == nullptr )
       return;
-   
+
    mashObs->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
 
    mashObs->setName( lineEdit_name->text(), mashObs->cacheOnly() );
@@ -65,15 +65,15 @@ void MashEditor::saveAndClose()
    mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toSI());
 
    mashObs->setNotes( textEdit_notes->toPlainText() );
-   
+
 }
 
 void MashEditor::fromEquipment()
 {
-   if( mashObs == 0 )
+   if( mashObs == nullptr )
       return;
 
-   if ( equip == 0 )
+   if ( equip == nullptr )
       return;
 
    lineEdit_tunMass->setText(equip);
@@ -83,8 +83,8 @@ void MashEditor::fromEquipment()
 void MashEditor::setMash(Mash* mash)
 {
    if( mashObs )
-      disconnect( mashObs, 0, this, 0 );
-   
+      disconnect( mashObs, nullptr, this, nullptr );
+
    mashObs = mash;
    if( mashObs )
    {
@@ -121,13 +121,13 @@ void MashEditor::showChanges(QMetaProperty* prop)
    bool updateAll = false;
    QString propName;
 
-   if( mashObs == 0 )
+   if( mashObs == nullptr )
    {
       clear();
       return;
    }
 
-   if( prop == 0 )
+   if( prop == nullptr )
       updateAll = true;
    else
       propName = prop->name();

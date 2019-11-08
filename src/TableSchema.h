@@ -95,6 +95,8 @@ public:
    const QString generateCreateTable(Brewtarget::DBTypes type, QString tmpName = QString("") );
    const QString generateUpdateRow(int key, Brewtarget::DBTypes type);
    const QString generateInsertRow(Brewtarget::DBTypes type);
+   // this one ignores the foreign keys
+   const QString generateInsertProperties(Brewtarget::DBTypes type);
    const QString generateCopyTable( QString dest, Brewtarget::DBTypes type);
 
    bool isInventoryTable();

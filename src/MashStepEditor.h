@@ -44,7 +44,7 @@ class MashStepEditor : public QDialog, public Ui::mashStepEditor
 {
    Q_OBJECT
 public:
-   MashStepEditor(QWidget* parent=0);
+   MashStepEditor(QWidget* parent=nullptr);
    virtual ~MashStepEditor() {}
 
    void setMashStep(MashStep* step);

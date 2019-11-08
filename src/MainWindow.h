@@ -103,7 +103,7 @@ class MainWindow : public QMainWindow, public Ui::mainWindow
 
    friend class OptionDialog;
 public:
-   MainWindow(QWidget* parent=0);
+   MainWindow(QWidget* parent=nullptr);
    virtual ~MainWindow() {}
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();

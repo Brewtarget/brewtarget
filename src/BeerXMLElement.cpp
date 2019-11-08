@@ -74,14 +74,14 @@ void BeerXMLElement::setDeleted(const bool var, bool cachedOnly)
 {
    _deleted = var;
    if ( ! cachedOnly )
-      set(kDeleted, kDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+      setEasy(kpropDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
 void BeerXMLElement::setDisplay(bool var, bool cachedOnly)
 {
    _display = var;
    if ( ! cachedOnly )
-      set(kDisplay, kDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+      setEasy(kpropDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
 QString BeerXMLElement::folder() const
@@ -93,7 +93,8 @@ void BeerXMLElement::setFolder(const QString var, bool signal, bool cachedOnly)
 {
    _folder = var;
    if ( ! cachedOnly )
-      set( kFolder, kFolder, var );
+      // set( kFolder, kFolder, var );
+      setEasy( kpropFolder, var );
    // not sure if I should only signal when not caching?
    if ( signal )
       emit changedFolder(var);
@@ -106,10 +107,11 @@ QString BeerXMLElement::name() const
 
 void BeerXMLElement::setName(const QString var, bool cachedOnly)
 {
-   
+
    _name = var;
    if ( ! cachedOnly ) {
-      set( kName, kName, var );
+      // set( kName, kName, var );
+      setEasy( kpropName, var );
       emit changedName(var);
    }
 }
