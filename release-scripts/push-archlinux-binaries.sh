@@ -6,7 +6,7 @@ TARGET="arch"
 BUILD_PATH=/app/arch
 PACKAGE="brewtarget-devel-${ARCH_VERSION}-1-x86_64.pkg.tar.xz"
 IMG_NAME="cgspeck/brewtarget-build:${TARGET}-${TRAVIS_BUILD_NUMBER}"
-
+echo "Pulling $IMG_NAME"
 docker pull $IMG_NAME
 docker run \
     --rm \

@@ -25,7 +25,7 @@ IMG_NAME="cgspeck/brewtarget-build:${TARGET}-${TRAVIS_BUILD_NUMBER}"
 echo "Creating Docker Tag: ${IMG_NAME}"
 docker tag cgspeck/brewtarget-build:$TARGET $IMG_NAME
 
-if [[ "$TRAVIS" == "true" && "$BRANCH" == "develop" ]]; then
+if [[ "$TRAVIS" == "true" && "$BRANCH_NAME" == "develop" ]]; then
   echo -e "\nPushing new docker image: cgspeck/brewtarget-build:$TARGET"
   docker push cgspeck/brewtarget-build:$TARGET
   echo -e "\nPushing new docker image: $IMG_NAME"

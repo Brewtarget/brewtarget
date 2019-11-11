@@ -14,10 +14,11 @@ package_dest_name="${!package_dest_name_str}"
 
 BUILD_PATH=/app/build
 PACKAGE="brewtarget_2.4.0_x86_64.deb"
-
-
+IMG_NAME="cgspeck/brewtarget-build:${TARGET}-${TRAVIS_BUILD_NUMBER}"
+echo "Pulling $IMG_NAME"
+docker pull $IMG_NAME
 echo -e "\n\nCopying ${BUILD_PATH}/${package_dest_name}"
-docker run --rm --entrypoint cat cgspeck/brewtarget-build:$TARGET $BUILD_PATH/$PACKAGE > "packages/${package_dest_name}"
+docker run --rm --entrypoint cat $IMG_NAME $BUILD_PATH/$PACKAGE > "packages/${package_dest_name}"
 echo -e "\n\nPackages:"
 ls packages/
 

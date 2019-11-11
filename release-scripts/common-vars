@@ -11,8 +11,6 @@ else
   BRANCH_NAME="${TRAVIS_BRANCH}"
 fi
 
-echo "XXXX BRANCH_NAME: '${BRANCH_NAME}'"
-
 TAG_NAME="${MAJ_VER}.${MIN_VER}.${PATCH_VER}.r${TRAVIS_BUILD_NUMBER}"
 TARGET_COMMITISH=$(git rev-parse HEAD)
 SHORT_HASH=$(git rev-parse --short HEAD)
