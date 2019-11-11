@@ -1,9 +1,23 @@
 #! /bin/bash -e
+MAJ_VER="2"
+MIN_VER="3"
+PATCH_VER="1"
+
 if [[ -z "${TRAVIS_BUILD_NUMBER}" ]]; then
-    TAG_NAME="v2.4.0-0(unknown)"
+  TRAVIS_BUILD_NUMBER="1"
+  BRANCH_NAME=`git symbolic-ref -q HEAD`
+  BRANCH_NAME=${BRANCH_NAME##refs/heads/}
 else
-    TAG_NAME="v2.4.0-${TRAVIS_BUILD_NUMBER}"
+  BRANCH_NAME="${TRAVIS_BRANCH}"
 fi
 
+TAG_NAME="${MAJ_VER}.${MIN_VER}.${PATCH_VER}.r${TRAVIS_BUILD_NUMBER}"
 TARGET_COMMITISH=$(git rev-parse HEAD)
 SHORT_HASH=$(git rev-parse --short HEAD)
+
+ARCH_VERSION="$MAJ_VER.$MIN_VER.$PATCH_VER.r${TRAVIS_BUILD_NUMBER}.${SHORT_HASH}"
+
+LAST_COMMIT_DATE=$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d%H%M%S%z)
+# myapp_1.0+1SNAPSHOT20120613154859+0200-0ubuntu1ppa1~precise
+ubuntu1804_VERSION="brewtarget_${MAJ_VER}.${MIN_VER}.${PATCH_VER}+2.4.0SNAPSHOT${LAST_COMMIT_DATE}-0ubuntu1ppa${TRAVIS_BUILD_NUMBER}~bionic"
+ubuntu1904_VERSION="brewtarget_${MAJ_VER}.${MIN_VER}.${PATCH_VER}+2.4.0SNAPSHOT${LAST_COMMIT_DATE}-0ubuntu1ppa${TRAVIS_BUILD_NUMBER}~disco"

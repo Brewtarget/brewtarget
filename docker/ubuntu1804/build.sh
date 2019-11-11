@@ -7,7 +7,6 @@ patch=/app/brewtarget/docker/ubuntu1804/patches/0001-Revert-CMakelist-change-bec
 cd $SRC_PATH
 git apply --stat $patch
 git apply --check $patch
-# git am < $patch  # <- am would do an apply & commit
 git apply $patch
 echo -e "\nStarting build...\n"
 [ -d $BUILD_PATH ] && rm -rf $BUILD_PATH
@@ -15,4 +14,5 @@ mkdir $BUILD_PATH
 cd $BUILD_PATH
 cmake $SRC_PATH
 make
+QT_QPA_PLATFORM=minimal make test
 make package
