@@ -31,7 +31,6 @@ echo -e "\nDownloading github-releases tool"
   chmod +x $github_release_path
   echo -e "\nUploading binaries to Github"
 
-
   src="./packages/${package_dest_name}"
   echo -e "\nUploading ${src}"
   $github_release_path upload \

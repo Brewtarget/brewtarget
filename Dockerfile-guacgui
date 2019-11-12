@@ -3,6 +3,7 @@ FROM lsiobase/guacgui
 # set version label
 ARG BUILD_DATE
 ARG VERSION
+ARG UBUNTU1804_DEB
 ARG DEBIAN_FRONTEND=noninteractive
 LABEL build_version="Brewtarget Devel version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="cgspeck"
@@ -53,7 +54,7 @@ RUN \
 # add local files
 COPY /docker/guacgui /
 RUN chmod +x /usr/bin/setup-brewtarget
-RUN /usr/bin/setup-brewtarget $VERSION
+RUN /usr/bin/setup-brewtarget $VERSION $UBUNTU1804_DEB
 
 RUN mkdir /brewtarget
 RUN chown abc:abc /brewtarget

@@ -1,11 +1,11 @@
 #! /bin/bash -e
 
-if [[ "$#" -ne 1 ]]; then
-  echo "Supply Github Release Tag"
+if [[ "$#" -ne 2 ]]; then
+  echo "Supply Github Release Tag and Ubuntu 18.04 version string"
   exit 1
 fi
 
-deb_filename="ubuntu1804_brewtarget_2.4.0_x86_64.deb"
+deb_filename=$(echo "${2}" | sed 's\~\.\')  # Github translates '~' into '.'
 tmp_deb=$(mktemp -d)/$deb_filename
 
 wget "https://github.com/cgspeck/brewtarget/releases/download/${1}/${deb_filename}" \

@@ -1,12 +1,6 @@
 #! /bin/bash -e
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $DIR/common-vars
-
-if [[ "$#" -eq 1 ]]; then
-  TAG_NAME=$1
-  echo "Overriding tag, using ${TAG_NAME}"
-fi
 
 BUILD_PATH=/app/build
 
@@ -16,18 +10,19 @@ fi
 
 echo "Building for ${TAG_NAME}"
 
-tag="latest"
+docker_tag="latest"
 
 docker build \
-  -t cgspeck/brewtarget-guacgui:$tag \
+  -t cgspeck/brewtarget-guacgui:$docker_tag \
   -f Dockerfile-guacgui \
   --build-arg BUILD_DATE=$(date -u +%s) \
   --build-arg VERSION=$TAG_NAME \
+  --build-arg UBUNTU1804_DEB=$ubuntu1804_VERSION \
   .
 
 if [[ "$TRAVIS" == "true" ]]; then
   echo -e "\nPushing new docker images"
-  docker push cgspeck/brewtarget-guacgui:$tag
+  docker push cgspeck/brewtarget-guacgui:$docker_tag
   echo -e "\nUpdating Docker Hub Readme"
   sed "s/%TAG_NAME%/${TAG_NAME}/" $PWD/docker/guacgui/README.md | sed  "s/%SHORT_HASH%/${SHORT_HASH}/" > $PWD/docker/guacgui/README.md.tmp
   mv $PWD/docker/guacgui/README.md.tmp $PWD/docker/guacgui/README.md
