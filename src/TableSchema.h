@@ -87,17 +87,17 @@ public:
    const QStringList allForeignKeyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
-   const QString inRecIndexName(Brewtarget::DBTypes type);
-   const QString childIndexName(Brewtarget::DBTypes type);
-   const QString parentIndexName(Brewtarget::DBTypes type);
+   const QString inRecIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   const QString childIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   const QString parentIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
 
    // Not sure these belong here yet, but maybe
-   const QString generateCreateTable(Brewtarget::DBTypes type, QString tmpName = QString("") );
-   const QString generateUpdateRow(int key, Brewtarget::DBTypes type);
-   const QString generateInsertRow(Brewtarget::DBTypes type);
+   const QString generateCreateTable(Brewtarget::DBTypes type = Brewtarget::ALLDB, QString tmpName = QString("") );
+   const QString generateUpdateRow(int key, Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   const QString generateInsertRow(Brewtarget::DBTypes type = Brewtarget::ALLDB);
    // this one ignores the foreign keys
-   const QString generateInsertProperties(Brewtarget::DBTypes type);
-   const QString generateCopyTable( QString dest, Brewtarget::DBTypes type);
+   const QString generateInsertProperties(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   const QString generateCopyTable( QString dest, Brewtarget::DBTypes type = Brewtarget::ALLDB);
 
    bool isInventoryTable();
    bool isBaseTable();

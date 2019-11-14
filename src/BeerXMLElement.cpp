@@ -261,7 +261,7 @@ QString BeerXMLElement::text(QDate const& val)
 
 void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
 {
-   if (prop_name != NULL && col_name != NULL) {
+   if (prop_name != nullptr && col_name != nullptr) {
     // Get the meta property.
     int ndx = metaObject()->indexOfProperty(prop_name);
 

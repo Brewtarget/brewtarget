@@ -170,31 +170,38 @@ const QStringList TableSchema::allForeignKeyColumnNames(Brewtarget::DBTypes type
 
 const PropertySchema* TableSchema::property(QString prop) const
 {
+   PropertySchema* retval = nullptr;
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop);
+      retval = m_properties.value(prop);
    }
-
-   return nullptr;
+   else if ( m_foreignKeys.contains(prop)){
+      retval = m_foreignKeys.value(prop);
+   }
+   return retval;
 }
 
 const QString TableSchema::propertyToColumn(QString prop, Brewtarget::DBTypes type) const
 {
+   QString retval;
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->colName(type);
+      retval =  m_properties.value(prop)->colName(type);
    }
-   else {
-      return QString();
+   else if ( m_foreignKeys.contains(prop)){
+      retval = m_foreignKeys.value(prop)->colName(type);
    }
+   return retval;
 }
 
 const QString TableSchema::propertyToXml(QString prop, Brewtarget::DBTypes type) const
 {
+   QString retval;
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->xmlName(type);
+      retval = m_properties.value(prop)->xmlName(type);
    }
-   else {
-      return QString();
+   else if ( m_foreignKeys.contains(prop) ) {
+      retval = m_foreignKeys.value(prop)->xmlName(type);
    }
+   return retval;
 }
 
 const QString TableSchema::xmlToProperty(QString xmlName, Brewtarget::DBTypes type) const
@@ -225,12 +232,14 @@ const QString TableSchema::propertyColumnType(QString prop, Brewtarget::DBTypes 
 
 const QVariant TableSchema::propertyColumnDefault(QString prop, Brewtarget::DBTypes type) const
 {
+   QVariant retval = QString();
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->defaultValue(type);
+      retval = m_properties.value(prop)->defaultValue(type);
    }
-   else {
-      return QString();
+   else if ( m_foreignKeys.contains(prop) ) {
+      retval = m_foreignKeys.value(prop)->xmlName(type);
    }
+   return retval;
 }
 
 int TableSchema::propertyColumnSize(QString prop, Brewtarget::DBTypes type) const

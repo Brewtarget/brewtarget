@@ -132,12 +132,14 @@ public:
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
    {
       QSqlQuery q;
-      QString index = QString("%1_%2").arg(dbDefn->tableName(table)).arg(col_name);
+      TableSchema* tbl = dbDefn->table(table);
+      QString index = QString("%1_%2").arg(tbl->tableName()).arg(col_name);
 
       if ( ! selectSome.contains(index) ) {
-         QString query = QString("SELECT %1 from %2 WHERE id=:id")
+         QString query = QString("SELECT %1 from %2 WHERE %3=:id")
                            .arg(col_name)
-                           .arg(dbDefn->tableName(table));
+                           .arg(tbl->tableName())
+                           .arg(tbl->keyName());
          q = QSqlQuery( sqlDatabase() );
          q.prepare(query);
          selectSome.insert(index,q);
@@ -196,8 +198,10 @@ public:
    template<class T> T* newIngredient(QString name, QHash<int,T*>* all) {
       int key;
       // To quote the talking heads, my god what have I done?
-      Brewtarget::DBTable table = dbDefn->classNameToTable( T::classNameStr() );
-      QString insert = QString("INSERT INTO %1 (name) VALUES (:name)").arg(dbDefn->tableName(table));
+      TableSchema* tbl = dbDefn->table(dbDefn->classNameToTable(T::classNameStr()));
+      QString insert = QString("INSERT INTO %1 (%2) VALUES (:name)")
+              .arg(tbl->tableName())
+              .arg(tbl->propertyToColumn(kpropName));
 
       QSqlQuery q(sqlDatabase());
 
@@ -218,7 +222,7 @@ public:
          throw; // rethrow the error until somebody cares
       }
 
-      T* tmp = new T(table, key);
+      T* tmp = new T(tbl->dbTable(), key);
       all->insert(tmp->_key,tmp);
 
       return tmp;
@@ -367,8 +371,7 @@ public:
 
    template <class T>void remove(T* ing, bool emitSignal = true)
    {
-      if (!ing)
-          return;
+      if (!ing) return;
 
       const QMetaObject *meta = ing->metaObject();
       Brewtarget::DBTable ingTable = dbDefn->classNameToTable( meta->className() );
@@ -464,6 +467,7 @@ public:
    //! Return a list of all the steps in a mash.
    QList<MashStep*> mashSteps(Mash const* parent);
 
+   QString textFromValue(QVariant value, QString type);
    // Export to BeerXML =======================================================
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
@@ -497,7 +501,7 @@ public:
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
 
-   void updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap);
+   // void updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap);
 
 signals:
    void changed(QMetaProperty prop, QVariant value);
@@ -588,8 +592,9 @@ private:
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       QSqlQuery q(sqlDatabase());
+      TableSchema* tbl = dbDefn->table(table);
       q.setForwardOnly(true);
-      QString queryString = QString("SELECT * FROM %1").arg(dbDefn->tableName(table));
+      QString queryString = QString("SELECT * FROM %1").arg(tbl->tableName());
       q.prepare( queryString );
 
       try {
@@ -602,9 +607,8 @@ private:
          throw;
       }
 
-      while( q.next() )
-      {
-         int key = q.record().value("id").toInt();
+      while( q.next() ) {
+         int key = q.record().value(tbl->keyName(Brewtarget::dbType())).toInt();
 
          T* e = new T(table, key, q.record());
          if( ! hash.contains(key) )
@@ -618,16 +622,19 @@ private:
    template <class T> bool getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
    {
       QSqlQuery q(sqlDatabase());
+      TableSchema* tbl = dbDefn->table( table );
       q.setForwardOnly(true);
       QString queryString;
 
       if ( id.isEmpty() )
-         id = "id";
+         id = tbl->keyName(Brewtarget::dbType());
+      else
+         id = tbl->propertyToColumn(id);
 
       if( !filter.isEmpty() )
-         queryString = QString("SELECT %1 as id FROM %2 WHERE %3").arg(id).arg(dbDefn->tableName(table)).arg(filter);
+         queryString = QString("SELECT %1 as id FROM %2 WHERE %3").arg(id).arg(tbl->tableName()).arg(filter);
       else
-         queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(dbDefn->tableName(table));
+         queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tbl->tableName());
 
       try {
          if ( ! q.exec(queryString) )
@@ -735,20 +742,21 @@ private:
       if ( transact ) {
          sqlDatabase().transaction();
       }
-      // Queries have to be created inside transactional boundaries
 
+      // Queries have to be created inside transactional boundaries
       QSqlQuery q(sqlDatabase());
       try {
          if ( ndx != -1 ) {
-            table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
-            child = dbDefn->table( table->childTable() );
-            inrec = dbDefn->table( table->inRecTable() );
-
             propName  = meta->classInfo(ndx).value();
          }
          else {
             throw QString("could not locate classInfo for signal on %2").arg(meta->className());
          }
+
+         table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
+         child = dbDefn->table( table->childTable() );
+         inrec = dbDefn->table( table->inRecTable() );
+
          // Ensure this ingredient is not already in the recipe.
          QString select = QString("SELECT %5 from %1 WHERE %2=%3 AND %5=%4")
                               .arg(inrec->tableName())
@@ -786,9 +794,10 @@ private:
          // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
          q.setForwardOnly(true);
 
-         QString insert = QString("INSERT INTO %1 (%2, recipe_id) VALUES (:ingredient, :recipe)")
+         QString insert = QString("INSERT INTO %1 (%2, %3) VALUES (:ingredient, :recipe)")
                   .arg(inrec->tableName())
-                  .arg(inrec->inRecIndexName(Brewtarget::dbType()));
+                  .arg(inrec->inRecIndexName(Brewtarget::dbType()))
+                  .arg(inrec->propertyToColumn(kcolRecipeId));
 
          q.prepare(insert);
          q.bindValue(":ingredient", newIng->key());
@@ -816,16 +825,20 @@ private:
              *   Else if fails due to a foreign key constrain.
              */
             int key = ing->key();
-            q.prepare(QString("SELECT parent_id FROM %1 WHERE child_id=%2")
+            q.prepare(QString("SELECT %1 FROM %2 WHERE %3=%4")
+                  .arg(child->propertyToColumn(kpropParentId))
                   .arg(child->tableName())
+                  .arg(child->propertyToColumn(kpropChildId))
                   .arg(key));
             if (q.exec() && q.next()) {
-               key = q.record().value("parent_id").toInt();
+               key = q.record().value(child->propertyToColumn(kpropParentId)).toInt();
             }
             q.finish();
 
-            insert = QString("INSERT INTO %1 (parent_id, child_id) VALUES (:parent, :child)")
-                  .arg(child->tableName());
+            insert = QString("INSERT INTO %1 (%2, %3) VALUES (:parent, :child)")
+                  .arg(child->tableName())
+                  .arg(child->propertyToColumn(kpropParentId))
+                  .arg(child->propertyToColumn(kpropChildId));
 
             q.prepare(insert);
             q.bindValue(":parent", key);
@@ -871,8 +884,9 @@ private:
       T* newOne;
 
       Brewtarget::DBTable t = dbDefn->classNameToTable(object->metaObject()->className());
+      TableSchema* tbl = dbDefn->table(t);
 
-      QString tName = dbDefn->tableName(t);
+      QString tName = tbl->tableName();
 
       QSqlQuery q(sqlDatabase());
 
@@ -893,8 +907,7 @@ private:
          for (i=0; i< oldRecord.count(); ++i)
          {
             QString name = oldRecord.fieldName(i);
-            if ( name != "id" )
-            {
+            if ( name != tbl->keyName(Brewtarget::dbType()) ) {
                fields += fields.isEmpty() ? name : QString(",%1").arg(name);
                holder += holder.isEmpty() ? QString(":%1").arg(name) : QString(",:%1").arg(name);
             }
@@ -915,15 +928,14 @@ private:
             QString name = oldRecord.fieldName(i);
             QVariant val = oldRecord.value(i);
 
-            // We need to set the parent correctly.
-            if ( name == "parent" )
-               insert.bindValue(QString(":%1").arg(name), object->_key);
-            // Display is being set by the call, not by what we are copying
-            else if ( name == "display" )
+            // We have never had an attribute called 'parent'. See the git logs to understand this comment
+            if ( name == tbl->propertyToColumn(kpropDisplay) ) {
                insert.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
+            }
             // Ignore ID again, for the same reasons as before.
-            else if ( name != "id" )
+            else if ( name != tbl->keyName(Brewtarget::dbType()) ) {
                insert.bindValue(QString(":%1").arg(name), val);
+            }
          }
 
          if (! insert.exec() )
@@ -941,8 +953,6 @@ private:
       }
 
       q.finish();
-
-
       return newOne;
    }
 
@@ -980,10 +990,6 @@ private:
    //! \brief converts sqlite values (mostly booleans) into something postgres
    // wants
    QVariant convertValue(Brewtarget::DBTypes newType, QSqlField field);
-
-   /*
-   QStringList allTablesInOrder(QSqlQuery q);
-   */
 
    //! \brief does the heavy lifting to copy the contents from one db to the
    //next

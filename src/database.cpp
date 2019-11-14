@@ -75,6 +75,9 @@
 #include "DatabaseSchema.h"
 #include "TableSchema.h"
 #include "TableSchemaConst.h"
+#include "MashStepSchema.h"
+#include "InstructionSchema.h"
+#include "BrewnoteSchema.h"
 
 // Static members.
 Database* Database::dbInstance = nullptr;
@@ -703,11 +706,6 @@ bool Database::backupToDir(QString dir,QString filename)
 bool Database::restoreFromFile(QString newDbFileStr)
 {
    bool success = true;
-   /*
-   QString prefix = dirStr + "/";
-   QString newDbFileName = prefix + "database.sqlite";
-   QFile newDbFile(newDbFileName);
-   */
 
    QFile newDbFile(newDbFileStr);
    // Fail if we can't find file.
@@ -724,40 +722,45 @@ bool Database::restoreFromFile(QString newDbFileStr)
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 {
    const QMetaObject* meta = ing->metaObject();
-   QString tableName = dbDefn->classNameToTableName(meta->className());
+   Brewtarget::DBTypes dbType = Brewtarget::dbType();
+   TableSchema *table;
+   TableSchema *child;
+   TableSchema *inrec;
 
    int ndx = meta->indexOfClassInfo("signal");
-   QString propName, relTableName, ingKeyName, childTableName;
+   QString propName;
 
    sqlDatabase().transaction();
    QSqlQuery q(sqlDatabase());
 
    try {
       if ( ndx != -1 ) {
-         QString prefix = meta->classInfo( meta->indexOfClassInfo("prefix")).value();
          propName  = meta->classInfo(ndx).value();
-         relTableName = QString("%1_in_recipe").arg(prefix);
-         ingKeyName = QString("%1_id").arg(prefix);
-         childTableName = QString("%1_children").arg(prefix);
       }
       else {
          throw QString("could not locate classInfo for signal on %2").arg(meta->className());
       }
 
+      table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
+      child = dbDefn->table( table->childTable() );
+      inrec = dbDefn->table( table->inRecTable() );
       // We need to do many things -- remove the link in *in_recipe,
       // remove the entry from *_children
       // and DELETE THE COPY
-      QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND recipe_id=%4")
-                                 .arg(relTableName)
-                                 .arg(ingKeyName)
+      QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND %5=%4")
+                                 .arg(inrec->tableName() )
+                                 .arg(inrec->inRecIndexName(dbType))
                                  .arg(ing->_key)
-                                 .arg(rec->_key);
-      QString deleteFromChildren = QString("DELETE FROM %1 WHERE child_id=%2")
-                                 .arg(childTableName)
-                                 .arg(ing->_key);
-      QString deleteIngredient = QString("DELETE FROM %1 where id=%2")
-                                 .arg(tableName)
-                                 .arg(ing->_key);
+                                 .arg(rec->_key)
+                                 .arg(inrec->propertyToColumn(kcolRecipeId));
+      QString deleteFromChildren = QString("DELETE FROM %1 WHERE %3=%2")
+                                 .arg(child->tableName())
+                                 .arg(ing->_key)
+                                 .arg( child->childIndexName(dbType) );
+      QString deleteIngredient = QString("DELETE FROM %1 where %3=%2")
+                                 .arg(table->tableName())
+                                 .arg(ing->_key)
+                                 .arg(table->keyName(dbType));
       q.setForwardOnly(true);
 
       if ( ! q.exec(deleteFromInRecipe) )
@@ -766,7 +769,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       // I don't really like this, but I can't think of a better solution. Of
       // all the ingredients, instructions don't have a _children table. Given
       // that it is only one table, I will try the easy way first
-      if ( tableName != "instruction" && ! q.exec( deleteFromChildren ) )
+      if ( table->dbTable() != Brewtarget::INSTRUCTIONTABLE && ! q.exec( deleteFromChildren ) )
          throw QString("failed to delete children.");
 
       if ( ! q.exec( deleteIngredient ) )
@@ -809,11 +812,12 @@ void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 
 void Database::removeFrom( Mash* mash, MashStep* step )
 {
+   TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
    // Just mark the step as deleted.
    try {
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
-               QString("deleted = %1").arg(Brewtarget::dbTrue()),
-               QString("id=%1").arg(step->_key) );
+               QString("%1 = %2").arg(tbl->propertyToColumn(kpropDeleted)).arg(Brewtarget::dbTrue()),
+               QString("%1 = %2").arg(tbl->keyName()).arg(step->_key));
    }
    catch ( QString e ) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -826,7 +830,13 @@ void Database::removeFrom( Mash* mash, MashStep* step )
 Recipe* Database::getParentRecipe( BrewNote const* note )
 {
    int key;
-   QString query = QString("SELECT recipe_id FROM brewnote WHERE id = %1").arg(note->_key);
+   TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
+   // QString query = QString("SELECT recipe_id FROM brewnote WHERE id = %1").arg(note->_key);
+   QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4")
+           .arg( tbl->propertyToColumn(kcolRecipeId) )
+           .arg( tbl->tableName() )
+           .arg( tbl->keyName() )
+           .arg(note->_key);
 
    QSqlQuery q(sqlDatabase());
 
@@ -845,7 +855,7 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
    }
 
    q.next();
-   key = q.record().value("recipe_id").toInt();
+   key = q.record().value(tbl->propertyToColumn(kcolRecipeId)).toInt();
    q.finish();
 
    return allRecipes[key];
@@ -861,8 +871,17 @@ Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
-   QString update = QString("UPDATE mashstep SET step_number = CASE id WHEN %1 then %2 when %3 then %4 END WHERE id IN (%1,%3)")
-                .arg(m1->_key).arg(m2->stepNumber()).arg(m2->_key).arg(m1->stepNumber());
+   TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
+   // maybe this wasn't such a good idear?
+   // QString update = QString("UPDATE mashstep SET step_number = CASE id WHEN %1 then %2 when %3 then %4 END WHERE id IN (%1,%3)")
+   QString update = QString("UPDATE %1 SET %2 = CASE %3 WHEN %4 then %5 when %6 then %7 END WHERE %3 IN (%4,%6)")
+                .arg( tbl->tableName() )
+                .arg( tbl->propertyToColumn(kpropStepNumber))
+                .arg( tbl->keyName())
+                .arg(m1->_key)
+                .arg(m2->stepNumber())
+                .arg(m2->_key)
+                .arg(m1->stepNumber());
 
    QSqlQuery q(sqlDatabase() );
 
@@ -888,16 +907,19 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 
 void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 {
+   TableSchema* tbl = dbDefn->table(Brewtarget::INSTINRECTABLE);
+
+   // QString( "UPDATE instruction_in_recipe SET instruction_number = CASE instruction_id WHEN %1 THEN %3 WHEN %2 THEN %4 END WHERE instruction_id IN (%1,%2)")
    QString update =
-      QString(
-         "UPDATE instruction_in_recipe "
-         "SET instruction_number = "
-         "  CASE instruction_id "
-         "    WHEN %1 THEN %3 "
-         "    WHEN %2 THEN %4 "
-         "  END "
-         "WHERE instruction_id IN (%1,%2)")
-      .arg(in1->_key).arg(in2->_key).arg(in2->instructionNumber()).arg(in1->instructionNumber());
+      QString( "UPDATE %1 SET %2 = CASE %3 WHEN %4 THEN %5 WHEN %6 THEN %7 END WHERE %2 IN (%4,%6)")
+      .arg(tbl->tableName())
+      .arg(tbl->propertyToColumn(kcolInstructionNumber))
+      .arg(tbl->childIndexName())
+      .arg(in1->_key)
+      .arg(in2->instructionNumber())
+      .arg(in2->_key)
+      .arg(in1->instructionNumber());
+
    QSqlQuery q( sqlDatabase());
 
    try {
@@ -923,7 +945,12 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 void Database::insertInstruction(Instruction* in, int pos)
 {
    int parentRecipeKey;
-   QString query = QString("SELECT recipe_id FROM instruction_in_recipe WHERE instruction_id=%2")
+   TableSchema* tbl = dbDefn->table( Brewtarget::INSTINRECTABLE );
+   // QString query = QString("SELECT recipe_id FROM instruction_in_recipe WHERE instruction_id=%2")
+   QString query = QString("SELECT %1 FROM %2 WHERE %3=%4")
+                   .arg( tbl->propertyToColumn( kcolRecipeId ) )
+                   .arg( tbl->tableName() )
+                   .arg( tbl->inRecIndexName() )
                    .arg(in->_key);
    QString update;
 
@@ -936,14 +963,14 @@ void Database::insertInstruction(Instruction* in, int pos)
          throw QString("failed to find recipe");
 
       q.next();
-      parentRecipeKey = q.record().value("recipe_id").toInt();
+      parentRecipeKey = q.record().value(tbl->propertyToColumn(kcolRecipeId)).toInt();
       q.finish();
 
       // Increment all instruction positions greater or equal to pos.
-      update = QString(
-            "UPDATE instruction_in_recipe "
-            "SET instruction_number=instruction_number+1 "
-            "WHERE recipe_id=%1 AND instruction_number>=%2")
+      update = QString( "UPDATE %1 SET %2=%2+1 WHERE %3=%1 AND %2>=%4")
+         .arg( tbl->tableName() )
+         .arg( tbl->propertyToColumn(kcolInstructionNumber) )
+         .arg( tbl->propertyToColumn(kcolRecipeId) )
          .arg(parentRecipeKey).arg(pos);
 
       if ( !q.exec(update) )
@@ -951,25 +978,32 @@ void Database::insertInstruction(Instruction* in, int pos)
 
       // This is sort of spooky action at a distance -- the emit should really be
       // happening with the update. So it goes.
-      query = QString("SELECT instruction_id as id, instruction_number as pos FROM instruction_in_recipe WHERE recipe_id=%1 and instruction_number>%2")
-         .arg(parentRecipeKey).arg(pos);
+      // query = QString("SELECT instruction_id as id, instruction_number as pos FROM instruction_in_recipe WHERE recipe_id=%1 and instruction_number>%2")
+      query = QString("SELECT %1, %2 FROM %3 WHERE %4=%5 and %2>%5")
+         .arg( tbl->inRecIndexName() )
+         .arg( tbl->propertyToColumn(kcolInstructionNumber) )
+         .arg( tbl->tableName() )
+         .arg( tbl->propertyToColumn(kcolRecipeId) )
+         .arg(parentRecipeKey)
+         .arg(pos);
 
       if ( !q.exec(query) )
          throw QString("failed to find renumbered instructions");
 
       while( q.next() ) {
-         Instruction* inst = allInstructions[ q.record().value("id").toInt() ];
-         int newPos = q.record().value("pos").toInt();
+         Instruction* inst = allInstructions[q.record().value(tbl->inRecIndexName()).toInt() ];
+         int newPos = q.record().value(tbl->propertyToColumn(kcolInstructionNumber)).toInt();
 
          emit inst->changed( inst->metaProperty("instructionNumber"),newPos );
       }
 
       // Change in's position to pos.
-      update = QString(
-            "UPDATE instruction_in_recipe "
-            "SET instruction_number=%1 "
-            "WHERE instruction_id=%2"
-         ).arg(pos).arg(in->_key);
+      update = QString( "UPDATE %1 SET %2=%3 WHERE %4=%5")
+         .arg(tbl->tableName())
+         .arg(tbl->propertyToColumn(kcolInstructionNumber))
+         .arg(pos)
+         .arg( tbl->inRecIndexName() )
+         .arg(in->_key);
 
       if ( !q.exec(update) )
          throw QString("failed to insert new instruction recipe");
@@ -994,7 +1028,14 @@ void Database::insertInstruction(Instruction* in, int pos)
 QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 {
    QList<BrewNote*> ret;
-   QString filterString = QString("recipe_id = %1 AND deleted = %2").arg(parent->_key).arg(Brewtarget::dbFalse());
+   TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
+
+   //  QString filterString = QString("recipe_id = %1 AND deleted = %2")
+   QString filterString = QString("%1 = %2 AND %3 = %4")
+           .arg( tbl->propertyToColumn(kcolRecipeId))
+           .arg(parent->_key)
+           .arg(tbl->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
 
    getElements(ret, filterString, Brewtarget::BREWNOTETABLE, allBrewNotes);
 
@@ -1004,9 +1045,10 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 QList<Fermentable*> Database::fermentables(Recipe const* parent)
 {
    QList<Fermentable*> ret;
-   QString filter = QString("recipe_id = %1").arg(parent->_key);
+   TableSchema* tbl = dbDefn->table(Brewtarget::FERMTABLE);
+   QString filter = QString("%1 = %2").arg(tbl->propertyToColumn(kcolRecipeId)).arg(parent->_key);
 
-   getElements(ret,filter, Brewtarget::FERMINRECTABLE, allFermentables, "fermentable_id");
+   getElements(ret,filter, Brewtarget::FERMINRECTABLE, allFermentables, dbDefn->table(Brewtarget::FERMINRECTABLE)->childIndexName());
 
    return ret;
 }
@@ -1915,8 +1957,6 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
                            .arg(value.toString())
                            .arg(key);
 
-//      update.prepare( command );
-//      update.bindValue(":value", value);
 
       if ( ! update.exec(command) )
          throw QString("Could not update %1.%2 to %3: %4 %5")
@@ -1955,7 +1995,7 @@ void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant v
       QSqlQuery update( sqlDatabase() );
       QString command = QString("UPDATE %1 set %2=:value where id=%3")
                            .arg(schema->tableName())
-                           .arg(schema->propertyToColumn(propName,Brewtarget::dbType()))
+                           .arg(schema->propertyToColumn(propName))
                            .arg(object->key());
 
       update.prepare( command );
@@ -1964,7 +2004,7 @@ void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant v
       if ( ! update.exec() )
          throw QString("Could not update %1.%2 to %3: %4 %5")
                   .arg( schema->tableName() )
-                  .arg(schema->propertyToColumn(propName,Brewtarget::dbType()))
+                  .arg(schema->propertyToColumn(propName))
                   .arg( value.toString() )
                   .arg( update.lastQuery() )
                   .arg( update.lastError().text() );
@@ -1985,6 +2025,8 @@ void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant v
 
 }
 
+/* As far as I can tell, this is unused. I am commenting it out until I compile. If we compile clean, I am removing it.
+ * If this comment is still here, I am an idiot and you should remove this
 void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap)
 {
    // Assumes the table has a column called 'deleted'.
@@ -2029,9 +2071,10 @@ void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantM
       throw;
    }
 
-   /*if ( notify )
-      emit object->changed(prop,value);*/
+   if ( notify )
+      emit object->changed(prop,value);
 }
+*/
 
 // Inventory functions ========================================================
 
@@ -2039,10 +2082,11 @@ void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantM
 //The first displayed ingredient in the database is assumed to be the parent.
 void Database::populateChildTablesByName(Brewtarget::DBTable table)
 {
-   Brewtarget::logW( QString("Populating Children Ingredient Links (%1)").arg(dbDefn->tableName(table)));
+   TableSchema* tbl = dbDefn->table(table);
+   Brewtarget::logW( QString("Populating Children Ingredient Links (%1)").arg(tbl->tableName()));
 
    try {
-      QString queryString = QString("SELECT DISTINCT name FROM %1").arg(dbDefn->tableName(table));
+      QString queryString = QString("SELECT DISTINCT name FROM %1").arg(tbl->tableName());
 
       QSqlQuery nameq( queryString, sqlDatabase() );
 
@@ -2051,45 +2095,50 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
 
       while (nameq.next()) {
          QString name = nameq.record().value(0).toString();
-         queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC LIMIT 1")
-                     .arg(dbDefn->tableName(table))
-                     .arg(Brewtarget::dbTrue());
-         QSqlQuery parentq( sqlDatabase() );
+         queryString = QString( "SELECT %1 FROM %2 WHERE ( %3=:name AND 4%=:boolean ) ORDER BY %1 ASC LIMIT 1")
+                     .arg(tbl->keyName())
+                     .arg(tbl->tableName())
+                     .arg(tbl->propertyToColumn(kpropName))
+                     .arg(tbl->propertyToColumn(kpropDisplay));
+         QSqlQuery query( sqlDatabase() );
 
-         parentq.prepare(queryString);
-         parentq.bindValue(":name", name);
-         parentq.exec();
+         query.prepare(queryString);
+         query.bindValue(":name", name);
+         query.bindValue(":boolean",Brewtarget::dbTrue());
+         query.exec();
 
-         if ( !parentq.isActive() )
-            throw QString("%1 %2").arg(parentq.lastQuery()).arg(parentq.lastError().text());
+         if ( !query.isActive() )
+            throw QString("%1 %2").arg(query.lastQuery()).arg(query.lastError().text());
 
-         parentq.first();
-         QString parentID = parentq.record().value("id").toString();
+         query.first();
+         QString parentID = query.record().value(tbl->keyName()).toString();
 
-         queryString = QString( "SELECT id FROM %1 WHERE ( name=:name AND display=%2 ) ORDER BY id ASC")
-                     .arg(dbDefn->tableName(table))
-                     .arg(Brewtarget::dbFalse());
-         QSqlQuery childrenq( sqlDatabase() );
-         childrenq.prepare(queryString);
-         childrenq.bindValue(":name", name);
-         childrenq.exec();
+         query.bindValue(":name", name);
+         query.bindValue(":boolean", Brewtarget::dbFalse());
+         query.exec();
 
-         if ( !childrenq.isActive() )
-            throw QString("%1 %2").arg(childrenq.lastQuery()).arg(childrenq.lastError().text());
+         if ( !query.isActive() )
+            throw QString("%1 %2").arg(query.lastQuery()).arg(query.lastError().text());
          // Postgres uses a more verbose upsert syntax. I don't like this, but
          // I'm not seeing a better way yet.
-         while (childrenq.next()) {
-            QString childID = childrenq.record().value("id").toString();
+         while (query.next()) {
+            QString childID = query.record().value(tbl->keyName()).toString();
             switch( Brewtarget::dbType() ) {
                case Brewtarget::PGSQL:
-                  queryString = QString("INSERT INTO %1 (parent_id, child_id) VALUES (%2, %3) ON CONFLICT(child_id) DO UPDATE set parent_id = EXCLUDED.parent_id")
+                // MURPHY WEEPS
+                //  QString("INSERT INTO %1 (parent_id, child_id) VALUES (%2, %3) ON CONFLICT(child_id) DO UPDATE set parent_id = EXCLUDED.parent_id")
+                  queryString = QString("INSERT INTO %1 (%2, %3) VALUES (%4, %5) ON CONFLICT(%3) DO UPDATE set %2 = EXCLUDED.%2")
                         .arg( dbDefn->childTableName((table)))
+                        .arg( tbl->propertyToColumn(kpropParentId))
+                        .arg(tbl->propertyToColumn(kpropChildId))
                         .arg(parentID)
                         .arg(childID);
                   break;
                default:
-                  queryString = QString("INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)")
+                  queryString = QString("INSERT OR REPLACE INTO %1 (%2, %3) VALUES (%4, %5)")
                               .arg(dbDefn->childTableName(table))
+                              .arg( tbl->propertyToColumn(kpropParentId))
+                              .arg(tbl->propertyToColumn(kpropChildId))
                               .arg(parentID)
                               .arg(childID);
             }
@@ -2131,14 +2180,16 @@ int Database::getParentID(TableSchema* table, int childKey)
    int ret;
 
    //child_id is expected to be unique in table
-   QString query = QString("SELECT parent_id FROM %1 WHERE child_id = %2 LIMIT 1")
+   QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4 LIMIT 1")
+      .arg( table->propertyToColumn(kpropParentId))
       .arg(dbDefn->childTableName(table->dbTable()))
+      .arg( table->propertyToColumn(kpropChildId))
       .arg(childKey);
 
    QSqlQuery q( query, sqlDatabase() );
    q.first();
 
-   ret = q.record().value("parent_id").toInt();
+   ret = q.record().value(table->propertyToColumn(kpropParentId)).toInt();
 
    if ( ret == 0 ) {
       return childKey;
@@ -2151,27 +2202,32 @@ int Database::getParentID(TableSchema* table, int childKey)
 //Returns the key to the inventory table for a given ingredient
 int Database::getInventoryID(TableSchema* table, int key)
 {
-   QString query = QString("SELECT id FROM %1 WHERE %2_id = %3 LIMIT 1")
+   QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4 LIMIT 1")
+         .arg(table->keyName())
          .arg(dbDefn->invTableName(table->dbTable()))
-         .arg(table->tableName())
+         .arg(table->childIndexName())
          .arg(getParentID(table, key));
 
    QSqlQuery q( query, sqlDatabase() );
    q.first();
 
-   return q.record().value("id").toInt();
+   return q.record().value(table->keyName()).toInt();
 }
 
 QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key)
 {
    QVariant val = QVariant(0.0);
    TableSchema* tbl = dbDefn->table(table);
-   QString queryString = QString("select %2.%1 from %2, %3, %4 where %3.id = %5 and %3.id = %4.child_id and %4.parent_id = %2.%3_id")
+   QString queryString = QString("select %2.%1 from %2, %3, %4 where %3.%6 = %5 and %3.%6 = %4.%7 and %4.%8 = %2.%9")
         .arg(col_name)
         .arg(dbDefn->invTableName(table))
         .arg(tbl->tableName())
         .arg(dbDefn->childTableName(table))
-        .arg(key);
+        .arg(key)
+        .arg(tbl->keyName())
+        .arg(tbl->propertyToColumn(kpropChildId))
+        .arg(tbl->propertyToColumn(kpropParentId))
+        .arg(tbl->childIndexName());
    QSqlQuery q( queryString, sqlDatabase() );
 
    if ( q.first() ) {
@@ -2189,15 +2245,15 @@ int Database::newInventory(TableSchema* schema, int invForID) {
    switch(Brewtarget::dbType())
    {
       case Brewtarget::PGSQL:
-         queryString = QString("INSERT INTO %1 (%2_id) VALUES(%3) ON CONFLICT(%2_id) DO UPDATE set %2_id = EXCLUDED.%2_id")
+         queryString = QString("INSERT INTO %1 (%2) VALUES(%3) ON CONFLICT(%2) DO UPDATE set %2 = EXCLUDED.%2")
                      .arg(invTable)
-                     .arg(schema->tableName())
+                     .arg(schema->childIndexName())
                      .arg(getParentID(schema, invForID));
          break;
       default:
-         queryString = QString("INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)")
+         queryString = QString("INSERT OR REPLACE INTO %1 (%2) VALUES (%3)")
                      .arg(invTable)
-                     .arg(schema->tableName())
+                     .arg(schema->childIndexName())
                      .arg(getParentID(schema, invForID));
    }
 
@@ -2209,10 +2265,8 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
 {
    QMap<int, double> result;
    TableSchema* tbl = dbDefn->childTable(table);
-   // this is a cheat, because I know these tables only have one foreign key
-   // in them. I am considering this, as I don't like cheats.
-   QString id     = tbl->allForeignKeyColumnNames().first();
-   QString amount = tbl->allColumnNames().first();
+   QString id     = tbl->childIndexName();
+   QString amount = tbl->propertyToColumn(kpropAmount);
 
    QString query = QString("SELECT %1,%2 FROM %3 WHERE %2 > 0")
                          .arg(id)
@@ -2220,15 +2274,13 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
                          .arg(tbl->tableName());
 
    QSqlQuery sql(query, sqlDatabase());
-   if (!sql.isActive())
-   {
+   if (! sql.isActive()) {
       throw QString("Failed to get the inventory.\nQuery:\n%1\nError:\n%2")
             .arg(sql.lastQuery())
             .arg(sql.lastError().text());
    }
 
-   while (sql.next())
-   {
+   while (sql.next()) {
       result[sql.value(id).toInt()] = sql.value(amount).toDouble();
    }
 
@@ -2239,6 +2291,7 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
 void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transact )
 {
    Equipment* newEquip = e;
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    if( e == nullptr )
       return;
@@ -2254,8 +2307,8 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
 
       // Update equipment_id
       sqlUpdate(Brewtarget::RECTABLE,
-                QString("equipment_id=%1").arg(newEquip->key()),
-                QString("id=%1").arg(rec->_key));
+                QString("%1=%2").arg(tbl->propertyToColumn(kcolEquipmentId)).arg(newEquip->key()),
+                QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
 
    }
    catch (QString e ) {
@@ -2381,6 +2434,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
 void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
    Mash* newMash = m;
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    if ( transact )
       sqlDatabase().transaction();
@@ -2395,8 +2449,8 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 
       // Update mash_id
       sqlUpdate(Brewtarget::RECTABLE,
-               QString("mash_id=%1").arg(newMash->key()),
-               QString("id=%1").arg(rec->_key));
+               QString("%1=%2").arg(tbl->propertyToColumn(kcolMashId) ).arg(newMash->key()),
+               QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -2472,8 +2526,8 @@ void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
 
 void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
 {
-
    Style* newStyle = s;
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    if ( s == nullptr )
       return;
@@ -2486,8 +2540,8 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
          newStyle = copy<Style>(s, &allStyles, false);
 
       sqlUpdate(Brewtarget::RECTABLE,
-                QString("style_id=%1").arg(newStyle->key()),
-                QString("id=%1").arg(rec->_key));
+                QString("%1=%2").arg(tbl->propertyToColumn(kcolStyleId)).arg(newStyle->key()),
+                QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -2620,72 +2674,104 @@ QList<BrewNote*> Database::brewNotes()
 QList<Equipment*> Database::equipments()
 {
    QList<Equipment*> tmp;
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::EQUIPTABLE, allEquipments);
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::EQUIPTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::EQUIPTABLE, allEquipments);
    return tmp;
 }
 
 QList<Fermentable*> Database::fermentables()
 {
    QList<Fermentable*> tmp;
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::FERMTABLE, allFermentables);
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::FERMTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::FERMTABLE, allFermentables);
    return tmp;
 }
 
 QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::HOPTABLE, allHops);
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::HOPTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::HOPTABLE, allHops);
    return tmp;
 }
 
 QList<Mash*> Database::mashs()
 {
    QList<Mash*> tmp;
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::MASHTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
    //! Mashs and mashsteps are the odd balls.
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::MASHTABLE, allMashs);
+   getElements( tmp, query, Brewtarget::MASHTABLE, allMashs);
    return tmp;
 }
 
 QList<MashStep*> Database::mashSteps()
 {
    QList<MashStep*> tmp;
-   getElements( tmp, QString("deleted=%1 order by step_number").arg(Brewtarget::dbFalse()), Brewtarget::MASHSTEPTABLE, allMashSteps);
+   TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
+   QString query = QString("%1=%2 order by %3")
+           .arg(tbl->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse())
+           .arg(tbl->propertyToColumn(kpropStepNumber));
+   getElements( tmp, query, Brewtarget::MASHSTEPTABLE, allMashSteps);
    return tmp;
 }
 
 QList<Misc*> Database::miscs()
 {
    QList<Misc*> tmp;
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::MISCTABLE, allMiscs );
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::MISCTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::MISCTABLE, allMiscs );
    return tmp;
 }
 
 QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::RECTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
    // This is gonna kill me.
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::RECTABLE, allRecipes );
+   getElements( tmp, query, Brewtarget::RECTABLE, allRecipes );
    return tmp;
 }
 
 QList<Style*> Database::styles()
 {
    QList<Style*> tmp;
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::STYLETABLE, allStyles );
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::STYLETABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::STYLETABLE, allStyles );
    return tmp;
 }
 
 QList<Water*> Database::waters()
 {
    QList<Water*> tmp;
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::WATERTABLE, allWaters );
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::WATERTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::WATERTABLE, allWaters );
    return tmp;
 }
 
 QList<Yeast*> Database::yeasts()
 {
    QList<Yeast*> tmp;
-   getElements( tmp, QString("deleted=%1").arg(Brewtarget::dbFalse()), Brewtarget::YEASTTABLE, allYeasts );
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::YEASTTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::YEASTTABLE, allYeasts );
    return tmp;
 }
 
@@ -2864,1215 +2950,397 @@ bool Database::importFromXML(const QString& filename)
    return ret;
 }
 
+QString Database::textFromValue(QVariant value, QString type)
+{
+   QString retval = value.toString();
+
+   if (type == "boolean" )
+       retval = BeerXMLElement::text(value.toBool());
+   else if (type == "real")
+       retval = BeerXMLElement::text(value.toDouble());
+   else if (type == "timestamp")
+       retval = BeerXMLElement::text(value.toDate());
+
+   return retval;
+}
+
 void Database::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
 {
-   // TODO: implement
-   QDomElement bNode;
+   QDomElement node;
    QDomElement tmpElement;
    QDomText tmpText;
 
-   bNode = doc.createElement("BREWNOTE");
+   node = doc.createElement("BREWNOTE");
+   TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
 
-   tmpElement = doc.createElement("BREWDATE");
-   tmpText = doc.createTextNode(a->brewDate_str());
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("DATE_FERMENTED_OUT");
-   tmpText = doc.createTextNode(a->fermentDate_str());
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
+   // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
+   node.appendChild(tmpElement);
 
-   tmpElement = doc.createElement("SG");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->sg()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("VOLUME_INTO_BK");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->volumeIntoBK_l()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("STRIKE_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->strikeTemp_c()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("MASH_FINAL_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->mashFinTemp_c()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("OG");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->og()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("POST_BOIL_VOLUME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->postBoilVolume_l()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("VOLUME_INTO_FERMENTER");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->volumeIntoFerm_l()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PITCH_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->pitchTemp_c()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("FG");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->fg()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("EFF_INTO_BK");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->effIntoBK_pct()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PREDICTED_OG");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->calculateOg()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("BREWHOUSE_EFF");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->brewhouseEff_pct()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PREDICTED_ABV");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->calculateABV_pct()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("ACTUAL_ABV");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->abv()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("ATTENUATION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->attenuation()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_BOIL_GRAV");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projBoilGrav()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_STRIKE_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projStrikeTemp_c()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_MASH_FIN_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projMashFinTemp_c()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_VOL_INTO_BK");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projVolIntoBK_l()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_OG");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projOg()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_VOL_INTO_FERM");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projVolIntoFerm_l()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_FG");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projFg()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_EFF");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projEff_pct()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_ABV");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projABV_pct()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_POINTS");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projPoints()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PROJECTED_ATTEN");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->projAtten()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("BOIL_OFF");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilOff_l()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("FINAL_VOLUME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->finalVolume_l()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(QString("%1").arg(a->notes()));
-   tmpElement.appendChild(tmpText);
-   bNode.appendChild(tmpElement);
-
-   parent.appendChild(bNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 }
 
 void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement equipNode;
-   QDomElement tmpNode;
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
-   equipNode = doc.createElement("EQUIPMENT");
+   node = doc.createElement("EQUIPMENT");
+   TableSchema* tbl = dbDefn->table(Brewtarget::EQUIPTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("VERSION");
+   // This sucks. Not quite sure what to do, but hard code it
+   tmpElement = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
+   tmpElement.appendChild(tmpText);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("BOIL_SIZE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilSize_l()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BATCH_SIZE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->batchSize_l()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TUN_VOLUME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunVolume_l()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TUN_WEIGHT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunWeight_kg()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TUN_SPECIFIC_HEAT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunSpecificHeat_calGC()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TOP_UP_WATER");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->topUpWater_l()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TRUB_CHILLER_LOSS");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->trubChillerLoss_l()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("EVAP_RATE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->evapRate_pctHr()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("REAL_EVAP_RATE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->evapRate_lHr()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BOIL_TIME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilTime_min()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CALC_BOIL_VOLUME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->calcBoilVolume()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("LAUTER_DEADSPACE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->lauterDeadspace_l()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TOP_UP_KETTLE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->topUpKettle_l()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("HOP_UTILIZATION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->hopUtilization_pct()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   // My extensions below
-   tmpNode = doc.createElement("ABSORPTION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->grainAbsorption_LKg()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BOILING_POINT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilingPoint_c()));
-   tmpNode.appendChild(tmpText);
-   equipNode.appendChild(tmpNode);
-   parent.appendChild(equipNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 }
 
 void Database::toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement fermNode;
-   QDomElement tmpNode;
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
-   fermNode = doc.createElement("FERMENTABLE");
+   node = doc.createElement("FERMENTABLE");
+   TableSchema* tbl = dbDefn->table(Brewtarget::FERMTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("VERSION");
+   // This sucks. Not quite sure what to do, but hard code it
+   tmpElement = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
+   tmpElement.appendChild(tmpText);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(Fermentable::types.at(a->type()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 
-   tmpNode = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount_kg()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("YIELD");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->yield_pct()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("COLOR");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->color_srm()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("ADD_AFTER_BOIL");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->addAfterBoil()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("ORIGIN");
-   tmpText = doc.createTextNode(a->origin());
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SUPPLIER");
-   tmpText = doc.createTextNode(a->supplier());
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("COARSE_FINE_DIFF");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->coarseFineDiff_pct()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("MOISTURE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->moisture_pct()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("DIASTATIC_POWER");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->diastaticPower_lintner()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PROTEIN");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->protein_pct()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("MAX_IN_BATCH");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->maxInBatch_pct()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("RECOMMEND_MASH");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->recommendMash()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("IS_MASHED");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->isMashed()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("IBU_GAL_PER_LB");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->ibuGalPerLb()));
-   tmpNode.appendChild(tmpText);
-   fermNode.appendChild(tmpNode);
-
-   parent.appendChild(fermNode);
 }
 
 void Database::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement hopNode;
-   QDomElement tmpNode;
+
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
-   hopNode = doc.createElement("HOP");
+   node = doc.createElement("HOP");
+   TableSchema* tbl = dbDefn->table(Brewtarget::HOPTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("VERSION");
+   // This sucks. Not quite sure what to do, but hard code it
+   tmpElement = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
+   tmpElement.appendChild(tmpText);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("ALPHA");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->alpha_pct()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 
-   tmpNode = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount_kg()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("USE");
-   tmpText = doc.createTextNode(a->useString());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TIME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->time_min()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->typeString());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("FORM");
-   tmpText = doc.createTextNode(a->formString());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BETA");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->beta_pct()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("HSI");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->hsi_pct()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("ORIGIN");
-   tmpText = doc.createTextNode(a->origin());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SUBSTITUTES");
-   tmpText = doc.createTextNode(a->substitutes());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("HUMULENE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->humulene_pct()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CARYOPHYLLENE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->caryophyllene_pct()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("COHUMULONE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->cohumulone_pct()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("MYRCENE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->myrcene_pct()));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-
-   parent.appendChild(hopNode);
 }
 
 void Database::toXml( Instruction* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement insNode;
-   QDomElement tmpNode;
+
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
-   insNode = doc.createElement("INSTRUCTION");
+   node = doc.createElement("INSTRUCTION");
+   TableSchema* tbl = dbDefn->table(Brewtarget::INSTRUCTIONTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
+   // This sucks. Not quite sure what to do, but hard code it
+   tmpElement = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpElement.appendChild(tmpText);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("DIRECTIONS");
-   tmpText = doc.createTextNode(a->directions());
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 
-   tmpNode = doc.createElement("HAS_TIMER");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->hasTimer()));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TIMER_VALUE");
-   tmpText = doc.createTextNode(a->timerValue());
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("COMPLETED");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->completed()));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("INTERVAL");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->interval()));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-
-   parent.appendChild(insNode);
 }
 
 void Database::toXml( Mash* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement mashNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
 
+   QDomElement node;
+   QDomElement tmpElement;
+   QDomText tmpText;
    int i, size;
 
-   mashNode = doc.createElement("MASH");
+   node = doc.createElement("MASH");
+   TableSchema* tbl = dbDefn->table(Brewtarget::MASHTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("VERSION");
+   // This sucks. Not quite sure what to do, but hard code it
+   tmpElement = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
+   tmpElement.appendChild(tmpText);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("GRAIN_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->grainTemp_c()));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
 
-   tmpNode = doc.createElement("MASH_STEPS");
+   tmpElement = doc.createElement("MASH_STEPS");
    QList<MashStep*> mashSteps = a->mashSteps();
    size = mashSteps.size();
    for( i = 0; i < size; ++i )
-      toXml( mashSteps[i], doc, tmpNode);
-   mashNode.appendChild(tmpNode);
+      toXml( mashSteps[i], doc, tmpElement);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
+   parent.appendChild(node);
 
-   tmpNode = doc.createElement("TUN_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunTemp_c()));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SPARGE_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->spargeTemp_c()));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PH");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->ph()));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TUN_WEIGHT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunWeight_kg()));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TUN_SPECIFIC_HEAT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunSpecificHeat_calGC()));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("EQUIP_ADJUST");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->equipAdjust()));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-
-   parent.appendChild(mashNode);
 }
 
 void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement mashStepNode;
-   QDomElement tmpNode;
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
-   mashStepNode = doc.createElement("MASH_STEP");
+   node = doc.createElement("MASH_STEP");
+   TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("VERSION");
+   // This sucks. Not quite sure what to do, but hard code it
+   tmpElement = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
+   tmpElement.appendChild(tmpText);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("TYPE");
-   if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) )
-      tmpText = doc.createTextNode(  MashStep::types[0] );
-   else
-      tmpText = doc.createTextNode(a->typeString());
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString val;
+         // flySparge and batchSparge aren't part of the BeerXML spec.
+         // This makes sure we give BeerXML something it understands.
+         if ( element == kpropType ) {
+            if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) {
+               val = MashStep::types[0];
+            }
+            else {
+               val = a->typeString();
+            }
+         }
+         else {
+             val = textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element));
+         }
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(val);
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 
-   tmpNode = doc.createElement("INFUSE_AMOUNT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->infuseAmount_l()));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("STEP_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->stepTemp_c()));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("STEP_TIME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->stepTime_min()));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("RAMP_TIME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->rampTime_min()));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("END_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->endTemp_c()));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("INFUSE_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->infuseTemp_c()));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("DECOCTION_AMOUNT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->decoctionAmount_l()));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-
-   parent.appendChild(mashStepNode);
 }
 
 void Database::toXml( Misc* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement miscNode;
-   QDomElement tmpNode;
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
-   miscNode = doc.createElement("MISC");
+   node = doc.createElement("MISC");
+   TableSchema* tbl = dbDefn->table(Brewtarget::MISCTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("VERSION");
+   // This sucks. Not quite sure what to do, but hard code it
+   tmpElement = doc.createElement("VERSION");
    tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
+   tmpElement.appendChild(tmpText);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->typeString());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("USE");
-   tmpText = doc.createTextNode(a->useString());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TIME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->time()));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount()));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("AMOUNT_IS_WEIGHT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->amountIsWeight()));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("USE_FOR");
-   tmpText = doc.createTextNode(a->useFor());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-
-   parent.appendChild(miscNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 }
 
 void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement recipeNode;
-   QDomElement tmpNode;
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
    int i;
 
-   recipeNode = doc.createElement("RECIPE");
+   node = doc.createElement("RECIPE");
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->type());
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
 
    Style* style = a->style();
    if( style != nullptr )
-      toXml( style, doc, recipeNode);
+      toXml( style, doc, node);
 
-   tmpNode = doc.createElement("BREWER");
-   tmpText = doc.createTextNode(a->brewer());
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BATCH_SIZE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->batchSize_l()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BOIL_SIZE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilSize_l()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BOIL_TIME");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilTime_min()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("EFFICIENCY");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->efficiency_pct()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("HOPS");
+   tmpElement = doc.createElement("HOPS");
    QList<Hop*> hops = a->hops();
    for( i = 0; i < hops.size(); ++i )
-      toXml( hops[i], doc, tmpNode);
-   recipeNode.appendChild(tmpNode);
+      toXml( hops[i], doc, tmpElement);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("FERMENTABLES");
+   tmpElement = doc.createElement("FERMENTABLES");
    QList<Fermentable*> ferms = a->fermentables();
    for( i = 0; i < ferms.size(); ++i )
-      toXml( ferms[i], doc, tmpNode);
-   recipeNode.appendChild(tmpNode);
+      toXml( ferms[i], doc, tmpElement);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("MISCS");
+   tmpElement = doc.createElement("MISCS");
    QList<Misc*> miscs = a->miscs();
    for( i = 0; i < miscs.size(); ++i )
-      toXml( miscs[i], doc, tmpNode);
-   recipeNode.appendChild(tmpNode);
+      toXml( miscs[i], doc, tmpElement);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("YEASTS");
+   tmpElement = doc.createElement("YEASTS");
    QList<Yeast*> yeasts = a->yeasts();
    for( i = 0; i < yeasts.size(); ++i )
-      toXml( yeasts[i], doc, tmpNode);
-   recipeNode.appendChild(tmpNode);
+      toXml( yeasts[i], doc, tmpElement);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("WATERS");
+   tmpElement = doc.createElement("WATERS");
    QList<Water*> waters = a->waters();
    for( i = 0; i < waters.size(); ++i )
-      toXml( waters[i], doc, tmpNode);
-   recipeNode.appendChild(tmpNode);
+      toXml( waters[i], doc, tmpElement);
+   node.appendChild(tmpElement);
 
    Mash* mash = a->mash();
    if( mash != nullptr )
-      toXml( mash, doc, recipeNode);
+      toXml( mash, doc, node);
 
-   tmpNode = doc.createElement("INSTRUCTIONS");
+   tmpElement = doc.createElement("INSTRUCTIONS");
    QList<Instruction*> instructions = a->instructions();
    for( i = 0; i < instructions.size(); ++i )
-      toXml( instructions[i], doc, tmpNode);
-   recipeNode.appendChild(tmpNode);
+      toXml( instructions[i], doc, tmpElement);
+   node.appendChild(tmpElement);
 
-   tmpNode = doc.createElement("BREWNOTES");
+   tmpElement = doc.createElement("BREWNOTES");
    QList<BrewNote*> brewNotes = a->brewNotes();
    for(i=0; i < brewNotes.size(); ++i)
-      toXml(brewNotes[i], doc, tmpNode);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("ASST_BREWER");
-   tmpText = doc.createTextNode(a->asstBrewer());
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
+      toXml(brewNotes[i], doc, tmpElement);
+   node.appendChild(tmpElement);
 
    Equipment* equip = a->equipment();
    if( equip )
-      toXml( equip, doc, recipeNode);
+      toXml( equip, doc, node);
 
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TASTE_NOTES");
-   tmpText = doc.createTextNode(a->tasteNotes());
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TASTE_RATING");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tasteRating()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("OG");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->og()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("FG");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->fg()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("FERMENTATION_STAGES");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->fermentationStages()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PRIMARY_AGE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->primaryAge_days()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PRIMARY_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->primaryTemp_c()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SECONDARY_AGE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->secondaryAge_days()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SECONDARY_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->secondaryTemp_c()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TERTIARY_AGE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tertiaryAge_days()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TERTIARY_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->tertiaryTemp_c()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("AGE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->age_days()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("AGE_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->ageTemp_c()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("DATE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->date()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CARBONATION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->carbonation_vols()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("FORCED_CARBONATION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->forcedCarbonation()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PRIMING_SUGAR_NAME");
-   tmpText = doc.createTextNode(a->primingSugarName());
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CARBONATION_TEMP");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->carbonationTemp_c()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PRIMING_SUGAR_EQUIV");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->primingSugarEquiv()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("KEG_PRIMING_FACTOR");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->kegPrimingFactor()));
-   tmpNode.appendChild(tmpText);
-   recipeNode.appendChild(tmpNode);
-
-   parent.appendChild(recipeNode);
+   parent.appendChild(node);
 }
 
 void Database::toXml( Style* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement styleNode;
-   QDomElement tmpNode;
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
-   styleNode = doc.createElement("STYLE");
+   node = doc.createElement("STYLE");
+   TableSchema* tbl = dbDefn->table(Brewtarget::STYLETABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CATEGORY");
-   tmpText = doc.createTextNode(a->category());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CATEGORY_NUMBER");
-   tmpText = doc.createTextNode(a->categoryNumber());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("STYLE_LETTER");
-   tmpText = doc.createTextNode(a->styleLetter());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("STYLE_GUIDE");
-   tmpText = doc.createTextNode(a->styleGuide());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->typeString());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("OG_MIN");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->ogMin()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("OG_MAX");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->ogMax()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("FG_MIN");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->fgMin()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("FG_MAX");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->fgMax()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("IBU_MIN");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->ibuMin()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("IBU_MAX");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->ibuMax()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("COLOR_MIN");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->colorMin_srm()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("COLOR_MAX");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->colorMax_srm()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("ABV_MIN");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->abvMin_pct()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("ABV_MAX");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->abvMax_pct()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CARB_MIN");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->carbMin_vol()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CARB_MAX");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->carbMax_vol()));
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PROFILE");
-   tmpText = doc.createTextNode(a->profile());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("INGREDIENTS");
-   tmpText = doc.createTextNode(a->ingredients());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("EXAMPLES");
-   tmpText = doc.createTextNode(a->examples());
-   tmpNode.appendChild(tmpText);
-   styleNode.appendChild(tmpNode);
-
-   parent.appendChild(styleNode);
 }
 
 void Database::toXml( Water* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement waterNode;
-   QDomElement tmpNode;
+   QDomElement node;
+   QDomElement tmpElement;
    QDomText tmpText;
 
-   waterNode = doc.createElement("WATER");
+   node = doc.createElement("WATER");
+   TableSchema* tbl = dbDefn->table(Brewtarget::WATERTABLE);
 
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
 
-   tmpNode = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount_l()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CALCIUM");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->calcium_ppm()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BICARBONATE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->bicarbonate_ppm()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SULFATE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->sulfate_ppm()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CHLORIDE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->chloride_ppm()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SODIUM");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->sodium_ppm()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("MAGNESIUM");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->magnesium_ppm()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PH");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->ph()));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   parent.appendChild(waterNode);
 }
 
 void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
 {
-   QDomElement yeastNode;
+   QDomElement node;
    QDomElement tmpElement;
    QDomText tmpText;
 
-   yeastNode = doc.createElement("YEAST");
+   node = doc.createElement("YEAST");
+   TableSchema* tbl = dbDefn->table(Brewtarget::EQUIPTABLE);
 
-   tmpElement = doc.createElement("NAME");
-   tmpText = doc.createTextNode(a->name());
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(Yeast::types.at(a->type()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("FORM");
-   tmpText = doc.createTextNode(Yeast::forms.at(a->form()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("AMOUNT_IS_WEIGHT");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->amountIsWeight()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("LABORATORY");
-   tmpText = doc.createTextNode(a->laboratory());
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("PRODUCT_ID");
-   tmpText = doc.createTextNode(a->productID());
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("MIN_TEMPERATURE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->minTemperature_c()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("MAX_TEMPERATURE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->maxTemperature_c()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("FLOCCULATION");
-   tmpText = doc.createTextNode(Yeast::flocculations.at(a->flocculation()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("ATTENUATION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->attenuation_pct()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(a->notes());
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("BEST_FOR");
-   tmpText = doc.createTextNode(a->bestFor());
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("TIMES_CULTURED");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->timesCultured()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("MAX_REUSE");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->maxReuse()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("ADD_TO_SECONDARY");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->addToSecondary()));
-   tmpElement.appendChild(tmpText);
-   yeastNode.appendChild(tmpElement);
-
-   parent.appendChild(yeastNode);
+   foreach (QString element, tbl->allPropertyNames()) {
+      if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         tmpElement = doc.createElement(tbl->propertyToXml(element));
+         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpElement.appendChild(tmpText);
+         node.appendChild(tmpElement);
+      }
+   }
+   parent.appendChild(node);
 }
 
 // fromXml ====================================================================
@@ -4259,6 +3527,8 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
    return ret;
 }
 
+// pick up here. I need to figure out what to do with the getElements call. Wonder if I should make
+// getElements get the column name?
 Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
     // When loading from XML, we need to delay the signals until after
@@ -4877,7 +4147,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
          return nullptr;
       }
       // Get standard properties.
-      fromXml( ret, node);
+      fromXml(ret, node);
 
       // I need to insert this now, because I need a valid key for adding
       // things to the recipe
@@ -5706,19 +4976,6 @@ QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
    return retVar;
 }
 
-/* -- Replace by databaseschema class, and can be removed once I are sure
-QStringList Database::allTablesInOrder(QSqlQuery q)
-{
-   QString query = "SELECT name FROM bt_alltables ORDER BY table_id";
-   QStringList tmp;
-
-   q.exec(query);
-   while ( q.next() ) {
-      tmp.append( q.value("name").toString());
-   }
-   return tmp;
-}
-*/
 void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase newDb)
 {
    QSqlDatabase oldDb = sqlDatabase();
@@ -5731,7 +4988,7 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
       bool mustPrepare = true;
       int maxid = -1;
 
-      QString findAllQuery = QString("SELECT * FROM %1 order by %2 asc").arg(tname).arg(oldType);
+      QString findAllQuery = QString("SELECT * FROM %1 order by %2 asc").arg(tname).arg(table->keyName(oldType));
       try {
 
          if (! readOld.exec(findAllQuery) )
@@ -5766,7 +5023,7 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
             // All that's left is to bind
             for(int i = 0; i < here.count(); ++i) {
-               if ( tname == "brewnote" && here.fieldName(i) == "brewdate" ) {
+               if ( table->dbTable() == Brewtarget::BREWNOTETABLE && here.fieldName(i) == kpropBrewDate ) {
                   QVariant helpme(here.field(i).value().toString());
                   upsertNew.bindValue(":brewdate",helpme);
                }
@@ -5781,6 +5038,7 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
          upsertNew.finish();
          // We need to manually reset the sequences
          if ( newType == Brewtarget::PGSQL && maxid > 0 ) {
+             // this probably should be fixed somewhere, but this is enough for now?
             QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(tname).arg(maxid);
             QSqlQuery updateSeq(seq, newDb);
 
