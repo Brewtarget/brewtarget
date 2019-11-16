@@ -65,8 +65,8 @@ BtTreeView::BtTreeView(QWidget *parent, BtTreeModel::TypeMasks type) :
    filter->setSourceModel(_model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
-   
-   setExpanded(findElement(0), true);
+
+   setExpanded(findElement(nullptr), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
@@ -126,7 +126,7 @@ QString BtTreeView::folderName(QModelIndex index)
    BeerXMLElement* thing = _model->thing(filter->mapToSource(index));
    if ( thing )
       return _model->thing(filter->mapToSource(index))->folder();
-   else 
+   else
       return "";
 }
 
@@ -167,23 +167,23 @@ Style* BtTreeView::style(const QModelIndex &index) const
 
 BrewNote* BtTreeView::brewNote(const QModelIndex &index) const
 {
-   if ( ! index.isValid() ) 
-      return NULL;
+   if ( ! index.isValid() )
+      return nullptr;
 
    return _model->brewNote(filter->mapToSource(index));
 }
 
 BtFolder* BtTreeView::folder(const QModelIndex &index) const
 {
-   if ( ! index.isValid() ) 
-      return NULL;
+   if ( ! index.isValid() )
+      return nullptr;
 
    return _model->folder(filter->mapToSource(index));
 }
 
 QModelIndex BtTreeView::findFolder(BtFolder* folder)
 {
-   return filter->mapFromSource(_model->findFolder(folder->fullPath(), NULL, false));
+   return filter->mapFromSource(_model->findFolder(folder->fullPath(), nullptr, false));
 }
 
 void BtTreeView::addFolder(QString folder)
@@ -242,8 +242,8 @@ void BtTreeView::mouseMoveEvent(QMouseEvent *event)
    QMimeData *data = mimeData(selectionModel()->selectedRows());
 
    drag->setMimeData(data);
-   drag->start(Qt::CopyAction);
-} 
+   drag->exec(Qt::CopyAction);
+}
 
 void BtTreeView::keyPressEvent(QKeyEvent *event)
 {
@@ -259,7 +259,7 @@ void BtTreeView::keyPressEvent(QKeyEvent *event)
    QTreeView::keyPressEvent(event);
 }
 
-QMimeData* BtTreeView::mimeData(QModelIndexList indexes) 
+QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
 {
    QMimeData *mimeData = new QMimeData();
    QByteArray encodedData;
@@ -278,7 +278,7 @@ QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
          continue;
 
       _type = type(index);
-      if ( _type != BtTreeItem::FOLDER ) 
+      if ( _type != BtTreeItem::FOLDER )
       {
          id   = _model->thing(filter->mapToSource(index))->key();
          name = _model->name(filter->mapToSource(index));
@@ -286,7 +286,7 @@ QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
          if ( itsa == -1 )
             itsa = _type;
       }
-      else 
+      else
       {
          id = -1;
          name = _model->folder(filter->mapToSource(index))->fullPath();
@@ -295,7 +295,7 @@ QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
    }
 
    // Recipes, equipment and styles get dropped on the recipe pane
-   if ( itsa == BtTreeItem::RECIPE || itsa == BtTreeItem::STYLE || itsa == BtTreeItem::EQUIPMENT ) 
+   if ( itsa == BtTreeItem::RECIPE || itsa == BtTreeItem::STYLE || itsa == BtTreeItem::EQUIPMENT )
       name = "application/x-brewtarget-recipe";
    // Everything other than folders get dropped on the ingredients pane
    else if ( itsa != -1 )
@@ -316,7 +316,7 @@ bool BtTreeView::multiSelected()
    hasRecipe        = false;
    hasSomethingElse = false;
 
-   if ( selected.count() == 0 ) 
+   if ( selected.count() == 0 )
       return false;
 
    foreach (QModelIndex selection, selected)
@@ -379,7 +379,7 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
    _contextMenu->addMenu(_newMenu);
    _contextMenu->addSeparator();
 
-   switch(_type) 
+   switch(_type)
    {
       // the recipe case is a bit more complex, because we need to handle the brewnotes too
       case BtTreeModel::RECIPEMASK:
@@ -428,7 +428,7 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
    _exportMenu->addAction(tr("To HTML"), top, SLOT(exportSelectedHtml()));
    _contextMenu->addMenu(_exportMenu);
    _contextMenu->addAction(tr("Import"), top, SLOT(importFiles()));
-   
+
 }
 
 QMenu* BtTreeView::contextMenu(QModelIndex selected)
@@ -456,7 +456,7 @@ QString BtTreeView::verifyCopy(QString tag, QString name, bool *abort)
 
       name = askEm.textValue();
    }
-   else 
+   else
    {
       if ( abort )
          *abort = true;
@@ -472,7 +472,7 @@ void BtTreeView::copySelected(QModelIndexList selected)
    QModelIndexList translated;
    bool abort = false;
 
-   // Time to lay down the boogie 
+   // Time to lay down the boogie
    foreach( QModelIndex at, selected )
    {
       // If somebody said cancel, bug out
@@ -483,7 +483,7 @@ void BtTreeView::copySelected(QModelIndexList selected)
       QModelIndex trans = filter->mapToSource(at);
 
       // You can't delete the root element
-      if ( trans == findElement(0) )
+      if ( trans == findElement(nullptr) )
          continue;
 
       // Otherwise prompt
@@ -540,8 +540,8 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
    QModelIndexList translated;
 
    int confirmDelete = QMessageBox::NoButton;
-  
-   // Time to lay down the boogie 
+
+   // Time to lay down the boogie
    foreach( QModelIndex at, selected )
    {
       // If somebody said cancel, bug out
@@ -552,7 +552,7 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
       QModelIndex trans = filter->mapToSource(at);
 
       // You can't delete the root element
-      if ( trans == findElement(0) )
+      if ( trans == findElement(nullptr) )
          continue;
 
       // If we have alread said "Yes To All", just append and go
@@ -561,7 +561,7 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
          translated.append(trans);
          continue;
       }
-      
+
       // Otherwise prompt
       switch(_model->type(trans))
       {

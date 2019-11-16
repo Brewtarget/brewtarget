@@ -263,7 +263,7 @@ const QString TableSchema::childIndexName(Brewtarget::DBTypes type)
 {
    QString cname;
 
-   if ( m_type == CHILD ) {
+   if ( m_type == CHILD || m_type == BT ) {
       QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
 
       while ( i.hasNext() ) {
@@ -426,6 +426,8 @@ const QString TableSchema::generateInsertProperties(Brewtarget::DBTypes type)
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(m_tableName).arg(columns).arg(binding);
 
 }
+
+// note: this does not do anything with foreign keys. It is up to the calling code to handle those problems
 const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
 {
    QString columns;
@@ -449,6 +451,29 @@ const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
            .arg(key);
 }
 
+// note: this does not do anything with foreign keys. It is up to the calling code to handle those problems
+// unlike the previous method, this one uses a bind named ":id" for the key value.
+const QString TableSchema::generateUpdateRow(Brewtarget::DBTypes type)
+{
+   QString columns;
+
+   QMapIterator<QString, PropertySchema*> i(m_properties);
+   while ( i.hasNext() ) {
+      i.next();
+      PropertySchema* prop = i.value();
+      if ( ! columns.isEmpty() ) {
+         columns += QString(",%1=:%1").arg( prop->colName(type));
+      }
+      else {
+         columns = QString("%1=:%1").arg( prop->colName(type) );
+      }
+   }
+
+   return QString("UPDATE %1 SET %2 where %3=:id")
+           .arg(m_tableName)
+           .arg(columns)
+           .arg(keyName(type));
+}
 const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes type )
 {
    QString columns = keyName(type);

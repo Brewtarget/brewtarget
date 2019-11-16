@@ -618,6 +618,47 @@ private:
       q.finish();
    }
 
+   //! we search by name enough that this is actually not a bad idea
+   template <class T> bool getElementsByName( QList<T*>& list, Brewtarget::DBTable table, QString name, QHash<int,T*> allElements, QString id=QString("") )
+   {
+      QSqlQuery q(sqlDatabase());
+      TableSchema* tbl = dbDefn->table( table );
+      q.setForwardOnly(true);
+      QString queryString;
+
+      if ( id.isEmpty() )
+         id = tbl->keyName(Brewtarget::dbType());
+      else
+         id = tbl->propertyToColumn(id);
+
+      queryString = QString("SELECT %1 as id FROM %2 WHERE %3=:name")
+              .arg(id)
+              .arg(tbl->tableName())
+              .arg(tbl->propertyToColumn(kpropName));
+
+      try {
+         q.prepare(queryString);
+         q.bindValue(":name", name);
+         if ( ! q.exec() )
+            throw QString("could not execute query: %2 : %3").arg(queryString).arg(q.lastError().text());
+      }
+      catch (QString e) {
+         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         q.finish();
+         throw;
+      }
+
+      while( q.next() )
+      {
+         int key = q.record().value("id").toInt();
+         if( allElements.contains(key) )
+            list.append( allElements[key] );
+      }
+
+      q.finish();
+      return true;
+   }
+
    //! Helper to populate the list using the given filter.
    template <class T> bool getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
    {
@@ -967,7 +1008,7 @@ private:
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
 
-   QList<TableParams> makeTableParams();
+   QMap<QString, std::function<BeerXMLElement*(QString name)> > makeTableParams();
 
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.
@@ -982,17 +1023,11 @@ private:
    QSqlDatabase openPostgres(QString const& Hostname, QString const& DbName,
                              QString const& Username, QString const& Password,
                              int Portnum);
-   //! \brief makes a query string we can prepare. Needed this in two places,
-   // so it got a method
-   QString makeInsertString( QSqlRecord here, QString realName );
-   QString makeUpdateString( QSqlRecord here, QString realName, int key );
 
-   //! \brief converts sqlite values (mostly booleans) into something postgres
-   // wants
+   //! \brief converts sqlite values (mostly booleans) into something postgres wants
    QVariant convertValue(Brewtarget::DBTypes newType, QSqlField field);
 
-   //! \brief does the heavy lifting to copy the contents from one db to the
-   //next
+   //! \brief does the heavy lifting to copy the contents from one db to the next
    void copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes newType, QSqlDatabase oldDb);
    void automaticBackup();
 

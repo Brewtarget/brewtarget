@@ -336,7 +336,7 @@ bool MashDesigner::initializeMash()
                                         tr("Tun Temp"),
                                         tr("Enter the temperature of the tun before your first infusion."),
                                         QLineEdit::Normal, //default,
-                                        QString::null,
+                                        QString(),
                                         &ok
                                        //don't need the widget pointer - default is parent
                                               );

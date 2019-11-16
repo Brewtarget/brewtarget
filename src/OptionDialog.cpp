@@ -435,7 +435,7 @@ void OptionDialog::saveAndClose()
             Brewtarget::copyDataFiles(newUserDataDir);
          }
 
-         Brewtarget::userDataDir = newUserDataDir;
+         Brewtarget::userDataDir.setPath(newUserDataDir);
          Brewtarget::setOption("user_data_dir", newUserDataDir);
          QMessageBox::information(
             this,

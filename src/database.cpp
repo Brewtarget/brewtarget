@@ -3527,8 +3527,6 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
    return ret;
 }
 
-// pick up here. I need to figure out what to do with the getElements call. Wonder if I should make
-// getElements get the column name?
 Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
     // When loading from XML, we need to delay the signals until after
@@ -3547,7 +3545,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
       // If we are just importing an equip by itself, need to do some dupe-checking.
         if( parent == nullptr ) {
             // Check to see if there is an equip already in the DB with the same name.
-            getElements<Equipment>( matching, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
+            getElementsByName<Equipment>( matching, Brewtarget::EQUIPTABLE, name, allEquipments );
 
             // If we find a match, use it
             if( matching.length() > 0 ) {
@@ -3614,7 +3612,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
          // No parent means we handle the transaction
          sqlDatabase().transaction();
          // Check to see if we already have a Fermentable with this name
-         getElements<Fermentable>( matching, QString("name='%1'").arg(name), Brewtarget::FERMTABLE, allFermentables );
+         getElementsByName<Fermentable>( matching, Brewtarget::FERMTABLE, name, allFermentables );
 
          if ( matching.length() > 0 ) {
             createdNew = false;
@@ -3679,52 +3677,64 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
 
 int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
 {
-  if ( Hop::types.indexOf(type) < 0 )
-  {
+  if ( Hop::types.indexOf(type) < 0 ) {
+    TableSchema* tbl = dbDefn->table(Brewtarget::HOPTABLE);
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT htype FROM hop WHERE name='%1' AND htype != ''").arg(hop->name()), sqlDatabase());
-    q.first();
-    if ( q.isValid() )
-    {
-      QString htype = q.record().value(0).toString();
-      q.finish();
-      if ( htype != "" )
-      {
-         if ( Hop::types.indexOf(htype) >= 0 )
-         {
+    QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
+           .arg(tbl->propertyToColumn(kpropType))
+           .arg(tbl->tableName())
+           .arg(tbl->propertyToColumn(kpropName));
+    // Check to see if there is an hop already in the DB with the same name.
+    QSqlQuery q(sqlDatabase());
+    q.prepare(query);
+    q.bindValue(":name", hop->name());
+
+    if ( q.exec() ) {
+       q.first();
+       if ( q.isValid() ) {
+         QString htype = q.record().value(0).toString();
+         q.finish();
+         if ( htype != "" &&  Hop::types.indexOf(htype) >= 0 ) {
             return Hop::types.indexOf(htype);
          }
-      }
+       }
     }
     // out of ideas at this point so default to Both
     return Hop::types.indexOf(QString("Both"));
   }
-  else
-  {
+  else {
      return Hop::types.indexOf(type);
   }
 }
 
 int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
 {
-  if ( Hop::uses.indexOf(use) < 0 )
-  {
+  if ( Hop::uses.indexOf(use) < 0 ) {
+    TableSchema* tbl = dbDefn->table(Brewtarget::HOPTABLE);
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT use FROM hop WHERE name='%1' AND use != ''").arg(hop->name()), sqlDatabase());
-    q.first();
-    if ( q.isValid() )
-    {
-      QString hUse = q.record().value(0).toString();
-      q.finish();
-      if ( hUse != "" )
-         if ( Hop::uses.indexOf(hUse) >= 0 )
-            return Hop::uses.indexOf(hUse);
+    QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
+           .arg(tbl->propertyToColumn(kpropUse))
+           .arg(tbl->tableName())
+           .arg(tbl->propertyToColumn(kpropName));
+
+    QSqlQuery q(sqlDatabase());
+    q.prepare(query);
+    q.bindValue(":name", hop->name());
+
+    if ( q.exec() ) {
+       q.first();
+       if ( q.isValid() ) {
+          QString hUse = q.record().value(0).toString();
+          q.finish();
+          if ( hUse != "" &&  Hop::uses.indexOf(hUse) >= 0 ) {
+             return Hop::uses.indexOf(hUse);
+          }
+       }
     }
     // out of ideas at this point so default to Flavor
     return Hop::uses.indexOf(QString("Flavor"));
   }
-  else
-  {
+  else {
      return Hop::uses.indexOf(use);
   }
 }
@@ -3747,7 +3757,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
          // as always, start the transaction if no parent
          sqlDatabase().transaction();
          // Check to see if there is a hop already in the DB with the same name.
-         getElements<Hop>( matching, QString("name='%1'").arg(name), Brewtarget::HOPTABLE, allHops );
+         getElementsByName<Hop>( matching, Brewtarget::HOPTABLE, name, allHops );
 
          if( matching.length() > 0 ) {
             createdNew = false;
@@ -3888,13 +3898,11 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
       ret = new Mash(name);
 
       // If the mash has a name
-      if ( ! name.isEmpty() )
-      {
-         getElements<Mash>( matching, QString("name='%1'").arg(name), Brewtarget::MASHTABLE, allMashs );
+      if ( ! name.isEmpty() ) {
+         getElementsByName<Mash>( matching, Brewtarget::MASHTABLE, name, allMashs );
 
          // If there are no other matches in the database
-         if( matching.isEmpty() )
-         {
+         if( matching.isEmpty() ) {
             ret->setDisplay(true);
          }
       }
@@ -3996,52 +4004,65 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
 
 int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
 {
-  if ( Misc::types.indexOf(type) < 0 )
-  {
-    // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT mtype FROM misc WHERE name='%1' AND mtype != ''").arg(misc->name()), sqlDatabase());
-    q.first();
-    if ( q.isValid() )
-    {
-      QString mtype = q.record().value(0).toString();
-      q.finish();
-      if ( mtype != "" )
-      {
-         if ( Misc::types.indexOf(mtype) >= 0 )
-         {
+  if ( Misc::types.indexOf(type) < 0 ) {
+    TableSchema* tbl = dbDefn->table(Brewtarget::MISCTABLE);
+    // look for a valid mash type from our database to use
+    QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
+            .arg(tbl->propertyToColumn(kpropType))
+            .arg(tbl->tableName())
+            .arg(tbl->propertyToColumn(kpropName));
+    QSqlQuery q(sqlDatabase());
+
+    q.prepare(query);
+    q.bindValue(":name", misc->name());
+
+    if ( q.exec() ) {
+       q.first();
+       if ( q.isValid() )
+       {
+         QString mtype = q.record().value(0).toString();
+         q.finish();
+         if ( mtype != "" &&  Misc::types.indexOf(mtype) >= 0 ) {
             return Misc::types.indexOf(mtype);
          }
-      }
+       }
     }
     // out of ideas at this point so default to Flavor
     return Misc::types.indexOf(QString("Flavor"));
   }
-  else
-  {
+  else {
      return Misc::types.indexOf(type);
   }
 }
 
 int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
 {
-  if ( Misc::uses.indexOf(use) < 0 )
-  {
+  if ( Misc::uses.indexOf(use) < 0 ) {
     // look for a valid misc type from our database to use
-    QSqlQuery q(QString("SELECT use FROM misc WHERE name='%1' AND use != ''").arg(misc->name()), sqlDatabase());
-    q.first();
-    if ( q.isValid() )
-    {
-      QString mUse = q.record().value(0).toString();
-      q.finish();
-      if ( mUse != "" )
-         if ( Misc::uses.indexOf(mUse) >= 0 )
+    TableSchema* tbl = dbDefn->table(Brewtarget::MISCTABLE);
+    QString query = QString("SELECT %1 FROM %2 WHERE %3=:use AND %1 != ''")
+            .arg(tbl->propertyToColumn(kpropType))
+            .arg(tbl->tableName())
+            .arg(tbl->propertyToColumn(kpropUse));
+    QSqlQuery q(sqlDatabase());
+
+    q.prepare(query);
+    q.bindValue(":name", misc->name());
+
+    if ( q.exec() ) {
+       q.first();
+       if ( q.isValid() ) {
+         QString mUse = q.record().value(0).toString();
+         q.finish();
+         if ( mUse != "" &&  Misc::uses.indexOf(mUse) >= 0 ) {
             return Misc::uses.indexOf(mUse);
+         }
+       }
     }
     // out of ideas at this point so default to Flavor
     return Misc::uses.indexOf(QString("Flavor"));
   }
-  else
-  {
+  else {
      return Misc::uses.indexOf(use);
   }
 }
@@ -4063,7 +4084,7 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
          // Check to see if there is a hop already in the DB with the same name.
          sqlDatabase().transaction();
 
-         getElements<Misc>( matching, QString("name='%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
+         getElementsByName<Misc>( matching, Brewtarget::MISCTABLE, name, allMiscs );
 
          if( matching.length() > 0 ) {
             createdNew = false;
@@ -4263,7 +4284,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
          // No parent means we handle the transaction
          sqlDatabase().transaction();
          // Check to see if there is a style already in the DB with the same name.
-         getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
+         getElementsByName<Style>( matching, Brewtarget::STYLETABLE, name, allStyles );
 
          // If we found a match, use it.
          if ( matching.length() > 0 ) {
@@ -4341,7 +4362,7 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
       if( parent == nullptr ) {
          sqlDatabase().transaction();
          // Check to see if there is a hop already in the DB with the same name.
-         getElements<Water>( matching, QString("name='%1'").arg(name), Brewtarget::WATERTABLE, allWaters );
+         getElementsByName<Water>( matching, Brewtarget::WATERTABLE, name, allWaters );
 
          if( matching.length() > 0 )
          {
@@ -4397,7 +4418,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
          // start the transaction, just in case
          sqlDatabase().transaction();
          // Check to see if there is a yeast already in the DB with the same name.
-         getElements<Yeast>( matching, QString("name='%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
+         getElementsByName<Yeast>( matching, Brewtarget::YEASTTABLE, name, allYeasts );
 
          if ( matching.length() > 0 ) {
             createdNew = false;
@@ -4537,90 +4558,20 @@ void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
 // think this method will be significantly reduced. I am probably going to
 // have to create and "updateElement" method like insertElement and then we
 // can remove this.
-QList<TableParams> Database::makeTableParams()
+QMap<QString, std::function<BeerXMLElement*(QString name)> > Database::makeTableParams()
 {
-   QList<TableParams> ret;
-   TableParams tmp;
-
+   QMap<QString, std::function<BeerXMLElement*(QString name)> > tmp;
    //=============================Equipment====================================
 
-   tmp.tableName = "equipment";
-   tmp.propName = QStringList() <<
-      "name" << "boil_size" << "batch_size" << "tun_volume" << "tun_weight" <<
-      "tun_specific_heat" << "top_up_water" << "trub_chiller_loss" <<
-      "evap_rate" << "real_evap_rate" << "boil_time" << "calc_boil_volume" <<
-      "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
-      "notes";
-   tmp.newElement = [&](QString name) { return this->newEquipment(); };
+   tmp.insert(ktableEquipment,   [&](QString name) { return this->newEquipment(); } );
+   tmp.insert(ktableFermentable, [&](QString name) { return this->newFermentable(); } );
+   tmp.insert(ktableHop,         [&](QString name) { return this->newHop(); } );
+   tmp.insert(ktableMisc,        [&](QString name) { return this->newMisc(); } );
+   tmp.insert(ktableStyle,       [&](QString name) { return this->newStyle(name); } );
+   tmp.insert(ktableYeast,       [&](QString name) { return this->newYeast(); } );
+   tmp.insert(ktableWater,       [&](QString name) { return this->newWater(); } );
 
-   ret.append(tmp);
-   //==============================Fermentables================================
-
-   tmp.tableName = "fermentable";
-   tmp.propName = QStringList() <<
-      "name" << "ftype" << "amount" << "yield" << "color" <<
-      "add_after_boil" << "origin" << "supplier" << "notes" <<
-      "coarse_fine_diff" << "moisture" << "diastatic_power" << "protein" <<
-      "max_in_batch" << "recommend_mash" << "ibu_gal_per_lb";
-   tmp.newElement = [&](QString name) { return this->newFermentable(); };
-
-   //==============================Hops=============================
-   tmp.tableName = "hop";
-   tmp.propName = QStringList() <<
-      "name" << "alpha" << "amount" << "use" << "time" << "notes" << "htype" <<
-      "form" << "beta" << "hsi" << "origin" << "substitutes" << "humulene" <<
-      "caryophyllene" << "cohumulone" << "myrcene";
-   // First cast specifies which newHop() I want, since it is overloaded.
-   // Second cast is to force the conversion of the function pointer.
-   tmp.newElement = [&](QString name) { return this->newHop(); };
-
-   ret.append(tmp);
-
-   //==================================Miscs===================================
-
-   tmp.tableName = "misc";
-   tmp.propName = QStringList() <<
-      "name" << "mtype" << "use" << "time" << "amount" << "amount_is_weight" <<
-      "use_for" << "notes";
-   tmp.newElement = [&](QString name) { return this->newMisc(); };
-
-   ret.append(tmp);
-   //==================================Styles==================================
-
-   tmp.tableName = "style";
-   tmp.propName = QStringList() <<
-      "name" << "s_type" << "category" << "category_number" <<
-      "style_letter" << "style_guide" << "og_min" << "og_max" << "fg_min" <<
-      "fg_max" << "ibu_min" << "ibu_max" << "color_min" << "color_max" <<
-      "abv_min" << "abv_max" << "carb_min" << "carb_max" << "notes" <<
-      "profile" << "ingredients" << "examples";
-   tmp.newElement = [&](QString name) { return this->newStyle(name); };
-
-   ret.append(tmp);
-
-   //==================================Yeasts==================================
-
-   tmp.tableName = "yeast";
-   tmp.propName = QStringList() <<
-      "name" << "ytype" << "form" << "amount" << "amount_is_weight" <<
-      "laboratory" << "product_id" << "min_temperature" << "max_temperature" <<
-      "flocculation" << "attenuation" << "notes" << "best_for" <<
-      "times_cultured" << "max_reuse" << "add_to_secondary";
-   tmp.newElement = [&](QString name) { return this->newYeast(); };
-
-   ret.append(tmp);
-
-   //===================================Waters=================================
-
-   tmp.tableName = "water";
-   tmp.propName = QStringList() <<
-      "name" << "amount" << "calcium" << "bicarbonate" << "sulfate" <<
-      "chloride" << "sodium" << "magnesium" << "ph" << "notes";
-   tmp.newElement = [&](QString name) { return this->newWater(); };
-
-   ret.append(tmp);
-
-   return ret;
+   return tmp;
 }
 
 void Database::updateDatabase(QString const& filename)
@@ -4629,18 +4580,13 @@ void Database::updateDatabase(QString const& filename)
    // "new" means the database coming from 'filename'.
 
    QVariant btid, newid, oldid;
-   QVariant zero(0);
-   QList<TableParams> tableParams = makeTableParams();
-
-   QList<QVariant> propVal;
-   QStringList varAndHolder;
+   QMap<QString, std::function<BeerXMLElement*(QString name)> >  makeObject = makeTableParams();
 
    try {
       QString newCon("newSqldbCon");
       QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
       newSqldb.setDatabaseName(filename);
-      if( ! newSqldb.open() )
-      {
+      if( ! newSqldb.open() ) {
          QMessageBox::critical(nullptr,
                               QObject::tr("Database Failure"),
                               QString(QObject::tr("Failed to open the database '%1'.").arg(filename)));
@@ -4660,43 +4606,31 @@ void Database::updateDatabase(QString const& filename)
 
       // Execute.
 
-      foreach( TableParams tp, tableParams)
+      foreach( TableSchema* tbl, dbDefn->baseTables() )
       {
-         QSqlQuery qNewBtIng( QString("SELECT * FROM bt_%1").arg(tp.tableName), newSqldb );
+         TableSchema* btTbl = dbDefn->btTable(tbl->dbTable());
+         QSqlQuery qNewBtIng( QString("SELECT * FROM %1").arg(btTbl->tableName()), newSqldb );
 
          QSqlQuery qNewIng( newSqldb );
-         qNewIng.prepare(QString("SELECT * FROM %1 WHERE id=:id").arg(tp.tableName));
+         qNewIng.prepare(QString("SELECT * FROM %1 WHERE %2=:id").arg(tbl->tableName()).arg(tbl->keyName()));
 
          // Construct the big update query.
          QSqlQuery qUpdateOldIng( sqlDatabase() );
-         QString updateString = QString("UPDATE %1 SET ").arg(tp.tableName);
-         varAndHolder.clear();
-
-         foreach( QString pn, tp.propName)
-            varAndHolder.append(QString("%1=:%1").arg(pn));
-
-         updateString.append(varAndHolder.join(", "));
-
-         // Un-delete it if it is somehow deleted.
-         updateString.append(", deleted=:zero WHERE id=:id");
-         qUpdateOldIng.prepare(updateString);
-         qUpdateOldIng.bindValue( ":zero", Brewtarget::dbFalse() );
+         QString updateString = tbl->generateUpdateRow();
 
          QSqlQuery qOldBtIng( sqlDatabase() );
-         qOldBtIng.prepare( QString("SELECT * FROM bt_%1 WHERE id=:btid").arg(tp.tableName) );
+         qOldBtIng.prepare( QString("SELECT * FROM %1 WHERE %2=:btid").arg(btTbl->tableName()).arg(btTbl->keyName()) );
 
          QSqlQuery qOldBtIngInsert( sqlDatabase() );
-         qOldBtIngInsert.prepare( QString("INSERT INTO bt_%1 (id,%1_id) values (:id,:%1_id)").arg(tp.tableName) );
-
-         // Resize propVal appropriately for current table.
-         propVal.clear();
-         foreach( QString pn, tp.propName )
-            propVal.append(QVariant());
+         qOldBtIngInsert.prepare( QString("INSERT INTO %1 (%2,%3) values (:id,:%3)")
+                                  .arg(btTbl->tableName())
+                                  .arg(btTbl->keyName())
+                                  .arg(btTbl->childIndexName()));
 
          while( qNewBtIng.next() )
          {
-            btid = qNewBtIng.record().value("id");
-            newid = qNewBtIng.record().value(QString("%1_id").arg(tp.tableName));
+            btid = qNewBtIng.record().value(btTbl->keyName());
+            newid = qNewBtIng.record().value(btTbl->childIndexName());
 
             qNewIng.bindValue(":id", newid);
             if ( ! qNewIng.exec() )
@@ -4704,14 +4638,12 @@ void Database::updateDatabase(QString const& filename)
             if( !qNewIng.next() )
                throw QString("Could not advance query: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
 
-            QList<QVariant>::iterator it = propVal.begin();
-            foreach( QString pn, tp.propName )
-            {
-               // Get new value.
-               *it = qNewIng.record().value(pn);
-               // Bind it to the old ingredient.
-               qUpdateOldIng.bindValue( QString(":%1").arg(pn), *it );
-               ++it;
+            foreach( QString pn, tbl->allPropertyNames()) {
+               // Bind the old values to the new unless it is deleted, which we always set to false
+               if ( pn == kpropDeleted ) {
+                  qUpdateOldIng.bindValue( QString(":%1").arg(pn), Brewtarget::dbFalse());
+               }
+               qUpdateOldIng.bindValue( QString(":%1").arg(pn), qNewIng.record().value(pn));
             }
 
             // Done retrieving new ingredient data.
@@ -4728,7 +4660,7 @@ void Database::updateDatabase(QString const& filename)
             // If the btid exists in the old bt_hop table, do an update.
             if( qOldBtIng.next() )
             {
-               oldid = qOldBtIng.record().value( QString("%1_id").arg(tp.tableName) );
+               oldid = qOldBtIng.record().value( btTbl->keyName() );
                qOldBtIng.finish();
 
                qUpdateOldIng.bindValue( ":id", oldid );
@@ -4740,12 +4672,11 @@ void Database::updateDatabase(QString const& filename)
                            .arg(qUpdateOldIng.lastError().text());
 
             }
-            // If the btid doesn't exist in the old bt_hop table, do an insert into
-            // the new hop table, then into the new bt_hop table.
-            else
-            {
+            // If the btid doesn't exist in the old bt_ table, do an insert into
+            // the new table, then into the new bt_ table.
+            else {
                // Create a new ingredient.
-               oldid = tp.newElement(qNewBtIng.record().value("name").toString())->_key;
+               oldid = makeObject.value(tbl->tableName())(qNewBtIng.record().value("name").toString())->_key;
 
                // Copy in the new data.
                qUpdateOldIng.bindValue( ":id", oldid );
@@ -4759,7 +4690,7 @@ void Database::updateDatabase(QString const& filename)
 
                // Insert an entry into our bt_<ingredient> table.
                qOldBtIngInsert.bindValue( ":id", btid );
-               qOldBtIngInsert.bindValue( QString(":%1_id").arg(tp.tableName), oldid );
+               qOldBtIngInsert.bindValue( QString(":%1").arg(btTbl->childIndexName()), oldid );
 
                if ( !  qOldBtIngInsert.exec() )
                   throw QString("Could not insert btID (%1): %2 %3")
@@ -4920,41 +4851,6 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       throw;
    }
-}
-
-QString Database::makeInsertString( QSqlRecord here, QString realName )
-{
-   QString columns,qmarks;
-
-   // Yes. I went from named to positional place holders. Such is life
-   for(int i=0; i < here.count(); ++i) {
-      if ( ! columns.isEmpty() ) {
-         columns += QString(",%1").arg( here.fieldName(i));
-         qmarks  += ",?";
-      }
-      else {
-         columns = here.fieldName(i);
-         qmarks = "?";
-      }
-   }
-   return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(realName).arg(columns).arg(qmarks);
-}
-
-QString Database::makeUpdateString( QSqlRecord here, QString realName, int key )
-{
-   QString columns;
-
-   // Yes. I am still using positional place holders, and you are still dealing
-   // with it
-   for(int i=0; i < here.count(); ++i) {
-      if ( ! columns.isEmpty() ) {
-         columns += QString(",%1=?").arg( here.fieldName(i) );
-      }
-      else {
-         columns = QString("%1=?").arg( here.fieldName(i) );
-      }
-   }
-   return QString("UPDATE %1 SET %2 where id=%3").arg(realName).arg(columns).arg(key);
 }
 
 QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)

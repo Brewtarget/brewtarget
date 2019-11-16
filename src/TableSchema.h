@@ -94,6 +94,7 @@ public:
    // Not sure these belong here yet, but maybe
    const QString generateCreateTable(Brewtarget::DBTypes type = Brewtarget::ALLDB, QString tmpName = QString("") );
    const QString generateUpdateRow(int key, Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   const QString generateUpdateRow(Brewtarget::DBTypes type = Brewtarget::ALLDB);
    const QString generateInsertRow(Brewtarget::DBTypes type = Brewtarget::ALLDB);
    // this one ignores the foreign keys
    const QString generateInsertProperties(Brewtarget::DBTypes type = Brewtarget::ALLDB);
