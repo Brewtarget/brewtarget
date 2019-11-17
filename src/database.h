@@ -161,7 +161,6 @@ public:
       QString index = QString("%1_%2").arg(tbl->tableName()).arg(col_name);
 
       if ( ! selectSome.contains(index) ) {
-         qDebug() << "Generating new query for " << tbl->tableName();
          QString query = QString("SELECT %1 from %2 WHERE %3=:id")
                            .arg(col_name)
                            .arg(tbl->tableName())
@@ -685,22 +684,24 @@ private:
    }
 
    //! Helper to populate the list using the given filter.
-   template <class T> bool getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements, QString id=QString("") )
+   template <class T> bool getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table,
+                                        QHash<int,T*> allElements, QString id=QString() )
    {
       QSqlQuery q(sqlDatabase());
       TableSchema* tbl = dbDefn->table( table );
       q.setForwardOnly(true);
       QString queryString;
 
-      if ( id.isEmpty() )
+      if ( id.isEmpty() ) {
          id = tbl->keyName(Brewtarget::dbType());
-      else
-         id = tbl->propertyToColumn(id);
+      }
 
-      if( !filter.isEmpty() )
+      if( !filter.isEmpty() ) {
          queryString = QString("SELECT %1 as id FROM %2 WHERE %3").arg(id).arg(tbl->tableName()).arg(filter);
-      else
+      }
+      else {
          queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tbl->tableName());
+      }
 
       try {
          if ( ! q.exec(queryString) )
@@ -891,19 +892,19 @@ private:
              */
             int key = ing->key();
             q.prepare(QString("SELECT %1 FROM %2 WHERE %3=%4")
-                  .arg(child->propertyToColumn(kpropParentId))
+                  .arg(child->parentIndexName())
                   .arg(child->tableName())
-                  .arg(child->propertyToColumn(kpropChildId))
+                  .arg(child->childIndexName())
                   .arg(key));
             if (q.exec() && q.next()) {
-               key = q.record().value(child->propertyToColumn(kpropParentId)).toInt();
+               key = q.record().value(child->parentIndexName()).toInt();
             }
             q.finish();
 
             insert = QString("INSERT INTO %1 (%2, %3) VALUES (:parent, :child)")
                   .arg(child->tableName())
-                  .arg(child->propertyToColumn(kpropParentId))
-                  .arg(child->propertyToColumn(kpropChildId));
+                  .arg(child->parentIndexName())
+                  .arg(child->childIndexName());
 
             q.prepare(insert);
             q.bindValue(":parent", key);

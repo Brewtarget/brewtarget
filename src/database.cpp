@@ -1033,7 +1033,7 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 
    //  QString filterString = QString("recipe_id = %1 AND deleted = %2")
    QString filterString = QString("%1 = %2 AND %3 = %4")
-           .arg( tbl->propertyToColumn(kcolRecipeId))
+           .arg( tbl->foreignKeyToColumn() )
            .arg(parent->_key)
            .arg(tbl->propertyToColumn(kpropDeleted))
            .arg(Brewtarget::dbFalse());
@@ -1138,14 +1138,14 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
 QList<Instruction*> Database::instructions( Recipe const* parent )
 {
    QList<Instruction*> ret;
-   TableSchema* tbl = dbDefn->table(Brewtarget::INSTINRECTABLE);
+   TableSchema* inrec = dbDefn->table(Brewtarget::INSTINRECTABLE);
    // "recipe_id = [key] ORDER BY instruction_number ASC"
    QString filter = QString("%1 = %2 ORDER BY %3 ASC")
-         .arg( tbl->parentIndexName())
+         .arg( inrec->parentIndexName())
          .arg(parent->_key)
-         .arg( tbl->propertyToColumn(kpropInstructionNumber));
+         .arg( inrec->propertyToColumn(kpropInstructionNumber));
 
-   getElements(ret,filter,Brewtarget::INSTINRECTABLE,allInstructions,kpropInstructionId);
+   getElements(ret,filter,Brewtarget::INSTINRECTABLE,allInstructions,inrec->childIndexName());
 
    return ret;
 }
@@ -1153,9 +1153,10 @@ QList<Instruction*> Database::instructions( Recipe const* parent )
 QList<Water*> Database::waters(Recipe const* parent)
 {
    QList<Water*> ret;
-   QString filter = QString("recipe_id = %1").arg(parent->_key);
+   TableSchema* inrec = dbDefn->table(Brewtarget::WATERINRECTABLE);
+   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
 
-   getElements(ret,filter,Brewtarget::WATERINRECTABLE,allWaters,"water_id");
+   getElements(ret,filter,Brewtarget::WATERINRECTABLE,allWaters,inrec->childIndexName());
 
    return ret;
 }
@@ -1163,9 +1164,10 @@ QList<Water*> Database::waters(Recipe const* parent)
 QList<Yeast*> Database::yeasts(Recipe const* parent)
 {
    QList<Yeast*> ret;
-   QString filter = QString("recipe_id = %1").arg(parent->_key);
+   TableSchema* inrec = dbDefn->table(Brewtarget::YEASTINRECTABLE);
+   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
 
-   getElements(ret,filter,Brewtarget::YEASTINRECTABLE,allYeasts,"yeast_id");
+   getElements(ret,filter,Brewtarget::YEASTINRECTABLE,allYeasts,inrec->childIndexName());
 
    return ret;
 }
@@ -1192,10 +1194,11 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
 
    try {
       tmp = newIngredient(&allBrewNotes);
+      TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
 
       sqlUpdate( Brewtarget::BREWNOTETABLE,
-               QString("recipe_id=%1").arg(parent->_key),
-               QString("id=%2").arg(tmp->_key) );
+               QString("%1=%2").arg(tbl->foreignKeyToColumn()).arg(parent->_key),
+               QString("%1=%2").arg(tbl->keyName()).arg(tmp->_key) );
 
    }
    catch (QString e) {
@@ -2021,6 +2024,7 @@ void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant v
 void Database::populateChildTablesByName(Brewtarget::DBTable table)
 {
    TableSchema* tbl = dbDefn->table(table);
+   TableSchema* cld = dbDefn->childTable( table );
    Brewtarget::logW( QString("Populating Children Ingredient Links (%1)").arg(tbl->tableName()));
 
    try {
@@ -2068,17 +2072,17 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
                 // MURPHY WEEPS
                 //  QString("INSERT INTO %1 (parent_id, child_id) VALUES (%2, %3) ON CONFLICT(child_id) DO UPDATE set parent_id = EXCLUDED.parent_id")
                   queryString = QString("INSERT INTO %1 (%2, %3) VALUES (%4, %5) ON CONFLICT(%3) DO UPDATE set %2 = EXCLUDED.%2")
-                        .arg( dbDefn->childTableName((table)))
-                        .arg( tbl->propertyToColumn(kpropParentId))
-                        .arg(tbl->propertyToColumn(kpropChildId))
+                        .arg(dbDefn->childTableName((table)))
+                        .arg(cld->parentIndexName())
+                        .arg(cld->childIndexName())
                         .arg(parentID)
                         .arg(childID);
                   break;
                default:
                   queryString = QString("INSERT OR REPLACE INTO %1 (%2, %3) VALUES (%4, %5)")
                               .arg(dbDefn->childTableName(table))
-                              .arg( tbl->propertyToColumn(kpropParentId))
-                              .arg(tbl->propertyToColumn(kpropChildId))
+                              .arg(cld->parentIndexName())
+                              .arg(cld->childIndexName())
                               .arg(parentID)
                               .arg(childID);
             }
@@ -2121,15 +2125,15 @@ int Database::getParentID(TableSchema* table, int childKey)
 
    //child_id is expected to be unique in table
    QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4 LIMIT 1")
-      .arg( table->propertyToColumn(kpropParentId))
+      .arg(table->parentIndexName())
       .arg(dbDefn->childTableName(table->dbTable()))
-      .arg( table->propertyToColumn(kpropChildId))
+      .arg(table->childIndexName())
       .arg(childKey);
 
    QSqlQuery q( query, sqlDatabase() );
    q.first();
 
-   ret = q.record().value(table->propertyToColumn(kpropParentId)).toInt();
+   ret = q.record().value(table->parentIndexName()).toInt();
 
    if ( ret == 0 ) {
       return childKey;
@@ -2158,16 +2162,26 @@ QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable tab
 {
    QVariant val = QVariant(0.0);
    TableSchema* tbl = dbDefn->table(table);
-   QString queryString = QString("select %2.%1 from %2, %3, %4 where %3.%6 = %5 and %3.%6 = %4.%7 and %4.%8 = %2.%9")
+   TableSchema* inv = dbDefn->table(tbl->invTable());
+   TableSchema* cld  = dbDefn->table(tbl->childTable());
+   // Good lord, I've killed more brain cells pulling this apart then I have drinking beer
+   // select misc_in_inventory(1).amount(2) from misc_in_inventory(1), misc(3), misc_children(4) where
+   //    misc(3).id(5) = [key(6)] and
+   //    misc(3).id(5) = misc_children(4).child_id(7) and
+   //    misc_child(4).parent_id(8) = misc_in_inventory(1).misc_id(9)
+   QString queryString = QString("select %1.%2 from %1, %3, %4 where "
+                                 "%3.%5 = %6 and "
+                                 "%3.%5 = %4.%7 and "
+                                 "%4.%8 = %1.%9")
+        .arg(inv->tableName())
         .arg(col_name)
-        .arg(dbDefn->invTableName(table))
         .arg(tbl->tableName())
-        .arg(dbDefn->childTableName(table))
-        .arg(key)
+        .arg(cld->tableName())
         .arg(tbl->keyName())
-        .arg(tbl->propertyToColumn(kpropChildId))
-        .arg(tbl->propertyToColumn(kpropParentId))
-        .arg(tbl->childIndexName());
+        .arg(key)
+        .arg(cld->childIndexName())
+        .arg(cld->parentIndexName())
+        .arg(inv->foreignKeyToColumn());
    QSqlQuery q( queryString, sqlDatabase() );
 
    if ( q.first() ) {
@@ -2584,24 +2598,6 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
 
    q.finish();
 }
-
-/*
-QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
-{
-   QHash<Brewtarget::DBTable,QSqlQuery> ret;
-
-   foreach( Brewtarget::DBTable table, tableNames.keys() )
-   {
-      QSqlQuery q(sqlDatabase());
-      QString query = QString("SELECT * FROM %1 WHERE id=:id").arg(tableNames[table]);
-      q.prepare( query );
-
-      ret[table] = q;
-   }
-
-   return ret;
-}
-*/
 
 QList<BrewNote*> Database::brewNotes()
 {
