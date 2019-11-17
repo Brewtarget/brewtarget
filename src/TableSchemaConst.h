@@ -96,6 +96,20 @@ static const QString kpropChildId("child_id");
 
 // water and mash
 static const QString kpropPH("ph");
+
+// properties for foreign keys. This is being done for consistency
+// later. They are exactly the same as the kcol elements later, but
+// it really got annoying trying to remember when to use kprop or kcol.
+static const QString kpropRecipeId("recipe_id");
+static const QString kpropEquipmentId("equipment_id");
+static const QString kpropFermentableId("fermentable_id");
+static const QString kpropHopId("hop_id");
+static const QString kpropInstructionId("instruction_id");
+static const QString kpropMashId("mash_id");
+static const QString kpropMiscId("misc_id");
+static const QString kpropStyleId("style_id");
+static const QString kpropWaterId("water_id");
+static const QString kpropYeastId("yeast_id");
 // Same for these column names. Yes, but I think the consistency is better
 // this way
 static const QString kcolName("name");

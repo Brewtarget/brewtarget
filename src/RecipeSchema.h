@@ -20,6 +20,7 @@
 #ifndef _RECIPETABLESCHEMA_H
 #define _RECIPETABLESCHEMA_H
 
+#include <QString>
 // Columns for the recipe table
 static const QString kcolRecipeType("type");
 static const QString kcolRecipeBrewer("brewer");
@@ -78,9 +79,6 @@ static const QString kpropCarbTemp("carbonationTemp_c");
 static const QString kpropPrimSugEquiv("primingSugarEquiv");
 static const QString kpropKegPrimFact("kegPrimingFactor");
 
-static const QString kpropEquipmentId("equipment_id");
-static const QString kpropMashId("mash_id");
-static const QString kpropStyleId("style_id");
 static const QString kpropAncestorId("ancestor_id");
 
 // Huh. Took a long time for a xmlPropType to show up

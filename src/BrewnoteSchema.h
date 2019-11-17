@@ -90,8 +90,6 @@ static const QString kpropPostBoilVol("postBoilVolume_l");
 static const QString kpropProjVolIntoBoil("projVolIntoBK_l");
 static const QString kpropProjVolIntoFerm("projVolIntoFerm_l");
 
-static const QString kpropRecipeId("recipe_id");
-
 // finally, XML props
 static const QString kxmlPropBrewDate("BREWDATE");
 static const QString kxmlPropFermDate("DATE_FERMENTED_OUT");

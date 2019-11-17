@@ -44,7 +44,7 @@ QString Misc::classNameStr()
 }
 
 //============================CONSTRUCTORS======================================
-Misc::Misc(Brewtarget::DBTable table, int key) 
+Misc::Misc(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
@@ -224,7 +224,7 @@ void Misc::setInventoryAmount( double var )
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: inventory < 0: %1").arg(var) );
    else {
-      setInventoryEasier(var);
+      setInventory(var);
    }
 }
 
@@ -249,11 +249,11 @@ bool Misc::isValidUse( const QString& var )
    static const QString uses[] = {"Boil", "Mash", "Primary", "Secondary", "Bottling"};
    static const unsigned int size = 5;
    unsigned int i;
-   
+
    for( i = 0; i < size; ++i )
       if( var == uses[i] )
          return true;
-   
+
    return false;
 }
 
@@ -262,10 +262,10 @@ bool Misc::isValidType( const QString& var )
    static const QString types[] = {"Spice", "Fining", "Water Agent", "Herb", "Flavor", "Other"};
    static const unsigned int size = 6;
    unsigned int i;
-   
+
    for( i = 0; i < size; ++i )
       if( var == types[i] )
          return true;
-   
+
    return false;
 }

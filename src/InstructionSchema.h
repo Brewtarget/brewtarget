@@ -42,7 +42,7 @@ static const QString kxmlPropInterval("interval");
 
 
 // small cheat here. InstructionInRecipe tables have a spare column. Rather
-// than define a unique header file, I am including it here. It has no
-// property and no XML property
+// than define a unique header file, I am including it here.
+static const QString kpropInstructionNumber("instruction_number");
 static const QString kcolInstructionNumber("instruction_number");
 #endif // _INSTRUCTIONTABLESCHEMA_H

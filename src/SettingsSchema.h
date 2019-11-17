@@ -20,7 +20,11 @@
 #ifndef _SETTINGSTABLESCHEMA_H
 #define _SETTINGSTABLESCHEMA_H
 
-// Columns for the btall table
+// this is kind of weird, as this table has no properties. But I've decided
+// that all of the propertyTo* calls should only take kprops.
+static const QString kpropSettingsVersion("version");
+static const QString kpropSettingsRepopulate("repopulatechildrenonnextstart");
+// Columns for the settings table
 static const QString kcolSettingsVersion("version");
 static const QString kcolSettingsRepopulate("repopulatechildrenonnextstart");
 

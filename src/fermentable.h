@@ -59,7 +59,7 @@ public:
    Q_ENUMS( Type AdditionMethod AdditionTime )
 
    virtual ~Fermentable() {}
-   
+
    //! \brief The \c Type.
    Q_PROPERTY( Type type                     READ type                   WRITE setType                   /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The \c Type string.
@@ -112,8 +112,8 @@ public:
    Q_PROPERTY( bool isExtract                READ isExtract STORED false)
    //! \brief Whether this fermentable is a sugar. Somewhat redundant, but it makes for nice symetry elsewhere
    Q_PROPERTY( bool isSugar                  READ isSugar STORED false)
-   
-   const Type type() const;
+
+   Type type() const;
    double amount_kg() const;
    double inventory() const;
    double yield_pct() const;
@@ -134,10 +134,10 @@ public:
    const QString typeString() const;
    //! Returns a translated type string.
    const QString typeStringTr() const;
-   const AdditionMethod additionMethod() const;
+   AdditionMethod additionMethod() const;
    //! Returns a translated addition method string.
    const QString additionMethodStringTr() const;
-   const AdditionTime additionTime() const;
+   AdditionTime additionTime() const;
    //! Returns a translated addition time string.
    const QString additionTimeStringTr() const;
    // Calculated getters.
@@ -173,19 +173,19 @@ public:
    static QString classNameStr();
 
 signals:
-   
+
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   
+
 private:
    Fermentable(Brewtarget::DBTable table, int key);
    Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Fermentable( Fermentable const& other );
    Fermentable( QString name, bool cache = true );
-   
+
    static bool isValidType( const QString& str );
    static QStringList types;
-   
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 
@@ -226,7 +226,7 @@ inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentab
    // Sort by name if the two fermentables are of equal weight
    if ( lhs->amount_kg() == rhs->amount_kg() )
       return lhs->name() < rhs->name();
-   
+
    // Yes. I know. This seems silly, but I want the returned list in
    // descending not ascending order.
    return lhs->amount_kg() > rhs->amount_kg();

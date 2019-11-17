@@ -27,15 +27,10 @@
 #include "brewtarget.h"
 #include "database.h"
 
-static const QString kFolder("folder");
-static const QString kName("name");
-static const QString kDeleted("deleted");
-static const QString kDisplay("display");
-
 static const char* kVersion = "version";
 
 BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name, bool t_display)
-   : QObject(0),
+   : QObject(nullptr),
      _key(key),
      _table(table),
      _valid(true),
@@ -47,7 +42,7 @@ BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key, QString t_nam
 }
 
 BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
-   : QObject(0),
+   : QObject(nullptr),
      _key(other._key),
      _table(other._table),
      _valid(true),
@@ -110,7 +105,6 @@ void BeerXMLElement::setName(const QString var, bool cachedOnly)
 
    _name = var;
    if ( ! cachedOnly ) {
-      // set( kName, kName, var );
       setEasy( kpropName, var );
       emit changedName(var);
    }
@@ -259,23 +253,6 @@ QString BeerXMLElement::text(QDate const& val)
    return val.toString(Qt::ISODate);
 }
 
-void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
-{
-   if (prop_name != nullptr && col_name != nullptr) {
-    // Get the meta property.
-    int ndx = metaObject()->indexOfProperty(prop_name);
-
-    // Should schedule an update of the appropriate entry in table,
-    // then use prop to emit its notification signal.
-    Database::instance().updateEntry( _table, _key, col_name, value, metaObject()->property(ndx), this, notify );
-   }
-}
-
-void BeerXMLElement::set(const QString &prop_name, const QString &col_name, const QVariant &value, bool notify)
-{
-   set(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
-}
-
 void BeerXMLElement::setEasy(QString prop_name, QVariant value, bool notify)
 {
    Database::instance().updateEntry(this,prop_name,value,notify);
@@ -291,29 +268,7 @@ QVariant BeerXMLElement::get( const QString& col_name ) const
    return get(col_name.toUtf8().constData());
 }
 
-void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
-{
-   /*
-    // Get the meta property.
-    int ndx = metaObject()->indexOfProperty(prop_name);
-
-    int invkey = Database::instance().getInventoryID(_table, _key);
-    Brewtarget::DBTable invtable = Database::instance().getInventoryTable(_table);
-    if(invkey == 0){ //no inventory row in the database so lets make one
-      invkey = Database::instance().newInventory(_table,_key);
-    }
-    Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
-    */
-
-    Database::instance().setInventory( this, value, notify );
-}
-
-void BeerXMLElement::setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify )
-{
-    Database::instance().setInventory( this, value, notify );
-}
-
-void BeerXMLElement::setInventoryEasier( const QVariant& value, bool notify )
+void BeerXMLElement::setInventory( const QVariant& value, bool notify )
 {
     Database::instance().setInventory( this, value, notify );
 }
@@ -321,17 +276,6 @@ void BeerXMLElement::setInventoryEasier( const QVariant& value, bool notify )
 QVariant BeerXMLElement::getInventory( const char* col_name ) const
 {
    QVariant val = 0.0;
-/*
-   int invkey = Database::instance().getInventoryID(_table, _key);
-   Brewtarget::DBTable invtable = Database::instance().getInventoryTable(_table);
-   if(invkey != 0){
-      val = Database::instance().get( invtable , invkey, col_name );
-   }
-
-   if ( val > 0.0 ) {
-      QVariant wtf = Database::instance().getInventoryAmt(col_name, _table, _key);
-   }
-*/
    val = Database::instance().getInventoryAmt(col_name, _table, _key);
    return val;
 }
@@ -354,7 +298,7 @@ void BeerXMLElement::invalidate()
 QVariantMap BeerXMLElement::getColumnValueMap() const
 {
    QVariantMap map;
-   map.insert(kFolder, folder());
-   map.insert(kName, name());
+   map.insert(kpropFolder, folder());
+   map.insert(kpropName, name());
    return map;
 }

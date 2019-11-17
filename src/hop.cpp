@@ -185,14 +185,14 @@ void Hop::setInventoryAmount( double num )
    else
    {
       if ( ! m_cacheOnly ) {
-         setInventoryEasier(num);
+         setInventory(num);
       }
    }
 }
 
 void Hop::setUse(Use u)
 {
-   if ( u >= 0 and u < uses.size()) {
+   if ( u < uses.size()) {
       m_use = u;
       m_useStr = uses.at(u);
       if ( ! m_cacheOnly ) {
@@ -216,7 +216,7 @@ void Hop::setTime_min( double num )
       }
    }
 }
-      
+
 void Hop::setNotes( const QString& str )
 {
    m_notes = str;
@@ -227,7 +227,7 @@ void Hop::setNotes( const QString& str )
 
 void Hop::setType(Type t)
 {
-  if ( t >= 0 and t < types.size() ) {
+  if ( t < types.size() ) {
      m_type = t;
      m_typeStr = types.at(t);
      if ( ! m_cacheOnly ) {
@@ -238,7 +238,7 @@ void Hop::setType(Type t)
 
 void Hop::setForm( Form f )
 {
-   if ( f >= 0 and f < forms.size() ) {
+   if ( f < forms.size() ) {
       m_form = f;
       m_formStr = forms.at(f);
       if ( ! m_cacheOnly ) {

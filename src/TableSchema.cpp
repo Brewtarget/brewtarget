@@ -98,11 +98,14 @@ TableSchema::TableSchema(Brewtarget::DBTable table)
       m_childTable(Brewtarget::NOTABLE),
       m_inRecTable(Brewtarget::NOTABLE),
       m_invTable(Brewtarget::NOTABLE),
-      m_btTable(Brewtarget::NOTABLE)
+      m_btTable(Brewtarget::NOTABLE),
+      m_defType(Brewtarget::dbType())
 {
     // for this bit of ugly, I gain a lot of utility.
     defineTable();
 }
+
+// almost everything is a get. The initialization is expected all the parameters
 
 const QString TableSchema::tableName() const { return m_tableName; }
 const QString TableSchema::className() const { return m_className; }
@@ -115,42 +118,49 @@ Brewtarget::DBTable TableSchema::btTable() const { return m_btTable; }
 const QMap<QString,PropertySchema*> TableSchema::properties() const { return m_properties; }
 const QMap<QString,PropertySchema*> TableSchema::foreignKeys() const { return m_foreignKeys; }
 const PropertySchema* TableSchema::key() const { return m_key; }
+Brewtarget::DBTypes TableSchema::defType() const { return m_defType; }
 
-const QString TableSchema::keyName( Brewtarget::DBTypes dbType ) const
+const QString TableSchema::keyName( Brewtarget::DBTypes type ) const
 {
-   return m_key->colName(dbType);
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+
+   return m_key->colName(selected);
 }
 
 const QStringList TableSchema::allPropertyNames(Brewtarget::DBTypes type) const
 {
-    QMapIterator<QString,PropertySchema*> i(m_properties);
-    QStringList retval;
-    while ( i.hasNext() ) {
-        i.next();
-        retval.append( i.value()->propName(type));
-    }
-    return retval;
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+
+   QMapIterator<QString,PropertySchema*> i(m_properties);
+   QStringList retval;
+   while ( i.hasNext() ) {
+      i.next();
+      retval.append( i.value()->propName(selected));
+   }
+   return retval;
 }
 
 const QStringList TableSchema::allForeignKeyNames(Brewtarget::DBTypes type) const
 {
-    QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
-    QStringList retval;
-    while ( i.hasNext() ) {
-        i.next();
-        retval.append( i.value()->colName(type));
-    }
-    return retval;
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+   QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
+   QStringList retval;
+   while ( i.hasNext() ) {
+      i.next();
+      retval.append( i.value()->colName(selected));
+   }
+   return retval;
 }
 
 const QStringList TableSchema::allColumnNames(Brewtarget::DBTypes type) const
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QStringList tmp;
    QMapIterator<QString,PropertySchema*> i(m_properties);
 
    while ( i.hasNext() ) {
       i.next();
-      tmp.append(i.value()->colName(type));
+      tmp.append(i.value()->colName(selected));
    }
    return tmp;
 }
@@ -158,14 +168,14 @@ const QStringList TableSchema::allColumnNames(Brewtarget::DBTypes type) const
 const QStringList TableSchema::allForeignKeyColumnNames(Brewtarget::DBTypes type) const
 {
    QStringList tmp;
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
 
    QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
 
    while ( i.hasNext() ) {
       i.next();
-      tmp.append(i.value()->colName(type));
-   }
-   return tmp;
+      tmp.append(i.value()->colName(selected));
+   } return tmp;
 }
 
 const PropertySchema* TableSchema::property(QString prop) const
@@ -174,32 +184,46 @@ const PropertySchema* TableSchema::property(QString prop) const
    if ( m_properties.contains(prop) ) {
       retval = m_properties.value(prop);
    }
-   else if ( m_foreignKeys.contains(prop)){
-      retval = m_foreignKeys.value(prop);
-   }
    return retval;
 }
 
 const QString TableSchema::propertyToColumn(QString prop, Brewtarget::DBTypes type) const
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString retval;
    if ( m_properties.contains(prop) ) {
-      retval =  m_properties.value(prop)->colName(type);
+      retval =  m_properties.value(prop)->colName(selected);
    }
-   else if ( m_foreignKeys.contains(prop)){
-      retval = m_foreignKeys.value(prop)->colName(type);
+   return retval;
+}
+
+const QString TableSchema::foreignKeyToColumn(QString fkey, Brewtarget::DBTypes type) const
+{
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+   QString retval;
+   if ( m_foreignKeys.contains(fkey) ) {
+      retval =  m_foreignKeys.value(fkey)->colName(selected);
+   }
+   return retval;
+}
+
+const QString TableSchema::foreignKeyToColumn(Brewtarget::DBTypes type) const
+{
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+   QString retval;
+
+   if ( m_foreignKeys.size() == 1 ) {
+      retval = m_properties.first()->colName(selected);
    }
    return retval;
 }
 
 const QString TableSchema::propertyToXml(QString prop, Brewtarget::DBTypes type) const
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString retval;
    if ( m_properties.contains(prop) ) {
-      retval = m_properties.value(prop)->xmlName(type);
-   }
-   else if ( m_foreignKeys.contains(prop) ) {
-      retval = m_foreignKeys.value(prop)->xmlName(type);
+      retval = m_properties.value(prop)->xmlName(selected);
    }
    return retval;
 }
@@ -207,13 +231,14 @@ const QString TableSchema::propertyToXml(QString prop, Brewtarget::DBTypes type)
 const QString TableSchema::xmlToProperty(QString xmlName, Brewtarget::DBTypes type) const
 {
    QString retval;
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
 
    QMapIterator<QString,PropertySchema*> i(m_properties);
 
    while ( i.hasNext() ) {
       i.next();
       if ( i.value()->xmlName() == xmlName ) {
-         retval = i.value()->propName(type);
+         retval = i.value()->propName(selected);
          break;
       }
    }
@@ -222,8 +247,9 @@ const QString TableSchema::xmlToProperty(QString xmlName, Brewtarget::DBTypes ty
 
 const QString TableSchema::propertyColumnType(QString prop, Brewtarget::DBTypes type) const
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->colType(type);
+      return m_properties.value(prop)->colType(selected);
    }
    else {
       return QString();
@@ -232,24 +258,46 @@ const QString TableSchema::propertyColumnType(QString prop, Brewtarget::DBTypes 
 
 const QVariant TableSchema::propertyColumnDefault(QString prop, Brewtarget::DBTypes type) const
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QVariant retval = QString();
    if ( m_properties.contains(prop) ) {
-      retval = m_properties.value(prop)->defaultValue(type);
-   }
-   else if ( m_foreignKeys.contains(prop) ) {
-      retval = m_foreignKeys.value(prop)->xmlName(type);
+      retval = m_properties.value(prop)->defaultValue(selected);
    }
    return retval;
 }
 
 int TableSchema::propertyColumnSize(QString prop, Brewtarget::DBTypes type) const
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    if ( m_properties.contains(prop) ) {
-      return m_properties.value(prop)->colSize(type);
+      return m_properties.value(prop)->colSize(selected);
    }
    else {
       return 0;
    }
+}
+
+Brewtarget::DBTable TableSchema::foreignTable(QString fkey, Brewtarget::DBTypes type) const
+{
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+   Brewtarget::DBTable retval = Brewtarget::NOTABLE;
+
+   if ( m_foreignKeys.contains(fkey) ) {
+      retval =  m_foreignKeys.value(fkey)->fTable(selected);
+   }
+   return retval;
+
+}
+
+Brewtarget::DBTable TableSchema::foreignTable(Brewtarget::DBTypes type) const
+{
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+   Brewtarget::DBTable retval = Brewtarget::NOTABLE;
+
+   if ( m_foreignKeys.size() == 1 ) {
+      retval =  m_foreignKeys.first()->fTable(selected);
+   }
+   return retval;
 }
 
 bool TableSchema::isInventoryTable() { return m_type == INV; }
@@ -261,6 +309,7 @@ bool TableSchema::isMetaTable()      { return m_type == META; }
 
 const QString TableSchema::childIndexName(Brewtarget::DBTypes type)
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString cname;
 
    if ( m_type == CHILD || m_type == BT ) {
@@ -268,8 +317,8 @@ const QString TableSchema::childIndexName(Brewtarget::DBTypes type)
 
       while ( i.hasNext() ) {
          i.next();
-         if ( i.value()->colName(type) != kpropRecipeId ) {
-            cname = i.value()->colName(type);
+         if ( i.value()->colName(selected) != kpropRecipeId ) {
+            cname = i.value()->colName(selected);
             break;
          }
       }
@@ -279,6 +328,7 @@ const QString TableSchema::childIndexName(Brewtarget::DBTypes type)
 
 const QString TableSchema::inRecIndexName(Brewtarget::DBTypes type)
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString cname;
 
    if ( m_type == INREC ) {
@@ -286,8 +336,8 @@ const QString TableSchema::inRecIndexName(Brewtarget::DBTypes type)
 
       while ( i.hasNext() ) {
          i.next();
-         if ( i.value()->colName(type) != kpropRecipeId ) {
-            cname = i.value()->colName(type);
+         if ( i.value()->colName(selected) != kpropRecipeId ) {
+            cname = i.value()->colName(selected);
             break;
          }
       }
@@ -298,13 +348,14 @@ const QString TableSchema::inRecIndexName(Brewtarget::DBTypes type)
 const QString TableSchema::parentIndexName(Brewtarget::DBTypes type)
 {
    QString cname;
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
 
    QMapIterator<QString,PropertySchema*> i(m_foreignKeys);
 
    while ( i.hasNext() ) {
       i.next();
-      if ( i.value()->colName(type) == kpropRecipeId ) {
-         cname = i.value()->colName(type);
+      if ( i.value()->colName(selected) == kpropRecipeId ) {
+         cname = i.value()->colName(selected);
          break;
       }
    }
@@ -313,11 +364,12 @@ const QString TableSchema::parentIndexName(Brewtarget::DBTypes type)
 
 const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString tmpName)
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString tname = tmpName.isEmpty() ? m_tableName : tmpName;
    QString retVal = QString("CREATE TABLE %1 (%2 %3 ")
                      .arg( tname )
-                     .arg( m_key->colName(type) )
-                     .arg( m_key->constraint(type)
+                     .arg( m_key->colName(selected) )
+                     .arg( m_key->constraint(selected)
    );
 
    QString retKeys;
@@ -328,7 +380,7 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
 
       // based on the different way a boolean is handled between sqlite and
       // pgsql, I need to single them out.
-      QVariant defVal = prop->defaultValue(type);
+      QVariant defVal = prop->defaultValue(selected);
       if ( defVal.isValid() ) {
          QString tmp = defVal.toString();
          if ( prop->colType() == "boolean" ) {
@@ -357,10 +409,10 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
       j.next();
       PropertySchema* key = j.value();
 
-      retVal.append( QString(", %1 %2").arg( key->colName(type) ).arg( key->colType(type) ));
+      retVal.append( QString(", %1 %2").arg( key->colName(selected) ).arg( key->colType(selected) ));
 
       retKeys.append( QString(", FOREIGN KEY(%1) REFERENCES %2(id)")
-                       .arg( key->colName(type) )
+                       .arg( key->colName(selected) )
                        .arg( dbTableToName[ key->fTable() ] )
       );
    }
@@ -375,16 +427,17 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
 
 const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
 {
-   QString columns = keyName(type);
-   QString binding = QString(":%1").arg(keyName(type));
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+   QString columns = keyName(selected);
+   QString binding = QString(":%1").arg(keyName(selected));
 
    QMapIterator<QString, PropertySchema*> i(m_properties);
    while ( i.hasNext() ) {
       i.next();
       PropertySchema* prop = i.value();
 
-      columns += QString(",%1").arg( prop->colName(type));
-      binding += QString(",:%1").arg( prop->colName(type));
+      columns += QString(",%1").arg( prop->colName(selected));
+      binding += QString(",:%1").arg( prop->colName(selected));
    }
 
    QMapIterator<QString, PropertySchema*> j(m_foreignKeys);
@@ -392,8 +445,8 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
       j.next();
       PropertySchema* key = j.value();
 
-      columns += QString(",%1").arg(key->colName(type));
-      binding += QString(",:%1").arg(key->colName(type));
+      columns += QString(",%1").arg(key->colName(selected));
+      binding += QString(",:%1").arg(key->colName(selected));
    }
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(m_tableName).arg(columns).arg(binding);
 }
@@ -405,6 +458,7 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
 // and not the column name. It saves a call later.
 const QString TableSchema::generateInsertProperties(Brewtarget::DBTypes type)
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString columns;
    QString binding;
 
@@ -414,12 +468,12 @@ const QString TableSchema::generateInsertProperties(Brewtarget::DBTypes type)
       PropertySchema* prop = i.value();
 
       if ( columns.isEmpty() ) {
-         columns = QString("%1").arg( prop->colName(type));
-         binding = QString(":%1").arg( prop->propName(type));
+         columns = QString("%1").arg( prop->colName(selected));
+         binding = QString(":%1").arg( prop->propName(selected));
       }
       else {
-         columns += QString(",%1").arg( prop->colName(type));
-         binding += QString(",:%1").arg( prop->propName(type));
+         columns += QString(",%1").arg( prop->colName(selected));
+         binding += QString(",:%1").arg( prop->propName(selected));
       }
    }
 
@@ -430,6 +484,7 @@ const QString TableSchema::generateInsertProperties(Brewtarget::DBTypes type)
 // note: this does not do anything with foreign keys. It is up to the calling code to handle those problems
 const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString columns;
 
    QMapIterator<QString, PropertySchema*> i(m_properties);
@@ -437,17 +492,17 @@ const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
       i.next();
       PropertySchema* prop = i.value();
       if ( ! columns.isEmpty() ) {
-         columns += QString(",%1=:%1").arg( prop->colName(type));
+         columns += QString(",%1=:%1").arg( prop->colName(selected));
       }
       else {
-         columns = QString("%1=:%1").arg( prop->colName(type) );
+         columns = QString("%1=:%1").arg( prop->colName(selected) );
       }
    }
 
    return QString("UPDATE %1 SET %2 where %3=%4")
            .arg(m_tableName)
            .arg(columns)
-           .arg(keyName(type))
+           .arg(keyName(selected))
            .arg(key);
 }
 
@@ -455,6 +510,7 @@ const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
 // unlike the previous method, this one uses a bind named ":id" for the key value.
 const QString TableSchema::generateUpdateRow(Brewtarget::DBTypes type)
 {
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString columns;
 
    QMapIterator<QString, PropertySchema*> i(m_properties);
@@ -462,28 +518,29 @@ const QString TableSchema::generateUpdateRow(Brewtarget::DBTypes type)
       i.next();
       PropertySchema* prop = i.value();
       if ( ! columns.isEmpty() ) {
-         columns += QString(",%1=:%1").arg( prop->colName(type));
+         columns += QString(",%1=:%1").arg( prop->colName(selected));
       }
       else {
-         columns = QString("%1=:%1").arg( prop->colName(type) );
+         columns = QString("%1=:%1").arg( prop->colName(selected) );
       }
    }
 
    return QString("UPDATE %1 SET %2 where %3=:id")
            .arg(m_tableName)
            .arg(columns)
-           .arg(keyName(type));
+           .arg(keyName(selected));
 }
 const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes type )
 {
-   QString columns = keyName(type);
+   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
+   QString columns = keyName(selected);
 
    QMapIterator<QString, PropertySchema*> i(m_properties);
    while ( i.hasNext() ) {
       i.next();
       PropertySchema* prop = i.value();
 
-      columns += QString(",%1").arg( prop->colName(type));
+      columns += QString(",%1").arg( prop->colName(selected));
    }
    return QString("INSERT INTO %1 (%2) SELECT %2 FROM %3").arg(dest).arg(columns).arg(m_tableName);
 
@@ -1090,10 +1147,9 @@ void TableSchema::defineInstructionInRecipeTable(QString childIdx, Brewtarget::D
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   // this sort of breaks the rule -- I prefer to have a kcol and a kprop. But
-   // these aren't in any object, so they no property and I can reuse
-   // the kcol value
-   m_properties[kcolInstructionNumber] = new PropertySchema( kcolInstructionNumber, kcolInstructionNumber, QString(""), QString("int"), QVariant(0));
+   // I am not breaking these rules any more. It makes it too annoying in the calling code to know when to use a kcol or kprop
+   // so it is now kprop all the time
+   m_properties[kpropInstructionNumber] = new PropertySchema( kpropInstructionNumber, kcolInstructionNumber, QString(""), QString("int"), QVariant(0));
 
    m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, QString("integer"), Brewtarget::RECTABLE);
    m_foreignKeys[childIdx]      = new PropertySchema( childIdx,      childIdx,     QString("integer"), table);
@@ -1123,9 +1179,8 @@ void TableSchema::defineFermInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropAmount]        = new PropertySchema( kpropAmount,       kcolAmount,        kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kcolFermentableId] = new PropertySchema( kcolFermentableId, kcolFermentableId, QString("integer"), Brewtarget::FERMTABLE);
-
+   m_properties[kpropAmount]         = new PropertySchema( kpropAmount,        kcolAmount,        kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_foreignKeys[kpropFermentableId] = new PropertySchema( kpropFermentableId, kcolFermentableId, QString("integer"), Brewtarget::FERMTABLE);
 }
 
 void TableSchema::defineHopInventoryTable()
@@ -1137,9 +1192,8 @@ void TableSchema::defineHopInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropAmount] = new PropertySchema( kpropAmount, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kcolHopId]  = new PropertySchema( kcolHopId,   kcolHopId,  QString("integer"), Brewtarget::HOPTABLE);
-
+   m_properties[kpropAmount]  = new PropertySchema( kpropAmount, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_foreignKeys[kpropHopId]  = new PropertySchema( kpropHopId,  kcolHopId,  QString("integer"), Brewtarget::HOPTABLE);
 }
 
 void TableSchema::defineMiscInventoryTable()
@@ -1151,8 +1205,8 @@ void TableSchema::defineMiscInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropAmount] = new PropertySchema( kpropAmount, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kcolMiscId] = new PropertySchema( kcolMiscId,  kcolMiscId, QString("integer"), Brewtarget::MISCTABLE);
+   m_properties[kpropAmount]  = new PropertySchema( kpropAmount, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_foreignKeys[kpropMiscId] = new PropertySchema( kpropMiscId, kcolMiscId, QString("integer"), Brewtarget::MISCTABLE);
 
 }
 
@@ -1165,11 +1219,13 @@ void TableSchema::defineYeastInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropAmount]  = new PropertySchema( kpropQuanta, kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kcolYeastId] = new PropertySchema( kcolYeastId, kcolYeastId,     QString("integer"), Brewtarget::YEASTTABLE);
+   m_properties[kpropAmount]   = new PropertySchema( kpropQuanta,  kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_foreignKeys[kpropYeastId] = new PropertySchema( kpropYeastId, kcolYeastId,     QString("integer"), Brewtarget::YEASTTABLE);
 
 }
 
+// the btAll table is probably going away. This breaks all my conventions
+// but I will hopefully be able to remove it
 void TableSchema::defineBtAllTable()
 {
    m_type = META;
@@ -1197,7 +1253,6 @@ void TableSchema::defineSettingsTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kcolSettingsVersion]    = new PropertySchema( QString(), kcolSettingsVersion,    QString(), QString("integer"), QVariant(0));
-   m_properties[kcolSettingsRepopulate] = new PropertySchema( QString(), kcolSettingsRepopulate, QString(), QString("integer"), QVariant(0));
+   m_properties[kpropSettingsVersion]    = new PropertySchema( QString(), kcolSettingsVersion,    QString(), QString("integer"), QVariant(0));
+   m_properties[kpropSettingsRepopulate] = new PropertySchema( QString(), kcolSettingsRepopulate, QString(), QString("integer"), QVariant(0));
 }
-

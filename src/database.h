@@ -121,12 +121,6 @@ public:
                                    QString const& password="brewtarget");
    bool loadSuccessful();
 
-   /*! update an entry, and call the notification when complete.
-    * NOTE: This cannot be simplified without a bit more work. The inventory
-    * needs to specify a table other than the one named by the beerXML element
-    */
-   void updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true, bool transact = false );
-
    void updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify = true, bool transact = false );
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
@@ -161,6 +155,37 @@ public:
       return ret;
    }
 
+   QVariant get( TableSchema* tbl, int key, QString col_name )
+   {
+      QSqlQuery q;
+      QString index = QString("%1_%2").arg(tbl->tableName()).arg(col_name);
+
+      if ( ! selectSome.contains(index) ) {
+         qDebug() << "Generating new query for " << tbl->tableName();
+         QString query = QString("SELECT %1 from %2 WHERE %3=:id")
+                           .arg(col_name)
+                           .arg(tbl->tableName())
+                           .arg(tbl->keyName());
+         q = QSqlQuery( sqlDatabase() );
+         q.prepare(query);
+         selectSome.insert(index,q);
+      }
+
+      q = selectSome.value(index);
+      q.bindValue(":id", key);
+
+      q.exec();
+      if( !q.next() )
+      {
+         Brewtarget::logE( QString("Database::get(): %1 (%2) %3").arg(q.lastQuery()).arg(col_name).arg(q.lastError().text()));
+         q.finish();
+         return QVariant();
+      }
+
+      QVariant ret( q.record().value(col_name) );
+      q.finish();
+      return ret;
+   }
    //! Get a table view.
    QTableView* createView( Brewtarget::DBTable table );
 
@@ -374,8 +399,8 @@ public:
       if (!ing) return;
 
       const QMetaObject *meta = ing->metaObject();
-      Brewtarget::DBTable ingTable = dbDefn->classNameToTable( meta->className() );
       QString propName;
+      Brewtarget::DBTable ingTable = dbDefn->classNameToTable(meta->className());
 
       if ( ingTable == Brewtarget::BREWNOTETABLE ) {
          emitSignal = false;
@@ -392,7 +417,7 @@ public:
       }
 
       try {
-         deleteRecord(ingTable, ing);
+         deleteRecord(ing);
       }
       catch (QString e) {
          throw;
@@ -738,9 +763,8 @@ private:
    }
 
    //! Mark the \b object in \b table as deleted.
-   void deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object );
+   void deleteRecord( BeerXMLElement* object );
 
-   // TODO: encapsulate this in a QUndoCommand.
    // Note -- this has to happen on a transactional boundary. We are touching
    // something like four tables, and just sort of hoping it all works.
    /*!

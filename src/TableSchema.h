@@ -80,9 +80,9 @@ public:
    const QString foreignKeyToColumn(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
    // which table does this foreign key point to
-   const QString foreignTable(QString fkey, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   Brewtarget::DBTable foreignTable(QString fkey, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    // a lot of tables have one foreign key. This is a nice shortcut for that
-   const QString foreignTable(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   Brewtarget::DBTable foreignTable(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
    const QStringList allForeignKeyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
@@ -95,9 +95,11 @@ public:
    const QString generateCreateTable(Brewtarget::DBTypes type = Brewtarget::ALLDB, QString tmpName = QString("") );
    const QString generateUpdateRow(int key, Brewtarget::DBTypes type = Brewtarget::ALLDB);
    const QString generateUpdateRow(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   // this one includes the foreign keys and is really only suitable for copying databases
    const QString generateInsertRow(Brewtarget::DBTypes type = Brewtarget::ALLDB);
-   // this one ignores the foreign keys
+   // this one ignores the foreign keys and is more generally useful
    const QString generateInsertProperties(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   // when dropping columns, we have to copy tables in sqlite. This does that.
    const QString generateCopyTable( QString dest, Brewtarget::DBTypes type = Brewtarget::ALLDB);
 
    bool isInventoryTable();
@@ -107,7 +109,7 @@ public:
    bool isBtTable();
    bool isMetaTable();
 
-   const QString keyName(Brewtarget::DBTypes dbType = Brewtarget::ALLDB) const;
+   const QString keyName(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
 private:
 
@@ -130,6 +132,16 @@ private:
    PropertySchema* m_key;
    QMap<QString,PropertySchema*> m_properties;
    QMap<QString,PropertySchema*> m_foreignKeys;
+   // It all depends on the call I want to make. I can require the type on
+   // every call to a TableSchema object which is dull, repetitive and makes
+   // some already difficult to read calls harder to read. Or I can cache the
+   // default in the table and use that if ALLDB is sent, which breaks the
+   // metaphor.
+   Brewtarget::DBTypes m_defType;
+
+   // getter only. But this are private because only my dearest,
+   // closest friends can do this
+   Brewtarget::DBTypes defType() const;
 
    void defineTable();
    void defineStyleTable();

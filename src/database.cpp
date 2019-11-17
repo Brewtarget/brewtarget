@@ -78,6 +78,7 @@
 #include "MashStepSchema.h"
 #include "InstructionSchema.h"
 #include "BrewnoteSchema.h"
+#include "RecipeSchema.h"
 
 // Static members.
 Database* Database::dbInstance = nullptr;
@@ -1045,10 +1046,10 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 QList<Fermentable*> Database::fermentables(Recipe const* parent)
 {
    QList<Fermentable*> ret;
-   TableSchema* tbl = dbDefn->table(Brewtarget::FERMTABLE);
-   QString filter = QString("%1 = %2").arg(tbl->propertyToColumn(kcolRecipeId)).arg(parent->_key);
+   TableSchema* inrec = dbDefn->table(Brewtarget::FERMINRECTABLE);
+   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
 
-   getElements(ret,filter, Brewtarget::FERMINRECTABLE, allFermentables, dbDefn->table(Brewtarget::FERMINRECTABLE)->childIndexName());
+   getElements(ret,filter, Brewtarget::FERMINRECTABLE, allFermentables, inrec->childIndexName());
 
    return ret;
 }
@@ -1056,9 +1057,10 @@ QList<Fermentable*> Database::fermentables(Recipe const* parent)
 QList<Hop*> Database::hops(Recipe const* parent)
 {
    QList<Hop*> ret;
-   QString filter = QString("recipe_id = %1").arg(parent->_key);
+   TableSchema* inrec = dbDefn->table(Brewtarget::HOPINRECTABLE);
+   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
 
-   getElements(ret,filter, Brewtarget::HOPINRECTABLE, allHops, "hop_id");
+   getElements(ret,filter, Brewtarget::HOPINRECTABLE, allHops, inrec->childIndexName());
 
    return ret;
 }
@@ -1066,17 +1068,18 @@ QList<Hop*> Database::hops(Recipe const* parent)
 QList<Misc*> Database::miscs(Recipe const* parent)
 {
    QList<Misc*> ret;
-   QString filter = QString("recipe_id = %1").arg(parent->_key);
+   TableSchema* inrec = dbDefn->table(Brewtarget::MISCINRECTABLE);
+   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
 
-
-   getElements(ret,filter, Brewtarget::MISCINRECTABLE, allMiscs, "misc_id");
+   getElements(ret,filter, Brewtarget::MISCINRECTABLE, allMiscs, inrec->childIndexName());
 
    return ret;
 }
 
 Equipment* Database::equipment(Recipe const* parent)
 {
-   int id = get( Brewtarget::RECTABLE, parent->key(), "equipment_id" ).toInt();
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
+   int id = get( tbl, parent->key(), tbl->foreignKeyToColumn(kpropEquipmentId)).toInt();
 
    if( allEquipments.contains(id) )
       return allEquipments[id];
@@ -1086,7 +1089,8 @@ Equipment* Database::equipment(Recipe const* parent)
 
 Style* Database::style(Recipe const* parent)
 {
-   int id = get( Brewtarget::RECTABLE, parent->key(), "style_id").toInt();
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
+   int id = get( tbl, parent->key(), tbl->foreignKeyToColumn(kpropStyleId)).toInt();
 
    if( allStyles.contains(id) )
       return allStyles[id];
@@ -1104,7 +1108,8 @@ Style* Database::styleById(int styleId )
 
 Mash* Database::mash( Recipe const* parent )
 {
-   int mashId = get( Brewtarget::RECTABLE, parent->key(), "mash_id" ).toInt();
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
+   int mashId = get( tbl, parent->key(), tbl->foreignKeyToColumn(kpropMashId)).toInt();
 
    if( allMashs.contains(mashId) )
       return allMashs[mashId];
@@ -1115,7 +1120,15 @@ Mash* Database::mash( Recipe const* parent )
 QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
-   QString filterString = QString("mash_id = %1 AND deleted = %2 order by step_number").arg(parent->_key).arg(Brewtarget::dbFalse());
+   TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
+
+   // "mash_id = [key] AND deleted = false order by step_number"
+   QString filterString = QString("%1 = %2 AND %3 = %4 order by %5")
+         .arg(tbl->foreignKeyToColumn())
+         .arg(parent->_key)
+         .arg(tbl->propertyToColumn(kpropDeleted))
+         .arg(Brewtarget::dbFalse())
+         .arg(tbl->propertyToColumn(kpropStepNumber));
 
    getElements(ret, filterString, Brewtarget::MASHSTEPTABLE, allMashSteps);
 
@@ -1125,9 +1138,14 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
 QList<Instruction*> Database::instructions( Recipe const* parent )
 {
    QList<Instruction*> ret;
-   QString filter = QString("recipe_id = %1 ORDER BY instruction_number ASC").arg(parent->_key);
+   TableSchema* tbl = dbDefn->table(Brewtarget::INSTINRECTABLE);
+   // "recipe_id = [key] ORDER BY instruction_number ASC"
+   QString filter = QString("%1 = %2 ORDER BY %3 ASC")
+         .arg( tbl->parentIndexName())
+         .arg(parent->_key)
+         .arg( tbl->propertyToColumn(kpropInstructionNumber));
 
-   getElements(ret,filter,Brewtarget::INSTINRECTABLE,allInstructions,"instruction_id");
+   getElements(ret,filter,Brewtarget::INSTINRECTABLE,allInstructions,kpropInstructionId);
 
    return ret;
 }
@@ -1158,14 +1176,11 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 {
    BrewNote* tmp = copy<BrewNote>(other, &allBrewNotes);
 
-   if ( tmp ) {
-      if ( signal )
-      {
-         emit changed( metaProperty("brewNotes"), QVariant() );
-         emit newBrewNoteSignal(tmp);
-      }
-
+   if ( tmp && signal ) {
+      emit changed( metaProperty("brewNotes"), QVariant() );
+      emit newBrewNoteSignal(tmp);
    }
+
    return tmp;
 }
 
@@ -1288,17 +1303,22 @@ Instruction* Database::newInstruction(Recipe* rec)
    return tmp;
 }
 
+// needs fixed
 int Database::instructionNumber(Instruction const* in)
 {
-   QSqlQuery q(
-      QString(
-         "SELECT instruction_number FROM instruction_in_recipe WHERE instruction_id=%1"
-      ).arg(in->_key),
-      sqlDatabase()
-   );
+   TableSchema* tbl = dbDefn->table(Brewtarget::INSTINRECTABLE);
+   QString colName = tbl->propertyToColumn(kpropInstructionNumber);
+   //  "SELECT instruction_number FROM instruction_in_recipe WHERE instruction_id=%1"
+   QString query = QString("SELECT %1 FROM %2 WHERE %3=%4")
+         .arg(colName)
+         .arg(tbl->tableName())
+         .arg(tbl->childIndexName())
+         .arg(in->key());
+
+   QSqlQuery q(query,sqlDatabase());
 
    if( q.next() )
-      return q.record().value("instruction_number").toInt();
+      return q.record().value(colName).toInt();
    else
       return 0;
 }
@@ -1323,11 +1343,11 @@ Mash* Database::newMash(Mash* other, bool displace)
          // Connect tmp to parent, removing any existing mash in parent.
          // This doesn't really work. It simply orphans the old mash and its
          // steps.
-         if( displace )
-         {
+         if( displace ) {
+            TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
             sqlUpdate( Brewtarget::RECTABLE,
-                       QString("mash_id=%1").arg(tmp->_key),
-                       QString("mash_id=%1").arg(other->_key) );
+                       QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(tmp->_key),
+                       QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(other->_key));
          }
       }
    }
@@ -1359,9 +1379,10 @@ Mash* Database::newMash(Recipe* parent, bool transact)
       tmp = newIngredient(&allMashs);
 
       // Connect tmp to parent, removing any existing mash in parent.
+      TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
       sqlUpdate( Brewtarget::RECTABLE,
-                 QString("mash_id=%1").arg(tmp->_key),
-                 QString("id=%1").arg(parent->_key) );
+                 QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(tmp->_key),
+                 QString("%1=%2").arg(tbl->keyName()).arg(parent->_key));
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -1388,9 +1409,14 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
    // NOTE: we have unique(mash_id,step_number) constraints on this table,
    // so may have to pay special attention when creating the new record.
    MashStep* tmp;
-   QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
-                        .arg(dbDefn->tableName(Brewtarget::MASHSTEPTABLE))
+   TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
+   // step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM mashstep WHERE deleted=false AND mash_id=[key] )
+   QString coalesce = QString( "%1 = (SELECT COALESCE(MAX(%1)+1,0) FROM %2 WHERE %3=%4 AND %5=%6 )")
+                        .arg(tbl->propertyToColumn(kpropStepNumber))
+                        .arg(tbl->tableName())
+                        .arg(tbl->propertyToColumn(kpropDeleted))
                         .arg(Brewtarget::dbFalse())
+                        .arg(tbl->foreignKeyToColumn())
                         .arg(mash->_key);
 
    sqlDatabase().transaction();
@@ -1405,14 +1431,16 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
 
       // I *think* we need to set the mash_id first
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
-                 QString("mash_id=%1 ").arg(mash->_key),
-                 QString("id=%1").arg(tmp->_key)
+                 QString("%1=%2 ").arg(tbl->foreignKeyToColumn()).arg(mash->_key),
+                 QString("%1=%2").arg(tbl->keyName()).arg(tmp->_key)
                );
 
       // Just sets the step number within the mash to the next available number.
       // we need coalesce here instead of isnull. coalesce is SQL standard, so
       // should be more widely supported than isnull
-      sqlUpdate( Brewtarget::MASHSTEPTABLE, coalesce, QString("id=%1").arg(tmp->_key) );
+      sqlUpdate( Brewtarget::MASHSTEPTABLE,
+                 coalesce,
+                 QString("%1=%2").arg(tbl->keyName()).arg(tmp->_key));
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -1633,7 +1661,7 @@ int Database::insertElement(BeerXMLElement* ins)
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
-       if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == "brewdate" ) {
+       if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == kpropBrewDate ) {
            QVariant helpme( ins->property(prop.toUtf8().data()).toString());
            q.bindValue(":brewdate",helpme);
        }
@@ -1760,9 +1788,14 @@ int Database::insertMash(Mash* ins)
 // mash
 int Database::insertMashStep(MashStep* ins, Mash* parent)
 {
-   QString coalesce = QString( "step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM %1 WHERE deleted=%2 AND mash_id=%3 )")
-                        .arg(dbDefn->tableName(Brewtarget::MASHSTEPTABLE))
+   TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
+   // step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM mashstep WHERE deleted=false AND mash_id=[key] )
+   QString coalesce = QString( "%1 = (SELECT COALESCE(MAX(%1)+1,0) FROM %2 WHERE %3=%4 AND %5=%6 )")
+                        .arg(tbl->propertyToColumn(kpropStepNumber))
+                        .arg(tbl->tableName())
+                        .arg(tbl->propertyToColumn(kpropDeleted))
                         .arg(Brewtarget::dbFalse())
+                        .arg(tbl->foreignKeyToColumn())
                         .arg(parent->_key);
    int key;
 
@@ -1772,19 +1805,17 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
       key = insertElement(ins);
       ins->setCacheOnly(false);
 
-      TableSchema* ts = dbDefn->table(Brewtarget::MASHSTEPTABLE);
-      foreach (QString p, ts->allPropertyNames()) {
-          qDebug() << Q_FUNC_INFO << p << ins->property( p.toUtf8().data());
-      }
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
-                 QString("mash_id=%1 ").arg(parent->_key),
-                 QString("id=%1").arg(key)
+                 QString("%1=%2 ").arg(tbl->foreignKeyToColumn()).arg(parent->_key),
+                 QString("%1=%2").arg(tbl->keyName()).arg(ins->_key)
                );
 
       // Just sets the step number within the mash to the next available number.
       // we need coalesce here instead of isnull. coalesce is SQL standard, so
       // should be more widely supported than isnull
-      sqlUpdate( Brewtarget::MASHSTEPTABLE, coalesce, QString("id=%1").arg(key) );
+      sqlUpdate( Brewtarget::MASHSTEPTABLE,
+                 coalesce,
+                 QString("%1=%2").arg(tbl->keyName()).arg(ins->_key));
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -1857,6 +1888,7 @@ int Database::insertWater(Water* ins)
 int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
 {
    int key;
+   TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
    sqlDatabase().transaction();
 
    try {
@@ -1864,8 +1896,8 @@ int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
       ins->setCacheOnly(false);
 
       sqlUpdate( Brewtarget::BREWNOTETABLE,
-               QString("recipe_id=%1").arg(parent->_key),
-               QString("id=%2").arg(key) );
+               QString("%1=%2").arg(tbl->foreignKeyToColumn()).arg(parent->_key),
+               QString("%1=%2").arg(tbl->keyName()).arg(key) );
 
    }
    catch (QString e) {
@@ -1884,13 +1916,10 @@ int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
+void Database::deleteRecord( BeerXMLElement* object )
 {
-   int ndx = object->metaObject()->indexOfProperty("deleted");
-
    try {
-      updateEntry( table, object->_key, "deleted", Brewtarget::dbTrue(),
-                   object->metaObject()->property(ndx), object, true);
+      updateEntry( object, kpropDeleted, Brewtarget::dbTrue(), true);
    }
    catch (QString e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
@@ -1912,11 +1941,12 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
       {
          // Copy the old mash step.
          MashStep* newStep = copy<MashStep>(*ms,&allMashSteps);
+         TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
 
          // Put it in the new mash.
          sqlUpdate( Brewtarget::MASHSTEPTABLE,
-                      QString("mash_id=%1").arg(newMash->key()),
-                      QString("id=%1").arg(newStep->key())
+                      QString("%1=%2").arg(tbl->foreignKeyToColumn()).arg(newMash->key()),
+                      QString("%1=%2").arg(tbl->keyName()).arg(newStep->key())
                   );
          // Make the new mash pay attention to the new step.
          connect( newStep, &BeerXMLElement::changed,
@@ -1939,47 +1969,6 @@ QString Database::getDbFileName()
    instance();
 
    return dbFileName;
-}
-
-// Cthulhu weeps (and we lose 2 SAN points)
-void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify, bool transact )
-{
-   QString tableName = dbDefn->tableName(table);
-
-   if ( transact )
-      sqlDatabase().transaction();
-
-   try {
-      QSqlQuery update( sqlDatabase() );
-      QString command = QString("UPDATE %1 set %2=%3 where id=%4")
-                           .arg(tableName)
-                           .arg(col_name)
-                           .arg(value.toString())
-                           .arg(key);
-
-
-      if ( ! update.exec(command) )
-         throw QString("Could not update %1.%2 to %3: %4 %5")
-                  .arg( tableName )
-                  .arg( col_name )
-                  .arg( value.toString() )
-                  .arg( update.lastQuery() )
-                  .arg( update.lastError().text() );
-
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
-      if ( transact )
-         sqlDatabase().rollback();
-      throw;
-   }
-
-   if ( transact )
-      sqlDatabase().commit();
-
-   if ( notify )
-      emit object->changed(prop,value);
-
 }
 
 void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify, bool transact )
@@ -2025,57 +2014,6 @@ void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant v
 
 }
 
-/* As far as I can tell, this is unused. I am commenting it out until I compile. If we compile clean, I am removing it.
- * If this comment is still here, I am an idiot and you should remove this
-void Database::updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap)
-{
-   // Assumes the table has a column called 'deleted'.
-   QString tableName = dbDefn->tableName(table);
-   try {
-
-      static const QString kSetStr("%1=?, ");
-      static const QString kSetStrLast("%1=?");
-      QStringList cols = colValMap.keys();
-      QString setValsStr;
-      for(int i = 0; i < cols.length(); i++ )
-      {
-         if(i < cols.length() - 1)
-            setValsStr += kSetStr.arg(cols[i]);
-         else
-            setValsStr += kSetStrLast.arg(cols[i]);
-      }
-
-      QString command = QString("UPDATE %1 set %2 where id=%3")
-                           .arg(tableName)
-                           .arg(setValsStr)
-                           .arg(key);
-      QSqlQuery query( sqlDatabase() );
-      query.prepare( command );
-
-      for(int i = 0; i < cols.length(); i++)
-      {
-         const QString key(cols[i]);
-         query.addBindValue(colValMap[key]);
-      }
-
-
-      if ( ! query.exec() )
-         throw QString("Could not update %1: %4 %5")
-                  .arg( tableName )
-                  .arg( query.lastQuery() )
-                  .arg( query.lastError().text() );
-
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
-      throw;
-   }
-
-   if ( notify )
-      emit object->changed(prop,value);
-}
-*/
-
 // Inventory functions ========================================================
 
 //This links ingredients with the same name.
@@ -2086,7 +2024,9 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
    Brewtarget::logW( QString("Populating Children Ingredient Links (%1)").arg(tbl->tableName()));
 
    try {
-      QString queryString = QString("SELECT DISTINCT name FROM %1").arg(tbl->tableName());
+      // "SELECT DISTINCT name FROM [tablename]"
+      QString queryString = QString("SELECT DISTINCT %1 FROM %2")
+            .arg(tbl->propertyToColumn(kpropName)).arg(tbl->tableName());
 
       QSqlQuery nameq( queryString, sqlDatabase() );
 
@@ -2307,7 +2247,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
 
       // Update equipment_id
       sqlUpdate(Brewtarget::RECTABLE,
-                QString("%1=%2").arg(tbl->propertyToColumn(kcolEquipmentId)).arg(newEquip->key()),
+                QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropEquipmentId)).arg(newEquip->key()),
                 QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
 
    }
@@ -4531,6 +4471,9 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// this may be bad form. After a lot of refactoring, setInventory is the only method
+// that needs to update something other than the BeerXMLElement's table. To simplify
+// other things, I merged the nastier updateEntry into here and removed that method
 void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
 {
    TableSchema* tbl = dbDefn->table(ins->table());
@@ -4549,8 +4492,32 @@ void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
    if ( invkey == 0 ) { //no inventory row in the database so lets make one
       invkey = newInventory(tbl,ins->key());
    }
-   updateEntry( invtable, invkey, invCol.toUtf8().constData(),
-                value, ins->metaObject()->property(ndx), ins, notify );
+
+   try {
+      QSqlQuery update( sqlDatabase() );
+      QString command = QString("UPDATE %1 set %2=%3 where id=%4")
+                           .arg(invTbl->tableName())
+                           .arg(invCol)
+                           .arg(value.toString())
+                           .arg(invkey);
+
+
+      if ( ! update.exec(command) )
+         throw QString("Could not update %1.%2 to %3: %4 %5")
+                  .arg(invTbl->tableName())
+                  .arg(invCol)
+                  .arg( value.toString() )
+                  .arg( update.lastQuery() )
+                  .arg( update.lastError().text() );
+
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      throw;
+   }
+
+   if ( notify )
+      emit ins->changed(ins->metaObject()->property(ndx),value);
 }
 
 // This method and the one that follows need to be 'fixed' to use the

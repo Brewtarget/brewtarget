@@ -156,8 +156,10 @@ protected:
     * 1) Set the appropriate value in the appropriate table row.
     * 2) Call the NOTIFY method associated with \c prop_name if \c notify == true.
     */
+   /*
    void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    void set( const QString& prop_name, const QString& col_name, const QVariant& value, bool notify = true );
+   */
    void setEasy( QString prop_name, QVariant value, bool notify = true );
 
    /*!
@@ -167,9 +169,7 @@ protected:
    QVariant get( const char* col_name ) const;
    QVariant get( const QString& col_name ) const;
 
-   void setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
-   void setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify = true );
-   void setInventoryEasier( const QVariant& value, bool notify=true );
+   void setInventory( const QVariant& value, bool notify=true );
 
    QVariant getInventory( const char* col_name ) const;
    QVariant getInventory( const QString& col_name ) const;

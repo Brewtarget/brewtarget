@@ -144,7 +144,7 @@ Fermentable::Fermentable( Fermentable const& other )
 
 // Gets
 
-const Fermentable::Type Fermentable::type() const { return m_type; }
+Fermentable::Type Fermentable::type() const { return m_type; }
 double Fermentable::amount_kg() const { return m_amountKg; }
 double Fermentable::yield_pct() const { return m_yieldPct; }
 double Fermentable::color_srm() const { return m_colorSrm; }
@@ -162,7 +162,7 @@ double Fermentable::ibuGalPerLb() const { return m_ibuGalPerLb; }
 bool Fermentable::isMashed() const { return m_isMashed; }
 bool Fermentable::cacheOnly() const { return m_cacheOnly; }
 
-const Fermentable::AdditionMethod Fermentable::additionMethod() const
+Fermentable::AdditionMethod Fermentable::additionMethod() const
 {
    Fermentable::AdditionMethod additionMethod;
    if(isMashed())
@@ -177,7 +177,7 @@ const Fermentable::AdditionMethod Fermentable::additionMethod() const
    return additionMethod;
 }
 
-const Fermentable::AdditionTime Fermentable::additionTime() const
+Fermentable::AdditionTime Fermentable::additionTime() const
 {
    Fermentable::AdditionTime additionTime;
    if(addAfterBoil())
@@ -327,7 +327,7 @@ void Fermentable::setIbuGalPerLb( double num )
 double Fermentable::equivSucrose_kg() const
 {
    double ret = amount_kg() * yield_pct() * (1.0-moisture_pct()/100.0) / 100.0;
-   
+
    // If this is a steeped grain...
    if( type() == Grain && !isMashed() )
       return 0.60 * ret; // Reduce the yield by 60%.
@@ -361,7 +361,7 @@ void Fermentable::setInventoryAmount( double num )
    else
    {
       // These will need fixed
-      setInventoryEasier(num);
+      setInventory(num);
    }
 }
 
