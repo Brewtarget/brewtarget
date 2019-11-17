@@ -71,8 +71,11 @@ EBCUnit* Units::ebc = new EBCUnit();
 SgUnit* Units::sp_grav = new SgUnit();
 PlatoUnit* Units::plato = new PlatoUnit();
 // == diastatic power ==
-LintnerUnit* Units::lintner = new LintnerUnit();;
+LintnerUnit* Units::lintner = new LintnerUnit();
 WKUnit* Units::wk = new WKUnit();
+// == length ==
+CmUnit* Units::cm = new CmUnit();
+InUnit* Units::in = new InUnit();
 
 QString Unit::unitFromString(QString qstr)
 {
@@ -234,6 +237,9 @@ void Unit::setupMap()
 
    Unit::nameToUnit.insert(Units::lintner->getUnitName(), Units::lintner);
    Unit::nameToUnit.insert(Units::wk->getUnitName(), Units::wk);
+
+   Unit::nameToUnit.insert(Units::cm->getUnitName(), Units::cm);
+   Unit::nameToUnit.insert(Units::in->getUnitName(), Units::in);
 
    Unit::isMapSetup = true;
 }
@@ -839,4 +845,41 @@ double WKUnit::toSI( double amt ) const
 double WKUnit::fromSI(double amt) const
 {
    return 3.5 * amt - 16;
+}
+
+// == length ==
+CmUnit::CmUnit()
+{
+   unitName = "cm";
+   SIUnitName = "cm";
+   _type = Length;
+   _unitSystem = SI;
+}
+
+double CmUnit::toSI( double amt ) const
+{
+   return amt;
+}
+
+double CmUnit::fromSI(double amt) const
+{
+   return amt;
+}
+
+InUnit::InUnit()
+{
+   unitName = "in";
+   SIUnitName = "cm";
+   _type = Length;
+   _unitSystem = Imperial;
+}
+
+double InUnit::toSI( double amt ) const
+{
+   return amt*2.54;
+}
+
+double InUnit::fromSI(double amt) const
+{
+   return amt/2.54;
 }

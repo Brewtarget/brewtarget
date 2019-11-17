@@ -78,6 +78,12 @@ public:
    //! \brief Set the boiling point of water in Celsius.
    Q_PROPERTY( double boilingPoint_c        READ boilingPoint_c        WRITE setBoilingPoint_c        NOTIFY changedBoilingPoint_c )
 
+   Q_PROPERTY( double tunDiameter_cm        READ tunDiameter_cm        WRITE setTunDiameter_cm        NOTIFY changedTunDiameter_cm )
+   //! \brief The whirlpool time in minutes.
+   Q_PROPERTY( double whirlpoolTime_min     READ whirlpoolTime_min     WRITE setWhirlpoolTime_min     NOTIFY changedWhirlpoolTime_min )
+   //! \brief Set whether you want to estimate IBU during whirlpool.
+   Q_PROPERTY( bool   hopEstWhirlpool       READ hopEstWhirlpool       WRITE setHopEstWhirlpool       NOTIFY changedHopEstWhirlpool )
+
    // Set
    void setBoilSize_l( double var );
    void setBatchSize_l( double var );
@@ -96,6 +102,9 @@ public:
    void setNotes( const QString &var );
    void setGrainAbsorption_LKg(double var);
    void setBoilingPoint_c(double var);
+   void setTunDiameter_cm( double var );
+   void setWhirlpoolTime_min( double var );
+   void setHopEstWhirlpool( bool var );
 
    // Get
    double boilSize_l() const;
@@ -115,6 +124,9 @@ public:
    QString notes() const;
    double grainAbsorption_LKg();
    double boilingPoint_c() const;
+   double tunDiameter_cm() const;
+   double whirlpoolTime_min() const;
+   bool hopEstWhirlpool() const;
 
    //! \brief Calculate how much wort is left immediately at knockout.
    double wortEndOfBoil_l( double kettleWort_l ) const;
@@ -141,6 +153,9 @@ signals:
    void changedNotes(QString);
    void changedGrainAbsorption_LKg(double);
    void changedBoilingPoint_c(double);
+   void changedTunDiameter_cm(double);
+   void changedWhirlpoolTime_min(double);
+   void changedHopEstWhirlpool(bool);
    
 private:
    Equipment(Brewtarget::DBTable table, int key);

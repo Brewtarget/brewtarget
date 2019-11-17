@@ -45,6 +45,9 @@ const QString kHopUtilization("hop_utilization");
 const QString kNotes("notes");
 const QString kAbsorption("absorption");
 const QString kBoilingPoint("boiling_point");
+const QString kTunDiameter("tun_diameter");
+const QString kWhirlpoolTime("whirlpool_time");
+const QString kHopEstWhirlpool("hop_est_whirlpool");
 
 /************** Props **************/
 
@@ -67,6 +70,9 @@ const QString kNotesProp("notes");
 const QString kGrainAbsorptionProp("grainAbsorption_LKg");
 const QString kAbsorptionProp("absorption_LKg");
 const QString kBoildPointProp("boilingPoint_c");
+const QString kTunDiameterProp("tunDiameter_cm");
+const QString kWhirlpoolTimeProp("whirlpoolTime_min");
+const QString kHopEstWhirlpoolProp("hopEstWhirlpool");
 
 
 QHash<QString,QString> Equipment::tagToProp = Equipment::tagToPropHash();
@@ -93,6 +99,9 @@ QHash<QString,QString> Equipment::tagToPropHash()
    propHash["NOTES"] = kNotesProp;
    propHash["ABSORPTION"] = kGrainAbsorptionProp;
    propHash["BOILING_POINT"] = kBoildPointProp;
+   propHash["TUN_DIAMETER"] = kTunDiameterProp;
+   propHash["WHIRLPOOL_TIME"] = kWhirlpoolTimeProp;
+   propHash["HOP_EST_WHIRLPOOL"] = kHopEstWhirlpoolProp;
 
    return propHash;
 }
@@ -344,6 +353,38 @@ void Equipment::setBoilingPoint_c(double var)
 }
 
 //============================"GET" METHODS=====================================
+void Equipment::setTunDiameter_cm( double var )
+{
+   if( var < 0.0 )
+   {
+      Brewtarget::logW( QString("Equipment: tun diameter negative: %1").arg(var) );
+      return;
+   }
+   else
+   {
+      set(kTunDiameterProp, kTunDiameter, var);
+   }
+}
+
+void Equipment::setWhirlpoolTime_min( double var )
+{
+   if( var < 0.0 )
+   {
+      Brewtarget::logW( QString("Equipment: whirlpool time negative: %1").arg(var) );
+      return;
+   }
+   else
+   {
+      set(kWhirlpoolTimeProp, kWhirlpoolTime, var);
+   }
+}
+
+void Equipment::setHopEstWhirlpool( bool var )
+{
+   set(kHopEstWhirlpoolProp, kHopEstWhirlpool, var);
+}
+
+//============================"GET" METHODS=====================================
 
 QString Equipment::notes() const
 {
@@ -444,4 +485,19 @@ double Equipment::wortEndOfBoil_l( double kettleWort_l ) const
    //return kettleWort_l * (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
 
    return kettleWort_l - (boilTime_min()/(double)60)*evapRate_lHr();
+}
+
+double Equipment::tunDiameter_cm() const
+{
+   return get(kTunDiameter).toDouble();
+}
+
+double Equipment::whirlpoolTime_min() const
+{
+   return get(kWhirlpoolTime).toDouble();
+}
+
+bool Equipment::hopEstWhirlpool() const
+{
+   return get(kHopEstWhirlpool).toBool();
 }

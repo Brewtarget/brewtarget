@@ -48,6 +48,8 @@ class BtTimeLabel;
 class BtTimeEdit;
 class BtVolumeLabel;
 class BtVolumeEdit;
+class BtLengthLabel;
+class BtLengthEdit;
 class Equipment;
 class EquipmentListModel;
 class BeerXMLSortProxyModel;
@@ -134,6 +136,12 @@ public:
    QPushButton *pushButton_new;
    QPushButton *pushButton_save;
    QPushButton *pushButton_cancel;
+   BtLengthLabel *label_tunDiameter;
+   BtLengthEdit *lineEdit_tunDiameter;
+   QLabel *label_hopEstWhirlpool;
+   QCheckBox *checkBox_hopEstWhirlpool;
+   BtTimeLabel *label_whirlpoolTime;
+   BtTimeEdit *lineEdit_whirlpoolTime;
    //! @}
 
    //! Edit the given equipment.
@@ -162,6 +170,7 @@ public slots:
    //! \brief set the default equipment, or unset the current equipment as the default
    void updateDefaultEquipment(int state);
 
+   void updateHopEstWhirlpool();
    void changed(QMetaProperty,QVariant);
 
    double calcBatchSize();

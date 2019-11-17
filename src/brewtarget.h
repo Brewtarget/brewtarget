@@ -323,6 +323,7 @@ public:
    static QMenu* setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit::unitScale scale = Unit::noScale, bool generateScale = true);
    static QMenu* setupDiastaticPowerMenu(QWidget* parent, Unit::unitDisplay unit);
    static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
+   static QMenu* setupLengthMenu(QWidget* parent, Unit::unitDisplay unit);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
 
    /*! 

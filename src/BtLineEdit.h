@@ -29,6 +29,7 @@
 class BtGenericEdit;
 class BtMassEdit;
 class BtVolumeEdit;
+class BtLengthEdit;
 class BtTemperatureEdit;
 class BtTimeEdit;
 class BtDensityEdit;
@@ -197,6 +198,14 @@ class BtDiastaticPowerEdit : public BtLineEdit
 
 public:
    BtDiastaticPowerEdit(QWidget* parent);
+};
+
+class BtLengthEdit : public BtLineEdit
+{
+   Q_OBJECT
+
+public:
+   BtLengthEdit(QWidget* parent);
 };
 
 #endif
