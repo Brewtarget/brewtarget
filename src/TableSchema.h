@@ -58,6 +58,8 @@ public:
 
    // Get the property object. Try not to use this?
    const PropertySchema* property(QString prop) const;
+   // some properties may be named differently (like inventory v quanta)
+   const QString propertyName(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    // get the database column name for this property
    const QString propertyToColumn(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    // get the database column type
@@ -89,7 +91,9 @@ public:
 
    const QString inRecIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
    const QString childIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   const QString recipeIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
    const QString parentIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   const QString invIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
 
    // Not sure these belong here yet, but maybe
    const QString generateCreateTable(Brewtarget::DBTypes type = Brewtarget::ALLDB, QString tmpName = QString("") );

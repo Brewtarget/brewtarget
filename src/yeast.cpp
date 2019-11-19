@@ -150,7 +150,7 @@ double Yeast::maxTemperature_c() const { return m_maxTemperature_c; }
 
 double Yeast::attenuation_pct() const { return m_attenuation_pct; }
 
-int Yeast::inventory() const { return getInventory(kpropQuanta).toInt(); }
+int Yeast::inventory() const { return getInventory(kpropInventory).toInt(); }
 
 int Yeast::timesCultured() const { return m_timesCultured; }
 

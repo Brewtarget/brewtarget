@@ -748,20 +748,23 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       // We need to do many things -- remove the link in *in_recipe,
       // remove the entry from *_children
       // and DELETE THE COPY
-      QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND %5=%4")
+      // delete from misc_in_recipe where misc_id = [misc key] and recipe_id = [rec key]
+      QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND %4=%5")
                                  .arg(inrec->tableName() )
                                  .arg(inrec->inRecIndexName(dbType))
                                  .arg(ing->_key)
-                                 .arg(rec->_key)
-                                 .arg(inrec->propertyToColumn(kcolRecipeId));
-      QString deleteFromChildren = QString("DELETE FROM %1 WHERE %3=%2")
+                                 .arg(inrec->recipeIndexName())
+                                 .arg(rec->_key);
+      // delete from misc_child where child_id = [misc key]
+      QString deleteFromChildren = QString("DELETE FROM %1 WHERE %2=%3")
                                  .arg(child->tableName())
-                                 .arg(ing->_key)
-                                 .arg( child->childIndexName(dbType) );
-      QString deleteIngredient = QString("DELETE FROM %1 where %3=%2")
+                                 .arg( child->childIndexName(dbType) )
+                                 .arg(ing->_key);
+      // delete from misc where id = [misc key]
+      QString deleteIngredient = QString("DELETE FROM %1 where %2=%3")
                                  .arg(table->tableName())
-                                 .arg(ing->_key)
-                                 .arg(table->keyName(dbType));
+                                 .arg(table->keyName(dbType))
+                                 .arg(ing->_key);
       q.setForwardOnly(true);
 
       if ( ! q.exec(deleteFromInRecipe) )
@@ -832,9 +835,9 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
 {
    int key;
    TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
-   // QString query = QString("SELECT recipe_id FROM brewnote WHERE id = %1").arg(note->_key);
+   // SELECT recipe_id FROM brewnote WHERE id = [key]
    QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4")
-           .arg( tbl->propertyToColumn(kcolRecipeId) )
+           .arg( tbl->recipeIndexName())
            .arg( tbl->tableName() )
            .arg( tbl->keyName() )
            .arg(note->_key);
@@ -856,7 +859,7 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
    }
 
    q.next();
-   key = q.record().value(tbl->propertyToColumn(kcolRecipeId)).toInt();
+   key = q.record().value(tbl->recipeIndexName()).toInt();
    q.finish();
 
    return allRecipes[key];
@@ -947,9 +950,9 @@ void Database::insertInstruction(Instruction* in, int pos)
 {
    int parentRecipeKey;
    TableSchema* tbl = dbDefn->table( Brewtarget::INSTINRECTABLE );
-   // QString query = QString("SELECT recipe_id FROM instruction_in_recipe WHERE instruction_id=%2")
+   // SELECT recipe_id FROM instruction_in_recipe WHERE instruction_id=[key]
    QString query = QString("SELECT %1 FROM %2 WHERE %3=%4")
-                   .arg( tbl->propertyToColumn( kcolRecipeId ) )
+                   .arg( tbl->recipeIndexName())
                    .arg( tbl->tableName() )
                    .arg( tbl->inRecIndexName() )
                    .arg(in->_key);
@@ -964,27 +967,33 @@ void Database::insertInstruction(Instruction* in, int pos)
          throw QString("failed to find recipe");
 
       q.next();
-      parentRecipeKey = q.record().value(tbl->propertyToColumn(kcolRecipeId)).toInt();
+      parentRecipeKey = q.record().value(tbl->recipeIndexName()).toInt();
       q.finish();
 
+      // this happens in three steps --
+      // 1. Bump the instruction number for any instruction >= where we need to insert the new one
+      // 2. Generate all the signals for what we just did
+      // 3. Insert the instruction into the desired slot.
+
       // Increment all instruction positions greater or equal to pos.
-      update = QString( "UPDATE %1 SET %2=%2+1 WHERE %3=%1 AND %2>=%4")
+      // update instruction_in_recipe set instruction_number = instruction_number + 1 where recipe_id = [key] and instruction_number > [pos]
+      update = QString( "UPDATE %1 SET %2=%2+1 WHERE %3=%4 AND %2>=%5")
          .arg( tbl->tableName() )
-         .arg( tbl->propertyToColumn(kcolInstructionNumber) )
-         .arg( tbl->propertyToColumn(kcolRecipeId) )
-         .arg(parentRecipeKey).arg(pos);
+         .arg( tbl->propertyToColumn(kpropInstructionNumber) )
+         .arg( tbl->recipeIndexName() )
+         .arg(parentRecipeKey)
+         .arg(pos);
 
       if ( !q.exec(update) )
          throw QString("failed to renumber instructions recipe");
 
-      // This is sort of spooky action at a distance -- the emit should really be
-      // happening with the update. So it goes.
-      // query = QString("SELECT instruction_id as id, instruction_number as pos FROM instruction_in_recipe WHERE recipe_id=%1 and instruction_number>%2")
-      query = QString("SELECT %1, %2 FROM %3 WHERE %4=%5 and %2>%5")
+      // Emit the signals for everything we just changed.
+      // SELECT instruction_id, instruction_number FROM instruction_in_recipe WHERE recipe_id=[key] and instruction_number>[pos]")
+      query = QString("SELECT %1, %2 FROM %3 WHERE %4=%5 and %2>%6")
          .arg( tbl->inRecIndexName() )
          .arg( tbl->propertyToColumn(kcolInstructionNumber) )
          .arg( tbl->tableName() )
-         .arg( tbl->propertyToColumn(kcolRecipeId) )
+         .arg( tbl->recipeIndexName())
          .arg(parentRecipeKey)
          .arg(pos);
 
@@ -998,7 +1007,8 @@ void Database::insertInstruction(Instruction* in, int pos)
          emit inst->changed( inst->metaProperty("instructionNumber"),newPos );
       }
 
-      // Change in's position to pos.
+      // Insert the instruction into the new place
+      // UPDATE instruction_in_recipe set instruction_number = [pos] where instruction_id=[key]
       update = QString( "UPDATE %1 SET %2=%3 WHERE %4=%5")
          .arg(tbl->tableName())
          .arg(tbl->propertyToColumn(kcolInstructionNumber))
@@ -1031,9 +1041,9 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent)
    QList<BrewNote*> ret;
    TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
 
-   //  QString filterString = QString("recipe_id = %1 AND deleted = %2")
+   //  recipe_id = [key] AND deleted = false
    QString filterString = QString("%1 = %2 AND %3 = %4")
-           .arg( tbl->foreignKeyToColumn() )
+           .arg( tbl->recipeIndexName() )
            .arg(parent->_key)
            .arg(tbl->propertyToColumn(kpropDeleted))
            .arg(Brewtarget::dbFalse());
@@ -1047,9 +1057,10 @@ QList<Fermentable*> Database::fermentables(Recipe const* parent)
 {
    QList<Fermentable*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::FERMINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
+   // recipe_id = [key]
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
 
-   getElements(ret,filter, Brewtarget::FERMINRECTABLE, allFermentables, inrec->childIndexName());
+   getElements(ret,filter, Brewtarget::FERMINRECTABLE, allFermentables, inrec->inRecIndexName());
 
    return ret;
 }
@@ -1058,9 +1069,9 @@ QList<Hop*> Database::hops(Recipe const* parent)
 {
    QList<Hop*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::HOPINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
 
-   getElements(ret,filter, Brewtarget::HOPINRECTABLE, allHops, inrec->childIndexName());
+   getElements(ret,filter, Brewtarget::HOPINRECTABLE, allHops, inrec->inRecIndexName());
 
    return ret;
 }
@@ -1069,9 +1080,9 @@ QList<Misc*> Database::miscs(Recipe const* parent)
 {
    QList<Misc*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::MISCINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
 
-   getElements(ret,filter, Brewtarget::MISCINRECTABLE, allMiscs, inrec->childIndexName());
+   getElements(ret,filter, Brewtarget::MISCINRECTABLE, allMiscs, inrec->inRecIndexName());
 
    return ret;
 }
@@ -1141,11 +1152,11 @@ QList<Instruction*> Database::instructions( Recipe const* parent )
    TableSchema* inrec = dbDefn->table(Brewtarget::INSTINRECTABLE);
    // "recipe_id = [key] ORDER BY instruction_number ASC"
    QString filter = QString("%1 = %2 ORDER BY %3 ASC")
-         .arg( inrec->parentIndexName())
+         .arg( inrec->recipeIndexName())
          .arg(parent->_key)
          .arg( inrec->propertyToColumn(kpropInstructionNumber));
 
-   getElements(ret,filter,Brewtarget::INSTINRECTABLE,allInstructions,inrec->childIndexName());
+   getElements(ret,filter,Brewtarget::INSTINRECTABLE,allInstructions,inrec->inRecIndexName());
 
    return ret;
 }
@@ -1154,9 +1165,9 @@ QList<Water*> Database::waters(Recipe const* parent)
 {
    QList<Water*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::WATERINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
 
-   getElements(ret,filter,Brewtarget::WATERINRECTABLE,allWaters,inrec->childIndexName());
+   getElements(ret,filter,Brewtarget::WATERINRECTABLE,allWaters,inrec->inRecIndexName());
 
    return ret;
 }
@@ -1165,9 +1176,9 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 {
    QList<Yeast*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::YEASTINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->parentIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
 
-   getElements(ret,filter,Brewtarget::YEASTINRECTABLE,allYeasts,inrec->childIndexName());
+   getElements(ret,filter,Brewtarget::YEASTINRECTABLE,allYeasts,inrec->inRecIndexName());
 
    return ret;
 }
@@ -1197,7 +1208,7 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
       TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
 
       sqlUpdate( Brewtarget::BREWNOTETABLE,
-               QString("%1=%2").arg(tbl->foreignKeyToColumn()).arg(parent->_key),
+               QString("%1=%2").arg(tbl->recipeIndexName()).arg(parent->_key),
                QString("%1=%2").arg(tbl->keyName()).arg(tmp->_key) );
 
    }
@@ -2069,8 +2080,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
             QString childID = query.record().value(tbl->keyName()).toString();
             switch( Brewtarget::dbType() ) {
                case Brewtarget::PGSQL:
-                // MURPHY WEEPS
-                //  QString("INSERT INTO %1 (parent_id, child_id) VALUES (%2, %3) ON CONFLICT(child_id) DO UPDATE set parent_id = EXCLUDED.parent_id")
+                //  INSERT INTO %1 (parent_id, child_id) VALUES (%2, %3) ON CONFLICT(child_id) DO UPDATE set parent_id = EXCLUDED.parent_id
                   queryString = QString("INSERT INTO %1 (%2, %3) VALUES (%4, %5) ON CONFLICT(%3) DO UPDATE set %2 = EXCLUDED.%2")
                         .arg(dbDefn->childTableName((table)))
                         .arg(cld->parentIndexName())
@@ -2124,6 +2134,7 @@ int Database::getParentID(TableSchema* table, int childKey)
    int ret;
 
    //child_id is expected to be unique in table
+   // select parent_id from hop_children where child_id = [childKey] LIMIT 1
    QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4 LIMIT 1")
       .arg(table->parentIndexName())
       .arg(dbDefn->childTableName(table->dbTable()))
@@ -2146,71 +2157,75 @@ int Database::getParentID(TableSchema* table, int childKey)
 //Returns the key to the inventory table for a given ingredient
 int Database::getInventoryID(TableSchema* table, int key)
 {
+   TableSchema* inv = dbDefn->invTable(table->dbTable());
+   // select id from hop_in_inventory where hop_id = [parent_id] LIMIT 1
    QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4 LIMIT 1")
-         .arg(table->keyName())
-         .arg(dbDefn->invTableName(table->dbTable()))
-         .arg(table->childIndexName())
+         .arg(inv->keyName())
+         .arg(inv->tableName())
+         .arg(inv->invIndexName())
          .arg(getParentID(table, key));
 
+   qDebug() << Q_FUNC_INFO << query;
    QSqlQuery q( query, sqlDatabase() );
    q.first();
 
    return q.record().value(table->keyName()).toInt();
 }
 
-QVariant Database::getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key)
+// The trick to optimizing database queries is first to reduce the number of round trips, second to reduce the number of queries
+// and then -- and only then -- to try to optimize the query. By using the neat little COALESCE, I am reducing roundtrips.
+// it has the net result of using hop_children.parent_id if it exists, or the hop.id if it doesn't.
+QVariant Database::getInventoryAmt(QString col_name, Brewtarget::DBTable table, int key)
 {
    QVariant val = QVariant(0.0);
    TableSchema* tbl = dbDefn->table(table);
    TableSchema* inv = dbDefn->table(tbl->invTable());
    TableSchema* cld  = dbDefn->table(tbl->childTable());
-   // Good lord, I've killed more brain cells pulling this apart then I have drinking beer
-   // select misc_in_inventory(1).amount(2) from misc_in_inventory(1), misc(3), misc_children(4) where
-   //    misc(3).id(5) = [key(6)] and
-   //    misc(3).id(5) = misc_children(4).child_id(7) and
-   //    misc_child(4).parent_id(8) = misc_in_inventory(1).misc_id(9)
-   QString queryString = QString("select %1.%2 from %1, %3, %4 where "
-                                 "%3.%5 = %6 and "
-                                 "%3.%5 = %4.%7 and "
-                                 "%4.%8 = %1.%9")
-        .arg(inv->tableName())
-        .arg(col_name)
-        .arg(tbl->tableName())
-        .arg(cld->tableName())
-        .arg(tbl->keyName())
-        .arg(key)
-        .arg(cld->childIndexName())
-        .arg(cld->parentIndexName())
-        .arg(inv->foreignKeyToColumn());
-   QSqlQuery q( queryString, sqlDatabase() );
+
+   // select amount from hop_in_inventory where hop_id = COALESCE( (select parent_id from hop_children where child_id=[key]),[key])
+   QString query = QString("select %1 from %2 where %3 = COALESCE( (select %4 from %5 where %6=%7),%7)")
+         .arg(inv->propertyToColumn(col_name))
+         .arg(inv->tableName())
+         .arg(inv->invIndexName())
+         .arg(cld->parentIndexName())
+         .arg(cld->tableName())
+         .arg(cld->childIndexName())
+         .arg(key);
+
+   if ( table == Brewtarget::FERMTABLE && key == 490 )  {
+      qDebug() << Q_FUNC_INFO << query;
+   }
+   QSqlQuery q( query, sqlDatabase() );
 
    if ( q.first() ) {
-      val = q.record().value(col_name);
+      val = q.record().value(inv->propertyToColumn(col_name));
    }
    return val;
 }
 
 //create a new inventory row
 int Database::newInventory(TableSchema* schema, int invForID) {
-   QString invTable = dbDefn->invTableName(schema->dbTable());
+   TableSchema* inv = dbDefn->table( schema->invTable());
 
    QString queryString;
 
    switch(Brewtarget::dbType())
    {
       case Brewtarget::PGSQL:
+        // insert into hop_in_inventory (hop_id) values ([parent_id]) on conflict (hop_id) do update set hop_id = excluded.child_id
          queryString = QString("INSERT INTO %1 (%2) VALUES(%3) ON CONFLICT(%2) DO UPDATE set %2 = EXCLUDED.%2")
-                     .arg(invTable)
-                     .arg(schema->childIndexName())
+                     .arg(inv->tableName())
+                     .arg(inv->invIndexName())
                      .arg(getParentID(schema, invForID));
          break;
       default:
          queryString = QString("INSERT OR REPLACE INTO %1 (%2) VALUES (%3)")
-                     .arg(invTable)
-                     .arg(schema->childIndexName())
+                     .arg(inv->tableName())
+                     .arg(inv->invIndexName())
                      .arg(getParentID(schema, invForID));
    }
 
+   qDebug() << Q_FUNC_INFO << queryString;
    QSqlQuery q( queryString, sqlDatabase() );
    return q.lastInsertId().toInt();
 }
@@ -2403,7 +2418,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 
       // Update mash_id
       sqlUpdate(Brewtarget::RECTABLE,
-               QString("%1=%2").arg(tbl->propertyToColumn(kcolMashId) ).arg(newMash->key()),
+               QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId) ).arg(newMash->key()),
                QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
    }
    catch (QString e) {
@@ -2494,7 +2509,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
          newStyle = copy<Style>(s, &allStyles, false);
 
       sqlUpdate(Brewtarget::RECTABLE,
-                QString("%1=%2").arg(tbl->propertyToColumn(kcolStyleId)).arg(newStyle->key()),
+                QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropStyleId)).arg(newStyle->key()),
                 QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
    }
    catch (QString e) {
@@ -4467,41 +4482,48 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// I need one of two things here for caching to work -- either every child of a inventory capable
+// thing (eg, hops) listens for the parent to signal an inventory change, or this code has to
+// reach into every child and update the inventory. I am leaning towards the first.
+// Turns out, both are required in some order. Still thinking signal/slot
+//
 // this may be bad form. After a lot of refactoring, setInventory is the only method
 // that needs to update something other than the BeerXMLElement's table. To simplify
 // other things, I merged the nastier updateEntry into here and removed that method
 void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
 {
    TableSchema* tbl = dbDefn->table(ins->table());
-   Brewtarget::DBTable invtable = tbl->invTable();
-   TableSchema* invTbl = dbDefn->table(invtable);
+   TableSchema* inv = dbDefn->table(tbl->invTable());
 
-   QString invCol = invTbl->propertyToColumn(kpropAmount);
+   QString invProp = inv->propertyName(kpropInventory);
 
-   int ndx = ins->metaObject()->indexOfProperty(invCol.toUtf8().constData());
+   int ndx = ins->metaObject()->indexOfProperty(invProp.toUtf8().data());
    int invkey = getInventoryID(tbl, ins->key());
 
    if ( ! value.isValid() || value.isNull() ) {
       value = 0.0;
    }
 
-   if ( invkey == 0 ) { //no inventory row in the database so lets make one
+   //no inventory row in the database so lets make one
+   // if I felt better, we could do an upsert here, but that syntax is foul and nasty for postgres
+   if ( invkey == 0 ) {
       invkey = newInventory(tbl,ins->key());
    }
 
    try {
       QSqlQuery update( sqlDatabase() );
-      QString command = QString("UPDATE %1 set %2=%3 where id=%4")
-                           .arg(invTbl->tableName())
-                           .arg(invCol)
+      QString command = QString("UPDATE %1 set %2=%3 where %4=%5")
+                           .arg(inv->tableName())
+                           .arg(inv->propertyToColumn(kpropInventory))
                            .arg(value.toString())
+                           .arg(inv->keyName())
                            .arg(invkey);
 
 
       if ( ! update.exec(command) )
          throw QString("Could not update %1.%2 to %3: %4 %5")
-                  .arg(invTbl->tableName())
-                  .arg(invCol)
+                  .arg(inv->tableName())
+                  .arg(inv->propertyToColumn(kpropInventory))
                   .arg( value.toString() )
                   .arg( update.lastQuery() )
                   .arg( update.lastError().text() );
@@ -4512,8 +4534,17 @@ void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
       throw;
    }
 
-   if ( notify )
+   if ( notify ) {
+      qDebug() << "emitting changed for" << invProp << "key=" << ins->_key;
       emit ins->changed(ins->metaObject()->property(ndx),value);
+      if ( ins->_key == 185 ) {
+         Fermentable* tmp = allFermentables[490];
+         tmp->setCacheOnly(true);
+         tmp->setInventoryAmount(value.toDouble());
+         tmp->setCacheOnly(false);
+         emit tmp->changed(ins->metaObject()->property(ndx),value);
+      }
+   }
 }
 
 // This method and the one that follows need to be 'fixed' to use the

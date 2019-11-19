@@ -1608,8 +1608,7 @@ void Recipe::recalcVolumeEstimates()
    double tmp_pbv = 0.0;
 
    // wortFromMash_l ==========================
-   if( mash() == nullptr )
-   {
+   if( mash() == nullptr ) {
       m_wortFromMash_l = 0.0;
    }
    else
@@ -1680,21 +1679,21 @@ void Recipe::recalcVolumeEstimates()
       }
    }
 
-   if ( qFuzzyCompare(tmp_bv, m_boilVolume_l ) ) {
+   if ( ! qFuzzyCompare(tmp_bv, m_boilVolume_l ) ) {
         m_boilVolume_l = tmp_bv;
       if (!m_uninitializedCalcs) {
         emit changed( metaProperty("boilVolume_l"), m_boilVolume_l );
       }
    }
 
-   if ( qFuzzyCompare(tmp_fv, m_finalVolume_l ) ) {
+   if ( ! qFuzzyCompare(tmp_fv, m_finalVolume_l ) ) {
        m_finalVolume_l = tmp_fv;
       if (!m_uninitializedCalcs) {
         emit changed( metaProperty("finalVolume_l"), m_finalVolume_l );
       }
    }
 
-   if ( qFuzzyCompare(tmp_pbv, m_postBoilVolume_l ) ) {
+   if ( ! qFuzzyCompare(tmp_pbv, m_postBoilVolume_l ) ) {
       m_postBoilVolume_l = tmp_pbv;
       if (!m_uninitializedCalcs) {
         emit changed( metaProperty("postBoilVolume_l"), m_postBoilVolume_l );
@@ -1720,7 +1719,7 @@ void Recipe::recalcGrainsInMash_kg()
       }
    }
 
-   if ( qFuzzyCompare(ret, m_grainsInMash_kg )  ) {
+   if ( ! qFuzzyCompare(ret, m_grainsInMash_kg )  ) {
       m_grainsInMash_kg = ret;
       if (!m_uninitializedCalcs) {
         emit changed( metaProperty("grainsInMash_kg"), m_grainsInMash_kg );
@@ -1738,7 +1737,7 @@ void Recipe::recalcGrains_kg()
    for( i = 0; i < size; ++i )
       ret += ferms[i]->amount_kg();
 
-   if ( qFuzzyCompare(ret, m_grains_kg ) ) {
+   if ( ! qFuzzyCompare(ret, m_grains_kg ) ) {
       m_grains_kg = ret;
       if (!m_uninitializedCalcs) {
         emit changed( metaProperty("grains_kg"), m_grains_kg );
@@ -1790,7 +1789,7 @@ void Recipe::recalcCalories()
       tmp = 0;
    }
 
-   if ( qFuzzyCompare(tmp, m_calories ) ) {
+   if ( ! qFuzzyCompare(tmp, m_calories ) ) {
       m_calories = tmp;
       if (!m_uninitializedCalcs) {
         emit changed( metaProperty("calories"), m_calories );
@@ -1870,7 +1869,7 @@ void Recipe::recalcBoilGrav()
 
    ret = Algorithms::PlatoToSG_20C20C( Algorithms::getPlato(sugar_kg, boilSize_l()) );
 
-   if ( qFuzzyCompare(ret, m_boilGrav ) ) {
+   if ( ! qFuzzyCompare(ret, m_boilGrav ) ) {
       m_boilGrav = ret;
       if (!m_uninitializedCalcs)
       {
@@ -1985,7 +1984,7 @@ void Recipe::recalcOgFg()
       m_fg_fermentable = tmp_fg;
    }
 
-   if ( qFuzzyCompare(m_og, tmp_og ) ) {
+   if ( ! qFuzzyCompare(m_og, tmp_og ) ) {
       m_og     = tmp_og;
       // NOTE: We don't want to do this on the first load of the recipe.
       // NOTE: We are we recalculating all of these on load? Shouldn't we be
@@ -2003,7 +2002,7 @@ void Recipe::recalcOgFg()
       }
    }
 
-   if ( qFuzzyCompare(tmp_fg, m_fg ) ) {
+   if ( ! qFuzzyCompare(tmp_fg, m_fg ) ) {
       m_fg     = tmp_fg;
       if (!m_uninitializedCalcs)
       {

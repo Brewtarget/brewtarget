@@ -275,14 +275,14 @@ void BeerXMLElement::setInventory( const QVariant& value, bool notify )
 
 QVariant BeerXMLElement::getInventory( const char* col_name ) const
 {
-   QVariant val = 0.0;
-   val = Database::instance().getInventoryAmt(col_name, _table, _key);
-   return val;
+   return getInventory(QString(col_name));
 }
 
 QVariant BeerXMLElement::getInventory( const QString& col_name ) const
 {
-   return getInventory(col_name.toUtf8().constData());
+   QVariant val = 0.0;
+   val = Database::instance().getInventoryAmt(col_name, _table, _key);
+   return val;
 }
 
 bool BeerXMLElement::isValid()

@@ -69,6 +69,7 @@ Fermentable::Fermentable(QString name, bool cache)
      m_maxInBatchPct(100.0),
      m_recommendMash(false),
      m_ibuGalPerLb(0.0),
+     m_inventory(-1.0),
      m_isMashed(false),
      m_cacheOnly(cache)
 {
@@ -92,6 +93,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key)
      m_maxInBatchPct(0.0),
      m_recommendMash(true),
      m_ibuGalPerLb(0.0),
+     m_inventory(-1.0),
      m_isMashed(true),
      m_cacheOnly(false)
 {
@@ -115,12 +117,13 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_maxInBatchPct(rec.value(kcolFermMaxInBatch).toDouble()),
      m_recommendMash(rec.value(kcolFermRecommendMash).toBool()),
      m_ibuGalPerLb(rec.value(kcolFermIBUGalPerLb).toDouble()),
+     m_inventory(-1.0),
      m_isMashed(rec.value(kcolFermIsMashed).toBool()),
      m_cacheOnly(false)
 {
 }
 
-Fermentable::Fermentable( Fermentable const& other )
+Fermentable::Fermentable( Fermentable &other )
         : BeerXMLElement( other )
 {
    setType( other.type() );
@@ -138,6 +141,7 @@ Fermentable::Fermentable( Fermentable const& other )
    setProtein_pct( other.protein_pct() );
    setMaxInBatch_pct( other.maxInBatch_pct() );
    setRecommendMash( other.recommendMash() );
+   setInventoryAmount( other.inventory() );
    setIbuGalPerLb( other.ibuGalPerLb() );
    setIsMashed(other.isMashed());
 }
@@ -353,21 +357,24 @@ void Fermentable::setAmount_kg( double num )
 
 void Fermentable::setInventoryAmount( double num )
 {
-   if( num < 0.0 )
-   {
+   if( num < 0.0 ) {
       Brewtarget::logW( QString("Fermentable: negative inventory: %1").arg(num) );
       return;
    }
    else
    {
-      // These will need fixed
-      setInventory(num);
+      m_inventory = num;
+      if ( ! m_cacheOnly )
+         setInventory(num);
    }
 }
 
-double Fermentable::inventory() const
+double Fermentable::inventory()
 {
-   return getInventory(kpropAmount).toDouble();
+   if ( m_inventory < 0 ) {
+      m_inventory = getInventory(kpropInventory).toDouble();
+   }
+   return m_inventory;
 }
 
 void Fermentable::setYield_pct( double num )

@@ -115,7 +115,7 @@ public:
 
    Type type() const;
    double amount_kg() const;
-   double inventory() const;
+   double inventory();
    double yield_pct() const;
    double color_srm() const;
    bool addAfterBoil() const;
@@ -180,7 +180,7 @@ signals:
 private:
    Fermentable(Brewtarget::DBTable table, int key);
    Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   Fermentable( Fermentable const& other );
+   Fermentable( Fermentable &other );
    Fermentable( QString name, bool cache = true );
 
    static bool isValidType( const QString& str );
@@ -205,6 +205,7 @@ private:
    double m_maxInBatchPct;
    bool m_recommendMash;
    double m_ibuGalPerLb;
+   double m_inventory;
    bool m_isMashed;
    bool m_cacheOnly;
 };

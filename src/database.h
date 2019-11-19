@@ -94,7 +94,6 @@ class Database : public QObject
 {
    Q_OBJECT
 
-   friend class BtSqlQuery; // This class needs the _thread instance.
 public:
 
    //! This should be the ONLY way you get an instance.
@@ -122,11 +121,13 @@ public:
    bool loadSuccessful();
 
    void updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify = true, bool transact = false );
-   //! \brief Get the contents of the cell specified by table/key/col_name.
+
+   //! \brief Get the contents of the cell specified by table/key/col_name
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
    {
       QSqlQuery q;
       TableSchema* tbl = dbDefn->table(table);
+
       QString index = QString("%1_%2").arg(tbl->tableName()).arg(col_name);
 
       if ( ! selectSome.contains(index) ) {
@@ -143,8 +144,7 @@ public:
       q.bindValue(":id", key);
 
       q.exec();
-      if( !q.next() )
-      {
+      if( !q.next() ) {
          Brewtarget::logE( QString("Database::get(): %1 (%2) %3").arg(q.lastQuery()).arg(col_name).arg(q.lastError().text()));
          q.finish();
          return QVariant();
@@ -157,33 +157,7 @@ public:
 
    QVariant get( TableSchema* tbl, int key, QString col_name )
    {
-      QSqlQuery q;
-      QString index = QString("%1_%2").arg(tbl->tableName()).arg(col_name);
-
-      if ( ! selectSome.contains(index) ) {
-         QString query = QString("SELECT %1 from %2 WHERE %3=:id")
-                           .arg(col_name)
-                           .arg(tbl->tableName())
-                           .arg(tbl->keyName());
-         q = QSqlQuery( sqlDatabase() );
-         q.prepare(query);
-         selectSome.insert(index,q);
-      }
-
-      q = selectSome.value(index);
-      q.bindValue(":id", key);
-
-      q.exec();
-      if( !q.next() )
-      {
-         Brewtarget::logE( QString("Database::get(): %1 (%2) %3").arg(q.lastQuery()).arg(col_name).arg(q.lastError().text()));
-         q.finish();
-         return QVariant();
-      }
-
-      QVariant ret( q.record().value(col_name) );
-      q.finish();
-      return ret;
+      return get( tbl->dbTable(), key, col_name.toUtf8().data());
    }
    //! Get a table view.
    QTableView* createView( Brewtarget::DBTable table );
@@ -320,7 +294,7 @@ public:
    //! \returns The entire inventory for a table.
    QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
 
-   QVariant getInventoryAmt(const char* col_name, Brewtarget::DBTable table, int key);
+   QVariant getInventoryAmt(QString col_name, Brewtarget::DBTable table, int key);
 
    void setInventory( BeerXMLElement* ins, QVariant value, bool notify=true );
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -863,7 +837,7 @@ private:
          QString insert = QString("INSERT INTO %1 (%2, %3) VALUES (:ingredient, :recipe)")
                   .arg(inrec->tableName())
                   .arg(inrec->inRecIndexName(Brewtarget::dbType()))
-                  .arg(inrec->propertyToColumn(kcolRecipeId));
+                  .arg(inrec->recipeIndexName());
 
          q.prepare(insert);
          q.bindValue(":ingredient", newIng->key());
