@@ -1985,6 +1985,80 @@ QString Database::getDbFileName()
    return dbFileName;
 }
 
+int Database::getInventoryId(TableSchema* tbl, int key )
+{
+   QString query = QString("SELECT %1 from %2 where %3 = %4")
+         .arg(tbl->foreignKeyToColumn())
+         .arg(tbl->tableName())
+         .arg(tbl->keyName())
+         .arg(key);
+
+   QSqlQuery q( query, sqlDatabase());
+   q.first();
+
+   return q.record().value(tbl->foreignKeyToColumn()).toInt();
+}
+
+// this may be bad form. After a lot of refactoring, setInventory is the only method
+// that needs to update something other than the BeerXMLElement's table. To simplify
+// other things, I merged the nastier updateEntry into here and removed that method
+//
+// I need one of two things here for caching to work -- either every child of a inventory capable
+// thing (eg, hops) listens for the parent to signal an inventory change, or this code has to
+// reach into every child and update the inventory. I am leaning towards the first.
+// Turns out, both are required in some order. Still thinking signal/slot
+//
+void Database::setInventory(BeerXMLElement* ins, QVariant value, bool notify )
+{
+   TableSchema* tbl = dbDefn->table(ins->table());
+   TableSchema* inv = dbDefn->table(tbl->invTable());
+
+   QString invProp = inv->propertyName(kpropInventory);
+
+   // int ndx = ins->metaObject()->indexOfProperty(invProp.toUtf8().data());
+   // I would like to get rid of this, but I need it to properly signal
+   int invKey = getInventoryId(tbl, ins->_key);
+
+   if ( ! value.isValid() || value.isNull() ) {
+      value = 0.0;
+   }
+
+   if ( invKey == 0 ) {
+      qDebug() << "Bad inventory request";
+      return;
+   }
+
+   try {
+      QSqlQuery update( sqlDatabase() );
+      // update hop_in_inventory set amount = [value] where hop.id = [invKey]
+      QString command = QString("UPDATE %1 set %2=%3 where %4=%5")
+                           .arg(inv->tableName())
+                           .arg(inv->propertyToColumn(kpropInventory))
+                           .arg(value.toString())
+                           .arg(inv->keyName())
+                           .arg(invKey);
+
+
+      if ( ! update.exec(command) )
+         throw QString("Could not update %1.%2 to %3: %4 %5")
+                  .arg(inv->tableName())
+                  .arg(inv->propertyToColumn(kpropInventory))
+                  .arg( value.toString() )
+                  .arg( update.lastQuery() )
+                  .arg( update.lastError().text() );
+
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      throw;
+   }
+
+   if ( notify ) {
+      emit ins->changed(ins->metaObject()->property(ndx),value);
+      emit changedInventory(tbl->dbTable(),invKey, value);
+   }
+}
+
 void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify, bool transact )
 {
    TableSchema* schema =dbDefn->table( object->table() );
@@ -2128,6 +2202,7 @@ void Database::populateChildTablesByName()
    }
 }
 
+/*
 //Returns the key of the parent ingredient
 int Database::getParentID(TableSchema* table, int childKey)
 {
@@ -2153,24 +2228,7 @@ int Database::getParentID(TableSchema* table, int childKey)
       return ret;
    }
 }
-
-//Returns the key to the inventory table for a given ingredient
-int Database::getInventoryID(TableSchema* table, int key)
-{
-   TableSchema* inv = dbDefn->invTable(table->dbTable());
-   // select id from hop_in_inventory where hop_id = [parent_id] LIMIT 1
-   QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4 LIMIT 1")
-         .arg(inv->keyName())
-         .arg(inv->tableName())
-         .arg(inv->invIndexName())
-         .arg(getParentID(table, key));
-
-   qDebug() << Q_FUNC_INFO << query;
-   QSqlQuery q( query, sqlDatabase() );
-   q.first();
-
-   return q.record().value(table->keyName()).toInt();
-}
+*/
 
 // The trick to optimizing database queries is first to reduce the number of round trips, second to reduce the number of queries
 // and then -- and only then -- to try to optimize the query. By using the neat little COALESCE, I am reducing roundtrips.
@@ -2180,21 +2238,19 @@ QVariant Database::getInventoryAmt(QString col_name, Brewtarget::DBTable table, 
    QVariant val = QVariant(0.0);
    TableSchema* tbl = dbDefn->table(table);
    TableSchema* inv = dbDefn->table(tbl->invTable());
-   TableSchema* cld  = dbDefn->table(tbl->childTable());
 
-   // select amount from hop_in_inventory where hop_id = COALESCE( (select parent_id from hop_children where child_id=[key]),[key])
-   QString query = QString("select %1 from %2 where %3 = COALESCE( (select %4 from %5 where %6=%7),%7)")
-         .arg(inv->propertyToColumn(col_name))
+   // int invKey = getInventoryId(tbl, key);
+   // select hop_in_inventory.amount from hop_in_inventory,hop where hop.id = key and hop_in_inventory.id = hop.inventory_id
+   QString query = QString("select %1.%2 from %1,%3 where %3.%4 = %5 and %1.%6 = %3.%7")
          .arg(inv->tableName())
-         .arg(inv->invIndexName())
-         .arg(cld->parentIndexName())
-         .arg(cld->tableName())
-         .arg(cld->childIndexName())
-         .arg(key);
+         .arg(inv->propertyToColumn(kpropInventory))
+         .arg(tbl->tableName())
+         .arg(tbl->keyName())
+         .arg(key)
+         .arg(inv->keyName())
+         .arg(tbl->foreignKeyToColumn(kpropInventoryId));
 
-   if ( table == Brewtarget::FERMTABLE && key == 490 )  {
-      qDebug() << Q_FUNC_INFO << query;
-   }
+
    QSqlQuery q( query, sqlDatabase() );
 
    if ( q.first() ) {
@@ -2204,30 +2260,20 @@ QVariant Database::getInventoryAmt(QString col_name, Brewtarget::DBTable table, 
 }
 
 //create a new inventory row
-int Database::newInventory(TableSchema* schema, int invForID) {
+int Database::newInventory(TableSchema* schema, int elementId) {
    TableSchema* inv = dbDefn->table( schema->invTable());
+   int newKey;
 
-   QString queryString;
-
-   switch(Brewtarget::dbType())
-   {
-      case Brewtarget::PGSQL:
-        // insert into hop_in_inventory (hop_id) values ([parent_id]) on conflict (hop_id) do update set hop_id = excluded.child_id
-         queryString = QString("INSERT INTO %1 (%2) VALUES(%3) ON CONFLICT(%2) DO UPDATE set %2 = EXCLUDED.%2")
+   // not sure why we were doing an upsert earlier. We already know there is no
+   // inventory row for this element. So doesn't this just need an insert?
+   QString queryString = QString("INSERT INTO %1 (%2) VALUES(%3)")
                      .arg(inv->tableName())
                      .arg(inv->invIndexName())
-                     .arg(getParentID(schema, invForID));
-         break;
-      default:
-         queryString = QString("INSERT OR REPLACE INTO %1 (%2) VALUES (%3)")
-                     .arg(inv->tableName())
-                     .arg(inv->invIndexName())
-                     .arg(getParentID(schema, invForID));
-   }
-
-   qDebug() << Q_FUNC_INFO << queryString;
+                     .arg(elementId);
    QSqlQuery q( queryString, sqlDatabase() );
-   return q.lastInsertId().toInt();
+   newKey = q.lastInsertId().toInt();
+
+   return newKey;
 }
 
 QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
@@ -4482,76 +4528,6 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// I need one of two things here for caching to work -- either every child of a inventory capable
-// thing (eg, hops) listens for the parent to signal an inventory change, or this code has to
-// reach into every child and update the inventory. I am leaning towards the first.
-// Turns out, both are required in some order. Still thinking signal/slot
-//
-// this may be bad form. After a lot of refactoring, setInventory is the only method
-// that needs to update something other than the BeerXMLElement's table. To simplify
-// other things, I merged the nastier updateEntry into here and removed that method
-void Database::setInventory( BeerXMLElement* ins, QVariant value, bool notify )
-{
-   TableSchema* tbl = dbDefn->table(ins->table());
-   TableSchema* inv = dbDefn->table(tbl->invTable());
-
-   QString invProp = inv->propertyName(kpropInventory);
-
-   int ndx = ins->metaObject()->indexOfProperty(invProp.toUtf8().data());
-   int invkey = getInventoryID(tbl, ins->key());
-
-   if ( ! value.isValid() || value.isNull() ) {
-      value = 0.0;
-   }
-
-   //no inventory row in the database so lets make one
-   // if I felt better, we could do an upsert here, but that syntax is foul and nasty for postgres
-   if ( invkey == 0 ) {
-      invkey = newInventory(tbl,ins->key());
-   }
-
-   try {
-      QSqlQuery update( sqlDatabase() );
-      QString command = QString("UPDATE %1 set %2=%3 where %4=%5")
-                           .arg(inv->tableName())
-                           .arg(inv->propertyToColumn(kpropInventory))
-                           .arg(value.toString())
-                           .arg(inv->keyName())
-                           .arg(invkey);
-
-
-      if ( ! update.exec(command) )
-         throw QString("Could not update %1.%2 to %3: %4 %5")
-                  .arg(inv->tableName())
-                  .arg(inv->propertyToColumn(kpropInventory))
-                  .arg( value.toString() )
-                  .arg( update.lastQuery() )
-                  .arg( update.lastError().text() );
-
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
-      throw;
-   }
-
-   if ( notify ) {
-      qDebug() << "emitting changed for" << invProp << "key=" << ins->_key;
-      emit ins->changed(ins->metaObject()->property(ndx),value);
-      if ( ins->_key == 185 ) {
-         Fermentable* tmp = allFermentables[490];
-         tmp->setCacheOnly(true);
-         tmp->setInventoryAmount(value.toDouble());
-         tmp->setCacheOnly(false);
-         emit tmp->changed(ins->metaObject()->property(ndx),value);
-      }
-   }
-}
-
-// This method and the one that follows need to be 'fixed' to use the
-// TableSchema objects. It will take some study to figure it all out, but I
-// think this method will be significantly reduced. I am probably going to
-// have to create and "updateElement" method like insertElement and then we
-// can remove this.
 QMap<QString, std::function<BeerXMLElement*(QString name)> > Database::makeTableParams()
 {
    QMap<QString, std::function<BeerXMLElement*(QString name)> > tmp;

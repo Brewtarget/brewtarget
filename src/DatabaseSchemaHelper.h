@@ -38,10 +38,10 @@ class DatabaseSchemaHelper
    friend class Database;
 
 public:
-   
+
    // No public methods. Database is the only class able to access
    // DatabaseSchemaHelper methods.
-   
+
 private:
 
    //! \brief Database version. Increment on any schema change.
@@ -64,7 +64,7 @@ private:
    static QString OPENPAREN;
    static QString CLOSEPAREN;
    static QString END;
-   
+
    // Types
    static QString TYPEINTEGER;
    static QString TYPETEXT;
@@ -77,7 +77,7 @@ private:
    static QString THENOW;
    static QString FALSE;
    static QString TRUE;
-   
+
    // ID string for EVERY table.
    static QString id;
    static QString name;
@@ -88,7 +88,7 @@ private:
    static QString display;
    static QString folder;
    static QString locked;
-   
+
    // =============================Table Names/Columns=========================
    // the meta table
    static QString tableMeta;
@@ -103,7 +103,7 @@ private:
    static QString tableSettings;
    static QString colSettingsVersion;
    static QString colSettingsRepopulateChildren;
-   
+
    // Equipment table
    static QString tableEquipment;
    static QString colEquipBoilSize;
@@ -123,7 +123,7 @@ private:
    static QString colEquipRealEvapRate;
    static QString colEquipBoilingPoint;
    static QString colEquipAbsorption;
-   
+
    // Fermentable table
    static QString tableFermentable;
    static QString colFermFtype;
@@ -142,7 +142,7 @@ private:
    static QString colFermRecommendMash;
    static QString colFermIsMashed;
    static QString colFermIbuGalLb;
-   
+
    // Hop table
    static QString tableHop;
    static QString colHopAlpha;
@@ -160,7 +160,7 @@ private:
    static QString colHopCaryophyllene;
    static QString colHopCohumulone;
    static QString colHopMyrcene;
-   
+
    // Misc table
    static QString tableMisc;
    static QString colMiscMtype;
@@ -170,7 +170,7 @@ private:
    static QString colMiscAmountIsWeight;
    static QString colMiscUseFor;
    static QString colMiscNotes;
-   
+
    // Style table
    static QString tableStyle;
    static QString colStyleType;
@@ -194,7 +194,7 @@ private:
    static QString colStyleProfile;
    static QString colStyleIngredients;
    static QString colStyleExamples;
-   
+
    // Yeast table
    static QString tableYeast;
    static QString colYeastType;
@@ -212,7 +212,7 @@ private:
    static QString colYeastRecultures;
    static QString colYeastReuseMax;
    static QString colYeastSecondary;
-   
+
    // Water table
    static QString tableWater;
    static QString colWaterAmount;
@@ -224,7 +224,7 @@ private:
    static QString colWaterMg;
    static QString colWaterPh;
    static QString colWaterNotes;
-   
+
    static QString tableMash;
    static QString colMashName;
    static QString colMashGrainTemp;
@@ -235,7 +235,7 @@ private:
    static QString colMashTunWeight;
    static QString colMashTunSpecificHeat;
    static QString colMashEquipAdjust;
-   
+
    static QString tableMashStep;
    static QString colMashStepType;
    static QString colMashStepInfAmount;
@@ -247,7 +247,7 @@ private:
    static QString colMashStepDecAmount;
    static QString colMashStepMashId;
    static QString colMashStepNumber;
-   
+
    // Brewnote table
    static QString tableBrewnote;
    static QString colBNoteAttenuation;
@@ -282,14 +282,14 @@ private:
    static QString colBNoteFinalVolume;
    static QString colBNoteNotes;
    static QString colBNoteRecipeId;
-   
+
    static QString tableInstruction;
    static QString colInsDirections;
    static QString colInsHasTimer;
    static QString colInsTimerVal;
    static QString colInsCompleted;
    static QString colInsInterval;
-   
+
    static QString tableRecipe;
    static QString colRecType;
    static QString colRecBrewer;
@@ -323,7 +323,7 @@ private:
    static QString colRecMashId;
    static QString colRecEquipId;
    static QString colRecAncestorId;
-   
+
    static QString tableBtEquipment;
    static QString tableBtFermentable;
    static QString tableBtHop;
@@ -331,14 +331,14 @@ private:
    static QString tableBtStyle;
    static QString tableBtYeast;
    static QString tableBtWater;
-   
+
    static QString tableFermInRec;
    static QString tableHopInRec;
    static QString tableMiscInRec;
    static QString tableWaterInRec;
    static QString tableYeastInRec;
    static QString tableInsInRec;
-   
+
    static QString tableEquipChildren;
    static QString tableFermChildren;
    static QString tableHopChildren;
@@ -347,12 +347,12 @@ private:
    static QString tableStyleChildren;
    static QString tableWaterChildren;
    static QString tableYeastChildren;
-   
+
    static QString tableFermInventory;
    static QString tableHopInventory;
    static QString tableMiscInventory;
    static QString tableYeastInventory;
-   
+
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    static bool upgrade;
@@ -360,17 +360,17 @@ private:
     * \brief Create a blank database whose schema version is \c dbVersion
     */
    static bool create(QSqlDatabase db = QSqlDatabase(), Brewtarget::DBTypes dbType = Brewtarget::NODB);
-   
+
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
     */
    static bool migrateNext(int oldVersion, QSqlDatabase db = QSqlDatabase());
-   
+
    /*!
     * \brief Migrate schema from \c oldVersion to \c newVersion
     */
    static bool migrate(int oldVersion, int newVersion, QSqlDatabase db = QSqlDatabase());
-   
+
    //! \brief Current schema version of the given database
    static int currentVersion(QSqlDatabase db = QSqlDatabase());
    static QString foreignKey( QString const& column, QString const& foreignTable );
@@ -380,7 +380,7 @@ private:
 
    // !\brief create_table is a convenience method to wrap a lot of boiler  plate
    static bool create_table(QSqlQuery q, QString create, QString tableName, Brewtarget::DBTable tableid,
-                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
+                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE,
                         Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
    // !\brief I need a meta table
    static bool create_meta(QSqlQuery q);
@@ -388,7 +388,7 @@ private:
    static bool create_settings(QSqlQuery q);
    // \!brief inserts a row into the meta table when a table is created
    static bool insert_meta(QSqlQuery q, QString const& name, Brewtarget::DBTable tableid,
-                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE, 
+                        QString className="", Brewtarget::DBTable inv_id = Brewtarget::NOTABLE,
                         Brewtarget::DBTable child_id = Brewtarget::NOTABLE);
 
    //! brief These create the beerXML tables
@@ -404,7 +404,7 @@ private:
    static bool create_brewnote(QSqlQuery q);
    static bool create_instruction(QSqlQuery q);
    static bool create_recipe(QSqlQuery q);
-  
+
    //! \brief These provide some convenience and reuse
    static bool create_beerXMLTables(QSqlQuery q);
    static bool create_btTables(QSqlQuery q);
@@ -414,7 +414,7 @@ private:
 
    //! \brief This creates a table for a bt_* table
    static bool create_btTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
-   //! \brief This creates a table for *in_recipe 
+   //! \brief This creates a table for *in_recipe
    static bool create_recipeChildTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
    //! \brief This creates a table for inventory
    static bool create_inventoryTable(QSqlQuery q, QString tableName, QString foreignTableName, Brewtarget::DBTable tableid);
@@ -436,6 +436,7 @@ private:
    static bool migrate_to_5(QSqlQuery q);
    static bool migrate_to_6(QSqlQuery q);
    static bool migrate_to_7(QSqlQuery q);
+   static bool migration_aide_8(QSqlQuery q, Brewtarget::DBTable table );
    static bool migrate_to_8(QSqlQuery q);
 };
 

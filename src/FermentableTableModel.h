@@ -35,6 +35,7 @@ class FermentableItemDelegate;
 #include <QItemDelegate>
 #include <QAbstractItemDelegate>
 #include <QList>
+#include "brewtarget.h"
 #include "unit.h"
 
 // Forward declarations.
@@ -106,6 +107,8 @@ public slots:
 private slots:
    //! \brief Catch changes to Recipe, Database, and Fermentable.
    void changed(QMetaProperty, QVariant);
+   //! \brief Catches changes to inventory
+   void changedInventory(Brewtarget::DBTable,int,QVariant);
 
 private:
    //! \brief Recalculate the total amount of grains in the model.
@@ -132,7 +135,7 @@ class FermentableItemDelegate : public QItemDelegate
    Q_OBJECT
 
 public:
-   FermentableItemDelegate(QObject* parent = 0);
+   FermentableItemDelegate(QObject* parent = nullptr);
 
    //! \brief Reimplemented from QItemDelegate.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;

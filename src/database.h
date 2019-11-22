@@ -123,7 +123,7 @@ public:
    void updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify = true, bool transact = false );
 
    //! \brief Get the contents of the cell specified by table/key/col_name
-   QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
+   QVariant get( Brewtarget::DBTable table, int key, QString col_name )
    {
       QSqlQuery q;
       TableSchema* tbl = dbDefn->table(table);
@@ -284,19 +284,19 @@ public:
    //! \returns the key of the parent ingredient
    int getParentID(TableSchema* table, int childKey);
 
-   //! \returns the key to the inventory table for a given ingredient
-   int getInventoryID(TableSchema* table, int key);
-
    //! Inserts an new inventory row in the appropriate table
    // void newInventory(Brewtarget::DBTable invForTable, int invForID);
    int newInventory(TableSchema* schema, int invForID);
+
+   int getInventoryId(TableSchema* tbl, int key );
+   void setInventory(BeerXMLElement* ins, QVariant value, bool notify );
 
    //! \returns The entire inventory for a table.
    QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
 
    QVariant getInventoryAmt(QString col_name, Brewtarget::DBTable table, int key);
 
-   void setInventory( BeerXMLElement* ins, QVariant value, bool notify=true );
+   // void setInventory( BeerXMLElement* ins, QVariant value, bool notify=true );
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash
@@ -499,8 +499,6 @@ public:
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
 
-   // void updateColumns(Brewtarget::DBTable table, int key, const QVariantMap& colValMap);
-
 signals:
    void changed(QMetaProperty prop, QVariant value);
    void newEquipmentSignal(Equipment*);
@@ -529,6 +527,9 @@ signals:
 
    // MashSteps need signals too
    void newMashStepSignal(MashStep*);
+
+   // Sigh
+   void changedInventory(Brewtarget::DBTable,int,QVariant);
 
 private slots:
    //! Load database from file.

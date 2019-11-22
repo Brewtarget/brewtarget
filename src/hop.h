@@ -43,7 +43,7 @@ class Hop : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "hops")
-   
+
    friend class Database;
    friend class HopDialog;
 public:
@@ -55,15 +55,17 @@ public:
    //! \brief The way the hop is used.
    enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma), and BeerXML expects a space for "Dry Hop" and "First Wort". Damn. Damn damn.
    Q_ENUMS( Type Form Use )
-   
+
    virtual ~Hop() {}
-   
+
    //! \brief The percent alpha.
    Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct /*NOTIFY changed*/ /*changedAlpha_pct*/ )
    //! \brief The amount in kg.
    Q_PROPERTY( double amount_kg READ amount_kg WRITE setAmount_kg /*NOTIFY changed*/ /*changedAmount_kg*/ )
    //! \brief The amount in inventory in kg.
    Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedInventory*/ )
+   //! \brief The inventory ID -- needed for signal processing. This is pretty much readonly
+   Q_PROPERTY( double inventoryId READ inventoryId /*WRITE setInventoryAmountId*/ /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief The \c Use.
    Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
    //! \brief The untranslated \c Use string.
@@ -96,10 +98,11 @@ public:
    Q_PROPERTY( double cohumulone_pct READ cohumulone_pct WRITE setCohumulone_pct /*NOTIFY changed*/ /*changedCohumulone_pct*/ )
    //! \brief Myrcene as a percentage of total hop oil.
    Q_PROPERTY( double myrcene_pct READ myrcene_pct WRITE setMyrcene_pct /*NOTIFY changed*/ /*changedMyrcene_pct*/ )
-   
+
    double alpha_pct() const;
    double amount_kg() const;
-   double inventory() const;
+   double inventory();
+   int inventoryId() const;
    // Use in enumerated, untranslated and translated versions
    Use use() const;
    const QString useString() const;
@@ -112,7 +115,7 @@ public:
    Type type() const;
    const QString typeString() const;
    const QString typeStringTr() const;
-   
+
    // Form in enumerated, untranslated and translated versions
    Form form() const;
    const QString formString() const;
@@ -127,14 +130,14 @@ public:
    double cohumulone_pct() const;
    double myrcene_pct() const;
    bool cacheOnly() const;
-   
+
    //set
    void setAlpha_pct( double num);
    void setAmount_kg( double num);
    void setInventoryAmount( double num);
    void setUse( Use u);
    void setTime_min( double num);
-   
+
    void setNotes( const QString& str);
    void setType( Type t);
    void setForm( Form f);
@@ -157,8 +160,8 @@ private:
    Hop(Brewtarget::DBTable table, int key);
    Hop(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Hop(QString name, bool cache = true);
-   Hop( Hop const& other );
-   
+   Hop( Hop & other );
+
    QString m_useStr;
    Use m_use;
    QString m_typeStr;
@@ -177,6 +180,8 @@ private:
    double m_caryophyllene_pct;
    double m_cohumulone_pct;
    double m_myrcene_pct;
+   double m_inventory;
+   int m_inventory_id;
    bool m_cacheOnly;
 
    void setDefaults();
@@ -188,7 +193,7 @@ private:
    static QStringList uses;
    static QStringList types;
    static QStringList forms;
-   
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };
@@ -207,11 +212,11 @@ inline bool HopPtrEq( Hop* lhs, Hop* rhs)
 
 inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
 {
-   if ( lhs->use() == rhs->use() ) 
+   if ( lhs->use() == rhs->use() )
    {
       if ( lhs->time_min() == rhs->time_min() )
          return lhs->name() < rhs->name();
-      
+
       return lhs->time_min() > rhs->time_min();
    }
    return lhs->use() < rhs->use();

@@ -42,7 +42,7 @@ class Yeast : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "yeasts")
-   
+
    friend class Database;
    friend class YeastDialog;
 public:
@@ -53,9 +53,9 @@ public:
    //! \brief How flocculant the strain is.
    enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
    Q_ENUMS( Type Form Flocculation )
-   
+
    virtual ~Yeast() {}
-   
+
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The \c Type string.
@@ -72,6 +72,8 @@ public:
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
    //! \brief The amount in inventory in either liters or kg depending on \c amountIsWeight().
    Q_PROPERTY( double inventory READ inventory WRITE setInventoryQuanta /*NOTIFY changed*/ /*changedInventory*/ )
+   //! \brief The inventory id
+   Q_PROPERTY( double inventoryId READ inventoryId /* WRITE setInventoryQuanta*/ /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief Whether the \c amount() is weight (kg) or volume (liters).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
    //! \brief The lab from which it came.
@@ -100,12 +102,12 @@ public:
    Q_PROPERTY( int maxReuse READ maxReuse WRITE setMaxReuse /*NOTIFY changed*/ /*changedMaxReuse*/ )
    //! \brief Whether the yeast is added to secondary or primary.
    Q_PROPERTY( bool addToSecondary READ addToSecondary WRITE setAddToSecondary /*NOTIFY changed*/ /*changedAddToSecondary*/ )
-   
+
    // Setters
    void setType( Type t);
    void setForm( Form f);
    void setAmount( double var);
-   void setInventoryQuanta( int var);
+   void setInventoryQuanta(int var);
    void setAmountIsWeight( bool var);
    void setLaboratory( const QString& var);
    void setProductID( const QString& var);
@@ -119,7 +121,7 @@ public:
    void setMaxReuse( int var);
    void setAddToSecondary( bool var);
    void setCacheOnly( bool cache);
-   
+
    // Getters
    Type type() const;
    const QString typeString() const;
@@ -128,7 +130,8 @@ public:
    const QString formString() const;
    const QString formStringTr() const;
    double amount() const;
-   int inventory() const;
+   int inventory();
+   int inventoryId() const;
    bool amountIsWeight() const;
    QString laboratory() const;
    QString productID() const;
@@ -146,7 +149,7 @@ public:
    bool cacheOnly() const;
 
    static QString classNameStr();
-   
+
 signals:
 
    //! \brief Emitted when \c name() changes.
@@ -156,8 +159,8 @@ private:
    Yeast(Brewtarget::DBTable table, int key);
    Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Yeast(QString name, bool cache = true);
-   Yeast(Yeast const& other);
-   
+   Yeast(Yeast & other);
+
    QString m_typeString;
    Type m_type;
    QString m_formString;
@@ -176,6 +179,8 @@ private:
    int m_timesCultured;
    int m_maxReuse;
    bool m_addToSecondary;
+   int m_inventory;
+   int m_inventory_id;
    bool m_cacheOnly;
 
    static QStringList types;
@@ -186,7 +191,7 @@ private:
    bool isValidType(const QString& str) const;
    bool isValidForm(const QString& str) const;
    bool isValidFlocculation(const QString& str) const;
-   
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };

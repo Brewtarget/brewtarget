@@ -39,11 +39,11 @@ class Misc : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "miscs")
-   
+
    friend class Database;
    friend class MiscDialog;
 public:
-  
+
    //! \brief The type of ingredient.
    enum Type {Spice, Fining, Water_Agent, Herb, Flavor, Other}; // NOTE: BeerXML expects "Water Agent", but we can't have white space in enums :-/.
    //! \brief Where the ingredient is used.
@@ -51,9 +51,9 @@ public:
    //! \brief What is the type of amount.
    enum AmountType { AmountType_Weight, AmountType_Volume };
    Q_ENUMS( Type Use AmountType )
-   
+
    virtual ~Misc() {}
-   
+
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The  \c Type string.
@@ -78,13 +78,15 @@ public:
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
    //! \brief The amount in inventory in either kg or L, depending on \c amountIsWeight().
    Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedAmount*/ )
+   //! \brief The inventory id.
+   Q_PROPERTY( double inventoryId READ inventoryId /*WRITE setInventoryAmount*/ /*NOTIFY changed*/ /*changedAmount*/ )
    //! \brief Whether the amount is weight (kg), or volume (L).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
    //! \brief What to use it for.
    Q_PROPERTY( QString useFor READ useFor WRITE setUseFor /*NOTIFY changed*/ /*changedUseFor*/ )
    //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
-   
+
    // Set
    void setType( Type t );
    void setUse( Use u );
@@ -96,7 +98,7 @@ public:
    void setUseFor( const QString &var );
    void setNotes( const QString &var );
    void setCacheOnly( bool cache );
-   
+
    // Get
 //   QString name() const;
    Type type() const;
@@ -109,7 +111,8 @@ public:
    const QString amountTypeString() const;
    const QString amountTypeStringTr() const;
    double amount() const;
-   double inventory() const;
+   double inventory();
+   int inventoryId() const;
    double time() const;
    bool amountIsWeight() const;
    QString useFor() const;
@@ -117,9 +120,9 @@ public:
    bool cacheOnly() const;
 
    static QString classNameStr();
-   
+
 signals:
-   
+
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
 
@@ -127,8 +130,8 @@ private:
    Misc(Brewtarget::DBTable table, int key);
    Misc(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Misc(QString name, bool cache = true);
-   Misc(Misc const& other);
-   
+   Misc(Misc & other);
+
    QString m_typeString;
    Type m_type;
    QString m_useString;
@@ -138,11 +141,13 @@ private:
    bool m_amountIsWeight;
    QString m_useFor;
    QString m_notes;
+   double m_inventory;
+   int m_inventory_id;
    bool m_cacheOnly;
 
    bool isValidType( const QString &var );
    bool isValidUse( const QString &var );
-   
+
    static QStringList types;
    static QStringList uses;
    static QStringList amountTypes;

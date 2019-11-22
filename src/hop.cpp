@@ -85,6 +85,8 @@ Hop::Hop(Brewtarget::DBTable table, int key)
      m_caryophyllene_pct(0.0),
      m_cohumulone_pct(0.0),
      m_myrcene_pct(0.0),
+     m_inventory(-1.0),
+     m_inventory_id(0),
      m_cacheOnly(false)
 {
 }
@@ -109,6 +111,8 @@ Hop::Hop(QString name, bool cache)
      m_caryophyllene_pct(0.0),
      m_cohumulone_pct(0.0),
      m_myrcene_pct(0.0),
+     m_inventory(-1.0),
+     m_inventory_id(0),
      m_cacheOnly(cache)
 {
 }
@@ -133,11 +137,13 @@ Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_caryophyllene_pct(rec.value(kcolHopCaryophyllene).toDouble()),
      m_cohumulone_pct(rec.value(kcolHopCohumulone).toDouble()),
      m_myrcene_pct(rec.value(kcolHopMyrcene).toDouble()),
+     m_inventory(-1.0),
+     m_inventory_id(rec.value(kcolInventoryId).toInt()),
      m_cacheOnly(false)
 {
 }
 
-Hop::Hop( Hop const& other )
+Hop::Hop( Hop & other )
    : BeerXMLElement(other)
 {
 }
@@ -184,6 +190,7 @@ void Hop::setInventoryAmount( double num )
    }
    else
    {
+      m_inventory = num;
       if ( ! m_cacheOnly ) {
          setInventory(num);
       }
@@ -383,10 +390,18 @@ double Hop::cohumulone_pct() const { return m_cohumulone_pct; }
 double Hop::myrcene_pct() const { return m_myrcene_pct; }
 bool   Hop::cacheOnly() const { return m_cacheOnly; }
 
-// inventory still must be handled separately, and I'm still annoyed.
-double Hop::inventory() const
+// a little different in that we don't get the results in advance, but on the fly. I had to undo some const action to make this work
+double Hop::inventory()
 {
-   return getInventory(kpropInventory).toDouble();
+   if ( m_inventory < 0 ) {
+      m_inventory = getInventory(kpropInventory).toDouble();
+   }
+   return m_inventory;
+}
+
+int Hop::inventoryId() const
+{
+   return m_inventory_id;
 }
 
 const QString Hop::useStringTr() const

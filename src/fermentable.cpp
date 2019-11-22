@@ -70,6 +70,7 @@ Fermentable::Fermentable(QString name, bool cache)
      m_recommendMash(false),
      m_ibuGalPerLb(0.0),
      m_inventory(-1.0),
+     m_inventoryId(0),
      m_isMashed(false),
      m_cacheOnly(cache)
 {
@@ -94,6 +95,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key)
      m_recommendMash(true),
      m_ibuGalPerLb(0.0),
      m_inventory(-1.0),
+     m_inventoryId(0),
      m_isMashed(true),
      m_cacheOnly(false)
 {
@@ -118,6 +120,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_recommendMash(rec.value(kcolFermRecommendMash).toBool()),
      m_ibuGalPerLb(rec.value(kcolFermIBUGalPerLb).toDouble()),
      m_inventory(-1.0),
+     m_inventoryId(rec.value(kcolInventoryId).toInt()),
      m_isMashed(rec.value(kcolFermIsMashed).toBool()),
      m_cacheOnly(false)
 {
@@ -142,6 +145,7 @@ Fermentable::Fermentable( Fermentable &other )
    setMaxInBatch_pct( other.maxInBatch_pct() );
    setRecommendMash( other.recommendMash() );
    setInventoryAmount( other.inventory() );
+   setInventoryId( other.inventoryId() );
    setIbuGalPerLb( other.ibuGalPerLb() );
    setIsMashed(other.isMashed());
 }
@@ -369,12 +373,31 @@ void Fermentable::setInventoryAmount( double num )
    }
 }
 
+void Fermentable::setInventoryId( int key )
+{
+   if( key < 1 ) {
+      Brewtarget::logW( QString("Fermentable: bad inventory id: %1").arg(key) );
+      return;
+   }
+   else
+   {
+      m_inventoryId = key;
+      if ( ! m_cacheOnly )
+         setEasy(kpropInventoryId,key);
+   }
+}
+
 double Fermentable::inventory()
 {
    if ( m_inventory < 0 ) {
       m_inventory = getInventory(kpropInventory).toDouble();
    }
    return m_inventory;
+}
+
+int Fermentable::inventoryId()
+{
+   return m_inventoryId;
 }
 
 void Fermentable::setYield_pct( double num )

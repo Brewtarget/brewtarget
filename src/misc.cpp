@@ -55,6 +55,8 @@ Misc::Misc(Brewtarget::DBTable table, int key)
    m_amountIsWeight(false),
    m_useFor(QString()),
    m_notes(QString()),
+   m_inventory(-1.0),
+   m_inventory_id(0),
    m_cacheOnly(false)
 {
 }
@@ -70,11 +72,13 @@ Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_amountIsWeight(rec.value(kcolMiscAmtIsWgt).toBool()),
    m_useFor(rec.value(kcolMiscUseFor).toString()),
    m_notes(rec.value(kcolNotes).toString()),
+   m_inventory(-1.0),
+   m_inventory_id(rec.value(kcolInventoryId).toInt()),
    m_cacheOnly(false)
 {
 }
 
-Misc::Misc(Misc const& other) : BeerXMLElement(other)
+Misc::Misc(Misc & other) : BeerXMLElement(other)
 {
 }
 
@@ -89,6 +93,8 @@ Misc::Misc(QString name, bool cache)
    m_amountIsWeight(false),
    m_useFor(QString()),
    m_notes(QString()),
+   m_inventory(-1.0),
+   m_inventory_id(0),
    m_cacheOnly(cache)
 {
 }
@@ -102,9 +108,9 @@ Misc::Use Misc::use() const { return m_use; }
 
 const QString Misc::useString() const { return m_useString; }
 
-double Misc::amount()    const { return m_amount; }
+double Misc::amount() const { return m_amount; }
 
-double Misc::time()      const { return m_time; }
+double Misc::time() const { return m_time; }
 
 bool Misc::amountIsWeight() const { return m_amountIsWeight; }
 
@@ -112,10 +118,15 @@ QString Misc::useFor() const { return m_useFor; }
 
 QString Misc::notes() const { return m_notes; }
 
-double Misc::inventory() const
+double Misc::inventory()
 {
-   return getInventory(kpropInventory).toDouble();
+   if ( m_inventory < 0.0 ) {
+      m_inventory = getInventory(kpropInventory).toDouble();
+   }
+   return m_inventory;
 }
+
+int Misc::inventoryId() const { return m_inventory_id; }
 
 Misc::AmountType Misc::amountType() const { return m_amountIsWeight ? AmountType_Weight : AmountType_Volume; }
 
@@ -124,7 +135,7 @@ const QString Misc::amountTypeString() const { return amountTypes.at(amountType(
 const QString Misc::typeStringTr() const
 {
    QStringList typesTr = QStringList() << tr("Spice") << tr("Fining") << tr("Water Agent") << tr("Herb") << tr("Flavor") << tr("Other");
-   if ( m_type >= 0 && m_type < typesTr.size()  ) {
+   if ( m_type >=  Spice && m_type < typesTr.size()  ) {
       return typesTr.at(m_type);
    }
    else {
@@ -135,7 +146,7 @@ const QString Misc::typeStringTr() const
 const QString Misc::useStringTr() const
 {
    QStringList usesTr = QStringList() << tr("Boil") << tr("Mash") << tr("Primary") << tr("Secondary") << tr("Bottling");
-   if ( m_use >= 0 && m_use < usesTr.size() ) {
+   if ( m_use >= Boil && m_use < usesTr.size() ) {
       return usesTr.at(use());
    }
    else {
@@ -224,7 +235,9 @@ void Misc::setInventoryAmount( double var )
    if( var < 0.0 )
       Brewtarget::logW( QString("Misc: inventory < 0: %1").arg(var) );
    else {
-      setInventory(var);
+      m_inventory = var;
+      if ( ! m_cacheOnly )
+         setInventory(var);
    }
 }
 

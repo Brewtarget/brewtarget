@@ -568,6 +568,15 @@ const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes 
 
       columns += QString(",%1").arg( prop->colName(selected));
    }
+
+   QMapIterator<QString, PropertySchema*> j(m_foreignKeys);
+   while ( j.hasNext() ) {
+      j.next();
+      PropertySchema* key = j.value();
+
+      columns += QString(",%1").arg(key->colName(selected));
+   }
+
    return QString("INSERT INTO %1 (%2) SELECT %2 FROM %3").arg(dest).arg(columns).arg(m_tableName);
 
 }
@@ -738,7 +747,7 @@ void TableSchema::defineStyleTable()
    // not sure about these, but I think I'm gonna need them anyway
    m_properties[kpropDisplay]   = new PropertySchema(kpropDisplay,   kcolDisplay,       QString(),        QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]   = new PropertySchema(kpropDeleted,   kcolDeleted,       QString(),        QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]    = new PropertySchema(kpropFolder,    kpropFolder,       QString(),        QString("text"), QString("''"));
+   m_properties[kpropFolder]    = new PropertySchema(kpropFolder,    kcolFolder,       QString(),        QString("text"), QString("''"));
 }
 
 void TableSchema::defineEquipmentTable()
@@ -773,7 +782,7 @@ void TableSchema::defineEquipmentTable()
 
    m_properties[kpropDisplay]       = new PropertySchema( kpropDisplay,       kcolDisplay,       QString(),               QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]       = new PropertySchema( kpropDeleted,       kcolDeleted,       QString(),               QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]        = new PropertySchema( kpropFolder,        kpropFolder,       QString(),               QString("text"), QString("''"));
+   m_properties[kpropFolder]        = new PropertySchema( kpropFolder,        kcolFolder,       QString(),               QString("text"), QString("''"));
 
 }
 
@@ -810,7 +819,11 @@ void TableSchema::defineFermentableTable()
 
    m_properties[kpropDisplay]        = new PropertySchema( kpropDisplay,        kcolDisplay,            QString(),              QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]        = new PropertySchema( kpropDeleted,        kcolDeleted,            QString(),              QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]         = new PropertySchema( kpropFolder,         kpropFolder,            QString(),              QString("text"), QString("''"));
+   m_properties[kpropFolder]         = new PropertySchema( kpropFolder,         kcolFolder,             QString(),              QString("text"), QString("''"));
+
+   // the inventory system is getting interesting
+   m_foreignKeys[kpropInventoryId]   = new PropertySchema( kpropInventoryId,    kcolInventoryId,        QString("integer"),    m_invTable);
+
 }
 
 void TableSchema::defineHopTable()
@@ -846,7 +859,9 @@ void TableSchema::defineHopTable()
 
    m_properties[kpropDisplay]       = new PropertySchema( kpropDisplay,       kcolDisplay,          QString(),             QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]       = new PropertySchema( kpropDeleted,       kcolDeleted,          QString(),             QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]        = new PropertySchema( kpropFolder,        kpropFolder,          QString(),             QString("text"), QString("''"));
+   m_properties[kpropFolder]        = new PropertySchema( kpropFolder,        kcolFolder,           QString(),             QString("text"), QString("''"));
+
+   m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
 
 void TableSchema::defineInstructionTable()
@@ -893,7 +908,7 @@ void TableSchema::defineMashTable()
 
    m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,         QString(),           QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,         QString(),           QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kpropFolder,         QString(),           QString("text"), QString("''"));
+   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,         QString(),           QString("text"), QString("''"));
 }
 
 // property name, column name, xml property name, column type, column default, column constraint
@@ -919,7 +934,7 @@ void TableSchema::defineMashstepTable()
 
    m_properties[kpropDisplay]    = new PropertySchema( kpropDisplay,    kcolDisplay,            QString(),          QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]    = new PropertySchema( kpropDeleted,    kcolDeleted,            QString(),          QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]     = new PropertySchema( kpropFolder,     kpropFolder,            QString(),          QString("text"), QString("''"));
+   m_properties[kpropFolder]     = new PropertySchema( kpropFolder,     kcolFolder,            QString(),          QString("text"), QString("''"));
 
    m_foreignKeys[kpropMashId]    = new PropertySchema( kpropMashId,     kcolMashId,       QString("integer"), Brewtarget::MASHTABLE);
 
@@ -950,7 +965,9 @@ void TableSchema::defineMiscTable()
 
    m_properties[kpropDisplay]  = new PropertySchema( kpropDisplay,  kcolDisplay,      QString(),        QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]  = new PropertySchema( kpropDeleted,  kcolDeleted,      QString(),        QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]   = new PropertySchema( kpropFolder,   kpropFolder,      QString(),        QString("text"), QString("''"));
+   m_properties[kpropFolder]   = new PropertySchema( kpropFolder,   kcolFolder,      QString(),        QString("text"), QString("''"));
+
+   m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
 
 void TableSchema::defineRecipeTable()
@@ -995,7 +1012,7 @@ void TableSchema::defineRecipeTable()
 
    m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,            QString(),            QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,            QString(),            QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kpropFolder,            QString(),            QString("text"), QString("''"));
+   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,            QString(),            QString("text"), QString("''"));
    m_properties[kpropLocked]      = new PropertySchema( kpropLocked,      kcolLocked,             QString(),            QString("boolean"), QVariant(false));
 
    // enough properties, now some foreign keys
@@ -1031,7 +1048,7 @@ void TableSchema::defineYeastTable()
    m_properties[kpropMinTemp]    = new PropertySchema( kpropMinTemp,    kcolYeastMinTemp,    kxmlPropMinTemp,    QString("real"), QVariant(0.0));
    m_properties[kpropMaxTemp]    = new PropertySchema( kpropMaxTemp,    kcolYeastMaxTemp,    kxmlPropMaxTemp,    QString("real"), QVariant(0.0));
    m_properties[kpropFloc]       = new PropertySchema( kpropFlocString, kcolYeastFloc,       QString(),          QString("text"), QObject::tr("'Medium'"));
-   m_properties[kpropAtten]      = new PropertySchema( kpropAttenPct,   kcolYeastAtten,      kxmlPropAtten,      QString("real"), QVariant(75.0));
+   m_properties[kpropAttenPct]   = new PropertySchema( kpropAttenPct,   kcolYeastAtten,      kxmlPropAtten,      QString("real"), QVariant(75.0));
    m_properties[kpropBestFor]    = new PropertySchema( kpropBestFor,    kcolYeastBestFor,    kxmlPropBestFor,    QString("text"), QString("''"));
    m_properties[kpropTimesCultd] = new PropertySchema( kpropTimesCultd, kcolYeastTimesCultd, kxmlPropTimesCultd, QString("int"), QVariant(0));
    m_properties[kpropMaxReuse]   = new PropertySchema( kpropMaxReuse,   kcolYeastMaxReuse,   kxmlPropMaxReuse,   QString("int"), QVariant(10));
@@ -1039,8 +1056,9 @@ void TableSchema::defineYeastTable()
 
    m_properties[kpropDisplay]    = new PropertySchema( kpropDisplay,    kcolDisplay,         QString(),          QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]    = new PropertySchema( kpropDeleted,    kcolDeleted,         QString(),          QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]     = new PropertySchema( kpropFolder,     kpropFolder,         QString(),          QString("text"), QString("''"));
+   m_properties[kpropFolder]     = new PropertySchema( kpropFolder,     kcolFolder,          QString(),          QString("text"),    QString("''"));
 
+   m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
 
 void TableSchema::defineBrewnoteTable()
@@ -1085,7 +1103,7 @@ void TableSchema::defineBrewnoteTable()
 
    m_properties[kpropDisplay]         = new PropertySchema( kpropDisplay,         kcolDisplay,              QString(),               QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]         = new PropertySchema( kpropDeleted,         kcolDeleted,              QString(),               QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]          = new PropertySchema( kpropFolder,          kpropFolder,              QString(),               QString("text"), QString("''"));
+   m_properties[kpropFolder]          = new PropertySchema( kpropFolder,          kcolFolder,              QString(),               QString("text"), QString("''"));
 
    m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, QString("integer"), Brewtarget::RECTABLE);
 
@@ -1118,7 +1136,7 @@ void TableSchema::defineWaterTable()
 
    m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kpropFolder,          QString(),           QString("text"),    QString("''"));
+   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,          QString(),           QString("text"),    QString("''"));
 
 }
 

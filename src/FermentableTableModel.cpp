@@ -81,6 +81,7 @@ void FermentableTableModel::observeRecipe(Recipe* rec)
    if( recObs )
    {
       connect( recObs, &BeerXMLElement::changed, this, &FermentableTableModel::changed );
+      connect( &(Database::instance()), &Database::changedInventory, this, &FermentableTableModel::changedInventory );
       addFermentables( recObs->fermentables() );
    }
 }
@@ -128,18 +129,16 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
    QList<Fermentable*>::iterator i;
    QList<Fermentable*> tmp;
 
-   for( i = ferms.begin(); i != ferms.end(); i++ )
-   {
-      if ( recObs ) {
-         qDebug() << Q_FUNC_INFO << recObs->name() << "::" << (*i)->name();
+   for( i = ferms.begin(); i != ferms.end(); i++ ) {
+      if ( recObs == nullptr  && ( (*i)->deleted() || !(*i)->display() ) ) {
+            continue;
       }
       if( !fermObs.contains(*i) )
          tmp.append(*i);
    }
 
    int size = fermObs.size();
-   if (size+tmp.size())
-   {
+   if (size+tmp.size()) {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       fermObs.append(tmp);
 
@@ -205,7 +204,25 @@ void FermentableTableModel::setDisplayPercentages(bool var)
    displayPercentages = var;
 }
 
-void FermentableTableModel::changed(QMetaProperty prop, QVariant val)
+void FermentableTableModel::changedInventory(Brewtarget::DBTable table, int invKey, QVariant val)
+{
+
+   if ( table == Brewtarget::FERMTABLE ) {
+      for( int i = 0; i < fermObs.size(); ++i ) {
+         Fermentable* holdmybeer = fermObs.at(i);
+
+         if ( invKey == holdmybeer->inventoryId() ) {
+            holdmybeer->setCacheOnly(true);
+            holdmybeer->setInventoryAmount(val.toDouble());
+            holdmybeer->setCacheOnly(false);
+            emit dataChanged( QAbstractItemModel::createIndex(i,FERMINVENTORYCOL),
+                              QAbstractItemModel::createIndex(i,FERMINVENTORYCOL) );
+         }
+      }
+   }
+}
+
+void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
 
@@ -217,10 +234,6 @@ void FermentableTableModel::changed(QMetaProperty prop, QVariant val)
       if( i < 0 )
          return;
 
-      qDebug() << "Caught a signal for key =" << fermSender->key() << "column =" << QString(prop.name());
-      if ( QString(prop.name()) == "inventory" ) {
-         qDebug() << "Trying to set column to " << val;
-      }
       updateTotalGrains();
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, FERMNUMCOLS-1));

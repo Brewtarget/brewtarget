@@ -166,14 +166,10 @@ protected:
     * \param col_name - The database column of the attribute we want to get.
     * Returns the value of the attribute specified by key/table/col_name.
     */
-   QVariant get( const char* col_name ) const;
    QVariant get( const QString& col_name ) const;
 
    void setInventory( const QVariant& value, bool notify=true );
-
-   QVariant getInventory( const char* col_name ) const;
    QVariant getInventory( const QString& col_name ) const;
-
 
    QVariantMap getColumnValueMap() const;
 

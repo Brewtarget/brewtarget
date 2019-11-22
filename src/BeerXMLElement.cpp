@@ -258,24 +258,15 @@ void BeerXMLElement::setEasy(QString prop_name, QVariant value, bool notify)
    Database::instance().updateEntry(this,prop_name,value,notify);
 }
 
-QVariant BeerXMLElement::get( const char* col_name ) const
+
+QVariant BeerXMLElement::get( const QString& col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
 }
 
-QVariant BeerXMLElement::get( const QString& col_name ) const
-{
-   return get(col_name.toUtf8().constData());
-}
-
 void BeerXMLElement::setInventory( const QVariant& value, bool notify )
 {
-    Database::instance().setInventory( this, value, notify );
-}
-
-QVariant BeerXMLElement::getInventory( const char* col_name ) const
-{
-   return getInventory(QString(col_name));
+   Database::instance().setInventory( this, value, notify );
 }
 
 QVariant BeerXMLElement::getInventory( const QString& col_name ) const

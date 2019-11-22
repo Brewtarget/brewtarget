@@ -77,7 +77,9 @@ public:
    //! \brief The amount in kg.
    Q_PROPERTY( double amount_kg              READ amount_kg              WRITE setAmount_kg              /*NOTIFY changed*/ /*changedAmount_kg*/ )
    //! \brief The amount in inventory in kg.
-   Q_PROPERTY( double inventory              READ inventory              WRITE setInventoryAmount              /*NOTIFY changed*/ /*changedInventory*/ )
+   Q_PROPERTY( double inventory              READ inventory              WRITE setInventoryAmount        /*NOTIFY changed*/ /*changedInventory*/ )
+   //! \brief The inventory table id, needed for signals
+   Q_PROPERTY( double inventoryId            READ inventoryId            WRITE setInventoryId            /*NOTIFY changed*/ /*changedInventoryId*/ )
    //! \brief The yield (when finely milled) as a percentage of equivalent glucose.
    Q_PROPERTY( double yield_pct              READ yield_pct              WRITE setYield_pct              /*NOTIFY changed*/ /*changedYield_pct*/ )
    //! \brief The color in SRM.
@@ -116,6 +118,7 @@ public:
    Type type() const;
    double amount_kg() const;
    double inventory();
+   int inventoryId();
    double yield_pct() const;
    double color_srm() const;
    bool addAfterBoil() const;
@@ -167,6 +170,7 @@ public:
    void setIbuGalPerLb( double num );
    void setIsMashed(bool var );
    void setCacheOnly(bool cache );
+   void setInventoryId(int key);
 
    void save();
 
@@ -206,6 +210,7 @@ private:
    bool m_recommendMash;
    double m_ibuGalPerLb;
    double m_inventory;
+   int m_inventoryId;
    bool m_isMashed;
    bool m_cacheOnly;
 };
@@ -225,7 +230,7 @@ inline bool FermentablePtrEq( Fermentable* lhs, Fermentable* rhs)
 inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentable* rhs)
 {
    // Sort by name if the two fermentables are of equal weight
-   if ( lhs->amount_kg() == rhs->amount_kg() )
+   if ( qFuzzyCompare(lhs->amount_kg(), rhs->amount_kg() ) )
       return lhs->name() < rhs->name();
 
    // Yes. I know. This seems silly, but I want the returned list in
