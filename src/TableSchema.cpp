@@ -99,6 +99,7 @@ TableSchema::TableSchema(Brewtarget::DBTable table)
       m_inRecTable(Brewtarget::NOTABLE),
       m_invTable(Brewtarget::NOTABLE),
       m_btTable(Brewtarget::NOTABLE),
+      m_trigger(QString()),
       m_defType(Brewtarget::dbType())
 {
     // for this bit of ugly, I gain a lot of utility.
@@ -114,6 +115,7 @@ Brewtarget::DBTable TableSchema::childTable() const  { return m_childTable; }
 Brewtarget::DBTable TableSchema::inRecTable() const { return m_inRecTable; }
 Brewtarget::DBTable TableSchema::invTable() const { return m_invTable; }
 Brewtarget::DBTable TableSchema::btTable() const { return m_btTable; }
+const QString TableSchema::triggerProperty() const { return m_trigger; }
 
 const QMap<QString,PropertySchema*> TableSchema::properties() const { return m_properties; }
 const QMap<QString,PropertySchema*> TableSchema::foreignKeys() const { return m_foreignKeys; }
@@ -556,6 +558,7 @@ const QString TableSchema::generateUpdateRow(Brewtarget::DBTypes type)
            .arg(columns)
            .arg(keyName(selected));
 }
+
 const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes type )
 {
    Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
@@ -581,6 +584,95 @@ const QString TableSchema::generateCopyTable( QString dest, Brewtarget::DBTypes 
 
 }
 
+// right now, only instruction_number has an increment (or decrement) trigger.
+// if we invent others, the m_trigger property will need to be set for that table.
+// this only handles one trigger per table. It could be made to handle a list, maybe.
+const QString TableSchema::generateIncrementTrigger(Brewtarget::DBTypes type)
+{
+   QString retval;
+
+   if ( m_trigger.isEmpty() )
+      return retval;
+
+   if ( type == Brewtarget::PGSQL ) {
+      // create or replace function increment_instruction_num() returns trigger as $BODY$
+      //   begin update instruction_in_recipe set instruction_number = (SELECT max(instruction_number) from instruction_in_recipe where recipe_id = new.recipe_id) + 1
+      //         where id = NEW.id;
+      //         return NULL;
+      //   end;
+      //   $BODY$ LANGUAGE plpgsql;
+      retval = QString("CREATE OR REPLACE FUNCTION increment_instruction_num() RETURNS TRIGGER AS $BODY$ "
+                       "BEGIN UPDATE %1 SET %2 = (SELECT max(%2) from %1 where %3 = NEW.%3) + 1 WHERE %4 = NEW.%4; "
+                       "return NULL;"
+                       "END;"
+                       "$BODY$ LANGUAGE plpgsql;")
+            .arg(m_tableName)
+            .arg(propertyToColumn(m_trigger))
+            .arg(recipeIndexName())
+            .arg(keyName());
+      // I do not like this, in that I am stringing these together in bad ways
+      retval += QString("CREATE TRIGGER inc_ins_num AFTER INSERT ON %1 "
+                        "FOR EACH ROW EXECUTE PROCEDURE increment_instruction_num();")
+            .arg(m_tableName);
+   }
+   else {
+     retval = QString("CREATE TRIGGER inc_ins_num AFTER INSERT ON %1 "
+                      "BEGIN "
+                         "UPDATE %1 SET %2 = (SELECT max(%2) from %1 where %3 = new.%3) + 1 "
+                         "WHERE rowid = new.rowid;"
+                      "END")
+           .arg(m_tableName)
+           .arg(propertyToColumn(m_trigger))
+           .arg(recipeIndexName());
+   }
+   return retval;
+}
+
+const QString TableSchema::generateDecrementTrigger(Brewtarget::DBTypes type)
+{
+   QString retval;
+
+   if ( m_trigger.isEmpty() )
+      return retval;
+
+   if ( type == Brewtarget::PGSQL ) {
+      // create or replace function decrement_instruction_num() returns trigger as $BODY$
+      //   begin update instruction_in_recipe set instruction_number = instruction_number - 1
+      //         where recipe_id = OLD.recipe_id AND instruction_number > OLD.instruction_number;
+      //         return NULL;
+      //   end;
+      //   $BODY$ LANGUAGE plpgsql;
+      retval = QString("CREATE OR REPLACE FUNCTION decrement_instruction_num() RETURNS TRIGGER AS $BODY$ "
+                       "BEGIN"
+                         "UPDATE %1 SET %2 = %2 - 1 "
+                         "WHERE %3 = OLD.%3 AND %2 > OLD.%2;"
+                         "return NULL;"
+                       "END;"
+                       "$BODY$ LANGUAGE plpgsql;")
+            .arg(tableName())
+            .arg(propertyToColumn(m_trigger))
+            .arg(recipeIndexName());
+      retval += QString("CREATE TRIGGER dec_ins_num AFTER DELETE ON %1 "
+                        "FOR EACH ROW EXECUTE PROCEDURE decrement_instruction_num();")
+            .arg(tableName());
+   }
+   else {
+      // CREATE TRIGGER dec_ins_num after DELETE ON instruction_in_recipe
+      // BEGIN
+      //   UPDATE instuction_in_recipe SET instruction_number = instruction_number - 1
+      //   WHERE recipe_id = OLD.recipe_id AND  instruction_number > OLD.instruction_number
+      // END
+     retval = QString("CREATE TRIGGER dec_ins_num AFTER DELETE ON %1 "
+                      "BEGIN "
+                        "UPDATE %1 SET %2 = %2 - 1 "
+                        "WHERE %3 = OLD.%3 AND %1 > OLD.%1; "
+                      "END")
+           .arg( tableName() )
+           .arg(propertyToColumn(m_trigger))
+           .arg(recipeIndexName());
+   }
+   return retval;
+}
 // This got long. Not sure if there's a better way to do it.
 void TableSchema::defineTable()
 {
@@ -1171,6 +1263,7 @@ void TableSchema::defineInRecipeTable(QString childIdx, Brewtarget::DBTable tabl
 void TableSchema::defineInstructionInRecipeTable(QString childIdx, Brewtarget::DBTable table)
 {
    m_type = INREC;
+   m_trigger = kpropInstructionNumber;
 
    m_key                        = new PropertySchema();
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);

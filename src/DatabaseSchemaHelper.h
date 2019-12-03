@@ -24,8 +24,9 @@
 #include <QString>
 #include <QSqlDatabase>
 
+#include "DatabaseSchema.h"
 
-   class DatabaseSchema;
+
 /*!
  * \brief Helper to Database that manages schema stuff
  * \author Philip G. Lee
@@ -359,7 +360,7 @@ private:
    /*!
     * \brief Create a blank database whose schema version is \c dbVersion
     */
-   static bool create(QSqlDatabase db = QSqlDatabase(), Brewtarget::DBTypes dbType = Brewtarget::NODB);
+   static bool create(QSqlDatabase db, DatabaseSchema* defn, Brewtarget::DBTypes dbType = Brewtarget::NODB);
 
    /*!
     * \brief Migrate from version \c oldVersion to \c oldVersion+1
@@ -430,14 +431,14 @@ private:
    static bool create_pgsql_decrement_trigger(QSqlQuery q);
    static bool create_sqlite_decrement_trigger(QSqlQuery q);
 
-   static bool migrate_to_202(QSqlQuery q);
-   static bool migrate_to_210(QSqlQuery q);
-   static bool migrate_to_4(QSqlQuery q);
-   static bool migrate_to_5(QSqlQuery q);
-   static bool migrate_to_6(QSqlQuery q);
-   static bool migrate_to_7(QSqlQuery q);
-   static bool migration_aide_8(QSqlQuery q, Brewtarget::DBTable table );
-   static bool migrate_to_8(QSqlQuery q);
+   static bool migrate_to_202(QSqlQuery q, DatabaseSchema *defn);
+   static bool migrate_to_210(QSqlQuery q, DatabaseSchema *defn);
+   static bool migrate_to_4(QSqlQuery q, DatabaseSchema *defn);
+   static bool migrate_to_5(QSqlQuery q, DatabaseSchema *defn);
+   static bool migrate_to_6(QSqlQuery q, DatabaseSchema *defn);
+   static bool migrate_to_7(QSqlQuery q, DatabaseSchema *defn);
+   static bool migration_aide_8(QSqlQuery q, DatabaseSchema* defn, Brewtarget::DBTable table );
+   static bool migrate_to_8(QSqlQuery q, DatabaseSchema *defn);
 };
 
 #endif

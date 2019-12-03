@@ -23,6 +23,7 @@
 #include "TableSchema.h"
 #include "TableSchemaConst.h"
 #include "DatabaseSchema.h"
+#include "InstructionSchema.h"
 
 // These HAVE to be in the same order as they are listed in
 // Brewtarget::DBTable
@@ -124,7 +125,7 @@ const QString DatabaseSchema::generateCreateTable(Brewtarget::DBTable table, QSt
 
    TableSchema* tSchema = m_tables.at(table);
 
-   return tSchema->generateCreateTable(m_type);
+   return tSchema->generateCreateTable(m_type,name);
 }
 
 // these two basically just pass the call to the proper table

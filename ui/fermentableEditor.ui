@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>351</height>
+    <width>605</width>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,7 +62,7 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>1000</width>
+              <width>100</width>
               <height>16777215</height>
              </size>
             </property>
@@ -298,6 +298,9 @@
          <property name="text">
           <string>Amount in Inventory</string>
          </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
          <property name="buddy">
           <cstring>lineEdit_inventory</cstring>
          </property>
@@ -328,7 +331,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,0">
        <item>
         <widget class="QLabel" name="label_origin">
          <property name="text">
@@ -349,7 +352,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>1000</width>
+           <width>100</width>
            <height>16777215</height>
           </size>
          </property>
@@ -382,7 +385,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>1000</width>
+           <width>100</width>
            <height>16777215</height>
           </size>
          </property>
@@ -399,6 +402,9 @@
         <widget class="QLabel" name="label_coarseFineDiff">
          <property name="text">
           <string>Coarse/Fine Diff (%)</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
          <property name="buddy">
           <cstring>lineEdit_coarseFineDiff</cstring>

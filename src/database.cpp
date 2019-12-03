@@ -82,6 +82,7 @@
 
 // Static members.
 Database* Database::dbInstance = nullptr;
+DatabaseSchema* Database::dbDefn;
 QString Database::dbHostname;
 int Database::dbPortnum;
 QString Database::dbUsername;
@@ -302,7 +303,7 @@ bool Database::load()
    // This should work regardless of the db being used.
    if( createFromScratch )
    {
-         bool success = DatabaseSchemaHelper::create(sqldb);
+         bool success = DatabaseSchemaHelper::create(sqldb,dbDefn);
          if( !success )
          {
             Brewtarget::logE("DatabaseSchemaHelper::create() failed");
@@ -433,7 +434,7 @@ bool Database::createBlank(QString const& filename)
          return false;
       }
 
-      DatabaseSchemaHelper::create(sqldb);
+      DatabaseSchemaHelper::create(sqldb,dbDefn);
 
       sqldb.close();
    } // sqldb gets destroyed as it goes out of scope before removeDatabase()
@@ -723,7 +724,6 @@ bool Database::restoreFromFile(QString newDbFileStr)
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
 {
    const QMetaObject* meta = ing->metaObject();
-   Brewtarget::DBTypes dbType = Brewtarget::dbType();
    TableSchema *table;
    TableSchema *child;
    TableSchema *inrec;
@@ -751,19 +751,14 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       // delete from misc_in_recipe where misc_id = [misc key] and recipe_id = [rec key]
       QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND %4=%5")
                                  .arg(inrec->tableName() )
-                                 .arg(inrec->inRecIndexName(dbType))
+                                 .arg(inrec->inRecIndexName())
                                  .arg(ing->_key)
                                  .arg(inrec->recipeIndexName())
                                  .arg(rec->_key);
-      // delete from misc_child where child_id = [misc key]
-      QString deleteFromChildren = QString("DELETE FROM %1 WHERE %2=%3")
-                                 .arg(child->tableName())
-                                 .arg( child->childIndexName(dbType) )
-                                 .arg(ing->_key);
       // delete from misc where id = [misc key]
       QString deleteIngredient = QString("DELETE FROM %1 where %2=%3")
                                  .arg(table->tableName())
-                                 .arg(table->keyName(dbType))
+                                 .arg(table->keyName())
                                  .arg(ing->_key);
       q.setForwardOnly(true);
 
@@ -773,8 +768,16 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       // I don't really like this, but I can't think of a better solution. Of
       // all the ingredients, instructions don't have a _children table. Given
       // that it is only one table, I will try the easy way first
-      if ( table->dbTable() != Brewtarget::INSTRUCTIONTABLE && ! q.exec( deleteFromChildren ) )
-         throw QString("failed to delete children.");
+      if ( table->dbTable() != Brewtarget::INSTRUCTIONTABLE ) {
+         // delete from misc_child where child_id = [misc key]
+         QString deleteFromChildren = QString("DELETE FROM %1 WHERE %2=%3")
+                                    .arg(child->tableName())
+                                    .arg( child->childIndexName() )
+                                    .arg(ing->_key);
+         if ( ! q.exec( deleteFromChildren ) ) {
+            throw QString("failed to delete children.");
+         }
+      }
 
       if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
@@ -917,7 +920,7 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
    QString update =
       QString( "UPDATE %1 SET %2 = CASE %3 WHEN %4 THEN %5 WHEN %6 THEN %7 END WHERE %2 IN (%4,%6)")
       .arg(tbl->tableName())
-      .arg(tbl->propertyToColumn(kcolInstructionNumber))
+      .arg(tbl->propertyToColumn(kpropInstructionNumber))
       .arg(tbl->childIndexName())
       .arg(in1->_key)
       .arg(in2->instructionNumber())
@@ -991,7 +994,7 @@ void Database::insertInstruction(Instruction* in, int pos)
       // SELECT instruction_id, instruction_number FROM instruction_in_recipe WHERE recipe_id=[key] and instruction_number>[pos]")
       query = QString("SELECT %1, %2 FROM %3 WHERE %4=%5 and %2>%6")
          .arg( tbl->inRecIndexName() )
-         .arg( tbl->propertyToColumn(kcolInstructionNumber) )
+         .arg( tbl->propertyToColumn(kpropInstructionNumber) )
          .arg( tbl->tableName() )
          .arg( tbl->recipeIndexName())
          .arg(parentRecipeKey)
@@ -1002,7 +1005,7 @@ void Database::insertInstruction(Instruction* in, int pos)
 
       while( q.next() ) {
          Instruction* inst = allInstructions[q.record().value(tbl->inRecIndexName()).toInt() ];
-         int newPos = q.record().value(tbl->propertyToColumn(kcolInstructionNumber)).toInt();
+         int newPos = q.record().value(tbl->propertyToColumn(kpropInstructionNumber)).toInt();
 
          emit inst->changed( inst->metaProperty("instructionNumber"),newPos );
       }
@@ -1011,7 +1014,7 @@ void Database::insertInstruction(Instruction* in, int pos)
       // UPDATE instruction_in_recipe set instruction_number = [pos] where instruction_id=[key]
       update = QString( "UPDATE %1 SET %2=%3 WHERE %4=%5")
          .arg(tbl->tableName())
-         .arg(tbl->propertyToColumn(kcolInstructionNumber))
+         .arg(tbl->propertyToColumn(kpropInstructionNumber))
          .arg(pos)
          .arg( tbl->inRecIndexName() )
          .arg(in->_key);
@@ -1305,7 +1308,7 @@ Instruction* Database::newInstruction(Recipe* rec)
       tmp = addIngredientToRecipe<Instruction>(rec,tmp,true,nullptr,false,false);
    }
    catch ( QString e ) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      Brewtarget::logE( QString("%1 %2").arg( Q_FUNC_INFO ).arg(e));
       sqlDatabase().rollback();
       throw;
    }
@@ -1326,7 +1329,7 @@ int Database::instructionNumber(Instruction const* in)
    QString query = QString("SELECT %1 FROM %2 WHERE %3=%4")
          .arg(colName)
          .arg(tbl->tableName())
-         .arg(tbl->childIndexName())
+         .arg(tbl->inRecIndexName())
          .arg(in->key());
 
    QSqlQuery q(query,sqlDatabase());
@@ -2015,7 +2018,7 @@ void Database::setInventory(BeerXMLElement* ins, QVariant value, bool notify )
 
    QString invProp = inv->propertyName(kpropInventory);
 
-   // int ndx = ins->metaObject()->indexOfProperty(invProp.toUtf8().data());
+   int ndx = ins->metaObject()->indexOfProperty(invProp.toUtf8().data());
    // I would like to get rid of this, but I need it to properly signal
    int invKey = getInventoryId(tbl, ins->_key);
 
@@ -2024,7 +2027,6 @@ void Database::setInventory(BeerXMLElement* ins, QVariant value, bool notify )
    }
 
    if ( invKey == 0 ) {
-      qDebug() << "Bad inventory request";
       return;
    }
 
@@ -2279,14 +2281,15 @@ int Database::newInventory(TableSchema* schema, int elementId) {
 QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
 {
    QMap<int, double> result;
-   TableSchema* tbl = dbDefn->childTable(table);
-   QString id     = tbl->childIndexName();
-   QString amount = tbl->propertyToColumn(kpropAmount);
+   TableSchema* inv = dbDefn->invTable(table);
+   QString id       = inv->invIndexName();
+   QString amount   = inv->propertyToColumn(kpropAmount);
 
+   // select fermentable_id,amount from fermentable_in_inventory where amount > 0
    QString query = QString("SELECT %1,%2 FROM %3 WHERE %2 > 0")
                          .arg(id)
                          .arg(amount)
-                         .arg(tbl->tableName());
+                         .arg(inv->tableName());
 
    QSqlQuery sql(query, sqlDatabase());
    if (! sql.isActive()) {
@@ -2295,6 +2298,7 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
             .arg(sql.lastError().text());
    }
 
+   // do not be fooled. the variable amount may contain 'amount' or 'quanta'
    while (sql.next()) {
       result[sql.value(id).toInt()] = sql.value(amount).toDouble();
    }
@@ -4856,9 +4860,10 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
       QString findAllQuery = QString("SELECT * FROM %1 order by %2 asc").arg(tname).arg(table->keyName(oldType));
       try {
-
          if (! readOld.exec(findAllQuery) )
-            throw QString("Could not execute %1 : %2").arg(readOld.lastQuery()).arg(readOld.lastError().text());
+            throw QString("Could not execute %1 : %2")
+               .arg(readOld.lastQuery())
+               .arg(readOld.lastError().text());
 
          newDb.transaction();
 
@@ -4889,17 +4894,42 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
 
             // All that's left is to bind
             for(int i = 0; i < here.count(); ++i) {
-               if ( table->dbTable() == Brewtarget::BREWNOTETABLE && here.fieldName(i) == kpropBrewDate ) {
+               if ( table->dbTable() == Brewtarget::BREWNOTETABLE
+                    && here.fieldName(i) == kpropBrewDate ) {
                   QVariant helpme(here.field(i).value().toString());
                   upsertNew.bindValue(":brewdate",helpme);
                }
                else {
-                  upsertNew.bindValue(QString(":%1").arg(here.fieldName(i)), convertValue(newType, here.field(i)));
+                  upsertNew.bindValue(QString(":%1").arg(here.fieldName(i)),
+                                      convertValue(newType, here.field(i)));
                }
             }
             // and execute
             if ( ! upsertNew.exec() )
-               throw QString("Could not insert new row %1 : %2").arg(upsertNew.lastQuery()).arg(upsertNew.lastError().text());
+               throw QString("Could not insert new row %1 : %2")
+                  .arg(upsertNew.lastQuery())
+                  .arg(upsertNew.lastError().text());
+         }
+         // We need to create the increment and decrement things for the
+         // instructions_in_recipe table. This seems a little weird to do this
+         // here, but it makes sense to wait until after we've inserted all
+         // the data. The increment trigger happens on insert, and I suspect
+         // bad things would happen if it were in place before we inserted all our data.
+         if ( table->dbTable() == Brewtarget::INSTINRECTABLE ) {
+            QString trigger = table->generateIncrementTrigger(newType);
+            if ( trigger.isEmpty() ) {
+               Brewtarget::logE(QString("No increment triggers found for %1").arg(table->tableName()));
+            }
+            else {
+               upsertNew.exec(trigger);
+               trigger =  table->generateDecrementTrigger(newType);
+               if ( trigger.isEmpty() ) {
+                  Brewtarget::logE(QString("No decrement triggers found for %1").arg(table->tableName()));
+               }
+               else {
+                  upsertNew.exec(trigger);
+               }
+            }
          }
          upsertNew.finish();
          // We need to manually reset the sequences

@@ -537,7 +537,7 @@ private slots:
 
 private:
    static Database* dbInstance; // The singleton object
-   DatabaseSchema* dbDefn;
+   static DatabaseSchema* dbDefn;
 
    //QThread* _thread;
    // These are for SQLite databases
@@ -801,10 +801,10 @@ private:
          // Ensure this ingredient is not already in the recipe.
          QString select = QString("SELECT %5 from %1 WHERE %2=%3 AND %5=%4")
                               .arg(inrec->tableName())
-                              .arg(inrec->inRecIndexName(Brewtarget::dbType()))
+                              .arg(inrec->inRecIndexName())
                               .arg(ing->_key)
                               .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key)
-                              .arg(kcolRecipeId);
+                              .arg(inrec->recipeIndexName());
          if (! q.exec(select) ) {
             throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
                .arg(q.lastQuery()).arg(q.lastError().text());
@@ -853,15 +853,13 @@ private:
          q.finish();
 
          //Put this in the <ing_type>_children table.
-         if( child->dbTable() != Brewtarget::INSTINRECTABLE) {
+         if( inrec->dbTable() != Brewtarget::INSTINRECTABLE) {
             /*
              * The parent to link to depends on where the ingredient is copied from:
              * - A fermentable from the fermentable tabel -> the ID of the fermentable.
              * - An ingredient from another recipe -> the ID of the ingredient's parent.
              *
-             * This is required for:
-             * - Getting the proper link to the inventory table, else the new record
-             *   will have no inventory.
+             * This is required:
              * - When deleting the ingredient from the original recipe no longer fails.
              *   Else if fails due to a foreign key constrain.
              */
@@ -944,11 +942,9 @@ private:
 
          // Get the field names from the oldRecord. But skip ID, because it
          // won't work to copy it
-
-         for (i=0; i< oldRecord.count(); ++i)
-         {
+         for (i=0; i< oldRecord.count(); ++i) {
             QString name = oldRecord.fieldName(i);
-            if ( name != tbl->keyName(Brewtarget::dbType()) ) {
+            if ( name != tbl->keyName() ) {
                fields += fields.isEmpty() ? name : QString(",%1").arg(name);
                holder += holder.isEmpty() ? QString(":%1").arg(name) : QString(",:%1").arg(name);
             }

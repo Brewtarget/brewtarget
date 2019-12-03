@@ -51,6 +51,7 @@
 class DatabaseSchema
 {
    friend class Database;
+   friend class DatabaseSchemaHelper;
 
 public:
 

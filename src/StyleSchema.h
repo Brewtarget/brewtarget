@@ -17,13 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QString>
 #ifndef _STYLETABLESCHEMA_H
 #define _STYLETABLESCHEMA_H
 
 // Columns for the style table
-// These are defined in the main constants file
-// const QString kcolStyleName("name");
-// const QString kcolStyleNotes("notes");
 static const QString kcolStyleType("s_type");
 static const QString kcolStyleCat("category");
 static const QString kcolStyleCatNum("category_number");
@@ -67,8 +65,6 @@ static const QString kpropIngreds("ingredients");
 static const QString kpropExamples("examples");
 
 // these are also in the main constants file
-// const QString kxmlNameProp("NAME");
-// const QString kxmlNotesProp("NOTES");
 static const QString kxmlPropCat("CATEGORY");
 static const QString kxmlPropCatNum("CATEGORY_NUMBER");
 static const QString kxmlPropLetter("STYLE_LETTER");

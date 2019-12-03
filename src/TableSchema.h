@@ -72,6 +72,9 @@ public:
    int propertyColumnSize(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    // given an XML tag, get the associated property name
    const QString xmlToProperty(QString xmlName, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   // returns the property to be used for the increment/decrement triggers
+   const QString triggerProperty() const;
+
    const QStringList allPropertyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    const QStringList allColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
@@ -106,6 +109,9 @@ public:
    // when dropping columns, we have to copy tables in sqlite. This does that.
    const QString generateCopyTable( QString dest, Brewtarget::DBTypes type = Brewtarget::ALLDB);
 
+   const QString generateDecrementTrigger(Brewtarget::DBTypes type);
+   const QString generateIncrementTrigger(Brewtarget::DBTypes type);
+
    bool isInventoryTable();
    bool isBaseTable();
    bool isChildTable();
@@ -133,6 +139,8 @@ private:
    Brewtarget::DBTable m_invTable;
    Brewtarget::DBTable m_btTable;
 
+   QString m_trigger;
+
    PropertySchema* m_key;
    QMap<QString,PropertySchema*> m_properties;
    QMap<QString,PropertySchema*> m_foreignKeys;
@@ -143,7 +151,7 @@ private:
    // metaphor.
    Brewtarget::DBTypes m_defType;
 
-   // getter only. But this are private because only my dearest,
+   // getter only. But this is private because only my dearest,
    // closest friends can do this
    Brewtarget::DBTypes defType() const;
 

@@ -116,7 +116,11 @@ void MashStepTableModel::reorderMashStep(MashStep* step, int current)
    // doSomething is -1 if moving up and 1 if moving down. swap current with
    // current -1 when moving up, and swap current with current+1 when moving
    // down
+#if QT_VERSION < QT_VERSION_CHECK(5,13,0)
+   steps.swap(current,current+doSomething);
+#else
    steps.swapItemsAt(current,current+doSomething);
+#endif
    endMoveRows();
 
 }

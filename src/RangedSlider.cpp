@@ -177,7 +177,11 @@ void RangedSlider::paintEvent(QPaintEvent* event)
 
    // Can't do this: want all the sliders to have exact same width
    //const int textWidth = textFontMetrics.width(_valText);
+#if QT_VERSION < QT_VERSION_CHECK(5,13,0)
+   static const int textWidth = textFontMetrics.width("1.000");
+#else
    static const int textWidth = textFontMetrics.horizontalAdvance("1.000");
+#endif
 
    QLinearGradient glassGrad( QPointF(0,0), QPointF(0,rectHeight) );
    glassGrad.setColorAt( 0, QColor(255,255,255,127) );

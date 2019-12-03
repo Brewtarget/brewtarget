@@ -29,6 +29,8 @@
 #include "DatabaseSchemaHelper.h"
 #include "TableSchema.h"
 #include "TableSchemaConst.h"
+#include "BrewnoteSchema.h"
+#include "SettingsSchema.h"
 
 const int DatabaseSchemaHelper::dbVersion = 8;
 
@@ -354,7 +356,7 @@ QString DatabaseSchemaHelper::tableYeastInventory("yeast_in_inventory");
 bool DatabaseSchemaHelper::upgrade = false;
 // Default namespace hides functions from everything outside this file.
 
-bool DatabaseSchemaHelper::create(QSqlDatabase db, Brewtarget::DBTypes dbType)
+bool DatabaseSchemaHelper::create(QSqlDatabase db, DatabaseSchema* defn, Brewtarget::DBTypes dbType )
 {
    //--------------------------------------------------------------------------
    // NOTE: if you edit this function, increment dbVersion and edit
@@ -372,64 +374,26 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db, Brewtarget::DBTypes dbType)
    //                 be put into a recipe.
    //       display=0 means the ingredient is in a recipe already and should not
    //                 be shown in a list, available to be put into a recipe.
-   // NOTE: This is order dependent. When using databases that actually
-   //       enforce constraints (not sqlite), anything with a foreign key has
-   //       to be created *after* what the foreign key references
+
+   bool hasTransaction = db.transaction();
 
    QSqlQuery q(db);
    bool ret = true;
 
-   // Some stuff just needs evaluated late
-   select_dbStrings(dbType);
-
-   // This has to be done outside the transaction
-   ret = create_meta(q);
-   // Start transaction
-   bool hasTransaction = db.transaction();
-
-   // Create the core (beerXML) tables
-   ret &= create_beerXMLTables(q);
-   if ( ! ret ) {
-      Brewtarget::logE("create_beerXMLTables() failed");
+   foreach( TableSchema* table, defn->allTables() ) {
+      QString createTable = table->generateCreateTable(dbType);
+      if ( ! q.exec(createTable) ) {
+         throw QString("Could not create %1 : %2").arg(table->tableName()).arg(q.lastError().text());
+      }
+      // We need to create the increment and decrement things for the instructions_in_recipe table.
+      if ( table->dbTable() == Brewtarget::INSTINRECTABLE ) {
+         q.exec(table->generateIncrementTrigger(dbType));
+         q.exec(table->generateDecrementTrigger(dbType));
+      }
    }
-
-   // Create the bt relational tables
-   ret &= create_btTables(q);
-   if ( ! ret ) {
-      Brewtarget::logE("create_btTables() failed");
-   }
-
-   // Recipe relational tables
-   ret &= create_inRecipeTables(q);
-   if ( ! ret ) {
-      Brewtarget::logE("create_inRecipeTables() failed");
-   }
-
-   // Triggers are still a pain
-   ret &= create_increment_trigger(q,dbType);
-   if ( ! ret ) {
-      Brewtarget::logE("create_increment_trigger() failed");
-   }
-   ret &= create_decrement_trigger(q,dbType);
-   if ( ! ret ) {
-      Brewtarget::logE("create_decrement_trigger() failed");
-   }
-
-   // Ingredient inheritance tables============================================
-   ret &= create_childrenTables(q);
-   if ( ! ret ) {
-      Brewtarget::logE("create_childrenTables() failed");
-   }
-
-   // Inventory tables=========================================================
-   ret &= create_inventoryTables(q);
-   if ( ! ret ) {
-      Brewtarget::logE("create_inventoryTables() failed");
-   }
-
    // Commit transaction
    if( hasTransaction )
-      ret &= db.commit();
+      ret = db.commit();
 
    if ( ! ret ) {
       Brewtarget::logE("db.commit() failed");
@@ -442,6 +406,7 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db )
 {
    QSqlQuery q(db);
    bool ret = true;
+   DatabaseSchema* defn = new DatabaseSchema();
 
    // NOTE: use this to debug your migration
 #define CHECKQUERY if(!ret) qDebug() << QString("ERROR: %1\nQUERY: %2").arg(q.lastError().text()).arg(q.lastQuery());
@@ -450,25 +415,25 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db )
    switch(oldVersion)
    {
       case 1: // == '2.0.0'
-         ret &= migrate_to_202(q);
+         ret &= migrate_to_202(q,defn);
          break;
       case 2: // == '2.0.2'
-         ret &= migrate_to_210(q);
+         ret &= migrate_to_210(q,defn);
          break;
       case 3: // == '2.1.0'
-         ret &= migrate_to_4(q);
+         ret &= migrate_to_4(q,defn);
          break;
       case 4:
-         ret &= migrate_to_5(q);
+         ret &= migrate_to_5(q,defn);
          break;
       case 5:
-         ret &= migrate_to_6(q);
+         ret &= migrate_to_6(q,defn);
          break;
       case 6:
-         ret &= migrate_to_7(q);
+         ret &= migrate_to_7(q,defn);
          break;
       case 7:
-         ret &= migrate_to_8(q);
+         ret &= migrate_to_8(q,defn);
          break;
       default:
          Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
@@ -1378,142 +1343,131 @@ bool DatabaseSchemaHelper::create_pgsql_decrement_trigger(QSqlQuery q)
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_202(QSqlQuery q)
+// This is when we first defined the settings table, and defined the version as a string.
+// In the new world, this will create the settings table and define the version as an int.
+// Since we don't set the version until the very last step of the update, I think this will be fine.
+bool DatabaseSchemaHelper::migrate_to_202(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
-
-   ret &= q.exec(
-      CREATETABLE + SEP + tableSettings + "(" +
-      id + "," +
-      colSettingsVersion + SEP + TYPETEXT +
-      ")"
-   );
+   TableSchema *tbl = defn->table(Brewtarget::BREWNOTETABLE);
 
    // Add "projected_ferm_points" to brewnote table
    ret &= q.exec(
-      ALTERTABLE + SEP + tableBrewnote + SEP +
-      ADDCOLUMN + SEP + "projected_ferm_points" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"
+      ALTERTABLE + SEP + tbl->tableName() + SEP +
+      ADDCOLUMN + SEP + tbl->propertyToColumn(kpropProjFermPnts) + SEP +
+            tbl->propertyColumnType(kpropProjFermPnts) + SEP + DEFAULT + SEP + "0.0"
    );
 
    ret &= q.exec(
-      UPDATE + SEP + tableBrewnote + SEP +
-      SET + SEP + "projected_ferm_points = -1.0"
+      UPDATE + SEP + tbl->tableName() + SEP +
+      SET + SEP + tbl->propertyColumnType(kpropProjFermPnts) + " = -1.0"
    );
 
-   // Update version to 2.0.2
-   ret &= q.exec(
-      INSERTINTO + SEP + tableSettings + " VALUES(1,'2.0.2')"
-   );
+   tbl = defn->table(Brewtarget::SETTINGTABLE);
+
+   // Add the settings table
+   ret &= q.exec(tbl->generateCreateTable());
 
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q)
+bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
-   QStringList getFolders = QStringList() << tableEquipment << tableFermentable << tableHop <<
-      tableMisc << tableStyle << tableYeast << tableWater << tableMash <<
-      tableBrewnote << tableRecipe;
 
-   QStringList rebuildTables = QStringList() << tableEquipChildren << tableFermChildren <<
-      tableHopChildren << tableMiscChildren << tableRecChildren <<
-      tableStyleChildren << tableWaterChildren << tableYeastChildren <<
-      tableFermInventory << tableHopInventory << tableMiscInventory << tableYeastInventory;
-
-   foreach(const QString &table, getFolders)
-   {
+   foreach( TableSchema* tbl, defn->baseTables() ) {
       ret &= q.exec(
-               ALTERTABLE + SEP + table + SEP +
-               ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
+               ALTERTABLE + SEP + tbl->tableName() + SEP +
+               ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropFolder) + SEP +
+               tbl->propertyColumnType(kpropFolder) + SEP + DEFAULT + " ''"
             );
    }
 
+   TableSchema* tbl = defn->table(Brewtarget::RECTABLE);
    // Put the "Bt:.*" recipes into /brewtarget folder
    ret &= q.exec(
-      UPDATE + SEP + tableRecipe + SEP +
-      SET + SEP + "folder='/brewtarget' WHERE name LIKE 'Bt:%'"
+      UPDATE + SEP + tbl->tableName() + SEP +
+      SET + SEP + tbl->propertyToColumn(kpropFolder) + "='/brewtarget' WHERE name LIKE 'Bt:%'"
    );
 
+   tbl = defn->table(Brewtarget::SETTINGTABLE);
    // Update version to 2.1.0
    ret &= q.exec(
-      UPDATE + SEP + tableSettings + SEP +
-      SET + SEP + colSettingsVersion + "='2.1.0' WHERE id=1"
+      UPDATE + SEP + tbl->tableName() + SEP + SET + SEP +
+            tbl->propertyToColumn(kpropSettingsVersion) + "='2.1.0' WHERE " + tbl->keyName() +"=1"
    );
 
    // Used to trigger the code to populate the ingredient inheritance tables
    ret &= q.exec(
-      ALTERTABLE + SEP + tableSettings + SEP +
-      ADDCOLUMN + SEP + "repopulateChildrenOnNextStart" + SEP + TYPEINTEGER
+      ALTERTABLE + SEP + tbl->tableName() + SEP +
+      ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropSettingsRepopulate)
+                 + SEP + tbl->propertyColumnType(kpropSettingsRepopulate)
    );
 
    ret &= q.exec(
-      UPDATE + SEP + tableSettings + SEP +
-      SET + SEP + "repopulateChildrenOnNextStart=1"
+      UPDATE + SEP + tbl->propertyToColumn(kpropSettingsRepopulate)
+             + SEP + tbl->propertyColumnType(kpropSettingsRepopulate) + "=1"
    );
 
-   // Drop and re-create children and inventory tables with new UNIQUE requirement
-   foreach(const QString &table, rebuildTables )
-   {
-      ret &= q.exec(
-         DROPTABLE + SEP + table
-      );
-   }
-   // This happens before the bt_alltables exists. Setting upgrade to true
-   // prevents create_table from trying to insert into it.
-   upgrade = true;
-   ret &= create_childrenTables(q);
-   ret &= create_inventoryTables(q);
-   // Just to avoid any weird side effects
-   upgrade = false;
+   // Drop and re-create children tables with new UNIQUE requirement
+   foreach(TableSchema *dead, defn->childTables()) {
+      ret &= q.exec( DROPTABLE + SEP + dead->tableName() );
+      if ( ret )
+         ret &= q.exec(dead->generateCreateTable());
 
+      if ( ! ret ) {
+         throw QString("Could not drop/recreate %1: %2").arg(dead->tableName()).arg(q.lastError().text());
+      }
+   }
+
+   foreach(TableSchema *dead, defn->inventoryTables()) {
+      ret &= q.exec(DROPTABLE + SEP + dead->tableName() );
+      if ( ret )
+         ret &= q.exec(dead->generateCreateTable());
+
+      if ( ! ret ) {
+         throw QString("Could not drop/recreate %1: %2").arg(dead->tableName()).arg(q.lastError().text());
+      }
+   }
+
+   ret &= q.exec(UPDATE + SEP + tbl->tableName() + " VALUES(1,2)");
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_4(QSqlQuery q)
+bool DatabaseSchemaHelper::migrate_to_4(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
+   TableSchema* tbl = defn->table(Brewtarget::SETTINGTABLE);
 
    // Save old settings
-   ret &= q.exec(
-      "CREATE TEMP TABLE oldsettings AS SELECT * FROM " + tableSettings
-   );
+   ret &= q.exec( tbl->generateCreateTable(Brewtarget::dbType(), QString("oldsettings")));
 
    // Drop the old settings with text version, and create new table
    // with intever version.
-   ret &= q.exec(
-      DROPTABLE + SEP + tableSettings
-   );
+   ret &= q.exec( DROPTABLE + SEP + tbl->tableName() );
 
-   ret &= q.exec(
-      CREATETABLE + SEP + tableSettings + "(" +
-      id + "," +
-      colSettingsVersion            + SEP + TYPEINTEGER + "," +
-      colSettingsRepopulateChildren + SEP + TYPEINTEGER +
-      ")"
-   );
+   ret &= q.exec( tbl->generateCreateTable() );
 
    // Update version to 4, saving other settings
    ret &= q.exec(
-      INSERTINTO + SEP + tableSettings +
-      QString(" (id,%1,%2)").arg(colSettingsVersion).arg(colSettingsRepopulateChildren) + " " +
-      QString("SELECT 1, 4, %1 FROM oldsettings").arg(colSettingsRepopulateChildren)
+      INSERTINTO + SEP + tbl->tableName() +
+      QString(" (%1,%2,%3)").arg(tbl->keyName())
+                            .arg(tbl->propertyToColumn(kpropSettingsVersion))
+                            .arg(tbl->propertyToColumn(kpropSettingsRepopulate)) + " " +
+      QString("SELECT 1, 4, %1 FROM oldsettings").arg(tbl->propertyToColumn(kpropSettingsRepopulate))
    );
 
    // Cleanup
-   ret &= q.exec(
-      DROPTABLE + SEP + "oldsettings"
-   );
+   ret &= q.exec( DROPTABLE + SEP + "oldsettings" );
 
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q)
+bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
    // Drop the previous bugged TRIGGER
-   ret &= q.exec( QString() +
-      "DROP TRIGGER dec_ins_num"
-   );
+   ret &= q.exec( QString("DROP TRIGGER dec_ins_num") );
 
    // Create the good trigger
    ret &= create_decrement_trigger(q);
@@ -1521,78 +1475,40 @@ bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q)
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q)
+//
+bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
+   TableSchema* tbl = defn->table(Brewtarget::BTALLTABLE);
 
-   ret = create_meta(q);
-
-   ret &= insert_meta(q,tableSettings,    Brewtarget::SETTINGTABLE);
-   ret &= insert_meta(q,tableEquipment,   Brewtarget::EQUIPTABLE,       "Equipment",   Brewtarget::NOTABLE,       Brewtarget::EQUIPCHILDTABLE);
-   ret &= insert_meta(q,tableFermentable, Brewtarget::FERMTABLE,        "Fermentable", Brewtarget::FERMINVTABLE,  Brewtarget::FERMCHILDTABLE);
-   ret &= insert_meta(q,tableHop,         Brewtarget::HOPTABLE,         "Hop",         Brewtarget::HOPINVTABLE,   Brewtarget::HOPCHILDTABLE);
-   ret &= insert_meta(q,tableMisc,        Brewtarget::MISCTABLE,        "Misc",        Brewtarget::MISCINVTABLE,  Brewtarget::MISCCHILDTABLE);
-   ret &= insert_meta(q,tableStyle,       Brewtarget::STYLETABLE,       "Style",       Brewtarget::NOTABLE,       Brewtarget::STYLECHILDTABLE);
-   ret &= insert_meta(q,tableYeast,       Brewtarget::YEASTTABLE,       "Yeast",       Brewtarget::YEASTINVTABLE, Brewtarget::YEASTCHILDTABLE);
-   ret &= insert_meta(q,tableWater,       Brewtarget::WATERTABLE,       "Water",       Brewtarget::NOTABLE,       Brewtarget::WATERCHILDTABLE);
-   ret &= insert_meta(q,tableRecipe,      Brewtarget::RECTABLE,         "Recipe",      Brewtarget::NOTABLE,       Brewtarget::RECIPECHILDTABLE);
-   ret &= insert_meta(q,tableMash,        Brewtarget::MASHTABLE,        "Mash");
-   ret &= insert_meta(q,tableMashStep,    Brewtarget::MASHSTEPTABLE,    "MashStep");
-   ret &= insert_meta(q,tableBrewnote,    Brewtarget::BREWNOTETABLE,    "BrewNote");
-   ret &= insert_meta(q,tableInstruction, Brewtarget::INSTRUCTIONTABLE, "Instruction");
-
-   ret &= insert_meta(q,tableBtEquipment,   Brewtarget::BT_EQUIPTABLE);
-   ret &= insert_meta(q,tableBtFermentable, Brewtarget::BT_FERMTABLE);
-   ret &= insert_meta(q,tableBtHop,         Brewtarget::BT_HOPTABLE);
-   ret &= insert_meta(q,tableBtMisc,        Brewtarget::BT_MISCTABLE);
-   ret &= insert_meta(q,tableBtStyle,       Brewtarget::BT_STYLETABLE);
-   ret &= insert_meta(q,tableBtYeast,       Brewtarget::BT_YEASTTABLE);
-   ret &= insert_meta(q,tableBtWater,       Brewtarget::BT_WATERTABLE);
-
-   ret &= insert_meta(q,tableFermInRec,     Brewtarget::FERMINRECTABLE);
-   ret &= insert_meta(q,tableHopInRec,      Brewtarget::HOPINRECTABLE);
-   ret &= insert_meta(q,tableMiscInRec,     Brewtarget::MISCINRECTABLE);
-   ret &= insert_meta(q,tableWaterInRec,    Brewtarget::WATERINRECTABLE);
-   ret &= insert_meta(q,tableYeastInRec,    Brewtarget::YEASTINRECTABLE);
-   ret &= insert_meta(q,tableInsInRec,      Brewtarget::INSTINRECTABLE);
-
-   ret &= insert_meta(q,tableEquipChildren, Brewtarget::EQUIPCHILDTABLE);
-   ret &= insert_meta(q,tableFermChildren,  Brewtarget::FERMCHILDTABLE);
-   ret &= insert_meta(q,tableHopChildren,   Brewtarget::HOPCHILDTABLE);
-   ret &= insert_meta(q,tableMiscChildren,  Brewtarget::MISCCHILDTABLE);
-   ret &= insert_meta(q,tableRecChildren,   Brewtarget::RECIPECHILDTABLE);
-   ret &= insert_meta(q,tableStyleChildren, Brewtarget::STYLECHILDTABLE);
-   ret &= insert_meta(q,tableWaterChildren, Brewtarget::WATERCHILDTABLE);
-   ret &= insert_meta(q,tableYeastChildren, Brewtarget::YEASTCHILDTABLE);
-
-   ret &= insert_meta(q,tableFermInventory, Brewtarget::FERMINVTABLE);
-   ret &= insert_meta(q,tableHopInventory,  Brewtarget::HOPINVTABLE);
-   ret &= insert_meta(q,tableMiscInventory, Brewtarget::MISCINVTABLE);
-   ret &= insert_meta(q,tableYeastInventory,Brewtarget::YEASTINVTABLE);
-
+   ret = q.exec(tbl->generateCreateTable());
+   // there should be a long round of populating this table. We drop it in version 8, so I see no need to do more than this
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q)
+bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
+   TableSchema* tbl = defn->table(Brewtarget::BREWNOTETABLE);
 
    // Add "attenuation" to brewnote table
    ret &= q.exec(
-      ALTERTABLE + SEP + tableBrewnote + SEP +
-      ADDCOLUMN + SEP + "attenuation" + SEP + TYPEREAL + SEP + DEFAULT + SEP + "0.0"
+      ALTERTABLE + SEP + tbl->tableName() + SEP +
+      ADDCOLUMN +  SEP + tbl->propertyToColumn(kpropAtten) +
+                   SEP +  tbl->propertyColumnType(kpropAtten) +
+                   SEP + DEFAULT + SEP + "0.0"
    );
 
    return ret;
 }
 
-bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, Brewtarget::DBTable table )
+bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, DatabaseSchema *defn, Brewtarget::DBTable table )
 {
    // get all the tables first
    bool ret = true;
-   TableSchema* tbl = new TableSchema(table);
-   TableSchema* cld = new TableSchema( tbl->childTable() );
-   TableSchema* inv = new TableSchema( tbl->invTable() );
+   TableSchema* tbl = defn->table(table);
+   TableSchema* cld = defn->childTable(table);
+   TableSchema* inv = defn->invTable(table);
 
    // do this in order. First, we have to add the column
    QString addColumn = QString("ALTER TABLE %1 ADD COLUMN %2 REFERENCES %3(%4)")
@@ -1611,8 +1527,8 @@ bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, Brewtarget::DBTable tab
          .arg(tbl->keyName())
          .arg(inv->invIndexName());
 
-   // that only handles things that already have an inventory entry. My current thought is I need all the things to have an entry in the inventory table
-   // it really, really simplifies life later.
+   // that only handles things that already have an inventory entry. My current thought is I need all the things to have an
+   // entry in the inventory table it really, really simplifies life later.
    // select hop.id from hop where not exists ( select hop_children.id from hop_children where hop_children.child_id = hop.id ) and
    //       not exists ( select hop_in_inventory.id from hop_in_inventory where hop_in_inventory.hop_id = hop.id );
    QString noInventory = QString( "select %1 from %2 where not exists ( select %3.%4 from %3 where %3.%5 = %2.%1 ) and "
@@ -1625,7 +1541,8 @@ bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, Brewtarget::DBTable tab
          .arg(inv->tableName())
          .arg(inv->keyName())
          .arg(inv->invIndexName());
-   // it would seem we have kids with their own rows in the database. This is a freaking mess, but I need to delete those rows before I can do anything else.
+   // it would seem we have kids with their own rows in the database. This is a freaking mess, but I need to delete those rows
+   // before I can do anything else.
    // delete hop_in_inventory where hop_in_inventory.id in ( select hop_in_inventory.id from hop_in_inventory, hop_children, hop where
    //  hop.id = hop_children.child_id and hop_in_inventory.hop_id = hop.id)"
    QString deleteKids = QString( "delete from %1 where %1.%2 in ( select %1.%2 from %1,%3,%4 where %4.%5 = %3.%6 and %1.%7 = %4.%5 )")
@@ -1654,76 +1571,68 @@ bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, Brewtarget::DBTable tab
 
    // add the column
    ret = q.exec(addColumn);
+   if ( !ret ) return ret;
 
    // remove kids from the inventory row
-   if ( ret ) {
-      ret = q.exec(deleteKids);
-   }
+   ret = q.exec(deleteKids);
+   if ( !ret ) return ret;
 
-   // set the inventory id for parents that have inventory
-   if ( ret ) {
-      // update parents that already have inventory rows
-      ret = q.exec(updateParents);
-   }
+   // update parents that already have inventory rows
+   ret = q.exec(updateParents);
+   if ( !ret ) return ret;
 
    // create new inventory rows for parents who have no inventory
-   if ( ret ) {
-      QSqlQuery i(q);
-      ret = q.exec(noInventory);
-      if ( ret )  {
-         while ( q.next() ) {
-            int idx = q.record().value(tbl->keyName()).toInt();
-            // add an inventory row
-            QString newInv = QString("INSERT into %1 (%2) VALUES(%3)")
-                  .arg(inv->tableName())
-                  .arg(inv->invIndexName())
-                  .arg(idx);
-            ret = i.exec(newInv);
-            if (ret) {
-               int newkey = i.lastInsertId().toInt();
-               // push that inventory_id into the parent
-               QString insInv = QString("UPDATE %1 SET %2=%3 where %4=%5")
-                     .arg(tbl->tableName())
-                     .arg(tbl->foreignKeyToColumn())
-                     .arg(newkey)
-                     .arg(tbl->keyName())
-                     .arg(idx);
-               ret = i.exec(insInv);
-            }
-            if ( !ret ) break;
-         }
-      }
+   QSqlQuery i(q);
+   ret = q.exec(noInventory);
+
+   while ( q.next() ) {
+      int idx = q.record().value(tbl->keyName()).toInt();
+      // add an inventory row
+      QString newInv = QString("INSERT into %1 (%2) VALUES(%3)")
+            .arg(inv->tableName())
+            .arg(inv->invIndexName())
+            .arg(idx);
+      ret = i.exec(newInv);
+      if ( !ret ) return ret;
+
+      int newkey = i.lastInsertId().toInt();
+      // push that inventory_id into the parent
+      QString insInv = QString("UPDATE %1 SET %2=%3 where %4=%5")
+            .arg(tbl->tableName())
+            .arg(tbl->foreignKeyToColumn())
+            .arg(newkey)
+            .arg(tbl->keyName())
+            .arg(idx);
+      ret = i.exec(insInv);
+      if ( !ret ) break;
    }
 
    // finally, point all the kids to their parent's inventory row
-   if ( ret ) {
-       ret = q.exec(updateKids);
-   }
+   ret = q.exec(updateKids);
 
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q )
+bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
+   TableSchema* tbl = defn->table(Brewtarget::BREWNOTETABLE);
 
    // these columns are used nowhere I can find and they are breaking things.
-
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
       ret &= q.exec (
-            ALTERTABLE + SEP + tableBrewnote + SEP +
+            ALTERTABLE + SEP + tbl->tableName() + SEP +
             DROPCOLUMN + SEP + "predicted_og"
          );
 
       ret &= q.exec (
-            ALTERTABLE + SEP + tableBrewnote + SEP +
+            ALTERTABLE + SEP + tbl->tableName() + SEP +
             DROPCOLUMN + SEP + "predicted_abv"
          );
    }
    // Fun fact. You can't drop a column in sqlite. So we do this instead
    else if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
       q.exec( "PRAGMA foreign_keys=off");
-      TableSchema* tbl = new TableSchema(Brewtarget::BREWNOTETABLE);
       // Create a temporary table
       QString createTemp = tbl->generateCreateTable(Brewtarget::SQLITE, "tmpbrewnote");
       ret = q.exec( createTemp );
@@ -1748,17 +1657,19 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q )
 
    // Now that we've had that fun, let's have this fun
    if ( ret ) {
-      ret = migration_aide_8(q, Brewtarget::FERMTABLE);
+      ret = migration_aide_8(q, defn, Brewtarget::FERMTABLE);
    }
    if ( ret ) {
-      ret = migration_aide_8(q, Brewtarget::HOPTABLE);
+      ret = migration_aide_8(q, defn, Brewtarget::HOPTABLE);
    }
    if ( ret ) {
-      ret = migration_aide_8(q, Brewtarget::MISCTABLE);
+      ret = migration_aide_8(q, defn, Brewtarget::MISCTABLE);
    }
    if ( ret ) {
-      ret = migration_aide_8(q, Brewtarget::YEASTTABLE);
+      ret = migration_aide_8(q, defn, Brewtarget::YEASTTABLE);
    }
 
+   // Finally, the btalltables table isn't needed, so drop it
+   ret = q.exec( DROPTABLE + SEP + "btalltables");
    return ret;
 }

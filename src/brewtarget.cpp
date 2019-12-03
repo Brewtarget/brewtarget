@@ -813,9 +813,29 @@ QString Brewtarget::getOptionValue(const QDomDocument& optionsDoc, const QString
    }
 }
 
+void Brewtarget::updateConfig()
+{
+   int cVersion = option("config_version", QVariant(0)).toInt();
+   while ( cVersion < CONFIG_VERSION ) {
+      switch ( ++cVersion ) {
+         case 1:
+            // Update the dbtype, because I had to increase the NODB value from -1 to 0
+            int newType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::SQLITE).toInt() + 1);
+            // Write that back to the config file
+            setOption("dbType", static_cast<int>(newType));
+            // and make sure we don't do it again.
+            setOption("config_version", QVariant(cVersion));
+            break;
+      }
+   }
+}
+
 void Brewtarget::readSystemOptions()
 {
    QString text;
+
+   // update the config file before we do anything
+   updateConfig();
 
    //================Version Checking========================
    checkVersion = option("check_version", QVariant(false)).toBool();
@@ -957,16 +977,6 @@ void Brewtarget::readSystemOptions()
 
    //=======================Database type ================
    _dbType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::SQLITE).toInt());
-   if ( ! option("changed_dbtype", QVariant(false)).toBool() ) {
-      // Update the dbtype, because I had to increase the NODB value from -1
-      // to 0
-      _dbType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::SQLITE).toInt() + 1);
-      // Make sure we write that back
-      setOption("dbType", static_cast<int>(_dbType));
-      // and make sure we don't do it again. What scares me is this now lives
-      // here. Forever.
-      setOption("changed_dbtype", QVariant(true));
-   }
 
 }
 

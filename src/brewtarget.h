@@ -28,6 +28,8 @@
 // restart.
 #define RESTART_CODE 0x1000
 
+#define CONFIG_VERSION 1
+
 // need to use this to turn on mac keyboard shortcuts (see http://doc.qt.nokia.com/4.7-snapshot/qtglobal.html#qt_set_sequence_auto_mnemonic)
 extern void qt_set_sequence_auto_mnemonic(bool b);
 
@@ -255,7 +257,7 @@ public:
    static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
 
    //! \return SI amount for the string
-   static double qStringToSI( QString qstr, Unit* unit, 
+   static double qStringToSI( QString qstr, Unit* unit,
          Unit::unitDisplay dispUnit = Unit::noUnit, Unit::unitScale dispScale = Unit::noScale);
 
    //! \brief return the bitterness formula's name
@@ -282,6 +284,8 @@ public:
    //! \brief Read options from file. This is deprecated, but we need it
    // around for the conversion
    static void convertPersistentOptions();
+   //! \brief Every so often, we need to update the config file itself. This does that.
+   static void updateConfig();
    //! \brief Read options from options. This replaces readPersistentOptions()
    static void readSystemOptions();
    //! \brief Writes the persisten options back to the options store
@@ -326,7 +330,7 @@ public:
    static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
 
-   /*! 
+   /*!
     * \brief If we are supporting multiple databases, we need some way to
     * figure out which database we are using. I still don't know that this
     * will be the final implementation -- I can't help but think I should be

@@ -57,12 +57,12 @@ A previous attempt had been made at addressing this issue, and it was that attem
 My solution goes the other way. Under almost every circumstance, the write process works as it has -- writes are automatically made to the database as soon as the field is completed. I have made a second path that does something different, and it is up to each component to decide which path to take.
 
 #### m\_cacheOnly
-The first step was to define a new attribute on every BeerXMLElement called `m_cacheOnly`. When this attribute is `true`, then we only update the cached value. No writes are made to the database. I went through a few different iterations of this, and settled on this approach. It is actually quite clean and reasonable hides all the implementation details.
+The first step was to define a new attribute on every BeerXMLElement called `m_cacheOnly`. When this attribute is `true`, we only update the cached value. No writes are made to the database. I went through a few different iterations of this, and settled on this approach. It is actually quite clean and reasonable hides all the implementation details.
 
 This means that I also had to write something that could flush the entire BeerXMLElement cache to the database. I played at this bit, and realize the best solution was to have something that could do one massive INSERT into the database at the right place.
 
 #### Database::insertElement
-I introduced a new method that uses the TableSchema class (and later will use the DatabaseSchema) to make the big insert string. It then does the work in the database. If the insert is successful, the new key is returned. For all of the prep work I had to do, the code itself is pretty compact and elegant.
+I introduced a new method that uses the TableSchema class to make the big insert string. It then does the work in the database. If the insert is successful, the new key is returned. For all of the prep work I had to do, the code itself is pretty compact and elegant.
 
 #### Database::insert[whatever]
 Of course, it wasn't quite that easy. There are a number of signals that need to be emitted, and some house work to be done. Based on how our signals work, I had to create a separate insert method for each class. It calls insertElement, sets the cacheOnly flag to false, emits the necessary signals and returns the key.

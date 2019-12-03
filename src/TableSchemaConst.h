@@ -90,6 +90,7 @@ static const QString kpropBoilTime("boilTime_min");
 // A rename later, and both brewnotes and recipes use this
 static const QString kpropOG("og");
 static const QString kpropFG("fg");
+
 // I am not sure this makes sense, but it is consistent
 static const QString kpropParentId("parent_id");
 static const QString kpropChildId("child_id");
@@ -111,6 +112,7 @@ static const QString kpropMiscId("misc_id");
 static const QString kpropStyleId("style_id");
 static const QString kpropWaterId("water_id");
 static const QString kpropYeastId("yeast_id");
+
 // Same for these column names. Yes, but I think the consistency is better
 // this way
 static const QString kcolName("name");
