@@ -970,7 +970,7 @@ private:
                insert.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
             }
             // Ignore ID again, for the same reasons as before.
-            else if ( name != tbl->keyName(Brewtarget::dbType()) ) {
+            else if ( name != tbl->keyName() ) {
                insert.bindValue(QString(":%1").arg(name), val);
             }
          }
@@ -979,7 +979,6 @@ private:
             throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
 
          newKey = insert.lastInsertId().toInt();
-         // This is a mess and wont' play nice w/ the caching
          newOne = new T(t, newKey, oldRecord);
          keyHash->insert( newKey, newOne );
       }

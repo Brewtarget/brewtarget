@@ -81,8 +81,7 @@ void FermentableEditor::save()
       Database::instance().insertFermentable(obsFerm);
    }
 
-   // we need to set inventory late, because we don't know if the row exists
-   // in the DB yet
+   // I could do this in the database code, but it makes sense to me here.
    obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
 
    setVisible(false);
@@ -90,7 +89,7 @@ void FermentableEditor::save()
 
 void FermentableEditor::clearAndClose()
 {
-   setFermentable(0);
+   setFermentable(nullptr);
    setVisible(false); // Hide the window.
 }
 
@@ -101,7 +100,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
 
    QString propName;
    bool updateAll = false;
-   if( metaProp == 0 )
+   if( metaProp == nullptr )
       updateAll = true;
    else
    {

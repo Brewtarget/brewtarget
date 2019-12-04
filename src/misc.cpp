@@ -241,6 +241,13 @@ void Misc::setInventoryAmount( double var )
    }
 }
 
+void Misc::setInventoryId( int key )
+{
+   m_inventory_id = key;
+   if ( ! m_cacheOnly )
+      setEasy(kpropInventoryId, key);
+}
+
 void Misc::setTime( double var )
 {
    if( var < 0.0 )

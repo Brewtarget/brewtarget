@@ -197,6 +197,15 @@ void Hop::setInventoryAmount( double num )
    }
 }
 
+void Hop::setInventoryId( int key )
+{
+   m_inventory_id = key;
+   if ( ! m_cacheOnly ) {
+      qDebug() << Q_FUNC_INFO << kpropInventoryId;
+      setEasy(kpropInventoryId, key);
+   }
+}
+
 void Hop::setUse(Use u)
 {
    if ( u < uses.size()) {

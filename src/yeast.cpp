@@ -270,6 +270,14 @@ void Yeast::setInventoryQuanta( int var )
    }
 }
 
+void Yeast::setInventoryId( int key )
+{
+   m_inventory_id = key;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropInventoryId, key);
+   }
+}
+
 void Yeast::setAmountIsWeight( bool var )
 {
    m_amountIsWeight = var;

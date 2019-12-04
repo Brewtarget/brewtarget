@@ -73,7 +73,7 @@ public:
    //! \brief The amount in inventory in either liters or kg depending on \c amountIsWeight().
    Q_PROPERTY( double inventory READ inventory WRITE setInventoryQuanta /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief The inventory id
-   Q_PROPERTY( double inventoryId READ inventoryId /* WRITE setInventoryQuanta*/ /*NOTIFY changed*/ /*changedInventory*/ )
+   Q_PROPERTY( double inventoryId READ inventoryId WRITE setInventoryId /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief Whether the \c amount() is weight (kg) or volume (liters).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
    //! \brief The lab from which it came.
@@ -121,6 +121,7 @@ public:
    void setMaxReuse( int var);
    void setAddToSecondary( bool var);
    void setCacheOnly( bool cache);
+   void setInventoryId( int key);
 
    // Getters
    Type type() const;

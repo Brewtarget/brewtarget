@@ -4,21 +4,21 @@ This is intended to document what changes I've made to how we interact with the 
 ## History
 In the beginning, there were XML flat files. These files were strictly BeerXML compliant and took a long time to load. I tend to have a lot of recipes with numerous brewnotes on each one. Loading the flat files took in excess of 30 seconds from the time Brewtarget started before it was usable. And I had the brilliant idea "Hey! Let's put this all into an RDBMS!".
 
-I mocked up a sample schema (which can still be seen in ideas/parse\_database.pl) and put the idea forward. Rocketman agreed with my idea and we set about it. It was hard and, frankly, I think burned both me and Rocketman out. Rocketman did the initial heavy lift of figuring out how to do it in Qt, as it was frankly beyond my ability. I chased the bugs and wrote the code to make it complete. This work was released as Brewtarget v2.0
+I mocked up a sample schema (which can still be seen in ideas/parse\_database.pl) and put the idea forward. Rocketman agreed with my idea and we set about it. It was hard and, frankly, I think burned both me and Rocketman out. Rocketman did the initial heavy lift of figuring out how to do it in Qt, as it was beyond my ability. I chased the bugs and wrote the code to make it complete. This work was released as Brewtarget v2.0
 
 In the course of making these changes, we made a few decisions that would have an impact and are relevant to this document. Our first decision was to use SQLite as the RDBMS, with an intent that we would expand support later. This was done to make the transition for users easy, and to reduce the amount of code we needed to write. The second decision was that we would cache nothing -- all reads would read from the database and all writes would immediately write to the database.
 
-After the release of version 2, I decided to expand the database to support PostgreSQL. I wanted to an RDBMS with a network interface, so that we could consider a mobile version and not have to worry about synchronizing data between multiple sources. My choice to use PostgreSQL was one mostly of personal preference, but it turns out I made a lucky choice. We had used 'id' as the primary key on all the tables, and it seems 'id' is a reserved word for MySQL. This change, believe it or not, will make it possible for us to support MySQL with only minor changes.
+After the release of version 2, I decided to expand the database to support PostgreSQL. I wanted to an RDBMS with a network interface, so that we could consider a mobile version and not have to worry about synchronizing data between multiple sources. My choice to use PostgreSQL was one mostly of personal preference, but it turns out I made a lucky choice. We had used 'id' as the primary key on all the tables, and it seems 'id' is a reserved word for MySQL. One of the important drivers of this series of changes has been how to address that problem in as transparent a manner as possible.
 
 In the process of going to PostgreSQL, it became apparent that we were suffering significant performance issues due to our decision to never cache. I did some investigation and decided that we needed to cache at least three properties: name, deleted and display. I modified the BeerXMLElement object and wrote some primitive caching mechanisms that resulted in a significant performance increase. Some of this change can be considered as the logical successor to that.
 
 ## Other issues
 Over time, we have grown an uncomfortable number of hashes, arrays, etc. to define the tables. In the current code base, if you want to add a column to a table you need to edit 7 (maybe 8) files in multiple places and make sure that your edits were consistent. This makes me very unhappy and does not spark joy. So I wanted to find a better way.
 
-I also have a dislike for DatabaseSchemaHelper. Between the code and the headers, it consists of 2000 lines of code that is hard to read, hard to parse and very difficult to maintain. It also duplicates almost all of the information we are stashing in the previously mentioned hashes, arrays and maps. Any solution I find needs to reduce those files to the task of creating tables and updating schema.
+I also have a dislike for DatabaseSchemaHelper. Between the code and the headers, it consists of 2000 lines of code that is hard to read, hard to parse and very difficult to maintain. It also duplicates almost all of the information we are stashing in the previously mentioned hashes, arrays and maps. Any solution needed to reduce that class to the task of updating schema.
 
 # Overview
-This change is massive. It touches literally every object and changes how we interact with every table. I will attempt to document what the changes are and why they are. I promise it is worth it; my start up time has gone from 8 seconds to 2 seconds and a remote database almost becomes usable.
+This change is massive. It touches literally every BeerXML object and changes how we interact with every table. I will attempt to document what the changes are and why they are. I promise it is worth it; my start up time has gone from 8 seconds to 2 seconds and a remote database almost becomes usable.
 
 ## Caches
 Every table primitive (eg, hops, equipment, etc.) now caches the attributes.
@@ -31,14 +31,14 @@ This resulted in each BeerXMLElement getting a long list of attributes. I tried 
 Every get method now just returns the cached values. It is up to the setters and the loaders to make sure the cache is correct.
 
 ### Writing
-When writing a new value, we now have to update the cached value. This isn't hard, but it does raise a question. Do we update the cached value and then write to the database, or do we write to the database and then update the cache? For reasons I will explain in just a few lines, I decided to update the cache and then write the value. This does raise a remote possibility that we could have a value in cache that isn't in the database. Doing it the other way (write first, update cache second) would ensure that the database was always correct. 
+When writing a new value, we now have to update the cached value. This isn't hard, but it does raise a question. Do we update the cached value and then write to the database, or do we write to the database and then update the cache? I decided to update the cache and then write the value. This does raise a remote possibility that we could have a value in cache that isn't in the database. Doing it the other way (write first, update cache second) would ensure that the database was always correct. 
 
 This also massively increased the performance. Every write we used to make actually created two round trips to the database -- one to set the attribute, and the next to get the value we just set. 
 
 ### Loading
-The initial database load is surprisingly hard for queries on the database. This is an unexpected and really unfortunate side effect of our original decision to cache nothing. As quickly as I can describe it, we would first query the database for (say) all the recipes, then we would query the database for each recipe's name (needed for the trees), then query the database for the brewdate, then query the database for the style. Each time we had to display these again, it would be the same pattern.
+The initial database load requires a suprisingly large number of queries. This is an unexpected and really unfortunate side effect of our original decision to cache nothing. As quickly as I can describe it, we would first query the database for (say) all the recipes, then we would query the database for each recipe's name (needed for the trees), then query the database for the brewdate, then query the database for the style. Each time we had to display these again, it would be the same pattern. 
 
-This resulted in thousands of redundant queries to the database. As soon as I had the caches in place, it quickly became apparent I could fix that issue. 
+This resulted in thousands of queries to the database on my data. As soon as I had the caches in place, it quickly became apparent I could fix that issue. 
 
 I modified the initial query in `Database::populateElements` to return all of the fields from the database. I created a new initializer for the BeerXMLElements that expected a `QSqlRecord` and it just copies the values from the `QSqlRecord` directly into the newly created object. This replaces four (or more) roundtrips to the database with one, and preloads the cache for us.
 
@@ -75,25 +75,23 @@ This required me to define a new constructor for each BeerXMLElement. The new co
 ## Schemas
 The second part of my solution was to create a method that could do on insert and write every column to the database. This was at first looking like a lot of unpleasant code, because I would have to basically write one method for each primitive, teach it about every column in the table, etc. I started looking at what we already had, and that is when I noticed the profusion of arrays, hashs, maps, etc. that we had written to solve this kind of problem. And yes, I take a lot of blame for that as I am probably the one who wrote the first one.
 
-This required a rethink, and I think I've come up with an elegant solution. I created three new classes (although the third class isn't done) for this: PropertySchema, TableSchema and DatabaseSchema. 
+This required a rethink, and I think I've come up with an elegant solution. I created three new classes for this: PropertySchema, TableSchema and DatabaseSchema. 
 
 ### PropertySchema
 This class defines a specific property, for example, `brewer`. It defines the property name (aka, the name of the property on the Recipe object), the database column name (see later explanations, because this got complex), the BeerXML property name, the type (eg, `string`), the default value and the size. The intent of this class is to define the mapping between a single property, its database column and the BeerXML property. 
 
 As with many things, this class has grown more complex. To support multiple databases with different column names, or different type names, etc. I had to rethink and rework this approach. Now what happens is that I store all of the information for each database in the PropertySchema object. You can request the property definition for a specific database by using the `Brewtarget::DBType` enum type when calling the various methods on PropertySchema. The default is to the use the what ever `Brewtarget::dbType()` returns.
 
-I also think I need to move some of the work of creating the table definition into here.
+Based on what I had to code later, I defined two initializers. One is for normal properties like `name` or `brewDate`. The other is intended for foreign keys, like `recipe_id` and `equipment_id`. I consider them both to be properties, but they have different uses and need different information.
 
-This work is still in progress. I need to play with alternate definitions to determine if this solution is the right one.
-
-For the most part, there are setter and getter methods and not much else. I expect most of the properties to be set when the object is created.
+There are the standard setter and getter methods and not much else. I expect most of the properties to be set when the object is created.
 
 ### TableSchema
 This class collects all the properties for a single table into one place, and provides some useful methods for querying information. It differentiates between properties and foreign keys. Generally speaking, we do not set the foreign keys when inserting the record into the database -- those relationships are typically handled in the higher level code.
 
 Each table in the database is represented by a TableSchema object. 
 
-A TableSchema object contains two QMap objects: `m_properties` and `m_foreignKey`. The QMap objects map from the object property to the appropriate PropertySchema object for that property. I am overloading a little on the properties and foreign keys and this may change.
+A TableSchema object contains two QMap objects: `m_properties` and `m_foreignKeys`. The QMap objects map from the object property to the appropriate PropertySchema object for that property. I am overloading a little on the properties and foreign keys and this may change.
 
 The hard work in TableSchema is actually defining the table. It is up to the developer (me so far, and you if you want to modify tables) to create that QMap entry. This has resulted in a TableSchema.cpp already being quite long, and the associated header file isn't much better.
 
@@ -110,6 +108,8 @@ This caused a few issues that I had to resolve.
 Almost every object has a property called `notes`. I could have done some fun `#ifdef` work, but decided instead that I would create TableSchemaConst.h and any constant that was used by more than one object would be defined in there. I applied the same rule to shared columns and XML properties.
 
 Every object has a property called `id`, but the name of the column changes in the database. I had to modify the second convention to include the table name, eg, kcolMashType. This has left me with some things that break the conventions like `kcolName`. There is no easy solution, and so far this one has worked.
+
+I tried to take some short cuts with things like foreign keys. Technically, there is no property on an individual Recipe object that stores the `equipment_id`. I had originally tried to just use the kcol for all things, like `kcolRecipeId` and `kcolEquipmentId`. Over time, I find it increasingly annoying to remember when I could use something like `kpropMashType` or and I had to use `kcolRecipeId`. So I got rid of the confusion. Everything has a kcol and a kprop constant, even if they happen to be the same value. Please follow this convention, should you be adding a new table.
 
 ### DatabaseSchema
 This class combines all the TableSchema into one place. I am expecting there to be one defined when the database itself is initialized. The main intent of this class is to allow me to remove all the bloody hashes, maps, arrays, QLists, QStringLists, etc. that we have developed over time. Instead of maintaining those, we will be able to simply ask the DatabaseSchema object for them.
@@ -134,6 +134,18 @@ Removing the tagToProps calls resulted in a problem when importing the element f
 
 This led, as it always does, to me reading the code and thinking "We did what?!" The import from XML code was a mess. In particular, there are a number of enumerated types (like Hop::USE) that are a little suspect in XML. In the original code, if we couldn't translate the received USE into one of our enumerated USES, we would find the most similar hop and just use that. I found that really bad. So I fixed all that code. Now, we import it anyway but warn the user to check what we imported.
 
+## Inventory
+I have also modified how the inventory system works. The previous design was (imho) overly complex. In essence, we have a many-to-one relationship between ingredients and inventory. The initial implementation required 3 distinct queries to get the inventory amount for any ingredient, and it was called A LOT. In order to reduce the number of calls, I reworked this. Now, each ingredient which can have inventory has an `inventory_id` field that points to the correct row in the appropriate inventory table. The migration code is awful and I would recommend not looking at it too closely.
+
+This helped reduce the number of round trips but I still had to query the database for the inventory amounts on every display.
+
+### Caching and signals
+Caching the inventory amount presented an unusual challenge. Editing the inventory amount only happens on the parent item, but each child has to display the new amount. To get this done, I added a new signal to Database -- `changeInventory`. When the inventory is set, this signal is raised using the `Database::DBTable` type, the inventory id of the row modified and the new amount.
+
+Every table model catches the signal, makes sure the DBTable type is of interest, and then determines if that inventory id is being used by anything in its list. If it is, `cacheOnly` is set true, the cached amount in inventory is updated, `cacheOnly` is set back to false and the model generates the necessary signals to get the tables redrawn. It is, perhaps, a little complex but works.
+
+I am considered redoing the signals a little. I can probably reduce the signalling noise if I use a different signal per ingredient -- eg, `hopInventoryChanged`. That would be a lot of work, and I haven't quite talked myself into it yet.
+
 # How TO
 This is more interesting to more people. This is my basic idea on how to add either a new column to a table or a new table to the database.
 
@@ -157,3 +169,24 @@ tmp[kpropTerpines] = new PropertySchema( kpropTerpines, kcolHopTerpines, kxmlPro
 
 ### Update the existing tables
 You will still be responsible for handling the migration code in `DatabaseSchemaHelper`, as well as updating the Hop object itself to do the new work. This is work you would have had to do anyway, but all the rest (writing to the table, creating the table from scratch, etc) is now done. Instead of editing in 7 (or 8) places just to add the new column, you have to edit three.
+
+## New Tables
+This would be harder, but the general idea would be along these lines.
+
+### Define new schema header file
+You would need to define all the kprop and kcol constants. A new table is unlikely to be defined in BeerXML, but you should probably make sure your table can be exported to XML if needed (like `brewnotes` does, but `hop_in_inventory` doesn't).
+
+### Include the new header file in TableSchema
+You will want to add the new header file to TableSchema.cpp.
+
+### Create the new define method
+You will need to create the new define method like defineHopTable. Make sure you set the key, the properties and the foreign keys separately. Include any of the other object properties (like `m_childTable`) as needed. If they are not used (like equipment has no in recipe table), simply do nothing. They will default to the proper values.
+
+It is really important that your new class properly invoke the `Q_PROPERTY` macros correctly. There are some loops that expect to use the Qt Meta system to invoke getters and setters. If you do not set up the `Q_PROPERTY` correctly, bad things will happen.
+
+### Invoke the new define method
+In the DatbaseSchema class, make sure the new table is properly initialized in `loadTables`.
+
+### Do the rest of the work.
+You will need to create the necessary work as a migration, but most of the tasks can be handled easily enough -- using `generateCreateTable()` and `generateInsertRow()` will give you the strings required to create the new table in the database and to insert the new information.
+

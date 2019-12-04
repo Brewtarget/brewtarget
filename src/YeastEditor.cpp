@@ -64,7 +64,6 @@ void YeastEditor::save()
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
    y->setAmount( lineEdit_amount->toSI());
-   y->setInventoryQuanta( lineEdit_inventory->text().toInt() );
 
    y->setLaboratory( lineEdit_laboratory->text() );
    y->setProductID( lineEdit_productID->text() );
@@ -81,6 +80,8 @@ void YeastEditor::save()
    if ( y->cacheOnly() ) {
       Database::instance().insertYeast(y);
    }
+   // do this late to make sure we've the row in the inventory table
+   y->setInventoryQuanta( lineEdit_inventory->text().toInt() );
    setVisible(false);
 }
 

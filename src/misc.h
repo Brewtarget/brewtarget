@@ -79,7 +79,7 @@ public:
    //! \brief The amount in inventory in either kg or L, depending on \c amountIsWeight().
    Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedAmount*/ )
    //! \brief The inventory id.
-   Q_PROPERTY( double inventoryId READ inventoryId /*WRITE setInventoryAmount*/ /*NOTIFY changed*/ /*changedAmount*/ )
+   Q_PROPERTY( double inventoryId READ inventoryId WRITE setInventoryId /*NOTIFY changed*/ /*changedAmount*/ )
    //! \brief Whether the amount is weight (kg), or volume (L).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
    //! \brief What to use it for.
@@ -98,6 +98,7 @@ public:
    void setUseFor( const QString &var );
    void setNotes( const QString &var );
    void setCacheOnly( bool cache );
+   void setInventoryId( int key );
 
    // Get
 //   QString name() const;

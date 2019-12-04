@@ -65,7 +65,7 @@ public:
    //! \brief The amount in inventory in kg.
    Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief The inventory ID -- needed for signal processing. This is pretty much readonly
-   Q_PROPERTY( double inventoryId READ inventoryId /*WRITE setInventoryAmountId*/ /*NOTIFY changed*/ /*changedInventory*/ )
+   Q_PROPERTY( double inventoryId READ inventoryId WRITE setInventoryId /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief The \c Use.
    Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
    //! \brief The untranslated \c Use string.
@@ -150,6 +150,7 @@ public:
    void setCohumulone_pct( double num);
    void setMyrcene_pct( double num);
    void setCacheOnly(bool cache);
+   void setInventoryId(int key);
 
    static QString classNameStr();
 signals:
