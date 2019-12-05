@@ -366,10 +366,7 @@ bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q, DatabaseSchema* defn)
 bool DatabaseSchemaHelper::migrate_to_6(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
-   TableSchema* tbl = defn->table(Brewtarget::BTALLTABLE);
-
-   ret = q.exec(tbl->generateCreateTable());
-   // there should be a long round of populating this table. We drop it in version 8, so I see no need to do more than this
+   // I drop this table in version 8. There is no sense doing anything here, and it breaks other things.
    return ret;
 }
 

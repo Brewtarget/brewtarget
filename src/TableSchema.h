@@ -169,7 +169,7 @@ private:
    void defineWaterTable();
    void defineBrewnoteTable();
    void defineSettingsTable();
-   void defineBtAllTable();
+//   void defineBtAllTable();
 
    // and we can get away with one method for the child tables
    void defineChildTable(Brewtarget::DBTable table);

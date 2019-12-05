@@ -25,54 +25,6 @@
 #include "DatabaseSchema.h"
 #include "InstructionSchema.h"
 
-// These HAVE to be in the same order as they are listed in
-// Brewtarget::DBTable
-static QStringList dbTableToName  = QStringList() <<
-   QString("none") <<  // need to handle the NOTABLE index
-   ktableMeta <<
-   ktableSettings <<
-   ktableEquipment <<
-   ktableFermentable <<
-   ktableHop <<
-   ktableMisc <<
-   ktableStyle <<
-   ktableYeast <<
-   ktableWater <<
-   ktableMash <<
-   ktableMashStep <<
-   ktableRecipe <<
-   ktableBrewnote <<
-   ktableInstruction <<
-// Now for BT internal tables
-   ktableBtEquipment <<
-   ktableBtFermentable <<
-   ktableBtHop <<
-   ktableBtMisc <<
-   ktableBtStyle <<
-   ktableBtYeast <<
-   ktableBtWater <<
-// Now the in_recipe tables
-   ktableFermInRec <<
-   ktableHopInRec <<
-   ktableMiscInRec <<
-   ktableWaterInRec <<
-   ktableYeastInRec <<
-   ktableInsInRec <<
-// child tables next
-   ktableEquipChildren <<
-   ktableFermChildren <<
-   ktableHopChildren <<
-   ktableMiscChildren <<
-   ktableRecChildren <<
-   ktableStyleChildren <<
-   ktableWaterChildren <<
-   ktableYeastChildren <<
-// inventory tables last
-   ktableFermInventory <<
-   ktableHopInventory <<
-   ktableMiscInventory <<
-   ktableYeastInventory;
-
 DatabaseSchema::DatabaseSchema()
 {
    loadTables();
@@ -100,8 +52,8 @@ TableSchema *DatabaseSchema::table(Brewtarget::DBTable table)
 
 TableSchema *DatabaseSchema::table(QString tableName)
 {
-   if ( dbTableToName.contains(tableName) ) {
-      return m_tables.value( static_cast<Brewtarget::DBTable>(dbTableToName.indexOf(tableName)));
+   if ( Brewtarget::dbTableToName.contains(tableName) ) {
+      return m_tables.value( static_cast<Brewtarget::DBTable>(Brewtarget::dbTableToName.indexOf(tableName)));
    }
    return nullptr;
 }
@@ -238,12 +190,22 @@ QVector<TableSchema*> DatabaseSchema::btTables()
     return retVal;
 }
 
-QVector<TableSchema*>  DatabaseSchema::allTables()
+QVector<TableSchema*>  DatabaseSchema::allTables(bool createOrder)
 {
     QVector<TableSchema*> retval;
 
-    for( int i = 1; i < dbTableToName.size(); ++i ) {
-        retval.append( m_tables.value( static_cast<Brewtarget::DBTable>(i)) );
+    // when creating the database from scratch, we need to make sure the
+    // inventory tables happen before the base tables. otherwise, we will
+    // get constraint violations because the inventory_id has nothing to point
+    // to
+    for( int i = 1; i < Brewtarget::dbTableToName.size(); ++i ) {
+       TableSchema* tmp = m_tables.value( static_cast<Brewtarget::DBTable>(i));
+       if ( createOrder && tmp->isInventoryTable() ) {
+          retval.prepend(tmp);
+       }
+       else {
+          retval.append( tmp );
+       }
     }
     return retval;
 }

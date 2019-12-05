@@ -36,64 +36,13 @@
 #include "YeastSchema.h"
 #include "WaterSchema.h"
 #include "BrewnoteSchema.h"
-#include "BtAllTableSchema.h"
 #include "SettingsSchema.h"
-
-// We have to hard code this, because we cannot be certain the database is
-// available yet -- so no bt_alltables lookups can be allowed
-// These HAVE to be in the same order as they are listed in
-// Brewtarget::DBTable
-static QStringList dbTableToName  = QStringList() <<
-   QString("none") <<  // need to handle the NOTABLE index
-   ktableMeta <<
-   ktableSettings <<
-   ktableEquipment <<
-   ktableFermentable <<
-   ktableHop <<
-   ktableMisc <<
-   ktableStyle <<
-   ktableYeast <<
-   ktableWater <<
-   ktableMash <<
-   ktableMashStep <<
-   ktableRecipe <<
-   ktableBrewnote <<
-   ktableInstruction <<
-// Now for BT internal tables
-   ktableBtEquipment <<
-   ktableBtFermentable <<
-   ktableBtHop <<
-   ktableBtMisc <<
-   ktableBtStyle <<
-   ktableBtYeast <<
-   ktableBtWater <<
-// Now the in_recipe tables
-   ktableFermInRec <<
-   ktableHopInRec <<
-   ktableMiscInRec <<
-   ktableWaterInRec <<
-   ktableYeastInRec <<
-   ktableInsInRec <<
-// child tables next
-   ktableEquipChildren <<
-   ktableFermChildren <<
-   ktableHopChildren <<
-   ktableMiscChildren <<
-   ktableRecChildren <<
-   ktableStyleChildren <<
-   ktableWaterChildren <<
-   ktableYeastChildren <<
-// inventory tables last
-   ktableFermInventory <<
-   ktableHopInventory <<
-   ktableMiscInventory <<
-   ktableYeastInventory;
 
 static const QString kDefault("DEFAULT");
 
 TableSchema::TableSchema(Brewtarget::DBTable table)
     : QObject(nullptr),
-      m_tableName( dbTableToName[ static_cast<int>(table) ] ),
+      m_tableName( Brewtarget::dbTableToName[ static_cast<int>(table) ] ),
       m_dbTable(table),
       m_childTable(Brewtarget::NOTABLE),
       m_inRecTable(Brewtarget::NOTABLE),
@@ -441,7 +390,7 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
 
       retKeys.append( QString(", FOREIGN KEY(%1) REFERENCES %2(id)")
                        .arg( key->colName(selected) )
-                       .arg( dbTableToName[ key->fTable() ] )
+                       .arg( Brewtarget::dbTableToName[ key->fTable() ] )
       );
    }
 
@@ -643,8 +592,7 @@ const QString TableSchema::generateDecrementTrigger(Brewtarget::DBTypes type)
       //   end;
       //   $BODY$ LANGUAGE plpgsql;
       retval = QString("CREATE OR REPLACE FUNCTION decrement_instruction_num() RETURNS TRIGGER AS $BODY$ "
-                       "BEGIN"
-                         "UPDATE %1 SET %2 = %2 - 1 "
+                       "BEGIN UPDATE %1 SET %2 = %2 - 1 "
                          "WHERE %3 = OLD.%3 AND %2 > OLD.%2;"
                          "return NULL;"
                        "END;"
@@ -679,9 +627,6 @@ void TableSchema::defineTable()
    switch( m_dbTable ) {
       case Brewtarget::SETTINGTABLE:
          defineSettingsTable();
-         break;
-      case Brewtarget::BTALLTABLE:
-         defineBtAllTable();
          break;
       case Brewtarget::BREWNOTETABLE:
          defineBrewnoteTable();
@@ -1335,25 +1280,6 @@ void TableSchema::defineYeastInventoryTable()
 
    m_properties[kpropInventory] = new PropertySchema( kpropQuanta,  kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
 
-}
-
-// the btAll table is probably going away. This breaks all my conventions
-// but I will hopefully be able to remove it
-void TableSchema::defineBtAllTable()
-{
-   m_type = META;
-
-   m_key                        = new PropertySchema();
-   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
-   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
-
-   m_properties[kpropName]                 = new PropertySchema( QString(), kcolName,                  QString(), QString("text"),      QString("''"), QString("not null"));
-   m_properties[kcolBtAllClassName]        = new PropertySchema( QString(), kcolBtAllClassName,        QString(), QString("text"),      QString("''"));
-   m_properties[kcolBtAllInventoryTableId] = new PropertySchema( QString(), kcolBtAllInventoryTableId, QString(), QString("integer"),   QVariant(0));
-   m_properties[kcolBtAllChildTableId]     = new PropertySchema( QString(), kcolBtAllChildTableId,     QString(), QString("integer"),   QVariant(0));
-   m_properties[kcolBtAllCreated]          = new PropertySchema( QString(), kcolBtAllCreated,          QString(), QString("timestamp"), QString("CURRENT_TIMESTAMP"));
-   m_properties[kcolBtAllVersion]          = new PropertySchema( QString(), kcolBtAllVersion,          QString(), QString("integer"),   QVariant(0));
-   m_properties[kcolBtAllTableId]          = new PropertySchema( QString(), kcolBtAllTableId,          QString(), QString("integer"),   QVariant(0));
 }
 
 void TableSchema::defineSettingsTable()

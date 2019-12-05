@@ -83,6 +83,53 @@
 #include <signal.h>
 #endif
 
+// These HAVE to be in the same order as they are listed in
+// Brewtarget::DBTable
+QStringList Brewtarget::dbTableToName  = QStringList() <<
+   QString("none") <<  // need to handle the NOTABLE index
+   ktableSettings <<
+   ktableEquipment <<
+   ktableFermentable <<
+   ktableHop <<
+   ktableMisc <<
+   ktableStyle <<
+   ktableYeast <<
+   ktableWater <<
+   ktableMash <<
+   ktableMashStep <<
+   ktableRecipe <<
+   ktableBrewnote <<
+   ktableInstruction <<
+// Now for BT internal tables
+   ktableBtEquipment <<
+   ktableBtFermentable <<
+   ktableBtHop <<
+   ktableBtMisc <<
+   ktableBtStyle <<
+   ktableBtYeast <<
+   ktableBtWater <<
+// Now the in_recipe tables
+   ktableFermInRec <<
+   ktableHopInRec <<
+   ktableMiscInRec <<
+   ktableWaterInRec <<
+   ktableYeastInRec <<
+   ktableInsInRec <<
+// child tables next
+   ktableEquipChildren <<
+   ktableFermChildren <<
+   ktableHopChildren <<
+   ktableMiscChildren <<
+   ktableRecChildren <<
+   ktableStyleChildren <<
+   ktableWaterChildren <<
+   ktableYeastChildren <<
+// inventory tables last
+   ktableFermInventory <<
+   ktableHopInventory <<
+   ktableMiscInventory <<
+   ktableYeastInventory;
+
 MainWindow* Brewtarget::_mainWindow = nullptr;
 QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = new QTranslator();

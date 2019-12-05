@@ -4910,15 +4910,18 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
 
       // this is to prevent us from over-writing or doing heavens knows what to an existing db
       if( newDb.tables().contains(QLatin1String("settings")) ) {
-         Brewtarget::logW( QString("Found a settings table in the target database. Doing nothing until it's gone"));
+         Brewtarget::logW( QString("It appears the database is already configured."));
+         return;
       }
 
       newDb.transaction();
-      foreach( TableSchema* table, dbDefn->allTables() ) {
+
+      // make sure we get the inventory tables first
+      foreach( TableSchema* table, dbDefn->allTables(true) ) {
          QString createTable = table->generateCreateTable(newType);
          QSqlQuery results( newDb );
          if ( ! results.exec(createTable) ) {
-            throw QString("Could not open %1 : %2").arg(Hostname).arg(results.lastError().text());
+            throw QString("Could not create %1 : %2").arg(table->tableName()).arg(results.lastError().text());
          }
       }
       newDb.commit();
@@ -4955,8 +4958,9 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
    QSqlDatabase oldDb = sqlDatabase();
    QSqlQuery readOld(oldDb);
 
-   // There are a lot of tables to process
-   foreach( TableSchema* table, dbDefn->allTables() ) {
+   // There are a lot of tables to process, and we need to make
+   // sure the inventory tables go first
+   foreach( TableSchema* table, dbDefn->allTables(true) ) {
       QString tname = table->tableName();
       QSqlField field;
       bool mustPrepare = true;
@@ -5031,20 +5035,23 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
                   Brewtarget::logE(QString("No decrement triggers found for %1").arg(table->tableName()));
                }
                else {
-                  upsertNew.exec(trigger);
+                  if ( ! upsertNew.exec(trigger) ) {
+                     throw QString("Could not insert new row %1 : %2")
+                        .arg(upsertNew.lastQuery())
+                        .arg(upsertNew.lastError().text());
+                  }
                }
             }
          }
-         upsertNew.finish();
          // We need to manually reset the sequences
-         if ( newType == Brewtarget::PGSQL && maxid > 0 ) {
+         if ( newType == Brewtarget::PGSQL ) {
              // this probably should be fixed somewhere, but this is enough for now?
-            QString seq = QString("SELECT setval('%1_id_seq',%2)").arg(tname).arg(maxid);
-            QSqlQuery updateSeq(seq, newDb);
+            //
+            QString seq = QString("SELECT setval('%1_%2_seq',(SELECT MAX(id) FROM %1))").arg(table->tableName()).arg(table->keyName());
 
-            if ( ! updateSeq.exec(seq) )
+            if ( ! upsertNew.exec(seq) )
                throw QString("Could not reset the sequences: %1 %2")
-                  .arg(seq).arg(updateSeq.lastError().text());
+                  .arg(seq).arg(upsertNew.lastError().text());
          }
       }
       catch (QString e) {

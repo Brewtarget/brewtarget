@@ -3,7 +3,7 @@
 #ifndef __TABLESCHEMACONSTH__
 #define __TABLESCHEMACONSTH__
 // Define tables names first, because I need them first
-static const QString ktableMeta("bt_alltables");
+// static const QString ktableMeta("bt_alltables");
 static const QString ktableSettings("settings");
 static const QString ktableEquipment("equipment");
 static const QString ktableFermentable("fermentable");

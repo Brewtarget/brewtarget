@@ -78,7 +78,7 @@ public:
    QVector<TableSchema*> inRecipeTables();
    QVector<TableSchema*> baseTables();
    QVector<TableSchema*> btTables();
-   QVector<TableSchema*> allTables();
+   QVector<TableSchema*> allTables(bool createOrder = false);
 
    // the idea here is to be able to give a base table and get back either its
    // inRec, child, inventory or bt table. I am thinking I will calculate these for

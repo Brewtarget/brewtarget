@@ -52,8 +52,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    createPostgresElements();
    createSQLiteElements();
 
-   if( parent != nullptr )
-   {
+   if( parent != nullptr ) {
       setWindowIcon(parent->windowIcon());
    }
 
@@ -285,12 +284,16 @@ void OptionDialog::saveAndClose()
                                                  static_cast<Brewtarget::DBTypes>(comboBox_engine->currentData().toInt()));
          }
          // Database engine stuff
-         Brewtarget::setOption("dbType", comboBox_engine->currentData().toInt());
-         Brewtarget::setOption("dbHostname", btStringEdit_hostname->text());
-         Brewtarget::setOption("dbPortnum", btStringEdit_portnum->text());
-         Brewtarget::setOption("dbSchema", btStringEdit_schema->text());
-         Brewtarget::setOption("dbName", btStringEdit_dbname->text());
-         Brewtarget::setOption("dbUsername", btStringEdit_username->text());
+         int engine = comboBox_engine->currentData().toInt();
+         Brewtarget::setOption("dbType", engine);
+         // only write these changes when switching TO pgsql
+         if ( engine == Brewtarget::PGSQL ) {
+            Brewtarget::setOption("dbHostname", btStringEdit_hostname->text());
+            Brewtarget::setOption("dbPortnum", btStringEdit_portnum->text());
+            Brewtarget::setOption("dbSchema", btStringEdit_schema->text());
+            Brewtarget::setOption("dbName", btStringEdit_dbname->text());
+            Brewtarget::setOption("dbUsername", btStringEdit_username->text());
+         }
          QMessageBox::information(this, tr("Restart"), tr("Please restart brewtarget to connect to the new database"));
       }
       catch (QString e) {

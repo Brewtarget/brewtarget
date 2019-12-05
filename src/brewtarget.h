@@ -100,16 +100,11 @@ public:
       COLOR
    };
 
-   //! \brief The database tables.
-   //! \brief You know. I need all the db tables, and I need them in a
-   //  specific order. I need these constants defined in the EXACT order the
-   //  tables are created by DatabaseSchemaHelper::create. Do not modify this
-   //  unless you understand the relationship and fix all sides
+   //! \brief The database tables. These are heavily used by the TableSchema and DatabaseSchema classes
    enum DBTable{
       //! None of the tables. 0
       NOTABLE,
       // Meta tables first
-      BTALLTABLE,
       SETTINGTABLE,
 
       // BeerXML tables next
@@ -160,6 +155,7 @@ public:
       YEASTINVTABLE
    };
 
+   static QStringList dbTableToName;
    //! \brief Supported databases. I am not 100% sure I'm digging this
    //  solution, but this is more extensible than what I was doing previously
    enum DBTypes {
@@ -184,7 +180,7 @@ public:
     */
    static int run(const QString &userDirectory = QString());
 
-   static double toDouble(QString text, bool* ok = 0);
+   static double toDouble(QString text, bool* ok = nullptr);
    static double toDouble(const BeerXMLElement* element, QString attribute, QString caller);
    static double toDouble(QString text, QString caller);
 
@@ -202,7 +198,7 @@ public:
     *  \param unitDisplay which unit system to use, defaulting to "noUnit" which means use the system default
     *  \param Unit::unitScale which scale to use, defaulting to Unit::noScale which means use the largest scale that generates a value > 1
     */
-   static QString displayAmount( double amount, Unit* units=0, int precision=3,
+   static QString displayAmount( double amount, Unit* units=nullptr, int precision=3,
                                  Unit::unitDisplay displayUnit = Unit::noUnit, Unit::unitScale displayScale = Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -213,7 +209,7 @@ public:
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
+   static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
 
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -224,7 +220,7 @@ public:
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( double amount, QString section, QString attribute, Unit* units=0, int precision = 3);
+   static QString displayAmount( double amount, QString section, QString attribute, Unit* units=nullptr, int precision = 3);
 
    /*!
     *  \brief Displays an amount in the appropriate units.
@@ -233,7 +229,7 @@ public:
     *  \param units the units that \c amount is in
     *  \param precision how many decimal places
     */
-   static double amountDisplay( double amount, Unit* units=0, int precision=3,
+   static double amountDisplay( double amount, Unit* units=nullptr, int precision=3,
                                  Unit::unitDisplay displayUnit = Unit::noUnit, Unit::unitScale displayScale = Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -242,7 +238,7 @@ public:
     * \param attribute the \c QObject::property of \c element that returns the
     *        amount we wish to display
     */
-   static double amountDisplay( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
+   static double amountDisplay( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
 
    //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
@@ -328,7 +324,7 @@ public:
    static QMenu* setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit::unitScale scale = Unit::noScale, bool generateScale = true);
    static QMenu* setupDiastaticPowerMenu(QWidget* parent, Unit::unitDisplay unit);
    static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
-   static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
+   static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = nullptr);
 
    /*!
     * \brief If we are supporting multiple databases, we need some way to
@@ -434,7 +430,7 @@ private:
     */
    static QString getOptionValue(const QDomDocument& optionsDoc,
                                  const QString& option,
-                                 bool* hasOption = 0);
+                                 bool* hasOption = nullptr);
 
    /*!
     *  \brief Copies the user xml files to another directory.
@@ -445,7 +441,7 @@ private:
    //! \brief Ensure our directories exist.
    static bool ensureDirectoriesExist();
    //! \brief Create a directory if it doesn't exist, popping a error dialog if creation fails
-   static bool createDir(QDir dir, QString errText = NULL);
+   static bool createDir(QDir dir, QString errText = nullptr);
 
    //! \brief Load translation files.
    static void loadTranslations();
