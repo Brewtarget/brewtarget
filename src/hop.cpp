@@ -192,7 +192,7 @@ void Hop::setInventoryAmount( double num )
    {
       m_inventory = num;
       if ( ! m_cacheOnly ) {
-         setInventory(num);
+         setInventory(num,m_inventory_id);
       }
    }
 }

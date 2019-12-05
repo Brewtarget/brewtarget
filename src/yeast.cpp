@@ -265,7 +265,7 @@ void Yeast::setInventoryQuanta( int var )
    else {
       m_inventory = var;
       if ( ! m_cacheOnly ) {
-         setInventory(var);
+         setInventory(var,m_inventory_id);
       }
    }
 }

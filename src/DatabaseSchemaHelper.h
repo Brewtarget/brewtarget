@@ -87,6 +87,9 @@ private:
    //! \brief Current schema version of the given database
    static int currentVersion(QSqlDatabase db = QSqlDatabase());
 
+   static bool drop_columns(QSqlQuery q, TableSchema* tbl);
+   static bool drop_columns(QSqlQuery q, TableSchema* tbl, QStringList colNames);
+
    static bool migrate_to_202(QSqlQuery q, DatabaseSchema *defn);
    static bool migrate_to_210(QSqlQuery q, DatabaseSchema *defn);
    static bool migrate_to_4(QSqlQuery q, DatabaseSchema *defn);

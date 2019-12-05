@@ -164,12 +164,20 @@ bool DatabaseSchemaHelper::migrate(int oldVersion, int newVersion, QSqlDatabase 
 
    bool ret = true;
 
+   // turning the foreign_keys on or off can only happen *outside* a
+   // transaction boundary. Eeewwww.
+   if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
+      db.exec("PRAGMA foreign_keys=off");
+   }
+
    // Start a transaction
    db.transaction();
-
    for( ; oldVersion < newVersion && ret; ++oldVersion )
       ret &= migrateNext(oldVersion, db);
 
+   if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
+      db.exec("PRAGMA foreign_keys=on");
+   }
    // If any statement failed to execute, rollback database to last good state.
    if( ret )
       ret &= db.commit();
@@ -381,6 +389,8 @@ bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q, DatabaseSchema* defn)
    return ret;
 }
 
+// Note. I think we need to drop this hop_id column (and it's brethern in the other tables)
+// when we are done. It is circular and an inventory row never really cares who points to it?
 bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, DatabaseSchema *defn, Brewtarget::DBTable table )
 {
    // get all the tables first
@@ -388,26 +398,26 @@ bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, DatabaseSchema *defn, B
    TableSchema* tbl = defn->table(table);
    TableSchema* cld = defn->childTable(table);
    TableSchema* inv = defn->invTable(table);
+   // the inventory indexes are mostly dead, so we cannot rely on the TableSchema
+   QString invIdxName = QString("%1_id").arg(tbl->tableName());
 
-   // do this in order. First, we have to add the column
-   QString addColumn = QString("ALTER TABLE %1 ADD COLUMN %2 REFERENCES %3(%4)")
-         .arg( tbl->tableName() )
-         .arg( tbl->foreignKeyToColumn())
-         .arg( inv->tableName() )
-         .arg( inv->keyName());
+   // First, we add the column. It got hard because postgres is sometimes.
+   QString addColumn;
 
-   // then we populate the parent items
-   // update hop set inventory_id = ( select hop_in_inventory.id from hop_in_inventory where hop.id = hop_in_inventory.hop_id )
-   QString updateParents = QString("UPDATE %1 SET %2 = ( select %3.%4 from %3 where %1.%5 = %3.%6 )")
-         .arg(tbl->tableName())
-         .arg(tbl->foreignKeyToColumn())
+   // it would seem we have kids with their own rows in the database. This is a freaking mess, but I need to delete those rows
+   // before I can do anything else.
+   // delete hop_in_inventory where hop_in_inventory.id in ( select hop_in_inventory.id from hop_in_inventory, hop_children where
+   //  hop_children.child_id = hop_in_inventory.hop_id)"
+   QString deleteKids = QString( "delete from %1 where %1.%2 in ( select %1.%2 from %1,%3,%4 where %4.%5 = %3.%6 and %1.%7 = %4.%5 )")
          .arg(inv->tableName())
          .arg(inv->keyName())
+         .arg(cld->tableName())
+         .arg(tbl->tableName())
          .arg(tbl->keyName())
-         .arg(inv->invIndexName());
+         .arg(cld->childIndexName())
+         .arg(invIdxName);
 
-   // that only handles things that already have an inventory entry. My current thought is I need all the things to have an
-   // entry in the inventory table it really, really simplifies life later.
+   // Everything has an inventory row now. This will find all the parent items that don't have an inventory row.
    // select hop.id from hop where not exists ( select hop_children.id from hop_children where hop_children.child_id = hop.id ) and
    //       not exists ( select hop_in_inventory.id from hop_in_inventory where hop_in_inventory.hop_id = hop.id );
    QString noInventory = QString( "select %1 from %2 where not exists ( select %3.%4 from %3 where %3.%5 = %2.%1 ) and "
@@ -419,46 +429,73 @@ bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, DatabaseSchema *defn, B
          .arg(cld->childIndexName())
          .arg(inv->tableName())
          .arg(inv->keyName())
-         .arg(inv->invIndexName());
-   // it would seem we have kids with their own rows in the database. This is a freaking mess, but I need to delete those rows
-   // before I can do anything else.
-   // delete hop_in_inventory where hop_in_inventory.id in ( select hop_in_inventory.id from hop_in_inventory, hop_children, hop where
-   //  hop.id = hop_children.child_id and hop_in_inventory.hop_id = hop.id)"
-   QString deleteKids = QString( "delete from %1 where %1.%2 in ( select %1.%2 from %1,%3,%4 where %4.%5 = %3.%6 and %1.%7 = %4.%5 )")
+         .arg(invIdxName);
+
+   // Once we know all parents have inventory rows, we populate inventory_id for them
+   // update hop set inventory_id = (select hop_in_inventory.id from hop_in_inventory where hop.id = hop_in_inventory.hop_id)
+   QString updateParents = QString("UPDATE %1 SET %2 = (SELECT %3.%4 from %3 where %1.%5 = %3.%6)")
+         .arg(tbl->tableName())
+         .arg(tbl->foreignKeyToColumn())
          .arg(inv->tableName())
          .arg(inv->keyName())
-         .arg(cld->tableName())
-         .arg(tbl->tableName())
          .arg(tbl->keyName())
-         .arg(cld->childIndexName())
-         .arg(inv->invIndexName());
+         .arg(invIdxName);
 
-   // now, update all the kids. This is where it gets really weird
-   // update hop[%1] set inventory_id[%2] = ( select hop_in_inventory[%3].id[%4] from hop_in_inventory[%3], hop_children[%5] where
-   //   ( hop[%1].id[%6] = hop_in_inventory[%3].hop_id[%7] or
-   //   ( hop[%1].id[%6] = hop_children[%5].child_id[%8] and hop_children[%5].parent_id[%9] = hop_in_inventory[%3].hop_id[%7])))
-   QString updateKids = QString("UPDATE %1 SET %2 = ( select %3.%4 from %3,%5 where ( %1.%6 = %3.%7 or ( %1.%6 = %5.%8 and %5.%9 = %3.%7 )))")
+   // Finally, we update all the kids to have the same inventory_id as their dear old paw
+   // update hop[%1] set inventory_id[%2] = (
+   //   select tmp.inventory_id[%2] from hop[%1] tmp, hop_children[%3] where
+   //      hop[%1].id[%4] = hop_children[%3].child_id[%5] and
+   //      tmp.id[%4] = hop_children[%3].parent_id[%6]
+   //   )
+   // where inventory_id[%2] is null
+   QString updateKids = QString("UPDATE %1 SET %2 = ( "
+                                "select tmp.%2 from %1 tmp, %3 where"
+                                " %1.%4 = %3.%5 and tmp.%4 = %3.%6"
+                                ") where %2 is null")
          .arg(tbl->tableName())            // 1
          .arg(tbl->foreignKeyToColumn())   // 2
-         .arg(inv->tableName())            // 3
-         .arg(inv->keyName())              // 4
-         .arg(cld->tableName())            // 5
-         .arg(tbl->keyName())              // 6
-         .arg(inv->invIndexName())         // 7
-         .arg(cld->childIndexName())       // 8
-         .arg(cld->parentIndexName());
+         .arg(cld->tableName())            // 3
+         .arg(tbl->keyName())              // 4
+         .arg(cld->childIndexName())       // 5
+         .arg(cld->parentIndexName());     // 6
 
-   // add the column
-   ret = q.exec(addColumn);
-   if ( !ret ) return ret;
+
+   // add the column and the constraint. postgres is verbose at times
+   if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
+      // sqlite can add the column and the constraint at the same time
+      addColumn = QString("ALTER TABLE %1 ADD COLUMN %2 REFERENCES %3 (%4)")
+         .arg( tbl->tableName() )
+         .arg( tbl->foreignKeyToColumn())
+         .arg( inv->tableName() )
+         .arg( inv->keyName());
+      ret = q.exec(addColumn);
+   }
+   else if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
+      // postgres needs to add the column first
+      addColumn = QString("ALTER TABLE %1 ADD COLUMN %2 INTEGER")
+         .arg( tbl->tableName() )
+         .arg( tbl->foreignKeyToColumn());
+
+      ret = q.exec(addColumn);
+      if ( ret ) {
+         // and then the constraint
+         addColumn = QString("ALTER TABLE %1 ADD CONSTRAINT %2_%3_fk FOREIGN KEY (%4) REFERENCES %2(%3)")
+               .arg(tbl->tableName())
+               .arg(inv->tableName())
+               .arg(inv->keyName())
+               .arg(tbl->foreignKeyToColumn());
+         ret = q.exec(addColumn);
+      }
+   }
+   if ( !ret ) {
+      return ret;
+   }
 
    // remove kids from the inventory row
    ret = q.exec(deleteKids);
-   if ( !ret ) return ret;
-
-   // update parents that already have inventory rows
-   ret = q.exec(updateParents);
-   if ( !ret ) return ret;
+   if ( !ret ) {
+      return ret;
+   }
 
    // create new inventory rows for parents who have no inventory
    QSqlQuery i(q);
@@ -467,23 +504,22 @@ bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, DatabaseSchema *defn, B
    while ( q.next() ) {
       int idx = q.record().value(tbl->keyName()).toInt();
       // add an inventory row
+      // this is weird, but they aren't quite dead yet
       QString newInv = QString("INSERT into %1 (%2) VALUES(%3)")
             .arg(inv->tableName())
-            .arg(inv->invIndexName())
+            .arg(invIdxName)
             .arg(idx);
       ret = i.exec(newInv);
-      if ( !ret ) return ret;
+      if ( !ret ) {
+         return ret;
+      }
+   }
 
-      int newkey = i.lastInsertId().toInt();
-      // push that inventory_id into the parent
-      QString insInv = QString("UPDATE %1 SET %2=%3 where %4=%5")
-            .arg(tbl->tableName())
-            .arg(tbl->foreignKeyToColumn())
-            .arg(newkey)
-            .arg(tbl->keyName())
-            .arg(idx);
-      ret = i.exec(insInv);
-      if ( !ret ) break;
+   // now that all parents have inventory rows
+   // we can update parents to have inventory_id
+   ret = q.exec(updateParents);
+   if ( !ret ) {
+      return ret;
    }
 
    // finally, point all the kids to their parent's inventory row
@@ -492,63 +528,101 @@ bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, DatabaseSchema *defn, B
    return ret;
 }
 
-bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
+bool DatabaseSchemaHelper::drop_columns(QSqlQuery q, TableSchema *tbl, QStringList colNames)
 {
    bool ret = true;
-   TableSchema* tbl = defn->table(Brewtarget::BREWNOTETABLE);
 
-   // these columns are used nowhere I can find and they are breaking things.
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
-      ret &= q.exec (
-            ALTERTABLE + SEP + tbl->tableName() + SEP +
-            DROPCOLUMN + SEP + "predicted_og"
-         );
-
-      ret &= q.exec (
-            ALTERTABLE + SEP + tbl->tableName() + SEP +
-            DROPCOLUMN + SEP + "predicted_abv"
-         );
+      foreach(QString column, colNames ) {
+         qDebug() << "suckawhat";
+         ret &= q.exec(
+                  ALTERTABLE + SEP + tbl->tableName() + SEP +
+                  DROPCOLUMN + SEP + "IF EXISTS " + column
+               );
+      }
    }
-   // Fun fact. You can't drop a column in sqlite. So we do this instead
-   else if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
-      q.exec( "PRAGMA foreign_keys=off");
+   else {
       // Create a temporary table
-      QString createTemp = tbl->generateCreateTable(Brewtarget::SQLITE, "tmpbrewnote");
-      ret = q.exec( createTemp );
+      QString tmptable = QString("tmp%1").arg(tbl->tableName());
+      QString createTemp = tbl->generateCreateTable(Brewtarget::SQLITE, tmptable);
+      ret &= q.exec( createTemp );
+      if ( !ret && tbl->dbTable() == Brewtarget::FERMINVTABLE ) {
+         qDebug() << "created temp table:" << createTemp << ret << q.lastError();
+      }
 
       // copy the old to the new, less bad columns
-      if ( ret ) {
-         QString copySql = tbl->generateCopyTable("tmpbrewnote", Brewtarget::SQLITE );
-         ret = q.exec( copySql );
+      QString copySql = tbl->generateCopyTable(tmptable, Brewtarget::SQLITE );
+      ret &= q.exec( copySql );
+      if ( tbl->dbTable() == Brewtarget::FERMINVTABLE ) {
+         qDebug() << "copied to the temp table:" << copySql << ret << q.lastError();
       }
 
       // drop the old
-      if ( ret ) {
-         ret = q.exec( "drop table brewnote");
+      QString dropOld = QString("drop table %1").arg(tbl->tableName());
+      ret &= q.exec(dropOld);
+      if ( tbl->dbTable() == Brewtarget::FERMINVTABLE ) {
+         qDebug() << "dropped the original table:" << dropOld << ret << q.lastError();
       }
 
       // rename the new
-      if ( ret ) {
-         ret = q.exec( "alter table tmpbrewnote rename to brewnote");
+      QString rename = QString("alter table %1 rename to %2").arg(tmptable).arg(tbl->tableName());
+      ret &= q.exec( rename );
+      if ( tbl->dbTable() == Brewtarget::FERMINVTABLE ) {
+         qDebug() << "renamed the new table:" << rename << ret << q.lastError();
       }
-      q.exec( "PRAGMA foreign_keys=on");
    }
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
+{
+   bool ret = true;
+
+   // these columns are used nowhere I can find and they are breaking things.
+   ret = drop_columns(q,defn->table(Brewtarget::BREWNOTETABLE),QStringList() << "predicted_og" << "predicted_abv");
+   qDebug() << "finished cleaning up brewnote: ret =" << ret;
 
    // Now that we've had that fun, let's have this fun
+   Brewtarget::logW(QString("rearranging inventory"));
+   ret &= migration_aide_8(q, defn, Brewtarget::FERMTABLE);
+   if ( ret )
+      ret &= migration_aide_8(q, defn, Brewtarget::HOPTABLE);
+   if ( ret )
+      ret &= migration_aide_8(q, defn, Brewtarget::MISCTABLE);
+   if ( ret )
+      ret &= migration_aide_8(q, defn, Brewtarget::YEASTTABLE);
+   qDebug() << "finished rearranging inventory: ret =" << ret;
+
+   // We need to drop the appropriate columns from the inventory tables
+   // Scary, innit? The changes above basically reverse the relation.
+   // Instead of inventory knowing about ingredients, we now have ingredients
+   // knowing about inventory. I am concerned that leaving these in place
+   // will cause circular references
+   Brewtarget::logW(QString("dropping inventory columns"));
    if ( ret ) {
-      ret = migration_aide_8(q, defn, Brewtarget::FERMTABLE);
+      ret &= drop_columns(q, defn->table(Brewtarget::FERMINVTABLE),  QStringList() << "fermentable_id");
+      qDebug() << "finished dropping fermentable inventory column: ret =" << ret;
    }
    if ( ret ) {
-      ret = migration_aide_8(q, defn, Brewtarget::HOPTABLE);
+      ret &= drop_columns(q, defn->table(Brewtarget::HOPINVTABLE),   QStringList() << "hop_id");
+      qDebug() << "finished dropping hop inventory column: ret =" << ret;
    }
    if ( ret ) {
-      ret = migration_aide_8(q, defn, Brewtarget::MISCTABLE);
+      ret &= drop_columns(q, defn->table(Brewtarget::MISCINVTABLE),  QStringList() << "misc_id");
+      qDebug() << "finished dropping misc inventory column: ret =" << ret;
    }
    if ( ret ) {
-      ret = migration_aide_8(q, defn, Brewtarget::YEASTTABLE);
+      ret &= drop_columns(q, defn->table(Brewtarget::YEASTINVTABLE), QStringList() << "yeast_id");
+      qDebug() << "finished dropping yeast inventory column: ret =" << ret;
    }
+   qDebug() << "finished dropping inventory columns: ret =" << ret;
 
    // Finally, the btalltables table isn't needed, so drop it
-   ret = q.exec( DROPTABLE + SEP + "btalltables");
+   Brewtarget::logW(QString("dropping bt_alltables"));
+   if ( ret )
+      ret &= q.exec( DROPTABLE + SEP + "bt_alltables");
+   qDebug() << "finished dropping bt_alltables: ret =" << ret;
+
    return ret;
 }

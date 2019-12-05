@@ -1300,7 +1300,6 @@ void TableSchema::defineFermInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropInventory]      = new PropertySchema( kpropInventory,     kcolAmount,        kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kpropFermentableId] = new PropertySchema( kpropFermentableId, kcolFermentableId, QString("integer"), Brewtarget::FERMTABLE);
 }
 
 void TableSchema::defineHopInventoryTable()
@@ -1312,7 +1311,6 @@ void TableSchema::defineHopInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropInventory] = new PropertySchema( kpropInventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kpropHopId]    = new PropertySchema( kpropHopId,     kcolHopId,  QString("integer"), Brewtarget::HOPTABLE);
 }
 
 void TableSchema::defineMiscInventoryTable()
@@ -1324,7 +1322,6 @@ void TableSchema::defineMiscInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropInventory] = new PropertySchema( kpropInventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kpropMiscId]   = new PropertySchema( kpropMiscId,    kcolMiscId, QString("integer"), Brewtarget::MISCTABLE);
 
 }
 
@@ -1337,7 +1334,6 @@ void TableSchema::defineYeastInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropInventory] = new PropertySchema( kpropQuanta,  kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
-   m_foreignKeys[kpropYeastId]  = new PropertySchema( kpropYeastId, kcolYeastId,     QString("integer"), Brewtarget::YEASTTABLE);
 
 }
 

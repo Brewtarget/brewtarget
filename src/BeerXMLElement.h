@@ -168,7 +168,7 @@ protected:
     */
    QVariant get( const QString& col_name ) const;
 
-   void setInventory( const QVariant& value, bool notify=true );
+   void setInventory( const QVariant& value, int invKey = 0, bool notify=true );
    QVariant getInventory( const QString& col_name ) const;
 
    QVariantMap getColumnValueMap() const;

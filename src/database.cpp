@@ -1284,7 +1284,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allFermentables);
-         int invkey = newInventory( dbDefn->table(Brewtarget::FERMINVTABLE), tmp->key());
+         int invkey = newInventory( dbDefn->table(Brewtarget::FERMINVTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1323,7 +1323,7 @@ Hop* Database::newHop(Hop* other)
          qDebug() << Q_FUNC_INFO << "adding new hop";
          tmp = newIngredient(&allHops);
          qDebug() << Q_FUNC_INFO << "adding new inventory" << tmp->key();
-         int invkey = newInventory( dbDefn->table(Brewtarget::HOPINVTABLE), tmp->key());
+         int invkey = newInventory( dbDefn->table(Brewtarget::HOPINVTABLE));
          qDebug() << Q_FUNC_INFO << "added new inventory" << invkey;
          tmp->setInventoryId(invkey);
       }
@@ -1547,7 +1547,7 @@ Misc* Database::newMisc(Misc* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allMiscs);
-         int invkey = newInventory( dbDefn->table(Brewtarget::MISCINVTABLE), tmp->key());
+         int invkey = newInventory( dbDefn->table(Brewtarget::MISCINVTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1731,7 +1731,7 @@ Yeast* Database::newYeast(Yeast* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allYeasts);
-         int invkey = newInventory( dbDefn->table(Brewtarget::YEASTINVTABLE), tmp->key());
+         int invkey = newInventory( dbDefn->table(Brewtarget::YEASTINVTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1830,7 +1830,7 @@ int Database::insertFermentable(Fermentable* ins)
       ins->setCacheOnly(false);
       // I think this must go here -- we need the inventory id value written
       // to the db, and we don't have the fermentable id until now
-      int invKey = newInventory(dbDefn->table(Brewtarget::FERMTABLE),key);
+      int invKey = newInventory(dbDefn->table(Brewtarget::FERMTABLE));
       ins->setInventoryId(invKey);
    }
    catch( QString e ) {
@@ -1853,7 +1853,7 @@ int Database::insertHop(Hop* ins)
    try {
       key = insertElement(ins);
       ins->setCacheOnly(false);
-      int invKey = newInventory(dbDefn->table(Brewtarget::HOPTABLE),key);
+      int invKey = newInventory(dbDefn->table(Brewtarget::HOPTABLE));
       ins->setInventoryId(invKey);
    }
    catch( QString e ) {
@@ -1967,7 +1967,7 @@ int Database::insertMisc(Misc* ins)
       key = insertElement(ins);
       ins->setCacheOnly(false);
 
-      int invKey = newInventory(dbDefn->table(Brewtarget::MISCTABLE),key);
+      int invKey = newInventory(dbDefn->table(Brewtarget::MISCTABLE));
       ins->setInventoryId(invKey);
    }
    catch( QString e ) {
@@ -2003,7 +2003,7 @@ int Database::insertYeast(Yeast* ins)
    try {
       key = insertElement(ins);
       ins->setCacheOnly(false);
-      int invKey = newInventory(dbDefn->table(Brewtarget::YEASTTABLE),key);
+      int invKey = newInventory(dbDefn->table(Brewtarget::YEASTTABLE));
       ins->setInventoryId(invKey);
    }
    catch( QString e ) {
@@ -2142,7 +2142,7 @@ int Database::getInventoryId(TableSchema* tbl, int key )
 // reach into every child and update the inventory. I am leaning towards the first.
 // Turns out, both are required in some order. Still thinking signal/slot
 //
-void Database::setInventory(BeerXMLElement* ins, QVariant value, bool notify )
+void Database::setInventory(BeerXMLElement* ins, QVariant value, int invKey, bool notify )
 {
    TableSchema* tbl = dbDefn->table(ins->table());
    TableSchema* inv = dbDefn->table(tbl->invTable());
@@ -2151,19 +2151,17 @@ void Database::setInventory(BeerXMLElement* ins, QVariant value, bool notify )
 
    int ndx = ins->metaObject()->indexOfProperty(invProp.toUtf8().data());
    // I would like to get rid of this, but I need it to properly signal
-   int invKey = getInventoryId(tbl, ins->_key);
+   if ( invKey == 0 ) {
+      qDebug() << "bad inventory call. find it an kill it";
+   }
 
    if ( ! value.isValid() || value.isNull() ) {
       value = 0.0;
    }
 
-   if ( invKey == 0 ) {
-      return;
-   }
-
    try {
       QSqlQuery update( sqlDatabase() );
-      // update hop_in_inventory set amount = [value] where hop.id = [invKey]
+      // update hop_in_inventory set amount = [value] where hop_in_inventory.id = [invKey]
       QString command = QString("UPDATE %1 set %2=%3 where %4=%5")
                            .arg(inv->tableName())
                            .arg(inv->propertyToColumn(kpropInventory))
@@ -2223,7 +2221,7 @@ void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant v
       if ( ! update.exec() )
          throw QString("Could not update %1.%2 to %3: %4 %5")
                   .arg( schema->tableName() )
-                  .arg(schema->propertyToColumn(propName))
+                  .arg( colName )
                   .arg( value.toString() )
                   .arg( update.lastQuery() )
                   .arg( update.lastError().text() );
@@ -2344,44 +2342,12 @@ void Database::populateChildTablesByName()
    }
 }
 
-/*
-//Returns the key of the parent ingredient
-int Database::getParentID(TableSchema* table, int childKey)
-{
-   int ret;
-
-   //child_id is expected to be unique in table
-   // select parent_id from hop_children where child_id = [childKey] LIMIT 1
-   QString query = QString("SELECT %1 FROM %2 WHERE %3 = %4 LIMIT 1")
-      .arg(table->parentIndexName())
-      .arg(dbDefn->childTableName(table->dbTable()))
-      .arg(table->childIndexName())
-      .arg(childKey);
-
-   QSqlQuery q( query, sqlDatabase() );
-   q.first();
-
-   ret = q.record().value(table->parentIndexName()).toInt();
-
-   if ( ret == 0 ) {
-      return childKey;
-   }
-   else {
-      return ret;
-   }
-}
-*/
-
-// The trick to optimizing database queries is first to reduce the number of round trips, second to reduce the number of queries
-// and then -- and only then -- to try to optimize the query. By using the neat little COALESCE, I am reducing roundtrips.
-// it has the net result of using hop_children.parent_id if it exists, or the hop.id if it doesn't.
 QVariant Database::getInventoryAmt(QString col_name, Brewtarget::DBTable table, int key)
 {
    QVariant val = QVariant(0.0);
    TableSchema* tbl = dbDefn->table(table);
    TableSchema* inv = dbDefn->table(tbl->invTable());
 
-   // int invKey = getInventoryId(tbl, key);
    // select hop_in_inventory.amount from hop_in_inventory,hop where hop.id = key and hop_in_inventory.id = hop.inventory_id
    QString query = QString("select %1.%2 from %1,%3 where %3.%4 = %5 and %1.%6 = %3.%7")
          .arg(inv->tableName())
@@ -2402,17 +2368,14 @@ QVariant Database::getInventoryAmt(QString col_name, Brewtarget::DBTable table, 
 }
 
 //create a new inventory row
-int Database::newInventory(TableSchema* schema, int invForId) {
-   TableSchema* inv = dbDefn->table( schema->invTable());
+int Database::newInventory(TableSchema* schema) {
+   TableSchema* inv = dbDefn->table(schema->invTable());
    int newKey;
 
    // not sure why we were doing an upsert earlier. We already know there is no
    // inventory row for this element. So doesn't this just need an insert?
-   // insert into hop_in_inventory (hop_id) VALUES( [invForId] )
-   QString queryString = QString("INSERT INTO %1 (%2) VALUES(%3)")
-                     .arg(inv->tableName())
-                     .arg(inv->invIndexName())
-                     .arg(invForId);
+   // insert into hop_in_inventory DEFAULT VALUES
+   QString queryString = QString("INSERT INTO %1 DEFAULT VALUES").arg(inv->tableName());
    QSqlQuery q( queryString, sqlDatabase() );
    newKey = q.lastInsertId().toInt();
 

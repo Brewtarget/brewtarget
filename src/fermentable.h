@@ -210,7 +210,7 @@ private:
    bool m_recommendMash;
    double m_ibuGalPerLb;
    double m_inventory;
-   int m_inventoryId;
+   int m_inventory_id;
    bool m_isMashed;
    bool m_cacheOnly;
 };

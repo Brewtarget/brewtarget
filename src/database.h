@@ -285,18 +285,16 @@ public:
    int getParentID(TableSchema* table, int childKey);
 
    //! Inserts an new inventory row in the appropriate table
-   // void newInventory(Brewtarget::DBTable invForTable, int invForID);
-   int newInventory(TableSchema* schema, int invForID);
+   int newInventory(TableSchema* schema);
 
    int getInventoryId(TableSchema* tbl, int key );
-   void setInventory(BeerXMLElement* ins, QVariant value, bool notify );
+   void setInventory(BeerXMLElement* ins, QVariant value, int invKey = 0, bool notify=true );
 
    //! \returns The entire inventory for a table.
    QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
 
    QVariant getInventoryAmt(QString col_name, Brewtarget::DBTable table, int key);
 
-   // void setInventory( BeerXMLElement* ins, QVariant value, bool notify=true );
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash

@@ -264,9 +264,9 @@ QVariant BeerXMLElement::get( const QString& col_name ) const
    return Database::instance().get( _table, _key, col_name );
 }
 
-void BeerXMLElement::setInventory( const QVariant& value, bool notify )
+void BeerXMLElement::setInventory( const QVariant& value, int invKey, bool notify )
 {
-   Database::instance().setInventory( this, value, notify );
+   Database::instance().setInventory( this, value, invKey, notify );
 }
 
 QVariant BeerXMLElement::getInventory( const QString& col_name ) const
