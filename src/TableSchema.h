@@ -92,11 +92,14 @@ public:
    const QStringList allForeignKeyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
    const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
+   //!brief Use this to get the not recipe_id index from an inrec table
    const QString inRecIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   //!brief Use this to get the child_id index from a children table
    const QString childIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   //!brief Use this to get the recipe_id from a inrec table
    const QString recipeIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   //!brief Use this to get the parent_id from a child table
    const QString parentIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
-   const QString invIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
 
    // Not sure these belong here yet, but maybe
    const QString generateCreateTable(Brewtarget::DBTypes type = Brewtarget::ALLDB, QString tmpName = QString("") );

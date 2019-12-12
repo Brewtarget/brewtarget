@@ -164,19 +164,16 @@ void MashWizard::wizardry()
    double tw, tf, t1; // Water, final, and initial temps.
    double grainMass = 0.0, massWater = 0.0;
    double grainDensity = PhysicalConstants::grainDensity_kgL;
-   double absorption_LKg;
-   double boilingPoint_c;
+   double absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
+   double boilingPoint_c = 100.0;
+   double lauterDeadspace = 0.0;
 
    // If we have an equipment, utilize the custom absorption and boiling temp.
    if( recObs->equipment() != nullptr )
    {
       absorption_LKg = recObs->equipment()->grainAbsorption_LKg();
       boilingPoint_c = recObs->equipment()->boilingPoint_c();
-   }
-   else
-   {
-      absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
-      boilingPoint_c = 100.0;
+      lauterDeadspace = recObs->equipment()->lauterDeadspace_l();
    }
 
    QList<MashStep*> steps = mash->mashSteps();
@@ -305,7 +302,7 @@ void MashWizard::wizardry()
 
    // if no sparge, adjust volume of last step to meet target runoff volume
    if ( bGroup->checkedButton() == radioButton_noSparge  && steps.size() > 1) {
-      double otherMashStepTotal = 0.0f;
+      double otherMashStepTotal = 0.0;
       for( i = 0; i < steps.size()-1; ++i )
       {
          otherMashStepTotal += steps[i]->infuseAmount_l();
@@ -339,8 +336,9 @@ void MashWizard::wizardry()
    }
 
    // Now, do a sparge step, using just enough water that the total
-   // volume sums up to the target pre-boil size.
-   double spargeWater_l = recObs->targetTotalMashVol_l() - recObs->mash()->totalMashWater_l();
+   // volume sums up to the target pre-boil size. We need to account for the potential
+   // lauter dead space, I think?
+   double spargeWater_l = recObs->targetTotalMashVol_l() + lauterDeadspace - recObs->mash()->totalMashWater_l();
 
    // If I've done my math right, we should never get here on nosparge
    if( spargeWater_l >= 0.001 )

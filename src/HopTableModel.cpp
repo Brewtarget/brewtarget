@@ -71,6 +71,7 @@ HopTableModel::HopTableModel(QTableView* parent, bool editable)
    parentTableWidget->setWordWrap(false);
 
    connect(headerView, &QWidget::customContextMenuRequested, this, &HopTableModel::contextMenu);
+   connect( &(Database::instance()), &Database::changedInventory, this, &HopTableModel::changedInventory );
 }
 
 HopTableModel::~HopTableModel()
@@ -90,7 +91,6 @@ void HopTableModel::observeRecipe(Recipe* rec)
    if( recObs )
    {
       connect( recObs, &BeerXMLElement::changed, this, &HopTableModel::changed );
-      connect( &(Database::instance()), &Database::changedInventory, this, &HopTableModel::changedInventory );
       addHops( recObs->hops() );
    }
 }

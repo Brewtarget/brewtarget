@@ -1712,8 +1712,7 @@ void MainWindow::setTreeSelection(QModelIndex item)
    QModelIndex parent = active->parent(item);
 
    active->setCurrentIndex(item);
-   if ( active->type(parent) == BtTreeItem::FOLDER && !
-         active->isExpanded(parent) )
+   if ( active->type(parent) == BtTreeItem::FOLDER && ! active->isExpanded(parent) )
       active->setExpanded(parent,true);
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
 
@@ -1723,27 +1722,25 @@ void MainWindow::reduceInventory(){
 
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
 
-      foreach(QModelIndex selected, indexes)
-      {
-         Recipe*   rec   = treeView_recipe->recipe(selected);
-         if( rec == nullptr ){
-            //try the parent recipe
-            rec = treeView_recipe->recipe(treeView_recipe->parent(selected));
-            if( rec == nullptr ){
-               continue;
-            }
+   foreach(QModelIndex selected, indexes) {
+      Recipe* rec   = treeView_recipe->recipe(selected);
+      if ( rec == nullptr ) {
+         //try the parent recipe
+         rec = treeView_recipe->recipe(treeView_recipe->parent(selected));
+         if ( rec == nullptr ) {
+            continue;
          }
+      }
 
-         // Make sure everything is properly set and selected
-         if( rec != recipeObs )
-            setRecipe(rec);
+      // Make sure everything is properly set and selected
+      if( rec != recipeObs )
+         setRecipe(rec);
 
       int i = 0;
       //reduce fermentables
       QList<Fermentable*> flist = rec->fermentables();
-      if(flist.size() > 0){
-         for( i = 0; static_cast<int>(i) < flist.size(); ++i )
-         {
+      if ( flist.size() > 0 ){
+         for( i = 0; static_cast<int>(i) < flist.size(); ++i ) {
             double newVal=flist[i]->inventory() - flist[i]->amount_kg();
             newVal = (newVal < 0) ? 0 : newVal;
             flist[i]->setInventoryAmount(newVal);
@@ -1752,9 +1749,8 @@ void MainWindow::reduceInventory(){
 
       //reduce misc
       QList<Misc*> mlist = rec->miscs();
-      if(mlist.size() > 0){
-         for( i = 0; static_cast<int>(i) < mlist.size(); ++i )
-         {
+      if ( mlist.size() > 0 ) {
+         for( i = 0; static_cast<int>(i) < mlist.size(); ++i ) {
             double newVal=mlist[i]->inventory() - mlist[i]->amount();
             newVal = (newVal < 0) ? 0 : newVal;
             mlist[i]->setInventoryAmount(newVal);
@@ -1762,9 +1758,8 @@ void MainWindow::reduceInventory(){
       }
       //reduce hops
       QList<Hop*> hlist = rec->hops();
-      if(hlist.size() > 0){
-         for( i = 0; static_cast<int>(i) < hlist.size(); ++i )
-         {
+      if( hlist.size() > 0 ) {
+         for( i = 0; static_cast<int>(i) < hlist.size(); ++i ) {
             double newVal = hlist[i]->inventory() - hlist[i]->amount_kg();
             newVal = (newVal < 0) ? 0 : newVal;
             hlist[i]->setInventoryAmount(newVal);
@@ -1782,7 +1777,6 @@ void MainWindow::reduceInventory(){
          }
       }
    }
-
 }
 
 // Need to make sure the recipe tree is active, I think
@@ -1791,8 +1785,7 @@ void MainWindow::newBrewNote()
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QModelIndex bIndex;
 
-   foreach(QModelIndex selected, indexes)
-   {
+   foreach(QModelIndex selected, indexes) {
       Recipe*   rec   = treeView_recipe->recipe(selected);
 
       if( rec == nullptr )

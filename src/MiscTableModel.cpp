@@ -47,6 +47,7 @@ MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
    parentTableWidget->setWordWrap(false);
 
    connect(headerView, &QWidget::customContextMenuRequested, this, &MiscTableModel::contextMenu);
+   connect( &(Database::instance()), &Database::changedInventory, this, &MiscTableModel::changedInventory );
 }
 
 void MiscTableModel::observeRecipe(Recipe* rec)
@@ -61,7 +62,6 @@ void MiscTableModel::observeRecipe(Recipe* rec)
    if( recObs )
    {
       connect( recObs, &BeerXMLElement::changed, this, &MiscTableModel::changed );
-      connect( &(Database::instance()), &Database::changedInventory, this, &MiscTableModel::changedInventory );
       addMiscs( recObs->miscs() );
    }
 }

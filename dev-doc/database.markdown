@@ -73,14 +73,14 @@ The mashsteps and the brewnotes were a little harder, mostly because I had to li
 This required me to define a new constructor for each BeerXMLElement. The new contructor takes the name of the element (or date, in the case of a brewnote), eg `new Recipe(name)`, sets all the fields to their default levels and, very importantly, sets cacheOnly to true. It is the responsibility of the calling method to call the insert method to actually write the element to the database.
 
 ## Schemas
-The second part of my solution was to create a method that could do on insert and write every column to the database. This was at first looking like a lot of unpleasant code, because I would have to basically write one method for each primitive, teach it about every column in the table, etc. I started looking at what we already had, and that is when I noticed the profusion of arrays, hashs, maps, etc. that we had written to solve this kind of problem. And yes, I take a lot of blame for that as I am probably the one who wrote the first one.
+The second part of my solution was to create a method that could do one insert and write every column to the database. This was at first looking like a lot of unpleasant code, because I would have to basically write one method for each primitive, teach it about every column in the table, etc. I started looking at what we already had, and that is when I noticed the profusion of arrays, hashs, maps, etc. that we had written to solve this kind of problem. I take a lot of blame for that as I am probably the one who wrote the majority of them.
 
-This required a rethink, and I think I've come up with an elegant solution. I created three new classes for this: PropertySchema, TableSchema and DatabaseSchema. 
+This required a rethink, and I think I've come up with an elegant solution. Instead of having a bunch of maps, lists and vectors running around, I decided to create proper objects that we could initialize and have methods on those objects to generate the metadata we needed. This introduced three new classes: PropertySchema, TableSchema and DatabaseSchema. 
 
 ### PropertySchema
 This class defines a specific property, for example, `brewer`. It defines the property name (aka, the name of the property on the Recipe object), the database column name (see later explanations, because this got complex), the BeerXML property name, the type (eg, `string`), the default value and the size. The intent of this class is to define the mapping between a single property, its database column and the BeerXML property. 
 
-As with many things, this class has grown more complex. To support multiple databases with different column names, or different type names, etc. I had to rethink and rework this approach. Now what happens is that I store all of the information for each database in the PropertySchema object. You can request the property definition for a specific database by using the `Brewtarget::DBType` enum type when calling the various methods on PropertySchema. The default is to the use the what ever `Brewtarget::dbType()` returns.
+This class has grown complex. To support multiple databases with different column names, or different type names, etc. I had to rethink and rework this approach. Now what happens is that I store all of the information for each database in the PropertySchema object. You can request the property definition for a specific database by using the `Brewtarget::DBType` enum type when calling the various methods on PropertySchema. The default is to the use the what ever `Brewtarget::dbType()` returns.
 
 Based on what I had to code later, I defined two initializers. One is for normal properties like `name` or `brewDate`. The other is intended for foreign keys, like `recipe_id` and `equipment_id`. I consider them both to be properties, but they have different uses and need different information.
 
@@ -169,6 +169,9 @@ tmp[kpropTerpines] = new PropertySchema( kpropTerpines, kcolHopTerpines, kxmlPro
 
 ### Update the existing tables
 You will still be responsible for handling the migration code in `DatabaseSchemaHelper`, as well as updating the Hop object itself to do the new work. This is work you would have had to do anyway, but all the rest (writing to the table, creating the table from scratch, etc) is now done. Instead of editing in 7 (or 8) places just to add the new column, you have to edit three.
+
+### A note on `Q_PROPERTY`
+For all of the abstraction to work, it is really important that the `Q_PROPERTY` for any new parameter is defined properly. There are several places in the new system where I use Qt's metaobject system to access values. If the new property is not defined via `Q_PROPERTY`, the right thing will not happen.
 
 ## New Tables
 This would be harder, but the general idea would be along these lines.

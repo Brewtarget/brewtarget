@@ -67,6 +67,7 @@ FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
    parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->setWordWrap(false);
    connect(headerView, &QWidget::customContextMenuRequested, this, &FermentableTableModel::contextMenu);
+   connect( &(Database::instance()), &Database::changedInventory, this, &FermentableTableModel::changedInventory );
 }
 
 void FermentableTableModel::observeRecipe(Recipe* rec)
@@ -81,7 +82,6 @@ void FermentableTableModel::observeRecipe(Recipe* rec)
    if( recObs )
    {
       connect( recObs, &BeerXMLElement::changed, this, &FermentableTableModel::changed );
-      connect( &(Database::instance()), &Database::changedInventory, this, &FermentableTableModel::changedInventory );
       addFermentables( recObs->fermentables() );
    }
 }

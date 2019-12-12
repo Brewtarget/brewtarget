@@ -330,15 +330,6 @@ const QString TableSchema::parentIndexName(Brewtarget::DBTypes type)
    return cname;
 }
 
-const QString TableSchema::invIndexName(Brewtarget::DBTypes type)
-{
-   QString cname;
-   Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
-
-   cname = m_foreignKeys.first()->colName(selected);
-   return cname;
-}
-
 const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString tmpName)
 {
    Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;

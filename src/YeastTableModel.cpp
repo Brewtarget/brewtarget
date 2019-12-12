@@ -57,6 +57,7 @@ YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
    parentTableWidget->setWordWrap(false);
 
    connect(headerView, &QWidget::customContextMenuRequested, this, &YeastTableModel::contextMenu);
+   connect( &(Database::instance()), &Database::changedInventory, this, &YeastTableModel::changedInventory );
 }
 
 void YeastTableModel::addYeast(Yeast* yeast)
@@ -93,7 +94,6 @@ void YeastTableModel::observeRecipe(Recipe* rec)
    if( recObs )
    {
       connect( recObs, &BeerXMLElement::changed, this, &YeastTableModel::changed );
-      connect( &(Database::instance()), &Database::changedInventory, this, &YeastTableModel::changedInventory );
       addYeasts( recObs->yeasts() );
    }
 }

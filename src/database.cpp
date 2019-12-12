@@ -2385,16 +2385,24 @@ int Database::newInventory(TableSchema* schema) {
 QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
 {
    QMap<int, double> result;
+   TableSchema* tbl = dbDefn->table(table);
    TableSchema* inv = dbDefn->invTable(table);
-   QString id       = inv->invIndexName();
-   QString amount   = inv->propertyToColumn(kpropAmount);
 
-   // select fermentable_id,amount from fermentable_in_inventory where amount > 0
-   QString query = QString("SELECT %1,%2 FROM %3 WHERE %2 > 0")
-                         .arg(id)
-                         .arg(amount)
-                         .arg(inv->tableName());
+   // select fermentable.id as id,fermentable_in_inventory.amount as amount from
+   //   fermentable_in_inventory where amount > 0 and fermentable.inventory_id = fermentable_in_inventory.id
+   QString query = QString("SELECT %1.%2 as id,%3.%4 as amount FROM %1,%3 WHERE %3.%4 > 0 and %1.%5=%3.%6 and %1.%7=%8 and %1.%9=%10")
+         .arg(tbl->tableName())
+         .arg(tbl->keyName())
+         .arg(inv->tableName())
+         .arg(inv->propertyToColumn(kpropInventory))
+         .arg(tbl->foreignKeyToColumn())
+         .arg(inv->keyName())
+         .arg(tbl->propertyToColumn(kpropDisplay))
+         .arg(Brewtarget::dbTrue())
+         .arg(tbl->propertyToColumn(kpropDeleted))
+         .arg(Brewtarget::dbFalse());
 
+   qDebug() << Q_FUNC_INFO << query;
    QSqlQuery sql(query, sqlDatabase());
    if (! sql.isActive()) {
       throw QString("Failed to get the inventory.\nQuery:\n%1\nError:\n%2")
@@ -2402,9 +2410,8 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
             .arg(sql.lastError().text());
    }
 
-   // do not be fooled. the variable amount may contain 'amount' or 'quanta'
    while (sql.next()) {
-      result[sql.value(id).toInt()] = sql.value(amount).toDouble();
+      result[sql.value("id").toInt()] = sql.value("amount").toDouble();
    }
 
    return result;
