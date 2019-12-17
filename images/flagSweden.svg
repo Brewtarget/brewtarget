@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- Created by Idar Lund (https://github.com/idarlund) -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="65" height="65" id="flagDenmark.svg">
+
+<!-- Code for the actual flag -->
+<rect width="65" height="65" fill="#006aa7" rx="4" ry="4"/> <!-- Blue background -->
+<rect width="16.25" height="65" x="24.375" fill="#fecc00"/> <!-- Yellow vertical line -->
+<rect width="65" height="16.25" y="24.375" fill="#fecc00"/> <!-- Yellow horizontal line -->
+
+<!-- Black line around the flag -->
+<rect
+	style="fill:url();fill-opacity:1;stroke:#000000;stroke-linejoin:miter;stroke-opacity:1"
+    width="64"
+    height="64"
+    x="0.49554"
+    y="0.51398‬"
+    rx="4"
+    ry="4"
+/>
+</svg>
