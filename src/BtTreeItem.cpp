@@ -38,6 +38,7 @@
 #include "yeast.h"
 #include "style.h"
 #include "BtFolder.h"
+#include "FermentableTableModel.h"
 
 bool operator==(BtTreeItem& lhs, BtTreeItem& rhs)
 {
@@ -232,21 +233,37 @@ QVariant BtTreeItem::dataEquipment(int column)
 
 QVariant BtTreeItem::dataFermentable(int column)
 {
-    Fermentable* ferm = qobject_cast<Fermentable*>(_thing);
+   Fermentable* ferm = qobject_cast<Fermentable*>(_thing);
+
    switch(column)
    {
-        case FERMENTABLENAMECOL:
+      case FERMENTABLENAMECOL:
          if ( ferm )
+         {
             return QVariant(ferm->name());
+         }
          else
+         {
             return QVariant(QObject::tr("Fermentables"));
-        case FERMENTABLETYPECOL:
-         if ( ferm )
-            return QVariant(ferm->typeStringTr());
+         }
          break;
-        case FERMENTABLECOLORCOL:
+      case FERMENTABLETYPECOL:
          if ( ferm )
-            return QVariant(ferm->color_srm());
+         {
+            return QVariant(ferm->typeStringTr());
+         }
+         break;
+      case FERMENTABLECOLORCOL:
+         if ( ferm )
+         {
+             return QVariant( Brewtarget::displayAmount( ferm->color_srm(),
+                                                         Units::srm,
+                                                         0,
+                                                         (Unit::unitDisplay)Brewtarget::option("color_srm",
+                                                                                               QVariant(-1),
+                                                                                               0,
+                                                                                               Brewtarget::UNIT).toInt()));
+         }
          break;
       default :
          Brewtarget::logW( QString("BtTreeItem::dataFermentable Bad column: %1").arg(column));

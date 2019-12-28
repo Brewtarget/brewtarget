@@ -42,7 +42,7 @@ class MashEditor : public QDialog, public Ui::mashEditor
 {
    Q_OBJECT
 public:
-   MashEditor( QWidget *parent = 0 );
+   MashEditor( QWidget *parent = nullptr );
 
 public slots:
    void showEditor();
@@ -56,7 +56,7 @@ public slots:
 
    void changed(QMetaProperty,QVariant);
 private:
-   void showChanges(QMetaProperty* prop = 0);
+   void showChanges(QMetaProperty* prop = nullptr);
    void clear();
    Mash* mashObs;
    Equipment* equip;

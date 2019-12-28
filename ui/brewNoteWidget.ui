@@ -211,7 +211,7 @@
                 </size>
                </property>
                <property name="toolTip">
-                <string>Temperature of mash after dough in</string>
+                <string>Temperature of strike water before dough in</string>
                </property>
                <property name="editField" stdset="0">
                 <string notr="true">strikeTemp_c</string>
@@ -615,10 +615,10 @@
              <item row="0" column="0">
               <widget class="QLabel" name="btLabel_effInfoBk">
                <property name="statusTip">
-                <string>percent efficiency into boil kettle</string>
+                <string>Percent efficiency into boil kettle</string>
                </property>
                <property name="text">
-                <string>Eff into BK</string>
+                <string>Efficiency into boil kettle</string>
                </property>
               </widget>
              </item>
@@ -635,7 +635,7 @@
                 <enum>Qt::CustomContextMenu</enum>
                </property>
                <property name="statusTip">
-                <string>Expected OG, based on measure fg</string>
+                <string>Expected OG, based on measured FG</string>
                </property>
                <property name="text">
                 <string>Projected OG</string>
@@ -661,7 +661,7 @@
                 <string>Brewhouse efficiency</string>
                </property>
                <property name="text">
-                <string>Brewhouse Eff</string>
+                <string>Brewhouse efficiency</string>
                </property>
               </widget>
              </item>
@@ -675,7 +675,7 @@
              <item row="3" column="0">
               <widget class="QLabel" name="btLabel_projectedAbv">
                <property name="statusTip">
-                <string>Expected ABV based on OG</string>
+                <string>Expected ABV based on recipe OG</string>
                </property>
                <property name="text">
                 <string>Projected ABV</string>
@@ -692,7 +692,7 @@
              <item row="4" column="0">
               <widget class="QLabel" name="btlabel_Abv">
                <property name="statusTip">
-                <string>ABV based on FG</string>
+                <string>ABV based on user-reported FG</string>
                </property>
                <property name="text">
                 <string>ABV</string>
@@ -701,6 +701,40 @@
              </item>
              <item row="4" column="1">
               <widget class="BtDigitWidget" name="lcdnumber_abv">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="btLabel_yeastProjAtten">
+               <property name="statusTip">
+                <string>Yeast attenuation based on yeast specified in recipe</string>
+               </property>
+               <property name="text">
+                <string>Projected yeast attenuation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="BtDigitWidget" name="lcdnumber_projAtten">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="btLabel_yeastAtten">
+               <property name="statusTip">
+                <string>Yeast attentuation based on user-reported OG and FG</string>
+               </property>
+               <property name="text">
+                <string>Measured yeast attenuation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="BtDigitWidget" name="lcdnumber_atten">
                <property name="text">
                 <string/>
                </property>

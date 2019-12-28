@@ -37,6 +37,7 @@ public:
    PreInstruction(const QString& txt, const QString& title, double t);
 
    friend bool operator<(const PreInstruction& lhs, const PreInstruction& rhs);
+   friend bool operator>(const PreInstruction& lhs, const PreInstruction& rhs);
 
    QString getText();
    QString getTitle();

@@ -22,9 +22,10 @@
 #include "brewtarget.h"
 #include "MashStepEditor.h"
 #include "mashstep.h"
+#include "database.h"
 
 MashStepEditor::MashStepEditor(QWidget* parent)
-   : QDialog(parent), obs(0)
+   : QDialog(parent), obs(nullptr)
 {
    setupUi(this);
 
@@ -38,7 +39,7 @@ MashStepEditor::MashStepEditor(QWidget* parent)
 
 void MashStepEditor::showChanges(QMetaProperty* metaProp)
 {
-   if( obs == 0 )
+   if( obs == nullptr )
    {
       clear();
       return;
@@ -48,7 +49,7 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
    QVariant value;
    bool updateAll = false;
 
-   if( metaProp == 0 )
+   if( metaProp == nullptr )
       updateAll = true;
    else
    {
@@ -56,7 +57,7 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
       value = metaProp->read(obs);
    }
 
-   if ( updateAll ) 
+   if ( updateAll )
    {
       lineEdit_name->setText(obs->name());
       comboBox_type->setCurrentIndex(obs->type());
@@ -69,23 +70,23 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_endTemp->setText(obs);
    }
 
-   else if( propName == "name" ) 
+   else if( propName == "name" )
       lineEdit_name->setText(obs->name());
-   else if( propName == "type" ) 
+   else if( propName == "type" )
       comboBox_type->setCurrentIndex(obs->type());
-   else if( propName == "infuseAmount_l" ) 
+   else if( propName == "infuseAmount_l" )
       lineEdit_infuseAmount->setText(obs);
-   else if( propName == "infuseTemp_c" ) 
+   else if( propName == "infuseTemp_c" )
       lineEdit_infuseTemp->setText(obs);
-   else if( propName == "decoctionAmount_l" ) 
+   else if( propName == "decoctionAmount_l" )
       lineEdit_decoctionAmount->setText(obs);
-   else if( propName == "stepTemp_c" ) 
+   else if( propName == "stepTemp_c" )
       lineEdit_stepTemp->setText(obs);
-   else if( propName == "stepTime_min" ) 
+   else if( propName == "stepTime_min" )
       lineEdit_stepTime->setText(obs);
-   else if( propName == "rampTime_min" ) 
+   else if( propName == "rampTime_min" )
       lineEdit_rampTime->setText(obs);
-   else if( propName == "endTemp_c" ) 
+   else if( propName == "endTemp_c" )
       lineEdit_endTemp->setText(obs);
 }
 
@@ -118,8 +119,8 @@ void MashStepEditor::changed(QMetaProperty prop, QVariant /*val*/)
 void MashStepEditor::setMashStep(MashStep* step)
 {
    if( obs )
-      disconnect( obs, 0, this, 0 );
-   
+      disconnect( obs, nullptr, this, nullptr );
+
    if( step )
    {
       obs = step;
@@ -128,9 +129,14 @@ void MashStepEditor::setMashStep(MashStep* step)
    }
 }
 
+void MashStepEditor::setParentMash(Mash *parent)
+{
+   m_parent = parent;
+}
+
 void MashStepEditor::saveAndClose()
 {
-   obs->setName(lineEdit_name->text());
+   obs->setName(lineEdit_name->text(),obs->cacheOnly());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    obs->setInfuseAmount_l(lineEdit_infuseAmount->toSI());
    obs->setInfuseTemp_c(lineEdit_infuseTemp->toSI());
@@ -139,6 +145,10 @@ void MashStepEditor::saveAndClose()
    obs->setStepTime_min(lineEdit_stepTime->toSI());
    obs->setRampTime_min(lineEdit_rampTime->toSI());
    obs->setEndTemp_c(lineEdit_endTemp->toSI());
+
+   if ( obs->cacheOnly() ) {
+      Database::instance().insertMashStep(obs,m_parent);
+   }
 
    setVisible(false);
 }

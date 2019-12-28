@@ -51,7 +51,7 @@ class BtTreeView : public QTreeView
    Q_OBJECT
 public:
    //! \brief The standard contructor
-   BtTreeView(QWidget *parent = 0, BtTreeModel::TypeMasks mask = BtTreeModel::RECIPEMASK);
+   BtTreeView(QWidget *parent = nullptr, BtTreeModel::TypeMasks mask = BtTreeModel::RECIPEMASK);
    //! \brief returns the model associated with this tree
    BtTreeModel* model();
    //! \brief returns the context menu associated with the \c selected item
@@ -69,24 +69,24 @@ public:
 
    QModelIndex findElement(BeerXMLElement* thing);
 
-   //! \brief returns the recipe at \c index 
+   //! \brief returns the recipe at \c index
    Recipe* recipe(const QModelIndex &index) const;
-   //! \brief returns the equipment at \c index 
+   //! \brief returns the equipment at \c index
    Equipment* equipment(const QModelIndex &index) const;
-   //! \brief returns the fermentable at \c index 
+   //! \brief returns the fermentable at \c index
    Fermentable* fermentable(const QModelIndex &index) const;
-   //! \brief returns the hop at \c index 
+   //! \brief returns the hop at \c index
    Hop* hop(const QModelIndex &index) const;
-   //! \brief returns the misc at \c index 
+   //! \brief returns the misc at \c index
    Misc* misc(const QModelIndex &index) const;
-   //! \brief returns the yeast at \c index 
+   //! \brief returns the yeast at \c index
    Yeast* yeast(const QModelIndex &index) const;
-   //! \brief returns the yeast at \c index 
+   //! \brief returns the yeast at \c index
    Style* style(const QModelIndex &index) const;
-   //! \brief returns the brewnote at \c index 
+   //! \brief returns the brewnote at \c index
    BrewNote* brewNote(const QModelIndex &index) const;
 
-   //! \brief returns the folder at \c index 
+   //! \brief returns the folder at \c index
    BtFolder* folder(const QModelIndex &index) const;
    //! \brief finds the index of the \c folder in the tree,but does not create
    QModelIndex findFolder( BtFolder* folder);
@@ -96,7 +96,7 @@ public:
    void renameFolder(BtFolder* victim, QString newName);
    QString folderName(QModelIndex starter);
 
-   //! \brief gets the type of the item at \c index. 
+   //! \brief gets the type of the item at \c index.
    int type(const QModelIndex &index);
 
    //! returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
@@ -150,7 +150,7 @@ private:
 };
 
 //!
-// \class RecipeTreeView 
+// \class RecipeTreeView
 // \brief subclasses BtTreeView to only show recipes.
 class RecipeTreeView : public BtTreeView
 {
@@ -158,12 +158,12 @@ class RecipeTreeView : public BtTreeView
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
    // few options on the tree that can only be set after the model
-   RecipeTreeView(QWidget *parent = 0);
+   RecipeTreeView(QWidget *parent = nullptr);
 
 };
 
-//! 
-// \class EquipmentTreeView 
+//!
+// \class EquipmentTreeView
 // \brief subclasses BtTreeView to only show equipment.
 class EquipmentTreeView : public BtTreeView
 {
@@ -171,11 +171,11 @@ class EquipmentTreeView : public BtTreeView
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
    // few options on the tree that can only be set after the model
-   EquipmentTreeView(QWidget *parent = 0);
+   EquipmentTreeView(QWidget *parent = nullptr);
 };
 
 //!
-// \class FermentableTreeView 
+// \class FermentableTreeView
 // \brief subclasses BtTreeView to only show fermentables.
 class FermentableTreeView : public BtTreeView
 {
@@ -183,12 +183,12 @@ class FermentableTreeView : public BtTreeView
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
    // few options on the tree that can only be set after the model
-   FermentableTreeView(QWidget *parent = 0);
+   FermentableTreeView(QWidget *parent = nullptr);
 
 };
 
 //!
-// \class HopTreeView 
+// \class HopTreeView
 // \brief subclasses BtTreeView to only show hops.
 class HopTreeView : public BtTreeView
 {
@@ -196,12 +196,12 @@ class HopTreeView : public BtTreeView
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
    // few options on the tree that can only be set after the model
-   HopTreeView(QWidget *parent = 0);
+   HopTreeView(QWidget *parent = nullptr);
 
 };
 
 //!
-// \class MiscTreeView 
+// \class MiscTreeView
 // \brief subclasses BtTreeView to only show miscs.
 class MiscTreeView : public BtTreeView
 {
@@ -209,11 +209,11 @@ class MiscTreeView : public BtTreeView
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
    // few options on the tree that can only be set after the model
-   MiscTreeView(QWidget *parent = 0);
+   MiscTreeView(QWidget *parent = nullptr);
 };
 
 //!
-// \class YeastTreeView 
+// \class YeastTreeView
 // \brief subclasses BtTreeView to only show yeasts.
 class YeastTreeView : public BtTreeView
 {
@@ -221,12 +221,12 @@ class YeastTreeView : public BtTreeView
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
    // few options on the tree that can only be set after the model
-   YeastTreeView(QWidget *parent = 0);
+   YeastTreeView(QWidget *parent = nullptr);
 
 };
 
 //!
-// \class StyleTreeView 
+// \class StyleTreeView
 // \brief subclasses BtTreeView to only show styles.
 class StyleTreeView : public BtTreeView
 {
@@ -234,7 +234,7 @@ class StyleTreeView : public BtTreeView
 public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
    // few options on the tree that can only be set after the model
-   StyleTreeView(QWidget *parent = 0);
+   StyleTreeView(QWidget *parent = nullptr);
 
 };
 

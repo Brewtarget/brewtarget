@@ -133,6 +133,12 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
       lcdnumber_abv->setLowLim( bNoteObs->projABV_pct() * low);
       lcdnumber_abv->setHighLim( bNoteObs->projABV_pct() * high);
 
+      lcdnumber_atten->setLowLim( bNoteObs->projAtten() * low );
+      lcdnumber_atten->setHighLim( bNoteObs->projAtten() * high );
+
+      lcdnumber_projAtten->setLowLim( bNoteObs->projAtten() * low );
+      lcdnumber_projAtten->setHighLim( bNoteObs->projAtten() * high );
+
       showChanges();
    }
 }
@@ -237,7 +243,7 @@ void BrewNoteWidget::updateNotes()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText(), false);
+   bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText() );
 }
 
 void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
@@ -247,29 +253,6 @@ void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
 
    showChanges();
 }
-
-/*
-void BrewNoteWidget::saveAll()
-{
-   if ( ! bNoteObs )
-      return;
-   
-   updateSG();
-   updateVolumeIntoBK_l();
-   updateStrikeTemp_c();
-   updateMashFinTemp_c();
-   updateOG();
-   updatePostBoilVolume_l();
-   updateVolumeIntoFerm_l();
-   updatePitchTemp_c();
-   updateFG();
-   updateFinalVolume_l();
-   updateFermentDate();
-   updateNotes();
-
-   hide();
-}
-*/
 
 void BrewNoteWidget::showChanges(QString field)
 {
@@ -299,10 +282,10 @@ void BrewNoteWidget::showChanges(QString field)
    lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);
    lcdnumber_abv->display(bNoteObs->abv(),2);
-   
+   lcdnumber_atten->display(bNoteObs->attenuation(),2);
+   lcdnumber_projAtten->display(bNoteObs->projAtten(),2);
 }
 
 void BrewNoteWidget::focusOutEvent(QFocusEvent *e)
 {
-   //qDebug() << "Notes lost focus";
 }

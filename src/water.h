@@ -40,7 +40,6 @@ class Water : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "waters")
-   Q_CLASSINFO("prefix", "water")
    
    friend class Database;
 public:
@@ -75,6 +74,7 @@ public:
    double magnesium_ppm() const;
    double ph() const;
    QString notes() const;
+   bool cacheOnly() const;
 
    void setAmount_l( double var );
    void setCalcium_ppm( double var );
@@ -85,6 +85,7 @@ public:
    void setMagnesium_ppm( double var );
    void setPh( double var );
    void setNotes( const QString &var );
+   void setCacheOnly( bool cache );
 
    static QString classNameStr();
    
@@ -106,8 +107,21 @@ signals:
    
 private:
    Water(Brewtarget::DBTable table, int key);
-   Water( Water const& other );
+   Water(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Water(Water const& other);
+   Water(QString name, bool cache = true);
    
+   double m_amount_l;
+   double m_calcium_ppm;
+   double m_bicarbonate_ppm;
+   double m_sulfate_ppm;
+   double m_chloride_ppm;
+   double m_sodium_ppm;
+   double m_magnesium_ppm;
+   double m_ph;
+   QString m_notes;
+   bool m_cacheOnly;
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };

@@ -35,6 +35,7 @@ class FermentableItemDelegate;
 #include <QItemDelegate>
 #include <QAbstractItemDelegate>
 #include <QList>
+#include "brewtarget.h"
 #include "unit.h"
 
 // Forward declarations.
@@ -54,7 +55,7 @@ class FermentableTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   FermentableTableModel(QTableView* parent=0, bool editable=true);
+   FermentableTableModel(QTableView* parent=nullptr, bool editable=true);
    virtual ~FermentableTableModel() {}
    //! \brief Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -70,11 +71,11 @@ public:
    void setDisplayPercentages( bool var );
    /*!
     * \brief True if the inventory column should be editable, false otherwise.
-    * 
+    *
     * The default is that the inventory column is not editable
     */
    void setInventoryEditable( bool var ) { _inventoryEditable = var; }
-   
+
    Unit::unitDisplay displayUnit(int column) const;
    Unit::unitScale displayScale(int column) const;
    void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
@@ -92,9 +93,9 @@ public:
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
    //! \brief Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-   
+
    QTableView* parentTableWidget;
-   
+
 public slots:
    //! \brief Watch \b ferm for changes.
    void addFermentable(Fermentable* ferm);
@@ -106,34 +107,36 @@ public slots:
 private slots:
    //! \brief Catch changes to Recipe, Database, and Fermentable.
    void changed(QMetaProperty, QVariant);
+   //! \brief Catches changes to inventory
+   void changedInventory(Brewtarget::DBTable,int,QVariant);
 
 private:
    //! \brief Recalculate the total amount of grains in the model.
    void updateTotalGrains();
    QString generateName(int column) const;
-   
+
    bool editable;
    bool _inventoryEditable;
    QList<Fermentable*> fermObs;
    Recipe* recObs;
    bool displayPercentages;
    double totalFermMass_kg;
-   
+
 };
 
 /*!
  * \brief An item delegate for Fermentable tables.
  * \sa FermentableTableModel.
- * 
+ *
  * \author Philip G. Lee
  */
 class FermentableItemDelegate : public QItemDelegate
 {
    Q_OBJECT
-           
+
 public:
-   FermentableItemDelegate(QObject* parent = 0);
-   
+   FermentableItemDelegate(QObject* parent = nullptr);
+
    //! \brief Reimplemented from QItemDelegate.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
    //! \brief Reimplemented from QItemDelegate.
@@ -143,7 +146,7 @@ public:
    //! \brief Reimplemented from QItemDelegate.
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
    //virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-   
+
 //public slots:
 //   void destroyWidget(QWidget* widget, QAbstractItemDelegate::EndEditHint hint);
 private:

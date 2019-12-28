@@ -31,7 +31,7 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    : QDialog(parent), obsStyle(0)
 {
    setupUi(this);
-   if ( singleStyleEditor ) 
+   if ( singleStyleEditor )
    {
       for(int i = 0; i < horizontalLayout_styles->count(); ++i)
       {
@@ -39,7 +39,7 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
          if(w)
             w->setVisible(false);
       }
-      
+
       pushButton_new->setVisible(false);
    }
 
@@ -48,7 +48,7 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    styleProxyModel->setDynamicSortFilter(true);
    styleProxyModel->setSourceModel(styleListModel);
    styleComboBox->setModel(styleProxyModel);
-   
+
    connect( pushButton_save, &QAbstractButton::clicked, this, &StyleEditor::save );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
    connect( pushButton_cancel, &QAbstractButton::clicked, this, &StyleEditor::clearAndClose );
@@ -62,14 +62,14 @@ void StyleEditor::setStyle( Style* s )
 {
    if( obsStyle )
       disconnect( obsStyle, 0, this, 0 );
-   
+
    obsStyle = s;
    if( obsStyle )
    {
       connect( obsStyle, &BeerXMLElement::changed, this, &StyleEditor::changed );
       showChanges();
    }
- 
+
    styleComboBox->setCurrentIndex(styleListModel->indexOf(obsStyle));
 }
 
@@ -96,8 +96,8 @@ void StyleEditor::save()
       setVisible(false);
       return;
    }
-   
-   s->setName( lineEdit_name->text() );
+
+   s->setName( lineEdit_name->text(), s->cacheOnly());
    s->setCategory( lineEdit_category->text() );
    s->setCategoryNumber( lineEdit_categoryNumber->text() );
    s->setStyleLetter( lineEdit_styleLetter->text() );
@@ -120,6 +120,11 @@ void StyleEditor::save()
    s->setExamples( textEdit_examples->toPlainText() );
    s->setNotes( textEdit_notes->toPlainText() );
 
+   if ( s->cacheOnly() ) {
+      Database::instance().insertStyle(s);
+      s->setCacheOnly(false);
+   }
+
    setVisible(false);
 }
 
@@ -135,10 +140,9 @@ void StyleEditor::newStyle(QString folder)
    if( name.isEmpty() )
       return;
 
-   Style *s = Database::instance().newStyle();
-   s->setName( name );
-   if ( ! folder.isEmpty() ) 
-      s->setFolder(folder);
+   Style *s = new Style(name);
+   if ( ! folder.isEmpty() )
+      s->setFolder(folder,true);
 
    setStyle(s);
    show();
@@ -223,10 +227,10 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       textEdit_ingredients->setText(s->ingredients());
       textEdit_examples->setText(s->examples());
       textEdit_notes->setText(s->notes());
-      
+
       return;
    }
-   
+
    if( propName == "name" )
       lineEdit_name->setText(val.toString());
    else if( propName == "category" )

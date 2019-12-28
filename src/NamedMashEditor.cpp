@@ -99,7 +99,7 @@ void NamedMashEditor::saveAndClose()
    // class will do the right thing. That is how a plan comes together.
 
    mashObs->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
-   mashObs->setName( lineEdit_name->text() );
+   mashObs->setName( lineEdit_name->text(), mashObs->cacheOnly());
    mashObs->setGrainTemp_c(lineEdit_grainTemp->toSI());
    mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toSI());
    mashObs->setPh(lineEdit_spargePh->toSI()); 

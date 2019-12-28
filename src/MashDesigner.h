@@ -3,6 +3,7 @@
  * authors 2009-2014
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Jonathon Harding <github@jrhardin.net>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +42,7 @@ class MashDesigner : public QDialog, public Ui::mashDesigner
 {
    Q_OBJECT
 public:
-   MashDesigner(QWidget* parent = 0);
+   MashDesigner(QWidget* parent = nullptr);
    //! Set the recipe we want to design the mash for.
    void setRecipe(Recipe* rec);
 
@@ -78,6 +79,9 @@ private:
    double volFromTemp_l( double temp_c );
    double getDecoctionAmount_l();
    double waterFromMash_l();
+   bool heating();
+   double boilingTemp_c();
+   double bound_temp_c(double temp_c);
 
    // I have developed a distaste for "getBlah"
    double selectedAmount_l();

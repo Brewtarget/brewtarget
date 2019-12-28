@@ -213,8 +213,7 @@ void FermentableDialog::newFermentable(QString folder)
    if( name.isEmpty() )
       return;
    
-   Fermentable* ferm = Database::instance().newFermentable();
-   ferm->setName(name);
+   Fermentable* ferm = new Fermentable(name);
    if ( ! folder.isEmpty() )
       ferm->setFolder(folder);
 

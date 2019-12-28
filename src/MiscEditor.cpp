@@ -29,10 +29,10 @@
 #include "misc.h"
 
 MiscEditor::MiscEditor( QWidget* parent )
-   : QDialog(parent), obsMisc(0)
+   : QDialog(parent), obsMisc(nullptr)
 {
    setupUi(this);
-   
+
    connect( buttonBox, &QDialogButtonBox::accepted, this, &MiscEditor::save);
    connect( buttonBox, &QDialogButtonBox::rejected, this, &MiscEditor::clearAndClose);
 
@@ -41,8 +41,8 @@ MiscEditor::MiscEditor( QWidget* parent )
 void MiscEditor::setMisc( Misc* m )
 {
    if( obsMisc )
-      disconnect( obsMisc, 0, this, 0 );
-   
+      disconnect( obsMisc, nullptr, this, nullptr );
+
    obsMisc = m;
    if( obsMisc )
    {
@@ -54,54 +54,58 @@ void MiscEditor::setMisc( Misc* m )
 void MiscEditor::save()
 {
    Misc* m = obsMisc;
-   
-   if( m == 0 )
+
+   if( m == nullptr )
    {
       setVisible(false);
       return;
    }
-   
-   m->setName(lineEdit_name->text());
+
+   m->setName(lineEdit_name->text(),m->cacheOnly());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
    m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
    m->setTime(lineEdit_time->toSI());
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
    m->setAmount( lineEdit_amount->toSI());
-   m->setInventoryAmount(lineEdit_inventory->toSI());
    m->setUseFor(textEdit_useFor->toPlainText());
    m->setNotes( textEdit_notes->toPlainText() );
 
+   if ( m->cacheOnly() ) {
+      Database::instance().insertMisc(m);
+   }
+   // do this late to make sure we've the row in the inventory table
+   m->setInventoryAmount(lineEdit_inventory->toSI());
    setVisible(false);
 }
 
 void MiscEditor::clearAndClose()
 {
-   setMisc(0);
+   setMisc(nullptr);
    setVisible(false); // Hide the window.
 }
 
 void MiscEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( sender() == obsMisc ) 
+   if( sender() == obsMisc )
       showChanges(&prop);
 }
 
 void MiscEditor::showChanges(QMetaProperty* metaProp)
 {
-   if( obsMisc == 0 )
+   if( obsMisc == nullptr )
       return;
-   
+
    QString propName;
    QVariant value;
    bool updateAll = false;
-   if( metaProp == 0 )
+   if( metaProp == nullptr )
       updateAll = true;
    else
    {
       propName = metaProp->name();
       value = metaProp->read(obsMisc);
    }
-   
+
    if( propName == "name" || updateAll )
    {
       lineEdit_name->setText(obsMisc->name());

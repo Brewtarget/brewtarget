@@ -45,13 +45,13 @@
 RecipeFormatter::RecipeFormatter(QObject* parent)
    : QObject(parent)
 {
-   textSeparator = 0;
-   rec = 0;
+   textSeparator = nullptr;
+   rec = nullptr;
 
    //===Construct a print-preview dialog.===
    docDialog = new QDialog(Brewtarget::mainWindow());
    docDialog->setWindowTitle("Print Preview");
-   if( docDialog->layout() == 0 )
+   if( docDialog->layout() == nullptr )
       docDialog->setLayout(new QVBoxLayout);
    doc = new QTextBrowser(docDialog);
    docDialog->layout()->addWidget(doc);
@@ -80,11 +80,11 @@ QString RecipeFormatter::getTextFormat()
 {
    QString ret = "";
    QString tmp = "";
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
-   
+
    Style* style = rec->style();
-   
+
    ret += QString("%1 - %2 (%3%4)\n").arg( rec->name())
          .arg( style ? style->name() : tr("unknown style"))
          .arg( style ? style->categoryNumber() : tr("N/A"))
@@ -133,20 +133,20 @@ QString RecipeFormatter::getTextFormat()
       ret += getTextSeparator();
       ret += tmp;
    }
-   
+
    return ret;
 }
 
 QString RecipeFormatter::getTextSeparator()
 {
-   if( textSeparator != 0 )
+   if( textSeparator != nullptr )
       return *textSeparator;
-   
+
    int i;
    textSeparator = new QString();
    for( i = 0; i < 80; ++i )
       textSeparator->append('=');
-   
+
    textSeparator->append('\n');
    return *textSeparator;
 }
@@ -219,7 +219,7 @@ QString RecipeFormatter::getBBCodeFormat()
    QString tmp = "";
    QRegExp regexp("(^[^\n]*\n)(.*$)"); //Regexp to match the first line of tables
 
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    Style* style = rec->style();
@@ -280,9 +280,9 @@ QString RecipeFormatter::getToolTip(Recipe* rec)
    QString header;
    QString body;
 
-   Style* style = 0;
+   Style* style = nullptr;
 
-   if ( rec == 0 )
+   if ( rec == nullptr )
       return "";
 
    style = rec->style();
@@ -309,14 +309,14 @@ QString RecipeFormatter::getToolTip(Recipe* rec)
            .arg(tr("FG"))
            .arg(Brewtarget::displayAmount(rec->fg(), Units::sp_grav, 3));
 
-   // Fourth row: Color and Bitterness.  
+   // Fourth row: Color and Bitterness.
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td>")
            .arg(tr("Color"))
            .arg(Brewtarget::displayAmount(rec->color_srm(),Units::srm, 1))
            .arg(Brewtarget::colorFormulaName());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td></tr>")
            .arg(tr("IBU"))
-           .arg(Brewtarget::displayAmount(rec->IBU(), 0, 1))
+           .arg(Brewtarget::displayAmount(rec->IBU(), nullptr, 1))
            .arg(Brewtarget::ibuFormulaName() );
 
    body += "</table></body></html>";
@@ -330,7 +330,7 @@ QString RecipeFormatter::getToolTip(Style* style)
    QString header;
    QString body;
 
-   if ( style == 0 )
+   if ( style == nullptr )
       return "";
 
    // Do the style sheet first
@@ -373,7 +373,7 @@ QString RecipeFormatter::getToolTip(Equipment* kit)
    QString header;
    QString body;
 
-   if ( kit == 0 )
+   if ( kit == nullptr )
       return "";
 
    // Do the style sheet first
@@ -408,7 +408,7 @@ QString RecipeFormatter::getToolTip(Fermentable* ferm)
    QString header;
    QString body;
 
-   if ( ferm == 0 )
+   if ( ferm == nullptr )
       return "";
 
    // Do the style sheet first
@@ -436,7 +436,7 @@ QString RecipeFormatter::getToolTip(Fermentable* ferm)
            .arg( ferm->isMashed() ? tr("Yes") : tr("No") );
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Yield"))
-           .arg(Brewtarget::displayAmount(ferm->yield_pct(), 0));
+           .arg(Brewtarget::displayAmount(ferm->yield_pct(), nullptr));
 
    body += "</table></body></html>";
 
@@ -449,7 +449,7 @@ QString RecipeFormatter::getToolTip(Hop* hop)
    QString header;
    QString body;
 
-   if ( hop == 0 )
+   if ( hop == nullptr )
       return "";
 
    // Do the style sheet first
@@ -467,10 +467,10 @@ QString RecipeFormatter::getToolTip(Hop* hop)
    // First row -- alpha and beta
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Alpha"))
-           .arg(Brewtarget::displayAmount(hop->alpha_pct(), 0));
+           .arg(Brewtarget::displayAmount(hop->alpha_pct(), nullptr));
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Beta"))
-           .arg(Brewtarget::displayAmount(hop->beta_pct(), 0));
+           .arg(Brewtarget::displayAmount(hop->beta_pct(), nullptr));
 
    // Second row -- form and use
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
@@ -491,7 +491,7 @@ QString RecipeFormatter::getToolTip(Misc* misc)
    QString header;
    QString body;
 
-   if ( misc == 0 )
+   if ( misc == nullptr )
       return "";
 
    // Do the style sheet first
@@ -525,7 +525,7 @@ QString RecipeFormatter::getToolTip(Yeast* yeast)
    QString header;
    QString body;
 
-   if ( yeast == 0 )
+   if ( yeast == nullptr )
       return "";
 
    // Do the style sheet first
@@ -553,7 +553,7 @@ QString RecipeFormatter::getToolTip(Yeast* yeast)
            .arg(yeast->laboratory());
    body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Attenuation"))
-           .arg(Brewtarget::displayAmount(yeast->attenuation_pct(), 0));
+           .arg(Brewtarget::displayAmount(yeast->attenuation_pct(), nullptr));
 
    // third row -- atten and floc
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
@@ -585,20 +585,21 @@ unsigned int RecipeFormatter::getMaxLength( QStringList* list )
       if( list->at(i).size() > maxlen )
          maxlen = list->at(i).size();
    }
-   
-   return maxlen;
+
+   return static_cast<unsigned int>(maxlen);
 }
 
 QString RecipeFormatter::padToLength( const QString &str, unsigned int length )
 {
-   return QString("%1").arg(str, -length, ' ');
+   // The 0 is redundant. It makes me feel better
+   return QString("%1").arg(str, 0 - static_cast<int>(length), ' ');
 }
 
 void RecipeFormatter::padAllToMaxLength( QStringList* list, unsigned int padding )
 {
    unsigned int maxlen = getMaxLength( list );
-   unsigned int i, size;
-   
+   int i, size;
+
    size = list->count();
    for( i = 0; i < size; ++i )
       list->replace( i, padToLength( list->at(i), maxlen + padding ) ); // Add a padding so that text doesn't run together.
@@ -649,9 +650,9 @@ QString RecipeFormatter::buildStatTableHtml()
 {
    QString header;
    QString body;
-   Style* style = 0;
+   Style* style = nullptr;
 
-   if ( rec == 0 )
+   if ( rec == nullptr )
       return "";
 
    style = rec->style();
@@ -701,7 +702,7 @@ QString RecipeFormatter::buildStatTableHtml()
                    "<td align=\"left\" class=\"left\">%1</td>"
                    "<td class=\"value\">%2</td>")
            .arg(tr("Boil Time"))
-           .arg( (rec->equipment() == 0)?
+           .arg( (rec->equipment() == nullptr)?
                    Brewtarget::displayAmount(0, "tab_recipe", "boilTime_min", Units::minutes)
                  : Brewtarget::displayAmount( (rec->equipment())->boilTime_min(), "tab_recipe", "boilTime_min", Units::minutes));
    body += QString("<td align=\"right\" class=\"right\">%1</td>"
@@ -725,11 +726,11 @@ QString RecipeFormatter::buildStatTableHtml()
                    "<td align=\"left\" class=\"left\">%1</td>"
                    "<td class=\"value\">%2%</td>")
            .arg(tr("ABV"))
-           .arg(Brewtarget::displayAmount(rec->ABV_pct(), 0, 1));
+           .arg(Brewtarget::displayAmount(rec->ABV_pct(), nullptr, 1));
    body += QString("<td align=\"right\" class=\"right\">%1</td>"
                    "<td class=\"value\">%2 (%3)</td></tr>")
            .arg(tr("IBU"))
-           .arg(Brewtarget::displayAmount(rec->IBU(), 0, 1))
+           .arg(Brewtarget::displayAmount(rec->IBU(), nullptr, 1))
            .arg(Brewtarget::ibuFormulaName() );
 
    // Fifth row: Color and calories.  Set up the color string first
@@ -739,11 +740,11 @@ QString RecipeFormatter::buildStatTableHtml()
            .arg(tr("Color"))
            .arg(Brewtarget::displayAmount(rec->color_srm(),"tab_recipe", "color_srm", Units::srm, 1))
            .arg(Brewtarget::colorFormulaName());
-           
+
    body += QString("<td align=\"right\" class=\"right\">%1</td>"
                    "<td class=\"value\">%2</td></tr>")
            .arg( Brewtarget::getVolumeUnitSystem() == SI ? tr("Estimated calories (per 33 cl)") : tr("Estimated calories (per 12 oz)"))
-           .arg( Brewtarget::displayAmount(Brewtarget::getVolumeUnitSystem() == SI ? rec->calories33cl() : rec->calories12oz(),0,0) );
+           .arg( Brewtarget::displayAmount(Brewtarget::getVolumeUnitSystem() == SI ? rec->calories33cl() : rec->calories12oz(),nullptr,0) );
 
    body += "</table>";
 
@@ -757,7 +758,7 @@ QString RecipeFormatter::buildStatTableTxt()
    const int nbLines = 9;
    int i;
 
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    QStringList entry, value;
@@ -767,7 +768,7 @@ QString RecipeFormatter::buildStatTableTxt()
    entry.append(tr("Boil Size"));
    value.append(QString("%1").arg(Brewtarget::displayAmount(rec->boilVolume_l(), "tab_recipe", "boilVolume_l", Units::liters)));
    entry.append(tr("Boil Time"));
-   value.append(QString("%1").arg((rec->equipment() == 0)?
+   value.append(QString("%1").arg((rec->equipment() == nullptr)?
                          Brewtarget::displayAmount(0, "tab_recipe", "boilTime_min", Units::minutes)
                        : Brewtarget::displayAmount( (rec->equipment())->boilTime_min(), "tab_recipe", "boilTime_min", Units::minutes)));
    entry.append(tr("Efficiency"));
@@ -777,9 +778,9 @@ QString RecipeFormatter::buildStatTableTxt()
    entry.append(tr("FG"));
    value.append(QString("%1").arg(Brewtarget::displayAmount(rec->fg(), "tab_recipe", "fg", Units::sp_grav, 3)));
    entry.append(tr("ABV"));
-   value.append(QString("%1%").arg(Brewtarget::displayAmount(rec->ABV_pct(), 0, 1)));
+   value.append(QString("%1%").arg(Brewtarget::displayAmount(rec->ABV_pct(), nullptr, 1)));
    entry.append(tr("Bitterness"));
-   value.append(QString("%1 %2 (%3)").arg(Brewtarget::displayAmount(rec->IBU(), 0, 1))
+   value.append(QString("%1 %2 (%3)").arg(Brewtarget::displayAmount(rec->IBU(), nullptr, 1))
                               .arg(tr("IBU"))
                               .arg(Brewtarget::ibuFormulaName()));
    entry.append(tr("Color"));
@@ -797,7 +798,7 @@ QString RecipeFormatter::buildStatTableTxt()
 
 QString RecipeFormatter::buildFermentableTableHtml()
 {
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    QString ftable;
@@ -837,7 +838,7 @@ QString RecipeFormatter::buildFermentableTableHtml()
             .arg( Brewtarget::displayAmount(ferm->amount_kg(), "fermentableTable", "amount_kg", Units::kilograms))
             .arg( ferm->isMashed() ? tr("Yes") : tr("No") )
             .arg( ferm->addAfterBoil() ? tr("Yes") : tr("No"))
-            .arg( Brewtarget::displayAmount(ferm->yield_pct(), 0, 0) )
+            .arg( Brewtarget::displayAmount(ferm->yield_pct(), nullptr, 0) )
             .arg( Brewtarget::displayAmount(ferm->color_srm(), "fermentableTable", "color_srm", Units::srm, 1));
    }
    // One row for the total grain (QTextBrowser does not know the caption tag)
@@ -858,7 +859,7 @@ QString RecipeFormatter::buildFermentableTableTxt()
    QString ret = "";
    int i, size;
 
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    QList<Fermentable*> ferms = sortFermentablesByWeight(rec);
@@ -883,7 +884,7 @@ QString RecipeFormatter::buildFermentableTableTxt()
          amounts.append(Brewtarget::displayAmount(ferm->amount_kg(), "fermentableTable", "amount_kg", Units::kilograms));
          masheds.append( ferm->isMashed() ? tr("Yes") : tr("No"));
          lates.append( ferm->addAfterBoil() ? tr("Yes") : tr("No"));
-         yields.append( QString("%1%").arg(Brewtarget::displayAmount(ferm->yield_pct(), 0, 0) ) );
+         yields.append( QString("%1%").arg(Brewtarget::displayAmount(ferm->yield_pct(), nullptr, 0) ) );
          colors.append( QString("%1").arg(Brewtarget::displayAmount(ferm->color_srm(), "fermentableTable", "color_srm", Units::srm, 1)));
       }
 
@@ -905,9 +906,9 @@ QString RecipeFormatter::buildFermentableTableTxt()
 
 QString RecipeFormatter::buildHopsTableHtml()
 {
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
-   
+
    QString hTable;
    QList<Hop*> hops = sortHopsByTime(rec);
    int i, size;
@@ -941,12 +942,12 @@ QString RecipeFormatter::buildHopsTableHtml()
       Hop *hop = hops[i];
       hTable += QString("<tr><td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td></tr>")
             .arg( hop->name())
-            .arg( Brewtarget::displayAmount(hop->alpha_pct(),0,1) )
+            .arg( Brewtarget::displayAmount(hop->alpha_pct(),nullptr,1) )
             .arg( Brewtarget::displayAmount(hop->amount_kg(), "hopTable", "amount_kg", Units::kilograms))
             .arg( hop->useStringTr())
             .arg( Brewtarget::displayAmount(hop->time_min(), "hopTable", "time_min", Units::minutes))
             .arg( hop->formStringTr())
-            .arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), 0, 1) );
+            .arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), nullptr, 1) );
    }
    hTable += "</table>";
    return hTable;
@@ -957,7 +958,7 @@ QString RecipeFormatter::buildHopsTableTxt()
    QString ret = "";
    int i, size;
 
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    QList<Hop*> hops = sortHopsByTime(rec);
@@ -979,12 +980,12 @@ QString RecipeFormatter::buildHopsTableTxt()
          Hop* hop = hops[i];
 
          names.append(hop->name());
-         alphas.append(QString("%1%").arg(Brewtarget::displayAmount(hop->alpha_pct(), 0, 1)));
+         alphas.append(QString("%1%").arg(Brewtarget::displayAmount(hop->alpha_pct(), nullptr, 1)));
          amounts.append(Brewtarget::displayAmount(hop->amount_kg(), "hopTable", "amount_kg", Units::kilograms));
          uses.append(hop->useStringTr());
          times.append(Brewtarget::displayAmount(hop->time_min(), "hopTable", "time_min", Units::minutes));
          forms.append(hop->formStringTr());
-         ibus.append(QString("%1").arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), 0, 1)));
+         ibus.append(QString("%1").arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), nullptr, 1)));
       }
 
       padAllToMaxLength(&names);
@@ -1003,9 +1004,9 @@ QString RecipeFormatter::buildHopsTableTxt()
 
 QString RecipeFormatter::buildMiscTableHtml()
 {
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
-   
+
    QString mtable;
    int i, size;
    QList<Misc*> miscs = rec->miscs();
@@ -1033,7 +1034,7 @@ QString RecipeFormatter::buildMiscTableHtml()
    for( i = 0; i < size; ++i)
    {
       Misc *misc = miscs[i];
-      kindOf = misc->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
+      kindOf = misc->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
 
       mtable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td></tr>")
             .arg( misc->name())
@@ -1053,7 +1054,7 @@ QString RecipeFormatter::buildMiscTableTxt()
    int i, size;
    Unit* kindOf;
 
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    QList<Misc*> miscs = rec->miscs();
@@ -1071,7 +1072,7 @@ QString RecipeFormatter::buildMiscTableTxt()
       for( i = 0; i < size; ++i )
       {
          Misc* misc = miscs[i];
-         kindOf = misc->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
+         kindOf = misc->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
          names.append(misc->name());
          types.append(misc->typeStringTr());
          uses.append(misc->useStringTr());
@@ -1093,15 +1094,15 @@ QString RecipeFormatter::buildMiscTableTxt()
 
 QString RecipeFormatter::buildYeastTableHtml()
 {
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
-   
+
    QString ytable;
    int i, size;
    QList<Yeast*> yeasts = rec->yeasts();
    Unit* kindOf;
    size = yeasts.size();
-   
+
    if( size < 1 )
       return "";
 
@@ -1122,7 +1123,7 @@ QString RecipeFormatter::buildYeastTableHtml()
    for( i = 0; i < size; ++i)
    {
       Yeast* y = yeasts[i];
-      kindOf = y->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
+      kindOf = y->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
 
       ytable += QString("<tr><td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td></tr>")
             .arg( y->name())
@@ -1141,7 +1142,7 @@ QString RecipeFormatter::buildYeastTableTxt()
    int i, size;
    Unit* kindOf;
 
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    QList<Yeast*> yeasts = rec->yeasts();
@@ -1159,7 +1160,7 @@ QString RecipeFormatter::buildYeastTableTxt()
       for( i = 0; i < size; ++i )
       {
          Yeast* y = yeasts[i];
-         kindOf = y->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
+         kindOf = y->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
          names.append(y->name());
          types.append(y->typeStringTr());
          forms.append(y->formStringTr());
@@ -1181,17 +1182,17 @@ QString RecipeFormatter::buildYeastTableTxt()
 
 QString RecipeFormatter::buildMashTableHtml()
 {
-   if( rec == 0 || rec->mash() == 0 )
+   if( rec == nullptr || rec->mash() == nullptr )
       return "";
-      
+
    QString mtable;
-   
+
    MashStep* ms;
    int i, size;
    Mash* m = rec->mash();
    QList<MashStep*> mashSteps = m->mashSteps();
    size = mashSteps.size();
-   
+
    if( size <= 0 )
       return "";
 
@@ -1250,7 +1251,7 @@ QString RecipeFormatter::buildMashTableTxt()
    QString ret = "";
    int i, size;
 
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    Mash* mash = rec->mash();
@@ -1311,7 +1312,7 @@ QString RecipeFormatter::buildNotesHtml()
 {
    QString notes;
 
-   if ( rec == 0 || rec->notes() == "" )
+   if ( rec == nullptr || rec->notes() == "" )
       return "";
 
    notes = QString("<h3>%1</h3>").arg(tr("Notes"));
@@ -1324,14 +1325,14 @@ QString RecipeFormatter::buildNotesHtml()
 
 QString RecipeFormatter::buildInstructionTableHtml()
 {
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
-   
+
    QString itable;
    int i, size;
    QList<Instruction*> instructions = rec->instructions();
    size = instructions.size();
-   
+
    if ( size < 1 )
       return "";
 
@@ -1354,7 +1355,7 @@ QString RecipeFormatter::buildInstructionTableTxt()
    QString ret = "";
    int i, size;
 
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
 
    QStringList num, text;
@@ -1386,14 +1387,14 @@ QString RecipeFormatter::buildInstructionTableTxt()
 
 QString RecipeFormatter::buildBrewNotesHtml()
 {
-   if( rec == 0 )
+   if( rec == nullptr )
       return "";
-   
+
    QString bnTable = "";
    int i, size;
    QList<BrewNote*> brewNotes = rec->brewNotes();
    size = brewNotes.size();
-   
+
    if ( size < 1 )
       return bnTable;
 
@@ -1403,7 +1404,7 @@ QString RecipeFormatter::buildBrewNotesHtml()
       QString section;
 
       bnTable += QString("<h2>%1 %2</h2>").arg(tr("Brew Date")).arg(note->brewDate_short());
-      
+
       // PREBOIL, done two-by-two
       section = "page_preboil";
       bnTable += "<table id=\"brewnote\">";
@@ -1422,7 +1423,7 @@ QString RecipeFormatter::buildBrewNotesHtml()
 
       bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                  .arg(tr("Eff into BK"))
-                 .arg(Brewtarget::displayAmount(note->calculateEffIntoBK_pct(), 0, 2))
+                 .arg(Brewtarget::displayAmount(note->calculateEffIntoBK_pct(), nullptr, 2))
                  .arg(tr("Projected OG"))
                  .arg(Brewtarget::displayAmount(note->calculateOg(), section, "projOg", Units::sp_grav, 3));
       bnTable += "</table>";
@@ -1440,10 +1441,10 @@ QString RecipeFormatter::buildBrewNotesHtml()
                  .arg(tr("Volume Into Fermenter"))
                  .arg(Brewtarget::displayAmount(note->volumeIntoFerm_l(), section, "volumeIntoFerm_l", Units::liters))
                  .arg(tr("Brewhouse Eff"))
-                 .arg(Brewtarget::displayAmount(note->calculateBrewHouseEff_pct(), 0, 2));
+                 .arg(Brewtarget::displayAmount(note->calculateBrewHouseEff_pct(), nullptr, 2));
       bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td></tr>")
                  .arg(tr("Projected ABV"))
-                 .arg(Brewtarget::displayAmount(note->calculateABV_pct(), 0, 2));
+                 .arg(Brewtarget::displayAmount(note->calculateABV_pct(), nullptr, 2));
       bnTable += "</table>";
 
 
@@ -1461,7 +1462,7 @@ QString RecipeFormatter::buildBrewNotesHtml()
                  .arg(tr("Date"))
                  .arg(note->fermentDate_short())
                  .arg(tr("ABV"))
-                 .arg(Brewtarget::displayAmount(note->calculateActualABV_pct(), 0, 2));
+                 .arg(Brewtarget::displayAmount(note->calculateActualABV_pct(), nullptr, 2));
       bnTable += "</table>";
 
    }
@@ -1524,7 +1525,7 @@ bool RecipeFormatter::loadComplete(bool ok)
 void RecipeFormatter::print(QPrinter* mainPrinter,
       int action, QFile* outFile)
 {
-   if( rec == 0 )
+   if( rec == nullptr )
       return;
 
    // Short cut if we are saving to HTML
@@ -1551,15 +1552,15 @@ void RecipeFormatter::print(QPrinter* mainPrinter,
 QList<Hop*> RecipeFormatter::sortHopsByTime(Recipe* rec)
 {
    QList<Hop*> sorted = rec->hops();
-   
-   qSort(sorted.begin(), sorted.end(), hopLessThanByTime);
+
+   std::sort(sorted.begin(), sorted.end(), hopLessThanByTime);
    return sorted;
 }
 
 QList<Fermentable*> RecipeFormatter::sortFermentablesByWeight(Recipe* rec)
 {
    QList<Fermentable*> sorted = rec->fermentables();
-   
-   qSort(sorted.begin(), sorted.end(), fermentablesLessThanByWeight);
+
+   std::sort(sorted.begin(), sorted.end(), fermentablesLessThanByWeight);
    return sorted;
 }

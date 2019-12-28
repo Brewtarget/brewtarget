@@ -42,9 +42,9 @@ class Yeast : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "yeasts")
-   Q_CLASSINFO("prefix", "yeast")
-   
+
    friend class Database;
+   friend class YeastDialog;
 public:
    //! \brief What beverage the yeast is for.
    enum Type {Ale, Lager, Wheat, Wine, Champagne};
@@ -53,9 +53,9 @@ public:
    //! \brief How flocculant the strain is.
    enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
    Q_ENUMS( Type Form Flocculation )
-   
+
    virtual ~Yeast() {}
-   
+
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The \c Type string.
@@ -72,6 +72,8 @@ public:
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
    //! \brief The amount in inventory in either liters or kg depending on \c amountIsWeight().
    Q_PROPERTY( double inventory READ inventory WRITE setInventoryQuanta /*NOTIFY changed*/ /*changedInventory*/ )
+   //! \brief The inventory id
+   Q_PROPERTY( double inventoryId READ inventoryId WRITE setInventoryId /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief Whether the \c amount() is weight (kg) or volume (liters).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
    //! \brief The lab from which it came.
@@ -100,25 +102,27 @@ public:
    Q_PROPERTY( int maxReuse READ maxReuse WRITE setMaxReuse /*NOTIFY changed*/ /*changedMaxReuse*/ )
    //! \brief Whether the yeast is added to secondary or primary.
    Q_PROPERTY( bool addToSecondary READ addToSecondary WRITE setAddToSecondary /*NOTIFY changed*/ /*changedAddToSecondary*/ )
-   
+
    // Setters
-   void setType( Type t );
-   void setForm( Form f );
-   void setAmount( double var );
-   void setInventoryQuanta( int var );
-   void setAmountIsWeight( bool var );
-   void setLaboratory( const QString& var );
-   void setProductID( const QString& var );
-   void setMinTemperature_c( double var );
-   void setMaxTemperature_c( double var );
-   void setFlocculation( Flocculation f );
-   void setAttenuation_pct( double var );
-   void setNotes( const QString& var );
-   void setBestFor( const QString& var );
-   void setTimesCultured( int var );
-   void setMaxReuse( int var );
-   void setAddToSecondary( bool var );
-   
+   void setType( Type t);
+   void setForm( Form f);
+   void setAmount( double var);
+   void setInventoryQuanta(int var);
+   void setAmountIsWeight( bool var);
+   void setLaboratory( const QString& var);
+   void setProductID( const QString& var);
+   void setMinTemperature_c( double var);
+   void setMaxTemperature_c( double var);
+   void setFlocculation( Flocculation f);
+   void setAttenuation_pct( double var);
+   void setNotes( const QString& var);
+   void setBestFor( const QString& var);
+   void setTimesCultured( int var);
+   void setMaxReuse( int var);
+   void setAddToSecondary( bool var);
+   void setCacheOnly( bool cache);
+   void setInventoryId( int key);
+
    // Getters
    Type type() const;
    const QString typeString() const;
@@ -127,7 +131,8 @@ public:
    const QString formString() const;
    const QString formStringTr() const;
    double amount() const;
-   int inventory() const;
+   int inventory();
+   int inventoryId() const;
    bool amountIsWeight() const;
    QString laboratory() const;
    QString productID() const;
@@ -142,9 +147,10 @@ public:
    int timesCultured() const;
    int maxReuse() const;
    bool addToSecondary() const;
+   bool cacheOnly() const;
 
    static QString classNameStr();
-   
+
 signals:
 
    //! \brief Emitted when \c name() changes.
@@ -152,8 +158,32 @@ signals:
 
 private:
    Yeast(Brewtarget::DBTable table, int key);
-   Yeast(Yeast const& other);
-   
+   Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Yeast(QString name, bool cache = true);
+   Yeast(Yeast & other);
+
+   QString m_typeString;
+   Type m_type;
+   QString m_formString;
+   Form m_form;
+   QString m_flocculationString;
+   Flocculation m_flocculation;
+   double m_amount;
+   bool m_amountIsWeight;
+   QString m_laboratory;
+   QString m_productID;
+   double m_minTemperature_c;
+   double m_maxTemperature_c;
+   double m_attenuation_pct;
+   QString m_notes;
+   QString m_bestFor;
+   int m_timesCultured;
+   int m_maxReuse;
+   bool m_addToSecondary;
+   int m_inventory;
+   int m_inventory_id;
+   bool m_cacheOnly;
+
    static QStringList types;
    static QStringList forms;
    static QStringList flocculations;
@@ -162,7 +192,7 @@ private:
    bool isValidType(const QString& str) const;
    bool isValidForm(const QString& str) const;
    bool isValidFlocculation(const QString& str) const;
-   
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };

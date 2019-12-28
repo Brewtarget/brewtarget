@@ -41,11 +41,11 @@ class MiscEditor : public QDialog, private Ui::miscEditor
    Q_OBJECT
 
 public:
-   MiscEditor( QWidget *parent=0 );
+   MiscEditor( QWidget *parent=nullptr );
    virtual ~MiscEditor() {}
    //! Set the misc we wish to view/edit.
    void setMisc( Misc* m );
-   
+
 public slots:
    //! Save changes.
    void save();
@@ -53,14 +53,14 @@ public slots:
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
 //   void updateField();
-   
+
 private:
    Misc* obsMisc;
    /*! Updates the UI elements effected by the \b metaProp of
     *  the misc we are watching. If \b metaProp is null,
     *  then update all the UI elements at once.
     */
-   void showChanges(QMetaProperty* metaProp = 0);
+   void showChanges(QMetaProperty* metaProp = nullptr);
 };
 
 #endif   /* _MISCEDITOR_H */

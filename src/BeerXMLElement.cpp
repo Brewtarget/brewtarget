@@ -27,96 +27,87 @@
 #include "brewtarget.h"
 #include "database.h"
 
-static const QString kFolder("folder");
-static const QString kName("name");
-static const QString kDeleted("deleted");
-static const QString kDisplay("display");
-
 static const char* kVersion = "version";
 
-BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key)
-   : QObject(0),
+BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name, bool t_display)
+   : QObject(nullptr),
      _key(key),
      _table(table),
+     _valid(true),
+     _folder(QString()),
+     _name(t_name),
+     _display(t_display),
+     _deleted(QVariant())
+{
+}
+
+BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
+   : QObject(nullptr),
+     _key(other._key),
+     _table(other._table),
+     _valid(true),
      _folder(QString()),
      _name(QString()),
      _display(QVariant()),
      _deleted(QVariant())
 {
-   _valid = true;
-}
-
-BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
-   : QObject(0),
-   _key(other._key),
-   _table(other._table),
-   _folder(QString()),
-   _name(QString()),
-   _display(QVariant()),
-   _deleted(QVariant())
-{
-   _valid = true;
 }
 
 bool BeerXMLElement::deleted() const
 {
-
-   if ( ! _deleted.isValid() )
-      _deleted = get(kDeleted);
 
    return _deleted.toBool();
 }
 
 bool BeerXMLElement::display() const
 {
-   if ( ! _display.isValid() )
-      _display = get(kDisplay);
-
    return _display.toBool();
 }
 
 // Sigh. New databases, more complexity
-void BeerXMLElement::setDeleted(const bool var)
+void BeerXMLElement::setDeleted(const bool var, bool cachedOnly)
 {
-   set(kDeleted, kDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
    _deleted = var;
+   if ( ! cachedOnly )
+      setEasy(kpropDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
-void BeerXMLElement::setDisplay(bool var)
+void BeerXMLElement::setDisplay(bool var, bool cachedOnly)
 {
-   set(kDisplay, kDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
    _display = var;
+   if ( ! cachedOnly )
+      setEasy(kpropDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
 QString BeerXMLElement::folder() const
 {
-   if ( _folder.isEmpty() )
-      _folder = get(kFolder).toString();
-
    return _folder;
 }
 
-void BeerXMLElement::setFolder(const QString var, bool signal)
+void BeerXMLElement::setFolder(const QString var, bool signal, bool cachedOnly)
 {
-   set( kFolder, kFolder, var );
    _folder = var;
+   if ( ! cachedOnly )
+      // set( kFolder, kFolder, var );
+      setEasy( kpropFolder, var );
+   // not sure if I should only signal when not caching?
    if ( signal )
       emit changedFolder(var);
 }
 
 QString BeerXMLElement::name() const
 {
-   if ( _name.isEmpty() )
-      _name = get(kName).toString();
-
    return _name;
 }
 
-void BeerXMLElement::setName(const QString var)
+void BeerXMLElement::setName(const QString var, bool cachedOnly)
 {
-   set( kName, kName, var );
+
    _name = var;
-   emit changedName(var);
+   if ( ! cachedOnly ) {
+      setEasy( kpropName, var );
+      emit changedName(var);
+   }
 }
 
 int BeerXMLElement::key() const
@@ -128,7 +119,6 @@ Brewtarget::DBTable BeerXMLElement::table() const
 {
    return _table;
 }
-
 
 int BeerXMLElement::version() const
 {
@@ -263,66 +253,27 @@ QString BeerXMLElement::text(QDate const& val)
    return val.toString(Qt::ISODate);
 }
 
-void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
+void BeerXMLElement::setEasy(QString prop_name, QVariant value, bool notify)
 {
-   if (prop_name != NULL && col_name != NULL) {
-    // Get the meta property.
-    int ndx = metaObject()->indexOfProperty(prop_name);
-
-    // Should schedule an update of the appropriate entry in table,
-    // then use prop to emit its notification signal.
-    Database::instance().updateEntry( _table, _key, col_name, value, metaObject()->property(ndx), this, notify );
-   }
+   Database::instance().updateEntry(this,prop_name,value,notify);
 }
 
-void BeerXMLElement::set(const QString &prop_name, const QString &col_name, const QVariant &value, bool notify)
-{
-   set(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
-}
 
-QVariant BeerXMLElement::get( const char* col_name ) const
+QVariant BeerXMLElement::get( const QString& col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
 }
 
-QVariant BeerXMLElement::get( const QString& col_name ) const
+void BeerXMLElement::setInventory( const QVariant& value, int invKey, bool notify )
 {
-   return get(col_name.toUtf8().constData());
-}
-
-void BeerXMLElement::setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
-{
-    // Get the meta property.
-    int ndx = metaObject()->indexOfProperty(prop_name);
-
-    int invkey = Database::instance().getInventoryID(_table, _key);
-    Brewtarget::DBTable invtable = Database::instance().getInventoryTable(_table);
-    if(invkey == 0){ //no inventory row in the database so lets make one
-      Database::instance().newInventory(_table,_key);
-      invkey = Database::instance().getInventoryID(_table, _key);
-    }
-    Database::instance().updateEntry( invtable, invkey, col_name, value, metaObject()->property(ndx), this, notify );
-}
-
-void BeerXMLElement::setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify )
-{
-   setInventory(prop_name.toUtf8().constData(), col_name.toUtf8().constData(), value, notify);
-}
-
-QVariant BeerXMLElement::getInventory( const char* col_name ) const
-{
-   int invkey = Database::instance().getInventoryID(_table, _key);
-   Brewtarget::DBTable invtable = Database::instance().getInventoryTable(_table);
-   QVariant val = 0.0;
-   if(invkey != 0){
-      val = Database::instance().get( invtable , invkey, col_name );
-   }
-   return val;
+   Database::instance().setInventory( this, value, invKey, notify );
 }
 
 QVariant BeerXMLElement::getInventory( const QString& col_name ) const
 {
-   return getInventory(col_name.toUtf8().constData());
+   QVariant val = 0.0;
+   val = Database::instance().getInventoryAmt(col_name, _table, _key);
+   return val;
 }
 
 bool BeerXMLElement::isValid()
@@ -338,7 +289,7 @@ void BeerXMLElement::invalidate()
 QVariantMap BeerXMLElement::getColumnValueMap() const
 {
    QVariantMap map;
-   map.insert(kFolder, folder());
-   map.insert(kName, name());
+   map.insert(kpropFolder, folder());
+   map.insert(kpropName, name());
    return map;
 }
