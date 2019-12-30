@@ -207,7 +207,6 @@ public slots:
    //! \brief Create a new folder
    void newFolder();
    void renameFolder();
-   // void deleteFolder();
 
    void deleteSelected();
    void copySelected();
@@ -257,7 +256,7 @@ public slots:
    //! \brief Catches a QNetworkReply signal and gets info about any new version available.
    void finishCheckingVersion();
 
-   void redisplayLabel(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
+   void redisplayLabel();
 
    void showEquipmentEditor();
    void showStyleEditor();
@@ -282,7 +281,7 @@ private slots:
     *
     * \param prop Not yet used. Will indicate which Recipe property has changed.
     */
-   void showChanges(QMetaProperty* prop = 0);
+   void showChanges(QMetaProperty* prop = nullptr);
 
 private:
    Recipe* recipeObs;
@@ -325,19 +324,24 @@ private:
    PitchDialog* pitchDialog;
    QPrinter *printer;
 
+   // all things tables should go here.
    FermentableTableModel* fermTableModel;
-   FermentableSortFilterProxyModel* fermTableProxy;
    HopTableModel* hopTableModel;
-   HopSortFilterProxyModel* hopTableProxy;
-   MiscTableModel* miscTableModel;
-   MiscSortFilterProxyModel* miscTableProxy;
-   YeastTableModel* yeastTableModel;
-   YeastSortFilterProxyModel* yeastTableProxy;
    MashStepTableModel* mashStepTableModel;
+   MiscTableModel* miscTableModel;
+   YeastTableModel* yeastTableModel;
+
+   // all things lists should go here
    EquipmentListModel* equipmentListModel;
    MashListModel* mashListModel;
    StyleListModel* styleListModel;
+
+   // all things sort/filter proxy go here
+   FermentableSortFilterProxyModel* fermTableProxy;
+   HopSortFilterProxyModel* hopTableProxy;
+   MiscSortFilterProxyModel* miscTableProxy;
    StyleSortFilterProxyModel* styleProxyModel;
+   YeastSortFilterProxyModel* yeastTableProxy;
 
    NamedMashEditor* namedMashEditor;
    NamedMashEditor* singleNamedMashEditor;
@@ -388,8 +392,6 @@ private:
    void setupTextEdit();
    //! \brief Connect signal/slots drag/drop
    void setupDrops();
-
-
 
    void updateDensitySlider(QString attribute, RangedSlider* slider, double max);
    void updateColorSlider(QString attribute, RangedSlider* slider);
