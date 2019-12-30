@@ -174,13 +174,11 @@ MainWindow::MainWindow(QWidget* parent)
    setupClicks();
    // connect slots to activate() signals
    setupActivate();
-   // connect signal/slots for labels
-   setupLabels();
    // connect signal slots for the text editors
    setupTextEdit();
    // connect the remaining labels
    setupLabels();
-   // and (finally) set up the drag/drop parts
+   // set up the drag/drop parts
    setupDrops();
 
    // No connections from the database yet? Oh FSM, that probably means I'm
@@ -279,6 +277,24 @@ void MainWindow::setupRanges()
    styleRangeWidget_ibu->setPrecision(1);
    styleRangeWidget_ibu->setTickMarks(10, 2);
 
+   // definitely cheating, but I don't feel like making a whole subclass just to support this
+   // or the next.
+   rangeWidget_batchsize->setRange(0, recipeObs == nullptr ? 19.0 : recipeObs->batchSize_l());
+   rangeWidget_batchsize->setPrecision(1);
+   rangeWidget_batchsize->setTickMarks(2,5);
+
+   rangeWidget_batchsize->setBackgroundBrush(QColor(255,255,255));
+   rangeWidget_batchsize->setPreferredRangeBrush(QColor(55,138,251));
+   rangeWidget_batchsize->setMarkerBrush(QBrush(Qt::NoBrush));
+
+   rangeWidget_boilsize->setRange(0, recipeObs == nullptr? 24.0 : recipeObs->boilVolume_l());
+   rangeWidget_boilsize->setPrecision(1);
+   rangeWidget_boilsize->setTickMarks(2,5);
+
+   rangeWidget_boilsize->setBackgroundBrush(QColor(255,255,255));
+   rangeWidget_boilsize->setPreferredRangeBrush(QColor(55,138,251));
+   rangeWidget_boilsize->setMarkerBrush(QBrush(Qt::NoBrush));
+
    const int srmMax = 50;
    styleRangeWidget_srm->setRange(0.0, static_cast<double>(srmMax));
    styleRangeWidget_srm->setPrecision(1);
@@ -340,6 +356,7 @@ void MainWindow::setupComboBoxes()
 
 // Anything creating new tables models, filter proxies and configuring the two
 // should go in here
+// TODO: Water table will need to be added here
 void MainWindow::setupTables()
 {
    // Set table models.
@@ -549,8 +566,7 @@ void MainWindow::setupTriggers()
    });
    connect(actionBrewdayHTML, &QAction::triggered, this, [this]() {
       exportHTML([this](QFile* file) {
-         brewDayScrollWidget->print(
-               printer,  BrewDayScrollWidget::PRINT);
+         brewDayScrollWidget->print(printer,BrewDayScrollWidget::PRINT,file);
       });
    });
    connect(actionInventoryPrint, &QAction::triggered, [this]() {
@@ -618,12 +634,9 @@ void MainWindow::setupTextEdit()
 void MainWindow::setupLabels()
 {
    // These are the sliders. I need to consider these harder, but small steps
-   connect(oGLabel,       &BtLabel::labelChanged,
-           this,          &MainWindow::redisplayLabel);
-   connect(fGLabel,       &BtLabel::labelChanged,
-           this,          &MainWindow::redisplayLabel);
-   connect(colorSRMLabel, &BtLabel::labelChanged,
-           this,          &MainWindow::redisplayLabel);
+   connect(oGLabel,       &BtLabel::labelChanged, this, &MainWindow::redisplayLabel);
+   connect(fGLabel,       &BtLabel::labelChanged, this, &MainWindow::redisplayLabel);
+   connect(colorSRMLabel, &BtLabel::labelChanged, this, &MainWindow::redisplayLabel);
 }
 
 // anything with a BtTabWidget::set* signal should go in here
@@ -981,12 +994,13 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lineEdit_boilSize->setCursorPosition(0);
    lineEdit_efficiency->setCursorPosition(0);
    lineEdit_boilTime->setCursorPosition(0);
-
+/*
    lineEdit_calcBatchSize->setText(recipeObs);
    lineEdit_calcBoilSize->setText(recipeObs);
+*/
 
    // Color manipulation
-
+/*
    if( 0.95*recipeObs->batchSize_l() <= recipeObs->finalVolume_l() && recipeObs->finalVolume_l() <= 1.05*recipeObs->batchSize_l() )
       lineEdit_calcBatchSize->setStyleSheet(goodSS);
    else if( recipeObs->finalVolume_l() < 0.95*recipeObs->batchSize_l() )
@@ -1000,7 +1014,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
       lineEdit_calcBoilSize->setStyleSheet(lowSS);
    else
       lineEdit_calcBoilSize->setStyleSheet(highSS);
-
+*/
    lineEdit_boilSg->setText(recipeObs);
 
    updateDensitySlider("og", styleRangeWidget_og, 1.120);
@@ -1011,6 +1025,14 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    styleRangeWidget_abv->setValue(recipeObs->ABV_pct());
    styleRangeWidget_ibu->setValue(recipeObs->IBU());
+
+   rangeWidget_batchsize->setRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"batchSize_l", Units::liters,0));
+   rangeWidget_batchsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"finalVolume_l", Units::liters,0));
+   rangeWidget_batchsize->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"finalVolume_l", Units::liters,0));
+
+   rangeWidget_boilsize->setRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilSize_l", Units::liters,0));
+   rangeWidget_boilsize->setPreferredRange(0, Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilVolume_l", Units::liters,0));
+   rangeWidget_boilsize->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"boilVolume_l", Units::liters,0));
 
    /* Colors need the same basic treatment as gravity */
    updateColorSlider("color_srm", styleRangeWidget_srm);
@@ -1296,7 +1318,7 @@ Fermentable* MainWindow::selectedFermentable()
    }
 
    modelIndex = fermTableProxy->mapToSource(viewIndex);
-   Fermentable* ferm = fermTableModel->getFermentable(modelIndex.row());
+   Fermentable* ferm = fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row()));
 
    return ferm;
 }
@@ -2438,7 +2460,7 @@ void MainWindow::finishCheckingVersion()
    }
 }
 
-void MainWindow::redisplayLabel(Unit::unitDisplay oldUnit, Unit::unitScale oldScale)
+void MainWindow::redisplayLabel()
 {
    // There is a lot of magic going on in the showChanges(). I can either
    // duplicate that magic or I can just call showChanges().
