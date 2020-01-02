@@ -169,8 +169,7 @@ void MashWizard::wizardry()
    double lauterDeadspace = 0.0;
 
    // If we have an equipment, utilize the custom absorption and boiling temp.
-   if( recObs->equipment() != nullptr )
-   {
+   if( recObs->equipment() != nullptr ) {
       absorption_LKg = recObs->equipment()->grainAbsorption_LKg();
       boilingPoint_c = recObs->equipment()->boilingPoint_c();
       lauterDeadspace = recObs->equipment()->lauterDeadspace_l();
@@ -194,11 +193,15 @@ void MashWizard::wizardry()
    // Find any batch sparges and remove them for now.
    for( i = 0; i < steps.size(); ++i) {
       MashStep* step = steps[i];
-      // NOTE: For backwards compatibility, the Final Batch Sparge comparison
-      // must be allowed. No matter how much we desire otherwise.
-      if( step->isSparge() || step->name() == "Final Batch Sparge" )
+      if( step->isSparge() ) {
+         qDebug() << "removing" << step->name();
          Database::instance().removeFrom(mash,step);
+      }
    }
+
+   // we need to reset the steps array here, since we just removed a bunch
+   // of steps.
+   steps = mash->mashSteps();
 
    grainMass = recObs->grainsInMash_kg();
    if ( bGroup->checkedButton() != radioButton_noSparge ) {
@@ -206,22 +209,21 @@ void MashWizard::wizardry()
       thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
    }
    else {
+      qDebug() << Q_FUNC_INFO << "Doing a nosparge" << steps.size();
       // not sure I like this. Why is this here and not somewhere later?
       if (steps.size() == 1) {
-         mashStep->setInfuseAmount_l(recObs->targetTotalMashVol_l());
+         qDebug() << Q_FUNC_INFO << "Step size was one";
+         mashStep->setInfuseAmount_l(recObs->targetTotalMashVol_l() + lauterDeadspace);
       }
       // For no sparge, get the thickness of the first mash step
       thickNum = mashStep->infuseAmount_l()/grainMass;
       thickness_LKg = thickNum;
    }
 
-   if( thickness_LKg <= 0.0 )
-   {
+   if( thickness_LKg <= 0.0 ) {
       QMessageBox::information(this, tr("Bad thickness"), tr("You must have a positive mash thickness."));
       return;
    }
-
-   steps = mash->mashSteps();
 
    // Do first step
    tf = mashStep->stepTemp_c();
@@ -234,8 +236,7 @@ void MashWizard::wizardry()
    tw = MC/MCw * (tf-t1) + (mash->tunSpecificHeat_calGC()*mash->tunWeight_kg())/MCw * (tf-mash->tunTemp_c()) + tf;
 
    // Can't have water above boiling.
-   if( tw > boilingPoint_c )
-   {
+   if( tw > boilingPoint_c ) {
       QMessageBox::information(this,
                                tr("Mash too thick"),
                                tr("Your mash is too thick for desired temp. at first step."));
@@ -251,14 +252,13 @@ void MashWizard::wizardry()
    // I am specifically ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
    MC += mash->tunSpecificHeat_calGC()*mash->tunWeight_kg();
 
-   for( i = 1; i < steps.size(); ++i )
-   {
+   for( i = 1; i < steps.size(); ++i ) {
       mashStep = steps[i];
 
-      if( mashStep->isTemperature() )
+      if( mashStep->isTemperature() ) {
          continue;
-      else if( mashStep->isDecoction() )
-      {
+      }
+      else if( mashStep->isDecoction() ) {
          double m_w, m_g, m_e, r;
          double c_w, c_g, c_e;
 
@@ -286,8 +286,7 @@ void MashWizard::wizardry()
 
          mashStep->setDecoctionAmount_l( r*(m_w + m_g/grainDensity) );
       }
-      else
-      {
+      else {
          tf = mashStep->stepTemp_c();
          t1 = steps[i-1]->stepTemp_c();
          tw = boilingPoint_c; // Assume adding boiling water to minimize final volume.
@@ -303,8 +302,7 @@ void MashWizard::wizardry()
    // if no sparge, adjust volume of last step to meet target runoff volume
    if ( bGroup->checkedButton() == radioButton_noSparge  && steps.size() > 1) {
       double otherMashStepTotal = 0.0;
-      for( i = 0; i < steps.size()-1; ++i )
-      {
+      for( i = 0; i < steps.size()-1; ++i ) {
          otherMashStepTotal += steps[i]->infuseAmount_l();
       }
 
@@ -316,7 +314,7 @@ void MashWizard::wizardry()
          t1 = mash->grainTemp_c();
       }
 
-      double targetWortFromMash= recObs->targetTotalMashVol_l();
+      double targetWortFromMash= recObs->targetTotalMashVol_l() + lauterDeadspace;
 
       massWater = (targetWortFromMash - otherMashStepTotal)*Algorithms::getWaterDensity_kgL(0);
 
@@ -341,8 +339,8 @@ void MashWizard::wizardry()
    double spargeWater_l = recObs->targetTotalMashVol_l() + lauterDeadspace - recObs->mash()->totalMashWater_l();
 
    // If I've done my math right, we should never get here on nosparge
-   if( spargeWater_l >= 0.001 )
-   {
+   // not sure why I am inferring this when I could just check the button group?
+   if( spargeWater_l > 0 ) {
       int lastMashStep = steps.size()-1;
       tf = mash->spargeTemp_c();
       if( lastMashStep >= 0 )

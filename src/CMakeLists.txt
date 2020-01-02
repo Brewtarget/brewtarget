@@ -158,7 +158,9 @@ SET( brewtarget_SRCS
     ${SRCDIR}/USWeightUnitSystem.cpp
     ${SRCDIR}/water.cpp
     ${SRCDIR}/WaterTableModel.cpp
+    ${SRCDIR}/WaterListModel.cpp
     ${SRCDIR}/WaterTableWidget.cpp
+    ${SRCDIR}/WaterButton.cpp
     ${SRCDIR}/WaterEditor.cpp
     ${SRCDIR}/yeast.cpp
     ${SRCDIR}/YeastDialog.cpp
@@ -282,8 +284,10 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/TimerMainDialog.h
     ${SRCDIR}/TimerWidget.h
     ${SRCDIR}/unit.h
+    ${SRCDIR}/WaterListModel.h
     ${SRCDIR}/WaterTableModel.h
     ${SRCDIR}/WaterTableWidget.h
+    ${SRCDIR}/WaterButton.h
     ${SRCDIR}/WaterEditor.h
     ${SRCDIR}/YeastDialog.h
     ${SRCDIR}/YeastEditor.h

@@ -1,5 +1,5 @@
 /*
- * EquipmentButton.h is part of Brewtarget, and is Copyright the following
+ * WaterButton.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,43 +17,59 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _EQUIPMENTBUTTON_H
-#define _EQUIPMENTBUTTON_H
+#ifndef _WATERBUTTON_H
+#define _WATERBUTTON_H
 
 #include <QPushButton>
 #include <QMetaProperty>
 #include <QVariant>
+#include "water.h"
 
 // Forward declarations.
-class Equipment;
 class Recipe;
 class QWidget;
 
 /*!
- * \class EquipmentButton
+ * \class WaterButton
  * \author Philip G. Lee (rocketman768@gmail.com)
  *
- * \brief This is a view class that displays the name of an equipment.
+ * \brief This is a view class that displays the name of an water.
  */
-class EquipmentButton : public QPushButton
+class WaterButton : public QPushButton
 {
    Q_OBJECT
-public:
-   EquipmentButton(QWidget* parent = nullptr);
-   virtual ~EquipmentButton(){}
 
-   //! Observe a recipe's equipment.
+public:
+   WaterButton(Water::WaterTypes type = Water::NONE, QWidget* parent = nullptr);
+   virtual ~WaterButton(){}
+
+   //! Observe a recipe's water.
    void setRecipe(Recipe* recipe);
-   //! Observe a particular equipment.
-   void setEquipment(Equipment* equip);
+   //! Observe a particular water.
+   void setWater(Water* water);
 
 private slots:
    void recChanged(QMetaProperty,QVariant);
-   void equipChanged(QMetaProperty,QVariant);
+   void waterChanged(QMetaProperty,QVariant);
 
 private:
-   Recipe* _rec;
-   Equipment* _equip;
+   Recipe* m_rec;
+   Water* m_water;
+   Water::WaterTypes m_type;
+};
+
+class BaseWaterButton: public WaterButton
+{
+   Q_OBJECT
+public:
+   BaseWaterButton(QWidget* parent = nullptr);
+};
+
+class TargetWaterButton: public WaterButton
+{
+   Q_OBJECT
+public:
+   TargetWaterButton(QWidget* parent = nullptr);
 };
 
 #endif
