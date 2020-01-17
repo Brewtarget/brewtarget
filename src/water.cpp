@@ -76,7 +76,7 @@ Water::Water(QString name, bool cache)
 }
 
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_amount_l(rec.value(kcolAmount).toDouble()),
    m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
    m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),
