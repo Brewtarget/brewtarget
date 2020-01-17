@@ -742,6 +742,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
          throw QString("could not locate classInfo for signal on %2").arg(meta->className());
       }
 
+
       table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
       child = dbDefn->table( table->childTable() );
       inrec = dbDefn->table( table->inRecTable() );
@@ -755,15 +756,13 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
                                  .arg(ing->_key)
                                  .arg(inrec->recipeIndexName())
                                  .arg(rec->_key);
+
       // delete from misc where id = [misc key]
       QString deleteIngredient = QString("DELETE FROM %1 where %2=%3")
                                  .arg(table->tableName())
                                  .arg(table->keyName())
                                  .arg(ing->_key);
       q.setForwardOnly(true);
-
-      if ( ! q.exec(deleteFromInRecipe) )
-         throw QString("failed to delete in_recipe.");
 
       // I don't really like this, but I can't think of a better solution. Of
       // all the ingredients, instructions don't have a _children table. Given
@@ -778,6 +777,12 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
             throw QString("failed to delete children.");
          }
       }
+
+      if ( ! q.exec(deleteFromInRecipe) )
+         throw QString("failed to delete in_recipe.");
+
+      if ( ! q.exec(deleteFromInInventory) )
+         throw QString("failed to delete in_inventory.");
 
       if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
@@ -4373,6 +4378,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
       blockSignals(false);
+      throw;
    }
 
    emit newRecipeSignal(ret);
