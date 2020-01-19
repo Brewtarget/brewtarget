@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>waterDialog</class>
+ <widget class="QDialog" name="waterDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>756</width>
+    <width>841</width>
     <height>526</height>
    </rect>
   </property>
@@ -27,424 +27,875 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_inputs">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+      <layout class="QVBoxLayout" name="verticalLayout_left">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <widget class="QGroupBox" name="groupBox_profiles">
-           <property name="title">
-            <string>Profiles</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_2">
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_targetProfile">
+        <widget class="QGroupBox" name="groupBox_profiles">
+         <property name="title">
+          <string>Profiles</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_targetProfile">
+            <property name="text">
+             <string>Target Profile</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_baseButtons">
+            <item>
+             <widget class="WaterButton" name="baseProfileButton">
               <property name="text">
-               <string>Target Profile</string>
+               <string>PushButton</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_baseButtons">
-              <item>
-               <widget class="BaseWaterButton" name="pushButton_baseProfile">
-                <property name="text">
-                 <string>PushButton</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CustomComboBox" name="comboBox_baseProfile">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>30</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>30</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_baseProfile">
-              <property name="text">
-               <string>Base Profile</string>
+            <item>
+             <widget class="CustomComboBox" name="baseProfileCombo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>30</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
               </property>
              </widget>
-            </item>
-            <item row="1" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_targetButtons">
-              <item>
-               <widget class="TargetWaterButton" name="pushButton_targetProfile">
-                <property name="text">
-                 <string>PushButton</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="CustomComboBox" name="comboBox_targetProfile">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>30</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>30</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_2">
-           <property name="title">
-            <string>% RO in</string>
-           </property>
-           <layout class="QFormLayout" name="formLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_baseProfile">
+            <property name="text">
+             <string>Base Profile</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_targetButtons">
+            <item>
+             <widget class="WaterButton" name="targetProfileButton">
               <property name="text">
-               <string>Mash</string>
+               <string>PushButton</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Sparge</string>
+            <item>
+             <widget class="CustomComboBox" name="targetProfileCombo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>30</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="BtGenericEdit" name="lineEdit"/>
-            </item>
-            <item row="0" column="1">
-             <widget class="BtGenericEdit" name="lineEdit_2"/>
-            </item>
            </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="title">
-            <string>Results</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_ca">
-              <item>
-               <widget class="QLabel" name="label_ca">
-                <property name="text">
-                 <string>Ca</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="StyleRangeWidget" name="rangeWidget_ca" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>128</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>512</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_mg">
-              <item>
-               <widget class="QLabel" name="label_mg">
-                <property name="text">
-                 <string>Mg</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="StyleRangeWidget" name="rangeWidget_mg" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>128</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>512</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_sulfate">
-              <item>
-               <widget class="QLabel" name="label_sulfate">
-                <property name="text">
-                 <string>SO&lt;sub&gt;4&lt;/sub&gt;</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="StyleRangeWidget" name="rangeWidget_sulfate" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>128</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>512</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_na">
-              <item>
-               <widget class="QLabel" name="label_na">
-                <property name="text">
-                 <string>Na</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="StyleRangeWidget" name="rangeWidget_na" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>128</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>512</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_cl">
-              <item>
-               <widget class="QLabel" name="label_cl">
-                <property name="text">
-                 <string>Cl</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="StyleRangeWidget" name="rangeWidget_cl" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>128</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>512</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_bicarb">
-              <item>
-               <widget class="QLabel" name="label_bicarb">
-                <property name="text">
-                 <string>HCO&lt;sub&gt;3&lt;/sub&gt;</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="StyleRangeWidget" name="rangeWidget_bicarb" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>128</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>512</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_pH">
-              <item>
-               <widget class="QLabel" name="label_pH">
-                <property name="text">
-                 <string>pH</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="StyleRangeWidget" name="rangeWidget_pH" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>128</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>512</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2">
-         <item>
-          <widget class="QGroupBox" name="groupBox_miscTree">
-           <property name="title">
-            <string>Water Agents</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout">
-            <item row="0" column="0">
-             <widget class="MiscTreeView" name="treeView_miscTree"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QScrollArea" name="scrollArea">
-             <property name="acceptDrops">
-              <bool>true</bool>
-             </property>
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>291</width>
-                <height>463</height>
-               </rect>
+        <widget class="QGroupBox" name="groupBox_percentRO">
+         <property name="title">
+          <string>% RO in</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_mashRO">
+            <property name="text">
+             <string>Mash</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="BtGenericEdit" name="lineEdit_mashRO">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_spargeRO">
+            <property name="text">
+             <string>Sparge</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="BtGenericEdit" name="lineEdit_spargeRO"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_ranges">
+         <property name="title">
+          <string>Results</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_ca">
+            <item>
+             <widget class="QLabel" name="label_ca">
+              <property name="text">
+               <string>Ca</string>
               </property>
              </widget>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+            </item>
+            <item>
+             <widget class="StyleRangeWidget" name="rangeWidget_ca" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>128</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>512</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_mg">
+            <item>
+             <widget class="QLabel" name="label_mg">
+              <property name="text">
+               <string>Mg</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="StyleRangeWidget" name="rangeWidget_mg" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>128</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>512</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_sulfate">
+            <item>
+             <widget class="QLabel" name="label_sulfate">
+              <property name="text">
+               <string>SO&lt;sub&gt;4&lt;/sub&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="StyleRangeWidget" name="rangeWidget_sulfate" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>128</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>512</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_na">
+            <item>
+             <widget class="QLabel" name="label_na">
+              <property name="text">
+               <string>Na</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="StyleRangeWidget" name="rangeWidget_na" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>128</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>512</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_cl">
+            <item>
+             <widget class="QLabel" name="label_cl">
+              <property name="text">
+               <string>Cl</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="StyleRangeWidget" name="rangeWidget_cl" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>128</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>512</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_bicarb">
+            <item>
+             <widget class="QLabel" name="label_bicarb">
+              <property name="text">
+               <string>HCO&lt;sub&gt;3&lt;/sub&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="StyleRangeWidget" name="rangeWidget_bicarb" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>128</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>512</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_pH">
+            <item>
+             <widget class="QLabel" name="label_pH">
+              <property name="text">
+               <string>pH</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="StyleRangeWidget" name="rangeWidget_pH" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>128</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>512</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </item>
      <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_right">
+       <item>
+        <widget class="QCheckBox" name="checkBox_magix">
+         <property name="text">
+          <string>Magix</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tabWidgetPage1">
+          <attribute name="title">
+           <string>Strike</string>
+          </attribute>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridLayout_strike">
+             <item row="0" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_strikecacl">
+               <item>
+                <widget class="BtMassLabel" name="label_strikecacl">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>CaCl&lt;sub&gt;2&lt;/sub&gt; (pickling salt)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_strikecacl">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_strikemgso4">
+               <item>
+                <widget class="BtMassLabel" name="label_strikemgs04">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(epsom salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_strikemgso4">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_strikecaco3">
+               <item>
+                <widget class="BtMassLabel" name="label_strikecaco3_3">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt; (chalk)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_totalcaco3_3">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_strikenacl">
+               <item>
+                <widget class="BtMassLabel" name="label_strikenacl">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl (table salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_strikenacl">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_strikecaso4">
+               <item>
+                <widget class="BtMassLabel" name="label_strikecaso4">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(gypsum)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_strikecaso4">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_strikebicarb">
+               <item>
+                <widget class="BtMassLabel" name="label_strikebicarb">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3 &lt;/span&gt;(bicarbonate)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_strikebicarb">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tabWidgetPage2">
+          <attribute name="title">
+           <string>Sparge</string>
+          </attribute>
+          <layout class="QFormLayout" name="formLayout_2">
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_spargecacl">
+               <item>
+                <widget class="BtMassLabel" name="label_spargecacl">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>CaCl&lt;sub&gt;2&lt;/sub&gt; (pickling salt)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_spargecacl">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_spargemgso4">
+               <item>
+                <widget class="BtMassLabel" name="label_spargemgs04">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(epsom salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_spargemgso4">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_spargecaco3">
+               <item>
+                <widget class="BtMassLabel" name="label_spargecaco3">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt; (chalk)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_spargecaco3">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_spargenacl">
+               <item>
+                <widget class="BtMassLabel" name="label_spargenacl">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl (table salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_spargenacl">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="0">
+              <layout class="QHBoxLayout" name="horizontalLayout_spargecaso4">
+               <item>
+                <widget class="BtMassLabel" name="label_spargecaso4">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(gypsum)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_spargecaso4">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_spargebicarb">
+               <item>
+                <widget class="BtMassLabel" name="label_spargebicarb">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3 &lt;/span&gt;(bicarbonate)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="BtMassEdit" name="lineEdit_spargebicarb">
+                 <property name="maximumSize">
+                  <size>
+                   <width>40</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_total">
+         <property name="title">
+          <string>Totals</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="2" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalbicarb">
+            <item>
+             <widget class="BtMassLabel" name="label_totalbicarb">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3 &lt;/span&gt;(bicarbonate)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_totalbicarb</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="BtMassEdit" name="lineEdit_totalbicarb">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalnacl">
+            <item>
+             <widget class="BtMassLabel" name="label_totalnacl">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl (table salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_totalnacl</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="BtMassEdit" name="lineEdit_totalnacl">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalmgso4">
+            <item>
+             <widget class="BtMassLabel" name="label_totalmgs04">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(epsom salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_totalmgso4</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="BtMassEdit" name="lineEdit_totalmgso4">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalcaso4">
+            <item>
+             <widget class="BtMassLabel" name="label_totalcaso4">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(gypsum)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_totalcaso4</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="BtMassEdit" name="lineEdit_totalcaso4">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalcacl">
+            <item>
+             <widget class="BtMassLabel" name="label_totalcacl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>CaCl&lt;sub&gt;2&lt;/sub&gt; (pickling salt)</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_totalcacl</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="BtMassEdit" name="lineEdit_totalcacl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalcaco3">
+            <item>
+             <widget class="BtMassLabel" name="label_totalcaco3">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt; (chalk)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_totalcaco3</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="BtMassEdit" name="lineEdit_totalcaco3">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -452,7 +903,7 @@
   <customwidget>
    <class>BtGenericEdit</class>
    <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <header location="global">BtLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>CustomComboBox</class>
@@ -465,29 +916,36 @@
    <header>StyleRangeWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>MiscTreeView</class>
-   <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BaseWaterButton</class>
+   <class>WaterButton</class>
    <extends>QPushButton</extends>
    <header>WaterButton.h</header>
   </customwidget>
   <customwidget>
-   <class>TargetWaterButton</class>
-   <extends>QPushButton</extends>
-   <header>WaterButton.h</header>
+   <class>BtMassEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <signal>textModified()</signal>
+    <slot>lineChanged()</slot>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtMassLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+    <slot>popContextMenu(QPoint)</slot>
+   </slots>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../brewtarget.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>waterDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -503,7 +961,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>waterDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

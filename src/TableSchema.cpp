@@ -1161,10 +1161,11 @@ void TableSchema::defineWaterTable()
    m_properties[kpropChloride]    = new PropertySchema( kpropChloride,    kcolWaterChloride,    kxmlPropChloride,    QString("real"),    QVariant(0.0));
    m_properties[kpropMagnesium]   = new PropertySchema( kpropMagnesium,   kcolWaterMagnesium,   kxmlPropMagnesium,   QString("real"),    QVariant(0.0));
    m_properties[kpropPH]          = new PropertySchema( kpropPH,          kcolPH,               kxmlPropPH,          QString("real"),    QVariant(0.0));
+   m_properties[kpropAlkalinity]  = new PropertySchema( kpropAlkalinity,  kcolWaterAlkalinity,  QString(),           QString("real"),    QVariant(0.0));
 
    m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,          QString(),           QString("text"),    QString("''"));
+   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,           QString(),           QString("text"),    QString("''"));
 
 }
 

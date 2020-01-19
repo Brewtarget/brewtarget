@@ -27,68 +27,6 @@
 
 QStringList Style::m_types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 
-/*
-// Maps from the XML tag to the object property
-QHash<QString,QString> Style::tagToProp = Style::tagToPropHash();
-QHash<QString,QString> Style::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   propHash["NAME"] = kNameProp;
-   propHash["CATEGORY"] = kCategoryProp;
-   propHash["CATEGORY_NUMBER"] = kCategoryNumberProp;
-   propHash["STYLE_LETTER"] = kStyleLetterProp;
-   propHash["STYLE_GUIDE"] = kStyleGuideProp;
-   //propHash["TYPE"] = kTypeProp;
-   propHash["OG_MIN"] = kOGMinProp;
-   propHash["OG_MAX"] = kOGMaxProp;
-   propHash["FG_MIN"] = kFGMinProp;
-   propHash["FG_MAX"] = kFGMaxProp;
-   propHash["IBU_MIN"] = kIBUMinProp;
-   propHash["IBU_MAX"] = kIBUMaxProp;
-   propHash["COLOR_MIN"] = kColorMinProp;
-   propHash["COLOR_MAX"] = kColorMaxProp;
-   propHash["CARB_MIN"] = kCarbMinProp;
-   propHash["CARB_MAX"] = kCarbMaxProp;
-   propHash["ABV_MIN"] = kABVMinProp;
-   propHash["ABV_MAX"] = kABVMaxProp;
-   propHash["NOTES"] = kNotesProp;
-   propHash["PROFILE"] = kProfileProp;
-   propHash["INGREDIENTS"] = kIngredientsProp;
-   propHash["EXAMPLES"] = kExamplesProp;
-   return propHash;
-}
-
-// Maps from the object property to the database column
-QHash<QString,QString > Style::columnToProp = Style::columnToPropHash();
-QHash<QString,QString> Style::columnToPropHash()
-{
-   QHash<QString,QString> propHash;
-   propHash[kNameProp]           = kName;
-   propHash[kCategoryProp]       = kCategory;
-   propHash[kCategoryNumberProp] = kCategoryNumber;
-   propHash[kStyleLetterProp]    = kStyleLetter;
-   propHash[kStyleGuideProp]     = kStyleGuide;
-   propHash[kTypeProp]           = kType;
-   propHash[kOGMinProp]          = kOGMin;
-   propHash[kOGMaxProp]          = kOGMax;
-   propHash[kFGMinProp]          = kFGMin;
-   propHash[kFGMaxProp]          = kFGMax;
-   propHash[kIBUMinProp]         = kIBUMin;
-   propHash[kIBUMaxProp]         = kIBUMax;
-   propHash[kColorMinProp]       = kColorMin;
-   propHash[kColorMaxProp]       = kColorMax;
-   propHash[kCarbMinProp]        = kCarbMin;
-   propHash[kCarbMaxProp]        = kCarbMax;
-   propHash[kABVMinProp]         = kABVMin;
-   propHash[kABVMaxProp]         = kABVMax;
-   propHash[kNotesProp]          = kNotes;
-   propHash[kProfileProp]        = kProfile;
-   propHash[kIngredientsProp]    = kIngredients;
-   propHash[kExamplesProp]       = kExamples;
-
-   return propHash;
-}
-*/
 bool operator<(Style &s1, Style &s2)
 {
    return s1.name() < s2.name();
@@ -106,7 +44,7 @@ QString Style::classNameStr()
 }
 
 Style::Style(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(Brewtarget::STYLETABLE, -1, QString(), true),
+   : BeerXMLElement(table, key, QString(), true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -441,10 +379,10 @@ QString Style::notes() const { return m_notes; }
 QString Style::profile() const { return m_profile; }
 QString Style::ingredients() const { return m_ingredients; }
 QString Style::examples() const { return m_examples; }
-const Style::Type Style::type() const { return m_type; }
+Style::Type Style::type() const { return m_type; }
 const QString Style::typeString() const { return m_typeStr; }
 
-bool Style::cacheOnly() const { return m_cacheOnly; }
+bool   Style::cacheOnly() const { return m_cacheOnly; }
 double Style::ogMin() const { return m_ogMin; }
 double Style::ogMax() const { return m_ogMax; }
 double Style::fgMin() const { return m_fgMin; }

@@ -216,16 +216,42 @@ double Mash::totalMashWater_l()
    double waterAdded_l = 0.0;
    QList<MashStep*> steps = mashSteps();
    MashStep* step;
-   
+
    size = steps.size();
    for( i = 0; i < size; ++i )
    {
       step = steps[i];
-      
+
       if( step->isInfusion() )
          waterAdded_l += step->infuseAmount_l();
    }
-   
+
+   return waterAdded_l;
+}
+
+double Mash::totalInfusionAmount_l() const
+{
+   double waterAdded_l = 0.0;
+
+   foreach( MashStep* i, mashSteps() )
+   {
+      if( i->isInfusion() && ! i->isSparge() )
+         waterAdded_l += i->infuseAmount_l();
+   }
+
+   return waterAdded_l;
+}
+
+double Mash::totalSpargeAmount_l() const
+{
+   double waterAdded_l = 0.0;
+
+   foreach( MashStep* i, mashSteps() )
+   {
+      if( ! i->isSparge() )
+         waterAdded_l += i->infuseAmount_l();
+   }
+
    return waterAdded_l;
 }
 
@@ -256,7 +282,7 @@ void Mash::acceptMashStepChange(QMetaProperty prop, QVariant /*val*/)
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
    if( stepSender == 0 )
       return;
-   
+
    // If one of our mash steps changed, our calculated properties
    // may also change, so we need to emit some signals.
    i = mashSteps().indexOf(stepSender);

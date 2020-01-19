@@ -40,12 +40,23 @@ class Water : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "waters")
-   
+
    friend class Database;
+   friend class WaterDialog;
 public:
 
+   enum Types {
+      NONE,
+      BASE,
+      TARGET,
+      STRIKE,
+      SPARGE
+   };
+   Q_ENUM(Types)
+
    virtual ~Water() {}
-   
+
+   // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief The amount in liters.
    Q_PROPERTY( double amount_l READ amount_l WRITE setAmount_l /*NOTIFY changed*/ /*changedAmount_l*/ )
    //! \brief The ppm of calcium.
@@ -62,9 +73,13 @@ public:
    Q_PROPERTY( double magnesium_ppm READ magnesium_ppm WRITE setMagnesium_ppm /*NOTIFY changed*/ /*changedMagnesium_ppm*/ )
    //! \brief The pH.
    Q_PROPERTY( double ph READ ph WRITE setPh /*NOTIFY changed*/ /*changedPh*/ )
+   //! \brief The residual alkalinity
+   Q_PROPERTY( double alkalinity READ alkalinity WRITE setAlkalinity /*NOTIFY changed*/ /*changedAlkalinity*/ )
    //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
-   
+   //! \brief What kind of water is this
+   Q_PROPERTY( Water::Types type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+
    double amount_l() const;
    double calcium_ppm() const;
    double bicarbonate_ppm() const;
@@ -73,8 +88,10 @@ public:
    double sodium_ppm() const;
    double magnesium_ppm() const;
    double ph() const;
+   double alkalinity() const;
    QString notes() const;
    bool cacheOnly() const;
+   Water::Types type() const;
 
    void setAmount_l( double var );
    void setCalcium_ppm( double var );
@@ -84,33 +101,24 @@ public:
    void setSodium_ppm( double var );
    void setMagnesium_ppm( double var );
    void setPh( double var );
+   void setAlkalinity(double var);
    void setNotes( const QString &var );
    void setCacheOnly( bool cache );
+   void setType(Types type);
 
    static QString classNameStr();
-   
+
 signals:
-   
+
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   /*
-   void changedAmount_l(double);
-   void changedCalcium_ppm(double);
-   void changedBicarbonate_ppm(double);
-   void changedSulfate_ppm(double);
-   void changedChloride_ppm(double);
-   void changedSodium_ppm(double);
-   void changedMagnesium_ppm(double);
-   void changedPh(double);
-   void changedNotes(QString);
-   */
-   
+
 private:
    Water(Brewtarget::DBTable table, int key);
    Water(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   Water(Water const& other);
+   Water(Water const& other, bool cache = true);
    Water(QString name, bool cache = true);
-   
+
    double m_amount_l;
    double m_calcium_ppm;
    double m_bicarbonate_ppm;
@@ -119,8 +127,16 @@ private:
    double m_sodium_ppm;
    double m_magnesium_ppm;
    double m_ph;
+   double m_alkalinity;
    QString m_notes;
    bool m_cacheOnly;
+   Water::Types m_type;
+   double m_CaCl2;
+   double m_CaCO3;
+   double m_CaSO4;
+   double m_MgSO4;
+   double m_NaCl;
+   double m_NaHCO3;
 
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();

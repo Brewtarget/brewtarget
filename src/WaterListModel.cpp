@@ -32,12 +32,9 @@ WaterListModel::WaterListModel(QWidget* parent)
 
 void WaterListModel::addWater(Water* water)
 {
-   if( !water ||
-      m_waters.contains(water) ||
-      water->deleted() ||
-      !water->display()
-   )
+   if ( !water || m_waters.contains(water) || water->deleted() || !water->display() ) {
       return;
+   }
 
    int size = m_waters.size();
    beginInsertRows( QModelIndex(), size, size );
@@ -48,29 +45,26 @@ void WaterListModel::addWater(Water* water)
 
 void WaterListModel::addWaters(QList<Water*> waters)
 {
-   QList<Water*>::iterator i;
+//   QList<Water*>::iterator i;
    QList<Water*> tmp;
 
-   for( i = waters.begin(); i != waters.end(); i++ )
-   {
+   foreach ( Water* i, waters) {
       // if the water is not already in the list and
       // if the water has not been deleted and
       // if the water is to be displayed, then append it
-      if( !waters.contains(*i) &&
-          !(*i)->deleted()         &&
-           (*i)->display() )
-         tmp.append(*i);
+      if ( waters.contains(i) && ! i->deleted() && i->display() ) {
+         tmp.append(i);
+      }
    }
 
    int size = waters.size();
-   if (size+tmp.size())
-   {
+   if (size+tmp.size()) {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       m_waters.append(tmp);
 
-      for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &BeerXMLElement::changed, this, &WaterListModel::waterChanged );
-
+      foreach ( Water* i, tmp) {
+         connect( i, &BeerXMLElement::changed, this, &WaterListModel::waterChanged );
+      }
       endInsertRows();
    }
 }
@@ -78,8 +72,7 @@ void WaterListModel::addWaters(QList<Water*> waters)
 void WaterListModel::removeWater(Water* water)
 {
    int ndx = m_waters.indexOf(water);
-   if( ndx > 0 )
-   {
+   if( ndx > 0 ) {
       beginRemoveRows( QModelIndex(), ndx, ndx );
       disconnect( water, nullptr, this, nullptr );
       m_waters.removeAt(ndx);
@@ -87,10 +80,8 @@ void WaterListModel::removeWater(Water* water)
    }
 }
 
-void WaterListModel::removeAll()
-{
-   if (m_waters.size())
-   {
+void WaterListModel::removeAll() {
+   if (m_waters.size()) {
       beginRemoveRows( QModelIndex(), 0, m_waters.size()-1 );
       while( !m_waters.isEmpty() ) {
          disconnect( m_waters.takeLast(), nullptr, this, nullptr );
@@ -102,6 +93,7 @@ void WaterListModel::removeAll()
 void WaterListModel::waterChanged(QMetaProperty prop, QVariant val)
 {
    Water* eSend = qobject_cast<Water*>(sender());
+   Q_UNUSED(val)
 
    // NOTE: how to get around the issue that the sender might live in
    // a different thread and therefore always cause eSend == 0?
@@ -109,10 +101,9 @@ void WaterListModel::waterChanged(QMetaProperty prop, QVariant val)
       return;
 
    QString propName(prop.name());
-   if( propName == "name" )
-   {
+   if ( propName == "name" ) {
       int ndx = m_waters.indexOf(eSend);
-      if( ndx >= 0 )
+      if ( ndx >= 0 )
          emit dataChanged( createIndex(ndx,0), createIndex(ndx,0) );
    }
 }
@@ -120,7 +111,7 @@ void WaterListModel::waterChanged(QMetaProperty prop, QVariant val)
 void WaterListModel::recChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   if( propName == "water" ) {
+   if ( propName == "water" ) {
       Water* newWater = qobject_cast<Water*>(BeerXMLElement::extractPtr(val));
       // Now do something with the water.
       Q_UNUSED(newWater) // Until then, this will keep the compiler happy
@@ -167,6 +158,7 @@ void WaterListModel::observeRecipe(Recipe* rec)
 
 int WaterListModel::rowCount( QModelIndex const& parent ) const
 {
+   Q_UNUSED(parent)
    return m_waters.size();
 }
 
@@ -182,5 +174,8 @@ QVariant WaterListModel::data( QModelIndex const& index, int role ) const
 
 QVariant WaterListModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
+   Q_UNUSED(section)
+   Q_UNUSED(orientation)
+   Q_UNUSED(role)
    return QVariant(QString("Testing..."));
 }

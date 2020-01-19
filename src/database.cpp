@@ -2620,8 +2620,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
       sqlDatabase().transaction();
 
    try {
-      foreach (Misc* misc, miscs )
-      {
+      foreach (Misc* misc, miscs ) {
          addIngredientToRecipe( rec, misc, false, &allMiscs,true,false );
       }
    }
@@ -2638,18 +2637,15 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
    }
 }
 
-void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
+Water* Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
 {
 
    try {
-      addIngredientToRecipe( rec, w, noCopy, &allWaters,true,transact );
+      return addIngredientToRecipe( rec, w, noCopy, &allWaters,true,transact );
    }
    catch (QString e) {
       throw;
    }
-
-   if ( transact  && ! noCopy )
-      rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
