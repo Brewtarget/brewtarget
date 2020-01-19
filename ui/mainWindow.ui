@@ -240,7 +240,7 @@
            <x>0</x>
            <y>0</y>
            <width>695</width>
-           <height>412</height>
+           <height>403</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1075,7 +1075,7 @@
            <x>0</x>
            <y>0</y>
            <width>695</width>
-           <height>304</height>
+           <height>313</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1719,6 +1719,7 @@
     <addaction name="actionScale_Recipe"/>
     <addaction name="actionHydrometer_Temp_Adjustment"/>
     <addaction name="actionStrikeWater_Calculator"/>
+    <addaction name="actionWater_Chemistry"/>
     <addaction name="actionTimers"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
@@ -2209,12 +2210,56 @@
     <string>&amp;Export to HTML</string>
    </property>
   </action>
+  <action name="actionWater_Chemistry">
+   <property name="text">
+    <string>Water &amp;Chemistry</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>BtGenericEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CustomComboBox</class>
+   <extends>QComboBox</extends>
+   <header>CustomComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>StyleRangeWidget</class>
+   <extends>QWidget</extends>
+   <header>StyleRangeWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MiscTreeView</class>
+   <extends>QTreeView</extends>
+   <header>BtTreeView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtDensityEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtColorLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
   </customwidget>
   <customwidget>
    <class>BtTimeEdit</class>
@@ -2241,14 +2286,6 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtDensityLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
    <class>BtVolumeEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
@@ -2257,32 +2294,9 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>BtDensityEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtColorLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>CustomComboBox</class>
-   <extends>QComboBox</extends>
-   <header>CustomComboBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>IbuGuSlider</class>
    <extends>QWidget</extends>
    <header>IbuGuSlider.h</header>
-  </customwidget>
-  <customwidget>
-   <class>StyleRangeWidget</class>
-   <extends>QWidget</extends>
-   <header>StyleRangeWidget.h</header>
   </customwidget>
   <customwidget>
    <class>BrewDayScrollWidget</class>
@@ -2316,11 +2330,6 @@
   </customwidget>
   <customwidget>
    <class>HopTreeView</class>
-   <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MiscTreeView</class>
    <extends>QTreeView</extends>
    <header>BtTreeView.h</header>
   </customwidget>

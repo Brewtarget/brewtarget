@@ -162,6 +162,8 @@ SET( brewtarget_SRCS
     ${SRCDIR}/WaterTableWidget.cpp
     ${SRCDIR}/WaterButton.cpp
     ${SRCDIR}/WaterEditor.cpp
+    ${SRCDIR}/WaterDialog.cpp
+    ${SRCDIR}/WaterSortFilterProxyModel.cpp
     ${SRCDIR}/yeast.cpp
     ${SRCDIR}/YeastDialog.cpp
     ${SRCDIR}/YeastEditor.cpp
@@ -201,6 +203,7 @@ SET( brewtarget_UIS
     ${UIDIR}/timerMainDialog.ui
     ${UIDIR}/timerWidget.ui
     ${UIDIR}/waterEditor.ui
+    ${UIDIR}/waterDialog.ui
     ${UIDIR}/yeastEditor.ui
     ${UIDIR}/mashDesigner.ui
     ${UIDIR}/pitchDialog.ui
@@ -289,6 +292,8 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/WaterTableWidget.h
     ${SRCDIR}/WaterButton.h
     ${SRCDIR}/WaterEditor.h
+    ${SRCDIR}/WaterDialog.h
+    ${SRCDIR}/WaterSortFilterProxyModel.h
     ${SRCDIR}/YeastDialog.h
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h

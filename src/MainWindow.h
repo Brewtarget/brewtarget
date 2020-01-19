@@ -91,6 +91,8 @@ class StyleSortFilterProxyModel;
 class NamedMashEditor;
 class BtDatePopup;
 
+class WaterDialog;
+class WaterListModel;
 /*!
  * \class MainWindow
  * \author Philip G. Lee
@@ -322,6 +324,7 @@ private:
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
+   WaterDialog* waterDialog;
    QPrinter *printer;
 
    // all things tables should go here.
@@ -335,6 +338,7 @@ private:
    EquipmentListModel* equipmentListModel;
    MashListModel* mashListModel;
    StyleListModel* styleListModel;
+   WaterListModel* waterListModel;
 
    // all things sort/filter proxy go here
    FermentableSortFilterProxyModel* fermTableProxy;

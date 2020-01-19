@@ -1425,6 +1425,7 @@ Style* Recipe::style()
    return tmp;
 }
 
+// I wonder if we could cache any of this. It is an awful lot of back and forth to the db
 Mash* Recipe::mash() const { return Database::instance().mash( this ); }
 Equipment* Recipe::equipment() const { return Database::instance().equipment(this); }
 
@@ -1435,6 +1436,45 @@ QList<Fermentable*> Recipe::fermentables() const { return Database::instance().f
 QList<Misc*> Recipe::miscs() const { return Database::instance().miscs(this); }
 QList<Yeast*> Recipe::yeasts() const { return Database::instance().yeasts(this); }
 QList<Water*> Recipe::waters() const { return Database::instance().waters(this); }
+
+Water* Recipe::baseWaterProfile() const
+{
+   foreach( Water* i, waters() ) {
+      if ( i->type() == Water::BASE ) {
+         return i;
+      }
+   }
+   return nullptr;
+}
+Water* Recipe::targetWaterProfile() const
+{
+   foreach( Water* i, waters() ) {
+      if ( i->type() == Water::TARGET ) {
+         return i;
+      }
+   }
+   return nullptr;
+}
+
+Water* Recipe::strikeWaterProfile() const
+{
+   foreach( Water* i, waters() ) {
+      if ( i->type() == Water::STRIKE ) {
+         return i;
+      }
+   }
+   return nullptr;
+}
+
+Water* Recipe::spargeWaterProfile() const
+{
+   foreach( Water* i, waters() ) {
+      if ( i->type() == Water::SPARGE ) {
+         return i;
+      }
+   }
+   return nullptr;
+}
 
 //==============================Getters===================================
 QString Recipe::type() const { return m_type; }

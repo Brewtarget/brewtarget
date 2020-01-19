@@ -117,6 +117,9 @@
 #include "StyleSortFilterProxyModel.h"
 #include "NamedMashEditor.h"
 #include "BtDatePopup.h"
+#include "WaterDialog.h"
+#include "WaterListModel.h"
+
 #if defined(Q_OS_WIN)
    #include <windows.h>
 #endif
@@ -243,6 +246,8 @@ void MainWindow::setupDialogs()
    pitchDialog = new PitchDialog(this);
    btDatePopup = new BtDatePopup(this);
 
+   waterDialog = new WaterDialog(this);
+
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
    fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
@@ -351,7 +356,6 @@ void MainWindow::setupComboBoxes()
    namedMashEditor = new NamedMashEditor(this, mashStepEditor);
    // I don't think this is used yet
    singleNamedMashEditor = new NamedMashEditor(this,mashStepEditor,true);
-
 }
 
 // Anything creating new tables models, filter proxies and configuring the two
@@ -524,6 +528,7 @@ void MainWindow::setupTriggers()
    connect( actionMergeDatabases, &QAction::triggered, this, &MainWindow::updateDatabase );
    connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );
    connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
+   connect( actionWater_Chemistry, &QAction::triggered, waterDialog, &QWidget::show);
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
@@ -902,6 +907,8 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
+
+   waterDialog->setRecipe(recipeObs);
 
    // changes in how the data is loaded means we may not have fired all the signals we should have
    // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.

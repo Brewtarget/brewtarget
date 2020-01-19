@@ -31,7 +31,7 @@ class QWidget;
 
 /*!
  * \class WaterButton
- * \author Philip G. Lee (rocketman768@gmail.com)
+ * \author Mik Firestone (mikfire@fastmail.com)
  *
  * \brief This is a view class that displays the name of an water.
  */
@@ -39,8 +39,10 @@ class WaterButton : public QPushButton
 {
    Q_OBJECT
 
+
 public:
-   WaterButton(Water::WaterTypes type = Water::NONE, QWidget* parent = nullptr);
+
+   WaterButton(QWidget* parent = nullptr);
    virtual ~WaterButton(){}
 
    //! Observe a recipe's water.
@@ -55,21 +57,6 @@ private slots:
 private:
    Recipe* m_rec;
    Water* m_water;
-   Water::WaterTypes m_type;
-};
-
-class BaseWaterButton: public WaterButton
-{
-   Q_OBJECT
-public:
-   BaseWaterButton(QWidget* parent = nullptr);
-};
-
-class TargetWaterButton: public WaterButton
-{
-   Q_OBJECT
-public:
-   TargetWaterButton(QWidget* parent = nullptr);
 };
 
 #endif

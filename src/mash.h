@@ -96,7 +96,12 @@ public:
    bool cacheOnly() const;
 
    // Calculated getters
+   //! \brief all the mash water, sparge and strike
    double totalMashWater_l();
+   //! \brief all the infusion water, excluding sparge
+   double totalInfusionAmount_l() const;
+   //! \brief all the sparge water
+   double totalSpargeAmount_l() const;
    double totalTime();
 
    // Relational getters

@@ -323,7 +323,7 @@ public:
    void addToRecipe( Recipe* rec, Misc* m, bool noCopy = false, bool transact = true);
    //! Add a style, displacing any current style.
    void addToRecipe( Recipe* rec, Style* s, bool noCopy = false, bool transact = true );
-   void addToRecipe( Recipe* rec, Water* w, bool noCopy = false, bool transact = true);
+   Water* addToRecipe( Recipe* rec, Water* w, bool noCopy = false, bool transact = true);
    void addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false, bool transact = true);
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );

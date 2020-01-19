@@ -20,6 +20,7 @@
 #ifndef _WATERTABLESCHEMA_H
 #define _WATERTABLESCHEMA_H
 
+#include <QString>
 // Columns for the yeast table
 // What isn't here (like name) is defined in TableSchemaConstants
 static const QString kcolWaterCalcium("calcium");
@@ -28,6 +29,8 @@ static const QString kcolWaterSulfate("sulfate");
 static const QString kcolWaterChloride("chloride");
 static const QString kcolWaterSodium("sodium");
 static const QString kcolWaterMagnesium("magnesium");
+static const QString kcolWaterAlkalinity("alkalinity");
+static const QString kcolWaterType("wtype");
 
 // properties for objects
 static const QString kpropCalcium("calcium");
@@ -36,6 +39,7 @@ static const QString kpropSulfate("sulfate");
 static const QString kpropChloride("chloride");
 static const QString kpropSodium("sodium");
 static const QString kpropMagnesium("magnesium");
+static const QString kpropAlkalinity("alkalinity");
 
 // XML properties
 // Note -- no XML props for type, form and flocculation

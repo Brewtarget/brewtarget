@@ -22,57 +22,57 @@
 #include "recipe.h"
 #include <QWidget>
 
-WaterButton::WaterButton(Water::WaterTypes type, QWidget* parent)
+WaterButton::WaterButton(QWidget* parent)
    : QPushButton(parent),
      m_rec(nullptr),
-     m_water(nullptr),
-     m_type(type)
+     m_water(nullptr)
 {
 }
 
 void WaterButton::setRecipe(Recipe* rec)
 {
-   if(m_rec)
+   if (m_rec) {
       disconnect( m_rec, nullptr, this, nullptr );
+   }
 
    m_rec = rec;
-   if( m_rec )
-   {
+   if ( m_rec && m_rec->waters().size() > 0 ) {
       connect( m_rec, &BeerXMLElement::changed, this, &WaterButton::recChanged );
       setWater( m_rec->waters().at(0) );
    }
-   else
+   else {
       setWater(nullptr);
+   }
 }
 
 void WaterButton::setWater(Water* water)
 {
-   if( m_water )
+   if ( m_water )
       disconnect( m_water, nullptr, this, nullptr );
 
    m_water = water;
-   if( m_water ) {
+   if ( m_water ) {
       connect( m_water, &BeerXMLElement::changed, this, &WaterButton::waterChanged );
       setText( m_water->name() );
    }
-   else
+   else {
       setText("");
+   }
 }
 
 void WaterButton::waterChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   if( propName == "name" )
+   if ( propName == "name" ) {
       setText( val.toString() );
+   }
 }
 
 void WaterButton::recChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
 
-   if( propName == "water" )
+   if ( propName == "water" ) {
       setWater( qobject_cast<Water*>(BeerXMLElement::extractPtr(val)) );
+   }
 }
-
-BaseWaterButton::BaseWaterButton(QWidget *parent) : WaterButton(Water::BASE,parent) {}
-TargetWaterButton::TargetWaterButton(QWidget *parent) : WaterButton(Water::TARGET,parent) {}

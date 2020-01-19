@@ -55,8 +55,10 @@ Water::Water(Brewtarget::DBTable table, int key)
    m_sodium_ppm(0.0),
    m_magnesium_ppm(0.0),
    m_ph(0.0),
+   m_alkalinity(0.0),
    m_notes(QString()),
-   m_cacheOnly(false)
+   m_cacheOnly(false),
+   m_type(NONE)
 {
 }
 
@@ -70,8 +72,27 @@ Water::Water(QString name, bool cache)
    m_sodium_ppm(0.0),
    m_magnesium_ppm(0.0),
    m_ph(0.0),
+   m_alkalinity(0.0),
    m_notes(QString()),
-   m_cacheOnly(cache)
+   m_cacheOnly(cache),
+   m_type(NONE)
+{
+}
+
+Water::Water(Water const& other, bool cache)
+   : BeerXMLElement(Brewtarget::WATERTABLE, -1, other.name(), true),
+   m_amount_l(other.m_amount_l),
+   m_calcium_ppm(other.m_calcium_ppm),
+   m_bicarbonate_ppm(other.m_bicarbonate_ppm),
+   m_sulfate_ppm(other.m_sulfate_ppm),
+   m_chloride_ppm(other.m_chloride_ppm),
+   m_sodium_ppm(other.m_sodium_ppm),
+   m_magnesium_ppm(other.m_magnesium_ppm),
+   m_ph(other.m_ph),
+   m_alkalinity(other.m_alkalinity),
+   m_notes(other.m_notes),
+   m_cacheOnly(cache),
+   m_type(other.m_type)
 {
 }
 
@@ -85,8 +106,10 @@ Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_sodium_ppm(rec.value(kcolWaterSodium).toDouble()),
    m_magnesium_ppm(rec.value(kcolWaterMagnesium).toDouble()),
    m_ph(rec.value(kcolPH).toDouble()),
+   m_alkalinity(rec.value(kcolWaterAlkalinity).toDouble()),
    m_notes(rec.value(kcolAmount).toString()),
-   m_cacheOnly(false)
+   m_cacheOnly(false),
+   m_type(static_cast<Water::Types>(rec.value(kcolWaterType).toInt()))
 {
 }
 
@@ -147,6 +170,14 @@ void Water::setPh( double var )
    }
 }
 
+void Water::setAlkalinity(double var)
+{
+   m_alkalinity = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropAlkalinity, var);
+   }
+}
+
 void Water::setSulfate_ppm( double var )
 {
    m_sulfate_ppm = var;
@@ -164,23 +195,28 @@ void Water::setNotes( const QString &var )
 }
 
 void Water::setCacheOnly(bool cache) { m_cacheOnly = cache; }
+void Water::setType(Types type)
+{
+   if ( type < NONE || type > SPARGE ) {
+      return;
+   }
+
+   m_type = type;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropType, type);
+   }
+}
+
 //=========================="GET" METHODS=======================================
 QString Water::notes() const { return m_notes; }
-
 double Water::sulfate_ppm() const { return m_sulfate_ppm; }
-
 double Water::amount_l() const { return m_amount_l; }
-
 double Water::calcium_ppm() const { return m_calcium_ppm; }
-
 double Water::bicarbonate_ppm() const { return m_bicarbonate_ppm; }
-
 double Water::chloride_ppm() const { return m_chloride_ppm; }
-
 double Water::sodium_ppm() const { return m_sodium_ppm; }
-
 double Water::magnesium_ppm() const { return m_magnesium_ppm; }
-
 double Water::ph() const { return m_ph; }
-
+double Water::alkalinity() const { return m_alkalinity; }
 bool Water::cacheOnly() const { return m_cacheOnly; }
+Water::Types Water::type() const { return m_type; }

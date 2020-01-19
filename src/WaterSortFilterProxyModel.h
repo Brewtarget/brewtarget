@@ -1,5 +1,5 @@
 /*
- * StyleButton.h is part of Brewtarget, and is Copyright the following
+ * WaterSortFilterProxyModel.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,43 +18,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _STYLEBUTTON_H
-#define _STYLEBUTTON_H
+#ifndef _WATERSORTFILTERPROXYMODEL_H
+#define _WATERSORTFILTERPROXYMODEL_H
 
-#include <QPushButton>
-#include <QMetaProperty>
-#include <QVariant>
+class WaterSortFilterProxyModel;
 
-// Forward declarations.
-class Style;
-class Recipe;
-class QWidget;
+#include <QSortFilterProxyModel>
 
 /*!
- * \class StyleButton
- * \author Mik Firestone (mikfire@gmail.com)
+ * \class WaterSortFilterProxyModel
+ * \author Mik Firestone
  *
- * \brief This is a view class that displays the name of a style
+ * \brief Proxy model for sorting water profiles.
  */
-class StyleButton : public QPushButton
+class WaterSortFilterProxyModel : public QSortFilterProxyModel
 {
    Q_OBJECT
+
 public:
-   StyleButton(QWidget* parent = nullptr);
-   virtual ~StyleButton(){}
+   WaterSortFilterProxyModel(QObject *parent = nullptr, bool filt = true);
 
-   //! Observe a recipe's equipment.
-   void setRecipe(Recipe* recipe);
-   //! Observe a particular equipment.
-   void setStyle(Style* style);
-
-private slots:
-   void recChanged(QMetaProperty,QVariant);
-   void styleChanged(QMetaProperty,QVariant);
+protected:
+   bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+//   bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 
 private:
-   Recipe* _rec;
-   Style* _style;
+   bool filter;
 };
 
 #endif
