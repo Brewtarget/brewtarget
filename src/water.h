@@ -131,15 +131,7 @@ private:
    QString m_notes;
    bool m_cacheOnly;
    Water::Types m_type;
-   double m_CaCl2;
-   double m_CaCO3;
-   double m_CaSO4;
-   double m_MgSO4;
-   double m_NaCl;
-   double m_NaHCO3;
 
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Water*> )

@@ -25,9 +25,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_inputs">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_left">
        <item>
@@ -398,7 +398,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_right">
+      <layout class="QVBoxLayout" name="verticalLayout_right" stretch="1,3,1,1">
        <item>
         <widget class="QCheckBox" name="checkBox_magix">
          <property name="text">
@@ -407,309 +407,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="tabWidgetPage1">
-          <attribute name="title">
-           <string>Strike</string>
-          </attribute>
-          <layout class="QFormLayout" name="formLayout_3">
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout_strike">
-             <item row="0" column="0">
-              <layout class="QHBoxLayout" name="horizontalLayout_strikecacl">
-               <item>
-                <widget class="BtMassLabel" name="label_strikecacl">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>CaCl&lt;sub&gt;2&lt;/sub&gt; (pickling salt)</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_strikecacl">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_strikemgso4">
-               <item>
-                <widget class="BtMassLabel" name="label_strikemgs04">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(epsom salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_strikemgso4">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="0">
-              <layout class="QHBoxLayout" name="horizontalLayout_strikecaco3">
-               <item>
-                <widget class="BtMassLabel" name="label_strikecaco3_3">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt; (chalk)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_totalcaco3_3">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_strikenacl">
-               <item>
-                <widget class="BtMassLabel" name="label_strikenacl">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl (table salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_strikenacl">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="2" column="0">
-              <layout class="QHBoxLayout" name="horizontalLayout_strikecaso4">
-               <item>
-                <widget class="BtMassLabel" name="label_strikecaso4">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(gypsum)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_strikecaso4">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="2" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_strikebicarb">
-               <item>
-                <widget class="BtMassLabel" name="label_strikebicarb">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3 &lt;/span&gt;(bicarbonate)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_strikebicarb">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="tabWidgetPage2">
-          <attribute name="title">
-           <string>Sparge</string>
-          </attribute>
-          <layout class="QFormLayout" name="formLayout_2">
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
-              <layout class="QHBoxLayout" name="horizontalLayout_spargecacl">
-               <item>
-                <widget class="BtMassLabel" name="label_spargecacl">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>CaCl&lt;sub&gt;2&lt;/sub&gt; (pickling salt)</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_spargecacl">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_spargemgso4">
-               <item>
-                <widget class="BtMassLabel" name="label_spargemgs04">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(epsom salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_spargemgso4">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="0">
-              <layout class="QHBoxLayout" name="horizontalLayout_spargecaco3">
-               <item>
-                <widget class="BtMassLabel" name="label_spargecaco3">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt; (chalk)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_spargecaco3">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_spargenacl">
-               <item>
-                <widget class="BtMassLabel" name="label_spargenacl">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl (table salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_spargenacl">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="2" column="0">
-              <layout class="QHBoxLayout" name="horizontalLayout_spargecaso4">
-               <item>
-                <widget class="BtMassLabel" name="label_spargecaso4">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(gypsum)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_spargecaso4">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="2" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_spargebicarb">
-               <item>
-                <widget class="BtMassLabel" name="label_spargebicarb">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3 &lt;/span&gt;(bicarbonate)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="BtMassEdit" name="lineEdit_spargebicarb">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_salts" stretch="1,2">
+         <item>
+          <widget class="MiscTreeView" name="treeView_salts"/>
+         </item>
+         <item>
+          <widget class="QTableView" name="tableView_salts"/>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="Line" name="line">
@@ -729,7 +434,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalbicarb">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3 &lt;/span&gt;(bicarbonate)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Baking Soda (NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalbicarb</cstring>
@@ -753,7 +458,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalnacl">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl (table salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Table Salt (NaCl)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalnacl</cstring>
@@ -777,7 +482,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalmgs04">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(epsom salt)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Epsom Salt&lt;span style=&quot; vertical-align:sub;&quot;/&gt;(MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalmgso4</cstring>
@@ -801,7 +506,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalcaso4">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4 &lt;/span&gt;(gypsum)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gypsum&lt;span style=&quot; vertical-align:sub;&quot;/&gt;(CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalcaso4</cstring>
@@ -831,7 +536,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>CaCl&lt;sub&gt;2&lt;/sub&gt; (pickling salt)</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calcium Chloride (CaCl&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalcacl</cstring>
@@ -861,7 +566,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalcaco3">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt; (chalk)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calcium Carbonate (CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalcaco3</cstring>
@@ -938,6 +643,11 @@
     <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
     <slot>popContextMenu(QPoint)</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>MiscTreeView</class>
+   <extends>QTreeView</extends>
+   <header>BtTreeView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

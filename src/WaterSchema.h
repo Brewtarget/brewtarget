@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _WATERTABLESCHEMA_H
-#define _WATERTABLESCHEMA_H
+#ifndef _WATERSCHEMA_H
+#define _WATERSCHEMA_H
 
 #include <QString>
 // Columns for the yeast table
@@ -42,7 +42,6 @@ static const QString kpropMagnesium("magnesium");
 static const QString kpropAlkalinity("alkalinity");
 
 // XML properties
-// Note -- no XML props for type, form and flocculation
 static const QString kxmlPropCalcium("CALCIUM");
 static const QString kxmlPropBiCarbonate("BICARBONATE");
 static const QString kxmlPropSulfate("SULFATE");
@@ -50,4 +49,4 @@ static const QString kxmlPropChloride("CHLORIDE");
 static const QString kxmlPropSodium("SODIUM");
 static const QString kxmlPropMagnesium("MAGNESIUM");
 
-#endif // _WATERTABLESCHEMA_H
+#endif // _WATERSCHEMA_H

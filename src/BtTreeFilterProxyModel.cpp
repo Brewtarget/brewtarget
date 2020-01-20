@@ -24,13 +24,13 @@
 #include "BtTreeModel.h"
 #include "BtTreeItem.h"
 
-BtTreeFilterProxyModel::BtTreeFilterProxyModel(QObject *parent,BtTreeModel::TypeMasks mask ) 
+BtTreeFilterProxyModel::BtTreeFilterProxyModel(QObject *parent,BtTreeModel::TypeMasks mask )
 : QSortFilterProxyModel(parent),
    treeMask(mask)
 {
 }
 
-bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
                                          const QModelIndex &right) const
 {
 
@@ -112,7 +112,7 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
    return leftRecipe->name() < rightRecipe->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanEquip(BtTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanEquip(BtTreeModel* model, const QModelIndex &left,
                                          const QModelIndex &right) const
 {
    // As the models get more complex, so does the sort algorithm
@@ -150,7 +150,7 @@ bool BtTreeFilterProxyModel::lessThanEquip(BtTreeModel* model, const QModelIndex
    return leftEquip->name() < rightEquip->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanFerment(BtTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanFerment(BtTreeModel* model, const QModelIndex &left,
                                          const QModelIndex &right) const
 {
    // As the models get more complex, so does the sort algorithm
@@ -189,7 +189,7 @@ bool BtTreeFilterProxyModel::lessThanFerment(BtTreeModel* model, const QModelInd
    return leftFerment->name() < rightFerment->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanHop(BtTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanHop(BtTreeModel* model, const QModelIndex &left,
                                          const QModelIndex &right) const
 {
    // As the models get more complex, so does the sort algorithm
@@ -229,7 +229,7 @@ bool BtTreeFilterProxyModel::lessThanHop(BtTreeModel* model, const QModelIndex &
    return leftHop->name() < rightHop->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanMisc(BtTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanMisc(BtTreeModel* model, const QModelIndex &left,
                                          const QModelIndex &right) const
 {
    // As the models get more complex, so does the sort algorithm
@@ -268,7 +268,7 @@ bool BtTreeFilterProxyModel::lessThanMisc(BtTreeModel* model, const QModelIndex 
    return leftMisc->name() < rightMisc->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanStyle(BtTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanStyle(BtTreeModel* model, const QModelIndex &left,
                                          const QModelIndex &right) const
 {
    // As the models get more complex, so does the sort algorithm
@@ -312,7 +312,7 @@ bool BtTreeFilterProxyModel::lessThanStyle(BtTreeModel* model, const QModelIndex
    return leftStyle->name() < rightStyle->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanYeast(BtTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanYeast(BtTreeModel* model, const QModelIndex &left,
                                          const QModelIndex &right) const
 {
    // As the models get more complex, so does the sort algorithm
@@ -366,11 +366,55 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
    if ( ! child.isValid() )
       return false;
 
-   if ( model->isFolder(child) ) 
+   if ( model->isFolder(child) )
       return true;
 
    BeerXMLElement* thing = model->thing(child);
 
    return thing->display();
 
+}
+
+SaltTreeFilterProxyModel::SaltTreeFilterProxyModel(QObject *parent)
+   : BtTreeFilterProxyModel(parent,BtTreeModel::MISCMASK)
+{
+}
+
+bool SaltTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+   bool isWaterAgent = false;
+   bool isNotInstantWater = false;
+   bool isUsedInMash = false;
+
+   if ( !source_parent.isValid() )
+      return true;
+
+   const BtTreeModel* model = qobject_cast<const BtTreeModel*>(source_parent.model());
+
+   QModelIndex child = model->index(source_row, 0, source_parent);
+
+   // We shouldn't get here, but if we cannot find the row in the parent,
+   // don't display the item.
+   if ( ! child.isValid() )
+      return false;
+
+   if ( model->isFolder(child) )
+      return true;
+
+   Misc* thing = model->misc(child);
+
+   if ( thing == nullptr )
+      return false;
+
+   isWaterAgent = thing->type() == Misc::Water_Agent;
+   isNotInstantWater = ! thing->name().startsWith(QString("Instant"));
+   isUsedInMash = thing->use() == Misc::Mash;
+
+   bool theAnswer = thing->display() && isWaterAgent && isNotInstantWater && isUsedInMash;
+   if ( theAnswer ) {
+      qDebug() << "accepting" << thing->name();
+   }
+   // for this limited list, show only things to be displayed
+   // that are water agents but not the instant water things.
+   return theAnswer;
 }

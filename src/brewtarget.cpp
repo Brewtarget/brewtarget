@@ -100,6 +100,7 @@ QStringList Brewtarget::dbTableToName  = QStringList() <<
    ktableRecipe <<
    ktableBrewnote <<
    ktableInstruction <<
+   ktableSalt <<
 // Now for BT internal tables
    ktableBtEquipment <<
    ktableBtFermentable <<
@@ -115,6 +116,7 @@ QStringList Brewtarget::dbTableToName  = QStringList() <<
    ktableWaterInRec <<
    ktableYeastInRec <<
    ktableInsInRec <<
+   ktableSaltInRec <<
 // child tables next
    ktableEquipChildren <<
    ktableFermChildren <<

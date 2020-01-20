@@ -23,6 +23,8 @@
 #include "WaterDialog.h"
 #include "WaterListModel.h"
 #include "WaterSortFilterProxyModel.h"
+#include "BtTreeFilterProxyModel.h"
+#include "BtTreeModel.h"
 #include "WaterButton.h"
 #include "brewtarget.h"
 #include "database.h"
@@ -59,6 +61,13 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    rangeWidget_na->setPrecision(1);
    rangeWidget_bicarb->setPrecision(1);
    rangeWidget_sulfate->setPrecision(1);
+
+   // lets see if I can get the misc tree setup right
+   SaltTreeFilterProxyModel* sfilter = new SaltTreeFilterProxyModel(this);
+   sfilter->setSourceModel( treeView_salts->model());
+   treeView_salts->setModel(sfilter);
+   sfilter->setDynamicSortFilter(true);
+   treeView_salts->setFilter(sfilter);
 
    // need to connect some lineEdit signals to some slots.
 

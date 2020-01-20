@@ -170,9 +170,9 @@ private:
    void defineRecipeTable();
    void defineYeastTable();
    void defineWaterTable();
+   void defineSaltTable();
    void defineBrewnoteTable();
    void defineSettingsTable();
-//   void defineBtAllTable();
 
    // and we can get away with one method for the child tables
    void defineChildTable(Brewtarget::DBTable table);
