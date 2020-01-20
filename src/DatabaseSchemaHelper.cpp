@@ -31,8 +31,9 @@
 #include "TableSchemaConst.h"
 #include "BrewnoteSchema.h"
 #include "SettingsSchema.h"
+#include "WaterSchema.h"
 
-const int DatabaseSchemaHelper::dbVersion = 8;
+const int DatabaseSchemaHelper::dbVersion = 9;
 
 // Commands and keywords
 QString DatabaseSchemaHelper::CREATETABLE("CREATE TABLE");
@@ -135,6 +136,9 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db )
          break;
       case 7:
          ret &= migrate_to_8(q,defn);
+         break;
+      case 8:
+         ret &= migrate_to_9(q,defn);
          break;
       default:
          Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
@@ -620,6 +624,30 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
    if ( ret )
       ret &= q.exec( DROPTABLE + SEP + "bt_alltables");
    qDebug() << "finished dropping bt_alltables: ret =" << ret;
+
+   return ret;
+}
+
+// To support the water chemistry, I need to add two columns to water and to
+// create the salt and salt_in_recipe tables
+bool DatabaseSchemaHelper::migrate_to_9(QSqlQuery q, DatabaseSchema* defn)
+{
+   bool ret = true;
+   TableSchema* tbl = defn->table(Brewtarget::WATERTABLE);
+   ret &= q.exec(
+            ALTERTABLE + SEP + tbl->tableName() + SEP +
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropType) +
+                         SEP + tbl->propertyColumnType(kpropType) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropType).toString()
+   );
+   ret &= q.exec(
+            ALTERTABLE + SEP + tbl->tableName() + SEP +
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropAlkalinity) +
+                         SEP + tbl->propertyColumnType(kpropAlkalinity) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropAlkalinity).toString()
+   );
+   ret &= q.exec(defn->generateCreateTable(Brewtarget::SALTTABLE));
+   ret &= q.exec(defn->generateCreateTable(Brewtarget::SALTINRECTABLE));
 
    return ret;
 }

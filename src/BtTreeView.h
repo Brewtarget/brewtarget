@@ -99,7 +99,7 @@ public:
    //! \brief gets the type of the item at \c index.
    int type(const QModelIndex &index);
 
-   //! returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
+   //! \brief returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
    bool multiSelected();
 
    // Another try at drag and drop
@@ -115,6 +115,11 @@ public:
 
    //! \brief creates a context menu based on the type of tree
    void setupContextMenu(QWidget* top, QWidget* editor );
+
+   //! \brief sets a new filter
+   void setFilter(BtTreeFilterProxyModel* newFilter);
+   //! \brief gets the current filter
+   BtTreeFilterProxyModel* filter() const;
 
    void deleteSelected(QModelIndexList selected);
    void copySelected(QModelIndexList selected);
@@ -136,7 +141,7 @@ private slots:
 
 private:
    BtTreeModel* _model;
-   BtTreeFilterProxyModel* filter;
+   BtTreeFilterProxyModel* _filter;
    BtTreeModel::TypeMasks _type;
    QMenu* _contextMenu, *subMenu;
    QPoint dragStart;

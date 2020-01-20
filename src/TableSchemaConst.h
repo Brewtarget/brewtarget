@@ -3,7 +3,6 @@
 #ifndef __TABLESCHEMACONSTH__
 #define __TABLESCHEMACONSTH__
 // Define tables names first, because I need them first
-// static const QString ktableMeta("bt_alltables");
 static const QString ktableSettings("settings");
 static const QString ktableEquipment("equipment");
 static const QString ktableFermentable("fermentable");
@@ -12,6 +11,7 @@ static const QString ktableMisc("misc");
 static const QString ktableStyle("style");
 static const QString ktableYeast("yeast");
 static const QString ktableWater("water");
+static const QString ktableSalt("salt");
 static const QString ktableMash("mash");
 static const QString ktableMashStep("mashstep");
 static const QString ktableBrewnote("brewnote");
@@ -32,6 +32,7 @@ static const QString ktableFermInRec("fermentable_in_recipe");
 static const QString ktableHopInRec("hop_in_recipe");
 static const QString ktableMiscInRec("misc_in_recipe");
 static const QString ktableWaterInRec("water_in_recipe");
+static const QString ktableSaltInRec("salt_in_recipe");
 static const QString ktableYeastInRec("yeast_in_recipe");
 static const QString ktableInsInRec("instruction_in_recipe");
 
@@ -111,6 +112,7 @@ static const QString kpropMashId("mash_id");
 static const QString kpropMiscId("misc_id");
 static const QString kpropStyleId("style_id");
 static const QString kpropWaterId("water_id");
+static const QString kpropSaltId("salt_id");
 static const QString kpropYeastId("yeast_id");
 
 // Same for these column names. Yes, but I think the consistency is better
@@ -158,7 +160,7 @@ static const QString kxmlPropOG("OG");
 
 // water and mash
 static const QString kxmlPropPH("PH");
-// Child information. We were really consisten on our naming here, so all the
+// Child information. We were really consistent with our naming here, so all the
 // *children tables will use these constants. The only thing that changes is
 // the table it points at
 
@@ -176,6 +178,7 @@ static const QString kcolMashId("mash_id");
 static const QString kcolMiscId("misc_id");
 static const QString kcolStyleId("style_id");
 static const QString kcolWaterId("water_id");
+static const QString kcolSaltId("salt_id");
 static const QString kcolYeastId("yeast_id");
 
 #endif

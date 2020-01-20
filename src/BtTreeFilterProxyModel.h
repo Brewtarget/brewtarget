@@ -67,4 +67,15 @@ private:
    bool lessThanStyle(BtTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
 };
 
+class SaltTreeFilterProxyModel : public BtTreeFilterProxyModel
+{
+   Q_OBJECT
+
+public:
+   SaltTreeFilterProxyModel(QObject *parent);
+
+protected:
+   bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
+};
+
 #endif

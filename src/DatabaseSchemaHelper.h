@@ -98,6 +98,7 @@ private:
    static bool migrate_to_7(QSqlQuery q, DatabaseSchema *defn);
    static bool migration_aide_8(QSqlQuery q, DatabaseSchema* defn, Brewtarget::DBTable table );
    static bool migrate_to_8(QSqlQuery q, DatabaseSchema *defn);
+   static bool migrate_to_9(QSqlQuery q, DatabaseSchema *defn);
 };
 
 #endif
