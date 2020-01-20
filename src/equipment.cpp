@@ -87,7 +87,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_boilSize_l(rec.value(kcolEquipBoilSize).toDouble()),
    m_batchSize_l(rec.value(kcolEquipBatchSize).toDouble()),
    m_tunVolume_l(rec.value(kcolEquipTunVolume).toDouble()),
@@ -387,7 +387,7 @@ void Equipment::setBoilingPoint_c(double var)
       Brewtarget::logW( QString("Equipment: boiling point of water < 0: %1").arg(var));
       return;
    }
-   else 
+   else
    {
       m_boilingPoint_c = var;
       if ( ! m_cacheOnly ) {

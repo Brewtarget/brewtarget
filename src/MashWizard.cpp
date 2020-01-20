@@ -176,6 +176,7 @@ void MashWizard::wizardry()
    }
 
    QList<MashStep*> steps = mash->mashSteps();
+   QList<MashStep*> tmp;
 
    // We ensured that there was at least one mash step when we displayed the thickness dialog in show().
    mashStep = steps.at(0);
@@ -196,13 +197,11 @@ void MashWizard::wizardry()
       if( step->isSparge() ) {
          qDebug() << "removing" << step->name();
          Database::instance().removeFrom(mash,step);
-      }
+      else
+          tmp.append(step);
    }
 
-   // we need to reset the steps array here, since we just removed a bunch
-   // of steps.
-   steps = mash->mashSteps();
-
+   steps = tmp;
    grainMass = recObs->grainsInMash_kg();
    if ( bGroup->checkedButton() != radioButton_noSparge ) {
       thickNum = doubleSpinBox_thickness->value();
@@ -211,9 +210,8 @@ void MashWizard::wizardry()
    else {
       qDebug() << Q_FUNC_INFO << "Doing a nosparge" << steps.size();
       // not sure I like this. Why is this here and not somewhere later?
-      if (steps.size() == 1) {
-         qDebug() << Q_FUNC_INFO << "Step size was one";
-         mashStep->setInfuseAmount_l(recObs->targetTotalMashVol_l() + lauterDeadspace);
+      if (steps.size() == 1 ) {
+         mashStep->setInfuseAmount_l(recObs->targetTotalMashVol_l());
       }
       // For no sparge, get the thickness of the first mash step
       thickNum = mashStep->infuseAmount_l()/grainMass;
@@ -277,8 +275,7 @@ void MashWizard::wizardry()
 
          // r is the ratio of water and grain to take out for decoction.
          r = ((m_w*c_w + m_g*c_g + m_e*c_e)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(boilingPoint_c-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
-         if( r < 0 || r > 1 )
-         {
+         if( r < 0 || r > 1 ) {
             QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation.") );
             Brewtarget::logE(QString("Decoction: r=%1").arg(r));
             return;
@@ -336,11 +333,13 @@ void MashWizard::wizardry()
    // Now, do a sparge step, using just enough water that the total
    // volume sums up to the target pre-boil size. We need to account for the potential
    // lauter dead space, I think?
-   double spargeWater_l = recObs->targetTotalMashVol_l() + lauterDeadspace - recObs->mash()->totalMashWater_l();
+   double spargeWater_l = recObs->targetTotalMashVol_l() - recObs->mash()->totalMashWater_l();
 
    // If I've done my math right, we should never get here on nosparge
    // not sure why I am inferring this when I could just check the button group?
-   if( spargeWater_l > 0 ) {
+   if( spargeWater_l >= 0.001 )
+   {
+      spargeWater_l += lauterDeadspace;
       int lastMashStep = steps.size()-1;
       tf = mash->spargeTemp_c();
       if( lastMashStep >= 0 )

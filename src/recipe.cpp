@@ -167,7 +167,7 @@ Recipe::Recipe(QString name, bool cache)
 }
 
 Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_type(rec.value(kcolRecipeType).toString()),
    m_brewer(rec.value(kcolRecipeBrewer).toString()),
    m_asstBrewer(rec.value(kcolRecipeAsstBrewer).toString()),

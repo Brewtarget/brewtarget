@@ -391,8 +391,8 @@ void BrewNote::setFg(double var)
 }
 
 // This one is a bit of an odd ball. We need to convert to pure glucose points
-// before we store it in the database. 
-// DO NOT ignore the loading flag. Just. Don't. 
+// before we store it in the database.
+// DO NOT ignore the loading flag. Just. Don't.
 void BrewNote::setProjPoints(double var)
 {
 
@@ -432,7 +432,7 @@ void BrewNote::setProjFermPoints(double var)
 
       m_projFermPoints = convertPnts;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropProjPnts, convertPnts);
+         setEasy(kpropProjFermPnts, convertPnts);
       }
    }
 }
@@ -674,9 +674,9 @@ double BrewNote::calculateOg()
    double cOG;
    double points, expectedVol, actualVol;
 
-   points = (sg()-1) * 1000;
-   expectedVol = projVolIntoBK_l() - boilOff_l();
-   actualVol   = volumeIntoBK_l();
+   points = (m_sg-1) * 1000;
+   expectedVol = m_projVolIntoBK_l - m_boilOff_l;
+   actualVol   = m_volumeIntoBK_l;
 
    if ( expectedVol <= 0.0 )
       return 0.0;
@@ -692,8 +692,8 @@ double BrewNote::calculateBrewHouseEff_pct()
    double expectedPoints, actualPoints;
    double brewhouseEff;
 
-   expectedPoints = projFermPoints() * projVolIntoFerm_l();
-   actualPoints = (og()-1.0) * 1000.0 * volumeIntoFerm_l();
+   expectedPoints = m_projFermPoints * m_projVolIntoFerm_l;
+   actualPoints = (m_og-1.0) * 1000.0 * m_volumeIntoFerm_l;
 
    brewhouseEff = actualPoints/expectedPoints * 100.0;
    setBrewhouseEff_pct(brewhouseEff);
@@ -705,16 +705,16 @@ double BrewNote::calculateBrewHouseEff_pct()
 // on the actual OG, not the calculated.
 double BrewNote::calculateABV_pct()
 {
-   double atten_pct = projAtten();
+   double atten_pct = m_projAtten;
    double calculatedABV;
    double estFg;
 
    // This looks weird, but the math works. (Yes, I am showing my work)
    // 1 + [(og-1) * 1000 * (1.0 - %/100)] / 1000  =
    // 1 + [(og - 1) * (1.0 - %/100)]
-   estFg = 1 + ((og()-1.0)*(1.0 - atten_pct/100.0));
+   estFg = 1 + ((m_og-1.0)*(1.0 - atten_pct/100.0));
 
-   calculatedABV = (og()-estFg)*130;
+   calculatedABV = (m_og-estFg)*130;
    setProjABV_pct(calculatedABV);
 
    return calculatedABV;
@@ -724,7 +724,7 @@ double BrewNote::calculateActualABV_pct()
 {
    double abv;
 
-   abv = (og() - fg()) * 130;
+   abv = (m_og - m_fg) * 130;
    setABV(abv);
 
    return abv;
@@ -734,7 +734,7 @@ double BrewNote::calculateAttenuation_pct()
 {
     // Calculate measured attenuation based on user-reported values for
     // post-boil OG and post-ferment FG
-    double attenuation = ((og() - fg()) / (og() - 1)) * 100;
+    double attenuation = ((m_og - m_fg) / (m_og - 1)) * 100;
 
     setAttenuation(attenuation);
 

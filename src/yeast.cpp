@@ -105,7 +105,7 @@ Yeast::Yeast(QString name, bool cache )
 }
 
 Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_typeString(rec.value(kcolYeastType).toString()),
      m_type(static_cast<Yeast::Type>(types.indexOf(m_typeString))),
      m_formString(rec.value(kcolYeastForm).toString()),

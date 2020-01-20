@@ -118,7 +118,7 @@ Hop::Hop(QString name, bool cache)
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_useStr(rec.value(kcolUse).toString()),
      m_use(static_cast<Hop::Use>(uses.indexOf(m_useStr))),
      m_typeStr(rec.value(kcolHopType).toString()),

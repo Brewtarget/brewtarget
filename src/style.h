@@ -150,9 +150,9 @@ signals:
 
 private:
    Style(Brewtarget::DBTable table, int key);
+   Style(QString t_name, bool cache = true);
    Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
-   Style( QString t_name, bool cache = true );
 
    QString m_category;
    QString m_categoryNumber;

@@ -43,6 +43,39 @@ QString Style::classNameStr()
    return name;
 }
 
+//====== Constructors =========
+
+// suitable for something that will be written to the db later
+Style::Style(QString t_name, bool cacheOnly)
+   : BeerXMLElement(Brewtarget::STYLETABLE, -1, t_name, true),
+     m_category(QString()),
+     m_categoryNumber(QString()),
+     m_styleLetter(QString()),
+     m_styleGuide(QString()),
+     m_typeStr(QString()),
+     m_type(static_cast<Style::Type>(0)),
+     m_ogMin(0.0),
+     m_ogMax(0.0),
+     m_fgMin(0.0),
+     m_fgMax(0.0),
+     m_ibuMin(0.0),
+     m_ibuMax(0.0),
+     m_colorMin_srm(0.0),
+     m_colorMax_srm(0.0),
+     m_carbMin_vol(0.0),
+     m_carbMax_vol(0.0),
+     m_abvMin_pct(0.0),
+     m_abvMax_pct(0.0),
+     m_notes(QString()),
+     m_profile(QString()),
+     m_ingredients(QString()),
+     m_examples(QString()),
+     m_cacheOnly(cacheOnly)
+{
+}
+
+// suitable for something that needs to be created in the db when the object is, but all the other
+// fields will be filled in later (shouldn't be used that much)
 Style::Style(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key, QString(), true),
      m_category(QString()),
@@ -71,36 +104,9 @@ Style::Style(Brewtarget::DBTable table, int key)
 {
 }
 
-Style::Style(QString t_name, bool cache)
-   : BeerXMLElement(Brewtarget::STYLETABLE, -1, t_name, true),
-     m_category(QString()),
-     m_categoryNumber(QString()),
-     m_styleLetter(QString()),
-     m_styleGuide(QString()),
-     m_typeStr(QString()),
-     m_type(static_cast<Style::Type>(0)),
-     m_ogMin(0.0),
-     m_ogMax(0.0),
-     m_fgMin(0.0),
-     m_fgMax(0.0),
-     m_ibuMin(0.0),
-     m_ibuMax(0.0),
-     m_colorMin_srm(0.0),
-     m_colorMax_srm(0.0),
-     m_carbMin_vol(0.0),
-     m_carbMax_vol(0.0),
-     m_abvMin_pct(0.0),
-     m_abvMax_pct(0.0),
-     m_notes(QString()),
-     m_profile(QString()),
-     m_ingredients(QString()),
-     m_examples(QString()),
-     m_cacheOnly(cache)
-{
-}
-
+// suitable for creating a Style from a database record
 Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_category(rec.value(kcolStyleCat).toString()),
      m_categoryNumber(rec.value(kcolStyleCatNum).toString()),
      m_styleLetter(rec.value(kcolStyleLetter).toString()),
