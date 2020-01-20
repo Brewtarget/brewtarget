@@ -781,9 +781,6 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
       if ( ! q.exec(deleteFromInRecipe) )
          throw QString("failed to delete in_recipe.");
 
-      if ( ! q.exec(deleteFromInInventory) )
-         throw QString("failed to delete in_inventory.");
-
       if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
 

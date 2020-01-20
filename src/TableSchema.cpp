@@ -982,14 +982,14 @@ void TableSchema::defineMiscTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]     = new PropertySchema( kpropName,     kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropNotes]    = new PropertySchema( kpropNotes,    kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
-   m_properties[kpropAmountKg] = new PropertySchema( kpropAmountKg, kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
-   m_properties[kpropUse]      = new PropertySchema( kpropUse,      kcolUse,          QString(""),      QString("text"), QString("'Boil'"));
-   m_properties[kpropTime]     = new PropertySchema( kpropTime,     kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
-   m_properties[kpropType]     = new PropertySchema( kpropType,     kcolMiscType,     QString(""),      QString("text"), QString("'Other'"));
-   m_properties[kpropAmtIsWgt] = new PropertySchema( kpropAmtIsWgt, kcolMiscAmtIsWgt, kxmlPropAmtIsWgt, QString("boolean"), QVariant(true));
-   m_properties[kpropUseFor]   = new PropertySchema( kpropUseFor,   kcolMiscUseFor,   kxmlPropUseFor,   QString("text"), QString("''"));
+   m_properties[kpropName]     = new PropertySchema( kpropName,       kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
+   m_properties[kpropNotes]    = new PropertySchema( kpropNotes,      kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
+   m_properties[kpropAmountKg] = new PropertySchema( kpropAmountKg,   kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
+   m_properties[kpropUse]      = new PropertySchema( kpropUseString,  kcolUse,          QString(""),      QString("text"), QString("'Boil'"));
+   m_properties[kpropTime]     = new PropertySchema( kpropTime,       kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
+   m_properties[kpropType]     = new PropertySchema( kpropTypeString, kcolMiscType,     QString(""),      QString("text"), QString("'Other'"));
+   m_properties[kpropAmtIsWgt] = new PropertySchema( kpropAmtIsWgt,   kcolMiscAmtIsWgt, kxmlPropAmtIsWgt, QString("boolean"), QVariant(true));
+   m_properties[kpropUseFor]   = new PropertySchema( kpropUseFor,     kcolMiscUseFor,   kxmlPropUseFor,   QString("text"), QString("''"));
 
    m_properties[kpropDisplay]  = new PropertySchema( kpropDisplay,  kcolDisplay,      QString(),        QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]  = new PropertySchema( kpropDeleted,  kcolDeleted,      QString(),        QString("boolean"), QVariant(false));
