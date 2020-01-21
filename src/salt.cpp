@@ -63,13 +63,13 @@ Salt::Salt(QString name, bool cache)
 {
 }
 
-Salt::Salt(Salt const& other, bool cache)
+Salt::Salt(Salt const& other)
    : BeerXMLElement(Brewtarget::SALTTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_add_to(other.m_add_to),
    m_type(other.m_type),
    m_misc_id(other.m_misc_id),
-   m_cacheOnly(cache)
+   m_cacheOnly(other.m_cacheOnly)
 {
 }
 

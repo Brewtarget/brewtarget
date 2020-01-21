@@ -867,6 +867,11 @@ void Recipe::addWater( Water* var )
    Database::instance().addToRecipe( this, var );
 }
 
+void Recipe::addSalt( Salt* var )
+{
+   Database::instance().addToRecipe( this, var );
+}
+
 //==============================="SET" METHODS=================================
 void Recipe::setType( const QString &var )
 {
@@ -1436,45 +1441,7 @@ QList<Fermentable*> Recipe::fermentables() const { return Database::instance().f
 QList<Misc*> Recipe::miscs() const { return Database::instance().miscs(this); }
 QList<Yeast*> Recipe::yeasts() const { return Database::instance().yeasts(this); }
 QList<Water*> Recipe::waters() const { return Database::instance().waters(this); }
-
-Water* Recipe::baseWaterProfile() const
-{
-   foreach( Water* i, waters() ) {
-      if ( i->type() == Water::BASE ) {
-         return i;
-      }
-   }
-   return nullptr;
-}
-Water* Recipe::targetWaterProfile() const
-{
-   foreach( Water* i, waters() ) {
-      if ( i->type() == Water::TARGET ) {
-         return i;
-      }
-   }
-   return nullptr;
-}
-
-Water* Recipe::strikeWaterProfile() const
-{
-   foreach( Water* i, waters() ) {
-      if ( i->type() == Water::STRIKE ) {
-         return i;
-      }
-   }
-   return nullptr;
-}
-
-Water* Recipe::spargeWaterProfile() const
-{
-   foreach( Water* i, waters() ) {
-      if ( i->type() == Water::SPARGE ) {
-         return i;
-      }
-   }
-   return nullptr;
-}
+QList<Salt*> Recipe::salts() const { return Database::instance().salts(this); }
 
 //==============================Getters===================================
 QString Recipe::type() const { return m_type; }

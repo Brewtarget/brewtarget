@@ -195,10 +195,11 @@ void MashWizard::wizardry()
    for( i = 0; i < steps.size(); ++i) {
       MashStep* step = steps[i];
       if( step->isSparge() ) {
-         qDebug() << "removing" << step->name();
          Database::instance().removeFrom(mash,step);
-      else
+      }
+      else {
           tmp.append(step);
+      }
    }
 
    steps = tmp;

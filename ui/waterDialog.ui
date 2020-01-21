@@ -22,6 +22,9 @@
     <height>0</height>
    </size>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
@@ -412,7 +415,11 @@
           <widget class="MiscTreeView" name="treeView_salts"/>
          </item>
          <item>
-          <widget class="QTableView" name="tableView_salts"/>
+          <widget class="QTableView" name="tableView_salts">
+           <property name="mimeAccepted" stdset="0">
+            <string notr="true">application/x-brewtarget-ingredient</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -608,22 +615,7 @@
   <customwidget>
    <class>BtGenericEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>CustomComboBox</class>
-   <extends>QComboBox</extends>
-   <header>CustomComboBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>StyleRangeWidget</class>
-   <extends>QWidget</extends>
-   <header>StyleRangeWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>WaterButton</class>
-   <extends>QPushButton</extends>
-   <header>WaterButton.h</header>
+   <header>BtLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>BtMassEdit</class>
@@ -645,9 +637,24 @@
    </slots>
   </customwidget>
   <customwidget>
+   <class>CustomComboBox</class>
+   <extends>QComboBox</extends>
+   <header>CustomComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>StyleRangeWidget</class>
+   <extends>QWidget</extends>
+   <header>StyleRangeWidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>MiscTreeView</class>
    <extends>QTreeView</extends>
    <header>BtTreeView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WaterButton</class>
+   <extends>QPushButton</extends>
+   <header>WaterButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

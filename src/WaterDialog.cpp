@@ -20,16 +20,20 @@
 #include <limits>
 #include <Algorithms.h>
 #include <QComboBox>
+#include <QMimeData>
+
 #include "WaterDialog.h"
 #include "WaterListModel.h"
 #include "WaterSortFilterProxyModel.h"
 #include "BtTreeFilterProxyModel.h"
 #include "BtTreeModel.h"
 #include "WaterButton.h"
+#include "SaltTableModel.h"
 #include "brewtarget.h"
 #include "database.h"
 #include "mash.h"
 #include "mashstep.h"
+#include "salt.h"
 
 WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    obsRec(nullptr)
@@ -62,15 +66,19 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    rangeWidget_bicarb->setPrecision(1);
    rangeWidget_sulfate->setPrecision(1);
 
-   // lets see if I can get the misc tree setup right
+   // setup the misc tree
    SaltTreeFilterProxyModel* sfilter = new SaltTreeFilterProxyModel(this);
    sfilter->setSourceModel( treeView_salts->model());
    treeView_salts->setModel(sfilter);
    sfilter->setDynamicSortFilter(true);
    treeView_salts->setFilter(sfilter);
 
-   // need to connect some lineEdit signals to some slots.
-
+   // and now let's see what the table does.
+   saltTableModel = new SaltTableModel(tableView_salts);
+   tableView_salts->setItemDelegate(new SaltItemDelegate(tableView_salts));
+   tableView_salts->setModel(saltTableModel);
+   // can I catch the dropped salts?
+   tableView_salts->setAcceptDrops(true);
 }
 
 WaterDialog::~WaterDialog() {}
@@ -97,10 +105,15 @@ void WaterDialog::setRecipe(Recipe *rec)
    baseProfileButton->setRecipe(obsRec);
    targetProfileButton->setRecipe(obsRec);
 
-   Water* base = obsRec->baseWaterProfile();
-   Water* target = obsRec->targetWaterProfile();
-   Water* strike = obsRec->strikeWaterProfile();
-   Water* sparge = obsRec->spargeWaterProfile();
+   Water *base = nullptr;
+   Water *target = nullptr;
+
+   foreach( Water* w, obsRec->waters()) {
+      if (w->type() == Water::BASE )
+         base = w;
+      else if ( w->type() == Water::TARGET )
+         target = w;
+   }
 
    if ( base != nullptr ) {
       baseProfileButton->setWater(base);
@@ -120,12 +133,6 @@ void WaterDialog::setRecipe(Recipe *rec)
       setSlider(rangeWidget_bicarb, target->bicarbonate_ppm());
       setSlider(rangeWidget_sulfate, target->sulfate_ppm());
    }
-
-   if ( strike != nullptr ) {
-      double totalVolume = mash->totalInfusionAmount_l();
-      // concentration is = constant * salt/volume
-   }
-
 }
 
 double WaterDialog::gypsum_to_calcium(Water* strike, double volume)
@@ -181,4 +188,80 @@ void WaterDialog::update_targetProfile(int selected)
       setSlider(rangeWidget_bicarb, child->bicarbonate_ppm());
       setSlider(rangeWidget_sulfate, child->sulfate_ppm());
    }
+}
+
+void WaterDialog::dropEvent(QDropEvent *dpEvent)
+{
+   const QMimeData* mData;
+   int _type;
+   QString name;
+   int id;
+   QList<Misc*> salty;
+
+   qDebug() << "Caught a drop";
+   if ( acceptMime.size() == 0 )
+      acceptMime = tableView_salts->property("mimeAccepted").toString();
+
+   if ( ! dpEvent->mimeData()->hasFormat(acceptMime)) {
+      return;
+   }
+
+   mData = dpEvent->mimeData();
+   QByteArray itemData = mData->data(acceptMime);
+   QDataStream dStream(&itemData, QIODevice::ReadOnly);
+
+   while ( ! dStream.atEnd() ) {
+      dStream >> _type >> id >> name;
+      if ( _type == BtTreeItem::MISC )
+         qDebug() << Q_FUNC_INFO << _type << id << name;
+         salty.append( Database::instance().misc(id) );
+   }
+
+   if ( salty.size() > 0 )
+      addSalts(salty);
+   // this is like "mischief managed"
+   dpEvent->acceptProposedAction();
+}
+
+void WaterDialog::addSalts(QList<Misc*> dropped)
+{
+   qDebug() << "Entering " << Q_FUNC_INFO;
+   if ( obsRec == nullptr )
+      return;
+
+   foreach( Misc *m, dropped ) {
+      QString mName = m->name();
+
+      Salt::Types sType = Salt::NONE;
+
+      // Oh, this just got hard. We dropped MISC but I need salts.
+      Salt* gaq = Database::instance().newSalt();
+      gaq->setName(mName);
+      if (mName == QString("Calcium Chloride") )
+         sType = Salt::CACL2;
+      else if (mName == QString("Calcium Carbonate") )
+         sType = Salt::CACO3;
+      else if (mName == QString("Gypsum"))
+         sType = Salt::CASO4;
+      else if (mName == QString("Epsom Salt") )
+         sType = Salt::MGSO4;
+      else if ( mName == QString("Kosher Salt") )
+         sType = Salt::NACL;
+      else if ( mName == QString("Baking Soda") )
+         sType = Salt::NAHCO3;
+      else
+         Brewtarget::logW( QString("Unknown brewing salt %1").arg(mName));
+      gaq->setType(sType);
+      obsRec->addSalt(gaq);
+   }
+}
+void WaterDialog::dragEnterEvent(QDragEnterEvent *deEvent)
+{
+   if ( acceptMime.size() == 0 )
+      acceptMime = tableView_salts->property("mimeAccepted").toString();
+
+   qDebug() << "Drag enter event" << acceptMime;
+
+   if (deEvent->mimeData()->hasFormat(acceptMime) )
+      deEvent->acceptProposedAction();
 }
