@@ -398,6 +398,7 @@ bool SaltTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelInde
    if ( ! child.isValid() )
       return false;
 
+   // I don't want to show folders in this tree
    if ( model->isFolder(child) )
       return true;
 
@@ -411,9 +412,6 @@ bool SaltTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelInde
    isUsedInMash = thing->use() == Misc::Mash;
 
    bool theAnswer = thing->display() && isWaterAgent && isNotInstantWater && isUsedInMash;
-   if ( theAnswer ) {
-      qDebug() << "accepting" << thing->name();
-   }
    // for this limited list, show only things to be displayed
    // that are water agents but not the instant water things.
    return theAnswer;

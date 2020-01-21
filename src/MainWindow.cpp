@@ -360,7 +360,6 @@ void MainWindow::setupComboBoxes()
 
 // Anything creating new tables models, filter proxies and configuring the two
 // should go in here
-// TODO: Water table will need to be added here
 void MainWindow::setupTables()
 {
    // Set table models.

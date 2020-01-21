@@ -27,12 +27,10 @@
 
 // Forward declarations.
 class Salt;
-bool operator<(Salt &w1, Salt &w2);
-bool operator==(Salt &w1, Salt &w2);
 
 /*!
  * \class Salt
- * \author Philip G. Lee
+ * \author Mik Firestone
  *
  * \brief Model for salt records in the database.
  */
@@ -98,7 +96,7 @@ signals:
 private:
    Salt(Brewtarget::DBTable table, int key);
    Salt(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   Salt(Salt const& other, bool cache = true);
+   Salt(Salt const& other );
    Salt(QString name, bool cache = true);
 
    double m_amount;
@@ -109,23 +107,23 @@ private:
 
 };
 
-Q_DECLARE_METATYPE( QList<Salt*> )
+Q_DECLARE_METATYPE( Salt* )
 
 inline bool SaltPtrLt( Salt* lhs, Salt* rhs)
 {
-   return *lhs < *rhs;
+   return lhs->type() < rhs->type();
 }
 
 inline bool SaltPtrEq( Salt* lhs, Salt* rhs)
 {
-   return *lhs == *rhs;
+   return lhs->type() == rhs->type();
 }
 
 struct Salt_ptr_cmp
 {
    bool operator()( Salt* lhs, Salt* rhs)
    {
-      return *lhs < *rhs;
+      return lhs->type() < rhs->type();
    }
 };
 
@@ -133,7 +131,7 @@ struct Salt_ptr_equals
 {
    bool operator()( Salt* lhs, Salt* rhs )
    {
-      return *lhs == *rhs;
+      return lhs->type() == rhs->type();
    }
 };
 

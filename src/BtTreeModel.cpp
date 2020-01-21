@@ -593,7 +593,6 @@ void BtTreeModel::loadTreeModel()
    foreach( BeerXMLElement* elem, elems ) {
 
       if (! elem->folder().isEmpty() ) {
-         qDebug() << elem->name() << "has a folder";
          ndxLocal = findFolder( elem->folder(), rootItem->child(0), true );
          // I cannot imagine this failing, but what the hell
          if ( ! ndxLocal.isValid() ) {
@@ -1145,7 +1144,6 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
    i = 0;
 
-   qDebug()<< "looking for " << name << "create" << create;
    // Time to get funky with no recursion!
    while( i < pItem->childCount() ) {
       BtTreeItem* kid = pItem->child(i);
@@ -1180,7 +1178,6 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
    // If we are supposed to create something, then lets get busy
    if ( create ) {
-      qDebug() << "creating " << dirs;
       // push the current dir back on the stack
       dirs.prepend(current);
       // And start with the madness

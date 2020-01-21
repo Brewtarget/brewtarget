@@ -46,6 +46,7 @@ class Fermentable;
 class Equipment;
 class Yeast;
 class Water;
+class Salt;
 class Instruction;
 class PreInstruction;
 class BrewNote;
@@ -195,6 +196,8 @@ public:
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ /*NOTIFY changed*/ STORED false )
    //! \brief The waters.
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ /*NOTIFY changed*/ STORED false )
+   //! \brief The salts.
+   Q_PROPERTY( QList<Salt*> salts READ salts /*WRITE*/ /*NOTIFY changed*/ STORED false )
 
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
@@ -207,6 +210,7 @@ public:
    void addMisc( Misc* var );
    void addYeast( Yeast* var );
    void addWater( Water* var );
+   void addSalt( Salt* var );
    void removeBrewNote(BrewNote* var);
    void removeInstruction( Instruction* ins );
    /*!
@@ -281,18 +285,15 @@ public:
    QList<Hop*> hops() const;
    QList<Instruction*> instructions() const;
    QList<Fermentable*> fermentables() const;
-   QList<Misc*> miscs() const;
+   QList<Misc*>  miscs() const;
    QList<Yeast*> yeasts() const;
    QList<Water*> waters() const;
+   QList<Salt*>  salts() const;
    QList<BrewNote*> brewNotes() const;
 
    Mash* mash() const;
    Equipment* equipment() const;
    Style* style();
-   Water* baseWaterProfile() const;
-   Water* targetWaterProfile() const;
-   Water* strikeWaterProfile() const;
-   Water* spargeWaterProfile() const;
 
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);

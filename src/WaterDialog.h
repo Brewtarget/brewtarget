@@ -28,6 +28,7 @@
 
 class WaterListModel;
 class WaterSortFilterProxyModel;
+class SaltTableModel;
 
 /*!
  * \class WaterDialog
@@ -48,16 +49,23 @@ class WaterDialog : public QDialog, public Ui::waterDialog
     void update_baseProfile(int selected);
     void update_targetProfile(int selected);
 
+  protected:
+    void dropEvent(QDropEvent* dpEvent);
+    void dragEnterEvent(QDragEnterEvent *deEvent);
+    QString acceptMime;
+
   private:
 
     WaterListModel *baseListModel;
     WaterListModel *targetListModel;
+    SaltTableModel *saltTableModel;
     Recipe* obsRec;
 
     WaterSortFilterProxyModel *baseFilter;
     WaterSortFilterProxyModel *targetFilter;
 
     void setSlider(RangedSlider* slider, double data);
+    void addSalts(QList<Misc*>dropped);
 
     // all of these ratios are taken from Bru'n Water's execellent water knowledge page
     // https://sites.google.com/site/brunwater/water-knowledge

@@ -66,6 +66,7 @@
 #include "recipe.h"
 #include "style.h"
 #include "water.h"
+#include "salt.h"
 #include "yeast.h"
 
 #include "config.h"
@@ -127,6 +128,7 @@ Database::~Database()
    qDeleteAll(allMiscs);
    qDeleteAll(allStyles);
    qDeleteAll(allWaters);
+   qDeleteAll(allSalts);
    qDeleteAll(allYeasts);
    qDeleteAll(allRecipes);
 
@@ -363,6 +365,7 @@ bool Database::load()
    populateElements( allMiscs, Brewtarget::MISCTABLE );
    populateElements( allStyles, Brewtarget::STYLETABLE );
    populateElements( allWaters, Brewtarget::WATERTABLE );
+   populateElements( allSalts, Brewtarget::SALTTABLE );
    populateElements( allYeasts, Brewtarget::YEASTTABLE );
 
    populateElements( allRecipes, Brewtarget::RECTABLE );
@@ -875,6 +878,7 @@ Hop*         Database::hop(int key)         { return allHops[key]; }
 Misc*        Database::misc(int key)        { return allMiscs[key]; }
 Style*       Database::style(int key)       { return allStyles[key]; }
 Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
+Salt*        Database::salt(int key)        { return allSalts[key]; }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
@@ -1187,6 +1191,17 @@ QList<Water*> Database::waters(Recipe const* parent)
    QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
 
    getElements(ret,filter,Brewtarget::WATERINRECTABLE,allWaters,inrec->inRecIndexName());
+
+   return ret;
+}
+
+QList<Salt*> Database::salts(Recipe const* parent)
+{
+   QList<Salt*> ret;
+   TableSchema* inrec = dbDefn->table(Brewtarget::SALTINRECTABLE);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
+
+   getElements(ret,filter,Brewtarget::SALTINRECTABLE,allSalts,inrec->inRecIndexName());
 
    return ret;
 }
@@ -1718,6 +1733,28 @@ Water* Database::newWater(Water* other)
    return tmp;
 }
 
+Salt* Database::newSalt(Salt* other)
+{
+   Salt* tmp;
+
+   try {
+      if ( other )
+         tmp = copy(other,&allSalts);
+      else
+         tmp = newIngredient(&allSalts);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
+
+   emit changed( metaProperty("salts"), QVariant() );
+   emit newSaltSignal(tmp);
+
+   return tmp;
+}
+
 Yeast* Database::newYeast(Yeast* other)
 {
    Yeast* tmp;
@@ -2031,6 +2068,17 @@ int Database::insertWater(Water* ins)
    return key;
 }
 
+int Database::insertSalt(Salt* ins)
+{
+   int key = insertElement(ins);
+   ins->setCacheOnly(false);
+
+   allSalts.insert(key,ins);
+   emit changed( metaProperty("salts"), QVariant() );
+   emit newSaltSignal(ins);
+
+   return key;
+}
 // This is more similar to a mashstep in that we need to link the brewnote to
 // the parent recipe.
 int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
@@ -2639,11 +2687,22 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
    }
 }
 
-Water* Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
+void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
 {
 
    try {
-      return addIngredientToRecipe( rec, w, noCopy, &allWaters,true,transact );
+      addIngredientToRecipe( rec, w, noCopy, &allWaters,true,transact );
+   }
+   catch (QString e) {
+      throw;
+   }
+}
+
+void Database::addToRecipe( Recipe* rec, Salt* s, bool noCopy, bool transact )
+{
+
+   try {
+      addIngredientToRecipe( rec, s, noCopy, &allSalts,true,transact );
    }
    catch (QString e) {
       throw;
@@ -2870,6 +2929,16 @@ QList<Water*> Database::waters()
            .arg(dbDefn->table(Brewtarget::WATERTABLE)->propertyToColumn(kpropDeleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::WATERTABLE, allWaters );
+   return tmp;
+}
+
+QList<Salt*> Database::salts()
+{
+   QList<Salt*> tmp;
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::SALTTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::SALTTABLE, allSalts );
    return tmp;
 }
 
