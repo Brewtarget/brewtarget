@@ -21,20 +21,21 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include <QDebug>
 
 #include "salt.h"
 #include "brewtarget.h"
 #include "TableSchemaConst.h"
 #include "SaltSchema.h"
 
-bool operator<(Salt &w1, Salt &w2)
+bool operator<(const Salt &s1, const Salt &s2)
 {
-   return w1.name() < w2.name();
+   return s1.m_add_to < s2.m_add_to;
 }
 
-bool operator==(Salt &w1, Salt &w2)
+bool operator==(const Salt &s1, const Salt &s2)
 {
-   return w1.name() == w2.name();
+   return s1.m_add_to == s2.m_add_to;
 }
 
 QString Salt::classNameStr()
@@ -63,7 +64,7 @@ Salt::Salt(QString name, bool cache)
 {
 }
 
-Salt::Salt(Salt const& other)
+Salt::Salt(Salt & other)
    : BeerXMLElement(Brewtarget::SALTTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_add_to(other.m_add_to),
@@ -94,7 +95,7 @@ void Salt::setAmount( double var )
 
 void Salt::setAddTo( Salt::WhenToAdd var )
 {
-   if ( var < NEVER || var > SPARGE ) {
+   if ( var < NEVER || var > BOTH ) {
       return;
    }
 
@@ -124,3 +125,50 @@ Salt::WhenToAdd Salt::addTo() const { return m_add_to; }
 Salt::Types Salt::type() const { return m_type; }
 bool Salt::cacheOnly() const { return m_cacheOnly; }
 int Salt::miscId() const { return m_misc_id; }
+
+//====== maths ===========
+// All of these the per gram, per liter
+// these values are taken from Bru'n Water's execellent water knowledge page
+// https://sites.google.com/site/brunwater/water-knowledge
+
+// the magic 1000 is here because masses are stored as kg. Upstream expects grams
+double Salt::Ca() const
+{
+   switch (m_type) {
+      case Salt::CACL2: return 272 * m_amount * 1000;
+      case Salt::CACO3: return 200 * m_amount * 1000;
+      case Salt::CASO4: return 232 * m_amount * 1000;
+      default: return 0;
+   }
+}
+
+double Salt::Cl() const
+{
+   switch (m_type) {
+      case Salt::CACL2: return 483 * m_amount * 1000;
+      case Salt::NACL: return 607 * m_amount * 1000;
+      default: return 0;
+   }
+}
+
+double Salt::CO3()  const { return m_type == Salt::CACO3 ? 610  * m_amount * 1000: 0; }
+double Salt::HCO3() const { return m_type == Salt::NAHCO3 ? 726 * m_amount * 1000: 0; }
+double Salt::Mg()   const { return m_type == Salt::MGSO4 ? 99   * m_amount * 1000: 0; }
+
+double Salt::Na() const
+{
+   switch (m_type) {
+      case Salt::NACL: return 393 * m_amount * 1000;
+      case Salt::NAHCO3: return 274 * m_amount * 1000;
+      default: return 0;
+   }
+}
+
+double Salt::SO4() const
+{
+   switch (m_type) {
+      case Salt::CASO4: return 558 * m_amount * 1000;
+      case Salt::MGSO4: return 389 * m_amount * 1000;
+      default: return 0;
+   }
+}

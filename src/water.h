@@ -48,9 +48,7 @@ public:
    enum Types {
       NONE,
       BASE,
-      TARGET,
-      STRIKE,
-      SPARGE
+      TARGET
    };
    Q_ENUM(Types)
 
@@ -79,6 +77,12 @@ public:
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
    //! \brief What kind of water is this
    Q_PROPERTY( Water::Types type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief percent of the mash water that is RO
+   Q_PROPERTY( double mashRO READ mashRO WRITE setMashRO /*NOTIFY changed*/ /*changedMashRO*/ )
+   //! \brief percent of the sparge water that is RO
+   Q_PROPERTY( double spargeRO READ spargeRO WRITE setSpargeRO /*NOTIFY changed*/ /*changedSpargeRO*/ )
+   //! \brief adjust both mash and sparge water
+   Q_PROPERTY( bool adjustBoth READ adjustBoth WRITE setAdjustBoth /*NOTIFY changed*/ /*changedAdjustBoth*/ )
 
    double amount_l() const;
    double calcium_ppm() const;
@@ -92,6 +96,9 @@ public:
    QString notes() const;
    bool cacheOnly() const;
    Water::Types type() const;
+   double mashRO() const;
+   double spargeRO() const;
+   bool adjustBoth() const;
 
    void setAmount_l( double var );
    void setCalcium_ppm( double var );
@@ -105,6 +112,9 @@ public:
    void setNotes( const QString &var );
    void setCacheOnly( bool cache );
    void setType(Types type);
+   void setMashRO(double var);
+   void setSpargeRO(double var);
+   void setAdjustBoth(bool var);
 
    static QString classNameStr();
 
@@ -131,6 +141,9 @@ private:
    QString m_notes;
    bool m_cacheOnly;
    Water::Types m_type;
+   double m_mash_ro;
+   double m_sparge_ro;
+   bool m_adjust_both;
 
 };
 

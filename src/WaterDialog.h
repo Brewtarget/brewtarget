@@ -38,49 +38,44 @@ class SaltTableModel;
  */
 class WaterDialog : public QDialog, public Ui::waterDialog
 {
-  Q_OBJECT
-  public:
-    WaterDialog(QWidget* parent = nullptr);
-    void setRecipe(Recipe* rec);
+   Q_OBJECT
 
-    ~WaterDialog();
+public:
+   WaterDialog(QWidget* parent = nullptr);
+   void setRecipe(Recipe* rec);
 
-  public slots:
-    void update_baseProfile(int selected);
-    void update_targetProfile(int selected);
+   ~WaterDialog();
 
-  protected:
-    void dropEvent(QDropEvent* dpEvent);
-    void dragEnterEvent(QDragEnterEvent *deEvent);
-    QString acceptMime;
+public slots:
+   void update_baseProfile(int selected);
+   void update_targetProfile(int selected);
 
-  private:
+protected:
+   void dropEvent(QDropEvent* dpEvent);
+   void dragEnterEvent(QDragEnterEvent *deEvent);
+   QString acceptMime;
 
-    WaterListModel *baseListModel;
-    WaterListModel *targetListModel;
-    SaltTableModel *saltTableModel;
-    Recipe* obsRec;
+protected slots:
+   void newTotals();
 
-    WaterSortFilterProxyModel *baseFilter;
-    WaterSortFilterProxyModel *targetFilter;
+signals:
+   void droppedSalt(Salt* drop);
+   void droppedSalts(QList<Salt*> drops);
 
-    void setSlider(RangedSlider* slider, double data);
-    void addSalts(QList<Misc*>dropped);
+private:
 
-    // all of these ratios are taken from Bru'n Water's execellent water knowledge page
-    // https://sites.google.com/site/brunwater/water-knowledge
-    double gypsum_to_calcium(Water* strike, double volume);  // 1g/L == 232 ppm
-    double gypsum_to_sulfate();  // 1g/L == 558 ppm
-    double epsom_to_magnesium(); // 1g/L == 99 ppm
-    double epsom_to_sulfate();   // 1g/L == 389 ppm
-    double pickle_to_caclium();  // 1g/L == 272 ppm
-    double pickle_to_chloride(); // 1g/L == 483 ppm
-    double salt_to_sodium();     // 1g/L == 393 ppm
-    double salt_to_chloride();   // 1g/L == 607 ppm
-    double soda_to_sodium();     // 1g/L == 274 ppm
-    double soda_to_bicarb();     // 1g/L == 726 ppm
-    double chalk_to_calcium();   // 1g/L == 200 ppm
-    double chalk_to_carbonate(); // 1g/L == 610 ppm
+   WaterListModel *baseListModel;
+   WaterListModel *targetListModel;
+   SaltTableModel *saltTableModel;
+   Recipe* recObs;
+   Water *base, *target;
+
+   WaterSortFilterProxyModel *baseFilter;
+   WaterSortFilterProxyModel *targetFilter;
+
+   void setSlider(RangedSlider* slider, double data);
+   void addSalts(QList<Misc*>dropped);
+
 };
 
 #endif

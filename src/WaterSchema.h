@@ -30,6 +30,9 @@ static const QString kcolWaterChloride("chloride");
 static const QString kcolWaterSodium("sodium");
 static const QString kcolWaterMagnesium("magnesium");
 static const QString kcolWaterAlkalinity("alkalinity");
+static const QString kcolWaterMashRO("mash_ro");
+static const QString kcolWaterSpargeRO("sparge_ro");
+static const QString kcolWaterAdjustBoth("adjust_both");
 static const QString kcolWaterType("wtype");
 
 // properties for objects
@@ -40,6 +43,9 @@ static const QString kpropChloride("chloride");
 static const QString kpropSodium("sodium");
 static const QString kpropMagnesium("magnesium");
 static const QString kpropAlkalinity("alkalinity");
+static const QString kpropMashRO("mashRO");
+static const QString kpropSpargeRO("spargeRO");
+static const QString kpropAdjustBoth("adjustBoth");
 
 // XML properties
 static const QString kxmlPropCalcium("CALCIUM");
