@@ -153,7 +153,14 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="BtGenericEdit" name="lineEdit_spargeRO"/>
+           <widget class="BtGenericEdit" name="lineEdit_spargeRO">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -439,20 +446,26 @@
           <item row="2" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_totalbicarb">
             <item>
-             <widget class="BtMassLabel" name="label_totalbicarb">
+             <widget class="BtMassLabel" name="label_totalnahco3">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Baking Soda (NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
-               <cstring>lineEdit_totalbicarb</cstring>
+               <cstring>lineEdit_totalnahco3</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="BtMassEdit" name="lineEdit_totalbicarb">
+             <widget class="BtMassEdit" name="lineEdit_totalnahco3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>40</width>
+                <width>16777215</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -465,7 +478,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalnacl">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Table Salt (NaCl)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalnacl</cstring>
@@ -474,9 +487,15 @@
             </item>
             <item>
              <widget class="BtMassEdit" name="lineEdit_totalnacl">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>40</width>
+                <width>16777215</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -489,7 +508,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalmgs04">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Epsom Salt&lt;span style=&quot; vertical-align:sub;&quot;/&gt;(MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalmgso4</cstring>
@@ -498,9 +517,15 @@
             </item>
             <item>
              <widget class="BtMassEdit" name="lineEdit_totalmgso4">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>40</width>
+                <width>16777215</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -513,7 +538,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalcaso4">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Gypsum&lt;span style=&quot; vertical-align:sub;&quot;/&gt;(CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalcaso4</cstring>
@@ -522,9 +547,15 @@
             </item>
             <item>
              <widget class="BtMassEdit" name="lineEdit_totalcaso4">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>40</width>
+                <width>16777215</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -543,7 +574,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calcium Chloride (CaCl&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCl&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalcacl</cstring>
@@ -553,14 +584,14 @@
             <item>
              <widget class="BtMassEdit" name="lineEdit_totalcacl">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
               <property name="maximumSize">
                <size>
-                <width>40</width>
+                <width>16777215</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -573,7 +604,7 @@
             <item>
              <widget class="BtMassLabel" name="label_totalcaco3">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calcium Carbonate (CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
                <cstring>lineEdit_totalcaco3</cstring>
@@ -582,9 +613,15 @@
             </item>
             <item>
              <widget class="BtMassEdit" name="lineEdit_totalcaco3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>40</width>
+                <width>16777215</width>
                 <height>16777215</height>
                </size>
               </property>

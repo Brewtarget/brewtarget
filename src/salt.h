@@ -43,14 +43,15 @@ class Salt : public BeerXMLElement
    friend class WaterDialog;
 public:
 
-   virtual ~Salt() {}
+   friend bool operator<( const Salt &s1, const Salt &s2 );
+   friend bool operator==( const Salt &s1, const Salt &s2 );
 
    enum WhenToAdd {
       NEVER,
       MASH,
-      SPARGE
+      SPARGE,
+      BOTH
    };
-   Q_ENUM(WhenToAdd)
 
    enum Types {
       NONE,
@@ -61,7 +62,10 @@ public:
       NACL,
       NAHCO3
    };
-   Q_ENUM(Types)
+
+   Q_ENUMS(WhenToAdd Types)
+
+   virtual ~Salt() {}
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief The amount of salt to be added (always a weight)
@@ -88,6 +92,14 @@ public:
 
    static QString classNameStr();
 
+   double Ca() const;
+   double Cl() const;
+   double CO3() const;
+   double HCO3() const;
+   double Mg() const;
+   double Na() const;
+   double SO4() const;
+
 signals:
 
    //! \brief Emitted when \c name() changes.
@@ -96,7 +108,7 @@ signals:
 private:
    Salt(Brewtarget::DBTable table, int key);
    Salt(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   Salt(Salt const& other );
+   Salt(Salt & other );
    Salt(QString name, bool cache = true);
 
    double m_amount;
@@ -107,23 +119,27 @@ private:
 
 };
 
-Q_DECLARE_METATYPE( Salt* )
+Q_DECLARE_METATYPE( QList<Salt*> )
 
 inline bool SaltPtrLt( Salt* lhs, Salt* rhs)
 {
-   return lhs->type() < rhs->type();
+   return (lhs->type() < rhs->type() &&
+           lhs->addTo() < rhs->addTo());
 }
 
 inline bool SaltPtrEq( Salt* lhs, Salt* rhs)
 {
-   return lhs->type() == rhs->type();
+   return (lhs->type() == rhs->type() &&
+           lhs->addTo() == rhs->addTo());
+
 }
 
 struct Salt_ptr_cmp
 {
    bool operator()( Salt* lhs, Salt* rhs)
    {
-      return lhs->type() < rhs->type();
+      return ( lhs->type() < rhs->type() &&
+           lhs->addTo() < rhs->addTo());
    }
 };
 
@@ -131,7 +147,8 @@ struct Salt_ptr_equals
 {
    bool operator()( Salt* lhs, Salt* rhs )
    {
-      return lhs->type() == rhs->type();
+      return ( lhs->type() == rhs->type() &&
+           lhs->addTo() == rhs->addTo());
    }
 };
 

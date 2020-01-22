@@ -76,6 +76,7 @@
 #include "mash.h"
 #include "instruction.h"
 #include "water.h"
+#include "salt.h"
 
 // Needed for kill(2)
 #if defined(Q_OS_UNIX)
@@ -436,6 +437,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
    qRegisterMetaType<Equipment*>();
    qRegisterMetaType<Mash*>();
    qRegisterMetaType<Style*>();
+   qRegisterMetaType<Salt*>();
    qRegisterMetaType<Brewtarget::DBTable>();
    qRegisterMetaType< QList<BrewNote*> >();
    qRegisterMetaType< QList<Hop*> >();
@@ -444,6 +446,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
    qRegisterMetaType< QList<Misc*> >();
    qRegisterMetaType< QList<Yeast*> >();
    qRegisterMetaType< QList<Water*> >();
+   qRegisterMetaType< QList<Salt*> >();
 
 
    // Use overwride if present.

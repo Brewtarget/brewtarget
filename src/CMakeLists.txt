@@ -137,7 +137,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/salt.cpp
     ${SRCDIR}/SaltTableModel.cpp
-    ${SRCDIR}/SaltTableWidget.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SgDensityUnitSystem.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
@@ -281,7 +280,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/salt.h
     ${SRCDIR}/SaltTableModel.h
-    ${SRCDIR}/SaltTableWidget.h
     ${SRCDIR}/ScaleRecipeTool.h
     ${SRCDIR}/StrikeWaterDialog.h
     ${SRCDIR}/StyleButton.h

@@ -58,7 +58,10 @@ Water::Water(Brewtarget::DBTable table, int key)
    m_alkalinity(0.0),
    m_notes(QString()),
    m_cacheOnly(false),
-   m_type(NONE)
+   m_type(NONE),
+   m_mash_ro(0.0),
+   m_sparge_ro(0.0),
+   m_adjust_both(true)
 {
 }
 
@@ -75,7 +78,10 @@ Water::Water(QString name, bool cache)
    m_alkalinity(0.0),
    m_notes(QString()),
    m_cacheOnly(cache),
-   m_type(NONE)
+   m_type(NONE),
+   m_mash_ro(0.0),
+   m_sparge_ro(0.0),
+   m_adjust_both(true)
 {
 }
 
@@ -92,7 +98,10 @@ Water::Water(Water const& other, bool cache)
    m_alkalinity(other.m_alkalinity),
    m_notes(other.m_notes),
    m_cacheOnly(cache),
-   m_type(other.m_type)
+   m_type(other.m_type),
+   m_mash_ro(other.m_mash_ro),
+   m_sparge_ro(other.m_sparge_ro),
+   m_adjust_both(other.m_adjust_both)
 {
 }
 
@@ -109,7 +118,10 @@ Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_alkalinity(rec.value(kcolWaterAlkalinity).toDouble()),
    m_notes(rec.value(kcolAmount).toString()),
    m_cacheOnly(false),
-   m_type(static_cast<Water::Types>(rec.value(kcolWaterType).toInt()))
+   m_type(static_cast<Water::Types>(rec.value(kcolWaterType).toInt())),
+   m_mash_ro(rec.value(kcolWaterMashRO).toDouble()),
+   m_sparge_ro(rec.value(kcolWaterSpargeRO).toDouble()),
+   m_adjust_both(rec.value(kcolWaterAdjustBoth).toBool())
 {
 }
 
@@ -195,15 +207,40 @@ void Water::setNotes( const QString &var )
 }
 
 void Water::setCacheOnly(bool cache) { m_cacheOnly = cache; }
+
 void Water::setType(Types type)
 {
-   if ( type < NONE || type > SPARGE ) {
+   if ( type < NONE || type > TARGET ) {
       return;
    }
 
    m_type = type;
    if ( ! m_cacheOnly ) {
       setEasy(kpropType, type);
+   }
+}
+
+void Water::setMashRO( double var )
+{
+   m_mash_ro = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropMashRO, var);
+   }
+}
+
+void Water::setSpargeRO( double var )
+{
+   m_sparge_ro = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropSpargeRO, var);
+   }
+}
+
+void Water::setAdjustBoth(bool var)
+{
+   m_adjust_both = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropAdjustBoth, var);
    }
 }
 
@@ -220,3 +257,6 @@ double Water::ph() const { return m_ph; }
 double Water::alkalinity() const { return m_alkalinity; }
 bool Water::cacheOnly() const { return m_cacheOnly; }
 Water::Types Water::type() const { return m_type; }
+double Water::mashRO() const { return m_mash_ro; }
+double Water::spargeRO() const { return m_sparge_ro; }
+bool Water::adjustBoth() const { return m_adjust_both; }

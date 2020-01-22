@@ -32,12 +32,12 @@ class SaltItemDelegate;
 #include <QItemDelegate>
 #include <QList>
 #include <QTableView>
+#include "salt.h"
 
 #include "unit.h"
 // Forward declarations.
-class Salt;
-class SaltTableWidget;
 class Recipe;
+class WaterDialog;
 
 enum{ SALTNAMECOL, SALTAMOUNTCOL, SALTADDTOCOL,
       SALTNUMCOLS /*This one MUST be last*/};
@@ -53,11 +53,12 @@ class SaltTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   SaltTableModel(QTableView* parent=nullptr);
-   virtual ~SaltTableModel() {}
-   void addSalts(QList<Salt*> salts);
+   SaltTableModel(QTableView* parent=nullptr, WaterDialog* gp = nullptr);
+   ~SaltTableModel();
    void observeRecipe(Recipe* rec);
-   void observeDatabase(bool val);
+   void addSalt(Salt* salt);
+   void addSalts(QList<Salt*> salts);
+   // void observeDatabase(bool val);
    void removeAll();
 
    //! Reimplemented from QAbstractTableModel.
@@ -73,15 +74,32 @@ public:
    //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
-public slots:
+    double total_Ca() const;
+    double total_Cl() const;
+    double total_CO3() const;
+    double total_HCO3() const;
+    double total_Mg() const;
+    double total_Na() const;
+    double total_SO4() const;
+
+    double total( Salt::Types type ) const;
+
+protected slots:
    void changed(QMetaProperty,QVariant);
-   void addSalt(Salt* salt);
    void removeSalt(Salt* salt);
+   void catchSalt(Salt* salt);
+   void catchSalts(QList<Salt*> salt);
+   void contextMenu(const QPoint &point);
+
+signals:
+   void newTotals();
 
 private:
+   QVector<Qt::ItemFlags> colFlags;
    QList<Salt*> saltObs;
    Recipe* recObs;
-   SaltTableWidget* parentTableWidget;
+   QTableView* parentTableWidget;
+   WaterDialog* dropper;
 
    void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
    void setDisplayScale(int column, Unit::unitScale displayScale);
@@ -110,6 +128,7 @@ public:
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 private:
+
 };
 
 #endif   /* _SALTTABLEMODEL_H */
