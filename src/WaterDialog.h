@@ -29,6 +29,7 @@
 class WaterListModel;
 class WaterSortFilterProxyModel;
 class SaltTableModel;
+class Salt;
 
 /*!
  * \class WaterDialog
@@ -49,18 +50,14 @@ public:
 public slots:
    void update_baseProfile(int selected);
    void update_targetProfile(int selected);
-
-protected:
-   void dropEvent(QDropEvent* dpEvent);
-   void dragEnterEvent(QDragEnterEvent *deEvent);
-   QString acceptMime;
-
-protected slots:
    void newTotals();
+   void removeSalts();
+   void setMashRO(int val);
+   void setSpargeRO(int val);
 
 signals:
-   void droppedSalt(Salt* drop);
-   void droppedSalts(QList<Salt*> drops);
+   void newSalt(Salt* drop);
+   void newSalts(QList<Salt*> drops);
 
 private:
 
@@ -69,12 +66,13 @@ private:
    SaltTableModel *saltTableModel;
    Recipe* recObs;
    Water *base, *target;
+   double m_mashRO;
+   double m_spargeRO;
 
    WaterSortFilterProxyModel *baseFilter;
    WaterSortFilterProxyModel *targetFilter;
 
    void setSlider(RangedSlider* slider, double data);
-   void addSalts(QList<Misc*>dropped);
 
 };
 

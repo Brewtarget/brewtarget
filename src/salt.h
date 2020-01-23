@@ -41,6 +41,7 @@ class Salt : public BeerXMLElement
 
    friend class Database;
    friend class WaterDialog;
+   friend class SaltTableModel;
 public:
 
    friend bool operator<( const Salt &s1, const Salt &s2 );
@@ -50,7 +51,8 @@ public:
       NEVER,
       MASH,
       SPARGE,
-      BOTH
+      RATIO,
+      EQUAL
    };
 
    enum Types {

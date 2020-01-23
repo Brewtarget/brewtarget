@@ -95,7 +95,7 @@ void Salt::setAmount( double var )
 
 void Salt::setAddTo( Salt::WhenToAdd var )
 {
-   if ( var < NEVER || var > BOTH ) {
+   if ( var < NEVER || var > EQUAL ) {
       return;
    }
 
@@ -134,6 +134,10 @@ int Salt::miscId() const { return m_misc_id; }
 // the magic 1000 is here because masses are stored as kg. Upstream expects grams
 double Salt::Ca() const
 {
+   if ( m_add_to == Salt::NEVER ) {
+      return 0;
+   }
+
    switch (m_type) {
       case Salt::CACL2: return 272 * m_amount * 1000;
       case Salt::CACO3: return 200 * m_amount * 1000;
@@ -144,6 +148,8 @@ double Salt::Ca() const
 
 double Salt::Cl() const
 {
+   if ( m_add_to == Salt::NEVER )
+      return 0;
    switch (m_type) {
       case Salt::CACL2: return 483 * m_amount * 1000;
       case Salt::NACL: return 607 * m_amount * 1000;
@@ -151,12 +157,31 @@ double Salt::Cl() const
    }
 }
 
-double Salt::CO3()  const { return m_type == Salt::CACO3 ? 610  * m_amount * 1000: 0; }
-double Salt::HCO3() const { return m_type == Salt::NAHCO3 ? 726 * m_amount * 1000: 0; }
-double Salt::Mg()   const { return m_type == Salt::MGSO4 ? 99   * m_amount * 1000: 0; }
+double Salt::CO3() const
+{
+   if ( m_add_to == Salt::NEVER )
+      return 0;
+   return m_type == Salt::CACO3 ? 610  * m_amount * 1000: 0;
+}
+
+double Salt::HCO3() const
+{
+   if ( m_add_to == Salt::NEVER )
+      return 0;
+   return m_type == Salt::NAHCO3 ? 726 * m_amount * 1000: 0;
+}
+
+double Salt::Mg() const
+{
+   if ( m_add_to == Salt::NEVER )
+      return 0;
+   return m_type == Salt::MGSO4 ? 99   * m_amount * 1000: 0;
+}
 
 double Salt::Na() const
 {
+   if ( m_add_to == Salt::NEVER )
+      return 0;
    switch (m_type) {
       case Salt::NACL: return 393 * m_amount * 1000;
       case Salt::NAHCO3: return 274 * m_amount * 1000;
@@ -166,6 +191,8 @@ double Salt::Na() const
 
 double Salt::SO4() const
 {
+   if ( m_add_to == Salt::NEVER )
+      return 0;
    switch (m_type) {
       case Salt::CASO4: return 558 * m_amount * 1000;
       case Salt::MGSO4: return 389 * m_amount * 1000;

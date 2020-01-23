@@ -30,6 +30,7 @@
 #include <QStyleOptionViewItem>
 #include <QLineEdit>
 #include <QString>
+#include <QObject>
 
 #include <QList>
 #include "database.h"
@@ -38,36 +39,36 @@
 #include "salt.h"
 #include "unit.h"
 #include "recipe.h"
+#include "mash.h"
 #include "brewtarget.h"
-#include "BtLineEdit.h"
 
+static QStringList addToName = QStringList() << QObject::tr("Never")
+                                             << QObject::tr("Mash")
+                                             << QObject::tr("Sparge")
+                                             << QObject::tr("Ratio")
+                                             << QObject::tr("Both");
 
-SaltTableModel::SaltTableModel(QTableView* parent, WaterDialog* gp)
+static QStringList saltNames = QStringList() << QObject::tr("None")
+                                             << QObject::tr("CaCl2")
+                                             << QObject::tr("CaCO3")
+                                             << QObject::tr("CaSO4")
+                                             << QObject::tr("MgSO4")
+                                             << QObject::tr("NaCl")
+                                             << QObject::tr("NaHCO3");
+
+SaltTableModel::SaltTableModel(QTableView* parent)
    : QAbstractTableModel(parent),
-     colFlags(SALTNUMCOLS),
      recObs(nullptr),
-     parentTableWidget(parent),
-     dropper(gp)
+     parentTableWidget(parent)
 {
    saltObs.clear();
    setObjectName("saltTable");
 
-   for (int i = 0; i < SALTNAMECOL; ++i) {
-      // cannot edit names
-      if ( i == SALTNAMECOL )
-         colFlags[i] = Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::NoItemFlags;
-      else
-         colFlags[i] = Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   }
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   parentTableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-   parentTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->setWordWrap(false);
 
    connect(headerView, &QWidget::customContextMenuRequested, this, &SaltTableModel::contextMenu);
-   if ( dropper )
-      connect(dropper, &WaterDialog::droppedSalts, this, &SaltTableModel::catchSalts);
 }
 
 SaltTableModel::~SaltTableModel()
@@ -90,18 +91,17 @@ void SaltTableModel::observeRecipe(Recipe* rec)
          addSalts( salts );
          emit newTotals();
       }
+      if ( recObs->mash() ) {
+         spargePct = recObs->mash()->totalSpargeAmount_l()/recObs->mash()->totalInfusionAmount_l();
+      }
    }
 }
 
 void SaltTableModel::addSalt(Salt* salt)
 {
-   if( saltObs.contains(salt) )
+   if( saltObs.contains(salt) ) {
       return;
-   // If we are observing the database, ensure that the item is undeleted and
-   // fit to display.
-   if( recObs == nullptr &&
-      ( salt->deleted() || !salt->display() ) )
-      return;
+   }
 
    beginInsertRows( QModelIndex(), saltObs.size(), saltObs.size() );
    saltObs.append(salt);
@@ -142,67 +142,29 @@ void SaltTableModel::addSalts(QList<Salt*> salts)
 
 }
 
-void SaltTableModel::catchSalt(Salt* salt) { addSalt(salt); }
-
-// I want some complex logic here. My current design is to allow each salt
-// to only ever be added once to the mash or sparge. Of course, I have to
-// handle 'both'.
-// So the idea is this:
-//   o if the salt is already in the list and the addTo === BOTH, don't accept;
-//   o if the salt is already in the list twice, don't accept;
-//   o if the salt is in the list once and addTo == SPARGE, make this "MASH"
-//   o if the salt is in the list once and addTo == MASH, make this one SPARGE
-void SaltTableModel::catchSalts(QList<Salt*> salts)
+void SaltTableModel::catchSalt()
 {
-   QList<Salt*> accepted;
-   foreach (Salt* i, salts) {
-      int cnt = 0;
-      Salt* found = nullptr;
-      foreach( Salt* tmp, saltObs) {
-         if ( tmp->type() == i->type() ) {
-            cnt++;
-            found = tmp;
-         }
-      }
-
-      if( cnt == 0 ) {
-         accepted.append(i);
-      }
-      else if ( cnt == 1 ) {
-         if ( found->addTo() == Salt::MASH ) {
-            i->setAddTo(Salt::SPARGE);
-            accepted.append(i);
-         }
-         else if ( found->addTo() == Salt::SPARGE ) {
-            i->setAddTo(Salt::MASH);
-            accepted.append(i);
-         }
-      }
-   }
-
-   int size = saltObs.size();
-   if (accepted.size()) {
-      beginInsertRows( QModelIndex(), size, size+accepted.size()-1 );
-      saltObs.append(accepted);
-
-      foreach (Salt* i, accepted) {
-         connect( i, &BeerXMLElement::changed, this, &SaltTableModel::changed );
-      }
-
-      endInsertRows();
-   }
+   Salt* gaq = new Salt(QString(),true);
+   addSalt(gaq);
 }
 
 double SaltTableModel::total_Ca() const
 {
    double ret = 0;
    foreach(Salt* i, saltObs) {
-      // if one thing is being added to both mash and
-      // sparge, we need to double the amount shown
-      int mult = i->addTo() == Salt::BOTH ? 2 : 1;
+      double mult  = 1;
+      // If we are adding equal amounts to mash and sparge
+      // then double what's shown
+      if ( i->addTo() == Salt::EQUAL ) {
+         mult = 2;
+      }
+      // If we are adding a proportional amount to both,
+      // this should handle that math.
+      else if ( i->addTo() == Salt::RATIO ) {
+         mult = 1.0 + spargePct;
+      }
       ret += mult * i->Ca();
    }
-
    return ret;
 }
 
@@ -210,7 +172,13 @@ double SaltTableModel::total_Cl() const
 {
    double ret = 0;
    foreach(Salt* i, saltObs) {
-      int mult = i->addTo() == Salt::BOTH ? 2 : 1;
+      double mult  = 1;
+      if ( i->addTo() == Salt::EQUAL ) {
+         mult = 2;
+      }
+      else if ( i->addTo() == Salt::RATIO ) {
+         mult = 1.0 + spargePct;
+      }
       ret += mult * i->Cl();
    }
 
@@ -221,7 +189,7 @@ double SaltTableModel::total_CO3() const
 {
    double ret = 0;
    foreach(Salt* i, saltObs) {
-      int mult = i->addTo() == Salt::BOTH ? 2 : 1;
+      int mult = i->addTo() == Salt::RATIO ? 2 : 1;
       ret += mult * i->CO3();
    }
 
@@ -232,7 +200,13 @@ double SaltTableModel::total_HCO3() const
 {
    double ret = 0;
    foreach(Salt* i, saltObs) {
-      int mult = i->addTo() == Salt::BOTH ? 2 : 1;
+      double mult  = 1;
+      if ( i->addTo() == Salt::EQUAL ) {
+         mult = 2;
+      }
+      else if ( i->addTo() == Salt::RATIO ) {
+         mult = 1.0 + spargePct;
+      }
       ret += mult * i->HCO3();
    }
 
@@ -243,7 +217,13 @@ double SaltTableModel::total_Mg() const
 {
    double ret = 0;
    foreach(Salt* i, saltObs) {
-      int mult = i->addTo() == Salt::BOTH ? 2 : 1;
+      double mult  = 1;
+      if ( i->addTo() == Salt::EQUAL ) {
+         mult = 2;
+      }
+      else if ( i->addTo() == Salt::RATIO ) {
+         mult = 1.0 + spargePct;
+      }
       ret += mult * i->Mg();
    }
 
@@ -254,7 +234,13 @@ double SaltTableModel::total_Na() const
 {
    double ret = 0;
    foreach(Salt* i, saltObs) {
-      int mult = i->addTo() == Salt::BOTH ? 2 : 1;
+      double mult  = 1;
+      if ( i->addTo() == Salt::EQUAL ) {
+         mult = 2;
+      }
+      else if ( i->addTo() == Salt::RATIO ) {
+         mult = 1.0 + spargePct;
+      }
       ret += mult * i->Na();
    }
 
@@ -265,7 +251,13 @@ double SaltTableModel::total_SO4() const
 {
    double ret = 0;
    foreach(Salt* i, saltObs) {
-      int mult = i->addTo() == Salt::BOTH ? 2 : 1;
+      double mult  = 1;
+      if ( i->addTo() == Salt::EQUAL ) {
+         mult = 2;
+      }
+      else if ( i->addTo() == Salt::RATIO ) {
+         mult = 1.0 + spargePct;
+      }
       ret += mult * i->SO4();
    }
 
@@ -275,10 +267,18 @@ double SaltTableModel::total_SO4() const
 double SaltTableModel::total(Salt::Types type) const
 {
    double ret = 0;
-   foreach(Salt* i, saltObs) {
-      if ( i->type() == type ) {
-         int mult = i->addTo() == Salt::BOTH ? 2 : 1;
-         ret += mult * i->amount();
+   if (type != Salt::NONE) {
+      foreach(Salt* i, saltObs) {
+         if ( i->type() == type && i->addTo() != Salt::NEVER) {
+            double mult  = 1;
+            if ( i->addTo() == Salt::EQUAL ) {
+               mult = 2;
+            }
+            else if ( i->addTo() == Salt::RATIO ) {
+               mult = 1.0 + spargePct;
+            }
+            ret += mult * i->amount();
+         }
       }
    }
    return ret;
@@ -289,6 +289,7 @@ void SaltTableModel::removeSalt(Salt* salt)
    int i;
 
    i = saltObs.indexOf(salt);
+
    if( i >= 0 ) {
       beginRemoveRows( QModelIndex(), i, i );
       disconnect( salt, nullptr, this, nullptr );
@@ -300,6 +301,29 @@ void SaltTableModel::removeSalt(Salt* salt)
          parentTableWidget->resizeRowsToContents();
       }
    }
+}
+
+void SaltTableModel::removeSalts(QList<int>deadSalts)
+{
+   QList<Salt*> dead;
+
+   // I am removing the salts so the index of any salt
+   // will change. I think this will work
+   foreach(int i, deadSalts) {
+      dead.append( saltObs.at(i));
+   }
+
+   foreach( Salt* zombie, dead) {
+      int i = saltObs.indexOf(zombie);
+
+      if ( i >= 0 ) {
+         beginRemoveRows( QModelIndex(), i, i );
+         disconnect( zombie, nullptr, this, nullptr );
+         saltObs.removeAt(i);
+         endRemoveRows();
+      }
+   }
+
 }
 
 void SaltTableModel::removeAll()
@@ -355,7 +379,6 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
    int col = index.column();
    Unit::unitScale scale;
    Unit::unitDisplay unit;
-   QStringList addToName = QStringList() << "Never" << "Mash" << "Sparge" << "Both";
 
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(saltObs.size()) ) {
@@ -365,25 +388,29 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
    else
       row = saltObs[index.row()];
 
-   // Make sure we only respond to the DisplayRole role.
-   if( role != Qt::DisplayRole )
-      return QVariant();
-
    switch( index.column() ) {
       case SALTNAMECOL:
-         return QVariant(row->name());
+         if ( role == Qt::DisplayRole )
+            return QVariant( saltNames.at(row->type()));
+         else if ( role == Qt::UserRole )
+            return QVariant( row->type());
+         else
+            return QVariant();
       case SALTAMOUNTCOL:
+         if ( role != Qt::DisplayRole )
+            return QVariant();
+
          unit = displayUnit(col);
          scale = displayScale(col);
 
          return QVariant( Brewtarget::displayAmount(row->amount(), Units::kilograms,3, unit, scale));
       case SALTADDTOCOL:
-         if ( row->addTo() < Salt::NEVER || row->addTo() > Salt::BOTH ) {
-            return QVariant();
-         }
-         else {
+         if ( role == Qt::DisplayRole )
             return QVariant( addToName.at(row->addTo()));
-         }
+         else if ( role == Qt::UserRole )
+            return QVariant( row->addTo());
+         else
+            return QVariant();
       default :
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -411,14 +438,8 @@ QVariant SaltTableModel::headerData( int section, Qt::Orientation orientation, i
 
 Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index ) const
 {
-   int col = index.column();
-   switch(col) {
-      case SALTNAMECOL:
-         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-      default:
-         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-            Qt::ItemIsEnabled;
-   }
+   Q_UNUSED(index)
+   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }
 
 bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
@@ -427,7 +448,6 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
    bool retval = false;
 
    if( index.row() >= saltObs.size() || role != Qt::EditRole ) {
-      qDebug() << Q_FUNC_INFO << "bugging out" << index.row() << saltObs.size() << role << Qt::EditRole;
       return false;
    }
 
@@ -438,16 +458,16 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
 
    switch( index.column() ) {
       case SALTNAMECOL:
-         retval = value.canConvert(QVariant::String);
+         retval = value.canConvert(QVariant::Int);
          if ( retval ) {
-            row->setName(value.toString());
+            row->setType( static_cast<Salt::Types>(value.toInt()));
+            row->setName( saltNames.at(value.toInt()));
          }
          break;
       case SALTAMOUNTCOL:
          retval = value.canConvert(QVariant::Double);
          if ( retval ) {
             row->setAmount( Brewtarget::qStringToSI(value.toString(), Units::kilograms, dspUnit, dspScl) );
-            emit newTotals();
          }
          break;
       case SALTADDTOCOL:
@@ -461,6 +481,9 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
    }
 
+   if ( retval )
+      emit newTotals();
+   emit dataChanged(index,index);
    return retval;
 }
 
@@ -569,45 +592,66 @@ SaltItemDelegate::SaltItemDelegate(QObject* parent)
 {
 }
 
-QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
+QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-   if ( index.column() == SALTADDTOCOL ) {
+   Q_UNUSED(option)
+   if ( index.column() == SALTNAMECOL ) {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("Never"));
-      box->addItem(tr("Mash"));
-      box->addItem(tr("Sparge"));
-      box->addItem(tr("Both"));
+      box->addItem(tr("NONE")  ,   Salt::NONE);
+      box->addItem(tr("CaCL2") ,  Salt::CACL2);
+      box->addItem(tr("CaCO3") ,  Salt::CACO3);
+      box->addItem(tr("CaSO4") ,  Salt::CASO4);
+      box->addItem(tr("MgSO4") ,  Salt::MGSO4);
+      box->addItem(tr("NaCl")  ,   Salt::NACL);
+      box->addItem(tr("NaHCO3"), Salt::NAHCO3);
+      box->setMinimumWidth( box->minimumSizeHint().width());
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+      return box;
+
+   }
+   else if ( index.column() == SALTADDTOCOL ) {
+      QComboBox *box = new QComboBox(parent);
+
+      box->addItem(tr("Never"),  Salt::NEVER);
+      box->addItem(tr("Mash"),   Salt::MASH);
+      box->addItem(tr("Sparge"), Salt::SPARGE);
+      box->addItem(tr("Ratio"),  Salt::RATIO);
+      box->addItem(tr("Equal"),  Salt::EQUAL);
       box->setMinimumWidth( box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
    }
-
-   return new QLineEdit(parent);
+   else {
+      return new QLineEdit(parent);
+   }
 }
 
 void SaltItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-   if ( index.column() == SALTADDTOCOL ) {
-      QComboBox* box = static_cast<QComboBox*>(editor);
+   int column = index.column();
+
+   if ( column == SALTNAMECOL || column == SALTADDTOCOL ) {
+      QComboBox *box = qobject_cast<QComboBox*>(editor);
       box->setCurrentIndex(index.model()->data(index,Qt::UserRole).toInt());
    }
    else {
-      QLineEdit* line = static_cast<QLineEdit*>(editor);
+      QLineEdit* line = qobject_cast<QLineEdit*>(editor);
       line->setText(index.model()->data(index, Qt::DisplayRole).toString());
    }
 }
 
 void SaltItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
+   int column = index.column();
 
-   if ( index.column() == SALTADDTOCOL ) {
+   if ( column == SALTNAMECOL || column == SALTADDTOCOL ) {
       QComboBox* box = static_cast<QComboBox*>(editor);
-      int curr = box->currentIndex();
-      int ndx = index.model()->data(index,Qt::UserRole).toInt();
+      int selected = box->currentData().toInt();
+      int saved = model->data(index,Qt::UserRole).toInt();
 
-      if ( curr != ndx ) {
-         model->setData(index,curr,Qt::EditRole);
+      if ( selected != saved ) {
+         model->setData(index,selected,Qt::EditRole);
       }
    }
    else {

@@ -218,8 +218,7 @@ double Mash::totalMashWater_l()
    MashStep* step;
 
    size = steps.size();
-   for( i = 0; i < size; ++i )
-   {
+   for( i = 0; i < size; ++i ) {
       step = steps[i];
 
       if( step->isInfusion() )
@@ -233,8 +232,7 @@ double Mash::totalInfusionAmount_l() const
 {
    double waterAdded_l = 0.0;
 
-   foreach( MashStep* i, mashSteps() )
-   {
+   foreach( MashStep* i, mashSteps() ) {
       if( i->isInfusion() && ! i->isSparge() )
          waterAdded_l += i->infuseAmount_l();
    }
@@ -246,9 +244,8 @@ double Mash::totalSpargeAmount_l() const
 {
    double waterAdded_l = 0.0;
 
-   foreach( MashStep* i, mashSteps() )
-   {
-      if( ! i->isSparge() )
+   foreach( MashStep* i, mashSteps() ) {
+      if( i->isSparge() )
          waterAdded_l += i->infuseAmount_l();
    }
 
