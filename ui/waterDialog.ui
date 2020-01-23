@@ -22,15 +22,12 @@
     <height>0</height>
    </size>
   </property>
-  <property name="acceptDrops">
-   <bool>true</bool>
-  </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_left">
        <item>
@@ -127,40 +124,39 @@
          <property name="title">
           <string>% RO in</string>
          </property>
-         <layout class="QFormLayout" name="formLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_mashRO">
-            <property name="text">
-             <string>Mash</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="BtGenericEdit" name="lineEdit_mashRO">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="1">
            <widget class="QLabel" name="label_spargeRO">
             <property name="text">
              <string>Sparge</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="BtGenericEdit" name="lineEdit_spargeRO">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="1" column="2">
+           <widget class="QSpinBox" name="spinBox_spargeRO"/>
+          </item>
+          <item row="0" column="2">
+           <widget class="QSpinBox" name="spinBox_mashRO"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_mashRO">
+            <property name="text">
+             <string>Mash</string>
             </property>
            </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -238,16 +234,16 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_sulfate">
+           <layout class="QHBoxLayout" name="horizontalLayout_so4">
             <item>
-             <widget class="QLabel" name="label_sulfate">
+             <widget class="QLabel" name="label_so4">
               <property name="text">
                <string>SO&lt;sub&gt;4&lt;/sub&gt;</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_sulfate" native="true">
+             <widget class="StyleRangeWidget" name="rangeWidget_so4" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -337,16 +333,16 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_bicarb">
+           <layout class="QHBoxLayout" name="horizontalLayout_hco3">
             <item>
-             <widget class="QLabel" name="label_bicarb">
+             <widget class="QLabel" name="label_hco3">
               <property name="text">
                <string>HCO&lt;sub&gt;3&lt;/sub&gt;</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_bicarb" native="true">
+             <widget class="StyleRangeWidget" name="rangeWidget_hco3" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -408,25 +404,59 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_right" stretch="1,3,1,1">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QCheckBox" name="checkBox_magix">
-         <property name="text">
-          <string>Magix</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_salts" stretch="1,2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="MiscTreeView" name="treeView_salts"/>
+          <widget class="QTableView" name="tableView_salts"/>
          </item>
          <item>
-          <widget class="QTableView" name="tableView_salts">
-           <property name="mimeAccepted" stdset="0">
-            <string notr="true">application/x-brewtarget-ingredient</string>
+          <layout class="QVBoxLayout" name="verticalLayout_ferm">
+           <property name="spacing">
+            <number>1</number>
            </property>
-          </widget>
+           <item>
+            <widget class="QPushButton" name="pushButton_addSalt">
+             <property name="toolTip">
+              <string>Add a salt</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../brewtarget.qrc">
+               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_removeSalt">
+             <property name="toolTip">
+              <string>Remove selected salt</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../brewtarget.qrc">
+               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -443,50 +473,20 @@
           <string>Totals</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="2" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_totalbicarb">
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalcaso4">
             <item>
-             <widget class="BtMassLabel" name="label_totalnahco3">
+             <widget class="BtMassLabel" name="label_totalcaso4">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
-               <cstring>lineEdit_totalnahco3</cstring>
+               <cstring>lineEdit_totalcaso4</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="BtMassEdit" name="lineEdit_totalnahco3">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_totalnacl">
-            <item>
-             <widget class="BtMassLabel" name="label_totalnacl">
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="buddy">
-               <cstring>lineEdit_totalnacl</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="BtMassEdit" name="lineEdit_totalnacl">
+             <widget class="BtMassEdit" name="lineEdit_totalcaso4">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -533,20 +533,20 @@
             </item>
            </layout>
           </item>
-          <item row="2" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_totalcaso4">
+          <item row="2" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalnahco3">
             <item>
-             <widget class="BtMassLabel" name="label_totalcaso4">
+             <widget class="BtMassLabel" name="label_totalnahco3">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
-               <cstring>lineEdit_totalcaso4</cstring>
+               <cstring>lineEdit_totalnahco3</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="BtMassEdit" name="lineEdit_totalcaso4">
+             <widget class="BtMassEdit" name="lineEdit_totalnahco3">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -564,9 +564,9 @@
            </layout>
           </item>
           <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_totalcacl">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalcacl2">
             <item>
-             <widget class="BtMassLabel" name="label_totalcacl">
+             <widget class="BtMassLabel" name="label_totalcacl2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -577,12 +577,42 @@
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCl&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="buddy">
-               <cstring>lineEdit_totalcacl</cstring>
+               <cstring>lineEdit_totalcacl2</cstring>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="BtMassEdit" name="lineEdit_totalcacl">
+             <widget class="BtMassEdit" name="lineEdit_totalcacl2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_totalnacl">
+            <item>
+             <widget class="BtMassLabel" name="label_totalnacl">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="buddy">
+               <cstring>lineEdit_totalnacl</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="BtMassEdit" name="lineEdit_totalnacl">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -637,7 +667,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QDialogButtonBox" name="buttonBox_save">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -650,9 +680,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
+   <class>CustomComboBox</class>
+   <extends>QComboBox</extends>
+   <header>CustomComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>StyleRangeWidget</class>
+   <extends>QWidget</extends>
+   <header>StyleRangeWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WaterButton</class>
+   <extends>QPushButton</extends>
+   <header>WaterButton.h</header>
   </customwidget>
   <customwidget>
    <class>BtMassEdit</class>
@@ -673,31 +713,13 @@
     <slot>popContextMenu(QPoint)</slot>
    </slots>
   </customwidget>
-  <customwidget>
-   <class>CustomComboBox</class>
-   <extends>QComboBox</extends>
-   <header>CustomComboBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>StyleRangeWidget</class>
-   <extends>QWidget</extends>
-   <header>StyleRangeWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MiscTreeView</class>
-   <extends>QTreeView</extends>
-   <header>BtTreeView.h</header>
-  </customwidget>
-  <customwidget>
-   <class>WaterButton</class>
-   <extends>QPushButton</extends>
-   <header>WaterButton.h</header>
-  </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../brewtarget.qrc"/>
+ </resources>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>buttonBox_save</sender>
    <signal>accepted()</signal>
    <receiver>waterDialog</receiver>
    <slot>accept()</slot>
@@ -713,7 +735,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>buttonBox_save</sender>
    <signal>rejected()</signal>
    <receiver>waterDialog</receiver>
    <slot>reject()</slot>

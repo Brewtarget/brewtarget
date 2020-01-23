@@ -39,12 +39,11 @@ class SaltItemDelegate;
 class Recipe;
 class WaterDialog;
 
-enum{ SALTNAMECOL, SALTAMOUNTCOL, SALTADDTOCOL,
-      SALTNUMCOLS /*This one MUST be last*/};
 
+enum{ SALTNAMECOL, SALTAMOUNTCOL, SALTADDTOCOL, SALTNUMCOLS /*This one MUST be last*/};
 /*!
  * \class SaltTableModel
- * \author Philip G. Lee
+ * \author mik firestone
  *
  * \brief Table model for salts.
  */
@@ -53,7 +52,7 @@ class SaltTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   SaltTableModel(QTableView* parent=nullptr, WaterDialog* gp = nullptr);
+   SaltTableModel(QTableView* parent=nullptr);
    ~SaltTableModel();
    void observeRecipe(Recipe* rec);
    void addSalt(Salt* salt);
@@ -84,25 +83,26 @@ public:
 
     double total( Salt::Types type ) const;
 
-protected slots:
+   void removeSalts(QList<int>deadSalts);
+
+public slots:
    void changed(QMetaProperty,QVariant);
    void removeSalt(Salt* salt);
-   void catchSalt(Salt* salt);
-   void catchSalts(QList<Salt*> salt);
+   void catchSalt();
    void contextMenu(const QPoint &point);
 
 signals:
    void newTotals();
 
 private:
-   QVector<Qt::ItemFlags> colFlags;
    QList<Salt*> saltObs;
    Recipe* recObs;
    QTableView* parentTableWidget;
-   WaterDialog* dropper;
+   double spargePct;
 
    void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
    void setDisplayScale(int column, Unit::unitScale displayScale);
+
    QString generateName(int column) const;
    Unit::unitDisplay displayUnit(int column) const;
    Unit::unitScale displayScale(int column) const;
@@ -110,7 +110,7 @@ private:
 
 /*!
  * \class SaltItemDelegate
- * \author Philip G. Lee
+ * \author Mik Firestone
  *
  * Item delegate for salt tables.
  */

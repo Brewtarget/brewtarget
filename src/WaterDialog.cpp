@@ -36,11 +36,13 @@
 #include "salt.h"
 
 WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
-   recObs(nullptr)
+   recObs(nullptr),
+   base(nullptr),
+   target(nullptr),
+   m_mashRO(0.0),
+   m_spargeRO(0.0)
 {
    setupUi(this);
-   base = nullptr;
-   target = nullptr;
 
    // initialize the two buttons and lists (I think)
    baseListModel = new WaterListModel(baseProfileCombo);
@@ -65,27 +67,38 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    rangeWidget_cl->setPrecision(1);
    rangeWidget_mg->setPrecision(1);
    rangeWidget_na->setPrecision(1);
-   rangeWidget_bicarb->setPrecision(1);
-   rangeWidget_sulfate->setPrecision(1);
-
-   // setup the misc tree
-   SaltTreeFilterProxyModel* sfilter = new SaltTreeFilterProxyModel(this);
-   sfilter->setSourceModel( treeView_salts->model());
-   treeView_salts->setModel(sfilter);
-   sfilter->setDynamicSortFilter(true);
-   treeView_salts->setFilter(sfilter);
+   rangeWidget_hco3->setPrecision(1);
+   rangeWidget_so4->setPrecision(1);
 
    // and now let's see what the table does.
-   saltTableModel = new SaltTableModel(tableView_salts,this);
+   saltTableModel = new SaltTableModel(tableView_salts);
    tableView_salts->setItemDelegate(new SaltItemDelegate(tableView_salts));
    tableView_salts->setModel(saltTableModel);
-   // can I catch the dropped salts?
-   tableView_salts->setAcceptDrops(true);
 
-   connect( saltTableModel, &SaltTableModel::newTotals, this, &WaterDialog::newTotals);
+   connect( saltTableModel,        &SaltTableModel::newTotals, this, &WaterDialog::newTotals);
+   connect( pushButton_addSalt,    &QAbstractButton::clicked, saltTableModel, &SaltTableModel::catchSalt);
+   connect( pushButton_removeSalt, &QAbstractButton::clicked, this, &WaterDialog::removeSalts);
+
+   connect( spinBox_mashRO, SIGNAL(valueChanged(int)), this, SLOT(setMashRO(int)));
+   connect( spinBox_spargeRO, SIGNAL(valueChanged(int)), this, SLOT(setSpargeRO(int)));
+
 }
 
 WaterDialog::~WaterDialog() {}
+
+void WaterDialog::setMashRO(int val)
+{
+   m_mashRO = val/100.0;
+   if ( base ) base->setMashRO(m_mashRO);
+   newTotals();
+}
+
+void WaterDialog::setSpargeRO(int val)
+{
+   m_spargeRO = val/100.0;
+   if ( base ) base->setSpargeRO(m_spargeRO);
+   newTotals();
+}
 
 void WaterDialog::setSlider( RangedSlider* slider, double data)
 {
@@ -119,13 +132,20 @@ void WaterDialog::setRecipe(Recipe *rec)
    }
 
    if ( base != nullptr ) {
+
+      m_mashRO = base->mashRO();
+      spinBox_mashRO->setValue( QVariant(m_mashRO*100).toInt());
+      m_spargeRO = base->spargeRO();
+      spinBox_spargeRO->setValue( QVariant(m_spargeRO*100).toInt());
+      double modifier = 1 - ( m_mashRO * mash->totalInfusionAmount_l() + m_spargeRO * mash->totalSpargeAmount_l() ) / mash->totalMashWater_l();
+
       baseProfileButton->setWater(base);
-      rangeWidget_ca->setValue(base->calcium_ppm());
-      rangeWidget_cl->setValue(base->chloride_ppm());
-      rangeWidget_mg->setValue(base->magnesium_ppm());
-      rangeWidget_na->setValue(base->sodium_ppm());
-      rangeWidget_bicarb->setValue(base->bicarbonate_ppm());
-      rangeWidget_sulfate->setValue(base->sulfate_ppm());
+      rangeWidget_ca->setValue(modifier * base->calcium_ppm());
+      rangeWidget_cl->setValue(modifier * base->chloride_ppm());
+      rangeWidget_mg->setValue(modifier * base->magnesium_ppm());
+      rangeWidget_na->setValue(modifier * base->sodium_ppm());
+      rangeWidget_hco3->setValue(modifier * base->bicarbonate_ppm());
+      rangeWidget_so4->setValue(modifier * base->sulfate_ppm());
    }
    if ( target != nullptr ) {
       targetProfileButton->setWater(target);
@@ -133,9 +153,10 @@ void WaterDialog::setRecipe(Recipe *rec)
       setSlider(rangeWidget_cl, target->chloride_ppm());
       setSlider(rangeWidget_mg,target->magnesium_ppm());
       setSlider(rangeWidget_na, target->sodium_ppm());
-      setSlider(rangeWidget_bicarb, target->bicarbonate_ppm());
-      setSlider(rangeWidget_sulfate, target->sulfate_ppm());
+      setSlider(rangeWidget_hco3, target->bicarbonate_ppm());
+      setSlider(rangeWidget_so4, target->sulfate_ppm());
    }
+   newTotals();
 }
 
 void WaterDialog::update_baseProfile(int selected)
@@ -175,12 +196,12 @@ void WaterDialog::update_targetProfile(int selected)
       target->setType(Water::TARGET);
       targetProfileButton->setWater(target);
 
-      setSlider(rangeWidget_ca,      target->calcium_ppm());
-      setSlider(rangeWidget_cl,      target->chloride_ppm());
-      setSlider(rangeWidget_mg,      target->magnesium_ppm());
-      setSlider(rangeWidget_na,      target->sodium_ppm());
-      setSlider(rangeWidget_bicarb,  target->bicarbonate_ppm());
-      setSlider(rangeWidget_sulfate, target->sulfate_ppm());
+      setSlider(rangeWidget_ca,   target->calcium_ppm());
+      setSlider(rangeWidget_cl,   target->chloride_ppm());
+      setSlider(rangeWidget_mg,   target->magnesium_ppm());
+      setSlider(rangeWidget_na,   target->sodium_ppm());
+      setSlider(rangeWidget_hco3, target->bicarbonate_ppm());
+      setSlider(rangeWidget_so4,  target->sulfate_ppm());
    }
 }
 
@@ -189,7 +210,8 @@ void WaterDialog::newTotals()
    if ( ! recObs || ! recObs->mash() )
       return;
 
-   double allTheWaters = recObs->mash()->totalMashWater_l();
+   Mash* mash = recObs->mash();
+   double allTheWaters = mash->totalMashWater_l();
 
    if ( qFuzzyCompare(allTheWaters,0.0) ) {
       Brewtarget::logW(QString("How did you get this far with no mash water?"));
@@ -198,7 +220,7 @@ void WaterDialog::newTotals()
    // Two major things need to happen here:
    //   o the totals need to be updated
    //   o the slides need to be updated
-   lineEdit_totalcacl->setText(saltTableModel->total(Salt::CACL2));
+   lineEdit_totalcacl2->setText(saltTableModel->total(Salt::CACL2));
    lineEdit_totalcaco3->setText(saltTableModel->total(Salt::CACO3));
    lineEdit_totalcaso4->setText(saltTableModel->total(Salt::CASO4));
    lineEdit_totalmgso4->setText(saltTableModel->total(Salt::MGSO4));
@@ -209,102 +231,37 @@ void WaterDialog::newTotals()
    // water ppm. I still need to make this care about the %RO.
 
    if ( base != nullptr ) {
-      rangeWidget_ca->setValue( saltTableModel->total_Ca() / allTheWaters + base->calcium_ppm());
-      rangeWidget_mg->setValue( saltTableModel->total_Mg() / allTheWaters + base->magnesium_ppm());
-      rangeWidget_sulfate->setValue( saltTableModel->total_SO4() / allTheWaters + base->sulfate_ppm());
-      rangeWidget_na->setValue( saltTableModel->total_Na() / allTheWaters + base->sodium_ppm());
-      rangeWidget_cl->setValue( saltTableModel->total_Cl() / allTheWaters + base->chloride_ppm());
-      rangeWidget_bicarb->setValue( saltTableModel->total_HCO3() / allTheWaters + base->bicarbonate_ppm());
 
-      qDebug() << "grams of caso4 =" << saltTableModel->total(Salt::MGSO4);
-      qDebug() << "total water =" << allTheWaters;
-      qDebug() << "total_ca = " << saltTableModel->total_Ca();
-      qDebug() << "total_so4 = " << saltTableModel->total_SO4();
+      // I hope this is right. All this 'rithmetic is making me head hurt.
+      // If we are watering down (hahaha) the base water with RO, this should adjust the salts properly.
+      double modifier = 1 - ( (m_mashRO * mash->totalInfusionAmount_l()) + (m_spargeRO * mash->totalSpargeAmount_l())) / allTheWaters;
+
+      rangeWidget_ca->setValue( saltTableModel->total_Ca() / allTheWaters + modifier * base->calcium_ppm());
+      rangeWidget_mg->setValue( saltTableModel->total_Mg() / allTheWaters + modifier * base->magnesium_ppm());
+      rangeWidget_na->setValue( saltTableModel->total_Na() / allTheWaters + modifier * base->sodium_ppm());
+      rangeWidget_cl->setValue( saltTableModel->total_Cl() / allTheWaters + modifier * base->chloride_ppm());
+      rangeWidget_hco3->setValue( saltTableModel->total_HCO3() / allTheWaters + modifier * base->bicarbonate_ppm());
+      rangeWidget_so4->setValue( saltTableModel->total_SO4() / allTheWaters + modifier * base->sulfate_ppm());
+
    }
    else {
       rangeWidget_ca->setValue( saltTableModel->total_Ca() / allTheWaters );
       rangeWidget_mg->setValue( saltTableModel->total_Mg() / allTheWaters );
-      rangeWidget_sulfate->setValue( saltTableModel->total_SO4() / allTheWaters );
       rangeWidget_na->setValue( saltTableModel->total_Na() / allTheWaters );
       rangeWidget_cl->setValue( saltTableModel->total_Cl() / allTheWaters );
-      rangeWidget_bicarb->setValue( saltTableModel->total_HCO3() / allTheWaters );
+      rangeWidget_hco3->setValue( saltTableModel->total_HCO3() / allTheWaters );
+      rangeWidget_so4->setValue( saltTableModel->total_SO4() / allTheWaters );
 
    }
-
 }
 
-void WaterDialog::dropEvent(QDropEvent *dpEvent)
+void WaterDialog::removeSalts()
 {
-   const QMimeData* mData;
-   int _type;
-   QString name;
-   int id;
-   QList<Misc*> salty;
+   QModelIndexList selected = tableView_salts->selectionModel()->selectedIndexes();
+   QList<int> deadSalts;
 
-   if ( acceptMime.size() == 0 )
-      acceptMime = tableView_salts->property("mimeAccepted").toString();
-
-   if ( ! dpEvent->mimeData()->hasFormat(acceptMime)) {
-      return;
+   foreach( QModelIndex i, selected) {
+      deadSalts.append( i.row() );
    }
-
-   mData = dpEvent->mimeData();
-   QByteArray itemData = mData->data(acceptMime);
-   QDataStream dStream(&itemData, QIODevice::ReadOnly);
-
-   while ( ! dStream.atEnd() ) {
-      dStream >> _type >> id >> name;
-      if ( _type == BtTreeItem::MISC )
-         salty.append( Database::instance().misc(id) );
-   }
-
-   if ( salty.size() > 0 )
-      addSalts(salty);
-   // this is like "mischief managed"
-   dpEvent->acceptProposedAction();
-}
-
-void WaterDialog::addSalts(QList<Misc*> dropped)
-{
-   QList<Salt*> caught;
-   if ( recObs == nullptr )
-      return;
-
-   foreach( Misc *m, dropped ) {
-      QString mName = m->name();
-
-      Salt::Types sType = Salt::NONE;
-
-      // Oh, this just got hard. We dropped MISC but I need salts.
-      Salt* gaq = new Salt(m->name(), true);
-      if (mName == QString("Calcium Chloride") )
-         sType = Salt::CACL2;
-      else if (mName == QString("Calcium Carbonate") )
-         sType = Salt::CACO3;
-      else if (mName == QString("Gypsum"))
-         sType = Salt::CASO4;
-      else if (mName == QString("Epsom Salt") )
-         sType = Salt::MGSO4;
-      else if ( mName == QString("Kosher Salt") )
-         sType = Salt::NACL;
-      else if ( mName == QString("Baking Soda") )
-         sType = Salt::NAHCO3;
-      else
-         Brewtarget::logW( QString("Unknown brewing salt %1").arg(mName));
-      gaq->setType(sType);
-      gaq->setAddTo(Salt::BOTH);
-      gaq->m_misc_id = m->key();
-      caught.append(gaq);
-   }
-   if ( caught.size() > 0 ) {
-      emit droppedSalts(caught);
-   }
-}
-void WaterDialog::dragEnterEvent(QDragEnterEvent *deEvent)
-{
-   if ( acceptMime.size() == 0 )
-      acceptMime = tableView_salts->property("mimeAccepted").toString();
-
-   if (deEvent->mimeData()->hasFormat(acceptMime) )
-      deEvent->acceptProposedAction();
+   saltTableModel->removeSalts(deadSalts);
 }

@@ -51,7 +51,7 @@ class HopTableModel : public QAbstractTableModel
 
 public:
 
-   HopTableModel(QTableView* parent=0, bool editable=true);
+   HopTableModel(QTableView* parent=nullptr, bool editable=true);
    virtual ~HopTableModel();
    //! \brief Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -127,7 +127,7 @@ class HopItemDelegate : public QItemDelegate
    Q_OBJECT
 
 public:
-   HopItemDelegate(QObject* parent = 0);
+   HopItemDelegate(QObject* parent = nullptr);
 
    // Inherited functions.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
