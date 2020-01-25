@@ -28,6 +28,7 @@
 
 class WaterListModel;
 class WaterSortFilterProxyModel;
+class WaterEditor;
 class SaltTableModel;
 class Salt;
 
@@ -54,6 +55,7 @@ public slots:
    void removeSalts();
    void setMashRO(int val);
    void setSpargeRO(int val);
+   void updateAcids();
 
 signals:
    void newSalt(Salt* drop);
@@ -64,15 +66,27 @@ private:
    WaterListModel *baseListModel;
    WaterListModel *targetListModel;
    SaltTableModel *saltTableModel;
+   WaterEditor* baseProfileEdit;
+   WaterEditor* targetProfileEdit;
    Recipe* recObs;
    Water *base, *target;
    double m_mashRO;
    double m_spargeRO;
+   double m_total_grains;
+   double m_thickness;
+   double m_weighted_colors;
 
    WaterSortFilterProxyModel *baseFilter;
    WaterSortFilterProxyModel *targetFilter;
 
    void setSlider(RangedSlider* slider, double data);
+   void calculateGrainEquivalent();
+
+   double calculateRA() const;
+   double calculateGristpH();
+   double calculateMashpH();
+   double calculateSaltpH();
+   double calculateAcidpH();
 
 };
 

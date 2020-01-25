@@ -135,67 +135,67 @@ int Salt::miscId() const { return m_misc_id; }
 double Salt::Ca() const
 {
    if ( m_add_to == Salt::NEVER ) {
-      return 0;
+      return 0.0;
    }
 
    switch (m_type) {
-      case Salt::CACL2: return 272 * m_amount * 1000;
-      case Salt::CACO3: return 200 * m_amount * 1000;
-      case Salt::CASO4: return 232 * m_amount * 1000;
-      default: return 0;
+      case Salt::CACL2: return 272.0 * m_amount * 1000.0;
+      case Salt::CACO3: return 200.0 * m_amount * 1000.0;
+      case Salt::CASO4: return 232.0 * m_amount * 1000.0;
+      default: return 0.0;
    }
 }
 
 double Salt::Cl() const
 {
    if ( m_add_to == Salt::NEVER )
-      return 0;
+      return 0.0;
    switch (m_type) {
-      case Salt::CACL2: return 483 * m_amount * 1000;
-      case Salt::NACL: return 607 * m_amount * 1000;
-      default: return 0;
+      case Salt::CACL2: return 483 * m_amount * 1000.0;
+      case Salt::NACL: return 607 * m_amount * 1000.0;
+      default: return 0.0;
    }
 }
 
 double Salt::CO3() const
 {
    if ( m_add_to == Salt::NEVER )
-      return 0;
-   return m_type == Salt::CACO3 ? 610  * m_amount * 1000: 0;
+      return 0.0;
+   return m_type == Salt::CACO3 ? 610.0  * m_amount * 1000.0: 0.0;
 }
 
 double Salt::HCO3() const
 {
    if ( m_add_to == Salt::NEVER )
-      return 0;
-   return m_type == Salt::NAHCO3 ? 726 * m_amount * 1000: 0;
+      return 0.0;
+   return m_type == Salt::NAHCO3 ? 726.0 * m_amount * 1000.0: 0.0;
 }
 
 double Salt::Mg() const
 {
    if ( m_add_to == Salt::NEVER )
-      return 0;
-   return m_type == Salt::MGSO4 ? 99   * m_amount * 1000: 0;
+      return 0.0;
+   return m_type == Salt::MGSO4 ? 99.0 * m_amount * 1000.0: 0.0;
 }
 
 double Salt::Na() const
 {
    if ( m_add_to == Salt::NEVER )
-      return 0;
+      return 0.0;
    switch (m_type) {
-      case Salt::NACL: return 393 * m_amount * 1000;
-      case Salt::NAHCO3: return 274 * m_amount * 1000;
-      default: return 0;
+      case Salt::NACL: return 393.0 * m_amount * 1000.0;
+      case Salt::NAHCO3: return 274.0 * m_amount * 1000.0;
+      default: return 0.0;
    }
 }
 
 double Salt::SO4() const
 {
    if ( m_add_to == Salt::NEVER )
-      return 0;
+      return 0.0;
    switch (m_type) {
-      case Salt::CASO4: return 558 * m_amount * 1000;
-      case Salt::MGSO4: return 389 * m_amount * 1000;
-      default: return 0;
+      case Salt::CASO4: return 558.0 * m_amount * 1000.0;
+      case Salt::MGSO4: return 389.0 * m_amount * 1000.0;
+      default: return 0.0;
    }
 }

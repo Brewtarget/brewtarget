@@ -71,6 +71,7 @@ class Recipe : public BeerXMLElement
    friend class Database;
    friend class RecipeFormatter;
    friend class MainWindow;
+   friend class WaterDialog;
 public:
 
    virtual ~Recipe() {}

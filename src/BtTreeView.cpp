@@ -39,12 +39,14 @@
 #include "yeast.h"
 #include "brewnote.h"
 #include "style.h"
+#include "water.h"
 #include "FermentableDialog.h"
 #include "EquipmentEditor.h"
 #include "HopDialog.h"
 #include "MiscDialog.h"
 #include "StyleEditor.h"
 #include "YeastDialog.h"
+#include "WaterEditor.h"
 
 BtTreeView::BtTreeView(QWidget *parent, BtTreeModel::TypeMasks type) :
    QTreeView(parent)
@@ -163,6 +165,11 @@ Yeast* BtTreeView::yeast(const QModelIndex &index) const
 Style* BtTreeView::style(const QModelIndex &index) const
 {
    return _model->style(_filter->mapToSource(index));
+}
+
+Water* BtTreeView::water(const QModelIndex &index) const
+{
+   return _model->water(_filter->mapToSource(index));
 }
 
 BrewNote* BtTreeView::brewNote(const QModelIndex &index) const
@@ -365,6 +372,9 @@ void BtTreeView::newIngredient() {
       case BtTreeModel::YEASTMASK:
          qobject_cast<YeastDialog*>(_editor)->newYeast(folder);
          break;
+      case BtTreeModel::WATERMASK:
+         qobject_cast<WaterEditor*>(_editor)->newWater(folder);
+         break;
       default:
          Brewtarget::logW(QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type));
    }
@@ -417,6 +427,9 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
          break;
       case BtTreeModel::YEASTMASK:
          _newMenu->addAction(tr("Yeast"), this, SLOT(newIngredient()));
+         break;
+      case BtTreeModel::WATERMASK:
+         _newMenu->addAction(tr("Water"), this, SLOT(newIngredient()));
          break;
       default:
          Brewtarget::logW(QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type));
@@ -516,6 +529,9 @@ void BtTreeView::copySelected(QModelIndexList selected)
          case BtTreeItem::YEAST:
             newName = verifyCopy(tr("Yeast"),_model->name(trans), &abort);
             break;
+         case BtTreeItem::WATER:
+            newName = verifyCopy(tr("Water"),_model->name(trans), &abort);
+            break;
          default:
             Brewtarget::logW( QString("BtTreeView::copySelected Unknown type: %1").arg(_model->type(trans)));
       }
@@ -598,6 +614,9 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
          case BtTreeItem::FOLDER:
             confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(trans));
             break;
+         case BtTreeItem::WATER:
+            confirmDelete = verifyDelete(confirmDelete,tr("Water"),_model->name(trans));
+            break;
          default:
             Brewtarget::logW( QString("BtTreeView::deleteSelected Unknown type: %1").arg(_model->type(trans)));
       }
@@ -665,5 +684,11 @@ YeastTreeView::YeastTreeView(QWidget *parent)
 // Nope. Apparently not, cause I keep adding more
 StyleTreeView::StyleTreeView(QWidget *parent)
    : BtTreeView(parent,BtTreeModel::STYLEMASK)
+{
+}
+
+// Cthulhu take me
+WaterTreeView::WaterTreeView(QWidget *parent)
+   : BtTreeView(parent,BtTreeModel::WATERMASK)
 {
 }

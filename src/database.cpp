@@ -80,6 +80,8 @@
 #include "InstructionSchema.h"
 #include "BrewnoteSchema.h"
 #include "RecipeSchema.h"
+#include "WaterSchema.h"
+#include "SaltSchema.h"
 
 // Static members.
 Database* Database::dbInstance = nullptr;
@@ -879,6 +881,7 @@ Misc*        Database::misc(int key)        { return allMiscs[key]; }
 Style*       Database::style(int key)       { return allStyles[key]; }
 Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
 Salt*        Database::salt(int key)        { return allSalts[key]; }
+Water*       Database::water(int key)       { return allWaters[key]; }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
@@ -1796,6 +1799,7 @@ int Database::insertElement(BeerXMLElement* ins)
    QString insert = schema->generateInsertProperties(Brewtarget::dbType());
    QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
+   qDebug() << "expected properties =" << allProps.size();
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
@@ -1806,13 +1810,16 @@ int Database::insertElement(BeerXMLElement* ins)
        else {
           QVariant wtf = ins->property(prop.toUtf8().data() );
           // I've arranged it such that the bindings are on the property names. It simplifies a lot
+          qDebug() << "binding " << prop << wtf;
           q.bindValue( QString(":%1").arg(prop), wtf);
        }
    }
 
    try {
       if ( ! q.exec() ) {
-         throw QString("could not insert a record into %1").arg(ins->table());
+         throw QString("could not insert a record into %1: %2")
+               .arg(schema->tableName())
+               .arg(insert);
       }
 
       key = q.lastInsertId().toInt();
@@ -1821,7 +1828,7 @@ int Database::insertElement(BeerXMLElement* ins)
    catch (QString e) {
       sqlDatabase().rollback();
       Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
-      throw; // rethrow the error until somebody cares
+      abort();
    }
    ins->_key = key;
 

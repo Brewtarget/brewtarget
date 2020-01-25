@@ -39,18 +39,20 @@ class WaterEditor : public QDialog, public Ui::waterEditor
 {
     Q_OBJECT
 public:
-    WaterEditor(QWidget *parent = 0);
+    WaterEditor(QWidget *parent = nullptr);
     virtual ~WaterEditor() {}
 
     /*!
      * Sets the water we want to observe.
      */
     void setWater(Water* water);
+    void newWater(QString folder);
 
  public slots:
-    void showChanges(QMetaProperty* prop = 0);
+    void showChanges(QMetaProperty* prop = nullptr);
     void saveAndClose();
     void changed(QMetaProperty,QVariant);
+    void clearAndClose();
 
 private:
     Water* obs; // Observed water.

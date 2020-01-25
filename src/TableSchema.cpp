@@ -1172,7 +1172,7 @@ void TableSchema::defineWaterTable()
    m_properties[kpropType]        = new PropertySchema( kpropType,        kcolWaterType,        QString(),           QString("int"),     QVariant(0));
    m_properties[kpropMashRO]      = new PropertySchema( kpropMashRO,      kcolWaterMashRO,      QString(),           QString("real"),    QVariant(0.0));
    m_properties[kpropSpargeRO]    = new PropertySchema( kpropSpargeRO,    kcolWaterSpargeRO,    QString(),           QString("real"),    QVariant(0.0));
-   m_properties[kpropAdjustBoth]  = new PropertySchema( kpropAdjustBoth,  kcolWaterAdjustBoth,  QString(),           QString("boolean"), QVariant(true));
+   m_properties[kpropAsHCO3]      = new PropertySchema( kpropAsHCO3,      kcolWaterAsHCO3,      QString(),           QString("boolean"), QVariant(true));
 
    m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));

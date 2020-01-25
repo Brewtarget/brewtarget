@@ -43,6 +43,7 @@ class Misc;
 class Yeast;
 class Style;
 class BtFolder;
+class Water;
 
 /*!
  * \class BtTreeItem
@@ -52,7 +53,7 @@ class BtFolder;
  *
  * This provides a generic item from which the trees are built. Since most of
  * the actions required are the same regardless of the item being stored (e.g.
- * hop or equipment), this class considers them all the same. 
+ * hop or equipment), this class considers them all the same.
  *
  * It does assume that everything being stored can be cast into a QObject.
  */
@@ -61,83 +62,83 @@ class BtTreeItem
 
 public:
 
-   /*! 
+   /*!
     * The columns being displayed for recipes
     */
    enum RECIPEITEM {
       //! Recipe name
-      RECIPENAMECOL, 
+      RECIPENAMECOL,
       //! Recipe brewdate
-      RECIPEBREWDATECOL, 
+      RECIPEBREWDATECOL,
       //! Recipe style
-      RECIPESTYLECOL, 
+      RECIPESTYLECOL,
       //! the number of columns available for recipes
-      RECIPENUMCOLS 
+      RECIPENUMCOLS
    };
-   /*! 
+   /*!
     * The columns being displayed for equipment
     */
    enum EQUIPITEM {
       //! Equipment name
-      EQUIPMENTNAMECOL, 
+      EQUIPMENTNAMECOL,
       //! Equipment boil time
-      EQUIPMENTBOILTIMECOL, 
+      EQUIPMENTBOILTIMECOL,
       //! the number of columns available for equipment
       EQUIPMENTNUMCOLS
    };
-   /*! 
+   /*!
     * The columns being displayed for fermentables
     */
    enum FERMITEM {
       //! Fermentable name
-      FERMENTABLENAMECOL, 
+      FERMENTABLENAMECOL,
       //! Fermentable type
-      FERMENTABLETYPECOL, 
+      FERMENTABLETYPECOL,
       //! Fermentable color
-      FERMENTABLECOLORCOL, 
+      FERMENTABLECOLORCOL,
       //! the number of columns available for fermentables
       FERMENTABLENUMCOLS
    };
-   /*! 
+   /*!
     * The columns being displayed for hops
     */
    enum HOPITEM {
       //! Hop name
-      HOPNAMECOL, 
+      HOPNAMECOL,
       //! Hop form
-      HOPFORMCOL, 
+      HOPFORMCOL,
       //! Hop use
-      HOPUSECOL, 
+      HOPUSECOL,
       //! the number of columns available for hops
       HOPNUMCOLS
    };
-   /*! 
+   /*!
     * The columns being displayed for misc
     */
    enum MISCITEM {
       //! Misc name
-      MISCNAMECOL, 
+      MISCNAMECOL,
       //! Misc type
-      MISCTYPECOL, 
+      MISCTYPECOL,
       //! Misc user
-      MISCUSECOL, 
+      MISCUSECOL,
       //! the number of columns available for misc
       MISCNUMCOLS
    };
-   /*! 
+   /*!
     * The columns being displayed for yeast
     */
    enum YEASTITEM {
       //! Yeast name
-      YEASTNAMECOL, 
+      YEASTNAMECOL,
       //! Yeast type
-      YEASTTYPECOL, 
+      YEASTTYPECOL,
       //! Yeast form
-      YEASTFORMCOL, 
+      YEASTFORMCOL,
       //! the number of columns available for yeast
       YEASTNUMCOLS
    };
-   /*! 
+   /*!
     * The columns being displayed for brewnotes
     */
    enum BREWNOTEITEM {
@@ -154,7 +155,7 @@ public:
       STYLENAMECOL,
       //! Category
       STYLECATEGORYCOL,
-      //! category number 
+      //! category number
       STYLENUMBERCOL,
       //! category letter
       STYLELETTERCOL,
@@ -175,8 +176,28 @@ public:
       FOLDERNUMCOLS
    };
 
-   
-   /*! 
+   enum WATERITEM {
+      //! Name
+      WATERNAMECOL,
+      //! Ca
+      WATERCACOL,
+      //! HCO3
+      WATERHCO3COL,
+      //! SO4
+      WATERSO4COL,
+      //! Cl
+      WATERCLCOL,
+      //! NA
+      WATERNACOL,
+      //! MG
+      WATERMGCOL,
+      //! pH
+      WATERpHCOL,
+      //! and the standard for the number of columns
+      WATERNUMCOLS
+   };
+
+   /*!
     * This enum lists the different things that we can store in an item
     */
    enum ITEMTYPE {
@@ -189,6 +210,7 @@ public:
       BREWNOTE,
       STYLE,
       FOLDER,
+      WATER,
       NUMTYPES
    };
 
@@ -196,11 +218,11 @@ public:
 
    //! \brief A constructor that sets the \c type of the BtTreeItem and
    // the \c parent
-   BtTreeItem(int _type = NUMTYPES, BtTreeItem *parent=0 );
+   BtTreeItem(int _type = NUMTYPES, BtTreeItem *parent=nullptr );
    virtual ~BtTreeItem();
 
    //! \brief returns the child at \c number
-   BtTreeItem *child(int number);       
+   BtTreeItem *child(int number);
    //! \brief returns item's parent
    BtTreeItem *parent();
 
@@ -211,7 +233,7 @@ public:
    //! \brief returns number of columns associated with the item's \c type
    int columnCount(int _type) const;
    //! \brief returns the data of the item of \c type at \c column
-   QVariant data(int _type, int column);        
+   QVariant data(int _type, int column);
    //! \brief returns the index of the item in it's parents list
    int childNumber() const;
 
@@ -240,6 +262,8 @@ public:
    Style*       style();
    //! \brief returns data as a folder
    BtFolder*   folder();
+   //! \brief returns data as a water
+   Water*   water();
    //! \brief returns the data as a BeerXMLElement
    BeerXMLElement* thing();
 
@@ -248,7 +272,7 @@ public:
    //! \brief removes \c count items starting at \c position
    bool removeChildren(int position, int count);
 
-   //! \brief returns the name. 
+   //! \brief returns the name.
    QString name();
 
 private:
@@ -272,6 +296,7 @@ private:
    QVariant dataBrewNote(int column);
    QVariant dataStyle(int column);
    QVariant dataFolder(int column);
+   QVariant dataWater(int column);
 
    void setType(int t);
 };

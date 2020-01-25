@@ -41,6 +41,7 @@
 #include "yeast.h"
 #include "brewnote.h"
 #include "style.h"
+#include "water.h"
 
 // =========================================================================
 // ============================ CLASS STUFF ================================
@@ -107,6 +108,13 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          _type = BtTreeItem::YEAST;
          _mimeType = "application/x-brewtarget-ingredient";
          break;
+      case WATERMASK:
+         rootItem->insertChildren(items,1,BtTreeItem::WATER);
+         connect( &(Database::instance()), SIGNAL(newWaterSignal(Water*)),this, SLOT(elementAdded(Water*)));
+         connect( &(Database::instance()), SIGNAL(deletedSignal(Water*)),this, SLOT(elementRemoved(Water*)));
+         _type = BtTreeItem::WATER;
+         _mimeType = "application/x-brewtarget-ingredient";
+         break;
       default:
          Brewtarget::logW(QString("Invalid treemask: %1").arg(type));
    }
@@ -165,6 +173,8 @@ int BtTreeModel::columnCount( const QModelIndex &parent) const
       return BtTreeItem::YEASTNUMCOLS;
    case STYLEMASK:
       return BtTreeItem::STYLENUMCOLS;
+   case WATERMASK:
+      return BtTreeItem::WATERNUMCOLS;
    default:
       return 0;
    }
@@ -256,8 +266,14 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
    case FOLDERMASK:
       maxColumns = BtTreeItem::FOLDERNUMCOLS;
       break;
+   case WATERMASK:
+      maxColumns = BtTreeItem::WATERNUMCOLS;
+      break;
    default:
       // Backwards compatibility. This MUST be fixed prior to releasing the code
+      // I hate this comment! Why? Why MUST this be fixed prior to release?
+      // It wasn't, so what is "this" and what are the consequences. I am such
+      // an ass.
       maxColumns = BtTreeItem::RECIPENUMCOLS;
    }
 
@@ -302,6 +318,11 @@ QVariant BtTreeModel::toolTipData(const QModelIndex &index) const
          return whiskey->getToolTip( qobject_cast<Misc*>(thing(index)));
       case YEASTMASK:
          return whiskey->getToolTip( qobject_cast<Yeast*>(thing(index)));
+      case WATERMASK:
+         return thing(index)->name();
+         // this must wait until I implement the call. SEE? That's a proper
+         // comment. Not this weaksauce "must be fixed" shit.
+         // return whiskey->getToolTip( qobject_cast<Water*>(thing(index)));
       default:
          return item(index)->name();
    }
@@ -331,6 +352,8 @@ QVariant BtTreeModel::headerData(int section, Qt::Orientation orientation, int r
       return styleHeader(section);
    case FOLDERMASK:
       return folderHeader(section);
+   case WATERMASK:
+      return waterHeader(section);
    default:
       return QVariant();
    }
@@ -466,6 +489,32 @@ QVariant BtTreeModel::folderHeader(int section) const
    return QVariant();
 }
 
+QVariant BtTreeModel::waterHeader(int section) const
+{
+   switch(section)
+   {
+   case BtTreeItem::WATERNAMECOL:
+      return QVariant(tr("Name"));
+   case BtTreeItem::WATERCACOL:
+      return QVariant(tr("Ca"));
+   case BtTreeItem::WATERHCO3COL:
+      return QVariant(tr("HCO3"));
+   case BtTreeItem::WATERSO4COL:
+      return QVariant(tr("SO4"));
+   case BtTreeItem::WATERCLCOL:
+      return QVariant(tr("Cl"));
+   case BtTreeItem::WATERNACOL:
+      return QVariant(tr("Na"));
+   case BtTreeItem::WATERMGCOL:
+      return QVariant(tr("Mg"));
+   case BtTreeItem::WATERpHCOL:
+      return QVariant(tr("pH"));
+   }
+   Brewtarget::logW( QString("BtTreeModel::waterHeader Bad column: %1").arg(section) );
+   return QVariant();
+
+}
+
 bool BtTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim, int victimType )
 {
    if ( ! parent.isValid() )
@@ -574,6 +623,10 @@ QList<BeerXMLElement*> BtTreeModel::elements()
       break;
    case STYLEMASK:
       foreach( BeerXMLElement* elem, Database::instance().styles() )
+         elements.append(elem);
+      break;
+   case WATERMASK:
+      foreach( BeerXMLElement* elem, Database::instance().waters() )
          elements.append(elem);
       break;
    default:
@@ -687,6 +740,11 @@ BtFolder* BtTreeModel::folder(const QModelIndex &index) const
    return index.isValid() ? item(index)->folder() : nullptr;
 }
 
+Water* BtTreeModel::water(const QModelIndex &index) const
+{
+   return index.isValid() ? item(index)->water() : nullptr;
+}
+
 BeerXMLElement* BtTreeModel::thing(const QModelIndex &index) const
 {
    return index.isValid() ? item(index)->thing() : nullptr;
@@ -730,6 +788,11 @@ bool BtTreeModel::isStyle(const QModelIndex &index) const
 bool BtTreeModel::isBrewNote(const QModelIndex &index) const
 {
    return type(index) == BtTreeItem::BREWNOTE;
+}
+
+bool BtTreeModel::isWater(const QModelIndex &index) const
+{
+   return type(index) == BtTreeItem::WATER;
 }
 
 bool BtTreeModel::isFolder(const QModelIndex &index) const
@@ -826,6 +889,15 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             else
                failed = true;
             break;
+         case BtTreeItem::WATER:
+            Water *copyWater, *oldWater;
+            oldWater = water(ndx);
+            copyWater = Database::instance().newWater(oldWater); // Create a deep copy.
+            if ( copyWater )
+               copyWater->setName(name);
+            else
+               failed = true;
+            break;
          default:
             Brewtarget::logW(QString("copySelected:: unknown type %1").arg(type(ndx)));
       }
@@ -870,6 +942,9 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
             break;
          case BtTreeItem::BREWNOTE:
             Database::instance().remove( brewNote(ndx) );
+            break;
+         case BtTreeItem::WATER:
+            Database::instance().remove( water(ndx) );
             break;
          case BtTreeItem::FOLDER:
             // This one is weird.
@@ -1220,6 +1295,7 @@ void BtTreeModel::elementAdded(Misc* victim) { elementAdded(qobject_cast<BeerXML
 void BtTreeModel::elementAdded(Style* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementAdded(Yeast* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementAdded(BrewNote* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
+void BtTreeModel::elementAdded(Water* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 
 // I guess this isn't too bad. Better than this same function copied 7 times
 void BtTreeModel::elementAdded(BeerXMLElement* victim)
@@ -1271,6 +1347,7 @@ void BtTreeModel::elementRemoved(Misc* victim)        { elementRemoved(qobject_c
 void BtTreeModel::elementRemoved(Style* victim)       { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementRemoved(Yeast* victim)       { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementRemoved(BrewNote* victim)    { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
+void BtTreeModel::elementRemoved(Water* victim)       { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
 
 void BtTreeModel::elementRemoved(BeerXMLElement* victim)
 {
@@ -1378,6 +1455,9 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
          case BtTreeItem::YEAST:
             elem = Database::instance().yeast(id);
             break;
+         case BtTreeItem::WATER:
+            elem = Database::instance().water(id);
+            break;
          case BtTreeItem::FOLDER:
             break;
          default:
@@ -1412,4 +1492,3 @@ Qt::DropActions BtTreeModel::supportedDropActions() const
 {
    return Qt::CopyAction | Qt::MoveAction;
 }
-

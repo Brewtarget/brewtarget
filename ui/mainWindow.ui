@@ -213,6 +213,20 @@
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="tabTree_water">
+           <attribute name="icon">
+            <iconset resource="../brewtarget.qrc">
+             <normaloff>:/images/smallWater.svg</normaloff>:/images/smallWater.svg</iconset>
+           </attribute>
+           <attribute name="title">
+            <string/>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="WaterTreeView" name="treeView_water"/>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -240,7 +254,7 @@
            <x>0</x>
            <y>0</y>
            <width>695</width>
-           <height>403</height>
+           <height>398</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1075,7 +1089,7 @@
            <x>0</x>
            <y>0</y>
            <width>695</width>
-           <height>313</height>
+           <height>318</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -2218,11 +2232,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>CustomComboBox</class>
    <extends>QComboBox</extends>
    <header>CustomComboBox.h</header>
@@ -2231,6 +2240,27 @@
    <class>StyleRangeWidget</class>
    <extends>QWidget</extends>
    <header>StyleRangeWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>MiscTreeView</class>
@@ -2275,22 +2305,6 @@
    <header>BtLabel.h</header>
    <slots>
     <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -2358,6 +2372,11 @@
    <extends>QTabWidget</extends>
    <header>BtTabWidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WaterTreeView</class>
+   <extends>QTreeView</extends>
+   <header>BtTreeView.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

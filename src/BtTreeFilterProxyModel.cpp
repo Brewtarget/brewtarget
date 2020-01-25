@@ -51,6 +51,8 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
         return lessThanYeast(model,left, right);
       case BtTreeModel::STYLEMASK:
         return lessThanStyle(model,left, right);
+      case BtTreeModel::WATERMASK:
+        return lessThanWater(model,left, right);
       default:
         return lessThanRecipe(model,left, right);
 
@@ -350,6 +352,56 @@ bool BtTreeFilterProxyModel::lessThanYeast(BtTreeModel* model, const QModelIndex
          return leftYeast->form() < rightYeast->form();
    }
    return leftYeast->name() < rightYeast->name();
+}
+
+bool BtTreeFilterProxyModel::lessThanWater(BtTreeModel* model, const QModelIndex &left,
+                                         const QModelIndex &right) const
+{
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::WATER)
+   {
+      BtFolder* leftFolder = model->folder(left);
+      Water*  rightWater = model->water(right);
+
+      return leftFolder->fullPath() < rightWater->name();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::WATER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      Water*  leftWater = model->water(left);
+      return leftWater->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
+
+   Water*  leftWater = model->water(left);
+   Water* rightWater = model->water(right);
+
+
+   switch(left.column())
+   {
+      case BtTreeItem::WATERNAMECOL:
+         return leftWater->name() < rightWater->name();
+      case BtTreeItem::WATERpHCOL:
+         return leftWater->ph() < rightWater->ph();
+      case BtTreeItem::WATERHCO3COL:
+         return leftWater->bicarbonate_ppm() < rightWater->bicarbonate_ppm();
+      case BtTreeItem::WATERSO4COL:
+         return leftWater->sulfate_ppm() < rightWater->sulfate_ppm();
+      case BtTreeItem::WATERCLCOL:
+         return leftWater->chloride_ppm() < rightWater->chloride_ppm();
+      case BtTreeItem::WATERNACOL:
+         return leftWater->sodium_ppm() < rightWater->sodium_ppm();
+      case BtTreeItem::WATERMGCOL:
+         return leftWater->magnesium_ppm() < rightWater->magnesium_ppm();
+      case BtTreeItem::WATERCACOL:
+         return leftWater->calcium_ppm() < rightWater->calcium_ppm();
+   }
+   return leftWater->name() < rightWater->name();
 }
 
 bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
