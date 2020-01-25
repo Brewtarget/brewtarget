@@ -445,7 +445,6 @@ Unit::unitScale MiscTableModel::displayScale(int column) const
 //      o which should have the side effect of clearing any scale
 void MiscTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
 {
-   // Misc* row; // disabled per-cell magic
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
@@ -454,20 +453,11 @@ void MiscTableModel::setDisplayUnit(int column, Unit::unitDisplay displayUnit)
    Brewtarget::setOption(attribute,displayUnit,this->objectName(),Brewtarget::UNIT);
    Brewtarget::setOption(attribute,Unit::noScale,this->objectName(),Brewtarget::SCALE);
 
-   /* Disabled cell-specific code
-   for (int i = 0; i < rowCount(); ++i )
-   {
-      row = getMisc(i);
-      row->setDisplayUnit(Unit::noUnit);
-   }
-   */
 }
 
 // Setting the scale should clear any cell-level scaling options
 void MiscTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
 {
-   // Misc* row; //disabled per-cell magic
-
    QString attribute = generateName(column);
 
    if ( attribute.isEmpty() )
@@ -475,13 +465,6 @@ void MiscTableModel::setDisplayScale(int column, Unit::unitScale displayScale)
 
    Brewtarget::setOption(attribute,displayScale,this->objectName(),Brewtarget::SCALE);
 
-   /* disabled cell-specific code
-   for (int i = 0; i < rowCount(); ++i )
-   {
-      row = getMisc(i);
-      row->setDisplayScale(Unit::noScale);
-   }
-   */
 }
 
 QString MiscTableModel::generateName(int column) const

@@ -49,6 +49,9 @@ Salt::Salt(Brewtarget::DBTable table, int key)
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
+   m_amount_is_weight(true),
+   m_percent_acid(0.0),
+   m_is_acid(false),
    m_misc_id(-1),
    m_cacheOnly(false)
 {
@@ -59,6 +62,9 @@ Salt::Salt(QString name, bool cache)
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
+   m_amount_is_weight(true),
+   m_percent_acid(0.0),
+   m_is_acid(false),
    m_misc_id(-1),
    m_cacheOnly(cache)
 {
@@ -69,6 +75,9 @@ Salt::Salt(Salt & other)
    m_amount(other.m_amount),
    m_add_to(other.m_add_to),
    m_type(other.m_type),
+   m_amount_is_weight(other.m_amount_is_weight),
+   m_percent_acid(other.m_percent_acid),
+   m_is_acid(other.m_is_acid),
    m_misc_id(other.m_misc_id),
    m_cacheOnly(other.m_cacheOnly)
 {
@@ -79,6 +88,9 @@ Salt::Salt(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_amount(rec.value(kcolAmount).toDouble()),
    m_add_to(static_cast<Salt::WhenToAdd>(rec.value(kcolSaltAddTo).toInt())),
    m_type(static_cast<Salt::Types>(rec.value(kcolSaltType).toInt())),
+   m_amount_is_weight(rec.value(kcolSaltAmtIsWgt).toBool()),
+   m_percent_acid(rec.value(kcolSaltPctAcid).toDouble()),
+   m_is_acid(rec.value(kcolSaltIsAcid).toBool()),
    m_misc_id(rec.value(kcolMiscId).toInt()),
    m_cacheOnly(false)
 {
@@ -105,18 +117,48 @@ void Salt::setAddTo( Salt::WhenToAdd var )
    }
 }
 
+// This may come to haunt me, but I am setting the isAcid flag and the
+// amount_is_weight flags here.
 void Salt::setType(Salt::Types type)
 {
-   if ( type < NONE || type > NAHCO3 ) {
+   if ( type < NONE || type > ACIDMLT ) {
       return;
    }
 
    m_type = type;
+   m_is_acid = (type > NAHCO3);
+   m_amount_is_weight = ! (type == LACTIC || type == H3PO4);
+
    if ( ! m_cacheOnly ) {
       setEasy(kpropType, type);
+      setEasy(kpropIsAcid, m_is_acid);
+      setEasy(kpropAmtIsWgt, m_amount_is_weight);
    }
 }
 
+void Salt::setAmountIsWeight( bool var )
+{
+   m_amount_is_weight = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropAmtIsWgt, var);
+   }
+}
+
+void Salt::setIsAcid( bool var )
+{
+   m_is_acid = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropIsAcid, var);
+   }
+}
+
+void Salt::setPercentAcid(double var)
+{
+   m_percent_acid = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropPctAcid, var);
+   }
+}
 void Salt::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //=========================="GET" METHODS=======================================
@@ -125,6 +167,9 @@ Salt::WhenToAdd Salt::addTo() const { return m_add_to; }
 Salt::Types Salt::type() const { return m_type; }
 bool Salt::cacheOnly() const { return m_cacheOnly; }
 int Salt::miscId() const { return m_misc_id; }
+bool Salt::isAcid() const { return m_is_acid; }
+bool Salt::amountIsWeight() const { return m_amount_is_weight; }
+double Salt::percentAcid() const { return m_percent_acid; }
 
 //====== maths ===========
 // All of these the per gram, per liter

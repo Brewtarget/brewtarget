@@ -40,7 +40,11 @@ class Recipe;
 class WaterDialog;
 
 
-enum{ SALTNAMECOL, SALTAMOUNTCOL, SALTADDTOCOL, SALTNUMCOLS /*This one MUST be last*/};
+enum{ SALTNAMECOL,
+      SALTAMOUNTCOL,
+      SALTADDTOCOL,
+      SALTPCTACIDCOL,
+      SALTNUMCOLS /*This one MUST be last*/};
 /*!
  * \class SaltTableModel
  * \author mik firestone
@@ -57,7 +61,6 @@ public:
    void observeRecipe(Recipe* rec);
    void addSalt(Salt* salt);
    void addSalts(QList<Salt*> salts);
-   // void observeDatabase(bool val);
    void removeAll();
 
    //! Reimplemented from QAbstractTableModel.
@@ -82,6 +85,7 @@ public:
     double total_SO4() const;
 
     double total( Salt::Types type ) const;
+   double totalAcidWeight(Salt::Types type) const;
 
    void removeSalts(QList<int>deadSalts);
 

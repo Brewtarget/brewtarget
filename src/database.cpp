@@ -1794,7 +1794,6 @@ int Database::insertElement(BeerXMLElement* ins)
    QString insert = schema->generateInsertProperties(Brewtarget::dbType());
    QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
-   qDebug() << "expected properties =" << allProps.size();
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
@@ -1805,7 +1804,6 @@ int Database::insertElement(BeerXMLElement* ins)
        else {
           QVariant wtf = ins->property(prop.toUtf8().data() );
           // I've arranged it such that the bindings are on the property names. It simplifies a lot
-          qDebug() << "binding " << prop << wtf;
           q.bindValue( QString(":%1").arg(prop), wtf);
        }
    }

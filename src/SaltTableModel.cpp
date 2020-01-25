@@ -54,7 +54,10 @@ static QStringList saltNames = QStringList() << QObject::tr("None")
                                              << QObject::tr("CaSO4")
                                              << QObject::tr("MgSO4")
                                              << QObject::tr("NaCl")
-                                             << QObject::tr("NaHCO3");
+                                             << QObject::tr("NaHCO3")
+                                             << QObject::tr("Lactic acid")
+                                             << QObject::tr("H3PO4")
+                                             << QObject::tr("Acid malt");
 
 SaltTableModel::SaltTableModel(QTableView* parent)
    : QAbstractTableModel(parent),
@@ -284,6 +287,43 @@ double SaltTableModel::total(Salt::Types type) const
    return ret;
 }
 
+double SaltTableModel::totalAcidWeight(Salt::Types type) const
+{
+   const double H3PO4_density = 1.685;
+   const double lactic_density = 1.2;
+
+   double ret = 0.0;
+   if (type != Salt::NONE) {
+      foreach(Salt* i, saltObs) {
+         if ( i->type() == type && i->addTo() != Salt::NEVER) {
+            double mult  = 1.0;
+            if ( i->addTo() == Salt::EQUAL ) {
+               mult = 2.0;
+            }
+            else if ( i->addTo() == Salt::RATIO ) {
+               mult = 1.0 + spargePct;
+            }
+            // Acid malts are easy
+            if ( type == Salt::ACIDMLT ) {
+               ret += 1000.0 * i->amount() * i->percentAcid();
+            }
+            // Lactic acid isn't quite so easy
+            else if ( type == Salt::LACTIC ) {
+               double density = i->percentAcid()/88.0 * (lactic_density - 1.0) + 1.0;
+               double lactic_wgt = 1000.0 * i->amount() * mult * density;
+               ret += (i->percentAcid()/100.0) * lactic_wgt;
+            }
+            else if ( type == Salt::H3PO4 ) {
+               double density = i->percentAcid()/85.0 * (H3PO4_density - 1.0) + 1.0;
+               double H3PO4_wgt = 1000.0 * i->amount() * density;
+               ret += (i->percentAcid()/100.0) * H3PO4_wgt;
+            }
+         }
+      }
+   }
+   return ret;
+}
+
 void SaltTableModel::removeSalt(Salt* salt)
 {
    int i;
@@ -377,7 +417,6 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
 {
    Salt* row;
    int col = index.column();
-   Unit::unitScale scale;
    Unit::unitDisplay unit;
 
    // Ensure the row is ok.
@@ -388,6 +427,7 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
    else
       row = saltObs[index.row()];
 
+   Unit* rightUnit = row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms): static_cast<Unit*>(Units::liters);
    switch( index.column() ) {
       case SALTNAMECOL:
          if ( role == Qt::DisplayRole )
@@ -399,11 +439,9 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
       case SALTAMOUNTCOL:
          if ( role != Qt::DisplayRole )
             return QVariant();
-
          unit = displayUnit(col);
-         scale = displayScale(col);
 
-         return QVariant( Brewtarget::displayAmount(row->amount(), Units::kilograms,3, unit, scale));
+         return QVariant( Brewtarget::displayAmount(row->amount(), rightUnit, 3, unit, Unit::noScale ) );
       case SALTADDTOCOL:
          if ( role == Qt::DisplayRole )
             return QVariant( addToName.at(row->addTo()));
@@ -411,6 +449,11 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
             return QVariant( row->addTo());
          else
             return QVariant();
+      case SALTPCTACIDCOL:
+         if ( role == Qt::DisplayRole &&  row->isAcid() ) {
+            return QVariant( row->percentAcid() );
+         }
+         return QVariant();
       default :
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -427,6 +470,8 @@ QVariant SaltTableModel::headerData( int section, Qt::Orientation orientation, i
             return QVariant(tr("Amount"));
          case SALTADDTOCOL:
             return QVariant(tr("Added To"));
+         case SALTPCTACIDCOL:
+               return  QVariant(tr("% Acid"));
          default:
             Brewtarget::logW(tr("Bad column: %1").arg(section));
             return QVariant();
@@ -453,6 +498,7 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
 
    row = saltObs[index.row()];
 
+   Unit* unit = row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms): static_cast<Unit*>(Units::liters);
    Unit::unitDisplay dspUnit = displayUnit(index.column());
    Unit::unitScale   dspScl  = displayScale(index.column());
 
@@ -460,20 +506,36 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
       case SALTNAMECOL:
          retval = value.canConvert(QVariant::Int);
          if ( retval ) {
-            row->setType( static_cast<Salt::Types>(value.toInt()));
-            row->setName( saltNames.at(value.toInt()));
+            int newType = value.toInt();
+            Salt::Types oldType = row->type();
+            row->setType(static_cast<Salt::Types>(newType));
+            row->setName(saltNames.at(newType));
+            if ( oldType == Salt::NONE ) {
+               switch(  static_cast<Salt::Types>(newType) ) {
+                  case Salt::LACTIC: row->setPercentAcid(88); break;
+                  case Salt::H3PO4:  row->setPercentAcid(10); break;
+                  case Salt::ACIDMLT: row->setPercentAcid(2); break;
+                  default: row->setPercentAcid(0);
+               }
+            }
          }
          break;
       case SALTAMOUNTCOL:
          retval = value.canConvert(QVariant::Double);
          if ( retval ) {
-            row->setAmount( Brewtarget::qStringToSI(value.toString(), Units::kilograms, dspUnit, dspScl) );
+            row->setAmount( Brewtarget::qStringToSI(value.toString(), unit, dspUnit, dspScl) );
          }
          break;
       case SALTADDTOCOL:
          retval = value.canConvert(QVariant::Int);
          if ( retval ) {
             row->setAddTo( static_cast<Salt::WhenToAdd>(value.toInt()) );
+         }
+         break;
+      case SALTPCTACIDCOL:
+         retval = row->isAcid() && value.canConvert(QVariant::Double);
+         if ( retval ) {
+            row->setPercentAcid(value.toDouble());
          }
          break;
       default:
@@ -556,8 +618,6 @@ void SaltTableModel::contextMenu(const QPoint &point)
    Unit::unitDisplay currentUnit;
    Unit::unitScale  currentScale;
 
-   // Since we need to call generateVolumeMenu() two different ways, we need
-   // to figure out the currentUnit and Scale here
    currentUnit  = displayUnit(selected);
    currentScale = displayScale(selected);
 
@@ -598,13 +658,16 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
    if ( index.column() == SALTNAMECOL ) {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("NONE")  ,   Salt::NONE);
-      box->addItem(tr("CaCL2") ,  Salt::CACL2);
-      box->addItem(tr("CaCO3") ,  Salt::CACO3);
-      box->addItem(tr("CaSO4") ,  Salt::CASO4);
-      box->addItem(tr("MgSO4") ,  Salt::MGSO4);
-      box->addItem(tr("NaCl")  ,   Salt::NACL);
-      box->addItem(tr("NaHCO3"), Salt::NAHCO3);
+      box->addItem(tr("NONE")  ,      Salt::NONE);
+      box->addItem(tr("CaCL2") ,      Salt::CACL2);
+      box->addItem(tr("CaCO3") ,      Salt::CACO3);
+      box->addItem(tr("CaSO4") ,      Salt::CASO4);
+      box->addItem(tr("MgSO4") ,      Salt::MGSO4);
+      box->addItem(tr("NaCl")  ,      Salt::NACL);
+      box->addItem(tr("NaHCO3"),      Salt::NAHCO3);
+      box->addItem(tr("Lactic acid"), Salt::LACTIC);
+      box->addItem(tr("H3PO4"),       Salt::H3PO4);
+      box->addItem(tr("Acid malt"),   Salt::ACIDMLT);
       box->setMinimumWidth( box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
@@ -648,9 +711,9 @@ void SaltItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
    if ( column == SALTNAMECOL || column == SALTADDTOCOL ) {
       QComboBox* box = static_cast<QComboBox*>(editor);
       int selected = box->currentData().toInt();
-      int saved = model->data(index,Qt::UserRole).toInt();
+      int stored = model->data(index,Qt::UserRole).toInt();
 
-      if ( selected != saved ) {
+      if ( selected != stored ) {
          model->setData(index,selected,Qt::EditRole);
       }
    }

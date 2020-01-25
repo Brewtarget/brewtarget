@@ -25,9 +25,14 @@
 // What isn't here (like name) is defined in TableSchemaConstants
 static const QString kcolSaltType("stype");
 static const QString kcolSaltAddTo("addTo");
+static const QString kcolSaltAmtIsWgt("amount_is_weight");
+static const QString kcolSaltPctAcid("percent_acid");
+static const QString kcolSaltIsAcid("is_acid");
 
 // properties for objects
 static const QString kpropAddTo("addTo");
+static const QString kpropPctAcid("percentAcid");
+static const QString kpropIsAcid("isAcid");
 
 
 // XML properties
