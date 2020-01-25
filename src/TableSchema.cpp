@@ -1191,8 +1191,11 @@ void TableSchema::defineSaltTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]     = new PropertySchema( kpropName,    kcolName,      QString(), QString("text"),    QString("''"), QString("not null"));
-   m_properties[kpropAmount]   = new PropertySchema( kpropAmount,  kcolAmount,    QString(), QString("real"),    QVariant(0.0));
+   m_properties[kpropName]     = new PropertySchema( kpropName,     kcolName,         QString(), QString("text"),    QString("''"), QString("not null"));
+   m_properties[kpropAmount]   = new PropertySchema( kpropAmount,   kcolAmount,       QString(), QString("real"),    QVariant(0.0));
+   m_properties[kpropAmtIsWgt] = new PropertySchema( kpropAmtIsWgt, kcolSaltAmtIsWgt, QString(), QString("boolean"), QVariant(true));
+   m_properties[kpropPctAcid]  = new PropertySchema( kpropPctAcid,  kcolSaltPctAcid,  QString(), QString("real"),    QVariant(0.0));
+   m_properties[kpropIsAcid]   = new PropertySchema( kpropIsAcid,   kcolSaltIsAcid,   QString(), QString("boolean"), QVariant(false));
 
    m_properties[kpropType]     = new PropertySchema( kpropType,    kcolSaltType,  QString(), QString("int"),     QVariant(0));
    m_properties[kpropAddTo]    = new PropertySchema( kpropAddTo,   kcolSaltAddTo, QString(), QString("int"),     QVariant(0));

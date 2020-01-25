@@ -140,8 +140,8 @@ void WaterEditor::saveAndClose()
       return;
 
    obs->setName( lineEdit_name->text());
-   obs->setAmount_l(0.0);
-   obs->setBicarbonate_ppm( lineEdit_alk->toDouble() );
+   obs->setAmount(0.0);
+   obs->setBicarbonate_ppm( lineEdit_alk->toSI() );
    obs->setCalcium_ppm( lineEdit_ca->toSI() );
    obs->setMagnesium_ppm( lineEdit_mg->toSI() );
    obs->setSulfate_ppm( lineEdit_so4->toSI() );

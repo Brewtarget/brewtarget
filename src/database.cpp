@@ -1338,11 +1338,8 @@ Hop* Database::newHop(Hop* other)
       else {
          sqlDatabase().transaction();
          transact = true;
-         qDebug() << Q_FUNC_INFO << "adding new hop";
          tmp = newIngredient(&allHops);
-         qDebug() << Q_FUNC_INFO << "adding new inventory" << tmp->key();
          int invkey = newInventory( dbDefn->table(Brewtarget::HOPINVTABLE));
-         qDebug() << Q_FUNC_INFO << "added new inventory" << invkey;
          tmp->setInventoryId(invkey);
       }
    }
@@ -1799,7 +1796,6 @@ int Database::insertElement(BeerXMLElement* ins)
    QString insert = schema->generateInsertProperties(Brewtarget::dbType());
    QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
-   qDebug() << "expected properties =" << allProps.size();
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
@@ -1810,7 +1806,6 @@ int Database::insertElement(BeerXMLElement* ins)
        else {
           QVariant wtf = ins->property(prop.toUtf8().data() );
           // I've arranged it such that the bindings are on the property names. It simplifies a lot
-          qDebug() << "binding " << prop << wtf;
           q.bindValue( QString(":%1").arg(prop), wtf);
        }
    }
@@ -2457,7 +2452,6 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
          .arg(tbl->propertyToColumn(kpropDeleted))
          .arg(Brewtarget::dbFalse());
 
-   qDebug() << Q_FUNC_INFO << query;
    QSqlQuery sql(query, sqlDatabase());
    if (! sql.isActive()) {
       throw QString("Failed to get the inventory.\nQuery:\n%1\nError:\n%2")

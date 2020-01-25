@@ -130,7 +130,7 @@ class MiscItemDelegate : public QItemDelegate
    Q_OBJECT
 
 public:
-   MiscItemDelegate(QObject* parent = 0);
+   MiscItemDelegate(QObject* parent = nullptr);
 
    // Inherited functions.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;

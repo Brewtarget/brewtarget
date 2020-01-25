@@ -62,7 +62,10 @@ public:
       CASO4,
       MGSO4,
       NACL,
-      NAHCO3
+      NAHCO3,
+      LACTIC,
+      H3PO4,
+      ACIDMLT
    };
 
    Q_ENUMS(WhenToAdd Types)
@@ -76,6 +79,12 @@ public:
    Q_PROPERTY( Salt::WhenToAdd addTo READ addTo WRITE setAddTo /*NOTIFY changed*/ /*changedCalcium_ppm*/ )
    //! \brief What kind of salt this is
    Q_PROPERTY( Salt::Types type READ type WRITE setType /*NOTIFY changed*/ /*changedBicarbonate_ppm*/ )
+   //! \brief Is this a weight (like CaCO3) or a volume (like H3PO3)
+   Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
+   //! \brief What percent is acid (used for lactic acid, H3PO4 and acid malts)
+   Q_PROPERTY( double percentAcid READ percentAcid WRITE setPercentAcid /*NOTIFY changed*/ /*changedPercentAcid*/ )
+   //! \brief Is this an acid or salt?
+   Q_PROPERTY( bool isAcid READ isAcid WRITE setIsAcid /*NOTIFY changed*/ /*changedIsAcid*/ )
    //! \brief A link to the salt in the MISC table. Not sure I'm going to use this
    Q_PROPERTY( int miscId READ miscId /* WRITE setMiscId*/ /*NOTIFY changed*/ /*changedSulfate_ppm*/ )
    //! \brief To cache or not to cache
@@ -84,12 +93,18 @@ public:
    double amount() const;
    Salt::WhenToAdd addTo() const;
    Salt::Types type() const;
+   bool amountIsWeight() const;
+   double percentAcid() const;
+   bool isAcid() const;
    int miscId() const;
    bool cacheOnly() const;
 
    void setAmount( double var );
    void setAddTo( Salt::WhenToAdd var );
    void setType( Salt::Types var );
+   void setAmountIsWeight( bool var );
+   void setPercentAcid(double var);
+   void setIsAcid( bool var );
    void setCacheOnly( bool var );
 
    static QString classNameStr();
@@ -116,6 +131,9 @@ private:
    double m_amount;
    Salt::WhenToAdd m_add_to;
    Salt::Types m_type;
+   bool m_amount_is_weight;
+   double m_percent_acid;
+   bool m_is_acid;
    int m_misc_id;
    bool m_cacheOnly;
 

@@ -103,6 +103,7 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    connect( spinBox_mashRO, SIGNAL(valueChanged(int)), this, SLOT(setMashRO(int)));
    connect( spinBox_spargeRO, SIGNAL(valueChanged(int)), this, SLOT(setSpargeRO(int)));
 
+   /*
    connect( lineEdit_lacticAmount, &BtLineEdit::textModified, this, &WaterDialog::updateAcids);
    connect( lineEdit_acidAmount, &BtLineEdit::textModified, this, &WaterDialog::updateAcids);
    connect( lineEdit_H3PO4, &BtLineEdit::textModified, this, &WaterDialog::updateAcids);
@@ -110,6 +111,7 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    connect( label_acidAmount, &BtLabel::labelChanged, lineEdit_acidAmount, &BtLineEdit::lineChanged);
    connect( label_lacticAmount, &BtLabel::labelChanged, lineEdit_lacticAmount, &BtLineEdit::lineChanged);
    connect( label_H3PO4, &BtLabel::labelChanged, lineEdit_H3PO4, &BtLineEdit::lineChanged);
+   */
 
 
 }
@@ -367,35 +369,19 @@ double WaterDialog::calculateSaltpH()
 
 double WaterDialog::calculateAcidpH()
 {
-   const double H3PO4_density = 1.685;
-   const double lactic_density = 1.2;
    const double H3PO4_gpm = 98;
    const double lactic_gpm = 90;
-
    double totalDelta = 0.0;
-   // this is cheating, but  the formula are meant to work on grams and mL,
-   // not liters and  kilograms.
-   double lactic_amt   = 1000 * lineEdit_lacticAmount->toSI();
-   double acidmalt_amt = 1000 * lineEdit_acidAmount->toSI();
-   double H3PO4_amt    = 1000 * lineEdit_H3PO4->toSI();
+
+   double lactic_amt   = saltTableModel->totalAcidWeight(Salt::LACTIC);
+   double acidmalt_amt = saltTableModel->totalAcidWeight(Salt::ACIDMLT);
+   double H3PO4_amt    = saltTableModel->totalAcidWeight(Salt::H3PO4);
 
    if ( lactic_amt + acidmalt_amt > 0.0 ) {
-      // from malt is easy
-      double from_malt = acidmalt_amt * spinBox_acidity->value()/100.0;
-
-      // from lactic acid is not
-      double density = spinBox_lacticConcentration->value()/88 * (lactic_density - 1) + 1;
-      double lactic_wgt = lactic_amt * density;
-      double from_acid  = (spinBox_lacticConcentration->value()/100.0) * lactic_wgt;
-
-      totalDelta += 1000 * (from_malt + from_acid) / lactic_gpm;
+      totalDelta += 1000 * (lactic_amt + acidmalt_amt) / lactic_gpm;
    }
    if ( H3PO4_amt > 0.0 ) {
-      double density = spinBox_H3PO4->value()/85 * (H3PO4_density - 1) + 1;
-      double H3PO4_wgt = H3PO4_amt * density;
-      double from_H3PO4 = (spinBox_H3PO4->value()/100.0) * H3PO4_wgt;
-
-      totalDelta += 1000 * from_H3PO4 / H3PO4_gpm;
+      totalDelta += 1000 * H3PO4_amt / H3PO4_gpm;
    }
 
    return totalDelta/mEq/m_thickness;

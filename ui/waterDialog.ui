@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>801</width>
-    <height>606</height>
+    <height>638</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -749,144 +749,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QGroupBox" name="groupBox_lactic">
-            <property name="title">
-             <string>Acids</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="1">
-              <widget class="BtVolumeEdit" name="lineEdit_lacticAmount">
-               <property name="text">
-                <string>0</string>
-               </property>
-               <property name="editField" stdset="0">
-                <string>lacid_amt</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLabel" name="label_lacticConcentration">
-               <property name="text">
-                <string>Concentration</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="BtVolumeLabel" name="label_lacticAmount">
-               <property name="contextMenuPolicy">
-                <enum>Qt::CustomContextMenu</enum>
-               </property>
-               <property name="text">
-                <string>Lactic Acid</string>
-               </property>
-               <property name="buddy">
-                <cstring>lineEdit_lacticAmount</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="4">
-              <widget class="QSpinBox" name="spinBox_lacticConcentration">
-               <property name="maximum">
-                <number>100</number>
-               </property>
-               <property name="value">
-                <number>88</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="3" column="3">
-              <widget class="QLabel" name="label_acidity">
-               <property name="text">
-                <string>Acidity</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="4">
-              <widget class="QSpinBox" name="spinBox_acidity">
-               <property name="maximum">
-                <number>100</number>
-               </property>
-               <property name="value">
-                <number>2</number>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="BtMassEdit" name="lineEdit_acidAmount">
-               <property name="text">
-                <string>0</string>
-               </property>
-               <property name="editField" stdset="0">
-                <string>malt_amt</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="BtMassLabel" name="label_acidAmount">
-               <property name="contextMenuPolicy">
-                <enum>Qt::CustomContextMenu</enum>
-               </property>
-               <property name="text">
-                <string>Acid Malt</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="BtVolumeLabel" name="label_H3PO4">
-               <property name="contextMenuPolicy">
-                <enum>Qt::CustomContextMenu</enum>
-               </property>
-               <property name="text">
-                <string>H3PO4</string>
-               </property>
-               <property name="editField" stdset="0">
-                <string>H3PO4_amt</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="BtVolumeEdit" name="lineEdit_H3PO4">
-               <property name="text">
-                <string>0</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="3">
-              <widget class="QLabel" name="label_2">
-               <property name="text">
-                <string>Concentration</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="4">
-              <widget class="QSpinBox" name="spinBox_H3PO4">
-               <property name="maximum">
-                <number>100</number>
-               </property>
-               <property name="value">
-                <number>10</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
+         <layout class="QVBoxLayout" name="verticalLayout_2"/>
         </item>
        </layout>
       </item>
@@ -904,19 +767,6 @@
        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
       </property>
      </widget>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
     </item>
    </layout>
   </widget>
@@ -954,22 +804,6 @@
    <slots>
     <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
     <slot>popContextMenu(QPoint)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
   </customwidget>
  </customwidgets>
