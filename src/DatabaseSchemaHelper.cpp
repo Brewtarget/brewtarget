@@ -622,6 +622,24 @@ bool DatabaseSchemaHelper::migrate_to_9(QSqlQuery q, DatabaseSchema* defn)
                          SEP + tbl->propertyColumnType(kpropAlkalinity) +
                          SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropAlkalinity).toString()
    );
+   ret &= q.exec(
+            ALTERTABLE + SEP + tbl->tableName() + SEP +
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropAsHCO3) +
+                         SEP + tbl->propertyColumnType(kpropAsHCO3) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropAsHCO3).toString()
+   );
+   ret &= q.exec(
+            ALTERTABLE + SEP + tbl->tableName() + SEP +
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropSpargeRO) +
+                         SEP + tbl->propertyColumnType(kpropSpargeRO) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropSpargeRO).toString()
+   );
+   ret &= q.exec(
+            ALTERTABLE + SEP + tbl->tableName() + SEP +
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropMashRO) +
+                         SEP + tbl->propertyColumnType(kpropMashRO) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropMashRO).toString()
+   );
    ret &= q.exec(defn->generateCreateTable(Brewtarget::SALTTABLE));
    ret &= q.exec(defn->generateCreateTable(Brewtarget::SALTINRECTABLE));
 

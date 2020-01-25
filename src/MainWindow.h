@@ -93,6 +93,8 @@ class BtDatePopup;
 
 class WaterDialog;
 class WaterListModel;
+class WaterEditor;
+
 /*!
  * \class MainWindow
  * \author Philip G. Lee
@@ -324,8 +326,10 @@ private:
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
-   WaterDialog* waterDialog;
    QPrinter *printer;
+
+   WaterDialog* waterDialog;
+   WaterEditor* waterEditor;
 
    // all things tables should go here.
    FermentableTableModel* fermTableModel;
@@ -370,7 +374,7 @@ private:
 
    //! \brief Set the keyboard shortcuts.
    void setupShortCuts();
-   //! \brief Set the context menus.
+   //! \brief Set the BtTreeView context menus.
    void setupContextMenu();
    //! \brief Create the CSS strings
    void setupCSS();

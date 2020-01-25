@@ -313,6 +313,7 @@ public:
    Style* style(int key);
    Yeast* yeast(int key);
    Salt* salt(int key);
+   Water* water(int key);
 
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList

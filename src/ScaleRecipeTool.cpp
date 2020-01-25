@@ -62,99 +62,99 @@ void ScaleRecipeTool::setRecipe(Recipe* rec)
 
 void ScaleRecipeTool::scale(Equipment* equip, double newEff)
 {
-   if( recObs == 0 || equip == 0 )
+   if( recObs == nullptr || equip == nullptr )
       return;
-   
+
    int i, size;
-   
+
    // Calculate volume ratio
    double currentBatchSize_l = recObs->batchSize_l();
    double newBatchSize_l = equip->batchSize_l();
    double volRatio = newBatchSize_l / currentBatchSize_l;
-   
+
    // Calculate efficiency ratio
    double oldEfficiency = recObs->efficiency_pct();
    double effRatio = oldEfficiency / newEff;
-   
+
    Database::instance().addToRecipe(recObs, equip);
    recObs->setBatchSize_l(newBatchSize_l);
    recObs->setBoilSize_l(equip->boilSize_l());
    recObs->setEfficiency_pct(newEff);
    recObs->setBoilTime_min(equip->boilTime_min());
-   
+
    QList<Fermentable*> ferms = recObs->fermentables();
    size = ferms.size();
    for( i = 0; i < size; ++i )
    {
       Fermentable* ferm = ferms[i];
       // NOTE: why the hell do we need this?
-      if( ferm == 0 )
+      if( ferm == nullptr )
          continue;
-      
+
       if( !ferm->isSugar() && !ferm->isExtract() ) {
          ferm->setAmount_kg(ferm->amount_kg() * effRatio * volRatio);
       } else {
          ferm->setAmount_kg(ferm->amount_kg() * volRatio);
       }
    }
-   
+
    QList<Hop*> hops = recObs->hops();
    size = hops.size();
    for( i = 0; i < size; ++i )
    {
       Hop* hop = hops[i];
       // NOTE: why the hell do we need this?
-      if( hop == 0 )
+      if( hop == nullptr )
          continue;
-      
+
       hop->setAmount_kg(hop->amount_kg() * volRatio);
    }
-   
+
    QList<Misc*> miscs = recObs->miscs();
    size = miscs.size();
    for( i = 0; i < size; ++i )
    {
       Misc* misc = miscs[i];
       // NOTE: why the hell do we need this?
-      if( misc == 0 )
+      if( misc == nullptr )
          continue;
-      
+
       misc->setAmount( misc->amount() * volRatio );
    }
-   
+
    QList<Water*> waters = recObs->waters();
    size = waters.size();
    for( i = 0; i < size; ++i )
    {
       Water* water = waters[i];
       // NOTE: why the hell do we need this?
-      if( water == 0 )
+      if( water == nullptr )
          continue;
-      
-      water->setAmount_l(water->amount_l() * volRatio);
+
+      water->setAmount(water->amount() * volRatio);
    }
-   
+
    Mash* mash = recObs->mash();
-   if( mash == 0 )
+   if( mash == nullptr )
       return;
-   
+
    QList<MashStep*> mashSteps = mash->mashSteps();
    size = mashSteps.size();
    for( i = 0; i < size; ++i )
    {
       MashStep* step = mashSteps[i];
       // NOTE: why the hell do we need this?
-      if( step == 0 )
+      if( step == nullptr )
          continue;
-      
+
       // Reset all these to zero so that the user
       // will know to re-run the mash wizard.
       step->setDecoctionAmount_l(0);
       step->setInfuseAmount_l(0);
    }
-   
+
    // I don't think I should scale the yeasts.
-   
+
    // Let the user know what happened.
    QMessageBox::information(this, tr("Recipe Scaled"),
              tr("The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.") );

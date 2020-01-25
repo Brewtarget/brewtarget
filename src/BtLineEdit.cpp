@@ -35,13 +35,6 @@ BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type) :
    _forceScale(Unit::noScale)
 {
    _section = property("configSection").toString();
-   /*
-   btParent = parent;
-   _type = type;
-   _forceUnit = Unit::noUnit;
-   _forceScale = Unit::noScale;
-   */
-    
    connect(this,&QLineEdit::editingFinished,this,&BtLineEdit::onLineChanged);
 }
 

@@ -47,7 +47,7 @@ QString Water::classNameStr()
 
 Water::Water(Brewtarget::DBTable table, int key)
    : BeerXMLElement(table, key),
-   m_amount_l(0.0),
+   m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
    m_sulfate_ppm(0.0),
@@ -61,13 +61,13 @@ Water::Water(Brewtarget::DBTable table, int key)
    m_type(NONE),
    m_mash_ro(0.0),
    m_sparge_ro(0.0),
-   m_adjust_both(true)
+   m_alkalinity_as_hco3(true)
 {
 }
 
 Water::Water(QString name, bool cache)
    : BeerXMLElement(Brewtarget::WATERTABLE, -1, name, true),
-   m_amount_l(0.0),
+   m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
    m_sulfate_ppm(0.0),
@@ -81,13 +81,13 @@ Water::Water(QString name, bool cache)
    m_type(NONE),
    m_mash_ro(0.0),
    m_sparge_ro(0.0),
-   m_adjust_both(true)
+   m_alkalinity_as_hco3(true)
 {
 }
 
 Water::Water(Water const& other, bool cache)
    : BeerXMLElement(Brewtarget::WATERTABLE, -1, other.name(), true),
-   m_amount_l(other.m_amount_l),
+   m_amount(other.m_amount),
    m_calcium_ppm(other.m_calcium_ppm),
    m_bicarbonate_ppm(other.m_bicarbonate_ppm),
    m_sulfate_ppm(other.m_sulfate_ppm),
@@ -101,13 +101,13 @@ Water::Water(Water const& other, bool cache)
    m_type(other.m_type),
    m_mash_ro(other.m_mash_ro),
    m_sparge_ro(other.m_sparge_ro),
-   m_adjust_both(other.m_adjust_both)
+   m_alkalinity_as_hco3(other.m_alkalinity_as_hco3)
 {
 }
 
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
    : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-   m_amount_l(rec.value(kcolAmount).toDouble()),
+   m_amount(rec.value(kcolAmount).toDouble()),
    m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
    m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),
    m_sulfate_ppm(rec.value(kcolWaterSulfate).toDouble()),
@@ -121,14 +121,14 @@ Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_type(static_cast<Water::Types>(rec.value(kcolWaterType).toInt())),
    m_mash_ro(rec.value(kcolWaterMashRO).toDouble()),
    m_sparge_ro(rec.value(kcolWaterSpargeRO).toDouble()),
-   m_adjust_both(rec.value(kcolWaterAdjustBoth).toBool())
+   m_alkalinity_as_hco3(rec.value(kcolWaterAsHCO3).toBool())
 {
 }
 
 //================================"SET" METHODS=================================
-void Water::setAmount_l( double var )
+void Water::setAmount( double var )
 {
-   m_amount_l = var;
+   m_amount = var;
    if ( ! m_cacheOnly ) {
       setEasy(kpropAmount, var);
    }
@@ -236,18 +236,18 @@ void Water::setSpargeRO( double var )
    }
 }
 
-void Water::setAdjustBoth(bool var)
+void Water::setAlkalinityAsHCO3(bool var)
 {
-   m_adjust_both = var;
+   m_alkalinity_as_hco3 = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAdjustBoth, var);
+      setEasy(kpropAsHCO3, var);
    }
 }
 
 //=========================="GET" METHODS=======================================
 QString Water::notes() const { return m_notes; }
 double Water::sulfate_ppm() const { return m_sulfate_ppm; }
-double Water::amount_l() const { return m_amount_l; }
+double Water::amount() const { return m_amount; }
 double Water::calcium_ppm() const { return m_calcium_ppm; }
 double Water::bicarbonate_ppm() const { return m_bicarbonate_ppm; }
 double Water::chloride_ppm() const { return m_chloride_ppm; }
@@ -259,4 +259,4 @@ bool Water::cacheOnly() const { return m_cacheOnly; }
 Water::Types Water::type() const { return m_type; }
 double Water::mashRO() const { return m_mash_ro; }
 double Water::spargeRO() const { return m_sparge_ro; }
-bool Water::adjustBoth() const { return m_adjust_both; }
+bool Water::alkalinityAsHCO3() const { return m_alkalinity_as_hco3; }

@@ -119,6 +119,7 @@
 #include "BtDatePopup.h"
 #include "WaterDialog.h"
 #include "WaterListModel.h"
+#include "WaterEditor.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
@@ -247,6 +248,7 @@ void MainWindow::setupDialogs()
    btDatePopup = new BtDatePopup(this);
 
    waterDialog = new WaterDialog(this);
+   waterEditor = new WaterEditor(this);
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
@@ -693,6 +695,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
    Misc *m;
    Yeast *y;
    Style *s;
+   Water *w;
 
    QObject* calledBy = sender();
    BtTreeView* active;
@@ -764,6 +767,14 @@ void MainWindow::treeActivated(const QModelIndex &index)
          setBrewNoteByIndex(index);
          break;
       case BtTreeItem::FOLDER:  // default behavior is fine, but no warning
+         break;
+      case BtTreeItem::WATER:
+         w = active->water(index);
+         if (w)
+         {
+            waterEditor->setWater(w);
+            waterEditor->show();
+         }
          break;
       default:
          Brewtarget::logW(QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index)));
@@ -2219,6 +2230,7 @@ void MainWindow::setupContextMenu()
    treeView_misc->setupContextMenu(this,miscDialog);
    treeView_style->setupContextMenu(this,singleStyleEditor);
    treeView_yeast->setupContextMenu(this,yeastDialog);
+   treeView_water->setupContextMenu(this,waterEditor);
 
    // TreeView for clicks, both double and right
    connect( treeView_recipe, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
@@ -2242,6 +2254,8 @@ void MainWindow::setupContextMenu()
    connect( treeView_style, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
    connect( treeView_style, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 
+   connect( treeView_water, &QAbstractItemView::doubleClicked, this, &MainWindow::treeActivated);
+   connect( treeView_water, &QWidget::customContextMenuRequested, this, &MainWindow::contextMenu);
 }
 
 void MainWindow::copySelected()

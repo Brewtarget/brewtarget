@@ -39,6 +39,7 @@ class Misc;
 class Yeast;
 class BrewNote;
 class Style;
+class Water;
 
 /*!
  * \class BtTreeItem
@@ -85,6 +86,8 @@ public:
    Style* style(const QModelIndex &index) const;
    //! \brief returns the brewnote at \c index
    BrewNote* brewNote(const QModelIndex &index) const;
+   //! \brief returns the water at \c index
+   Water* water(const QModelIndex &index) const;
 
    //! \brief returns the folder at \c index
    BtFolder* folder(const QModelIndex &index) const;
@@ -132,6 +135,7 @@ public:
    friend class MiscTreeView;
    friend class YeastTreeView;
    friend class StyleTreeView;
+   friend class WaterTreeView;
 
 public slots:
    void newIngredient();
@@ -243,4 +247,16 @@ public:
 
 };
 
+//!
+// \class WaterTreeView
+// \brief subclasses BtTreeView to only show waters.
+class WaterTreeView : public BtTreeView
+{
+   Q_OBJECT
+public:
+   //! \brief Constructs the tree view, sets up the filter proxy and sets a
+   // few options on the tree that can only be set after the model
+   WaterTreeView(QWidget *parent = nullptr);
+
+};
 #endif /* BREWTARGETTREEVIEW_H_ */

@@ -43,6 +43,7 @@ class Water : public BeerXMLElement
 
    friend class Database;
    friend class WaterDialog;
+   friend class WaterEditor;
 public:
 
    enum Types {
@@ -56,7 +57,7 @@ public:
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief The amount in liters.
-   Q_PROPERTY( double amount_l READ amount_l WRITE setAmount_l /*NOTIFY changed*/ /*changedAmount_l*/ )
+   Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount_l*/ )
    //! \brief The ppm of calcium.
    Q_PROPERTY( double calcium_ppm READ calcium_ppm WRITE setCalcium_ppm /*NOTIFY changed*/ /*changedCalcium_ppm*/ )
    //! \brief The ppm of bicarbonate.
@@ -81,10 +82,10 @@ public:
    Q_PROPERTY( double mashRO READ mashRO WRITE setMashRO /*NOTIFY changed*/ /*changedMashRO*/ )
    //! \brief percent of the sparge water that is RO
    Q_PROPERTY( double spargeRO READ spargeRO WRITE setSpargeRO /*NOTIFY changed*/ /*changedSpargeRO*/ )
-   //! \brief adjust both mash and sparge water
-   Q_PROPERTY( bool adjustBoth READ adjustBoth WRITE setAdjustBoth /*NOTIFY changed*/ /*changedAdjustBoth*/ )
+   //! \brief is the alkalinity measured as HCO3 or CO3?
+   Q_PROPERTY( bool alkalinityAsHCO3 READ alkalinityAsHCO3 WRITE setAlkalinityAsHCO3 /*NOTIFY changed*/ /*changedSpargeRO*/ )
 
-   double amount_l() const;
+   double amount() const;
    double calcium_ppm() const;
    double bicarbonate_ppm() const;
    double sulfate_ppm() const;
@@ -98,9 +99,9 @@ public:
    Water::Types type() const;
    double mashRO() const;
    double spargeRO() const;
-   bool adjustBoth() const;
+   bool alkalinityAsHCO3() const;
 
-   void setAmount_l( double var );
+   void setAmount( double var );
    void setCalcium_ppm( double var );
    void setSulfate_ppm( double var );
    void setBicarbonate_ppm( double var );
@@ -114,7 +115,7 @@ public:
    void setType(Types type);
    void setMashRO(double var);
    void setSpargeRO(double var);
-   void setAdjustBoth(bool var);
+   void setAlkalinityAsHCO3(bool var);
 
    static QString classNameStr();
 
@@ -129,7 +130,7 @@ private:
    Water(Water const& other, bool cache = true);
    Water(QString name, bool cache = true);
 
-   double m_amount_l;
+   double m_amount;
    double m_calcium_ppm;
    double m_bicarbonate_ppm;
    double m_sulfate_ppm;
@@ -143,7 +144,7 @@ private:
    Water::Types m_type;
    double m_mash_ro;
    double m_sparge_ro;
-   bool m_adjust_both;
+   bool m_alkalinity_as_hco3;
 
 };
 
