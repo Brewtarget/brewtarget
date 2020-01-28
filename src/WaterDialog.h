@@ -56,6 +56,8 @@ public slots:
    void setMashRO(int val);
    void setSpargeRO(int val);
    void updateAcids();
+   void saveAndClose();
+   void clearAndClose();
 
 signals:
    void newSalt(Salt* drop);

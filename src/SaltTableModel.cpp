@@ -69,6 +69,8 @@ SaltTableModel::SaltTableModel(QTableView* parent)
 
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   headerView->setMinimumSectionSize(parent->width()/SALTNUMCOLS);
+   headerView->setSectionResizeMode(QHeaderView::ResizeToContents);
    parentTableWidget->setWordWrap(false);
 
    connect(headerView, &QWidget::customContextMenuRequested, this, &SaltTableModel::contextMenu);
@@ -341,6 +343,7 @@ void SaltTableModel::removeSalt(Salt* salt)
          parentTableWidget->resizeRowsToContents();
       }
    }
+   emit newTotals();
 }
 
 void SaltTableModel::removeSalts(QList<int>deadSalts)
@@ -361,9 +364,13 @@ void SaltTableModel::removeSalts(QList<int>deadSalts)
          disconnect( zombie, nullptr, this, nullptr );
          saltObs.removeAt(i);
          endRemoveRows();
+
+         // Dead salts do not malinger in the database. This will
+         // delete the thing, not just mark it deleted
+         Database::instance().removeIngredientFromRecipe(recObs,zombie);
       }
    }
-
+   emit newTotals();
 }
 
 void SaltTableModel::removeAll()
@@ -483,7 +490,15 @@ QVariant SaltTableModel::headerData( int section, Qt::Orientation orientation, i
 
 Qt::ItemFlags SaltTableModel::flags(const QModelIndex& index ) const
 {
-   Q_UNUSED(index)
+   // Q_UNUSED(index)
+   if( index.row() >= saltObs.size() )
+      return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+
+   Salt* row = saltObs[index.row()];
+
+   if ( !row->isAcid() && index.column() == SALTPCTACIDCOL )  {
+      return Qt::NoItemFlags;
+   }
    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
 }
 
@@ -546,6 +561,9 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
    if ( retval )
       emit newTotals();
    emit dataChanged(index,index);
+   QHeaderView* headerView = parentTableWidget->horizontalHeader();
+   headerView->resizeSections(QHeaderView::ResizeToContents);
+
    return retval;
 }
 
@@ -645,6 +663,17 @@ void SaltTableModel::contextMenu(const QPoint &point)
 
 }
 
+void SaltTableModel::saveAndClose()
+{
+   // all of the writes should have been instantaneous unless
+   // we've added a new salt. Wonder if this will work?
+   foreach( Salt* i, saltObs ) {
+      if ( i->cacheOnly() ) {
+         Database::instance().insertSalt(i);
+         Database::instance().addToRecipe(recObs,i,true);
+      }
+   }
+}
 //==========================CLASS SaltItemDelegate===============================
 
 SaltItemDelegate::SaltItemDelegate(QObject* parent)

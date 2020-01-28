@@ -42,6 +42,7 @@
 #include "equipment.h"
 #include "yeast.h"
 #include "water.h"
+#include "salt.h"
 #include "PreInstruction.h"
 #include "Algorithms.h"
 #include "IbuMethods.h"
@@ -57,6 +58,7 @@ static const QString kMashStepSection("mashStepTableModel");
 static const QString kMiscTableSection("miscTableModel");
 static const QString kFermentableTableSection("fermentableTable");
 static const QString kHopTableSection("hopTable");
+static const QString kSaltTableSection("saltTable");
 static const QString kTabRecipeSection("tab_recipe");
 
 static const QString kTimeAttr("time");
@@ -67,6 +69,7 @@ static const QString kDecoctionAmountAttr("decoctionAmount_l");
 static const QString kStepTimeAttr("stepTime_min");
 static const QString kBoilSizeAttr("boilSize_l");
 static const QString kBatchSizeAttr("batchSize_l");
+static const QString kSaltAmountAttr("amount");
 
 
 bool operator<(Recipe &r1, Recipe &r2 )
@@ -259,7 +262,34 @@ Instruction* Recipe::mashFermentableIns()
 
 }
 
-Instruction* Recipe::mashWaterIns(unsigned int size)
+Instruction* Recipe::saltWater(Salt::WhenToAdd when)
+{
+   Instruction *ins;
+   QString str,tmp;
+   QStringList reagents;
+   int i;
+
+   if ( mash() == nullptr || salts().size() == 0 )
+      return nullptr;
+
+   reagents = getReagents(salts(), when);
+   if ( reagents.size() == 0 )
+      return nullptr;
+
+   ins = Database::instance().newInstruction(this);
+   tmp = when == Salt::MASH ? tr("mash") : tr("sparge");
+   ins->setName(tr("Modify %1 water").arg( tmp ));
+   str = tr("Dissolve ");
+
+   for( i = 0; i < reagents.size(); ++i )
+      str += reagents.at(i);
+
+   str += QString(tr(" into the %1 water").arg(tmp));
+   ins->setDirections(str);
+   return ins;
+}
+
+Instruction* Recipe::mashWaterIns()
 {
    Instruction* ins;
    QString str, tmp;
@@ -661,8 +691,12 @@ void Recipe::generateInstructions()
      /*** prepare mashed fermentables ***/
      mashFermentableIns();
 
+     /*** salt the water ***/
+     saltWater(Salt::MASH);
+     saltWater(Salt::SPARGE);
+
      /*** Prepare water additions ***/
-     mashWaterIns(size);
+     mashWaterIns();
 
      timeRemaining = mash()->totalTime();
 
@@ -2123,9 +2157,7 @@ QList<QString> Recipe::getReagents(QList<Hop*> hops, bool firstWort)
 
    for( int i = 0; i < hops.size(); ++i )
    {
-      if( firstWort &&
-         (hops[i]->use() == Hop::First_Wort) )
-      {
+      if( firstWort && (hops[i]->use() == Hop::First_Wort) ) {
          tmp = QString("%1 %2,")
                .arg(Brewtarget::displayAmount(hops[i]->amount_kg(), kHopTableSection, kpropAmountKg,  Units::kilograms))
                .arg(hops[i]->name());
@@ -2158,6 +2190,51 @@ QList<QString> Recipe::getReagents( QList<MashStep*> msteps )
                 .arg(Brewtarget::displayAmount(msteps[i]->infuseTemp_c(), kMashStepSection, kInfuseTempAttr, Units::celsius));
       }
       reagents.append(tmp);
+   }
+   return reagents;
+}
+
+//! \brief send me a list of salts and if we are wanting to add to the
+//! mash or the sparge, and I will return a list of instructions
+QStringList Recipe::getReagents( QList<Salt*> salts, Salt::WhenToAdd wanted)
+{
+   QString tmp;
+   QStringList reagents = QStringList();
+
+   for ( int i = 0; i < salts.size(); ++i )
+   {
+      Salt::WhenToAdd what = salts[i]->addTo();
+      Unit* rightUnit = salts[i]->amountIsWeight() ? static_cast<Unit*>(Units::kilograms): static_cast<Unit*>(Units::liters);
+      if ( what == wanted ) {
+         tmp = tr("%1 %2, ")
+               .arg(Brewtarget::displayAmount(salts[i]->amount(), kSaltTableSection, kSaltAmountAttr, rightUnit))
+               .arg(salts[i]->name());
+      }
+      else if ( what == Salt::EQUAL ) {
+         tmp = tr("%1 %2, ")
+               .arg(Brewtarget::displayAmount(salts[i]->amount(), kSaltTableSection, kSaltAmountAttr, rightUnit))
+               .arg(salts[i]->name());
+      }
+      else if ( what == Salt::RATIO ) {
+         double ratio = mash()->totalInfusionAmount_l()/mash()->totalMashWater_l();
+         if ( wanted == Salt::SPARGE )
+            ratio = 1 - ratio;
+         double amt = salts[i]->amount() * ratio;
+         tmp = tr("%1 %2, ")
+               .arg(Brewtarget::displayAmount(amt, kSaltTableSection, kSaltAmountAttr, rightUnit))
+               .arg(salts[i]->name());
+      }
+      else {
+         continue;
+      }
+      reagents.append(tmp);
+   }
+   // How many ways can we remove the trailing ", " because it really, really
+   // annoys me?
+   if ( reagents.size() > 0 ) {
+      QString fixin = reagents.takeLast();
+      fixin.remove( fixin.lastIndexOf(","), 2);
+      reagents.append(fixin);
    }
    return reagents;
 }

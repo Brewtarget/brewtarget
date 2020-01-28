@@ -605,7 +605,7 @@ const QString TableSchema::generateDecrementTrigger(Brewtarget::DBTypes type)
      retval = QString("CREATE TRIGGER dec_ins_num AFTER DELETE ON %1 "
                       "BEGIN "
                         "UPDATE %1 SET %2 = %2 - 1 "
-                        "WHERE %3 = OLD.%3 AND %1 > OLD.%1; "
+                        "WHERE %3 = OLD.%3 AND %2 > OLD.%2; "
                       "END")
            .arg( tableName() )
            .arg(propertyToColumn(m_trigger))

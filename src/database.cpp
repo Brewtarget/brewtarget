@@ -767,10 +767,8 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
                                  .arg(ing->_key);
       q.setForwardOnly(true);
 
-      // I don't really like this, but I can't think of a better solution. Of
-      // all the ingredients, instructions don't have a _children table. Given
-      // that it is only one table, I will try the easy way first
-      if ( table->dbTable() != Brewtarget::INSTRUCTIONTABLE ) {
+      // instructions and salts don't have a _children table.
+      if ( table->childTable() != Brewtarget::NOTABLE ) {
          // delete from misc_child where child_id = [misc key]
          QString deleteFromChildren = QString("DELETE FROM %1 WHERE %2=%3")
                                     .arg(child->tableName())

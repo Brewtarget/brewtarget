@@ -103,16 +103,8 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    connect( spinBox_mashRO, SIGNAL(valueChanged(int)), this, SLOT(setMashRO(int)));
    connect( spinBox_spargeRO, SIGNAL(valueChanged(int)), this, SLOT(setSpargeRO(int)));
 
-   /*
-   connect( lineEdit_lacticAmount, &BtLineEdit::textModified, this, &WaterDialog::updateAcids);
-   connect( lineEdit_acidAmount, &BtLineEdit::textModified, this, &WaterDialog::updateAcids);
-   connect( lineEdit_H3PO4, &BtLineEdit::textModified, this, &WaterDialog::updateAcids);
-
-   connect( label_acidAmount, &BtLabel::labelChanged, lineEdit_acidAmount, &BtLineEdit::lineChanged);
-   connect( label_lacticAmount, &BtLabel::labelChanged, lineEdit_lacticAmount, &BtLineEdit::lineChanged);
-   connect( label_H3PO4, &BtLabel::labelChanged, lineEdit_H3PO4, &BtLineEdit::lineChanged);
-   */
-
+   connect( buttonBox_save, &QDialogButtonBox::accepted, this, &WaterDialog::saveAndClose);
+   connect( buttonBox_save, &QDialogButtonBox::rejected, this, &WaterDialog::clearAndClose);
 
 }
 
@@ -169,6 +161,17 @@ void WaterDialog::setRecipe(Recipe *rec)
          target = w;
    }
 
+   // I need these numbers before we set the ranges
+   foreach( Fermentable *i, recObs->fermentables() ) {
+      m_total_grains   += i->amount_kg();
+   }
+
+   foreach( Fermentable *i, recObs->fermentables() ) {
+      double lovi = ( i->color_srm() +0.6 ) / 1.35;
+      m_weighted_colors   += (i->amount_kg()/m_total_grains)*lovi;
+   }
+   m_thickness = recObs->mash()->totalInfusionAmount_l()/m_total_grains;
+
    if ( base != nullptr ) {
 
       m_mashRO = base->mashRO();
@@ -185,6 +188,7 @@ void WaterDialog::setRecipe(Recipe *rec)
       rangeWidget_na->setValue(modifier * base->sodium_ppm());
       rangeWidget_hco3->setValue(modifier * base->bicarbonate_ppm());
       rangeWidget_so4->setValue(modifier * base->sulfate_ppm());
+      rangeWidget_pH->setValue( calculateMashpH() );
    }
    if ( target != nullptr ) {
       targetProfileButton->setWater(target);
@@ -198,23 +202,12 @@ void WaterDialog::setRecipe(Recipe *rec)
       setSlider(rangeWidget_so4, target->sulfate_ppm());
    }
 
-   // oh. this sucks. I need that total mass first
-   foreach( Fermentable *i, recObs->fermentables() ) {
-      m_total_grains   += i->amount_kg();
-   }
-   // and then I need to use that to get this number.
-   foreach( Fermentable *i, recObs->fermentables() ) {
-      double lovi = ( i->color_srm() +0.6 ) / 1.35;
-      m_weighted_colors   += (i->amount_kg()/m_total_grains)*lovi;
-   }
-   m_thickness = recObs->mash()->totalInfusionAmount_l()/m_total_grains;
-
    newTotals();
 }
 
 void WaterDialog::update_baseProfile(int selected)
 {
-
+   Q_UNUSED(selected)
    if ( recObs == nullptr )
       return;
 
@@ -237,6 +230,7 @@ void WaterDialog::update_baseProfile(int selected)
 void WaterDialog::update_targetProfile(int selected)
 {
 
+   Q_UNUSED(selected)
    if ( recObs == nullptr )
       return;
 
@@ -443,4 +437,24 @@ double WaterDialog::calculateMashpH()
    }
 
    return mashpH;
+}
+
+void WaterDialog::saveAndClose()
+{
+   saltTableModel->saveAndClose();
+   if ( base != nullptr && base->cacheOnly() ) {
+      Database::instance().insertWater(base);
+      Database::instance().addToRecipe(recObs,base,true);
+   }
+   if ( target != nullptr && target->cacheOnly() ) {
+      Database::instance().insertWater(target);
+      Database::instance().addToRecipe(recObs,target,true);
+   }
+
+   setVisible(false);
+}
+
+void WaterDialog::clearAndClose()
+{
+   setVisible(false);
 }

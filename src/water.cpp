@@ -116,7 +116,7 @@ Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
    m_magnesium_ppm(rec.value(kcolWaterMagnesium).toDouble()),
    m_ph(rec.value(kcolPH).toDouble()),
    m_alkalinity(rec.value(kcolWaterAlkalinity).toDouble()),
-   m_notes(rec.value(kcolAmount).toString()),
+   m_notes(rec.value(kcolNotes).toString()),
    m_cacheOnly(false),
    m_type(static_cast<Water::Types>(rec.value(kcolWaterType).toInt())),
    m_mash_ro(rec.value(kcolWaterMashRO).toDouble()),
