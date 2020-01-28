@@ -319,10 +319,10 @@ QVariant BtTreeModel::toolTipData(const QModelIndex &index) const
       case YEASTMASK:
          return whiskey->getToolTip( qobject_cast<Yeast*>(thing(index)));
       case WATERMASK:
-         return thing(index)->name();
+         // return thing(index)->name();
          // this must wait until I implement the call. SEE? That's a proper
          // comment. Not this weaksauce "must be fixed" shit.
-         // return whiskey->getToolTip( qobject_cast<Water*>(thing(index)));
+         return whiskey->getToolTip( qobject_cast<Water*>(thing(index)));
       default:
          return item(index)->name();
    }

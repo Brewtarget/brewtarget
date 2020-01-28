@@ -35,6 +35,7 @@ class Recipe;
 #include "BeerXMLElement.h"
 #include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
 #include "misc.h"
+#include "salt.h"
 #include "brewnote.h"
 
 // Forward declarations.
@@ -46,7 +47,6 @@ class Fermentable;
 class Equipment;
 class Yeast;
 class Water;
-class Salt;
 class Instruction;
 class PreInstruction;
 class BrewNote;
@@ -310,9 +310,14 @@ public:
    // Helpers
    //! \brief Get the ibus from a given \c hop.
    double ibuFromHop(Hop const* hop);
+   //! \brief Formats the fermentables for instructions
    QList<QString> getReagents( QList<Fermentable*> ferms );
+   //! \brief Formats the mashsteps for instructions
    QList<QString> getReagents( QList<MashStep*> msteps );
+   //! \brief Formats the hops for instructions
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
+   //! \brief Formats the salts for instructions
+   QStringList getReagents( QList<Salt*> salts, Salt::WhenToAdd wanted);
    QHash<QString,double> calcTotalPoints();
 
    static QString classNameStr();
@@ -364,37 +369,6 @@ public slots:
    void acceptYeastChange(Yeast* yeast);
    void acceptMashChange(Mash* mash);
 
-   /*
-   // Setters -- why are these slots?
-   void setType( const QString &var );
-   void setBrewer( const QString &var );
-   void setBatchSize_l( double var );
-   void setBoilSize_l( double var );
-   void setBoilTime_min( double var );
-   void setEfficiency_pct( double var );
-   void setAsstBrewer( const QString &var );
-   void setNotes( const QString &var );
-   void setTasteNotes( const QString &var );
-   void setTasteRating( double var );
-   void setOg( double var );
-   void setFg( double var );
-   void setFermentationStages( int var );
-   void setPrimaryAge_days( double var );
-   void setPrimaryTemp_c( double var );
-   void setSecondaryAge_days( double var );
-   void setSecondaryTemp_c( double var );
-   void setTertiaryAge_days( double var );
-   void setTertiaryTemp_c( double var );
-   void setAge_days( double var );
-   void setAgeTemp_c( double var );
-   void setDate( const QDate &var );
-   void setCarbonation_vols( double var );
-   void setForcedCarbonation( bool var );
-   void setPrimingSugarName( const QString &var );
-   void setCarbonationTemp_c( double var );
-   void setPrimingSugarEquiv( double var );
-   void setKegPrimingFactor( double var );
-  */
 private:
 
    Recipe(Brewtarget::DBTable table, int key);
@@ -495,9 +469,10 @@ private:
    Instruction* postboilFermentablesIns();
    Instruction* postboilIns();
    Instruction* mashFermentableIns();
-   Instruction* mashWaterIns(unsigned int size);
+   Instruction* mashWaterIns();
    Instruction* firstWortHopsIns();
    Instruction* topOffIns();
+   Instruction* saltWater(Salt::WhenToAdd when);
 
    //void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );

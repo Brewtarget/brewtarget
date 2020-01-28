@@ -570,6 +570,54 @@ QString RecipeFormatter::getToolTip(Yeast* yeast)
 
 }
 
+QString RecipeFormatter::getToolTip(Water* water)
+{
+   QString header;
+   QString body;
+
+   if ( water == nullptr )
+      return "";
+
+   // Do the style sheet first
+   header = "<html><head><style type=\"text/css\">";
+   header += Html::getCss(":/css/tooltip.css");
+   header += "</style></head>";
+
+   body   = "<body>";
+
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%1</caption>")
+         .arg( water->name() );
+
+   // First row -- Ca and Mg
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(tr("Ca"))
+           .arg(water->calcium_ppm());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(tr("Mg"))
+           .arg(water->magnesium_ppm());
+   // Second row -- SO4 and Na
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(tr("SO<sub>4</sub>"))
+           .arg(water->sulfate_ppm());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(tr("Na"))
+           .arg(water->sodium_ppm());
+   // third row -- Cl and HCO3
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(tr("Cl"))
+           .arg(water->chloride_ppm());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(tr("HCO<sub>3</sub>"))
+           .arg( water->bicarbonate_ppm());
+
+
+   body += "</table></body></html>";
+
+   return header + body;
+
+}
 void RecipeFormatter::toTextClipboard()
 {
    QApplication::clipboard()->setText(getTextFormat());

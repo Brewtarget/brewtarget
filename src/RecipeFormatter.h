@@ -45,8 +45,8 @@ class RecipeFormatter : public QObject
 public:
 
    enum { PRINT, PREVIEW, HTML, NUMACTIONS };
-   
-   RecipeFormatter(QObject* parent=0);
+
+   RecipeFormatter(QObject* parent=nullptr);
    ~RecipeFormatter();
    //! Set the recipe to view.
    void setRecipe(Recipe* recipe);
@@ -66,6 +66,7 @@ public:
    QString getToolTip(Hop* hop);
    QString getToolTip(Misc* misc);
    QString getToolTip(Yeast* yeast);
+   QString getToolTip(Water* water);
    QString getLabelToolTip();
    //! Get the maximum number of characters in a list of strings.
    unsigned int getMaxLength( QStringList* list );
@@ -75,14 +76,14 @@ public:
    void padAllToMaxLength( QStringList* list, unsigned int padding=2 );
    //! Return the text wrapped with the given length
    QString wrapText( const QString &text, int wrapLength );
-   
+
    //! Send a printable version to the printer.
-   void print(QPrinter *mainPrinter, int action = PRINT, QFile* outFile=0);
+   void print(QPrinter *mainPrinter, int action = PRINT, QFile* outFile=nullptr);
 
 public slots:
    //! Put the plaintext view onto the clipboard.
    void toTextClipboard();
-   
+
 private:
    QString getTextSeparator();
 
@@ -102,13 +103,21 @@ private:
    QString buildNotesHtml();
    QString buildInstructionTableHtml();
    QString buildInstructionTableTxt();
+   /* I am not sure how I want to implement these yet.
+    * I might just include the salts in the instructions table. Until I decide
+    * these stay commented out
+   QString buildWaterTableHtml();
+   QString buildWaterTableTxt();
+   QString buildSaltTableHtml();
+   QString buildSaltTableTxt();
+   */
    QString buildBrewNotesHtml();
    QString buildBrewNotesTxt();
    QString buildHTMLFooter();
 
    QList<Hop*> sortHopsByTime(Recipe* rec);
    QList<Fermentable*> sortFermentablesByWeight(Recipe* rec);
-   
+
    QString* textSeparator;
    Recipe* rec;
 

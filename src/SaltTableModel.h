@@ -76,18 +76,19 @@ public:
    //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
-    double total_Ca() const;
-    double total_Cl() const;
-    double total_CO3() const;
-    double total_HCO3() const;
-    double total_Mg() const;
-    double total_Na() const;
-    double total_SO4() const;
+   double total_Ca() const;
+   double total_Cl() const;
+   double total_CO3() const;
+   double total_HCO3() const;
+   double total_Mg() const;
+   double total_Na() const;
+   double total_SO4() const;
 
-    double total( Salt::Types type ) const;
+   double total( Salt::Types type ) const;
    double totalAcidWeight(Salt::Types type) const;
 
    void removeSalts(QList<int>deadSalts);
+   void saveAndClose();
 
 public slots:
    void changed(QMetaProperty,QVariant);
