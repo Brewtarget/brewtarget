@@ -531,7 +531,6 @@ bool DatabaseSchemaHelper::drop_columns(QSqlQuery q, TableSchema *tbl, QStringLi
 
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
       foreach(QString column, colNames ) {
-         qDebug() << "suckawhat";
          ret &= q.exec(
                   ALTERTABLE + SEP + tbl->tableName() + SEP +
                   DROPCOLUMN + SEP + "IF EXISTS " + column
@@ -543,30 +542,18 @@ bool DatabaseSchemaHelper::drop_columns(QSqlQuery q, TableSchema *tbl, QStringLi
       QString tmptable = QString("tmp%1").arg(tbl->tableName());
       QString createTemp = tbl->generateCreateTable(Brewtarget::SQLITE, tmptable);
       ret &= q.exec( createTemp );
-      if ( !ret && tbl->dbTable() == Brewtarget::FERMINVTABLE ) {
-         qDebug() << "created temp table:" << createTemp << ret << q.lastError();
-      }
 
       // copy the old to the new, less bad columns
       QString copySql = tbl->generateCopyTable(tmptable, Brewtarget::SQLITE );
       ret &= q.exec( copySql );
-      if ( tbl->dbTable() == Brewtarget::FERMINVTABLE ) {
-         qDebug() << "copied to the temp table:" << copySql << ret << q.lastError();
-      }
 
       // drop the old
       QString dropOld = QString("drop table %1").arg(tbl->tableName());
       ret &= q.exec(dropOld);
-      if ( tbl->dbTable() == Brewtarget::FERMINVTABLE ) {
-         qDebug() << "dropped the original table:" << dropOld << ret << q.lastError();
-      }
 
       // rename the new
       QString rename = QString("alter table %1 rename to %2").arg(tmptable).arg(tbl->tableName());
       ret &= q.exec( rename );
-      if ( tbl->dbTable() == Brewtarget::FERMINVTABLE ) {
-         qDebug() << "renamed the new table:" << rename << ret << q.lastError();
-      }
    }
 
    return ret;
@@ -578,7 +565,6 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
 
    // these columns are used nowhere I can find and they are breaking things.
    ret = drop_columns(q,defn->table(Brewtarget::BREWNOTETABLE),QStringList() << "predicted_og" << "predicted_abv");
-   qDebug() << "finished cleaning up brewnote: ret =" << ret;
 
    // Now that we've had that fun, let's have this fun
    Brewtarget::logW(QString("rearranging inventory"));
@@ -589,7 +575,6 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
       ret &= migration_aide_8(q, defn, Brewtarget::MISCTABLE);
    if ( ret )
       ret &= migration_aide_8(q, defn, Brewtarget::YEASTTABLE);
-   qDebug() << "finished rearranging inventory: ret =" << ret;
 
    // We need to drop the appropriate columns from the inventory tables
    // Scary, innit? The changes above basically reverse the relation.
@@ -599,27 +584,21 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
    Brewtarget::logW(QString("dropping inventory columns"));
    if ( ret ) {
       ret &= drop_columns(q, defn->table(Brewtarget::FERMINVTABLE),  QStringList() << "fermentable_id");
-      qDebug() << "finished dropping fermentable inventory column: ret =" << ret;
    }
    if ( ret ) {
       ret &= drop_columns(q, defn->table(Brewtarget::HOPINVTABLE),   QStringList() << "hop_id");
-      qDebug() << "finished dropping hop inventory column: ret =" << ret;
    }
    if ( ret ) {
       ret &= drop_columns(q, defn->table(Brewtarget::MISCINVTABLE),  QStringList() << "misc_id");
-      qDebug() << "finished dropping misc inventory column: ret =" << ret;
    }
    if ( ret ) {
       ret &= drop_columns(q, defn->table(Brewtarget::YEASTINVTABLE), QStringList() << "yeast_id");
-      qDebug() << "finished dropping yeast inventory column: ret =" << ret;
    }
-   qDebug() << "finished dropping inventory columns: ret =" << ret;
 
    // Finally, the btalltables table isn't needed, so drop it
    Brewtarget::logW(QString("dropping bt_alltables"));
    if ( ret )
       ret &= q.exec( DROPTABLE + SEP + "bt_alltables");
-   qDebug() << "finished dropping bt_alltables: ret =" << ret;
 
    return ret;
 }

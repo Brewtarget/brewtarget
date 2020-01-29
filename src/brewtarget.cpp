@@ -867,7 +867,7 @@ void Brewtarget::updateConfig()
       switch ( ++cVersion ) {
          case 1:
             // Update the dbtype, because I had to increase the NODB value from -1 to 0
-            int newType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::SQLITE).toInt() + 1);
+            int newType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::NODB).toInt() + 1);
             // Write that back to the config file
             setOption("dbType", static_cast<int>(newType));
             // and make sure we don't do it again.
