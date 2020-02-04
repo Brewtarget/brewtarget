@@ -337,6 +337,7 @@ void MashWizard::wizardry()
    double spargeWater_l = recObs->targetTotalMashVol_l() - recObs->mash()->totalMashWater_l();
 
    // If I've done my math right, we should never get here on nosparge
+   // not sure why I am inferring this when I could just check the button group?
    if( spargeWater_l >= 0.001 )
    {
       spargeWater_l += lauterDeadspace;
