@@ -188,6 +188,8 @@ public:
    static void logE( QString message );
    //! \brief Log a warning message.
    static void logW( QString message );
+   //! \brief Log an info message.
+   static void logI( QString message );
 
    /*!
     *  \brief Displays an amount in the appropriate units.

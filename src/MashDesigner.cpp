@@ -72,7 +72,6 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
 
 void MashDesigner::proceed()
 {
-    qDebug() << Q_FUNC_INFO << curStep;
    nextStep(++curStep);
 }
 

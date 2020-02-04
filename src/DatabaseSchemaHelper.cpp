@@ -326,22 +326,18 @@ bool DatabaseSchemaHelper::migrate_to_4(QSqlQuery q, DatabaseSchema* defn)
    TableSchema* tbl = defn->table(Brewtarget::SETTINGTABLE);
 
    // Save old settings
-   ret &= q.exec( tbl->generateCreateTable(Brewtarget::dbType(), QString("oldsettings")));
+   ret &= q.exec( ALTERTABLE + SEP + tbl->tableName() + SEP + "RENAME TO oldsettings");
 
-   // Drop the old settings with text version, and create new table
-   // with intever version.
-   ret &= q.exec( DROPTABLE + SEP + tbl->tableName() );
-
+   // create new table with intever version.
    ret &= q.exec( tbl->generateCreateTable() );
 
    // Update version to 4, saving other settings
-   ret &= q.exec(
-      INSERTINTO + SEP + tbl->tableName() +
-      QString(" (%1,%2,%3)").arg(tbl->keyName())
+   QString copySettings =  INSERTINTO + SEP + tbl->tableName() + SEP +
+         QString("(%1,%2,%3)").arg(tbl->keyName())
                             .arg(tbl->propertyToColumn(kpropSettingsVersion))
                             .arg(tbl->propertyToColumn(kpropSettingsRepopulate)) + " " +
-      QString("SELECT 1, 4, %1 FROM oldsettings").arg(tbl->propertyToColumn(kpropSettingsRepopulate))
-   );
+         QString("SELECT 1, 4, %1 FROM oldsettings").arg(tbl->propertyToColumn(kpropSettingsRepopulate));
+   ret &= q.exec(copySettings);
 
    // Cleanup
    ret &= q.exec( DROPTABLE + SEP + "oldsettings" );
@@ -352,11 +348,12 @@ bool DatabaseSchemaHelper::migrate_to_4(QSqlQuery q, DatabaseSchema* defn)
 bool DatabaseSchemaHelper::migrate_to_5(QSqlQuery q, DatabaseSchema* defn)
 {
    bool ret = true;
+   TableSchema *tbl = defn->table(Brewtarget::INSTINRECTABLE);
    // Drop the previous bugged TRIGGER
    ret &= q.exec( QString("DROP TRIGGER dec_ins_num") );
 
    // Create the good trigger
-   QString trigger = defn->table(Brewtarget::INSTRUCTIONTABLE)->generateDecrementTrigger(Brewtarget::dbType());
+   QString trigger = tbl->generateDecrementTrigger( Brewtarget::dbType());
    ret &= q.exec(trigger);
 
    return ret;
@@ -567,7 +564,7 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
    ret = drop_columns(q,defn->table(Brewtarget::BREWNOTETABLE),QStringList() << "predicted_og" << "predicted_abv");
 
    // Now that we've had that fun, let's have this fun
-   Brewtarget::logW(QString("rearranging inventory"));
+   Brewtarget::logI(QString("rearranging inventory"));
    ret &= migration_aide_8(q, defn, Brewtarget::FERMTABLE);
    if ( ret )
       ret &= migration_aide_8(q, defn, Brewtarget::HOPTABLE);
@@ -581,7 +578,7 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
    // Instead of inventory knowing about ingredients, we now have ingredients
    // knowing about inventory. I am concerned that leaving these in place
    // will cause circular references
-   Brewtarget::logW(QString("dropping inventory columns"));
+   Brewtarget::logI(QString("dropping inventory columns"));
    if ( ret ) {
       ret &= drop_columns(q, defn->table(Brewtarget::FERMINVTABLE),  QStringList() << "fermentable_id");
    }
@@ -596,9 +593,9 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
    }
 
    // Finally, the btalltables table isn't needed, so drop it
-   Brewtarget::logW(QString("dropping bt_alltables"));
+   Brewtarget::logI(QString("dropping bt_alltables"));
    if ( ret )
-      ret &= q.exec( DROPTABLE + SEP + "bt_alltables");
+      ret &= q.exec( DROPTABLE + SEP + "IF EXISTS bt_alltables");
 
    return ret;
 }

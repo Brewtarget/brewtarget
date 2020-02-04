@@ -30,14 +30,14 @@ Log::Log(bool isLoggingToStderr)
    : errStream(stderr),
      file(),
      isLoggingToStderr(isLoggingToStderr),
-     stream(NULL) {
+     stream(nullptr) {
 }
 
 Log::~Log() {
    delete stream;
-   stream = NULL;
+   stream = nullptr;
    if( file.isOpen() )
-      file.close();   
+      file.close();
 }
 
 void Log::changeDirectory(const QDir defaultDir) {
@@ -97,10 +97,9 @@ void Log::doLog(const LogType lt, const QString message) {
 
 QString Log::getTypeName(const LogType type) const {
    switch(type) {
-      case LogType_DEBUG: return "DEBUG";
-      case LogType_INFO: return "INFO";
-      case LogType_WARNING: return "WARNING";
-      case LogType_ERROR: return "ERROR";
-      default: return "";
+      case LogType_DEBUG: return tr("DEBUG");
+      case LogType_INFO: return tr("INFO");
+      case LogType_WARNING: return tr("WARNING");
+      case LogType_ERROR: return tr("ERROR");
    }
 }
