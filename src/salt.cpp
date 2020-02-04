@@ -175,8 +175,17 @@ double Salt::percentAcid() const { return m_percent_acid; }
 // All of these the per gram, per liter
 // these values are taken from Bru'n Water's execellent water knowledge page
 // https://sites.google.com/site/brunwater/water-knowledge
-
-// the magic 1000 is here because masses are stored as kg. Upstream expects grams
+// the numbers are derived by dividing the molecular weight of the ion by the
+// molecular weight of the molecule in grams and then multiplying by 1000 to
+// mg
+// eg:
+//    NaHCO3 84 g/mol
+//       Na provides    23 g/mol
+//       HCO3 provides  61 g/mol (ish)
+//     So 1 g of NaHCO3 in 1L of water provides 1000*(61/84) = 726 ppm HCO3
+//
+// the magic 1000 is here because masses are stored as kg. We need it in grams
+// for this part
 double Salt::Ca() const
 {
    if ( m_add_to == Salt::NEVER ) {
