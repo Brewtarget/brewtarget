@@ -178,19 +178,12 @@ void WaterDialog::setRecipe(Recipe *rec)
       spinBox_mashRO->setValue( QVariant(m_mashRO*100).toInt());
       m_spargeRO = base->spargeRO();
       spinBox_spargeRO->setValue( QVariant(m_spargeRO*100).toInt());
-      double modifier = 1 - ( m_mashRO * mash->totalInfusionAmount_l() + m_spargeRO * mash->totalSpargeAmount_l() ) / mash->totalMashWater_l();
 
       baseProfileButton->setWater(base);
       baseProfileEdit->setWater(base);
-      rangeWidget_ca->setValue(modifier * base->calcium_ppm());
-      rangeWidget_cl->setValue(modifier * base->chloride_ppm());
-      rangeWidget_mg->setValue(modifier * base->magnesium_ppm());
-      rangeWidget_na->setValue(modifier * base->sodium_ppm());
-      rangeWidget_hco3->setValue(modifier * base->bicarbonate_ppm());
-      rangeWidget_so4->setValue(modifier * base->sulfate_ppm());
-      rangeWidget_pH->setValue( calculateMashpH() );
+      // all of the magic to set the sliders happens in newTotals(). So don't do it twice
    }
-   if ( target != nullptr ) {
+   if ( target != nullptr  && target != base ) {
       targetProfileButton->setWater(target);
       targetProfileEdit->setWater(target);
 
@@ -201,8 +194,8 @@ void WaterDialog::setRecipe(Recipe *rec)
       setSlider(rangeWidget_hco3, target->bicarbonate_ppm());
       setSlider(rangeWidget_so4, target->sulfate_ppm());
    }
-
    newTotals();
+
 }
 
 void WaterDialog::update_baseProfile(int selected)
@@ -316,7 +309,27 @@ void WaterDialog::removeSalts()
    saltTableModel->removeSalts(deadSalts);
 }
 
+// All of the pH calculations are taken from the work done by Kai Troester and
+// published at
+// http://braukaiser.com/wiki/index.php/Beer_color_to_mash_pH_(v2.0)
+// with additional information being gleaned from the spreadsheet associated
+// with that link.
 
+// I've seen some confusion over this constant. 50 mEq/l is what Kai uses.
+const double mEq = 50.0;
+// Ca grams per mole
+const double Cagpm = 40.0;
+// Mg grams per mole
+const double Mggpm = 24.30;
+// HCO3 grams per mole
+const double HCO3gpm = 61.01;
+// The pH of a beer with no color
+const double nosrmbeer_ph = 5.6;
+// Magic constants Kai derives in the document above.
+const double pHSlopeLight = 0.21;
+const double pHSlopeDark  = 0.06;
+
+//! \brief Calcuates the residual alkalinity of the mash water.
 double WaterDialog::calculateRA() const
 {
    double residual = 0.0;
@@ -332,35 +345,36 @@ double WaterDialog::calculateRA() const
    return residual;
 }
 
-// All of the pH calculations are taken from the work done by Kai Troester and
-// published at
-// http://braukaiser.com/wiki/index.php/Beer_color_to_mash_pH_(v2.0)
-// with additional information being gleaned from the spreadsheet associated
-// with that link.
 
-const double mEq = 50.0;
-
-//! brief Calculates the pH delta caused by any Ca or Mg either in the base
-//! water or the salt additions.
+//! \brief Calculates the pH delta caused by any Ca or Mg either in the base
+//! water or the salt additions. I may need to split this out, as it also
+//! handles the pH delta for NaHCO3 additions but ignores the base
 double WaterDialog::calculateSaltpH()
 {
-   // Ca grams per mole
-   const double Cagpm = 40.0;
-   // Mg grams per mole
-   const double Mggpm = 24.30;
 
-   // I have no idea where the 2 comes from, but Kai does it.
+   // I have no idea where the 2 comes from, but Kai did it. I wish I knew why
    // We need the value from the range widget (which is already in ppm)
    // as that will deal with both the base water and the salt additions.
    double cappm = rangeWidget_ca->value()/Cagpm * 2;
    double mgppm = rangeWidget_mg->value()/Mggpm * 2;
+   // The base water HCO3 is already taken into account, so I need the avoid
+   // using it here and have to get the amount from the salts
+   double hco3ppm = saltTableModel->total_HCO3()/HCO3gpm;
+
 
    // totalDelta gives me a value in mEq/l. Multiplied by the mash,
    // it will give me the mEq which is what is needed.
-   double totalDelta = calculateRA() - cappm/3.5 - mgppm/7;
-   return totalDelta * recObs->mash()->totalInfusionAmount_l();
+   // The 3.5 and 7 come from Paul Kohlbach's work from the 1940's.
+   // The 61 is another magic number from Kai. Sigh
+   double totalDelta = (calculateRA() - cappm/3.5 - mgppm/7 + hco3ppm/61) * recObs->mash()->totalInfusionAmount_l();
+   // note: The referenced paper says the formula is
+   // gristpH + strikepH * thickness/mEq. I could never get that to work.
+   // the spreadsheet gave me this formula, and  it works much better.
+   return totalDelta/m_thickness/mEq;
 }
 
+//! \brief Calculates the pH adjustment caused by lactic acid, H3PO4 and/or acid
+//! malts
 double WaterDialog::calculateAcidpH()
 {
    const double H3PO4_gpm = 98;
@@ -381,15 +395,10 @@ double WaterDialog::calculateAcidpH()
    return totalDelta/mEq/m_thickness;
 }
 
-//! \brief Calculates the theoretical DI mash pH. There is some confusion over
-//! the value for the no SRM beer. The spreadsheet says 5.7, the documentation
-//! suggests 5.6 is more accurate.
+//! \brief Calculates the theoretical distilled water mash pH. I make some
+//! rather rash assumptions about a crystal v roasted malt.
 double WaterDialog::calculateGristpH()
 {
-   const double nosrmbeer_ph = 5.6;
-   const double pHSlopeLight = 0.21;
-   const double pHSlopeDark  = 0.06;
-
    double gristPh = nosrmbeer_ph;
    double pHAdjustment = 0.0;
 
@@ -406,7 +415,10 @@ double WaterDialog::calculateGristpH()
          // haunt me later, but I have no way of knowing what kind of malt
          // (base, crystal, roasted) this is.
          if ( i->diastaticPower_lintner() < 1 ) {
-            double lovi = ( i->color_srm() + 0.6)/1.35;
+            double lovi = 19.0;
+            if ( i->color_srm() <= 120 ) {
+               lovi = ( i->color_srm() + 0.6)/1.35;
+            }
             colorFromGrain = ( i->amount_kg() / m_total_grains ) * lovi;
           }
       }
@@ -419,7 +431,7 @@ double WaterDialog::calculateGristpH()
 }
 
 //! \brief This figures out the expected mash pH. I am unsure about the
-//! 50 mEq/(kg*Ph). I have seen 32, 36 and 50. This is the value in the
+//! 50 mEq/(kg*Ph). I have seen 32, 36 and 50. This is the value in Kai's
 //! spreadsheet.
 double WaterDialog::calculateMashpH()
 {
@@ -430,10 +442,8 @@ double WaterDialog::calculateMashpH()
       double strikepH  = calculateSaltpH();
       double acids     = calculateAcidpH();
 
-      // note: The referenced paper says the formula is
-      // gristpH + strikepH * thickness/mEq. I could never get that to work.
-      // the spreadsheet gave me this formula, and  it works much better.
-      mashpH = gristpH + strikepH/m_thickness/mEq - acids;
+      // qDebug() << "gristph =" << gristpH << "strike =" << strikepH << "acids =" << acids;
+      mashpH = gristpH + strikepH - acids;
    }
 
    return mashpH;

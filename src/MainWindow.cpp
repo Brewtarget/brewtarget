@@ -918,11 +918,12 @@ void MainWindow::setRecipe(Recipe* recipe)
    mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
-   waterDialog->setRecipe(recipeObs);
-
    // changes in how the data is loaded means we may not have fired all the signals we should have
    // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.
    recipe->recalcAll();
+
+   // this has to happen late, because the water dialog needs teh calculted values
+   waterDialog->setRecipe(recipeObs);
    // If you don't connect this late, every previous set of an attribute
    // causes this signal to be slotted, which then causes showChanges() to be
    // called.

@@ -94,7 +94,6 @@ void SaltTableModel::observeRecipe(Recipe* rec)
       connect( recObs, &BeerXMLElement::changed, this, &SaltTableModel::changed );
       if (salts.size() > 0 ) {
          addSalts( salts );
-         emit newTotals();
       }
       if ( recObs->mash() ) {
          spargePct = recObs->mash()->totalSpargeAmount_l()/recObs->mash()->totalInfusionAmount_l();
@@ -132,19 +131,18 @@ void SaltTableModel::addSalts(QList<Salt*> salts)
    if (size+tmp.size()) {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       saltObs.append(tmp);
+      endInsertRows();
 
       foreach (Salt* i, tmp) {
          connect( i, &BeerXMLElement::changed, this, &SaltTableModel::changed );
       }
 
-      endInsertRows();
    }
 
    if( parentTableWidget ) {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-
 }
 
 void SaltTableModel::catchSalt()
@@ -153,6 +151,7 @@ void SaltTableModel::catchSalt()
    addSalt(gaq);
 }
 
+// total salt in ppm. Not sure this is helping.
 double SaltTableModel::total_Ca() const
 {
    double ret = 0;
