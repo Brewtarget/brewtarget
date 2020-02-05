@@ -366,7 +366,8 @@ void SaltTableModel::removeSalts(QList<int>deadSalts)
 
          // Dead salts do not malinger in the database. This will
          // delete the thing, not just mark it deleted
-         Database::instance().removeIngredientFromRecipe(recObs,zombie);
+         if ( ! zombie->cacheOnly() )
+            Database::instance().removeIngredientFromRecipe(recObs,zombie);
       }
    }
    emit newTotals();
@@ -667,7 +668,7 @@ void SaltTableModel::saveAndClose()
    // all of the writes should have been instantaneous unless
    // we've added a new salt. Wonder if this will work?
    foreach( Salt* i, saltObs ) {
-      if ( i->cacheOnly() ) {
+      if ( i->cacheOnly() && i->type() != Salt::NONE && i->addTo() == Salt::NEVER ) {
          Database::instance().insertSalt(i);
          Database::instance().addToRecipe(recObs,i,true);
       }
@@ -687,7 +688,7 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
       QComboBox *box = new QComboBox(parent);
 
       box->addItem(tr("NONE")  ,      Salt::NONE);
-      box->addItem(tr("CaCL2") ,      Salt::CACL2);
+      box->addItem(tr("CaCl2") ,      Salt::CACL2);
       box->addItem(tr("CaCO3") ,      Salt::CACO3);
       box->addItem(tr("CaSO4") ,      Salt::CASO4);
       box->addItem(tr("MgSO4") ,      Salt::MGSO4);

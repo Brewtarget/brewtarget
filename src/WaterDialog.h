@@ -55,7 +55,6 @@ public slots:
    void removeSalts();
    void setMashRO(int val);
    void setSpargeRO(int val);
-   void updateAcids();
    void saveAndClose();
    void clearAndClose();
 
@@ -88,6 +87,7 @@ private:
    double calculateGristpH();
    double calculateMashpH();
    double calculateSaltpH();
+   double calculateAddedSaltpH();
    double calculateAcidpH();
 
 };

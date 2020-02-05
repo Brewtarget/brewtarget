@@ -110,12 +110,6 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
 
 WaterDialog::~WaterDialog() {}
 
-void WaterDialog::updateAcids()
-{
-   // this only causes a recalc right now. I have no idea how I'm storing
-   // the acids.
-   newTotals();
-}
 void WaterDialog::setMashRO(int val)
 {
    m_mashRO = val/100.0;
