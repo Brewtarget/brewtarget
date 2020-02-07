@@ -328,8 +328,6 @@ bool Database::load()
       return false;
    }
 
-   // Initialize the SELECT * query hashes.
-   // selectAll = Database::selectAllHash();
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -742,6 +740,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
          throw QString("could not locate classInfo for signal on %2").arg(meta->className());
       }
 
+
       table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
       child = dbDefn->table( table->childTable() );
       inrec = dbDefn->table( table->inRecTable() );
@@ -755,6 +754,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
                                  .arg(ing->_key)
                                  .arg(inrec->recipeIndexName())
                                  .arg(rec->_key);
+
       // delete from misc where id = [misc key]
       QString deleteIngredient = QString("DELETE FROM %1 where %2=%3")
                                  .arg(table->tableName())
@@ -762,13 +762,8 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
                                  .arg(ing->_key);
       q.setForwardOnly(true);
 
-      if ( ! q.exec(deleteFromInRecipe) )
-         throw QString("failed to delete in_recipe.");
-
-      // I don't really like this, but I can't think of a better solution. Of
-      // all the ingredients, instructions don't have a _children table. Given
-      // that it is only one table, I will try the easy way first
-      if ( table->dbTable() != Brewtarget::INSTRUCTIONTABLE ) {
+      // Don't do this if no child table is defined (like instructions)
+      if ( table->childTable() != Brewtarget::NOTABLE ) {
          // delete from misc_child where child_id = [misc key]
          QString deleteFromChildren = QString("DELETE FROM %1 WHERE %2=%3")
                                     .arg(child->tableName())
@@ -778,6 +773,9 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
             throw QString("failed to delete children.");
          }
       }
+
+      if ( ! q.exec(deleteFromInRecipe) )
+         throw QString("failed to delete in_recipe.");
 
       if ( ! q.exec( deleteIngredient ) )
          throw QString("failed to delete ingredient.");
@@ -1320,11 +1318,8 @@ Hop* Database::newHop(Hop* other)
       else {
          sqlDatabase().transaction();
          transact = true;
-         qDebug() << Q_FUNC_INFO << "adding new hop";
          tmp = newIngredient(&allHops);
-         qDebug() << Q_FUNC_INFO << "adding new inventory" << tmp->key();
          int invkey = newInventory( dbDefn->table(Brewtarget::HOPINVTABLE));
-         qDebug() << Q_FUNC_INFO << "added new inventory" << invkey;
          tmp->setInventoryId(invkey);
       }
    }
@@ -1775,7 +1770,9 @@ int Database::insertElement(BeerXMLElement* ins)
 
    try {
       if ( ! q.exec() ) {
-         throw QString("could not insert a record into %1").arg(ins->table());
+         throw QString("could not insert a record into %1: %2")
+               .arg(schema->tableName())
+               .arg(insert);
       }
 
       key = q.lastInsertId().toInt();
@@ -1784,7 +1781,7 @@ int Database::insertElement(BeerXMLElement* ins)
    catch (QString e) {
       sqlDatabase().rollback();
       Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
-      throw; // rethrow the error until somebody cares
+      abort();
    }
    ins->_key = key;
 
@@ -2250,7 +2247,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
 {
    TableSchema* tbl = dbDefn->table(table);
    TableSchema* cld = dbDefn->childTable( table );
-   Brewtarget::logW( QString("Populating Children Ingredient Links (%1)").arg(tbl->tableName()));
+   Brewtarget::logI( QString("Populating Children Ingredient Links (%1)").arg(tbl->tableName()));
 
    try {
       // "SELECT DISTINCT name FROM [tablename]"
@@ -2264,7 +2261,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
 
       while (nameq.next()) {
          QString name = nameq.record().value(0).toString();
-         queryString = QString( "SELECT %1 FROM %2 WHERE ( %3=:name AND 4%=:boolean ) ORDER BY %1 ASC LIMIT 1")
+         queryString = QString( "SELECT %1 FROM %2 WHERE ( %3=:name AND %4=:boolean ) ORDER BY %1 ASC LIMIT 1")
                      .arg(tbl->keyName())
                      .arg(tbl->tableName())
                      .arg(tbl->propertyToColumn(kpropName))
@@ -2402,7 +2399,6 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
          .arg(tbl->propertyToColumn(kpropDeleted))
          .arg(Brewtarget::dbFalse());
 
-   qDebug() << Q_FUNC_INFO << query;
    QSqlQuery sql(query, sqlDatabase());
    if (! sql.isActive()) {
       throw QString("Failed to get the inventory.\nQuery:\n%1\nError:\n%2")
@@ -4373,6 +4369,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
       blockSignals(false);
+      throw;
    }
 
    emit newRecipeSignal(ret);

@@ -41,7 +41,7 @@ class Style : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "styles")
-   
+
    friend class Database;
    friend class StyleEditor;
 public:
@@ -51,7 +51,7 @@ public:
    //! \brief The type of beverage.
    enum Type {Lager, Ale, Mead, Wheat, Mixed, Cider};
    Q_ENUMS( Type )
-   
+
    //! \brief The category.
    Q_PROPERTY( QString category READ category WRITE setCategory /*NOTIFY changed*/ /*changedCategory*/ )
    //! \brief The category number.
@@ -94,7 +94,7 @@ public:
    Q_PROPERTY( QString ingredients READ ingredients WRITE setIngredients /*NOTIFY changed*/ /*changedIngredients*/ )
    //! \brief The commercial examples.
    Q_PROPERTY( QString examples READ examples WRITE setExamples /*NOTIFY changed*/ /*changedExamples*/ )
-   
+
    void setCategory( const QString& var);
    void setCategoryNumber( const QString& var);
    void setStyleLetter( const QString& var);
@@ -122,7 +122,7 @@ public:
    QString categoryNumber() const;
    QString styleLetter() const;
    QString styleGuide() const;
-   const Type type() const;
+   Type type() const;
    const QString typeString() const;
    double ogMin() const;
    double ogMax() const;
@@ -150,10 +150,10 @@ signals:
 
 private:
    Style(Brewtarget::DBTable table, int key);
+   Style(QString t_name, bool cache = true);
    Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
-   Style( QString t_name, bool cache = true );
-   
+
    QString m_category;
    QString m_categoryNumber;
    QString m_styleLetter;
@@ -176,12 +176,12 @@ private:
    QString m_profile;
    QString m_ingredients;
    QString m_examples;
-  
+
    bool m_cacheOnly;
 
    bool isValidType( const QString &str );
    static QStringList m_types;
-   
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
    static QHash<QString,QString> columnToProp;

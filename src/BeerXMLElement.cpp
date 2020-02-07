@@ -29,12 +29,12 @@
 
 static const char* kVersion = "version";
 
-BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name, bool t_display)
+BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name, bool t_display, QString folder)
    : QObject(nullptr),
      _key(key),
      _table(table),
      _valid(true),
-     _folder(QString()),
+     _folder(folder),
      _name(t_name),
      _display(t_display),
      _deleted(QVariant())
@@ -46,10 +46,10 @@ BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
      _key(other._key),
      _table(other._table),
      _valid(true),
-     _folder(QString()),
+     _folder(other._folder),
      _name(QString()),
-     _display(QVariant()),
-     _deleted(QVariant())
+     _display(other._display),
+     _deleted(other._deleted)
 {
 }
 

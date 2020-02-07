@@ -58,7 +58,8 @@ class BeerXMLElement : public QObject
 
    friend class Database;
 public:
-   BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name = QString(), bool t_display = false);
+   BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name = QString(),
+                  bool t_display = false, QString folder = QString());
    BeerXMLElement( BeerXMLElement const& other );
 
    // Everything that inherits from BeerXML has a name, delete, display and a folder

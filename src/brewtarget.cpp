@@ -772,7 +772,7 @@ void Brewtarget::convertPersistentOptions()
       }
       else
       {
-         Brewtarget::logW(QString("Bad use_plato type: %1").arg(text));
+         logW(QString("Bad use_plato type: %1").arg(text));
       }
    }
 
@@ -791,7 +791,7 @@ void Brewtarget::convertPersistentOptions()
          thingToUnitSystem.insert(Unit::Color,UnitSystems::ebcColorUnitSystem());
       }
       else
-         Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
+         logW(QString("Bad color_unit type: %1").arg(text));
    }
 
    //=======================Diastatic power unit===================
@@ -810,7 +810,7 @@ void Brewtarget::convertPersistentOptions()
       }
       else
       {
-         Brewtarget::logW(QString("Bad diastatic_power_unit type: %1").arg(text));
+         logW(QString("Bad diastatic_power_unit type: %1").arg(text));
       }
    }
 
@@ -843,7 +843,7 @@ QString Brewtarget::getOptionValue(const QDomDocument& optionsDoc, const QString
 
    list = optionsDoc.elementsByTagName(option);
    if(list.length() <= 0) {
-      Brewtarget::logW(QString("Could not find the <%1> tag in the option file.").arg(option));
+      logW(QString("Could not find the <%1> tag in the option file.").arg(option));
       if( hasOption != nullptr )
          *hasOption = false;
       return "";
@@ -867,7 +867,7 @@ void Brewtarget::updateConfig()
       switch ( ++cVersion ) {
          case 1:
             // Update the dbtype, because I had to increase the NODB value from -1 to 0
-            int newType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::SQLITE).toInt() + 1);
+            int newType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::NODB).toInt() + 1);
             // Write that back to the config file
             setOption("dbType", static_cast<int>(newType));
             // and make sure we don't do it again.
@@ -1000,7 +1000,7 @@ void Brewtarget::readSystemOptions()
       thingToUnitSystem.insert(Unit::Color,UnitSystems::ebcColorUnitSystem());
    }
    else
-      Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
+      logW(QString("Bad color_unit type: %1").arg(text));
 
    //=======================Diastatic power unit===================
    text = option("diastatic_power_unit", "Lintner").toString();
@@ -1016,7 +1016,7 @@ void Brewtarget::readSystemOptions()
    }
    else
    {
-      Brewtarget::logW(QString("Bad diastatic_power_unit type: %1").arg(text));
+      logW(QString("Bad diastatic_power_unit type: %1").arg(text));
    }
 
    //=======================Date format===================
@@ -1131,6 +1131,10 @@ void Brewtarget::logW( QString message )
    log.warn(message);
 }
 
+void Brewtarget::logI( QString message )
+{
+   log.info(message);
+}
 /* Qt5 changed how QString::toDouble() works in that it will always convert
    in the C locale. We are instructed to use QLocale::toDouble instead, except
    that will never fall back to the C locale. This doesn't really work for us,
