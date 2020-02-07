@@ -317,6 +317,9 @@ const double Cagpm = 40.0;
 const double Mggpm = 24.30;
 // HCO3 grams per mole
 const double HCO3gpm = 61.01;
+// CO3 grams per mole
+const double CO3gpm = 60.01;
+
 // The pH of a beer with no color
 const double nosrmbeer_ph = 5.6;
 // Magic constants Kai derives in the document above.
@@ -340,30 +343,48 @@ double WaterDialog::calculateRA() const
 }
 
 
-//! \brief Calculates the pH delta caused by any Ca or Mg either in the base
-//! water or the salt additions. I may need to split this out, as it also
-//! handles the pH delta for NaHCO3 additions but ignores the base
+//! \brief Calculates the pH of the base water caused by any Ca or Mg
+//! including figuring out the residual alkalinity.
 double WaterDialog::calculateSaltpH()
 {
+   if ( ! recObs || ! recObs->mash() )
+      return 0.0;
+
+   Mash* mash = recObs->mash();
+   double allTheWaters = mash->totalMashWater_l();
+
+   double modifier = 1 - ( (m_mashRO * mash->totalInfusionAmount_l()) + (m_spargeRO * mash->totalSpargeAmount_l())) / allTheWaters;
 
    // I have no idea where the 2 comes from, but Kai did it. I wish I knew why
-   // We need the value from the range widget (which is already in ppm)
-   // as that will deal with both the base water and the salt additions.
-   double cappm = rangeWidget_ca->value()/Cagpm * 2;
-   double mgppm = rangeWidget_mg->value()/Mggpm * 2;
-   // The base water HCO3 is already taken into account, so I need the avoid
-   // using it here and have to get the amount from the salts
-   double hco3ppm = saltTableModel->total_HCO3()/HCO3gpm;
+   // we get the initial numbers from the base water
+   double cappm = modifier * base->calcium_ppm()/Cagpm * 2;
+   double mgppm = modifier * base->magnesium_ppm()/Mggpm * 2;
 
-
-   // totalDelta gives me a value in mEq/l. Multiplied by the mash,
-   // it will give me the mEq which is what is needed.
+   // I need mass of the salts, and all the previous math gave me
+   // ppm. Multiplying by the water volume gives me the mass
    // The 3.5 and 7 come from Paul Kohlbach's work from the 1940's.
-   // The 61 is another magic number from Kai. Sigh
-   double totalDelta = (calculateRA() - cappm/3.5 - mgppm/7 + hco3ppm/61) * recObs->mash()->totalInfusionAmount_l();
+   double totalDelta = (calculateRA() - cappm/3.5 - mgppm/7) * recObs->mash()->totalInfusionAmount_l();
    // note: The referenced paper says the formula is
    // gristpH + strikepH * thickness/mEq. I could never get that to work.
    // the spreadsheet gave me this formula, and  it works much better.
+   return totalDelta/m_thickness/mEq;
+}
+
+//! \brief Calculates the pH delta caused by any salt additions.
+double WaterDialog::calculateAddedSaltpH()
+{
+
+   // We need the value from the salt table model, because we need all the
+   // added salts, but not the base.
+   double ca = saltTableModel->total_Ca()/Cagpm * 2;
+   double mg = saltTableModel->total_Mg()/Mggpm * 2;
+   double hco3 = saltTableModel->total_HCO3()/HCO3gpm;
+   double co3 = saltTableModel->total_CO3()/CO3gpm;
+
+   // The 61 is another magic number from Kai. Sigh
+   // unlike previous calculations, I am getting a mass here so I do not
+   // need to convert from mg/L
+   double totalDelta = 0.0 - ca/3.5 - mg/7 + (hco3+co3)/61;
    return totalDelta/m_thickness/mEq;
 }
 
@@ -424,20 +445,22 @@ double WaterDialog::calculateGristpH()
    return gristPh;
 }
 
-//! \brief This figures out the expected mash pH. I am unsure about the
-//! 50 mEq/(kg*Ph). I have seen 32, 36 and 50. This is the value in Kai's
-//! spreadsheet.
+//! \brief This figures out the expected mash pH. It really just calls
+//! all the other pieces to get those calculations and then sums them
+//! all up.
 double WaterDialog::calculateMashpH()
 {
    double mashpH = 0.0;
 
    if ( recObs && recObs->fermentables().size() ) {
       double gristpH   = calculateGristpH();
-      double strikepH  = calculateSaltpH();
+      double basepH    = calculateSaltpH();
+      double saltpH    = calculateAddedSaltpH();
       double acids     = calculateAcidpH();
 
       // qDebug() << "gristph =" << gristpH << "strike =" << strikepH << "acids =" << acids;
-      mashpH = gristpH + strikepH - acids;
+      // residual alkalinity is handled by basepH
+      mashpH = basepH + gristpH + saltpH - acids;
    }
 
    return mashpH;
