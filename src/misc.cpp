@@ -237,7 +237,7 @@ void Misc::setAmount( double var )
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropAmountKg, var );
+         setEasy( kpropAmount, var );
       }
    }
 }

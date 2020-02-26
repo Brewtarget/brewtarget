@@ -427,7 +427,7 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type)
          }
 
          kindOf = misc->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
-         str = str .arg(Brewtarget::displayAmount(misc->amount(), kMiscTableSection, kpropAmountKg, kindOf))
+         str = str .arg(Brewtarget::displayAmount(misc->amount(), kMiscTableSection, kpropAmount, kindOf))
                    .arg(misc->name())
                    .arg(Brewtarget::displayAmount(misc->time(), kMiscTableSection, kTimeAttr, Units::minutes));
 

@@ -71,6 +71,7 @@ SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 
 #==============================Compile flags===================================
 
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Enable and enforce c++11 standards, so that we may lambda
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED_ON)

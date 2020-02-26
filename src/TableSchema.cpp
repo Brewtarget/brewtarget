@@ -984,7 +984,7 @@ void TableSchema::defineMiscTable()
    // These are defined in the global file.
    m_properties[kpropName]     = new PropertySchema( kpropName,       kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]    = new PropertySchema( kpropNotes,      kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
-   m_properties[kpropAmountKg] = new PropertySchema( kpropAmountKg,   kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
+   m_properties[kpropAmount]   = new PropertySchema( kpropAmount,     kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
    m_properties[kpropUse]      = new PropertySchema( kpropUseString,  kcolUse,          QString(""),      QString("text"), QString("'Boil'"));
    m_properties[kpropTime]     = new PropertySchema( kpropTime,       kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
    m_properties[kpropType]     = new PropertySchema( kpropTypeString, kcolMiscType,     QString(""),      QString("text"), QString("'Other'"));
