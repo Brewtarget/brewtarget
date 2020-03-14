@@ -27,6 +27,7 @@
 #include "unit.h"
 #include "equipment.h"
 #include "recipe.h"
+#include "database.h"
 
 MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(nullptr)
 {
@@ -51,8 +52,12 @@ void MashEditor::closeEditor()
 
 void MashEditor::saveAndClose()
 {
-   if( mashObs == nullptr )
-      return;
+   bool isNew = false;
+
+   if( mashObs == nullptr ) {
+      mashObs = new Mash( lineEdit_name->text(), true);
+      isNew = true;
+   }
 
    mashObs->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
 
@@ -66,6 +71,10 @@ void MashEditor::saveAndClose()
 
    mashObs->setNotes( textEdit_notes->toPlainText() );
 
+   if ( isNew ) {
+      Database::instance().insertElement(mashObs);
+      Database::instance().addToRecipe(m_rec, mashObs);
+   }
 }
 
 void MashEditor::fromEquipment()
@@ -73,11 +82,11 @@ void MashEditor::fromEquipment()
    if( mashObs == nullptr )
       return;
 
-   if ( equip == nullptr )
+   if ( m_equip == nullptr )
       return;
 
-   lineEdit_tunMass->setText(equip);
-   lineEdit_tunSpHeat->setText(equip);
+   lineEdit_tunMass->setText(m_equip);
+   lineEdit_tunSpHeat->setText(m_equip);
 }
 
 void MashEditor::setMash(Mash* mash)
@@ -93,20 +102,22 @@ void MashEditor::setMash(Mash* mash)
    }
 }
 
-void MashEditor::setEquipment(Equipment* e)
+void MashEditor::setRecipe(Recipe* r)
 {
-   if ( ! e )
+   if ( ! r )
       return;
 
-   equip = e;
-   if( mashObs )
+   m_rec = r;
+   m_equip = m_rec->equipment();
+
+   if( mashObs && m_equip )
    {
       // Only do this if we have to. Otherwise, it causes some uneccesary
       // updates to the database.
-      if ( mashObs->tunWeight_kg() != e->tunWeight_kg() )
-         mashObs->setTunWeight_kg( e->tunWeight_kg() );
-      if ( mashObs->tunSpecificHeat_calGC() != e->tunSpecificHeat_calGC() )
-         mashObs->setTunSpecificHeat_calGC( e->tunSpecificHeat_calGC() );
+      if ( mashObs->tunWeight_kg() != m_equip->tunWeight_kg() )
+         mashObs->setTunWeight_kg( m_equip->tunWeight_kg() );
+      if ( mashObs->tunSpecificHeat_calGC() != m_equip->tunSpecificHeat_calGC() )
+         mashObs->setTunSpecificHeat_calGC( m_equip->tunSpecificHeat_calGC() );
    }
 }
 
@@ -114,6 +125,11 @@ void MashEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
    if( sender() == mashObs )
       showChanges(&prop);
+
+   if (sender() == m_rec ) {
+      m_equip = m_rec->equipment();
+      showChanges();
+   }
 }
 
 void MashEditor::showChanges(QMetaProperty* prop)

@@ -377,6 +377,7 @@ bool MashDesigner::initializeMash()
 
    if ( mash->cacheOnly() ) {
        Database::instance().insertMash(mash);
+       Database::instance().addToRecipe(recObs, mash, true);
    }
    return true;
 }
