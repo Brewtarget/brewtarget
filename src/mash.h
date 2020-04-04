@@ -41,13 +41,14 @@ class Mash : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashs")
-   Q_CLASSINFO("prefix", "mash")
-   
+
    friend class Database;
+   friend class MashDesigner;
+   friend class MashEditor;
 public:
 
    virtual ~Mash() {}
-   
+
    //! \brief The initial grain temp in Celsius.
    Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c /*NOTIFY changed*/ /*changedGrainTemp_c*/ )
    //! \brief The notes.
@@ -71,7 +72,7 @@ public:
   // Q_PROPERTY( double tunMass_kg READ tunMass_kg  WRITE setTunMass_kg /*NOTIFY changed*/ /*changedTotalTime*/ )
    //! \brief The individual mash steps.
    Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
-   
+
    // Setters
    void setGrainTemp_c( double var );
    void setNotes( const QString &var );
@@ -81,6 +82,7 @@ public:
    void setTunWeight_kg( double var );
    void setTunSpecificHeat_calGC( double var );
    void setEquipAdjust( bool var );
+   void setCacheOnly( bool cache );
 
    // Getters
    double grainTemp_c() const;
@@ -92,14 +94,15 @@ public:
    double tunWeight_kg() const;
    double tunSpecificHeat_calGC() const;
    bool equipAdjust() const;
-   
+   bool cacheOnly() const;
+
    // Calculated getters
    double totalMashWater_l();
    double totalTime();
-   
+
    // Relational getters
    QList<MashStep*> mashSteps() const;
-   
+
    // NOTE: should this be completely in Database?
    void removeAllMashSteps();
 
@@ -107,21 +110,32 @@ public:
 
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
-   
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   
+
    // Emitted when the number of steps change, or when you should call mashSteps() again.
    void mashStepsChanged();
-   
+
 private:
    Mash(Brewtarget::DBTable table, int key);
+   Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Mash( Mash const& other );
-   
-   // Get via the relational relationship.
-   //QVector<MashStep *> mashSteps;
-   
+   Mash( QString name, bool cache = true );
+
+   double m_grainTemp_c;
+   QString m_notes;
+   double m_tunTemp_c;
+   double m_spargeTemp_c;
+   double m_ph;
+   double m_tunWeight_kg;
+   double m_tunSpecificHeat_calGC;
+   bool m_equipAdjust;
+   bool m_cacheOnly;
+
+   QList<MashStep*> m_mashSteps;
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 

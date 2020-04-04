@@ -38,7 +38,7 @@
 
 MashStepTableModel::MashStepTableModel(QTableView* parent)
    : QAbstractTableModel(parent),
-     mashObs(0),
+     mashObs(nullptr),
      parentTableWidget(parent)
 {
    setObjectName("mashStepTableModel");
@@ -55,9 +55,9 @@ void MashStepTableModel::setMash( Mash* m )
    {
       beginRemoveRows( QModelIndex(), 0, steps.size()-1 );
       // Remove mashObs and all steps.
-      disconnect( mashObs, 0, this, 0 );
+      disconnect( mashObs, nullptr, this, nullptr );
       for( i = 0; i < steps.size(); ++i )
-         disconnect( steps[i], 0, this, 0 );
+         disconnect( steps[i], nullptr, this, nullptr );
       steps.clear();
       endRemoveRows();
    }
@@ -110,13 +110,17 @@ void MashStepTableModel::reorderMashStep(MashStep* step, int current)
    // we need to be one less than stepNumber. If we are moving down, it just
    // works.
    if ( doSomething < 0 )
-      destChild--; 
+      destChild--;
 
    beginMoveRows(QModelIndex(),current,current,QModelIndex(),destChild);
    // doSomething is -1 if moving up and 1 if moving down. swap current with
    // current -1 when moving up, and swap current with current+1 when moving
    // down
+#if QT_VERSION < QT_VERSION_CHECK(5,13,0)
    steps.swap(current,current+doSomething);
+#else
+   steps.swapItemsAt(current,current+doSomething);
+#endif
    endMoveRows();
 
 }
@@ -124,9 +128,9 @@ void MashStepTableModel::reorderMashStep(MashStep* step, int current)
 MashStep* MashStepTableModel::getMashStep(unsigned int i)
 {
    if( i < static_cast<unsigned int>(steps.size()) )
-      return steps[i];
+      return steps[static_cast<int>(i)];
    else
-      return 0;
+      return nullptr;
 }
 
 void MashStepTableModel::mashChanged()
@@ -145,7 +149,7 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
       if ( prop.name() == QStringLiteral("stepNumber") ) {
          reorderMashStep(stepSender,i);
       }
-         
+
 
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS-1));
@@ -175,11 +179,11 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
    Unit::unitScale scale;
    int col = index.column();
 
-   if( mashObs == 0 )
+   if( mashObs == nullptr )
       return QVariant();
 
    // Ensure the row is ok.
-   if( index.row() >= (int)(steps.size()) )
+   if( index.row() >= static_cast<int>(steps.size()) )
    {
       Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
@@ -265,10 +269,10 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
 {
    MashStep *row;
 
-   if( mashObs == 0 )
+   if( mashObs == nullptr )
       return false;
 
-   if( index.row() >= (int)(steps.size()) || role != Qt::EditRole )
+   if( index.row() >= static_cast<int>(steps.size()) || role != Qt::EditRole )
       return false;
    else
       row = steps[index.row()];
@@ -337,7 +341,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
 
 void MashStepTableModel::moveStepUp(int i)
 {
-   if( mashObs == 0 || i == 0 || i >= steps.size() )
+   if( mashObs == nullptr || i == 0 || i >= steps.size() )
       return;
 
    Database::instance().swapMashStepOrder( steps[i], steps[i-1] );
@@ -345,7 +349,7 @@ void MashStepTableModel::moveStepUp(int i)
 
 void MashStepTableModel::moveStepDown(int i)
 {
-   if( mashObs == 0 ||  i+1 >= steps.size() )
+   if( mashObs == nullptr ||  i+1 >= steps.size() )
       return;
 
    Database::instance().swapMashStepOrder( steps[i], steps[i+1] );
@@ -358,7 +362,7 @@ Unit::unitDisplay MashStepTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return (Unit::unitDisplay)Brewtarget::option(attribute, Unit::noUnit, this->objectName(), Brewtarget::UNIT).toInt();
+   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, Unit::noUnit, this->objectName(), Brewtarget::UNIT).toInt());
 }
 
 Unit::unitScale MashStepTableModel::displayScale(int column) const
@@ -368,7 +372,7 @@ Unit::unitScale MashStepTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return (Unit::unitScale)Brewtarget::option(attribute, Unit::noScale, this->objectName(), Brewtarget::SCALE).toInt();
+   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, Unit::noScale, this->objectName(), Brewtarget::SCALE).toInt());
 }
 
 // We need to:
@@ -475,14 +479,14 @@ void MashStepTableModel::contextMenu(const QPoint &point)
    }
 
    invoked = menu->exec(hView->mapToGlobal(point));
-   if ( invoked == 0 )
+   if ( invoked == nullptr )
       return;
 
    QWidget* pMenu = invoked->parentWidget();
    if ( pMenu == menu )
-      setDisplayUnit(selected,(Unit::unitDisplay)invoked->data().toInt());
+      setDisplayUnit(selected,static_cast<Unit::unitDisplay>(invoked->data().toInt()));
    else
-      setDisplayScale(selected,(Unit::unitScale)invoked->data().toInt());
+      setDisplayScale(selected,static_cast<Unit::unitScale>(invoked->data().toInt()));
 }
 
 //==========================CLASS MashStepItemDelegate===============================

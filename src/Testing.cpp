@@ -84,11 +84,10 @@ void Testing::recipeCalcTest_allGrain()
 {
    double const grain_kg = 5.0;
    double const conversion_l = grain_kg * 2.8; // 2.8 L/kg mash thickness
-   Recipe* rec = Database::instance().newRecipe();
+   Recipe* rec = Database::instance().newRecipe(QString("TestRecipe"));
    Equipment* e = equipFiveGalNoLoss;
 
    // Basic recipe parameters
-   rec->setName("TestRecipe");
    rec->setBatchSize_l(e->batchSize_l());
    rec->setBoilSize_l(e->boilSize_l());
    rec->setEfficiency_pct(70.0);
@@ -120,7 +119,6 @@ void Testing::recipeCalcTest_allGrain()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   twoRow->save();
    rec->addFermentable(twoRow);
 
    // Add mash
@@ -168,8 +166,8 @@ void Testing::recipeCalcTest_allGrain()
 void Testing::postBoilLossOgTest()
 {
    double const grain_kg = 5.0;
-   Recipe* recNoLoss = Database::instance().newRecipe();
-   Recipe* recLoss = Database::instance().newRecipe();
+   Recipe* recNoLoss = Database::instance().newRecipe(QString("TestRecipe_noLoss"));
+   Recipe* recLoss = Database::instance().newRecipe(QString("TestRecipe_loss"));
    Equipment* eNoLoss = equipFiveGalNoLoss;
    Equipment* eLoss = Database::instance().newEquipment(eNoLoss);
 
@@ -180,12 +178,10 @@ void Testing::postBoilLossOgTest()
    eLoss->setBoilSize_l(eNoLoss->boilSize_l() + eLoss->trubChillerLoss_l());
 
    // Basic recipe parameters
-   recNoLoss->setName("TestRecipe_noLoss");
    recNoLoss->setBatchSize_l(eNoLoss->batchSize_l());
    recNoLoss->setBoilSize_l(eNoLoss->boilSize_l());
    recNoLoss->setEfficiency_pct(70.0);
 
-   recLoss->setName("TestRecipe_loss");
    recLoss->setBatchSize_l(eLoss->batchSize_l() - eLoss->trubChillerLoss_l()); // Adjust for trub losses
    recLoss->setBoilSize_l(eLoss->boilSize_l() - eLoss->trubChillerLoss_l());
    recLoss->setEfficiency_pct(70.0);
@@ -203,7 +199,6 @@ void Testing::postBoilLossOgTest()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   twoRow->save();
    recNoLoss->addFermentable(twoRow);
    recLoss->addFermentable(twoRow);
 

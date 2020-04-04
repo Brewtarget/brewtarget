@@ -71,6 +71,7 @@ public:
    Q_PROPERTY( double volumeIntoFerm_l READ volumeIntoFerm_l WRITE setVolumeIntoFerm_l /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double pitchTemp_c READ pitchTemp_c WRITE setPitchTemp_c /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double fg READ fg WRITE setFg /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double attenuation READ attenuation WRITE setAttenuation /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double finalVolume_l READ finalVolume_l WRITE setFinalVolume_l /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double boilOff_l READ boilOff_l WRITE setBoilOff_l /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double projBoilGrav READ projBoilGrav WRITE setProjBoilGrav /*NOTIFY changed*/ STORED false )
@@ -91,7 +92,7 @@ public:
    void setAttenuation(double var);
    void setBrewDate(QDateTime const& date = QDateTime::currentDateTime());
    void setFermentDate(QDateTime const& date);
-   void setNotes(const QString& var, bool notify = true);
+   void setNotes(const QString& var);
    void setSg(double var);
    void setVolumeIntoBK_l(double var);
    void setBrewhouseEff_pct(double var);
@@ -109,6 +110,7 @@ public:
    void populateNote(Recipe* parent);
    void recalculateEff(Recipe* parent);
    void setLoading(bool flag);
+   void setCacheOnly(bool cache);
 
    // Getters
    QDateTime brewDate() const;
@@ -116,7 +118,7 @@ public:
    QString   brewDate_str() const;
    //! Convenience method.
    QString   brewDate_short() const;
-   QDateTime fermentDate() const;
+    QDateTime fermentDate() const;
    //! Convenience method.
    QString   fermentDate_str() const;
    //! Convenience method.
@@ -179,14 +181,49 @@ public:
    double projPoints() const;
    double projFermPoints() const;
    double projAtten() const;
+   bool cacheOnly() const;
    
 signals:
    void brewDateChanged(const QDateTime&);
 
 private:
    BrewNote(Brewtarget::DBTable table, int key);
+   BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   BrewNote(QDateTime dateNow, bool cache = true);
    BrewNote(BrewNote const& other);
    bool loading;
+
+   QDateTime m_brewDate;
+   QDateTime m_fermentDate;
+   QString m_notes;
+   double m_sg;
+   double m_abv;
+   double m_effIntoBK_pct;
+   double m_brewhouseEff_pct;
+   double m_volumeIntoBK_l;
+   double m_strikeTemp_c;
+   double m_mashFinTemp_c;
+   double m_og;
+   double m_postBoilVolume_l;
+   double m_volumeIntoFerm_l;
+   double m_pitchTemp_c;
+   double m_fg;
+   double m_attenuation;
+   double m_finalVolume_l;
+   double m_boilOff_l;
+   double m_projBoilGrav;
+   double m_projVolIntoBK_l;
+   double m_projStrikeTemp_c;
+   double m_projMashFinTemp_c;
+   double m_projOg;
+   double m_projVolIntoFerm_l;
+   double m_projFg;
+   double m_projEff_pct;
+   double m_projABV_pct;
+   double m_projPoints;
+   double m_projFermPoints;
+   double m_projAtten;
+   bool m_cacheOnly;
 
    QHash<QString,double> info;
    QHash<QString,QString> XMLTagToName();

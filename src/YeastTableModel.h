@@ -36,6 +36,7 @@ class YeastItemDelegate;
 #include <QTableView>
 
 #include "unit.h"
+#include "brewtarget.h"
 
 // Forward declarations.
 class Yeast;
@@ -55,7 +56,7 @@ class YeastTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   YeastTableModel(QTableView* parent=0, bool editable=true);
+   YeastTableModel(QTableView* parent=nullptr, bool editable=true);
    virtual ~YeastTableModel() {}
    //! \brief Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -70,11 +71,11 @@ public:
 
    /*!
     * \brief True if the inventory column should be editable, false otherwise.
-    * 
+    *
     * The default is that the inventory column is not editable
     */
    void setInventoryEditable( bool var ) { _inventoryEditable = var; }
-   
+
    //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
    //! \brief Reimplemented from QAbstractTableModel.
@@ -104,7 +105,8 @@ public slots:
 private slots:
    //! \brief Catch changes to Recipe, Database, and Yeast.
    void changed(QMetaProperty, QVariant);
-   
+   void changedInventory(Brewtarget::DBTable,int,QVariant);
+
 private:
    bool editable;
    bool _inventoryEditable;
@@ -124,7 +126,7 @@ class YeastItemDelegate : public QItemDelegate
    Q_OBJECT
 
 public:
-   YeastItemDelegate(QObject* parent = 0);
+   YeastItemDelegate(QObject* parent = nullptr);
 
    // Inherited functions.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;

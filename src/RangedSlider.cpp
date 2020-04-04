@@ -55,10 +55,10 @@ RangedSlider::RangedSlider(QWidget* parent)
 {
    setMinimumSize( 32, 32 );
    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
-   
+
    // Generate mouse move events whenever mouse movers over widget.
    setMouseTracking(true);
-   
+
    repaint();
 }
 
@@ -66,12 +66,12 @@ void RangedSlider::setPreferredRange( double min, double max )
 {
    _prefMin = min;
    _prefMax = max;
-   
+
    // Only show tooltips if the range has nonzero size.
    setMouseTracking(min < max);
-  
+
    _tooltipText = QString("%1 - %2").arg(min, 0, 'f', _prec).arg(max, 0, 'f', _prec);
-   
+
    update();
 }
 
@@ -145,21 +145,21 @@ void RangedSlider::setTickMarks( double primaryInterval, int secondaryTicks )
 {
    _secondaryTicks = (secondaryTicks<1)? 1 : secondaryTicks;
    _tickInterval = primaryInterval/_secondaryTicks;
-   
+
    update();
 }
 
 QSize RangedSlider::sizeHint() const
 {
    static const QSize hint(64,32);
-   
+
    return hint;
 }
 
 void RangedSlider::mouseMoveEvent(QMouseEvent* event)
 {
    event->accept();
-   
+
    QPoint tipPoint( mapToGlobal(QPoint(0,0)) );
    QToolTip::showText( tipPoint, _tooltipText, this );
 }
@@ -174,77 +174,83 @@ void RangedSlider::paintEvent(QPaintEvent* event)
    static const int indWidth   = 4;
    static const QColor fgRectColor(0,127,0);
    static const QColor textColor(0,127,0);
-   
+
    // Can't do this: want all the sliders to have exact same width
    //const int textWidth = textFontMetrics.width(_valText);
+#if QT_VERSION < QT_VERSION_CHECK(5,13,0)
    static const int textWidth = textFontMetrics.width("1.000");
-   
+#else
+   static const int textWidth = textFontMetrics.horizontalAdvance("1.000");
+#endif
+
    QLinearGradient glassGrad( QPointF(0,0), QPointF(0,rectHeight) );
    glassGrad.setColorAt( 0, QColor(255,255,255,127) );
    glassGrad.setColorAt( 1, QColor(255,255,255,0) );
    QBrush glassBrush(glassGrad);
-   
+
    QPainter painter(this);
    float rectWidth   = 512;
-   float fgRectLeft  = rectWidth/(_max-_min) * (_prefMin-_min);
-   float fgRectWidth = rectWidth/(_max-_min) * (_prefMax-_prefMin);
-   float indX        = rectWidth/(_max-_min) * (_val-_min);
+   double dblWide    = 512; // this is a cheat to get ride of some cast warnings
+   float fgRectLeft  = static_cast<float>(dblWide/(_max-_min) *  (_prefMin-_min));
+   float fgRectWidth = static_cast<float>(dblWide/(_max-_min) * (_prefMax-_prefMin));
+   float indX        = static_cast<float>(dblWide/(_max-_min) * (_val-_min));
    float indLeft;
-   
+
    // Make sure all coordinates are valid.
    fgRectLeft  = qBound( 0.f, fgRectLeft, rectWidth);
    fgRectWidth = qBound( 0.f, fgRectWidth, rectWidth-fgRectLeft);
    indX        = qBound( 0.f, indX, rectWidth-indWidth/2 );
    indLeft     = qBound( 0.f, indX-indWidth/2, rectWidth );
-   
+
    painter.save();
 
       // Indicator text.
       QRectF markerTextRect = painter.boundingRect( QRectF(), Qt::AlignCenter | Qt::AlignBottom, _markerTextIsValue? _valText : _markerText );
-      float markerTextLeft = qBound( 0.f, static_cast<float>(indLeft*(width()-textWidth-2)/rectWidth - markerTextRect.width()/2), static_cast<float>(width()-textWidth-2-markerTextRect.width()));
+      // this makes no sense. cast to float the
+      float markerTextLeft = qBound( 0.f, static_cast<float>(static_cast<double>(indLeft*(width()-textWidth-2)/rectWidth) - markerTextRect.width()/2), static_cast<float>(width()-textWidth-2-markerTextRect.width()));
       painter.drawText(
-         markerTextLeft, 0,
-         markerTextRect.width(), 16,
+         QVariant(markerTextLeft).toInt(), 0,
+         QVariant(markerTextRect.width()).toInt(), 16,
          Qt::AlignCenter | Qt::AlignBottom,
          _markerTextIsValue? _valText : _markerText
       );
 
       // Scale coordinates so that 'rectWidth' units == width()-textWidth-2 pixels.
-      painter.scale( (width()-textWidth-2)/rectWidth, 1.0 );
+      painter.scale( static_cast<qreal>((width()-textWidth-2)/rectWidth), 1.0 );
       painter.translate(0, indTextHeight);
-      
+
       painter.setPen(Qt::NoPen);
-      
+
       // Make sure anything we draw "inside" the "glass rectangle" stays inside.
       QPainterPath clipRect;
-      clipRect.addRoundedRect( QRectF(0, 0, rectWidth, rectHeight), 8, 8 );
+      clipRect.addRoundedRect( QRectF(0, 0, dblWide, rectHeight), 8, 8 );
       painter.setClipPath(clipRect);
-      
+
       // Draw the background rectangle.
       painter.setBrush(_bgBrush);
       painter.setRenderHint(QPainter::Antialiasing);
-      painter.drawRoundedRect( QRectF(0, 0, rectWidth, rectHeight), 8, 8 );
+      painter.drawRoundedRect( QRectF(0, 0, dblWide, rectHeight), 8, 8 );
       painter.setRenderHint(QPainter::Antialiasing,false);
-      
+
       // Draw the style "foreground" rectangle.
       painter.save();
          painter.setBrush(_prefRangeBrush);
          painter.setPen(_prefRangePen);
          painter.setRenderHint(QPainter::Antialiasing);
          //painter.drawRect( QRectF(fgRectLeft, 0, fgRectWidth, rectHeight) );
-         painter.drawRoundedRect( QRectF(fgRectLeft, 0, fgRectWidth, rectHeight), 8,8 );
+         painter.drawRoundedRect( QRectF(static_cast<qreal>(fgRectLeft), 0, static_cast<qreal>(fgRectWidth), rectHeight), 8,8 );
       painter.restore();
-      
+
       // Draw the indicator.
       painter.setBrush(_markerBrush);
-      painter.drawRect( QRectF(indLeft, 0, indWidth, rectHeight) );
-      
+      painter.drawRect( QRectF(static_cast<double>(indLeft), 0, indWidth, rectHeight) );
+
       // Draw a white to clear gradient to suggest "glassy."
       painter.setBrush(glassBrush);
       painter.setRenderHint(QPainter::Antialiasing);
-      painter.drawRoundedRect( QRectF(0, 0, rectWidth, rectHeight), 8, 8 );
+      painter.drawRoundedRect( QRectF(0, 0, dblWide, rectHeight), 8, 8 );
       painter.setRenderHint(QPainter::Antialiasing,false);
-      
+
       // Draw the ticks.
       painter.setPen(Qt::black);
       if( _tickInterval > 0.0 )
@@ -252,7 +258,7 @@ void RangedSlider::paintEvent(QPaintEvent* event)
          int secTick = 1;
          for( double currentTick = _min+_tickInterval; _max - currentTick > _tickInterval-1e-6; currentTick += _tickInterval )
          {
-            painter.translate( rectWidth/(_max-_min) * _tickInterval, 0);
+            painter.translate( dblWide/(_max-_min) * _tickInterval, 0);
             if( secTick == _secondaryTicks )
             {
                painter.drawLine( QPointF(0,0.25*rectHeight), QPointF(0,0.75*rectHeight) );
@@ -266,7 +272,7 @@ void RangedSlider::paintEvent(QPaintEvent* event)
          }
       }
    painter.restore();
-   
+
    painter.translate( width() - textWidth, indTextHeight );
    // Draw the text.
    painter.setPen(textColor);

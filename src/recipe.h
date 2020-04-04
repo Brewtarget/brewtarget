@@ -66,16 +66,16 @@ class Recipe : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "recipes")
-   Q_CLASSINFO("prefix", "recipe")
    
    friend class Database;
+   friend class RecipeFormatter;
+   friend class MainWindow;
 public:
 
    virtual ~Recipe() {}
 
    friend bool operator<(Recipe &r1, Recipe &r2 );
    friend bool operator==(Recipe &r1, Recipe &r2 );
-   friend class RecipeFormatter;
    
    // NOTE: move to database?
    //! \brief Retains only the name, but sets everything else to defaults.
@@ -256,6 +256,7 @@ public:
    double carbonationTemp_c() const;
    double primingSugarEquiv() const;
    double kegPrimingFactor() const;
+   bool cacheOnly() const;
    
    // Calculated getters.
    double points();
@@ -287,7 +288,7 @@ public:
    
    Mash* mash() const;
    Equipment* equipment() const;
-   Style* style() const;
+   Style* style();
    
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
@@ -310,6 +311,37 @@ public:
    
    static QString classNameStr();
 
+   // Setters that are not slots
+   void setType( const QString &var );
+   void setBrewer( const QString &var );
+   void setBatchSize_l( double var );
+   void setBoilSize_l( double var );
+   void setBoilTime_min( double var );
+   void setEfficiency_pct( double var );
+   void setAsstBrewer( const QString &var );
+   void setNotes( const QString &var );
+   void setTasteNotes( const QString &var );
+   void setTasteRating( double var );
+   void setOg( double var );
+   void setFg( double var );
+   void setFermentationStages( int var );
+   void setPrimaryAge_days( double var );
+   void setPrimaryTemp_c( double var );
+   void setSecondaryAge_days( double var );
+   void setSecondaryTemp_c( double var );
+   void setTertiaryAge_days( double var );
+   void setTertiaryTemp_c( double var );
+   void setAge_days( double var );
+   void setAgeTemp_c( double var );
+   void setDate( const QDate &var );
+   void setCarbonation_vols( double var );
+   void setForcedCarbonation( bool var );
+   void setPrimingSugarName( const QString &var );
+   void setCarbonationTemp_c( double var );
+   void setPrimingSugarEquiv( double var );
+   void setKegPrimingFactor( double var );
+   void setCacheOnly( bool cache );
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(const QString&);
@@ -326,6 +358,7 @@ public slots:
    void acceptYeastChange(Yeast* yeast);
    void acceptMashChange(Mash* mash);
 
+   /*
    // Setters -- why are these slots?
    void setType( const QString &var );
    void setBrewer( const QString &var );
@@ -355,39 +388,71 @@ public slots:
    void setCarbonationTemp_c( double var );
    void setPrimingSugarEquiv( double var );
    void setKegPrimingFactor( double var );
-   
+  */ 
 private:
    
    Recipe(Brewtarget::DBTable table, int key);
+   Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Recipe(QString name, bool cache = true);
    Recipe(Recipe const& other);
-   
+  
+   // Cached properties that are written directly to db
+   QString m_type;
+   QString m_brewer;
+   QString m_asstBrewer;
+   double m_batchSize_l;
+   double m_boilSize_l;
+   double m_boilTime_min;
+   double m_efficiency_pct;
+   int m_fermentationStages;
+   double m_primaryAge_days;
+   double m_primaryTemp_c;
+   double m_secondaryAge_days;
+   double m_secondaryTemp_c;
+   double m_tertiaryAge_days;
+   double m_tertiaryTemp_c;
+   double m_age;
+   double m_ageTemp_c;
+   QDate m_date;
+   double m_carbonation_vols;
+   bool m_forcedCarbonation;
+   QString m_primingSugarName;
+   double m_carbonationTemp_c;
+   double m_primingSugarEquiv;
+   double m_kegPrimingFactor;
+   QString m_notes;
+   QString m_tasteNotes;
+   double m_tasteRating;
+   int m_style_id;
+  
    // Calculated properties.
-   double _ABV_pct;
-   double _color_srm;
-   double _boilGrav;
-   double _IBU;
-   QList<double> _ibus;
-   double _wortFromMash_l;
-   double _boilVolume_l;
-   double _postBoilVolume_l;
-   double _finalVolume_l;
+   double m_ABV_pct;
+   double m_color_srm;
+   double m_boilGrav;
+   double m_IBU;
+   QList<double> m_ibus;
+   double m_wortFromMash_l;
+   double m_boilVolume_l;
+   double m_postBoilVolume_l;
+   double m_finalVolume_l;
    // Final volume before any losses out of the kettle, used in calculations for sg/ibu/etc.
-   double _finalVolumeNoLosses_l;
-   double _calories;
-   double _grainsInMash_kg;
-   double _grains_kg;
-   QColor _SRMColor;
+   double m_finalVolumeNoLosses_l;
+   double m_calories;
+   double m_grainsInMash_kg;
+   double m_grains_kg;
+   QColor m_SRMColor;
    
    // Calculated, but stored...BeerXML is weird sometimes.
-   double _og;
-   double _fg;
-   double _og_fermentable;
-   double _fg_fermentable;
+   double m_og;
+   double m_fg;
+   double m_og_fermentable;
+   double m_fg_fermentable;
    
+   bool m_cacheOnly;
    // True when constructed, indicates whether recalcAll has been called.
-   bool _uninitializedCalcs;
-   QMutex _uninitializedCalcsMutex;
-   QMutex _recalcMutex;
+   bool m_uninitializedCalcs;
+   QMutex m_uninitializedCalcsMutex;
+   QMutex m_recalcMutex;
    
    // Batch size without losses.
    double batchSizeNoLosses_l();

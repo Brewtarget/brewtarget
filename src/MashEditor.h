@@ -42,7 +42,7 @@ class MashEditor : public QDialog, public Ui::mashEditor
 {
    Q_OBJECT
 public:
-   MashEditor( QWidget *parent = 0 );
+   MashEditor( QWidget *parent = nullptr );
 
 public slots:
    void showEditor();
@@ -52,14 +52,15 @@ public slots:
    void fromEquipment();
    //! Set the mash we wish to view/edit.
    void setMash(Mash* mash);
-   void setEquipment(Equipment* e);
+   void setRecipe(Recipe* r);
 
    void changed(QMetaProperty,QVariant);
 private:
-   void showChanges(QMetaProperty* prop = 0);
+   void showChanges(QMetaProperty* prop = nullptr);
    void clear();
+   Recipe* m_rec;
    Mash* mashObs;
-   Equipment* equip;
+   Equipment* m_equip;
 
 };
 

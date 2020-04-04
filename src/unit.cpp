@@ -796,12 +796,12 @@ PlatoUnit::PlatoUnit()
 
 double PlatoUnit::toSI( double amt ) const
 {
-   return Algorithms::PlatoToSG_20C20C( amt );
+   return amt == 0.0 ? 0.0 : Algorithms::PlatoToSG_20C20C( amt );
 }
 
 double PlatoUnit::fromSI(double amt) const
 {
-   return Algorithms::SG_20C20C_toPlato(amt);
+   return amt == 0.0 ? 0.0 : Algorithms::SG_20C20C_toPlato(amt);
 }
 
 // == diastatic power ==

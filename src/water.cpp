@@ -26,48 +26,8 @@
 #include "water.h"
 #include "brewtarget.h"
 
-/************* Columns *************/
-const QString kName("name");
-const QString kAmount("amount");
-const QString kCalcium("calcium");
-const QString kBiCarbonate("bicarbonate");
-const QString kSulfate("sulfate");
-const QString kChloride("chloride");
-const QString kSodium("sodium");
-const QString kMagnesium("magnesium");
-const QString kPh("ph");
-const QString kNotes("notes");
-
-/************** Props **************/
-const QString kNameProp("name");
-const QString kAmountProp("amount_l");
-const QString kCalciumProp("calcium_ppm");
-const QString kBiCarbonateProp("bicarbonate_ppm");
-const QString kSulfateProp("sulfate_ppm");
-const QString kChlorideProp("chloride_ppm");
-const QString kSodiumProp("sodium_ppm");
-const QString kMagnesiumProp("magnesium_ppm");
-const QString kPhProp("ph");
-const QString kNotesProp("notes");
-
-
-QHash<QString,QString> Water::tagToProp = Water::tagToPropHash();
-
-QHash<QString,QString> Water::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   propHash["NAME"] = kNameProp;
-   propHash["AMOUNT"] = kAmountProp;
-   propHash["CALCIUM"] = kCalciumProp;
-   propHash["BICARBONATE"] = kBiCarbonateProp;
-   propHash["SULFATE"] = kSulfateProp;
-   propHash["CHLORIDE"] = kChlorideProp;
-   propHash["SODIUM"] = kSodiumProp;
-   propHash["MAGNESIUM"] = kMagnesiumProp;
-   propHash["PH"] = kPhProp;
-   propHash["NOTES"] = kNotesProp;
-   return propHash;
-}
+#include "TableSchemaConst.h"
+#include "WaterSchema.h"
 
 bool operator<(Water &w1, Water &w2)
 {
@@ -86,98 +46,141 @@ QString Water::classNameStr()
 }
 
 Water::Water(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key),
+   m_amount_l(0.0),
+   m_calcium_ppm(0.0),
+   m_bicarbonate_ppm(0.0),
+   m_sulfate_ppm(0.0),
+   m_chloride_ppm(0.0),
+   m_sodium_ppm(0.0),
+   m_magnesium_ppm(0.0),
+   m_ph(0.0),
+   m_notes(QString()),
+   m_cacheOnly(false)
+{
+}
+
+Water::Water(QString name, bool cache)
+   : BeerXMLElement(Brewtarget::WATERTABLE, -1, name, true),
+   m_amount_l(0.0),
+   m_calcium_ppm(0.0),
+   m_bicarbonate_ppm(0.0),
+   m_sulfate_ppm(0.0),
+   m_chloride_ppm(0.0),
+   m_sodium_ppm(0.0),
+   m_magnesium_ppm(0.0),
+   m_ph(0.0),
+   m_notes(QString()),
+   m_cacheOnly(cache)
+{
+}
+
+Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   m_amount_l(rec.value(kcolAmount).toDouble()),
+   m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
+   m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),
+   m_sulfate_ppm(rec.value(kcolWaterSulfate).toDouble()),
+   m_chloride_ppm(rec.value(kcolWaterChloride).toDouble()),
+   m_sodium_ppm(rec.value(kcolWaterSodium).toDouble()),
+   m_magnesium_ppm(rec.value(kcolWaterMagnesium).toDouble()),
+   m_ph(rec.value(kcolPH).toDouble()),
+   m_notes(rec.value(kcolAmount).toString()),
+   m_cacheOnly(false)
 {
 }
 
 //================================"SET" METHODS=================================
 void Water::setAmount_l( double var )
 {
-   set(kAmountProp, kAmount, var);
+   m_amount_l = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropAmount, var);
+   }
 }
 
 void Water::setCalcium_ppm( double var )
 {
-   set(kCalciumProp, kCalcium, var);
+   m_calcium_ppm = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropCalcium, var);
+   }
 }
 
 void Water::setBicarbonate_ppm( double var )
 {
-   set(kBiCarbonateProp, kBiCarbonate, var);
+   m_bicarbonate_ppm = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropBiCarbonate, var);
+   }
 }
 
 void Water::setChloride_ppm( double var )
 {
-   set(kChlorideProp, kChloride, var);
+   m_chloride_ppm = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropChloride, var);
+   }
 }
 
 void Water::setSodium_ppm( double var )
 {
-   set(kSodiumProp, kSodium, var);
+   m_sodium_ppm = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropSodium, var);
+   }
 }
 
 void Water::setMagnesium_ppm( double var )
 {
-   set(kMagnesiumProp, kMagnesium, var);
+   m_magnesium_ppm = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropMagnesium, var);
+   }
 }
 
 void Water::setPh( double var )
 {
-   set(kPhProp, kPh, var);
+   m_ph = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropPH, var);
+   }
 }
 
 void Water::setSulfate_ppm( double var )
 {
-   set(kSulfateProp, kSulfate, var);
+   m_sulfate_ppm = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropSulfate, var);
+   }
 }
 
 void Water::setNotes( const QString &var )
 {
-   set(kNotesProp, kNotes, var);
+   m_notes = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropNotes, var);
+   }
 }
 
+void Water::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 //=========================="GET" METHODS=======================================
-QString Water::notes() const
-{
-   return get(kNotes).toString();
-}
+QString Water::notes() const { return m_notes; }
 
-double Water::sulfate_ppm() const
-{
-   return get(kSulfate).toDouble();
-}
+double Water::sulfate_ppm() const { return m_sulfate_ppm; }
 
-double Water::amount_l() const
-{
-   return get(kAmount).toDouble();
-}
+double Water::amount_l() const { return m_amount_l; }
 
-double Water::calcium_ppm() const
-{
-   return get(kCalcium).toDouble();
-}
+double Water::calcium_ppm() const { return m_calcium_ppm; }
 
-double Water::bicarbonate_ppm() const
-{
-   return get(kBiCarbonate).toDouble();
-}
+double Water::bicarbonate_ppm() const { return m_bicarbonate_ppm; }
 
-double Water::chloride_ppm() const
-{
-   return get(kChloride).toDouble();
-}
+double Water::chloride_ppm() const { return m_chloride_ppm; }
 
-double Water::sodium_ppm() const
-{
-   return get(kSodium).toDouble();
-}
+double Water::sodium_ppm() const { return m_sodium_ppm; }
 
-double Water::magnesium_ppm() const
-{
-   return get(kMagnesium).toDouble();
-}
+double Water::magnesium_ppm() const { return m_magnesium_ppm; }
 
-double Water::ph() const
-{
-   return get(kPh).toDouble();
-}
+double Water::ph() const { return m_ph; }
+
+bool Water::cacheOnly() const { return m_cacheOnly; }

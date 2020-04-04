@@ -22,21 +22,8 @@
 #include "brewtarget.h"
 #include "database.h"
 
-QHash<QString,QString> Instruction::tagToProp = Instruction::tagToPropHash();
-
-QHash<QString,QString> Instruction::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   
-   propHash["NAME"] = "name";
-   propHash["DIRECTIONS"] = "directions";
-   propHash["HAS_TIMER"] = "hasTimer";
-   propHash["TIMER_VALUE"] = "timerValue";
-   propHash["COMPLETED"] = "completed";
-   propHash["INTERVAL"] = "interval";
-   
-   return propHash;
-}
+#include "TableSchemaConst.h"
+#include "InstructionSchema.h"
 
 QString Instruction::classNameStr()
 {
@@ -45,30 +32,69 @@ QString Instruction::classNameStr()
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, QString(), true),
+     m_directions(QString()),
+     m_hasTimer  (false),
+     m_timerValue(QString()),
+     m_completed (false),
+     m_interval  (0.0),
+     m_cacheOnly(false)
 {
-   setObjectName("Instruction"); 
+}
+
+Instruction::Instruction(QString name, bool cache)
+   : BeerXMLElement(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
+     m_directions(QString()),
+     m_hasTimer  (false),
+     m_timerValue(QString()),
+     m_completed (false),
+     m_interval  (0.0),
+     m_cacheOnly(cache)
+{
+}
+
+Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
+     m_directions(rec.value(kcolInstructionDirections).toString()),
+     m_hasTimer  (rec.value(kcolInstructionHasTimer).toBool()),
+     m_timerValue(rec.value(kcolInstructionTimerValue).toString()),
+     m_completed (rec.value(kcolInstructionCompleted).toBool()),
+     m_interval  (rec.value(kcolInstructionInterval).toDouble()),
+     m_cacheOnly(false)
+{
 }
 
 // Setters ====================================================================
 void Instruction::setDirections(const QString& dir)
 {
-   set("directions", "directions", dir);
+   m_directions = dir;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropDirections,  dir);
+   }
 }
 
 void Instruction::setHasTimer(bool has)
 {
-   set("hasTimer", "hasTimer", has);
+   m_hasTimer = has;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropHasTimer,  has);
+   }
 }
 
 void Instruction::setTimerValue(const QString& timerVal)
 {
-   set("timerValue", "timerValue", timerVal);
+   m_timerValue = timerVal;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropTimerValue,  timerVal);
+   }
 }
 
 void Instruction::setCompleted(bool comp)
 {
-   set("completed", "completed", comp);
+   m_completed = comp;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropCompleted,  comp);
+   }
 }
 
 // TODO: figure out.
@@ -81,25 +107,31 @@ void Instruction::setReagent(const QString& reagent)
 
 void Instruction::setInterval(double time) 
 {
-   set("interval", "interval", time);
+   m_interval = time;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropInterval,  time);
+   }
 }
 
 void Instruction::addReagent(const QString& reagent)
 {
-   _reagents.append(reagent);
+   m_reagents.append(reagent);
 }
 
+void Instruction::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 // Accessors ==================================================================
-QString Instruction::directions() { return get("directions").toString(); }
+QString Instruction::directions() { return m_directions; }
 
-bool Instruction::hasTimer() { return get("hasTimer").toBool(); }
+bool Instruction::hasTimer() { return m_hasTimer; }
 
-QString Instruction::timerValue() { return get("timerValue").toString(); }
+QString Instruction::timerValue() { return m_timerValue; }
 
-bool Instruction::completed() { return get("completed").toBool(); }
+bool Instruction::completed() { return m_completed; }
 
-QList<QString> Instruction::reagents() { return _reagents; }
+QList<QString> Instruction::reagents() { return m_reagents; }
 
-double Instruction::interval() { return get("interval").toDouble(); }
+double Instruction::interval() { return m_interval; }
 
 int Instruction::instructionNumber() const { return Database::instance().instructionNumber(this); }
+
+bool Instruction::cacheOnly() { return m_cacheOnly; }

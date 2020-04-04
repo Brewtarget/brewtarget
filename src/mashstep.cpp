@@ -18,54 +18,15 @@
  */
 
 #include <QVector>
+#include <QDebug>
 #include "mashstep.h"
 #include "brewtarget.h"
 
-
-/************* Columns *************/
-const QString kName("name");
-const QString kType("mstype");
-const QString kInfuseAmount("infuse_amount");
-const QString kStepTemp("step_temp");
-const QString kStepTime("step_time");
-const QString kRampTime("ramp_time");
-const QString kEndTemp("end_temp");
-const QString kInfuseTemp("infuse_temp");
-const QString kDecoctionAmount("decoction_amount");
-const QString kStepNumber("step_number");
-
-
-/************** Props **************/
-const QString kNameProp("name");
-const QString kTypeProp("type");
-const QString kInfuseAmountProp("infuseAmount_l");
-const QString kStepTempProp("stepTemp_c");
-const QString kStepTimeProp("stepTime_min");
-const QString kRampTimeProp("rampTime_min");
-const QString kEndTempProp("endTemp_c");
-const QString kInfuseTempProp("infuseTemp_c");
-const QString kDecoctionAmountProp("decoctionAmount_l");
-
+#include "TableSchemaConst.h"
+#include "MashStepSchema.h"
 
 QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction" << "Fly Sparge" << "Batch Sparge";
 QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction") << QObject::tr("Fly Sparge") << QObject::tr("Batch Sparge");
-
-QHash<QString,QString> MashStep::tagToProp = MashStep::tagToPropHash();
-
-QHash<QString,QString> MashStep::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   propHash["NAME"] = kNameProp;
-   //propHash["TYPE"] = kTypeProp;
-   propHash["INFUSE_AMOUNT"] = kInfuseAmountProp;
-   propHash["STEP_TEMP"] = kStepTimeProp;
-   propHash["STEP_TIME"] = kStepTimeProp;
-   propHash["RAMP_TIME"] = kRampTimeProp;
-   propHash["END_TEMP"] = kEndTempProp;
-   propHash["INFUSE_TEMP"] = kInfuseTempProp;
-   propHash["DECOCTION_AMOUNT"] = kDecoctionAmountProp;
-   return propHash;
-}
 
 bool operator<(MashStep &m1, MashStep &m2)
 {
@@ -86,19 +47,69 @@ QString MashStep::classNameStr()
 //==============================CONSTRUCTORS====================================
 
 MashStep::MashStep(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+   : BeerXMLElement(table, key, QString(), true),
+     m_typeStr(QString()),
+     m_type(static_cast<MashStep::Type>(0)),
+     m_infuseAmount_l(0.0),
+     m_stepTemp_c(0.0),
+     m_stepTime_min(0.0),
+     m_rampTime_min(0.0),
+     m_endTemp_c(0.0),
+     m_infuseTemp_c(0.0),
+     m_decoctionAmount_l(0.0),
+     m_stepNumber(0.0),
+     m_cacheOnly(false)
+{
+}
+
+MashStep::MashStep(bool cache)
+   : BeerXMLElement(Brewtarget::MASHSTEPTABLE, -1, QString(), true),
+     m_typeStr(QString()),
+     m_type(static_cast<MashStep::Type>(0)),
+     m_infuseAmount_l(0.0),
+     m_stepTemp_c(0.0),
+     m_stepTime_min(0.0),
+     m_rampTime_min(0.0),
+     m_endTemp_c(0.0),
+     m_infuseTemp_c(0.0),
+     m_decoctionAmount_l(0.0),
+     m_stepNumber(0.0),
+     m_cacheOnly(cache)
+{
+}
+
+MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
+   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+     m_typeStr(rec.value(kcolMashstepType).toString()),
+     m_type(static_cast<MashStep::Type>(types.indexOf(m_typeStr))),
+     m_infuseAmount_l(rec.value(kcolMashstepInfuseAmt).toDouble()),
+     m_stepTemp_c(rec.value(kcolMashstepStepTemp).toDouble()),
+     m_stepTime_min(rec.value(kcolMashstepStepTime).toDouble()),
+     m_rampTime_min(rec.value(kcolMashstepRampTime).toDouble()),
+     m_endTemp_c(rec.value(kcolMashstepEndTemp).toDouble()),
+     m_infuseTemp_c(rec.value(kcolMashstepInfuseTemp).toDouble()),
+     m_decoctionAmount_l(rec.value(kcolMashstepDecoctAmt).toDouble()),
+     m_stepNumber(rec.value(kcolMashstepStepNumber).toInt()),
+     m_cacheOnly(false)
 {
 }
 
 //================================"SET" METHODS=================================
-void MashStep::setInfuseTemp_c(double var)
+void MashStep::setInfuseTemp_c(double var )
 {
-   set(kInfuseTempProp, kInfuseTemp, var);
+   m_infuseTemp_c = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropInfuseTemp, var);
+   }
 }
 
 void MashStep::setType( Type t )
 {
-   set(kTypeProp, kType, types.at(t));
+   m_type = t;
+   m_typeStr = types.at(t);
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropType, m_typeStr);
+   }
 }
 
 void MashStep::setInfuseAmount_l( double var )
@@ -110,7 +121,10 @@ void MashStep::setInfuseAmount_l( double var )
    }
    else
    {
-      set(kInfuseAmountProp, kInfuseAmount, var);
+      m_infuseAmount_l = var;
+      if ( ! m_cacheOnly ) {
+         setEasy(kpropInfuseAmt, var);
+      }
    }
 }
 
@@ -123,7 +137,10 @@ void MashStep::setStepTemp_c( double var )
    }
    else
    {
-      set(kStepTempProp, kStepTemp, var);
+      m_stepTemp_c = var;
+      if ( ! m_cacheOnly ) {
+         setEasy(kpropStepTemp, var);
+      }
    }
 }
 
@@ -136,7 +153,10 @@ void MashStep::setStepTime_min( double var )
    }
    else
    {
-      set(kStepTimeProp, kStepTime, var);
+      m_stepTime_min = var;
+      if ( ! m_cacheOnly ) {
+         setEasy(kpropStepTime, var);
+      }
    }
 }
 
@@ -150,7 +170,10 @@ void MashStep::setRampTime_min( double var )
    }
    else
    {
-      set(kRampTimeProp, kRampTime, var);
+      m_rampTime_min = var;
+      if ( ! m_cacheOnly ) {
+         setEasy(kpropRampTime, var);
+      }
    }
 }
 
@@ -163,97 +186,64 @@ void MashStep::setEndTemp_c( double var )
    }
    else
    {
-      set(kEndTempProp, kEndTemp, var);
+      m_endTemp_c = var;
+      if ( ! m_cacheOnly ) {
+         setEasy(kpropEndTemp, var);
+      }
    }
 }
 
-void MashStep::setDecoctionAmount_l(double var)
+void MashStep::setDecoctionAmount_l(double var )
 {
-   set(kDecoctionAmountProp, kDecoctionAmount, var);
+   m_decoctionAmount_l = var;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropDecoctAmt, var);
+   }
 }
+
+void MashStep::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
 //============================="GET" METHODS====================================
-MashStep::Type MashStep::type() const
-{
-   return static_cast<MashStep::Type>(types.indexOf(typeString()));
+MashStep::Type MashStep::type() const { return m_type; }
+const QString MashStep::typeString() const { return m_typeStr; }
+const QString MashStep::typeStringTr() const { 
+   if ( m_type < 0 || m_type > typesTr.length() ) { 
+      return ""; 
+   } 
+   return typesTr.at(m_type);
 }
-
-const QString MashStep::typeString() const
-{
-   return get(kType).toString();
-}
-
-const QString MashStep::typeStringTr() const
-{
-   return typesTr.at(type());
-}
-
-double MashStep::infuseTemp_c() const
-{
-   return get(kInfuseTemp).toDouble();
-}
-
-double MashStep::infuseAmount_l() const
-{
-   return get(kInfuseAmount).toDouble();
-}
-
-double MashStep::stepTemp_c() const
-{
-   return get(kStepTemp).toDouble();
-}
-
-double MashStep::stepTime_min() const
-{
-   return get(kStepTime).toDouble();
-}
-
-double MashStep::rampTime_min() const
-{
-   return get(kRampTime).toDouble();
-}
-
-double MashStep::endTemp_c() const
-{
-   return get(kEndTemp).toDouble();
-}
-
-double MashStep::decoctionAmount_l() const
-{
-   return get(kDecoctionAmount).toDouble();
-}
-
-int MashStep::stepNumber() const
-{
-   return get(kStepNumber).toInt();
-}
+double MashStep::infuseTemp_c() const { return m_infuseTemp_c; }
+double MashStep::infuseAmount_l() const { return m_infuseAmount_l; }
+double MashStep::stepTemp_c() const { return m_stepTemp_c; }
+double MashStep::stepTime_min() const { return m_stepTime_min; }
+double MashStep::rampTime_min() const { return m_rampTime_min; }
+double MashStep::endTemp_c() const { return m_endTemp_c; }
+double MashStep::decoctionAmount_l() const { return m_decoctionAmount_l; }
+int MashStep::stepNumber() const { return m_stepNumber; }
+bool MashStep::cacheOnly( ) const { return m_cacheOnly; }
 
 bool MashStep::isInfusion() const
 {
-   MashStep::Type _type = type();
-   return ( _type == MashStep::Infusion    ||
-            _type == MashStep::batchSparge ||
-            _type == MashStep::flySparge );
+   return ( m_type == MashStep::Infusion    ||
+            m_type == MashStep::batchSparge ||
+            m_type == MashStep::flySparge );
 }
 
 bool MashStep::isSparge() const
 {
-   MashStep::Type _type = type();
-   return ( _type == MashStep::batchSparge ||
-            _type == MashStep::flySparge   || 
+   return ( m_type == MashStep::batchSparge ||
+            m_type == MashStep::flySparge   || 
             name() == "Final Batch Sparge" );
 }
 
 bool MashStep::isTemperature() const
 {
-   MashStep::Type _type = type();
-   return ( _type == MashStep::Temperature );
+   return ( m_type == MashStep::Temperature );
 }
 
 bool MashStep::isDecoction() const
 {
-   MashStep::Type _type = type();
-   return ( _type == MashStep::Decoction );
+   return ( m_type == MashStep::Decoction );
 }
 
 bool MashStep::isValidType( const QString &str ) const

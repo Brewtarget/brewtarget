@@ -71,6 +71,7 @@ SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 
 #==============================Compile flags===================================
 
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Enable and enforce c++11 standards, so that we may lambda
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED_ON)
@@ -104,7 +105,7 @@ IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
 
-ADD_DEFINITIONS("-std=c++11")
+ADD_DEFINITIONS("-std=c++14")
 
 #============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")

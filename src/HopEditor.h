@@ -42,7 +42,7 @@ class HopEditor : public QDialog, private Ui::hopEditor
    Q_OBJECT
 
 public:
-   HopEditor( QWidget *parent=0 );
+   HopEditor( QWidget *parent=nullptr );
    virtual ~HopEditor() {}
    //! Edit the given hop.
    void setHop( Hop* h );
@@ -60,7 +60,7 @@ private:
    /*! Updates the UI elements based on \b prop.
     *  If null, updates all UI elements.
     */
-   void showChanges(QMetaProperty* prop = 0);
+   void showChanges(QMetaProperty* prop = nullptr);
 };
 
 #endif   /* _HOPEDITOR_H */

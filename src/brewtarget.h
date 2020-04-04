@@ -28,6 +28,8 @@
 // restart.
 #define RESTART_CODE 0x1000
 
+#define CONFIG_VERSION 1
+
 // need to use this to turn on mac keyboard shortcuts (see http://doc.qt.nokia.com/4.7-snapshot/qtglobal.html#qt_set_sequence_auto_mnemonic)
 extern void qt_set_sequence_auto_mnemonic(bool b);
 
@@ -98,16 +100,11 @@ public:
       COLOR
    };
 
-   //! \brief The database tables.
-   //! \brief You know. I need all the db tables, and I need them in a
-   //  specific order. I need these constants defined in the EXACT order the
-   //  tables are created by DatabaseSchemaHelper::create. Do not modify this
-   //  unless you understand the relationship and fix all sides
+   //! \brief The database tables. These are heavily used by the TableSchema and DatabaseSchema classes
    enum DBTable{
       //! None of the tables. 0
       NOTABLE,
       // Meta tables first
-      BTALLTABLE,
       SETTINGTABLE,
 
       // BeerXML tables next
@@ -158,12 +155,14 @@ public:
       YEASTINVTABLE
    };
 
+   static QStringList dbTableToName;
    //! \brief Supported databases. I am not 100% sure I'm digging this
    //  solution, but this is more extensible than what I was doing previously
    enum DBTypes {
-      NODB = -1,  // seems a popular choice with the cool enums
-      SQLITE,     // compact, fast and a little loose
-      PGSQL       // big, powerful, uptight and a little stodgy
+      NODB = 0,  // Popularity was over rated
+      SQLITE,    // compact, fast and a little loose
+      PGSQL,     // big, powerful, uptight and a little stodgy
+      ALLDB      // Keep this one the last one, or bad things will happen
    };
 
    //! \return the data directory
@@ -181,7 +180,7 @@ public:
     */
    static int run(const QString &userDirectory = QString());
 
-   static double toDouble(QString text, bool* ok = 0);
+   static double toDouble(QString text, bool* ok = nullptr);
    static double toDouble(const BeerXMLElement* element, QString attribute, QString caller);
    static double toDouble(QString text, QString caller);
 
@@ -189,6 +188,8 @@ public:
    static void logE( QString message );
    //! \brief Log a warning message.
    static void logW( QString message );
+   //! \brief Log an info message.
+   static void logI( QString message );
 
    /*!
     *  \brief Displays an amount in the appropriate units.
@@ -199,7 +200,7 @@ public:
     *  \param unitDisplay which unit system to use, defaulting to "noUnit" which means use the system default
     *  \param Unit::unitScale which scale to use, defaulting to Unit::noScale which means use the largest scale that generates a value > 1
     */
-   static QString displayAmount( double amount, Unit* units=0, int precision=3,
+   static QString displayAmount( double amount, Unit* units=nullptr, int precision=3,
                                  Unit::unitDisplay displayUnit = Unit::noUnit, Unit::unitScale displayScale = Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -210,7 +211,7 @@ public:
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
+   static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
 
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -221,7 +222,7 @@ public:
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( double amount, QString section, QString attribute, Unit* units=0, int precision = 3);
+   static QString displayAmount( double amount, QString section, QString attribute, Unit* units=nullptr, int precision = 3);
 
    /*!
     *  \brief Displays an amount in the appropriate units.
@@ -230,7 +231,7 @@ public:
     *  \param units the units that \c amount is in
     *  \param precision how many decimal places
     */
-   static double amountDisplay( double amount, Unit* units=0, int precision=3,
+   static double amountDisplay( double amount, Unit* units=nullptr, int precision=3,
                                  Unit::unitDisplay displayUnit = Unit::noUnit, Unit::unitScale displayScale = Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -239,7 +240,7 @@ public:
     * \param attribute the \c QObject::property of \c element that returns the
     *        amount we wish to display
     */
-   static double amountDisplay( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
+   static double amountDisplay( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
 
    //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
@@ -254,7 +255,7 @@ public:
    static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
 
    //! \return SI amount for the string
-   static double qStringToSI( QString qstr, Unit* unit, 
+   static double qStringToSI( QString qstr, Unit* unit,
          Unit::unitDisplay dispUnit = Unit::noUnit, Unit::unitScale dispScale = Unit::noScale);
 
    //! \brief return the bitterness formula's name
@@ -281,6 +282,8 @@ public:
    //! \brief Read options from file. This is deprecated, but we need it
    // around for the conversion
    static void convertPersistentOptions();
+   //! \brief Every so often, we need to update the config file itself. This does that.
+   static void updateConfig();
    //! \brief Read options from options. This replaces readPersistentOptions()
    static void readSystemOptions();
    //! \brief Writes the persisten options back to the options store
@@ -323,9 +326,9 @@ public:
    static QMenu* setupVolumeMenu(QWidget* parent, Unit::unitDisplay unit, Unit::unitScale scale = Unit::noScale, bool generateScale = true);
    static QMenu* setupDiastaticPowerMenu(QWidget* parent, Unit::unitDisplay unit);
    static QMenu* setupTimeMenu(QWidget* parent, Unit::unitScale scale);
-   static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = 0);
+   static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal, QActionGroup* qgrp = nullptr);
 
-   /*! 
+   /*!
     * \brief If we are supporting multiple databases, we need some way to
     * figure out which database we are using. I still don't know that this
     * will be the final implementation -- I can't help but think I should be
@@ -338,6 +341,7 @@ public:
     */
    static QString dbTrue(Brewtarget::DBTypes whichDb = Brewtarget::NODB);
    static QString dbFalse(Brewtarget::DBTypes whichDb = Brewtarget::NODB);
+   static QString dbBoolean(bool flag, Brewtarget::DBTypes whichDb = Brewtarget::NODB);
 
    //! \return the main window.
    static MainWindow* mainWindow();
@@ -428,7 +432,7 @@ private:
     */
    static QString getOptionValue(const QDomDocument& optionsDoc,
                                  const QString& option,
-                                 bool* hasOption = 0);
+                                 bool* hasOption = nullptr);
 
    /*!
     *  \brief Copies the user xml files to another directory.
@@ -439,7 +443,7 @@ private:
    //! \brief Ensure our directories exist.
    static bool ensureDirectoriesExist();
    //! \brief Create a directory if it doesn't exist, popping a error dialog if creation fails
-   static bool createDir(QDir dir, QString errText = NULL);
+   static bool createDir(QDir dir, QString errText = nullptr);
 
    //! \brief Load translation files.
    static void loadTranslations();

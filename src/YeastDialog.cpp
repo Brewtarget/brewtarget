@@ -217,14 +217,12 @@ void YeastDialog::newYeast(QString folder)
    if( name.isEmpty() )
       return;
 
-   Yeast* y = Database::instance().newYeast();
-   y->setName(name);
+   Yeast* y = new Yeast(name);
    if ( ! folder.isEmpty() )
       y->setFolder(folder);
 
    yeastEditor->setYeast(y);
    yeastEditor->show();
-   y->setDisplay(true);
 }
 
 void YeastDialog::filterYeasts(QString searchExpression)
