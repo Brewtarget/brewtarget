@@ -31,6 +31,7 @@
 #include <QMetaProperty>
 #include <QVariant>
 #include <QDateTime>
+#include <QSqlRecord>
 #include "brewtarget.h"
 // For uintptr_t.
 #if HAVE_STDINT_H
@@ -57,7 +58,8 @@ class BeerXMLElement : public QObject
 
    friend class Database;
 public:
-   BeerXMLElement(Brewtarget::DBTable table, int key);
+   BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name = QString(),
+                  bool t_display = false, QString folder = QString());
    BeerXMLElement( BeerXMLElement const& other );
 
    // Everything that inherits from BeerXML has a name, delete, display and a folder
@@ -78,13 +80,13 @@ public:
    QString name() const;
 
    //! And ways to set those flags
-   void setDeleted(const bool var);
-   void setDisplay(const bool var);
+   void setDeleted(const bool var, bool cachedOnly = false);
+   void setDisplay(const bool var, bool cachedOnly = false);
    //! and a way to set the folder
-   virtual void setFolder(const QString var, bool signal=true);
+   virtual void setFolder(const QString var, bool signal=true, bool cachedOnly = false);
 
    //!
-   void setName(const QString var);
+   void setName(const QString var, bool cachedOnly = false);
 
    //! \returns our key in the table we are stored in.
    int key() const;
@@ -155,21 +157,20 @@ protected:
     * 1) Set the appropriate value in the appropriate table row.
     * 2) Call the NOTIFY method associated with \c prop_name if \c notify == true.
     */
+   /*
    void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    void set( const QString& prop_name, const QString& col_name, const QVariant& value, bool notify = true );
+   */
+   void setEasy( QString prop_name, QVariant value, bool notify = true );
 
    /*!
     * \param col_name - The database column of the attribute we want to get.
     * Returns the value of the attribute specified by key/table/col_name.
     */
-   QVariant get( const char* col_name ) const;
    QVariant get( const QString& col_name ) const;
 
-   void setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
-   void setInventory( const QString& prop_name, const QString& col_name, QVariant const& value, bool notify = true );
-   QVariant getInventory( const char* col_name ) const;
+   void setInventory( const QVariant& value, int invKey = 0, bool notify=true );
    QVariant getInventory( const QString& col_name ) const;
-
 
    QVariantMap getColumnValueMap() const;
 

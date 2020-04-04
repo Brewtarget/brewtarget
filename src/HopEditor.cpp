@@ -30,10 +30,10 @@
 #include "brewtarget.h"
 
 HopEditor::HopEditor( QWidget* parent )
-   : QDialog(parent), obsHop(0)
+   : QDialog(parent), obsHop(nullptr)
 {
    setupUi(this);
-   
+
    connect( buttonBox, &QDialogButtonBox::accepted, this, &HopEditor::save);
    connect( buttonBox, &QDialogButtonBox::rejected, this, &HopEditor::clearAndClose);
 }
@@ -41,8 +41,8 @@ HopEditor::HopEditor( QWidget* parent )
 void HopEditor::setHop( Hop* h )
 {
    if( obsHop )
-      disconnect( obsHop, 0, this, 0 );
-   
+      disconnect( obsHop, nullptr, this, nullptr );
+
    obsHop = h;
    if( obsHop )
    {
@@ -55,20 +55,15 @@ void HopEditor::save()
 {
    Hop* h = obsHop;
 
-   if( h == 0 )
+   if( h == nullptr )
    {
       setVisible(false);
       return;
    }
 
-   // TODO: check this out with 1.2.5.
-   // Need to disable notification since every "set" method will cause a "showChanges" that
-   // will revert any changes made.
-
-   h->setName(lineEdit_name->text());
+   h->setName(lineEdit_name->text(), h->cacheOnly());
    h->setAlpha_pct(lineEdit_alpha->toSI());
    h->setAmount_kg(lineEdit_amount->toSI());
-   h->setInventoryAmount(lineEdit_inventory->toSI());
    h->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
    h->setTime_min(lineEdit_time->toSI());
    h->setType(static_cast<Hop::Type>(comboBox_type->currentIndex()));
@@ -84,12 +79,18 @@ void HopEditor::save()
    h->setSubstitutes(textEdit_substitutes->toPlainText());
    h->setNotes(textEdit_notes->toPlainText());
 
+   if ( h->cacheOnly() ) {
+      Database::instance().insertHop(h);
+   }
+
+   // do this late to make sure we've the row in the inventory table
+   h->setInventoryAmount(lineEdit_inventory->toSI());
    setVisible(false);
 }
 
 void HopEditor::clearAndClose()
 {
-   setHop(0);
+   setHop(nullptr);
    setVisible(false); // Hide the window.
 }
 
@@ -103,16 +104,16 @@ void HopEditor::showChanges(QMetaProperty* prop)
 {
    bool updateAll = false;
    QString propName;
-   if( obsHop == 0 )
+   if( obsHop == nullptr )
       return;
 
-   if( prop == 0 )
+   if( prop == nullptr )
       updateAll = true;
    else
    {
       propName = prop->name();
    }
-   
+
    if( propName == "name" || updateAll )
    {
       lineEdit_name->setText(obsHop->name());

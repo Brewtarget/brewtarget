@@ -61,8 +61,12 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
 {
    // This is a little awkward.
    if ( model->type(left) == BtTreeItem::BREWNOTE ||
-        model->type(right) == BtTreeItem::BREWNOTE )
-      return false;
+        model->type(right) == BtTreeItem::BREWNOTE ) {
+      BrewNote *leftBn = model->brewNote(left);
+      BrewNote *rightBn = model->brewNote(right);
+
+      return leftBn->brewDate() < rightBn->brewDate();
+   }
 
    // As the models get more complex, so does the sort algorithm
    if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::RECIPE)

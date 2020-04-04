@@ -64,7 +64,7 @@ class EquipmentEditor : public QDialog
 
 public:
    //! \param singleEquipEditor true if you do not want the necessary elements for viewing all the database elements.
-   EquipmentEditor( QWidget *parent=0, bool singleEquipEditor=false );
+   EquipmentEditor( QWidget *parent=nullptr, bool singleEquipEditor=false );
    virtual ~EquipmentEditor() {}
 
    //! \name Public UI Variables
@@ -138,7 +138,7 @@ public:
 
    //! Edit the given equipment.
    void setEquipment( Equipment* e );
-   
+
    void newEquipment(QString folder);
 
 public slots:

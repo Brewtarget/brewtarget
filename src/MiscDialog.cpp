@@ -212,8 +212,7 @@ void MiscDialog::newMisc(QString folder)
    if(name.isEmpty())
       return;
 
-   Misc* m = Database::instance().newMisc();
-   m->setName(name);
+   Misc* m = new Misc(name);
    if ( ! folder.isEmpty() ) 
       m->setFolder(folder);
 

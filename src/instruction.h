@@ -39,7 +39,6 @@ class Instruction : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "instructions")
-   Q_CLASSINFO("prefix", "instruction")
    friend class Database;
 public:
    
@@ -60,6 +59,7 @@ public:
    void setTimerValue(const QString& timerVal);
    void setCompleted(bool comp);
    void setInterval(double interval);
+   void setCacheOnly(bool cache);
    void addReagent(const QString& reagent);
 
    // "get" methods.
@@ -70,33 +70,28 @@ public:
    //! This is a non-stored temporary in-memory set.
    QList<QString> reagents();
    double interval();
+   bool cacheOnly();
 
    int instructionNumber() const;
 
    static QString classNameStr();
 
 signals:
-   /*
-   void changedName(QString);
-   void changedDirections(QString);
-   void changedHasTimer(bool);
-   void changedTimerValue(QString);
-   void changedCompleted(bool);
-   void changedInterval(double);
-   void changedReagents(QVector<QString>);
-   */
 
 private:
-   //! Only database gets to construct instances.
    Instruction(Brewtarget::DBTable table, int key);
+   Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec);
+   Instruction( QString name, bool cache = true );
    Instruction( Instruction const& other );
-   /*
-   Instruction( const QString& name,
-                const QString& directions,
-                bool hasTimer = false,
-                const QString& timerVal = "0" );
-   */
-   QList<QString> _reagents;
+
+   QString m_directions;
+   bool    m_hasTimer;
+   QString m_timerValue;
+   bool    m_completed;
+   double  m_interval;
+   bool    m_cacheOnly;
+
+   QList<QString> m_reagents;
    
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();

@@ -28,10 +28,10 @@
 #include "yeast.h"
 
 YeastEditor::YeastEditor( QWidget* parent )
-   : QDialog(parent), obsYeast(0)
+   : QDialog(parent), obsYeast(nullptr)
 {
    setupUi(this);
-   
+
    connect( buttonBox, &QDialogButtonBox::accepted, this, &YeastEditor::save);
    connect( buttonBox, &QDialogButtonBox::rejected, this, &YeastEditor::clearAndClose);
 }
@@ -39,8 +39,8 @@ YeastEditor::YeastEditor( QWidget* parent )
 void YeastEditor::setYeast( Yeast* y )
 {
    if( obsYeast )
-      disconnect( obsYeast, 0, this, 0 );
-   
+      disconnect( obsYeast, nullptr, this, nullptr );
+
    obsYeast = y;
    if( obsYeast )
    {
@@ -53,19 +53,17 @@ void YeastEditor::save()
 {
    Yeast* y = obsYeast;
 
-   if( y == 0 )
+   if( y == nullptr )
    {
       setVisible(false);
       return;
    }
 
-   y->setName(lineEdit_name->text());
+   y->setName(lineEdit_name->text(), y->cacheOnly());
    y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
    y->setAmount( lineEdit_amount->toSI());
-   y->setInventoryQuanta( lineEdit_inventory->text().toInt() );
-
 
    y->setLaboratory( lineEdit_laboratory->text() );
    y->setProductID( lineEdit_productID->text() );
@@ -77,14 +75,19 @@ void YeastEditor::save()
    y->setMaxReuse(lineEdit_maxReuse->text().toInt());
    y->setAddToSecondary( (checkBox_addToSecondary->checkState() == Qt::Checked)? true : false );
    y->setBestFor(textEdit_bestFor->toPlainText());
-   y->setNotes(textEdit_notes->toPlainText()); 
+   y->setNotes(textEdit_notes->toPlainText());
 
+   if ( y->cacheOnly() ) {
+      Database::instance().insertYeast(y);
+   }
+   // do this late to make sure we've the row in the inventory table
+   y->setInventoryQuanta( lineEdit_inventory->text().toInt() );
    setVisible(false);
 }
 
 void YeastEditor::clearAndClose()
 {
-   setYeast(0);
+   setYeast(nullptr);
    setVisible(false); // Hide the window.
 }
 
@@ -97,20 +100,20 @@ void YeastEditor::changed(QMetaProperty prop, QVariant /*val*/)
 void YeastEditor::showChanges(QMetaProperty* metaProp)
 {
    Yeast* y = obsYeast;
-   if( y == 0 )
+   if( y == nullptr )
       return;
 
    QString propName;
    QVariant value;
    bool updateAll = false;
-   if( metaProp == 0 )
+   if( metaProp == nullptr )
       updateAll = true;
    else
    {
       propName = metaProp->name();
       value = metaProp->read(y);
    }
-   
+
    if( propName == "name" || updateAll )
    {
       lineEdit_name->setText(obsYeast->name());

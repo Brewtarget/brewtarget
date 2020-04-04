@@ -41,9 +41,9 @@ class Style : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "styles")
-   Q_CLASSINFO("prefix", "style")
-   
+
    friend class Database;
+   friend class StyleEditor;
 public:
 
    virtual ~Style() {}
@@ -51,7 +51,7 @@ public:
    //! \brief The type of beverage.
    enum Type {Lager, Ale, Mead, Wheat, Mixed, Cider};
    Q_ENUMS( Type )
-   
+
    //! \brief The category.
    Q_PROPERTY( QString category READ category WRITE setCategory /*NOTIFY changed*/ /*changedCategory*/ )
    //! \brief The category number.
@@ -94,34 +94,35 @@ public:
    Q_PROPERTY( QString ingredients READ ingredients WRITE setIngredients /*NOTIFY changed*/ /*changedIngredients*/ )
    //! \brief The commercial examples.
    Q_PROPERTY( QString examples READ examples WRITE setExamples /*NOTIFY changed*/ /*changedExamples*/ )
-   
-   void setCategory( const QString& var );
-   void setCategoryNumber( const QString& var );
-   void setStyleLetter( const QString& var );
-   void setStyleGuide( const QString& var );
-   void setType( Type t );
-   void setOgMin( double var );
-   void setOgMax( double var );
-   void setFgMin( double var );
-   void setFgMax( double var );
-   void setIbuMin( double var );
-   void setIbuMax( double var );
-   void setColorMin_srm( double var );
-   void setColorMax_srm( double var );
-   void setCarbMin_vol( double var );
-   void setCarbMax_vol( double var );
-   void setAbvMin_pct( double var );
-   void setAbvMax_pct( double var );
-   void setNotes( const QString& var );
-   void setProfile( const QString& var );
-   void setIngredients( const QString& var );
-   void setExamples( const QString& var );
+
+   void setCategory( const QString& var);
+   void setCategoryNumber( const QString& var);
+   void setStyleLetter( const QString& var);
+   void setStyleGuide( const QString& var);
+   void setType( Type t);
+   void setOgMin( double var);
+   void setOgMax( double var);
+   void setFgMin( double var);
+   void setFgMax( double var);
+   void setIbuMin( double var);
+   void setIbuMax( double var);
+   void setColorMin_srm( double var);
+   void setColorMax_srm( double var);
+   void setCarbMin_vol( double var);
+   void setCarbMax_vol( double var);
+   void setAbvMin_pct( double var);
+   void setAbvMax_pct( double var);
+   void setNotes( const QString& var);
+   void setProfile( const QString& var);
+   void setIngredients( const QString& var);
+   void setExamples( const QString& var);
+   void setCacheOnly(const bool cache);
 
    QString category() const;
    QString categoryNumber() const;
    QString styleLetter() const;
    QString styleGuide() const;
-   const Type type() const;
+   Type type() const;
    const QString typeString() const;
    double ogMin() const;
    double ogMax() const;
@@ -139,6 +140,7 @@ public:
    QString profile() const;
    QString ingredients() const;
    QString examples() const;
+   bool cacheOnly() const;
 
    static QString classNameStr();
 
@@ -146,39 +148,44 @@ signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
 
-   /*
-   void changedCategory(QString);
-   void changedCategoryNumber(QString);
-   void changedStyleLetter(QString);
-   void changedStyleGuide(QString);
-   void changedType(Type);
-   void changedOgMin(double);
-   void changedOgMax(double);
-   void changedFgMin(double);
-   void changedFgMax(double);
-   void changedIbuMin(double);
-   void changedIbuMax(double);
-   void changedColorMin_srm(double);
-   void changedColorMax_srm(double);
-   void changedCarbMin_vol(double);
-   void changedCarbMax_vol(double);
-   void changedAbvMin_pct(double);
-   void changedAbvMax_pct(double);
-   void changedNotes(QString);
-   void changedProfile(QString);
-   void changedIngredients(QString);
-   void changedExamples(QString);
-   */
-
 private:
    Style(Brewtarget::DBTable table, int key);
+   Style(QString t_name, bool cache = true);
+   Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
-   
+
+   QString m_category;
+   QString m_categoryNumber;
+   QString m_styleLetter;
+   QString m_styleGuide;
+   QString m_typeStr;
+   Type m_type;
+   double m_ogMin;
+   double m_ogMax;
+   double m_fgMin;
+   double m_fgMax;
+   double m_ibuMin;
+   double m_ibuMax;
+   double m_colorMin_srm;
+   double m_colorMax_srm;
+   double m_carbMin_vol;
+   double m_carbMax_vol;
+   double m_abvMin_pct;
+   double m_abvMax_pct;
+   QString m_notes;
+   QString m_profile;
+   QString m_ingredients;
+   QString m_examples;
+
+   bool m_cacheOnly;
+
    bool isValidType( const QString &str );
-   static QStringList types;
-   
+   static QStringList m_types;
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
+   static QHash<QString,QString> columnToProp;
+   static QHash<QString,QString> columnToPropHash();
 };
 
 Q_DECLARE_METATYPE( Style* )

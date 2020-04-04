@@ -39,7 +39,7 @@ class MashStepTableWidget : public QTableView
    Q_OBJECT
    friend class MainWindow;
 public:
-   MashStepTableWidget(QWidget* parent=0);
+   MashStepTableWidget(QWidget* parent=nullptr);
    MashStepTableModel* getModel();
 
 public slots:

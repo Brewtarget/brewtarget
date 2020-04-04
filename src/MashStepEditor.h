@@ -32,6 +32,7 @@ class MashStepEditor;
 
 // Forward declarations.
 class MashStep;
+class Mash;
 
 /*!
  * \class MashStepEditor
@@ -43,13 +44,15 @@ class MashStepEditor : public QDialog, public Ui::mashStepEditor
 {
    Q_OBJECT
 public:
-   MashStepEditor(QWidget* parent=0);
+   MashStepEditor(QWidget* parent=nullptr);
    virtual ~MashStepEditor() {}
+
+   void setMashStep(MashStep* step);
+   void setParentMash(Mash* mash);
 
 public slots:
    void saveAndClose();
    //! View/edit the given mash step.
-   void setMashStep(MashStep* step);
    void close();
    /*!
     * Grays out irrelevant portions of the dialog.
@@ -66,6 +69,7 @@ private:
    void showChanges(QMetaProperty* metaProp = 0);
    void clear();
    MashStep* obs;
+   Mash* m_parent;
 };
 
 #endif   /* _MASHSTEPEDITOR_H */
