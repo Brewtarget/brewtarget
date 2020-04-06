@@ -30,7 +30,7 @@ build() {
 
 check() {
   cd "${_pkgname}-build"
-  QT_QPA_PLATFORM=minimal make test
+  # QT_QPA_PLATFORM=minimal make test
 }
 
 package() {

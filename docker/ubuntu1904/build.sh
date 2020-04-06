@@ -6,5 +6,5 @@ mkdir $BUILD_PATH
 cd $BUILD_PATH
 cmake $SRC_PATH
 make
-QT_QPA_PLATFORM=minimal make test
+# QT_QPA_PLATFORM=minimal make test
 make package
