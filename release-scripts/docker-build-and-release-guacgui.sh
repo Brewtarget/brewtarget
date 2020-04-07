@@ -23,13 +23,4 @@ docker build \
 if [[ "$TRAVIS" == "true" ]]; then
   echo -e "\nPushing new docker images"
   docker push cgspeck/brewtarget-guacgui:$docker_tag
-  echo -e "\nUpdating Docker Hub Readme"
-  sed "s/%TAG_NAME%/${TAG_NAME}/" $PWD/docker/guacgui/README.md | sed  "s/%SHORT_HASH%/${SHORT_HASH}/" > $PWD/docker/guacgui/README.md.tmp
-  mv $PWD/docker/guacgui/README.md.tmp $PWD/docker/guacgui/README.md
-  docker run -v $PWD/docker/guacgui:/workspace \
-    -e DOCKERHUB_USERNAME=$DOCKER_USERNAME \
-    -e DOCKERHUB_PASSWORD=$DOCKER_PASSWORD \
-    -e DOCKERHUB_REPOSITORY='cgspeck/brewtarget-guacgui' \
-    -e README_FILEPATH='/workspace/README.md' \
-    peterevans/dockerhub-description:2.1.0
 fi
