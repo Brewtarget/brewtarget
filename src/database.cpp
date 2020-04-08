@@ -1283,7 +1283,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allFermentables);
-         int invkey = newInventory( dbDefn->table(Brewtarget::FERMINVTABLE));
+         int invkey = newInventory( dbDefn->table(Brewtarget::FERMTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1320,7 +1320,7 @@ Hop* Database::newHop(Hop* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allHops);
-         int invkey = newInventory( dbDefn->table(Brewtarget::HOPINVTABLE));
+         int invkey = newInventory( dbDefn->table(Brewtarget::HOPTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1543,7 +1543,7 @@ Misc* Database::newMisc(Misc* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allMiscs);
-         int invkey = newInventory( dbDefn->table(Brewtarget::MISCINVTABLE));
+         int invkey = newInventory( dbDefn->table(Brewtarget::MISCTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1727,7 +1727,7 @@ Yeast* Database::newYeast(Yeast* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allYeasts);
-         int invkey = newInventory( dbDefn->table(Brewtarget::YEASTINVTABLE));
+         int invkey = newInventory( dbDefn->table(Brewtarget::YEASTTABLE));
          tmp->setInventoryId(invkey);
       }
    }
