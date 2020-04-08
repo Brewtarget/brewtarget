@@ -984,7 +984,7 @@ void TableSchema::defineMiscTable()
    // These are defined in the global file.
    m_properties[kpropName]     = new PropertySchema( kpropName,       kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]    = new PropertySchema( kpropNotes,      kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
-   m_properties[kpropAmountKg] = new PropertySchema( kpropAmountKg,   kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
+   m_properties[kpropAmount]   = new PropertySchema( kpropAmount,     kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
    m_properties[kpropUse]      = new PropertySchema( kpropUseString,  kcolUse,          QString(""),      QString("text"), QString("'Boil'"));
    m_properties[kpropTime]     = new PropertySchema( kpropTime,       kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
    m_properties[kpropType]     = new PropertySchema( kpropTypeString, kcolMiscType,     QString(""),      QString("text"), QString("'Other'"));
@@ -1041,7 +1041,7 @@ void TableSchema::defineRecipeTable()
    m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,            QString(),            QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,            QString(),            QString("boolean"), QVariant(false));
    m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,            QString(),            QString("text"), QString("''"));
-   m_properties[kpropLocked]      = new PropertySchema( kpropLocked,      kcolLocked,             QString(),            QString("boolean"), QVariant(false));
+   // m_properties[kpropLocked]      = new PropertySchema( kpropLocked,      kcolLocked,             QString(),            QString("boolean"), QVariant(false));
 
    // enough properties, now some foreign keys
 

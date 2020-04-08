@@ -27,6 +27,7 @@
 #include <QRegExp>
 #include <QDebug>
 #include <QLocale>
+#include <QString>
 #include "brewnote.h"
 #include "brewtarget.h"
 #include "Algorithms.h"
@@ -282,7 +283,38 @@ void BrewNote::recalculateEff(Recipe* parent)
 }
 
 BrewNote::BrewNote(BrewNote const& other)
-   : BeerXMLElement(other)
+   : BeerXMLElement(other),
+     m_brewDate(other.m_brewDate),
+     m_fermentDate(other.m_fermentDate),
+     m_notes(other.m_notes),
+     m_sg(other.m_sg),
+     m_abv(other.m_abv),
+     m_effIntoBK_pct(other.m_effIntoBK_pct),
+     m_brewhouseEff_pct(other.m_brewhouseEff_pct),
+     m_volumeIntoBK_l(other.m_volumeIntoBK_l),
+     m_strikeTemp_c(other.m_strikeTemp_c),
+     m_mashFinTemp_c(other.m_mashFinTemp_c),
+     m_og(other.m_og),
+     m_postBoilVolume_l(other.m_postBoilVolume_l),
+     m_volumeIntoFerm_l(other.m_volumeIntoFerm_l),
+     m_pitchTemp_c(other.m_pitchTemp_c),
+     m_fg(other.m_fg),
+     m_attenuation(other.m_attenuation),
+     m_finalVolume_l(other.m_finalVolume_l),
+     m_boilOff_l(other.m_boilOff_l),
+     m_projBoilGrav(other.m_projBoilGrav),
+     m_projVolIntoBK_l(other.m_projVolIntoBK_l),
+     m_projStrikeTemp_c(other.m_projStrikeTemp_c),
+     m_projMashFinTemp_c(other.m_projMashFinTemp_c),
+     m_projOg(other.m_projOg),
+     m_projVolIntoFerm_l(other.m_projVolIntoFerm_l),
+     m_projFg(other.m_projFg),
+     m_projEff_pct(other.m_projEff_pct),
+     m_projABV_pct(other.m_projABV_pct),
+     m_projPoints(other.m_projPoints),
+     m_projFermPoints(other.m_projFermPoints),
+     m_projAtten(other.m_projAtten),
+     m_cacheOnly(other.m_cacheOnly)
 {
 }
 

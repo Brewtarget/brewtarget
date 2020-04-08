@@ -79,6 +79,7 @@
 #include "InstructionSchema.h"
 #include "BrewnoteSchema.h"
 #include "RecipeSchema.h"
+#include "SettingsSchema.h"
 
 // Static members.
 Database* Database::dbInstance = nullptr;
@@ -303,7 +304,7 @@ bool Database::load()
    // This should work regardless of the db being used.
    if( createFromScratch )
    {
-         bool success = DatabaseSchemaHelper::create(sqldb,dbDefn);
+         bool success = DatabaseSchemaHelper::create(sqldb,dbDefn,Brewtarget::dbType());
          if( !success )
          {
             Brewtarget::logE("DatabaseSchemaHelper::create() failed");

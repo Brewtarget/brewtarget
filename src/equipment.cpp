@@ -110,7 +110,25 @@ Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Equipment::Equipment( Equipment const& other )
-   : BeerXMLElement(other)
+   : BeerXMLElement(other),
+   m_boilSize_l(other.m_boilSize_l),
+   m_batchSize_l(other.m_batchSize_l),
+   m_tunVolume_l(other.m_tunVolume_l),
+   m_tunWeight_kg(other.m_tunWeight_kg),
+   m_tunSpecificHeat_calGC(other.m_tunSpecificHeat_calGC),
+   m_topUpWater_l(other.m_topUpWater_l),
+   m_trubChillerLoss_l(other.m_trubChillerLoss_l),
+   m_evapRate_pctHr(other.m_evapRate_pctHr),
+   m_evapRate_lHr(other.m_evapRate_lHr),
+   m_boilTime_min(other.m_boilTime_min),
+   m_calcBoilVolume(other.m_calcBoilVolume),
+   m_lauterDeadspace_l(other.m_lauterDeadspace_l),
+   m_topUpKettle_l(other.m_topUpKettle_l),
+   m_hopUtilization_pct(other.m_hopUtilization_pct),
+   m_notes(other.m_notes),
+   m_grainAbsorption_LKg(other.m_grainAbsorption_LKg),
+   m_boilingPoint_c(other.m_boilingPoint_c),
+   m_cacheOnly(other.m_cacheOnly)
 {
 }
 

@@ -78,7 +78,19 @@ Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Misc::Misc(Misc & other) : BeerXMLElement(other)
+Misc::Misc(Misc & other) : BeerXMLElement(other),
+   m_typeString(other.m_typeString),
+   m_type(other.m_type),
+   m_useString(other.m_useString),
+   m_use(other.m_use),
+   m_time(other.m_time),
+   m_amount(other.m_amount),
+   m_amountIsWeight(other.m_amountIsWeight),
+   m_useFor(other.m_useFor),
+   m_notes(other.m_notes),
+   m_inventory(other.m_inventory),
+   m_inventory_id(other.m_inventory_id),
+   m_cacheOnly(other.m_cacheOnly)
 {
 }
 
@@ -225,7 +237,7 @@ void Misc::setAmount( double var )
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropAmountKg, var );
+         setEasy( kpropAmount, var );
       }
    }
 }

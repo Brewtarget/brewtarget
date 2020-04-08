@@ -145,7 +145,6 @@ public:
 
       q.exec();
       if( !q.next() ) {
-         Brewtarget::logE( QString("Database::get(): %1 (%2) %3").arg(q.lastQuery()).arg(col_name).arg(q.lastError().text()));
          q.finish();
          return QVariant();
       }

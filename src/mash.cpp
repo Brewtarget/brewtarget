@@ -63,7 +63,7 @@ Mash::Mash(Brewtarget::DBTable table, int key)
 }
 
 Mash::Mash(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::MISCTABLE, -1, name, true),
+   : BeerXMLElement(Brewtarget::MASHTABLE, -1, name, true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
