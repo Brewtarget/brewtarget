@@ -21,6 +21,7 @@
 
 #include <QDir>
 #include <QTime>
+#include <QString>
 
 const QString Log::filename = "brewtarget_log.txt";
 const QString Log::timeFormat = "hh:mm:ss.zzz";
@@ -102,4 +103,5 @@ QString Log::getTypeName(const LogType type) const {
       case LogType_WARNING: return tr("WARNING");
       case LogType_ERROR: return tr("ERROR");
    }
+   return tr("ERROR");
 }
