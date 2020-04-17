@@ -9,8 +9,8 @@ jobs:
     - stage: Build Binaries
       name: Build for Ubuntu 18.04
       script: ./release-scripts/docker-build-and-release-ubuntu.sh ubuntu1804
-    - name: Build for Ubuntu 19.04
-      script: ./release-scripts/docker-build-and-release-ubuntu.sh ubuntu1904
+    - name: Build for Ubuntu 19.10
+      script: ./release-scripts/docker-build-and-release-ubuntu.sh ubuntu1910
     - name: Build for Archlinux
       script: ./release-scripts/docker-build-and-release-archlinux.sh
 
@@ -24,8 +24,9 @@ jobs:
       script: ./release-scripts/push-ubuntu-binaries.sh ubuntu1804
       if: branch = develop
 
-    - name: Push Ubuntu 19.04 binaries
-      script: ./release-scripts/push-ubuntu-binaries.sh ubuntu1904
+    - stage: Push Binaries
+      name: Push Ubuntu 19.10 binaries
+      script: ./release-scripts/push-ubuntu-binaries.sh ubuntu1910
       if: branch = develop
 
     - name: Push Archlinux Binaries

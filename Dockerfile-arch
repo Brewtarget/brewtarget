@@ -8,6 +8,7 @@ WORKDIR /app
 
 RUN pacman -Sy && pacman -S -y --noconfirm --needed \
     cmake \
+    libffi \
     base-devel \
     sed \
     qt5-multimedia \
