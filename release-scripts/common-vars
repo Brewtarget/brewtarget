@@ -4,7 +4,7 @@ MIN_VER="3"
 PATCH_VER="1"
 
 if [[ -z "${TRAVIS_BUILD_NUMBER}" ]]; then
-  TRAVIS_BUILD_NUMBER="1281"
+  TRAVIS_BUILD_NUMBER="1298"
   BRANCH_NAME=`git symbolic-ref -q HEAD`
   BRANCH_NAME=${BRANCH_NAME##refs/heads/}
 else
@@ -20,4 +20,4 @@ ARCH_VERSION="$MAJ_VER.$MIN_VER.$PATCH_VER.r${TRAVIS_BUILD_NUMBER}.${SHORT_HASH}
 LAST_COMMIT_DATE=$(git log -1 --format="%at" | xargs -I{} date -u -d @{} +%Y%m%d%H%M%S%z)
 # myapp_1.0+1SNAPSHOT20120613154859+0200-0ubuntu1ppa1~precise
 ubuntu1804_VERSION="brewtarget_${MAJ_VER}.${MIN_VER}.${PATCH_VER}+2.4.0SNAPSHOT${LAST_COMMIT_DATE}-0ubuntu1ppa${TRAVIS_BUILD_NUMBER}~bionic.deb"
-ubuntu1904_VERSION="brewtarget_${MAJ_VER}.${MIN_VER}.${PATCH_VER}+2.4.0SNAPSHOT${LAST_COMMIT_DATE}-0ubuntu1ppa${TRAVIS_BUILD_NUMBER}~disco.deb"
+ubuntu1910_VERSION="brewtarget_${MAJ_VER}.${MIN_VER}.${PATCH_VER}+2.4.0SNAPSHOT${LAST_COMMIT_DATE}-0ubuntu1ppa${TRAVIS_BUILD_NUMBER}~eoan.deb"
