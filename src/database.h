@@ -172,7 +172,7 @@ public:
 
       QSqlQuery q(sqlDatabase());
 
-      q.setForwardOnly(true);
+      // q.setForwardOnly(true);
 
       try {
          if ( ! q.exec(insert) )
@@ -830,7 +830,7 @@ private:
          }
 
          // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
-         q.setForwardOnly(true);
+         // q.setForwardOnly(true);
 
          QString insert = QString("INSERT INTO %1 (%2, %3) VALUES (:ingredient, :recipe)")
                   .arg(inrec->tableName())
