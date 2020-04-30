@@ -21,3 +21,4 @@ LAST_COMMIT_DATE=$(git log -1 --format="%at" | xargs -I{} date -u -d @{} +%Y%m%d
 # myapp_1.0+1SNAPSHOT20120613154859+0200-0ubuntu1ppa1~precise
 ubuntu1804_VERSION="brewtarget_${MAJ_VER}.${MIN_VER}.${PATCH_VER}+2.4.0SNAPSHOT${LAST_COMMIT_DATE}-0ubuntu1ppa${TRAVIS_BUILD_NUMBER}~bionic.deb"
 ubuntu1910_VERSION="brewtarget_${MAJ_VER}.${MIN_VER}.${PATCH_VER}+2.4.0SNAPSHOT${LAST_COMMIT_DATE}-0ubuntu1ppa${TRAVIS_BUILD_NUMBER}~eoan.deb"
+ubuntu2004_VERSION="brewtarget_${MAJ_VER}.${MIN_VER}.${PATCH_VER}+2.4.0SNAPSHOT${LAST_COMMIT_DATE}-0ubuntu1ppa${TRAVIS_BUILD_NUMBER}~focal.deb"

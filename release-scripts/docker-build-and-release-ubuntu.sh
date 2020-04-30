@@ -1,7 +1,7 @@
 #! /bin/bash -e
 
 if [[ "$#" -ne 1 ]]; then
-  echo "Please supply target, e.g. 'ubuntu1804' or 'ubuntu1904'"
+  echo "Please supply target, e.g. 'ubuntu1804', 'ubuntu1904' or 'ubuntu2004'"
   exit 1
 fi
 
