@@ -962,7 +962,6 @@ void TableSchema::defineMashstepTable()
 
    m_properties[kpropDisplay]    = new PropertySchema( kpropDisplay,    kcolDisplay,            QString(),          QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]    = new PropertySchema( kpropDeleted,    kcolDeleted,            QString(),          QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]     = new PropertySchema( kpropFolder,     kcolFolder,            QString(),          QString("text"), QString("''"));
 
    m_foreignKeys[kpropMashId]    = new PropertySchema( kpropMashId,     kcolMashId,       QString("integer"), Brewtarget::MASHTABLE);
 
