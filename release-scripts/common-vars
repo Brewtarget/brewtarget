@@ -3,6 +3,8 @@ MAJ_VER="2"
 MIN_VER="3"
 PATCH_VER="1"
 
+GITHUB_RELEASES_URL="https://github.com/github-release/github-release/releases/download/v0.8.1/linux-amd64-github-release.bz2"
+
 if [[ -z "${TRAVIS_BUILD_NUMBER}" ]]; then
   TRAVIS_BUILD_NUMBER="1298"
   BRANCH_NAME=`git symbolic-ref -q HEAD`
