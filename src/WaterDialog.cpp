@@ -299,7 +299,7 @@ void WaterDialog::newTotals()
       btDigit_cl->display( saltTableModel->total_Cl() / allTheWaters + modifier * base->chloride_ppm());
       btDigit_hco3->display( saltTableModel->total_HCO3() / allTheWaters + modifier * base->bicarbonate_ppm());
       btDigit_so4->display( saltTableModel->total_SO4() / allTheWaters + modifier * base->sulfate_ppm());
-      btDigit_ph->display( calculateMashpH() );
+      btDigit_ph->display( Brewtarget::amountDisplay(calculateMashpH()), 2 );
 
    }
    else {
@@ -479,7 +479,7 @@ double WaterDialog::calculateMashpH()
       double saltpH    = calculateAddedSaltpH();
       double acids     = calculateAcidpH();
 
-      // qDebug() << "gristph =" << gristpH << "strike =" << strikepH << "acids =" << acids;
+      // qDebug() << "basepH =" << basepH << "gristph =" << gristpH << "saltpH =" << saltpH << "acids =" << acids;
       // residual alkalinity is handled by basepH
       mashpH = basepH + gristpH + saltpH - acids;
    }
