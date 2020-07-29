@@ -209,7 +209,6 @@ void MashWizard::wizardry()
       thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
    }
    else {
-      qDebug() << Q_FUNC_INFO << "Doing a nosparge" << steps.size();
       // not sure I like this. Why is this here and not somewhere later?
       if (steps.size() == 1 ) {
          mashStep->setInfuseAmount_l(recObs->targetTotalMashVol_l());

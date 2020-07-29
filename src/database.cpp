@@ -1304,7 +1304,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allFermentables);
-         int invkey = newInventory( dbDefn->table(Brewtarget::FERMINVTABLE));
+         int invkey = newInventory( dbDefn->table(Brewtarget::FERMTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1341,7 +1341,7 @@ Hop* Database::newHop(Hop* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allHops);
-         int invkey = newInventory( dbDefn->table(Brewtarget::HOPINVTABLE));
+         int invkey = newInventory( dbDefn->table(Brewtarget::HOPTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1564,7 +1564,7 @@ Misc* Database::newMisc(Misc* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allMiscs);
-         int invkey = newInventory( dbDefn->table(Brewtarget::MISCINVTABLE));
+         int invkey = newInventory( dbDefn->table(Brewtarget::MISCTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -1770,7 +1770,7 @@ Yeast* Database::newYeast(Yeast* other)
          sqlDatabase().transaction();
          transact = true;
          tmp = newIngredient(&allYeasts);
-         int invkey = newInventory( dbDefn->table(Brewtarget::YEASTINVTABLE));
+         int invkey = newInventory( dbDefn->table(Brewtarget::YEASTTABLE));
          tmp->setInventoryId(invkey);
       }
    }
@@ -4724,6 +4724,7 @@ QMap<QString, std::function<BeerXMLElement*(QString name)> > Database::makeTable
    tmp.insert(ktableStyle,       [&](QString name) { return this->newStyle(name); } );
    tmp.insert(ktableYeast,       [&](QString name) { return this->newYeast(); } );
    tmp.insert(ktableWater,       [&](QString name) { return this->newWater(); } );
+   tmp.insert(ktableSalt,        [&](QString name) { return this->newSalt(); } );
 
    return tmp;
 }
@@ -4763,6 +4764,10 @@ void Database::updateDatabase(QString const& filename)
       foreach( TableSchema* tbl, dbDefn->baseTables() )
       {
          TableSchema* btTbl = dbDefn->btTable(tbl->dbTable());
+         // not all tables have bt* tables
+         if ( btTbl == nullptr ) {
+            continue;
+         }
          QSqlQuery qNewBtIng( QString("SELECT * FROM %1").arg(btTbl->tableName()), newSqldb );
 
          QSqlQuery qNewIng( newSqldb );
@@ -4771,6 +4776,7 @@ void Database::updateDatabase(QString const& filename)
          // Construct the big update query.
          QSqlQuery qUpdateOldIng( sqlDatabase() );
          QString updateString = tbl->generateUpdateRow();
+         qUpdateOldIng.prepare(updateString);
 
          QSqlQuery qOldBtIng( sqlDatabase() );
          qOldBtIng.prepare( QString("SELECT * FROM %1 WHERE %2=:btid").arg(btTbl->tableName()).arg(btTbl->keyName()) );
@@ -4781,20 +4787,22 @@ void Database::updateDatabase(QString const& filename)
                                   .arg(btTbl->keyName())
                                   .arg(btTbl->childIndexName()));
 
-         while( qNewBtIng.next() )
-         {
+         while( qNewBtIng.next() ) {
             btid = qNewBtIng.record().value(btTbl->keyName());
             newid = qNewBtIng.record().value(btTbl->childIndexName());
 
             qNewIng.bindValue(":id", newid);
+            // if we can't run the query
             if ( ! qNewIng.exec() )
                throw QString("Could not retrieve new ingredient: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
+
+            // if we can't get the result from the query
             if( !qNewIng.next() )
                throw QString("Could not advance query: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
 
-            foreach( QString pn, tbl->allPropertyNames()) {
+            foreach( QString pn, tbl->allColumnNames()) {
                // Bind the old values to the new unless it is deleted, which we always set to false
-               if ( pn == kpropDeleted ) {
+               if ( pn == kcolDeleted ) {
                   qUpdateOldIng.bindValue( QString(":%1").arg(pn), Brewtarget::dbFalse());
                }
                qUpdateOldIng.bindValue( QString(":%1").arg(pn), qNewIng.record().value(pn));
@@ -4805,15 +4813,15 @@ void Database::updateDatabase(QString const& filename)
 
             // Find the bt_<ingredient> record in the local table.
             qOldBtIng.bindValue( ":btid", btid );
-            if ( ! qOldBtIng.exec() )
+            if ( ! qOldBtIng.exec() ) {
                throw QString("Could not find btID (%1): %2 %3")
                         .arg(btid.toInt())
                         .arg(qOldBtIng.lastQuery())
                         .arg(qOldBtIng.lastError().text());
+            }
 
             // If the btid exists in the old bt_hop table, do an update.
-            if( qOldBtIng.next() )
-            {
+            if( qOldBtIng.next() ) {
                oldid = qOldBtIng.record().value( btTbl->keyName() );
                qOldBtIng.finish();
 
@@ -4861,8 +4869,7 @@ void Database::updateDatabase(QString const& filename)
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      blockSignals(false);
-      throw;
+      abort();
    }
 }
 

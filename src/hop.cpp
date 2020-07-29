@@ -415,7 +415,7 @@ int Hop::inventoryId() const
 const QString Hop::useStringTr() const
 {
    static QStringList usesTr = QStringList() << tr("Mash") << tr("First Wort") << tr("Boil") << tr("Aroma") << tr("Dry Hop") ;
-   if ( m_use < usesTr.size() ) {
+   if ( m_use < usesTr.size() && m_use >= 0 ) {
       return usesTr.at(m_use);
    }
    else {
@@ -426,7 +426,7 @@ const QString Hop::useStringTr() const
 const QString Hop::typeStringTr() const
 {
    static QStringList typesTr = QStringList() << tr("Bittering") << tr("Aroma") << tr("Both");
-   if ( m_type < typesTr.size() ) {
+   if ( m_type < typesTr.size()  && m_type >= 0 ) {
       return typesTr.at(m_type);
    }
    else {
@@ -437,7 +437,7 @@ const QString Hop::typeStringTr() const
 const QString Hop::formStringTr() const
 {
    static QStringList formsTr = QStringList() << tr("Leaf") << tr("Pellet") << tr("Plug");
-   if ( m_form < formsTr.size() ) {
+   if ( m_form < formsTr.size() && m_form >= 0 ) {
       return formsTr.at(m_form);
    }
    else {

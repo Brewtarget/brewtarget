@@ -156,11 +156,11 @@ double SaltTableModel::total_Ca() const
 {
    double ret = 0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1;
+      double mult  = 1.0;
       // If we are adding equal amounts to mash and sparge
       // then double what's shown
       if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2;
+         mult = 2.0;
       }
       // If we are adding a proportional amount to both,
       // this should handle that math.
@@ -174,11 +174,11 @@ double SaltTableModel::total_Ca() const
 
 double SaltTableModel::total_Cl() const
 {
-   double ret = 0;
+   double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1;
+      double mult  = 1.0;
       if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2;
+         mult = 2.0;
       }
       else if ( i->addTo() == Salt::RATIO ) {
          mult = 1.0 + spargePct;
@@ -191,9 +191,15 @@ double SaltTableModel::total_Cl() const
 
 double SaltTableModel::total_CO3() const
 {
-   double ret = 0;
+   double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      int mult = i->addTo() == Salt::RATIO ? 2 : 1;
+      double mult  = 1.0;
+      if ( i->addTo() == Salt::EQUAL ) {
+         mult = 2.0;
+      }
+      else if ( i->addTo() == Salt::RATIO ) {
+         mult = 1.0 + spargePct;
+      }
       ret += mult * i->CO3();
    }
 
@@ -202,11 +208,11 @@ double SaltTableModel::total_CO3() const
 
 double SaltTableModel::total_HCO3() const
 {
-   double ret = 0;
+   double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1;
+      double mult  = 1.0;
       if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2;
+         mult = 2.0;
       }
       else if ( i->addTo() == Salt::RATIO ) {
          mult = 1.0 + spargePct;
@@ -219,11 +225,11 @@ double SaltTableModel::total_HCO3() const
 
 double SaltTableModel::total_Mg() const
 {
-   double ret = 0;
+   double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1;
+      double mult  = 1.0;
       if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2;
+         mult = 2.0;
       }
       else if ( i->addTo() == Salt::RATIO ) {
          mult = 1.0 + spargePct;
@@ -236,11 +242,11 @@ double SaltTableModel::total_Mg() const
 
 double SaltTableModel::total_Na() const
 {
-   double ret = 0;
+   double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1;
+      double mult  = 1.0;
       if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2;
+         mult = 2.0;
       }
       else if ( i->addTo() == Salt::RATIO ) {
          mult = 1.0 + spargePct;
@@ -253,11 +259,11 @@ double SaltTableModel::total_Na() const
 
 double SaltTableModel::total_SO4() const
 {
-   double ret = 0;
+   double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1;
+      double mult  = 1.0;
       if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2;
+         mult = 2.0;
       }
       else if ( i->addTo() == Salt::RATIO ) {
          mult = 1.0 + spargePct;
@@ -270,13 +276,13 @@ double SaltTableModel::total_SO4() const
 
 double SaltTableModel::total(Salt::Types type) const
 {
-   double ret = 0;
+   double ret = 0.0;
    if (type != Salt::NONE) {
       foreach(Salt* i, saltObs) {
          if ( i->type() == type && i->addTo() != Salt::NEVER) {
-            double mult  = 1;
+            double mult  = 1.0;
             if ( i->addTo() == Salt::EQUAL ) {
-               mult = 2;
+               mult = 2.0;
             }
             else if ( i->addTo() == Salt::RATIO ) {
                mult = 1.0 + spargePct;
@@ -558,7 +564,7 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
    }
 
-   if ( retval )
+   if ( retval && row->addTo() != Salt::NEVER )
       emit newTotals();
    emit dataChanged(index,index);
    QHeaderView* headerView = parentTableWidget->horizontalHeader();

@@ -207,9 +207,10 @@ const QString Fermentable::typeString() const
 const QString Fermentable::typeStringTr() const
 {
    static QStringList typesTr = QStringList () << QObject::tr("Grain") << QObject::tr("Sugar") << QObject::tr("Extract") << QObject::tr("Dry Extract") << QObject::tr("Adjunct");
-   if ( m_type > typesTr.length()) {
+   if ( m_type > typesTr.length() || m_type < 0 ) {
       return "";
    }
+
    return typesTr.at(m_type);
 }
 

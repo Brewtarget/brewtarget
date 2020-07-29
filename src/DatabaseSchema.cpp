@@ -55,6 +55,9 @@ TableSchema *DatabaseSchema::table(QString tableName)
    if ( Brewtarget::dbTableToName.contains(tableName) ) {
       return m_tables.value( static_cast<Brewtarget::DBTable>(Brewtarget::dbTableToName.indexOf(tableName)));
    }
+   else {
+      qDebug() << "Could not find table for " + tableName;
+   }
    return nullptr;
 }
 

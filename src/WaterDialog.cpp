@@ -276,12 +276,13 @@ void WaterDialog::newTotals()
    // Two major things need to happen here:
    //   o the totals need to be updated
    //   o the digits need to be updated
-   btDigit_totalcacl2->display(saltTableModel->total(Salt::CACL2));
-   btDigit_totalcaco3->display(saltTableModel->total(Salt::CACO3));
-   btDigit_totalcaso4->display(saltTableModel->total(Salt::CASO4));
-   btDigit_totalmgso4->display(saltTableModel->total(Salt::MGSO4));
-   btDigit_totalnacl->display(saltTableModel->total(Salt::NACL));
-   btDigit_totalnahco3->display(saltTableModel->total(Salt::NAHCO3));
+
+   btDigit_totalcacl2->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::CACL2), Units::kilograms ), 2 );
+   btDigit_totalcaco3 ->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::CACO3), Units::kilograms), 2 );
+   btDigit_totalcaso4->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::CASO4), Units::kilograms), 2 );
+   btDigit_totalmgso4->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::MGSO4), Units::kilograms), 2 );
+   btDigit_totalnacl->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::NACL), Units::kilograms), 2 );
+   btDigit_totalnahco3->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::NAHCO3), Units::kilograms), 2 );
 
    // the total_* method return the numerator, we supply the denominator and
    // include the base water ppm. The confusing math generates an adjustment

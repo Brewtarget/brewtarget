@@ -188,7 +188,7 @@ const QString Yeast::typeStringTr() const
                                        << QObject::tr("Wine")
                                        << QObject::tr("Champagne");
 
-   if ( m_type < typesTr.size() ) {
+   if ( m_type < typesTr.size() && m_type >= 0 ) {
       return typesTr.at(m_type);
    }
    else {
@@ -202,7 +202,7 @@ const QString Yeast::formStringTr() const
                                        << QObject::tr("Dry")
                                        << QObject::tr("Slant")
                                        << QObject::tr("Culture");
-   if ( m_form < formsTr.size() ) {
+   if ( m_form < formsTr.size() && m_form >= 0  ) {
       return formsTr.at(m_form);
    }
    else {
@@ -216,7 +216,7 @@ const QString Yeast::flocculationStringTr() const
                                                << QObject::tr("Medium")
                                                << QObject::tr("High")
                                                << QObject::tr("Very High");
-   if ( m_flocculation < flocculationsTr.size() ) {
+   if ( m_flocculation < flocculationsTr.size() && m_flocculation >= 0 ) {
       return flocculationsTr.at(m_flocculation);
    }
    else {
