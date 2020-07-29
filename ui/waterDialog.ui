@@ -29,27 +29,17 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_left" stretch="0,0">
+      <layout class="QVBoxLayout" name="verticalLayout_left" stretch="0,0,0">
        <item>
         <widget class="QGroupBox" name="groupBox_profiles">
          <property name="title">
           <string>Profiles</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="2" column="1">
-           <widget class="QSpinBox" name="spinBox_mashRO"/>
-          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_mashRO">
             <property name="text">
              <string>% RO in Mash</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_spargeRO">
-            <property name="text">
-             <string>% RO in Sparge</string>
             </property>
            </widget>
           </item>
@@ -60,45 +50,8 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_baseButtons" stretch="0,1">
-            <item>
-             <widget class="WaterButton" name="baseProfileButton">
-              <property name="text">
-               <string>PushButton</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="CustomComboBox" name="baseProfileCombo">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>30</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>30</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_baseProfile">
-            <property name="text">
-             <string>Base Profile</string>
-            </property>
-           </widget>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="spinBox_mashRO"/>
           </item>
           <item row="1" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_targetButtons">
@@ -133,261 +86,209 @@
             </item>
            </layout>
           </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_baseProfile">
+            <property name="text">
+             <string>Base Profile</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="1">
            <widget class="QSpinBox" name="spinBox_spargeRO"/>
           </item>
-          <item row="4" column="1">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_baseButtons" stretch="0,1">
+            <item>
+             <widget class="WaterButton" name="baseProfileButton">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="CustomComboBox" name="baseProfileCombo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>30</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_spargeRO">
+            <property name="text">
+             <string>% RO in Sparge</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_ranges">
-         <property name="title">
-          <string>Results</string>
+        <widget class="QGroupBox" name="groupbox_ppm">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_ca">
-            <item>
-             <widget class="QLabel" name="label_ca">
-              <property name="text">
-               <string>Ca</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_ca" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>128</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>512</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+         <property name="title">
+          <string>PPM</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0">
+          <item row="0" column="3">
+           <widget class="BtDigitWidget" name="btDigit_na" native="true"/>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_mg">
-            <item>
-             <widget class="QLabel" name="label_mg">
-              <property name="text">
-               <string>Mg</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_mg" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>128</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>512</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_ca">
+            <property name="text">
+             <string>Ca</string>
+            </property>
+           </widget>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_so4">
-            <item>
-             <widget class="QLabel" name="label_so4">
-              <property name="text">
-               <string>SO&lt;sub&gt;4&lt;/sub&gt;</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_so4" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>128</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>512</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="2" column="1">
+           <widget class="BtDigitWidget" name="btDigit_so4" native="true"/>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_na">
-            <item>
-             <widget class="QLabel" name="label_na">
-              <property name="text">
-               <string>Na</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_na" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>128</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>512</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_mg">
+            <property name="text">
+             <string>Mg</string>
+            </property>
+           </widget>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_cl">
-            <item>
-             <widget class="QLabel" name="label_cl">
-              <property name="text">
-               <string>Cl</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_cl" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>128</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>512</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="0" column="1">
+           <widget class="BtDigitWidget" name="btDigit_ca" native="true"/>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_hco3">
-            <item>
-             <widget class="QLabel" name="label_hco3">
-              <property name="text">
-               <string>HCO&lt;sub&gt;3&lt;/sub&gt;</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_hco3" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>128</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>512</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="3" column="1">
+           <widget class="BtDigitWidget" name="btDigit_ph" native="true"/>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_pH">
-            <item>
-             <widget class="QLabel" name="label_pH">
-              <property name="text">
-               <string>pH</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="StyleRangeWidget" name="rangeWidget_pH" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>128</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>512</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="2" column="3">
+           <widget class="BtDigitWidget" name="btDigit_hco3" native="true"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_pH">
+            <property name="text">
+             <string>pH</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_na">
+            <property name="text">
+             <string>Na</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_cl">
+            <property name="text">
+             <string>Cl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_so4">
+            <property name="text">
+             <string>SO&lt;sub&gt;4&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="BtDigitWidget" name="btDigit_mg" native="true"/>
+          </item>
+          <item row="1" column="3">
+           <widget class="BtDigitWidget" name="btDigit_cl" native="true"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_hco3">
+            <property name="text">
+             <string>HCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_total">
+         <property name="title">
+          <string>Total Salts</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_totalcacl2">
+            <property name="text">
+             <string>CaCl&lt;sub&gt;2&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="BtDigitWidget" name="btDigit_totalcacl2" native="true"/>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_totalmgso4">
+            <property name="text">
+             <string>MgSO&lt;sub&gt;4&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="BtDigitWidget" name="btDigit_totalmgso4" native="true"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_totalcaco3">
+            <property name="text">
+             <string>CaCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="BtDigitWidget" name="btDigit_totalcaco3" native="true"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_totalnacl">
+            <property name="text">
+             <string>NaCl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="BtDigitWidget" name="btDigit_totalnacl" native="true"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_totalcaso4">
+            <property name="text">
+             <string>CaSO&lt;sub&gt;4&lt;?sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="BtDigitWidget" name="btDigit_totalcaso4" native="true"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_totalnahco3">
+            <property name="text">
+             <string>NaHCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="BtDigitWidget" name="btDigit_totalnahco3" native="true"/>
           </item>
          </layout>
         </widget>
@@ -426,7 +327,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset>
                 <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
               </property>
              </widget>
@@ -440,7 +341,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset>
                 <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
               </property>
              </widget>
@@ -470,291 +371,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_total">
-         <property name="title">
-          <string>Total Salts</string>
-         </property>
-         <property name="configSection" stdset="0">
-          <string>waterDialog</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0" colspan="2">
-           <widget class="BtMassLabel" name="label_totalcacl2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::CustomContextMenu</enum>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCl&lt;span style=&quot; vertical-align:sub;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_totalcacl2</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" colspan="2">
-           <widget class="BtMassEdit" name="lineEdit_totalcacl2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="acceptDrops">
-             <bool>false</bool>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4" colspan="2">
-           <widget class="BtMassLabel" name="label_totalmgs04">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::CustomContextMenu</enum>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MgSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_totalmgso4</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="6" colspan="2">
-           <widget class="BtMassEdit" name="lineEdit_totalmgso4">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="acceptDrops">
-             <bool>false</bool>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="BtMassLabel" name="label_totalcaco3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::CustomContextMenu</enum>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_totalcaco3</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2" colspan="2">
-           <widget class="BtMassEdit" name="lineEdit_totalcaco3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="acceptDrops">
-             <bool>false</bool>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4" colspan="2">
-           <widget class="BtMassLabel" name="label_totalnacl">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::CustomContextMenu</enum>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaCl  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_totalnacl</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="6" colspan="2">
-           <widget class="BtMassEdit" name="lineEdit_totalnacl">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="BtMassLabel" name="label_totalcaso4">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::CustomContextMenu</enum>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;CaSO&lt;span style=&quot; vertical-align:sub;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_totalcaso4</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2" colspan="2">
-           <widget class="BtMassEdit" name="lineEdit_totalcaso4">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="acceptDrops">
-             <bool>false</bool>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="4" colspan="2">
-           <widget class="BtMassLabel" name="label_totalnahco3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::CustomContextMenu</enum>
-            </property>
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;NaHCO&lt;span style=&quot; vertical-align:sub;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_totalnahco3</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="6" colspan="2">
-           <widget class="BtMassEdit" name="lineEdit_totalnahco3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="acceptDrops">
-             <bool>false</bool>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
@@ -781,33 +397,15 @@
    <header>CustomComboBox.h</header>
   </customwidget>
   <customwidget>
-   <class>StyleRangeWidget</class>
-   <extends>QWidget</extends>
-   <header>StyleRangeWidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>WaterButton</class>
    <extends>QPushButton</extends>
    <header>WaterButton.h</header>
   </customwidget>
   <customwidget>
-   <class>BtMassEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <signal>textModified()</signal>
-    <slot>lineChanged()</slot>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtMassLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-    <slot>popContextMenu(QPoint)</slot>
-   </slots>
+   <class>BtDigitWidget</class>
+   <extends>QWidget</extends>
+   <header>BtDigitWidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -819,12 +417,6 @@
   <tabstop>spinBox_spargeRO</tabstop>
   <tabstop>pushButton_addSalt</tabstop>
   <tabstop>pushButton_removeSalt</tabstop>
-  <tabstop>lineEdit_totalmgso4</tabstop>
-  <tabstop>lineEdit_totalnahco3</tabstop>
-  <tabstop>lineEdit_totalcacl2</tabstop>
-  <tabstop>lineEdit_totalnacl</tabstop>
-  <tabstop>lineEdit_totalcaco3</tabstop>
-  <tabstop>lineEdit_totalcaso4</tabstop>
  </tabstops>
  <resources>
   <include location="../brewtarget.qrc"/>
@@ -859,102 +451,6 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_totalcacl2</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_totalcacl2</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>352</x>
-     <y>500</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>463</x>
-     <y>500</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_totalcaco3</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_totalcaco3</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>352</x>
-     <y>533</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>463</x>
-     <y>533</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_totalcaso4</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_totalcaso4</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>352</x>
-     <y>566</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>463</x>
-     <y>566</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_totalmgs04</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_totalmgso4</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>581</x>
-     <y>500</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>698</x>
-     <y>500</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_totalnacl</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_totalnacl</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>581</x>
-     <y>533</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>698</x>
-     <y>533</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>label_totalnahco3</sender>
-   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   <receiver>lineEdit_totalnahco3</receiver>
-   <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>581</x>
-     <y>566</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>698</x>
-     <y>566</y>
     </hint>
    </hints>
   </connection>

@@ -20,20 +20,23 @@
 #include <limits>
 #include <Algorithms.h>
 #include <QComboBox>
-#include <QMimeData>
 #include <QFont>
+#include <QInputDialog>
 
 #include "WaterDialog.h"
 #include "WaterListModel.h"
 #include "WaterSortFilterProxyModel.h"
 #include "WaterButton.h"
 #include "WaterEditor.h"
-#include "BtTreeFilterProxyModel.h"
-#include "BtTreeModel.h"
+#include "WaterTableModel.h"
 #include "WaterButton.h"
+// #include "SaltEditor.h"
 #include "SaltTableModel.h"
+#include "WaterTableModel.h"
+#include "BtDigitWidget.h"
 #include "brewtarget.h"
 #include "database.h"
+#include "fermentable.h"
 #include "mash.h"
 #include "mashstep.h"
 #include "salt.h"
@@ -48,8 +51,11 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    m_total_grains(0.0),
    m_thickness(0.0)
 {
-   setupUi(this);
+   QStringList msgs = QStringList() << tr("Too low for target profile.")
+                                    << tr("In range for target profile.")
+                                    << tr("Too high for target profile.");
 
+   setupUi(this);
    // initialize the two buttons and lists (I think)
    baseListModel = new WaterListModel(baseProfileCombo);
    baseFilter    = new WaterSortFilterProxyModel(baseProfileCombo);
@@ -67,20 +73,36 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    targetFilter->sort(0);
    targetProfileCombo->setModel(targetFilter);
 
-   rangeWidget_ca->setPrecision(1);
-   rangeWidget_cl->setPrecision(1);
-   rangeWidget_mg->setPrecision(1);
-   rangeWidget_na->setPrecision(1);
-   rangeWidget_hco3->setPrecision(1);
-   rangeWidget_so4->setPrecision(1);
+   // not sure if this is better or worse, but we will try it out
+   m_ppm_digits.append(btDigit_ca);
+   m_ppm_digits.append(btDigit_cl);
+   m_ppm_digits.append(btDigit_hco3);
+   m_ppm_digits.append(btDigit_mg);
+   m_ppm_digits.append(btDigit_na);
+   m_ppm_digits.append(btDigit_so4);
 
-   // we can set pH up a little better than the rest
-   rangeWidget_pH->setPrecision(2);
-   rangeWidget_pH->setRange(2,10);
-   rangeWidget_pH->setTickMarks(1,5);
-   rangeWidget_pH->setValue(7.0);
-   rangeWidget_pH->setPreferredRange(5.2,5.5);
+   m_total_digits.append(btDigit_totalcaco3);
+   m_total_digits.append(btDigit_totalcacl2);
+   m_total_digits.append(btDigit_totalcaso4);
+   m_total_digits.append(btDigit_totalmgso4);
+   m_total_digits.append(btDigit_totalnacl);
+   m_total_digits.append(btDigit_totalnahco3);
 
+   foreach( BtDigitWidget* i, m_ppm_digits ) {
+      i->setLimits(0.0,1000.0);
+      i->display(0.0, 1);
+      i->setMessages(msgs);
+   }
+   // as before, we can be a bit more specific with pH
+   btDigit_ph->setLowLim(5.0);
+   btDigit_ph->setHighLim(5.5);
+   btDigit_ph->display(7.0,1);
+
+   // since all the things are now digits, lets get the totals configured
+   foreach( BtDigitWidget* i, m_total_digits ) {
+      i->setConstantColor(BtDigitWidget::BLACK);
+      i->display(0,1);
+   }
    // and now let's see what the table does.
    saltTableModel = new SaltTableModel(tableView_salts);
    tableView_salts->setItemDelegate(new SaltItemDelegate(tableView_salts));
@@ -124,11 +146,19 @@ void WaterDialog::setSpargeRO(int val)
    newTotals();
 }
 
-void WaterDialog::setSlider( RangedSlider* slider, double data)
+void WaterDialog::setDigits(Water* target)
 {
-   slider->setPreferredRange( 0.95 * data, 1.05 * data);
-   slider->setRange(0,data*2);
-   slider->setTickMarks(data/4,4);
+   if ( target == nullptr )
+      return;
+
+   btDigit_ca->setLimits(target->calcium_ppm() * 0.95,target->calcium_ppm() * 1.05);
+   btDigit_cl->setLimits(target->chloride_ppm() * 0.95,target->chloride_ppm() * 1.05);
+   btDigit_hco3->setLimits(target->bicarbonate_ppm() * 0.95,target->bicarbonate_ppm() * 1.05);
+   btDigit_mg->setLimits(target->magnesium_ppm() * 0.95,target->magnesium_ppm() * 1.05);
+   btDigit_na->setLimits(target->sodium_ppm() * 0.95,target->sodium_ppm() * 1.05);
+   btDigit_so4->setLimits(target->sulfate_ppm() * 0.95,target->sulfate_ppm() * 1.05);
+
+   // oddly, pH doesn't change with the target water
 }
 
 void WaterDialog::setRecipe(Recipe *rec)
@@ -181,12 +211,7 @@ void WaterDialog::setRecipe(Recipe *rec)
       targetProfileButton->setWater(target);
       targetProfileEdit->setWater(target);
 
-      setSlider(rangeWidget_ca, target->calcium_ppm());
-      setSlider(rangeWidget_cl, target->chloride_ppm());
-      setSlider(rangeWidget_mg,target->magnesium_ppm());
-      setSlider(rangeWidget_na, target->sodium_ppm());
-      setSlider(rangeWidget_hco3, target->bicarbonate_ppm());
-      setSlider(rangeWidget_so4, target->sulfate_ppm());
+      setDigits(target);
    }
    newTotals();
 
@@ -232,12 +257,7 @@ void WaterDialog::update_targetProfile(int selected)
       targetProfileButton->setWater(target);
       targetProfileEdit->setWater(target);
 
-      setSlider(rangeWidget_ca,   target->calcium_ppm());
-      setSlider(rangeWidget_cl,   target->chloride_ppm());
-      setSlider(rangeWidget_mg,   target->magnesium_ppm());
-      setSlider(rangeWidget_na,   target->sodium_ppm());
-      setSlider(rangeWidget_hco3, target->bicarbonate_ppm());
-      setSlider(rangeWidget_so4,  target->sulfate_ppm());
+      setDigits(target);
    }
 }
 
@@ -255,13 +275,13 @@ void WaterDialog::newTotals()
    }
    // Two major things need to happen here:
    //   o the totals need to be updated
-   //   o the slides need to be updated
-   lineEdit_totalcacl2->setText(saltTableModel->total(Salt::CACL2));
-   lineEdit_totalcaco3->setText(saltTableModel->total(Salt::CACO3));
-   lineEdit_totalcaso4->setText(saltTableModel->total(Salt::CASO4));
-   lineEdit_totalmgso4->setText(saltTableModel->total(Salt::MGSO4));
-   lineEdit_totalnacl->setText(saltTableModel->total(Salt::NACL));
-   lineEdit_totalnahco3->setText(saltTableModel->total(Salt::NAHCO3));
+   //   o the digits need to be updated
+   btDigit_totalcacl2->display(saltTableModel->total(Salt::CACL2));
+   btDigit_totalcaco3->display(saltTableModel->total(Salt::CACO3));
+   btDigit_totalcaso4->display(saltTableModel->total(Salt::CASO4));
+   btDigit_totalmgso4->display(saltTableModel->total(Salt::MGSO4));
+   btDigit_totalnacl->display(saltTableModel->total(Salt::NACL));
+   btDigit_totalnahco3->display(saltTableModel->total(Salt::NAHCO3));
 
    // the total_* method return the numerator, we supply the denominator and
    // include the base water ppm. The confusing math generates an adjustment
@@ -272,22 +292,22 @@ void WaterDialog::newTotals()
       // I hope this is right. All this 'rithmetic is making me head hurt.
       double modifier = 1 - ( (m_mashRO * mash->totalInfusionAmount_l()) + (m_spargeRO * mash->totalSpargeAmount_l())) / allTheWaters;
 
-      rangeWidget_ca->setValue( saltTableModel->total_Ca() / allTheWaters + modifier * base->calcium_ppm());
-      rangeWidget_mg->setValue( saltTableModel->total_Mg() / allTheWaters + modifier * base->magnesium_ppm());
-      rangeWidget_na->setValue( saltTableModel->total_Na() / allTheWaters + modifier * base->sodium_ppm());
-      rangeWidget_cl->setValue( saltTableModel->total_Cl() / allTheWaters + modifier * base->chloride_ppm());
-      rangeWidget_hco3->setValue( saltTableModel->total_HCO3() / allTheWaters + modifier * base->bicarbonate_ppm());
-      rangeWidget_so4->setValue( saltTableModel->total_SO4() / allTheWaters + modifier * base->sulfate_ppm());
-      rangeWidget_pH->setValue( calculateMashpH() );
+      btDigit_ca->display( saltTableModel->total_Ca() / allTheWaters + modifier * base->calcium_ppm());
+      btDigit_mg->display( saltTableModel->total_Mg() / allTheWaters + modifier * base->magnesium_ppm());
+      btDigit_na->display( saltTableModel->total_Na() / allTheWaters + modifier * base->sodium_ppm());
+      btDigit_cl->display( saltTableModel->total_Cl() / allTheWaters + modifier * base->chloride_ppm());
+      btDigit_hco3->display( saltTableModel->total_HCO3() / allTheWaters + modifier * base->bicarbonate_ppm());
+      btDigit_so4->display( saltTableModel->total_SO4() / allTheWaters + modifier * base->sulfate_ppm());
+      btDigit_ph->display( calculateMashpH() );
 
    }
    else {
-      rangeWidget_ca->setValue( saltTableModel->total_Ca() / allTheWaters );
-      rangeWidget_mg->setValue( saltTableModel->total_Mg() / allTheWaters );
-      rangeWidget_na->setValue( saltTableModel->total_Na() / allTheWaters );
-      rangeWidget_cl->setValue( saltTableModel->total_Cl() / allTheWaters );
-      rangeWidget_hco3->setValue( saltTableModel->total_HCO3() / allTheWaters );
-      rangeWidget_so4->setValue( saltTableModel->total_SO4() / allTheWaters );
+      btDigit_ca->display( saltTableModel->total_Ca() / allTheWaters );
+      btDigit_mg->display( saltTableModel->total_Mg() / allTheWaters );
+      btDigit_na->display( saltTableModel->total_Na() / allTheWaters );
+      btDigit_cl->display( saltTableModel->total_Cl() / allTheWaters );
+      btDigit_hco3->display( saltTableModel->total_HCO3() / allTheWaters );
+      btDigit_so4->display( saltTableModel->total_SO4() / allTheWaters );
 
    }
 }

@@ -64,6 +64,9 @@ signals:
 
 private:
 
+   QList<BtDigitWidget*> m_ppm_digits;
+   QList<BtDigitWidget*> m_total_digits;
+
    WaterListModel *baseListModel;
    WaterListModel *targetListModel;
    SaltTableModel *saltTableModel;
@@ -80,7 +83,7 @@ private:
    WaterSortFilterProxyModel *baseFilter;
    WaterSortFilterProxyModel *targetFilter;
 
-   void setSlider(RangedSlider* slider, double data);
+   void setDigits(Water* target);
    void calculateGrainEquivalent();
 
    double calculateRA() const;

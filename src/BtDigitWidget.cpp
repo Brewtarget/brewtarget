@@ -23,24 +23,23 @@
 #include <iostream>
 #include <QLocale>
 
-BtDigitWidget::BtDigitWidget(QWidget *parent) : QLabel(parent)
+BtDigitWidget::BtDigitWidget(QWidget *parent) : QLabel(parent),
+   m_rgblow(0x0000d0),
+   m_rgbgood(0x008000),
+   m_rgbhigh(0xd00000),
+   m_lowLim(0.0),
+   m_highLim(1.0),
+   m_styleSheet(QString("QLabel { font-weight: bold; color: #%1 }")),
+   m_constantColor(false),
+   m_lastNum(1.5),
+   m_lastPrec(3),
+   m_low_msg(tr("Too low for style.")),
+   m_good_msg(tr("In range for style.")),
+   m_high_msg(tr("Too high for style."))
 {
-   //rgblow = 208; // r = 0, g = 0, b = 208
-   //rgbgood = 128 << 8; // r = 0, g = 128, b = 0
-   //rgbhigh = 208 << 16; // r = 208, g = 0, b = 0
-   rgblow = 0x0000d0;
-   rgbgood = 0x008000;
-   rgbhigh = 0xd00000;
-   //styleSheet = QString("QLabel { font: normal bold 12 px \"Arial\"; color: #%1 }");
-   styleSheet = QString("QLabel { font-weight: bold; color: #%1 }");
-   setStyleSheet(styleSheet.arg(0,6,16,QChar('0')));
+   setStyleSheet(m_styleSheet.arg(0,6,16,QChar('0')));
    setFrameStyle(QFrame::Box);
    setFrameShadow(QFrame::Sunken);
-   lowLim = 0;
-   highLim = 1;
-   lastNum = 1.5;
-   lastPrec = 3;
-   constantColor = false;
 }
 
 void BtDigitWidget::display(QString str)
@@ -48,10 +47,10 @@ void BtDigitWidget::display(QString str)
    static bool converted;
   
 
-   lastNum = Brewtarget::toDouble(str,&converted);
-   lastPrec = str.length() - str.lastIndexOf(QLocale().decimalPoint()) - 1;
+   m_lastNum = Brewtarget::toDouble(str,&converted);
+   m_lastPrec = str.length() - str.lastIndexOf(QLocale().decimalPoint()) - 1;
    if( converted )
-      display(lastNum,lastPrec);
+      display(m_lastNum,m_lastPrec);
    else
    {
       Brewtarget::logW( QString( "BtDigitWidget::display(QString) could not convert %1 to double").arg(str));
@@ -62,60 +61,78 @@ void BtDigitWidget::display(QString str)
 void BtDigitWidget::display(double num, int prec)
 {
    QString str = QString("%L1").arg(num,0,'f',prec);
-   QString style = styleSheet;
+   QString style = m_styleSheet;
 
-   lastNum = num;
-   lastPrec = prec;
+   m_lastNum = num;
+   m_lastPrec = prec;
 
-   if( (!constantColor && (num < lowLim)) || (constantColor && color == LOW))
+   if( (!m_constantColor && (num < m_lowLim)) || (m_constantColor && m_color == LOW))
    {
-      style = styleSheet.arg(rgblow,6,16,QChar('0'));
-      setToolTip(constantColor? "" : tr("Too low for style."));
+      style = m_styleSheet.arg(m_rgblow,6,16,QChar('0'));
+      setToolTip(m_constantColor? "" : m_low_msg);
    }
-   else if( (!constantColor && (num <= highLim)) || (constantColor && color == GOOD))
+   else if( (!m_constantColor && (num <= m_highLim)) || (m_constantColor && m_color == GOOD))
    {
-      style = styleSheet.arg(rgbgood,6,16,QChar('0'));
-      setToolTip(constantColor? "" : tr("In range for style."));
+      style = m_styleSheet.arg(m_rgbgood,6,16,QChar('0'));
+      setToolTip(m_constantColor? "" : m_good_msg);
    }
    else
    {
-      if( constantColor && color == BLACK )
-         style = styleSheet.arg(0,6,16,QChar('0'));
+      if( m_constantColor && m_color == BLACK )
+         style = m_styleSheet.arg(0,6,16,QChar('0'));
       else
       {
-         style = styleSheet.arg(rgbhigh,6,16,QChar('0'));
-         setToolTip(tr("Too high for style."));
+         style = m_styleSheet.arg(m_rgbhigh,6,16,QChar('0'));
+         setToolTip(m_high_msg);
       }
    }
 
    setStyleSheet(style);
    setText(str);
-   //update(); // Calls for a repaint.
 }
 
 void BtDigitWidget::setLowLim(double num)
 {
-   if( num < highLim )
-      lowLim = num;
-   display(lastNum, lastPrec);
+   if( num < m_highLim )
+      m_lowLim = num;
+   display(m_lastNum, m_lastPrec);
 }
 
 void BtDigitWidget::setHighLim(double num)
 {
-   if( num > lowLim )
-      highLim = num;
-   display(lastNum, lastPrec);
+   if( num > m_lowLim )
+      m_highLim = num;
+   display(m_lastNum, m_lastPrec);
 }
 
 void BtDigitWidget::setConstantColor(ColorType c)
 {
-   constantColor = (c == LOW || c == GOOD || c == HIGH || c == BLACK );
-   color = c;
+   m_constantColor = (c == LOW || c == GOOD || c == HIGH || c == BLACK );
+   m_color = c;
    update(); // repaint.
 }
 
-void BtDigitWidget::unsetConstantColor()
+void BtDigitWidget::setLimits(double low, double high)
 {
-   constantColor = false;
-   update(); // repaint
+   if( low <  high ) {
+      m_lowLim = low;
+      m_highLim = high;
+   }
+   display(m_lastNum, m_lastPrec);
 }
+
+void BtDigitWidget::setLowMsg( QString msg )  { m_low_msg = msg; }
+void BtDigitWidget::setGoodMsg( QString msg ) { m_good_msg = msg; }
+void BtDigitWidget::setHighMsg( QString msg ) { m_high_msg = msg; }
+
+void BtDigitWidget::setMessages( QStringList msgs )
+{
+   if ( msgs.size() != 3 ) {
+      Brewtarget::logW("Wrong number of messages");
+      return;
+   }
+   m_low_msg = msgs[0];
+   m_good_msg = msgs[1];
+   m_high_msg = msgs[2];
+}
+

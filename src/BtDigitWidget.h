@@ -37,12 +37,12 @@ class BtDigitWidget : public QLabel
 {
    Q_OBJECT
 public:
-   enum ColorType{ LOW, GOOD, HIGH, BLACK };
+   enum ColorType{ NONE, LOW, GOOD, HIGH, BLACK };
 
    BtDigitWidget(QWidget* parent = 0);
 
    //! \brief Displays the given \c num with precision \c prec.
-   void display( double num, int prec );
+   void display( double num, int prec = 0 );
    //! \brief Display a QString.
    void display(QString str);
 
@@ -50,22 +50,34 @@ public:
    void setLowLim(double num);
    //! \brief Set the upper limit of the "good" range.
    void setHighLim(double num);
-   //! \brief Always use a constant color.
+   //! \brief Always use a constant color. Use a constantColor of NONE to
+   //!  unset
    void setConstantColor( ColorType c );
-   //! \brief Automatically choose color.
-   void unsetConstantColor();
+   //! \brief Convience method to set high and low limits in one call
+   void setLimits(double low, double high);
+   //! \brief Methods to set the low, good and high messages
+   void setLowMsg(QString msg);
+   void setGoodMsg(QString msg);
+   void setHighMsg(QString msg);
+   //! \brief the array needs to be low, good, high
+   void setMessages(QStringList msgs);
 
 private:
-   unsigned int rgblow;
-   unsigned int rgbgood;
-   unsigned int rgbhigh;
-   double lowLim;
-   double highLim;
-   QString styleSheet;
-   bool constantColor;
-   ColorType color;
-   double lastNum;
-   int lastPrec;
+
+   unsigned int m_rgblow;
+   unsigned int m_rgbgood;
+   unsigned int m_rgbhigh;
+   double m_lowLim;
+   double m_highLim;
+   QString m_styleSheet;
+   bool m_constantColor;
+   ColorType m_color;
+   double m_lastNum;
+   int m_lastPrec;
+
+   QString m_low_msg;
+   QString m_good_msg;
+   QString m_high_msg;
 };
 
 #endif // BTDIGITWIDGET_H
