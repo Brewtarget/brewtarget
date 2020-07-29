@@ -52,14 +52,15 @@ public slots:
    void fromEquipment();
    //! Set the mash we wish to view/edit.
    void setMash(Mash* mash);
-   void setEquipment(Equipment* e);
+   void setRecipe(Recipe* r);
 
    void changed(QMetaProperty,QVariant);
 private:
    void showChanges(QMetaProperty* prop = nullptr);
    void clear();
+   Recipe* m_rec;
    Mash* mashObs;
-   Equipment* equip;
+   Equipment* m_equip;
 
 };
 

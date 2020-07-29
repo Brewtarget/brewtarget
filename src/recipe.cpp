@@ -204,7 +204,37 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other)
+Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other),
+   m_type(other.m_type),
+   m_brewer(other.m_brewer),
+   m_asstBrewer(other.m_asstBrewer),
+   m_batchSize_l(other.m_batchSize_l),
+   m_boilSize_l(other.m_boilSize_l),
+   m_boilTime_min(other.m_boilTime_min),
+   m_efficiency_pct(other.m_efficiency_pct),
+   m_fermentationStages(other.m_fermentationStages),
+   m_primaryAge_days(other.m_primaryAge_days),
+   m_primaryTemp_c(other.m_primaryTemp_c),
+   m_secondaryAge_days(other.m_secondaryAge_days),
+   m_secondaryTemp_c(other.m_secondaryTemp_c),
+   m_tertiaryAge_days(other.m_tertiaryAge_days),
+   m_tertiaryTemp_c(other.m_tertiaryTemp_c),
+   m_age(other.m_age),
+   m_ageTemp_c(other.m_ageTemp_c),
+   m_date(other.m_date),
+   m_carbonation_vols(other.m_carbonation_vols),
+   m_forcedCarbonation(other.m_forcedCarbonation),
+   m_primingSugarName(other.m_primingSugarName),
+   m_carbonationTemp_c(other.m_carbonationTemp_c),
+   m_primingSugarEquiv(other.m_primingSugarEquiv),
+   m_kegPrimingFactor(other.m_kegPrimingFactor),
+   m_notes(other.m_notes),
+   m_tasteNotes(other.m_tasteNotes),
+   m_tasteRating(other.m_tasteRating),
+   m_style_id(other.m_style_id),
+   m_og(other.m_og),
+   m_fg(other.m_fg),
+   m_cacheOnly(other.m_cacheOnly)
 {
    setObjectName("Recipe");
 }
@@ -427,7 +457,7 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type)
          }
 
          kindOf = misc->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
-         str = str .arg(Brewtarget::displayAmount(misc->amount(), kMiscTableSection, kpropAmountKg, kindOf))
+         str = str .arg(Brewtarget::displayAmount(misc->amount(), kMiscTableSection, kpropAmount, kindOf))
                    .arg(misc->name())
                    .arg(Brewtarget::displayAmount(misc->time(), kMiscTableSection, kTimeAttr, Units::minutes));
 

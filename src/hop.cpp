@@ -144,7 +144,28 @@ Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Hop::Hop( Hop & other )
-   : BeerXMLElement(other)
+   : BeerXMLElement(other),
+     m_useStr(other.m_useStr),
+     m_use(other.m_use),
+     m_typeStr(other.m_typeStr),
+     m_type(other.m_type),
+     m_formStr(other.m_formStr),
+     m_form(other.m_form),
+     m_alpha_pct(other.m_alpha_pct),
+     m_amount_kg(other.m_amount_kg),
+     m_time_min(other.m_time_min),
+     m_notes(other.m_notes),
+     m_beta_pct(other.m_beta_pct),
+     m_hsi_pct(other.m_hsi_pct),
+     m_origin(other.m_origin),
+     m_substitutes(other.m_substitutes),
+     m_humulene_pct(other.m_humulene_pct),
+     m_caryophyllene_pct(other.m_caryophyllene_pct),
+     m_cohumulone_pct(other.m_cohumulone_pct),
+     m_myrcene_pct(other.m_myrcene_pct),
+     m_inventory(other.m_inventory),
+     m_inventory_id(other.m_inventory_id),
+     m_cacheOnly(other.m_cacheOnly)
 {
 }
 

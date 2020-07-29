@@ -127,7 +127,27 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Fermentable::Fermentable( Fermentable &other )
-        : BeerXMLElement( other )
+        : BeerXMLElement( other ),
+     m_typeStr(other.m_typeStr),
+     m_type(other.m_type),
+     m_amountKg(other.m_amountKg),
+     m_yieldPct(other.m_yieldPct),
+     m_colorSrm(other.m_colorSrm),
+     m_isAfterBoil(other.m_isAfterBoil),
+     m_origin(other.m_origin),
+     m_supplier(other.m_supplier),
+     m_notes(other.m_notes),
+     m_coarseFineDiff(other.m_coarseFineDiff),
+     m_moisturePct(other.m_moisturePct),
+     m_diastaticPower(other.m_diastaticPower),
+     m_proteinPct(other.m_proteinPct),
+     m_maxInBatchPct(other.m_maxInBatchPct),
+     m_recommendMash(other.m_recommendMash),
+     m_ibuGalPerLb(other.m_ibuGalPerLb),
+     m_inventory(other.m_inventory),
+     m_inventory_id(other.m_inventory_id),
+     m_isMashed(other.m_isMashed),
+     m_cacheOnly(other.m_cacheOnly)
 {
    setType( other.type() );
    setAmount_kg( other.amount_kg() );

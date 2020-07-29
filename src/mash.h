@@ -44,6 +44,7 @@ class Mash : public BeerXMLElement
 
    friend class Database;
    friend class MashDesigner;
+   friend class MashEditor;
 public:
 
    virtual ~Mash() {}

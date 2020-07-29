@@ -84,13 +84,32 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db, DatabaseSchema* defn, Brewtar
    foreach( TableSchema* table, defn->allTables() ) {
       QString createTable = table->generateCreateTable(dbType);
       if ( ! q.exec(createTable) ) {
-         throw QString("Could not create %1 : %2").arg(table->tableName()).arg(q.lastError().text());
+         throw QString("Could not create %1 : %2")
+               .arg(table->tableName())
+               .arg(q.lastError().text());
       }
       // We need to create the increment and decrement things for the instructions_in_recipe table.
       if ( table->dbTable() == Brewtarget::INSTINRECTABLE ) {
          q.exec(table->generateIncrementTrigger(dbType));
          q.exec(table->generateDecrementTrigger(dbType));
       }
+
+   }
+   TableSchema* settings = defn->table(Brewtarget::SETTINGTABLE);
+
+   // since we create from scratch, it will always be at the most
+   // recent version
+   QString insSetting = QString("INSERT INTO settings (%1,%2) values (%3,%4)")
+         .arg( settings->propertyToColumn(kpropSettingsRepopulate))
+         .arg(settings->propertyToColumn(kpropSettingsVersion))
+         .arg(Brewtarget::dbTrue())
+         .arg(dbVersion);
+
+   if ( !q.exec(insSetting) ) {
+      throw QString("Could not insert into %1 : %2 (%3)")
+               .arg(settings->tableName())
+               .arg(q.lastError().text())
+               .arg(q.lastQuery());
    }
    // Commit transaction
    if( hasTransaction )

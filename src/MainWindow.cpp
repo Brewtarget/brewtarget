@@ -913,7 +913,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    singleStyleEditor->setStyle(recStyle);
 
    mashEditor->setMash(recipeObs->mash());
-   mashEditor->setEquipment(recEquip);
+   mashEditor->setRecipe(recipeObs);
 
    mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
@@ -1155,7 +1155,7 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
       recipeObs->setBatchSize_l( kit->batchSize_l() );
       recipeObs->setBoilSize_l( kit->boilSize_l() );
       recipeObs->setBoilTime_min( kit->boilTime_min() );
-      mashEditor->setEquipment(kit);
+      mashEditor->setRecipe(recipeObs);
    }
 }
 
