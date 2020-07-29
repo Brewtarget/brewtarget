@@ -35,7 +35,7 @@
          <property name="title">
           <string>Profiles</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
+         <layout class="QGridLayout" name="gridLayout_profiles">
           <item row="2" column="0">
            <widget class="QLabel" name="label_mashRO">
             <property name="text">
@@ -150,7 +150,7 @@
          <property name="title">
           <string>PPM</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0">
+         <layout class="QGridLayout" name="gridLayout_ppm" rowstretch="0,0,0,0">
           <item row="0" column="3">
            <widget class="BtDigitWidget" name="btDigit_na" native="true"/>
           </item>
@@ -229,7 +229,7 @@
          <property name="title">
           <string>Total Salts</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
+         <layout class="QGridLayout" name="gridLayout_total">
           <item row="0" column="0">
            <widget class="QLabel" name="label_totalcacl2">
             <property name="text">
@@ -247,7 +247,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="3" >
+          <item row="0" column="3">
            <widget class="BtDigitWidget" name="btDigit_totalmgso4" native="true"/>
           </item>
           <item row="1" column="0">
@@ -327,7 +327,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="../brewtarget.qrc">
                 <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
               </property>
              </widget>
@@ -341,7 +341,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="../brewtarget.qrc">
                 <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
               </property>
              </widget>
