@@ -1677,7 +1677,12 @@ void MainWindow::newFolder()
       return;
    }
 
-   if ( name.split("/", QString::SkipEmptyParts).isEmpty() )
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
+   QString::SplitBehavior skip = QString::SkipEmptyParts;
+#else
+   Qt::SplitBehaviorFlags skip = Qt::SkipEmptyParts;
+#endif
+   if ( name.split("/", skip).isEmpty() )
    {
       QMessageBox::critical( this, tr("Bad Name"), tr("A folder name must have at least one non-/ character in it"));
       return;
@@ -1724,7 +1729,12 @@ void MainWindow::renameFolder()
       return;
    }
 
-   if ( newName.split("/", QString::SkipEmptyParts).isEmpty() )
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
+   QString::SplitBehavior skip = QString::SkipEmptyParts;
+#else
+   Qt::SplitBehaviorFlags skip = Qt::SkipEmptyParts;
+#endif
+   if ( newName.split("/", skip).isEmpty() )
    {
       QMessageBox::critical( this, tr("Bad Name"), tr("A folder name must have at least one non-/ character in it"));
       return;

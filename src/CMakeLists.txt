@@ -458,19 +458,19 @@ ENDIF()
 
 SET( QT5_USE_MODULES_LIST
    ${brewtarget_EXECUTABLE}
-   Widgets
-   Network
-   PrintSupport
-   Sql
-   Svg
-   Xml
+   Qt5::Widgets
+   Qt5::Network
+   Qt5::PrintSupport
+   Qt5::Sql
+   Qt5::Svg
+   Qt5::Xml
    )
 
 IF( NOT ${NO_QTMULTIMEDIA})
-SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Multimedia)
+   SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-QT5_USE_MODULES( ${QT5_USE_MODULES_LIST})
+target_link_libraries( ${QT5_USE_MODULES_LIST})
 
 #=================================Tests========================================
 
@@ -484,20 +484,20 @@ ADD_EXECUTABLE(
 
 SET( QT5_USE_MODULES_LIST
    brewtarget_tests
-   Widgets
-   Network
-   PrintSupport
-   Sql
-   Svg
-   Xml
-   Test
+   Qt5::Widgets
+   Qt5::Network
+   Qt5::PrintSupport
+   Qt5::Sql
+   Qt5::Svg
+   Qt5::Xml
+   Qt5::Test
    )
 
 IF( NOT ${NO_QTMULTIMEDIA})
-SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Multimedia)
+SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-QT5_USE_MODULES(${QT5_USE_MODULES_LIST})
+target_link_libraries(${QT5_USE_MODULES_LIST})
 
 ADD_TEST(
    NAME pstdintTest

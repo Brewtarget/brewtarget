@@ -1208,7 +1208,11 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
    // Prepare all the variables for the first loop
 
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
    dirs = name.split("/", QString::SkipEmptyParts);
+#else
+   dirs = name.split("/", Qt::SkipEmptyParts);
+#endif
 
    if ( dirs.isEmpty() )
       return QModelIndex();
