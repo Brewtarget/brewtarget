@@ -2246,9 +2246,9 @@ QStringList Recipe::getReagents( QList<Salt*> salts, Salt::WhenToAdd wanted)
                .arg(salts[i]->name());
       }
       else if ( what == Salt::RATIO ) {
-         double ratio = mash()->totalInfusionAmount_l()/mash()->totalMashWater_l();
+         double ratio = 1.0;
          if ( wanted == Salt::SPARGE )
-            ratio = 1 - ratio;
+            ratio = mash()->totalSpargeAmount_l()/mash()->totalInfusionAmount_l();
          double amt = salts[i]->amount() * ratio;
          tmp = tr("%1 %2, ")
                .arg(Brewtarget::displayAmount(amt, kSaltTableSection, kSaltAmountAttr, rightUnit))

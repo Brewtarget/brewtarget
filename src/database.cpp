@@ -799,8 +799,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
                            .arg(q.lastError().text()));
       sqlDatabase().rollback();
       q.finish();
-      throw QString("%1 %2 %3 %4").arg(Q_FUNC_INFO).arg(e).arg(q.lastQuery()).arg(q.lastError().text());
-
+      abort();
    }
 
    rec->recalcAll();
