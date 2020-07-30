@@ -84,6 +84,7 @@ public:
    double total_Na() const;
    double total_SO4() const;
 
+   double total(Water::Ions ion) const;
    double total( Salt::Types type ) const;
    double totalAcidWeight(Salt::Types type) const;
 

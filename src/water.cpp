@@ -260,3 +260,18 @@ Water::Types Water::type() const { return m_type; }
 double Water::mashRO() const { return m_mash_ro; }
 double Water::spargeRO() const { return m_sparge_ro; }
 bool Water::alkalinityAsHCO3() const { return m_alkalinity_as_hco3; }
+
+double Water::ppm( Water::Ions ion ) 
+{
+   switch(ion) {
+      case Water::Ca:   return m_calcium_ppm;
+      case Water::Cl:   return m_chloride_ppm;
+      case Water::HCO3: return m_bicarbonate_ppm;
+      case Water::Mg:   return m_magnesium_ppm;
+      case Water::Na:   return m_sodium_ppm;
+      case Water::SO4:  return m_sulfate_ppm;
+      default: return 0.0;
+   }
+
+   return 0.0;
+}

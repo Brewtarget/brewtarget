@@ -25,6 +25,9 @@ class BtDigitWidget;
 #include <QLabel>
 #include <QWidget>
 #include <QString>
+#include "unit.h"
+#include "UnitSystem.h"
+#include "UnitSystems.h"
 
 /*!
  * \class BtDigitWidget
@@ -36,14 +39,20 @@ class BtDigitWidget;
 class BtDigitWidget : public QLabel
 {
    Q_OBJECT
+   Q_PROPERTY( int     type              READ type              WRITE setType              STORED false)
+   Q_PROPERTY( QString configSection     READ configSection     WRITE setConfigSection     STORED false)
+   Q_PROPERTY( QString editField         READ editField         WRITE setEditField         STORED false)
+   Q_PROPERTY( QString forcedUnit        READ forcedUnit        WRITE setForcedUnit        STORED false)
+   Q_PROPERTY( QString forcedScale       READ forcedScale       WRITE setForcedScale       STORED false)
+
 public:
    enum ColorType{ NONE, LOW, GOOD, HIGH, BLACK };
 
-   BtDigitWidget(QWidget* parent = 0);
+   BtDigitWidget(QWidget* parent = 0, Unit::UnitType type = Unit::None, Unit* units = nullptr );
 
    //! \brief Displays the given \c num with precision \c prec.
    void display( double num, int prec = 0 );
-   //! \brief Display a QString.
+   //! \brief Display a QString. 
    void display(QString str);
 
    //! \brief Set the lower limit of the "good" range.
@@ -62,7 +71,39 @@ public:
    //! \brief the array needs to be low, good, high
    void setMessages(QStringList msgs);
 
+   void setText( double amount, int precision = 2);
+   void setText( QString amount, int precision = 2);
+
+   // By defining the setters/getters, we can remove the need for
+   // initializeProperties.
+   QString editField() const;
+   void setEditField( QString editField );
+
+   QString configSection();
+   void setConfigSection( QString configSection );
+
+   int type() const;
+   void setType(int type);
+
+   QString forcedUnit() const;
+   void setForcedUnit(QString forcedUnit);
+
+   QString forcedScale() const;
+   void setForcedScale(QString forcedScale);
+
+   QString displayAmount( double amount, int precision = 2 );
+   double toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale);
+
+public slots:
+   void displayChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
+
 private:
+   QString m_section, m_editField;
+   Unit::UnitType m_type;
+   Unit::unitDisplay m_forceUnit;
+   Unit::unitScale m_forceScale;
+   Unit* m_units;
+   QWidget* m_parent;
 
    unsigned int m_rgblow;
    unsigned int m_rgbgood;
@@ -78,6 +119,22 @@ private:
    QString m_low_msg;
    QString m_good_msg;
    QString m_high_msg;
+};
+
+class BtMassDigit: public BtDigitWidget
+{
+   Q_OBJECT
+
+public:
+   BtMassDigit(QWidget* parent);
+};
+
+class BtGenericDigit: public BtDigitWidget
+{
+   Q_OBJECT
+
+public:
+   BtGenericDigit(QWidget* parent);
 };
 
 #endif // BTDIGITWIDGET_H

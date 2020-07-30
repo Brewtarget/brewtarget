@@ -43,9 +43,11 @@
 #include "ColorMethods.h"
 
 WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
-   recObs(nullptr),
-   base(nullptr),
-   target(nullptr),
+   m_ppm_digits( QVector<BtDigitWidget*>(Water::numIons) ),
+   m_total_digits( QVector<BtDigitWidget*>(Salt::numTypes) ),
+   m_rec(nullptr),
+   m_base(nullptr),
+   m_target(nullptr),
    m_mashRO(0.0),
    m_spargeRO(0.0),
    m_total_grains(0.0),
@@ -57,69 +59,70 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
 
    setupUi(this);
    // initialize the two buttons and lists (I think)
-   baseListModel = new WaterListModel(baseProfileCombo);
-   baseFilter    = new WaterSortFilterProxyModel(baseProfileCombo);
-   baseFilter->setDynamicSortFilter(true);
-   baseFilter->setSortLocaleAware(true);
-   baseFilter->setSourceModel(baseListModel);
-   baseFilter->sort(0);
-   baseProfileCombo->setModel(baseFilter);
+   m_base_combo_list = new WaterListModel(baseProfileCombo);
+   m_base_filter    = new WaterSortFilterProxyModel(baseProfileCombo);
+   m_base_filter->setDynamicSortFilter(true);
+   m_base_filter->setSortLocaleAware(true);
+   m_base_filter->setSourceModel(m_base_combo_list);
+   m_base_filter->sort(0);
+   baseProfileCombo->setModel(m_base_filter);
 
-   targetListModel = new WaterListModel(targetProfileCombo);
-   targetFilter    = new WaterSortFilterProxyModel(targetProfileCombo);
-   targetFilter->setDynamicSortFilter(true);
-   targetFilter->setSortLocaleAware(true);
-   targetFilter->setSourceModel(targetListModel);
-   targetFilter->sort(0);
-   targetProfileCombo->setModel(targetFilter);
+   m_target_combo_list = new WaterListModel(targetProfileCombo);
+   m_target_filter    = new WaterSortFilterProxyModel(targetProfileCombo);
+   m_target_filter->setDynamicSortFilter(true);
+   m_target_filter->setSortLocaleAware(true);
+   m_target_filter->setSourceModel(m_target_combo_list);
+   m_target_filter->sort(0);
+   targetProfileCombo->setModel(m_target_filter);
 
    // not sure if this is better or worse, but we will try it out
-   m_ppm_digits.append(btDigit_ca);
-   m_ppm_digits.append(btDigit_cl);
-   m_ppm_digits.append(btDigit_hco3);
-   m_ppm_digits.append(btDigit_mg);
-   m_ppm_digits.append(btDigit_na);
-   m_ppm_digits.append(btDigit_so4);
+   m_ppm_digits[Water::Ca]   = btDigit_ca;
+   m_ppm_digits[Water::Cl]   = btDigit_cl;
+   m_ppm_digits[Water::HCO3] = btDigit_hco3;
+   m_ppm_digits[Water::Mg]   = btDigit_mg;
+   m_ppm_digits[Water::Na]   = btDigit_na;
+   m_ppm_digits[Water::SO4]  = btDigit_so4;
 
-   m_total_digits.append(btDigit_totalcaco3);
-   m_total_digits.append(btDigit_totalcacl2);
-   m_total_digits.append(btDigit_totalcaso4);
-   m_total_digits.append(btDigit_totalmgso4);
-   m_total_digits.append(btDigit_totalnacl);
-   m_total_digits.append(btDigit_totalnahco3);
+   m_total_digits[Salt::CACL2] = btDigit_totalcacl2;
+   m_total_digits[Salt::CACO3] = btDigit_totalcaco3;
+   m_total_digits[Salt::CASO4] = btDigit_totalcaso4;
+   m_total_digits[Salt::MGSO4] = btDigit_totalmgso4;
+   m_total_digits[Salt::NACL] = btDigit_totalnacl;
+   m_total_digits[Salt::NAHCO3] = btDigit_totalnahco3;
 
-   foreach( BtDigitWidget* i, m_ppm_digits ) {
-      i->setLimits(0.0,1000.0);
-      i->display(0.0, 1);
-      i->setMessages(msgs);
+   // foreach( BtDigitWidget* i, m_ppm_digits ) {
+   for(int i = 0; i < Water::numIons; ++i ) {
+      m_ppm_digits[i]->setLimits(0.0,1000.0);
+      m_ppm_digits[i]->setText(0.0, 1);
+      m_ppm_digits[i]->setMessages(msgs);
    }
-   // as before, we can be a bit more specific with pH
+   // we can be a bit more specific with pH
    btDigit_ph->setLowLim(5.0);
    btDigit_ph->setHighLim(5.5);
    btDigit_ph->display(7.0,1);
 
    // since all the things are now digits, lets get the totals configured
-   foreach( BtDigitWidget* i, m_total_digits ) {
-      i->setConstantColor(BtDigitWidget::BLACK);
-      i->display(0,1);
+   for (int i = Salt::CACL2; i < Salt::NAHCO3; ++i ) {
+      m_total_digits[i]->setConstantColor(BtDigitWidget::BLACK);
+      m_total_digits[i]->setText(0.0,1);
    }
    // and now let's see what the table does.
-   saltTableModel = new SaltTableModel(tableView_salts);
+   m_salt_table_model = new SaltTableModel(tableView_salts);
    tableView_salts->setItemDelegate(new SaltItemDelegate(tableView_salts));
-   tableView_salts->setModel(saltTableModel);
+   tableView_salts->setModel(m_salt_table_model);
 
-   baseProfileEdit = new WaterEditor(this);
-   targetProfileEdit = new WaterEditor(this);
+   m_base_editor = new WaterEditor(this);
+   m_target_editor = new WaterEditor(this);
 
    // all the signals
    connect(baseProfileCombo, SIGNAL( activated(int)), this, SLOT(update_baseProfile(int)));
    connect(targetProfileCombo, SIGNAL( activated(int)), this, SLOT(update_targetProfile(int)));
 
-   connect(baseProfileButton, &WaterButton::clicked, baseProfileEdit, &QWidget::show);
-   connect(targetProfileButton, &WaterButton::clicked, targetProfileEdit, &QWidget::show);
+   connect(baseProfileButton, &WaterButton::clicked, m_base_editor, &QWidget::show);
+   connect(targetProfileButton, &WaterButton::clicked, m_target_editor, &QWidget::show);
 
-   connect( saltTableModel,        &SaltTableModel::newTotals, this, &WaterDialog::newTotals);
-   connect( pushButton_addSalt,    &QAbstractButton::clicked, saltTableModel, &SaltTableModel::catchSalt);
+   connect( m_salt_table_model,        &SaltTableModel::newTotals, this, &WaterDialog::newTotals);
+   connect( pushButton_addSalt,    &QAbstractButton::clicked, m_salt_table_model, &SaltTableModel::catchSalt);
    connect( pushButton_removeSalt, &QAbstractButton::clicked, this, &WaterDialog::removeSalts);
 
    connect( spinBox_mashRO, SIGNAL(valueChanged(int)), this, SLOT(setMashRO(int)));
@@ -135,14 +138,14 @@ WaterDialog::~WaterDialog() {}
 void WaterDialog::setMashRO(int val)
 {
    m_mashRO = val/100.0;
-   if ( base ) base->setMashRO(m_mashRO);
+   if ( m_base ) m_base->setMashRO(m_mashRO);
    newTotals();
 }
 
 void WaterDialog::setSpargeRO(int val)
 {
    m_spargeRO = val/100.0;
-   if ( base ) base->setSpargeRO(m_spargeRO);
+   if ( m_base ) m_base->setSpargeRO(m_spargeRO);
    newTotals();
 }
 
@@ -151,12 +154,17 @@ void WaterDialog::setDigits(Water* target)
    if ( target == nullptr )
       return;
 
-   btDigit_ca->setLimits(target->calcium_ppm() * 0.95,target->calcium_ppm() * 1.05);
-   btDigit_cl->setLimits(target->chloride_ppm() * 0.95,target->chloride_ppm() * 1.05);
-   btDigit_hco3->setLimits(target->bicarbonate_ppm() * 0.95,target->bicarbonate_ppm() * 1.05);
-   btDigit_mg->setLimits(target->magnesium_ppm() * 0.95,target->magnesium_ppm() * 1.05);
-   btDigit_na->setLimits(target->sodium_ppm() * 0.95,target->sodium_ppm() * 1.05);
-   btDigit_so4->setLimits(target->sulfate_ppm() * 0.95,target->sulfate_ppm() * 1.05);
+   for(int i = 0; i < Water::numIons; ++i ) {
+      double ppm = target->ppm(static_cast<Water::Ions>(i));
+      double min_ppm = ppm * 0.95;
+      double max_ppm = ppm * 1.05;
+      QStringList msgs = QStringList() 
+         << tr("Minimum expected concentration is %1 ppm").arg(min_ppm)
+         << tr("In range for target profile.")
+         << tr("Maximum expected concentration is %1 ppm").arg(max_ppm);
+      m_ppm_digits[i]->setLimits(min_ppm,max_ppm);
+      m_ppm_digits[i]->setMessages(msgs);
+   }
 
    // oddly, pH doesn't change with the target water
 }
@@ -166,52 +174,52 @@ void WaterDialog::setRecipe(Recipe *rec)
    if ( rec == nullptr )
       return;
 
-   recObs = rec;
-   Mash* mash = recObs->mash();
-   saltTableModel->observeRecipe(recObs);
+   m_rec = rec;
+   Mash* mash = m_rec->mash();
+   m_salt_table_model->observeRecipe(m_rec);
 
    if ( mash == nullptr || mash->mashSteps().size() == 0 ) {
       Brewtarget::logW(QString("Can not set strike water chemistry without a mash"));
       return;
    }
 
-   baseProfileButton->setRecipe(recObs);
-   targetProfileButton->setRecipe(recObs);
+   baseProfileButton->setRecipe(m_rec);
+   targetProfileButton->setRecipe(m_rec);
 
-   foreach( Water* w, recObs->waters()) {
+   foreach( Water* w, m_rec->waters()) {
       if (w->type() == Water::BASE )
-         base = w;
+         m_base = w;
       else if ( w->type() == Water::TARGET )
-         target = w;
+         m_target = w;
    }
 
    // I need these numbers before we set the ranges
-   foreach( Fermentable *i, recObs->fermentables() ) {
+   foreach( Fermentable *i, m_rec->fermentables() ) {
       m_total_grains   += i->amount_kg();
    }
 
-   foreach( Fermentable *i, recObs->fermentables() ) {
+   foreach( Fermentable *i, m_rec->fermentables() ) {
       double lovi = ( i->color_srm() +0.6 ) / 1.35;
       m_weighted_colors   += (i->amount_kg()/m_total_grains)*lovi;
    }
-   m_thickness = recObs->mash()->totalInfusionAmount_l()/m_total_grains;
+   m_thickness = m_rec->mash()->totalInfusionAmount_l()/m_total_grains;
 
-   if ( base != nullptr ) {
+   if ( m_base != nullptr ) {
 
-      m_mashRO = base->mashRO();
+      m_mashRO = m_base->mashRO();
       spinBox_mashRO->setValue( QVariant(m_mashRO*100).toInt());
-      m_spargeRO = base->spargeRO();
+      m_spargeRO = m_base->spargeRO();
       spinBox_spargeRO->setValue( QVariant(m_spargeRO*100).toInt());
 
-      baseProfileButton->setWater(base);
-      baseProfileEdit->setWater(base);
+      baseProfileButton->setWater(m_base);
+      m_base_editor->setWater(m_base);
       // all of the magic to set the sliders happens in newTotals(). So don't do it twice
    }
-   if ( target != nullptr  && target != base ) {
-      targetProfileButton->setWater(target);
-      targetProfileEdit->setWater(target);
+   if ( m_target != nullptr  && m_target != m_base ) {
+      targetProfileButton->setWater(m_target);
+      m_target_editor->setWater(m_target);
 
-      setDigits(target);
+      setDigits(m_target);
    }
    newTotals();
 
@@ -220,20 +228,20 @@ void WaterDialog::setRecipe(Recipe *rec)
 void WaterDialog::update_baseProfile(int selected)
 {
    Q_UNUSED(selected)
-   if ( recObs == nullptr )
+   if ( m_rec == nullptr )
       return;
 
-   QModelIndex proxyIdx(baseFilter->index(baseProfileCombo->currentIndex(),0));
-   QModelIndex sourceIdx(baseFilter->mapToSource(proxyIdx));
-   const Water* parent = baseListModel->at(sourceIdx.row());
+   QModelIndex proxyIdx(m_base_filter->index(baseProfileCombo->currentIndex(),0));
+   QModelIndex sourceIdx(m_base_filter->mapToSource(proxyIdx));
+   const Water* parent = m_base_combo_list->at(sourceIdx.row());
 
    if ( parent ) {
       // this is in cache only until we say "ok"
-      base = new Water(*parent, true);
-      base->setType(Water::BASE);
+      m_base = new Water(*parent, true);
+      m_base->setType(Water::BASE);
 
-      baseProfileButton->setWater(base);
-      baseProfileEdit->setWater(base);
+      baseProfileButton->setWater(m_base);
+      m_base_editor->setWater(m_base);
       newTotals();
 
    }
@@ -243,30 +251,30 @@ void WaterDialog::update_targetProfile(int selected)
 {
 
    Q_UNUSED(selected)
-   if ( recObs == nullptr )
+   if ( m_rec == nullptr )
       return;
 
-   QModelIndex proxyIdx(targetFilter->index(targetProfileCombo->currentIndex(),0));
-   QModelIndex sourceIdx(targetFilter->mapToSource(proxyIdx));
-   Water* parent = targetListModel->at(sourceIdx.row());
+   QModelIndex proxyIdx(m_target_filter->index(targetProfileCombo->currentIndex(),0));
+   QModelIndex sourceIdx(m_target_filter->mapToSource(proxyIdx));
+   Water* parent = m_target_combo_list->at(sourceIdx.row());
 
    if ( parent ) {
       // this is in cache only until we say "ok"
-      target = new Water(*parent, true);
-      target->setType(Water::TARGET);
-      targetProfileButton->setWater(target);
-      targetProfileEdit->setWater(target);
+      m_target = new Water(*parent, true);
+      m_target->setType(Water::TARGET);
+      targetProfileButton->setWater(m_target);
+      m_target_editor->setWater(m_target);
 
-      setDigits(target);
+      setDigits(m_target);
    }
 }
 
 void WaterDialog::newTotals()
 {
-   if ( ! recObs || ! recObs->mash() )
+   if ( ! m_rec || ! m_rec->mash() )
       return;
 
-   Mash* mash = recObs->mash();
+   Mash* mash = m_rec->mash();
    double allTheWaters = mash->totalMashWater_l();
 
    if ( qFuzzyCompare(allTheWaters,0.0) ) {
@@ -277,39 +285,37 @@ void WaterDialog::newTotals()
    //   o the totals need to be updated
    //   o the digits need to be updated
 
-   btDigit_totalcacl2->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::CACL2), Units::kilograms ), 2 );
-   btDigit_totalcaco3 ->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::CACO3), Units::kilograms), 2 );
-   btDigit_totalcaso4->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::CASO4), Units::kilograms), 2 );
-   btDigit_totalmgso4->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::MGSO4), Units::kilograms), 2 );
-   btDigit_totalnacl->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::NACL), Units::kilograms), 2 );
-   btDigit_totalnahco3->display( Brewtarget::amountDisplay( saltTableModel->total(Salt::NAHCO3), Units::kilograms), 2 );
+   for (int i = Salt::CACL2; i < Salt::LACTIC; ++i ) {
+      Salt::Types type = static_cast<Salt::Types>(i);
+      m_total_digits[i]->setText(m_salt_table_model->total(type), 2);
+   }
 
    // the total_* method return the numerator, we supply the denominator and
    // include the base water ppm. The confusing math generates an adjustment
    // for the base water that depends the %RO in the mash and sparge water
 
-   if ( base != nullptr ) {
+   if ( m_base != nullptr ) {
+      // 'd' means 'diluted'. They make calculating the modifier readable
+      double dInfuse = m_mashRO * mash->totalInfusionAmount_l();
+      double dSparge = m_spargeRO * mash->totalSpargeAmount_l();
 
       // I hope this is right. All this 'rithmetic is making me head hurt.
-      double modifier = 1 - ( (m_mashRO * mash->totalInfusionAmount_l()) + (m_spargeRO * mash->totalSpargeAmount_l())) / allTheWaters;
+      double modifier = 1.0 - (dInfuse + dSparge) / allTheWaters;
 
-      btDigit_ca->display( saltTableModel->total_Ca() / allTheWaters + modifier * base->calcium_ppm());
-      btDigit_mg->display( saltTableModel->total_Mg() / allTheWaters + modifier * base->magnesium_ppm());
-      btDigit_na->display( saltTableModel->total_Na() / allTheWaters + modifier * base->sodium_ppm());
-      btDigit_cl->display( saltTableModel->total_Cl() / allTheWaters + modifier * base->chloride_ppm());
-      btDigit_hco3->display( saltTableModel->total_HCO3() / allTheWaters + modifier * base->bicarbonate_ppm());
-      btDigit_so4->display( saltTableModel->total_SO4() / allTheWaters + modifier * base->sulfate_ppm());
-      btDigit_ph->display( Brewtarget::amountDisplay(calculateMashpH()), 2 );
+      for (int i = 0; i < Water::numIons; ++i ) {
+         Water::Ions ion = static_cast<Water::Ions>(i);
+         double mPPM = modifier * m_base->ppm(ion);
+         m_ppm_digits[i]->setText( m_salt_table_model->total(ion) / allTheWaters + mPPM, 0 );
+                                   
+      }
+      btDigit_ph->setText( calculateMashpH(), 2 );
 
    }
    else {
-      btDigit_ca->display( saltTableModel->total_Ca() / allTheWaters );
-      btDigit_mg->display( saltTableModel->total_Mg() / allTheWaters );
-      btDigit_na->display( saltTableModel->total_Na() / allTheWaters );
-      btDigit_cl->display( saltTableModel->total_Cl() / allTheWaters );
-      btDigit_hco3->display( saltTableModel->total_HCO3() / allTheWaters );
-      btDigit_so4->display( saltTableModel->total_SO4() / allTheWaters );
-
+      for (int i = 0; i < Water::numIons; ++i ) {
+         Water::Ions ion = static_cast<Water::Ions>(i);
+         m_ppm_digits[i]->setText( m_salt_table_model->total(ion) / allTheWaters, 0 );
+      }
    }
 }
 
@@ -321,7 +327,7 @@ void WaterDialog::removeSalts()
    foreach( QModelIndex i, selected) {
       deadSalts.append( i.row() );
    }
-   saltTableModel->removeSalts(deadSalts);
+   m_salt_table_model->removeSalts(deadSalts);
 }
 
 // All of the pH calculations are taken from the work done by Kai Troester and
@@ -351,10 +357,10 @@ const double pHSlopeDark  = 0.06;
 double WaterDialog::calculateRA() const
 {
    double residual = 0.0;
-   if ( base ) {
+   if ( m_base ) {
 
-      double base_alk = ( 1.0 - base->mashRO() ) * base->alkalinity();
-      if ( ! base->alkalinityAsHCO3() ) {
+      double base_alk = ( 1.0 - m_base->mashRO() ) * m_base->alkalinity();
+      if ( ! m_base->alkalinityAsHCO3() ) {
          base_alk = 1.22 * base_alk;
       }
       residual = base_alk/61;
@@ -368,23 +374,23 @@ double WaterDialog::calculateRA() const
 //! including figuring out the residual alkalinity.
 double WaterDialog::calculateSaltpH()
 {
-   if ( ! recObs || ! recObs->mash() )
+   if ( ! m_rec || ! m_rec->mash() )
       return 0.0;
 
-   Mash* mash = recObs->mash();
+   Mash* mash = m_rec->mash();
    double allTheWaters = mash->totalMashWater_l();
 
    double modifier = 1 - ( (m_mashRO * mash->totalInfusionAmount_l()) + (m_spargeRO * mash->totalSpargeAmount_l())) / allTheWaters;
 
    // I have no idea where the 2 comes from, but Kai did it. I wish I knew why
    // we get the initial numbers from the base water
-   double cappm = modifier * base->calcium_ppm()/Cagpm * 2;
-   double mgppm = modifier * base->magnesium_ppm()/Mggpm * 2;
+   double cappm = modifier * m_base->calcium_ppm()/Cagpm * 2;
+   double mgppm = modifier * m_base->magnesium_ppm()/Mggpm * 2;
 
    // I need mass of the salts, and all the previous math gave me
    // ppm. Multiplying by the water volume gives me the mass
    // The 3.5 and 7 come from Paul Kohlbach's work from the 1940's.
-   double totalDelta = (calculateRA() - cappm/3.5 - mgppm/7) * recObs->mash()->totalInfusionAmount_l();
+   double totalDelta = (calculateRA() - cappm/3.5 - mgppm/7) * m_rec->mash()->totalInfusionAmount_l();
    // note: The referenced paper says the formula is
    // gristpH + strikepH * thickness/mEq. I could never get that to work.
    // the spreadsheet gave me this formula, and  it works much better.
@@ -397,10 +403,10 @@ double WaterDialog::calculateAddedSaltpH()
 
    // We need the value from the salt table model, because we need all the
    // added salts, but not the base.
-   double ca = saltTableModel->total_Ca()/Cagpm * 2;
-   double mg = saltTableModel->total_Mg()/Mggpm * 2;
-   double hco3 = saltTableModel->total_HCO3()/HCO3gpm;
-   double co3 = saltTableModel->total_CO3()/CO3gpm;
+   double ca = m_salt_table_model->total_Ca()/Cagpm * 2;
+   double mg = m_salt_table_model->total_Mg()/Mggpm * 2;
+   double hco3 = m_salt_table_model->total_HCO3()/HCO3gpm;
+   double co3 = m_salt_table_model->total_CO3()/CO3gpm;
 
    // The 61 is another magic number from Kai. Sigh
    // unlike previous calculations, I am getting a mass here so I do not
@@ -417,9 +423,9 @@ double WaterDialog::calculateAcidpH()
    const double lactic_gpm = 90;
    double totalDelta = 0.0;
 
-   double lactic_amt   = saltTableModel->totalAcidWeight(Salt::LACTIC);
-   double acidmalt_amt = saltTableModel->totalAcidWeight(Salt::ACIDMLT);
-   double H3PO4_amt    = saltTableModel->totalAcidWeight(Salt::H3PO4);
+   double lactic_amt   = m_salt_table_model->totalAcidWeight(Salt::LACTIC);
+   double acidmalt_amt = m_salt_table_model->totalAcidWeight(Salt::ACIDMLT);
+   double H3PO4_amt    = m_salt_table_model->totalAcidWeight(Salt::H3PO4);
 
    if ( lactic_amt + acidmalt_amt > 0.0 ) {
       totalDelta += 1000 * (lactic_amt + acidmalt_amt) / lactic_gpm;
@@ -438,14 +444,14 @@ double WaterDialog::calculateGristpH()
    double gristPh = nosrmbeer_ph;
    double pHAdjustment = 0.0;
 
-   if ( recObs && recObs->fermentables().size() ) {
+   if ( m_rec && m_rec->fermentables().size() ) {
       PlatoUnit* convert = new PlatoUnit;
 
-      double platoRatio = 1/convert->fromSI(recObs->og());
-      double color = recObs->color_srm();
+      double platoRatio = 1/convert->fromSI(m_rec->og());
+      double color = m_rec->color_srm();
       double colorFromGrain = 0.0;
 
-      foreach( Fermentable *i, recObs->fermentables() ) {
+      foreach( Fermentable *i, m_rec->fermentables() ) {
          // I am counting anything that doesn't have diastatic
          // power as a roasted/crystal malt. I am sure my assumption will
          // haunt me later, but I have no way of knowing what kind of malt
@@ -473,7 +479,7 @@ double WaterDialog::calculateMashpH()
 {
    double mashpH = 0.0;
 
-   if ( recObs && recObs->fermentables().size() ) {
+   if ( m_rec && m_rec->fermentables().size() ) {
       double gristpH   = calculateGristpH();
       double basepH    = calculateSaltpH();
       double saltpH    = calculateAddedSaltpH();
@@ -489,14 +495,14 @@ double WaterDialog::calculateMashpH()
 
 void WaterDialog::saveAndClose()
 {
-   saltTableModel->saveAndClose();
-   if ( base != nullptr && base->cacheOnly() ) {
-      Database::instance().insertWater(base);
-      Database::instance().addToRecipe(recObs,base,true);
+   m_salt_table_model->saveAndClose();
+   if ( m_base != nullptr && m_base->cacheOnly() ) {
+      Database::instance().insertWater(m_base);
+      Database::instance().addToRecipe(m_rec,m_base,true);
    }
-   if ( target != nullptr && target->cacheOnly() ) {
-      Database::instance().insertWater(target);
-      Database::instance().addToRecipe(recObs,target,true);
+   if ( m_target != nullptr && m_target->cacheOnly() ) {
+      Database::instance().insertWater(m_target);
+      Database::instance().addToRecipe(m_rec,m_target,true);
    }
 
    setVisible(false);

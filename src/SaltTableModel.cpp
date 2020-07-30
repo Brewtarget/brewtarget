@@ -274,6 +274,20 @@ double SaltTableModel::total_SO4() const
    return ret;
 }
 
+double SaltTableModel::total(Water::Ions ion) const
+{
+   switch(ion) {
+      case Water::Ca: return total_Ca();
+      case Water::Cl: return total_Cl();
+      case Water::HCO3: return total_HCO3();
+      case Water::Mg: return total_Mg();
+      case Water::Na: return total_Na();
+      case Water::SO4: return total_SO4();
+      default: return 0.0;
+   }
+   return 0.0;
+}
+
 double SaltTableModel::total(Salt::Types type) const
 {
    double ret = 0.0;
@@ -674,7 +688,7 @@ void SaltTableModel::saveAndClose()
    // all of the writes should have been instantaneous unless
    // we've added a new salt. Wonder if this will work?
    foreach( Salt* i, saltObs ) {
-      if ( i->cacheOnly() && i->type() != Salt::NONE && i->addTo() == Salt::NEVER ) {
+      if ( i->cacheOnly() && i->type() != Salt::NONE && i->addTo() != Salt::NEVER ) {
          Database::instance().insertSalt(i);
          Database::instance().addToRecipe(recObs,i,true);
       }

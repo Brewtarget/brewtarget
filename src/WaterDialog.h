@@ -23,8 +23,11 @@
 #include <QDialog>
 #include <QWidget>
 #include <QButtonGroup>
+#include <QVector>
 #include "ui_waterDialog.h"
 #include "unit.h"
+#include "water.h"
+#include "salt.h"
 
 class WaterListModel;
 class WaterSortFilterProxyModel;
@@ -64,24 +67,24 @@ signals:
 
 private:
 
-   QList<BtDigitWidget*> m_ppm_digits;
-   QList<BtDigitWidget*> m_total_digits;
+   QVector<BtDigitWidget*> m_ppm_digits;
+   QVector<BtDigitWidget*> m_total_digits;
 
-   WaterListModel *baseListModel;
-   WaterListModel *targetListModel;
-   SaltTableModel *saltTableModel;
-   WaterEditor* baseProfileEdit;
-   WaterEditor* targetProfileEdit;
-   Recipe* recObs;
-   Water *base, *target;
+   WaterListModel *m_base_combo_list;
+   WaterListModel *m_target_combo_list;
+   SaltTableModel *m_salt_table_model;
+   WaterEditor* m_base_editor;
+   WaterEditor* m_target_editor;
+   Recipe* m_rec;
+   Water *m_base, *m_target;
    double m_mashRO;
    double m_spargeRO;
    double m_total_grains;
    double m_thickness;
    double m_weighted_colors;
 
-   WaterSortFilterProxyModel *baseFilter;
-   WaterSortFilterProxyModel *targetFilter;
+   WaterSortFilterProxyModel *m_base_filter;
+   WaterSortFilterProxyModel *m_target_filter;
 
    void setDigits(Water* target);
    void calculateGrainEquivalent();

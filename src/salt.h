@@ -65,7 +65,8 @@ public:
       NAHCO3,
       LACTIC,
       H3PO4,
-      ACIDMLT
+      ACIDMLT,
+      numTypes
    };
 
    Q_ENUMS(WhenToAdd Types)

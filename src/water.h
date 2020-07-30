@@ -51,7 +51,18 @@ public:
       BASE,
       TARGET
    };
-   Q_ENUM(Types)
+
+   enum Ions {
+      Ca,
+      Cl,
+      HCO3,
+      Mg,
+      Na,
+      SO4,
+      numIons
+   };
+
+   Q_ENUM(Types Ions)
 
    virtual ~Water() {}
 
@@ -101,6 +112,7 @@ public:
    double spargeRO() const;
    bool alkalinityAsHCO3() const;
 
+   double ppm( Water::Ions ion );
    void setAmount( double var );
    void setCalcium_ppm( double var );
    void setSulfate_ppm( double var );

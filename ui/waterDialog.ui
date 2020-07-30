@@ -51,7 +51,11 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QSpinBox" name="spinBox_mashRO"/>
+           <widget class="QSpinBox" name="spinBox_mashRO">
+            <property name="maximum">
+             <number>100</number>
+            </property>
+           </widget>
           </item>
           <item row="1" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_targetButtons">
@@ -94,7 +98,11 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QSpinBox" name="spinBox_spargeRO"/>
+           <widget class="QSpinBox" name="spinBox_spargeRO">
+            <property name="maximum">
+             <number>100</number>
+            </property>
+           </widget>
           </item>
           <item row="0" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_baseButtons" stretch="0,1">
@@ -150,9 +158,16 @@
          <property name="title">
           <string>PPM</string>
          </property>
+         <property name="configSection" stdset="0">
+          <string>totalSalts</string>
+         </property>
          <layout class="QGridLayout" name="gridLayout_ppm" rowstretch="0,0,0,0">
           <item row="0" column="3">
-           <widget class="BtDigitWidget" name="btDigit_na" native="true"/>
+           <widget class="BtGenericDigit" name="btDigit_na">
+            <property name="editField" stdset="0">
+             <string>nappm</string>
+            </property>
+           </widget>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_ca">
@@ -162,7 +177,11 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="BtDigitWidget" name="btDigit_so4" native="true"/>
+           <widget class="BtGenericDigit" name="btDigit_so4">
+            <property name="editField" stdset="0">
+             <string>so4ppm</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_mg">
@@ -172,13 +191,25 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="BtDigitWidget" name="btDigit_ca" native="true"/>
+           <widget class="BtGenericDigit" name="btDigit_ca">
+            <property name="editField" stdset="0">
+             <string>cappm</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="1">
-           <widget class="BtDigitWidget" name="btDigit_ph" native="true"/>
+           <widget class="BtGenericDigit" name="btDigit_ph">
+            <property name="editField" stdset="0">
+             <string>ph</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="3">
-           <widget class="BtDigitWidget" name="btDigit_hco3" native="true"/>
+           <widget class="BtGenericDigit" name="btDigit_hco3">
+            <property name="editField" stdset="0">
+             <string>hco3ppm</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_pH">
@@ -209,10 +240,18 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="BtDigitWidget" name="btDigit_mg" native="true"/>
+           <widget class="BtGenericDigit" name="btDigit_mg">
+            <property name="editField" stdset="0">
+             <string>mgppm</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="3">
-           <widget class="BtDigitWidget" name="btDigit_cl" native="true"/>
+           <widget class="BtGenericDigit" name="btDigit_cl">
+            <property name="editField" stdset="0">
+             <string>clppm</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="2">
            <widget class="QLabel" name="label_hco3">
@@ -229,66 +268,129 @@
          <property name="title">
           <string>Total Salts</string>
          </property>
+         <property name="configSection" stdset="0">
+          <string>totalSalts</string>
+         </property>
          <layout class="QGridLayout" name="gridLayout_total">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_totalcacl2">
+           <widget class="BtMassLabel" name="label_totalcacl2">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>CaCl&lt;sub&gt;2&lt;/sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalcacl2</cstring>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="BtDigitWidget" name="btDigit_totalcacl2" native="true"/>
+           <widget class="BtMassDigit" name="btDigit_totalcacl2">
+            <property name="editField" stdset="0">
+             <string>cacl</string>
+            </property>
+           </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QLabel" name="label_totalmgso4">
+           <widget class="BtMassLabel" name="label_totalmgso4">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>MgSO&lt;sub&gt;4&lt;/sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalmgso4</cstring>
             </property>
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="BtDigitWidget" name="btDigit_totalmgso4" native="true"/>
+           <widget class="BtMassDigit" name="btDigit_totalmgso4">
+            <property name="editField" stdset="0">
+             <string>mgso4</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_totalcaco3">
+           <widget class="BtMassLabel" name="label_totalcaco3">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>CaCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalcaco3</cstring>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="BtDigitWidget" name="btDigit_totalcaco3" native="true"/>
+           <widget class="BtMassDigit" name="btDigit_totalcaco3">
+            <property name="editField" stdset="0">
+             <string>caco3</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QLabel" name="label_totalnacl">
+           <widget class="BtMassLabel" name="label_totalnacl">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>NaCl</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalnacl</cstring>
             </property>
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="BtDigitWidget" name="btDigit_totalnacl" native="true"/>
+           <widget class="BtMassDigit" name="btDigit_totalnacl">
+            <property name="editField" stdset="0">
+             <string>nacl</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_totalcaso4">
+           <widget class="BtMassLabel" name="label_totalcaso4">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>CaSO&lt;sub&gt;4&lt;?sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalcaso4</cstring>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="BtDigitWidget" name="btDigit_totalcaso4" native="true"/>
+           <widget class="BtMassDigit" name="btDigit_totalcaso4">
+            <property name="editField" stdset="0">
+             <string>caso4</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QLabel" name="label_totalnahco3">
+           <widget class="BtMassLabel" name="label_totalnahco3">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="text">
              <string>NaHCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalnahco3</cstring>
             </property>
            </widget>
           </item>
           <item row="2" column="3">
-           <widget class="BtDigitWidget" name="btDigit_totalnahco3" native="true"/>
+           <widget class="BtMassDigit" name="btDigit_totalnahco3">
+            <property name="editField" stdset="0">
+             <string>nahco3</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -364,16 +466,16 @@
          </layout>
         </widget>
        </item>
-       <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox_save">
@@ -402,10 +504,22 @@
    <header>WaterButton.h</header>
   </customwidget>
   <customwidget>
-   <class>BtDigitWidget</class>
-   <extends>QWidget</extends>
+   <class>BtMassLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtGenericDigit</class>
+   <extends>QLabel</extends>
    <header>BtDigitWidget.h</header>
-   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BtMassDigit</class>
+   <extends>QLabel</extends>
+   <header>BtDigitWidget.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -451,6 +565,102 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalcacl2</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalcacl2</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>433</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>160</x>
+     <y>433</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalcaco3</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalcaco3</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>469</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>160</x>
+     <y>469</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalcaso4</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalcaso4</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>160</x>
+     <y>506</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalmgso4</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalmgso4</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>433</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>433</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalnacl</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalnacl</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>469</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>469</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalnahco3</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalnahco3</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>506</y>
     </hint>
    </hints>
   </connection>

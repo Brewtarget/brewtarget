@@ -1802,15 +1802,12 @@ int Database::insertElement(BeerXMLElement* ins)
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
-       if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == kpropBrewDate ) {
-           QVariant helpme( ins->property(prop.toUtf8().data()).toString());
-           q.bindValue(":brewdate",helpme);
-       }
-       else {
-          QVariant wtf = ins->property(prop.toUtf8().data() );
-          // I've arranged it such that the bindings are on the property names. It simplifies a lot
-          q.bindValue( QString(":%1").arg(prop), wtf);
-       }
+      QVariant val_to_ins = ins->property(prop.toUtf8().data());
+      if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == kpropBrewDate ) {
+         val_to_ins = val_to_ins.toString();
+      }
+      // I've arranged it such that the bindings are on the property names. It simplifies a lot
+      q.bindValue( QString(":%1").arg(prop), val_to_ins);
    }
 
    try {
