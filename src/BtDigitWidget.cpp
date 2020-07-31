@@ -106,6 +106,37 @@ void BtDigitWidget::display(double num, int prec)
    QLabel::setText(str);
 }
 
+void BtDigitWidget::adjustColors()
+{
+
+   QString str = displayAmount(m_lastNum, m_lastPrec);
+   QString style = m_styleSheet;
+
+   if( (!m_constantColor && (m_lastNum < m_lowLim)) || (m_constantColor && m_color == LOW))
+   {
+      style = m_styleSheet.arg(m_rgblow,6,16,QChar('0'));
+      setToolTip(m_constantColor? "" : m_low_msg);
+   }
+   else if( (!m_constantColor && (m_lastNum <= m_highLim)) || (m_constantColor && m_color == GOOD))
+   {
+      style = m_styleSheet.arg(m_rgbgood,6,16,QChar('0'));
+      setToolTip(m_constantColor? "" : m_good_msg);
+   }
+   else
+   {
+      if( m_constantColor && m_color == BLACK )
+         style = m_styleSheet.arg(0,6,16,QChar('0'));
+      else
+      {
+         style = m_styleSheet.arg(m_rgbhigh,6,16,QChar('0'));
+         setToolTip(m_high_msg);
+      }
+   }
+
+   setStyleSheet(style);
+   QLabel::setText(str);
+}
+
 void BtDigitWidget::setLowLim(double num)
 {
    if( num < m_highLim )
@@ -133,12 +164,13 @@ void BtDigitWidget::setLimits(double low, double high)
       m_lowLim = low;
       m_highLim = high;
    }
-   display(m_lastNum, m_lastPrec);
+   adjustColors();
+   update(); // repaint.
 }
 
-void BtDigitWidget::setLowMsg( QString msg )  { m_low_msg = msg; }
-void BtDigitWidget::setGoodMsg( QString msg ) { m_good_msg = msg; }
-void BtDigitWidget::setHighMsg( QString msg ) { m_high_msg = msg; }
+void BtDigitWidget::setLowMsg(  QString msg ) { m_low_msg  = msg; update();}
+void BtDigitWidget::setGoodMsg( QString msg ) { m_good_msg = msg; update();}
+void BtDigitWidget::setHighMsg( QString msg ) { m_high_msg = msg; update();}
 
 void BtDigitWidget::setMessages( QStringList msgs )
 {
@@ -149,6 +181,8 @@ void BtDigitWidget::setMessages( QStringList msgs )
    m_low_msg = msgs[0];
    m_good_msg = msgs[1];
    m_high_msg = msgs[2];
+
+   adjustColors();
 }
 
 
@@ -232,8 +266,7 @@ void BtDigitWidget::displayChanged(Unit::unitDisplay oldUnit, Unit::unitScale ol
    // amount (aka to SI) and then into the unit we want.
    switch( m_type ) {
       case Unit::Mass:
-         val = toSI(oldUnit,oldScale);
-         amt = displayAmount(val,2);
+         amt = displayAmount(m_lastNum,2);
          break;
       case Unit::String:
          amt = text();
@@ -267,6 +300,7 @@ void BtDigitWidget::setText(QString amount, int precision)
    double amt;
    bool ok = false;
 
+
    setConfigSection("");
    if ( m_type == Unit::String )
       QLabel::setText(amount);
@@ -280,62 +314,17 @@ void BtDigitWidget::setText(QString amount, int precision)
                .arg(m_section)
                .arg(m_editField) );
       }
+      m_lastNum = amt;
+      m_lastPrec = precision;
       QLabel::setText(displayAmount(amt, precision));
    }
 }
-void BtDigitWidget::setText( double amount, int precision)
+void BtDigitWidget::setText(double amount, int precision)
 {
+   m_lastNum = amount;
+   m_lastPrec = precision;
    setConfigSection("");
    QLabel::setText( displayAmount(amount,precision) );
-}
-
-double BtDigitWidget::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale)
-{
-   UnitSystem* temp;
-   Unit*       works;
-   Unit::unitDisplay dspUnit  = oldUnit;
-   Unit::unitScale   dspScale = oldScale;
-
-   // If the display unit is forced, use this unit instead of what was sent
-   if ( m_forceUnit != Unit::noUnit ) {
-      dspUnit = m_forceUnit;
-   }
-   else {
-      dspUnit   = (Unit::unitDisplay)Brewtarget::option(m_editField, Unit::noUnit, m_section, Brewtarget::UNIT).toInt();
-   }
-
-   // If the display scale is forced, use this scale as the default one.
-   if( m_forceScale != Unit::noScale ) {
-      dspScale = m_forceScale;
-   }
-   else {
-      dspScale  = (Unit::unitScale)Brewtarget::option(m_editField, Unit::noScale, m_section, Brewtarget::SCALE).toInt();
-   }
-
-   // Find the unit system containing dspUnit
-   temp = Brewtarget::findUnitSystem(m_units,dspUnit);
-   if ( temp ) {
-      // find the unit referred by dspScale
-      works = temp->scaleUnit(dspScale);
-      if (! works ) {
-         works = temp->unit();
-      }
-
-      // get the qstringToSI() from the unit system, using the found unit.
-      // Force the issue in qstringToSI() unless dspScale is Unit::noScale.
-
-      return temp->qstringToSI(text(), works, dspScale != Unit::noScale, dspScale);
-   }
-   else if ( m_type == Unit::String )
-      return 0.0;
-
-   // If all else fails, simply try to force the contents of the field to a
-   // double. This doesn't seem advisable?
-   bool ok = false;
-   double amt = Brewtarget::toDouble(text(),&ok);
-   if ( ! ok )
-      Brewtarget::logW( QString("%1 : could not convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(text()).arg(m_section).arg(m_editField) );
-   return amt;
 }
 
 BtMassDigit::BtMassDigit(QWidget* parent) : BtDigitWidget(parent,Unit::Mass,Units::kilograms) {}

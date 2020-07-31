@@ -115,17 +115,17 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    m_target_editor = new WaterEditor(this);
 
    // all the signals
-   connect(baseProfileCombo, SIGNAL( activated(int)), this, SLOT(update_baseProfile(int)));
+   connect(baseProfileCombo,   SIGNAL( activated(int)), this, SLOT(update_baseProfile(int)));
    connect(targetProfileCombo, SIGNAL( activated(int)), this, SLOT(update_targetProfile(int)));
 
-   connect(baseProfileButton, &WaterButton::clicked, m_base_editor, &QWidget::show);
+   connect(baseProfileButton,   &WaterButton::clicked, m_base_editor,   &QWidget::show);
    connect(targetProfileButton, &WaterButton::clicked, m_target_editor, &QWidget::show);
 
-   connect( m_salt_table_model,        &SaltTableModel::newTotals, this, &WaterDialog::newTotals);
-   connect( pushButton_addSalt,    &QAbstractButton::clicked, m_salt_table_model, &SaltTableModel::catchSalt);
-   connect( pushButton_removeSalt, &QAbstractButton::clicked, this, &WaterDialog::removeSalts);
+   connect( m_salt_table_model,    &SaltTableModel::newTotals, this, &WaterDialog::newTotals);
+   connect( pushButton_addSalt,    &QAbstractButton::clicked,  m_salt_table_model, &SaltTableModel::catchSalt);
+   connect( pushButton_removeSalt, &QAbstractButton::clicked,  this, &WaterDialog::removeSalts);
 
-   connect( spinBox_mashRO, SIGNAL(valueChanged(int)), this, SLOT(setMashRO(int)));
+   connect( spinBox_mashRO, SIGNAL(valueChanged(int)),   this, SLOT(setMashRO(int)));
    connect( spinBox_spargeRO, SIGNAL(valueChanged(int)), this, SLOT(setSpargeRO(int)));
 
    connect( buttonBox_save, &QDialogButtonBox::accepted, this, &WaterDialog::saveAndClose);

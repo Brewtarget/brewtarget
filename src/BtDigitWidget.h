@@ -92,7 +92,6 @@ public:
    void setForcedScale(QString forcedScale);
 
    QString displayAmount( double amount, int precision = 2 );
-   double toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale);
 
 public slots:
    void displayChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
@@ -119,6 +118,8 @@ private:
    QString m_low_msg;
    QString m_good_msg;
    QString m_high_msg;
+
+   void adjustColors();
 };
 
 class BtMassDigit: public BtDigitWidget
