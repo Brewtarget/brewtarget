@@ -529,7 +529,7 @@ void MainWindow::setupTriggers()
    connect( actionMergeDatabases, &QAction::triggered, this, &MainWindow::updateDatabase );
    connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );
    connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
-   connect( actionWater_Chemistry, &QAction::triggered, waterDialog, &QWidget::show);
+   connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
@@ -922,8 +922,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.
    recipe->recalcAll();
 
-   // this has to happen late, because the water dialog needs teh calculted values
-   waterDialog->setRecipe(recipeObs);
    // If you don't connect this late, every previous set of an attribute
    // causes this signal to be slotted, which then causes showChanges() to be
    // called.
@@ -2627,4 +2625,26 @@ void MainWindow::closeBrewNote(BrewNote* b)
 
    return;
 
+}
+
+void MainWindow::popChemistry()
+{
+   bool allow = false;
+
+   if ( recipeObs ) {
+
+      Mash* eMash = recipeObs->mash();
+      if ( eMash && eMash->mashSteps().size() > 0 ) {
+         allow = true;
+      }
+   }
+
+   // late binding for the win?
+   if (allow ) {
+      waterDialog->setRecipe(recipeObs);
+      waterDialog->show();
+   }
+   else {
+      QMessageBox::warning( this, tr("No Mash"), tr("You must define a mash first."));
+   }
 }

@@ -33,6 +33,7 @@ class WaterListModel;
 class WaterSortFilterProxyModel;
 class WaterEditor;
 class SaltTableModel;
+class SaltItemDelegate;
 class Salt;
 
 /*!
@@ -73,6 +74,7 @@ private:
    WaterListModel *m_base_combo_list;
    WaterListModel *m_target_combo_list;
    SaltTableModel *m_salt_table_model;
+   SaltItemDelegate *m_salt_delegate;
    WaterEditor* m_base_editor;
    WaterEditor* m_target_editor;
    Recipe* m_rec;

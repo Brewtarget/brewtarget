@@ -19,7 +19,7 @@
  */
 
 #ifndef _SALTTABLEMODEL_H
-#define   _SALTTABLEMODEL_H
+#define _SALTTABLEMODEL_H
 
 class SaltTableModel;
 class SaltItemDelegate;
@@ -38,7 +38,7 @@ class SaltItemDelegate;
 // Forward declarations.
 class Recipe;
 class WaterDialog;
-
+class Mash;
 
 enum{ SALTNAMECOL,
       SALTAMOUNTCOL,
@@ -102,12 +102,13 @@ signals:
 
 private:
    QList<Salt*> saltObs;
-   Recipe* recObs;
+   Recipe* m_rec;
    QTableView* parentTableWidget;
    double spargePct;
 
    void setDisplayUnit(int column, Unit::unitDisplay displayUnit);
    void setDisplayScale(int column, Unit::unitScale displayScale);
+   double multiplier(Salt *s) const;
 
    QString generateName(int column) const;
    Unit::unitDisplay displayUnit(int column) const;
@@ -133,7 +134,11 @@ public:
    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+   void observeRecipe(Recipe *rec);
+
 private:
+   Mash* m_mash; 
+   // I really dislike this
 
 };
 

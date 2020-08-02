@@ -108,7 +108,8 @@ WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),
    }
    // and now let's see what the table does.
    m_salt_table_model = new SaltTableModel(tableView_salts);
-   tableView_salts->setItemDelegate(new SaltItemDelegate(tableView_salts));
+   m_salt_delegate    = new SaltItemDelegate(tableView_salts);
+   tableView_salts->setItemDelegate(m_salt_delegate);
    tableView_salts->setModel(m_salt_table_model);
 
    m_base_editor = new WaterEditor(this);
@@ -177,9 +178,10 @@ void WaterDialog::setRecipe(Recipe *rec)
    m_rec = rec;
    Mash* mash = m_rec->mash();
    m_salt_table_model->observeRecipe(m_rec);
+   m_salt_delegate->observeRecipe(m_rec);
 
    if ( mash == nullptr || mash->mashSteps().size() == 0 ) {
-      Brewtarget::logW(QString("Can not set strike water chemistry without a mash"));
+      Brewtarget::logW(QString("Can not set water chemistry without a mash"));
       return;
    }
 
@@ -278,7 +280,7 @@ void WaterDialog::newTotals()
    double allTheWaters = mash->totalMashWater_l();
 
    if ( qFuzzyCompare(allTheWaters,0.0) ) {
-      Brewtarget::logW(QString("How did you get this far with no mash water?"));
+      Brewtarget::logW(QString("Can not set strike water chemistry without a mash"));
       return;
    }
    // Two major things need to happen here:

@@ -21,6 +21,7 @@
 
 #include <QAbstractTableModel>
 #include <QAbstractItemModel>
+#include <QStandardItemModel>
 #include <QWidget>
 #include <QComboBox>
 #include <QHeaderView>
@@ -40,6 +41,7 @@
 #include "unit.h"
 #include "recipe.h"
 #include "mash.h"
+#include "mashstep.h"
 #include "brewtarget.h"
 
 static QStringList addToName = QStringList() << QObject::tr("Never")
@@ -61,7 +63,7 @@ static QStringList saltNames = QStringList() << QObject::tr("None")
 
 SaltTableModel::SaltTableModel(QTableView* parent)
    : QAbstractTableModel(parent),
-     recObs(nullptr),
+     m_rec(nullptr),
      parentTableWidget(parent)
 {
    saltObs.clear();
@@ -83,20 +85,20 @@ SaltTableModel::~SaltTableModel()
 
 void SaltTableModel::observeRecipe(Recipe* rec)
 {
-   if ( recObs ) {
-      disconnect( recObs, nullptr, this, nullptr );
+   if ( m_rec ) {
+      QObject::disconnect( m_rec, nullptr, this, nullptr );
       removeAll();
    }
 
-   recObs = rec;
-   if ( recObs ) {
-      QList<Salt*> salts = recObs->salts();
-      connect( recObs, &BeerXMLElement::changed, this, &SaltTableModel::changed );
+   m_rec = rec;
+   if ( m_rec ) {
+      QList<Salt*> salts = m_rec->salts();
+      connect( m_rec, &BeerXMLElement::changed, this, &SaltTableModel::changed );
       if (salts.size() > 0 ) {
          addSalts( salts );
       }
-      if ( recObs->mash() ) {
-         spargePct = recObs->mash()->totalSpargeAmount_l()/recObs->mash()->totalInfusionAmount_l();
+      if ( m_rec->mash() ) {
+         spargePct = m_rec->mash()->totalSpargeAmount_l()/m_rec->mash()->totalInfusionAmount_l();
       }
    }
 }
@@ -151,22 +153,29 @@ void SaltTableModel::catchSalt()
    addSalt(gaq);
 }
 
+double SaltTableModel::multiplier(Salt *s) const
+{
+   double ret = 1.0;
+   QList<MashStep*> better = m_rec->mash()->mashSteps();
+
+   if ( s->addTo() == Salt::EQUAL ) {
+      ret = 2.0;
+   }
+   // If we are adding a proportional amount to both,
+   // this should handle that math.
+   else if ( s->addTo() == Salt::RATIO ) {
+      ret = 1.0 + spargePct;
+   }
+
+   return ret;
+}
+
 // total salt in ppm. Not sure this is helping.
 double SaltTableModel::total_Ca() const
 {
-   double ret = 0;
+   double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1.0;
-      // If we are adding equal amounts to mash and sparge
-      // then double what's shown
-      if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2.0;
-      }
-      // If we are adding a proportional amount to both,
-      // this should handle that math.
-      else if ( i->addTo() == Salt::RATIO ) {
-         mult = 1.0 + spargePct;
-      }
+      double mult  = multiplier(i);
       ret += mult * i->Ca();
    }
    return ret;
@@ -176,13 +185,7 @@ double SaltTableModel::total_Cl() const
 {
    double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1.0;
-      if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2.0;
-      }
-      else if ( i->addTo() == Salt::RATIO ) {
-         mult = 1.0 + spargePct;
-      }
+      double mult  = multiplier(i);
       ret += mult * i->Cl();
    }
 
@@ -193,13 +196,7 @@ double SaltTableModel::total_CO3() const
 {
    double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1.0;
-      if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2.0;
-      }
-      else if ( i->addTo() == Salt::RATIO ) {
-         mult = 1.0 + spargePct;
-      }
+      double mult  = multiplier(i);
       ret += mult * i->CO3();
    }
 
@@ -210,13 +207,7 @@ double SaltTableModel::total_HCO3() const
 {
    double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1.0;
-      if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2.0;
-      }
-      else if ( i->addTo() == Salt::RATIO ) {
-         mult = 1.0 + spargePct;
-      }
+      double mult  = multiplier(i);
       ret += mult * i->HCO3();
    }
 
@@ -227,13 +218,7 @@ double SaltTableModel::total_Mg() const
 {
    double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1.0;
-      if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2.0;
-      }
-      else if ( i->addTo() == Salt::RATIO ) {
-         mult = 1.0 + spargePct;
-      }
+      double mult  = multiplier(i);
       ret += mult * i->Mg();
    }
 
@@ -244,13 +229,7 @@ double SaltTableModel::total_Na() const
 {
    double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1.0;
-      if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2.0;
-      }
-      else if ( i->addTo() == Salt::RATIO ) {
-         mult = 1.0 + spargePct;
-      }
+      double mult  = multiplier(i);
       ret += mult * i->Na();
    }
 
@@ -261,13 +240,7 @@ double SaltTableModel::total_SO4() const
 {
    double ret = 0.0;
    foreach(Salt* i, saltObs) {
-      double mult  = 1.0;
-      if ( i->addTo() == Salt::EQUAL ) {
-         mult = 2.0;
-      }
-      else if ( i->addTo() == Salt::RATIO ) {
-         mult = 1.0 + spargePct;
-      }
+      double mult  = multiplier(i);
       ret += mult * i->SO4();
    }
 
@@ -294,13 +267,7 @@ double SaltTableModel::total(Salt::Types type) const
    if (type != Salt::NONE) {
       foreach(Salt* i, saltObs) {
          if ( i->type() == type && i->addTo() != Salt::NEVER) {
-            double mult  = 1.0;
-            if ( i->addTo() == Salt::EQUAL ) {
-               mult = 2.0;
-            }
-            else if ( i->addTo() == Salt::RATIO ) {
-               mult = 1.0 + spargePct;
-            }
+            double mult  = multiplier(i);
             ret += mult * i->amount();
          }
       }
@@ -317,13 +284,7 @@ double SaltTableModel::totalAcidWeight(Salt::Types type) const
    if (type != Salt::NONE) {
       foreach(Salt* i, saltObs) {
          if ( i->type() == type && i->addTo() != Salt::NEVER) {
-            double mult  = 1.0;
-            if ( i->addTo() == Salt::EQUAL ) {
-               mult = 2.0;
-            }
-            else if ( i->addTo() == Salt::RATIO ) {
-               mult = 1.0 + spargePct;
-            }
+            double mult  = multiplier(i);
             // Acid malts are easy
             if ( type == Salt::ACIDMLT ) {
                ret += 1000.0 * i->amount() * i->percentAcid();
@@ -387,7 +348,7 @@ void SaltTableModel::removeSalts(QList<int>deadSalts)
          // Dead salts do not malinger in the database. This will
          // delete the thing, not just mark it deleted
          if ( ! zombie->cacheOnly() )
-            Database::instance().removeIngredientFromRecipe(recObs,zombie);
+            Database::instance().removeIngredientFromRecipe(m_rec,zombie);
       }
    }
    emit newTotals();
@@ -419,11 +380,11 @@ void SaltTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 
    // See if sender is our recipe.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if( recSender && recSender == recObs )
+   if( recSender && recSender == m_rec )
    {
       if( QString(prop.name()) == "salts" ) {
          removeAll();
-         addSalts( recObs->salts() );
+         addSalts( m_rec->salts() );
       }
       if( rowCount() > 0 )
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
@@ -690,14 +651,15 @@ void SaltTableModel::saveAndClose()
    foreach( Salt* i, saltObs ) {
       if ( i->cacheOnly() && i->type() != Salt::NONE && i->addTo() != Salt::NEVER ) {
          Database::instance().insertSalt(i);
-         Database::instance().addToRecipe(recObs,i,true);
+         Database::instance().addToRecipe(m_rec,i,true);
       }
    }
 }
 //==========================CLASS SaltItemDelegate===============================
 
 SaltItemDelegate::SaltItemDelegate(QObject* parent)
-        : QItemDelegate(parent)
+        : QItemDelegate(parent),
+        m_mash(nullptr)
 {
 }
 
@@ -732,6 +694,18 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
       box->addItem(tr("Equal"),  Salt::EQUAL);
       box->setMinimumWidth( box->minimumSizeHint().width());
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
+      if ( m_mash != nullptr ) {
+         QStandardItemModel* i_model = qobject_cast<QStandardItemModel*>(box->model());
+         QList<MashStep*> activate = m_mash->mashSteps();
+         if ( activate.size() == 1 && activate[0]->type() == MashStep::Infusion ) {
+            for( int i = 2; i < 5; ++i ) {
+               QStandardItem* entry = i_model->item(i);
+               entry->setEnabled(false);
+            }
+         }
+      }
+
       return box;
    }
    else {
@@ -777,4 +751,9 @@ void SaltItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
 void SaltItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
 {
    editor->setGeometry(option.rect);
+}
+
+void SaltItemDelegate::observeRecipe( Recipe* rec )
+{
+   m_mash = rec->mash();
 }

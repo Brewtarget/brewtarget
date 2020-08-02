@@ -222,6 +222,8 @@ public slots:
    //! \brief Restore the database.
    void restoreFromBackup();
 
+   //! \brief makes sure we can do water chemistry before we show the window
+   void popChemistry();
    /*!
     * \brief Prints a document.
     *
