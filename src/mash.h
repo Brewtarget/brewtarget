@@ -105,6 +105,8 @@ public:
    double totalSpargeAmount_l() const;
    double totalTime();
 
+   bool hasSparge() const;
+
    // Relational getters
    QList<MashStep*> mashSteps() const;
 

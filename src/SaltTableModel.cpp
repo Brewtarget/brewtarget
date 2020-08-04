@@ -156,7 +156,10 @@ void SaltTableModel::catchSalt()
 double SaltTableModel::multiplier(Salt *s) const
 {
    double ret = 1.0;
-   QList<MashStep*> better = m_rec->mash()->mashSteps();
+
+   if ( ! m_rec->mash()->hasSparge() ) {
+      return ret;
+   }
 
    if ( s->addTo() == Salt::EQUAL ) {
       ret = 2.0;
@@ -697,11 +700,11 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 
       if ( m_mash != nullptr ) {
          QStandardItemModel* i_model = qobject_cast<QStandardItemModel*>(box->model());
-         QList<MashStep*> activate = m_mash->mashSteps();
-         if ( activate.size() == 1 && activate[0]->type() == MashStep::Infusion ) {
+         if ( ! m_mash->hasSparge() ) {
             for( int i = 2; i < 5; ++i ) {
                QStandardItem* entry = i_model->item(i);
-               entry->setEnabled(false);
+               if ( entry ) 
+                  entry->setEnabled(false);
             }
          }
       }

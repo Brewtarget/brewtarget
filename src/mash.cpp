@@ -268,6 +268,17 @@ double Mash::totalTime()
    return totalTime;
 }
 
+bool Mash::hasSparge() const
+{
+   foreach( MashStep* ms, mashSteps() ) {
+      if ( ms->isSparge() ) {
+         return true;
+      }
+   }
+
+   return false;
+}
+
 QList<MashStep*> Mash::mashSteps() const
 {
    return Database::instance().mashSteps(this);
