@@ -583,7 +583,11 @@ void Database::automaticBackup()
 
    QString backupDir = Brewtarget::option("directory", Brewtarget::getConfigDir().canonicalPath(),"backups").toString();
    QString listOfFiles = Brewtarget::option("files",QVariant(),"backups").toString();
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
    QStringList fileNames = listOfFiles.split(",", QString::SkipEmptyParts);
+#else
+   QStringList fileNames = listOfFiles.split(",", Qt::SkipEmptyParts);
+#endif
 
    QString halfName = QString("%1.%2").arg("bt_database").arg(QDate::currentDate().toString("yyyyMMdd"));
    QString newName = halfName;
