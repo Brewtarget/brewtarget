@@ -33,15 +33,15 @@ class QWidget;
  * \class EquipmentButton
  * \author Philip G. Lee (rocketman768@gmail.com)
  *
- * \brief This is a view class that displays the name of an equipment. 
+ * \brief This is a view class that displays the name of an equipment.
  */
 class EquipmentButton : public QPushButton
 {
    Q_OBJECT
 public:
-   EquipmentButton(QWidget* parent = 0);
+   EquipmentButton(QWidget* parent = nullptr);
    virtual ~EquipmentButton(){}
-   
+
    //! Observe a recipe's equipment.
    void setRecipe(Recipe* recipe);
    //! Observe a particular equipment.

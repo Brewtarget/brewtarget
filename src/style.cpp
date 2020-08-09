@@ -388,7 +388,7 @@ QString Style::examples() const { return m_examples; }
 Style::Type Style::type() const { return m_type; }
 const QString Style::typeString() const { return m_typeStr; }
 
-bool Style::cacheOnly() const { return m_cacheOnly; }
+bool   Style::cacheOnly() const { return m_cacheOnly; }
 double Style::ogMin() const { return m_ogMin; }
 double Style::ogMax() const { return m_ogMax; }
 double Style::fgMin() const { return m_fgMin; }

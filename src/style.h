@@ -150,7 +150,7 @@ signals:
 
 private:
    Style(Brewtarget::DBTable table, int key);
-   Style(QString t_name, bool cache = true);
+   Style(QString t_name, bool cacheOnly = true);
    Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
 

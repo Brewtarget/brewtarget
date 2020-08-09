@@ -39,7 +39,7 @@
 #include "brewtarget.h"
 
 WaterTableModel::WaterTableModel(WaterTableWidget* parent)
-   : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent)
+   : QAbstractTableModel(parent), recObs(nullptr), parentTableWidget(parent)
 {
 }
 
@@ -47,10 +47,10 @@ void WaterTableModel::observeRecipe(Recipe* rec)
 {
    if( recObs )
    {
-      disconnect( recObs, 0, this, 0 );
+      disconnect( recObs, nullptr, this, nullptr );
       removeAll();
    }
-   
+
    recObs = rec;
    if( recObs )
    {
@@ -63,7 +63,7 @@ void WaterTableModel::observeDatabase(bool val)
 {
    if( val )
    {
-      observeRecipe(0);
+      observeRecipe(nullptr);
       removeAll();
       connect( &(Database::instance()), &Database::newWaterSignal, this, &WaterTableModel::addWater );
       connect( &(Database::instance()), SIGNAL(deletedSignal(Water*)), this, SLOT(removeWater(Water*)) );
@@ -72,7 +72,7 @@ void WaterTableModel::observeDatabase(bool val)
    else
    {
       removeAll();
-      disconnect( &(Database::instance()), 0, this, 0 );
+      disconnect( &(Database::instance()), nullptr, this, nullptr );
    }
 }
 
@@ -83,19 +83,19 @@ void WaterTableModel::addWater(Water* water)
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
    if(
-      recObs == 0 &&
+      recObs == nullptr &&
       (
          water->deleted() ||
          !water->display()
       )
    )
       return;
-   
+
    beginInsertRows( QModelIndex(), waterObs.size(), waterObs.size() );
    waterObs.append(water);
    connect( water, &BeerXMLElement::changed, this, &WaterTableModel::changed );
    endInsertRows();
-   
+
    if(parentTableWidget)
    {
       parentTableWidget->resizeColumnsToContents();
@@ -107,22 +107,22 @@ void WaterTableModel::addWaters(QList<Water*> waters)
 {
    QList<Water*>::iterator i;
    QList<Water*> tmp;
-   
+
    for( i = waters.begin(); i != waters.end(); i++ )
    {
       if( !waterObs.contains(*i) )
          tmp.append(*i);
    }
-   
+
    int size = waterObs.size();
    if (size+tmp.size())
    {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       waterObs.append(tmp);
-      
+
       for( i = tmp.begin(); i != tmp.end(); i++ )
          connect( *i, &BeerXMLElement::changed, this, &WaterTableModel::changed );
-      
+
       endInsertRows();
    }
 
@@ -131,21 +131,21 @@ void WaterTableModel::addWaters(QList<Water*> waters)
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-   
+
 }
 
 void WaterTableModel::removeWater(Water* water)
 {
    int i;
-   
+
    i = waterObs.indexOf(water);
    if( i >= 0 )
    {
       beginRemoveRows( QModelIndex(), i, i );
-      disconnect( water, 0, this, 0 );
+      disconnect( water, nullptr, this, nullptr );
       waterObs.removeAt(i);
       endRemoveRows();
-         
+
       if(parentTableWidget)
       {
          parentTableWidget->resizeColumnsToContents();
@@ -159,15 +159,17 @@ void WaterTableModel::removeAll()
    beginRemoveRows( QModelIndex(), 0, waterObs.size()-1 );
    while( !waterObs.isEmpty() )
    {
-      disconnect( waterObs.takeLast(), 0, this, 0 );
+      disconnect( waterObs.takeLast(), nullptr, this, nullptr );
    }
    endRemoveRows();
 }
 
-void WaterTableModel::changed(QMetaProperty prop, QVariant /*val*/)
+void WaterTableModel::changed(QMetaProperty prop, QVariant val)
 {
    int i;
 
+   Q_UNUSED(prop)
+   Q_UNUSED(val)
    // Find the notifier in the list
    Water* waterSender = qobject_cast<Water*>(sender());
    if( waterSender )
@@ -195,7 +197,7 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
    Water* row;
 
    // Ensure the row is ok.
-   if( index.row() >= (int)waterObs.size() )
+   if( index.row() >= waterObs.size() )
    {
       Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
@@ -212,19 +214,19 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
       case WATERNAMECOL:
          return QVariant(row->name());
       case WATERAMOUNTCOL:
-         return QVariant( Brewtarget::displayAmount(row->amount_l(), Units::liters) );
+         return QVariant( Brewtarget::displayAmount(row->amount(), Units::liters) );
       case WATERCALCIUMCOL:
-         return QVariant( Brewtarget::displayAmount(row->calcium_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->calcium_ppm(), nullptr) );
       case WATERBICARBONATECOL:
-         return QVariant( Brewtarget::displayAmount(row->bicarbonate_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->bicarbonate_ppm(), nullptr) );
       case WATERSULFATECOL:
-         return QVariant( Brewtarget::displayAmount(row->sulfate_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->sulfate_ppm(), nullptr) );
       case WATERCHLORIDECOL:
-         return QVariant( Brewtarget::displayAmount(row->chloride_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->chloride_ppm(), nullptr) );
       case WATERSODIUMCOL:
-         return QVariant( Brewtarget::displayAmount(row->sodium_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->sodium_ppm(), nullptr) );
       case WATERMAGNESIUMCOL:
-         return QVariant( Brewtarget::displayAmount(row->magnesium_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->magnesium_ppm(), nullptr) );
       default :
          Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -280,7 +282,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
    Water *row;
    bool retval = false;
 
-   if( index.row() >= (int)waterObs.size() || role != Qt::EditRole )
+   if( index.row() >= waterObs.size() || role != Qt::EditRole )
       return false;
    else
       row = waterObs[index.row()];
@@ -298,7 +300,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
          row->setName(value.toString());
          break;
       case WATERAMOUNTCOL:
-         row->setAmount_l( Brewtarget::qStringToSI(value.toString(), Units::liters, dspUnit, dspScl) );
+         row->setAmount( Brewtarget::qStringToSI(value.toString(), Units::liters, dspUnit, dspScl) );
          break;
       case WATERCALCIUMCOL:
          row->setCalcium_ppm( Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));
@@ -333,7 +335,7 @@ Unit::unitDisplay WaterTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return (Unit::unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
+   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt());
 }
 
 Unit::unitScale WaterTableModel::displayScale(int column) const
@@ -343,7 +345,7 @@ Unit::unitScale WaterTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return (Unit::unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
+   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt());
 }
 
 // We need to:

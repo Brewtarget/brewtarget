@@ -253,6 +253,7 @@ public:
    Style* newStyle(Style* other);
    Style* newStyle(QString name);
    Water* newWater(Water* other = nullptr);
+   Salt* newSalt(Salt* other = nullptr);
    Yeast* newYeast(Yeast* other = nullptr);
 
    int    insertElement(BeerXMLElement* ins);
@@ -265,6 +266,7 @@ public:
    int    insertStyle(Style* ins);
    int    insertYeast(Yeast* ins);
    int    insertWater(Water* ins);
+   int    insertSalt(Salt* ins);
 
    // Brewnotes, instructions and mashsteps are impossible without their parent objects
    int    insertBrewnote(BrewNote* ins, Recipe *parent);
@@ -309,6 +311,8 @@ public:
    Misc* misc(int key);
    Style* style(int key);
    Yeast* yeast(int key);
+   Salt* salt(int key);
+   Water* water(int key);
 
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
@@ -323,6 +327,7 @@ public:
    //! Add a style, displacing any current style.
    void addToRecipe( Recipe* rec, Style* s, bool noCopy = false, bool transact = true );
    void addToRecipe( Recipe* rec, Water* w, bool noCopy = false, bool transact = true);
+   void addToRecipe( Recipe* rec, Salt* s,  bool noCopy = false, bool transact = true);
    void addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false, bool transact = true);
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
@@ -423,6 +428,7 @@ public:
    Q_PROPERTY( QList<Recipe*> recipes READ recipes /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Style*> styles READ styles /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false )
+   Q_PROPERTY( QList<Salt*> salts READ salts /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false )
 
    // Returns non-deleted BeerXMLElements.
@@ -436,6 +442,7 @@ public:
    QList<Recipe*> recipes();
    QList<Style*> styles();
    QList<Water*> waters();
+   QList<Salt*> salts();
    QList<Yeast*> yeasts();
 
    //! \b returns a list of the brew notes in a recipe.
@@ -450,6 +457,8 @@ public:
    QList<Misc*> miscs( Recipe const* parent );
    //! Return a list of all the waters in a recipe.
    QList<Water*> waters( Recipe const* parent );
+   //! Return a list of all the salts in a recipe.
+   QList<Salt*> salts( Recipe const* parent );
    //! Return a list of all the yeasts in a recipe.
    QList<Yeast*> yeasts( Recipe const* parent );
    //! Get recipe's equipment.
@@ -506,6 +515,7 @@ signals:
    void newRecipeSignal(Recipe*);
    void newStyleSignal(Style*);
    void newWaterSignal(Water*);
+   void newSaltSignal(Salt*);
    void newYeastSignal(Yeast*);
    // This is still experimental. Or at least mental
    void newBrewNoteSignal(BrewNote*);
@@ -518,6 +528,7 @@ signals:
    void deletedSignal(Recipe*);
    void deletedSignal(Style*);
    void deletedSignal(Water*);
+   void deletedSignal(Salt*);
    void deletedSignal(Yeast*);
    void deletedSignal(BrewNote*);
    void deletedSignal(MashStep*);
@@ -578,6 +589,7 @@ private:
    QHash< int, Recipe* > allRecipes;
    QHash< int, Style* > allStyles;
    QHash< int, Water* > allWaters;
+   QHash< int, Salt* > allSalts;
    QHash< int, Yeast* > allYeasts;
    QHash<QString,QSqlQuery> selectSome;
 
@@ -850,7 +862,8 @@ private:
          q.finish();
 
          //Put this in the <ing_type>_children table.
-         if( inrec->dbTable() != Brewtarget::INSTINRECTABLE) {
+         // instructions and salts have no children.
+         if( inrec->dbTable() != Brewtarget::INSTINRECTABLE && inrec->dbTable() != Brewtarget::SALTINRECTABLE ) {
             /*
              * The parent to link to depends on where the ingredient is copied from:
              * - A fermentable from the fermentable tabel -> the ID of the fermentable.

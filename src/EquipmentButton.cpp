@@ -24,15 +24,15 @@
 
 EquipmentButton::EquipmentButton(QWidget* parent)
    : QPushButton(parent),
-     _rec(0),
-     _equip(0)
+     _rec(nullptr),
+     _equip(nullptr)
 {
 }
 
 void EquipmentButton::setRecipe(Recipe* rec)
 {
    if(_rec)
-      disconnect( _rec, 0, this, 0 );
+      disconnect( _rec, nullptr, this, nullptr );
 
    _rec = rec;
    if( _rec )
@@ -41,14 +41,14 @@ void EquipmentButton::setRecipe(Recipe* rec)
       setEquipment( _rec->equipment() );
    }
    else
-      setEquipment(0);
+      setEquipment(nullptr);
 }
 
 void EquipmentButton::setEquipment(Equipment* equip)
 {
    if( _equip )
-      disconnect( _equip, 0, this, 0 );
-   
+      disconnect( _equip, nullptr, this, nullptr );
+
    _equip = equip;
    if( _equip )
    {
@@ -69,7 +69,7 @@ void EquipmentButton::equipChanged(QMetaProperty prop, QVariant val)
 void EquipmentButton::recChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   
+
    if( propName == "equipment" )
       setEquipment( qobject_cast<Equipment*>(BeerXMLElement::extractPtr(val)) );
 }

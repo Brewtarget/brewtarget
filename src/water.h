@@ -40,14 +40,35 @@ class Water : public BeerXMLElement
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "waters")
-   
+
    friend class Database;
+   friend class WaterDialog;
+   friend class WaterEditor;
 public:
 
+   enum Types {
+      NONE,
+      BASE,
+      TARGET
+   };
+
+   enum Ions {
+      Ca,
+      Cl,
+      HCO3,
+      Mg,
+      Na,
+      SO4,
+      numIons
+   };
+
+   Q_ENUM(Types Ions)
+
    virtual ~Water() {}
-   
+
+   // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief The amount in liters.
-   Q_PROPERTY( double amount_l READ amount_l WRITE setAmount_l /*NOTIFY changed*/ /*changedAmount_l*/ )
+   Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount_l*/ )
    //! \brief The ppm of calcium.
    Q_PROPERTY( double calcium_ppm READ calcium_ppm WRITE setCalcium_ppm /*NOTIFY changed*/ /*changedCalcium_ppm*/ )
    //! \brief The ppm of bicarbonate.
@@ -62,10 +83,20 @@ public:
    Q_PROPERTY( double magnesium_ppm READ magnesium_ppm WRITE setMagnesium_ppm /*NOTIFY changed*/ /*changedMagnesium_ppm*/ )
    //! \brief The pH.
    Q_PROPERTY( double ph READ ph WRITE setPh /*NOTIFY changed*/ /*changedPh*/ )
+   //! \brief The residual alkalinity
+   Q_PROPERTY( double alkalinity READ alkalinity WRITE setAlkalinity /*NOTIFY changed*/ /*changedAlkalinity*/ )
    //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
-   
-   double amount_l() const;
+   //! \brief What kind of water is this
+   Q_PROPERTY( Water::Types type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief percent of the mash water that is RO
+   Q_PROPERTY( double mashRO READ mashRO WRITE setMashRO /*NOTIFY changed*/ /*changedMashRO*/ )
+   //! \brief percent of the sparge water that is RO
+   Q_PROPERTY( double spargeRO READ spargeRO WRITE setSpargeRO /*NOTIFY changed*/ /*changedSpargeRO*/ )
+   //! \brief is the alkalinity measured as HCO3 or CO3?
+   Q_PROPERTY( bool alkalinityAsHCO3 READ alkalinityAsHCO3 WRITE setAlkalinityAsHCO3 /*NOTIFY changed*/ /*changedSpargeRO*/ )
+
+   double amount() const;
    double calcium_ppm() const;
    double bicarbonate_ppm() const;
    double sulfate_ppm() const;
@@ -73,10 +104,16 @@ public:
    double sodium_ppm() const;
    double magnesium_ppm() const;
    double ph() const;
+   double alkalinity() const;
    QString notes() const;
    bool cacheOnly() const;
+   Water::Types type() const;
+   double mashRO() const;
+   double spargeRO() const;
+   bool alkalinityAsHCO3() const;
 
-   void setAmount_l( double var );
+   double ppm( Water::Ions ion );
+   void setAmount( double var );
    void setCalcium_ppm( double var );
    void setSulfate_ppm( double var );
    void setBicarbonate_ppm( double var );
@@ -84,34 +121,28 @@ public:
    void setSodium_ppm( double var );
    void setMagnesium_ppm( double var );
    void setPh( double var );
+   void setAlkalinity(double var);
    void setNotes( const QString &var );
    void setCacheOnly( bool cache );
+   void setType(Types type);
+   void setMashRO(double var);
+   void setSpargeRO(double var);
+   void setAlkalinityAsHCO3(bool var);
 
    static QString classNameStr();
-   
+
 signals:
-   
+
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   /*
-   void changedAmount_l(double);
-   void changedCalcium_ppm(double);
-   void changedBicarbonate_ppm(double);
-   void changedSulfate_ppm(double);
-   void changedChloride_ppm(double);
-   void changedSodium_ppm(double);
-   void changedMagnesium_ppm(double);
-   void changedPh(double);
-   void changedNotes(QString);
-   */
-   
+
 private:
    Water(Brewtarget::DBTable table, int key);
    Water(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   Water(Water const& other);
+   Water(Water const& other, bool cache = true);
    Water(QString name, bool cache = true);
-   
-   double m_amount_l;
+
+   double m_amount;
    double m_calcium_ppm;
    double m_bicarbonate_ppm;
    double m_sulfate_ppm;
@@ -119,11 +150,14 @@ private:
    double m_sodium_ppm;
    double m_magnesium_ppm;
    double m_ph;
+   double m_alkalinity;
    QString m_notes;
    bool m_cacheOnly;
+   Water::Types m_type;
+   double m_mash_ro;
+   double m_sparge_ro;
+   bool m_alkalinity_as_hco3;
 
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Water*> )

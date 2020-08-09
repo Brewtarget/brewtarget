@@ -66,6 +66,7 @@
 #include "recipe.h"
 #include "style.h"
 #include "water.h"
+#include "salt.h"
 #include "yeast.h"
 
 #include "config.h"
@@ -79,6 +80,8 @@
 #include "InstructionSchema.h"
 #include "BrewnoteSchema.h"
 #include "RecipeSchema.h"
+#include "WaterSchema.h"
+#include "SaltSchema.h"
 #include "SettingsSchema.h"
 
 // Static members.
@@ -128,6 +131,7 @@ Database::~Database()
    qDeleteAll(allMiscs);
    qDeleteAll(allStyles);
    qDeleteAll(allWaters);
+   qDeleteAll(allSalts);
    qDeleteAll(allYeasts);
    qDeleteAll(allRecipes);
 
@@ -364,6 +368,7 @@ bool Database::load()
    populateElements( allMiscs, Brewtarget::MISCTABLE );
    populateElements( allStyles, Brewtarget::STYLETABLE );
    populateElements( allWaters, Brewtarget::WATERTABLE );
+   populateElements( allSalts, Brewtarget::SALTTABLE );
    populateElements( allYeasts, Brewtarget::YEASTTABLE );
 
    populateElements( allRecipes, Brewtarget::RECTABLE );
@@ -583,7 +588,11 @@ void Database::automaticBackup()
 
    QString backupDir = Brewtarget::option("directory", Brewtarget::getConfigDir().canonicalPath(),"backups").toString();
    QString listOfFiles = Brewtarget::option("files",QVariant(),"backups").toString();
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
    QStringList fileNames = listOfFiles.split(",", QString::SkipEmptyParts);
+#else
+   QStringList fileNames = listOfFiles.split(",", Qt::SkipEmptyParts);
+#endif
 
    QString halfName = QString("%1.%2").arg("bt_database").arg(QDate::currentDate().toString("yyyyMMdd"));
    QString newName = halfName;
@@ -790,8 +799,7 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
                            .arg(q.lastError().text()));
       sqlDatabase().rollback();
       q.finish();
-      throw QString("%1 %2 %3 %4").arg(Q_FUNC_INFO).arg(e).arg(q.lastQuery()).arg(q.lastError().text());
-
+      abort();
    }
 
    rec->recalcAll();
@@ -874,6 +882,8 @@ Hop*         Database::hop(int key)         { return allHops[key]; }
 Misc*        Database::misc(int key)        { return allMiscs[key]; }
 Style*       Database::style(int key)       { return allStyles[key]; }
 Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
+Salt*        Database::salt(int key)        { return allSalts[key]; }
+Water*       Database::water(int key)       { return allWaters[key]; }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
@@ -1186,6 +1196,17 @@ QList<Water*> Database::waters(Recipe const* parent)
    QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
 
    getElements(ret,filter,Brewtarget::WATERINRECTABLE,allWaters,inrec->inRecIndexName());
+
+   return ret;
+}
+
+QList<Salt*> Database::salts(Recipe const* parent)
+{
+   QList<Salt*> ret;
+   TableSchema* inrec = dbDefn->table(Brewtarget::SALTINRECTABLE);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
+
+   getElements(ret,filter,Brewtarget::SALTINRECTABLE,allSalts,inrec->inRecIndexName());
 
    return ret;
 }
@@ -1714,6 +1735,28 @@ Water* Database::newWater(Water* other)
    return tmp;
 }
 
+Salt* Database::newSalt(Salt* other)
+{
+   Salt* tmp;
+
+   try {
+      if ( other )
+         tmp = copy(other,&allSalts);
+      else
+         tmp = newIngredient(&allSalts);
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      sqlDatabase().rollback();
+      throw;
+   }
+
+   emit changed( metaProperty("salts"), QVariant() );
+   emit newSaltSignal(tmp);
+
+   return tmp;
+}
+
 Yeast* Database::newYeast(Yeast* other)
 {
    Yeast* tmp;
@@ -1758,15 +1801,12 @@ int Database::insertElement(BeerXMLElement* ins)
    q.prepare(insert);
 
    foreach (QString prop, allProps) {
-       if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == kpropBrewDate ) {
-           QVariant helpme( ins->property(prop.toUtf8().data()).toString());
-           q.bindValue(":brewdate",helpme);
-       }
-       else {
-          QVariant wtf = ins->property(prop.toUtf8().data() );
-          // I've arranged it such that the bindings are on the property names. It simplifies a lot
-          q.bindValue( QString(":%1").arg(prop), wtf);
-       }
+      QVariant val_to_ins = ins->property(prop.toUtf8().data());
+      if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == kpropBrewDate ) {
+         val_to_ins = val_to_ins.toString();
+      }
+      // I've arranged it such that the bindings are on the property names. It simplifies a lot
+      q.bindValue( QString(":%1").arg(prop), val_to_ins);
    }
 
    try {
@@ -2029,6 +2069,17 @@ int Database::insertWater(Water* ins)
    return key;
 }
 
+int Database::insertSalt(Salt* ins)
+{
+   int key = insertElement(ins);
+   ins->setCacheOnly(false);
+
+   allSalts.insert(key,ins);
+   emit changed( metaProperty("salts"), QVariant() );
+   emit newSaltSignal(ins);
+
+   return key;
+}
 // This is more similar to a mashstep in that we need to link the brewnote to
 // the parent recipe.
 int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
@@ -2619,8 +2670,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
       sqlDatabase().transaction();
 
    try {
-      foreach (Misc* misc, miscs )
-      {
+      foreach (Misc* misc, miscs ) {
          addIngredientToRecipe( rec, misc, false, &allMiscs,true,false );
       }
    }
@@ -2646,9 +2696,17 @@ void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
    catch (QString e) {
       throw;
    }
+}
 
-   if ( transact  && ! noCopy )
-      rec->recalcAll();
+void Database::addToRecipe( Recipe* rec, Salt* s, bool noCopy, bool transact )
+{
+
+   try {
+      addIngredientToRecipe( rec, s, noCopy, &allSalts,true,transact );
+   }
+   catch (QString e) {
+      throw;
+   }
 }
 
 void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
@@ -2871,6 +2929,16 @@ QList<Water*> Database::waters()
            .arg(dbDefn->table(Brewtarget::WATERTABLE)->propertyToColumn(kpropDeleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::WATERTABLE, allWaters );
+   return tmp;
+}
+
+QList<Salt*> Database::salts()
+{
+   QList<Salt*> tmp;
+   QString query = QString("%1=%2")
+           .arg(dbDefn->table(Brewtarget::SALTTABLE)->propertyToColumn(kpropDeleted))
+           .arg(Brewtarget::dbFalse());
+   getElements( tmp, query, Brewtarget::SALTTABLE, allSalts );
    return tmp;
 }
 
@@ -4653,6 +4721,7 @@ QMap<QString, std::function<BeerXMLElement*(QString name)> > Database::makeTable
    tmp.insert(ktableStyle,       [&](QString name) { return this->newStyle(name); } );
    tmp.insert(ktableYeast,       [&](QString name) { return this->newYeast(); } );
    tmp.insert(ktableWater,       [&](QString name) { return this->newWater(); } );
+   tmp.insert(ktableSalt,        [&](QString name) { return this->newSalt(); } );
 
    return tmp;
 }
@@ -4692,6 +4761,10 @@ void Database::updateDatabase(QString const& filename)
       foreach( TableSchema* tbl, dbDefn->baseTables() )
       {
          TableSchema* btTbl = dbDefn->btTable(tbl->dbTable());
+         // not all tables have bt* tables
+         if ( btTbl == nullptr ) {
+            continue;
+         }
          QSqlQuery qNewBtIng( QString("SELECT * FROM %1").arg(btTbl->tableName()), newSqldb );
 
          QSqlQuery qNewIng( newSqldb );
@@ -4700,6 +4773,7 @@ void Database::updateDatabase(QString const& filename)
          // Construct the big update query.
          QSqlQuery qUpdateOldIng( sqlDatabase() );
          QString updateString = tbl->generateUpdateRow();
+         qUpdateOldIng.prepare(updateString);
 
          QSqlQuery qOldBtIng( sqlDatabase() );
          qOldBtIng.prepare( QString("SELECT * FROM %1 WHERE %2=:btid").arg(btTbl->tableName()).arg(btTbl->keyName()) );
@@ -4710,20 +4784,22 @@ void Database::updateDatabase(QString const& filename)
                                   .arg(btTbl->keyName())
                                   .arg(btTbl->childIndexName()));
 
-         while( qNewBtIng.next() )
-         {
+         while( qNewBtIng.next() ) {
             btid = qNewBtIng.record().value(btTbl->keyName());
             newid = qNewBtIng.record().value(btTbl->childIndexName());
 
             qNewIng.bindValue(":id", newid);
+            // if we can't run the query
             if ( ! qNewIng.exec() )
                throw QString("Could not retrieve new ingredient: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
+
+            // if we can't get the result from the query
             if( !qNewIng.next() )
                throw QString("Could not advance query: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
 
-            foreach( QString pn, tbl->allPropertyNames()) {
+            foreach( QString pn, tbl->allColumnNames()) {
                // Bind the old values to the new unless it is deleted, which we always set to false
-               if ( pn == kpropDeleted ) {
+               if ( pn == kcolDeleted ) {
                   qUpdateOldIng.bindValue( QString(":%1").arg(pn), Brewtarget::dbFalse());
                }
                qUpdateOldIng.bindValue( QString(":%1").arg(pn), qNewIng.record().value(pn));
@@ -4734,15 +4810,15 @@ void Database::updateDatabase(QString const& filename)
 
             // Find the bt_<ingredient> record in the local table.
             qOldBtIng.bindValue( ":btid", btid );
-            if ( ! qOldBtIng.exec() )
+            if ( ! qOldBtIng.exec() ) {
                throw QString("Could not find btID (%1): %2 %3")
                         .arg(btid.toInt())
                         .arg(qOldBtIng.lastQuery())
                         .arg(qOldBtIng.lastError().text());
+            }
 
             // If the btid exists in the old bt_hop table, do an update.
-            if( qOldBtIng.next() )
-            {
+            if( qOldBtIng.next() ) {
                oldid = qOldBtIng.record().value( btTbl->keyName() );
                qOldBtIng.finish();
 
@@ -4790,8 +4866,7 @@ void Database::updateDatabase(QString const& filename)
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
       sqlDatabase().rollback();
-      blockSignals(false);
-      throw;
+      abort();
    }
 }
 
