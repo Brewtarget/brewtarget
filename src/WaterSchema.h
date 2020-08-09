@@ -17,9 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _WATERTABLESCHEMA_H
-#define _WATERTABLESCHEMA_H
+#ifndef _WATERSCHEMA_H
+#define _WATERSCHEMA_H
 
+#include <QString>
 // Columns for the yeast table
 // What isn't here (like name) is defined in TableSchemaConstants
 static const QString kcolWaterCalcium("calcium");
@@ -28,17 +29,25 @@ static const QString kcolWaterSulfate("sulfate");
 static const QString kcolWaterChloride("chloride");
 static const QString kcolWaterSodium("sodium");
 static const QString kcolWaterMagnesium("magnesium");
+static const QString kcolWaterAlkalinity("alkalinity");
+static const QString kcolWaterMashRO("mash_ro");
+static const QString kcolWaterSpargeRO("sparge_ro");
+static const QString kcolWaterAsHCO3("as_hco3");
+static const QString kcolWaterType("wtype");
 
 // properties for objects
-static const QString kpropCalcium("calcium");
-static const QString kpropBiCarbonate("bicarbonate");
-static const QString kpropSulfate("sulfate");
-static const QString kpropChloride("chloride");
-static const QString kpropSodium("sodium");
-static const QString kpropMagnesium("magnesium");
+static const QString kpropCalcium("calcium_ppm");
+static const QString kpropBiCarbonate("bicarbonate_ppm");
+static const QString kpropSulfate("sulfate_ppm");
+static const QString kpropChloride("chloride_ppm");
+static const QString kpropSodium("sodium_ppm");
+static const QString kpropMagnesium("magnesium_ppm");
+static const QString kpropAlkalinity("alkalinity");
+static const QString kpropMashRO("mashRO");
+static const QString kpropSpargeRO("spargeRO");
+static const QString kpropAsHCO3("alkalinityAsHCO3");
 
 // XML properties
-// Note -- no XML props for type, form and flocculation
 static const QString kxmlPropCalcium("CALCIUM");
 static const QString kxmlPropBiCarbonate("BICARBONATE");
 static const QString kxmlPropSulfate("SULFATE");
@@ -46,4 +55,4 @@ static const QString kxmlPropChloride("CHLORIDE");
 static const QString kxmlPropSodium("SODIUM");
 static const QString kxmlPropMagnesium("MAGNESIUM");
 
-#endif // _WATERTABLESCHEMA_H
+#endif // _WATERSCHEMA_H

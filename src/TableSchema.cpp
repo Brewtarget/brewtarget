@@ -35,6 +35,7 @@
 #include "RecipeSchema.h"
 #include "YeastSchema.h"
 #include "WaterSchema.h"
+#include "SaltSchema.h"
 #include "BrewnoteSchema.h"
 #include "SettingsSchema.h"
 
@@ -655,6 +656,9 @@ void TableSchema::defineTable()
       case Brewtarget::WATERTABLE:
          defineWaterTable();
          break;
+      case Brewtarget::SALTTABLE:
+         defineSaltTable();
+         break;
       case Brewtarget::BT_EQUIPTABLE:
          defineBtTable(kcolEquipmentId, Brewtarget::EQUIPTABLE);
          break;
@@ -714,6 +718,9 @@ void TableSchema::defineTable()
          break;
       case Brewtarget::WATERINRECTABLE:
          defineInRecipeTable(kcolWaterId, Brewtarget::WATERTABLE);
+         break;
+      case Brewtarget::SALTINRECTABLE:
+         defineInRecipeTable(kcolSaltId, Brewtarget::SALTTABLE);
          break;
       case Brewtarget::YEASTINRECTABLE:
          defineInRecipeTable(kcolYeastId, Brewtarget::YEASTTABLE);
@@ -1162,11 +1169,43 @@ void TableSchema::defineWaterTable()
    m_properties[kpropChloride]    = new PropertySchema( kpropChloride,    kcolWaterChloride,    kxmlPropChloride,    QString("real"),    QVariant(0.0));
    m_properties[kpropMagnesium]   = new PropertySchema( kpropMagnesium,   kcolWaterMagnesium,   kxmlPropMagnesium,   QString("real"),    QVariant(0.0));
    m_properties[kpropPH]          = new PropertySchema( kpropPH,          kcolPH,               kxmlPropPH,          QString("real"),    QVariant(0.0));
+   m_properties[kpropAlkalinity]  = new PropertySchema( kpropAlkalinity,  kcolWaterAlkalinity,  QString(),           QString("real"),    QVariant(0.0));
+   m_properties[kpropType]        = new PropertySchema( kpropType,        kcolWaterType,        QString(),           QString("int"),     QVariant(0));
+   m_properties[kpropMashRO]      = new PropertySchema( kpropMashRO,      kcolWaterMashRO,      QString(),           QString("real"),    QVariant(0.0));
+   m_properties[kpropSpargeRO]    = new PropertySchema( kpropSpargeRO,    kcolWaterSpargeRO,    QString(),           QString("real"),    QVariant(0.0));
+   m_properties[kpropAsHCO3]      = new PropertySchema( kpropAsHCO3,      kcolWaterAsHCO3,      QString(),           QString("boolean"), QVariant(true));
 
    m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
    m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,          QString(),           QString("text"),    QString("''"));
+   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,           QString(),           QString("text"),    QString("''"));
 
+}
+
+void TableSchema::defineSaltTable()
+{
+   m_type = BASE;
+   m_className = QString("Salt");
+   m_inRecTable = Brewtarget::SALTINRECTABLE;
+
+   m_key                        = new PropertySchema();
+   m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
+   m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
+
+   // These are defined in the global file.
+   m_properties[kpropName]     = new PropertySchema( kpropName,     kcolName,         QString(), QString("text"),    QString("''"), QString("not null"));
+   m_properties[kpropAmount]   = new PropertySchema( kpropAmount,   kcolAmount,       QString(), QString("real"),    QVariant(0.0));
+   m_properties[kpropAmtIsWgt] = new PropertySchema( kpropAmtIsWgt, kcolSaltAmtIsWgt, QString(), QString("boolean"), QVariant(true));
+   m_properties[kpropPctAcid]  = new PropertySchema( kpropPctAcid,  kcolSaltPctAcid,  QString(), QString("real"),    QVariant(0.0));
+   m_properties[kpropIsAcid]   = new PropertySchema( kpropIsAcid,   kcolSaltIsAcid,   QString(), QString("boolean"), QVariant(false));
+
+   m_properties[kpropType]     = new PropertySchema( kpropType,    kcolSaltType,  QString(), QString("int"),     QVariant(0));
+   m_properties[kpropAddTo]    = new PropertySchema( kpropAddTo,   kcolSaltAddTo, QString(), QString("int"),     QVariant(0));
+
+   m_properties[kpropDisplay]  = new PropertySchema( kpropDisplay, kcolDisplay,   QString(), QString("boolean"), QVariant(true));
+   m_properties[kpropDeleted]  = new PropertySchema( kpropDeleted, kcolDeleted,   QString(), QString("boolean"), QVariant(false));
+   m_properties[kpropFolder]   = new PropertySchema( kpropFolder,  kcolFolder,    QString(), QString("text"),    QString("''"));
+
+   m_foreignKeys[kpropMiscId]  = new PropertySchema( kpropMiscId, kcolMiscId, QString("integer"), Brewtarget::MISCTABLE);
 }
 
 void TableSchema::defineChildTable(Brewtarget::DBTable table)

@@ -1,7 +1,6 @@
 /*
- * WaterEditor.h is part of Brewtarget, and is Copyright the following
+ * WaterButton.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
- * - Jeff Bailey <skydvr38@verizon.net>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -18,44 +17,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WATEREDITOR_H
-#define WATEREDITOR_H
+#ifndef _WATERBUTTON_H
+#define _WATERBUTTON_H
 
-#include <QDialog>
+#include <QPushButton>
 #include <QMetaProperty>
 #include <QVariant>
-#include "ui_waterEditor.h"
+#include "water.h"
 
 // Forward declarations.
-class Water;
+class Recipe;
+class QWidget;
 
 /*!
- * \class WaterEditor
- * \author Philip G. Lee
+ * \class WaterButton
+ * \author Mik Firestone (mikfire@fastmail.com)
  *
- * \brief View/controller class for modifying water records.
+ * \brief This is a view class that displays the name of an water.
  */
-class WaterEditor : public QDialog, public Ui::waterEditor
+class WaterButton : public QPushButton
 {
-    Q_OBJECT
+   Q_OBJECT
+
+
 public:
-    WaterEditor(QWidget *parent = nullptr);
-    virtual ~WaterEditor() {}
 
-    /*!
-     * Sets the water we want to observe.
-     */
-    void setWater(Water* water);
-    void newWater(QString folder);
+   WaterButton(QWidget* parent = nullptr);
+   virtual ~WaterButton(){}
 
- public slots:
-    void showChanges(QMetaProperty* prop = nullptr);
-    void saveAndClose();
-    void changed(QMetaProperty,QVariant);
-    void clearAndClose();
+   //! Observe a recipe's water.
+   void setRecipe(Recipe* recipe);
+   //! Observe a particular water.
+   void setWater(Water* water);
+
+private slots:
+   void recChanged(QMetaProperty,QVariant);
+   void waterChanged(QMetaProperty,QVariant);
 
 private:
-    Water* obs; // Observed water.
+   Recipe* m_rec;
+   Water* m_water;
 };
 
-#endif // WATEREDITOR_H
+#endif

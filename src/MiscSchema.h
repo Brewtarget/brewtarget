@@ -17,9 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QString>
+
 #ifndef _MISCTABLESCHEMA_H
 #define _MISCTABLESCHEMA_H
-
 // Columns for the misc table
 // Everything else is globally defined. A little depressing, actually
 static const QString kcolMiscType("mtype");

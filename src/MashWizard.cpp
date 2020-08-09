@@ -169,8 +169,7 @@ void MashWizard::wizardry()
    double lauterDeadspace = 0.0;
 
    // If we have an equipment, utilize the custom absorption and boiling temp.
-   if( recObs->equipment() != nullptr )
-   {
+   if( recObs->equipment() != nullptr ) {
       absorption_LKg = recObs->equipment()->grainAbsorption_LKg();
       boilingPoint_c = recObs->equipment()->boilingPoint_c();
       lauterDeadspace = recObs->equipment()->lauterDeadspace_l();
@@ -195,12 +194,12 @@ void MashWizard::wizardry()
    // Find any batch sparges and remove them for now.
    for( i = 0; i < steps.size(); ++i) {
       MashStep* step = steps[i];
-      // NOTE: For backwards compatibility, the Final Batch Sparge comparison
-      // must be allowed. No matter how much we desire otherwise.
-      if( step->isSparge() || step->name() == "Final Batch Sparge" )
+      if( step->isSparge() ) {
          Database::instance().removeFrom(mash,step);
-      else
+      }
+      else {
           tmp.append(step);
+      }
    }
 
    steps = tmp;
@@ -235,8 +234,7 @@ void MashWizard::wizardry()
    tw = MC/MCw * (tf-t1) + (mash->tunSpecificHeat_calGC()*mash->tunWeight_kg())/MCw * (tf-mash->tunTemp_c()) + tf;
 
    // Can't have water above boiling.
-   if( tw > boilingPoint_c )
-   {
+   if( tw > boilingPoint_c ) {
       QMessageBox::information(this,
                                tr("Mash too thick"),
                                tr("Your mash is too thick for desired temp. at first step."));
@@ -255,8 +253,9 @@ void MashWizard::wizardry()
    for( i = 1; i < steps.size(); ++i ) {
       mashStep = steps[i];
 
-      if( mashStep->isTemperature() )
+      if( mashStep->isTemperature() ) {
          continue;
+      }
       else if( mashStep->isDecoction() ) {
          double m_w, m_g, m_e, r;
          double c_w, c_g, c_e;
@@ -312,7 +311,7 @@ void MashWizard::wizardry()
          t1 = mash->grainTemp_c();
       }
 
-      double targetWortFromMash= recObs->targetTotalMashVol_l();
+      double targetWortFromMash= recObs->targetTotalMashVol_l() + lauterDeadspace;
 
       massWater = (targetWortFromMash - otherMashStepTotal)*Algorithms::getWaterDensity_kgL(0);
 
@@ -337,6 +336,7 @@ void MashWizard::wizardry()
    double spargeWater_l = recObs->targetTotalMashVol_l() - recObs->mash()->totalMashWater_l();
 
    // If I've done my math right, we should never get here on nosparge
+   // not sure why I am inferring this when I could just check the button group?
    if( spargeWater_l >= 0.001 )
    {
       spargeWater_l += lauterDeadspace;

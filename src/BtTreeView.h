@@ -39,6 +39,7 @@ class Misc;
 class Yeast;
 class BrewNote;
 class Style;
+class Water;
 
 /*!
  * \class BtTreeItem
@@ -85,6 +86,8 @@ public:
    Style* style(const QModelIndex &index) const;
    //! \brief returns the brewnote at \c index
    BrewNote* brewNote(const QModelIndex &index) const;
+   //! \brief returns the water at \c index
+   Water* water(const QModelIndex &index) const;
 
    //! \brief returns the folder at \c index
    BtFolder* folder(const QModelIndex &index) const;
@@ -99,7 +102,7 @@ public:
    //! \brief gets the type of the item at \c index.
    int type(const QModelIndex &index);
 
-   //! returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
+   //! \brief returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
    bool multiSelected();
 
    // Another try at drag and drop
@@ -116,6 +119,11 @@ public:
    //! \brief creates a context menu based on the type of tree
    void setupContextMenu(QWidget* top, QWidget* editor );
 
+   //! \brief sets a new filter
+   void setFilter(BtTreeFilterProxyModel* newFilter);
+   //! \brief gets the current filter
+   BtTreeFilterProxyModel* filter() const;
+
    void deleteSelected(QModelIndexList selected);
    void copySelected(QModelIndexList selected);
    // Friend classes. For the most part, the children don't do much beyond
@@ -127,6 +135,7 @@ public:
    friend class MiscTreeView;
    friend class YeastTreeView;
    friend class StyleTreeView;
+   friend class WaterTreeView;
 
 public slots:
    void newIngredient();
@@ -136,7 +145,7 @@ private slots:
 
 private:
    BtTreeModel* _model;
-   BtTreeFilterProxyModel* filter;
+   BtTreeFilterProxyModel* _filter;
    BtTreeModel::TypeMasks _type;
    QMenu* _contextMenu, *subMenu;
    QPoint dragStart;
@@ -238,4 +247,16 @@ public:
 
 };
 
+//!
+// \class WaterTreeView
+// \brief subclasses BtTreeView to only show waters.
+class WaterTreeView : public BtTreeView
+{
+   Q_OBJECT
+public:
+   //! \brief Constructs the tree view, sets up the filter proxy and sets a
+   // few options on the tree that can only be set after the model
+   WaterTreeView(QWidget *parent = nullptr);
+
+};
 #endif /* BREWTARGETTREEVIEW_H_ */

@@ -135,6 +135,8 @@ SET( brewtarget_SRCS
     ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeFormatter.cpp
     ${SRCDIR}/RefractoDialog.cpp
+    ${SRCDIR}/salt.cpp
+    ${SRCDIR}/SaltTableModel.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SgDensityUnitSystem.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
@@ -158,8 +160,12 @@ SET( brewtarget_SRCS
     ${SRCDIR}/USWeightUnitSystem.cpp
     ${SRCDIR}/water.cpp
     ${SRCDIR}/WaterTableModel.cpp
+    ${SRCDIR}/WaterListModel.cpp
     ${SRCDIR}/WaterTableWidget.cpp
+    ${SRCDIR}/WaterButton.cpp
     ${SRCDIR}/WaterEditor.cpp
+    ${SRCDIR}/WaterDialog.cpp
+    ${SRCDIR}/WaterSortFilterProxyModel.cpp
     ${SRCDIR}/yeast.cpp
     ${SRCDIR}/YeastDialog.cpp
     ${SRCDIR}/YeastEditor.cpp
@@ -199,6 +205,7 @@ SET( brewtarget_UIS
     ${UIDIR}/timerMainDialog.ui
     ${UIDIR}/timerWidget.ui
     ${UIDIR}/waterEditor.ui
+    ${UIDIR}/waterDialog.ui
     ${UIDIR}/yeastEditor.ui
     ${UIDIR}/mashDesigner.ui
     ${UIDIR}/pitchDialog.ui
@@ -271,6 +278,8 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h
     ${SRCDIR}/RefractoDialog.h
+    ${SRCDIR}/salt.h
+    ${SRCDIR}/SaltTableModel.h
     ${SRCDIR}/ScaleRecipeTool.h
     ${SRCDIR}/StrikeWaterDialog.h
     ${SRCDIR}/StyleButton.h
@@ -282,9 +291,13 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/TimerMainDialog.h
     ${SRCDIR}/TimerWidget.h
     ${SRCDIR}/unit.h
+    ${SRCDIR}/WaterListModel.h
     ${SRCDIR}/WaterTableModel.h
     ${SRCDIR}/WaterTableWidget.h
+    ${SRCDIR}/WaterButton.h
     ${SRCDIR}/WaterEditor.h
+    ${SRCDIR}/WaterDialog.h
+    ${SRCDIR}/WaterSortFilterProxyModel.h
     ${SRCDIR}/YeastDialog.h
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
@@ -312,6 +325,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/MiscSchema.h
     ${SRCDIR}/PropertySchema.h
     ${SRCDIR}/RecipeSchema.h
+    ${SRCDIR}/SaltSchema.h
     ${SRCDIR}/SettingsSchema.h
     ${SRCDIR}/StyleSchema.h
     ${SRCDIR}/TableSchema.h
