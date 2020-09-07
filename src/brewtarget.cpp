@@ -1140,6 +1140,12 @@ void Brewtarget::logI( QString message )
 {
    log.info(message);
 }
+
+void Brewtarget::logD( QString message )
+{
+   log.debug(message);
+}
+
 /* Qt5 changed how QString::toDouble() works in that it will always convert
    in the C locale. We are instructed to use QLocale::toDouble instead, except
    that will never fall back to the C locale. This doesn't really work for us,
