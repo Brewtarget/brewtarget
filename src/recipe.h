@@ -355,7 +355,8 @@ public:
 
 signals:
    //! \brief Emitted when \c name() changes.
-   void changedName(const QString&);
+   // Declared in Base Class BeerXMLElement, should not be overloaded
+   //void changedName(const QString&);
 
 public slots:
    void acceptEquipChange(QMetaProperty prop, QVariant val);
