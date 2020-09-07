@@ -3580,7 +3580,7 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
                element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), stringVal);
                break;
             default:
-               Brewtarget::logW("Database::fromXML: don't understand property type.");
+               Brewtarget::logW("Database::fromXML(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode): don't understand property type.");
                break;
          }
          // Not sure if we should keep processing or just dump?
@@ -3658,7 +3658,7 @@ void Database::fromXml(BeerXMLElement* element, QDomNode const& elementNode)
                element->setProperty(pTag.toStdString().c_str(), stringVal);
                break;
             default:
-               Brewtarget::logW("Database::fromXML: don't understand property type.");
+               Brewtarget::logW(QString("Database::fromXML(BeerXMLElement* element, QDomNode const& elementNode): don't understand property type. xmlTag=%1").arg(xmlTag));
                break;
          }
          // Not sure if we should keep processing or just dump?
@@ -3822,7 +3822,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
          }
 
          if ( ! ret->isValid() ) {
-            Brewtarget::logW( QString("Could convert a recognized type") );
+            Brewtarget::logW( QString("Database::fermentableFromXml: Could convert a recognized type") );
          }
          insertFermentable(ret);
       }
@@ -3951,7 +3951,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
       if ( createdNew ) {
          fromXml( ret, node );
          if ( ! ret->isValid() ) {
-            throw QString("Error reading fermentable from XML");
+            throw QString("Error reading Hop from XML");
          }
 
          // Handle enums separately.
@@ -3997,7 +3997,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
          }
 
          if ( ! ret->isValid() ) {
-            Brewtarget::logW(QString("Could convert %1 to a recognized type"));
+            Brewtarget::logW(QString("Database::hopFromXml: Could convert %1 to a recognized type"));
          }
          insertHop(ret);
       }
@@ -4011,7 +4011,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
       if ( ! parent )
          sqlDatabase().rollback();
 
-      throw;
+      throw e;
    }
 
    if ( ! parent ) {
@@ -4086,6 +4086,11 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
       // First, get all the standard properties.
       fromXml( ret, node );
 
+      //Need to insert the Mash before the Mash steps to get
+      //the ID for foreign key contraint in Maststep table.
+      sqlDatabase().transaction();
+      insertMash(ret);
+
       // Now, get the individual mash steps.
       n = node.firstChildElement("MASH_STEPS");
       if( ! n.isNull() ) {
@@ -4102,8 +4107,6 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
          }
       }
 
-      sqlDatabase().transaction();
-      insertMash(ret);
       if ( parent ) {
          addToRecipe( parent, ret, true, false);
       }
@@ -4299,7 +4302,7 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
          }
 
          if ( ! ret->isValid() ) {
-            Brewtarget::logW(QString("Could convert %1 to a recognized type"));
+            Brewtarget::logW(QString("Database::miscFromXml: Could convert %1 to a recognized type"));
          }
          insertMisc(ret);
       }
@@ -4498,7 +4501,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
          // If translating the enums craps out, give a warning
          if (! ret->isValid() ) {
-            Brewtarget::logW(QString("Could convert %1 to a recognized type"));
+            Brewtarget::logW(QString("Database::styleFromXml: Could convert %1 to a recognized type"));
          }
          // we need to poke this into the database
          insertStyle(ret);
