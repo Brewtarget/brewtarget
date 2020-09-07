@@ -125,7 +125,8 @@ public:
 signals:
 
    //! \brief Emitted when \c name() changes.
-   void changedName(QString);
+   // Declared in Base Class BeerXMLElement, should not be overloaded
+   //void changedName(QString);
 
 private:
    Misc(Brewtarget::DBTable table, int key);

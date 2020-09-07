@@ -126,7 +126,8 @@ public:
 
 signals:
    
-   void changedName(QString);
+   // Declared in Base Class BeerXMLElement, should not be overloaded
+   //void changedName(QString);
    void changedBoilSize_l(double);
    void changedBatchSize_l(double);
    void changedTunVolume_l(double);

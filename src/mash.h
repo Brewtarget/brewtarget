@@ -120,7 +120,8 @@ public slots:
 
 signals:
    //! \brief Emitted when \c name() changes.
-   void changedName(QString);
+   // Declared in Base Class BeerXMLElement, should not be overloaded
+   //void changedName(QString);
 
    // Emitted when the number of steps change, or when you should call mashSteps() again.
    void mashStepsChanged();
