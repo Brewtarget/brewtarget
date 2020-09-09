@@ -95,15 +95,6 @@ public:
       UNIT
    };
 
-   //! \brief Logging settings for better bug reporting
-   enum LoggingLevel {
-      NOLOGGING,
-      INFO,
-      WARNING,
-      ERROR,
-      DEBUG
-   };
-
    enum RangeType {
       DENSITY,
       COLOR

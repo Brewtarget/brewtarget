@@ -472,7 +472,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
 
    readSystemOptions();
    loadMap();
-   log.changeDirectory(getUserDataDir());
+   log.changeDirectory();
 
    // Make sure all the necessary directories and files we need exist before starting.
    ensureDirectoriesExist();
@@ -1030,6 +1030,13 @@ void Brewtarget::readSystemOptions()
    //=======================Database type ================
    _dbType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::SQLITE).toInt());
 
+   //======================Logging options =======================
+   log.LoggingEnabled = option("LoggingEnabled", false).toBool();
+   log.LoggingLevel = log.getLogTypeFromString(QString(option("LoggingLevel", "INFO").toString()));
+   log.LogFilePath = QDir(option("LogFilePath", getConfigDir().absolutePath()).toString());
+   log.LoggingUseConfigDir = option("LoggingUseConfigDir", true).toBool();
+   if( log.LoggingUseConfigDir )
+      log.LogFilePath = getConfigDir().absolutePath();
 }
 
 void Brewtarget::saveSystemOptions()
@@ -1091,6 +1098,11 @@ void Brewtarget::saveSystemOptions()
          setOption("diastatic_power_unit", "WK");
          break;
    }
+
+   setOption("LoggingEnabled", log.LoggingEnabled);
+   setOption("LoggingLevel", log.getOptionStringFromLogType(log.LoggingLevel));
+   setOption("LogFilePath", log.LogFilePath.absolutePath());
+   setOption("LoggingUseConfigDir", log.LoggingUseConfigDir);
 }
 
 // the defaults come from readSystemOptions. This just fleshes out the hash
@@ -1128,22 +1140,26 @@ void Brewtarget::loadMap()
 
 void Brewtarget::logE( QString message )
 {
-   log.error(message);
+   if ( log.LoggingEnabled && log.LoggingLevel <= Log::LogType_ERROR)
+      log.error(message);
 }
 
 void Brewtarget::logW( QString message )
 {
-   log.warn(message);
+   if ( log.LoggingEnabled && log.LoggingLevel <= Log::LogType_WARNING)
+      log.warn(message);
 }
 
 void Brewtarget::logI( QString message )
 {
-   log.info(message);
+   if ( log.LoggingEnabled && log.LoggingLevel <= Log::LogType_INFO)
+      log.info(message);
 }
 
 void Brewtarget::logD( QString message )
 {
-   log.debug(message);
+   if ( log.LoggingEnabled && log.LoggingLevel <= Log::LogType_DEBUG)
+      log.debug(message);
 }
 
 /* Qt5 changed how QString::toDouble() works in that it will always convert
