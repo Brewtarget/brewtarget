@@ -112,10 +112,6 @@ public:
 
 signals:
 
-   //! \brief Emitted when \c name() changes.
-   // Declared in Base Class BeerXMLElement, should not be overloaded
-   //void changedName(QString);
-
 private:
    MashStep(Brewtarget::DBTable table, int key);
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);

@@ -145,9 +145,6 @@ public:
    static QString classNameStr();
 
 signals:
-   //! \brief Emitted when \c name() changes.
-   // Declared in Base Class BeerXMLElement, should not be overloaded
-   //void changedName(QString);
 
 private:
    Style(Brewtarget::DBTable table, int key);
