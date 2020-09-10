@@ -153,9 +153,6 @@ public:
 
 signals:
 
-   //! \brief Emitted when \c name() changes.
-   void changedName(QString);
-
 private:
    Yeast(Brewtarget::DBTable table, int key);
    Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);

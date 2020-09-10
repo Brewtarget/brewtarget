@@ -178,9 +178,6 @@ public:
 
 signals:
 
-   //! \brief Emitted when \c name() changes.
-   void changedName(QString);
-
 private:
    Fermentable(Brewtarget::DBTable table, int key);
    Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec);

@@ -112,9 +112,6 @@ public:
 
 signals:
 
-   //! \brief Emitted when \c name() changes.
-   void changedName(QString);
-
 private:
    MashStep(Brewtarget::DBTable table, int key);
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);

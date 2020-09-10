@@ -119,9 +119,6 @@ public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
 
 signals:
-   //! \brief Emitted when \c name() changes.
-   void changedName(QString);
-
    // Emitted when the number of steps change, or when you should call mashSteps() again.
    void mashStepsChanged();
 

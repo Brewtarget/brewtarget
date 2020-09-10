@@ -120,9 +120,6 @@ public:
 
 signals:
 
-   //! \brief Emitted when \c name() changes.
-   void changedName(QString);
-
 private:
    Salt(Brewtarget::DBTable table, int key);
    Salt(Brewtarget::DBTable table, int key, QSqlRecord rec);

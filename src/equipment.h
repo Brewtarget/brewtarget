@@ -125,8 +125,6 @@ public:
    static QString classNameStr();
 
 signals:
-   
-   void changedName(QString);
    void changedBoilSize_l(double);
    void changedBatchSize_l(double);
    void changedTunVolume_l(double);

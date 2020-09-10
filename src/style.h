@@ -145,8 +145,6 @@ public:
    static QString classNameStr();
 
 signals:
-   //! \brief Emitted when \c name() changes.
-   void changedName(QString);
 
 private:
    Style(Brewtarget::DBTable table, int key);
