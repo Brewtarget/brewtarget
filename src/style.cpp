@@ -47,7 +47,7 @@ QString Style::classNameStr()
 
 // suitable for something that will be written to the db later
 Style::Style(QString t_name, bool cacheOnly)
-   : BeerXMLElement(Brewtarget::STYLETABLE, -1, t_name, true),
+   : Ingredient(Brewtarget::STYLETABLE, -1, t_name, true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -77,7 +77,7 @@ Style::Style(QString t_name, bool cacheOnly)
 // suitable for something that needs to be created in the db when the object is, but all the other
 // fields will be filled in later (shouldn't be used that much)
 Style::Style(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -106,7 +106,7 @@ Style::Style(Brewtarget::DBTable table, int key)
 
 // suitable for creating a Style from a database record
 Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_category(rec.value(kcolStyleCat).toString()),
      m_categoryNumber(rec.value(kcolStyleCatNum).toString()),
      m_styleLetter(rec.value(kcolStyleLetter).toString()),

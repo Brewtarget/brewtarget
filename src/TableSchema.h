@@ -31,6 +31,7 @@ class TableSchema : QObject
    friend class DatabaseSchemaHelper;
    friend class DatabaseSchema;
    friend class Database;
+   friend class BeerXML;
 
 public:
 

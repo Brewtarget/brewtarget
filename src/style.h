@@ -24,7 +24,7 @@
 
 #include <QString>
 #include <QStringList>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 // Forward declarations.
 class Style;
@@ -37,12 +37,13 @@ bool operator==(Style &s1, Style &s2);
  *
  * \brief Model for style records in the database.
  */
-class Style : public BeerXMLElement
+class Style : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "styles")
 
    friend class Database;
+   friend class BeerXML;
    friend class StyleEditor;
 public:
 

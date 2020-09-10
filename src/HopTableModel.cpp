@@ -90,7 +90,7 @@ void HopTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &BeerXMLElement::changed, this, &HopTableModel::changed );
+      connect( recObs, &Ingredient::changed, this, &HopTableModel::changed );
       addHops( recObs->hops() );
    }
 }

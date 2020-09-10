@@ -45,7 +45,7 @@ QString Misc::classNameStr()
 
 //============================CONSTRUCTORS======================================
 Misc::Misc(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
    m_useString(QString()),
@@ -62,7 +62,7 @@ Misc::Misc(Brewtarget::DBTable table, int key)
 }
 
 Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_typeString(rec.value(kcolMiscType).toString()),
    m_type(static_cast<Misc::Type>(types.indexOf(m_typeString))),
    m_useString(rec.value(kcolUse).toString()),
@@ -78,7 +78,7 @@ Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Misc::Misc(Misc & other) : BeerXMLElement(other),
+Misc::Misc(Misc & other) : Ingredient(other),
    m_typeString(other.m_typeString),
    m_type(other.m_type),
    m_useString(other.m_useString),
@@ -95,7 +95,7 @@ Misc::Misc(Misc & other) : BeerXMLElement(other),
 }
 
 Misc::Misc(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::MISCTABLE, -1, name, true),
+   : Ingredient(Brewtarget::MISCTABLE, -1, name, true),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
    m_useString(QString()),

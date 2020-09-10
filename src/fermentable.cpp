@@ -31,7 +31,7 @@
 
 #include "TableSchemaConst.h"
 #include "FermentableSchema.h"
-#define SUPER BeerXMLElement
+#define SUPER Ingredient
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
 
@@ -52,7 +52,7 @@ QString Fermentable::classNameStr()
 }
 
 Fermentable::Fermentable(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::FERMTABLE, -1, name, true),
+   : Ingredient(Brewtarget::FERMTABLE, -1, name, true),
      m_typeStr(QString()),
      m_type(static_cast<Fermentable::Type>(0)),
      m_amountKg(0.0),
@@ -77,7 +77,7 @@ Fermentable::Fermentable(QString name, bool cache)
 }
 
 Fermentable::Fermentable(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_typeStr(QString()),
      m_type(static_cast<Fermentable::Type>(0)),
      m_amountKg(0.0),
@@ -102,7 +102,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key)
 }
 
 Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_typeStr(rec.value(kcolFermType).toString()),
      m_type(static_cast<Fermentable::Type>(types.indexOf(m_typeStr))),
      m_amountKg(rec.value(kcolFermAmount).toDouble()),
@@ -127,7 +127,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Fermentable::Fermentable( Fermentable &other )
-        : BeerXMLElement( other ),
+        : Ingredient( other ),
      m_typeStr(other.m_typeStr),
      m_type(other.m_type),
      m_amountKg(other.m_amountKg),

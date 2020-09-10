@@ -47,7 +47,7 @@ QString MashStep::classNameStr()
 //==============================CONSTRUCTORS====================================
 
 MashStep::MashStep(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -63,7 +63,7 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
 }
 
 MashStep::MashStep(bool cache)
-   : BeerXMLElement(Brewtarget::MASHSTEPTABLE, -1, QString(), true),
+   : Ingredient(Brewtarget::MASHSTEPTABLE, -1, QString(), true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -79,7 +79,7 @@ MashStep::MashStep(bool cache)
 }
 
 MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
      m_typeStr(rec.value(kcolMashstepType).toString()),
      m_type(static_cast<MashStep::Type>(types.indexOf(m_typeStr))),
      m_infuseAmount_l(rec.value(kcolMashstepInfuseAmt).toDouble()),

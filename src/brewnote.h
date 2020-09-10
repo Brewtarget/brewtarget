@@ -28,7 +28,7 @@
 #include <QStringList>
 #include <QDate>
 
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 // Forward declarations;
 class Recipe;
@@ -42,10 +42,11 @@ bool operator==(BrewNote const& lhs, BrewNote const& rhs);
  *
  * \brief Model for a brewnote record, which records what you did on brewday.
  */
-class BrewNote : public BeerXMLElement
+class BrewNote : public Ingredient
 {
    Q_OBJECT
    friend class Database;
+   friend class BeerXML;
    friend bool operator<(BrewNote &lhs, BrewNote &rhs);
    friend bool operator==(BrewNote &lhs, BrewNote &rhs);
    

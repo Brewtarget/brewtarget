@@ -77,7 +77,7 @@ void YeastTableModel::addYeast(Yeast* yeast)
    int size = yeastObs.size();
    beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);
-   connect( yeast, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+   connect( yeast, &Ingredient::changed, this, &YeastTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
@@ -93,7 +93,7 @@ void YeastTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+      connect( recObs, &Ingredient::changed, this, &YeastTableModel::changed );
       addYeasts( recObs->yeasts() );
    }
 }
@@ -137,7 +137,7 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
       yeastObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+         connect( *i, &Ingredient::changed, this, &YeastTableModel::changed );
 
       endInsertRows();
    }

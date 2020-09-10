@@ -66,7 +66,7 @@ QString Hop::classNameStr()
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString()),
+   : Ingredient(table, key, QString()),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -92,7 +92,7 @@ Hop::Hop(Brewtarget::DBTable table, int key)
 }
 
 Hop::Hop(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::HOPTABLE, -1, name, true),
+   : Ingredient(Brewtarget::HOPTABLE, -1, name, true),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -118,7 +118,7 @@ Hop::Hop(QString name, bool cache)
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_useStr(rec.value(kcolUse).toString()),
      m_use(static_cast<Hop::Use>(uses.indexOf(m_useStr))),
      m_typeStr(rec.value(kcolHopType).toString()),
@@ -144,7 +144,7 @@ Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Hop::Hop( Hop & other )
-   : BeerXMLElement(other),
+   : Ingredient(other),
      m_useStr(other.m_useStr),
      m_use(other.m_use),
      m_typeStr(other.m_typeStr),

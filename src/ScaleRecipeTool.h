@@ -34,7 +34,7 @@
 #include <QLineEdit>
 
 // Forward declarations
-class BeerXMLSortProxyModel;
+class IngredientSortProxyModel;
 class Equipment;
 class EquipmentListModel;
 class Recipe;
@@ -62,7 +62,7 @@ private:
    Recipe* recObs;
    QButtonGroup scaleGroup;
    EquipmentListModel* equipListModel;
-   BeerXMLSortProxyModel* equipSortProxyModel;
+   IngredientSortProxyModel* equipSortProxyModel;
 };
 
 class ScaleRecipeIntroPage : public QWizardPage {

@@ -19,7 +19,7 @@
 
 #include "BtLineEdit.h"
 #include "brewtarget.h"
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 #include "UnitSystems.h"
 #include "UnitSystem.h"
 #include "unit.h"
@@ -203,7 +203,7 @@ void BtLineEdit::setText( double amount, int precision)
    QLineEdit::setText( displayAmount(amount,precision) );
 }
 
-void BtLineEdit::setText( BeerXMLElement* element, int precision )
+void BtLineEdit::setText( Ingredient* element, int precision )
 {
    double amount = 0.0;
    QString display;

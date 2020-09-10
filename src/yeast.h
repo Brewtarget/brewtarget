@@ -23,7 +23,7 @@
 #ifndef _YEAST_H
 #define _YEAST_H
 
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 #include <QString>
 #include <QStringList>
 
@@ -38,12 +38,13 @@ bool operator==(Yeast &y1, Yeast &y2);
  *
  * \brief Model for yeast records in the database.
  */
-class Yeast : public BeerXMLElement
+class Yeast : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "yeasts")
 
    friend class Database;
+   friend class BeerXML;
    friend class YeastDialog;
 public:
    //! \brief What beverage the yeast is for.

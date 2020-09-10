@@ -53,7 +53,7 @@ QString Yeast::classNameStr()
 
 //============================CONSTRUCTORS======================================
 Yeast::Yeast(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true ),
+   : Ingredient(table, key, QString(), true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -79,7 +79,7 @@ Yeast::Yeast(Brewtarget::DBTable table, int key)
 }
 
 Yeast::Yeast(QString name, bool cache )
-   : BeerXMLElement(Brewtarget::YEASTTABLE, -1, name, true ),
+   : Ingredient(Brewtarget::YEASTTABLE, -1, name, true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -105,7 +105,7 @@ Yeast::Yeast(QString name, bool cache )
 }
 
 Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_typeString(rec.value(kcolYeastType).toString()),
      m_type(static_cast<Yeast::Type>(types.indexOf(m_typeString))),
      m_formString(rec.value(kcolYeastForm).toString()),
@@ -130,7 +130,7 @@ Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Yeast::Yeast(Yeast & other) : BeerXMLElement(other),
+Yeast::Yeast(Yeast & other) : Ingredient(other),
      m_typeString(other.m_typeString),
      m_type(other.m_type),
      m_formString(other.m_formString),

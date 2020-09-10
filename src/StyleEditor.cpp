@@ -66,7 +66,7 @@ void StyleEditor::setStyle( Style* s )
    obsStyle = s;
    if( obsStyle )
    {
-      connect( obsStyle, &BeerXMLElement::changed, this, &StyleEditor::changed );
+      connect( obsStyle, &Ingredient::changed, this, &StyleEditor::changed );
       showChanges();
    }
 

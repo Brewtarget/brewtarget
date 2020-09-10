@@ -335,7 +335,7 @@ void BrewDayWidget::setRecipe(Recipe* rec)
    
    recObs = rec;
    if( recObs )
-      connect( recObs, &BeerXMLElement::changed, this, &BrewDayWidget::changed );
+      connect( recObs, &Ingredient::changed, this, &BrewDayWidget::changed );
    
    showChanges();
 }

@@ -38,7 +38,7 @@
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
-#include "BeerXMLSortProxyModel.h"
+#include "IngredientSortProxyModel.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    : QDialog(parent)
@@ -65,7 +65,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
 
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
-   equipmentSortProxyModel = new BeerXMLSortProxyModel(equipmentListModel);
+   equipmentSortProxyModel = new IngredientSortProxyModel(equipmentListModel);
    equipmentComboBox->setModel(equipmentSortProxyModel);
 
    obsEquip = nullptr;

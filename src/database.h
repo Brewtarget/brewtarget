@@ -46,7 +46,7 @@ class Database;
 #include <QDebug>
 #include <QRegExp>
 #include <QMap>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 #include "brewtarget.h"
 #include "recipe.h"
 #include "DatabaseSchema.h"
@@ -54,8 +54,8 @@ class Database;
 #include "TableSchemaConst.h"
 
 // Forward declarations
+class BeerXML;
 class BrewNote;
-//class BeerXMLElement;
 class Equipment;
 class Fermentable;
 class Hop;
@@ -69,30 +69,34 @@ class Water;
 class Yeast;
 class QThread;
 
+/*
 typedef struct
 {
    QString tableName; // Name of the table.
    QStringList propName; // List of BeerXML column names.
-   std::function<BeerXMLElement*(QString name)> newElement;
+   std::function<Ingredient*(QString name)> newElement;
 
-   // BeerXMLElement* (Database::*newElement)(int); // Function to make a new ingredient in this table.
+   // Ingredient* (Database::*newElement)(int); // Function to make a new ingredient in this table.
 } TableParams;
+*/
 
 /*!
  * \class Database
  * \author Philip G. Lee
  *
- * \brief Model for lists of all the BeerXMLElement items in the database.
+ * \brief Model for lists of all the Ingredient items in the database.
  *
  * This class is a singleton, meaning that there should only ever be one
  * instance of this floating around, and its purpose is to manage all of
- * the BeerXMLElements in the app. The Database should be the only way
+ * the Ingredients in the app. The Database should be the only way
  * we ever get pointers to BeerXML ingredients and the like. This is our
  * big model class.
  */
 class Database : public QObject
 {
    Q_OBJECT
+
+   friend class BeerXML;
 
 public:
 
@@ -120,7 +124,7 @@ public:
                                    QString const& password="brewtarget");
    bool loadSuccessful();
 
-   void updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify = true, bool transact = false );
+   void updateEntry( Ingredient* object, QString propName, QVariant value, bool notify = true, bool transact = false );
 
    //! \brief Get the contents of the cell specified by table/key/col_name
    QVariant get( Brewtarget::DBTable table, int key, QString col_name )
@@ -256,7 +260,7 @@ public:
    Salt* newSalt(Salt* other = nullptr);
    Yeast* newYeast(Yeast* other = nullptr);
 
-   int    insertElement(BeerXMLElement* ins);
+   int    insertElement(Ingredient* ins);
    int    insertEquipment(Equipment* ins);
    int    insertFermentable(Fermentable* ins);
    int    insertHop(Hop* ins);
@@ -289,7 +293,7 @@ public:
    int newInventory(TableSchema* schema);
 
    int getInventoryId(TableSchema* tbl, int key );
-   void setInventory(BeerXMLElement* ins, QVariant value, int invKey = 0, bool notify=true );
+   void setInventory(Ingredient* ins, QVariant value, int invKey = 0, bool notify=true );
 
    //! \returns The entire inventory for a table.
    QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
@@ -341,7 +345,7 @@ public:
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
-   void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing );
+   void removeIngredientFromRecipe( Recipe* rec, Ingredient* ing );
 
    // An odd ball I can't resolve quite yet. But I will.
    // This one isn't even needed. remove does it
@@ -431,7 +435,7 @@ public:
    Q_PROPERTY( QList<Salt*> salts READ salts /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false )
 
-   // Returns non-deleted BeerXMLElements.
+   // Returns non-deleted Ingredients.
    QList<BrewNote*> brewNotes();
    QList<Equipment*> equipments();
    QList<Fermentable*> fermentables();
@@ -472,20 +476,6 @@ public:
    QList<MashStep*> mashSteps(Mash const* parent);
 
    QString textFromValue(QVariant value, QString type);
-   // Export to BeerXML =======================================================
-   void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Hop* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Instruction* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Mash* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( MashStep* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Misc* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Recipe* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Style* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Water* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Yeast* a, QDomDocument& doc, QDomNode& parent );
-   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! Get the file where this database was loaded from.
    static QString getDbFileName();
@@ -504,6 +494,8 @@ public:
    void convertDatabase(QString const& Hostname, QString const& DbName,
                         QString const& Username, QString const& Password,
                         int Portnum, Brewtarget::DBTypes newType);
+
+   BeerXML* getBeerXml() { return m_beerxml; }
 
 signals:
    void changed(QMetaProperty prop, QVariant value);
@@ -573,6 +565,7 @@ private:
    bool converted;
    bool createFromScratch;
    bool schemaUpdated;
+   BeerXML* m_beerxml;
 
    // Don't know where to put this, so it goes here for right now
    bool loadSQLite();
@@ -596,7 +589,7 @@ private:
    //! Get the right database connection for the calling thread.
    static QSqlDatabase sqlDatabase();
 
-   //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
+   //! Helper to populate all* hashes. T should be a Ingredient subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       QSqlQuery q(sqlDatabase());
@@ -714,23 +707,6 @@ private:
     * \param xmlTagsToProperties is a hash from xml tags to meta property names.
     * \param elementNode is the root node of the element we are reading from.
     */
-   void fromXml(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
-   void fromXml(BeerXMLElement* element, QDomNode const& elementNode);
-
-   // Import from BeerXML =====================================================
-   BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );
-   Equipment* equipmentFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   Hop* hopFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   Instruction* instructionFromXml( QDomNode const& node, Recipe* parent );
-   Mash* mashFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   MashStep* mashStepFromXml( QDomNode const& node, Mash* parent );
-   Misc* miscFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   Recipe* recipeFromXml( QDomNode const& node );
-   Style* styleFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   Water* waterFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   Yeast* yeastFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    //! Hidden constructor.
    Database();
@@ -748,7 +724,7 @@ private:
    }
 
    //! Mark the \b object in \b table as deleted.
-   void deleteRecord( BeerXMLElement* object );
+   void deleteRecord( Ingredient* object );
 
    // Note -- this has to happen on a transactional boundary. We are touching
    // something like four tables, and just sort of hoping it all works.
@@ -756,7 +732,7 @@ private:
     * Create a \e copy (by default) of \b ing and add the copy to \b recipe where \b ing's
     * key is \b ingKeyName and the relational table is \b relTableName.
     *
-    * \tparam T the type of ingredient. Must inherit BeerXMLElement.
+    * \tparam T the type of ingredient. Must inherit Ingredient.
     * \param rec the recipe to add the ingredient to
     * \param ing the ingredient to add to the recipe
     * \param propName the Recipe property that will change when we add \c ing to it
@@ -770,7 +746,7 @@ private:
     */
    template<class T> T* addIngredientToRecipe(
       Recipe* rec,
-      BeerXMLElement* ing,
+      Ingredient* ing,
       bool noCopy = false,
       QHash<int,T*>* keyHash = 0,
       bool doNotDisplay = true,
@@ -812,7 +788,7 @@ private:
                               .arg(inrec->tableName())
                               .arg(inrec->inRecIndexName())
                               .arg(ing->_key)
-                              .arg(reinterpret_cast<BeerXMLElement*>(rec)->_key)
+                              .arg(reinterpret_cast<Ingredient*>(rec)->_key)
                               .arg(inrec->recipeIndexName());
          if (! q.exec(select) ) {
             throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
@@ -916,7 +892,7 @@ private:
 
    /*!
     * \brief Create a deep copy of the \b object.
-    * \em T must be a subclass of \em BeerXMLElement.
+    * \em T must be a subclass of \em Ingredient.
     * \returns a pointer to the new copy. You must manually emit the changed()
     * signal after a copy() call. Also, does not insert things magically into
     * allHop or allInstructions etc. hashes. This just simply duplicates a
@@ -925,7 +901,7 @@ private:
     * \param displayed is true if you want the \em displayed column set to true.
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
-   template<class T> T* copy( BeerXMLElement const* object, QHash<int,T*>* keyHash, bool displayed = true )
+   template<class T> T* copy( Ingredient const* object, QHash<int,T*>* keyHash, bool displayed = true )
    {
       int newKey;
       int i;
@@ -1013,7 +989,7 @@ private:
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
 
-   QMap<QString, std::function<BeerXMLElement*(QString name)> > makeTableParams();
+   QMap<QString, std::function<Ingredient*(QString name)> > makeTableParams();
 
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.

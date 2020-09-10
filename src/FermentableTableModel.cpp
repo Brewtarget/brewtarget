@@ -81,7 +81,7 @@ void FermentableTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &BeerXMLElement::changed, this, &FermentableTableModel::changed );
+      connect( recObs, &Ingredient::changed, this, &FermentableTableModel::changed );
       addFermentables( recObs->fermentables() );
    }
 }
@@ -118,7 +118,7 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    int size = fermObs.size();
    beginInsertRows( QModelIndex(), size, size );
    fermObs.append(ferm);
-   connect( ferm, &BeerXMLElement::changed, this, &FermentableTableModel::changed );
+   connect( ferm, &Ingredient::changed, this, &FermentableTableModel::changed );
    totalFermMass_kg += ferm->amount_kg();
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
@@ -144,7 +144,7 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
       {
-         connect( *i, &BeerXMLElement::changed, this, &FermentableTableModel::changed );
+         connect( *i, &Ingredient::changed, this, &FermentableTableModel::changed );
          totalFermMass_kg += (*i)->amount_kg();
       }
 

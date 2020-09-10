@@ -23,7 +23,7 @@
 #ifndef _MASH_H
 #define _MASH_H
 
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 // Forward declarations.
 class Mash;
@@ -37,12 +37,13 @@ bool operator==(Mash &m1, Mash &m2);
  *
  * \brief Model class for a mash record in the database.
  */
-class Mash : public BeerXMLElement
+class Mash : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashs")
 
    friend class Database;
+   friend class BeerXML;
    friend class MashDesigner;
    friend class MashEditor;
 public:

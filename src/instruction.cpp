@@ -32,7 +32,7 @@ QString Instruction::classNameStr()
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
@@ -43,7 +43,7 @@ Instruction::Instruction(Brewtarget::DBTable table, int key)
 }
 
 Instruction::Instruction(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
+   : Ingredient(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
@@ -54,7 +54,7 @@ Instruction::Instruction(QString name, bool cache)
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
      m_directions(rec.value(kcolInstructionDirections).toString()),
      m_hasTimer  (rec.value(kcolInstructionHasTimer).toBool()),
      m_timerValue(rec.value(kcolInstructionTimerValue).toString()),
