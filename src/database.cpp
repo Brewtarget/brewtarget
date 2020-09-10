@@ -1795,10 +1795,10 @@ int Database::insertElement(BeerXMLElement* ins)
    QSqlQuery q( sqlDatabase() );
 
    TableSchema* schema = dbDefn->table(ins->table());
-   QString insert = schema->generateInsertProperties(Brewtarget::dbType());
+   QString insertQ = schema->generateInsertProperties(Brewtarget::dbType());
    QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
-   q.prepare(insert);
+   q.prepare(insertQ);
 
    foreach (QString prop, allProps) {
       QVariant val_to_ins = ins->property(prop.toUtf8().data());
@@ -1813,7 +1813,7 @@ int Database::insertElement(BeerXMLElement* ins)
       if ( ! q.exec() ) {
          throw QString("could not insert a record into %1: %2")
                .arg(schema->tableName())
-               .arg(insert);
+               .arg(insertQ);
       }
 
       key = q.lastInsertId().toInt();
@@ -3237,6 +3237,7 @@ void Database::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
    node.appendChild(tmpElement);
 
    foreach (QString element, tbl->allPropertyNames()) {
+
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
          tmpElement = doc.createElement(tbl->propertyToXml(element));
          tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
@@ -3658,7 +3659,8 @@ void Database::fromXml(BeerXMLElement* element, QDomNode const& elementNode)
                element->setProperty(pTag.toStdString().c_str(), stringVal);
                break;
             default:
-               Brewtarget::logW(QString("Database::fromXML(BeerXMLElement* element, QDomNode const& elementNode): don't understand property type. xmlTag=%1").arg(xmlTag));
+               Brewtarget::logW(QString("%1: don't understand property type for %2, xmlTag=%3")
+                     .arg(Q_FUNC_INFO).arg(element->name()).arg(xmlTag));
                break;
          }
          // Not sure if we should keep processing or just dump?
@@ -3675,6 +3677,7 @@ void Database::fromXml(BeerXMLElement* element, QDomNode const& elementNode)
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
+   blockSignals(true);
    BrewNote* ret;
    QDateTime theDate;
 
@@ -3687,8 +3690,6 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
       if ( ! ret ) {
          QString error = "Could not create new brewnote.";
          Brewtarget::logE(QString(error));
-         QMessageBox::critical(nullptr, tr("Import error."),
-               error.append("\nUnable to create brew note."));
          return ret;
       }
       // Need to tell the brewnote not to perform the calculations
@@ -3699,8 +3700,10 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
       insertBrewnote(ret,parent);
    }
    catch (QString e) {
+      blockSignals(false);
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
    }
+   blockSignals(false);
    return ret;
 }
 
@@ -3822,7 +3825,8 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
          }
 
          if ( ! ret->isValid() ) {
-            Brewtarget::logW( QString("Database::fermentableFromXml: Could convert a recognized type") );
+            Brewtarget::logW( QString("Database::fermentableFromXml: Could convert %1 to a recognized type")
+                  .arg(n.firstChild().toText().nodeValue()));
          }
          insertFermentable(ret);
       }
@@ -3965,6 +3969,8 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->invalidate();
+               Brewtarget::logW(QString("Database::hopFromXml: Could convert %1 to a recognized type")
+                     .arg(n.firstChild().toText().nodeValue()));
             }
          }
 
@@ -3979,6 +3985,8 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->invalidate();
+               Brewtarget::logW(QString("Database::hopFromXml: Could convert %1 to a recognized type")
+                     .arg(n.firstChild().toText().nodeValue()));
             }
          }
 
@@ -3993,25 +4001,24 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->invalidate();
+               Brewtarget::logW(QString("Database::hopFromXml: Could convert %1 to a recognized type")
+                     .arg(n.firstChild().toText().nodeValue()));
             }
          }
 
-         if ( ! ret->isValid() ) {
-            Brewtarget::logW(QString("Database::hopFromXml: Could convert %1 to a recognized type"));
-         }
          insertHop(ret);
       }
 
       if( parent )
          addToRecipe( parent, ret, true );
    }
-   catch (QString e) {
+   catch (QString &e) {
       Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
       blockSignals(false);
       if ( ! parent )
          sqlDatabase().rollback();
 
-      throw e;
+      abort();
    }
 
    if ( ! parent ) {
@@ -4071,6 +4078,10 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
 
+   if ( name.isEmpty() ) {
+      name = "";
+   }
+
    try {
       ret = new Mash(name);
 
@@ -4101,8 +4112,6 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
             if ( ! temp->isValid() ) {
                QString error = QString("Error importing mash step %1").arg(temp->name());
                Brewtarget::logE(error);
-               QMessageBox::critical(nullptr, tr("Import error."),
-                  error.append("\nImporting as \"Infusion\"."));
             }
          }
       }
@@ -4160,8 +4169,14 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
 
          if ( ndx != -1 )
             ret->setType( static_cast<MashStep::Type>(ndx) );
-         else
+         else {
+            Brewtarget::logW( 
+                  tr("%1: Could not convert mashstep type %2 to known type")
+                  .arg(Q_FUNC_INFO)
+                  .arg(str)
+            );
             ret->invalidate();
+         }
       }
 
       insertMashStep(ret,parent);
@@ -4302,7 +4317,10 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
          }
 
          if ( ! ret->isValid() ) {
-            Brewtarget::logW(QString("Database::miscFromXml: Could convert %1 to a recognized type"));
+            Brewtarget::logW(
+                  QString("%1: Could convert %2 to a recognized type")
+                  .arg(Q_FUNC_INFO)
+                  .arg(n.firstChild().toText().nodeValue()));
          }
          insertMisc(ret);
       }
@@ -4501,7 +4519,8 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
          // If translating the enums craps out, give a warning
          if (! ret->isValid() ) {
-            Brewtarget::logW(QString("Database::styleFromXml: Could convert %1 to a recognized type"));
+            Brewtarget::logW(QString("Database::styleFromXml: Could convert %1 to a recognized type")
+                  .arg(n.firstChild().toText().nodeValue()));
          }
          // we need to poke this into the database
          insertStyle(ret);
@@ -4652,7 +4671,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->setForm( static_cast<Yeast::Form>(0) );
-               Brewtarget::logE(
+               Brewtarget::logW(
                      QString("Could not translate the form %1 in %2.  Please select an appropriate value once the yeast is imported")
                      .arg(tname)
                      .arg(name));

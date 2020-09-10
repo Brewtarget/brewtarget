@@ -20,6 +20,8 @@
 #ifndef _HOPTABLESCHEMA_H
 #define _HOPTABLESCHEMA_H
 
+#include <QString>
+
 // Columns for the hop table
 static const QString kcolHopForm("form");
 static const QString kcolHopType("htype");
@@ -55,8 +57,7 @@ static const QString kxmlPropCohumulone("COHUMULONE");
 static const QString kxmlPropMyrcene("MYRCENE");
 
 // These are not in BeerXML
-//const QString kxmlPropUse("USE");
-//const QString kxmlPropType("TYPE");
-//const QString kxmlPropForm("FORM");
+static const QString kxmlPropUse("USE");
+static const QString kxmlPropForm("FORM");
 //
 #endif // _HOPTABLESCHEMA_H

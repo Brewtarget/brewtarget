@@ -73,7 +73,7 @@ static const QString kpropAgeTemp("ageTemp_c");
 static const QString kpropDate("date");
 static const QString kpropPoints("points");
 static const QString kpropCarbVols("carbonation_vols");
-static const QString kpropForcedCarb("forcedCarb");
+static const QString kpropForcedCarb("forcedCarbonation");
 static const QString kpropPrimSugName("primingSugarName");
 static const QString kpropCarbTemp("carbonationTemp_c");
 static const QString kpropPrimSugEquiv("primingSugarEquiv");

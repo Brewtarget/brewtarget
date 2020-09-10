@@ -29,8 +29,8 @@ static const QString kcolInstructionCompleted("completed");
 static const QString kcolInstructionInterval("interval");
 
 static const QString kpropDirections("directions");
-static const QString kpropHasTimer("hastimer");
-static const QString kpropTimerValue("timervalue");
+static const QString kpropHasTimer("hasTimer");
+static const QString kpropTimerValue("timerValue");
 static const QString kpropCompleted("completed");
 static const QString kpropInterval("interval");
 

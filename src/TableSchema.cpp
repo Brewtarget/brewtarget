@@ -187,6 +187,14 @@ const QString TableSchema::propertyToXml(QString prop, Brewtarget::DBTypes type)
    if ( m_properties.contains(prop) ) {
       retval = m_properties.value(prop)->xmlName(selected);
    }
+   if ( retval.isEmpty() ) {
+      foreach( PropertySchema* p, m_properties.values() ) {
+         if ( p->propName(selected) == prop ) {
+            retval = p->xmlName(selected);
+         }
+      }
+   }
+
    return retval;
 }
 
@@ -758,7 +766,7 @@ void TableSchema::defineStyleTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropName]      = new PropertySchema( kpropName,     kpropName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropType]      = new PropertySchema( kpropType,     kcolStyleType,     QString(""),      QString("text"), QString("'Ale'"));
+   m_properties[kpropType]      = new PropertySchema( kpropType,     kcolStyleType,     kxmlPropType,     QString("text"), QString("'Ale'"));
    m_properties[kpropCat]       = new PropertySchema( kpropCat,      kcolStyleCat,      kxmlPropCat,      QString("text"), QString("''"));
    m_properties[kpropLetter]    = new PropertySchema( kpropLetter,   kcolStyleLetter,   kxmlPropLetter,   QString("text"), QString("''"));
    m_properties[kpropGuide]     = new PropertySchema( kpropGuide,    kcolStyleGuide,    kxmlPropGuide,    QString("text"), QString("''"));
@@ -878,13 +886,13 @@ void TableSchema::defineHopTable()
    m_properties[kpropName]          = new PropertySchema( kpropName,          kcolName,             kxmlPropName,          QString("text"), QString("''"), QString("not null"));
    m_properties[kpropNotes]         = new PropertySchema( kpropNotes,         kcolNotes,            kxmlPropNotes,         QString("text"), QString("''"));
    m_properties[kpropAmountKg]      = new PropertySchema( kpropAmountKg,      kcolAmount,           kxmlPropAmount,        QString("real"), QVariant(0.0));
-   m_properties[kpropUse]           = new PropertySchema( kpropUseString,     kcolUse,              QString(""),           QString("text"), QString("'Boil'"));
+   m_properties[kpropUse]           = new PropertySchema( kpropUseString,     kcolUse,              kxmlPropUse,           QString("text"), QString("'Boil'"));
    m_properties[kpropTime]          = new PropertySchema( kpropTime,          kcolTime,             kxmlPropTime,          QString("real"), QVariant(0.0));
    m_properties[kpropOrigin]        = new PropertySchema( kpropOrigin,        kcolOrigin,           QString(""),           QString("text"), QString("''"));
    m_properties[kpropSubstitutes]   = new PropertySchema( kpropSubstitutes,   kcolSubstitutes,      QString(""),           QString("text"), QString("''"));
    m_properties[kpropAlpha]         = new PropertySchema( kpropAlpha,         kcolHopAlpha,         kxmlPropAlpha,         QString("real"), QVariant(0.0));
-   m_properties[kpropType]          = new PropertySchema( kpropTypeString,    kcolHopType,          QString(""),           QString("text"), QString("'Boil'"));
-   m_properties[kpropForm]          = new PropertySchema( kpropFormString,    kcolHopForm,          QString(""),           QString("text"), QString("'Pellet'"));
+   m_properties[kpropType]          = new PropertySchema( kpropTypeString,    kcolHopType,          kxmlPropType,          QString("text"), QString("'Boil'"));
+   m_properties[kpropForm]          = new PropertySchema( kpropFormString,    kcolHopForm,          kxmlPropForm,          QString("text"), QString("'Pellet'"));
    m_properties[kpropBeta]          = new PropertySchema( kpropBeta,          kcolHopBeta,          kxmlPropBeta,          QString("real"), QVariant(0.0));
    m_properties[kpropHSI]           = new PropertySchema( kpropHSI,           kcolHopHSI,           kxmlPropHSI,           QString("real"), QVariant(0.0));
    m_properties[kpropHumulene]      = new PropertySchema( kpropHumulene,      kcolHopHumulene,      kxmlPropHumulene,      QString("real"), QVariant(0.0));
@@ -957,7 +965,7 @@ void TableSchema::defineMashstepTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    m_properties[kpropName]       = new PropertySchema( kpropName,       kcolName,               kxmlPropName,       QString("text"), QString("''"),QString("not null"));
-   m_properties[kpropType]       = new PropertySchema( kpropTypeString, kcolMashstepType,       QString(""),        QString("text"), QString("'Infusion'"));
+   m_properties[kpropType]       = new PropertySchema( kpropTypeString, kcolMashstepType,       kxmlPropStepType,   QString("text"), QString("'Infusion'"));
    m_properties[kpropInfuseAmt]  = new PropertySchema( kpropInfuseAmt,  kcolMashstepInfuseAmt,  kxmlPropInfuseAmt,  QString("real"), QVariant(0.0));
    m_properties[kpropStepTemp]   = new PropertySchema( kpropStepTemp,   kcolMashstepStepTemp,   kxmlPropStepTemp,   QString("real"), QVariant(67.0));
    m_properties[kpropStepTime]   = new PropertySchema( kpropStepTime,   kcolMashstepStepTime,   kxmlPropStepTime,   QString("real"), QVariant(0.0));
@@ -992,7 +1000,7 @@ void TableSchema::defineMiscTable()
    m_properties[kpropNotes]    = new PropertySchema( kpropNotes,      kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
    m_properties[kpropAmount]   = new PropertySchema( kpropAmount,     kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
    m_properties[kpropUse]      = new PropertySchema( kpropUseString,  kcolUse,          QString(""),      QString("text"), QString("'Boil'"));
-   m_properties[kpropTime]     = new PropertySchema( kpropTime,       kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
+   m_properties[kpropTime]     = new PropertySchema( kpropMiscTime,   kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
    m_properties[kpropType]     = new PropertySchema( kpropTypeString, kcolMiscType,     QString(""),      QString("text"), QString("'Other'"));
    m_properties[kpropAmtIsWgt] = new PropertySchema( kpropAmtIsWgt,   kcolMiscAmtIsWgt, kxmlPropAmtIsWgt, QString("boolean"), QVariant(true));
    m_properties[kpropUseFor]   = new PropertySchema( kpropUseFor,     kcolMiscUseFor,   kxmlPropUseFor,   QString("text"), QString("''"));
