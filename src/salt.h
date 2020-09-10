@@ -120,10 +120,6 @@ public:
 
 signals:
 
-   //! \brief Emitted when \c name() changes.
-   // Declared in Base Class BeerXMLElement, should not be overloaded
-   //void changedName(QString);
-
 private:
    Salt(Brewtarget::DBTable table, int key);
    Salt(Brewtarget::DBTable table, int key, QSqlRecord rec);
