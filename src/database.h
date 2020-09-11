@@ -69,17 +69,6 @@ class Water;
 class Yeast;
 class QThread;
 
-/*
-typedef struct
-{
-   QString tableName; // Name of the table.
-   QStringList propName; // List of BeerXML column names.
-   std::function<Ingredient*(QString name)> newElement;
-
-   // Ingredient* (Database::*newElement)(int); // Function to make a new ingredient in this table.
-} TableParams;
-*/
-
 /*!
  * \class Database
  * \author Philip G. Lee

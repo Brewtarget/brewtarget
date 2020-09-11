@@ -181,7 +181,9 @@ bool Database::loadSQLite()
    }
 
    // Open SQLite db.
-   sqldb = QSqlDatabase::addDatabase("QSQLITE");
+   QString conName = QString("0x%1").arg(reinterpret_cast<uintptr_t>(QThread::currentThread()), 0, 16);
+
+   sqldb = QSqlDatabase::addDatabase("QSQLITE",conName);
    sqldb.setDatabaseName(dbFileName);
    dbIsOpen = sqldb.open();
    dbConName = sqldb.connectionName();
@@ -216,7 +218,7 @@ bool Database::loadSQLite()
          createFromScratch = sqldb.tables().size() == 0;
 
          // Associate this db with the current thread.
-         _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
+         _threadToConnection.insert(QThread::currentThread(), dbConName);
       }
       catch(QString e) {
          Brewtarget::logE( QString("%1: %2 (%3)").arg(Q_FUNC_INFO).arg(e).arg(pragma.lastError().text()));
@@ -256,7 +258,9 @@ bool Database::loadPgSQL()
       }
    }
 
-   sqldb = QSqlDatabase::addDatabase("QPSQL","brewtarget");
+   QString conName = QString("0x%1").arg(reinterpret_cast<uintptr_t>(QThread::currentThread()), 0, 16);
+
+   sqldb = QSqlDatabase::addDatabase("QPSQL",conName);
    sqldb.setHostName( dbHostname );
    sqldb.setDatabaseName( dbName );
    sqldb.setUserName( dbUsername );
@@ -292,12 +296,10 @@ bool Database::load()
    schemaUpdated=false;
    loadWasSuccessful = false;
 
-   if ( Brewtarget::dbType() == Brewtarget::PGSQL )
-   {
+   if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
       dbIsOpen = loadPgSQL();
    }
-   else
-   {
+   else {
       dbIsOpen = loadSQLite();
    }
 
@@ -308,14 +310,12 @@ bool Database::load()
    sqldb = sqlDatabase();
 
    // This should work regardless of the db being used.
-   if( createFromScratch )
-   {
-         bool success = DatabaseSchemaHelper::create(sqldb,dbDefn,Brewtarget::dbType());
-         if( !success )
-         {
-            Brewtarget::logE("DatabaseSchemaHelper::create() failed");
-            return success;
-         }
+   if( createFromScratch ) {
+      bool success = DatabaseSchemaHelper::create(sqldb,dbDefn,Brewtarget::dbType());
+      if( !success ) {
+         Brewtarget::logE("DatabaseSchemaHelper::create() failed");
+         return success;
+      }
    }
 
    // Update the database if need be. This has to happen before we do anything
@@ -323,8 +323,7 @@ bool Database::load()
    bool schemaErr = false;
    schemaUpdated = updateSchema(&schemaErr);
 
-   if( schemaErr )
-   {
+   if( schemaErr ) {
       if (Brewtarget::isInteractive()) {
          QMessageBox::critical(
             nullptr,
@@ -336,13 +335,12 @@ bool Database::load()
    }
 
    // See if there are new ingredients that we need to merge from the data-space db.
+   // Don't do this if we JUST copied the dataspace database.
    if( dataDbFile.fileName() != dbFile.fileName()
-      && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
+      && ! Brewtarget::userDatabaseDidNotExist
       && QFileInfo(dataDbFile).lastModified() > Brewtarget::lastDbMergeRequest )
    {
-
-      if(
-         Brewtarget::isInteractive() &&
+      if( Brewtarget::isInteractive() &&
          QMessageBox::question(
             nullptr,
             tr("Merge Database"),
@@ -553,13 +551,16 @@ QSqlDatabase Database::sqlDatabase()
 
 void Database::unload()
 {
-
-
    // selectSome saves context. If we close the database before we tear that
    // context down, core gets dumped
    selectSome.clear();
-   QSqlDatabase::database( dbConName, false ).close();
-   QSqlDatabase::removeDatabase( dbConName );
+
+   // so far, it seems we only create one connection to the db. This is
+   // likely overkill
+   foreach( QString conName, _threadToConnection.values() ) {
+      QSqlDatabase::database( conName, false ).close();
+      QSqlDatabase::removeDatabase( conName );
+   }
 
    if (loadWasSuccessful && Brewtarget::dbType() == Brewtarget::SQLITE )
    {

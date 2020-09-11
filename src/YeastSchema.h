@@ -63,5 +63,6 @@ static const QString kxmlPropBestFor("BEST_FOR");
 static const QString kxmlPropTimesCultd("TIMES_CULTURED");
 static const QString kxmlPropMaxReuse("MAX_REUSE");
 static const QString kxmlPropAddToSec("ADD_TO_SECONDARY");
+static const QString kxmlPropFloc("FLOCCULATION");
 
 #endif // _YEASTTABLESCHEMA_H

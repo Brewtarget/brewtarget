@@ -63,6 +63,8 @@ public:
    Q_PROPERTY( QString styleGuide READ styleGuide WRITE setStyleGuide /*NOTIFY changed*/ /*changedStyleGuide*/ )
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief The untranslated \c Type string.
+   Q_PROPERTY( QString typeString READ typeString /* WRITE setUse NOTIFY changed*/ /*changedUse*/ )
    //! \brief The minimum og.
    Q_PROPERTY( double ogMin READ ogMin WRITE setOgMin /*NOTIFY changed*/ /*changedOgMin*/ )
    //! \brief The maximum og.
