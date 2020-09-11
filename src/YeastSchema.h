@@ -20,6 +20,7 @@
 #ifndef _YEASTTABLESCHEMA_H
 #define _YEASTTABLESCHEMA_H
 
+#include <QString>
 // Columns for the yeast table
 // What isn't here (like name) is defined in TableSchemaConstants
 static const QString kcolYeastType("ytype");

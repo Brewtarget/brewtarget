@@ -29,6 +29,7 @@ static const QString kcolMiscUseFor("use_for");
 
 static const QString kpropUseFor("useFor");
 static const QString kpropTypeStr("typeString");
+static const QString kpropMiscTime("time");
 
 static const QString kxmlPropUseFor("USE_FOR");
 #endif // _MISCTABLESCHEMA_H

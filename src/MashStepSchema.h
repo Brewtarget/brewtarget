@@ -20,6 +20,7 @@
 #ifndef _MASHSTEPTABLESCHEMA_H
 #define _MASHSTEPTABLESCHEMA_H
 
+#include <QString>
 // Columns for the mash table
 static const QString kcolMashstepType("mstype");
 static const QString kcolMashstepInfuseAmt("infuse_amount");
@@ -47,4 +48,5 @@ static const QString kxmlPropRampTime("RAMP_TIME");
 static const QString kxmlPropEndTemp("END_TEMP");
 static const QString kxmlPropInfuseTemp("INFUSE_TEMP");
 static const QString kxmlPropDecoctAmt("DECOCTION_AMOUNT");
+static const QString kxmlPropStepType("STEP_TYPE");
 #endif // _MASHSTEPTABLESCHEMA_H
