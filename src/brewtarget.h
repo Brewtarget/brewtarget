@@ -194,6 +194,8 @@ public:
    static void logW( QString message );
    //! \brief Log an info message.
    static void logI( QString message );
+   //! \brief Log a debug message.
+   static void logD( QString message );
 
    /*!
     *  \brief Displays an amount in the appropriate units.
