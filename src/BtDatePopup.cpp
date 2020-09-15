@@ -55,5 +55,5 @@ BtDatePopup::BtDatePopup(QWidget* parent) : QDialog(parent, Qt::Popup)
 
 QDateTime BtDatePopup::selectedDate() const
 {
-   return QDateTime(calendar->selectedDate());
+   return QDateTime(calendar->selectedDate(), QTime::currentTime());
 }

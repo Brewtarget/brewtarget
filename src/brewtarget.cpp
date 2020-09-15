@@ -506,7 +506,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
 Brewtarget::DBTypes Brewtarget::dbType()
 {
    if ( _dbType == Brewtarget::NODB )
-      _dbType = static_cast<Brewtarget::DBTypes>(option("dbType", dbType()).toInt());
+      _dbType = static_cast<Brewtarget::DBTypes>(option("dbType", Brewtarget::SQLITE).toInt());
    return _dbType;
 }
 
@@ -1036,7 +1036,11 @@ void Brewtarget::readSystemOptions()
    log.LogFilePath = QDir(option("LogFilePath", getConfigDir().absolutePath()).toString());
    log.LoggingUseConfigDir = option("LoggingUseConfigDir", true).toBool();
    if( log.LoggingUseConfigDir )
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
       log.LogFilePath = getConfigDir().absolutePath();
+#else
+      log.LogFilePath.setPath(getConfigDir().absolutePath());
+#endif
 }
 
 void Brewtarget::saveSystemOptions()

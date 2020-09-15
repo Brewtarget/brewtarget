@@ -124,10 +124,17 @@ void Log::doLog(const LogType lt, const QString message) {
          .arg(message);
 
    mutex.lock();
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
    if (isLoggingToStderr)
       errStream << logEntry << endl;
    if (stream)
       *stream << logEntry << endl;
+#else
+   if (isLoggingToStderr)
+      errStream << logEntry << Qt::endl;
+   if (stream)
+      *stream << logEntry << Qt::endl;
+#endif
    mutex.unlock();
 
    emit wroteEntry(logEntry);
