@@ -125,9 +125,9 @@ void Log::doLog(const LogType lt, const QString message) {
 
    mutex.lock();
    if (isLoggingToStderr)
-      errStream << logEntry << endl;
+      errStream << logEntry << Qt::endl;
    if (stream)
-      *stream << logEntry << endl;
+      *stream << logEntry << Qt::endl;
    mutex.unlock();
 
    emit wroteEntry(logEntry);

@@ -438,7 +438,10 @@ bool Database::createBlank(QString const& filename)
          return false;
       }
 
-      DatabaseSchemaHelper::create(sqldb,dbDefn);
+      if ( dbDefn == nullptr ) {
+         dbDefn = new DatabaseSchema();
+      }
+      DatabaseSchemaHelper::create(sqldb,dbDefn,Brewtarget::SQLITE);
 
       sqldb.close();
    } // sqldb gets destroyed as it goes out of scope before removeDatabase()

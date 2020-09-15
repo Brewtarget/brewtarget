@@ -34,7 +34,7 @@ class OptionDialog;
 #include "BtLineEdit.h"
 #include "ui_optionsDialog.h"
 #include "unit.h"
-#include "log.h"
+#include "Log.h"
 
 /*!
  * \class OptionDialog
