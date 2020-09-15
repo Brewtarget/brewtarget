@@ -1,7 +1,8 @@
 /*
  * IngredientSortProxyModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2020-2025
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 /*
  * Ingredient.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2020-2025
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
