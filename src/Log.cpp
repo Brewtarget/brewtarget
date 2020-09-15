@@ -64,6 +64,43 @@ void Log::changeDirectory(const QDir defaultDir) {
    warn(QString("Could not create a log file."));
 }
 
+void Log::changeDirectory() {
+   //If it's the same, just return, no need to do anything.
+   if ( LogFilePath.filePath(filename) == file.fileName() ) {
+      return;
+   }
+
+   //If the file is already initialize, it needs to be closed and redefined.
+   if (stream) {
+      delete stream;
+      stream = nullptr;
+      if( file.isOpen() )
+         file.close();
+      //Preserving the old logfile
+      if ( ! file.copy(LogFilePath.filePath(filename)) ) {
+         error("Error while copying to the new file location\nReverting settings");
+         LogFilePath = QDir(QFileInfo(file).filePath());
+      }
+   }
+
+   // Test default location
+   file.setFileName(LogFilePath.filePath(filename));
+   if( file.open(QIODevice::Append) ) {
+      stream = new QTextStream(&file);
+      return;
+   }
+
+   // Defaults to temporary
+   file.setFileName(QDir::temp().filePath(filename));
+   if( file.open(QFile::WriteOnly | QFile::Truncate) ) {
+      stream = new QTextStream(&file);
+      warn(QString("Log is in a temporary directory: %1").arg(file.fileName()));
+      return;
+   }
+
+   warn(QString("Could not create a log file."));
+}
+
 void Log::debug(const QString message) {
    doLog(LogType_DEBUG, message);
 }
@@ -104,4 +141,24 @@ QString Log::getTypeName(const LogType type) const {
       case LogType_ERROR: return tr("ERROR");
    }
    return tr("ERROR");
+}
+
+Log::LogType Log::getLogTypeFromString(QString type)
+{
+   if (type == "INFO") return LogType_INFO;
+   else if (type == "WARNING") return LogType_WARNING;
+   else if (type == "ERROR") return LogType_ERROR;
+   else if (type == "DEBUG") return LogType_DEBUG;
+   else return LogType_INFO;
+}
+
+QString Log::getOptionStringFromLogType(const LogType type)
+{
+   switch(type) {
+      case LogType_DEBUG: return QString("DEBUG");
+      case LogType_INFO: return QString("INFO");
+      case LogType_WARNING: return QString("WARNING");
+      case LogType_ERROR: return QString("ERROR");
+   }
+   return QString("INFO");
 }

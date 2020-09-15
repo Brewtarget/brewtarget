@@ -152,6 +152,17 @@ OptionDialog::OptionDialog(QWidget* parent)
    connect( buttonBox, &QDialogButtonBox::accepted, this, &OptionDialog::saveAndClose );
    connect( buttonBox, &QDialogButtonBox::rejected, this, &OptionDialog::cancel );
 
+   //Populate options on the "Logging" tab
+   loggingLevelComboBox->addItem(tr("Information"), QVariant(Log::LogType_INFO));
+   loggingLevelComboBox->addItem(tr("Warning"), QVariant(Log::LogType_WARNING));
+   loggingLevelComboBox->addItem(tr("Error"), QVariant(Log::LogType_ERROR));
+   loggingLevelComboBox->addItem(tr("Debug"), QVariant(Log::LogType_DEBUG));
+   checkBox_enableLogging->setChecked(Brewtarget::log.LoggingEnabled);
+   checkBox_LogFileLocationUseDefault->setChecked(Brewtarget::log.LoggingUseConfigDir);
+   lineEdit_LogFileLocation->setText(Brewtarget::log.LogFilePath.absolutePath());
+   setLoggingControlsState(Brewtarget::log.LoggingEnabled);
+   setFileLocationState(Brewtarget::log.LoggingUseConfigDir);
+
    // database panel stuff
    comboBox_engine->addItem( tr("SQLite (default)"), QVariant(Brewtarget::SQLITE));
    comboBox_engine->addItem( tr("PostgreSQL"), QVariant(Brewtarget::PGSQL));
@@ -164,6 +175,8 @@ OptionDialog::OptionDialog(QWidget* parent)
 
    // Set the signals
    connect( checkBox_savePassword, &QAbstractButton::clicked, this, &OptionDialog::savePassword);
+   connect( checkBox_enableLogging, &QAbstractButton::clicked, this, &OptionDialog::setLoggingControlsState);
+   connect( checkBox_LogFileLocationUseDefault, &QAbstractButton::clicked, this, &OptionDialog::setFileLocationState);
 
    connect( btStringEdit_hostname, &BtLineEdit::textModified, this, &OptionDialog::testRequired);
    connect( btStringEdit_portnum, &BtLineEdit::textModified, this, &OptionDialog::testRequired);
@@ -175,6 +188,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    connect( pushButton_browseDataDir, &QAbstractButton::clicked, this, &OptionDialog::setDataDir );
    connect( pushButton_browseBackupDir, &QAbstractButton::clicked, this, &OptionDialog::setBackupDir );
    connect( pushButton_resetToDefault, &QAbstractButton::clicked, this, &OptionDialog::resetToDefault );
+   connect( pushButton_LogFileLocationBrowse, &QAbstractButton::clicked, this, &OptionDialog::setLogDir );
    pushButton_testConnection->setEnabled(false);
 
 }
@@ -235,6 +249,13 @@ void OptionDialog::setBackupDir()
    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), Brewtarget::getUserDataDir().canonicalPath(), QFileDialog::ShowDirsOnly);
    if( ! dir.isEmpty() )
       btStringEdit_backupDir->setText( dir );
+}
+
+void OptionDialog::setLogDir()
+{
+   QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), Brewtarget::getUserDataDir().canonicalPath(), QFileDialog::ShowDirsOnly);
+   if( ! dir.isEmpty() )
+      lineEdit_LogFileLocation->setText( dir );
 }
 
 void OptionDialog::resetToDefault()
@@ -455,6 +476,20 @@ void OptionDialog::saveAndClose()
    Brewtarget::setOption("mashHopAdjustment", ibuAdjustmentMashHopDoubleSpinBox->value() / 100);
    Brewtarget::setOption("firstWortHopAdjustment", ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);
 
+   // Saving Logging Options to the Log object
+   Brewtarget::log.LoggingEnabled = checkBox_enableLogging->isChecked();
+   Brewtarget::log.LoggingLevel = static_cast<Log::LogType>(loggingLevelComboBox->currentData().toInt());
+   Brewtarget::log.LogFilePath = QDir(lineEdit_LogFileLocation->text());
+   Brewtarget::log.LoggingUseConfigDir = checkBox_LogFileLocationUseDefault->isChecked();
+   if ( Brewtarget::log.LoggingUseConfigDir )
+   {
+      Brewtarget::log.LogFilePath = Brewtarget::getConfigDir();
+   }
+   Brewtarget::setOption("LoggingEnabled", Brewtarget::log.LoggingEnabled);
+   Brewtarget::setOption("LoggingLevel", Brewtarget::log.getOptionStringFromLogType(Brewtarget::log.LoggingLevel));
+   Brewtarget::setOption("LogFilePath", Brewtarget::log.LogFilePath.absolutePath());
+   Brewtarget::setOption("LoggingUseConfigDir", Brewtarget::log.LoggingUseConfigDir);
+   Brewtarget::log.changeDirectory();
    // Make sure the main window updates.
    if( Brewtarget::mainWindow() )
       Brewtarget::mainWindow()->showChanges();
@@ -853,4 +888,16 @@ void OptionDialog::savePassword(bool state)
       QMessageBox::warning(nullptr, QObject::tr("Plaintext"),
                               QObject::tr("Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems."));
    }
+}
+
+void OptionDialog::setLoggingControlsState(bool state)
+{
+   groupBox_loggingLevels->setEnabled(state);
+   groupBox_LogFileLocation->setEnabled(state);
+}
+
+void OptionDialog::setFileLocationState(bool state)
+{
+   lineEdit_LogFileLocation->setEnabled( ! state );
+   pushButton_LogFileLocationBrowse->setEnabled( ! state );
 }

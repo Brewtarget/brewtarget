@@ -34,9 +34,8 @@
 class Log : public QObject
 {
    Q_OBJECT
-
    friend class Brewtarget;
-   
+   friend class OptionDialog;
 public:
    ~Log();
 
@@ -51,14 +50,14 @@ public:
 
    //! \brief The log level of a message.
    enum LogType {
-      //! Meant for debugging only. If we see this in prod, we can safely remove.
-      LogType_DEBUG,
       //! Meant to express big actions one would want to find in the log file.
       LogType_INFO,
       //! Just a warning.
       LogType_WARNING,
       //! Full-blown error.
-      LogType_ERROR
+      LogType_ERROR,
+      //! Meant for debugging only. If we see this in prod, we can safely remove.
+      LogType_DEBUG
    };
 
 signals:
@@ -71,6 +70,12 @@ private:
    QTextStream* stream;
    QMutex mutex;
 
+   // options set by the end user.
+   bool LoggingEnabled = false;
+   Log::LogType LoggingLevel = LogType_INFO;
+   QDir LogFilePath;
+   bool LoggingUseConfigDir = true;
+
    static const QString filename;
    static const QString timeFormat;
    static const QString tmpl;
@@ -79,8 +84,11 @@ private:
    //! \brief Sets the default directory of the log file
    //! \param defaultDir The directory which will host the log file.
    void changeDirectory(const QDir defaultDir);
+   void changeDirectory();
    void doLog(const LogType lt, const QString message);
    QString getTypeName(const LogType type) const;
+   LogType getLogTypeFromString(QString type = QString("INFO"));
+   QString getOptionStringFromLogType(const LogType type = LogType_INFO);
 };
 
 #endif /* _LOG_H */
