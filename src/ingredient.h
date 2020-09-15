@@ -1,6 +1,6 @@
 /*
- * BeerXMLElement.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * Ingredient.h is part of Brewtarget, and is Copyright the following
+ * authors 2020-2025
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -20,8 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _BEERXMLELEMENT_H
-#define _BEERXMLELEMENT_H
+#ifndef _INGREDIENT_H
+#define _INGREDIENT_H
 
 #include <QDomText>
 #include <QDomNode>
@@ -43,24 +43,25 @@
 // Make uintptr_t available in QVariant.
 Q_DECLARE_METATYPE( uintptr_t )
 
-class BeerXMLElement;
+class Ingredient;
 
 /*!
- * \class BeerXMLElement
+ * \class Ingredient
  * \author Philip G. Lee
  *
  * \brief The base class for our database items.
  */
-class BeerXMLElement : public QObject
+class Ingredient : public QObject
 {
    Q_OBJECT
    Q_CLASSINFO("version","1")
 
    friend class Database;
+   friend class BeerXML;
 public:
-   BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name = QString(),
+   Ingredient(Brewtarget::DBTable table, int key, QString t_name = QString(),
                   bool t_display = false, QString folder = QString());
-   BeerXMLElement( BeerXMLElement const& other );
+   Ingredient( Ingredient const& other );
 
    // Everything that inherits from BeerXML has a name, delete, display and a folder
    Q_PROPERTY( QString name   READ name WRITE setName )
@@ -116,16 +117,16 @@ public:
    static QString text(QDate const& val);
 
    //! Use this to pass pointers around in QVariants.
-   static inline QVariant qVariantFromPtr( BeerXMLElement* ptr )
+   static inline QVariant qVariantFromPtr( Ingredient* ptr )
    {
       uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
       return QVariant::fromValue<uintptr_t>(addr);
    }
 
-   static inline BeerXMLElement* extractPtr( QVariant ptrVal )
+   static inline Ingredient* extractPtr( QVariant ptrVal )
    {
       uintptr_t addr = ptrVal.value<uintptr_t>();
-      return reinterpret_cast<BeerXMLElement*>(addr);
+      return reinterpret_cast<Ingredient*>(addr);
    }
 
    bool isValid();

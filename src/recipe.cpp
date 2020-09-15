@@ -100,7 +100,7 @@ QString Recipe::classNameStr()
 }
 
 Recipe::Recipe(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
    m_type(QString()),
    m_brewer(QString()),
    m_asstBrewer(QString()),
@@ -135,7 +135,7 @@ Recipe::Recipe(Brewtarget::DBTable table, int key)
 }
 
 Recipe::Recipe(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::RECTABLE, -1, name, true),
+   : Ingredient(Brewtarget::RECTABLE, -1, name, true),
    m_type(QString()),
    m_brewer(QString()),
    m_asstBrewer(QString()),
@@ -170,7 +170,7 @@ Recipe::Recipe(QString name, bool cache)
 }
 
 Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_type(rec.value(kcolRecipeType).toString()),
    m_brewer(rec.value(kcolRecipeBrewer).toString()),
    m_asstBrewer(rec.value(kcolRecipeAsstBrewer).toString()),
@@ -204,7 +204,7 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other),
+Recipe::Recipe( Recipe const& other ) : Ingredient(other),
    m_type(other.m_type),
    m_brewer(other.m_brewer),
    m_asstBrewer(other.m_asstBrewer),
@@ -1539,7 +1539,7 @@ bool Recipe::cacheOnly() const { return m_cacheOnly; }
 //=============================Removers========================================
 
 // Returns true if var is found and removed.
-void Recipe::remove( BeerXMLElement *var )
+void Recipe::remove( Ingredient *var )
 {
    // brewnotes a bit odd
    if ( dynamic_cast<BrewNote*>(var) )

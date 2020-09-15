@@ -24,7 +24,7 @@
 #include <QLineEdit>
 #include "unit.h"
 #include "UnitSystem.h"
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 class BtGenericEdit;
 class BtMassEdit;
@@ -71,7 +71,7 @@ public:
    QString displayAmount( double amount, int precision = 3);
 
    // Use one of these when you just want to set the text
-   void    setText( BeerXMLElement* element, int precision=3 );
+   void    setText( Ingredient* element, int precision=3 );
    void    setText( double amount, int precision = 3);
    void    setText( QString amount, int precision=3 );
    void    setText( QVariant amount, int precision=3 );

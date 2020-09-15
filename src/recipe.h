@@ -32,15 +32,13 @@ class Recipe;
 #include <QString>
 #include <QDate>
 #include <QMutex>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 #include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
 #include "misc.h"
 #include "salt.h"
 #include "brewnote.h"
 
 // Forward declarations.
-//class Hop;
-//class Misc;
 class Style;
 class Mash;
 class Fermentable;
@@ -63,12 +61,13 @@ bool operator==(Recipe &r1, Recipe &r2 );
  *
  * \brief Model class for recipe records in the database.
  */
-class Recipe : public BeerXMLElement
+class Recipe : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "recipes")
 
    friend class Database;
+   friend class BeerXML;
    friend class RecipeFormatter;
    friend class MainWindow;
    friend class WaterDialog;
@@ -203,7 +202,7 @@ public:
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
    // One method to bring them all and in darkness bind them
-   void remove( BeerXMLElement *var);
+   void remove( Ingredient *var);
 
    // And you do know what happens next right?
    void addHop( Hop *var );

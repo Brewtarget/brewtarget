@@ -23,7 +23,7 @@
 #define _EQUIPMENT_H
 
 #include <QDomNode>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 /*!
  * \class Equipment
@@ -31,13 +31,14 @@
  *
  * \brief Model representing a single equipment record.
  */
-class Equipment : public BeerXMLElement
+class Equipment : public Ingredient
 {
    Q_OBJECT
 
    Q_CLASSINFO("signal", "equipments")
    
    friend class Database;
+   friend class BeerXML;
    friend class EquipmentEditor;
 
 public:

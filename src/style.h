@@ -24,7 +24,7 @@
 
 #include <QString>
 #include <QStringList>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 // Forward declarations.
 class Style;
@@ -37,12 +37,13 @@ bool operator==(Style &s1, Style &s2);
  *
  * \brief Model for style records in the database.
  */
-class Style : public BeerXMLElement
+class Style : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "styles")
 
    friend class Database;
+   friend class BeerXML;
    friend class StyleEditor;
 public:
 
@@ -62,6 +63,8 @@ public:
    Q_PROPERTY( QString styleGuide READ styleGuide WRITE setStyleGuide /*NOTIFY changed*/ /*changedStyleGuide*/ )
    //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief The untranslated \c Type string.
+   Q_PROPERTY( QString typeString READ typeString /* WRITE setUse NOTIFY changed*/ /*changedUse*/ )
    //! \brief The minimum og.
    Q_PROPERTY( double ogMin READ ogMin WRITE setOgMin /*NOTIFY changed*/ /*changedOgMin*/ )
    //! \brief The maximum og.

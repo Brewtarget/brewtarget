@@ -28,7 +28,7 @@
  *
  * \brief Proxy model for sorting/filtering Styles.
  * This should really be a base filter for all ingredient models that filters
- * based on the BeerXMLElement::display() field.
+ * based on the Ingredient::display() field.
  */
 class StyleSortFilterProxyModel : public QSortFilterProxyModel
 {

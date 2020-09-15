@@ -511,19 +511,19 @@ Water* BtTreeItem::water()
     return nullptr;
 }
 
-BeerXMLElement* BtTreeItem::thing()
+Ingredient* BtTreeItem::thing()
 {
     if ( _thing )
-        return qobject_cast<BeerXMLElement*>(_thing);
+        return qobject_cast<Ingredient*>(_thing);
 
     return nullptr;
 }
 
 QString BtTreeItem::name()
 {
-   BeerXMLElement *tmp;
+   Ingredient *tmp;
    if ( ! _thing )
       return QString();
-   tmp = qobject_cast<BeerXMLElement*>(_thing);
+   tmp = qobject_cast<Ingredient*>(_thing);
    return tmp->name();
 }

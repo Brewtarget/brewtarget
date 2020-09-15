@@ -1188,7 +1188,7 @@ double Brewtarget::toDouble(QString text, bool* ok)
 }
 
 // And a few convenience methods, just for that sweet, sweet syntatic sugar
-double Brewtarget::toDouble(const BeerXMLElement* element, QString attribute, QString caller)
+double Brewtarget::toDouble(const Ingredient* element, QString attribute, QString caller)
 {
    double amount = 0.0;
    QString value;
@@ -1251,7 +1251,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, Un
    return ret;
 }
 
-QString Brewtarget::displayAmount(BeerXMLElement* element, QObject* object, QString attribute, Unit* units, int precision )
+QString Brewtarget::displayAmount(Ingredient* element, QObject* object, QString attribute, Unit* units, int precision )
 {
    double amount = 0.0;
    QString value;
@@ -1265,7 +1265,9 @@ QString Brewtarget::displayAmount(BeerXMLElement* element, QObject* object, QStr
       value = element->property(attribute.toLatin1().constData()).toString();
       amount = toDouble( value, &ok );
       if ( ! ok )
-         logW( QString("Brewtarget::displayAmount(BeerXMLElement*,QObject*,QString,Unit*,int) could not convert %1 to double").arg(value));
+         logW( QString("%1 could not convert %2 to double")
+               .arg(Q_FUNC_INFO)
+               .arg(value));
       // Get the display units and scale
       dispUnit  = static_cast<Unit::unitDisplay>(option(attribute, Unit::noUnit,  object->objectName(), UNIT).toInt());
       dispScale = static_cast<Unit::unitScale>(option(  attribute, Unit::noScale, object->objectName(), SCALE).toInt());
@@ -1317,7 +1319,7 @@ double Brewtarget::amountDisplay( double amount, Unit* units, int precision, Uni
    return ret;
 }
 
-double Brewtarget::amountDisplay(BeerXMLElement* element, QObject* object, QString attribute, Unit* units, int precision )
+double Brewtarget::amountDisplay(Ingredient* element, QObject* object, QString attribute, Unit* units, int precision )
 {
    double amount = 0.0;
    QString value;
@@ -1331,7 +1333,7 @@ double Brewtarget::amountDisplay(BeerXMLElement* element, QObject* object, QStri
       value = element->property(attribute.toLatin1().constData()).toString();
       amount = toDouble( value, &ok );
       if ( ! ok )
-         logW( QString("Brewtarget::amountDisplay(BeerXMLElement*,QObject*,QString,Unit*,int) could not convert %1 to double").arg(value));
+         logW( QString("Brewtarget::amountDisplay(Ingredient*,QObject*,QString,Unit*,int) could not convert %1 to double").arg(value));
       // Get the display units and scale
       dispUnit  = static_cast<Unit::unitDisplay>(option(attribute, Unit::noUnit,  object->objectName(), UNIT).toInt());
       dispScale = static_cast<Unit::unitScale>(option(  attribute, Unit::noScale, object->objectName(), SCALE).toInt());
@@ -1454,7 +1456,7 @@ bool Brewtarget::hasUnits(QString qstr)
    return amtUnit.cap(2).size() > 0;
 }
 
-QPair<double,double> Brewtarget::displayRange(BeerXMLElement* element, QObject *object, QString attribute, RangeType _type)
+QPair<double,double> Brewtarget::displayRange(Ingredient* element, QObject *object, QString attribute, RangeType _type)
 {
    QPair<double,double> range;
    QString minName = QString("%1%2").arg(attribute).arg("Min");

@@ -23,7 +23,7 @@
 #define _WATER_H
 
 #include <QString>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 // Forward declarations.
 class Water;
@@ -36,12 +36,13 @@ bool operator==(Water &w1, Water &w2);
  *
  * \brief Model for water records in the database.
  */
-class Water : public BeerXMLElement
+class Water : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "waters")
 
    friend class Database;
+   friend class BeerXML;
    friend class WaterDialog;
    friend class WaterEditor;
 public:

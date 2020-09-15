@@ -27,7 +27,7 @@
 #include <QString>
 #include <QVector>
 #include <QDomNode>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 /*!
  * \class Instruction
@@ -35,11 +35,12 @@
  *
  * \brief Model class for an instruction record in the database.
  */
-class Instruction : public BeerXMLElement
+class Instruction : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "instructions")
    friend class Database;
+   friend class BeerXML;
 public:
    
    virtual ~Instruction() {}

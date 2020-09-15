@@ -41,7 +41,7 @@ bool operator==(Equipment &e1, Equipment &e2)
 
 //=============================CONSTRUCTORS=====================================
 Equipment::Equipment(QString t_name, bool cacheOnly)
-   : BeerXMLElement(Brewtarget::EQUIPTABLE, -1, t_name, true),
+   : Ingredient(Brewtarget::EQUIPTABLE, -1, t_name, true),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -64,7 +64,7 @@ Equipment::Equipment(QString t_name, bool cacheOnly)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true ),
+   : Ingredient(table, key, QString(), true ),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -87,7 +87,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_boilSize_l(rec.value(kcolEquipBoilSize).toDouble()),
    m_batchSize_l(rec.value(kcolEquipBatchSize).toDouble()),
    m_tunVolume_l(rec.value(kcolEquipTunVolume).toDouble()),
@@ -110,7 +110,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Equipment::Equipment( Equipment const& other )
-   : BeerXMLElement(other),
+   : Ingredient(other),
    m_boilSize_l(other.m_boilSize_l),
    m_batchSize_l(other.m_batchSize_l),
    m_tunVolume_l(other.m_tunVolume_l),

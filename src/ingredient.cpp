@@ -1,6 +1,6 @@
 /*
- * BeerXMLElement.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * Ingredient.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2020-2025
  * - Kregg K <gigatropolis@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 #include <QDomElement>
 #include <QDomNode>
 #include <QMetaProperty>
@@ -29,7 +29,7 @@
 
 static const char* kVersion = "version";
 
-BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key, QString t_name, bool t_display, QString folder)
+Ingredient::Ingredient(Brewtarget::DBTable table, int key, QString t_name, bool t_display, QString folder)
    : QObject(nullptr),
      _key(key),
      _table(table),
@@ -41,7 +41,7 @@ BeerXMLElement::BeerXMLElement(Brewtarget::DBTable table, int key, QString t_nam
 {
 }
 
-BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
+Ingredient::Ingredient(Ingredient const& other)
    : QObject(nullptr),
      _key(other._key),
      _table(other._table),
@@ -53,38 +53,38 @@ BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
 {
 }
 
-bool BeerXMLElement::deleted() const
+bool Ingredient::deleted() const
 {
 
    return _deleted.toBool();
 }
 
-bool BeerXMLElement::display() const
+bool Ingredient::display() const
 {
    return _display.toBool();
 }
 
 // Sigh. New databases, more complexity
-void BeerXMLElement::setDeleted(const bool var, bool cachedOnly)
+void Ingredient::setDeleted(const bool var, bool cachedOnly)
 {
    _deleted = var;
    if ( ! cachedOnly )
       setEasy(kpropDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
-void BeerXMLElement::setDisplay(bool var, bool cachedOnly)
+void Ingredient::setDisplay(bool var, bool cachedOnly)
 {
    _display = var;
    if ( ! cachedOnly )
       setEasy(kpropDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
-QString BeerXMLElement::folder() const
+QString Ingredient::folder() const
 {
    return _folder;
 }
 
-void BeerXMLElement::setFolder(const QString var, bool signal, bool cachedOnly)
+void Ingredient::setFolder(const QString var, bool signal, bool cachedOnly)
 {
    _folder = var;
    if ( ! cachedOnly )
@@ -95,12 +95,12 @@ void BeerXMLElement::setFolder(const QString var, bool signal, bool cachedOnly)
       emit changedFolder(var);
 }
 
-QString BeerXMLElement::name() const
+QString Ingredient::name() const
 {
    return _name;
 }
 
-void BeerXMLElement::setName(const QString var, bool cachedOnly)
+void Ingredient::setName(const QString var, bool cachedOnly)
 {
 
    _name = var;
@@ -110,33 +110,33 @@ void BeerXMLElement::setName(const QString var, bool cachedOnly)
    }
 }
 
-int BeerXMLElement::key() const
+int Ingredient::key() const
 {
    return _key;
 }
 
-Brewtarget::DBTable BeerXMLElement::table() const
+Brewtarget::DBTable Ingredient::table() const
 {
    return _table;
 }
 
-int BeerXMLElement::version() const
+int Ingredient::version() const
 {
    return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo(kVersion)).value()).toInt();
 }
 
-QMetaProperty BeerXMLElement::metaProperty(const char* name) const
+QMetaProperty Ingredient::metaProperty(const char* name) const
 {
    return metaObject()->property(metaObject()->indexOfProperty(name));
 }
 
-QMetaProperty BeerXMLElement::metaProperty(QString const& name) const
+QMetaProperty Ingredient::metaProperty(QString const& name) const
 {
    return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
 }
 
 // getVal =====================================================================
-double BeerXMLElement::getDouble(const QDomText& textNode)
+double Ingredient::getDouble(const QDomText& textNode)
 {
    bool ok;
    double ret;
@@ -146,12 +146,12 @@ double BeerXMLElement::getDouble(const QDomText& textNode)
    // ret = text.toDouble(&ok);
    ret = Brewtarget::toDouble(text,&ok);
    if( !ok )
-      Brewtarget::logE(QString("BeerXMLElement::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("Ingredient::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
 }
 
-bool BeerXMLElement::getBool(const QDomText& textNode)
+bool Ingredient::getBool(const QDomText& textNode)
 {
    QString text = textNode.nodeValue();
 
@@ -160,12 +160,12 @@ bool BeerXMLElement::getBool(const QDomText& textNode)
    else if( text == "FALSE" )
       return false;
    else
-      Brewtarget::logE(QString("BeerXMLElement::getBool: %1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("Ingredient::getBool: %1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return false;
 }
 
-int BeerXMLElement::getInt(const QDomText& textNode)
+int Ingredient::getInt(const QDomText& textNode)
 {
    bool ok;
    int ret;
@@ -173,17 +173,17 @@ int BeerXMLElement::getInt(const QDomText& textNode)
 
    ret = text.toInt(&ok);
    if( !ok )
-      Brewtarget::logE(QString("BeerXMLElement::getInt: %1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("Ingredient::getInt: %1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
 }
 
-QString BeerXMLElement::getString( QDomText const& textNode )
+QString Ingredient::getString( QDomText const& textNode )
 {
    return textNode.nodeValue();
 }
 
-QDateTime BeerXMLElement::getDateTime( QDomText const& textNode )
+QDateTime Ingredient::getDateTime( QDomText const& textNode )
 {
    bool ok = true;
    QDateTime ret;
@@ -192,12 +192,12 @@ QDateTime BeerXMLElement::getDateTime( QDomText const& textNode )
    ret = QDateTime::fromString(text, Qt::ISODate);
    ok = ret.isValid();
    if( !ok )
-      Brewtarget::logE(QString("BeerXMLElement::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("Ingredient::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
 }
 
-QDate BeerXMLElement::getDate( QDomText const& textNode )
+QDate Ingredient::getDate( QDomText const& textNode )
 {
    bool ok = true;
    QDate ret;
@@ -213,14 +213,14 @@ QDate BeerXMLElement::getDate( QDomText const& textNode )
    }
 
    if ( !ok )
-      Brewtarget::logE(QString("BeerXMLElement::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("Ingredient::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-QDateTime BeerXMLElement::getDateTime(QString const& str)
+QDateTime Ingredient::getDateTime(QString const& str)
 {
    QDateTime temp;
 
@@ -230,7 +230,7 @@ QDateTime BeerXMLElement::getDateTime(QString const& str)
       return QDateTime::currentDateTime();
 }
 
-QString BeerXMLElement::text(bool val)
+QString Ingredient::text(bool val)
 {
    if( val )
       return QString("TRUE");
@@ -238,55 +238,55 @@ QString BeerXMLElement::text(bool val)
       return QString("FALSE");
 }
 
-QString BeerXMLElement::text(double val)
+QString Ingredient::text(double val)
 {
    return QString("%1").arg(val, 0, 'f', 8);
 }
 
-QString BeerXMLElement::text(int val)
+QString Ingredient::text(int val)
 {
    return QString("%1").arg(val);
 }
 
-QString BeerXMLElement::text(QDate const& val)
+QString Ingredient::text(QDate const& val)
 {
    return val.toString(Qt::ISODate);
 }
 
-void BeerXMLElement::setEasy(QString prop_name, QVariant value, bool notify)
+void Ingredient::setEasy(QString prop_name, QVariant value, bool notify)
 {
    Database::instance().updateEntry(this,prop_name,value,notify);
 }
 
 
-QVariant BeerXMLElement::get( const QString& col_name ) const
+QVariant Ingredient::get( const QString& col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
 }
 
-void BeerXMLElement::setInventory( const QVariant& value, int invKey, bool notify )
+void Ingredient::setInventory( const QVariant& value, int invKey, bool notify )
 {
    Database::instance().setInventory( this, value, invKey, notify );
 }
 
-QVariant BeerXMLElement::getInventory( const QString& col_name ) const
+QVariant Ingredient::getInventory( const QString& col_name ) const
 {
    QVariant val = 0.0;
    val = Database::instance().getInventoryAmt(col_name, _table, _key);
    return val;
 }
 
-bool BeerXMLElement::isValid()
+bool Ingredient::isValid()
 {
    return _valid;
 }
 
-void BeerXMLElement::invalidate()
+void Ingredient::invalidate()
 {
    _valid = false;
 }
 
-QVariantMap BeerXMLElement::getColumnValueMap() const
+QVariantMap Ingredient::getColumnValueMap() const
 {
    QVariantMap map;
    map.insert(kpropFolder, folder());

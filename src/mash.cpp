@@ -49,7 +49,7 @@ QString Mash::classNameStr()
 }
 
 Mash::Mash(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
@@ -63,7 +63,7 @@ Mash::Mash(Brewtarget::DBTable table, int key)
 }
 
 Mash::Mash(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::MASHTABLE, -1, name, true),
+   : Ingredient(Brewtarget::MASHTABLE, -1, name, true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
@@ -77,7 +77,7 @@ Mash::Mash(QString name, bool cache)
 }
 
 Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
      m_grainTemp_c(rec.value(kcolMashGrainTemp).toDouble()),
      m_notes(rec.value(kcolNotes).toString()),
      m_tunTemp_c(rec.value(kcolMashTunTemp).toDouble()),

@@ -65,7 +65,7 @@ void RecipeExtrasWidget::setRecipe(Recipe* rec)
    if( rec )
    {
       recipe = rec;
-      connect( recipe, &BeerXMLElement::changed, this, &RecipeExtrasWidget::changed );
+      connect( recipe, &Ingredient::changed, this, &RecipeExtrasWidget::changed );
       showChanges();
    }
 }

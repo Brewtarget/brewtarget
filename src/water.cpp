@@ -46,7 +46,7 @@ QString Water::classNameStr()
 }
 
 Water::Water(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -66,7 +66,7 @@ Water::Water(Brewtarget::DBTable table, int key)
 }
 
 Water::Water(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::WATERTABLE, -1, name, true),
+   : Ingredient(Brewtarget::WATERTABLE, -1, name, true),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -86,7 +86,7 @@ Water::Water(QString name, bool cache)
 }
 
 Water::Water(Water const& other, bool cache)
-   : BeerXMLElement(Brewtarget::WATERTABLE, -1, other.name(), true),
+   : Ingredient(Brewtarget::WATERTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_calcium_ppm(other.m_calcium_ppm),
    m_bicarbonate_ppm(other.m_bicarbonate_ppm),
@@ -106,7 +106,7 @@ Water::Water(Water const& other, bool cache)
 }
 
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_amount(rec.value(kcolAmount).toDouble()),
    m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
    m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),

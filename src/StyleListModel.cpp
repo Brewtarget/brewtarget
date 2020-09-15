@@ -41,7 +41,7 @@ void StyleListModel::addStyle(Style* s)
       int size = styles.size();
       beginInsertRows( QModelIndex(), size, size );
       styles.append(s);
-      connect( s, &BeerXMLElement::changed, this, &StyleListModel::styleChanged );
+      connect( s, &Ingredient::changed, this, &StyleListModel::styleChanged );
       endInsertRows();
    }
 }
@@ -64,7 +64,7 @@ void StyleListModel::addStyles(QList<Style*> s)
       styles.append(tmp);
       
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &BeerXMLElement::changed, this, &StyleListModel::styleChanged );
+         connect( *i, &Ingredient::changed, this, &StyleListModel::styleChanged );
       
       endInsertRows();
    }

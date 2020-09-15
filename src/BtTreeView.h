@@ -68,7 +68,7 @@ public:
    //! \brief returns the first \c type element in the tree
    QModelIndex first();
 
-   QModelIndex findElement(BeerXMLElement* thing);
+   QModelIndex findElement(Ingredient* thing);
 
    //! \brief returns the recipe at \c index
    Recipe* recipe(const QModelIndex &index) const;

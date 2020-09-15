@@ -32,12 +32,12 @@
 #include "database.h"
 #include "equipment.h"
 #include "EquipmentListModel.h"
-#include "BeerXMLSortProxyModel.h"
+#include "IngredientSortProxyModel.h"
 
 ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) :
    QWizard(parent),
    equipListModel(new EquipmentListModel(this)),
-   equipSortProxyModel(new BeerXMLSortProxyModel(equipListModel))
+   equipSortProxyModel(new IngredientSortProxyModel(equipListModel))
 {
    addPage(new ScaleRecipeIntroPage);
    addPage(new ScaleRecipeEquipmentPage(equipSortProxyModel));

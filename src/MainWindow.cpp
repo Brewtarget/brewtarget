@@ -120,6 +120,7 @@
 #include "WaterDialog.h"
 #include "WaterListModel.h"
 #include "WaterEditor.h"
+#include "beerxml.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
@@ -935,7 +936,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
 
    if( propName == "equipment" )
    {
-      Equipment* newRecEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(value));
+      Equipment* newRecEquip = qobject_cast<Equipment*>(Ingredient::extractPtr(value));
       recEquip = newRecEquip;
 
       singleEquipEditor->setEquipment(recEquip);
@@ -943,7 +944,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    else if( propName == "style" )
    {
       //recStyle = recipeObs->style();
-      recStyle = qobject_cast<Style*>(BeerXMLElement::extractPtr(value));
+      recStyle = qobject_cast<Style*>(Ingredient::extractPtr(value));
       singleStyleEditor->setStyle(recStyle);
 
    }
@@ -1279,6 +1280,7 @@ void MainWindow::exportRecipe()
 {
    QFile* outFile;
    QDomDocument doc;
+   BeerXML* bxml = Database::instance().getBeerXml();
 
    if( recipeObs == nullptr )
       return;
@@ -1300,7 +1302,7 @@ void MainWindow::exportRecipe()
 
    QDomElement recipes = doc.createElement("RECIPES"); // The root element.
    doc.appendChild(recipes);
-   Database::instance().toXml( recipeObs, doc, recipes );
+   bxml->toXml( recipeObs, doc, recipes );
 
    // QString::toLatin1 returns an ISO 8859-1 stream.
    out << doc.toString().toLatin1();
@@ -2341,6 +2343,7 @@ void MainWindow::exportSelected()
    QFile* outFile;
    QDomElement root,dbase,recipe;
    bool didRecipe = false;
+   BeerXML* bxml = Database::instance().getBeerXml();
 
 
    if ( active == nullptr )
@@ -2379,26 +2382,26 @@ void MainWindow::exportSelected()
       switch(type)
       {
          case BtTreeItem::RECIPE:
-            Database::instance().toXml( treeView_recipe->recipe(selection), doc, recipe);
+            bxml->toXml( treeView_recipe->recipe(selection), doc, recipe);
             didRecipe = true;
             break;
          case BtTreeItem::EQUIPMENT:
-            Database::instance().toXml( treeView_equip->equipment(selection), doc, dbase);
+            bxml->toXml( treeView_equip->equipment(selection), doc, dbase);
             break;
          case BtTreeItem::FERMENTABLE:
-            Database::instance().toXml( treeView_ferm->fermentable(selection), doc, dbase);
+            bxml->toXml( treeView_ferm->fermentable(selection), doc, dbase);
             break;
          case BtTreeItem::HOP:
-            Database::instance().toXml( treeView_hops->hop(selection), doc, dbase);
+            bxml->toXml( treeView_hops->hop(selection), doc, dbase);
             break;
          case BtTreeItem::MISC:
-            Database::instance().toXml( treeView_misc->misc(selection), doc, dbase);
+            bxml->toXml( treeView_misc->misc(selection), doc, dbase);
             break;
          case BtTreeItem::STYLE:
-            Database::instance().toXml( treeView_style->style(selection), doc, dbase);
+            bxml->toXml( treeView_style->style(selection), doc, dbase);
             break;
          case BtTreeItem::YEAST:
-            Database::instance().toXml( treeView_yeast->yeast(selection), doc, dbase);
+            bxml->toXml( treeView_yeast->yeast(selection), doc, dbase);
             break;
       }
    }

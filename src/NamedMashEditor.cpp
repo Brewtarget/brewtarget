@@ -120,7 +120,7 @@ void NamedMashEditor::setMash(Mash* mash)
 
    if( mashObs )
    {
-      connect( mashObs, &BeerXMLElement::changed, this, &NamedMashEditor::changed );
+      connect( mashObs, &Ingredient::changed, this, &NamedMashEditor::changed );
       showChanges();
    }
 }

@@ -21,7 +21,7 @@
 #ifndef _MASHSTEP_H
 #define _MASHSTEP_H
 
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 #include <QStringList>
 #include <QString>
 
@@ -36,12 +36,13 @@ bool operator==(MashStep &m1, MashStep &m2);
  *
  * \brief Model for a mash step record in the database.
  */
-class MashStep : public BeerXMLElement
+class MashStep : public Ingredient
 {
    Q_OBJECT
 
    // this seems to be a class with a lot of friends
    friend class Database;
+   friend class BeerXML;
    friend class MashStepItemDelegate;
    friend class MashWizard;
    friend class MashDesigner;

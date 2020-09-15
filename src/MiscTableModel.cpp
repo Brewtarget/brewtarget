@@ -61,7 +61,7 @@ void MiscTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &BeerXMLElement::changed, this, &MiscTableModel::changed );
+      connect( recObs, &Ingredient::changed, this, &MiscTableModel::changed );
       addMiscs( recObs->miscs() );
    }
 }
@@ -101,7 +101,7 @@ void MiscTableModel::addMisc(Misc* misc)
    int size = miscObs.size();
    beginInsertRows( QModelIndex(), size, size );
    miscObs.append(misc);
-   connect( misc, &BeerXMLElement::changed, this, &MiscTableModel::changed );
+   connect( misc, &Ingredient::changed, this, &MiscTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
@@ -126,7 +126,7 @@ void MiscTableModel::addMiscs(QList<Misc*> miscs)
       miscObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &BeerXMLElement::changed, this, &MiscTableModel::changed );
+         connect( *i, &Ingredient::changed, this, &MiscTableModel::changed );
 
       endInsertRows();
    }

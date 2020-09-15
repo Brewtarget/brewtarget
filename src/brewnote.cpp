@@ -65,7 +65,7 @@ bool operator==(BrewNote const& lhs, BrewNote const& rhs)
 
 // Initializers
 BrewNote::BrewNote(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
      loading(false),
      m_brewDate(QDateTime()),
      m_fermentDate(QDateTime()),
@@ -102,7 +102,7 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key)
 }
 
 BrewNote::BrewNote(QDateTime dateNow, bool cache)
-   : BeerXMLElement(Brewtarget::BREWNOTETABLE,-1,QString(),true),
+   : Ingredient(Brewtarget::BREWNOTETABLE,-1,QString(),true),
      loading(false),
      m_brewDate(dateNow),
      m_fermentDate(QDateTime()),
@@ -139,7 +139,7 @@ BrewNote::BrewNote(QDateTime dateNow, bool cache)
 }
 
 BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolBNoteFermDate).toString(), rec.value(kcolDisplay).toBool()),
+   : Ingredient(table, key, rec.value(kcolBNoteFermDate).toString(), rec.value(kcolDisplay).toBool()),
      m_brewDate(QDateTime::fromString(rec.value(kcolBNoteBrewDate).toString(), Qt::ISODate)),
      m_fermentDate(QDateTime::fromString(rec.value(kcolBNoteFermDate).toString(), Qt::ISODate)),
      m_notes(rec.value(kcolBNoteNotes).toString()),
@@ -283,7 +283,7 @@ void BrewNote::recalculateEff(Recipe* parent)
 }
 
 BrewNote::BrewNote(BrewNote const& other)
-   : BeerXMLElement(other),
+   : Ingredient(other),
      m_brewDate(other.m_brewDate),
      m_fermentDate(other.m_fermentDate),
      m_notes(other.m_notes),

@@ -70,6 +70,7 @@
 #include "yeast.h"
 
 #include "config.h"
+#include "beerxml.h"
 #include "brewtarget.h"
 #include "QueuedMethod.h"
 #include "DatabaseSchemaHelper.h"
@@ -110,6 +111,7 @@ Database::Database()
    _threadToConnectionMutex.lock();
    converted = false;
    dbDefn = new DatabaseSchema();
+   m_beerxml = new BeerXML(dbDefn);
 
 }
 
@@ -179,7 +181,9 @@ bool Database::loadSQLite()
    }
 
    // Open SQLite db.
-   sqldb = QSqlDatabase::addDatabase("QSQLITE");
+   QString conName = QString("0x%1").arg(reinterpret_cast<uintptr_t>(QThread::currentThread()), 0, 16);
+
+   sqldb = QSqlDatabase::addDatabase("QSQLITE",conName);
    sqldb.setDatabaseName(dbFileName);
    dbIsOpen = sqldb.open();
    dbConName = sqldb.connectionName();
@@ -214,7 +218,7 @@ bool Database::loadSQLite()
          createFromScratch = sqldb.tables().size() == 0;
 
          // Associate this db with the current thread.
-         _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
+         _threadToConnection.insert(QThread::currentThread(), dbConName);
       }
       catch(QString e) {
          Brewtarget::logE( QString("%1: %2 (%3)").arg(Q_FUNC_INFO).arg(e).arg(pragma.lastError().text()));
@@ -254,7 +258,9 @@ bool Database::loadPgSQL()
       }
    }
 
-   sqldb = QSqlDatabase::addDatabase("QPSQL","brewtarget");
+   QString conName = QString("0x%1").arg(reinterpret_cast<uintptr_t>(QThread::currentThread()), 0, 16);
+
+   sqldb = QSqlDatabase::addDatabase("QPSQL",conName);
    sqldb.setHostName( dbHostname );
    sqldb.setDatabaseName( dbName );
    sqldb.setUserName( dbUsername );
@@ -290,12 +296,10 @@ bool Database::load()
    schemaUpdated=false;
    loadWasSuccessful = false;
 
-   if ( Brewtarget::dbType() == Brewtarget::PGSQL )
-   {
+   if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
       dbIsOpen = loadPgSQL();
    }
-   else
-   {
+   else {
       dbIsOpen = loadSQLite();
    }
 
@@ -306,14 +310,12 @@ bool Database::load()
    sqldb = sqlDatabase();
 
    // This should work regardless of the db being used.
-   if( createFromScratch )
-   {
-         bool success = DatabaseSchemaHelper::create(sqldb,dbDefn,Brewtarget::dbType());
-         if( !success )
-         {
-            Brewtarget::logE("DatabaseSchemaHelper::create() failed");
-            return success;
-         }
+   if( createFromScratch ) {
+      bool success = DatabaseSchemaHelper::create(sqldb,dbDefn,Brewtarget::dbType());
+      if( !success ) {
+         Brewtarget::logE("DatabaseSchemaHelper::create() failed");
+         return success;
+      }
    }
 
    // Update the database if need be. This has to happen before we do anything
@@ -321,8 +323,7 @@ bool Database::load()
    bool schemaErr = false;
    schemaUpdated = updateSchema(&schemaErr);
 
-   if( schemaErr )
-   {
+   if( schemaErr ) {
       if (Brewtarget::isInteractive()) {
          QMessageBox::critical(
             nullptr,
@@ -334,13 +335,12 @@ bool Database::load()
    }
 
    // See if there are new ingredients that we need to merge from the data-space db.
+   // Don't do this if we JUST copied the dataspace database.
    if( dataDbFile.fileName() != dbFile.fileName()
-      && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
+      && ! Brewtarget::userDatabaseDidNotExist
       && QFileInfo(dataDbFile).lastModified() > Brewtarget::lastDbMergeRequest )
    {
-
-      if(
-         Brewtarget::isInteractive() &&
+      if( Brewtarget::isInteractive() &&
          QMessageBox::question(
             nullptr,
             tr("Merge Database"),
@@ -387,7 +387,7 @@ bool Database::load()
       Equipment* e = equipment(*i);
       if( e )
       {
-         connect( e, &BeerXMLElement::changed, *i, &Recipe::acceptEquipChange );
+         connect( e, &Ingredient::changed, *i, &Recipe::acceptEquipChange );
          connect( e, &Equipment::changedBoilSize_l, *i, &Recipe::setBoilSize_l);
          connect( e, &Equipment::changedBoilTime_min, *i, &Recipe::setBoilTime_min);
       }
@@ -551,13 +551,16 @@ QSqlDatabase Database::sqlDatabase()
 
 void Database::unload()
 {
-
-
    // selectSome saves context. If we close the database before we tear that
    // context down, core gets dumped
    selectSome.clear();
-   QSqlDatabase::database( dbConName, false ).close();
-   QSqlDatabase::removeDatabase( dbConName );
+
+   // so far, it seems we only create one connection to the db. This is
+   // likely overkill
+   foreach( QString conName, _threadToConnection.values() ) {
+      QSqlDatabase::database( conName, false ).close();
+      QSqlDatabase::removeDatabase( conName );
+   }
 
    if (loadWasSuccessful && Brewtarget::dbType() == Brewtarget::SQLITE )
    {
@@ -729,7 +732,7 @@ bool Database::restoreFromFile(QString newDbFileStr)
 }
 
 // removeFromRecipe ===========================================================
-void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing )
+void Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing )
 {
    const QMetaObject* meta = ing->metaObject();
    TableSchema *table;
@@ -1789,7 +1792,7 @@ Yeast* Database::newYeast(Yeast* other)
    return tmp;
 }
 
-int Database::insertElement(BeerXMLElement* ins)
+int Database::insertElement(Ingredient* ins)
 {
    int key;
    QSqlQuery q( sqlDatabase() );
@@ -2113,7 +2116,7 @@ int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void Database::deleteRecord( BeerXMLElement* object )
+void Database::deleteRecord( Ingredient* object )
 {
    try {
       updateEntry( object, kpropDeleted, Brewtarget::dbTrue(), true);
@@ -2146,7 +2149,7 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
                       QString("%1=%2").arg(tbl->keyName()).arg(newStep->key())
                   );
          // Make the new mash pay attention to the new step.
-         connect( newStep, &BeerXMLElement::changed,
+         connect( newStep, &Ingredient::changed,
                   newMash, &Mash::acceptMashStepChange );
       }
    }
@@ -2183,7 +2186,7 @@ int Database::getInventoryId(TableSchema* tbl, int key )
 }
 
 // this may be bad form. After a lot of refactoring, setInventory is the only method
-// that needs to update something other than the BeerXMLElement's table. To simplify
+// that needs to update something other than the Ingredient's table. To simplify
 // other things, I merged the nastier updateEntry into here and removed that method
 //
 // I need one of two things here for caching to work -- either every child of a inventory capable
@@ -2191,7 +2194,7 @@ int Database::getInventoryId(TableSchema* tbl, int key )
 // reach into every child and update the inventory. I am leaning towards the first.
 // Turns out, both are required in some order. Still thinking signal/slot
 //
-void Database::setInventory(BeerXMLElement* ins, QVariant value, int invKey, bool notify )
+void Database::setInventory(Ingredient* ins, QVariant value, int invKey, bool notify )
 {
    TableSchema* tbl = dbDefn->table(ins->table());
    TableSchema* inv = dbDefn->table(tbl->invTable());
@@ -2239,7 +2242,7 @@ void Database::setInventory(BeerXMLElement* ins, QVariant value, int invKey, boo
    }
 }
 
-void Database::updateEntry( BeerXMLElement* object, QString propName, QVariant value, bool notify, bool transact )
+void Database::updateEntry( Ingredient* object, QString propName, QVariant value, bool notify, bool transact )
 {
    TableSchema* schema =dbDefn->table( object->table() );
    int idx = object->metaObject()->indexOfProperty(propName.toUtf8().data());
@@ -2501,14 +2504,14 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
       sqlDatabase().commit();
    }
    // NOTE: need to disconnect the recipe's old equipment?
-   connect( newEquip, &BeerXMLElement::changed, rec, &Recipe::acceptEquipChange );
+   connect( newEquip, &Ingredient::changed, rec, &Recipe::acceptEquipChange );
    // NOTE: If we don't reconnect these signals, bad things happen when
    // changing boil times on the mainwindow
    connect( newEquip, &Equipment::changedBoilSize_l, rec, &Recipe::setBoilSize_l);
    connect( newEquip, &Equipment::changedBoilTime_min, rec, &Recipe::setBoilTime_min);
 
    // Emit a changed signal.
-   emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
+   emit rec->changed( rec->metaProperty("equipment"), Ingredient::qVariantFromPtr(newEquip) );
 
    // If we are already wrapped in a transaction boundary, do not call
    // recaclAll(). Weirdness ensues. But I want this after all the signals are
@@ -2641,7 +2644,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
       sqlDatabase().commit();
    }
    connect( newMash, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptMashChange(QMetaProperty,QVariant)));
-   emit rec->changed( rec->metaProperty("mash"), BeerXMLElement::qVariantFromPtr(newMash) );
+   emit rec->changed( rec->metaProperty("mash"), Ingredient::qVariantFromPtr(newMash) );
    // And let the recipe recalc all?
    if ( !noCopy && transact )
       rec->recalcAll();
@@ -2740,7 +2743,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
    }
    // Emit a changed signal.
    rec->m_style_id = newStyle->key();
-   emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
+   emit rec->changed( rec->metaProperty("style"), Ingredient::qVariantFromPtr(newStyle) );
 }
 
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
@@ -3028,7 +3031,7 @@ bool Database::importFromXML(const QString& filename)
    {
       for(int i = 0; i < list.count(); ++i )
       {
-         Recipe* temp = recipeFromXml( list.at(i) );
+         Recipe* temp = m_beerxml->recipeFromXml( list.at(i) );
          if ( ! temp || ! temp->isValid() )
             ret = false;
       }
@@ -3052,7 +3055,7 @@ bool Database::importFromXML(const QString& filename)
             {
                for(int i = 0; i < list.count(); ++i )
                {
-                  Equipment* temp = equipmentFromXml( list.at(i) );
+                  Equipment* temp = m_beerxml->equipmentFromXml( list.at(i) );
                   if ( ! temp->isValid() )
                      ret = false;
                }
@@ -3061,7 +3064,7 @@ bool Database::importFromXML(const QString& filename)
             {
                for( int i = 0; i < list.count(); ++i )
                {
-                  Fermentable* temp = fermentableFromXml( list.at(i) );
+                  Fermentable* temp = m_beerxml->fermentableFromXml( list.at(i) );
                   if ( ! temp->isValid() )
                      ret = false;
                }
@@ -3071,7 +3074,7 @@ bool Database::importFromXML(const QString& filename)
             {
                for(int i = 0; i < list.count(); ++i )
                {
-                  Hop* temp = hopFromXml( list.at(i) );
+                  Hop* temp = m_beerxml->hopFromXml( list.at(i) );
                   if ( ! temp->isValid() )
                      ret = false;
                }
@@ -3080,7 +3083,7 @@ bool Database::importFromXML(const QString& filename)
             {
                for(int i = 0; i < list.count(); ++i )
                {
-                  Misc* temp = miscFromXml( list.at(i) );
+                  Misc* temp = m_beerxml->miscFromXml( list.at(i) );
                   if ( ! temp->isValid() )
                      ret = false;
                }
@@ -3089,7 +3092,7 @@ bool Database::importFromXML(const QString& filename)
             {
                for( int i = 0; i < list.count(); ++i )
                {
-                  Style* temp = styleFromXml( list.at(i) );
+                  Style* temp = m_beerxml->styleFromXml( list.at(i) );
                   if ( ! temp->isValid() )
                      ret = false;
                }
@@ -3098,7 +3101,7 @@ bool Database::importFromXML(const QString& filename)
             {
                for(int i = 0; i < list.count(); ++i )
                {
-                  Yeast* temp = yeastFromXml( list.at(i) );
+                  Yeast* temp = m_beerxml->yeastFromXml( list.at(i) );
                   if ( ! temp->isValid() )
                      ret = false;
                }
@@ -3107,7 +3110,7 @@ bool Database::importFromXML(const QString& filename)
             {
                for( int i = 0; i < list.count(); ++i )
                {
-                  Water* temp = waterFromXml( list.at(i) );
+                  Water* temp = m_beerxml->waterFromXml( list.at(i) );
                   if ( ! temp->isValid() )
                      ret = false;
                }
@@ -3116,7 +3119,7 @@ bool Database::importFromXML(const QString& filename)
             {
                for( int i = 0; i < list.count(); ++i )
                {
-                  Mash* temp = mashFromXml( list.at(i) );
+                  Mash* temp = m_beerxml->mashFromXml( list.at(i) );
                   if ( ! temp->isValid() )
                      ret = false;
                }
@@ -3127,1613 +3130,11 @@ bool Database::importFromXML(const QString& filename)
    return ret;
 }
 
-QString Database::textFromValue(QVariant value, QString type)
-{
-   QString retval = value.toString();
-
-   if (type == "boolean" )
-       retval = BeerXMLElement::text(value.toBool());
-   else if (type == "real")
-       retval = BeerXMLElement::text(value.toDouble());
-   else if (type == "timestamp")
-       retval = BeerXMLElement::text(value.toDate());
-
-   return retval;
-}
-
-void Database::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("BREWNOTE");
-   TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
-
-   // This sucks. Not quite sure what to do, but hard code it
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   node.appendChild(tmpElement);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-}
-
-void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("EQUIPMENT");
-   TableSchema* tbl = dbDefn->table(Brewtarget::EQUIPTABLE);
-
-   // This sucks. Not quite sure what to do, but hard code it
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   node.appendChild(tmpElement);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-}
-
-void Database::toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("FERMENTABLE");
-   TableSchema* tbl = dbDefn->table(Brewtarget::FERMTABLE);
-
-   // This sucks. Not quite sure what to do, but hard code it
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   node.appendChild(tmpElement);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-
-}
-
-void Database::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
-{
-
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("HOP");
-   TableSchema* tbl = dbDefn->table(Brewtarget::HOPTABLE);
-
-   // This sucks. Not quite sure what to do, but hard code it
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   node.appendChild(tmpElement);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-
-}
-
-void Database::toXml( Instruction* a, QDomDocument& doc, QDomNode& parent )
-{
-
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("INSTRUCTION");
-   TableSchema* tbl = dbDefn->table(Brewtarget::INSTRUCTIONTABLE);
-
-   // This sucks. Not quite sure what to do, but hard code it
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   node.appendChild(tmpElement);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-
-}
-
-void Database::toXml( Mash* a, QDomDocument& doc, QDomNode& parent )
-{
-
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-   int i, size;
-
-   node = doc.createElement("MASH");
-   TableSchema* tbl = dbDefn->table(Brewtarget::MASHTABLE);
-
-   // This sucks. Not quite sure what to do, but hard code it
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   node.appendChild(tmpElement);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-
-   tmpElement = doc.createElement("MASH_STEPS");
-   QList<MashStep*> mashSteps = a->mashSteps();
-   size = mashSteps.size();
-   for( i = 0; i < size; ++i )
-      toXml( mashSteps[i], doc, tmpElement);
-   node.appendChild(tmpElement);
-
-   parent.appendChild(node);
-
-}
-
-void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("MASH_STEP");
-   TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
-
-   // This sucks. Not quite sure what to do, but hard code it
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   node.appendChild(tmpElement);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         QString val;
-         // flySparge and batchSparge aren't part of the BeerXML spec.
-         // This makes sure we give BeerXML something it understands.
-         if ( element == kpropType ) {
-            if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) {
-               val = MashStep::types[0];
-            }
-            else {
-               val = a->typeString();
-            }
-         }
-         else {
-             val = textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element));
-         }
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(val);
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-
-}
-
-void Database::toXml( Misc* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("MISC");
-   TableSchema* tbl = dbDefn->table(Brewtarget::MISCTABLE);
-
-   // This sucks. Not quite sure what to do, but hard code it
-   tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
-   tmpElement.appendChild(tmpText);
-   node.appendChild(tmpElement);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-}
-
-void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   int i;
-
-   node = doc.createElement("RECIPE");
-   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-
-   Style* style = a->style();
-   if( style != nullptr )
-      toXml( style, doc, node);
-
-   tmpElement = doc.createElement("HOPS");
-   QList<Hop*> hops = a->hops();
-   for( i = 0; i < hops.size(); ++i )
-      toXml( hops[i], doc, tmpElement);
-   node.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("FERMENTABLES");
-   QList<Fermentable*> ferms = a->fermentables();
-   for( i = 0; i < ferms.size(); ++i )
-      toXml( ferms[i], doc, tmpElement);
-   node.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("MISCS");
-   QList<Misc*> miscs = a->miscs();
-   for( i = 0; i < miscs.size(); ++i )
-      toXml( miscs[i], doc, tmpElement);
-   node.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("YEASTS");
-   QList<Yeast*> yeasts = a->yeasts();
-   for( i = 0; i < yeasts.size(); ++i )
-      toXml( yeasts[i], doc, tmpElement);
-   node.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("WATERS");
-   QList<Water*> waters = a->waters();
-   for( i = 0; i < waters.size(); ++i )
-      toXml( waters[i], doc, tmpElement);
-   node.appendChild(tmpElement);
-
-   Mash* mash = a->mash();
-   if( mash != nullptr )
-      toXml( mash, doc, node);
-
-   tmpElement = doc.createElement("INSTRUCTIONS");
-   QList<Instruction*> instructions = a->instructions();
-   for( i = 0; i < instructions.size(); ++i )
-      toXml( instructions[i], doc, tmpElement);
-   node.appendChild(tmpElement);
-
-   tmpElement = doc.createElement("BREWNOTES");
-   QList<BrewNote*> brewNotes = a->brewNotes();
-   for(i=0; i < brewNotes.size(); ++i)
-      toXml(brewNotes[i], doc, tmpElement);
-   node.appendChild(tmpElement);
-
-   Equipment* equip = a->equipment();
-   if( equip )
-      toXml( equip, doc, node);
-
-   parent.appendChild(node);
-}
-
-void Database::toXml( Style* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("STYLE");
-   TableSchema* tbl = dbDefn->table(Brewtarget::STYLETABLE);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-
-}
-
-void Database::toXml( Water* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("WATER");
-   TableSchema* tbl = dbDefn->table(Brewtarget::WATERTABLE);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-
-
-}
-
-void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
-{
-   QDomElement node;
-   QDomElement tmpElement;
-   QDomText tmpText;
-
-   node = doc.createElement("YEAST");
-   TableSchema* tbl = dbDefn->table(Brewtarget::EQUIPTABLE);
-
-   foreach (QString element, tbl->allPropertyNames()) {
-      if ( ! tbl->propertyToXml(element).isEmpty() ) {
-         tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
-         tmpElement.appendChild(tmpText);
-         node.appendChild(tmpElement);
-      }
-   }
-   parent.appendChild(node);
-}
-
-// fromXml ====================================================================
-void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString xmlTag;
-   int intVal;
-   double doubleVal;
-   bool boolVal;
-   QString stringVal;
-   QDateTime dateTimeVal;
-   QDate dateVal;
-
-   for( node = elementNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
-         continue;
-      }
-
-      child = node.firstChild();
-      if( child.isNull() || ! child.isText() )
-         continue;
-
-      xmlTag = node.nodeName();
-      textNode = child.toText();
-
-      if( xmlTagsToProperties.contains(xmlTag) )
-      {
-         switch( element->metaProperty(xmlTagsToProperties[xmlTag]).type() )
-         {
-            case QVariant::Bool:
-               boolVal = BeerXMLElement::getBool(textNode);
-               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), boolVal);
-               break;
-            case QVariant::Double:
-               doubleVal = BeerXMLElement::getDouble(textNode);
-               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), doubleVal);
-               break;
-            case QVariant::Int:
-               intVal = BeerXMLElement::getInt(textNode);
-               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), intVal);
-               break;
-            case QVariant::DateTime:
-               dateTimeVal = BeerXMLElement::getDateTime(textNode);
-               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), dateTimeVal);
-               break;
-            case QVariant::Date:
-               dateVal = BeerXMLElement::getDate(textNode);
-               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), dateVal);
-               break;
-            // NOTE: I believe that enum types like Fermentable::Type will go
-            // here since Q_ENUMS() converts enums to strings. So, need to make
-            // sure that the enums match exactly what we expect in the XML.
-            case QVariant::String:
-               stringVal = BeerXMLElement::getString(textNode);
-               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), stringVal);
-               break;
-            default:
-               Brewtarget::logW("Database::fromXML(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode): don't understand property type.");
-               break;
-         }
-         // Not sure if we should keep processing or just dump?
-         if ( ! element->isValid() ) {
-            Brewtarget::logE( QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag));
-            return;
-         }
-      }
-      else
-      {
-         //if( showWarnings )
-         //  Brewtarget::logW(QString("Database::fromXML: Unsupported property: %1. Line %2").arg(xmlTag).arg(node.lineNumber()) );
-      }
-   }
-
-}
-
-void Database::fromXml(BeerXMLElement* element, QDomNode const& elementNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString xmlTag;
-   int intVal;
-   double doubleVal;
-   bool boolVal;
-   QString stringVal;
-   QDateTime dateTimeVal;
-   QDate dateVal;
-   TableSchema* schema = new TableSchema( element->table() );
-
-   for( node = elementNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
-         continue;
-      }
-
-      child = node.firstChild();
-      if( child.isNull() || ! child.isText() )
-         continue;
-
-      xmlTag = node.nodeName();
-      textNode = child.toText();
-      QString pTag = schema->xmlToProperty(xmlTag);
-
-      if( pTag.size() ) {
-         switch( element->metaProperty(pTag).type() )
-         {
-            case QVariant::Bool:
-               boolVal = BeerXMLElement::getBool(textNode);
-               element->setProperty(pTag.toStdString().c_str(), boolVal);
-               break;
-            case QVariant::Double:
-               doubleVal = BeerXMLElement::getDouble(textNode);
-               element->setProperty(pTag.toStdString().c_str(), doubleVal);
-               break;
-            case QVariant::Int:
-               intVal = BeerXMLElement::getInt(textNode);
-               element->setProperty(pTag.toStdString().c_str(), intVal);
-               break;
-            case QVariant::DateTime:
-               dateTimeVal = BeerXMLElement::getDateTime(textNode);
-               element->setProperty(pTag.toStdString().c_str(), dateTimeVal);
-               break;
-            case QVariant::Date:
-               dateVal = BeerXMLElement::getDate(textNode);
-               element->setProperty(pTag.toStdString().c_str(), dateVal);
-               break;
-            // NOTE: I believe that enum types like Fermentable::Type will go
-            // here since Q_ENUMS() converts enums to strings. So, need to make
-            // sure that the enums match exactly what we expect in the XML.
-            case QVariant::String:
-               stringVal = BeerXMLElement::getString(textNode);
-               element->setProperty(pTag.toStdString().c_str(), stringVal);
-               break;
-            default:
-               Brewtarget::logW(QString("%1: don't understand property type for %2, xmlTag=%3")
-                     .arg(Q_FUNC_INFO).arg(element->name()).arg(xmlTag));
-               break;
-         }
-         // Not sure if we should keep processing or just dump?
-         if ( ! element->isValid() ) {
-            Brewtarget::logE( QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag));
-            return;
-         }
-      }
-   }
-}
-
-// Brewnotes can never be created w/ a recipe, so we will always assume the
-// calling method has the transactions
-BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   blockSignals(true);
-   BrewNote* ret;
-   QDateTime theDate;
-
-   n = node.firstChildElement("BREWDATE");
-   theDate = QDateTime::fromString(n.firstChild().toText().nodeValue(),Qt::ISODate);
-
-   try {
-      ret = new BrewNote(theDate);
-
-      if ( ! ret ) {
-         QString error = "Could not create new brewnote.";
-         Brewtarget::logE(QString(error));
-         return ret;
-      }
-      // Need to tell the brewnote not to perform the calculations
-      ret->setLoading(true);
-      fromXml(ret, node);
-      ret->setLoading(false);
-
-      insertBrewnote(ret,parent);
-   }
-   catch (QString e) {
-      blockSignals(false);
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-   }
-   blockSignals(false);
-   return ret;
-}
-
-Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
-{
-    // When loading from XML, we need to delay the signals until after
-    // everything is done. This should significantly speed up the load times
-
-    QDomNode n;
-    bool createdNew = true;
-    blockSignals(true);
-    Equipment* ret;
-    QString name;
-    QList<Equipment*> matching;
-
-    n = node.firstChildElement("NAME");
-    name = n.firstChild().toText().nodeValue();
-    try {
-      // If we are just importing an equip by itself, need to do some dupe-checking.
-        if( parent == nullptr ) {
-            // Check to see if there is an equip already in the DB with the same name.
-            getElementsByName<Equipment>( matching, Brewtarget::EQUIPTABLE, name, allEquipments );
-
-            // If we find a match, use it
-            if( matching.length() > 0 ) {
-                createdNew = false;
-                ret = matching.first();
-            }
-            else {
-                ret = new Equipment(name,true);
-            }
-        }
-        else {
-            ret = new Equipment(name,true);
-        }
-
-        if ( createdNew ) {
-            fromXml(ret, node);
-            if ( ! ret->isValid() )
-                throw QString("There was an error loading equipment profile from XML");
-
-            // If we are importing one of our beerXML files, the utilization is always
-            // 0%. We need to fix that.
-            if ( ret->hopUtilization_pct() == 0.0 )
-                ret->setHopUtilization_pct(100.0);
-
-            insertEquipment(ret);
-        }
-
-        if( parent ) {
-            ret->setDisplay(false);
-            addToRecipe( parent, ret, true );
-        }
-   }
-   catch (QString e) {
-        Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-        blockSignals(false);
-        throw;
-   }
-
-   blockSignals(false);
-
-   if ( createdNew ) {
-      emit changed( metaProperty("equipments"), QVariant() );
-      emit newEquipmentSignal(ret);
-   }
-
-   return ret;
-}
-
-Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   bool createdNew = true;
-   blockSignals(true);
-   Fermentable* ret;
-   QString name;
-   QList<Fermentable*> matching;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-   try {
-      // If we are just importing a ferm by itself, need to do some dupe-checking.
-      if ( parent == nullptr )
-      {
-         // No parent means we handle the transaction
-         sqlDatabase().transaction();
-         // Check to see if we already have a Fermentable with this name
-         getElementsByName<Fermentable>( matching, Brewtarget::FERMTABLE, name, allFermentables );
-
-         if ( matching.length() > 0 ) {
-            createdNew = false;
-            ret = matching.first();
-         }
-         else {
-            ret = new Fermentable(name);
-         }
-      }
-      else {
-         ret = new Fermentable(name);
-      }
-
-      if ( createdNew ) {
-         fromXml( ret, node );
-         if ( ! ret->isValid() )
-            throw QString("Error reading fermentable from XML");
-
-
-         // Handle enums separately.
-         n = node.firstChildElement("TYPE");
-         if ( n.firstChild().isNull() )
-            ret->invalidate();
-         else {
-            int ndx = Fermentable::types.indexOf( n.firstChild().toText().nodeValue());
-            if ( ndx != -1 )
-               ret->setType( static_cast<Fermentable::Type>(ndx));
-            else
-               ret->invalidate();
-         }
-
-         if ( ! ret->isValid() ) {
-            Brewtarget::logW( QString("Database::fermentableFromXml: Could convert %1 to a recognized type")
-                  .arg(n.firstChild().toText().nodeValue()));
-         }
-         insertFermentable(ret);
-      }
-
-      if ( parent ) {
-         ret->setDisplay(false);
-         addToRecipe( parent, ret, true );
-      }
-   }
-   catch (QString e) {
-      if ( parent == nullptr ) {
-         sqlDatabase().rollback();
-      }
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-   }
-
-   if ( parent == nullptr ) {
-      sqlDatabase().commit();
-   }
-
-   blockSignals(false);
-   if ( createdNew ) {
-      emit changed( metaProperty("fermentables"), QVariant() );
-      emit newFermentableSignal(ret);
-   }
-
-   return ret;
-}
-
-int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
-{
-  if ( Hop::types.indexOf(type) < 0 ) {
-    TableSchema* tbl = dbDefn->table(Brewtarget::HOPTABLE);
-    // look for a valid hop type from our database to use
-    QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
-           .arg(tbl->propertyToColumn(kpropType))
-           .arg(tbl->tableName())
-           .arg(tbl->propertyToColumn(kpropName));
-    // Check to see if there is an hop already in the DB with the same name.
-    QSqlQuery q(sqlDatabase());
-    q.prepare(query);
-    q.bindValue(":name", hop->name());
-
-    if ( q.exec() ) {
-       q.first();
-       if ( q.isValid() ) {
-         QString htype = q.record().value(0).toString();
-         q.finish();
-         if ( htype != "" &&  Hop::types.indexOf(htype) >= 0 ) {
-            return Hop::types.indexOf(htype);
-         }
-       }
-    }
-    // out of ideas at this point so default to Both
-    return Hop::types.indexOf(QString("Both"));
-  }
-  else {
-     return Hop::types.indexOf(type);
-  }
-}
-
-int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
-{
-  if ( Hop::uses.indexOf(use) < 0 ) {
-    TableSchema* tbl = dbDefn->table(Brewtarget::HOPTABLE);
-    // look for a valid hop type from our database to use
-    QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
-           .arg(tbl->propertyToColumn(kpropUse))
-           .arg(tbl->tableName())
-           .arg(tbl->propertyToColumn(kpropName));
-
-    QSqlQuery q(sqlDatabase());
-    q.prepare(query);
-    q.bindValue(":name", hop->name());
-
-    if ( q.exec() ) {
-       q.first();
-       if ( q.isValid() ) {
-          QString hUse = q.record().value(0).toString();
-          q.finish();
-          if ( hUse != "" &&  Hop::uses.indexOf(hUse) >= 0 ) {
-             return Hop::uses.indexOf(hUse);
-          }
-       }
-    }
-    // out of ideas at this point so default to Flavor
-    return Hop::uses.indexOf(QString("Flavor"));
-  }
-  else {
-     return Hop::uses.indexOf(use);
-  }
-}
-
-Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   bool createdNew = true;
-   blockSignals(true);
-   Hop* ret;
-   QString name;
-   QList<Hop*> matching;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-   try {
-      // If we are just importing a hop by itself, need to do some dupe-checking.
-      if( parent == nullptr )
-      {
-         // as always, start the transaction if no parent
-         sqlDatabase().transaction();
-         // Check to see if there is a hop already in the DB with the same name.
-         getElementsByName<Hop>( matching, Brewtarget::HOPTABLE, name, allHops );
-
-         if( matching.length() > 0 ) {
-            createdNew = false;
-            ret = matching.first();
-         }
-         else {
-            ret = new Hop(name);
-         }
-      }
-      else {
-         ret = new Hop(name);
-      }
-
-      if ( createdNew ) {
-         fromXml( ret, node );
-         if ( ! ret->isValid() ) {
-            throw QString("Error reading Hop from XML");
-         }
-
-         // Handle enums separately.
-         n = node.firstChildElement("USE");
-         if ( n.firstChild().isNull() )
-            ret->invalidate();
-         else {
-            int ndx = getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret);
-            if ( ndx != -1 ) {
-               ret->setUse( static_cast<Hop::Use>(ndx));
-            }
-            else {
-               ret->invalidate();
-               Brewtarget::logW(QString("Database::hopFromXml: Could convert %1 to a recognized type")
-                     .arg(n.firstChild().toText().nodeValue()));
-            }
-         }
-
-         n = node.firstChildElement("TYPE");
-         if ( n.firstChild().isNull() ) {
-            ret->invalidate();
-         }
-         else {
-            int ndx = getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret);
-            if ( ndx != -1 ) {
-               ret->setType( static_cast<Hop::Type>(ndx) );
-            }
-            else {
-               ret->invalidate();
-               Brewtarget::logW(QString("Database::hopFromXml: Could convert %1 to a recognized type")
-                     .arg(n.firstChild().toText().nodeValue()));
-            }
-         }
-
-         n = node.firstChildElement("FORM");
-         if ( n.firstChild().isNull() ) {
-            ret->invalidate();
-         }
-         else {
-            int ndx = Hop::forms.indexOf(n.firstChild().toText().nodeValue());
-            if ( ndx != -1 ) {
-               ret->setForm( static_cast<Hop::Form>(ndx));
-            }
-            else {
-               ret->invalidate();
-               Brewtarget::logW(QString("Database::hopFromXml: Could convert %1 to a recognized type")
-                     .arg(n.firstChild().toText().nodeValue()));
-            }
-         }
-
-         insertHop(ret);
-      }
-
-      if( parent )
-         addToRecipe( parent, ret, true );
-   }
-   catch (QString &e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
-      blockSignals(false);
-      if ( ! parent )
-         sqlDatabase().rollback();
-
-      abort();
-   }
-
-   if ( ! parent ) {
-      sqlDatabase().commit();
-   }
-
-   blockSignals(false);
-   if( createdNew ) {
-      emit changed( metaProperty("hops"), QVariant() );
-      emit newHopSignal(ret);
-   }
-   return ret;
-}
-
-// like brewnotes, we will assume here that the caller has the transaction
-// block
-Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   QString name;
-   Instruction* ret;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-
-   blockSignals(true);
-   try {
-      ret = new Instruction(name);
-
-      fromXml(ret, node);
-
-      insertInstruction(ret, parent);
-
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
-      blockSignals(false);
-      throw;
-   }
-
-   blockSignals(false);
-   emit changed( metaProperty("instructions"), QVariant() );
-   return ret;
-}
-
-Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   Mash* ret;
-   QString name;
-   QList<Mash*> matching;
-
-   blockSignals(true);
-
-   // Mashes are weird. We need to know if this is a duplicate, but we need to
-   // make a copy of it anyway.
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-
-   if ( name.isEmpty() ) {
-      name = "";
-   }
-
-   try {
-      ret = new Mash(name);
-
-      // If the mash has a name
-      if ( ! name.isEmpty() ) {
-         getElementsByName<Mash>( matching, Brewtarget::MASHTABLE, name, allMashs );
-
-         // If there are no other matches in the database
-         if( matching.isEmpty() ) {
-            ret->setDisplay(true);
-         }
-      }
-      // First, get all the standard properties.
-      fromXml( ret, node );
-
-      //Need to insert the Mash before the Mash steps to get
-      //the ID for foreign key contraint in Maststep table.
-      sqlDatabase().transaction();
-      insertMash(ret);
-
-      // Now, get the individual mash steps.
-      n = node.firstChildElement("MASH_STEPS");
-      if( ! n.isNull() ) {
-         // Iterate through all the mash steps.
-         for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-         {
-            MashStep* temp = mashStepFromXml( n, ret );
-            if ( ! temp->isValid() ) {
-               QString error = QString("Error importing mash step %1").arg(temp->name());
-               Brewtarget::logE(error);
-            }
-         }
-      }
-
-      if ( parent ) {
-         addToRecipe( parent, ret, true, false);
-      }
-
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      blockSignals(false);
-      sqlDatabase().rollback();
-      throw;
-   }
-
-   sqlDatabase().commit();
-
-   blockSignals(false);
-
-   emit changed( metaProperty("mashs"), QVariant() );
-   emit newMashSignal(ret);
-   emit ret->mashStepsChanged();
-
-   return ret;
-}
-
-// mashsteps don't exist without a mash. It is up to mashFromXml or
-// recipeFromXml to deal with the transaction
-MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
-{
-   QDomNode n;
-   QString str;
-   bool blocked = signalsBlocked();
-
-//   if (! blocked )
-//      blockSignals(true);
-
-   try {
-      MashStep* ret = new MashStep(true);
-
-      fromXml(ret,node);
-
-      // Handle enums separately.
-      n = node.firstChildElement("TYPE");
-      if ( n.firstChild().isNull() )
-         ret->invalidate();
-      else {
-         //Try to make sure incoming format matches
-         //e.g. convert INFUSION to Infusion
-         str = n.firstChild().toText().nodeValue();
-         str = str.toLower();
-         str[0] = str.at(0).toTitleCase();
-         int ndx =  MashStep::types.indexOf(str);
-
-         if ( ndx != -1 )
-            ret->setType( static_cast<MashStep::Type>(ndx) );
-         else {
-            Brewtarget::logW( 
-                  tr("%1: Could not convert mashstep type %2 to known type")
-                  .arg(Q_FUNC_INFO)
-                  .arg(str)
-            );
-            ret->invalidate();
-         }
-      }
-
-      insertMashStep(ret,parent);
-      if (! blocked )
-      {
-         blockSignals(false);
-         emit changed( metaProperty("mashs"), QVariant() );
-         emit parent->mashStepsChanged();
-      }
-      return ret;
-   }
-   catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      if (! blocked )
-         blockSignals(false);
-      throw;
-   }
-
-}
-
-int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
-{
-  if ( Misc::types.indexOf(type) < 0 ) {
-    TableSchema* tbl = dbDefn->table(Brewtarget::MISCTABLE);
-    // look for a valid mash type from our database to use
-    QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
-            .arg(tbl->propertyToColumn(kpropType))
-            .arg(tbl->tableName())
-            .arg(tbl->propertyToColumn(kpropName));
-    QSqlQuery q(sqlDatabase());
-
-    q.prepare(query);
-    q.bindValue(":name", misc->name());
-
-    if ( q.exec() ) {
-       q.first();
-       if ( q.isValid() )
-       {
-         QString mtype = q.record().value(0).toString();
-         q.finish();
-         if ( mtype != "" &&  Misc::types.indexOf(mtype) >= 0 ) {
-            return Misc::types.indexOf(mtype);
-         }
-       }
-    }
-    // out of ideas at this point so default to Flavor
-    return Misc::types.indexOf(QString("Flavor"));
-  }
-  else {
-     return Misc::types.indexOf(type);
-  }
-}
-
-int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
-{
-  if ( Misc::uses.indexOf(use) < 0 ) {
-    // look for a valid misc type from our database to use
-    TableSchema* tbl = dbDefn->table(Brewtarget::MISCTABLE);
-    QString query = QString("SELECT %1 FROM %2 WHERE %3=:use AND %1 != ''")
-            .arg(tbl->propertyToColumn(kpropType))
-            .arg(tbl->tableName())
-            .arg(tbl->propertyToColumn(kpropUse));
-    QSqlQuery q(sqlDatabase());
-
-    q.prepare(query);
-    q.bindValue(":name", misc->name());
-
-    if ( q.exec() ) {
-       q.first();
-       if ( q.isValid() ) {
-         QString mUse = q.record().value(0).toString();
-         q.finish();
-         if ( mUse != "" &&  Misc::uses.indexOf(mUse) >= 0 ) {
-            return Misc::uses.indexOf(mUse);
-         }
-       }
-    }
-    // out of ideas at this point so default to Flavor
-    return Misc::uses.indexOf(QString("Flavor"));
-  }
-  else {
-     return Misc::uses.indexOf(use);
-  }
-}
-
-Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   bool createdNew = true;
-   blockSignals(true);
-   Misc* ret;
-   QString name;
-   QList<Misc*> matching;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-   try {
-      // If we are just importing a misc by itself, need to do some dupe-checking.
-      if( parent == nullptr ) {
-         // Check to see if there is a hop already in the DB with the same name.
-         sqlDatabase().transaction();
-
-         getElementsByName<Misc>( matching, Brewtarget::MISCTABLE, name, allMiscs );
-
-         if( matching.length() > 0 ) {
-            createdNew = false;
-            ret = matching.first();
-         }
-         else {
-            ret = new Misc(name);
-         }
-      }
-      else {
-         ret = new Misc(name);
-      }
-
-      if ( createdNew ) {
-
-         fromXml( ret, node );
-
-         // Handle enums separately.
-         n = node.firstChildElement("TYPE");
-         // Assuming these return anything is a bad idea. So far, several other brewing programs are not generating
-         // valid XML.
-         if ( n.firstChild().isNull() ) {
-            ret->invalidate();
-         }
-         else {
-            ret->setType( static_cast<Misc::Type>(getQualifiedMiscTypeIndex(n.firstChild().toText().nodeValue(), ret)));
-         }
-
-         n = node.firstChildElement("USE");
-         if ( n.firstChild().isNull() ) {
-            ret->invalidate();
-         }
-         else {
-            ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
-         }
-
-         if ( ! ret->isValid() ) {
-            Brewtarget::logW(
-                  QString("%1: Could convert %2 to a recognized type")
-                  .arg(Q_FUNC_INFO)
-                  .arg(n.firstChild().toText().nodeValue()));
-         }
-         insertMisc(ret);
-      }
-
-      if( parent )
-         addToRecipe( parent, ret, true );
-   }
-   catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      if ( ! parent )
-         sqlDatabase().rollback();
-      blockSignals(false);
-      throw;
-   }
-
-   blockSignals(false);
-   if( createdNew )
-   {
-      emit changed( metaProperty("miscs"), QVariant() );
-      emit newMiscSignal(ret);
-   }
-   return ret;
-}
-
-Recipe* Database::recipeFromXml( QDomNode const& node )
-{
-   QDomNode n;
-   blockSignals(true);
-   Recipe *ret;
-   QString name;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-   try {
-
-      // This is all one long, gnarly transaction.
-      sqlDatabase().transaction();
-
-      // Oh sweet mercy
-      ret = new Recipe(name);
-
-      if ( ! ret ) {
-         return nullptr;
-      }
-      // Get standard properties.
-      fromXml(ret, node);
-
-      // I need to insert this now, because I need a valid key for adding
-      // things to the recipe
-      insertRecipe(ret);
-
-      // Get style. Note: styleFromXml requires the entire node, not just the
-      // firstchild of the node.
-      n = node.firstChildElement("STYLE");
-      styleFromXml(n, ret);
-      if ( ! ret->style()->isValid())
-         ret->invalidate();
-
-      // Get equipment. equipmentFromXml requires the entire node, not just the
-      // first child
-      n = node.firstChildElement("EQUIPMENT");
-      equipmentFromXml(n, ret);
-      if ( !ret->equipment()->isValid() )
-         ret->invalidate();
-
-      // Get hops.
-      n = node.firstChildElement("HOPS");
-      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      {
-         Hop* temp = hopFromXml(n, ret);
-         if ( ! temp->isValid() )
-            ret->invalidate();
-      }
-
-      // Get ferms.
-      n = node.firstChildElement("FERMENTABLES");
-      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      {
-         Fermentable* temp = fermentableFromXml(n, ret);
-         if ( ! temp->isValid() )
-            ret->invalidate();
-      }
-
-      // get mashes. There is only one mash per recipe, so this needs the entire
-      // node.
-      n = node.firstChildElement("MASH");
-      mashFromXml(n, ret);
-      if ( ! ret->mash()->isValid() )
-         ret->invalidate();
-
-      // Get miscs.
-      n = node.firstChildElement("MISCS");
-      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      {
-         Misc* temp = miscFromXml(n, ret);
-         if (! temp->isValid())
-            ret->invalidate();
-      }
-
-      // Get yeasts.
-      n = node.firstChildElement("YEASTS");
-      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      {
-         Yeast* temp = yeastFromXml(n, ret);
-         if ( !temp->isValid() )
-            ret->invalidate();
-      }
-
-      // Get waters. Odd. Waters don't invalidate.
-      n = node.firstChildElement("WATERS");
-      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-         waterFromXml(n, ret);
-
-      /* That ends the beerXML defined objects. I'm not going to do the
-      * validation for these last two. We write em, and we had better be
-      * writing them properly
-      */
-      // Get instructions.
-      n = node.firstChildElement("INSTRUCTIONS");
-      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-         instructionFromXml(n, ret);
-
-      // Get brew notes
-      n = node.firstChildElement("BREWNOTES");
-      for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-         brewNoteFromXml(n, ret);
-
-      // If we get here, commit
-      sqlDatabase().commit();
-
-      // Recalc everything, just for grins and giggles.
-      ret->recalcAll();
-      blockSignals(false);
-   }
-   catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      sqlDatabase().rollback();
-      blockSignals(false);
-      throw;
-   }
-
-   emit newRecipeSignal(ret);
-   return ret;
-}
-
-Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   bool createdNew = true;
-   blockSignals(true);
-   Style* ret;
-   QString name;
-   QList<Style*> matching;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-   try {
-      // If we are just importing a style by itself, need to do some dupe-checking.
-      if ( parent == nullptr ) {
-         // No parent means we handle the transaction
-         sqlDatabase().transaction();
-         // Check to see if there is a style already in the DB with the same name.
-         getElementsByName<Style>( matching, Brewtarget::STYLETABLE, name, allStyles );
-
-         // If we found a match, use it.
-         if ( matching.length() > 0 ) {
-            createdNew = false;
-            ret = matching.first();
-         }
-         else {
-            // We could find no matching style in the db
-            ret = new Style(name,true);
-         }
-      }
-      else {
-         // If we are inserting this as part of a recipe, we can skip straight
-         // to creating a new one
-         ret = newStyle(name);
-      }
-
-      if ( createdNew ) {
-         fromXml( ret, node );
-
-         // Handle enums separately.
-         n = node.firstChildElement("TYPE");
-         if ( n.firstChild().isNull() ) {
-            ret->invalidate();
-         }
-         else {
-            int ndx = Style::m_types.indexOf( n.firstChild().toText().nodeValue());
-            if ( ndx != -1 )
-               ret->setType(static_cast<Style::Type>(ndx));
-            else
-               ret->invalidate();
-         }
-
-         // If translating the enums craps out, give a warning
-         if (! ret->isValid() ) {
-            Brewtarget::logW(QString("Database::styleFromXml: Could convert %1 to a recognized type")
-                  .arg(n.firstChild().toText().nodeValue()));
-         }
-         // we need to poke this into the database
-         insertStyle(ret);
-      }
-      if ( parent ) {
-         addToRecipe( parent, ret, true );
-      }
-   }
-   catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      if ( ! parent )
-         sqlDatabase().rollback();
-      blockSignals(false);
-      throw;
-   }
-
-   blockSignals(false);
-   if ( createdNew ) {
-      emit changed( metaProperty("styles"), QVariant() );
-      emit newStyleSignal(ret);
-   }
-
-   return ret;
-}
-
-Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   blockSignals(true);
-   bool createdNew = true;
-   Water* ret;
-   QString name;
-   QList<Water*> matching;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-   try {
-      // If we are just importing a style by itself, need to do some dupe-checking.
-      if( parent == nullptr ) {
-         sqlDatabase().transaction();
-         // Check to see if there is a hop already in the DB with the same name.
-         getElementsByName<Water>( matching, Brewtarget::WATERTABLE, name, allWaters );
-
-         if( matching.length() > 0 )
-         {
-            createdNew = false;
-            ret = matching.first();
-         }
-         else
-            ret = new Water(name);
-      }
-      else
-         ret = new Water(name);
-
-      if ( createdNew ) {
-         fromXml( ret, node );
-         insertWater(ret);
-         if( parent ) {
-            addToRecipe( parent, ret, false );
-         }
-      }
-   }
-   catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      if ( parent == nullptr )
-         sqlDatabase().rollback();
-      blockSignals(false);
-      throw;
-   }
-
-   blockSignals(false);
-   if( createdNew )
-   {
-      emit changed( metaProperty("waters"), QVariant() );
-      emit newWaterSignal(ret);
-   }
-
-   return ret;
-}
-
-Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
-{
-   QDomNode n;
-   blockSignals(true);
-   bool createdNew = true;
-   Yeast* ret;
-   QString name;
-   QList<Yeast*> matching;
-
-   n = node.firstChildElement("NAME");
-   name = n.firstChild().toText().nodeValue();
-   try {
-      // If we are just importing a yeast by itself, need to do some dupe-checking.
-      if ( parent == nullptr ) {
-         // start the transaction, just in case
-         sqlDatabase().transaction();
-         // Check to see if there is a yeast already in the DB with the same name.
-         getElementsByName<Yeast>( matching, Brewtarget::YEASTTABLE, name, allYeasts );
-
-         if ( matching.length() > 0 ) {
-            createdNew = false;
-            ret = matching.first();
-         }
-         else {
-            ret = new Yeast(name);
-         }
-      }
-      else {
-         ret = new Yeast(name);
-      }
-
-      if ( createdNew ) {
-         fromXml( ret, node );
-
-         // Handle type enums separately.
-         n = node.firstChildElement("TYPE");
-         if ( n.firstChild().isNull() ) {
-            Brewtarget::logE(
-                  QString("Could not find TYPE in %1.  Please select an appropriate value once the yeast is imported").arg(name)
-            );
-         }
-         else {
-            QString tname = n.firstChild().toText().nodeValue();
-            int ndx = Yeast::types.indexOf( tname );
-            if ( ndx != -1) {
-               ret->setType( static_cast<Yeast::Type>(ndx) );
-            }
-            else {
-               ret->setType(static_cast<Yeast::Type>(0));
-               Brewtarget::logE(
-                     QString("Could not translate the type %1 in %2.  Please select an appropriate value once the yeast is imported")
-                     .arg(tname)
-                     .arg(name));
-            }
-         }
-         // Handle form enums separately.
-         n = node.firstChildElement("FORM");
-         if ( n.firstChild().isNull() ) {
-            Brewtarget::logE(
-                  QString("Could not find FORM in %1.  Please select an appropriate value once the yeast is imported").arg(name)
-            );
-         }
-         else {
-            QString tname = n.firstChild().toText().nodeValue();
-            int ndx = Yeast::forms.indexOf( tname );
-            if ( ndx != -1 ) {
-               ret->setForm( static_cast<Yeast::Form>(ndx) );
-            }
-            else {
-               ret->setForm( static_cast<Yeast::Form>(0) );
-               Brewtarget::logW(
-                     QString("Could not translate the form %1 in %2.  Please select an appropriate value once the yeast is imported")
-                     .arg(tname)
-                     .arg(name));
-            }
-         }
-         // Handle flocc enums separately.
-         n = node.firstChildElement("FLOCCULATION");
-         if ( n.firstChild().isNull() ) {
-            Brewtarget::logE(
-                  QString("Could not find FLOCCULATION in %1.  Please select an appropriate value once the yeast is imported").arg(name)
-            );
-         }
-         else {
-            QString tname = n.firstChild().toText().nodeValue();
-            int ndx = Yeast::flocculations.indexOf( tname );
-            if (ndx != -1) {
-               ret->setFlocculation( static_cast<Yeast::Flocculation>(ndx) );
-            }
-            else {
-               ret->setFlocculation( static_cast<Yeast::Flocculation>(0) );
-               Brewtarget::logE(
-                     QString("Could not translate the flocculation %1 in %2.  Please select an appropriate value once the yeast is imported")
-                     .arg(tname)
-                     .arg(name));
-            }
-         }
-
-         insertYeast(ret);
-      }
-
-      if( parent ) {
-         // we are in a transaction boundary, so tell addToRecipe not to start
-         // another
-         addToRecipe( parent, ret, false );
-         parent->recalcOgFg();
-         parent->recalcABV_pct();
-      }
-   }
-   catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
-      if ( ! parent )
-         sqlDatabase().rollback();
-      blockSignals(false);
-      throw;
-   }
-
-   sqlDatabase().commit();
-   blockSignals(false);
-   if( createdNew )
-   {
-      emit changed( metaProperty("yeasts"), QVariant() );
-      emit newYeastSignal(ret);
-   }
-
-   return ret;
-}
-
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-QMap<QString, std::function<BeerXMLElement*(QString name)> > Database::makeTableParams()
+QMap<QString, std::function<Ingredient*(QString name)> > Database::makeTableParams()
 {
-   QMap<QString, std::function<BeerXMLElement*(QString name)> > tmp;
+   QMap<QString, std::function<Ingredient*(QString name)> > tmp;
    //=============================Equipment====================================
 
    tmp.insert(ktableEquipment,   [&](QString name) { return this->newEquipment(); } );
@@ -4754,7 +3155,7 @@ void Database::updateDatabase(QString const& filename)
    // "new" means the database coming from 'filename'.
 
    QVariant btid, newid, oldid;
-   QMap<QString, std::function<BeerXMLElement*(QString name)> >  makeObject = makeTableParams();
+   QMap<QString, std::function<Ingredient*(QString name)> >  makeObject = makeTableParams();
 
    try {
       QString newCon("newSqldbCon");
