@@ -141,13 +141,14 @@ Database::~Database()
 
 bool Database::loadSQLite()
 {
+   Brewtarget::logD("Loading SQLITE...");
    bool dbIsOpen;
    QSqlDatabase sqldb;
 
    // Set file names.
    dbFileName = Brewtarget::getUserDataDir().filePath("database.sqlite");
    dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
-
+   Brewtarget::logD(QString("Database::loadSQLite() - dbFileName = \"%1\"\nDatabase::loadSQLite() - dataDbFileName=\"%2\"").arg(dbFileName).arg(dataDbFileName));
    // Set the files.
    dbFile.setFileName(dbFileName);
    dataDbFile.setFileName(dataDbFileName);
