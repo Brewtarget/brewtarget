@@ -894,7 +894,7 @@ Function btPageLeave
    ${If} ${FileExists} "$btPath\database.sqlite"
       CopyFiles "$btPath\database.sqlite" $targetDir
       CopyFiles "$btPath\options.xml" $targetDir
-      WriteRegStr HKCU "SOFTWARE\brewtarget\brewtarget" 'hadOldConfig' "1"
+      WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'hadOldConfig' "1"
       MessageBox MB_ICONINFORMATION "Your old databases have been copied into place. Please start brewtarget to have them automatically upgraded."
    ${Else}
       ${If} ${FileExists} "$btPath\database.xml"
@@ -908,7 +908,7 @@ Function btPageLeave
          CopyFiles "$btPath\options.xml" $targetDir
          ; update the registry, so we know to do the final conversion of the
          ; options file
-         WriteRegStr HKCU "SOFTWARE\brewtarget\brewtarget" 'hadOldConfig' "1"
+         WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'hadOldConfig' "1"
          ; Tell the user they are good.
          MessageBox MB_ICONINFORMATION "Your old databases have been copied into place. Please start brewtarget to have them automatically upgraded."
       ${Else}
@@ -917,9 +917,9 @@ Function btPageLeave
       ${EndIf}
    ${EndIf}
    ; Always set the new user_data_dir flag
-   ; WriteRegStr HKCU "SOFTWARE\${APP_NAME}\brewtarget" 'user_data_dir' "$APPDATA\${APP_NAME}\"
+   ; WriteRegStr HKCU "SOFTWARE\${APP_NAME}\OrganizationDefaults" 'user_data_dir' "$APPDATA\${APP_NAME}\"
 
-   WriteRegStr HKCU "SOFTWARE\brewtarget\brewtarget" 'user_data_dir' "$APPDATA\brewtarget\"
+   WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'user_data_dir' "$APPDATA\brewtarget\"
       
 FunctionEnd
 
@@ -1190,7 +1190,7 @@ inst:
   StrCmp "@CPACK_NSIS_MODIFY_PATH@" "ON" 0 noOptionsPage
     !insertmacro MUI_INSTALLOPTIONS_EXTRACT "NSIS.InstallOptions.ini"
 
-   ReadRegStr $btPath HKCU "SOFTWARE\brewtarget\brewtarget" 'user_data_dir'
+   ReadRegStr $btPath HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'user_data_dir'
    StrLen $0 $btPath
 
    ; If we did not find the registry key
