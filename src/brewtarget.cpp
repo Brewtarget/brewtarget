@@ -200,7 +200,7 @@ bool Brewtarget::ensureDirectoriesExist()
   // A missing dataDir is a serious issue, without it we're missing the default DB, sound files & translations.
   // An attempt could be made to created it, like the other config directories, but an empty data dir is just as bad as a missing one.
   // Because of that, we'll display a little more dire warning, and not try to create it.
-  QDir dataDir = getUserDataDir();
+  QDir dataDir = getDataDir();
   bool dataDirSuccess = true;
 
   if (! dataDir.exists())
@@ -424,25 +424,10 @@ const QDir Brewtarget::getConfigDir()
 QDir Brewtarget::getUserDataDir()
 {
    return userDataDir;
-}
-
-QDir Brewtarget::getDefaultUserDataDir()
-{
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
-   return getConfigDir();
-#elif defined(Q_OS_WIN) // Windows OS.
-   // On Windows the Programs directory is normally not writable so we need to get the appData path from the environment instead.
-   userDataDir.setPath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-   logD(QString("userDataDir=%1").arg(userDataDir.path()));
-   if (!userDataDir.exists()) {
-      logD(QString("User data dir \"%1\" does not exist, trying to create").arg(userDataDir.path()));
-      createDir(userDataDir);
-      logD("UserDatadit Created");
-   }
-   return userDataDir;
-#else
-# error "Unsupported OS"
-#endif
+//   if( userDataDir.endsWith('/') || userDataDir.endsWith('\\') )
+//      return userDataDir;
+//   else
+//      return userDataDir + "/";
 }
 
 bool Brewtarget::initialize(const QString &userDirectory)
@@ -476,7 +461,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
    // Guess where to put it.
    else {
       logW(QString("User data directory not specified or doesn't exist - using default."));
-      userDataDir = getDefaultUserDataDir();
+      userDataDir = getConfigDir();
    }
 
    // If the old options file exists, convert it. Otherwise, just get the
@@ -507,7 +492,6 @@ bool Brewtarget::initialize(const QString &userDirectory)
 
    // Check if the database was successfully loaded before
    // loading the main window.
-   logD("Loading Database...");
    if (Database::instance().loadSuccessful())
    {
       if ( ! QSettings().contains("converted") )
@@ -1049,13 +1033,13 @@ void Brewtarget::readSystemOptions()
    //======================Logging options =======================
    log.LoggingEnabled = option("LoggingEnabled", false).toBool();
    log.LoggingLevel = log.getLogTypeFromString(QString(option("LoggingLevel", "INFO").toString()));
-   log.LogFilePath = QDir(option("LogFilePath", getUserDataDir().canonicalPath()).toString());
+   log.LogFilePath = QDir(option("LogFilePath", getConfigDir().absolutePath()).toString());
    log.LoggingUseConfigDir = option("LoggingUseConfigDir", true).toBool();
    if( log.LoggingUseConfigDir )
 #if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-      log.LogFilePath = getUserDataDir().canonicalPath();
+      log.LogFilePath = getConfigDir().absolutePath();
 #else
-      log.LogFilePath.setPath(getUserDataDir().canonicalPath());
+      log.LogFilePath.setPath(getConfigDir().absolutePath());
 #endif
 }
 

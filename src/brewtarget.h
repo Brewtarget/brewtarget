@@ -178,8 +178,6 @@ public:
    static const QDir getConfigDir();
    //! \return user-specified directory where the database files reside.
    static QDir getUserDataDir();
-   //! \return The System path for users applicationpath. on windows: c:\\users\\<USERNAME>\\AppData\\Roaming\\<APPNAME>
-   static QDir getDefaultUserDataDir();
    /*!
     * \brief Blocking call that executes the application.
     * \param userDirectory If !isEmpty, overwrites the current settings.
