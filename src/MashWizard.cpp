@@ -33,6 +33,7 @@
 #include "brewtarget.h"
 #include "equipment.h"
 #include "PhysicalConstants.h"
+#include <QButtonGroup>
 
 MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 {
