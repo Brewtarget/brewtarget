@@ -435,6 +435,42 @@ FunctionEnd
 !insertmacro IsNT ""
 !insertmacro IsNT "un."
 
+
+
+; ConvertToCanonicalPath
+; input, top of stack = Path string to convert to Canonical path
+; usage:
+;     Push "C:\Path\to\Folder"
+;     Call ConvertToCanonicalPath
+;     Pop $R0
+;     $R0 will be C:/Path/to/Folder
+
+Function ConvertToCanonicalPath
+   Exch $R0 ;input string
+   Push $R1
+   ${StrRep} $R1 $R0 "\" "/"
+   StrCpy $R0 $R1
+   Pop $R1
+   Exch $R0 ;output string
+FunctionEnd
+
+; ConvertFromCanonicalPath
+; input, top of stack = Path string to convert to Canonical path
+; usage:
+;     Push "C:/Path/to/Folder"
+;     Call ConvertFromCanonicalPath
+;     Pop $R0
+;     $R0 will be C:\Path\to\Folder
+
+Function ConvertFromCanonicalPath
+   Exch $R0 ;input string
+   Push $R1
+   ${StrRep} $R1 $R0 "/" "\"
+   StrCpy $R0 $R1
+   Pop $R1
+   Exch $R0 ;output string
+FunctionEnd
+
 ; StrStr
 ; input, top of stack = string to search for
 ;        top of stack-1 = string to search in
@@ -752,6 +788,7 @@ FunctionEnd
 ; brewtarget specific instructions
 
 Var btPath
+Var btWindowsPath
 Var btPathVersion
 var prevInst
 Var targetDir
@@ -759,27 +796,35 @@ Var fileName
 Var locateHandle
 Var nouse1
 Var nouse2
+Var btRegPath
 
 !include "Locate.nsh"
 
 ; Set up the browser page. This happens post install, so I'm confused about
 ; what's already on disk and isn't.
+Section "-upgrade-old-database"
+   ${If} $prevInst == "found"
+      ;If old database was found, make sure it is moved to the Roaming folder.
+      Call btCopyAllFiles
+      MessageBox MB_ICONINFORMATION "Brewtarget has been successfully installed. Your database will automatically be upgraded on startup."
+      StrCpy $prevInst "CopyDone"
+   ${EndIf}
+SectionEnd
+
 PageEx Directory
-    DirVar $btPath
-    DirVerify leave
-    PageCallbacks btPageSkip btPageShow btPageLeave
-    DirText "Select old brewtarget install folder. Press skip if this is a new install,or you want to manually upgrade your database" "Brewtarget Install Folder" "" "Select Brewtarget Install Folder"
+   DirVar $btPath
+   DirVerify leave
+   PageCallbacks btPageSkip btPageShow btPageLeave
+   DirText "Select old brewtarget install folder. Press skip if this is a new install,or you want to manually upgrade your database" "Brewtarget Install Folder" "" "Select Brewtarget Install Folder"
 PageExEnd
 
-; If we found a key already in the registry, pop a message saying w00t and
-; that's it
 Function btPageSkip
-   ${If} $prevInst == "found"
-      MessageBox MB_ICONINFORMATION "Brewtarget has been successfully installed. Your database will automatically be upgraded on startup."
+   ${If} $prevInst == "CopyDone"
       Abort
    ${EndIf}
 FunctionEnd
 
+; If we found the Registrykey, don't display the dialog?
 Function btPageShow
    ;Hide space texts
    FindWindow $0 "#32770" "" $HWNDPARENT
@@ -798,31 +843,9 @@ Function btPageShow
    GetDlgItem $R0 $HWNDPARENT 2
    SendMessage $R0 ${WM_SETTEXT} 1 "STR:Skip"
    EnableWindow $R0 1
-
 FunctionEnd
 
-; Do all the copying
-; If this function is called, it means we didn't find the registry key and
-; believe we need to upgrade. The logic works like this:
-;  1. Prompt the user for the path to the brewtarget install
-;  2. If it is brewtarget-2.x, 
-;       search c:\users\[name]\AppData\Local for database.sqlite
-;     else 
-;       search c:\users\[name]\AppData\Local for database.xml
-;  3. If we find it
-;       copy the found file(s) to c:\users\[name]\AppData\Roaming\brewtarget
-;     else
-;       complain and give teh user another chance.
-;  4. Poke the value 
-;  
-
 Function btPageLeave
-   ; This is important to have $APPDATA variable
-   ; NOT point to C:\ProgramData
-   ; but to current user's Roaming folder
-   SetShellVarContext current
-   
-   StrCpy $targetDir "$APPDATA\brewtarget"
    
    GetInstDirError $0
 
@@ -832,21 +855,52 @@ Function btPageLeave
       Abort
    ${EndIf}
 
-   ; Create the target data directory if it isn't there
-   ${IfNot} ${FileExists} $targetDir
-      CreateDirectory $targetDir
+   Call btCopyAllFiles
+
+   MessageBox MB_ICONINFORMATION "Brewtarget has been successfully installed. Your database will automatically be upgraded on startup."
+FunctionEnd
+
+; Does all the copying
+; Set $btPath to where Database is located, or brewtargets install directory
+; Function will try to locate the database in local appdata aswell.
+
+Function btCopyAllFiles
+   ; Convert the path from canonicalPath / format to Windows \ instead for comparison.
+   ; Brewtarget 2.3.0 saves the user_data_dir in canonical format. so we need to convert to Windows \ due to all Environment variables.
+   ; otherwise the comparison fails.
+   Push $btPath
+   Call ConvertFromCanonicalPath
+   Pop $btWindowsPath
+
+   ; Make sure the files is not already in the Roaming Path
+   Push $btpath
+   Push $APPDATA
+   Call StrStr
+   Pop $R0
+   ${If} $R0 != ""
+      Goto btCopyAllFiles_done
    ${EndIf}
 
-   ; If the user points us at the program files directory, we have to worry
-   ; about virtual stores
-   Push $btPath
+   ;If database.sqlite is located in Programs files folder, or rather the user_data_dir reg key is pointing to it, we need to do all the copying and so on as if in "not located" scenario.
+   Push $btWindowsPath
    Push $PROGRAMFILES
    Call StrStr
    Pop $R0
 
-   ; We have to worry
    ${If} $R0 != ""
-      ; Need some more info. 
+      ; This is important to have $APPDATA variable
+      ; NOT point to C:\ProgramData
+      ; but to current user's Roaming folder
+      SetShellVarContext current
+
+      StrCpy $targetDir "$APPDATA\brewtarget\brewtarget"
+
+      ; Create the target data directory if it isn't there
+      ${IfNot} ${FileExists} $targetDir
+         CreateDirectory $targetDir
+      ${EndIf}
+
+      ; Need some more info.
       Push $btPath
       Push "t-2"
       Call StrStr
@@ -860,26 +914,27 @@ Function btPageLeave
          StrCpy $fileName 'database.xml'
       ${EndIf}
 
-	  ; $btPathVersion should be 'Brewtarget-1.2.4', 'Brewtarget-2.0.0', 'Brewtarget-2.0.1' etc.
-	  Push $btPath
-	  Push 'Brewtarget-'
-	  Call StrStr
-	  Pop $btPathVersion
-	  
+      ; $btPathVersion should be 'Brewtarget-1.2.4', 'Brewtarget-2.0.0', 'Brewtarget-2.0.1' etc.
+      Push $btPath
+      Push 'Brewtarget-'
+      Call StrStr
+      Call ConvertFromCanonicalPath
+      Pop $btPathVersion
       ; If there is no data file where the user pointed us,
       ; look for in LOCALAPPDATA
       ${IfNot} ${FileExists} "$btPath\$fileName"
-		 ${locate::Open} "$LOCALAPPDATA" "/M=$fileName" $locateHandle
-		 findloop:
-		 ${locate::Find} $locateHandle $R9 $R8 $R7 $R6 $nouse1 $nouse2
-                 StrCmp $R9 '' stoplocate
-		 Call whereisDb
-		 StrCmp $0 'StopLocate' stoplocate findloop
-		 stoplocate:
-		 ${locate::Close} $locateHandle
-		 ${locate::Unload}
+         ${locate::Open} "$LOCALAPPDATA" "/M=$fileName" $locateHandle
+         findloop:
+         ${locate::Find} $locateHandle $R9 $R8 $R7 $R6 $nouse1 $nouse2
+         StrCmp $R9 '' stoplocate
+         Call whereisDb
+         StrCmp $0 'StopLocate' stoplocate findloop
+         stoplocate:
+         ${locate::Close} $locateHandle
+         ${locate::Unload}
          ${If} $R4 != ""
             StrCpy $btPath $R4
+
          ; If we can't find anything, warn the user and send them back to the
          ; selection screen
          ${Else}
@@ -887,41 +942,43 @@ Function btPageLeave
             Abort
          ${EndIf}
       ${EndIf}
+   ${EndIF}
+   ${If} ${FileExists} "$btPath\$fileName"
+      ; this copies the database.xml or database.sqlite file to the new location.
+      CopyFiles "$btPath\$fileName" $targetDir
 
-   ${EndIf}
-
-   ; I dislike the duplicated code. I need to do this better.
-   ${If} ${FileExists} "$btPath\database.sqlite"
-      CopyFiles "$btPath\database.sqlite" $targetDir
-      CopyFiles "$btPath\options.xml" $targetDir
-      WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'hadOldConfig' "1"
-      MessageBox MB_ICONINFORMATION "Your old databases have been copied into place. Please start brewtarget to have them automatically upgraded."
-   ${Else}
-      ${If} ${FileExists} "$btPath\database.xml"
-         ; database
-         CopyFiles "$btPath\database.xml" $targetDir
+      ; If we're upgrading from brewtarget 1.2.x, also copy the remaining xml-files.
+      ${If} $filename == "database.xml"
          ; mashes
          CopyFiles "$btPath\mashes.xml" $targetDir
          ; recipes
          CopyFiles "$btPath\recipes.xml" $targetDir
          ; options file last
          CopyFiles "$btPath\options.xml" $targetDir
-         ; update the registry, so we know to do the final conversion of the
-         ; options file
-         WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'hadOldConfig' "1"
-         ; Tell the user they are good.
-         MessageBox MB_ICONINFORMATION "Your old databases have been copied into place. Please start brewtarget to have them automatically upgraded."
-      ${Else}
-         MessageBox mb_iconstop "Couldn't find an existing database to copy!"
-         Abort
       ${EndIf}
-   ${EndIf}
-   ; Always set the new user_data_dir flag
-   ; WriteRegStr HKCU "SOFTWARE\${APP_NAME}\OrganizationDefaults" 'user_data_dir' "$APPDATA\${APP_NAME}\"
 
-   WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'user_data_dir' "$APPDATA\brewtarget\"
-      
+      ; update the registry, so we know to do the final conversion of the
+      ; options file
+      WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'hadOldConfig' "1"
+
+      ; make the targetdir conform to canonical path format.
+      Push $targetDir
+      Call ConvertToCanonicalPath
+      Pop $targetDir
+      ; Always set the new user_data_dir flag
+      WriteRegStr HKCU $btRegPath 'user_data_dir' $targetDir
+   ${EndIf}
+btCopyAllFiles_done:
 FunctionEnd
+
+; Function to determin if the database is located in the directory.
+; Will put resulting path in $R4
+; $0 will be 'Stoplocate' if the database is found.
+;
+; usage:
+;     push "C:\PATH\TO\SOME\FOLDER"
+;     Call whereisDb
+;
 
 Function whereIsDb
 
@@ -945,14 +1002,19 @@ Function whereIsDb
    Push $btPathVersion
    Call StrStr
    Pop $R1
-   
+   nsislog::log "$EXEDIR\install.log" "btPathVersion: $btPathVersion"
+   nsislog::log "$EXEDIR\install.log" "R2: $R2"
+   nsislog::log "$EXEDIR\install.log" "R3: $R3"
+   nsislog::log "$EXEDIR\install.log" "R1: $R1"
+   nsislog::log "$EXEDIR\install.log" "R8: $R8"
+   nsislog::log "$EXEDIR\install.log" "R9: $R9"
    ${If} $R2 == ""
    ${AndIf} $R3 != ""
    ${AndIf} $R1 != ""
       StrCpy $R4 $R8
       StrCpy $0 StopLocate
    ${EndIf}
-
+   nsislog::log "$EXEDIR\install.log" "0: $0"
    Push $0
 FunctionEnd
 
@@ -1193,12 +1255,21 @@ inst:
    ReadRegStr $btPath HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'user_data_dir'
    StrLen $0 $btPath
 
-   ; If we did not find the registry key
+   ; If we did not find the registry key in the OrganizationDefalts, let's look in the brewtarget folder as well.
    ${If} $0 == 0
-      StrCpy $prevInst "none"
-      StrCpy $btPath $PROGRAMFILES
+      ReadRegStr $btPath HKCU "SOFTWARE\brewtarget\brewtarget" 'user_data_dir'
+      StrLen $0 $btPath
+      ${If} $0 == 0
+         StrCpy $prevInst "none"
+         StrCpy $btPath $PROGRAMFILES
+         StrCpy $btRegPath "SOFTWARE\brewtarget\OrganizationDefaults"
+      ${Else}
+         StrCpy $prevInst "found"
+         StrCpy $btRegPath "SOFTWARE\brewtarget\brewtarget"
+      ${EndIf}
    ${Else}
       StrCpy $prevInst "found"
+      StrCpy $btRegPath "SOFTWARE\brewtarget\OrganizationDefaults"
    ${Endif}
 
   noOptionsPage:
