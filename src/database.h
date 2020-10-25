@@ -99,6 +99,11 @@ public:
    //! \brief Create a blank database in the given file
    static bool createBlank(QString const& filename);
 
+   static char const * getDefaultBackupFileName();
+
+   //! backs up database to chosen file
+   static bool backupToFile(QString newDbFileName);
+
    //! backs up database to 'dir' in chosen directory
    static bool backupToDir(QString dir, QString filename="");
 
