@@ -38,6 +38,7 @@ class MainWindow;
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTimer>
+#include <QUndoStack>
 #include "ui_mainWindow.h"
 
 #include <functional>
@@ -208,6 +209,11 @@ public slots:
    //! \brief Create a duplicate of the current recipe.
    void copyRecipe();
 
+   //! \brief Implements "> Edit > Undo"
+   void editUndo();
+   //! \brief Implements "> Edit > Redo"
+   void editRedo();
+
    //! \brief Create a new folder
    void newFolder();
    void renameFolder();
@@ -289,6 +295,9 @@ private slots:
     */
    void showChanges(QMetaProperty* prop = nullptr);
 
+   //! \brief Set whether undo / redo commands are enabled
+   void setUndoRedoEnable();
+
 private:
    Recipe* recipeObs;
    Style* recStyle;
@@ -358,6 +367,9 @@ private:
 
    BtDatePopup* btDatePopup;
    int confirmDelete;
+
+   // Undo / Redo, using the Qt Undo framework
+   QUndoStack* undoStack = nullptr;
 
    //! \brief Currently highlighted fermentable in the fermentable table.
    Fermentable* selectedFermentable();

@@ -131,6 +131,8 @@
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
 {
+   undoStack = new QUndoStack(this);
+
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
 
@@ -197,8 +199,8 @@ void MainWindow::setupShortCuts()
    actionNewRecipe->setShortcut(QKeySequence::New);
    actionCopy_Recipe->setShortcut(QKeySequence::Copy);
    actionDeleteSelected->setShortcut(QKeySequence::Delete);
-   actionUndo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
-   actionRedo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
+   actionUndo->setShortcut(QKeySequence::Undo);
+   actionRedo->setShortcut(QKeySequence::Redo);
 }
 
 // Any manipulation of CSS for the MainWindow should be in here
@@ -510,10 +512,9 @@ void MainWindow::setupTriggers()
    connect( actionNewRecipe, &QAction::triggered, this, &MainWindow::newRecipe );                                       // > File > New Recipe
    connect( actionImport_Recipes, &QAction::triggered, this, &MainWindow::importFiles );                                // > File > Import Recipes
    connect( actionExportRecipe, &QAction::triggered, this, &MainWindow::exportRecipe );                                 // > File > Export Recipes
-//   connect( actionUndo, &QAction::triggered, this, &MainWindow::editUndo );                                             // > Edit > Undo
-   actionUndo->setEnabled(false);
-//   connect( actionRedo, &QAction::triggered, this, &MainWindow::editRedo );                                             // > Edit > Redo
-   actionRedo->setEnabled(false);
+   connect( actionUndo, &QAction::triggered, this, &MainWindow::editUndo );                                             // > Edit > Undo
+   connect( actionRedo, &QAction::triggered, this, &MainWindow::editRedo );                                             // > Edit > Redo
+   setUndoRedoEnable();
    connect( actionEquipments, &QAction::triggered, equipEditor, &QWidget::show );                                       // > View > Equipments
    connect( actionMashs, &QAction::triggered, namedMashEditor, &QWidget::show );                                        // > View > Mashs
    connect( actionStyles, &QAction::triggered, styleEditor, &QWidget::show );                                           // > View > Styles
@@ -1320,6 +1321,41 @@ void MainWindow::exportRecipe()
 Recipe* MainWindow::currentRecipe()
 {
    return recipeObs;
+}
+
+void MainWindow::setUndoRedoEnable()
+{
+   Q_ASSERT(this->undoStack != 0);
+   actionUndo->setEnabled(this->undoStack->canUndo());
+   actionRedo->setEnabled(this->undoStack->canRedo());
+   return;
+}
+
+// For undo/redo, we use Qt's Undo framework
+void MainWindow::editUndo()
+{
+   Q_ASSERT(this->undoStack != 0);
+   if ( !this->undoStack->canUndo() ) {
+      Brewtarget::logD("Undo called but nothing to undo");
+   } else {
+      this->undoStack->undo();
+   }
+
+   setUndoRedoEnable();
+   return;
+}
+
+void MainWindow::editRedo()
+{
+   Q_ASSERT(this->undoStack != 0);
+   if ( !this->undoStack->canRedo() ) {
+      Brewtarget::logD("Redo called but nothing to redo");
+   } else {
+      this->undoStack->redo();
+   }
+
+   setUndoRedoEnable();
+   return;
 }
 
 Fermentable* MainWindow::selectedFermentable()
