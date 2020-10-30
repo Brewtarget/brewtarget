@@ -297,6 +297,7 @@ private slots:
 
    //! \brief Set whether undo / redo commands are enabled
    void setUndoRedoEnable();
+   void doOrRedoUpdate(QUndoCommand * update);
 
 private:
    Recipe* recipeObs;

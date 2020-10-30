@@ -71,6 +71,7 @@
 #include "MiscTableModel.h"
 #include "style.h"
 #include "recipe.h"
+#include "RecipeUndoableUpdate.h"
 #include "MainWindow.h"
 #include "AboutDialog.h"
 #include "database.h"
@@ -1256,7 +1257,10 @@ void MainWindow::updateRecipeEfficiency()
    if( recipeObs == nullptr )
       return;
 
-   recipeObs->setEfficiency_pct( lineEdit_efficiency->toSI() );
+   this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
+                                                 RecipeUndoableUpdate::Attribute::Efficiency,
+                                                 lineEdit_efficiency->toSI()));
+   return;
 }
 
 void MainWindow::addFermentableToRecipe(Fermentable* ferm)
@@ -1328,6 +1332,14 @@ void MainWindow::setUndoRedoEnable()
    Q_ASSERT(this->undoStack != 0);
    actionUndo->setEnabled(this->undoStack->canUndo());
    actionRedo->setEnabled(this->undoStack->canRedo());
+   return;
+}
+
+void MainWindow::doOrRedoUpdate(QUndoCommand * update)
+{
+   Q_ASSERT(this->undoStack != 0);
+   this->undoStack->push(update);
+   this->setUndoRedoEnable();
    return;
 }
 
