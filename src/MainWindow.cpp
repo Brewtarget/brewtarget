@@ -1087,7 +1087,9 @@ void MainWindow::updateRecipeName()
    if( recipeObs == nullptr || ! lineEdit_name->isModified())
       return;
 
-   recipeObs->setName(lineEdit_name->text());
+   this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
+                                                 RecipeUndoableUpdate::Attribute::Name,
+                                                 lineEdit_name->text()));
 }
 
 void MainWindow::updateRecipeStyle()
@@ -1228,7 +1230,9 @@ void MainWindow::updateRecipeBoilSize()
    if( recipeObs == nullptr )
       return;
 
-   recipeObs->setBoilSize_l( lineEdit_boilSize->toSI() );
+   this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
+                                                 RecipeUndoableUpdate::Attribute::BoilSize,
+                                                 lineEdit_boilSize->toSI()));
 }
 
 void MainWindow::updateRecipeBoilTime()
@@ -1249,7 +1253,11 @@ void MainWindow::updateRecipeBoilTime()
    if( kit )
       kit->setBoilTime_min(boilTime);
    else
-      recipeObs->setBoilTime_min(boilTime);
+      this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
+                                                    RecipeUndoableUpdate::Attribute::BoilTime,
+                                                    boilTime));
+
+   return;
 }
 
 void MainWindow::updateRecipeEfficiency()
