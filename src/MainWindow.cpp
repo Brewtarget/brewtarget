@@ -1088,7 +1088,7 @@ void MainWindow::updateRecipeName()
       return;
 
    this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
-                                                 RecipeUndoableUpdate::Attribute::Name,
+                                                 "name",
                                                  lineEdit_name->text()));
 }
 
@@ -1231,7 +1231,7 @@ void MainWindow::updateRecipeBoilSize()
       return;
 
    this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
-                                                 RecipeUndoableUpdate::Attribute::BoilSize,
+                                                 "boilSize_l",
                                                  lineEdit_boilSize->toSI()));
 }
 
@@ -1254,7 +1254,7 @@ void MainWindow::updateRecipeBoilTime()
       kit->setBoilTime_min(boilTime);
    else
       this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
-                                                    RecipeUndoableUpdate::Attribute::BoilTime,
+                                                    "boilTime_min",
                                                     boilTime));
 
    return;
@@ -1266,7 +1266,7 @@ void MainWindow::updateRecipeEfficiency()
       return;
 
    this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
-                                                 RecipeUndoableUpdate::Attribute::Efficiency,
+                                                 "efficiency_pct",
                                                  lineEdit_efficiency->toSI()));
    return;
 }

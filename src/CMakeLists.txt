@@ -135,7 +135,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RangedSlider.cpp
     ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeFormatter.cpp
-    ${SRCDIR}/RecipeUndoableUpdate.cpp
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/salt.cpp
     ${SRCDIR}/SaltTableModel.cpp
