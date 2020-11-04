@@ -22,6 +22,7 @@
 SimpleUndoableUpdate::SimpleUndoableUpdate(QObject & updatee,
                                            char const * const propertyName,
                                            QVariant newValue,
+                                           QString const & description,
                                            QUndoCommand * parent)
    : QUndoCommand(parent), updatee(updatee), propertyName(propertyName), newValue(newValue)
 {
@@ -38,6 +39,9 @@ SimpleUndoableUpdate::SimpleUndoableUpdate(QObject & updatee,
    // For a simple property, we just store the old value.  (For a list of objects, where the update is adding or removing something
    // from the list, it's a bit more complicated - not least as there may be other elements of the UI to update.)
    this->oldValue = this->metaProperty.read(&updatee);
+
+   this->setText(description);
+   return;
 }
 
 SimpleUndoableUpdate::~SimpleUndoableUpdate()

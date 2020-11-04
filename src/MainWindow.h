@@ -293,9 +293,8 @@ public:
    //         which suffices for modifications to most individual non-relational attributes.
    void doOrRedoUpdate(QObject & updatee,
                        char const * const propertyName,
-                       QVariant newValue) {
-      this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyName, newValue));
-   }
+                       QVariant newValue,
+                       QString const & description);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);

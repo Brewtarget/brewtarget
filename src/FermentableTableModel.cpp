@@ -612,7 +612,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if ( retVal )
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "name",
-                                                     value.toString());
+                                                     value.toString(),
+                                                     tr("Change Fermentable Name"));
          break;
       case FERMTYPECOL:
          retVal = value.canConvert(QVariant::Int);
@@ -620,7 +621,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::Type>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "type",
-                                                     value.toInt());
+                                                     value.toInt(),
+                                                     tr("Change Fermentable Type"));
          }
          break;
       case FERMINVENTORYCOL:
@@ -629,7 +631,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // Inventory amount is in kg, but is just called "inventory" rather than "inventory_kg" in the Q_PROPERTY declaration in the Fermentable class
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "inventory",
-                                                     Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl));
+                                                     Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl),
+                                                     tr("Change Inventory Amount"));
          }
          break;
       case FERMAMOUNTCOL:
@@ -639,7 +642,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // We need to refer back to the MainWindow to make this an undoable operation
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "amount_kg",
-                                                     Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl));
+                                                     Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl),
+                                                     tr("Change Fermentable Amount"));
             if( rowCount() > 0 )
                headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
          }
@@ -650,7 +654,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::AdditionMethod>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "additionMethod",
-                                                     value.toInt());
+                                                     value.toInt(),
+                                                     tr("Change Addition Method"));
          }
          break;
       case FERMAFTERBOIL:
@@ -659,7 +664,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // Doing the set via doOrRedoUpdate() saves us from doing a static_cast<Fermentable::AdditionTime>() here (as the Q_PROPERTY system will do the casting for us).
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "additionTime",
-                                                     value.toInt());
+                                                     value.toInt(),
+                                                     tr("Change Addition Time"));
          }
          break;
       case FERMYIELDCOL:
@@ -667,7 +673,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "yield_pct",
-                                                     value.toDouble());
+                                                     value.toDouble(),
+                                                     tr("Change Yield"));
          }
          break;
       case FERMCOLORCOL:
@@ -675,7 +682,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "color_srm",
-                                                     Brewtarget::qStringToSI(value.toString(), Units::srm, dspUnit, dspScl));
+                                                     Brewtarget::qStringToSI(value.toString(), Units::srm, dspUnit, dspScl),
+                                                     tr("Change Color"));
          }
          break;
       default:

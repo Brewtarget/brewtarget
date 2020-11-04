@@ -44,16 +44,19 @@ public:
     * \param setter The setter method on the updatee
     * \param newValue The new value to assign
     * \param callback The method on MainWindow to call after doing/undoing/redoing the change - typically to update other display elements
+    * \param description Short text we can show on undo/redo menu to describe this update eg "Change Recipe Style"
     * \param parent This is for grouping updates together.  We don't currently use it.
     */
    RelationalUndoableUpdate(UU & updatee,
                             void (UU::*setter)(NV *),
                             NV * newValue,
                             void (MainWindow::*callback)(void),
+                            QString const & description,
                             QUndoCommand * parent = nullptr)
    : QUndoCommand(nullptr), updatee(updatee), setter(setter), newValue(newValue), callback(callback)
    {
       this->oldValue = updatee.style();
+      this->setText(description);
       return;
    }
 
@@ -111,8 +114,9 @@ template<class UU, class NV> RelationalUndoableUpdate<UU, NV> * newRelationalUnd
                                                                                             void (UU::*setter)(NV *),
                                                                                             NV * newValue,
                                                                                             void (MainWindow::*callback)(void),
+                                                                                            QString const & description,
                                                                                             QUndoCommand * parent = nullptr) {
-   return new RelationalUndoableUpdate<UU, NV>(updatee, setter, newValue, callback, parent);
+   return new RelationalUndoableUpdate<UU, NV>(updatee, setter, newValue, callback, description, parent);
 }
 
 

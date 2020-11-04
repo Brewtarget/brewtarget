@@ -1077,7 +1077,7 @@ void MainWindow::updateRecipeName()
    if( recipeObs == nullptr || ! lineEdit_name->isModified())
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, "name", lineEdit_name->text());
+   this->doOrRedoUpdate(*this->recipeObs, "name", lineEdit_name->text(), tr("Change Recipe Name"));
 }
 
 void MainWindow::displayRangesEtcForCurrentRecipeStyle()
@@ -1117,7 +1117,8 @@ void MainWindow::updateRecipeStyle()
          newRelationalUndoableUpdate(*this->recipeObs,
                                      &Recipe::setStyle,
                                      selected,
-                                     &MainWindow::displayRangesEtcForCurrentRecipeStyle)
+                                     &MainWindow::displayRangesEtcForCurrentRecipeStyle,
+                                     tr("Change Recipe Style"))
       );
    }
 }
@@ -1190,7 +1191,8 @@ void MainWindow::droppedRecipeStyle(Style* style)
       newRelationalUndoableUpdate(*this->recipeObs,
                                   &Recipe::setStyle,
                                   style,
-                                  &MainWindow::displayRangesEtcForCurrentRecipeStyle)
+                                  &MainWindow::displayRangesEtcForCurrentRecipeStyle,
+                                  tr("Change Recipe Style"))
    );
 
    return;
@@ -1242,7 +1244,7 @@ void MainWindow::updateRecipeBatchSize()
    if( recipeObs == nullptr )
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, "batchSize_l", lineEdit_batchSize->toSI());
+   this->doOrRedoUpdate(*this->recipeObs, "batchSize_l", lineEdit_batchSize->toSI(), tr("Change Batch Size"));
 }
 
 void MainWindow::updateRecipeBoilSize()
@@ -1250,7 +1252,7 @@ void MainWindow::updateRecipeBoilSize()
    if( recipeObs == nullptr )
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, "boilSize_l", lineEdit_boilSize->toSI());
+   this->doOrRedoUpdate(*this->recipeObs, "boilSize_l", lineEdit_boilSize->toSI(), tr("Change Boil Size"));
 }
 
 void MainWindow::updateRecipeBoilTime()
@@ -1269,9 +1271,9 @@ void MainWindow::updateRecipeBoilTime()
    // NOTE: This works because kit is the recipe's equipment, not the generic
    // equipment in the recipe drop down.
    if( kit )
-      this->doOrRedoUpdate(*kit, "boilTime_min", boilTime);
+      this->doOrRedoUpdate(*kit, "boilTime_min", boilTime, tr("Change Boil Time"));
    else
-      this->doOrRedoUpdate(*this->recipeObs, "boilTime_min", boilTime);
+      this->doOrRedoUpdate(*this->recipeObs, "boilTime_min", boilTime, tr("Change Boil Time"));
 
    return;
 }
@@ -1281,7 +1283,7 @@ void MainWindow::updateRecipeEfficiency()
    if( recipeObs == nullptr )
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, "efficiency_pct", lineEdit_efficiency->toSI());
+   this->doOrRedoUpdate(*this->recipeObs, "efficiency_pct", lineEdit_efficiency->toSI(), tr("Change Recipe Efficiency"));
    return;
 }
 
@@ -1355,6 +1357,10 @@ void MainWindow::setUndoRedoEnable()
    Q_ASSERT(this->undoStack != 0);
    actionUndo->setEnabled(this->undoStack->canUndo());
    actionRedo->setEnabled(this->undoStack->canRedo());
+
+   actionUndo->setText(QString(tr("Undo %1").arg(this->undoStack->undoText())));
+   actionRedo->setText(QString(tr("Redo %1").arg(this->undoStack->redoText())));
+
    return;
 }
 
@@ -1363,6 +1369,14 @@ void MainWindow::doOrRedoUpdate(QUndoCommand * update)
    Q_ASSERT(this->undoStack != 0);
    this->undoStack->push(update);
    this->setUndoRedoEnable();
+   return;
+}
+
+void MainWindow::doOrRedoUpdate(QObject & updatee,
+                                char const * const propertyName,
+                                QVariant newValue,
+                                QString const & description) {
+   this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyName, newValue, description));
    return;
 }
 
