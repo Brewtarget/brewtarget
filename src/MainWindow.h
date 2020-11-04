@@ -40,6 +40,7 @@ class MainWindow;
 #include <QTimer>
 #include <QUndoStack>
 #include "ui_mainWindow.h"
+#include "SimpleUndoableUpdate.h"
 
 #include <functional>
 
@@ -132,6 +133,8 @@ public slots:
 
    //! \brief Update Recipe name to that given by the relevant widget.
    void updateRecipeName();
+   //! \brief Redisplay the OG, FG, etc ranges for the style of the current recipe.  Needs to be called whenever the recipe style is changed.
+   void displayRangesEtcForCurrentRecipeStyle();
    //! \brief Update Recipe Style to that given by the relevant widget.
    void updateRecipeStyle();
    //! \brief Update Recipe Equipment to that given by the relevant widget.
@@ -281,6 +284,19 @@ public slots:
    void droppedRecipeMisc(QList<Misc*>miscs);
    void droppedRecipeYeast(QList<Yeast*>yeasts);
 
+   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the most generic version
+   //         which requires the caller to construct a QUndoCommand.
+   void doOrRedoUpdate(QUndoCommand * update);
+
+public:
+   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
+   //         which suffices for modifications to most individual non-relational attributes.
+   void doOrRedoUpdate(QObject & updatee,
+                       char const * const propertyName,
+                       QVariant newValue) {
+      this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyName, newValue));
+   }
+
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
@@ -297,10 +313,10 @@ private slots:
 
    //! \brief Set whether undo / redo commands are enabled
    void setUndoRedoEnable();
-   void doOrRedoUpdate(QUndoCommand * update);
 
 private:
    Recipe* recipeObs;
+   // TBD: Not sure why we need to store recipe style when we ought to be able to get it from the recipe.
    Style* recStyle;
    Equipment* recEquip;
 

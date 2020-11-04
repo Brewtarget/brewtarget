@@ -936,6 +936,12 @@ void Recipe::addSalt( Salt* var )
    Database::instance().addToRecipe( this, var );
 }
 
+void Recipe::setStyle( Style* var )
+{
+   Database::instance().addToRecipe( this, var );
+}
+
+
 //==============================="SET" METHODS=================================
 void Recipe::setType( const QString &var )
 {

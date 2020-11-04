@@ -71,7 +71,6 @@
 #include "MiscTableModel.h"
 #include "style.h"
 #include "recipe.h"
-#include "RecipeUndoableUpdate.h"
 #include "MainWindow.h"
 #include "AboutDialog.h"
 #include "database.h"
@@ -122,6 +121,7 @@
 #include "WaterListModel.h"
 #include "WaterEditor.h"
 #include "beerxml.h"
+#include "RelationalUndoableUpdate.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
@@ -876,19 +876,9 @@ void MainWindow::setRecipe(Recipe* recipe)
       disconnect( recipeObs, nullptr, this, nullptr );
    recipeObs = recipe;
 
-   recStyle = recipe->style();
+   this->recStyle = recipe->style();
    recEquip = recipe->equipment();
-
-   if( recStyle )
-   {
-      styleRangeWidget_og->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "og", Brewtarget::DENSITY ));
-      styleRangeWidget_fg->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "fg", Brewtarget::DENSITY ));
-
-      styleRangeWidget_abv->setPreferredRange(recStyle->abvMin_pct(), recStyle->abvMax_pct());
-      styleRangeWidget_ibu->setPreferredRange(recStyle->ibuMin(), recStyle->ibuMax());
-
-      styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "color_srm", Brewtarget::COLOR ));
-   }
+   this->displayRangesEtcForCurrentRecipeStyle();
 
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
@@ -919,7 +909,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    equipmentButton->setRecipe(recipe);
    singleEquipEditor->setEquipment(recEquip);
    styleButton->setRecipe(recipe);
-   singleStyleEditor->setStyle(recStyle);
+   singleStyleEditor->setStyle(recipe->style());
 
    mashEditor->setMash(recipeObs->mash());
    mashEditor->setRecipe(recipeObs);
@@ -1087,9 +1077,30 @@ void MainWindow::updateRecipeName()
    if( recipeObs == nullptr || ! lineEdit_name->isModified())
       return;
 
-   this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
-                                                 "name",
-                                                 lineEdit_name->text()));
+   this->doOrRedoUpdate(*this->recipeObs, "name", lineEdit_name->text());
+}
+
+void MainWindow::displayRangesEtcForCurrentRecipeStyle()
+{
+   if ( this->recipeObs == nullptr ) {
+      return;
+   }
+
+   Style * style = this->recipeObs->style();
+   if ( style == nullptr ) {
+      return;
+   }
+
+   styleRangeWidget_og->setPreferredRange( Brewtarget::displayRange(style, tab_recipe, "og", Brewtarget::DENSITY ));
+   styleRangeWidget_fg->setPreferredRange( Brewtarget::displayRange(style, tab_recipe, "fg", Brewtarget::DENSITY ));
+
+   styleRangeWidget_abv->setPreferredRange(style->abvMin_pct(), style->abvMax_pct());
+   styleRangeWidget_ibu->setPreferredRange(style->ibuMin(), style->ibuMax());
+   styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(style, tab_recipe, "color_srm", Brewtarget::COLOR));
+
+   this->styleButton->setStyle(style);
+
+   return;
 }
 
 void MainWindow::updateRecipeStyle()
@@ -1102,14 +1113,12 @@ void MainWindow::updateRecipeStyle()
    Style* selected = styleListModel->at(sourceIndex.row());
    if( selected )
    {
-      Database::instance().addToRecipe( recipeObs, selected );
-
-      styleRangeWidget_og->setPreferredRange( Brewtarget::displayRange(selected, tab_recipe, "og", Brewtarget::DENSITY ));
-      styleRangeWidget_fg->setPreferredRange( Brewtarget::displayRange(selected, tab_recipe, "fg", Brewtarget::DENSITY ));
-
-      styleRangeWidget_abv->setPreferredRange(selected->abvMin_pct(), selected->abvMax_pct());
-      styleRangeWidget_ibu->setPreferredRange(selected->ibuMin(), selected->ibuMax());
-      styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(selected, tab_recipe, "color_srm", Brewtarget::COLOR));
+      this->doOrRedoUpdate(
+         newRelationalUndoableUpdate(*this->recipeObs,
+                                     &Recipe::setStyle,
+                                     selected,
+                                     &MainWindow::displayRangesEtcForCurrentRecipeStyle)
+      );
    }
 }
 
@@ -1168,12 +1177,23 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    }
 }
 
+// This isn't called when we think it is...!
 void MainWindow::droppedRecipeStyle(Style* style)
 {
+   Brewtarget::logD("MainWindow::droppedRecipeStyle");
+
    if ( ! recipeObs )
       return;
-   Database::instance().addToRecipe( recipeObs, style);
-   styleButton->setStyle( style );
+   // When the style is changed, we also need to update what is shown on the Style button
+   Brewtarget::logD("MainWindow::droppedRecipeStyle - do or redo");
+   this->doOrRedoUpdate(
+      newRelationalUndoableUpdate(*this->recipeObs,
+                                  &Recipe::setStyle,
+                                  style,
+                                  &MainWindow::displayRangesEtcForCurrentRecipeStyle)
+   );
+
+   return;
 }
 
 // Well, aint this a kick in the pants. Apparently I can't template a slot
@@ -1222,7 +1242,7 @@ void MainWindow::updateRecipeBatchSize()
    if( recipeObs == nullptr )
       return;
 
-   recipeObs->setBatchSize_l( lineEdit_batchSize->toSI() );
+   this->doOrRedoUpdate(*this->recipeObs, "batchSize_l", lineEdit_batchSize->toSI());
 }
 
 void MainWindow::updateRecipeBoilSize()
@@ -1230,9 +1250,7 @@ void MainWindow::updateRecipeBoilSize()
    if( recipeObs == nullptr )
       return;
 
-   this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
-                                                 "boilSize_l",
-                                                 lineEdit_boilSize->toSI()));
+   this->doOrRedoUpdate(*this->recipeObs, "boilSize_l", lineEdit_boilSize->toSI());
 }
 
 void MainWindow::updateRecipeBoilTime()
@@ -1251,11 +1269,9 @@ void MainWindow::updateRecipeBoilTime()
    // NOTE: This works because kit is the recipe's equipment, not the generic
    // equipment in the recipe drop down.
    if( kit )
-      kit->setBoilTime_min(boilTime);
+      this->doOrRedoUpdate(*kit, "boilTime_min", boilTime);
    else
-      this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
-                                                    "boilTime_min",
-                                                    boilTime));
+      this->doOrRedoUpdate(*this->recipeObs, "boilTime_min", boilTime);
 
    return;
 }
@@ -1265,12 +1281,11 @@ void MainWindow::updateRecipeEfficiency()
    if( recipeObs == nullptr )
       return;
 
-   this->doOrRedoUpdate(new RecipeUndoableUpdate(*this->recipeObs,
-                                                 "efficiency_pct",
-                                                 lineEdit_efficiency->toSI()));
+   this->doOrRedoUpdate(*this->recipeObs, "efficiency_pct", lineEdit_efficiency->toSI());
    return;
 }
 
+// This appears to be unused... :-(
 void MainWindow::addFermentableToRecipe(Fermentable* ferm)
 {
    recipeObs->addFermentable(ferm);

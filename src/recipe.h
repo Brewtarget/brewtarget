@@ -179,7 +179,7 @@ public:
    //! \brief The equipment.
    Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ /*NOTIFY changed*/ STORED false)
    //! \brief The style.
-   Q_PROPERTY( Style* style READ style /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY( Style* style READ style WRITE setStyle /*NOTIFY changed*/ STORED false)
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
    //! \brief The brew notes.
@@ -294,6 +294,9 @@ public:
    Mash* mash() const;
    Equipment* equipment() const;
    Style* style();
+
+   // Relational setters
+   void setStyle(Style* style);
 
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);

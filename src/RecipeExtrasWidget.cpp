@@ -27,6 +27,7 @@
 #include "brewtarget.h"
 #include "recipe.h"
 #include "BtLabel.h"
+#include "MainWindow.h"
 
 RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
    : QWidget(parent), recipe(0)
@@ -75,7 +76,7 @@ void RecipeExtrasWidget::updateBrewer()
    if( recipe == 0 )
       return;
 
-   recipe->setBrewer(lineEdit_brewer->text());
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "brewer", lineEdit_brewer->text());
 }
 
 void RecipeExtrasWidget::updateBrewerAsst()
@@ -83,8 +84,10 @@ void RecipeExtrasWidget::updateBrewerAsst()
    if( recipe == 0 )
       return;
 
-   if ( lineEdit_asstBrewer->isModified() )
-      recipe->setAsstBrewer(lineEdit_asstBrewer->text());
+   if ( lineEdit_asstBrewer->isModified() ) {
+      Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "asstBrewer", lineEdit_asstBrewer->text());
+   }
+   return;
 }
 
 void RecipeExtrasWidget::changeRatings(int rating) { ratingChanged = true; }
@@ -96,7 +99,7 @@ void RecipeExtrasWidget::updateTasteRating()
 
    if ( ratingChanged )
    {
-      recipe->setTasteRating( (double)(spinBox_tasteRating->value()) );
+      Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "tasteRating", spinBox_tasteRating->value());
       ratingChanged = false;
    }
 }
@@ -106,7 +109,7 @@ void RecipeExtrasWidget::updatePrimaryAge()
    if( recipe == 0 )
       return;
 
-   recipe->setPrimaryAge_days( lineEdit_primaryAge->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "primaryAge_days", lineEdit_primaryAge->toSI());
 }
 
 void RecipeExtrasWidget::updatePrimaryTemp()
@@ -114,7 +117,7 @@ void RecipeExtrasWidget::updatePrimaryTemp()
    if( recipe == 0 )
       return;
 
-   recipe->setPrimaryTemp_c( lineEdit_primaryTemp->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "primaryTemp_c", lineEdit_primaryTemp->toSI());
 }
 
 void RecipeExtrasWidget::updateSecondaryAge()
@@ -122,7 +125,7 @@ void RecipeExtrasWidget::updateSecondaryAge()
    if( recipe == 0 )
       return;
 
-   recipe->setSecondaryAge_days( lineEdit_secAge->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "secondaryAge_days", lineEdit_secAge->toSI());
 }
 
 void RecipeExtrasWidget::updateSecondaryTemp()
@@ -130,7 +133,7 @@ void RecipeExtrasWidget::updateSecondaryTemp()
    if( recipe == 0 )
       return;
 
-   recipe->setSecondaryTemp_c( lineEdit_secTemp->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "secondaryTemp_c", lineEdit_secTemp->toSI());
 }
 
 void RecipeExtrasWidget::updateTertiaryAge()
@@ -138,7 +141,7 @@ void RecipeExtrasWidget::updateTertiaryAge()
    if( recipe == 0 )
       return;
 
-   recipe->setTertiaryAge_days( lineEdit_tertAge->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "tertiaryAge_days", lineEdit_tertAge->toSI());
 }
 
 void RecipeExtrasWidget::updateTertiaryTemp()
@@ -146,7 +149,7 @@ void RecipeExtrasWidget::updateTertiaryTemp()
    if( recipe == 0 )
       return;
 
-   recipe->setTertiaryTemp_c( lineEdit_tertTemp->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "tertiaryTemp_c", lineEdit_tertTemp->toSI());
 }
 
 void RecipeExtrasWidget::updateAge()
@@ -154,7 +157,7 @@ void RecipeExtrasWidget::updateAge()
    if( recipe == 0 )
       return;
 
-   recipe->setAge_days( lineEdit_age->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "age", lineEdit_age->toSI());
 }
 
 void RecipeExtrasWidget::updateAgeTemp()
@@ -162,7 +165,7 @@ void RecipeExtrasWidget::updateAgeTemp()
    if( recipe == 0 )
       return;
 
-   recipe->setAgeTemp_c( lineEdit_ageTemp->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "ageTemp_c", lineEdit_ageTemp->toSI());
 }
 
 void RecipeExtrasWidget::updateDate(const QDate& date)
@@ -171,9 +174,9 @@ void RecipeExtrasWidget::updateDate(const QDate& date)
       return;
 
    if ( date.isNull()  ) 
-      recipe->setDate( dateEdit_date->date() );
+      Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "date", dateEdit_date->date());
    else
-      recipe->setDate( date );
+      Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "date", date);
 }
 
 void RecipeExtrasWidget::updateCarbonation()
@@ -181,7 +184,7 @@ void RecipeExtrasWidget::updateCarbonation()
    if( recipe == 0 )
       return;
 
-   recipe->setCarbonation_vols( lineEdit_carbVols->toSI() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "carbonation_vols", lineEdit_carbVols->toSI());
 }
 
 void RecipeExtrasWidget::updateTasteNotes()
@@ -189,7 +192,7 @@ void RecipeExtrasWidget::updateTasteNotes()
    if( recipe == 0 )
       return;
 
-   recipe->setTasteNotes( btTextEdit_tasteNotes->toPlainText() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "tasteNotes", btTextEdit_tasteNotes->toPlainText());
 }
 
 void RecipeExtrasWidget::updateNotes()
@@ -197,7 +200,7 @@ void RecipeExtrasWidget::updateNotes()
    if( recipe == 0 )
       return;
 
-   recipe->setNotes( btTextEdit_notes->toPlainText() );
+   Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "notes", btTextEdit_notes->toPlainText());
 }
 
 void RecipeExtrasWidget::changed(QMetaProperty prop, QVariant /*val*/)
