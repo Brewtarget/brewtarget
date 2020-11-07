@@ -394,10 +394,12 @@ const QDir Brewtarget::getConfigDir()
    char* xdg_config_home = getenv("XDG_CONFIG_HOME");
 
    if (xdg_config_home) {
+     logI(QString("XDG_CONFIG_HOME directory is %1").arg(xdg_config_home));
      dir.setPath(QString(xdg_config_home).append("/brewtarget"));
    }
    else {
      // If XDG_CONFIG_HOME doesn't exist, config goes in ~/.config/brewtarget
+     logI(QString("XDG_CONFIG_HOME not set.  HOME directory is %1").arg(QDir::homePath()));
      QString dirPath = QDir::homePath().append("/.config/brewtarget");
      dir = QDir(dirPath);
    }
