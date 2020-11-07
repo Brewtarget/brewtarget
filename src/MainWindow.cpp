@@ -1894,12 +1894,19 @@ void MainWindow::brewAgainHelper()
 
 void MainWindow::backup()
 {
-   QString dir = QFileDialog::getExistingDirectory(this, tr("Backup Database"));
+   // NB: QDir does all the necessary magic of translating '/' to whatever current platform's directory separator is
+   QString defaultBackupFileName = QDir::currentPath() + "/" + Database::getDefaultBackupFileName();
+   QString backupFileName = QFileDialog::getSaveFileName(this, tr("Backup Database"), defaultBackupFileName);
+   Brewtarget::logD( QString("Database backup filename \"%1\"").arg(backupFileName) );
 
-   bool success = Database::backupToDir(dir);
+   // If the filename returned from the dialog is empty, it means the user clicked cancel, so we should stop trying to do the backup
+   if (!backupFileName.isEmpty())
+   {
+      bool success = Database::backupToFile(backupFileName);
 
-   if( ! success )
-      QMessageBox::warning( this, tr("Oops!"), tr("Could not copy the files for some reason."));
+      if( ! success )
+         QMessageBox::warning( this, tr("Oops!"), tr("Could not copy the files for some reason."));
+   }
 }
 
 void MainWindow::restoreFromBackup()
