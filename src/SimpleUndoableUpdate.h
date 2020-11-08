@@ -19,7 +19,7 @@
 #ifndef SIMPLE_UNDOABLE_UPDATE_H
 #define SIMPLE_UNDOABLE_UPDATE_H
 
-#include "brewtarget.h" // For logging
+#include <QMetaProperty>
 #include <QMetaType>
 #include <QString>
 #include <QUndoCommand>

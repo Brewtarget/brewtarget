@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SimpleUndoableUpdate.h"
-
+#include "brewtarget.h" // For logging
 
 SimpleUndoableUpdate::SimpleUndoableUpdate(QObject & updatee,
                                            char const * const propertyName,
@@ -51,12 +51,14 @@ SimpleUndoableUpdate::~SimpleUndoableUpdate()
 
 void SimpleUndoableUpdate::redo()
 {
+   QUndoCommand::redo();
    this->undoOrRedo(false);
    return;
 }
 
 void SimpleUndoableUpdate::undo()
 {
+   QUndoCommand::undo();
    this->undoOrRedo(true);
    return;
 }

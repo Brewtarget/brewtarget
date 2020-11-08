@@ -941,6 +941,10 @@ void Recipe::setStyle( Style* var )
    Database::instance().addToRecipe( this, var );
 }
 
+void Recipe::setEquipment( Equipment* var )
+{
+   Database::instance().addToRecipe( this, var );
+}
 
 //==============================="SET" METHODS=================================
 void Recipe::setType( const QString &var )

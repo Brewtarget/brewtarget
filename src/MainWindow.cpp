@@ -1,10 +1,11 @@
 /*
  * MainWindow.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - David Grundberg <individ@acc.umu.se>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -1116,6 +1117,7 @@ void MainWindow::updateRecipeStyle()
       this->doOrRedoUpdate(
          newRelationalUndoableUpdate(*this->recipeObs,
                                      &Recipe::setStyle,
+                                     this->recipeObs->style(),
                                      selected,
                                      &MainWindow::displayRangesEtcForCurrentRecipeStyle,
                                      tr("Change Recipe Style"))
@@ -1142,6 +1144,14 @@ void MainWindow::updateRecipeEquipment()
   droppedRecipeEquipment(equipmentListModel->at(equipmentComboBox->currentIndex()));
 }
 
+void MainWindow::updateEquipmentButton()
+{
+   if (this->recipeObs != nullptr) {
+      this->equipmentButton->setEquipment(this->recipeObs->equipment());
+   }
+   return;
+}
+
 void MainWindow::droppedRecipeEquipment(Equipment *kit)
 {
    if( recipeObs == nullptr )
@@ -1151,9 +1161,13 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    if( kit == nullptr )
       return;
 
-   // Notice that we are using a copy from the database.
-   Database::instance().addToRecipe(recipeObs,kit);
-   equipmentButton->setEquipment(kit);
+   // We need to hang on to this QUndoCommand pointer because there might be other updates linked to it - see below
+   auto equipmentUpdate = newRelationalUndoableUpdate(*this->recipeObs,
+                                                      &Recipe::setEquipment,
+                                                      this->recipeObs->equipment(),
+                                                      kit,
+                                                      &MainWindow::updateEquipmentButton,
+                                                      tr("Change Recipe Kit"));
 
    // Keep the mash tun weight and specific heat up to date.
    Mash* m = recipeObs->mash();
@@ -1171,11 +1185,22 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
         == QMessageBox::Yes
      )
    {
-      recipeObs->setBatchSize_l( kit->batchSize_l() );
-      recipeObs->setBoilSize_l( kit->boilSize_l() );
-      recipeObs->setBoilTime_min( kit->boilTime_min() );
-      mashEditor->setRecipe(recipeObs);
+      // If we do update batch size etc as a result of the equipment change, then we want those updates to undo/redo
+      // if and when the equipment change is undone/redone.  Setting the parent field on a QUndoCommand makes that
+      // parent the owner, responsible for invoking, deleting, etc.  Technically the descriptions of these subcommands
+      // won't ever be seen by the user, but there's no harm in setting them.
+      // (The previous call here to mashEditor->setRecipe() was a roundabout way of calling setTunWeight_kg() and
+      // setTunSpecificHeat_calGC() on the mash.)
+      new SimpleUndoableUpdate(*this->recipeObs, "batchSize_l", kit->batchSize_l(), tr("Change Batch Size"), equipmentUpdate);
+      new SimpleUndoableUpdate(*this->recipeObs, "boilSize_l", kit->boilSize_l(), tr("Change Boil Size"), equipmentUpdate);
+      new SimpleUndoableUpdate(*this->recipeObs, "boilTime_min", kit->boilTime_min(), tr("Change Boil Time"), equipmentUpdate);
+      Mash * mash = this->recipeObs->mash();
+      new SimpleUndoableUpdate(*mash, "tunWeight_kg", mash->tunWeight_kg(), tr("Change Tun Weight"), equipmentUpdate);
+      new SimpleUndoableUpdate(*mash, "tunSpecificHeat_calGC", mash->tunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
    }
+
+   // This will do the equipment update and any related updates - see above
+   this->doOrRedoUpdate(equipmentUpdate);
 }
 
 // This isn't called when we think it is...!
@@ -1190,6 +1215,7 @@ void MainWindow::droppedRecipeStyle(Style* style)
    this->doOrRedoUpdate(
       newRelationalUndoableUpdate(*this->recipeObs,
                                   &Recipe::setStyle,
+                                  this->recipeObs->style(),
                                   style,
                                   &MainWindow::displayRangesEtcForCurrentRecipeStyle,
                                   tr("Change Recipe Style"))
@@ -1375,7 +1401,8 @@ void MainWindow::doOrRedoUpdate(QUndoCommand * update)
 void MainWindow::doOrRedoUpdate(QObject & updatee,
                                 char const * const propertyName,
                                 QVariant newValue,
-                                QString const & description) {
+                                QString const & description,
+                                QUndoCommand * parent) {
    this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyName, newValue, description));
    return;
 }

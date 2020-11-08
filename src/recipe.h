@@ -297,6 +297,7 @@ public:
 
    // Relational setters
    void setStyle(Style* style);
+   void setEquipment(Equipment* equipment);
 
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);

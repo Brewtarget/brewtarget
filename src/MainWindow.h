@@ -1,8 +1,9 @@
  /*
  * MainWindow.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -276,6 +277,8 @@ public slots:
    void showEquipmentEditor();
    void showStyleEditor();
 
+   void updateEquipmentButton();
+
    //! \brief Set the equipment based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
    void droppedRecipeStyle(Style *style);
@@ -294,7 +297,8 @@ public:
    void doOrRedoUpdate(QObject & updatee,
                        char const * const propertyName,
                        QVariant newValue,
-                       QString const & description);
+                       QString const & description,
+                       QUndoCommand * parent = nullptr);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);

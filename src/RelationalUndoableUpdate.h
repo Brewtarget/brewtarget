@@ -35,27 +35,33 @@
  * \brief Each instance of this class is a non-trivial undoable update to a recipe that cannot be represented with
  *        SimpleUndoableUpdate - eg because we're adding a link to another object.
  */
-template<class UU, class NV>
+template<class UU, class VV>
 class RelationalUndoableUpdate : public QUndoCommand
 {
 public:
    /*!
     * \param updatee The object we are updating
     * \param setter The setter method on the updatee
+    * \param oldValue The current value.
+    *                 (Looked at passing the getter instead of the current value, as it makes the call look a bit more
+    *                 elegant - and the caller is almost certainly going to have to call the getter anyway.  However,
+    *                 not all getters are const functions - eg because of lazy loading from DB etc - so it's simpler to
+    *                 have the caller just give us the current value.)
     * \param newValue The new value to assign
-    * \param callback The method on MainWindow to call after doing/undoing/redoing the change - typically to update other display elements
+    * \param callback The method on MainWindow to call after doing/undoing/redoing the change - typically to update other display elements.  If null, no callback is made.
     * \param description Short text we can show on undo/redo menu to describe this update eg "Change Recipe Style"
     * \param parent This is for grouping updates together.  We don't currently use it.
     */
    RelationalUndoableUpdate(UU & updatee,
-                            void (UU::*setter)(NV *),
-                            NV * newValue,
+                            void (UU::*setter)(VV *),
+                            VV * oldValue,
+                            VV * newValue,
                             void (MainWindow::*callback)(void),
                             QString const & description,
                             QUndoCommand * parent = nullptr)
-   : QUndoCommand(nullptr), updatee(updatee), setter(setter), newValue(newValue), callback(callback)
+   : QUndoCommand(nullptr), updatee(updatee), setter(setter), oldValue(oldValue), newValue(newValue), callback(callback)
    {
-      this->oldValue = updatee.style();
+      // Parent class handles storing description and making it accessible to the undo stack etc - we just have to give it the text
       this->setText(description);
       return;
    }
@@ -70,6 +76,7 @@ public:
     */
    void redo()
    {
+      QUndoCommand::redo();
       this->undoOrRedo(false);
       return;
    }
@@ -79,6 +86,7 @@ public:
     */
    void undo()
    {
+      QUndoCommand::undo();
       this->undoOrRedo(true);
       return;
    }
@@ -91,14 +99,16 @@ private:
    void undoOrRedo(bool const isUndo)
    {
       (this->updatee.*(this->setter))(isUndo ? this->oldValue : this->newValue);
-      (Brewtarget::mainWindow()->*(this->callback))();
+      if (this->callback != nullptr) {
+         (Brewtarget::mainWindow()->*(this->callback))();
+      }
       return;
    }
 
    UU & updatee;
-   void (UU::*setter)(NV *);
-   NV * newValue;
-   NV * oldValue;
+   void (UU::*setter)(VV *);
+   VV * oldValue;
+   VV * newValue;
    void (MainWindow::*callback)(void);
 };
 
@@ -110,13 +120,14 @@ private:
  *        (I thought this might not be necessary with the introduction of Class Template Argument Deduction in C++17,
  *        but I think I must be missing something.)
  */
-template<class UU, class NV> RelationalUndoableUpdate<UU, NV> * newRelationalUndoableUpdate(UU & updatee,
-                                                                                            void (UU::*setter)(NV *),
-                                                                                            NV * newValue,
+template<class UU, class VV> RelationalUndoableUpdate<UU, VV> * newRelationalUndoableUpdate(UU & updatee,
+                                                                                            void (UU::*setter)(VV *),
+                                                                                            VV * oldValue,
+                                                                                            VV * newValue,
                                                                                             void (MainWindow::*callback)(void),
                                                                                             QString const & description,
                                                                                             QUndoCommand * parent = nullptr) {
-   return new RelationalUndoableUpdate<UU, NV>(updatee, setter, newValue, callback, description, parent);
+   return new RelationalUndoableUpdate<UU, VV>(updatee, setter, oldValue, newValue, callback, description, parent);
 }
 
 

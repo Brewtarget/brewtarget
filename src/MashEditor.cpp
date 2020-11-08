@@ -112,7 +112,7 @@ void MashEditor::setRecipe(Recipe* r)
 
    if( mashObs && m_equip )
    {
-      // Only do this if we have to. Otherwise, it causes some uneccesary
+      // Only do this if we have to. Otherwise, it causes some unnecessary
       // updates to the database.
       if ( mashObs->tunWeight_kg() != m_equip->tunWeight_kg() )
          mashObs->setTunWeight_kg( m_equip->tunWeight_kg() );
