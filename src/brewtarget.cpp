@@ -394,10 +394,12 @@ const QDir Brewtarget::getConfigDir()
    char* xdg_config_home = getenv("XDG_CONFIG_HOME");
 
    if (xdg_config_home) {
+     logI(QString("XDG_CONFIG_HOME directory is %1").arg(xdg_config_home));
      dir.setPath(QString(xdg_config_home).append("/brewtarget"));
    }
    else {
      // If XDG_CONFIG_HOME doesn't exist, config goes in ~/.config/brewtarget
+     logI(QString("XDG_CONFIG_HOME not set.  HOME directory is %1").arg(QDir::homePath()));
      QString dirPath = QDir::homePath().append("/.config/brewtarget");
      dir = QDir(dirPath);
    }
@@ -623,7 +625,7 @@ int Brewtarget::run(const QString &userDirectory)
       cleanup();
       return 1;
    }
-   log.info("Starting Brewtarget.");
+   log.info(QString("Starting Brewtarget v%1 on %2.").arg(VERSIONSTRING).arg(QSysInfo::prettyProductName()));
    _mainWindow = new MainWindow();
    _mainWindow->setVisible(true);
    splashScreen.finish(_mainWindow);

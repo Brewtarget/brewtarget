@@ -773,27 +773,40 @@ void Database::dropInstance()
 
 }
 
-bool Database::backupToDir(QString dir,QString filename)
+char const * Database::getDefaultBackupFileName()
 {
-   // Make sure the singleton exists.
+    return "database.sqlite";
+}
+
+bool Database::backupToFile(QString newDbFileName)
+{
+   // Make sure the singleton exists - otherwise there's nothing to backup.
    instance();
 
    bool success = true;
-   QString prefix = dir + "/";
-   QString newDbFileName = prefix + "database.sqlite";
-
-   if ( filename.isEmpty() ) {
-      newDbFileName = prefix + "database.sqlite";
-   }
-   else {
-      newDbFileName = prefix + filename;
-   }
 
    // Remove the files if they already exist so that
    // the copy() operation will succeed.
    QFile::remove(newDbFileName);
 
    success = dbFile.copy( newDbFileName );
+
+   Brewtarget::logD( QString("Database backup to \"%1\" %2").arg(newDbFileName, success ? "succeeded" : "failed") );
+
+   return success;
+}
+
+bool Database::backupToDir(QString dir,QString filename)
+{
+   bool success = true;
+   QString prefix = dir + "/";
+   QString newDbFileName = prefix + getDefaultBackupFileName();
+
+   if ( !filename.isEmpty() ) {
+      newDbFileName = prefix + filename;
+   }
+
+   success = backupToFile( newDbFileName );
 
    return success;
 }
