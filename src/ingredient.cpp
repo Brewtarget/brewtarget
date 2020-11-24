@@ -58,7 +58,6 @@ Ingredient::Ingredient(Ingredient const& other)
 
 bool Ingredient::deleted() const
 {
-
    return _deleted.toBool();
 }
 

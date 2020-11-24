@@ -1,7 +1,8 @@
 /*
  * yeast.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - marker5a
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - plut0nium
  * - Samuel Östling <MrOstling@gmail.com>
