@@ -1,6 +1,6 @@
 /*
  * MashStepEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -129,11 +129,6 @@ void MashStepEditor::setMashStep(MashStep* step)
    }
 }
 
-void MashStepEditor::setParentMash(Mash *parent)
-{
-   m_parent = parent;
-}
-
 void MashStepEditor::saveAndClose()
 {
    obs->setName(lineEdit_name->text(),obs->cacheOnly());
@@ -147,7 +142,11 @@ void MashStepEditor::saveAndClose()
    obs->setEndTemp_c(lineEdit_endTemp->toSI());
 
    if ( obs->cacheOnly() ) {
-      Database::instance().insertMashStep(obs,m_parent);
+      // This is a new MashStep, so we need to store it.
+      // We'll ask MainWindow to do this for us, because then it can be an undoable action.
+      //
+      // The Mash of this MashStep should already have been set by the caller
+      Brewtarget::mainWindow()->addMashStepToMash(obs);
    }
 
    setVisible(false);

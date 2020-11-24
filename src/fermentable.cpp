@@ -530,3 +530,23 @@ void Fermentable::setMaxInBatch_pct( double num )
 
 void Fermentable::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
+Ingredient * Fermentable::getParent() {
+   Fermentable * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().fermentable(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Fermentable::insertInDatabase() {
+   return Database::instance().insertFermentable(this);
+}

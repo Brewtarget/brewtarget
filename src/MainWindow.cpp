@@ -123,6 +123,7 @@
 #include "WaterEditor.h"
 #include "beerxml.h"
 #include "RelationalUndoableUpdate.h"
+#include "UndoableAddOrRemove.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
@@ -1313,29 +1314,79 @@ void MainWindow::updateRecipeEfficiency()
    return;
 }
 
-// This appears to be unused... :-(
 void MainWindow::addFermentableToRecipe(Fermentable* ferm)
 {
-   recipeObs->addFermentable(ferm);
-   fermTableModel->addFermentable(ferm);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::addFermentable,
+                             ferm,
+                             &Recipe::remove<Fermentable>,
+                             tr("Add fermentable to recipe"))
+   );
+   // We don't need to call fermTableModel->addFermentable(ferm) here because the change to the recipe will already have
+   // triggered the necessary updates to fermTableModel.
 }
 
 void MainWindow::addHopToRecipe(Hop *hop)
 {
-   recipeObs->addHop(hop);
-   hopTableModel->addHop(hop);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::addHop,
+                             hop,
+                             &Recipe::remove<Hop>,
+                             tr("Add hop to recipe"))
+   );
+   // We don't need to call hopTableModel->addHop(hop) here because the change to the recipe will already have
+   // triggered the necessary updates to hopTableModel.
 }
 
 void MainWindow::addMiscToRecipe(Misc* misc)
 {
-   recipeObs->addMisc(misc);
-   miscTableModel->addMisc(misc);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::addMisc,
+                             misc,
+                             &Recipe::remove<Misc>,
+                             tr("Add misc to recipe"))
+   );
+   // We don't need to call miscTableModel->addMisc(misc) here because the change to the recipe will already have
+   // triggered the necessary updates to miscTableModel.
 }
 
 void MainWindow::addYeastToRecipe(Yeast* yeast)
 {
-   recipeObs->addYeast(yeast);
-   yeastTableModel->addYeast(yeast);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::addYeast,
+                             yeast,
+                             &Recipe::remove<Yeast>,
+                             tr("Add yeast to recipe"))
+   );
+   // We don't need to call yeastTableModel->addYeast(yeast) here because the change to the recipe will already have
+   // triggered the necessary updates to yeastTableModel.
+}
+
+void MainWindow::postAddMashStepToMash(MashStep * mashStep) {
+   this->mashStepTableModel->addMashStep(mashStep);
+   return;
+}
+
+void MainWindow::addMashStepToMash(MashStep * mashStep)
+{
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs->mash(),
+                             &Mash::addMashStep,
+                             mashStep,
+                             &Mash::removeMashStep,
+                             &MainWindow::postAddMashStepToMash,
+                             static_cast<void (MainWindow::*)(MashStep *)>(nullptr),
+                             tr("Add mash step to recipe"))
+   );
+   // .:TBD:. (MY 2020-11-24) For some reason that I didn't work out yet, mashStepTableModel is not plumbed in quite
+   //         the same as the other table models, hence the need to add the callback to update it (otherwise Redo of
+   //         add MashStep will not update the display correctly).  This works, but is a bit of a hack.  At some
+   //         point it would be good to bring MashStepTableModel closer into line with similar classes - perhaps
+   //         even by pulling out some of the common/similar code into a base class or template...
 }
 
 void MainWindow::exportRecipe()
@@ -1537,32 +1588,66 @@ Yeast* MainWindow::selectedYeast()
    return y;
 }
 
+void MainWindow::removeHop(Hop * itemToRemove) {
+   this->hopTableModel->removeHop(itemToRemove);
+   return;
+}
+void MainWindow::removeFermentable(Fermentable * itemToRemove) {
+   this->fermTableModel->removeFermentable(itemToRemove);
+   return;
+}
+void MainWindow::removeMisc(Misc * itemToRemove) {
+   this->miscTableModel->removeMisc(itemToRemove);
+   return;
+}
+void MainWindow::removeYeast(Yeast * itemToRemove) {
+   this->yeastTableModel->removeYeast(itemToRemove);
+   return;
+}
+
+void MainWindow::removeMashStep(MashStep * itemToRemove) {
+   this->mashStepTableModel->removeMashStep(itemToRemove);
+   return;
+}
+
 
 void MainWindow::removeSelectedFermentable()
 {
-    QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
-    QModelIndex viewIndex, modelIndex;
-    QList<Fermentable *> itemsToRemove;
-    int size, i;
 
-    size = selected.size();
+   QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
+   QModelIndex viewIndex, modelIndex;
+   QList<Fermentable *> itemsToRemove;
+   int size, i;
 
-    if( size == 0 )
-       return;
+   size = selected.size();
 
-    for(int i = 0; i < size; i++)
-    {
-        viewIndex = selected.at(i);
-        modelIndex = fermTableProxy->mapToSource(viewIndex);
+   Brewtarget::logD(QString("MainWindow::removeSelectedFermentable() %1 items selected to remove").arg(size));
 
-        itemsToRemove.append(fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row())));
+   if( size == 0 )
+      return;
+
+   for(int i = 0; i < size; i++)
+   {
+      viewIndex = selected.at(i);
+      modelIndex = fermTableProxy->mapToSource(viewIndex);
+
+      itemsToRemove.append(fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row())));
+   }
+
+   for(i = 0; i < itemsToRemove.size(); i++)
+   {
+      this->doOrRedoUpdate(
+         newUndoableAddOrRemove(*this->recipeObs,
+                                &Recipe::remove<Fermentable>,
+                                itemsToRemove.at(i),
+                                &Recipe::addFermentable,
+                                &MainWindow::removeFermentable,
+                                static_cast<void (MainWindow::*)(Fermentable *)>(nullptr),
+                                tr("Remove fermentable from recipe"))
+      );
     }
 
-    for(i = 0; i < itemsToRemove.size(); i++)
-    {
-        fermTableModel->removeFermentable(itemsToRemove.at(i));
-        recipeObs->remove(itemsToRemove.at(i));
-    }
+    return;
 }
 
 
@@ -1608,85 +1693,106 @@ void MainWindow::editSelectedYeast()
 
 void MainWindow::removeSelectedHop()
 {
-    QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
-    QModelIndex modelIndex, viewIndex;
-    QList<Hop *> itemsToRemove;
-    int size, i;
+   QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
+   QList<Hop *> itemsToRemove;
+   int size, i;
 
-    size = selected.size();
+   size = selected.size();
 
-    if( size == 0 )
-       return;
+   if( size == 0 )
+      return;
 
-    for(int i = 0; i < size; i++)
-    {
-        viewIndex = selected.at(i);
-        modelIndex = hopTableProxy->mapToSource(viewIndex);
+   for(int i = 0; i < size; i++)
+   {
+      viewIndex = selected.at(i);
+      modelIndex = hopTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(hopTableModel->getHop(modelIndex.row()));
-    }
+      itemsToRemove.append(hopTableModel->getHop(modelIndex.row()));
+   }
 
-    for(i = 0; i < itemsToRemove.size(); i++)
-    {
-        hopTableModel->removeHop(itemsToRemove.at(i));
-        recipeObs->remove(itemsToRemove.at(i));
-    }
+   for(i = 0; i < itemsToRemove.size(); i++)
+   {
+      this->doOrRedoUpdate(
+         newUndoableAddOrRemove(*this->recipeObs,
+                                 &Recipe::remove<Hop>,
+                                 itemsToRemove.at(i),
+                                 &Recipe::addHop,
+                                 &MainWindow::removeHop,
+                                 static_cast<void (MainWindow::*)(Hop *)>(nullptr),
+                                 tr("Remove hop from recipe"))
+      );
+   }
 
 }
 
 
 void MainWindow::removeSelectedMisc()
 {
-    QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
-    QModelIndex modelIndex, viewIndex;
-    QList<Misc *> itemsToRemove;
-    int size, i;
+   QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
+   QList<Misc *> itemsToRemove;
+   int size, i;
 
-    size = selected.size();
+   size = selected.size();
 
-    if( size == 0 )
-       return;
+   if( size == 0 )
+      return;
 
-    for(int i = 0; i < size; i++)
-    {
-        viewIndex = selected.at(i);
-        modelIndex = miscTableProxy->mapToSource(viewIndex);
+   for(int i = 0; i < size; i++)
+   {
+      viewIndex = selected.at(i);
+      modelIndex = miscTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row())));
-    }
+      itemsToRemove.append(miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row())));
+   }
 
-    for(i = 0; i < itemsToRemove.size(); i++)
-    {
-       miscTableModel->removeMisc(itemsToRemove.at(i));
-       recipeObs->remove(itemsToRemove.at(i));
-    }
+   for(i = 0; i < itemsToRemove.size(); i++)
+   {
+      this->doOrRedoUpdate(
+         newUndoableAddOrRemove(*this->recipeObs,
+                                 &Recipe::remove<Misc>,
+                                 itemsToRemove.at(i),
+                                 &Recipe::addMisc,
+                                 &MainWindow::removeMisc,
+                                 static_cast<void (MainWindow::*)(Misc *)>(nullptr),
+                                 tr("Remove misc from recipe"))
+      );
+   }
 }
 
 void MainWindow::removeSelectedYeast()
 {
-    QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
-    QModelIndex modelIndex, viewIndex;
-    QList<Yeast *> itemsToRemove;
-    int size, i;
+   QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
+   QList<Yeast *> itemsToRemove;
+   int size, i;
 
-    size = selected.size();
+   size = selected.size();
 
-    if( size == 0 )
-       return;
+   if( size == 0 )
+      return;
 
-    for(int i = 0; i < size; i++)
-    {
-        viewIndex = selected.at(i);
-        modelIndex = yeastTableProxy->mapToSource(viewIndex);
+   for(int i = 0; i < size; i++)
+   {
+      viewIndex = selected.at(i);
+      modelIndex = yeastTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row())));
-    }
+      itemsToRemove.append(yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row())));
+   }
 
-    for(i = 0; i < itemsToRemove.size(); i++)
-    {
-       yeastTableModel->removeYeast(itemsToRemove.at(i));
-       recipeObs->remove(itemsToRemove.at(i));
-    }
+   for(i = 0; i < itemsToRemove.size(); i++)
+   {
+      this->doOrRedoUpdate(
+         newUndoableAddOrRemove(*this->recipeObs,
+                                 &Recipe::remove<Yeast>,
+                                 itemsToRemove.at(i),
+                                 &Recipe::addYeast,
+                                 &MainWindow::removeYeast,
+                                 static_cast<void (MainWindow::*)(Yeast *)>(nullptr),
+                                 tr("Remove yeast from recipe"))
+      );
+   }
 }
 
 void MainWindow::newRecipe()
@@ -1728,7 +1834,7 @@ void MainWindow::newRecipe()
       }
    }
 
-   Database::instance().insertRecipe(newRec);
+   newRec->insertInDatabase();
 
    // a new recipe will be put in a folder if you right click on a recipe or
    // folder. Otherwise, it goes into the main window?
@@ -2078,10 +2184,9 @@ void MainWindow::addMashStep()
       return;
    }
 
-   // MashStep* step = Database::instance().newMashStep(mash);
    MashStep* step = new MashStep(true);
+   step->setMash(mash);
    mashStepEditor->setMashStep(step);
-   mashStepEditor->setParentMash(mash);
    mashStepEditor->setVisible(true);
 }
 
@@ -2107,7 +2212,18 @@ void MainWindow::removeSelectedMashStep()
    }
 
    MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
-   Database::instance().removeFrom(mash,step);
+
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs->mash(),
+                              &Mash::removeMashStep,
+                              step,
+                              &Mash::addMashStep,
+                              &MainWindow::removeMashStep,
+                              &MainWindow::postAddMashStepToMash,
+                              tr("Remove mash step"))
+   );
+
+   return;
 }
 
 void MainWindow::moveSelectedMashStepUp()

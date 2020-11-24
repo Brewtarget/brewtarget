@@ -119,6 +119,10 @@ public:
    double Na() const;
    double SO4() const;
 
+   // Salt objects do not have parents
+   Ingredient * getParent() { return nullptr; }
+   int insertInDatabase();
+
 signals:
 
 private:

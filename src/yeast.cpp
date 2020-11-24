@@ -30,6 +30,7 @@
 
 #include "TableSchemaConst.h"
 #include "YeastSchema.h"
+#include "database.h"
 
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
@@ -458,4 +459,25 @@ bool Yeast::isValidFlocculation(const QString& str) const
          return true;
 
    return false;
+}
+
+Ingredient * Yeast::getParent() {
+   Yeast * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().yeast(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Yeast::insertInDatabase() {
+   return Database::instance().insertYeast(this);
 }

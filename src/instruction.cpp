@@ -105,7 +105,7 @@ void Instruction::setReagent(const QString& reagent)
 }
 */
 
-void Instruction::setInterval(double time) 
+void Instruction::setInterval(double time)
 {
    m_interval = time;
    if ( ! m_cacheOnly ) {
@@ -117,6 +117,8 @@ void Instruction::addReagent(const QString& reagent)
 {
    m_reagents.append(reagent);
 }
+
+void Instruction::setRecipe(Recipe * const recipe) { this->m_recipe = recipe; }
 
 void Instruction::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 // Accessors ==================================================================
@@ -135,3 +137,7 @@ double Instruction::interval() { return m_interval; }
 int Instruction::instructionNumber() const { return Database::instance().instructionNumber(this); }
 
 bool Instruction::cacheOnly() { return m_cacheOnly; }
+
+int Instruction::insertInDatabase() {
+   return Database::instance().insertInstruction(this, this->m_recipe);
+}

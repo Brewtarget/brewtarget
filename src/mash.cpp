@@ -300,3 +300,19 @@ void Mash::acceptMashStepChange(QMetaProperty prop, QVariant /*val*/)
       emit changed(metaProperty("totalTime"), QVariant());
    }
 }
+
+MashStep * Mash::addMashStep(MashStep * mashStep) {
+   mashStep->setMash(this);
+   mashStep->insertInDatabase();
+   return mashStep;
+}
+
+MashStep * Mash::removeMashStep(MashStep * mashStep) {
+   Database::instance().removeFrom(this, mashStep);
+   return mashStep;
+}
+
+
+int Mash::insertInDatabase() {
+   return Database::instance().insertMash(this);
+}

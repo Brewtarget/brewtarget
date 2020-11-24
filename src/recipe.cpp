@@ -1,7 +1,8 @@
 /*
  * recipe.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2020
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -905,36 +906,12 @@ QString Recipe::nextAddToBoil(double& time)
 }
 
 //============================Relational Setters===============================
-
-void Recipe::addHop( Hop *var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addFermentable( Fermentable* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addMisc( Misc* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addYeast( Yeast* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addWater( Water* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addSalt( Salt* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
+Hop *         Recipe::addHop(Hop * var)                 { return this->add<Hop>(var); }
+Fermentable * Recipe::addFermentable(Fermentable * var) { return this->add<Fermentable>(var); }
+Misc *        Recipe::addMisc(Misc * var)               { return this->add<Misc>(var); }
+Yeast *       Recipe::addYeast(Yeast * var)             { return this->add<Yeast>(var); }
+Water *       Recipe::addWater(Water * var)             { return this->add<Water>(var); }
+Salt *        Recipe::addSalt(Salt * var)               { return this->add<Salt>(var); }
 
 void Recipe::setStyle( Style* var )
 {
@@ -1546,17 +1523,27 @@ int Recipe::fermentationStages() const { return m_fermentationStages; }
 QDate Recipe::date() const { return m_date; }
 bool Recipe::cacheOnly() const { return m_cacheOnly; }
 
-//=============================Removers========================================
+//=============================Adders and Removers========================================
+template<class T> T * Recipe::add(T * var) {
+   // If the supplied ingredient has no parent then we need to make a copy of it - or rather tell the Database object
+   // to make a copy.  We'll then get back a pointer to the copy.  If it does have a parent then we can just add it
+   // directly, and we'll get back the same pointer we passed in.
+   bool noCopy = (var->getParent() != nullptr);
+   return Database::instance().addToRecipe(this, var, noCopy);
+}
 
-// Returns true if var is found and removed.
-void Recipe::remove( Ingredient *var )
+Ingredient * Recipe::removeIngredient( Ingredient *var )
 {
+//   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+
    // brewnotes a bit odd
-   if ( dynamic_cast<BrewNote*>(var) )
+   if ( dynamic_cast<BrewNote*>(var) ) {
       // the cast is required to force the template to gets it thing right
       Database::instance().remove(qobject_cast<BrewNote*>(var));
-   else
-      Database::instance().removeIngredientFromRecipe( this, var );
+      return var;
+   } else {
+      return Database::instance().removeIngredientFromRecipe( this, var );
+   }
 }
 
 double Recipe::batchSizeNoLosses_l()
@@ -2375,4 +2362,25 @@ double Recipe::targetTotalMashVol_l()
 
 
    return targetCollectedWortVol_l() + absorption_lKg * grainsInMash_kg();
+}
+
+Ingredient * Recipe::getParent() {
+   Recipe * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().recipe(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Recipe::insertInDatabase() {
+   return Database::instance().insertRecipe(this);
 }

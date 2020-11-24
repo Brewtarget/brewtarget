@@ -2,6 +2,7 @@
  * Ingredient.h is part of Brewtarget, and is Copyright the following
  * authors 2020-2025
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -132,6 +133,23 @@ public:
    bool isValid();
    void invalidate();
 
+   /*!
+    * \brief Some ingredients (eg Fermentable, Hop) get copied when added to a recipe, but others (eg Instruction) don't.
+    *        For those that do, we think of the copy as being a child of the original ingredient.  This function allows
+    *        us to access that parent.
+    * \return Pointer to the parent ingredient from which this one was originally copied, or null if no such parent exists.
+    */
+   virtual Ingredient * getParent() = 0;
+
+   void setParent(Ingredient const & parentIngredient);
+
+   /*!
+    * \brief When we create an ingredient, or undelete a deleted one, we need to put it in the database.  For the case of
+    *        undelete, it's helpful for the caller not to have to know what subclass of ingredient we are resurrecting.
+    * \return Key of element inserted in database.
+    */
+   virtual int insertInDatabase() = 0;
+
 signals:
    /*!
     * Passes the meta property that has changed about this object.
@@ -148,6 +166,8 @@ protected:
    int _key;
    //! The table where this ingredient is stored.
    Brewtarget::DBTable _table;
+   // This is 0 if there is no parent (or parent is not yet known)
+   int parentKey;
 
    /*!
     * \param prop_name A meta-property name

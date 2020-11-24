@@ -116,8 +116,14 @@ public:
 
    static QString classNameStr();
 
+   // Mash objects do not have parents
+   Ingredient * getParent() { return nullptr; }
+   int insertInDatabase();
+
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
+   MashStep * addMashStep(MashStep * mashStep);
+   MashStep * removeMashStep(MashStep * mashStep);
 
 signals:
    // Emitted when the number of steps change, or when you should call mashSteps() again.

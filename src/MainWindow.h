@@ -187,8 +187,12 @@ public slots:
    //! \brief Edit selected Yeast
    void editSelectedYeast();
 
-   //! \brief Add a new mash step to the recipe.
+   //! \brief Invoke the pop-up Window to add a new mash step to (the mash of) the recipe.
    void addMashStep();
+   //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
+   void addMashStepToMash(MashStep*);
+   //! \brief Update the display once a mash step is added.
+   void postAddMashStepToMash(MashStep * mashStep);
    //! \brief Move currently selected mash step down.
    void moveSelectedMashStepUp();
    //! \brief Move currently selected mash step up.
@@ -318,8 +322,18 @@ private slots:
    void setUndoRedoEnable();
 
 private:
+
+   void removeHop(Hop * itemToRemove);
+   void removeFermentable(Fermentable * itemToRemove);
+   void removeMisc(Misc * itemToRemove);
+   void removeYeast(Yeast * itemToRemove);
+   void removeMashStep(MashStep * itemToRemove);
+//   void removeWater(Water * itemToRemove);
+//   void removeSalt(Salt * itemToRemove);
+
    Recipe* recipeObs;
-   // TBD: Not sure why we need to store recipe style when we ought to be able to get it from the recipe.
+   // TBD: (MY 2020-11-24) Not sure whether we need to store recipe style (since it ought to be available from the
+   //      recipe) or whether this is just for convenience.
    Style* recStyle;
    Equipment* recEquip;
 
@@ -373,7 +387,7 @@ private:
    EquipmentListModel* equipmentListModel;
    MashListModel* mashListModel;
    StyleListModel* styleListModel;
-   WaterListModel* waterListModel;
+//   WaterListModel* waterListModel;  Appears to be unused...
 
    // all things sort/filter proxy go here
    FermentableSortFilterProxyModel* fermTableProxy;

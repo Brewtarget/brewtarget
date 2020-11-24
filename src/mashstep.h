@@ -24,6 +24,7 @@
 #include "ingredient.h"
 #include <QStringList>
 #include <QString>
+#include "mash.h"
 
 // Forward declarations.
 class MashStep;
@@ -87,6 +88,7 @@ public:
    void setInfuseTemp_c( double var);
    void setDecoctionAmount_l( double var);
    void setCacheOnly(bool cache);
+   void setMash(Mash * mash);
 
    Type type() const;
    const QString typeString() const;
@@ -99,6 +101,7 @@ public:
    double infuseTemp_c() const;
    double decoctionAmount_l() const;
    bool cacheOnly() const;
+   Mash * mash() const;
 
    //! What number this step is in the mash.
    int stepNumber() const;
@@ -110,6 +113,10 @@ public:
    bool isDecoction() const;
 
    static QString classNameStr();
+
+   // MashStep objects do not have parents
+   Ingredient * getParent() { return nullptr; }
+   int insertInDatabase();
 
 signals:
 
@@ -130,6 +137,7 @@ private:
    double m_decoctionAmount_l;
    int m_stepNumber;
    bool m_cacheOnly;
+   Mash * m_mash;
 
    bool isValidType( const QString &str ) const;
 

@@ -1,6 +1,7 @@
 /*
  * FermentableTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -108,6 +109,8 @@ void FermentableTableModel::observeDatabase(bool val)
 
 void FermentableTableModel::addFermentable(Fermentable* ferm)
 {
+   Brewtarget::logD(QString("FermentableTableModel::addFermentable() \"%1\"").arg(ferm->name()));
+
    //Check to see if it's already in the list
    if( fermObs.contains(ferm) )
       return;
@@ -127,6 +130,8 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
 
 void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
 {
+   Brewtarget::logD(QString("FermentableTableModel::addFermentables() Add up to %1 fermentables to existing list of %2").arg(ferms.size()).arg(this->fermObs.size()));
+
    QList<Fermentable*>::iterator i;
    QList<Fermentable*> tmp;
 
@@ -137,6 +142,8 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
       if( !fermObs.contains(*i) )
          tmp.append(*i);
    }
+
+   Brewtarget::logD(QString("FermentableTableModel::addFermentables() After de-duping, adding %1 fermentables").arg(tmp.size()));
 
    int size = fermObs.size();
    if (size+tmp.size()) {
@@ -225,6 +232,8 @@ void FermentableTableModel::changedInventory(Brewtarget::DBTable table, int invK
 
 void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
+   Brewtarget::logD(QString("FermentableTableModel::changed() %1").arg(prop.name()));
+
    int i;
 
    // Is sender one of our fermentables?

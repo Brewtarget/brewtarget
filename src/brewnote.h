@@ -49,7 +49,7 @@ class BrewNote : public Ingredient
    friend class BeerXML;
    friend bool operator<(BrewNote &lhs, BrewNote &rhs);
    friend bool operator==(BrewNote &lhs, BrewNote &rhs);
-   
+
 public:
    enum {DONOTUSE, RECIPE};
 
@@ -105,13 +105,14 @@ public:
    void setVolumeIntoFerm_l(double var);
    void setPitchTemp_c(double var);
    void setFg(double var);
-   void setFinalVolume_l(double var);  
+   void setFinalVolume_l(double var);
    void setBoilOff_l(double var);
    // Metasetter
    void populateNote(Recipe* parent);
    void recalculateEff(Recipe* parent);
    void setLoading(bool flag);
    void setCacheOnly(bool cache);
+   void setRecipe(Recipe * recipe);
 
    // Getters
    QDateTime brewDate() const;
@@ -137,8 +138,8 @@ public:
    double volumeIntoFerm_l() const;
    double pitchTemp_c() const;
    double fg() const;
-   double finalVolume_l() const;  
-   double boilOff_l() const;  
+   double finalVolume_l() const;
+   double boilOff_l() const;
    QString notes() const;
    // ick, but I don't see another way. I need a unique key that has *nothing*
    // to do with the data entered. The best one I can think of is the
@@ -183,7 +184,12 @@ public:
    double projFermPoints() const;
    double projAtten() const;
    bool cacheOnly() const;
-   
+
+   // BrewNote objects do not have parents
+   Ingredient * getParent() { return nullptr; }
+   int insertInDatabase();
+
+
 signals:
    void brewDateChanged(const QDateTime&);
 
@@ -225,6 +231,7 @@ private:
    double m_projFermPoints;
    double m_projAtten;
    bool m_cacheOnly;
+   Recipe * m_recipe;
 
    QHash<QString,double> info;
    QHash<QString,QString> XMLTagToName();

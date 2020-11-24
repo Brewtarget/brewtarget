@@ -1,7 +1,8 @@
 /*
  * MashStepEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -29,6 +30,7 @@ class MashStepEditor;
 #include <QMetaProperty>
 #include <QVariant>
 #include "ui_mashStepEditor.h"
+#include "MainWindow.h"
 
 // Forward declarations.
 class MashStep;
@@ -48,7 +50,6 @@ public:
    virtual ~MashStepEditor() {}
 
    void setMashStep(MashStep* step);
-   void setParentMash(Mash* mash);
 
 public slots:
    void saveAndClose();
@@ -69,7 +70,6 @@ private:
    void showChanges(QMetaProperty* metaProp = 0);
    void clear();
    MashStep* obs;
-   Mash* m_parent;
 };
 
 #endif   /* _MASHSTEPEDITOR_H */

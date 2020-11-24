@@ -1,6 +1,7 @@
 /*
  * RecipeExtrasWidget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Peter Buelow <goballstate@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -62,7 +63,7 @@ void RecipeExtrasWidget::setRecipe(Recipe* rec)
 {
    if( recipe )
       disconnect( recipe, 0, this, 0 );
-   
+
    if( rec )
    {
       recipe = rec;
@@ -173,7 +174,7 @@ void RecipeExtrasWidget::updateDate(const QDate& date)
    if( recipe == 0 )
       return;
 
-   if ( date.isNull()  ) 
+   if ( date.isNull()  )
       Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "date", dateEdit_date->date(), tr("Change Date"));
    else
       Brewtarget::mainWindow()->doOrRedoUpdate(*recipe, "date", date, tr("Change Date"));
@@ -247,7 +248,7 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
       propName = prop->name();
       val = prop->read(recipe);
    }
-   
+
    if( ! recipe )
       return;
 

@@ -1,7 +1,8 @@
 /*
  * misc.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - mik firestone <mikfire@gmail.com>
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
  *
@@ -32,6 +33,7 @@
 
 #include "TableSchemaConst.h"
 #include "MiscSchema.h"
+#include "database.h"
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
@@ -300,4 +302,25 @@ bool Misc::isValidType( const QString& var )
          return true;
 
    return false;
+}
+
+Ingredient * Misc::getParent() {
+   Misc * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().misc(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Misc::insertInDatabase() {
+   return Database::instance().insertMisc(this);
 }

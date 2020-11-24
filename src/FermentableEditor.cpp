@@ -78,7 +78,7 @@ void FermentableEditor::save()
    obsFerm->setNotes( textEdit_notes->toPlainText() );
 
    if ( obsFerm->cacheOnly() ) {
-      Database::instance().insertFermentable(obsFerm);
+      obsFerm->insertInDatabase();
    }
 
    // I could do this in the database code, but it makes sense to me here.

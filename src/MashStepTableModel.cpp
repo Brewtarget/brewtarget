@@ -1,6 +1,7 @@
 /*
  * MashStepTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -46,6 +47,42 @@ MashStepTableModel::MashStepTableModel(QTableView* parent)
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(headerView, &QWidget::customContextMenuRequested, this, &MashStepTableModel::contextMenu);
+}
+
+void MashStepTableModel::addMashStep(MashStep * mashStep)
+{
+   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+
+   if (mashStep == nullptr || this->steps.contains(mashStep)) {
+      return;
+   }
+
+   int size {this->steps.size()};
+   beginInsertRows( QModelIndex(), size, size );
+   this->steps.append(mashStep);
+   connect( mashStep, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   //reset(); // Tell everybody that the table has changed.
+   endInsertRows();
+   return;
+}
+
+bool MashStepTableModel::removeMashStep(MashStep * mashStep)
+{
+   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+
+   int i {this->steps.indexOf(mashStep)};
+   if( i >= 0 )
+   {
+      beginRemoveRows( QModelIndex(), i, i );
+      disconnect( mashStep, nullptr, this, nullptr );
+      this->steps.removeAt(i);
+      //reset(); // Tell everybody the table has changed.
+      endRemoveRows();
+
+      return true;
+   }
+
+   return false;
 }
 
 void MashStepTableModel::setMash( Mash* m )
@@ -149,7 +186,6 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
       if ( prop.name() == QStringLiteral("stepNumber") ) {
          reorderMashStep(stepSender,i);
       }
-
 
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS-1));

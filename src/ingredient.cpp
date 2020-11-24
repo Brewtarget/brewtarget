@@ -2,6 +2,7 @@
  * Ingredient.cpp is part of Brewtarget, and is Copyright the following
  * authors 2020-2025
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -33,6 +34,7 @@ Ingredient::Ingredient(Brewtarget::DBTable table, int key, QString t_name, bool 
    : QObject(nullptr),
      _key(key),
      _table(table),
+     parentKey(0),
      _valid(true),
      _folder(folder),
      _name(t_name),
@@ -45,6 +47,7 @@ Ingredient::Ingredient(Ingredient const& other)
    : QObject(nullptr),
      _key(other._key),
      _table(other._table),
+     parentKey(other.parentKey),
      _valid(true),
      _folder(other._folder),
      _name(QString()),
@@ -284,6 +287,12 @@ bool Ingredient::isValid()
 void Ingredient::invalidate()
 {
    _valid = false;
+}
+
+void Ingredient::setParent(Ingredient const & parentIngredient)
+{
+   this->parentKey = parentIngredient._key;
+   return;
 }
 
 QVariantMap Ingredient::getColumnValueMap() const

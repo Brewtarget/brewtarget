@@ -1,6 +1,6 @@
 /*
  * MashWizard.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+//  * authors 2009-2020
  * - David Grundberg <individ@acc.umu.se>
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mik Firestone <mikfire@gmail.com>
@@ -375,8 +375,8 @@ void MashWizard::wizardry()
             mashStep->setEndTemp_c(tw);
             mashStep->setStepTemp_c(tf);
             mashStep->setStepTime_min(15);
-
-            Database::instance().insertMashStep(mashStep,mash);
+            mashStep->setMash(mash);
+            mashStep->insertInDatabase();
             steps.append(mashStep);
             emit mashStep->changed(
                         mashStep->metaObject()->property(
@@ -397,8 +397,8 @@ void MashWizard::wizardry()
          mashStep->setEndTemp_c(tw);
          mashStep->setStepTemp_c(tf);
          mashStep->setStepTime_min(15);
-
-         Database::instance().insertMashStep(mashStep,mash);
+         mashStep->setMash(mash);
+         mashStep->insertInDatabase();
          steps.append(mashStep);
          emit mashStep->changed(
                      mashStep->metaObject()->property(

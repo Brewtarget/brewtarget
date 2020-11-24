@@ -1,6 +1,6 @@
 /*
  * StyleEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -121,7 +121,7 @@ void StyleEditor::save()
    s->setNotes( textEdit_notes->toPlainText() );
 
    if ( s->cacheOnly() ) {
-      Database::instance().insertStyle(s);
+      s->insertInDatabase();
       s->setCacheOnly(false);
    }
 
