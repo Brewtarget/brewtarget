@@ -741,8 +741,8 @@ Fermentable* BeerXML::fermentableFromXml( QDomNode const& node, Recipe* parent )
          // No parent means we handle the transaction
          db.sqlDatabase().transaction();
          // Check to see if we already have a Fermentable with this name
-         db.getElementsByName<Fermentable>( matching, 
-               Brewtarget::FERMTABLE, 
+         db.getElementsByName<Fermentable>( matching,
+               Brewtarget::FERMTABLE,
                name, db.allFermentables);
 
          if ( matching.length() > 0 ) {
@@ -893,9 +893,9 @@ Hop* BeerXML::hopFromXml( QDomNode const& node, Recipe* parent )
          // as always, start the transaction if no parent
          db.sqlDatabase().transaction();
          // Check to see if there is a hop already in the DB with the same name.
-         db.getElementsByName<Hop>( matching, 
-               Brewtarget::HOPTABLE, 
-               name, 
+         db.getElementsByName<Hop>( matching,
+               Brewtarget::HOPTABLE,
+               name,
                db.allHops);
 
          if( matching.length() > 0 ) {
@@ -1322,7 +1322,14 @@ Recipe* BeerXML::recipeFromXml( QDomNode const& node )
       // Get style. Note: styleFromXml requires the entire node, not just the
       // firstchild of the node.
       n = node.firstChildElement("STYLE");
+      auto deleteme =
       styleFromXml(n, ret);
+      Brewtarget::logD(QString("%1 deleteme %2").arg(Q_FUNC_INFO).arg(nullptr == deleteme ? "null" : "not null"));
+      Brewtarget::logD(QString("%1 ret->style() %2").arg(Q_FUNC_INFO).arg(nullptr == ret->style() ? "null" : "not null"));
+
+      if (! ret->style())
+         throw QString("Style error !?!");
+
       if ( ! ret->style()->isValid())
          ret->invalidate();
 
@@ -1422,13 +1429,16 @@ Style* BeerXML::styleFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Style*> matching;
 
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
+   Brewtarget::logD(QString("%1 name %2").arg(Q_FUNC_INFO).arg(name));
    try {
       // If we are just importing a style by itself, need to do some dupe-checking.
       if ( parent == nullptr ) {
+         Brewtarget::logD(QString("%1 Style (by itself) %2").arg(Q_FUNC_INFO).arg(name));
+
          // No parent means we handle the transaction
          db.sqlDatabase().transaction();
          // Check to see if there is a style already in the DB with the same name.
@@ -1447,6 +1457,7 @@ Style* BeerXML::styleFromXml( QDomNode const& node, Recipe* parent )
       else {
          // If we are inserting this as part of a recipe, we can skip straight
          // to creating a new one
+         Brewtarget::logD(QString("%1 Style (in recipe) %2").arg(Q_FUNC_INFO).arg(name));
          ret = new Style(name);
       }
 

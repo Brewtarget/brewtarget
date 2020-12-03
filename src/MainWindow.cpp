@@ -132,7 +132,7 @@ MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
 {
    // Need to call this to get all the widgets added (I think).
-   setupUi(this);
+   this->setupUi(this);
 
    /* PLEASE DO NOT REMOVE.
     This code is left here, commented out, intentionally. The only way I can
@@ -142,7 +142,6 @@ MainWindow::MainWindow(QWidget* parent)
    QLocale german(QLocale::German,QLocale::Germany);
    QLocale::setDefault(german);
    */
-
 
    // If the database doesn't load, we bail
    if (! Database::instance().loadSuccessful() )
@@ -158,37 +157,43 @@ MainWindow::MainWindow(QWidget* parent)
    printer = new QPrinter;
    printer->setPageSize(QPrinter::Letter);
 
-   setupCSS();
+   this->setupCSS();
    // initialize all of the dialog windows
-   setupDialogs();
+   this->setupDialogs();
    // initialize the ranged sliders
-   setupRanges();
+   this->setupRanges();
    // the dialogs have to be setup before this is called
-   setupComboBoxes();
+   this->setupComboBoxes();
    // do all the work to configure the tables models and their proxies
-   setupTables();
+   this->setupTables();
    // Create the keyboard shortcuts
-   setupShortCuts();
+   this->setupShortCuts();
    // Once more with the context menus too
-   setupContextMenu();
+   this->setupContextMenu();
+
+   // This sets up things that might have been 'remembered' (ie stored in the config file) from a previous run of the
+   // program - eg window size, which is stored in MainWindow::closeEvent().
    // Breaks the naming convention, doesn't it?
-   restoreSavedState();
+   this->restoreSavedState();
+
    // Connect slots to triggered() signals
-   setupTriggers();
+   this->setupTriggers();
    // Connect slots to clicked() signals
-   setupClicks();
+   this->setupClicks();
    // connect slots to activate() signals
-   setupActivate();
+   this->setupActivate();
    // connect signal slots for the text editors
-   setupTextEdit();
+   this->setupTextEdit();
    // connect the remaining labels
-   setupLabels();
+   this->setupLabels();
    // set up the drag/drop parts
-   setupDrops();
+   this->setupDrops();
 
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
    connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+
+   return;
 }
 
 // Setup the keyboard shortcuts
@@ -442,7 +447,6 @@ void MainWindow::setupTables()
 // Anything resulting in a restoreState() should go in here
 void MainWindow::restoreSavedState()
 {
-   QDesktopWidget *desktop = QApplication::desktop();
 
    // If we saved a size the last time we ran, use it
    if ( Brewtarget::hasOption("geometry"))
@@ -453,10 +457,13 @@ void MainWindow::restoreSavedState()
    else
    {
       // otherwise, guess a reasonable size at 1/4 of the screen.
+      QDesktopWidget *desktop = QApplication::desktop();
       int width = desktop->width();
       int height = desktop->height();
-
       this->resize(width/2,height/2);
+
+      // Or we could do the same in one line:
+      // this->resize(QDesktopWidget().availableGeometry(this).size() * 0.5);
    }
 
    // If we saved the selected recipe name the last time we ran, select it and show it.

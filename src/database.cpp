@@ -670,10 +670,13 @@ Database& Database::instance()
    static QMutex mutex;
    if( ! dbInstance )
    {
+      Brewtarget::logD(QString("%1 No instance").arg(Q_FUNC_INFO));
       mutex.lock();
 
       if( ! dbInstance ) {
          dbInstance = new Database();
+         Brewtarget::logD(QString("%1 Created new instance %2 stored at %3").arg(Q_FUNC_INFO).arg(QString().sprintf("%08p", static_cast<void *>(dbInstance))).arg(QString().sprintf("%08p", static_cast<void *>(&dbInstance))));
+
          dbInstance->load();
       }
 
@@ -686,6 +689,7 @@ Database& Database::instance()
 void Database::dropInstance()
 {
    static QMutex mutex;
+   Brewtarget::logD(QString("%1 Dropping instance %2 stored at %3").arg(Q_FUNC_INFO).arg(QString().sprintf("%08p", static_cast<void *>(dbInstance))).arg(QString().sprintf("%08p", static_cast<void *>(&dbInstance))));
 
    mutex.lock();
    dbInstance->unload();
@@ -1159,10 +1163,11 @@ Style* Database::style(Recipe const* parent)
 
 Style* Database::styleById(int styleId )
 {
-   if( allStyles.contains(styleId) )
+   if( allStyles.contains(styleId) ) {
       return allStyles[styleId];
-   else
+   } else {
       return nullptr;
+   }
 }
 
 Mash* Database::mash( Recipe const* parent )
@@ -2758,9 +2763,12 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
    if ( transact ) {
       sqlDatabase().commit();
    }
+
    // Emit a changed signal.
    rec->m_style_id = newStyle->key();
    emit rec->changed( rec->metaProperty("style"), Ingredient::qVariantFromPtr(newStyle) );
+
+   return;
 }
 
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
