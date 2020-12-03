@@ -625,7 +625,7 @@ BrewNote* BeerXML::brewNoteFromXml( QDomNode const& node, Recipe* parent )
    QDomNode n;
    BrewNote* ret;
    QDateTime theDate;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("BREWDATE");
    theDate = QDateTime::fromString(n.firstChild().toText().nodeValue(),Qt::ISODate);
@@ -664,7 +664,7 @@ Equipment* BeerXML::equipmentFromXml( QDomNode const& node, Recipe* parent )
    Equipment* ret;
    QString name;
    QList<Equipment*> matching;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
@@ -730,7 +730,7 @@ Fermentable* BeerXML::fermentableFromXml( QDomNode const& node, Recipe* parent )
    Fermentable* ret;
    QString name;
    QList<Fermentable*> matching;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
@@ -741,8 +741,8 @@ Fermentable* BeerXML::fermentableFromXml( QDomNode const& node, Recipe* parent )
          // No parent means we handle the transaction
          db.sqlDatabase().transaction();
          // Check to see if we already have a Fermentable with this name
-         db.getElementsByName<Fermentable>( matching, 
-               Brewtarget::FERMTABLE, 
+         db.getElementsByName<Fermentable>( matching,
+               Brewtarget::FERMTABLE,
                name, db.allFermentables);
 
          if ( matching.length() > 0 ) {
@@ -808,7 +808,7 @@ Fermentable* BeerXML::fermentableFromXml( QDomNode const& node, Recipe* parent )
 
 int BeerXML::getQualifiedHopTypeIndex(QString type, Hop* hop)
 {
-   Database db = Database::instance();
+   Database & db = Database::instance();
    TableSchema* tbl = m_tables->table(Brewtarget::HOPTABLE);
 
    if ( Hop::types.indexOf(type) < 0 ) {
@@ -842,7 +842,7 @@ int BeerXML::getQualifiedHopTypeIndex(QString type, Hop* hop)
 
 int BeerXML::getQualifiedHopUseIndex(QString use, Hop* hop)
 {
-   Database db = Database::instance();
+   Database & db = Database::instance();
    TableSchema* tbl = m_tables->table(Brewtarget::HOPTABLE);
 
    if ( Hop::uses.indexOf(use) < 0 ) {
@@ -876,7 +876,7 @@ int BeerXML::getQualifiedHopUseIndex(QString use, Hop* hop)
 
 Hop* BeerXML::hopFromXml( QDomNode const& node, Recipe* parent )
 {
-   Database db = Database::instance();
+   Database & db = Database::instance();
    QDomNode n;
    bool createdNew = true;
    blockSignals(true);
@@ -893,9 +893,9 @@ Hop* BeerXML::hopFromXml( QDomNode const& node, Recipe* parent )
          // as always, start the transaction if no parent
          db.sqlDatabase().transaction();
          // Check to see if there is a hop already in the DB with the same name.
-         db.getElementsByName<Hop>( matching, 
-               Brewtarget::HOPTABLE, 
-               name, 
+         db.getElementsByName<Hop>( matching,
+               Brewtarget::HOPTABLE,
+               name,
                db.allHops);
 
          if( matching.length() > 0 ) {
@@ -997,7 +997,7 @@ Instruction* BeerXML::instructionFromXml( QDomNode const& node, Recipe* parent )
    QDomNode n;
    QString name;
    Instruction* ret;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
@@ -1028,7 +1028,7 @@ Mash* BeerXML::mashFromXml( QDomNode const& node, Recipe* parent )
    Mash* ret;
    QString name;
    QList<Mash*> matching;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    blockSignals(true);
 
@@ -1100,7 +1100,7 @@ MashStep* BeerXML::mashStepFromXml( QDomNode const& node, Mash* parent )
 {
    QDomNode n;
    QString str;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    try {
       MashStep* ret = new MashStep(true);
@@ -1143,7 +1143,7 @@ MashStep* BeerXML::mashStepFromXml( QDomNode const& node, Mash* parent )
 int BeerXML::getQualifiedMiscTypeIndex(QString type, Misc* misc)
 {
    TableSchema* tbl = m_tables->table(Brewtarget::MISCTABLE);
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    if ( Misc::types.indexOf(type) < 0 ) {
       // look for a valid mash type from our database to use
@@ -1178,7 +1178,7 @@ int BeerXML::getQualifiedMiscTypeIndex(QString type, Misc* misc)
 int BeerXML::getQualifiedMiscUseIndex(QString use, Misc* misc)
 {
    TableSchema* tbl = m_tables->table(Brewtarget::MISCTABLE);
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    if ( Misc::uses.indexOf(use) < 0 ) {
       // look for a valid misc type from our database to use
@@ -1218,7 +1218,7 @@ Misc* BeerXML::miscFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Misc*> matching;
 
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
@@ -1297,7 +1297,7 @@ Recipe* BeerXML::recipeFromXml( QDomNode const& node )
    blockSignals(true);
    Recipe *ret;
    QString name;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
@@ -1422,7 +1422,7 @@ Style* BeerXML::styleFromXml( QDomNode const& node, Recipe* parent )
    QString name;
    QList<Style*> matching;
 
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
@@ -1502,7 +1502,7 @@ Water* BeerXML::waterFromXml( QDomNode const& node, Recipe* parent )
    Water* ret;
    QString name;
    QList<Water*> matching;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
@@ -1558,7 +1558,7 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
    Yeast* ret;
    QString name;
    QList<Yeast*> matching;
-   Database db = Database::instance();
+   Database & db = Database::instance();
 
    n = node.firstChildElement("NAME");
    name = n.firstChild().toText().nodeValue();
