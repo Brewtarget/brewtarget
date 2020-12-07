@@ -1,9 +1,10 @@
 /*
  * database.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -704,10 +705,10 @@ private:
 
    //! Hidden constructor.
    Database();
-   //! Copy constructor hidden.
-   Database(Database const&){}
-   //! Assignment operator hidden.
-   Database& operator=(Database const&){ return *this; }
+   //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton
+   Database(Database const&) = delete;
+   //! No assignment operator , as never want anyone, not even our friends, to make copies of a singleton.
+   Database& operator=(Database const&) = delete;
    //! Destructor hidden.
    ~Database();
 
