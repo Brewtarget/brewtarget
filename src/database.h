@@ -91,11 +91,6 @@ public:
 
    //! This should be the ONLY way you get an instance.
    static Database& instance();
-
-   Database(const Database&) = delete;
-   void operator=(const Database&) = delete;
-
-
    //! Call this to delete the internal instance.
    static void dropInstance();
    //! \brief Should be called when we are about to close down.
@@ -710,9 +705,9 @@ private:
    //! Hidden constructor.
    Database();
    //! Copy constructor hidden.
-//   Database(Database const&){}
+   Database(Database const&){}
    //! Assignment operator hidden.
-//   Database& operator=(Database const&){ return *this; }
+   Database& operator=(Database const&){ return *this; }
    //! Destructor hidden.
    ~Database();
 

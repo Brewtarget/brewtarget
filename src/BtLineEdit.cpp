@@ -26,8 +26,9 @@
 #include "Algorithms.h"
 #include <QSettings>
 #include <QDebug>
+#include <QStyle>
 
-BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type) :
+BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type, char const * const maximalDisplayString) :
    QLineEdit(parent),
    btParent(parent),
    _type(type),
@@ -36,6 +37,13 @@ BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type) :
 {
    _section = property("configSection").toString();
    connect(this,&QLineEdit::editingFinished,this,&BtLineEdit::onLineChanged);
+
+   // We can work out (and store) our display size here, but not yet set it.  The way the Designer UI Files work is to
+   // generate code that calls setters such as setMaximumWidth() etc, which would override anything we do here in the
+   // constructor.  So we set our size when setText() is called.
+   this->calculateDisplaySize(maximalDisplayString);
+
+   return;
 }
 
 void BtLineEdit::onLineChanged()
@@ -201,6 +209,8 @@ double BtLineEdit::toDouble(bool* ok)
 void BtLineEdit::setText( double amount, int precision)
 {
    QLineEdit::setText( displayAmount(amount,precision) );
+   this->setDisplaySize();
+   return;
 }
 
 void BtLineEdit::setText( Ingredient* element, int precision )
@@ -234,6 +244,8 @@ void BtLineEdit::setText( Ingredient* element, int precision )
    }
 
    QLineEdit::setText(display);
+   this->setDisplaySize();
+   return;
 }
 
 void BtLineEdit::setText( QString amount, int precision)
@@ -250,11 +262,16 @@ void BtLineEdit::setText( QString amount, int precision)
          Brewtarget::logW( QString("%1 could not convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(amount).arg(_section).arg(_editField) );
       QLineEdit::setText(displayAmount(amt, precision));
    }
+
+   this->setDisplaySize();
+   return;
 }
 
 void BtLineEdit::setText( QVariant amount, int precision)
 {
    setText(amount.toString(), precision);
+   this->setDisplaySize();
+   return;
 }
 
 int BtLineEdit::type() const { return (int)_type; }
@@ -320,6 +337,41 @@ void BtLineEdit::setForcedScale( QString forcedScale )
    QMetaEnum unitEnum = mo.enumerator(index);
 
    _forceScale = (Unit::unitScale)unitEnum.keyToValue(forcedScale.toStdString().c_str());
+}
+
+void BtLineEdit::calculateDisplaySize(char const * const maximalDisplayString)
+{
+   //
+   // By default, some, but not all, boxes have a min and max width of 100 pixels, but this is not wide enough on a
+   // high DPI display.  We instead calculate width here based on font-size - but without reducing any existing minimum
+   // width.
+   //
+   // Unfortunately, for a QLineEdit object, calculating the width is hard because, besides the text, we need to allow
+   // for the width of padding and frame, which is non-trivial to discover.  Eg, typically:
+   //   marginsAroundText() and contentsMargins() both return 0 for left and right margins
+   //   contentsRect() and frameSize() both give the same width as width()
+   // AFAICT, the best option is to query via pixelMetric() calls to the widget's style, but we need to check this works
+   // in practice on a variety of different systems.
+   //
+   QFontMetrics displayFontMetrics(this->font());
+   QRect minimumTextRect = displayFontMetrics.boundingRect(maximalDisplayString);
+   QMargins marginsAroundText = this->textMargins();
+   auto myStyle = this->style();
+   // NB: 2× frame width as on left and right; same for horizontal spacing
+   int totalWidgetWidthForMaximalDisplayString = minimumTextRect.width() +
+                                                 marginsAroundText.left() +
+                                                 marginsAroundText.right() +
+                                                 (2 * myStyle->pixelMetric(QStyle::PM_DefaultFrameWidth)) +
+                                                 (2 * myStyle->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+
+   this->desiredWidthInPixels = qMax(this->minimumWidth(), totalWidgetWidthForMaximalDisplayString);
+   return;
+}
+
+void BtLineEdit::setDisplaySize()
+{
+   this->setFixedWidth(this->desiredWidthInPixels);
+   return;
 }
 
 BtGenericEdit::BtGenericEdit(QWidget *parent)

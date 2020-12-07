@@ -69,7 +69,7 @@ RangedSlider::RangedSlider(QWidget* parent)
    this->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
 
    // There no particular reason to limit our horizontal size, so, in principle, this call asks that there be no such
-   // (practical) limit.  However, if a maximumSize property has been set in a Designer UI File (eg MainWindow.ui) then
+   // (practical) limit.  However, if a maximumSize property has been set in a Designer UI File (eg ui/mainWindow.ui) then
    // that setting will override this one, because it will be applied later (in fact pretty much straight after this
    // constructor returns).
    this->setMaximumWidth(QWIDGETSIZE_MAX);
@@ -276,12 +276,14 @@ void RangedSlider::paintEvent(QPaintEvent* event)
    //    const int valueTextWidth = valueTextFontMetrics.width(_valText);              // Pre Qt 5.13
    //    const int valueTextWidth = valueTextFontMetrics.horizontalAdvance(_valText);  // Since Qt 5.13
    // However, we want all the sliders to have exact same width, so we choose some representative text to measure the
-   // width of - viz "1.000".
+   // width of.  We assume that all sliders show no more than 4 digits and a decimal point, and then add a space to
+   // ensure a gap between the value text and the graphical area.  (Note that digits are all the same width in the font
+   // we are using.
    int valueTextWidth =
 #if QT_VERSION < QT_VERSION_CHECK(5,13,0)
-      valueTextFontMetrics.width("1.000");
+      valueTextFontMetrics.width(" 1.000");
 #else
-      valueTextFontMetrics.horizontalAdvance("1.000");
+      valueTextFontMetrics.horizontalAdvance(" 1.000");
 #endif
 
    QLinearGradient glassGrad( QPointF(0,0), QPointF(0,graphicalAreaHeight) );
@@ -339,69 +341,67 @@ void RangedSlider::paintEvent(QPaintEvent* event)
                     Qt::AlignRight | Qt::AlignVCenter,
                     this->_valText );
 
+   // All the rest of what we need to do is inside the graphical area, so move the origin to the top-left corner of it
+   painter.translate(0, indicatorTextRect.height());
+   painter.setPen(Qt::NoPen);
+
+   // Make sure anything we draw "inside" the "glass rectangle" stays inside.
+   QPainterPath clipRect;
+   clipRect.addRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
+   painter.setClipPath(clipRect);
+
+   // Draw the background rectangle.
+   painter.setBrush(_bgBrush);
+   painter.setRenderHint(QPainter::Antialiasing);
+   painter.drawRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
+   painter.setRenderHint(QPainter::Antialiasing,false);
+
+   // Draw the style "foreground" rectangle.
    painter.save();
-      painter.translate(0, indicatorTextRect.height());
-
-      painter.setPen(Qt::NoPen);
-
-      // Make sure anything we draw "inside" the "glass rectangle" stays inside.
-      QPainterPath clipRect;
-      clipRect.addRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
-      painter.setClipPath(clipRect);
-
-      // Draw the background rectangle.
-      painter.setBrush(_bgBrush);
+      painter.setBrush(_prefRangeBrush);
+      painter.setPen(_prefRangePen);
       painter.setRenderHint(QPainter::Antialiasing);
-      painter.drawRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
-      painter.setRenderHint(QPainter::Antialiasing,false);
+      //painter.drawRect( QRectF(fgRectLeft, 0, fgRectWidth, graphicalAreaHeight) );
+      painter.drawRoundedRect( QRectF(static_cast<qreal>(fgRectLeft), 0, static_cast<qreal>(fgRectWidth), graphicalAreaHeight), 8,8 );
+   painter.restore();
 
-      // Draw the style "foreground" rectangle.
-      painter.save();
-         painter.setBrush(_prefRangeBrush);
-         painter.setPen(_prefRangePen);
-         painter.setRenderHint(QPainter::Antialiasing);
-         //painter.drawRect( QRectF(fgRectLeft, 0, fgRectWidth, graphicalAreaHeight) );
-         painter.drawRoundedRect( QRectF(static_cast<qreal>(fgRectLeft), 0, static_cast<qreal>(fgRectWidth), graphicalAreaHeight), 8,8 );
-      painter.restore();
+   // Draw the indicator.
+   painter.setBrush(_markerBrush);
+   painter.drawRect( QRectF(static_cast<double>(indicatorLineLeft), 0, indicatorLineWidth, graphicalAreaHeight) );
 
-      // Draw the indicator.
-      painter.setBrush(_markerBrush);
-      painter.drawRect( QRectF(static_cast<double>(indicatorLineLeft), 0, indicatorLineWidth, graphicalAreaHeight) );
+   // Draw a white-to-clear gradient to suggest "glassy."
+   painter.setBrush(glassBrush);
+   painter.setRenderHint(QPainter::Antialiasing);
+   painter.drawRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
+   painter.setRenderHint(QPainter::Antialiasing,false);
 
-      // Draw a white to clear gradient to suggest "glassy."
-      painter.setBrush(glassBrush);
-      painter.setRenderHint(QPainter::Antialiasing);
-      painter.drawRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
-      painter.setRenderHint(QPainter::Antialiasing,false);
-
-      // Draw the ticks.
-      painter.setPen(Qt::black);
-      if( _tickInterval > 0.0 )
+   // Draw the ticks.
+   painter.setPen(Qt::black);
+   if( _tickInterval > 0.0 )
+   {
+      int secTick = 1;
+      for( double currentTick = _min+_tickInterval; _max - currentTick > _tickInterval-1e-6; currentTick += _tickInterval )
       {
-         int secTick = 1;
-         for( double currentTick = _min+_tickInterval; _max - currentTick > _tickInterval-1e-6; currentTick += _tickInterval )
+         painter.translate( graphicalAreaWidth/(_max-_min) * _tickInterval, 0);
+         if( secTick == _secondaryTicks )
          {
-            painter.translate( graphicalAreaWidth/(_max-_min) * _tickInterval, 0);
-            if( secTick == _secondaryTicks )
-            {
-               painter.drawLine( QPointF(0,0.25*graphicalAreaHeight), QPointF(0,0.75*graphicalAreaHeight) );
-               secTick = 1;
-            }
-            else
-            {
-               painter.drawLine( QPointF(0,0.333*graphicalAreaHeight), QPointF(0,0.666*graphicalAreaHeight) );
-               ++secTick;
-            }
+            painter.drawLine( QPointF(0,0.25*graphicalAreaHeight), QPointF(0,0.75*graphicalAreaHeight) );
+            secTick = 1;
+         }
+         else
+         {
+            painter.drawLine( QPointF(0,0.333*graphicalAreaHeight), QPointF(0,0.666*graphicalAreaHeight) );
+            ++secTick;
          }
       }
-   painter.restore();
+   }
 
    return;
 }
 
 
 void RangedSlider::moveEvent(QMoveEvent *event) {
-   // If we've moved, we might be on a new screen with a different DPI resolution
+   // If we've moved, we might be on a new screen with a different DPI resolution...
    // .:TBD:. This almost certainly needs further work and further testing.  It's far from clear whether our font size
    //         querying will give different answers just because the app has been moved from one screen to another.
    this->recalculateHeightInPixels();

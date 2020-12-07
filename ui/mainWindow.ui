@@ -111,15 +111,15 @@
            <property name="acceptDrops">
             <bool>true</bool>
            </property>
-           <property name="toolTip">
-            <string>Styles</string>
-           </property>
            <attribute name="icon">
             <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/smallStyle.svg</normaloff>:/images/smallStyle.svg</iconset>
            </attribute>
            <attribute name="title">
             <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Styles</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
@@ -138,6 +138,9 @@
            </attribute>
            <attribute name="title">
             <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Equipment</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_9">
             <item>
@@ -220,6 +223,9 @@
            </attribute>
            <attribute name="title">
             <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Water</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
