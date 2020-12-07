@@ -1,7 +1,9 @@
 /*
- * BtLineEdit.h is part of Brewtarget and was written by Mik Firestone
- * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
- * (rocketman768@gmail.com), 2009-2013.
+ * BtLineEdit.h is part of Brewtarget, and is Copyright the following
+ * authors 2009-2020:
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
+ * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +68,7 @@ public:
    *       Not sure how to signal the parent to redisplay
    */
 
-   BtLineEdit(QWidget* parent = 0, Unit::UnitType type = Unit::None, char const * const maximalDisplayString = "100.000 L");
+   BtLineEdit(QWidget* parent = 0, Unit::UnitType type = Unit::None, QString const & maximalDisplayString = "100.000 L");
    double toSI(Unit::unitDisplay oldUnit = Unit::noUnit, Unit::unitScale oldScale = Unit::noScale, bool force = false);
    // Use this when you want to do something with the returned QString
    QString displayAmount( double amount, int precision = 3);
@@ -106,7 +108,7 @@ signals:
    void textModified();
 
 private:
-   void calculateDisplaySize(char const * const maximalDisplayString);
+   void calculateDisplaySize(QString const & maximalDisplayString);
    void setDisplaySize();
    int desiredWidthInPixels;
 

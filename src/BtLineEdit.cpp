@@ -1,7 +1,9 @@
 /*
- * BtLineEdit.cpp is part of Brewtarget and was written by Mik Firestone
- * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
- * (rocketman768@gmail.com), 2009-2013.
+ * BtLineEdit.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2009-2020:
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
+ * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +30,7 @@
 #include <QDebug>
 #include <QStyle>
 
-BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type, char const * const maximalDisplayString) :
+BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type, QString const & maximalDisplayString) :
    QLineEdit(parent),
    btParent(parent),
    _type(type),
@@ -339,7 +341,7 @@ void BtLineEdit::setForcedScale( QString forcedScale )
    _forceScale = (Unit::unitScale)unitEnum.keyToValue(forcedScale.toStdString().c_str());
 }
 
-void BtLineEdit::calculateDisplaySize(char const * const maximalDisplayString)
+void BtLineEdit::calculateDisplaySize(QString const & maximalDisplayString)
 {
    //
    // By default, some, but not all, boxes have a min and max width of 100 pixels, but this is not wide enough on a

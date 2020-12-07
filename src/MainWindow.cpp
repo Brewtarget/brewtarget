@@ -251,7 +251,8 @@ void MainWindow::setSizesInPixelsBasedOnDpi()
    //
    Brewtarget::logD(QString("Logo default size: %1,%2").arg(this->label_Brewtarget->width()).arg(this->label_Brewtarget->height()));
    this->label_Brewtarget->setScaledContents(true);
-   this->label_Brewtarget->setFixedSize((265.0/66.0) * dpiX/2, dpiY/2);
+   this->label_Brewtarget->setFixedSize((265.0/66.0) * dpiX/2,  // width = 265/66 × height = 265/66 × half an inch = (265/66) × (dpiX/2)
+                                        dpiY/2);                // height = half an inch = dpiY/2
    Brewtarget::logD(QString("Logo new size: %1,%2").arg(this->label_Brewtarget->width()).arg(this->label_Brewtarget->height()));
 
    return;
