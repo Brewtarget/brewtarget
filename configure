@@ -46,8 +46,7 @@ done
 # This is not good for debian, so try to detect debian/ubuntu.
 if [ `uname` == 'Linux' ]
 then
-   grep -i ubuntu /etc/issue > /dev/null 2> /dev/null || grep -i debian /etc/issue > /dev/null 2> /dev/null
-   if [ $? == 0 ]
+   if grep -q -s -i -E -e 'ubuntu|debian' /etc/issue
    then
      PREFIX=/usr
    fi
