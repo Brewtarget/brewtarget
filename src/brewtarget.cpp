@@ -445,6 +445,22 @@ QDir Brewtarget::getDefaultUserDataDir()
 #endif
 }
 
+QDir Brewtarget::getDefaultUserDataDir()
+{
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
+   return getConfigDir();
+#elif defined(Q_OS_WIN) // Windows OS.
+   // On Windows the Programs directory is normally not writable so we need to get the appData path from the environment instead.
+   userDataDir.setPath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+   if (!userDataDir.exists()) {
+      createDir(userDataDir);
+   }
+   return userDataDir;
+#else
+# error "Unsupported OS"
+#endif
+}
+
 bool Brewtarget::initialize(const QString &userDirectory)
 {
    // Need these for changed(QMetaProperty,QVariant) to be emitted across threads.

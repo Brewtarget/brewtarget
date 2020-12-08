@@ -415,9 +415,7 @@ IF( WIN32 )
         ${QtSql_location}
         ${QtSvg_location}
         ${QtXml_location}
-        ${QtWebKit_location}
         ${QtGui_location}
-        ${QtWebKitWidgets_location}
         ${QtOpenGL_location}
    )
    IF( NOT ${NO_QTMULTIMEDIA})
@@ -551,6 +549,11 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET( CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Brewtarget-${brewtarget_VERSION_STRING}" )
     SET( CPACK_PACKAGE_INSTALL_DIRECTORY "Brewtarget-${brewtarget_VERSION_STRING}" )
     SET( CPACK_NSIS_MODIFY_PATH ON )
+
+    # The redistribution package from Microsoft is needed for Windows 7 installation.
+    # NSIS will install on target system if needed, but the file has to be included in the installer.
+    # Another approach would be to instruct the users of Windows 7 to download the redist for their platform and install it themselfs.
+    SET( CPACK_PACKAGE_REDIST_DIR "${ROOTDIR}/redist")
 
     # Extra start menu items.
     #SET( CPACK_NSIS_MENU_LINKS
