@@ -65,7 +65,7 @@ fi
 echo "CMAKEOPTIONS: $CMAKEOPTIONS"
 
 # Create dir only if needed
-mkdir build || true
+mkdir -p build
 
 # Do all the building in build/
 cd build/
