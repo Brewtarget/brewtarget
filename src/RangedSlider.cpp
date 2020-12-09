@@ -1,6 +1,7 @@
 /*
  * RangedSlider.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip G. Lee <rocketman768@gmail.com>
  *
@@ -63,16 +64,12 @@ RangedSlider::RangedSlider(QWidget* parent)
    // Ensure this->heightInPixels is properly initialised
    this->recalculateHeightInPixels();
 
-   this->setMinimumSize();
-
-   // Setting the horizontal policy here
-   this->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
-
-   // There no particular reason to limit our horizontal size, so, in principle, this call asks that there be no such
-   // (practical) limit.  However, if a maximumSize property has been set in a Designer UI File (eg ui/mainWindow.ui) then
-   // that setting will override this one, because it will be applied later (in fact pretty much straight after this
-   // constructor returns).
-   this->setMaximumWidth(QWIDGETSIZE_MAX);
+   // In principle we want to set our min/max sizes etc here.  However, if, say, a maximumSize property has been set
+   // for this object in a Designer UI File (eg ui/mainWindow.ui) then that setting will override this one, because it
+   // will be applied later (in fact pretty much straight after this constructor returns).  So we also make this call
+   // inside setValue(), which will be invoked _after_ the setter calls that were auto-generated from the Designer UI
+   // File.
+   this->setSizes();
 
    // Generate mouse move events whenever mouse movers over widget.
    this->setMouseTracking(true);
@@ -115,6 +112,10 @@ void RangedSlider::setValue(double value)
    _val = value;
    _valText = QString("%1").arg(_val, 0, 'f', _prec);
    update();
+
+   // See comment in constructor for why we call this here
+   this->setSizes();
+   return;
 }
 
 void RangedSlider::setPrecision(int precision)
@@ -205,19 +206,29 @@ void RangedSlider::recalculateHeightInPixels() const {
    //
    // The final wrinkle is that the height of the font sort of depends what you mean.  Strictly, using the inter-line
    // spacing (= height plus leading, though the latter is often 0) gives you enough space to show any character of the
-   // font.  But, for value text font, we only ever show digits and decimal points, we might not need all this space.
-   // We could consider using the height of a capital letter - via capHeight().  For now, we stick with line-spacing.
+   // font.  It is helpful for the indicator text to have a bit of space below it before we draw the graphical bit, and
+   // it's not a large font in any case.  However, for large value text font we don't necessarily need all this space
+   // because we currently only show digits and decimal points, which don't require space below the baseline.  However,
+   // assumptions about space below the baseline are locale-specific, so, say, using ascent() instead of lineSpacing()
+   // could end up painting us into a corner.
    //
-   QFontMetrics valueTextFontMetrics(this->valueTextFont);
    QFontMetrics indicatorTextFontMetrics(this->indicatorTextFont);
-   this->heightInPixels = valueTextFontMetrics.lineSpacing() + indicatorTextFontMetrics.lineSpacing();
+   QFontMetrics valueTextFontMetrics(this->valueTextFont);
+   this->heightInPixels = indicatorTextFontMetrics.lineSpacing() + valueTextFontMetrics.lineSpacing();
    return;
 }
 
-void RangedSlider::setMinimumSize() {
-   // Caller's responsibility to have recently called this->recalculateHeightInPixels();
-   // We just need to call the parent class method with suitable parameters
+void RangedSlider::setSizes() {
+   // Caller's responsibility to have recently called this->recalculateHeightInPixels().  (See comment in that function
+   // for how we choose minimum width.)
    this->setMinimumSize(2 * this->heightInPixels, this->heightInPixels);
+
+   this->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
+
+   // There no particular reason to limit our horizontal size, so, in principle, this call asks that there be no such
+   // (practical) limit.
+   this->setMaximumWidth(QWIDGETSIZE_MAX);
+
    return;
 }
 
@@ -241,7 +252,7 @@ void RangedSlider::paintEvent(QPaintEvent* event)
    // Simplistically, the high-level layout of the slider is:
    //
    //    |-------------------------------------------------------------|
-   //    |                   Indicator text                            |
+   //    |                   Indicator text               | B L A N K  |
    //    |------------------------------------------------+------------|
    //    | <--------------- Graphical Area -------------> | Value text |
    //    |-------------------------------------------------------------|
@@ -254,16 +265,26 @@ void RangedSlider::paintEvent(QPaintEvent* event)
    // The indicator text sits above the indicator line and shows either its value (this->_valText) or some textual
    // description (eg "Slightly Malty" on the IBU/GU scale) which comes from this->_markerText.
    //
-   // The value text also shows this->_valText
+   // In principle, we could have the value text a slightly different height than the graphical area - eg to help
+   // squeeze into smaller available vertical space on small screens (as we know there is blank space of
+   // indicatorTextHeight pixels above the space for the value text).
+   //
+   // The value text also shows this->_valText.
    //
 
    QFontMetrics indicatorTextFontMetrics(this->indicatorTextFont);
    int indicatorTextHeight = indicatorTextFontMetrics.lineSpacing();
 
-   // The slider graphic and the value text are the same height
+   // The heights of the slider graphic and the value text are usually the same, but we calculate them differently in
+   // case, in future, we want to squeeze things up a bit.
    QFontMetrics valueTextFontMetrics(this->valueTextFont);
-   int graphicalAreaHeight = valueTextFontMetrics.lineSpacing();
+   int valueTextHeight = valueTextFontMetrics.lineSpacing();
 
+   int graphicalAreaHeight = this->height() - indicatorTextHeight;
+
+   // Although the Qt calls take an x- and a y- radius, we want the radius on the rectangle corners to be the same
+   // vertically and horizontally, so only define one measure here.
+   int rectangleCornerRadius = graphicalAreaHeight / 4;
 
    static const QPalette palette(QApplication::palette());
    static const int indicatorLineWidth   = 4;
@@ -333,11 +354,13 @@ void RangedSlider::paintEvent(QPaintEvent* event)
       this->_markerTextIsValue ? this->_valText : this->_markerText
    );
 
-   // The position of the value text is trivial to work out, so just draw it
+   // Next draw the value text
+   // We work out its vertical position relative to the bottom of the graphical area in case (in future) we want to be
+   // able to use some of the blank space above it (to the right of the indicator text).
    painter.setPen(valueTextColor);
    painter.setFont(this->valueTextFont);
-   painter.drawText(graphicalAreaWidth, indicatorTextHeight,
-                    valueTextWidth, this->heightInPixels - indicatorTextHeight,
+   painter.drawText(graphicalAreaWidth, this->height() - valueTextHeight,
+                    valueTextWidth, valueTextHeight,
                     Qt::AlignRight | Qt::AlignVCenter,
                     this->_valText );
 
@@ -347,33 +370,40 @@ void RangedSlider::paintEvent(QPaintEvent* event)
 
    // Make sure anything we draw "inside" the "glass rectangle" stays inside.
    QPainterPath clipRect;
-   clipRect.addRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
+   clipRect.addRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight),
+                            rectangleCornerRadius,
+                            rectangleCornerRadius );
    painter.setClipPath(clipRect);
 
    // Draw the background rectangle.
    painter.setBrush(_bgBrush);
    painter.setRenderHint(QPainter::Antialiasing);
-   painter.drawRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
-   painter.setRenderHint(QPainter::Antialiasing,false);
+   painter.drawRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight),
+                            rectangleCornerRadius,
+                            rectangleCornerRadius );
+   painter.setRenderHint(QPainter::Antialiasing, false);
 
    // Draw the style "foreground" rectangle.
    painter.save();
       painter.setBrush(_prefRangeBrush);
       painter.setPen(_prefRangePen);
       painter.setRenderHint(QPainter::Antialiasing);
-      //painter.drawRect( QRectF(fgRectLeft, 0, fgRectWidth, graphicalAreaHeight) );
-      painter.drawRoundedRect( QRectF(static_cast<qreal>(fgRectLeft), 0, static_cast<qreal>(fgRectWidth), graphicalAreaHeight), 8,8 );
+      painter.drawRoundedRect( QRectF(fgRectLeft, 0, fgRectWidth, graphicalAreaHeight),
+                               rectangleCornerRadius,
+                               rectangleCornerRadius );
    painter.restore();
 
    // Draw the indicator.
    painter.setBrush(_markerBrush);
-   painter.drawRect( QRectF(static_cast<double>(indicatorLineLeft), 0, indicatorLineWidth, graphicalAreaHeight) );
+   painter.drawRect( QRectF(indicatorLineLeft, 0, indicatorLineWidth, graphicalAreaHeight) );
 
    // Draw a white-to-clear gradient to suggest "glassy."
    painter.setBrush(glassBrush);
    painter.setRenderHint(QPainter::Antialiasing);
-   painter.drawRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight), 8, 8 );
-   painter.setRenderHint(QPainter::Antialiasing,false);
+   painter.drawRoundedRect( QRectF(0, 0, graphicalAreaWidth, graphicalAreaHeight),
+                            rectangleCornerRadius,
+                            rectangleCornerRadius );
+   painter.setRenderHint(QPainter::Antialiasing, false);
 
    // Draw the ticks.
    painter.setPen(Qt::black);

@@ -1,6 +1,7 @@
 /*
  * RangedSlider.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip G. Lee <rocketman768@gmail.com>
  *
@@ -38,9 +39,6 @@ class RangedSlider : public QWidget
    Q_OBJECT
 
 public:
-   // Need to explicitly bring in functions of this name from parent, as we add our own overloaded version below
-   using QWidget::setMinimumSize;
-
    RangedSlider(QWidget* parent=0);
 
    Q_PROPERTY( double value READ value WRITE setValue )
@@ -113,7 +111,7 @@ protected:
    virtual void moveEvent(QMoveEvent *event);
 
 private:
-   void setMinimumSize();
+   void setSizes();
    void recalculateHeightInPixels() const;
 
    /**
