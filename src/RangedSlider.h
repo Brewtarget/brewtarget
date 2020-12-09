@@ -111,6 +111,9 @@ protected:
    virtual void moveEvent(QMoveEvent *event);
 
 private:
+   /**
+    * Sets minimum / maximum sizes and resize policy
+    */
    void setSizes();
    void recalculateHeightInPixels() const;
 
