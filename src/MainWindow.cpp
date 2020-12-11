@@ -136,8 +136,11 @@ MainWindow::MainWindow(QWidget* parent)
 {
    undoStack = new QUndoStack(this);
 
-   // Need to call this to get all the widgets added (I think).
-   setupUi(this);
+   // Need to call this parent class method to get all the widgets added (I think).
+   this->setupUi(this);
+
+   // Stop things looking ridiculously tiny on high DPI displays
+   this->setSizesInPixelsBasedOnDpi();
 
    /* PLEASE DO NOT REMOVE.
     This code is left here, commented out, intentionally. The only way I can
@@ -147,7 +150,6 @@ MainWindow::MainWindow(QWidget* parent)
    QLocale german(QLocale::German,QLocale::Germany);
    QLocale::setDefault(german);
    */
-
 
    // If the database doesn't load, we bail
    if (! Database::instance().loadSuccessful() )
@@ -163,38 +165,104 @@ MainWindow::MainWindow(QWidget* parent)
    printer = new QPrinter;
    printer->setPageSize(QPrinter::Letter);
 
-   setupCSS();
+   this->setupCSS();
    // initialize all of the dialog windows
-   setupDialogs();
+   this->setupDialogs();
    // initialize the ranged sliders
-   setupRanges();
+   this->setupRanges();
    // the dialogs have to be setup before this is called
-   setupComboBoxes();
+   this->setupComboBoxes();
    // do all the work to configure the tables models and their proxies
-   setupTables();
+   this->setupTables();
    // Create the keyboard shortcuts
-   setupShortCuts();
+   this->setupShortCuts();
    // Once more with the context menus too
-   setupContextMenu();
+   this->setupContextMenu();
+
+   // This sets up things that might have been 'remembered' (ie stored in the config file) from a previous run of the
+   // program - eg window size, which is stored in MainWindow::closeEvent().
    // Breaks the naming convention, doesn't it?
-   restoreSavedState();
+   this->restoreSavedState();
+
    // Connect slots to triggered() signals
-   setupTriggers();
+   this->setupTriggers();
    // Connect slots to clicked() signals
-   setupClicks();
+   this->setupClicks();
    // connect slots to activate() signals
-   setupActivate();
+   this->setupActivate();
    // connect signal slots for the text editors
-   setupTextEdit();
+   this->setupTextEdit();
    // connect the remaining labels
-   setupLabels();
+   this->setupLabels();
    // set up the drag/drop parts
-   setupDrops();
+   this->setupDrops();
 
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
    connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+
+   return;
 }
+
+void MainWindow::setSizesInPixelsBasedOnDpi()
+{
+   //
+   // Default icon sizes are fine for low DPI monitors, but need changing on high-DPI systems.
+   //
+   // Fortunately, the icons are already SVGs, so we don't need to do anything more complicated than tell Qt what size
+   // in pixels to render them.
+   //
+   // For the moment, we assume we don't need to change the icon size after set-up.  (In theory, it would be nice
+   // to detect, on a multi-monitor system, whether we have moved from a high DPI to a low DPI screen or vice versa.
+   // See https://doc.qt.io/qt-5/qdesktopwidget.html#screen-geometry for more on this.
+   // But, for now, TBD how important a use case that is.  Perhaps a future enhancement...)
+   //
+   // Low DPI monitors are 72 or 96 DPI typically.  High DPI monitors can be 168 DPI (as reported by logicalDpiX(),
+   // logicalDpiX()).  Default toolbar icon size of 22×22 looks fine on low DPI monitor.  So it seems 1/4-inch is a
+   // good width and height for these icons.  Therefore divide DPI by 4 to get icon size.
+   //
+   auto dpiX = this->logicalDpiX();
+   auto dpiY = this->logicalDpiY();
+   Brewtarget::logD(QString("Logical DPI: %1,%2.  Physical DPI: %3,%4")
+      .arg(dpiX)
+      .arg(dpiY)
+      .arg(this->physicalDpiX())
+      .arg(this->physicalDpiY()));
+   auto defaultToolBarIconSize = this->toolBar->iconSize();
+   Brewtarget::logD(QString("Default toolbar icon size: %1,%2")
+      .arg(defaultToolBarIconSize.width())
+      .arg(defaultToolBarIconSize.height()));
+   this->toolBar->setIconSize(QSize(dpiX/4,dpiY/4));
+
+   //
+   // Historically, tab icon sizes were, by default, smaller (16×16), but it seems more logical for them to be the same
+   // size as the toolbar ones.
+   //
+   auto defaultTabIconSize = this->tabWidget_Trees->iconSize();
+   Brewtarget::logD(QString("Default tab icon size: %1,%2")
+      .arg(defaultTabIconSize.width())
+      .arg(defaultTabIconSize.height()));
+   this->tabWidget_Trees->setIconSize(QSize(dpiX/4,dpiY/4));
+
+   //
+   // Default logo size is 100×30 pixels, which is actually the wrong aspect ratio for the underlying image (currently
+   // 265 × 66 - ie aspect ratio of 4.015:1).
+   //
+   // Setting height to be 1/3 inch seems plausible for the default size, but looks a bit wrong in practice.  Using 1/2
+   // height looks better.  Then width 265/66 × height.  (Note that we actually put the fraction in double literals to
+   // avoid premature rounding.)
+   //
+   // This is a bit more work to implement because its a PNG image in a QLabel object
+   //
+   Brewtarget::logD(QString("Logo default size: %1,%2").arg(this->label_Brewtarget->width()).arg(this->label_Brewtarget->height()));
+   this->label_Brewtarget->setScaledContents(true);
+   this->label_Brewtarget->setFixedSize((265.0/66.0) * dpiX/2,  // width = 265/66 × height = 265/66 × half an inch = (265/66) × (dpiX/2)
+                                        dpiY/2);                // height = half an inch = dpiY/2
+   Brewtarget::logD(QString("Logo new size: %1,%2").arg(this->label_Brewtarget->width()).arg(this->label_Brewtarget->height()));
+
+   return;
+}
+
 
 // Setup the keyboard shortcuts
 void MainWindow::setupShortCuts()
@@ -212,10 +280,16 @@ void MainWindow::setupCSS()
    // Different palettes for some text. This is all done via style sheets now.
    QColor wPalette = tabWidget_recipeView->palette().color(QPalette::Active,QPalette::Base);
 
+   //
+   // NB: Using pixels for font sizes in Qt is bad because, given the significant variations in pixels-per-inch (aka
+   // dots-per-inch / DPI) between "normal" and "high DPI" displays, a size specified in pixels will most likely be
+   // dramatically wrong on some displays.  The simple solution is instead to use points (which are device independent)
+   // to specify font size.
+   //
    goodSS = QString( "QLineEdit:read-only { color: #008800; background: %1 }").arg(wPalette.name());
    lowSS  = QString( "QLineEdit:read-only { color: #0000D0; background: %1 }").arg(wPalette.name());
    highSS = QString( "QLineEdit:read-only { color: #D00000; background: %1 }").arg(wPalette.name());
-   boldSS = QString( "QLineEdit:read-only { font: bold 12px; color: #000000; background: %1 }").arg(wPalette.name());
+   boldSS = QString( "QLineEdit:read-only { font: bold 10pt; color: #000000; background: %1 }").arg(wPalette.name());
 
    // The bold style sheet doesn't change, so set it here once.
    lineEdit_boilSg->setStyleSheet(boldSS);
@@ -449,7 +523,6 @@ void MainWindow::setupTables()
 // Anything resulting in a restoreState() should go in here
 void MainWindow::restoreSavedState()
 {
-   QDesktopWidget *desktop = QApplication::desktop();
 
    // If we saved a size the last time we ran, use it
    if ( Brewtarget::hasOption("geometry"))
@@ -460,10 +533,13 @@ void MainWindow::restoreSavedState()
    else
    {
       // otherwise, guess a reasonable size at 1/4 of the screen.
+      QDesktopWidget *desktop = QApplication::desktop();
       int width = desktop->width();
       int height = desktop->height();
-
       this->resize(width/2,height/2);
+
+      // Or we could do the same in one line:
+      // this->resize(QDesktopWidget().availableGeometry(this).size() * 0.5);
    }
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
@@ -1055,7 +1131,14 @@ void MainWindow::showChanges(QMetaProperty* prop)
    updateColorSlider("color_srm", styleRangeWidget_srm);
    styleRangeWidget_srm->setValue(Brewtarget::amountDisplay(recipeObs,tab_recipe,"color_srm",Units::srm,0));
 
-   ibuGuSlider->setValue(recipeObs->IBU()/((recipeObs->og()-1)*1000));
+   // In some, incomplete, recipes, OG is approximately 1.000, which then makes GU close to 0 and thus IBU/GU insanely
+   // large.  Besides being meaningless, such a large number takes up a lot of space.  So, where gravity units are
+   // below 1, we just show IBU on the IBU/GU slider.
+   auto gravityUnits = (recipeObs->og()-1)*1000;
+   if (gravityUnits < 1) {
+      gravityUnits = 1;
+   }
+   ibuGuSlider->setValue(recipeObs->IBU()/gravityUnits);
 
    label_calories->setText( QString("%1").arg( Brewtarget::getVolumeUnitSystem() == SI ? recipeObs->calories33cl() : recipeObs->calories12oz(),0,'f',0) );
 

@@ -618,10 +618,10 @@ private:
 
    //! Hidden constructor.
    Database();
-   //! Copy constructor hidden.
-   Database(Database const&){}
-   //! Assignment operator hidden.
-   Database& operator=(Database const&){ return *this; }
+   //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton
+   Database(Database const&) = delete;
+   //! No assignment operator , as never want anyone, not even our friends, to make copies of a singleton.
+   Database& operator=(Database const&) = delete;
    //! Destructor hidden.
    ~Database();
 

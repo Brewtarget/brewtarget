@@ -13,8 +13,8 @@ function printUsageAndExit {
            "      -p T   Set prefix to T.\n" \
            "      -t     Update translation files (*.ts).\n" \
            "      -v     Verbose compilation.\n" \
-           "      -h     Print this help message.\n";
-   exit 0;
+           "      -h     Print this help message.\n"
+   exit 0
 }
 
 # Ensures cmake exists.
@@ -22,13 +22,13 @@ function findCMake {
 
    if [ -z $(which cmake) ]
    then
-      echo "ERROR: cmake not installed";
-      exit 1;
+      echo "ERROR: cmake not installed"
+      exit 1
    fi
 
 }
 
-findCMake;
+findCMake
 
 # Get options.
 while getopts "m:p:t:h:v" option
@@ -46,26 +46,25 @@ done
 # This is not good for debian, so try to detect debian/ubuntu.
 if [ `uname` == 'Linux' ]
 then
-   grep -i ubuntu /etc/issue > /dev/null 2> /dev/null || grep -i debian /etc/issue > /dev/null 2> /dev/null
-   if [ $? == 0 ]
+   if grep -q -s -i -E -e 'ubuntu|debian' /etc/issue
    then
-     PREFIX=/usr;
+     PREFIX=/usr
    fi
 fi
 
-echo "Prefix: $PREFIX";
+echo "Prefix: $PREFIX"
 
 # If we have a prefix...
 if [ -n "$PREFIX" ]
 then
    #...define the prefix.
-   CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_INSTALL_PREFIX=$PREFIX";
+   CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_INSTALL_PREFIX=$PREFIX"
 fi
 
-echo "CMAKEOPTIONS: $CMAKEOPTIONS";
+echo "CMAKEOPTIONS: $CMAKEOPTIONS"
 
 # Create dir only if needed
-mkdir build || true
+mkdir -p build
 
 # Do all the building in build/
 cd build/

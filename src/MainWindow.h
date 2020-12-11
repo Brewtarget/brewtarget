@@ -405,6 +405,9 @@ private:
    // Undo / Redo, using the Qt Undo framework
    QUndoStack* undoStack = nullptr;
 
+   //! \brief Fix pixel dimensions according to dots-per-inch (DPI) of screen we're on.
+   void setSizesInPixelsBasedOnDpi();
+
    //! \brief Currently highlighted fermentable in the fermentable table.
    Fermentable* selectedFermentable();
    //! \brief Currently highlighted hop in the hop table.
