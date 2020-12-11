@@ -70,7 +70,7 @@ class BeerXML : public QObject
 public:
 
    virtual ~BeerXML() {}
-      
+
    // Export to BeerXML =======================================================
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
@@ -89,6 +89,9 @@ public:
    void fromXml(Ingredient* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
    void fromXml(Ingredient* element, QDomNode const& elementNode);
 
+   //! Import ingredients from BeerXML documents.
+   bool importFromXML(const QString& filename);
+
    // Import from BeerXML =====================================================
    BrewNote*    brewNoteFromXml(    QDomNode const& node, Recipe* parent );
    Equipment*   equipmentFromXml(   QDomNode const& node, Recipe* parent = nullptr );
@@ -106,6 +109,8 @@ public:
 private:
 
    DatabaseSchema* m_tables;
+
+   QDomDocument schema;
 
    BeerXML(DatabaseSchema* tables);
    QString textFromValue(QVariant value, QString type);

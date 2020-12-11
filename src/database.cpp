@@ -480,7 +480,7 @@ void Database::convertFromXml()
          // If the old file exists, import.
          if( oldXmlFile.exists() )
          {
-            importFromXML( oldXmlFile.fileName() );
+            m_beerxml->importFromXML( oldXmlFile.fileName() );
 
             // Move to obsolete/ directory.
             if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
@@ -3019,132 +3019,6 @@ bool Database::updateSchema(bool* err)
    sqlDatabase().commit();
 
    return doUpdate;
-}
-
-bool Database::importFromXML(const QString& filename)
-{
-   int count;
-   int line, col;
-   QDomDocument xmlDoc;
-   QDomElement root;
-   QDomNodeList list;
-   QString err;
-   QFile inFile;
-   QStringList tags = QStringList() << "EQUIPMENT" << "FERMENTABLE" << "HOP" << "MISC" << "STYLE" << "YEAST" << "WATER" << "MASHS";
-   inFile.setFileName(filename);
-   bool ret = true;
-
-   if( ! inFile.open(QIODevice::ReadOnly) )
-   {
-      Brewtarget::logW(QString("Database::importFromXML: Could not open %1 for reading.").arg(filename));
-      return false;
-   }
-
-   if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-      Brewtarget::logW(QString("Database::importFromXML: Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
-
-   list = xmlDoc.elementsByTagName("RECIPE");
-   if ( list.count() )
-   {
-      for(int i = 0; i < list.count(); ++i )
-      {
-         Recipe* temp = m_beerxml->recipeFromXml( list.at(i) );
-         if ( ! temp || ! temp->isValid() )
-            ret = false;
-      }
-   }
-   else
-   {
-      foreach (QString tag, tags)
-      {
-         list = xmlDoc.elementsByTagName(tag);
-         count = list.size();
-
-         if ( count > 0 )
-         {
-            // Tell how many there were in the status bar.
-            //statusBar()->showMessage( tr("Found %1 %2.").arg(count).arg(tag.toLower()), 5000 );
-
-            if (tag == "RECIPE")
-            {
-            }
-            else if ( tag == "EQUIPMENT" )
-            {
-               for(int i = 0; i < list.count(); ++i )
-               {
-                  Equipment* temp = m_beerxml->equipmentFromXml( list.at(i) );
-                  if ( ! temp->isValid() )
-                     ret = false;
-               }
-            }
-            else if( tag == "FERMENTABLE" )
-            {
-               for( int i = 0; i < list.count(); ++i )
-               {
-                  Fermentable* temp = m_beerxml->fermentableFromXml( list.at(i) );
-                  if ( ! temp->isValid() )
-                     ret = false;
-               }
-
-            }
-            else if (tag == "HOP")
-            {
-               for(int i = 0; i < list.count(); ++i )
-               {
-                  Hop* temp = m_beerxml->hopFromXml( list.at(i) );
-                  if ( ! temp->isValid() )
-                     ret = false;
-               }
-            }
-            else if (tag == "MISC")
-            {
-               for(int i = 0; i < list.count(); ++i )
-               {
-                  Misc* temp = m_beerxml->miscFromXml( list.at(i) );
-                  if ( ! temp->isValid() )
-                     ret = false;
-               }
-            }
-            else if( tag == "STYLE" )
-            {
-               for( int i = 0; i < list.count(); ++i )
-               {
-                  Style* temp = m_beerxml->styleFromXml( list.at(i) );
-                  if ( ! temp->isValid() )
-                     ret = false;
-               }
-            }
-            else if (tag == "YEAST")
-            {
-               for(int i = 0; i < list.count(); ++i )
-               {
-                  Yeast* temp = m_beerxml->yeastFromXml( list.at(i) );
-                  if ( ! temp->isValid() )
-                     ret = false;
-               }
-            }
-            else if( tag == "WATER" )
-            {
-               for( int i = 0; i < list.count(); ++i )
-               {
-                  Water* temp = m_beerxml->waterFromXml( list.at(i) );
-                  if ( ! temp->isValid() )
-                     ret = false;
-               }
-            }
-            else if( tag == "MASHS" )
-            {
-               for( int i = 0; i < list.count(); ++i )
-               {
-                  Mash* temp = m_beerxml->mashFromXml( list.at(i) );
-                  if ( ! temp->isValid() )
-                     ret = false;
-               }
-            }
-         }
-      }
-   }
-   return ret;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

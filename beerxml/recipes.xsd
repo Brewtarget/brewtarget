@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" xmlns:ferm="urn:beerxml:fermentable:" xmlns:misc="urn:beerxml:miscellaneous:" xmlns:hop="urn:beerxml:hop:" xmlns:yeast="urn:beerxml:yeast:" xmlns:water="urn:beerxml:water:" xmlns:style="urn:beerxml:style:" xmlns:mash="urn:beerxml:mash:" xmlns:rec="urn:beerxml:recipe:" targetNamespace="urn:beerxml:recipe:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="urn:beerxml:unit:" schemaLocation="measureable_units.xsd"/>
+  <xsd:import namespace="urn:beerxml:fermentable:" schemaLocation="grain.xsd"/>
+  <xsd:import namespace="urn:beerxml:miscellaneous:" schemaLocation="misc.xsd"/>
+  <xsd:import namespace="urn:beerxml:hop:" schemaLocation="hops.xsd"/>
+  <xsd:import namespace="urn:beerxml:yeast:" schemaLocation="yeast.xsd"/>
+  <xsd:import namespace="urn:beerxml:water:" schemaLocation="water.xsd"/>
+  <xsd:import namespace="urn:beerxml:style:" schemaLocation="style.xsd"/>
+  <xsd:import namespace="urn:beerxml:mash:" schemaLocation="mash.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Fermentation Stage
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="FermentationStageType">
+    <xsd:sequence>
+      <xsd:element name="aging" type="unit:TimeType"/>
+      <xsd:element name="temperature" type="unit:TemperatureType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # RecipeType composes the information stored in a beer_xml recipe
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="RecipeType">
+    <xsd:sequence>
+      <xsd:element name="name">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="type">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="extract"/>
+            <xsd:enumeration value="partial mash"/>
+            <xsd:enumeration value="all grain"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="author">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="coauthor" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="created" type="unit:DateType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="batch_size" type="unit:VolumeType"/>
+      <xsd:element name="boil_size" type="unit:VolumeType"/>
+      <xsd:element name="boil_time" type="unit:TimeType"/>
+      <xsd:element name="efficiency" type="unit:PercentType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="style" type="style:RecipeStyleType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="ingredients">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="grain_bill" type="ferm:FermentableAdditionType"/>
+            <xsd:element name="hop_bill" type="hop:HopAdditionType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="adjuncts" type="misc:MiscellaneousAdditionType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="yeast_additions" type="yeast:YeastAdditionType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="water_profile" type="water:WaterAdditionType" minOccurs="0" maxOccurs="1"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="mash" type="mash:MashProcedureType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="notes" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="original_gravity" type="unit:DensityType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="final_gravity" type="unit:DensityType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="alcohol_by_volume" type="unit:PercentType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="ibu_estimate" type="hop:IBUEstimateType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="color_estimate" type="unit:ColorType" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="carbonation" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="fermentation_stages" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="primary" type="rec:FermentationStageType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="secondary" type="rec:FermentationStageType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="tertiary" type="rec:FermentationStageType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="conditioning" type="rec:FermentationStageType" minOccurs="0" maxOccurs="1"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="taste" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="notes">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string"/>
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="rating">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:decimal"/>
+              </xsd:simpleType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="calories_per_pint" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

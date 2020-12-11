@@ -1941,7 +1941,7 @@ void MainWindow::importFiles()
 
    foreach( QString filename, fileOpener->selectedFiles() )
    {
-      if ( ! Database::instance().importFromXML(filename) )
+      if ( ! Database::instance().getBeerXml()->importFromXML(filename) )
          importMsg();
    }
 

@@ -24,6 +24,7 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include "config.h"
+#include "beerxml.h"
 #include "brewtarget.h"
 #include "database.h"
 
@@ -31,7 +32,7 @@ void importFromXml(const QString & filename);
 void createBlankDb(const QString & filename);
 
 int main(int argc, char **argv)
-{  
+{
    QApplication app(argc, argv);
    app.setOrganizationName("brewtarget");
 
@@ -99,7 +100,7 @@ int main(int argc, char **argv)
  * Use at your own risk.
  */
 void importFromXml(const QString & filename) {
-    Database::instance().importFromXML(filename);
+    Database::instance().getBeerXml()->importFromXML(filename);
     Database::dropInstance();
     Brewtarget::setOption("converted", QDate().currentDate().toString());
     exit(0);

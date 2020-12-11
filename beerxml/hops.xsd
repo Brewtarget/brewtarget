@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" xmlns:hop="urn:beerxml:hop:" targetNamespace="urn:beerxml:hop:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="urn:beerxml:unit:" schemaLocation="measureable_units.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # HopVarietyBase provides unique properties to identify
+   # individual records of a hop variety
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="HopVarietyBase">
+    <xsd:annotation>
+      <xsd:documentation>Hop Variety Base Desc</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="origin">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="alpha_acid_units">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="beta_acid_units" minOccurs="0">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # VarietyInformation collects the attributes of a hop variety
+   # to store as record information
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="VarietyInformation">
+    <xsd:annotation>
+      <xsd:documentation>Hop Variety Record Information</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="hop:HopVarietyBase">
+        <xsd:sequence>
+               <!-- NOTE: In this context, the application of hops
+                          during the boil is explicitly defined as:
+
+                          <10 mins   ( aroma )
+                          >20 mins   ( bittering )
+                          10-20 mins ( flavor )                 -->
+          <xsd:element name="type" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="aroma"/>
+                <xsd:enumeration value="bittering"/>
+                <xsd:enumeration value="flavor"/>
+                <xsd:enumeration value="aroma/bittering"/>
+                <xsd:enumeration value="bittering/flavor"/>
+                <xsd:enumeration value="aroma/flavor"/>
+                <xsd:enumeration value="aroma/bittering/flavor"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="notes" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="percent_lost" type="unit:PercentType" minOccurs="0"/>
+          <xsd:element name="substitutes" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="humulene" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:decimal"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="caryophyllene" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:decimal"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="cohumulone" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:decimal"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="myrcene" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:decimal"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="farnesene" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:decimal"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="inventory" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="leaf" type="unit:MassType" minOccurs="0"/>
+                <xsd:element name="pellet" type="unit:MassType" minOccurs="0"/>
+                <xsd:element name="plug" type="unit:MassType" minOccurs="0"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # HopAdditionType collects the attributes of a hop
+   # ingredient for use in a recipe hop bill
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="HopAdditionType">
+    <xsd:annotation>
+      <xsd:documentation>Addition of hops to recipe</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="addition" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:complexContent>
+            <xsd:extension base="hop:HopVarietyBase">
+              <xsd:sequence>
+                <xsd:element name="form">
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:enumeration value="leaf"/>
+                      <xsd:enumeration value="pellet"/>
+                      <xsd:enumeration value="plug"/>
+                    </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <!-- NOTE: 'continuous boil addition' assumes addition mass of hops
+                                   introduced linearly over duration of boil (equal portions
+                                   per unit time)                 -->
+                <xsd:element name="use">
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                      <xsd:enumeration value="boil"/>
+                      <xsd:enumeration value="dry hop"/>
+                      <xsd:enumeration value="first wort"/>
+                      <xsd:enumeration value="hopback"/>
+                      <xsd:enumeration value="mash"/>
+                      <xsd:enumeration value="continuous boil addition"/>
+                      <!-- xsd:enumeration value="aroma" / -->
+                              </xsd:restriction>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="amount" type="unit:MassType"/>
+                <xsd:element name="time" type="unit:TimeType"/>
+              </xsd:sequence>
+            </xsd:extension>
+          </xsd:complexContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # International Bitterness Unit Estimate Support Types
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="IBUMethodType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Rager"/>
+      <xsd:enumeration value="Tinseth"/>
+      <xsd:enumeration value="Garetz"/>
+      <xsd:enumeration value="Other"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="IBUEstimateType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="method" type="hop:IBUMethodType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+</xsd:schema>

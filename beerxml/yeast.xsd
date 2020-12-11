@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" xmlns:yeast="urn:beerxml:yeast:" targetNamespace="urn:beerxml:yeast:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="urn:beerxml:unit:" schemaLocation="measureable_units.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # CultureBase provides unique properties to identify
+   # individual records of a yeast culture
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="CultureBase">
+    <xsd:annotation>
+      <xsd:documentation>The descriptive base type for both yeast culture records and yeast recipe additions.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="type">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="ale"/>
+            <xsd:enumeration value="lager"/>
+            <xsd:enumeration value="wheat"/>
+            <xsd:enumeration value="wine"/>
+            <xsd:enumeration value="champagne"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="form">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="liquid"/>
+            <xsd:enumeration value="dry"/>
+            <xsd:enumeration value="slant"/>
+            <xsd:enumeration value="culture"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="laboratory">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="product_id">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # CultureInformation collects the attributes of a yeast
+   # culture to store as record information
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="CultureInformation">
+    <xsd:annotation>
+      <xsd:documentation>Yeast Culture Record Information</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="yeast:CultureBase">
+        <xsd:sequence>
+          <xsd:element name="temperature_range" type="unit:TemperatureRangeType" minOccurs="0"/>
+          <xsd:element name="flocculation" type="unit:QualitativeRangeType" minOccurs="0"/>
+          <xsd:element name="attenuation" type="unit:PercentType" minOccurs="0"/>
+          <xsd:element name="alcohol_tolerance" type="unit:PercentRangeType" minOccurs="0"/>
+          <xsd:element name="notes" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="best_for" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="max_reuse" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:integer"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="inventory" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="liquid" type="unit:VolumeType" minOccurs="0"/>
+                <xsd:element name="dry" type="unit:MassType" minOccurs="0"/>
+                <xsd:element name="slant" type="unit:VolumeType" minOccurs="0"/>
+                <xsd:element name="culture" minOccurs="0">
+                  <xsd:complexType>
+                    <xsd:simpleContent>
+                      <xsd:extension base="unit:VolumeType">
+                        <xsd:attribute name="date" type="unit:DateType" use="optional"/>
+                      </xsd:extension>
+                    </xsd:simpleContent>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # YeastAdditionType collects the attributes of a yeast
+   # ingredient for use in a recipe
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="YeastAdditionType">
+    <xsd:annotation>
+      <xsd:documentation>Addition of yeast to recipe</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="addition" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:complexContent>
+            <xsd:extension base="yeast:CultureBase">
+              <xsd:sequence>
+                <xsd:choice>
+                  <xsd:element name="amount" type="unit:VolumeType"/>
+                  <xsd:element name="amount_as_weight" type="unit:MassType"/>
+                </xsd:choice>
+                <xsd:element name="times_cultured" minOccurs="0">
+                  <xsd:simpleType>
+                    <xsd:restriction base="xsd:integer"/>
+                  </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="add_to_secondary" type="xsd:boolean" minOccurs="0"/>
+              </xsd:sequence>
+            </xsd:extension>
+          </xsd:complexContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

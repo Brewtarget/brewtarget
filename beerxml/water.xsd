@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" xmlns:water="urn:beerxml:water:" targetNamespace="urn:beerxml:water:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="urn:beerxml:unit:" schemaLocation="measureable_units.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # WaterBase provides unique properties to identify
+   # individual records of regional brewing water
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="WaterBase">
+    <xsd:sequence>
+      <xsd:element name="name">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="calcium">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="bicarbonate">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="sulfate">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="chloride">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="sodium">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="magnesium">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # WaterType collects the attributes of a regional brewing
+   # water to store as record information
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="WaterType">
+    <xsd:complexContent>
+      <xsd:extension base="water:WaterBase">
+        <xsd:sequence>
+          <xsd:element name="pH" minOccurs="0" maxOccurs="1">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:decimal"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="notes" minOccurs="0" maxOccurs="1">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # WaterAdditionType collects the attributes of a water
+   # salt addition for use in a recipe
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="WaterAdditionType">
+    <xsd:sequence>
+      <xsd:element name="addition" minOccurs="1" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:complexContent>
+            <xsd:extension base="water:WaterBase">
+              <xsd:sequence>
+                <xsd:element name="amount" type="unit:VolumeType"/>
+              </xsd:sequence>
+            </xsd:extension>
+          </xsd:complexContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

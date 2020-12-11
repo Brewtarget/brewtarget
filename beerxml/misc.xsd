@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" xmlns:misc="urn:beerxml:miscellaneous:" targetNamespace="urn:beerxml:miscellaneous:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="urn:beerxml:unit:" schemaLocation="measureable_units.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # MiscellaneousBase provides unique properties to identify
+   # individual records of adjunct ingredients
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="MiscellaneousBase">
+    <xsd:sequence>
+      <xsd:element name="name">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="type">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="spice"/>
+            <xsd:enumeration value="fining"/>
+            <xsd:enumeration value="water agent"/>
+            <xsd:enumeration value="herb"/>
+            <xsd:enumeration value="fruit"/>
+            <xsd:enumeration value="flavor"/>
+            <xsd:enumeration value="other"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="use">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="boil"/>
+            <xsd:enumeration value="mash"/>
+            <xsd:enumeration value="primary"/>
+            <xsd:enumeration value="secondary"/>
+            <xsd:enumeration value="bottling"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # MiscellaneousType collects the attributes of a adjunct
+   # ingredient to store as record information
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="MiscellaneousType">
+    <xsd:complexContent>
+      <xsd:extension base="misc:MiscellaneousBase">
+        <xsd:sequence>
+          <xsd:element name="use_for" minOccurs="0" maxOccurs="1">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="notes" minOccurs="0" maxOccurs="1">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="inventory" minOccurs="0" maxOccurs="1">
+            <xsd:complexType>
+              <xsd:choice>
+                <xsd:element name="amount" type="unit:VolumeType"/>
+                <xsd:element name="amount_as_weight" type="unit:MassType"/>
+              </xsd:choice>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # MiscellaneousAdditionType collects the attributes of an
+   # adjunct ingredient for use in a recipe adjunct bill
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="MiscellaneousAdditionType">
+    <xsd:sequence>
+      <xsd:element name="addition" minOccurs="1" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:complexContent>
+            <xsd:extension base="misc:MiscellaneousBase">
+              <xsd:sequence>
+                <xsd:choice>
+                  <xsd:element name="amount" type="unit:VolumeType"/>
+                  <xsd:element name="amount_as_weight" type="unit:MassType"/>
+                </xsd:choice>
+                <xsd:element name="time" type="unit:TimeType"/>
+              </xsd:sequence>
+            </xsd:extension>
+          </xsd:complexContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

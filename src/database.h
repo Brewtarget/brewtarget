@@ -299,8 +299,6 @@ public:
 
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash
    void duplicateMashSteps(Mash *oldMash, Mash *newMash);
-   //! Import ingredients from BeerXML documents.
-   bool importFromXML(const QString& filename);
 
    //! Get anything by key value.
    Recipe* recipe(int key);

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" xmlns:ferm="urn:beerxml:fermentable:" xmlns:misc="urn:beerxml:miscellaneous:" xmlns:hop="urn:beerxml:hop:" xmlns:yeast="urn:beerxml:yeast:" xmlns:water="urn:beerxml:water:" xmlns:style="urn:beerxml:style:" xmlns:mash="urn:beerxml:mash:" xmlns:rec="urn:beerxml:recipe:" xmlns:base="urn:beerxml:" targetNamespace="urn:beerxml:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="urn:beerxml:unit:" schemaLocation="measureable_units.xsd"/>
+  <xsd:import namespace="urn:beerxml:fermentable:" schemaLocation="grain.xsd"/>
+  <xsd:import namespace="urn:beerxml:miscellaneous:" schemaLocation="misc.xsd"/>
+  <xsd:import namespace="urn:beerxml:hop:" schemaLocation="hops.xsd"/>
+  <xsd:import namespace="urn:beerxml:yeast:" schemaLocation="yeast.xsd"/>
+  <xsd:import namespace="urn:beerxml:water:" schemaLocation="water.xsd"/>
+  <xsd:import namespace="urn:beerxml:style:" schemaLocation="style.xsd"/>
+  <xsd:import namespace="urn:beerxml:mash:" schemaLocation="mash.xsd"/>
+  <xsd:import namespace="urn:beerxml:recipe:" schemaLocation="recipes.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # BeerXML files associate a version with the brewing records stored within
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:element name="beer_xml">
+    <xsd:annotation>
+      <xsd:documentation>Root element of all BeerXML 3 documents.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="version" type="unit:VersionType">
+          <xsd:annotation>
+            <xsd:documentation>Explicitly encode BeerXML version within list of records.</xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+        <xsd:choice>
+          <xsd:annotation>
+            <xsd:documentation>Choice of the record collection type.</xsd:documentation>
+          </xsd:annotation>
+          <xsd:element name="fermentables">
+            <xsd:annotation>
+              <xsd:documentation>Records for any ingredient that contributes to the gravity of the beer.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="fermentable" type="ferm:FermentableType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="miscellaneous_ingredients">
+            <xsd:annotation>
+              <xsd:documentation>Records for adjuncts which do not contribute to the gravity of the beer.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="miscellaneous" type="misc:MiscellaneousType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="hop_varieties">
+            <xsd:annotation>
+              <xsd:documentation>Records detailing the many properties of unique hop varieties.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="hop" type="hop:VarietyInformation" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="cultures">
+            <xsd:annotation>
+              <xsd:documentation>Records detailing the wide array of unique yeast cultures.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="yeast" type="yeast:CultureInformation" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="profiles">
+            <xsd:annotation>
+              <xsd:documentation>Records for regional water profiles used in style-specific beer brewing.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="water" type="water:WaterType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="styles">
+            <xsd:annotation>
+              <xsd:documentation>Records detailing the characteristics of the beer styles for which judging guidelines have been established.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="style" type="style:StyleType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="procedure">
+            <xsd:annotation>
+              <xsd:documentation>A collection of steps providing process information for common mashing procedures.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="mash" type="mash:MashProcedureType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="recipes">
+            <xsd:annotation>
+              <xsd:documentation>Records containing a minimal collection of the description of ingredients, procedures and other required parameters necessary to recreate a batch of beer.</xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="recipe" type="rec:RecipeType" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

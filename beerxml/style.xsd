@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" xmlns:style="urn:beerxml:style:" targetNamespace="urn:beerxml:style:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="urn:beerxml:unit:" schemaLocation="measureable_units.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # StyleCategories
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="StyleCategories">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="lager"/>
+      <xsd:enumeration value="ale"/>
+      <xsd:enumeration value="mead"/>
+      <xsd:enumeration value="wheat"/>
+      <xsd:enumeration value="mixed"/>
+      <xsd:enumeration value="cider"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # StyleBase provides unique properties to identify
+   # individual beer styles
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="StyleBase">
+    <xsd:annotation>
+      <xsd:documentation>The descriptive base type for both beer style guideline records and recipe style provisions.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="name">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="category">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="category_number">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:integer"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="style_letter">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="1"/>
+            <xsd:pattern value="[A-Z ]"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="style_guide">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="type" type="style:StyleCategories"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # StyleType provide information for BJCP Style categorization
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="StyleType">
+    <xsd:annotation>
+      <xsd:documentation>Style Type Record Information</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="style:StyleBase">
+        <xsd:sequence>
+          <xsd:element name="original_gravity" type="unit:DensityRangeType"/>
+          <xsd:element name="final_gravity" type="unit:DensityRangeType"/>
+          <xsd:element name="international_bitterness_units" type="unit:QuantitativeRangeType"/>
+          <xsd:element name="color" type="unit:ColorRangeType"/>
+          <xsd:element name="carbonation" type="unit:QuantitativeRangeType" minOccurs="0"/>
+          <xsd:element name="alcohol_by_volume" type="unit:PercentRangeType" minOccurs="0"/>
+          <xsd:element name="notes" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="aroma" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="appearance" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="flavor" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="mouthfeel" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="overall_impression" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="ingredients" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+          <xsd:element name="examples" minOccurs="0">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string"/>
+            </xsd:simpleType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # RecipeStyleType defines style information stored in a recipe record
+   ###########################################################
+      </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="RecipeStyleType">
+    <xsd:annotation>
+      <xsd:documentation>Recipe Style Type Description</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexContent>
+      <xsd:extension base="style:StyleBase"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>

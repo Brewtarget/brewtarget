@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" xmlns:step="urn:beerxml:mash:step:" xmlns:mash="urn:beerxml:mash:" targetNamespace="urn:beerxml:mash:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="urn:beerxml:unit:" schemaLocation="measureable_units.xsd"/>
+  <xsd:import namespace="urn:beerxml:mash:step:" schemaLocation="mash_step.xsd"/>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # MashProcedureType defines the procedure for performing unique mashing styles
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="MashProcedureType">
+    <xsd:sequence>
+      <xsd:element name="name">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="grain_temperature" type="unit:TemperatureType"/>
+      <xsd:element name="sparge_temperature"  type="unit:TemperatureType" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="pH" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="notes" minOccurs="0" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="mash_steps">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="step" type="step:MashStepType" minOccurs="1" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- xsd:annotation><xsd:documentation>
+   ###########################################################
+   # MashStepType - a per step representation occuring within the mash
+   ###########################################################
+   </xsd:documentation></xsd:annotation>
+
+   <xsd:complexType name="MashStepType">
+      <xsd:sequence>
+
+         <xsd:element name="name">
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string" />
+            </xsd:simpleType>
+         </xsd:element>
+
+         <xsd:element name="type">
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string">
+                  <xsd:enumeration value="infusion" />
+                  <xsd:enumeration value="temperature" />
+                  <xsd:enumeration value="decoction" />
+               </xsd:restriction>
+            </xsd:simpleType>
+         </xsd:element>
+
+         <xsd:element name="infuse_amount" type="unit:VolumeType" minOccurs="0" maxOccurs="1" />
+
+         <xsd:element name="step_temperature" type="unit:TemperatureType" />
+
+         <xsd:element name="step_time" type="unit:TimeType" />
+
+         <xsd:element name="ramp_time" type="unit:TimeType" minOccurs="0" maxOccurs="1" />
+
+         <xsd:element name="end_temperature" type="unit:TemperatureType" minOccurs="0" maxOccurs="1" />
+
+         <xsd:element name="description" minOccurs="0" maxOccurs="1">
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:string" />
+            </xsd:simpleType>
+         </xsd:element>
+
+         <xsd:element name="water_grain_ratio" minOccurs="0" maxOccurs="1">
+            <xsd:simpleType>
+               <xsd:restriction base="xsd:decimal" />
+            </xsd:simpleType>
+         </xsd:element>
+
+         <xsd:element name="decoction_amount" type="unit:VolumeType" minOccurs="0" maxOccurs="1" />
+
+         <xsd:element name="infuse_temperature" type="unit:TemperatureType" minOccurs="0" maxOccurs="1" />
+
+      </xsd:sequence>
+   </xsd:complexType -->
+
+</xsd:schema>

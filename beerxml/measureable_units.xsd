@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:unit="urn:beerxml:unit:" targetNamespace="urn:beerxml:unit:" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Volume
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="VolumeUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ml"/>
+      <!-- SI milliliter -->
+      <xsd:enumeration value="l"/>
+      <!-- SI Liter -->
+      <xsd:enumeration value="tsp"/>
+      <!-- US teaspoon -->
+      <xsd:enumeration value="tbsp"/>
+      <!-- US tablespoon -->
+      <xsd:enumeration value="ozfl"/>
+      <!-- US fluid ounce -->
+      <xsd:enumeration value="cup"/>
+      <!-- US Cup -->
+      <xsd:enumeration value="pt"/>
+      <!-- US Pint -->
+      <xsd:enumeration value="qt"/>
+      <!-- US Quart -->
+      <xsd:enumeration value="gal"/>
+      <!-- US Gallon -->
+      <xsd:enumeration value="bbl"/>
+      <!-- US Barrel -->
+      <xsd:enumeration value="iozfl"/>
+      <!-- UK fluid ounce -->
+      <xsd:enumeration value="ipt"/>
+      <!-- UK Pint -->
+      <xsd:enumeration value="iqt"/>
+      <!-- UK Quart -->
+      <xsd:enumeration value="igal"/>
+      <!-- UK Gallon -->
+      <xsd:enumeration value="ibbl"/>
+      <!-- UK Barrel -->
+      </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="VolumeType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="volume" type="unit:VolumeUnitType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Mass
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="MassUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="mg"/>
+      <!-- SI milligram -->
+      <xsd:enumeration value="g"/>
+      <!-- SI gram -->
+      <xsd:enumeration value="kg"/>
+      <!-- SI kilogram -->
+      <xsd:enumeration value="lb"/>
+      <!-- US pound -->
+      <xsd:enumeration value="oz"/>
+      <!-- US ounce -->
+      </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="MassType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="mass" type="unit:MassUnitType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Temperature
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="TemperatureUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="C"/>
+      <!-- SI Celcius -->
+      <xsd:enumeration value="F"/>
+      <!-- US Farenheit -->
+      </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="TemperatureType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="degrees" type="unit:TemperatureUnitType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Length
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="DistanceUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="cm"/>
+      <!-- SI centimeter -->
+      <xsd:enumeration value="m"/>
+      <!-- SI meter -->
+      <xsd:enumeration value="ft"/>
+      <!-- US Foot -->
+      <xsd:enumeration value="in"/>
+      <!-- US Inch -->
+      </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="DistanceType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="length" type="unit:DistanceUnitType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Pressure
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="PressureUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="kPa"/>
+      <!-- SI kilopascals -->
+      <xsd:enumeration value="psi"/>
+      <!-- US pounds per square inch -->
+      <xsd:enumeration value="bar"/>
+      <!-- UK pressure -->
+
+      </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="PressureType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="pressure" type="unit:PressureUnitType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Time
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="TimeUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="sec"/>
+      <!-- second -->
+      <xsd:enumeration value="min"/>
+      <!-- minute -->
+      <xsd:enumeration value="hr"/>
+      <!-- hour -->
+      <xsd:enumeration value="day"/>
+      <xsd:enumeration value="week"/>
+      <xsd:enumeration value="month"/>
+      <xsd:enumeration value="year"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="TimeType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="duration" type="unit:TimeUnitType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Color
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="ColorUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="EBC"/>
+      <!-- European Brewing Convention -->
+      <xsd:enumeration value="L"/>
+      <!-- Lovibond (equivalent to SRM - used for malts)-->
+      <xsd:enumeration value="SRM"/>
+      <!-- Standard Reference Method (replaced Lovibond - used for finished beer) -->
+      </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="ColorType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="scale" type="unit:ColorUnitType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Density
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="DensityUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="sg"/>
+      <!-- Significant Gravity -->
+      <xsd:enumeration value="plato"/>
+      <!-- degrees Plato -->
+      </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="DensityType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:decimal">
+        <xsd:attribute name="density" type="unit:DensityUnitType" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Date
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="DateType">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="\d{4}-\d{2}-\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Percent
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="PercentType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:totalDigits value="5"/>
+      <xsd:fractionDigits value="2" fixed="false"/>
+      <xsd:minInclusive value="0.00"/>
+      <xsd:maxInclusive value="100.00"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Qualitative Range ( low-high )
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="QualitativeRangeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="very low"/>
+      <xsd:enumeration value="low"/>
+      <xsd:enumeration value="medium low"/>
+      <xsd:enumeration value="medium"/>
+      <xsd:enumeration value="medium high"/>
+      <xsd:enumeration value="high"/>
+      <xsd:enumeration value="very high"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Quantitative Range
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="QuantitativeRangeType">
+    <xsd:sequence>
+      <xsd:element name="minimum">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="maximum">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:decimal"/>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Temperature Range
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="TemperatureRangeType">
+    <xsd:sequence>
+      <xsd:element name="minimum" type="unit:TemperatureType"/>
+      <xsd:element name="maximum" type="unit:TemperatureType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Color Range
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="ColorRangeType">
+    <xsd:sequence>
+      <xsd:element name="minimum" type="unit:ColorType"/>
+      <xsd:element name="maximum" type="unit:ColorType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Density Range
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="DensityRangeType">
+    <xsd:sequence>
+      <xsd:element name="minimum" type="unit:DensityType"/>
+      <xsd:element name="maximum" type="unit:DensityType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Percent Range
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="PercentRangeType">
+    <xsd:sequence>
+      <xsd:element name="minimum" type="unit:PercentType"/>
+      <xsd:element name="maximum" type="unit:PercentType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:annotation>
+    <xsd:documentation>
+   ###########################################################
+   # Version
+   ###########################################################
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:simpleType name="VersionType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:pattern value="\d{1,3}\.\d{1,2}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>
