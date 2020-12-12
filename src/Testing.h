@@ -1,7 +1,8 @@
-/*
+b/*
  * Testing.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2020
  * - Philip G. Lee <rocketman768@gmail.com>
+ * - Mattias Måhl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +34,7 @@ class Fermentable;
 
 #include "brewtarget.h"
 #include "pstdint.h"
+#include "Log.h"
 
 class Testing : public QObject
 {
@@ -53,6 +55,22 @@ public:
       if( !ret )
          qDebug() << QString("a: %1, b: %2, tol: %3").arg(a).arg(b).arg(tol);
       return ret;
+   }
+
+   // method to fill dummy logs with content to build size
+   static QString randomStringGenerator()
+   {
+      QString posChars = "ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwwxyz";
+      int randomcharLength = 64;
+
+      QString randSTR;
+      for (int i = 0; i < randomcharLength; i++)
+      {
+         int index = QRandomGenerator().generate64() % posChars.length();
+         QChar nChar = posChars.at(index);
+         randSTR.append(nChar);
+      }
+      return randSTR;
    }
 
 private:
@@ -103,6 +121,9 @@ private slots:
 
    //! \brief Verify post-boil losses do not affect OG
    void postBoilLossOgTest();
+
+   //! \brief Verify Log rotation is working
+   void testLogRotation();
 };
 
 #endif /*TESTING_H*/

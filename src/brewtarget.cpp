@@ -1,6 +1,7 @@
-/*
+
+ /*
  * brewtarget.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Maxime Lavigne <duguigne@gmail.com>
@@ -8,6 +9,7 @@
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Rob Taylor <robtaylor@floopily.org>
  * - Ted Wright <unsure>
+ * - Mattias Måhl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +49,7 @@
 #include <QPixmap>
 #include <QSplashScreen>
 #include <QSettings>
+#include <QDebug>
 
 #include "brewtarget.h"
 #include "config.h"
@@ -146,7 +149,6 @@ QDir Brewtarget::userDataDir = QString();
 Brewtarget::DBTypes Brewtarget::_dbType = Brewtarget::NODB;
 
 bool Brewtarget::checkVersion = true;
-Log Brewtarget::log(true);
 
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
@@ -465,6 +467,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
    qRegisterMetaType< QList<Water*> >();
    qRegisterMetaType< QList<Salt*> >();
 
+    Log::initializeLog();
 
    // Use overwride if present.
    if (!userDirectory.isEmpty() && QDir(userDirectory).exists()) {
@@ -489,7 +492,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
 
    readSystemOptions();
    loadMap();
-   log.changeDirectory();
+    Log::changeDirectory();
 
    // Make sure all the necessary directories and files we need exist before starting.
    ensureDirectoriesExist();
@@ -593,7 +596,7 @@ QString Brewtarget::dbBoolean(bool flag, Brewtarget::DBTypes type)
 
 void Brewtarget::cleanup()
 {
-   log.info("Brewtarget is cleaning up.");
+   qDebug() << "Brewtarget is cleaning up.";
    // Should I do qApp->removeTranslator() first?
    delete defaultTrans;
    delete btTrans;
@@ -625,11 +628,10 @@ int Brewtarget::run(const QString &userDirectory)
       cleanup();
       return 1;
    }
-   log.info(QString("Starting Brewtarget v%1 on %2.").arg(VERSIONSTRING).arg(QSysInfo::prettyProductName()));
+   qDebug() << QString("Starting Brewtarget v%1 on %2.").arg(VERSIONSTRING).arg(QSysInfo::prettyProductName());
    _mainWindow = new MainWindow();
    _mainWindow->setVisible(true);
    splashScreen.finish(_mainWindow);
-   QObject::connect( &log, &Log::wroteEntry, _mainWindow, &MainWindow::updateStatus );
 
    checkForNewVersion(_mainWindow);
    do {
@@ -1049,15 +1051,15 @@ void Brewtarget::readSystemOptions()
    _dbType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::SQLITE).toInt());
 
    //======================Logging options =======================
-   log.LoggingEnabled = option("LoggingEnabled", false).toBool();
-   log.LoggingLevel = log.getLogTypeFromString(QString(option("LoggingLevel", "INFO").toString()));
-   log.LogFilePath = QDir(option("LogFilePath", getUserDataDir().canonicalPath()).toString());
-   log.LoggingUseConfigDir = option("LoggingUseConfigDir", true).toBool();
-   if( log.LoggingUseConfigDir )
+    Log::loggingEnabled = option("LoggingEnabled", false).toBool();
+    Log::logLevel = Log::getLogTypeFromString(QString(option("LoggingLevel", "INFO").toString()));
+    Log::logFilePath = QDir(option("LogFilePath", getUserDataDir().canonicalPath()).toString());
+    Log::logUseConfigDir = option("LoggingUseConfigDir", true).toBool();
+   if( Log::logUseConfigDir )
 #if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-      log.LogFilePath = getUserDataDir().canonicalPath();
+        Log::logFilePath = getUserDataDir().canonicalPath();
 #else
-      log.LogFilePath.setPath(getUserDataDir().canonicalPath());
+      Log::logFilePath.setPath(getUserDataDir().canonicalPath());
 #endif
 }
 
@@ -1121,10 +1123,10 @@ void Brewtarget::saveSystemOptions()
          break;
    }
 
-   setOption("LoggingEnabled", log.LoggingEnabled);
-   setOption("LoggingLevel", log.getOptionStringFromLogType(log.LoggingLevel));
-   setOption("LogFilePath", log.LogFilePath.absolutePath());
-   setOption("LoggingUseConfigDir", log.LoggingUseConfigDir);
+   setOption("LoggingEnabled", Log::loggingEnabled);
+   setOption("LoggingLevel", Log::getOptionStringFromLogType(Log::logLevel));
+   setOption("LogFilePath", Log::logFilePath.absolutePath());
+   setOption("LoggingUseConfigDir", Log::logUseConfigDir);
 }
 
 // the defaults come from readSystemOptions. This just fleshes out the hash
@@ -1162,26 +1164,26 @@ void Brewtarget::loadMap()
 
 void Brewtarget::logE( QString message )
 {
-   if ( log.LoggingEnabled && log.LoggingLevel <= Log::LogType_ERROR)
-      log.error(message);
+   if ( Log::loggingEnabled && Log::logLevel <= Log::LogType_ERROR)
+      qCritical() << message;
 }
 
 void Brewtarget::logW( QString message )
 {
-   if ( log.LoggingEnabled && log.LoggingLevel <= Log::LogType_WARNING)
-      log.warn(message);
+   if ( Log::loggingEnabled && Log::logLevel <= Log::LogType_WARNING)
+      qWarning() << message;
 }
 
 void Brewtarget::logI( QString message )
 {
-   if ( log.LoggingEnabled && log.LoggingLevel <= Log::LogType_INFO)
-      log.info(message);
+   if ( Log::loggingEnabled && Log::logLevel <= Log::LogType_INFO)
+      qInfo() << message;
 }
 
 void Brewtarget::logD( QString message )
 {
-   if ( log.LoggingEnabled && log.LoggingLevel <= Log::LogType_DEBUG)
-      log.debug(message);
+   if ( Log::loggingEnabled && Log::logLevel <= Log::LogType_DEBUG)
+      qDebug() << message;
 }
 
 /* Qt5 changed how QString::toDouble() works in that it will always convert

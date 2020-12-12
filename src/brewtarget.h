@@ -360,8 +360,6 @@ private:
    static QDomDocument* optionsDoc;
    static QTranslator* defaultTrans;
    static QTranslator* btTrans;
-   //! \brief OS-Agnostic RAII style Thread-safe Log file.
-   static Log log;
    static QString currentLanguage;
    static QSettings btSettings;
    static bool userDatabaseDidNotExist;

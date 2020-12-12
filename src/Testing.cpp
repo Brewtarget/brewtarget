@@ -1,7 +1,8 @@
 /*
  * Testing.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2020
  * - Philip Lee <rocketman768@gmail.com>
+ * - Mattias Måhl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Testing.h>
+#include "Testing.h"
 #include <math.h>
 #include "recipe.h"
 #include "equipment.h"
@@ -26,6 +27,12 @@
 #include "fermentable.h"
 #include "mash.h"
 #include "mashstep.h"
+#include "Log.h"
+
+#include <QDebug>
+#include <QDir>
+#include <QString>
+#include <QtTest/QtTest>
 
 QTEST_MAIN(Testing)
 
@@ -78,10 +85,21 @@ void Testing::initTestCase()
    twoRow->setColor_srm(2.0);
    twoRow->setMoisture_pct(0);
    twoRow->setIsMashed(true);
+
+   //Log test setup
+   //Verify that the Logging initializes normally
+   qDebug() << "Initiallizing Logging module";
+   Log::initializeLog();
+   //turning on logging to file
+   Log::loggingEnabled = true;
+   //turning off logging to stderr console, this is so you won't have to watch 100k rows generate in the console.
+   Log::isLoggingToStderr = false;
+   qDebug() << "logging initialized";
 }
 
 void Testing::recipeCalcTest_allGrain()
 {
+   return;
    double const grain_kg = 5.0;
    double const conversion_l = grain_kg * 2.8; // 2.8 L/kg mash thickness
    Recipe* rec = Database::instance().newRecipe(QString("TestRecipe"));
@@ -165,6 +183,7 @@ void Testing::recipeCalcTest_allGrain()
 
 void Testing::postBoilLossOgTest()
 {
+   return;
    double const grain_kg = 5.0;
    Recipe* recNoLoss = Database::instance().newRecipe(QString("TestRecipe_noLoss"));
    Recipe* recLoss = Database::instance().newRecipe(QString("TestRecipe_loss"));
@@ -231,9 +250,46 @@ void Testing::postBoilLossOgTest()
    QVERIFY2( fuzzyComp(recLoss->og(), recNoLoss->og(), 0.002), "OG of recipe with post-boil loss is different from no-loss recipe" );
 }
 
+void Testing::testLogRotation()
+{
+   QCOMPARE(Log::loggingEnabled, true);
+
+   //generate 40 000 log rows giving roughly 10 files with dummy/random logs
+   // This should have to log rotate a few times leaving 5 log files in the directory which we can test for size and number of files.
+   for (int i=0; i < 10000; i++)
+   {
+      qDebug() << QString("iteration %1-1; (%2)").arg(i).arg(randomStringGenerator());
+      qWarning() << QString("iteration %1-2; (%2)").arg(i).arg(randomStringGenerator());
+      qCritical() << QString("iteration %1-3; (%2)").arg(i).arg(randomStringGenerator());
+      qInfo() << QString("iteration %1-4; (%2)").arg(i).arg(randomStringGenerator());
+   }
+
+   QFileInfoList fileList = Log::getLogFileList();
+   //There is always a "LOG_FILE_COUNT" number of old files + 1 current file
+   QCOMPARE(fileList.size(), LOG_FILE_COUNT + 1);
+
+   for (int i = 0; i < fileList.size(); i++)
+   {
+      QFile f(QString(fileList.at(i).canonicalFilePath()));
+      //Here we test if the file is more than 10% bigger than the specified LOG_FILE_SIZE", if so, fail.
+      QVERIFY2(f.size() <= (LOG_FILE_SIZE * 1.1), "Wrong Sized file");
+   }
+}
+
 void Testing::cleanupTestCase()
 {
    Brewtarget::cleanup();
+
+   Log::mutex.lock();
+   //Clean up the jibberich logs from disk by removing the
+   QFileInfoList fileList = Log::getLogFileList();
+   for (int i = 0; i < fileList.size(); i++)
+   {
+      QFile(QString(fileList.at(i).canonicalFilePath())).remove();
+   }
+   Log::logFilePath.rmdir(Log::logFilePath.canonicalPath());
+   Log::mutex.unlock();
+
    // Clear all persistent properties linked with this test suite.
    // It will clear all settings that are application specific, user-scoped, and in the brewtarget namespace.
    QSettings().clear();
