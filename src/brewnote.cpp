@@ -1,6 +1,7 @@
 /*
  * brewnote.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -36,7 +37,7 @@
 #include "equipment.h"
 #include "mash.h"
 #include "yeast.h"
-
+#include "database.h"
 #include "TableSchemaConst.h"
 #include "BrewnoteSchema.h"
 
@@ -176,7 +177,7 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
 
 void BrewNote::populateNote(Recipe* parent)
 {
-
+   this->m_recipe = parent;
    Equipment* equip = parent->equipment();
    Mash* mash = parent->mash();
    QList<MashStep*> steps;
@@ -269,6 +270,7 @@ void BrewNote::populateNote(Recipe* parent)
 // This should allow the users to redo those calculations
 void BrewNote::recalculateEff(Recipe* parent)
 {
+   this->m_recipe = parent;
 
    QHash<QString,double> sugars;
 
@@ -631,6 +633,9 @@ void BrewNote::setBoilOff_l(double var)
 
 void BrewNote::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
+void BrewNote::setRecipe(Recipe * recipe) { this->m_recipe = recipe; }
+
+
 // Getters
 QDateTime BrewNote::brewDate() const { return m_brewDate; }
 QString BrewNote::brewDate_str() const { return m_brewDate.toString(); }
@@ -771,4 +776,8 @@ double BrewNote::calculateAttenuation_pct()
     setAttenuation(attenuation);
 
     return attenuation;
+}
+
+int BrewNote::insertInDatabase() {
+   return Database::instance().insertBrewNote(this, this->m_recipe);
 }

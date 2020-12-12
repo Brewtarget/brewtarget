@@ -1,6 +1,6 @@
 /*
  * MashEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Kregg K <gigatropolis@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -72,7 +72,7 @@ void MashEditor::saveAndClose()
    mashObs->setNotes( textEdit_notes->toPlainText() );
 
    if ( isNew ) {
-      Database::instance().insertElement(mashObs);
+      mashObs->insertInDatabase();
       Database::instance().addToRecipe(m_rec, mashObs);
    }
 }
@@ -112,7 +112,7 @@ void MashEditor::setRecipe(Recipe* r)
 
    if( mashObs && m_equip )
    {
-      // Only do this if we have to. Otherwise, it causes some uneccesary
+      // Only do this if we have to. Otherwise, it causes some unnecessary
       // updates to the database.
       if ( mashObs->tunWeight_kg() != m_equip->tunWeight_kg() )
          mashObs->setTunWeight_kg( m_equip->tunWeight_kg() );

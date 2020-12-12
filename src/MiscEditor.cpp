@@ -71,7 +71,7 @@ void MiscEditor::save()
    m->setNotes( textEdit_notes->toPlainText() );
 
    if ( m->cacheOnly() ) {
-      Database::instance().insertMisc(m);
+      m->insertInDatabase();
    }
    // do this late to make sure we've the row in the inventory table
    m->setInventoryAmount(lineEdit_inventory->toSI());

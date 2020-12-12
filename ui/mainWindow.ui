@@ -259,8 +259,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>695</width>
-           <height>398</height>
+           <width>684</width>
+           <height>532</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1094,8 +1094,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>695</width>
-           <height>318</height>
+           <width>705</width>
+           <height>309</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1647,7 +1647,7 @@
      <x>0</x>
      <y>0</y>
      <width>1050</width>
-     <height>24</height>
+     <height>44</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1744,7 +1744,15 @@
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuTools"/>
    <addaction name="menuAbout"/>
@@ -2233,6 +2241,16 @@
   <action name="actionWater_Chemistry">
    <property name="text">
     <string>Water &amp;Chemistry</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
    </property>
   </action>
  </widget>

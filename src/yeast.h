@@ -152,6 +152,9 @@ public:
 
    static QString classNameStr();
 
+   Ingredient * getParent();
+   int insertInDatabase();
+
 signals:
 
 private:

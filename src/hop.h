@@ -1,6 +1,6 @@
 /*
  * hop.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -154,6 +154,10 @@ public:
    void setInventoryId(int key);
 
    static QString classNameStr();
+
+   Ingredient * getParent();
+   int insertInDatabase();
+
 signals:
 
 private:

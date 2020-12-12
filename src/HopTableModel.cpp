@@ -1,7 +1,8 @@
 /*
  * HopTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Luke Vincent <luke.r.vincent@gmail.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -40,6 +41,7 @@
 #include "HopTableModel.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "MainWindow.h"
 
 HopTableModel::HopTableModel(QTableView* parent, bool editable)
    : QAbstractTableModel(parent),
@@ -382,8 +384,12 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
    {
       case HOPNAMECOL:
          retVal = value.canConvert(QVariant::String);
-         if( retVal )
-            row->setName(value.toString());
+         if( retVal ) {
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "name",
+                                                     value.toString(),
+                                                     tr("Change Hop Name"));
+         }
          break;
       case HOPALPHACOL:
          retVal = value.canConvert(QVariant::Double);
@@ -392,34 +398,57 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
             amt = Brewtarget::toDouble( value.toString(), &retVal );
             if ( ! retVal )
                Brewtarget::logW( QString("HopTableModel::setData() could not convert %1 to double").arg(value.toString()));
-            row->setAlpha_pct( amt );
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "alpha_pct",
+                                                     amt,
+                                                     tr("Change Hop Alpha %"));
          }
          break;
 
       case HOPINVENTORYCOL:
          retVal = value.canConvert(QVariant::String);
-         if( retVal )
-            row->setInventoryAmount( Brewtarget::qStringToSI(value.toString(),Units::kilograms, displayUnit(HOPINVENTORYCOL)));
+         if( retVal ) {
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "inventoryAmount",
+                                                     Brewtarget::qStringToSI(value.toString(),Units::kilograms, displayUnit(HOPINVENTORYCOL)),
+                                                     tr("Change Hop Inventory Amount"));
+         }
          break;
       case HOPAMOUNTCOL:
          retVal = value.canConvert(QVariant::String);
-         if( retVal )
-            row->setAmount_kg( Brewtarget::qStringToSI(value.toString(), Units::kilograms, dspUnit, dspScl));
+         if( retVal ) {
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "amount_kg",
+                                                     Brewtarget::qStringToSI(value.toString(), Units::kilograms, dspUnit, dspScl),
+                                                     tr("Change Hop Amount"));
+         }
          break;
       case HOPUSECOL:
          retVal = value.canConvert(QVariant::Int);
-         if( retVal )
-            row->setUse(static_cast<Hop::Use>(value.toInt()));
+         if( retVal ) {
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "use",
+                                                     static_cast<Hop::Use>(value.toInt()),
+                                                     tr("Change Hop Use"));
+         }
          break;
       case HOPFORMCOL:
          retVal = value.canConvert(QVariant::Int);
-         if( retVal )
-            row->setForm(static_cast<Hop::Form>(value.toInt()));
+         if( retVal ) {
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "form",
+                                                     static_cast<Hop::Form>(value.toInt()),
+                                                     tr("Change Hop Form"));
+         }
          break;
       case HOPTIMECOL:
          retVal = value.canConvert(QVariant::String);
-         if( retVal )
-            row->setTime_min( Brewtarget::qStringToSI(value.toString(),Units::minutes,dspUnit,dspScl));
+         if( retVal ) {
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "time_min",
+                                                     Brewtarget::qStringToSI(value.toString(),Units::minutes,dspUnit,dspScl),
+                                                     tr("Change Hop Time"));
+         }
          break;
       default:
          Brewtarget::logW(QString("HopTableModel::setdata Bad column: %1").arg(index.column()));

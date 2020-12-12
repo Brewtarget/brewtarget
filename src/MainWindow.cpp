@@ -1,10 +1,11 @@
 /*
  * MainWindow.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - David Grundberg <individ@acc.umu.se>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -121,6 +122,8 @@
 #include "WaterListModel.h"
 #include "WaterEditor.h"
 #include "beerxml.h"
+#include "RelationalUndoableUpdate.h"
+#include "UndoableAddOrRemove.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
@@ -131,6 +134,8 @@
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
 {
+   undoStack = new QUndoStack(this);
+
    // Need to call this parent class method to get all the widgets added (I think).
    this->setupUi(this);
 
@@ -265,6 +270,8 @@ void MainWindow::setupShortCuts()
    actionNewRecipe->setShortcut(QKeySequence::New);
    actionCopy_Recipe->setShortcut(QKeySequence::Copy);
    actionDeleteSelected->setShortcut(QKeySequence::Delete);
+   actionUndo->setShortcut(QKeySequence::Undo);
+   actionRedo->setShortcut(QKeySequence::Redo);
 }
 
 // Any manipulation of CSS for the MainWindow should be in here
@@ -578,46 +585,49 @@ void MainWindow::restoreSavedState()
 // anything with a SIGNAL of triggered() should go in here.
 void MainWindow::setupTriggers()
 {
-   // actions
-   connect( actionExit, &QAction::triggered, this, &QWidget::close );
-   connect( actionAbout_BrewTarget, &QAction::triggered, dialog_about, &QWidget::show );
-   connect( actionNewRecipe, &QAction::triggered, this, &MainWindow::newRecipe );
-   connect( actionImport_Recipes, &QAction::triggered, this, &MainWindow::importFiles );
-   connect( actionExportRecipe, &QAction::triggered, this, &MainWindow::exportRecipe );
-   connect( actionEquipments, &QAction::triggered, equipEditor, &QWidget::show );
-   connect( actionMashs, &QAction::triggered, namedMashEditor, &QWidget::show );
-   connect( actionStyles, &QAction::triggered, styleEditor, &QWidget::show );
-   connect( actionFermentables, &QAction::triggered, fermDialog, &QWidget::show );
-   connect( actionHops, &QAction::triggered, hopDialog, &QWidget::show );
-   connect( actionMiscs, &QAction::triggered, miscDialog, &QWidget::show );
-   connect( actionYeasts, &QAction::triggered, yeastDialog, &QWidget::show );
-   connect( actionOptions, &QAction::triggered, optionDialog, &OptionDialog::show );
-   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual );
-   connect( actionScale_Recipe, &QAction::triggered, recipeScaler, &QWidget::show );
-   connect( action_recipeToTextClipboard, &QAction::triggered, recipeFormatter, &RecipeFormatter::toTextClipboard );
-   connect( actionConvert_Units, &QAction::triggered, converterTool, &QWidget::show );
-   connect( actionHydrometer_Temp_Adjustment, &QAction::triggered, hydrometerTool, &QWidget::show );
-   connect( actionOG_Correction_Help, &QAction::triggered, ogAdjuster, &QWidget::show );
-   connect( actionCopy_Recipe, &QAction::triggered, this, &MainWindow::copyRecipe );
-   connect( actionPriming_Calculator, &QAction::triggered, primingDialog, &QWidget::show );
-   connect( actionStrikeWater_Calculator, &QAction::triggered, strikeWaterDialog, &QWidget::show );
-   connect( actionRefractometer_Tools, &QAction::triggered, refractoDialog, &QWidget::show );
-   connect( actionPitch_Rate_Calculator, &QAction::triggered, this, &MainWindow::showPitchDialog);
-   connect( actionMergeDatabases, &QAction::triggered, this, &MainWindow::updateDatabase );
-   connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );
+   // Connect actions defined in *.ui files to methods in code
+   connect( actionExit, &QAction::triggered, this, &QWidget::close );                                                   // > File > Exit
+   connect( actionAbout_BrewTarget, &QAction::triggered, dialog_about, &QWidget::show );                                // > About > About Brewtarget
+   connect( actionNewRecipe, &QAction::triggered, this, &MainWindow::newRecipe );                                       // > File > New Recipe
+   connect( actionImport_Recipes, &QAction::triggered, this, &MainWindow::importFiles );                                // > File > Import Recipes
+   connect( actionExportRecipe, &QAction::triggered, this, &MainWindow::exportRecipe );                                 // > File > Export Recipes
+   connect( actionUndo, &QAction::triggered, this, &MainWindow::editUndo );                                             // > Edit > Undo
+   connect( actionRedo, &QAction::triggered, this, &MainWindow::editRedo );                                             // > Edit > Redo
+   setUndoRedoEnable();
+   connect( actionEquipments, &QAction::triggered, equipEditor, &QWidget::show );                                       // > View > Equipments
+   connect( actionMashs, &QAction::triggered, namedMashEditor, &QWidget::show );                                        // > View > Mashs
+   connect( actionStyles, &QAction::triggered, styleEditor, &QWidget::show );                                           // > View > Styles
+   connect( actionFermentables, &QAction::triggered, fermDialog, &QWidget::show );                                      // > View > Fermentables
+   connect( actionHops, &QAction::triggered, hopDialog, &QWidget::show );                                               // > View > Hops
+   connect( actionMiscs, &QAction::triggered, miscDialog, &QWidget::show );                                             // > View > Miscs
+   connect( actionYeasts, &QAction::triggered, yeastDialog, &QWidget::show );                                           // > View > Yeasts
+   connect( actionOptions, &QAction::triggered, optionDialog, &OptionDialog::show );                                    // > Tools > Options
+   connect( actionManual, &QAction::triggered, this, &MainWindow::openManual );                                         // > About > Manual
+   connect( actionScale_Recipe, &QAction::triggered, recipeScaler, &QWidget::show );                                    // > Tools > Scale Recipe
+   connect( action_recipeToTextClipboard, &QAction::triggered, recipeFormatter, &RecipeFormatter::toTextClipboard );    // > Tools > Recipe to Clipboard as Text
+   connect( actionConvert_Units, &QAction::triggered, converterTool, &QWidget::show );                                  // > Tools > Convert Units
+   connect( actionHydrometer_Temp_Adjustment, &QAction::triggered, hydrometerTool, &QWidget::show );                    // > Tools > Hydrometer Temp Adjustment
+   connect( actionOG_Correction_Help, &QAction::triggered, ogAdjuster, &QWidget::show );                                // > Tools > OG Correction Help
+   connect( actionCopy_Recipe, &QAction::triggered, this, &MainWindow::copyRecipe );                                    // > File > Copy Recipe
+   connect( actionPriming_Calculator, &QAction::triggered, primingDialog, &QWidget::show );                             // > Tools > Priming Calculator
+   connect( actionStrikeWater_Calculator, &QAction::triggered, strikeWaterDialog, &QWidget::show );                     // > Tools > Strike Water Calculator
+   connect( actionRefractometer_Tools, &QAction::triggered, refractoDialog, &QWidget::show );                           // > Tools > Refractometer Tools
+   connect( actionPitch_Rate_Calculator, &QAction::triggered, this, &MainWindow::showPitchDialog);                      // > Tools > Pitch Rate Calculator
+   connect( actionMergeDatabases, &QAction::triggered, this, &MainWindow::updateDatabase );                             // > File > Database > Merge
+   connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );                                       // > Tools > Timers
    connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
-   connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);
+   connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
-      actionBackup_Database->setEnabled(false);
-      actionRestore_Database->setEnabled(false);
+      actionBackup_Database->setEnabled(false);                                                                         // > File > Database > Backup
+      actionRestore_Database->setEnabled(false);                                                                        // > File > Database > Restore
       label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
    }
    else {
-      connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );
-      connect( actionRestore_Database, &QAction::triggered, this, &MainWindow::restoreFromBackup );
+      connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );                                 // > File > Database > Backup
+      connect( actionRestore_Database, &QAction::triggered, this, &MainWindow::restoreFromBackup );                     // > File > Database > Restore
    }
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
@@ -944,19 +954,9 @@ void MainWindow::setRecipe(Recipe* recipe)
       disconnect( recipeObs, nullptr, this, nullptr );
    recipeObs = recipe;
 
-   recStyle = recipe->style();
+   this->recStyle = recipe->style();
    recEquip = recipe->equipment();
-
-   if( recStyle )
-   {
-      styleRangeWidget_og->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "og", Brewtarget::DENSITY ));
-      styleRangeWidget_fg->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "fg", Brewtarget::DENSITY ));
-
-      styleRangeWidget_abv->setPreferredRange(recStyle->abvMin_pct(), recStyle->abvMax_pct());
-      styleRangeWidget_ibu->setPreferredRange(recStyle->ibuMin(), recStyle->ibuMax());
-
-      styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "color_srm", Brewtarget::COLOR ));
-   }
+   this->displayRangesEtcForCurrentRecipeStyle();
 
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
@@ -987,7 +987,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    equipmentButton->setRecipe(recipe);
    singleEquipEditor->setEquipment(recEquip);
    styleButton->setRecipe(recipe);
-   singleStyleEditor->setStyle(recStyle);
+   singleStyleEditor->setStyle(recipe->style());
 
    mashEditor->setMash(recipeObs->mash());
    mashEditor->setRecipe(recipeObs);
@@ -1162,7 +1162,30 @@ void MainWindow::updateRecipeName()
    if( recipeObs == nullptr || ! lineEdit_name->isModified())
       return;
 
-   recipeObs->setName(lineEdit_name->text());
+   this->doOrRedoUpdate(*this->recipeObs, "name", lineEdit_name->text(), tr("Change Recipe Name"));
+}
+
+void MainWindow::displayRangesEtcForCurrentRecipeStyle()
+{
+   if ( this->recipeObs == nullptr ) {
+      return;
+   }
+
+   Style * style = this->recipeObs->style();
+   if ( style == nullptr ) {
+      return;
+   }
+
+   styleRangeWidget_og->setPreferredRange( Brewtarget::displayRange(style, tab_recipe, "og", Brewtarget::DENSITY ));
+   styleRangeWidget_fg->setPreferredRange( Brewtarget::displayRange(style, tab_recipe, "fg", Brewtarget::DENSITY ));
+
+   styleRangeWidget_abv->setPreferredRange(style->abvMin_pct(), style->abvMax_pct());
+   styleRangeWidget_ibu->setPreferredRange(style->ibuMin(), style->ibuMax());
+   styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(style, tab_recipe, "color_srm", Brewtarget::COLOR));
+
+   this->styleButton->setStyle(style);
+
+   return;
 }
 
 void MainWindow::updateRecipeStyle()
@@ -1175,14 +1198,14 @@ void MainWindow::updateRecipeStyle()
    Style* selected = styleListModel->at(sourceIndex.row());
    if( selected )
    {
-      Database::instance().addToRecipe( recipeObs, selected );
-
-      styleRangeWidget_og->setPreferredRange( Brewtarget::displayRange(selected, tab_recipe, "og", Brewtarget::DENSITY ));
-      styleRangeWidget_fg->setPreferredRange( Brewtarget::displayRange(selected, tab_recipe, "fg", Brewtarget::DENSITY ));
-
-      styleRangeWidget_abv->setPreferredRange(selected->abvMin_pct(), selected->abvMax_pct());
-      styleRangeWidget_ibu->setPreferredRange(selected->ibuMin(), selected->ibuMax());
-      styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(selected, tab_recipe, "color_srm", Brewtarget::COLOR));
+      this->doOrRedoUpdate(
+         newRelationalUndoableUpdate(*this->recipeObs,
+                                     &Recipe::setStyle,
+                                     this->recipeObs->style(),
+                                     selected,
+                                     &MainWindow::displayRangesEtcForCurrentRecipeStyle,
+                                     tr("Change Recipe Style"))
+      );
    }
 }
 
@@ -1205,6 +1228,14 @@ void MainWindow::updateRecipeEquipment()
   droppedRecipeEquipment(equipmentListModel->at(equipmentComboBox->currentIndex()));
 }
 
+void MainWindow::updateEquipmentButton()
+{
+   if (this->recipeObs != nullptr) {
+      this->equipmentButton->setEquipment(this->recipeObs->equipment());
+   }
+   return;
+}
+
 void MainWindow::droppedRecipeEquipment(Equipment *kit)
 {
    if( recipeObs == nullptr )
@@ -1214,9 +1245,13 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    if( kit == nullptr )
       return;
 
-   // Notice that we are using a copy from the database.
-   Database::instance().addToRecipe(recipeObs,kit);
-   equipmentButton->setEquipment(kit);
+   // We need to hang on to this QUndoCommand pointer because there might be other updates linked to it - see below
+   auto equipmentUpdate = newRelationalUndoableUpdate(*this->recipeObs,
+                                                      &Recipe::setEquipment,
+                                                      this->recipeObs->equipment(),
+                                                      kit,
+                                                      &MainWindow::updateEquipmentButton,
+                                                      tr("Change Recipe Kit"));
 
    // Keep the mash tun weight and specific heat up to date.
    Mash* m = recipeObs->mash();
@@ -1234,19 +1269,43 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
         == QMessageBox::Yes
      )
    {
-      recipeObs->setBatchSize_l( kit->batchSize_l() );
-      recipeObs->setBoilSize_l( kit->boilSize_l() );
-      recipeObs->setBoilTime_min( kit->boilTime_min() );
-      mashEditor->setRecipe(recipeObs);
+      // If we do update batch size etc as a result of the equipment change, then we want those updates to undo/redo
+      // if and when the equipment change is undone/redone.  Setting the parent field on a QUndoCommand makes that
+      // parent the owner, responsible for invoking, deleting, etc.  Technically the descriptions of these subcommands
+      // won't ever be seen by the user, but there's no harm in setting them.
+      // (The previous call here to mashEditor->setRecipe() was a roundabout way of calling setTunWeight_kg() and
+      // setTunSpecificHeat_calGC() on the mash.)
+      new SimpleUndoableUpdate(*this->recipeObs, "batchSize_l", kit->batchSize_l(), tr("Change Batch Size"), equipmentUpdate);
+      new SimpleUndoableUpdate(*this->recipeObs, "boilSize_l", kit->boilSize_l(), tr("Change Boil Size"), equipmentUpdate);
+      new SimpleUndoableUpdate(*this->recipeObs, "boilTime_min", kit->boilTime_min(), tr("Change Boil Time"), equipmentUpdate);
+      Mash * mash = this->recipeObs->mash();
+      new SimpleUndoableUpdate(*mash, "tunWeight_kg", mash->tunWeight_kg(), tr("Change Tun Weight"), equipmentUpdate);
+      new SimpleUndoableUpdate(*mash, "tunSpecificHeat_calGC", mash->tunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
    }
+
+   // This will do the equipment update and any related updates - see above
+   this->doOrRedoUpdate(equipmentUpdate);
 }
 
+// This isn't called when we think it is...!
 void MainWindow::droppedRecipeStyle(Style* style)
 {
+   Brewtarget::logD("MainWindow::droppedRecipeStyle");
+
    if ( ! recipeObs )
       return;
-   Database::instance().addToRecipe( recipeObs, style);
-   styleButton->setStyle( style );
+   // When the style is changed, we also need to update what is shown on the Style button
+   Brewtarget::logD("MainWindow::droppedRecipeStyle - do or redo");
+   this->doOrRedoUpdate(
+      newRelationalUndoableUpdate(*this->recipeObs,
+                                  &Recipe::setStyle,
+                                  this->recipeObs->style(),
+                                  style,
+                                  &MainWindow::displayRangesEtcForCurrentRecipeStyle,
+                                  tr("Change Recipe Style"))
+   );
+
+   return;
 }
 
 // Well, aint this a kick in the pants. Apparently I can't template a slot
@@ -1295,7 +1354,7 @@ void MainWindow::updateRecipeBatchSize()
    if( recipeObs == nullptr )
       return;
 
-   recipeObs->setBatchSize_l( lineEdit_batchSize->toSI() );
+   this->doOrRedoUpdate(*this->recipeObs, "batchSize_l", lineEdit_batchSize->toSI(), tr("Change Batch Size"));
 }
 
 void MainWindow::updateRecipeBoilSize()
@@ -1303,7 +1362,7 @@ void MainWindow::updateRecipeBoilSize()
    if( recipeObs == nullptr )
       return;
 
-   recipeObs->setBoilSize_l( lineEdit_boilSize->toSI() );
+   this->doOrRedoUpdate(*this->recipeObs, "boilSize_l", lineEdit_boilSize->toSI(), tr("Change Boil Size"));
 }
 
 void MainWindow::updateRecipeBoilTime()
@@ -1322,9 +1381,11 @@ void MainWindow::updateRecipeBoilTime()
    // NOTE: This works because kit is the recipe's equipment, not the generic
    // equipment in the recipe drop down.
    if( kit )
-      kit->setBoilTime_min(boilTime);
+      this->doOrRedoUpdate(*kit, "boilTime_min", boilTime, tr("Change Boil Time"));
    else
-      recipeObs->setBoilTime_min(boilTime);
+      this->doOrRedoUpdate(*this->recipeObs, "boilTime_min", boilTime, tr("Change Boil Time"));
+
+   return;
 }
 
 void MainWindow::updateRecipeEfficiency()
@@ -1332,31 +1393,83 @@ void MainWindow::updateRecipeEfficiency()
    if( recipeObs == nullptr )
       return;
 
-   recipeObs->setEfficiency_pct( lineEdit_efficiency->toSI() );
+   this->doOrRedoUpdate(*this->recipeObs, "efficiency_pct", lineEdit_efficiency->toSI(), tr("Change Recipe Efficiency"));
+   return;
 }
 
 void MainWindow::addFermentableToRecipe(Fermentable* ferm)
 {
-   recipeObs->addFermentable(ferm);
-   fermTableModel->addFermentable(ferm);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::addFermentable,
+                             ferm,
+                             &Recipe::remove<Fermentable>,
+                             tr("Add fermentable to recipe"))
+   );
+   // We don't need to call fermTableModel->addFermentable(ferm) here because the change to the recipe will already have
+   // triggered the necessary updates to fermTableModel.
 }
 
 void MainWindow::addHopToRecipe(Hop *hop)
 {
-   recipeObs->addHop(hop);
-   hopTableModel->addHop(hop);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::addHop,
+                             hop,
+                             &Recipe::remove<Hop>,
+                             tr("Add hop to recipe"))
+   );
+   // We don't need to call hopTableModel->addHop(hop) here because the change to the recipe will already have
+   // triggered the necessary updates to hopTableModel.
 }
 
 void MainWindow::addMiscToRecipe(Misc* misc)
 {
-   recipeObs->addMisc(misc);
-   miscTableModel->addMisc(misc);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::addMisc,
+                             misc,
+                             &Recipe::remove<Misc>,
+                             tr("Add misc to recipe"))
+   );
+   // We don't need to call miscTableModel->addMisc(misc) here because the change to the recipe will already have
+   // triggered the necessary updates to miscTableModel.
 }
 
 void MainWindow::addYeastToRecipe(Yeast* yeast)
 {
-   recipeObs->addYeast(yeast);
-   yeastTableModel->addYeast(yeast);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::addYeast,
+                             yeast,
+                             &Recipe::remove<Yeast>,
+                             tr("Add yeast to recipe"))
+   );
+   // We don't need to call yeastTableModel->addYeast(yeast) here because the change to the recipe will already have
+   // triggered the necessary updates to yeastTableModel.
+}
+
+void MainWindow::postAddMashStepToMash(MashStep * mashStep) {
+   this->mashStepTableModel->addMashStep(mashStep);
+   return;
+}
+
+void MainWindow::addMashStepToMash(MashStep * mashStep)
+{
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs->mash(),
+                             &Mash::addMashStep,
+                             mashStep,
+                             &Mash::removeMashStep,
+                             &MainWindow::postAddMashStepToMash,
+                             static_cast<void (MainWindow::*)(MashStep *)>(nullptr),
+                             tr("Add mash step to recipe"))
+   );
+   // .:TBD:. (MY 2020-11-24) For some reason that I didn't work out yet, mashStepTableModel is not plumbed in quite
+   //         the same as the other table models, hence the need to add the callback to update it (otherwise Redo of
+   //         add MashStep will not update the display correctly).  This works, but is a bit of a hack.  At some
+   //         point it would be good to bring MashStepTableModel closer into line with similar classes - perhaps
+   //         even by pulling out some of the common/similar code into a base class or template...
 }
 
 void MainWindow::exportRecipe()
@@ -1397,6 +1510,62 @@ void MainWindow::exportRecipe()
 Recipe* MainWindow::currentRecipe()
 {
    return recipeObs;
+}
+
+void MainWindow::setUndoRedoEnable()
+{
+   Q_ASSERT(this->undoStack != 0);
+   actionUndo->setEnabled(this->undoStack->canUndo());
+   actionRedo->setEnabled(this->undoStack->canRedo());
+
+   actionUndo->setText(QString(tr("Undo %1").arg(this->undoStack->undoText())));
+   actionRedo->setText(QString(tr("Redo %1").arg(this->undoStack->redoText())));
+
+   return;
+}
+
+void MainWindow::doOrRedoUpdate(QUndoCommand * update)
+{
+   Q_ASSERT(this->undoStack != 0);
+   this->undoStack->push(update);
+   this->setUndoRedoEnable();
+   return;
+}
+
+void MainWindow::doOrRedoUpdate(QObject & updatee,
+                                char const * const propertyName,
+                                QVariant newValue,
+                                QString const & description,
+                                QUndoCommand * parent) {
+   this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyName, newValue, description));
+   return;
+}
+
+// For undo/redo, we use Qt's Undo framework
+void MainWindow::editUndo()
+{
+   Q_ASSERT(this->undoStack != 0);
+   if ( !this->undoStack->canUndo() ) {
+      Brewtarget::logD("Undo called but nothing to undo");
+   } else {
+      this->undoStack->undo();
+   }
+
+   setUndoRedoEnable();
+   return;
+}
+
+void MainWindow::editRedo()
+{
+   Q_ASSERT(this->undoStack != 0);
+   if ( !this->undoStack->canRedo() ) {
+      Brewtarget::logD("Redo called but nothing to redo");
+   } else {
+      this->undoStack->redo();
+   }
+
+   setUndoRedoEnable();
+   return;
 }
 
 Fermentable* MainWindow::selectedFermentable()
@@ -1502,32 +1671,66 @@ Yeast* MainWindow::selectedYeast()
    return y;
 }
 
+void MainWindow::removeHop(Hop * itemToRemove) {
+   this->hopTableModel->removeHop(itemToRemove);
+   return;
+}
+void MainWindow::removeFermentable(Fermentable * itemToRemove) {
+   this->fermTableModel->removeFermentable(itemToRemove);
+   return;
+}
+void MainWindow::removeMisc(Misc * itemToRemove) {
+   this->miscTableModel->removeMisc(itemToRemove);
+   return;
+}
+void MainWindow::removeYeast(Yeast * itemToRemove) {
+   this->yeastTableModel->removeYeast(itemToRemove);
+   return;
+}
+
+void MainWindow::removeMashStep(MashStep * itemToRemove) {
+   this->mashStepTableModel->removeMashStep(itemToRemove);
+   return;
+}
+
 
 void MainWindow::removeSelectedFermentable()
 {
-    QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
-    QModelIndex viewIndex, modelIndex;
-    QList<Fermentable *> itemsToRemove;
-    int size, i;
 
-    size = selected.size();
+   QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
+   QModelIndex viewIndex, modelIndex;
+   QList<Fermentable *> itemsToRemove;
+   int size, i;
 
-    if( size == 0 )
-       return;
+   size = selected.size();
 
-    for(int i = 0; i < size; i++)
-    {
-        viewIndex = selected.at(i);
-        modelIndex = fermTableProxy->mapToSource(viewIndex);
+   Brewtarget::logD(QString("MainWindow::removeSelectedFermentable() %1 items selected to remove").arg(size));
 
-        itemsToRemove.append(fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row())));
+   if( size == 0 )
+      return;
+
+   for(int i = 0; i < size; i++)
+   {
+      viewIndex = selected.at(i);
+      modelIndex = fermTableProxy->mapToSource(viewIndex);
+
+      itemsToRemove.append(fermTableModel->getFermentable(static_cast<unsigned int>(modelIndex.row())));
+   }
+
+   for(i = 0; i < itemsToRemove.size(); i++)
+   {
+      this->doOrRedoUpdate(
+         newUndoableAddOrRemove(*this->recipeObs,
+                                &Recipe::remove<Fermentable>,
+                                itemsToRemove.at(i),
+                                &Recipe::addFermentable,
+                                &MainWindow::removeFermentable,
+                                static_cast<void (MainWindow::*)(Fermentable *)>(nullptr),
+                                tr("Remove fermentable from recipe"))
+      );
     }
 
-    for(i = 0; i < itemsToRemove.size(); i++)
-    {
-        fermTableModel->removeFermentable(itemsToRemove.at(i));
-        recipeObs->remove(itemsToRemove.at(i));
-    }
+    return;
 }
 
 
@@ -1573,85 +1776,106 @@ void MainWindow::editSelectedYeast()
 
 void MainWindow::removeSelectedHop()
 {
-    QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
-    QModelIndex modelIndex, viewIndex;
-    QList<Hop *> itemsToRemove;
-    int size, i;
+   QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
+   QList<Hop *> itemsToRemove;
+   int size, i;
 
-    size = selected.size();
+   size = selected.size();
 
-    if( size == 0 )
-       return;
+   if( size == 0 )
+      return;
 
-    for(int i = 0; i < size; i++)
-    {
-        viewIndex = selected.at(i);
-        modelIndex = hopTableProxy->mapToSource(viewIndex);
+   for(int i = 0; i < size; i++)
+   {
+      viewIndex = selected.at(i);
+      modelIndex = hopTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(hopTableModel->getHop(modelIndex.row()));
-    }
+      itemsToRemove.append(hopTableModel->getHop(modelIndex.row()));
+   }
 
-    for(i = 0; i < itemsToRemove.size(); i++)
-    {
-        hopTableModel->removeHop(itemsToRemove.at(i));
-        recipeObs->remove(itemsToRemove.at(i));
-    }
+   for(i = 0; i < itemsToRemove.size(); i++)
+   {
+      this->doOrRedoUpdate(
+         newUndoableAddOrRemove(*this->recipeObs,
+                                 &Recipe::remove<Hop>,
+                                 itemsToRemove.at(i),
+                                 &Recipe::addHop,
+                                 &MainWindow::removeHop,
+                                 static_cast<void (MainWindow::*)(Hop *)>(nullptr),
+                                 tr("Remove hop from recipe"))
+      );
+   }
 
 }
 
 
 void MainWindow::removeSelectedMisc()
 {
-    QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
-    QModelIndex modelIndex, viewIndex;
-    QList<Misc *> itemsToRemove;
-    int size, i;
+   QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
+   QList<Misc *> itemsToRemove;
+   int size, i;
 
-    size = selected.size();
+   size = selected.size();
 
-    if( size == 0 )
-       return;
+   if( size == 0 )
+      return;
 
-    for(int i = 0; i < size; i++)
-    {
-        viewIndex = selected.at(i);
-        modelIndex = miscTableProxy->mapToSource(viewIndex);
+   for(int i = 0; i < size; i++)
+   {
+      viewIndex = selected.at(i);
+      modelIndex = miscTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row())));
-    }
+      itemsToRemove.append(miscTableModel->getMisc(static_cast<unsigned int>(modelIndex.row())));
+   }
 
-    for(i = 0; i < itemsToRemove.size(); i++)
-    {
-       miscTableModel->removeMisc(itemsToRemove.at(i));
-       recipeObs->remove(itemsToRemove.at(i));
-    }
+   for(i = 0; i < itemsToRemove.size(); i++)
+   {
+      this->doOrRedoUpdate(
+         newUndoableAddOrRemove(*this->recipeObs,
+                                 &Recipe::remove<Misc>,
+                                 itemsToRemove.at(i),
+                                 &Recipe::addMisc,
+                                 &MainWindow::removeMisc,
+                                 static_cast<void (MainWindow::*)(Misc *)>(nullptr),
+                                 tr("Remove misc from recipe"))
+      );
+   }
 }
 
 void MainWindow::removeSelectedYeast()
 {
-    QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
-    QModelIndex modelIndex, viewIndex;
-    QList<Yeast *> itemsToRemove;
-    int size, i;
+   QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
+   QList<Yeast *> itemsToRemove;
+   int size, i;
 
-    size = selected.size();
+   size = selected.size();
 
-    if( size == 0 )
-       return;
+   if( size == 0 )
+      return;
 
-    for(int i = 0; i < size; i++)
-    {
-        viewIndex = selected.at(i);
-        modelIndex = yeastTableProxy->mapToSource(viewIndex);
+   for(int i = 0; i < size; i++)
+   {
+      viewIndex = selected.at(i);
+      modelIndex = yeastTableProxy->mapToSource(viewIndex);
 
-        itemsToRemove.append(yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row())));
-    }
+      itemsToRemove.append(yeastTableModel->getYeast(static_cast<unsigned int>(modelIndex.row())));
+   }
 
-    for(i = 0; i < itemsToRemove.size(); i++)
-    {
-       yeastTableModel->removeYeast(itemsToRemove.at(i));
-       recipeObs->remove(itemsToRemove.at(i));
-    }
+   for(i = 0; i < itemsToRemove.size(); i++)
+   {
+      this->doOrRedoUpdate(
+         newUndoableAddOrRemove(*this->recipeObs,
+                                 &Recipe::remove<Yeast>,
+                                 itemsToRemove.at(i),
+                                 &Recipe::addYeast,
+                                 &MainWindow::removeYeast,
+                                 static_cast<void (MainWindow::*)(Yeast *)>(nullptr),
+                                 tr("Remove yeast from recipe"))
+      );
+   }
 }
 
 void MainWindow::newRecipe()
@@ -1693,7 +1917,7 @@ void MainWindow::newRecipe()
       }
    }
 
-   Database::instance().insertRecipe(newRec);
+   newRec->insertInDatabase();
 
    // a new recipe will be put in a folder if you right click on a recipe or
    // folder. Otherwise, it goes into the main window?
@@ -2050,10 +2274,9 @@ void MainWindow::addMashStep()
       return;
    }
 
-   // MashStep* step = Database::instance().newMashStep(mash);
    MashStep* step = new MashStep(true);
+   step->setMash(mash);
    mashStepEditor->setMashStep(step);
-   mashStepEditor->setParentMash(mash);
    mashStepEditor->setVisible(true);
 }
 
@@ -2079,7 +2302,18 @@ void MainWindow::removeSelectedMashStep()
    }
 
    MashStep* step = mashStepTableModel->getMashStep(static_cast<unsigned int>(row));
-   Database::instance().removeFrom(mash,step);
+
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs->mash(),
+                              &Mash::removeMashStep,
+                              step,
+                              &Mash::addMashStep,
+                              &MainWindow::removeMashStep,
+                              &MainWindow::postAddMashStepToMash,
+                              tr("Remove mash step"))
+   );
+
+   return;
 }
 
 void MainWindow::moveSelectedMashStepUp()

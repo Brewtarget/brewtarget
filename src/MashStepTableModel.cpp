@@ -1,6 +1,7 @@
 /*
  * MashStepTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -35,6 +36,8 @@
 #include "MashStepTableModel.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "SimpleUndoableUpdate.h"
+#include "MainWindow.h"
 
 MashStepTableModel::MashStepTableModel(QTableView* parent)
    : QAbstractTableModel(parent),
@@ -46,6 +49,42 @@ MashStepTableModel::MashStepTableModel(QTableView* parent)
    QHeaderView* headerView = parentTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(headerView, &QWidget::customContextMenuRequested, this, &MashStepTableModel::contextMenu);
+}
+
+void MashStepTableModel::addMashStep(MashStep * mashStep)
+{
+   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+
+   if (mashStep == nullptr || this->steps.contains(mashStep)) {
+      return;
+   }
+
+   int size {this->steps.size()};
+   beginInsertRows( QModelIndex(), size, size );
+   this->steps.append(mashStep);
+   connect( mashStep, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   //reset(); // Tell everybody that the table has changed.
+   endInsertRows();
+   return;
+}
+
+bool MashStepTableModel::removeMashStep(MashStep * mashStep)
+{
+   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+
+   int i {this->steps.indexOf(mashStep)};
+   if( i >= 0 )
+   {
+      beginRemoveRows( QModelIndex(), i, i );
+      disconnect( mashStep, nullptr, this, nullptr );
+      this->steps.removeAt(i);
+      //reset(); // Tell everybody the table has changed.
+      endRemoveRows();
+
+      return true;
+   }
+
+   return false;
 }
 
 void MashStepTableModel::setMash( Mash* m )
@@ -149,7 +188,6 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
       if ( prop.name() == QStringLiteral("stepNumber") ) {
          reorderMashStep(stepSender,i);
       }
-
 
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS-1));
@@ -285,7 +323,10 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPNAMECOL:
          if( value.canConvert(QVariant::String))
          {
-            row->setName(value.toString());
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "name",
+                                                     value.toString(),
+                                                     tr("Change Mash Step Name"));
             return true;
          }
          else
@@ -293,7 +334,10 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTYPECOL:
          if( value.canConvert(QVariant::Int) )
          {
-            row->setType(static_cast<MashStep::Type>(value.toInt()));
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "type",
+                                                     static_cast<MashStep::Type>(value.toInt()),
+                                                     tr("Change Mash Step Type"));
             return true;
          }
          else
@@ -301,10 +345,17 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            if( row->type() == MashStep::Decoction )
-               row->setDecoctionAmount_l( Brewtarget::qStringToSI(value.toString(),Units::liters,dspUnit,dspScl) );
-            else
-               row->setInfuseAmount_l( Brewtarget::qStringToSI(value.toString(),Units::liters,dspUnit,dspScl) );
+            if( row->type() == MashStep::Decoction ) {
+               Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                        "decoctionAmount_l",
+                                                        Brewtarget::qStringToSI(value.toString(),Units::liters,dspUnit,dspScl),
+                                                        tr("Change Mash Step Decoction Amount"));
+            } else {
+               Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                        "infuseAmount_l",
+                                                        Brewtarget::qStringToSI(value.toString(),Units::liters,dspUnit,dspScl),
+                                                        tr("Change Mash Step Infuse Amount"));
+            }
             return true;
          }
          else
@@ -312,7 +363,10 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTEMPCOL:
          if( value.canConvert(QVariant::String) && row->type() != MashStep::Decoction )
          {
-            row->setInfuseTemp_c( Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl) );
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                      "infuseTemp_c",
+                                                      Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
+                                                      tr("Change Mash Step Infuse Temp"));
             return true;
          }
          else
@@ -320,8 +374,20 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTARGETTEMPCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setStepTemp_c( Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl) );
-            row->setEndTemp_c( Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl) );
+            // Two changes, but we want to group together as one undo/redo step
+            //
+            // We don't assign the pointer (returned by new) to second SimpleUndoableUpdate we create because, in the
+            // constructor, it gets linked to the first one, which then "owns" it.
+            auto targetTempUpdate = new SimpleUndoableUpdate(*row,
+                                                             "stepTemp_c",
+                                                             Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
+                                                             tr("Change Mash Step Temp"));
+            new SimpleUndoableUpdate(*row,
+                                     "endTemp_c",
+                                     Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
+                                     tr("Change Mash Step End Temp"),
+                                     targetTempUpdate);
+            Brewtarget::mainWindow()->doOrRedoUpdate(targetTempUpdate);
             return true;
          }
          else
@@ -329,7 +395,10 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTIMECOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setStepTime_min( Brewtarget::qStringToSI(value.toString(),Units::minutes,dspUnit,dspScl) );
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                      "stepTime_min",
+                                                      Brewtarget::qStringToSI(value.toString(),Units::minutes,dspUnit,dspScl),
+                                                      tr("Change Mash Step Time"));
             return true;
          }
          else

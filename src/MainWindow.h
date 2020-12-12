@@ -1,8 +1,9 @@
  /*
  * MainWindow.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -38,7 +39,9 @@ class MainWindow;
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTimer>
+#include <QUndoStack>
 #include "ui_mainWindow.h"
+#include "SimpleUndoableUpdate.h"
 
 #include <functional>
 
@@ -131,6 +134,8 @@ public slots:
 
    //! \brief Update Recipe name to that given by the relevant widget.
    void updateRecipeName();
+   //! \brief Redisplay the OG, FG, etc ranges for the style of the current recipe.  Needs to be called whenever the recipe style is changed.
+   void displayRangesEtcForCurrentRecipeStyle();
    //! \brief Update Recipe Style to that given by the relevant widget.
    void updateRecipeStyle();
    //! \brief Update Recipe Equipment to that given by the relevant widget.
@@ -182,8 +187,12 @@ public slots:
    //! \brief Edit selected Yeast
    void editSelectedYeast();
 
-   //! \brief Add a new mash step to the recipe.
+   //! \brief Invoke the pop-up Window to add a new mash step to (the mash of) the recipe.
    void addMashStep();
+   //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
+   void addMashStepToMash(MashStep*);
+   //! \brief Update the display once a mash step is added.
+   void postAddMashStepToMash(MashStep * mashStep);
    //! \brief Move currently selected mash step down.
    void moveSelectedMashStepUp();
    //! \brief Move currently selected mash step up.
@@ -207,6 +216,11 @@ public slots:
    void importFiles();
    //! \brief Create a duplicate of the current recipe.
    void copyRecipe();
+
+   //! \brief Implements "> Edit > Undo"
+   void editUndo();
+   //! \brief Implements "> Edit > Redo"
+   void editRedo();
 
    //! \brief Create a new folder
    void newFolder();
@@ -267,6 +281,8 @@ public slots:
    void showEquipmentEditor();
    void showStyleEditor();
 
+   void updateEquipmentButton();
+
    //! \brief Set the equipment based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
    void droppedRecipeStyle(Style *style);
@@ -274,6 +290,19 @@ public slots:
    void droppedRecipeHop(QList<Hop*>hops);
    void droppedRecipeMisc(QList<Misc*>miscs);
    void droppedRecipeYeast(QList<Yeast*>yeasts);
+
+   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the most generic version
+   //         which requires the caller to construct a QUndoCommand.
+   void doOrRedoUpdate(QUndoCommand * update);
+
+public:
+   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
+   //         which suffices for modifications to most individual non-relational attributes.
+   void doOrRedoUpdate(QObject & updatee,
+                       char const * const propertyName,
+                       QVariant newValue,
+                       QString const & description,
+                       QUndoCommand * parent = nullptr);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);
@@ -289,8 +318,22 @@ private slots:
     */
    void showChanges(QMetaProperty* prop = nullptr);
 
+   //! \brief Set whether undo / redo commands are enabled
+   void setUndoRedoEnable();
+
 private:
+
+   void removeHop(Hop * itemToRemove);
+   void removeFermentable(Fermentable * itemToRemove);
+   void removeMisc(Misc * itemToRemove);
+   void removeYeast(Yeast * itemToRemove);
+   void removeMashStep(MashStep * itemToRemove);
+//   void removeWater(Water * itemToRemove);
+//   void removeSalt(Salt * itemToRemove);
+
    Recipe* recipeObs;
+   // TBD: (MY 2020-11-24) Not sure whether we need to store recipe style (since it ought to be available from the
+   //      recipe) or whether this is just for convenience.
    Style* recStyle;
    Equipment* recEquip;
 
@@ -344,7 +387,7 @@ private:
    EquipmentListModel* equipmentListModel;
    MashListModel* mashListModel;
    StyleListModel* styleListModel;
-   WaterListModel* waterListModel;
+//   WaterListModel* waterListModel;  Appears to be unused...
 
    // all things sort/filter proxy go here
    FermentableSortFilterProxyModel* fermTableProxy;
@@ -358,6 +401,9 @@ private:
 
    BtDatePopup* btDatePopup;
    int confirmDelete;
+
+   // Undo / Redo, using the Qt Undo framework
+   QUndoStack* undoStack = nullptr;
 
    //! \brief Fix pixel dimensions according to dots-per-inch (DPI) of screen we're on.
    void setSizesInPixelsBasedOnDpi();

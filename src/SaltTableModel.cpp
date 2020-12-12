@@ -1,6 +1,6 @@
 /*
  * SaltTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - swstim <swstim@gmail.com>
@@ -653,7 +653,7 @@ void SaltTableModel::saveAndClose()
    // we've added a new salt. Wonder if this will work?
    foreach( Salt* i, saltObs ) {
       if ( i->cacheOnly() && i->type() != Salt::NONE && i->addTo() != Salt::NEVER ) {
-         Database::instance().insertSalt(i);
+         i->insertInDatabase();
          Database::instance().addToRecipe(m_rec,i,true);
       }
    }
@@ -703,7 +703,7 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
          if ( ! m_mash->hasSparge() ) {
             for( int i = 2; i < 5; ++i ) {
                QStandardItem* entry = i_model->item(i);
-               if ( entry ) 
+               if ( entry )
                   entry->setEnabled(false);
             }
          }

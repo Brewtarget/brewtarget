@@ -1,7 +1,8 @@
 /*
  * salt.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - mik fml firestone
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +28,7 @@
 #include "brewtarget.h"
 #include "TableSchemaConst.h"
 #include "SaltSchema.h"
+#include "database.h"
 
 bool operator<(const Salt &s1, const Salt &s2)
 {
@@ -252,4 +254,8 @@ double Salt::SO4() const
       case Salt::MGSO4: return 389.0 * m_amount * 1000.0;
       default: return 0.0;
    }
+}
+
+int Salt::insertInDatabase() {
+   return Database::instance().insertSalt(this);
 }

@@ -79,13 +79,18 @@ public:
    QString generateName(int column) const;
 
 public slots:
+   //! \brief Add a MashStep to the model.
+   void addMashStep(MashStep * mashStep);
+   //! \returns true if mashStep is successfully found and removed.
+   bool removeMashStep(MashStep * MashStep);
+
    void moveStepUp(int i);
    void moveStepDown(int i);
    void mashChanged();
    void mashStepChanged(QMetaProperty,QVariant);
 
    void contextMenu(const QPoint &point);
-   
+
 private:
    Mash* mashObs;
    QTableView* parentTableWidget;

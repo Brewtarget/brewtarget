@@ -166,7 +166,8 @@ void MashDesigner::saveStep()
    }
 
    if ( mashStep->cacheOnly() ) {
-      Database::instance().insertMashStep(mashStep, mash);
+      mashStep->setMash(mash);
+      mashStep->insertInDatabase();
    }
 }
 
@@ -376,7 +377,7 @@ bool MashDesigner::initializeMash()
    horizontalSlider_amount->setValue(0); // As thick as possible initially.
 
    if ( mash->cacheOnly() ) {
-       Database::instance().insertMash(mash);
+       mash->insertInDatabase();
        Database::instance().addToRecipe(recObs, mash, true);
    }
    return true;

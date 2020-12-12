@@ -1,6 +1,7 @@
 /*
  * style.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -24,6 +25,7 @@
 
 #include "TableSchemaConst.h"
 #include "StyleSchema.h"
+#include "database.h"
 
 QStringList Style::m_types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 
@@ -407,3 +409,23 @@ bool Style::isValidType( const QString &str )
    return m_types.contains( str );
 }
 
+Ingredient * Style::getParent() {
+   Style * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().style(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Style::insertInDatabase() {
+   return Database::instance().insertStyle(this);
+}

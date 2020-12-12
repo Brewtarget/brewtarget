@@ -1,6 +1,7 @@
 /*
  * equipment.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -28,6 +29,8 @@
 
 #include "TableSchemaConst.h"
 #include "EquipmentSchema.h"
+#include "database.h"
+
 
 bool operator<(Equipment &e1, Equipment &e2)
 {
@@ -451,4 +454,25 @@ double Equipment::wortEndOfBoil_l( double kettleWort_l ) const
    //return kettleWort_l * (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
 
    return kettleWort_l - (boilTime_min()/(double)60)*evapRate_lHr();
+}
+
+Ingredient * Equipment::getParent() {
+   Equipment * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().equipment(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Equipment::insertInDatabase() {
+   return Database::instance().insertEquipment(this);
 }
