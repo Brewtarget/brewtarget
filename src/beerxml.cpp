@@ -43,6 +43,7 @@
 #include <xercesc/dom/DOMImplementation.hpp>
 #include <xercesc/dom/DOMImplementationRegistry.hpp>
 #include <xercesc/dom/DOMLSParser.hpp>
+#include <xercesc/framework/XMLGrammarPoolImpl.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
 
@@ -67,7 +68,11 @@
 // This private implementation class holds all private non-virtual members of BeerXML
 class BeerXML::impl {
 public:
-   impl() {
+
+   /**
+    * Constructor
+    */
+   impl() : grammarPool(xercesc::XMLPlatformUtils::fgMemoryManager) {
       this->loadSchemas();
       return;
    }
@@ -130,9 +135,7 @@ public:
       // See https://stackoverflow.com/questions/52275608/xerces-c-validate-xml-with-hardcoded-xsd and
       // http://www.codesynthesis.com/~boris/blog/2010/03/15/validating-external-schemas-xerces-cxx/ (plus linked
       // public-domain example code) for advice about using fixed application-determined XSDs rather than trying to pull
-      // them off the internet on the fly.  NB: I have ignored the suggestion to use XMLGrammarPoolImpl as, AFAICT from
-      // https://xerces.apache.org/xerces-c/apiDocs-3/annotated.html this an internal class to Xerces and is not part of
-      // the API.
+      // them off the internet on the fly.
       //
       // The mysterious "features" parameter that we need to pass in to DOMImplementationRegistry::getDOMImplementation()
       // come from W3C DOM specifications - see eg:
@@ -160,9 +163,7 @@ public:
       // string into an array of XMLCh, but it's a bit clunky.)
       //
       XMLCh features[] {xercesc::chLatin_L, xercesc::chLatin_S, xercesc::chNull};
-      xercesc::DOMImplementation * domImplementation {
-         xercesc::DOMImplementationRegistry::getDOMImplementation(features)
-      };
+      this->domImplementation = xercesc::DOMImplementationRegistry::getDOMImplementation(features);
 
       //
       // According to https://xerces.apache.org/xerces-c/program-dom-3.html, DOMLSParser is a new interface introduced by
@@ -171,16 +172,16 @@ public:
       // https://markmail.org/message/5ztcgzgb5a7ldys3, DOMLSParser supersedes XercesDOMParser (which is nonetheless still
       // available to use).
       //
-      xercesc::DOMLSParser * parser {
+      this->parser =
          domImplementation->createLSParser(xercesc::DOMImplementationLS::MODE_SYNCHRONOUS,
-                                           nullptr) ////TBD do we need "http://www.w3.org/2001/XMLSchema" for XML schema?
-
-      };
+                                           nullptr, ////TBD do we need "http://www.w3.org/2001/XMLSchema" for XML schema?
+                                           xercesc::XMLPlatformUtils::fgMemoryManager,
+                                           &this->grammarPool);
 
       //
       // See https://xerces.apache.org/xerces-c/program-dom-3.html for full details of these config options
       //
-      xercesc::DOMConfiguration * config{parser->getDomConfig()};
+      xercesc::DOMConfiguration * config = this->parser->getDomConfig();
       config->setParameter(xercesc::XMLUni::fgDOMComments, false);                 // Discard Comment nodes in document
       config->setParameter(xercesc::XMLUni::fgDOMDatatypeNormalization, true);     // Let validation process do datatype normalization
       config->setParameter(xercesc::XMLUni::fgDOMEntities, false);                 // Do not create EntityReference nodes
@@ -216,7 +217,16 @@ public:
 
       return;
    }
+
+private:
+   // XMLGrammarPoolImpl is a bit lacking in documentation, probably because it used to be an "internal" class of
+   // Xerces.  However, since Xerces 3.0.0 release, it is now part of the public API -- see
+   // https://xerces.apache.org/xerces-c/migrate-archive-3.html#NewAPI300
+   xercesc::XMLGrammarPoolImpl grammarPool;
+   xercesc::DOMImplementation * domImplementation;
+   xercesc::DOMLSParser * parser;
 };
+
 
 BeerXML::BeerXML(DatabaseSchema* tables) : QObject(), pimpl{ new impl{} },
    m_tables(tables)
