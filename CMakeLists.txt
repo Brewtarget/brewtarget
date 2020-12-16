@@ -1,3 +1,8 @@
+#
+# CMakeLists.txt is part of Brewtarget
+#
+# See also src/CMakeLists.txt
+#
 PROJECT(brewtarget)
 CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
 CMAKE_POLICY( VERSION 3.0 )
@@ -194,6 +199,14 @@ SET_PROPERTY(
    "CPackConfig.cmake"
    "CPackSourceConfig.cmake"
 )
+
+#===============================Find Xerces-C++================================
+# CMake already knows how to find and configure Xerces-C++, see
+# https://cmake.org/cmake/help/latest/module/FindXercesC.html
+FIND_PACKAGE(XercesC REQUIRED)
+INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
+message( "Xerces-C++ include directories: " ${XercesC_INCLUDE_DIRS} )
+message( "Xerces-C++ libraries: " ${XercesC_LIBRARIES} )
 
 #=========================Configure brewtarget.qrc.in==========================
 

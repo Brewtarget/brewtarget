@@ -22,6 +22,8 @@
 
 class BeerXML;
 
+#include <memory> // For PImpl
+
 #include <QDomDocument>
 #include <QDomNode>
 #include <QList>
@@ -69,7 +71,12 @@ class BeerXML : public QObject
    friend class Database;
 public:
 
-   virtual ~BeerXML() {}
+   virtual ~BeerXML();
+
+   enum ValidationType {
+      Default,
+      ZeroOrMore
+   };
 
    // Export to BeerXML =======================================================
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
@@ -107,10 +114,11 @@ public:
    Recipe*      recipeFromXml(      QDomNode const& node);
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 private:
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
 
    DatabaseSchema* m_tables;
-
-   QDomDocument schema;
 
    BeerXML(DatabaseSchema* tables);
    QString textFromValue(QVariant value, QString type);
@@ -119,6 +127,10 @@ private:
 
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
+
+   int validate(QDomNode schemaDocNode, QDomNode beerXmlDocNode, ValidationType = Default);
+
+   void validate(QDomDocument & xmlDoc);
 };
 
 #endif

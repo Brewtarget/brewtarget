@@ -1,9 +1,15 @@
+#
+# src/CMakeLists.txt is part of Brewtarget
+#
+# See also ../CMakeLists.txt
+#
+
 # The current directory in the original source.
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} )
 # The current directory in the output build directory.
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 
-# Put all the required Qt dirs in the includes. 
+# Put all the required Qt dirs in the includes.
 #   That isn't quite what this include does. QT_USE_FILE references
 #   a cmake macro include, which is good but not required.
 #INCLUDE(${QT_USE_FILE})
@@ -16,14 +22,14 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 # _header_filename
 #  header to make a .gch
 #
-# _src_list 
+# _src_list
 #   the variable name (do not use ${..}) which contains a
 #     a list of sources (a.cpp b.cpp c.cpp ...)
 #  This macro will append a header file to it, then this src_list can be used in
 #  "add_executable..."
 #
 #
-# Now a .gch file should be generated and gcc should use it. 
+# Now a .gch file should be generated and gcc should use it.
 #        (add -Winvalid-pch to the cpp flags to verify)
 #
 # make clean should delete the pch file
@@ -472,7 +478,7 @@ IF( NOT ${NO_QTMULTIMEDIA})
    SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-target_link_libraries( ${QT5_USE_MODULES_LIST})
+target_link_libraries( ${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES})
 
 #=================================Tests========================================
 
@@ -499,7 +505,7 @@ IF( NOT ${NO_QTMULTIMEDIA})
 SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-target_link_libraries(${QT5_USE_MODULES_LIST})
+target_link_libraries(${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES})
 
 ADD_TEST(
    NAME pstdintTest

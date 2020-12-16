@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QMessageBox>
+#include <xercesc/util/PlatformUtils.hpp>
 #include "config.h"
 #include "beerxml.h"
 #include "brewtarget.h"
@@ -34,6 +35,14 @@ void createBlankDb(const QString & filename);
 int main(int argc, char **argv)
 {
    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+
+   // Initialize Xerces XML tools
+   try {
+      xercesc::XMLPlatformUtils::Initialize();
+   } catch (xercesc::XMLException const & xercesInitException) {
+      Brewtarget::logE(QString("%1 Xerces XML Parser Initialisation Failed: %2").arg(Q_FUNC_INFO).arg(xercesInitException.getMessage()));
+      return 1;
+   }
 
    QApplication app(argc, argv);
    app.setOrganizationName("brewtarget");
@@ -73,7 +82,12 @@ int main(int argc, char **argv)
 
    try
    {
-      return Brewtarget::run(parser.value(userDirectoryOption));
+      auto mainAppReturnValue = Brewtarget::run(parser.value(userDirectoryOption));
+
+      // Clean exit of Xerces XML tools
+      xercesc::XMLPlatformUtils::Terminate();
+
+      return mainAppReturnValue;
    }
    catch (const QString &error)
    {

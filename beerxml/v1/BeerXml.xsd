@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * beerxml/v1/BeerXml.xsd is part of Brewtarget, and is Copyright the following
+ * authors 2020-2021
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <xsd:complexType>
+      <xsd:sequence>
+         <xsd:choice maxOccurs="unbounded" minOccurs="1">
+            <xsd:element name="HOPS">
+            </xsd:element>
+            <xsd:element name="FERMENTABLES">
+            </xsd:element>
+            <xsd:element name="YEASTS">
+            </xsd:element>
+            <xsd:element name="MISCS">
+            </xsd:element>
+            <xsd:element name="WATERS">
+            </xsd:element>
+            <xsd:element name="STYLES">
+            </xsd:element>
+            <xsd:element name="MASHS">
+            </xsd:element>
+            <xsd:element name="RECIPES">
+            </xsd:element>
+            <xsd:element name="EQUIPMENTS">
+            </xsd:element>
+         </xsd:choice>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

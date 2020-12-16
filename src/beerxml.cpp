@@ -1,6 +1,7 @@
 /*
  * beerxml.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2025
+ * authors 2020-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -19,6 +20,8 @@
 
 #include "beerxml.h"
 
+#include <stdexcept>
+
 #include <QList>
 #include <QDomDocument>
 #include <QIODevice>
@@ -35,6 +38,13 @@
 #include <QThread>
 #include <QDebug>
 #include <QPair>
+
+#include <xercesc/dom/DOMConfiguration.hpp>
+#include <xercesc/dom/DOMImplementation.hpp>
+#include <xercesc/dom/DOMImplementationRegistry.hpp>
+#include <xercesc/dom/DOMLSParser.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/util/XMLUniDefs.hpp>
 
 #include "Algorithms.h"
 #include "DatabaseSchema.h"
@@ -53,23 +63,185 @@
 #include "yeast.h"
 
 #include "TableSchema.h"
-BeerXML::BeerXML(DatabaseSchema* tables) : QObject(),
-   m_tables(tables)
-{
-   QFile schemaFile(":/beerxml/BeerXML.xsd");
-   if (!schemaFile.open(QIODevice::ReadOnly)) {
-      // This should pretty much never happen, as we're loading from a QResource compiled into the binary rather than
-      // reading from the file system at run-time.
-      Brewtarget::logE(QString("%1 Could not open schema file resource %2 for reading").arg(Q_FUNC_INFO).arg(schemaFile.fileName()));
+
+// This private implementation class holds all private non-virtual members of BeerXML
+class BeerXML::impl {
+public:
+   impl() {
+      this->loadSchemas();
       return;
    }
 
+   //
+   // Frustratingly, although Qt has support for XML parsing, it would  not be wise to use it for dealing with XML
+   // Schemas.  In mid-2019, in release 5.13, Qt deprecated its "XML Patterns" package which included QXmlSchema etc,
+   // and the package was removed from Qt in the Qt6.0 release of December 2020.  It's not entirely clear why these
+   // features are being dropped, though, it's conceivable it may be related to the fact that some of the other Qt XML
+   // classes are not standards-compliant (see https://www.qt.io/blog/parsing-xml-with-qt-updates-for-qt-6) and Qt have
+   // decided to offer a slimmed-down but standards-compliant support for XML via QXmlStreamReader and
+   // QXmlStreamWriter.
+   //
+   // For those who want to manipulate XML schemas (or, for that matter, use standards-compliant DOM or SAX APIs for
+   // accessing XML documents), the official advice from Qt's developers seems simply to be (according to
+   // https://forum.qt.io/topic/102834/proper-successor-for-qxmlschemavalidator/6) to use another library.  For now,
+   // we've decided to use Xerces as it's mature, open-source, cross-platform, widely-used and AFAICT reasonably
+   // complete and up-to-date with standards.  (We might at some point also want to look at CodeSynthesis XSD, which is
+   // built on top of Apache Xerces and adds some extra features, but seems to be somewhat less widely used than
+   // Xerces.)
+   //
+   // The documentation for Xerces is not bad, but, in places, it seems to assume the reader has deep knowledge not
+   // only of various different XML API standards but also of the history of their evolution - in particular when faced
+   // with several similar but different classes/methods that ostensibly do more-or-less the same thing.  This is not
+   // entirely surprising given that (per https://xerces.apache.org/xerces-c/api-3.html) Xerces is implementing several
+   // different specifications:
+   //  • Xerces-C++ SAX implements the SAX 1.0/2.0 specification
+   //  • Xerces-C++ DOM imlements:
+   //    ‣ W3C DOM Level 1 Specification
+   //    ‣ W3C DOM Level 2 Core Specification
+   //    ‣ W3C DOM Level 2 Traversal and Range Specification
+   //    ‣ W3C DOM Level 3.0 Core Specification
+   //    ‣ W3C DOM Level 3.0 Load and Save Specification
+   // And, of course, the DOM specifications in particular are intentionally quite broad because DOM is a
+   // programming-language-neutral API specification for APIs for accessing both XML and HTML documents.
+   //
+   // All of this mostly does not prevent you doing things as you can just copy-and-paste example code, and if you hit
+   // a problem there's a good chance you can find how someone else already solved it by searching on Stackoverflow
+   // etc.  Nonetheless, you do sometimes need to do a bit of research to understand what's going on and what your
+   // options are.  We try to include such explanations in comments, which is partly why they are a bit more
+   // substantial than in some other areas of the code base.
+   //
+   void loadSchemas() {
+      QFile schemaFile(":/beerxml/v1/BeerXml.xsd");
+      if (!schemaFile.open(QIODevice::ReadOnly)) {
+         // This should pretty much never happen, as we're loading from a QResource compiled into the binary rather
+         // than reading from the file system at run-time.
+         Brewtarget::logE(
+            QString("%1 Could not open schema file resource %2 for reading").arg(Q_FUNC_INFO).arg(schemaFile.fileName())
+         );
+         throw std::runtime_error("Could not open schema file resource");
+      }
+
+      QByteArray schemaData = schemaFile.readAll();
+      Brewtarget::logD(
+         QString("%1 Schema file %2: %3 bytes").arg(Q_FUNC_INFO).arg(schemaFile.fileName()).arg(schemaData.length())
+      );
+
+      //
+      // See https://stackoverflow.com/questions/52275608/xerces-c-validate-xml-with-hardcoded-xsd and
+      // http://www.codesynthesis.com/~boris/blog/2010/03/15/validating-external-schemas-xerces-cxx/ (plus linked
+      // public-domain example code) for advice about using fixed application-determined XSDs rather than trying to pull
+      // them off the internet on the fly.  NB: I have ignored the suggestion to use XMLGrammarPoolImpl as, AFAICT from
+      // https://xerces.apache.org/xerces-c/apiDocs-3/annotated.html this an internal class to Xerces and is not part of
+      // the API.
+      //
+      // The mysterious "features" parameter that we need to pass in to DOMImplementationRegistry::getDOMImplementation()
+      // come from W3C DOM specifications - see eg:
+      //  • https://www.w3.org/TR/DOM-Level-3-Core/introduction.html#ID-Conformance
+      //  • https://www.w3.org/TR/DOM-Level-2-Core/#introduction-ID-Conformance
+      // According to https://c-dev.xerces.apache.narkive.com/yF69tsO8/list-of-dom-implementation-features, Xerces
+      // implements the following features and levels thereof:
+      //  • "XML"
+      //  • "1.0"
+      //  • "2.0"
+      //  • "3.0"
+      //  • "Traversal"
+      //  • "Core"
+      //  • "Range"
+      //  • "LS" = Load and Save  (which means I think implements the "platform- and language-neutral interface" interface
+      //                           defined in DOM Level 3 (https://www.w3.org/TR/2004/REC-DOM-Level-3-LS-20040407/)
+      // In practice, since we are not extending Xerces (eg to parse other SGML-derived languages), I'm not sure how much
+      // it matters what features we request.  (The xercesc::DOMImplementation class inherits from
+      // xercesc::DOMImplementationLS for instance.)  Most of the easily-found example code seems to use "LS" (or
+      // sometimes   "Range") but this is perhaps because "LS" is the shortest!
+      //
+      // Note that we have to think carefully about character sets even when passing in lists of requested features
+      // because Xerces encodes information as UTF-16 internally (using the XMLCh datatype), hence the slightly funky way
+      // feature strings are defined.  (There's an alternative of using xercesc::XMLString::transcode to copy a char *
+      // string into an array of XMLCh, but it's a bit clunky.)
+      //
+      XMLCh features[] {xercesc::chLatin_L, xercesc::chLatin_S, xercesc::chNull};
+      xercesc::DOMImplementation * domImplementation {
+         xercesc::DOMImplementationRegistry::getDOMImplementation(features)
+      };
+
+      //
+      // According to https://xerces.apache.org/xerces-c/program-dom-3.html, DOMLSParser is a new interface introduced by
+      // the W3C DOM Level 3.0 Load and Save Specification.  DOMLSParser provides the "Load" interface for parsing XML
+      // documents and building the corresponding DOM document tree from various input sources.  AIUI from
+      // https://markmail.org/message/5ztcgzgb5a7ldys3, DOMLSParser supersedes XercesDOMParser (which is nonetheless still
+      // available to use).
+      //
+      xercesc::DOMLSParser * parser {
+         domImplementation->createLSParser(xercesc::DOMImplementationLS::MODE_SYNCHRONOUS,
+                                           nullptr) ////TBD do we need "http://www.w3.org/2001/XMLSchema" for XML schema?
+
+      };
+
+      //
+      // See https://xerces.apache.org/xerces-c/program-dom-3.html for full details of these config options
+      //
+      xercesc::DOMConfiguration * config{parser->getDomConfig()};
+      config->setParameter(xercesc::XMLUni::fgDOMComments, false);                 // Discard Comment nodes in document
+      config->setParameter(xercesc::XMLUni::fgDOMDatatypeNormalization, true);     // Let validation process do datatype normalization
+      config->setParameter(xercesc::XMLUni::fgDOMEntities, false);                 // Do not create EntityReference nodes
+      config->setParameter(xercesc::XMLUni::fgDOMNamespaces, true);                // Perform Namespace processing
+      config->setParameter(xercesc::XMLUni::fgDOMElementContentWhitespace, false); // Do not include ignorable whitespace in DOM tree
+
+      config->setParameter(xercesc::XMLUni::fgXercesSchema, true); // Enable parser's schema support
+      config->setParameter(xercesc::XMLUni::fgDOMValidate, true);  // Report all validation errors
+
+      // Disable full schema constraint checking.  (Setting this to true would merely check the schema grammar itself
+      // for additional errors that are time-consuming or memory intensive to perform.  Given that we know in advance
+      // all the schemas we are going to use, this is something only to enable in dev when tweaking one or more of
+      // those schemas.)
+      config->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false);
+
+      // Cache the grammar in the pool for re-use in subsequent parses - but you need to have a grammar pool first!
+      //config->setParameter(xercesc::XMLUni::fgXercesCacheGrammarFromParse, true);
+      //
+      // Use cached grammar if it exists in the pool - but you need to have a grammar pool first!
+      //
+      //config->setParameter(xercesc::XMLUni::fgXercesUseCachedGrammarInParse, true);
+
+      // Don't load schemas from any other source (e.g., from XML document's
+      // xsi:schemaLocation attributes).
+      //
+      config->setParameter(xercesc::XMLUni::fgXercesLoadSchema, false); // Don't load the schema if it wasn't found in the grammar pool
+
+      // During schema validation allow multiple schemas with the same namespace to be imported
+      config->setParameter(xercesc::XMLUni::fgXercesHandleMultipleImports, true);
+
+      // We will release the DOM document ourselves.
+      config->setParameter(xercesc::XMLUni::fgXercesUserAdoptsDOMDocument, true);
+
+      return;
+   }
+};
+
+BeerXML::BeerXML(DatabaseSchema* tables) : QObject(), pimpl{ new impl{} },
+   m_tables(tables)
+{
+
+
+/*
    bool succeeded = this->schema.setContent(&schemaFile);
    schemaFile.close();
    if (!succeeded) {
+      // This could happen in dev, if you've messed up the contents of the schema file, but shouldn't be something end
+      // users see.
       Brewtarget::logE(QString("%1 Could not parse schema file %2").arg(Q_FUNC_INFO).arg(schemaFile.fileName()));
       return;
    }
+
+
+
+
+   QByteArray schemaAsByteArray = this->schema.toByteArray();
+   // By default, Wrapper4InputSource will 'adopt' the MemBufInputSource we pass to it
+   xercesc::Wrapper4InputSource schemaInputSource(new xercesc::MemBufInputSource(schemaAsByteArray.constData(), schemaAsByteArray.length(), "Dummy schema name"));
+   xercesc::DOMLSParser domParser;
+   domParser.loadGrammar(schemaInputSource,
+                         Grammar::SchemaGrammarType
 
    QDomElement docElem = this->schema.documentElement();
 
@@ -83,10 +255,101 @@ BeerXML::BeerXML(DatabaseSchema* tables) : QObject(),
       }
       n = n.nextSibling();
    }
+*/
 
    return;
 }
 
+// See https://herbsutter.com/gotw/_100/ for why we need to explicitly define the destructor here (and not in the header file)
+BeerXML::~BeerXML() = default;
+
+/*
+int BeerXML::validate(QDomNode schemaNode, QDomNode inputDocNode, BeerXML::ValidationType validationType) {
+   auto schemaNodeType = schemaNode.nodeType();
+   auto schemaNodeName = schemaNode.nodeName();
+   auto schemaNodeValue = schemaNode.nodeValue();
+   auto inputDocNodeType = inputDocNode.nodeType();
+   auto inputDocNodeName = inputDocNode.nodeName();
+   auto inputDocNodeValue = inputDocNode.nodeValue();
+
+   Brewtarget::logD(
+      QString("%1 schema node %2:%3/%4, BeerXML node %5:%6/%7")
+      .arg(Q_FUNC_INFO)
+      .arg(schemaNodeType)
+      .arg(schemaNodeName)
+      .arg(schemaNodeValue)
+      .arg(inputDocNodeType)
+      .arg(inputDocNodeName)
+      .arg(inputDocNodeValue)
+   );
+
+   if (schemaNodeName == "xsd:complexType") {
+      // complexType just means there's something inside
+      return this->validate(schemaNode.firstChild(), inputDocNode);
+   }
+
+   if (schemaNodeName == "xsd:sequence") {
+      // The sequence element specifies that the child elements must appear in a sequence. Each child element can occur
+      // from 0 to any number of times.
+      for (auto child = schemaNode.firstChild(); !child.isNull(); child = child.nextSibling()) {
+         this->validate(child, inputDocNode, BeerXML::ZeroOrMore);
+      }
+   }
+   if (schemaNodeName == "xsd:choice") {
+      //
+      // The choice element allows only one of the elements contained in the <choice> declaration to be present within
+      // the containing element.
+      // Attributes:
+      //    maxOccurs -- Optional. Specifies the maximum number of times the choice element can occur in the parent
+      //                 element. The value can be any number >= 0, or if you want to set no limit on the maximum
+      //                 number, use the value "unbounded". Default value is 1.  (We take 0 to mean unbounded too as it
+      //                 is otherwise meaningless.)
+      //    minOccurs -- Optional. Specifies the minimum number of times the choice element can occur in the parent
+      //                 element. The value can be any number >= 0. Default value is 1
+      //
+      QDomNamedNodeMap schemaNodeAttributes = schemaNode.attributes();
+
+      int maxOccurs = 0;
+      QDomNode maxOccursNode = schemaNodeAttributes.namedItem(QString("maxOccurs"));
+      if (!maxOccursNode.isNull()) {
+         QString maxOccursValue = maxOccursNode.nodeValue();
+         Brewtarget::logD(QString("%1 xsd:choice attribute maxOccurs %2").arg(Q_FUNC_INFO).arg(maxOccursValue));
+         if (maxOccursValue != "unbounded") {
+            maxOccurs = maxOccursValue.toInt();
+         }
+      }
+
+      int minOccurs = 0;
+      QDomNode minOccursNode = schemaNodeAttributes.namedItem(QString("minOccurs"));
+      if (!minOccursNode.isNull()) {
+         QString minOccursValue = minOccursNode.nodeValue();
+         Brewtarget::logD(QString("%1 xsd:choice attribute minOccurs %2").arg(Q_FUNC_INFO).arg(minOccursValue));
+         minOccurs = minOccursValue.toInt();
+      }
+
+      Brewtarget::logD(QString("%1 xsd:choice node maxOccurs %2, minOccurs %3").arg(Q_FUNC_INFO).arg(maxOccurs).arg(minOccurs));
+
+      for (auto child = schemaNode.firstChild(); !child.isNull(); child = child.nextSibling()) {
+
+      }
+   }
+
+
+   return 0;
+}
+
+
+void BeerXML::validate(QDomDocument & beerXmlDoc) {
+   QDomElement schemaDocElement = this->schema.documentElement();
+   QDomNode schemaDocNode = schemaDocElement.firstChild();
+
+   QDomElement beerXmlDocElement = beerXmlDoc.documentElement();
+   QDomNode beerXmlDocNode = beerXmlDocElement;
+
+   this->validate(schemaDocNode, beerXmlDocNode);
+   return;
+}
+*/
 
 QString BeerXML::textFromValue(QVariant value, QString type)
 {
@@ -1724,12 +1987,17 @@ bool BeerXML::importFromXML(const QString& filename)
 
    if( ! inFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::logW(QString("Database::importFromXML: Could not open %1 for reading.").arg(filename));
+      Brewtarget::logW(QString("%1: Could not open %2 for reading.").arg(Q_FUNC_INFO).arg(filename));
       return false;
    }
 
    if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-      Brewtarget::logW(QString("Database::importFromXML: Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+      Brewtarget::logW(QString("%1: Bad document formatting in %2 %3:%4. %5").arg(Q_FUNC_INFO).arg(filename).arg(line).arg(col).arg(err) );
+
+/////////////////////////////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+   // Ultimately 3 returns - completely invalid (can't parse) / slightly invalid (but we can fix) / valid
+   return true;
+/////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    list = xmlDoc.elementsByTagName("RECIPE");
    if ( list.count() )
