@@ -925,7 +925,7 @@ void BeerXML::fromXml(Ingredient* element, QDomNode const& elementNode)
 BrewNote* BeerXML::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   BrewNote* ret;
+   BrewNote* ret = nullptr;
    QDateTime theDate;
    Database & db = Database::instance();
 
@@ -947,7 +947,8 @@ BrewNote* BeerXML::brewNoteFromXml( QDomNode const& node, Recipe* parent )
       fromXml(ret, node);
       ret->setLoading(false);
 
-      db.insertBrewnote(ret,parent);
+      ret->setRecipe(parent);
+      ret->insertInDatabase();
    }
    catch (QString e) {
       Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
@@ -999,7 +1000,7 @@ Equipment* BeerXML::equipmentFromXml( QDomNode const& node, Recipe* parent )
          if ( ret->hopUtilization_pct() == 0.0 )
             ret->setHopUtilization_pct(100.0);
 
-         db.insertEquipment(ret);
+         ret->insertInDatabase();
       }
 
       if( parent ) {
@@ -1029,7 +1030,7 @@ Fermentable* BeerXML::fermentableFromXml( QDomNode const& node, Recipe* parent )
    QDomNode n;
    bool createdNew = true;
    blockSignals(true);
-   Fermentable* ret;
+   Fermentable* ret = nullptr;
    QString name;
    QList<Fermentable*> matching;
    Database & db = Database::instance();
@@ -1080,7 +1081,8 @@ Fermentable* BeerXML::fermentableFromXml( QDomNode const& node, Recipe* parent )
          if ( ! ret->isValid() ) {
             Brewtarget::logW( QString("BeerXML::fermentableFromXml: Could convert a recognized type") );
          }
-         db.insertFermentable(ret);
+         ret->insertInDatabase();
+
       }
 
       if ( parent ) {
@@ -1263,7 +1265,7 @@ Hop* BeerXML::hopFromXml( QDomNode const& node, Recipe* parent )
          if ( ! ret->isValid() ) {
             Brewtarget::logW(QString("BeerXML::hopFromXml: Could convert %1 to a recognized type"));
          }
-         db.insertHop(ret);
+         ret->insertInDatabase();
       }
 
       if( parent )
@@ -1310,7 +1312,8 @@ Instruction* BeerXML::instructionFromXml( QDomNode const& node, Recipe* parent )
 
       fromXml(ret, node);
 
-      db.insertInstruction(ret, parent);
+      ret->setRecipe(parent);
+      ret->insertInDatabase();
 
    }
    catch (QString e) {
@@ -1357,7 +1360,7 @@ Mash* BeerXML::mashFromXml( QDomNode const& node, Recipe* parent )
       //Need to insert the Mash before the Mash steps to get
       //the ID for foreign key contraint in Maststep table.
       db.sqlDatabase().transaction();
-      db.insertMash(ret);
+      ret->insertInDatabase();
 
       // Now, get the individual mash steps.
       n = node.firstChildElement("MASH_STEPS");
@@ -1427,7 +1430,9 @@ MashStep* BeerXML::mashStepFromXml( QDomNode const& node, Mash* parent )
             ret->invalidate();
       }
 
-      db.insertMashStep(ret,parent);
+      ret->setMash(parent);
+      ret->insertInDatabase();
+
       if (! signalsBlocked() )
       {
          emit db.changed( db.metaProperty("mashs"), QVariant() );
@@ -1570,7 +1575,7 @@ Misc* BeerXML::miscFromXml( QDomNode const& node, Recipe* parent )
          if ( ! ret->isValid() ) {
             Brewtarget::logW(QString("BeerXML::miscFromXml: Could convert %1 to a recognized type"));
          }
-         db.insertMisc(ret);
+         ret->insertInDatabase();
       }
 
       if( parent )
@@ -1619,7 +1624,7 @@ Recipe* BeerXML::recipeFromXml( QDomNode const& node )
 
       // I need to insert this now, because I need a valid key for adding
       // things to the recipe
-      db.insertRecipe(ret);
+      ret->insertInDatabase();
 
       // Get style. Note: styleFromXml requires the entire node, not just the
       // firstchild of the node.
@@ -1773,7 +1778,7 @@ Style* BeerXML::styleFromXml( QDomNode const& node, Recipe* parent )
             Brewtarget::logW(QString("BeerXML::styleFromXml: Could convert %1 to a recognized type"));
          }
          // we need to poke this into the database
-         db.insertStyle(ret);
+         ret->insertInDatabase();
       }
       if ( parent ) {
          db.addToRecipe( parent, ret, true );
@@ -1828,7 +1833,7 @@ Water* BeerXML::waterFromXml( QDomNode const& node, Recipe* parent )
 
       if ( createdNew ) {
          fromXml( ret, node );
-         db.insertWater(ret);
+         ret->insertInDatabase();
          if( parent ) {
             db.addToRecipe( parent, ret, false );
          }
@@ -1951,7 +1956,7 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
             }
          }
 
-         db.insertYeast(ret);
+         ret->insertInDatabase();
       }
 
       if( parent ) {

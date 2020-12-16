@@ -1,6 +1,7 @@
 /*
  * MiscTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -29,6 +30,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include "recipe.h"
+#include "MainWindow.h"
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
    : QAbstractTableModel(parent),
@@ -292,7 +294,6 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
 {
    Misc *row;
    int col;
-   QString tmpStr;
    Unit* unit;
 
    if( index.row() >= static_cast<int>(miscObs.size()) )
@@ -311,8 +312,10 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
       case MISCNAMECOL:
          if( value.canConvert(QVariant::String) )
          {
-            tmpStr = value.toString();
-            row->setName(tmpStr);
+            Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                     "name",
+                                                     value.toString(),
+                                                     tr("Change Misc Name"));
          }
          else
             return false;
@@ -320,36 +323,54 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
       case MISCTYPECOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
-         row->setType( static_cast<Misc::Type>(value.toInt()) );
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                   "type",
+                                                  static_cast<Misc::Type>(value.toInt()),
+                                                  tr("Change Misc Type"));
          break;
       case MISCUSECOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
-         row->setUse( static_cast<Misc::Use>(value.toInt()) );
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                   "use",
+                                                   static_cast<Misc::Use>(value.toInt()),
+                                                   tr("Change Misc Use"));
          break;
       case MISCTIMECOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
 
-         row->setTime( Brewtarget::qStringToSI(value.toString(), Units::minutes, dspUnit, dspScl) );
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                   "time",
+                                                   Brewtarget::qStringToSI(value.toString(), Units::minutes, dspUnit, dspScl),
+                                                   tr("Change Misc Time"));
          break;
       case MISCINVENTORYCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
 
-         row->setInventoryAmount(Brewtarget::qStringToSI(value.toString(), unit, dspUnit,dspScl));
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                   "inventoryAmount",
+                                                   Brewtarget::qStringToSI(value.toString(), unit, dspUnit,dspScl),
+                                                   tr("Change Misc Inventory Amount"));
          break;
       case MISCAMOUNTCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
 
-         row->setAmount( Brewtarget::qStringToSI(value.toString(), unit, dspUnit,dspScl ));
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                   "amount",
+                                                   Brewtarget::qStringToSI(value.toString(), unit, dspUnit,dspScl),
+                                                   tr("Change Misc Amount"));
          break;
       case MISCISWEIGHT:
          if( ! value.canConvert(QVariant::Int) )
             return false;
 
-         row->setAmountType( static_cast<Misc::AmountType>(value.toInt()) );
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                   "amountType",
+                                                   static_cast<Misc::AmountType>(value.toInt()),
+                                                   tr("Change Misc Amount Type"));
          break;
       default:
          return false;

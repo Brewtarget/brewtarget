@@ -1,6 +1,7 @@
 /*
  * beerxml.h is part of Brewtarget, and is Copyright the following
- * authors 2020-2025
+ * authors 2020-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -73,11 +74,6 @@ public:
 
    virtual ~BeerXML();
 
-   enum ValidationType {
-      Default,
-      ZeroOrMore
-   };
-
    // Export to BeerXML =======================================================
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
@@ -93,6 +89,12 @@ public:
    void toXml( Yeast* a, QDomDocument& doc, QDomNode& parent );
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+   /*! Populates the \b element with properties. This must be a class that
+    *  simple properties only (no subelements).
+    * \param element is the element you want to populate.
+    * \param xmlTagsToProperties is a hash from xml tags to meta property names.
+    * \param elementNode is the root node of the element we are reading from.
+    */
    void fromXml(Ingredient* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
    void fromXml(Ingredient* element, QDomNode const& elementNode);
 

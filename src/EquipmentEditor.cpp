@@ -662,7 +662,7 @@ void EquipmentEditor::save()
    obsEquip->setCalcBoilVolume(checkBox_calcBoilVolume->checkState() == Qt::Checked);
 
    if ( obsEquip->cacheOnly() ) {
-      Database::instance().insertEquipment(obsEquip);
+      obsEquip->insertInDatabase();
       obsEquip->setCacheOnly(false);
    }
    setVisible(false);

@@ -1,6 +1,6 @@
 /*
  * HopEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Kregg K <gigatropolis@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -80,7 +80,7 @@ void HopEditor::save()
    h->setNotes(textEdit_notes->toPlainText());
 
    if ( h->cacheOnly() ) {
-      Database::instance().insertHop(h);
+      h->insertInDatabase();
    }
 
    // do this late to make sure we've the row in the inventory table

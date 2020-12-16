@@ -1,11 +1,12 @@
 /*
  * database.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - David Grundberg <individ@acc.umu.se>
  * - Kregg K <gigatropolis@yahoo.com>
  * - Luke Vincent <luke.r.vincent@gmail.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -553,6 +554,83 @@ QSqlDatabase Database::sqlDatabase()
    return sqldb;
 }
 
+
+template <class T> void Database::populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
+{
+   QSqlQuery q(sqlDatabase());
+   TableSchema* tbl = dbDefn->table(table);
+   q.setForwardOnly(true);
+   QString queryString = QString("SELECT * FROM %1").arg(tbl->tableName());
+   q.prepare( queryString );
+
+   try {
+      if ( ! q.exec() )
+         throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      q.finish();
+      throw;
+   }
+
+   while( q.next() ) {
+      int key = q.record().value(tbl->keyName(Brewtarget::dbType())).toInt();
+
+      T* e = new T(table, key, q.record());
+      if( ! hash.contains(key) )
+         hash.insert(key, e);
+   }
+
+   q.finish();
+}
+
+
+template <class T> bool Database::getElements(QList<T*>& list,
+                                              QString filter,
+                                              Brewtarget::DBTable table,
+                                              QHash<int,T*> allElements,
+                                              QString id)
+{
+   QSqlQuery q(sqlDatabase());
+   TableSchema* tbl = dbDefn->table( table );
+   q.setForwardOnly(true);
+   QString queryString;
+
+   if ( id.isEmpty() ) {
+      id = tbl->keyName(Brewtarget::dbType());
+   }
+
+   if( !filter.isEmpty() ) {
+      queryString = QString("SELECT %1 as id FROM %2 WHERE %3").arg(id).arg(tbl->tableName()).arg(filter);
+   }
+   else {
+      queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tbl->tableName());
+   }
+
+   Brewtarget::logD(QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(queryString));
+
+   try {
+      if ( ! q.exec(queryString) )
+         throw QString("could not execute query: %2 : %3").arg(queryString).arg(q.lastError().text());
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      q.finish();
+      throw;
+   }
+
+   while( q.next() )
+   {
+      int key = q.record().value("id").toInt();
+      if( allElements.contains(key) )
+         list.append( allElements[key] );
+   }
+
+   q.finish();
+   return true;
+}
+
+
 void Database::unload()
 {
    // selectSome saves context. If we close the database before we tear that
@@ -748,9 +826,84 @@ bool Database::restoreFromFile(QString newDbFileStr)
    return success;
 }
 
+int Database::getParentIngredientKey(Ingredient const & ingredient) {
+   int parentKey = 0;
+
+   const QMetaObject* meta = ingredient.metaObject();
+
+   Brewtarget::DBTable parentToChildTableId =
+      this->dbDefn->table(
+         this->dbDefn->classNameToTable(meta->className())
+      )->childTable();
+
+   // Don't do this if no child table is defined (like instructions)
+   if (parentToChildTableId != Brewtarget::NOTABLE) {
+      TableSchema * parentToChildTable = this->dbDefn->table(parentToChildTableId);
+
+      QString findParentIngredient =
+         QString("SELECT %1 FROM %2 WHERE %3=%4").arg(parentToChildTable->parentIndexName())
+                                                 .arg(parentToChildTable->tableName())
+                                                 .arg(parentToChildTable->childIndexName())
+                                                 .arg(ingredient.key());
+      Brewtarget::logD(QString("%1 Find Parent Ingredient SQL: %2").arg(Q_FUNC_INFO).arg(findParentIngredient));
+
+      QSqlQuery query(this->sqlDatabase());
+      if (!query.exec(findParentIngredient)) {
+         throw QString("Database error trying to find parent ingredient.");
+      }
+
+      if (query.next()) {
+         parentKey = query.record().value(parentToChildTable->parentIndexName()).toInt();
+         Brewtarget::logD(QString("Found Parent with Key: %1").arg(parentKey));
+      }
+   }
+   return parentKey;
+}
+
+
+bool Database::isStored(Ingredient const & ingredient) {
+   // Valid database keys are all positive
+   if (ingredient.key() <= 0) {
+      return false;
+   }
+
+   const QMetaObject* meta = ingredient.metaObject();
+
+   TableSchema * table = this->dbDefn->table(this->dbDefn->classNameToTable(meta->className()));
+
+   QString idColumnName = table->keyName(Brewtarget::dbType());
+
+   QString queryString = QString("SELECT %1 AS id FROM %2 WHERE %3=%4").arg(idColumnName)
+                                                                       .arg(table->tableName())
+                                                                       .arg(idColumnName)
+                                                                       .arg(ingredient.key());
+
+   Brewtarget::logD(QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(queryString));
+
+   QSqlQuery query(this->sqlDatabase());
+
+   try {
+      if ( ! query.exec(queryString) )
+         throw QString("could not execute query: %2 : %3").arg(queryString).arg(query.lastError().text());
+   }
+   catch (QString e) {
+      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      query.finish();
+      throw;
+   }
+
+   bool foundInDatabase = query.next();
+
+   query.finish();
+   return foundInDatabase;
+}
+
+
 // removeFromRecipe ===========================================================
-void Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing )
+Ingredient * Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing )
 {
+   Ingredient * parentIngredient = ing->getParent();
+
    const QMetaObject* meta = ing->metaObject();
    TableSchema *table;
    TableSchema *child;
@@ -762,6 +915,8 @@ void Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing )
    sqlDatabase().transaction();
    QSqlQuery q(sqlDatabase());
 
+   Brewtarget::logD(QString("%1 Deleting Ingredient %2 #%3").arg(Q_FUNC_INFO).arg(meta->className()).arg(ing->_key));
+
    try {
       if ( ndx != -1 ) {
          propName  = meta->classInfo(ndx).value();
@@ -769,7 +924,6 @@ void Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing )
       else {
          throw QString("could not locate classInfo for signal on %2").arg(meta->className());
       }
-
 
       table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
       child = dbDefn->table( table->childTable() );
@@ -784,21 +938,25 @@ void Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing )
                                  .arg(ing->_key)
                                  .arg(inrec->recipeIndexName())
                                  .arg(rec->_key);
+      Brewtarget::logD(QString("Delete From In Recipe SQL: %1").arg(deleteFromInRecipe));
 
       // delete from misc where id = [misc key]
       QString deleteIngredient = QString("DELETE FROM %1 where %2=%3")
                                  .arg(table->tableName())
                                  .arg(table->keyName())
                                  .arg(ing->_key);
+      Brewtarget::logD(QString("Delete Ingredient SQL: %1").arg(deleteIngredient));
+
       q.setForwardOnly(true);
 
-      // Don't do this if no child table is defined (like instructions)
-      if ( table->childTable() != Brewtarget::NOTABLE ) {
+      if (parentIngredient) {
+
          // delete from misc_child where child_id = [misc key]
          QString deleteFromChildren = QString("DELETE FROM %1 WHERE %2=%3")
                                     .arg(child->tableName())
                                     .arg( child->childIndexName() )
                                     .arg(ing->_key);
+         Brewtarget::logD(QString("Delete From Children SQL: %1").arg(deleteFromChildren));
          if ( ! q.exec( deleteFromChildren ) ) {
             throw QString("failed to delete children.");
          }
@@ -827,10 +985,14 @@ void Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing )
 
    q.finish();
    emit rec->changed( rec->metaProperty(propName), QVariant() );
+
+   return ing;
 }
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
+   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+
    try {
       removeIngredientFromRecipe( rec, ins);
    }
@@ -1811,6 +1973,11 @@ Yeast* Database::newYeast(Yeast* other)
 
 int Database::insertElement(Ingredient* ins)
 {
+   // Check whether this ingredient is already in the DB.  If so, bail here.
+   if (this->isStored(*ins)) {
+      return ins->key();
+   }
+
    int key;
    QSqlQuery q( sqlDatabase() );
 
@@ -1818,8 +1985,12 @@ int Database::insertElement(Ingredient* ins)
    QString insertQ = schema->generateInsertProperties(Brewtarget::dbType());
    QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
+   ///qDebug() << Q_FUNC_INFO << "SQL:" << insertQ;
+   Brewtarget::logD(QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(insertQ));
    q.prepare(insertQ);
 
+   QString sqlParameters;
+   QTextStream sqlParametersConcat(&sqlParameters);
    foreach (QString prop, allProps) {
       QVariant val_to_ins = ins->property(prop.toUtf8().data());
       if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == kpropBrewDate ) {
@@ -1827,7 +1998,9 @@ int Database::insertElement(Ingredient* ins)
       }
       // I've arranged it such that the bindings are on the property names. It simplifies a lot
       q.bindValue( QString(":%1").arg(prop), val_to_ins);
+      sqlParametersConcat << prop << " = " << val_to_ins.toString() << " || ";
    }
+   Brewtarget::logD(QString("%1 SQL Parameters: %2").arg(Q_FUNC_INFO).arg(*sqlParametersConcat.string()));
 
    try {
       if ( ! q.exec() ) {
@@ -2102,7 +2275,7 @@ int Database::insertSalt(Salt* ins)
 }
 // This is more similar to a mashstep in that we need to link the brewnote to
 // the parent recipe.
-int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
+int Database::insertBrewNote(BrewNote* ins, Recipe* parent)
 {
    int key;
    TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
@@ -2133,6 +2306,13 @@ int Database::insertBrewnote(BrewNote* ins, Recipe* parent)
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+QMetaProperty Database::metaProperty(const char* name)
+{
+   return metaObject()->property(metaObject()->indexOfProperty(name));
+}
+
+
 void Database::deleteRecord( Ingredient* object )
 {
    try {
@@ -2144,6 +2324,169 @@ void Database::deleteRecord( Ingredient* object )
    }
 
 }
+
+
+template<class T> T* Database::addIngredientToRecipe(
+   Recipe* rec,
+   Ingredient* ing,
+   bool noCopy,
+   QHash<int,T*>* keyHash,
+   bool doNotDisplay,
+   bool transact
+)
+{
+   T* newIng = nullptr;
+   QString propName, relTableName, ingKeyName, childTableName;
+   TableSchema* table;
+   TableSchema* child;
+   TableSchema* inrec;
+   const QMetaObject* meta = ing->metaObject();
+   int ndx = meta->indexOfClassInfo("signal");
+
+   if( rec == nullptr || ing == nullptr )
+      return nullptr;
+
+   // TRANSACTION BEGIN, but only if requested. Yeah. Had to go there.
+   if ( transact ) {
+      sqlDatabase().transaction();
+   }
+
+   // Queries have to be created inside transactional boundaries
+   QSqlQuery q(sqlDatabase());
+   try {
+      if ( ndx != -1 ) {
+         propName  = meta->classInfo(ndx).value();
+      }
+      else {
+         throw QString("could not locate classInfo for signal on %2").arg(meta->className());
+      }
+
+      table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
+      child = dbDefn->table( table->childTable() );
+      inrec = dbDefn->table( table->inRecTable() );
+
+      // Ensure this ingredient is not already in the recipe.
+      QString select = QString("SELECT %5 from %1 WHERE %2=%3 AND %5=%4")
+                           .arg(inrec->tableName())
+                           .arg(inrec->inRecIndexName())
+                           .arg(ing->_key)
+                           .arg(reinterpret_cast<Ingredient*>(rec)->_key)
+                           .arg(inrec->recipeIndexName());
+      Brewtarget::logD(QString("%1 Ingredient in recipe search: %2").arg(Q_FUNC_INFO).arg(select));
+      if (! q.exec(select) ) {
+         throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
+            .arg(q.lastQuery()).arg(q.lastError().text());
+      }
+
+      // this probably should just be a warning, not a throw?
+      if ( q.next() ) {
+         throw QString("Ingredient already exists in recipe." );
+      }
+
+      q.finish();
+
+      if ( noCopy ) {
+         newIng = qobject_cast<T*>(ing);
+         // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
+         // Not sure I like this. It's a long call stack just to end up back
+         // here
+         ing->setDisplay(! doNotDisplay );
+         // Ensure the ingredient exists in the DB - eg if this is something that was previously deleted and we are
+         // adding it back via Undo.  NB: The reinsertion will change the ingredient's key.
+         ing->insertInDatabase();
+      }
+      else
+      {
+         newIng = copy<T>(ing, keyHash, false);
+         if ( newIng == nullptr ) {
+            throw QString("error copying ingredient");
+         }
+         Brewtarget::logD(QString("%1 Copy %2 #%3 to %2 #%4").arg(Q_FUNC_INFO).arg(meta->className()).arg(ing->key()).arg(newIng->key()));
+         newIng->setParent(*ing);
+      }
+
+      // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
+      // q.setForwardOnly(true);
+
+      // Link the ingredient to the recipe in the DB
+      // Eg, for a fermentable, this is INSERT INTO fermentable_in_recipe (fermentable_id, recipe_id) VALUES (:ingredient, :recipe)
+      QString insert = QString("INSERT INTO %1 (%2, %3) VALUES (:ingredient, :recipe)")
+               .arg(inrec->tableName())
+               .arg(inrec->inRecIndexName(Brewtarget::dbType()))
+               .arg(inrec->recipeIndexName());
+
+      q.prepare(insert);
+      q.bindValue(":ingredient", newIng->key());
+      q.bindValue(":recipe", rec->_key);
+
+      Brewtarget::logD(QString("%1 Link ingredient to recipe: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(newIng->key()).arg(rec->_key));
+
+      if ( ! q.exec() ) {
+         throw QString("%2 : %1.").arg(q.lastQuery()).arg(q.lastError().text());
+      }
+
+      emit rec->changed( rec->metaProperty(propName), QVariant() );
+
+      q.finish();
+
+      //Put this in the <ing_type>_children table.
+      // instructions and salts have no children.
+      if( inrec->dbTable() != Brewtarget::INSTINRECTABLE && inrec->dbTable() != Brewtarget::SALTINRECTABLE ) {
+         /*
+          * The parent to link to depends on where the ingredient is copied from:
+          * - A fermentable from the fermentable table -> the ID of the fermentable.
+          * - An ingredient from another recipe -> the ID of the ingredient's parent.
+          *
+          * This is required:
+          * - When deleting the ingredient from the original recipe no longer fails.
+          *   Else if fails due to a foreign key constrain.
+          */
+         int key = ing->key();
+         QString parentChildSql = QString("SELECT %1 FROM %2 WHERE %3=%4")
+               .arg(child->parentIndexName())
+               .arg(child->tableName())
+               .arg(child->childIndexName())
+               .arg(key);
+         q.prepare(parentChildSql);
+         Brewtarget::logD(QString("%1 Parent-Child find: %2").arg(Q_FUNC_INFO).arg(parentChildSql));
+         if (q.exec() && q.next()) {
+            key = q.record().value(child->parentIndexName()).toInt();
+         }
+         q.finish();
+
+         insert = QString("INSERT INTO %1 (%2, %3) VALUES (:parent, :child)")
+               .arg(child->tableName())
+               .arg(child->parentIndexName())
+               .arg(child->childIndexName());
+
+         q.prepare(insert);
+         q.bindValue(":parent", key);
+         q.bindValue(":child", newIng->key());
+
+         Brewtarget::logD(QString("%1 Parent-Child Insert: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(key).arg(newIng->key()));
+
+         if ( ! q.exec() ) {
+            throw QString("%1 %2.").arg(q.lastQuery()).arg(q.lastError().text());
+         }
+
+         emit rec->changed( rec->metaProperty(propName), QVariant() );
+      }
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(QString("Q_FUNC_INFO")).arg(e));
+      q.finish();
+      if ( transact )
+         sqlDatabase().rollback();
+      throw;
+   }
+   q.finish();
+   if ( transact )
+      sqlDatabase().commit();
+
+   return newIng;
+}
+
+
 
 // NOTE: This really should be in a transaction, but I am going to leave that
 // as the responsibility of the calling method. I am not comfortable with this
@@ -2310,6 +2653,45 @@ void Database::updateEntry( Ingredient* object, QString propName, QVariant value
       emit object->changed(mProp,value);
 
 }
+
+
+QVariant Database::get( Brewtarget::DBTable table, int key, QString col_name )
+{
+   QSqlQuery q;
+   TableSchema* tbl = dbDefn->table(table);
+
+   QString index = QString("%1_%2").arg(tbl->tableName()).arg(col_name);
+
+   if ( ! selectSome.contains(index) ) {
+      QString query = QString("SELECT %1 from %2 WHERE %3=:id")
+                        .arg(col_name)
+                        .arg(tbl->tableName())
+                        .arg(tbl->keyName());
+      q = QSqlQuery( sqlDatabase() );
+      q.prepare(query);
+      selectSome.insert(index,q);
+   }
+
+   q = selectSome.value(index);
+   q.bindValue(":id", key);
+
+   q.exec();
+   if( !q.next() ) {
+      q.finish();
+      return QVariant();
+   }
+
+   QVariant ret( q.record().value(col_name) );
+   q.finish();
+   return ret;
+}
+
+
+QVariant Database::get( TableSchema* tbl, int key, QString col_name )
+{
+   return get( tbl->dbTable(), key, col_name.toUtf8().data());
+}
+
 
 // Inventory functions ========================================================
 
@@ -2537,23 +2919,24 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
       rec->recalcAll();
 }
 
-void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy, bool transact )
+Fermentable * Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy, bool transact )
 {
    if ( ferm == nullptr )
-      return;
+      return nullptr;
 
    try {
       Fermentable* newFerm = addIngredientToRecipe<Fermentable>(rec,ferm,noCopy,&allFermentables,true,transact );
       connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+
+      // If somebody upstream is doing the transaction, let them call recalcAll
+      if ( transact && ! noCopy )
+         rec->recalcAll();
+
+      return newFerm;
    }
    catch (QString e) {
       throw;
    }
-
-   // If somebody upstream is doing the transaction, let them call recalcAll
-   if ( transact && ! noCopy )
-      rec->recalcAll();
-
 }
 
 void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact )
@@ -2585,7 +2968,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
    }
 }
 
-void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
+Hop * Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 {
    try {
       Hop* newHop = addIngredientToRecipe<Hop>( rec, hop, noCopy, &allHops, true, transact );
@@ -2594,6 +2977,7 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
       if ( transact ) {
          rec->recalcIBU();
       }
+      return newHop;
    }
    catch (QString e) {
       throw;
@@ -2629,7 +3013,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
    }
 }
 
-void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
+Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
    Mash* newMash = m;
    TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
@@ -2665,20 +3049,22 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
    // And let the recipe recalc all?
    if ( !noCopy && transact )
       rec->recalcAll();
+
+   return newMash;
 }
 
-void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy, bool transact )
+Misc * Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy, bool transact )
 {
+
    try {
-      addIngredientToRecipe( rec, m, noCopy, &allMiscs, true, transact );
+      Misc * newMisc = addIngredientToRecipe( rec, m, noCopy, &allMiscs, true, transact );
+      if ( transact && ! noCopy )
+         rec->recalcAll();
+      return newMisc;
    }
    catch (QString e) {
       throw;
    }
-
-   if ( transact && ! noCopy )
-      rec->recalcAll();
-
 }
 
 void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
@@ -2707,35 +3093,35 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
    }
 }
 
-void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
+Water * Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
 {
 
    try {
-      addIngredientToRecipe( rec, w, noCopy, &allWaters,true,transact );
+      return addIngredientToRecipe( rec, w, noCopy, &allWaters,true,transact );
    }
    catch (QString e) {
       throw;
    }
 }
 
-void Database::addToRecipe( Recipe* rec, Salt* s, bool noCopy, bool transact )
+Salt * Database::addToRecipe( Recipe* rec, Salt* s, bool noCopy, bool transact )
 {
 
    try {
-      addIngredientToRecipe( rec, s, noCopy, &allSalts,true,transact );
+      return addIngredientToRecipe( rec, s, noCopy, &allSalts,true,transact );
    }
    catch (QString e) {
       throw;
    }
 }
 
-void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
+Style * Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
 {
    Style* newStyle = s;
    TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    if ( s == nullptr )
-      return;
+      return nullptr;
 
    if ( transact )
       sqlDatabase().transaction();
@@ -2761,9 +3147,10 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact )
    // Emit a changed signal.
    rec->m_style_id = newStyle->key();
    emit rec->changed( rec->metaProperty("style"), Ingredient::qVariantFromPtr(newStyle) );
+   return newStyle;
 }
 
-void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
+Yeast * Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
 {
    try {
       Yeast* newYeast = addIngredientToRecipe<Yeast>( rec, y, noCopy, &allYeasts, true, transact );
@@ -2773,6 +3160,7 @@ void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
          rec->recalcOgFg();
          rec->recalcABV_pct();
       }
+      return newYeast;
    }
    catch (QString e) {
       throw;
@@ -2807,6 +3195,91 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
       rec->recalcABV_pct();
    }
 }
+
+
+template<class T> T* Database::copy( Ingredient const* object, QHash<int,T*>* keyHash, bool displayed )
+{
+   int newKey;
+   int i;
+   QString holder, fields;
+   T* newOne;
+
+   Brewtarget::DBTable t = dbDefn->classNameToTable(object->metaObject()->className());
+   TableSchema* tbl = dbDefn->table(t);
+
+   QString tName = tbl->tableName();
+
+   QSqlQuery q(sqlDatabase());
+
+   try {
+      QString select = QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key);
+
+      ///qDebug() << Q_FUNC_INFO << "SELECT SQL:" << select;
+      Brewtarget::logD(QString("%1 SELECT SQL: %2").arg(Q_FUNC_INFO).arg(select));
+
+      if( !q.exec(select) )
+         throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
+      else
+         q.next();
+
+      QSqlRecord oldRecord = q.record();
+      q.finish();
+
+      // Get the field names from the oldRecord. But skip ID, because it
+      // won't work to copy it
+      for (i=0; i< oldRecord.count(); ++i) {
+         QString name = oldRecord.fieldName(i);
+         if ( name != tbl->keyName() ) {
+            fields += fields.isEmpty() ? name : QString(",%1").arg(name);
+            holder += holder.isEmpty() ? QString(":%1").arg(name) : QString(",:%1").arg(name);
+         }
+      }
+
+      // Create a new row.
+      QString prepString = QString("INSERT INTO %1 (%2) VALUES(%3)")
+                           .arg(tName)
+                           .arg(fields)
+                           .arg(holder);
+
+      ///qDebug() << Q_FUNC_INFO << "INSERT SQL:" << prepString;
+      Brewtarget::logD(QString("%1 INSERT SQL: %2").arg(Q_FUNC_INFO).arg(prepString));
+
+      QSqlQuery insert = QSqlQuery( sqlDatabase() );
+      insert.prepare(prepString);
+
+      // Bind, bind like the wind! Or at least like mueslix
+      for (i=0; i< oldRecord.count(); ++i)
+      {
+         QString name = oldRecord.fieldName(i);
+         QVariant val = oldRecord.value(i);
+
+         // We have never had an attribute called 'parent'. See the git logs to understand this comment
+         if ( name == tbl->propertyToColumn(kpropDisplay) ) {
+            insert.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
+         }
+         // Ignore ID again, for the same reasons as before.
+         else if ( name != tbl->keyName() ) {
+            insert.bindValue(QString(":%1").arg(name), val);
+         }
+      }
+
+      if (! insert.exec() )
+         throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
+
+      newKey = insert.lastInsertId().toInt();
+      newOne = new T(t, newKey, oldRecord);
+      keyHash->insert( newKey, newOne );
+   }
+   catch (QString e) {
+      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      q.finish();
+      throw;
+   }
+
+   q.finish();
+   return newOne;
+}
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )

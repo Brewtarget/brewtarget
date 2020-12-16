@@ -1,7 +1,8 @@
 /*
  * fermentable.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -530,3 +531,23 @@ void Fermentable::setMaxInBatch_pct( double num )
 
 void Fermentable::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
+Ingredient * Fermentable::getParent() {
+   Fermentable * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().fermentable(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Fermentable::insertInDatabase() {
+   return Database::instance().insertFermentable(this);
+}

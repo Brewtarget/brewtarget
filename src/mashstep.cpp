@@ -21,7 +21,7 @@
 #include <QDebug>
 #include "mashstep.h"
 #include "brewtarget.h"
-
+#include "database.h"
 #include "TableSchemaConst.h"
 #include "MashStepSchema.h"
 
@@ -203,13 +203,15 @@ void MashStep::setDecoctionAmount_l(double var )
 
 void MashStep::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
+void MashStep::setMash( Mash * mash ) { this->m_mash = mash; }
+
 //============================="GET" METHODS====================================
 MashStep::Type MashStep::type() const { return m_type; }
 const QString MashStep::typeString() const { return m_typeStr; }
-const QString MashStep::typeStringTr() const { 
-   if ( m_type < 0 || m_type > typesTr.length() ) { 
-      return ""; 
-   } 
+const QString MashStep::typeStringTr() const {
+   if ( m_type < 0 || m_type > typesTr.length() ) {
+      return "";
+   }
    return typesTr.at(m_type);
 }
 double MashStep::infuseTemp_c() const { return m_infuseTemp_c; }
@@ -221,6 +223,7 @@ double MashStep::endTemp_c() const { return m_endTemp_c; }
 double MashStep::decoctionAmount_l() const { return m_decoctionAmount_l; }
 int MashStep::stepNumber() const { return m_stepNumber; }
 bool MashStep::cacheOnly( ) const { return m_cacheOnly; }
+Mash * MashStep::mash( ) const { return m_mash; }
 
 bool MashStep::isInfusion() const
 {
@@ -232,7 +235,7 @@ bool MashStep::isInfusion() const
 bool MashStep::isSparge() const
 {
    return ( m_type == MashStep::batchSparge ||
-            m_type == MashStep::flySparge   || 
+            m_type == MashStep::flySparge   ||
             name() == "Final Batch Sparge" );
 }
 
@@ -249,4 +252,8 @@ bool MashStep::isDecoction() const
 bool MashStep::isValidType( const QString &str ) const
 {
    return MashStep::types.contains(str);
+}
+
+int MashStep::insertInDatabase() {
+   return Database::instance().insertMashStep(this, this->m_mash);
 }

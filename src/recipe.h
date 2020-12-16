@@ -1,8 +1,9 @@
 /*
  * recipe.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -37,6 +38,7 @@ class Recipe;
 #include "misc.h"
 #include "salt.h"
 #include "brewnote.h"
+
 
 // Forward declarations.
 class Style;
@@ -179,7 +181,7 @@ public:
    //! \brief The equipment.
    Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ /*NOTIFY changed*/ STORED false)
    //! \brief The style.
-   Q_PROPERTY( Style* style READ style /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY( Style* style READ style WRITE setStyle /*NOTIFY changed*/ STORED false)
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
    //! \brief The brew notes.
@@ -202,15 +204,75 @@ public:
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
    // One method to bring them all and in darkness bind them
-   void remove( Ingredient *var);
+   // .:TBD:. (MY 2020-11-23) At the moment, it feels like there are a lot of places in the code that keep the object
+   //         model and the database in sync, which can get complicated.  In the long run, it would be simpler to have
+   //         the GUI interact with the object model (Recipes, Ingredients, etc) and make it the responsibility of the
+   //         object model to store/retrieve/modify what's in the database via some abstraction layer.  Might be worth
+   //         looking at https://www.qxorm.com or similar for this.
+   //            In the meantime, we cannot define a templated member function in this header that calls
+   //         Database::instance() (or indeed any other member function of Database) because that would require us to
+   //         #include "database.h" and database.h already needs to #include "recipe.h", so we'd be trapped in circular
+   //         dependencies.  This means we cannot template Recipe member functions addHop(Hop *),
+   //         addFermentable(Fermentable *) etc and cannot implement them as addIngredient(Ingredient *) because the
+   //         implementations need to call overloaded member functions on Database:  addToRecipe(Recipe *, Hop *, ...),
+   //         addToRecipe(Recipe *, Fermentable *, ...), etc.  Hence the slightly clunky addHop(), addFermentable() etc
+   //         member functions below.  (We _can_ template remove() because its implementation only needs to pass an
+   //         Ingredient * to a Database member function.  We _could_ also have had Recipe::add(Ingredient *) and done
+   //         lots of if/then/else dynamic casting (or similar jiggery pokery with QMetaObject) in the implementation.
+   //         But that feels wrong as we do actually know at compile time what subclass of Ingredient we are adding.
+   //         We would we risk turning what would otherwise be compile-time errors into run-time ones.)
+private:
+   /*!
+    * \brief Remove \c var from the recipe and return what was removed - ie \c var
+    */
+   Ingredient * removeIngredient( Ingredient *var);
 
-   // And you do know what happens next right?
-   void addHop( Hop *var );
-   void addFermentable( Fermentable* var );
-   void addMisc( Misc* var );
-   void addYeast( Yeast* var );
-   void addWater( Water* var );
-   void addSalt( Salt* var );
+public:
+   /*!
+    * \brief Remove \c var from the recipe and return what was removed - ie \c var
+    *
+    * We want callers to use this strongly-typed version because it makes the implementation of Undo/Redo easier (by
+    * making add and remove more symmetric).
+    */
+   template<class T> T * remove(T * var) {
+//      Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+      return static_cast<T *>(this->removeIngredient(var));
+   }
+
+private:
+   /*!
+    * \brief Add a copy of \c var from the recipe and return the copy
+    *
+    * For many types of ingredient, when we add an ingredient to a recipe, we make a copy of it, and it is the copy that
+    * it associated with the recipe.  Amongst other things, this allows the same ingredient to be added multiple times to
+    * a recipe - eg the same type of hops might well be added at multiple points in the recipe.  It also allows an
+    * ingredient in a recipe to be modified without those modifications affecting the use of the ingredient in other
+    * recipes.
+    *
+    * So, calling "myRecipe->addFermentable(&someFermentable)" will result in a COPY of someFermentable
+    * being created and added to the recipe, which means the inverse operation is NOT just
+    * myRecipe->removeFermentable(&someFermentable).  Instead, the add function returns a pointer to the
+    * newly-created ingredient:
+    *
+    *    Fermentable * newCopyOfSomeFermentable = myRecipe->addFermentable(&someFermentable);   // DO
+    *    myRecipe->removeFermentable(newCopyOfSomeFermentable);                                 // UNDO
+    *
+    * The remover function returns a pointer to the Ingredient that it removed.  This is useful because it makes add and
+    * remove symmetric and simplifies the implementation of UndoableAddOrRemove.
+    *
+    * TBD: (MY 2020-11-23) It would be good one day to pull out all the non-changeable aspects of ingredients and keep
+    *      just one copy of them in the DB and in memory.
+    */
+   template<class T> T * add(T * var);
+
+public:
+   Hop * addHop( Hop *var );
+   Fermentable * addFermentable( Fermentable* var );
+   Misc * addMisc( Misc* var );
+   Yeast * addYeast( Yeast* var );
+   Water * addWater( Water* var );
+   Salt * addSalt( Salt* var );
+
    void removeBrewNote(BrewNote* var);
    void removeInstruction( Instruction* ins );
    /*!
@@ -295,6 +357,10 @@ public:
    Equipment* equipment() const;
    Style* style();
 
+   // Relational setters
+   void setStyle(Style* style);
+   void setEquipment(Equipment* equipment);
+
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
    QVector<PreInstruction> mashSteps();
@@ -351,6 +417,9 @@ public:
    void setPrimingSugarEquiv( double var );
    void setKegPrimingFactor( double var );
    void setCacheOnly( bool cache );
+
+   Ingredient * getParent();
+   int insertInDatabase();
 
 signals:
 

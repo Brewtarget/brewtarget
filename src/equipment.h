@@ -36,7 +36,7 @@ class Equipment : public Ingredient
    Q_OBJECT
 
    Q_CLASSINFO("signal", "equipments")
-   
+
    friend class Database;
    friend class BeerXML;
    friend class EquipmentEditor;
@@ -44,7 +44,7 @@ class Equipment : public Ingredient
 public:
 
    virtual ~Equipment() {}
-   
+
    //! \brief The boil size in liters.
    Q_PROPERTY( double boilSize_l            READ boilSize_l            WRITE setBoilSize_l            NOTIFY changedBoilSize_l )
    //! \brief The batch size in liters.
@@ -125,6 +125,9 @@ public:
 
    static QString classNameStr();
 
+   Ingredient * getParent();
+   int insertInDatabase();
+
 signals:
    void changedBoilSize_l(double);
    void changedBatchSize_l(double);
@@ -143,13 +146,13 @@ signals:
    void changedNotes(QString);
    void changedGrainAbsorption_LKg(double);
    void changedBoilingPoint_c(double);
-   
+
 private:
    Equipment(Brewtarget::DBTable table, int key);
    Equipment(QString t_name, bool cacheOnly = true);
    Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Equipment( Equipment const& other);
-   
+
    double m_boilSize_l;
    double m_batchSize_l;
    double m_tunVolume_l;
@@ -171,7 +174,7 @@ private:
 
    // Calculate the boil size.
    void doCalculations();
-   
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };
