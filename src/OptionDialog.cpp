@@ -486,7 +486,7 @@ void OptionDialog::saveAndClose()
       Log::logFilePath = Brewtarget::getConfigDir();
    }
    Brewtarget::setOption("LoggingEnabled", Log::loggingEnabled);
-   Brewtarget::setOption("LoggingLevel", Log::getOptionStringFromLogType(Log::logLevel));
+   Brewtarget::setOption("LoggingLevel", Log::getTypeName(Log::logLevel));
    Brewtarget::setOption("LogFilePath", Log::logFilePath.absolutePath());
    Brewtarget::setOption("LoggingUseConfigDir", Log::logUseConfigDir);
    Log::changeDirectory();

@@ -26,6 +26,31 @@ namespace Log
    bool isLoggingToStderr(true);
    QTextStream* stream;
    QMutex mutex;
+   char const* logLevelNames[] =
+   {
+      "INFO",
+      "WARNING",
+      "ERROR",
+      "DEBUG"
+   };
+
+   char const* qtTypeTranslate[] =
+   {
+      "DEBUG",   /* QtDebugMsg    */
+      "WARNING", /* QtWarningMsg  */
+      "CRITICAL",   /* QtCriticalMsg */
+      "FATAL",   /* QtFatalMsg    */
+      "INFO"     /* QtInfoMsg     */
+   };
+
+   LogType const qtLogLevelTranslateEnum[] =
+   {
+      LogType_DEBUG,   /* QtDebugMsg = 0    */
+      LogType_WARNING, /* QtWarningMsg = 1  */
+      LogType_ERROR,   /* QtCriticalMsg = 2 */
+      LogType_ERROR,   /* QtFatalMsg = 3    */
+      LogType_INFO     /* QtInfoMsg = 4     */
+   };
 
    // options set by the end user.
    bool loggingEnabled = false;
@@ -160,13 +185,7 @@ namespace Log
    }
 
    QString Log::getTypeName(const LogType type) {
-      switch (type) {
-      case LogType_DEBUG: return QString("DEBUG");
-      case LogType_INFO: return QString("INFO");
-      case LogType_WARNING: return QString("WARNING");
-      case LogType_ERROR: return QString("ERROR");
-      }
-      return QString("ERROR");
+      return QString(logLevelNames[type]);
    }
 
    LogType getLogTypeFromString(QString type)
@@ -176,17 +195,6 @@ namespace Log
       else if (type == "ERROR") return LogType_ERROR;
       else if (type == "DEBUG") return LogType_DEBUG;
       else return LogType_INFO;
-   }
-
-   QString getOptionStringFromLogType(const LogType type)
-   {
-      switch (type) {
-      case LogType_DEBUG: return QString("DEBUG");
-      case LogType_INFO: return QString("INFO");
-      case LogType_WARNING: return QString("WARNING");
-      case LogType_ERROR: return QString("ERROR");
-      }
-      return QString("INFO");
    }
 
    bool initLogFileName()
@@ -213,37 +221,18 @@ namespace Log
 
    void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& message)
    {
-      /* First things first, Let's convert the QtMsgType into our own definition for compatability woth the rest of the library.
-      * Then we check if we're actually writing to a File or to the stderr output. because if we're writing to the stderr there potentially no files to prune.
-      * If we are ing fact not writing to stderr then we can continue to do all the file pruning and log file creations as normally.
-      *
-      * the case here is that when the application starts there is no referens to any logfile, as the settings has not yet been loaded.
-      * Therefor we avoid doing any file-system work until all is set according to the users settings.
+      /* First things first! do the user want to save logs, and if so, to what level.
+      * then, if the file-stream is open and the log file size is to big, we need to prune the old logs and initiate a new logfile.
+      * after that we're all set, Log away!
       */
 
-      LogType lType;
-      switch (type)
-      {
-      case QtDebugMsg:
-         lType = LogType_DEBUG;
-         break;
-      case QtWarningMsg:
-         lType = LogType_WARNING;
-         break;
-      case QtInfoMsg:
-         lType = LogType_INFO;
-         break;
-      case QtCriticalMsg:
-         lType = LogType_ERROR;
-         break;
-      case QtFatalMsg:
-         lType = LogType_DEBUG;
-         break;
-      }
+      //Check if we're actually want to log and that we're set to log this level, this is set by the user options.
+      assert(loggingEnabled && qtLogLevelTranslateEnum[type] == logLevel);
+
       /* Check if there is a file actually set yet, in a rare case if the logfile was not created at initialization.
-         * then we won't be logging to a file, the location may not yet have been loaded from the settings, thus only logging to the stderr.
-         * I this case we cannot do any of the pruning or filename generation.
-         */
+      * then we won't be logging to a file, the location may not yet have been loaded from the settings, thus only logging to the stderr.
+      * I this case we cannot do any of the pruning or filename generation.
+      */
       if (stream)
       {
          if (logFile.size() >= logFileSize)
@@ -252,7 +241,9 @@ namespace Log
             initLogFileName();
          }
       }
-      doLog(lType, QString("%1, in %2").arg(message).arg(context.line));
+
+      //Writing the actual log.
+      doLog(qtLogLevelTranslateEnum[type], QString("%1, in %2").arg(message).arg(context.line));
    } // End logMessageHandler
 
    void pruneLogFiles()

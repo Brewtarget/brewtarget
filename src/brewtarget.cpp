@@ -1124,7 +1124,7 @@ void Brewtarget::saveSystemOptions()
    }
 
    setOption("LoggingEnabled", Log::loggingEnabled);
-   setOption("LoggingLevel", Log::getOptionStringFromLogType(Log::logLevel));
+   setOption("LoggingLevel", Log::getTypeName(Log::logLevel));
    setOption("LogFilePath", Log::logFilePath.absolutePath());
    setOption("LoggingUseConfigDir", Log::logUseConfigDir);
 }

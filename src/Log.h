@@ -56,6 +56,9 @@ namespace Log
    extern bool isLoggingToStderr;
    extern QTextStream* stream;
    extern QMutex mutex;
+   extern char const* logLevelNames[];
+   extern char const* qtLogLevelTranslate[];
+   extern LogType const qtLogLevelTranslateEnum[];
 
    // options set by the end user.
    extern bool loggingEnabled;
@@ -75,7 +78,6 @@ namespace Log
    extern void doLog(const LogType lt, const QString message);
    extern QString getTypeName(const LogType type);
    extern LogType getLogTypeFromString(QString type = QString("INFO"));
-   extern QString getOptionStringFromLogType(const LogType type = LogType_INFO);
 
    /* initLogFileName initializes the log file and opens the stream for writing.
     * This was moved to its own function as this has to be called everytime logs are being pruned.
