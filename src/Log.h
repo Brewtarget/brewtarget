@@ -21,9 +21,6 @@
 #ifndef _LOG_H
 #define _LOG_H
 
-#define LOG_FILE_SIZE 500 * 1024
-#define LOG_FILE_COUNT 5
-
 #include <QDir>
 #include <QObject>
 #include <QMutex>
@@ -64,7 +61,8 @@ namespace Log
    extern LogType logLevel;
    extern QDir logFilePath;
    extern bool logUseConfigDir;
-
+   extern const int logFileSize;
+   extern const int logFileCount;
    extern QString logFileName;
    extern QString timeFormat;
    extern QString tmpl;
@@ -98,7 +96,7 @@ namespace Log
     */
    extern bool initializeLog();
 
-   /* Prunes old log files from the directory, keeping only the specified number of files in LOG_FILE_COUNT,
+   /* Prunes old log files from the directory, keeping only the specified number of files in logFileCount,
     * purpose is to keep log files to a mininum while keeping the logs up-to-date and also not require manual pruning of files.
     */
    extern void pruneLogFiles();

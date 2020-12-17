@@ -32,7 +32,8 @@ namespace Log
    LogType logLevel = LogType_INFO;
    QDir logFilePath;
    bool logUseConfigDir = true;
-
+   const int logFileSize = 500 * 1024;
+   const int  logFileCount = 5;
    QString logFileName;
    QString timeFormat;
    QString tmpl;
@@ -246,7 +247,7 @@ namespace Log
          */
       if (stream)
       {
-         if (logFile.size() >= LOG_FILE_SIZE)
+         if (logFile.size() >= logFileSize)
          {
             mutex.lock();
             pruneLogFiles();
@@ -282,9 +283,9 @@ namespace Log
       dir.setPath(logFilePath.canonicalPath());
       dir.setNameFilters(filters);
       QFileInfoList fileList = dir.entryInfoList();
-      if (fileList.size() > LOG_FILE_COUNT)
+      if (fileList.size() > logFileCount)
       {
-         for (int i = 0; i < (fileList.size() - LOG_FILE_COUNT); i++)
+         for (int i = 0; i < (fileList.size() - logFileCount); i++)
          {
             QFile f(QString(fileList.at(i).canonicalFilePath()));
             f.remove();

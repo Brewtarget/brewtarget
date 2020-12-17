@@ -265,14 +265,14 @@ void Testing::testLogRotation()
    }
 
    QFileInfoList fileList = Log::getLogFileList();
-   //There is always a "LOG_FILE_COUNT" number of old files + 1 current file
-   QCOMPARE(fileList.size(), LOG_FILE_COUNT + 1);
+   //There is always a "logFileCount" number of old files + 1 current file
+   QCOMPARE(fileList.size(), Log::logFileCount + 1);
 
    for (int i = 0; i < fileList.size(); i++)
    {
       QFile f(QString(fileList.at(i).canonicalFilePath()));
-      //Here we test if the file is more than 10% bigger than the specified LOG_FILE_SIZE", if so, fail.
-      QVERIFY2(f.size() <= (LOG_FILE_SIZE * 1.1), "Wrong Sized file");
+      //Here we test if the file is more than 10% bigger than the specified logFileSize", if so, fail.
+      QVERIFY2(f.size() <= (Log::logFileSize * 1.1), "Wrong Sized file");
    }
 }
 
