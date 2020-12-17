@@ -62,8 +62,8 @@ namespace Log
    extern LogType logLevel;
    extern QDir logFilePath;
    extern bool logUseConfigDir;
-   extern const int logFileSize;
-   extern const int logFileCount;
+   extern int const logFileSize;
+   extern int const logFileCount;
    extern QString logFileName;
    extern QString timeFormat;
    extern QString tmpl;

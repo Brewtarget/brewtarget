@@ -32,8 +32,8 @@ namespace Log
    LogType logLevel = LogType_INFO;
    QDir logFilePath;
    bool logUseConfigDir = true;
-   const int logFileSize = 500 * 1024;
-   const int  logFileCount = 5;
+   int const logFileSize = 500 * 1024;
+   int const logFileCount = 5;
    QString logFileName;
    QString timeFormat;
    QString tmpl;
