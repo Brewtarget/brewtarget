@@ -1,4 +1,4 @@
-b/*
+/*
  * Testing.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2020
  * - Philip G. Lee <rocketman768@gmail.com>
