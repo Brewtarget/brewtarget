@@ -30,6 +30,7 @@
 #include <QStandardPaths>
 #include <QTime>
 #include <QApplication>
+#include <QMutexLocker>
 
 /*!
  * \NameSpace Log

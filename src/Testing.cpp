@@ -279,8 +279,7 @@ void Testing::testLogRotation()
 void Testing::cleanupTestCase()
 {
    Brewtarget::cleanup();
-
-   Log::mutex.lock();
+   QMutexLocker locker(&Log::mutex);
    //Clean up the jibberich logs from disk by removing the
    QFileInfoList fileList = Log::getLogFileList();
    for (int i = 0; i < fileList.size(); i++)
@@ -288,7 +287,6 @@ void Testing::cleanupTestCase()
       QFile(QString(fileList.at(i).canonicalFilePath())).remove();
    }
    Log::logFilePath.rmdir(Log::logFilePath.canonicalPath());
-   Log::mutex.unlock();
 
    // Clear all persistent properties linked with this test suite.
    // It will clear all settings that are application specific, user-scoped, and in the brewtarget namespace.

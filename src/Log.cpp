@@ -138,12 +138,12 @@ namespace Log
    }
 
    void doLog(const LogType lt, const QString message) {
+      QMutexLocker locker(&mutex);
       QString logEntry = tmpl
          .arg(QTime::currentTime().toString(timeFormat))
          .arg(getTypeName(lt))
          .arg(message);
 
-      mutex.lock();
 #if QT_VERSION < QT_VERSION_CHECK(5,15,0)
       if (isLoggingToStderr)
          errStream << logEntry << endl;
@@ -155,7 +155,6 @@ namespace Log
       if (stream)
          *stream << logEntry << Qt::endl;
 #endif
-      mutex.unlock();
 
       //emit wroteEntry(logEntry);
    }
@@ -249,10 +248,8 @@ namespace Log
       {
          if (logFile.size() >= logFileSize)
          {
-            mutex.lock();
             pruneLogFiles();
             initLogFileName();
-            mutex.unlock();
          }
       }
       doLog(lType, QString("%1, in %2").arg(message).arg(context.line));
@@ -260,6 +257,7 @@ namespace Log
 
    void pruneLogFiles()
    {
+      QMutexLocker locker(&mutex);
       //Need to close and reset the stream before deleting any files.
       delete stream;
       stream = nullptr;
