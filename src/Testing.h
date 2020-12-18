@@ -27,6 +27,7 @@
 #include <QString>
 #include <QDir>
 #include <QDebug>
+#include <QMutexLocker>
 
 class Equipment;
 class Hop;

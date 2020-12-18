@@ -227,7 +227,8 @@ namespace Log
       */
 
       //Check if we're actually want to log and that we're set to log this level, this is set by the user options.
-      assert(loggingEnabled && qtLogLevelTranslateEnum[type] == logLevel);
+      if( ! loggingEnabled || ! (qtLogLevelTranslateEnum[type] <= logLevel) )
+         return;
 
       /* Check if there is a file actually set yet, in a rare case if the logfile was not created at initialization.
       * then we won't be logging to a file, the location may not yet have been loaded from the settings, thus only logging to the stderr.

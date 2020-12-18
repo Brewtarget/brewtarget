@@ -94,6 +94,7 @@ void Testing::initTestCase()
    Log::loggingEnabled = true;
    //turning off logging to stderr console, this is so you won't have to watch 100k rows generate in the console.
    Log::isLoggingToStderr = false;
+   Log::logLevel = Log::LogType_DEBUG;
    qDebug() << "logging initialized";
 }
 
