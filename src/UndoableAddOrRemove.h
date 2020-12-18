@@ -123,11 +123,11 @@ private:
       // will cause it to be stored in the DB with a new ID.
       //
       if (!isUndo) {
-         Brewtarget::logD(QString("%1: %2 \"%3\" for #%4").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->text()).arg(this->whatToAddOrRemove->key()));
+         qDebug() << QString("%1: %2 \"%3\" for #%4").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->text()).arg(this->whatToAddOrRemove->key());
 
          this->whatToAddOrRemove = (this->updatee.*(this->doer))(this->whatToAddOrRemove);
 
-         Brewtarget::logD(QString("%1: %2 Returned #%3").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->whatToAddOrRemove->key()));
+         qDebug() << QString("%1: %2 Returned #%3").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->whatToAddOrRemove->key());
          if (this->doCallback != nullptr) {
             (Brewtarget::mainWindow()->*(this->doCallback))(this->whatToAddOrRemove);
          }
@@ -136,11 +136,11 @@ private:
          // be able to distinguish the two cases.
          this->everDone = true;
       } else {
-         Brewtarget::logD(QString("%1: Undo \"%2\" for #%3").arg(Q_FUNC_INFO).arg(this->text()).arg(this->whatToAddOrRemove->key()));
+         qDebug() << QString("%1: Undo \"%2\" for #%3").arg(Q_FUNC_INFO).arg(this->text()).arg(this->whatToAddOrRemove->key());
 
          this->whatToAddOrRemove = (this->updatee.*(this->undoer))(this->whatToAddOrRemove);
 
-         Brewtarget::logD(QString("%1: Undo Returned #%2").arg(Q_FUNC_INFO).arg(this->whatToAddOrRemove->key()));
+         qDebug() << QString("%1: Undo Returned #%2").arg(Q_FUNC_INFO).arg(this->whatToAddOrRemove->key());
          if (this->undoCallback != nullptr) {
             (Brewtarget::mainWindow()->*(this->undoCallback))(this->whatToAddOrRemove);
          }

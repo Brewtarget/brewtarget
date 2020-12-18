@@ -618,7 +618,7 @@ double MashDesigner::getDecoctionAmount_l()
    if( prevStep == nullptr )
    {
       QMessageBox::critical(this, tr("Decoction error"), tr("The first mash step cannot be a decoction."));
-      Brewtarget::logE(QString("MashDesigner: First step not a decoction."));
+      qCritical() << "MashDesigner: First step not a decoction.";
       return 0;
    }
    tf = stepTemp_c();

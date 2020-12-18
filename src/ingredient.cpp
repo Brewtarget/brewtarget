@@ -148,7 +148,7 @@ double Ingredient::getDouble(const QDomText& textNode)
    // ret = text.toDouble(&ok);
    ret = Brewtarget::toDouble(text,&ok);
    if( !ok )
-      Brewtarget::logE(QString("Ingredient::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber()) );
+      qCritical() << QString("Ingredient::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber());
 
    return ret;
 }
@@ -162,7 +162,7 @@ bool Ingredient::getBool(const QDomText& textNode)
    else if( text == "FALSE" )
       return false;
    else
-      Brewtarget::logE(QString("Ingredient::getBool: %1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber()) );
+      qCritical() << QString("Ingredient::getBool: %1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber());
 
    return false;
 }
@@ -175,7 +175,7 @@ int Ingredient::getInt(const QDomText& textNode)
 
    ret = text.toInt(&ok);
    if( !ok )
-      Brewtarget::logE(QString("Ingredient::getInt: %1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber()) );
+      qCritical() << QString("Ingredient::getInt: %1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber());
 
    return ret;
 }
@@ -194,7 +194,7 @@ QDateTime Ingredient::getDateTime( QDomText const& textNode )
    ret = QDateTime::fromString(text, Qt::ISODate);
    ok = ret.isValid();
    if( !ok )
-      Brewtarget::logE(QString("Ingredient::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber()) );
+      qCritical() << QString("Ingredient::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber());
 
    return ret;
 }
@@ -215,7 +215,7 @@ QDate Ingredient::getDate( QDomText const& textNode )
    }
 
    if ( !ok )
-      Brewtarget::logE(QString("Ingredient::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
+      qCritical() << QString("Ingredient::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber());
 
    return ret;
 }

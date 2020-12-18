@@ -595,7 +595,7 @@ void EquipmentEditor::save()
 
    double grainAbs = Brewtarget::toDouble( lineEdit_grainAbsorption->text(), &ok );
    if ( ! ok )
-      Brewtarget::logW( QString("EquipmentEditor::save() could not convert %1 to double").arg(lineEdit_grainAbsorption->text()));
+      qWarning() << QString("EquipmentEditor::save() could not convert %1 to double").arg(lineEdit_grainAbsorption->text());
 
    double ga_LKg = grainAbs * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
 

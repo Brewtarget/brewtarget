@@ -186,7 +186,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(miscObs.size() ))
    {
-      Brewtarget::logW(QString("Bad model index. row = %1").arg(index.row()));
+      qWarning() << QString("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -242,7 +242,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
          else
             return QVariant();
       default:
-         Brewtarget::logW(QString("Bad model index. column = %1").arg(index.column()));
+         qWarning() << QString("Bad model index. column = %1").arg(index.column());
    }
    return QVariant();
 }

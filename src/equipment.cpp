@@ -147,7 +147,7 @@ void Equipment::setBoilSize_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: boil size negative: %1").arg(var) );
+      qWarning() << QString("Equipment: boil size negative: %1").arg(var);
       return;
    }
    else
@@ -164,7 +164,7 @@ void Equipment::setBatchSize_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: batch size negative: %1").arg(var) );
+      qWarning() << QString("Equipment: batch size negative: %1").arg(var);
       return;
    }
    else
@@ -181,7 +181,7 @@ void Equipment::setTunVolume_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: tun volume negative: %1").arg(var) );
+      qWarning() << QString("Equipment: tun volume negative: %1").arg(var);
       return;
    }
    else
@@ -197,7 +197,7 @@ void Equipment::setTunWeight_kg( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: tun weight negative: %1").arg(var) );
+      qWarning() << QString("Equipment: tun weight negative: %1").arg(var);
       return;
    }
    else
@@ -213,7 +213,7 @@ void Equipment::setTunSpecificHeat_calGC( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: tun sp heat negative: %1").arg(var) );
+      qWarning() << QString("Equipment: tun sp heat negative: %1").arg(var);
       return;
    }
    else
@@ -229,7 +229,7 @@ void Equipment::setTopUpWater_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: top up water negative: %1").arg(var) );
+      qWarning() << QString("Equipment: top up water negative: %1").arg(var);
       return;
    }
    else
@@ -246,7 +246,7 @@ void Equipment::setTrubChillerLoss_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: trub chiller loss negative: %1").arg(var) );
+      qWarning() << QString("Equipment: trub chiller loss negative: %1").arg(var);
       return;
    }
    else
@@ -263,7 +263,7 @@ void Equipment::setEvapRate_pctHr( double var )
 {
    if( var < 0.0 || var > 100.0)
    {
-      Brewtarget::logW( QString("Equipment: 0 < evap rate < 100: %1").arg(var) );
+      qWarning() << QString("Equipment: 0 < evap rate < 100: %1").arg(var);
       return;
    }
    else
@@ -285,7 +285,7 @@ void Equipment::setEvapRate_lHr( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: evap rate negative: %1").arg(var) );
+      qWarning() << QString("Equipment: evap rate negative: %1").arg(var);
       return;
    }
    else
@@ -304,7 +304,7 @@ void Equipment::setBoilTime_min( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: boil time negative: %1").arg(var) );
+      qWarning() << QString("Equipment: boil time negative: %1").arg(var);
       return;
    }
    else
@@ -333,7 +333,7 @@ void Equipment::setLauterDeadspace_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: deadspace negative: %1").arg(var) );
+      qWarning() << QString("Equipment: deadspace negative: %1").arg(var);
       return;
    }
    else
@@ -349,7 +349,7 @@ void Equipment::setTopUpKettle_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: top up kettle negative: %1").arg(var) );
+      qWarning() << QString("Equipment: top up kettle negative: %1").arg(var);
       return;
    }
    else
@@ -365,7 +365,7 @@ void Equipment::setHopUtilization_pct( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: 0 < hop utilization: %1").arg(var) );
+      qWarning() << QString("Equipment: 0 < hop utilization: %1").arg(var);
       return;
    }
    else
@@ -389,7 +389,7 @@ void Equipment::setGrainAbsorption_LKg(double var)
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: absorption < 0: %1").arg(var) );
+      qWarning() << QString("Equipment: absorption < 0: %1").arg(var);
       return;
    }
    else
@@ -405,7 +405,7 @@ void Equipment::setBoilingPoint_c(double var)
 {
    if ( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: boiling point of water < 0: %1").arg(var));
+      qWarning() << QString("Equipment: boiling point of water < 0: %1").arg(var);
       return;
    }
    else

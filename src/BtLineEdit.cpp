@@ -102,7 +102,7 @@ void BtLineEdit::lineChanged(Unit::unitDisplay oldUnit, Unit::unitScale oldScale
       default:
          val = Brewtarget::toDouble(text(),&ok);
          if ( ! ok )
-            Brewtarget::logW( QString("%1: failed to convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(text()).arg(_section).arg(_editField) );
+            qWarning() << QString("%1: failed to convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(text()).arg(_section).arg(_editField);
          amt = displayAmount(val);
    }
    QLineEdit::setText(amt);
@@ -160,7 +160,7 @@ double BtLineEdit::toSI(Unit::unitDisplay oldUnit,Unit::unitScale oldScale,bool 
    bool ok = false;
    double amt = toDouble(&ok);
    if ( ! ok )
-      Brewtarget::logW( QString("%1 : could not convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(text()).arg(_section).arg(_editField) );
+      qWarning() << QString("%1 : could not convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(text()).arg(_section).arg(_editField);
    return amt;
 }
 
@@ -231,11 +231,11 @@ void BtLineEdit::setText( Ingredient* element, int precision )
       // through toString() and then Brewtarget::toDouble().
       amount = tmp.toDouble(&ok);
       if ( !ok ) {
-         Brewtarget::logW( QString("%1 could not convert %2 (%3:%4) to double")
+         qWarning() << QString("%1 could not convert %2 (%3:%4) to double")
                               .arg(Q_FUNC_INFO)
                               .arg(tmp.toString())
                               .arg(_section)
-                              .arg(_editField) );
+                              .arg(_editField);
       }
 
       display = displayAmount(amount, precision);
@@ -261,7 +261,7 @@ void BtLineEdit::setText( QString amount, int precision)
    {
       amt = Brewtarget::toDouble(amount,&ok);
       if ( !ok )
-         Brewtarget::logW( QString("%1 could not convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(amount).arg(_section).arg(_editField) );
+         qWarning() << QString("%1 could not convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(amount).arg(_section).arg(_editField);
       QLineEdit::setText(displayAmount(amt, precision));
    }
 

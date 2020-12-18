@@ -223,15 +223,15 @@ void MainWindow::setSizesInPixelsBasedOnDpi()
    //
    auto dpiX = this->logicalDpiX();
    auto dpiY = this->logicalDpiY();
-   Brewtarget::logD(QString("Logical DPI: %1,%2.  Physical DPI: %3,%4")
+   qDebug() << QString("Logical DPI: %1,%2.  Physical DPI: %3,%4")
       .arg(dpiX)
       .arg(dpiY)
       .arg(this->physicalDpiX())
-      .arg(this->physicalDpiY()));
+      .arg(this->physicalDpiY());
    auto defaultToolBarIconSize = this->toolBar->iconSize();
-   Brewtarget::logD(QString("Default toolbar icon size: %1,%2")
+   qDebug() << QString("Default toolbar icon size: %1,%2")
       .arg(defaultToolBarIconSize.width())
-      .arg(defaultToolBarIconSize.height()));
+      .arg(defaultToolBarIconSize.height());
    this->toolBar->setIconSize(QSize(dpiX/4,dpiY/4));
 
    //
@@ -239,9 +239,9 @@ void MainWindow::setSizesInPixelsBasedOnDpi()
    // size as the toolbar ones.
    //
    auto defaultTabIconSize = this->tabWidget_Trees->iconSize();
-   Brewtarget::logD(QString("Default tab icon size: %1,%2")
+   qDebug() << QString("Default tab icon size: %1,%2")
       .arg(defaultTabIconSize.width())
-      .arg(defaultTabIconSize.height()));
+      .arg(defaultTabIconSize.height());
    this->tabWidget_Trees->setIconSize(QSize(dpiX/4,dpiY/4));
 
    //
@@ -254,11 +254,11 @@ void MainWindow::setSizesInPixelsBasedOnDpi()
    //
    // This is a bit more work to implement because its a PNG image in a QLabel object
    //
-   Brewtarget::logD(QString("Logo default size: %1,%2").arg(this->label_Brewtarget->width()).arg(this->label_Brewtarget->height()));
+   qDebug() << QString("Logo default size: %1,%2").arg(this->label_Brewtarget->width()).arg(this->label_Brewtarget->height());
    this->label_Brewtarget->setScaledContents(true);
    this->label_Brewtarget->setFixedSize((265.0/66.0) * dpiX/2,  // width = 265/66 × height = 265/66 × half an inch = (265/66) × (dpiX/2)
                                         dpiY/2);                // height = half an inch = dpiY/2
-   Brewtarget::logD(QString("Logo new size: %1,%2").arg(this->label_Brewtarget->width()).arg(this->label_Brewtarget->height()));
+   qDebug() << QString("Logo new size: %1,%2").arg(this->label_Brewtarget->width()).arg(this->label_Brewtarget->height());
 
    return;
 }
@@ -864,7 +864,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
          }
          break;
       default:
-         Brewtarget::logW(QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index)));
+         qWarning() << QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index));
    }
    treeView_recipe->setCurrentIndex(index);
 }
@@ -1290,12 +1290,12 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
 // This isn't called when we think it is...!
 void MainWindow::droppedRecipeStyle(Style* style)
 {
-   Brewtarget::logD("MainWindow::droppedRecipeStyle");
+   qDebug() << "MainWindow::droppedRecipeStyle";
 
    if ( ! recipeObs )
       return;
    // When the style is changed, we also need to update what is shown on the Style button
-   Brewtarget::logD("MainWindow::droppedRecipeStyle - do or redo");
+   qDebug() << "MainWindow::droppedRecipeStyle - do or redo";
    this->doOrRedoUpdate(
       newRelationalUndoableUpdate(*this->recipeObs,
                                   &Recipe::setStyle,
@@ -1546,7 +1546,7 @@ void MainWindow::editUndo()
 {
    Q_ASSERT(this->undoStack != 0);
    if ( !this->undoStack->canUndo() ) {
-      Brewtarget::logD("Undo called but nothing to undo");
+      qDebug() << "Undo called but nothing to undo";
    } else {
       this->undoStack->undo();
    }
@@ -1559,7 +1559,7 @@ void MainWindow::editRedo()
 {
    Q_ASSERT(this->undoStack != 0);
    if ( !this->undoStack->canRedo() ) {
-      Brewtarget::logD("Redo called but nothing to redo");
+      qDebug() << "Redo called but nothing to redo";
    } else {
       this->undoStack->redo();
    }
@@ -1704,7 +1704,7 @@ void MainWindow::removeSelectedFermentable()
 
    size = selected.size();
 
-   Brewtarget::logD(QString("MainWindow::removeSelectedFermentable() %1 items selected to remove").arg(size));
+   qDebug() << QString("MainWindow::removeSelectedFermentable() %1 items selected to remove").arg(size);
 
    if( size == 0 )
       return;
@@ -2204,7 +2204,7 @@ void MainWindow::backup()
    // NB: QDir does all the necessary magic of translating '/' to whatever current platform's directory separator is
    QString defaultBackupFileName = QDir::currentPath() + "/" + Database::getDefaultBackupFileName();
    QString backupFileName = QFileDialog::getSaveFileName(this, tr("Backup Database"), defaultBackupFileName);
-   Brewtarget::logD( QString("Database backup filename \"%1\"").arg(backupFileName) );
+   qDebug() << QString("Database backup filename \"%1\"").arg(backupFileName);
 
    // If the filename returned from the dialog is empty, it means the user clicked cancel, so we should stop trying to do the backup
    if (!backupFileName.isEmpty())
@@ -2498,7 +2498,7 @@ void MainWindow::print(std::function<void(QPrinter* printer)> functor)
 {
    if (!functor)
    {
-      Brewtarget::logE("The print function is called with an empty functor");
+      qCritical() << "The print function is called with an empty functor";
    }
 
    QPrintDialog dialogue(printer, this);
@@ -2513,8 +2513,7 @@ void MainWindow::exportHTML(std::function<void(QFile* file)> functor)
 {
    if (!functor)
    {
-      Brewtarget::logE(
-            "The export HTML function is called with an empty functor");
+      qCritical() << "The export HTML function is called with an empty functor";
    }
 
    std::unique_ptr<QFile> file{
@@ -2615,7 +2614,7 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 
       if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )
       {
-         Brewtarget::logW(QString("MainWindow::openForWrite Could not open %1 for writing.").arg(filename));
+         qWarning() << QString("MainWindow::openForWrite Could not open %1 for writing.").arg(filename);
          outFile = nullptr;
       }
    }

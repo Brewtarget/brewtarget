@@ -68,7 +68,7 @@ bool SimpleUndoableUpdate::undoOrRedo(bool const isUndo)
    bool success = this->metaProperty.write(&updatee, isUndo ? this->oldValue : this->newValue);
    if (!success)
    {
-      Brewtarget::logE(QString("Could not %1 update of %2 property %3").arg(isUndo ? "undo" : "redo").arg(this->updatee.metaObject()->className()).arg(propertyName));
+      qCritical() << QString("Could not %1 update of %2 property %3").arg(isUndo ? "undo" : "redo").arg(this->updatee.metaObject()->className()).arg(propertyName);
    }
    return success;
 }
