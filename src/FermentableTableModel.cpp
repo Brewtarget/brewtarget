@@ -109,7 +109,7 @@ void FermentableTableModel::observeDatabase(bool val)
 
 void FermentableTableModel::addFermentable(Fermentable* ferm)
 {
-   Brewtarget::logD(QString("FermentableTableModel::addFermentable() \"%1\"").arg(ferm->name()));
+   qDebug() << QString("FermentableTableModel::addFermentable() \"%1\"").arg(ferm->name());
 
    //Check to see if it's already in the list
    if( fermObs.contains(ferm) )
@@ -130,7 +130,7 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
 
 void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
 {
-   Brewtarget::logD(QString("FermentableTableModel::addFermentables() Add up to %1 fermentables to existing list of %2").arg(ferms.size()).arg(this->fermObs.size()));
+   qDebug() << QString("FermentableTableModel::addFermentables() Add up to %1 fermentables to existing list of %2").arg(ferms.size()).arg(this->fermObs.size());
 
    QList<Fermentable*>::iterator i;
    QList<Fermentable*> tmp;
@@ -143,7 +143,7 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
          tmp.append(*i);
    }
 
-   Brewtarget::logD(QString("FermentableTableModel::addFermentables() After de-duping, adding %1 fermentables").arg(tmp.size()));
+   qDebug() << QString("FermentableTableModel::addFermentables() After de-duping, adding %1 fermentables").arg(tmp.size());
 
    int size = fermObs.size();
    if (size+tmp.size()) {
@@ -232,7 +232,7 @@ void FermentableTableModel::changedInventory(Brewtarget::DBTable table, int invK
 
 void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   Brewtarget::logD(QString("FermentableTableModel::changed() %1").arg(prop.name()));
+   qDebug() << QString("FermentableTableModel::changed() %1").arg(prop.name());
 
    int i;
 
@@ -282,7 +282,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(fermObs.size() ))
    {
-      Brewtarget::logE(tr("Bad model index. row = %1").arg(index.row()));
+      qCritical() << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -347,7 +347,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
 
          return QVariant( Brewtarget::displayAmount(row->color_srm(), Units::srm, 0, unit) );
       default :
-         Brewtarget::logE(tr("Bad column: %1").arg(col));
+         qCritical() << tr("Bad column: %1").arg(col);
          return QVariant();
    }
 }
@@ -376,7 +376,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
          case FERMCOLORCOL:
             return QVariant(tr("Color"));
          default:
-            Brewtarget::logW(tr("Bad column: %1").arg(section));
+            qWarning() << tr("Bad column: %1").arg(section);
             return QVariant();
       }
    }
@@ -696,7 +696,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          }
          break;
       default:
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return false;
    }
    return retVal;

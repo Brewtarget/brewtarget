@@ -369,7 +369,7 @@ void Fermentable::setAmount_kg( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Fermentable: negative amount: %1").arg(num) );
+      qWarning() << QString("Fermentable: negative amount: %1").arg(num);
       return;
    }
    else
@@ -384,7 +384,7 @@ void Fermentable::setAmount_kg( double num )
 void Fermentable::setInventoryAmount( double num )
 {
    if( num < 0.0 ) {
-      Brewtarget::logW( QString("Fermentable: negative inventory: %1").arg(num) );
+      qWarning() << QString("Fermentable: negative inventory: %1").arg(num);
       return;
    }
    else
@@ -398,7 +398,7 @@ void Fermentable::setInventoryAmount( double num )
 void Fermentable::setInventoryId( int key )
 {
    if( key < 1 ) {
-      Brewtarget::logW( QString("Fermentable: bad inventory id: %1").arg(key) );
+      qWarning() << QString("Fermentable: bad inventory id: %1").arg(key);
       return;
    }
    else
@@ -433,7 +433,7 @@ void Fermentable::setYield_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < yield < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < yield < 100: %1").arg(num);
    }
 }
 
@@ -441,7 +441,7 @@ void Fermentable::setColor_srm( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Fermentable: negative color: %1").arg(num) );
+      qWarning() << QString("Fermentable: negative color: %1").arg(num);
       return;
    }
    else
@@ -464,7 +464,7 @@ void Fermentable::setCoarseFineDiff_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < coarsefinediff < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < coarsefinediff < 100: %1").arg(num);
    }
 }
 
@@ -479,7 +479,7 @@ void Fermentable::setMoisture_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < moisture < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < moisture < 100: %1").arg(num);
    }
 }
 
@@ -487,7 +487,7 @@ void Fermentable::setDiastaticPower_lintner( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Fermentable: negative DP: %1").arg(num) );
+      qWarning() << QString("Fermentable: negative DP: %1").arg(num);
       return;
    }
    else
@@ -510,7 +510,7 @@ void Fermentable::setProtein_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < protein < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < protein < 100: %1").arg(num);
    }
 }
 
@@ -525,7 +525,7 @@ void Fermentable::setMaxInBatch_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num);
    }
 }
 

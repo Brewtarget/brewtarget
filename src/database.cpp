@@ -142,14 +142,14 @@ Database::~Database()
 
 bool Database::loadSQLite()
 {
-   Brewtarget::logD("Loading SQLITE...");
+   qDebug() << "Loading SQLITE...";
    bool dbIsOpen;
    QSqlDatabase sqldb;
 
    // Set file names.
    dbFileName = Brewtarget::getUserDataDir().filePath("database.sqlite");
    dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
-   Brewtarget::logD(QString("Database::loadSQLite() - dbFileName = \"%1\"\nDatabase::loadSQLite() - dataDbFileName=\"%2\"").arg(dbFileName).arg(dataDbFileName));
+   qDebug() << QString("Database::loadSQLite() - dbFileName = \"%1\"\nDatabase::loadSQLite() - dataDbFileName=\"%2\"").arg(dbFileName).arg(dataDbFileName);
    // Set the files.
    dbFile.setFileName(dbFileName);
    dataDbFile.setFileName(dataDbFileName);
@@ -192,7 +192,7 @@ bool Database::loadSQLite()
 
    if( ! dbIsOpen )
    {
-      Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
+      qCritical() << QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text());
       if (Brewtarget::isInteractive()) {
          QMessageBox::critical(
             nullptr,
@@ -223,7 +223,7 @@ bool Database::loadSQLite()
          _threadToConnection.insert(QThread::currentThread(), dbConName);
       }
       catch(QString e) {
-         Brewtarget::logE( QString("%1: %2 (%3)").arg(Q_FUNC_INFO).arg(e).arg(pragma.lastError().text()));
+         qCritical() << QString("%1: %2 (%3)").arg(Q_FUNC_INFO).arg(e).arg(pragma.lastError().text());
          dbIsOpen = false;
       }
    }
@@ -273,7 +273,7 @@ bool Database::loadPgSQL()
    dbConName = sqldb.connectionName();
 
    if( ! dbIsOpen ) {
-      Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
+      qCritical() << QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text());
       QMessageBox::critical(nullptr,
                             QObject::tr("Database Failure"),
                             QString(QObject::tr("Failed to open the database '%1'.").arg(dbHostname))
@@ -315,7 +315,7 @@ bool Database::load()
    if( createFromScratch ) {
       bool success = DatabaseSchemaHelper::create(sqldb,dbDefn,Brewtarget::dbType());
       if( !success ) {
-         Brewtarget::logE("DatabaseSchemaHelper::create() failed");
+         qCritical() << "DatabaseSchemaHelper::create() failed";
          return success;
       }
    }
@@ -436,7 +436,7 @@ bool Database::createBlank(QString const& filename)
       bool dbIsOpen = sqldb.open();
       if( ! dbIsOpen )
       {
-         Brewtarget::logW(QString("Database::createBlank(): could not open '%1'").arg(filename));
+         qWarning() << QString("Database::createBlank(): could not open '%1'").arg(filename);
          return false;
       }
 
@@ -543,7 +543,7 @@ QSqlDatabase Database::sqlDatabase()
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       _threadToConnectionMutex.unlock();
       throw;
    }
@@ -568,7 +568,7 @@ template <class T> void Database::populateElements( QHash<int,T*>& hash, Brewtar
          throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       q.finish();
       throw;
    }
@@ -607,14 +607,14 @@ template <class T> bool Database::getElements(QList<T*>& list,
       queryString = QString("SELECT %1 as id FROM %2").arg(id).arg(tbl->tableName());
    }
 
-   Brewtarget::logD(QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(queryString));
+   qDebug() << QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(queryString);
 
    try {
       if ( ! q.exec(queryString) )
          throw QString("could not execute query: %2 : %3").arg(queryString).arg(q.lastError().text());
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       q.finish();
       throw;
    }
@@ -689,7 +689,7 @@ void Database::automaticBackup()
       foobar++;
       newName = QString("%1_%2").arg(halfName).arg(foobar,4,10,QChar('0'));
       if ( foobar > 9999 ) {
-         Brewtarget::logW( QString("%1 : could not find a unique name in 10000 tries. Overwriting %2").arg(Q_FUNC_INFO).arg(halfName));
+         qWarning() << QString("%1 : could not find a unique name in 10000 tries. Overwriting %2").arg(Q_FUNC_INFO).arg(halfName);
          newName = halfName;
       }
    }
@@ -719,7 +719,7 @@ void Database::automaticBackup()
       if ( fileThing->exists() && fileThing->isFile() ) {
          // If we can't remove it, give a warning.
          if (! file->remove() ) {
-            Brewtarget::logW( QString("%1 : could not remove %2 (%3).").arg(Q_FUNC_INFO).arg(victim).arg(file->error()));
+            qWarning() << QString("%1 : could not remove %2 (%3).").arg(Q_FUNC_INFO).arg(victim).arg(file->error());
          }
       }
    }
@@ -791,7 +791,7 @@ bool Database::backupToFile(QString newDbFileName)
 
    success = dbFile.copy( newDbFileName );
 
-   Brewtarget::logD( QString("Database backup to \"%1\" %2").arg(newDbFileName, success ? "succeeded" : "failed") );
+   qDebug() << QString("Database backup to \"%1\" %2").arg(newDbFileName, success ? "succeeded" : "failed");
 
    return success;
 }
@@ -845,7 +845,7 @@ int Database::getParentIngredientKey(Ingredient const & ingredient) {
                                                  .arg(parentToChildTable->tableName())
                                                  .arg(parentToChildTable->childIndexName())
                                                  .arg(ingredient.key());
-      Brewtarget::logD(QString("%1 Find Parent Ingredient SQL: %2").arg(Q_FUNC_INFO).arg(findParentIngredient));
+      qDebug() << QString("%1 Find Parent Ingredient SQL: %2").arg(Q_FUNC_INFO).arg(findParentIngredient);
 
       QSqlQuery query(this->sqlDatabase());
       if (!query.exec(findParentIngredient)) {
@@ -854,7 +854,7 @@ int Database::getParentIngredientKey(Ingredient const & ingredient) {
 
       if (query.next()) {
          parentKey = query.record().value(parentToChildTable->parentIndexName()).toInt();
-         Brewtarget::logD(QString("Found Parent with Key: %1").arg(parentKey));
+         qDebug() << QString("Found Parent with Key: %1").arg(parentKey);
       }
    }
    return parentKey;
@@ -878,7 +878,7 @@ bool Database::isStored(Ingredient const & ingredient) {
                                                                        .arg(idColumnName)
                                                                        .arg(ingredient.key());
 
-   Brewtarget::logD(QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(queryString));
+   qDebug() << QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(queryString);
 
    QSqlQuery query(this->sqlDatabase());
 
@@ -887,7 +887,7 @@ bool Database::isStored(Ingredient const & ingredient) {
          throw QString("could not execute query: %2 : %3").arg(queryString).arg(query.lastError().text());
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       query.finish();
       throw;
    }
@@ -915,7 +915,7 @@ Ingredient * Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing 
    sqlDatabase().transaction();
    QSqlQuery q(sqlDatabase());
 
-   Brewtarget::logD(QString("%1 Deleting Ingredient %2 #%3").arg(Q_FUNC_INFO).arg(meta->className()).arg(ing->_key));
+   qDebug() << QString("%1 Deleting Ingredient %2 #%3").arg(Q_FUNC_INFO).arg(meta->className()).arg(ing->_key);
 
    try {
       if ( ndx != -1 ) {
@@ -938,14 +938,14 @@ Ingredient * Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing 
                                  .arg(ing->_key)
                                  .arg(inrec->recipeIndexName())
                                  .arg(rec->_key);
-      Brewtarget::logD(QString("Delete From In Recipe SQL: %1").arg(deleteFromInRecipe));
+      qDebug() << QString("Delete From In Recipe SQL: %1").arg(deleteFromInRecipe);
 
       // delete from misc where id = [misc key]
       QString deleteIngredient = QString("DELETE FROM %1 where %2=%3")
                                  .arg(table->tableName())
                                  .arg(table->keyName())
                                  .arg(ing->_key);
-      Brewtarget::logD(QString("Delete Ingredient SQL: %1").arg(deleteIngredient));
+      qDebug() << QString("Delete Ingredient SQL: %1").arg(deleteIngredient);
 
       q.setForwardOnly(true);
 
@@ -956,7 +956,7 @@ Ingredient * Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing 
                                     .arg(child->tableName())
                                     .arg( child->childIndexName() )
                                     .arg(ing->_key);
-         Brewtarget::logD(QString("Delete From Children SQL: %1").arg(deleteFromChildren));
+         qDebug() << QString("Delete From Children SQL: %1").arg(deleteFromChildren);
          if ( ! q.exec( deleteFromChildren ) ) {
             throw QString("failed to delete children.");
          }
@@ -970,11 +970,11 @@ Ingredient * Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing 
 
    }
    catch ( QString e ) {
-      Brewtarget::logE(QString("%1 %2 %3 %4")
+      qCritical() << QString("%1 %2 %3 %4")
                            .arg(Q_FUNC_INFO)
                            .arg(e)
                            .arg(q.lastQuery())
-                           .arg(q.lastError().text()));
+                           .arg(q.lastError().text());
       sqlDatabase().rollback();
       q.finish();
       abort();
@@ -991,7 +991,7 @@ Ingredient * Database::removeIngredientFromRecipe( Recipe* rec, Ingredient* ing 
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
-   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
    try {
       removeIngredientFromRecipe( rec, ins);
@@ -1016,7 +1016,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
                QString("%1 = %2").arg(tbl->keyName()).arg(step->_key));
    }
    catch ( QString e ) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 
@@ -1041,11 +1041,11 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
          throw QString("could not find recipe id");
    }
    catch ( QString e ) {
-      Brewtarget::logE(QString("%1 %2 %3 %4")
+      qCritical() << QString("%1 %2 %3 %4")
                            .arg(Q_FUNC_INFO)
                            .arg(e)
                            .arg(q.lastQuery())
-                           .arg(q.lastError().text()));
+                           .arg(q.lastError().text());
       q.finish();
       throw;
    }
@@ -1096,11 +1096,11 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
          throw QString("failed to swap steps");
    }
    catch ( QString e ) {
-      Brewtarget::logE(QString("%1 %2 %3 %4")
+      qCritical() << QString("%1 %2 %3 %4")
                            .arg(Q_FUNC_INFO)
                            .arg(e)
                            .arg(q.lastQuery())
-                           .arg(q.lastError().text()));
+                           .arg(q.lastError().text());
       q.finish();
       throw;
    }
@@ -1141,11 +1141,11 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
          throw QString("failed to swap steps");
    }
    catch ( QString e ) {
-      Brewtarget::logE(QString("%1 %2 %3 %4")
+      qCritical() << QString("%1 %2 %3 %4")
                            .arg(Q_FUNC_INFO)
                            .arg(e)
                            .arg(q.lastQuery())
-                           .arg(q.lastError().text()));
+                           .arg(q.lastError().text());
       q.finish();
       throw;
    }
@@ -1230,11 +1230,11 @@ void Database::insertInstruction(Instruction* in, int pos)
          throw QString("failed to insert new instruction recipe");
    }
    catch ( QString e ) {
-      Brewtarget::logE(QString("%1 %2 %3 %4")
+      qCritical() << QString("%1 %2 %3 %4")
                            .arg(Q_FUNC_INFO)
                            .arg(e)
                            .arg(q.lastQuery())
-                           .arg(q.lastError().text()));
+                           .arg(q.lastError().text());
       q.finish();
       sqlDatabase().rollback();
       throw;
@@ -1434,7 +1434,7 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
 
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1464,7 +1464,7 @@ Equipment* Database::newEquipment(Equipment* other)
       emit newEquipmentSignal(tmp);
    }
    else {
-      Brewtarget::logE( QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name()));
+      qCritical() << QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name());
    }
 
    return tmp;
@@ -1491,7 +1491,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact ) sqlDatabase().rollback();
       throw;
    }
@@ -1504,7 +1504,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
       emit newFermentableSignal(tmp);
    }
    else {
-      Brewtarget::logE( QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name()));
+      qCritical() << QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name());
    }
 
    return tmp;
@@ -1528,7 +1528,7 @@ Hop* Database::newHop(Hop* other)
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact ) sqlDatabase().rollback();
       throw;
    }
@@ -1542,9 +1542,9 @@ Hop* Database::newHop(Hop* other)
       emit newHopSignal(tmp);
    }
    else {
-      Brewtarget::logE( QString("%1 could not %2 hop")
+      qCritical() << QString("%1 could not %2 hop")
             .arg(Q_FUNC_INFO)
-            .arg( other ? "copy" : "create"));
+            .arg( other ? "copy" : "create");
    }
 
    return tmp;
@@ -1564,7 +1564,7 @@ Instruction* Database::newInstruction(Recipe* rec)
       tmp = addIngredientToRecipe<Instruction>(rec,tmp,true,nullptr,false,false);
    }
    catch ( QString e ) {
-      Brewtarget::logE( QString("%1 %2").arg( Q_FUNC_INFO ).arg(e));
+      qCritical() << QString("%1 %2").arg( Q_FUNC_INFO ).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1658,7 +1658,7 @@ Mash* Database::newMash(Recipe* parent, bool transact)
                  QString("%1=%2").arg(tbl->keyName()).arg(parent->_key));
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact )
          sqlDatabase().rollback();
       throw;
@@ -1718,7 +1718,7 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
                  QString("%1=%2").arg(tbl->keyName()).arg(tmp->_key));
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1751,7 +1751,7 @@ Misc* Database::newMisc(Misc* other)
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact ) sqlDatabase().rollback();
       throw;
    }
@@ -1765,9 +1765,9 @@ Misc* Database::newMisc(Misc* other)
       emit newMiscSignal(tmp);
    }
    else {
-      Brewtarget::logE( QString("%1 could not %2 misc")
+      qCritical() << QString("%1 could not %2 misc")
             .arg(Q_FUNC_INFO)
-            .arg( other ? "copy" : "create"));
+            .arg( other ? "copy" : "create");
    }
 
    return tmp;
@@ -1785,7 +1785,7 @@ Recipe* Database::newRecipe(QString name)
       newMash(tmp,false);
    }
    catch (QString e ) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1798,7 +1798,7 @@ Recipe* Database::newRecipe(QString name)
       tmp->setDeleted(false);
    }
    catch (QString e ) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 
@@ -1832,7 +1832,7 @@ Recipe* Database::newRecipe(Recipe* other)
       addToRecipe( tmp, other->style(), false, false);
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1852,7 +1852,7 @@ Style* Database::newStyle(Style* other)
       tmp = copy(other, &allStyles);
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1871,7 +1871,7 @@ Style* Database::newStyle(QString name)
       tmp = newIngredient(name, &allStyles);
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1885,7 +1885,7 @@ Style* Database::newStyle(QString name)
    }
 
    catch (QString e ) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 
@@ -1906,7 +1906,7 @@ Water* Database::newWater(Water* other)
          tmp = newIngredient(&allWaters);
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1928,7 +1928,7 @@ Salt* Database::newSalt(Salt* other)
          tmp = newIngredient(&allSalts);
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1957,7 +1957,7 @@ Yeast* Database::newYeast(Yeast* other)
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -1986,7 +1986,7 @@ int Database::insertElement(Ingredient* ins)
    QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
    ///qDebug() << Q_FUNC_INFO << "SQL:" << insertQ;
-   Brewtarget::logD(QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(insertQ));
+   qDebug() << QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(insertQ);
    q.prepare(insertQ);
 
    QString sqlParameters;
@@ -2000,7 +2000,7 @@ int Database::insertElement(Ingredient* ins)
       q.bindValue( QString(":%1").arg(prop), val_to_ins);
       sqlParametersConcat << prop << " = " << val_to_ins.toString() << " || ";
    }
-   Brewtarget::logD(QString("%1 SQL Parameters: %2").arg(Q_FUNC_INFO).arg(*sqlParametersConcat.string()));
+   qDebug() << QString("%1 SQL Parameters: %2").arg(Q_FUNC_INFO).arg(*sqlParametersConcat.string());
 
    try {
       if ( ! q.exec() ) {
@@ -2014,7 +2014,7 @@ int Database::insertElement(Ingredient* ins)
    }
    catch (QString e) {
       sqlDatabase().rollback();
-      Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
+      qCritical() << QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text());
       abort();
    }
    ins->_key = key;
@@ -2065,7 +2065,7 @@ int Database::insertFermentable(Fermentable* ins)
       ins->setInventoryId(invKey);
    }
    catch( QString e ) {
-      Brewtarget::logE(e);
+      qCritical() << e;
       throw;
    }
 
@@ -2088,7 +2088,7 @@ int Database::insertHop(Hop* ins)
       ins->setInventoryId(invKey);
    }
    catch( QString e ) {
-      Brewtarget::logE(e);
+      qCritical() << e;
       throw;
    }
 
@@ -2113,7 +2113,7 @@ int Database::insertInstruction(Instruction* ins, Recipe* parent)
 
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -2172,7 +2172,7 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
                  QString("%1=%2").arg(tbl->keyName()).arg(ins->_key));
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -2202,7 +2202,7 @@ int Database::insertMisc(Misc* ins)
       ins->setInventoryId(invKey);
    }
    catch( QString e ) {
-      Brewtarget::logE(e);
+      qCritical() << e;
       throw;
    }
 
@@ -2238,7 +2238,7 @@ int Database::insertYeast(Yeast* ins)
       ins->setInventoryId(invKey);
    }
    catch( QString e ) {
-      Brewtarget::logE(e);
+      qCritical() << e;
       throw;
    }
 
@@ -2291,7 +2291,7 @@ int Database::insertBrewNote(BrewNote* ins, Recipe* parent)
 
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -2319,7 +2319,7 @@ void Database::deleteRecord( Ingredient* object )
       updateEntry( object, kpropDeleted, Brewtarget::dbTrue(), true);
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 
@@ -2372,7 +2372,7 @@ template<class T> T* Database::addIngredientToRecipe(
                            .arg(ing->_key)
                            .arg(reinterpret_cast<Ingredient*>(rec)->_key)
                            .arg(inrec->recipeIndexName());
-      Brewtarget::logD(QString("%1 Ingredient in recipe search: %2").arg(Q_FUNC_INFO).arg(select));
+      qDebug() << QString("%1 Ingredient in recipe search: %2").arg(Q_FUNC_INFO).arg(select);
       if (! q.exec(select) ) {
          throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
             .arg(q.lastQuery()).arg(q.lastError().text());
@@ -2401,7 +2401,7 @@ template<class T> T* Database::addIngredientToRecipe(
          if ( newIng == nullptr ) {
             throw QString("error copying ingredient");
          }
-         Brewtarget::logD(QString("%1 Copy %2 #%3 to %2 #%4").arg(Q_FUNC_INFO).arg(meta->className()).arg(ing->key()).arg(newIng->key()));
+         qDebug() << QString("%1 Copy %2 #%3 to %2 #%4").arg(Q_FUNC_INFO).arg(meta->className()).arg(ing->key()).arg(newIng->key());
          newIng->setParent(*ing);
       }
 
@@ -2419,7 +2419,7 @@ template<class T> T* Database::addIngredientToRecipe(
       q.bindValue(":ingredient", newIng->key());
       q.bindValue(":recipe", rec->_key);
 
-      Brewtarget::logD(QString("%1 Link ingredient to recipe: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(newIng->key()).arg(rec->_key));
+      qDebug() << QString("%1 Link ingredient to recipe: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(newIng->key()).arg(rec->_key);
 
       if ( ! q.exec() ) {
          throw QString("%2 : %1.").arg(q.lastQuery()).arg(q.lastError().text());
@@ -2448,7 +2448,7 @@ template<class T> T* Database::addIngredientToRecipe(
                .arg(child->childIndexName())
                .arg(key);
          q.prepare(parentChildSql);
-         Brewtarget::logD(QString("%1 Parent-Child find: %2").arg(Q_FUNC_INFO).arg(parentChildSql));
+         qDebug() << QString("%1 Parent-Child find: %2").arg(Q_FUNC_INFO).arg(parentChildSql);
          if (q.exec() && q.next()) {
             key = q.record().value(child->parentIndexName()).toInt();
          }
@@ -2463,7 +2463,7 @@ template<class T> T* Database::addIngredientToRecipe(
          q.bindValue(":parent", key);
          q.bindValue(":child", newIng->key());
 
-         Brewtarget::logD(QString("%1 Parent-Child Insert: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(key).arg(newIng->key()));
+         qDebug() << QString("%1 Parent-Child Insert: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(key).arg(newIng->key());
 
          if ( ! q.exec() ) {
             throw QString("%1 %2.").arg(q.lastQuery()).arg(q.lastError().text());
@@ -2473,7 +2473,7 @@ template<class T> T* Database::addIngredientToRecipe(
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(QString("Q_FUNC_INFO")).arg(e));
+      qCritical() << QString("%1 %2").arg(QString("Q_FUNC_INFO")).arg(e);
       q.finish();
       if ( transact )
          sqlDatabase().rollback();
@@ -2514,7 +2514,7 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 
@@ -2592,7 +2592,7 @@ void Database::setInventory(Ingredient* ins, QVariant value, int invKey, bool no
 
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 
@@ -2614,7 +2614,7 @@ void Database::updateEntry( Ingredient* object, QString propName, QVariant value
    }
 
    if ( colName.isEmpty() ) {
-      Brewtarget::logE(QString("Could not translate %1 to a column name").arg(propName));
+      qCritical() << QString("Could not translate %1 to a column name").arg(propName);
       throw  QString("Could not translate %1 to a column name").arg(propName);
    }
    if ( transact )
@@ -2640,7 +2640,7 @@ void Database::updateEntry( Ingredient* object, QString propName, QVariant value
 
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact )
          sqlDatabase().rollback();
       throw;
@@ -2701,7 +2701,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
 {
    TableSchema* tbl = dbDefn->table(table);
    TableSchema* cld = dbDefn->childTable( table );
-   Brewtarget::logI( QString("Populating Children Ingredient Links (%1)").arg(tbl->tableName()));
+   qInfo() << QString("Populating Children Ingredient Links (%1)").arg(tbl->tableName());
 
    try {
       // "SELECT DISTINCT name FROM [tablename]"
@@ -2768,7 +2768,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
 }
@@ -2788,7 +2788,7 @@ void Database::populateChildTablesByName()
       populateChildTablesByName(Brewtarget::YEASTTABLE);
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 }
@@ -3000,7 +3000,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact ) {
          sqlDatabase().rollback();
       }
@@ -3035,7 +3035,7 @@ Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
                QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact )
          sqlDatabase().rollback();
       throw;
@@ -3081,7 +3081,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact ) {
          sqlDatabase().rollback();
       }
@@ -3135,7 +3135,7 @@ Style * Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact
                 QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact )
          sqlDatabase().rollback();
       throw;
@@ -3183,7 +3183,7 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
       }
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact )
          sqlDatabase().rollback();
       throw;
@@ -3215,7 +3215,7 @@ template<class T> T* Database::copy( Ingredient const* object, QHash<int,T*>* ke
       QString select = QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key);
 
       ///qDebug() << Q_FUNC_INFO << "SELECT SQL:" << select;
-      Brewtarget::logD(QString("%1 SELECT SQL: %2").arg(Q_FUNC_INFO).arg(select));
+      qDebug() << QString("%1 SELECT SQL: %2").arg(Q_FUNC_INFO).arg(select);
 
       if( !q.exec(select) )
          throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
@@ -3242,7 +3242,7 @@ template<class T> T* Database::copy( Ingredient const* object, QHash<int,T*>* ke
                            .arg(holder);
 
       ///qDebug() << Q_FUNC_INFO << "INSERT SQL:" << prepString;
-      Brewtarget::logD(QString("%1 INSERT SQL: %2").arg(Q_FUNC_INFO).arg(prepString));
+      qDebug() << QString("%1 INSERT SQL: %2").arg(Q_FUNC_INFO).arg(prepString);
 
       QSqlQuery insert = QSqlQuery( sqlDatabase() );
       insert.prepare(prepString);
@@ -3271,7 +3271,7 @@ template<class T> T* Database::copy( Ingredient const* object, QHash<int,T*>* ke
       keyHash->insert( newKey, newOne );
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       q.finish();
       throw;
    }
@@ -3296,7 +3296,7 @@ void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, Q
    }
    catch (QString e) {
       q.finish();
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
 
@@ -3316,7 +3316,7 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
    }
    catch (QString e) {
       q.finish();
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
 
@@ -3456,7 +3456,7 @@ bool Database::updateSchema(bool* err)
       bool success = DatabaseSchemaHelper::migrate( currentVersion, newVersion, sqlDatabase() );
       if( !success )
       {
-         Brewtarget::logE(QString("Database migration %1->%2 failed").arg(currentVersion).arg(newVersion));
+         qCritical() << QString("Database migration %1->%2 failed").arg(currentVersion).arg(newVersion);
          if( err )
             *err = true;
          return false;
@@ -3484,7 +3484,7 @@ bool Database::updateSchema(bool* err)
       }
    }
    catch (QString e ) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       throw;
    }
@@ -3509,12 +3509,12 @@ bool Database::importFromXML(const QString& filename)
 
    if( ! inFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::logW(QString("Database::importFromXML: Could not open %1 for reading.").arg(filename));
+      qWarning() << QString("Database::importFromXML: Could not open %1 for reading.").arg(filename);
       return false;
    }
 
    if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-      Brewtarget::logW(QString("Database::importFromXML: Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+      qWarning() << QString("Database::importFromXML: Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err);
 
    list = xmlDoc.elementsByTagName("RECIPE");
    if ( list.count() )
@@ -3777,7 +3777,7 @@ void Database::updateDatabase(QString const& filename)
       // I think
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       abort();
    }
@@ -3842,7 +3842,7 @@ QSqlDatabase Database::openSQLite()
          throw QString("Could not open %1 : %2").arg(filePath).arg(newDb.lastError().text());
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 
@@ -3866,7 +3866,7 @@ QSqlDatabase Database::openPostgres(QString const& Hostname, QString const& DbNa
          throw QString("Could not open %1 : %2").arg(Hostname).arg(newDb.lastError().text());
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
    return newDb;
@@ -3903,7 +3903,7 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
 
       // this is to prevent us from over-writing or doing heavens knows what to an existing db
       if( newDb.tables().contains(QLatin1String("settings")) ) {
-         Brewtarget::logW( QString("It appears the database is already configured."));
+         qWarning() << QString("It appears the database is already configured.");
          return;
       }
 
@@ -3922,7 +3922,7 @@ void Database::convertDatabase(QString const& Hostname, QString const& DbName,
       copyDatabase(oldType,newType,newDb);
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       throw;
    }
 }
@@ -4019,13 +4019,13 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
          if ( table->dbTable() == Brewtarget::INSTINRECTABLE ) {
             QString trigger = table->generateIncrementTrigger(newType);
             if ( trigger.isEmpty() ) {
-               Brewtarget::logE(QString("No increment triggers found for %1").arg(table->tableName()));
+               qCritical() << QString("No increment triggers found for %1").arg(table->tableName());
             }
             else {
                upsertNew.exec(trigger);
                trigger =  table->generateDecrementTrigger(newType);
                if ( trigger.isEmpty() ) {
-                  Brewtarget::logE(QString("No decrement triggers found for %1").arg(table->tableName()));
+                  qCritical() << QString("No decrement triggers found for %1").arg(table->tableName());
                }
                else {
                   if ( ! upsertNew.exec(trigger) ) {
@@ -4048,7 +4048,7 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
          }
       }
       catch (QString e) {
-         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
          newDb.rollback();
          throw;
       }

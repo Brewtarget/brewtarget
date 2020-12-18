@@ -412,7 +412,7 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type)
             str = tr("Steep %1 %2 in wort for %3.");
          else
          {
-            Brewtarget::logW("Recipe::hopSteps(): Unrecognized hop use.");
+            qWarning() << "Recipe::hopSteps(): Unrecognized hop use.";
             str = tr("Use %1 %2 for %3");
          }
 
@@ -453,7 +453,7 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type)
             str = tr("Put %1 %2 into secondary for %3.");
          else
          {
-            Brewtarget::logW("Recipe::getMiscSteps(): Unrecognized misc use.");
+            qWarning() << "Recipe::getMiscSteps(): Unrecognized misc use.";
             str = tr("Use %1 %2 for %3.");
          }
 
@@ -928,7 +928,7 @@ void Recipe::setType( const QString &var )
 {
    QString tmp;
    if ( ! isValidType(var) ) {
-      Brewtarget::logW( QString("Recipe: invalid type: %1").arg(var) );
+      qWarning() << QString("Recipe: invalid type: %1").arg(var);
       tmp = "All Grain";
    }
    else {
@@ -953,7 +953,7 @@ void Recipe::setBatchSize_l( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: batch size < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: batch size < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -977,7 +977,7 @@ void Recipe::setBoilSize_l( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: boil size < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: boil size < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1001,7 +1001,7 @@ void Recipe::setBoilTime_min( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: boil time < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: boil time < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1020,7 +1020,7 @@ void Recipe::setEfficiency_pct( double var )
    double tmp;
    if( var < 0.0  || var > 100.0 )
    {
-      Brewtarget::logW( QString("Recipe: 0 < efficiency < 100: %1").arg(var) );
+      qWarning() << QString("Recipe: 0 < efficiency < 100: %1").arg(var);
       tmp = 70;
    }
    else
@@ -1068,7 +1068,7 @@ void Recipe::setTasteRating( double var )
    double tmp;
    if( var < 0.0 || var > 50.0 )
    {
-      Brewtarget::logW( QString("Recipe: 0 < taste rating < 50: %1").arg(var) );
+      qWarning() << QString("Recipe: 0 < taste rating < 50: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1087,7 +1087,7 @@ void Recipe::setOg( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: og < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: og < 0: %1").arg(var);
       tmp = 1.0;
    }
    else
@@ -1106,7 +1106,7 @@ void Recipe::setFg( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: fg < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: fg < 0: %1").arg(var);
       tmp = 1.0;
    }
    else
@@ -1125,7 +1125,7 @@ void Recipe::setFermentationStages( int var )
    int tmp;
    if( var < 0 )
    {
-      Brewtarget::logW( QString("Recipe: stages < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: stages < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1144,7 +1144,7 @@ void Recipe::setPrimaryAge_days( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: primary age < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: primary age < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1171,7 +1171,7 @@ void Recipe::setSecondaryAge_days( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: secondary age < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: secondary age < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1198,7 +1198,7 @@ void Recipe::setTertiaryAge_days( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: tertiary age < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: tertiary age < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1225,7 +1225,7 @@ void Recipe::setAge_days( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: age < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: age < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1262,7 +1262,7 @@ void Recipe::setCarbonation_vols( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: carb < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: carb < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1305,7 +1305,7 @@ void Recipe::setPrimingSugarEquiv( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: primingsugarequiv < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: primingsugarequiv < 0: %1").arg(var);
       tmp = 1;
    }
    else
@@ -1325,7 +1325,7 @@ void Recipe::setKegPrimingFactor( double var )
 
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: keg priming factor < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: keg priming factor < 0: %1").arg(var);
       tmp = 1;
    }
    else
@@ -1534,7 +1534,7 @@ template<class T> T * Recipe::add(T * var) {
 
 Ingredient * Recipe::removeIngredient( Ingredient *var )
 {
-//   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+//   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
    // brewnotes a bit odd
    if ( dynamic_cast<BrewNote*>(var) ) {

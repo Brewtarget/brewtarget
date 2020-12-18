@@ -116,7 +116,7 @@ void MashStep::setInfuseAmount_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("%1 number cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1 number cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
       return;
    }
    else
@@ -132,7 +132,7 @@ void MashStep::setStepTemp_c( double var )
 {
    if( var < -273.15 )
    {
-      Brewtarget::logW( QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var);
       return;
    }
    else
@@ -148,7 +148,7 @@ void MashStep::setStepTime_min( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("%1: step time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1: step time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
       return;
    }
    else
@@ -164,7 +164,7 @@ void MashStep::setRampTime_min( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("%1: ramp time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1: ramp time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
 
       return;
    }
@@ -181,7 +181,7 @@ void MashStep::setEndTemp_c( double var )
 {
    if( var < -273.15 )
    {
-      Brewtarget::logW( QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var);
       return;
    }
    else

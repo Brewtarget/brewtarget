@@ -59,13 +59,20 @@ namespace Log
    bool logUseConfigDir = true;
    int const logFileSize = 500 * 1024;
    int const logFileCount = 5;
-   QString logFileName;
+   // \brief this is the file we're always logging to.
+   QString logFileName("Brewtarget_Log");
+   // \brief what file ending to use for the file.
+   QString logFileNameSuffix("txt");
    QString timeFormat;
    QString tmpl;
 
+   QString logFileFullName() {
+      return QString("%1.%2")
+         .arg(logFileName)
+         .arg(logFileNameSuffix);
+   }
    bool initializeLog()
    {
-      initLogFileName();
       timeFormat = "hh:mm:ss.zzz";
       tmpl = "[%1] %2 : %3";
       //need to test if we're running in a test and ajust the location for the logfiles accordingly, this to not clutter the application path with dummy data.
@@ -117,7 +124,7 @@ namespace Log
 
    void changeDirectory() {
       //If it's the same, just return, no need to do anything.
-      if (logFilePath.filePath(logFileName) == logFile.fileName()) {
+      if (logFilePath.filePath(logFileFullName()) == logFile.fileName()) {
          return;
       }
 
@@ -138,14 +145,10 @@ namespace Log
          */
       if (stream)
       {
-         delete stream;
-         stream = nullptr;
-         if (logFile.isOpen())
-         {
-            logFile.close();
-         }
+         //Close the file if open and reset the stream.
+         closeLogFile();
          //Preserving the old logfiles
-         if (!logFile.copy(logFilePath.filePath(logFileName)))
+         if (!logFile.copy(logFilePath.filePath(logFileFullName())))
          {
             qCritical() << "Error while copying to the new file location. Reverting settings";
             logFilePath = QDir(QFileInfo(logFile).filePath());
@@ -199,17 +202,35 @@ namespace Log
 
    bool initLogFileName()
    {
-      logFileName = QString("Brewtarget_Log_%1__%2.txt").arg(QDate::currentDate().toString("yyyy_MM_dd")).arg(QTime::currentTime().toString("hh_mm_ss_zzz"));
+      //Accuire lock due to the file mangling below.
+      QMutexLocker locker(&mutex);
+      //first check if it's time to rotate the log file
+      if (logFile.size() > logFileSize)
+      {
+         //Doublecheck that the stream is not initiated, if so, kill it.
+         closeLogFile();
+         //Generate a new filename for the logfile adding timestamp to it and then rename the file.
+         QString newlogFileName = QString("%1_%2_%3.%4")
+            .arg(logFileName)
+            .arg(QDate::currentDate().toString("yyyy_MM_dd"))
+            .arg(QTime::currentTime().toString("hh_mm_ss_zzz"))
+            .arg(logFileNameSuffix);
 
+         if ( ! logFile.rename(logFilePath.filePath(logFileFullName()), logFilePath.filePath(newlogFileName)) )
+         {
+            qCritical() << "Could not rename the log file";
+         }
+      }
+      //Recreating the log file again with the name specified in logFileName variable.
       // Test default location
-      logFile.setFileName(logFilePath.filePath(logFileName));
+      logFile.setFileName(logFilePath.filePath(logFileFullName()));
       if (logFile.open(QIODevice::WriteOnly | QIODevice::Append)) {
          stream = new QTextStream(&logFile);
          return true;
       }
 
       // Defaults to temporary
-      logFile.setFileName(QDir::temp().filePath(logFileName));
+      logFile.setFileName(QDir::temp().filePath(logFileFullName()));
       if (logFile.open(QFile::WriteOnly | QFile::Truncate)) {
          logFile.setPermissions(QFileDevice::WriteUser | QFileDevice::ReadUser | QFileDevice::ExeUser);
          stream = new QTextStream(&logFile);
@@ -219,9 +240,23 @@ namespace Log
       return false;
    }
 
+   void closeLogFile()
+   {
+      //Close and reset the stream if it is set.
+      if (stream)
+      {
+         delete stream;
+         stream = nullptr;
+      }
+      //Close the file if it's open.
+      if (logFile.isOpen())
+         logFile.close();
+   }
+
    void logMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& message)
    {
-      /* First things first! do the user want to save logs, and if so, to what level.
+      /*
+      * First things first! do the user want to save logs, and if so, to what level.
       * then, if the file-stream is open and the log file size is to big, we need to prune the old logs and initiate a new logfile.
       * after that we're all set, Log away!
       */
@@ -251,28 +286,15 @@ namespace Log
    {
       QMutexLocker locker(&mutex);
       //Need to close and reset the stream before deleting any files.
-      delete stream;
-      stream = nullptr;
-      if (logFile.isOpen())
-      {
-         logFile.close();
-      }
+      closeLogFile();
 
       //if the logfile is closed and we're in testing mode where stderr is disabled, we need to enable is temporarily.
       //saving old value to reset to after pruning.
       bool old_isLoggingToStderr = isLoggingToStderr;
       isLoggingToStderr = true;
-      //setting up som preniminaries.
-      QDir dir;
-      QStringList filters;
-      filters << "Brewtarget_Log_*.txt";
 
-      //configuring the file filters to only remove the log files as the directory also contains the database.
-      dir.setSorting(QDir::Reversed | QDir::Time);
-      dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
-      dir.setPath(logFilePath.canonicalPath());
-      dir.setNameFilters(filters);
-      QFileInfoList fileList = dir.entryInfoList();
+      //Get the list of log files.
+      QFileInfoList fileList = getLogFileList();
       if (fileList.size() > logFileCount)
       {
          for (int i = 0; i < (fileList.size() - logFileCount); i++)
@@ -289,7 +311,7 @@ namespace Log
       //testing the number of logfiles that exist under the logging directory, and also checking that neither is bigger than the specified size restriction.
       QDir dir;
       QStringList filters;
-      filters << "Brewtarget_Log_*.txt";
+      filters << QString("%1*.%2").arg(logFileName).arg(logFileNameSuffix);
 
       //configuring the file filters to only remove the log files as the directory also contains the database.
       dir.setSorting(QDir::Reversed | QDir::Time);

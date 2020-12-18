@@ -181,7 +181,7 @@ void WaterDialog::setRecipe(Recipe *rec)
    m_salt_delegate->observeRecipe(m_rec);
 
    if ( mash == nullptr || mash->mashSteps().size() == 0 ) {
-      Brewtarget::logW(QString("Can not set water chemistry without a mash"));
+      qWarning() << QString("Can not set water chemistry without a mash");
       return;
    }
 
@@ -280,7 +280,7 @@ void WaterDialog::newTotals()
    double allTheWaters = mash->totalMashWater_l();
 
    if ( qFuzzyCompare(allTheWaters,0.0) ) {
-      Brewtarget::logW(QString("Can not set strike water chemistry without a mash"));
+      qWarning() << QString("Can not set strike water chemistry without a mash");
       return;
    }
    // Two major things need to happen here:

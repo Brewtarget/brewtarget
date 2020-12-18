@@ -235,7 +235,7 @@ void Misc::setAmountIsWeight( bool var )
 void Misc::setAmount( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
+      qWarning() << QString("Misc: amount < 0: %1").arg(var);
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
@@ -247,7 +247,7 @@ void Misc::setAmount( double var )
 void Misc::setInventoryAmount( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: inventory < 0: %1").arg(var) );
+      qWarning() << QString("Misc: inventory < 0: %1").arg(var);
    else {
       m_inventory = var;
       if ( ! m_cacheOnly )
@@ -265,7 +265,7 @@ void Misc::setInventoryId( int key )
 void Misc::setTime( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
+      qWarning() << QString("Misc: time < 0: %1").arg(var);
    else {
       m_time = var;
       if ( ! m_cacheOnly ) {

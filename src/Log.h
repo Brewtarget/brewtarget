@@ -68,6 +68,7 @@ namespace Log
    extern int const logFileSize;
    extern int const logFileCount;
    extern QString logFileName;
+   extern QString logFileNameSuffix;
    extern QString timeFormat;
    extern QString tmpl;
 
@@ -78,6 +79,12 @@ namespace Log
    extern void doLog(const LogType lt, const QString message);
    extern QString getTypeName(const LogType type);
    extern LogType getLogTypeFromString(QString type = QString("INFO"));
+
+   /*
+   * Generates a Logfilename based on the settings above.
+   * prepared for user settings if need be.
+   */
+   extern QString logFileFullName();
 
    /* initLogFileName initializes the log file and opens the stream for writing.
     * This was moved to its own function as this has to be called everytime logs are being pruned.
@@ -103,6 +110,11 @@ namespace Log
     * purpose is to keep log files to a mininum while keeping the logs up-to-date and also not require manual pruning of files.
     */
    extern void pruneLogFiles();
+
+   /*
+   * \brief Closes the log file stream and the file handle.
+   */
+   extern void closeLogFile();
 
    /* Get the list of Logfiles present in the directory currently logging in and returns a FileInfoList containing the files.*/
    extern QFileInfoList getLogFileList();

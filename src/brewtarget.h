@@ -46,6 +46,7 @@ extern void qt_set_sequence_auto_mnemonic(bool b);
 #include <QMenu>
 #include <QMetaProperty>
 #include <QList>
+#include <QDebug>
 #include "UnitSystem.h"
 #include "Log.h"
 
@@ -190,15 +191,6 @@ public:
    static double toDouble(QString text, bool* ok = nullptr);
    static double toDouble(const Ingredient* element, QString attribute, QString caller);
    static double toDouble(QString text, QString caller);
-
-   //! \brief Log an error message.
-   static void logE( QString message );
-   //! \brief Log a warning message.
-   static void logW( QString message );
-   //! \brief Log an info message.
-   static void logI( QString message );
-   //! \brief Log a debug message.
-   static void logD( QString message );
 
    /*!
     *  \brief Displays an amount in the appropriate units.

@@ -264,7 +264,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(hopObs.size() ))
    {
-      Brewtarget::logW(QString("Bad model index. row = %1").arg(index.row()));
+      qWarning() << QString("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -320,7 +320,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
         else
            return QVariant();
       default :
-         Brewtarget::logW(QString("HopTableModel::data Bad column: %1").arg(index.column()));
+         qWarning() << QString("HopTableModel::data Bad column: %1").arg(index.column());
          return QVariant();
    }
 }
@@ -346,7 +346,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
          case HOPFORMCOL:
             return QVariant(tr("Form"));
          default:
-            Brewtarget::logW(QString("HopTableModel::headerdata Bad column: %1").arg(section));
+            qWarning() << QString("HopTableModel::headerdata Bad column: %1").arg(section);
             return QVariant();
       }
    }
@@ -397,7 +397,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          {
             amt = Brewtarget::toDouble( value.toString(), &retVal );
             if ( ! retVal )
-               Brewtarget::logW( QString("HopTableModel::setData() could not convert %1 to double").arg(value.toString()));
+               qWarning() << QString("HopTableModel::setData() could not convert %1 to double").arg(value.toString());
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "alpha_pct",
                                                      amt,
@@ -451,7 +451,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          }
          break;
       default:
-         Brewtarget::logW(QString("HopTableModel::setdata Bad column: %1").arg(index.column()));
+         qWarning() << QString("HopTableModel::setdata Bad column: %1").arg(index.column());
          return false;
    }
    if ( retVal )
@@ -581,7 +581,7 @@ Hop* HopTableModel::getHop(int i) {
             return hopObs[i];
     }
     else
-        Brewtarget::logW( QString("HopTableModel::getHop( %1/%2 )").arg(i).arg(hopObs.size()) );
+       qWarning() << QString("HopTableModel::getHop( %1/%2 )").arg(i).arg(hopObs.size());
     return nullptr;
 }
 

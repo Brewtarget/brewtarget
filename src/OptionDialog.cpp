@@ -318,7 +318,7 @@ void OptionDialog::saveAndClose()
          QMessageBox::information(this, tr("Restart"), tr("Please restart brewtarget to connect to the new database"));
       }
       catch (QString e) {
-         Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         qCritical() << Q_FUNC_INFO << e;
          saveDbConfig = false;
       }
    }

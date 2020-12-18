@@ -257,7 +257,7 @@ void Testing::testLogRotation()
 
    //generate 40 000 log rows giving roughly 10 files with dummy/random logs
    // This should have to log rotate a few times leaving 5 log files in the directory which we can test for size and number of files.
-   for (int i=0; i < 10000; i++)
+   for (int i=0; i < 8000; i++)
    {
       qDebug() << QString("iteration %1-1; (%2)").arg(i).arg(randomStringGenerator());
       qWarning() << QString("iteration %1-2; (%2)").arg(i).arg(randomStringGenerator());
@@ -281,6 +281,8 @@ void Testing::cleanupTestCase()
 {
    Brewtarget::cleanup();
    QMutexLocker locker(&Log::mutex);
+   //Close the log file to avoind leaving hanging connections when removing all the files.
+   Log::closeLogFile();
    //Clean up the jibberich logs from disk by removing the
    QFileInfoList fileList = Log::getLogFileList();
    for (int i = 0; i < fileList.size(); i++)

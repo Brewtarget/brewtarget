@@ -288,7 +288,7 @@ QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
       if ( _type != BtTreeItem::FOLDER )
       {
          if ( _model->thing( _filter->mapToSource(index)) == nullptr ) {
-            Brewtarget::logW(QString("Couldn't map that thing"));
+            qWarning() << QString("Couldn't map that thing");
             id = -1;
          }
          else {
@@ -376,7 +376,7 @@ void BtTreeView::newIngredient() {
          qobject_cast<WaterEditor*>(_editor)->newWater(folder);
          break;
       default:
-         Brewtarget::logW(QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type));
+         qWarning() << QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type);
    }
 
 }
@@ -432,7 +432,7 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
          _newMenu->addAction(tr("Water"), this, SLOT(newIngredient()));
          break;
       default:
-         Brewtarget::logW(QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type));
+         qWarning() << QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type);
    }
 
    _newMenu->addAction(tr("Folder"), top, SLOT(newFolder()));
@@ -533,7 +533,7 @@ void BtTreeView::copySelected(QModelIndexList selected)
             newName = verifyCopy(tr("Water"),_model->name(trans), &abort);
             break;
          default:
-            Brewtarget::logW( QString("BtTreeView::copySelected Unknown type: %1").arg(_model->type(trans)));
+            qWarning() << QString("BtTreeView::copySelected Unknown type: %1").arg(_model->type(trans));
       }
       if ( !abort && !newName.isEmpty() )
          names.append(qMakePair(trans,newName));
@@ -618,7 +618,7 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
             confirmDelete = verifyDelete(confirmDelete,tr("Water"),_model->name(trans));
             break;
          default:
-            Brewtarget::logW( QString("BtTreeView::deleteSelected Unknown type: %1").arg(_model->type(trans)));
+            qWarning() << QString("BtTreeView::deleteSelected Unknown type: %1").arg(_model->type(trans));
       }
       // If they selected "Yes" or "Yes To All", push and loop
       if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )

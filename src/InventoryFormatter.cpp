@@ -65,9 +65,9 @@ static QString createInventoryTableFermentable()
 
          if (!fermentable)
          {
-            Brewtarget::logE(QString("The fermentable %1 has a record in the "
+            qCritical() << QString("The fermentable %1 has a record in the "
                                      "inventory, but does not exist.")
-                                   .arg(itor.key()));
+                                   .arg(itor.key());
             continue;
          }
 
@@ -109,9 +109,9 @@ static QString createInventoryTableHop()
 
          if (!hop)
          {
-            Brewtarget::logE(QString("The hop %1 has a record in the "
+            qCritical() << QString("The hop %1 has a record in the "
                                      "inventory, but does not exist.")
-                                   .arg(itor.key()));
+                                   .arg(itor.key());
             continue;
          }
 
@@ -152,9 +152,9 @@ static QString createInventoryTableMiscellaneous()
 
          if (!miscellaneous)
          {
-            Brewtarget::logE(QString("The miscellaneous %1 has a record in the "
+            qCritical() << QString("The miscellaneous %1 has a record in the "
                                      "inventory, but does not exist.")
-                                   .arg(itor.key()));
+                                   .arg(itor.key());
             continue;
          }
 
@@ -197,9 +197,9 @@ static QString createInventoryTableYeast()
 
          if (!yeast)
          {
-            Brewtarget::logE(QString("The yeast %1 has a record in the "
+            qCritical() << QString("The yeast %1 has a record in the "
                                      "inventory, but does not exist.")
-                                   .arg(itor.key()));
+                                   .arg(itor.key());
             continue;
          }
 

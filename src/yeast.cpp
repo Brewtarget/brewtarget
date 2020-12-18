@@ -271,7 +271,7 @@ void Yeast::setForm( Yeast::Form f )
 void Yeast::setAmount( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Yeast: amount < 0: %1").arg(var) );
+      qWarning() << QString("Yeast: amount < 0: %1").arg(var);
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
@@ -283,7 +283,7 @@ void Yeast::setAmount( double var )
 void Yeast::setInventoryQuanta( int var )
 {
    if( var < 0.0 ) {
-      Brewtarget::logW( QString("Yeast: inventory < 0: %1").arg(var) );
+      qWarning() << QString("Yeast: inventory < 0: %1").arg(var);
    }
    else {
       m_inventory = var;

@@ -135,7 +135,7 @@ void Mash::setPh( double var )
 {
    if( var < 0.0 || var > 14.0 )
    {
-      Brewtarget::logW( QString("Mash: 0 < pH < 14: %1").arg(var) );
+      qWarning() << QString("Mash: 0 < pH < 14: %1").arg(var);
       return;
    }
    else
@@ -151,7 +151,7 @@ void Mash::setTunWeight_kg( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Mash: tun weight < 0: %1").arg(var) );
+      qWarning() << QString("Mash: tun weight < 0: %1").arg(var);
       return;
    }
    else
@@ -167,7 +167,7 @@ void Mash::setTunSpecificHeat_calGC( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Mash: sp heat < 0: %1").arg(var) );
+      qWarning() << QString("Mash: sp heat < 0: %1").arg(var);
       return;
    }
    else

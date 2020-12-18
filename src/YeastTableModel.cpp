@@ -238,7 +238,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(yeastObs.size() ))
    {
-      Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
+      qWarning() << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -295,7 +295,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
                         );
 
       default :
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return QVariant();
    }
 }
@@ -321,7 +321,7 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
          case YEASTPRODIDCOL:
              return QVariant(tr("Product ID"));
          default:
-            Brewtarget::logW(tr("Bad column: %1").arg(section));
+            qWarning() << tr("Bad column: %1").arg(section);
             return QVariant();
       }
    }
@@ -420,7 +420,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          break;
 
       default:
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return false;
    }
    return true;

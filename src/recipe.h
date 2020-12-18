@@ -235,7 +235,7 @@ public:
     * making add and remove more symmetric).
     */
    template<class T> T * remove(T * var) {
-//      Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+//      qDebug() << QString("%1").arg(Q_FUNC_INFO);
       return static_cast<T *>(this->removeIngredient(var));
    }
 
