@@ -1259,6 +1259,8 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    {
       m->setTunWeight_kg( kit->tunWeight_kg() );
       m->setTunSpecificHeat_calGC( kit->tunSpecificHeat_calGC() );
+      new SimpleUndoableUpdate(*m, "tunWeight_kg", m->tunWeight_kg(), tr("Change Tun Weight"), equipmentUpdate);
+      new SimpleUndoableUpdate(*m, "tunSpecificHeat_calGC", m->tunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
    }
 
    if( QMessageBox::question(this,
@@ -1278,9 +1280,6 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
       new SimpleUndoableUpdate(*this->recipeObs, "batchSize_l", kit->batchSize_l(), tr("Change Batch Size"), equipmentUpdate);
       new SimpleUndoableUpdate(*this->recipeObs, "boilSize_l", kit->boilSize_l(), tr("Change Boil Size"), equipmentUpdate);
       new SimpleUndoableUpdate(*this->recipeObs, "boilTime_min", kit->boilTime_min(), tr("Change Boil Time"), equipmentUpdate);
-      Mash * mash = this->recipeObs->mash();
-      new SimpleUndoableUpdate(*mash, "tunWeight_kg", mash->tunWeight_kg(), tr("Change Tun Weight"), equipmentUpdate);
-      new SimpleUndoableUpdate(*mash, "tunSpecificHeat_calGC", mash->tunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
    }
 
    // This will do the equipment update and any related updates - see above
