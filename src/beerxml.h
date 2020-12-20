@@ -130,9 +130,9 @@ private:
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
 
-   int validate(QDomNode schemaDocNode, QDomNode beerXmlDocNode, ValidationType = Default);
+///   int validate(QDomNode schemaDocNode, QDomNode beerXmlDocNode, ValidationType = Default);
 
-   void validate(QDomDocument & xmlDoc);
+///   void validate(QDomDocument & xmlDoc);
 };
 
 #endif

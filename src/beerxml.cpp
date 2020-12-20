@@ -40,11 +40,19 @@
 #include <QPair>
 
 #include <xercesc/dom/DOMConfiguration.hpp>
+#include <xercesc/dom/DOMDocument.hpp>
+#include <xercesc/dom/DOMError.hpp>
+#include <xercesc/dom/DOMErrorHandler.hpp>
 #include <xercesc/dom/DOMImplementation.hpp>
 #include <xercesc/dom/DOMImplementationRegistry.hpp>
+#include <xercesc/dom/DOMLocator.hpp>
 #include <xercesc/dom/DOMLSParser.hpp>
+#include <xercesc/framework/MemBufInputSource.hpp>
+#include <xercesc/framework/Wrapper4InputSource.hpp>
 #include <xercesc/framework/XMLGrammarPoolImpl.hpp>
+#include <xercesc/sax/SAXException.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/util/XMLException.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
 
 #include "Algorithms.h"
@@ -64,6 +72,58 @@
 #include "yeast.h"
 
 #include "TableSchema.h"
+
+/**
+ * \brief This class extends QString to allow you to construct Qt QStrings from Xerces null-terminated XMLCh strings
+ *        without having to do lots of reinterpret_cast.
+ *
+ * Xerces and Qt both represent strings internally using UTF-16.  However, Xerces uses a base type (uint16_t) to define
+ * its 16-bit chars (XMLCh), whereas Qt uses a small class (QChar) for the same data.  So we need a reinterpret_cast to
+ * switch between the two.
+ */
+class XQString : public QString {
+public:
+   XQString(XMLCh const * xercesString) : QString(reinterpret_cast<QChar const *>(xercesString)) {
+      return;
+   }
+};
+
+class BtDomErrorHandler: public xercesc::DOMErrorHandler {
+public:
+   BtDomErrorHandler() : couldntHandleError(false) {}
+
+   // See https://xerces.apache.org/xerces-c/apiDocs-3/classDOMError.html for possible indexes into this array
+   static char const * const XercesErrorSeverities[];
+
+   bool failed() const { return this->couldntHandleError; }
+   /**
+    * If the handleError method returns true the DOM implementation should continue as if the error didn't happen when
+    * possible, if the method returns false then the DOM implementation should stop the current processing when possible.
+    */
+   virtual bool handleError (const xercesc::DOMError& domError) {
+      xercesc::DOMError::ErrorSeverity severity = domError.getSeverity();
+      XQString message{domError.getMessage()};
+      xercesc::DOMLocator* location {domError.getLocation()};
+      XQString uri{location->getURI()};
+
+      qDebug() <<
+         Q_FUNC_INFO << uri << ": " << XercesErrorSeverities[severity] << " at line " << location->getLineNumber() <<
+         ", column " << location->getColumnNumber() << ": " << message;
+
+     this->couldntHandleError = true;
+     return false;
+  }
+
+private:
+  bool couldntHandleError;
+};
+
+constexpr char const * const BtDomErrorHandler::XercesErrorSeverities[] {
+   "Not Used",
+   "Warning",     // DOM_SEVERITY_WARNING = 1
+   "Error",       // DOM_SEVERITY_ERROR = 2
+   "Fatal Error"  // DOM_SEVERITY_FATAL_ERROR = 3
+};
 
 // This private implementation class holds all private non-virtual members of BeerXML
 class BeerXML::impl {
@@ -116,21 +176,6 @@ public:
    // substantial than in some other areas of the code base.
    //
    void loadSchemas() {
-      QFile schemaFile(":/beerxml/v1/BeerXml.xsd");
-      if (!schemaFile.open(QIODevice::ReadOnly)) {
-         // This should pretty much never happen, as we're loading from a QResource compiled into the binary rather
-         // than reading from the file system at run-time.
-         Brewtarget::logE(
-            QString("%1 Could not open schema file resource %2 for reading").arg(Q_FUNC_INFO).arg(schemaFile.fileName())
-         );
-         throw std::runtime_error("Could not open schema file resource");
-      }
-
-      QByteArray schemaData = schemaFile.readAll();
-      Brewtarget::logD(
-         QString("%1 Schema file %2: %3 bytes").arg(Q_FUNC_INFO).arg(schemaFile.fileName()).arg(schemaData.length())
-      );
-
       //
       // See https://stackoverflow.com/questions/52275608/xerces-c-validate-xml-with-hardcoded-xsd and
       // http://www.codesynthesis.com/~boris/blog/2010/03/15/validating-external-schemas-xerces-cxx/ (plus linked
@@ -215,7 +260,118 @@ public:
       // We will release the DOM document ourselves.
       config->setParameter(xercesc::XMLUni::fgXercesUserAdoptsDOMDocument, true);
 
+
+      BtDomErrorHandler domErrorHandler;
+      config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &domErrorHandler);
+
+      QFile schemaFile(":/beerxml/v1/BeerXml.xsd");
+      if (!schemaFile.open(QIODevice::ReadOnly)) {
+         // This should pretty much never happen, as we're loading from a QResource compiled into the binary rather
+         // than reading from the file system at run-time.
+         Brewtarget::logE(
+            QString("%1 Could not open schema file resource %2 for reading").arg(Q_FUNC_INFO).arg(schemaFile.fileName())
+         );
+         throw std::runtime_error("Could not open schema file resource");
+      }
+
+      QByteArray schemaData = schemaFile.readAll();
+      Brewtarget::logD(
+         QString("%1 Schema file %2: %3 bytes").arg(Q_FUNC_INFO).arg(schemaFile.fileName()).arg(schemaData.length())
+      );
+
+      xercesc::MemBufInputSource schemaAsInputSource{reinterpret_cast<const XMLByte *>(schemaData.constData()), static_cast<XMLSize_t>(schemaData.length()), "dummy name"};
+
+      xercesc::Wrapper4InputSource schemaAsDOMLSInput{&schemaAsInputSource, false};
+
+      // Load the schema and cache its grammar
+      if (!this->parser->loadGrammar(&schemaAsDOMLSInput, xercesc::Grammar::SchemaGrammarType, true)) {
+         // As above, this shouldn't happen "in production" as it's our own schema file, so we should make it parseable
+         Brewtarget::logE(QString("%1 Error parsing %2").arg(Q_FUNC_INFO).arg(schemaFile.fileName()));
+         throw std::runtime_error("Could not open schema file resource");
+      }
+
       return;
+   }
+
+   /**
+    * Validate XML file against schema
+    *
+    * @param fileName
+    */
+   bool validate(const QString& fileName) {
+
+      QFile inputFile;
+      inputFile.setFileName(fileName);
+
+      if(! inputFile.open(QIODevice::ReadOnly)) {
+         Brewtarget::logW(QString("%1: Could not open %2 for reading.").arg(Q_FUNC_INFO).arg(fileName));
+         return false;
+      }
+
+      QByteArray documentData = inputFile.readAll();
+      Brewtarget::logD(
+         QString("%1 Schema file %2: %3 bytes").arg(Q_FUNC_INFO).arg(inputFile.fileName()).arg(documentData.length())
+      );
+
+
+      try {
+      // Probably not 100% necessary to lock the pool against modifications, as we're not planning any after start-up, but...
+      this->grammarPool.lockPool();
+
+      /// TBD probably need to lock other things here ///
+
+
+      BtDomErrorHandler domErrorHandler;
+      xercesc::DOMConfiguration * config = this->parser->getDomConfig();
+      config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &domErrorHandler);
+
+      config->setParameter(xercesc::XMLUni::fgDOMNamespaces, false);  // Do not perform the namespace processing
+      config->setParameter(xercesc::XMLUni::fgDOMNamespaceDeclarations, false); // Discard  all namespace declaration attributes (though namespace prefixes are retained).
+
+
+
+      QByteArray fileNameAsCString = fileName.toLocal8Bit();
+
+      xercesc::MemBufInputSource documentAsInputSource{reinterpret_cast<const XMLByte *>(documentData.constData()), static_cast<XMLSize_t>(documentData.length()), fileNameAsCString.constData()};
+
+      xercesc::Wrapper4InputSource documentAsDOMLSInput{&documentAsInputSource, false};
+
+      xercesc::DOMDocument* document{this->parser->parse(&documentAsDOMLSInput)};
+
+      if (document) {
+        document->release ();
+      }
+      bool parsedOk = !domErrorHandler.failed();
+
+
+      return parsedOk;
+
+      } catch(const std::exception& se) {
+         Brewtarget::logE(
+            QString("%1 Caught std::exception: %2").arg(Q_FUNC_INFO).arg(se.what())
+         );
+         return false;
+      } catch (const xercesc::XMLException & xe) {
+         XQString message {xe.getMessage()};
+         Brewtarget::logE(
+            QString("%1 Caught xerces::XMLException: %2").arg(Q_FUNC_INFO).arg(message)
+         );
+         return false;
+      } catch (const xercesc::DOMException & de) {
+         XQString message {de.getMessage()};
+         Brewtarget::logE(
+            QString("%1 Caught xerces::DOMException: %2").arg(Q_FUNC_INFO).arg(message)
+         );
+         return false;
+      } catch (const xercesc::SAXException & se) {
+         XQString message {se.getMessage()};
+         Brewtarget::logE(
+            QString("%1 Caught xerces::SAXException: %2").arg(Q_FUNC_INFO).arg(message)
+         );
+         return false;
+      }
+
+
    }
 
 private:
@@ -927,7 +1083,6 @@ BrewNote* BeerXML::brewNoteFromXml( QDomNode const& node, Recipe* parent )
    QDomNode n;
    BrewNote* ret = nullptr;
    QDateTime theDate;
-   Database & db = Database::instance();
 
    n = node.firstChildElement("BREWDATE");
    theDate = QDateTime::fromString(n.firstChild().toText().nodeValue(),Qt::ISODate);
@@ -2011,6 +2166,7 @@ bool BeerXML::importFromXML(const QString& filename)
 
 /////////////////////////////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
    // Ultimately 3 returns - completely invalid (can't parse) / slightly invalid (but we can fix) / valid
+   this->pimpl->validate(filename);
    return true;
 /////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

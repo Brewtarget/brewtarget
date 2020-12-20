@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <xsd:complexType>
+   <xsd:complexType name="TopLevel">
       <xsd:sequence>
          <xsd:choice maxOccurs="unbounded" minOccurs="1">
             <xsd:element name="HOPS">
