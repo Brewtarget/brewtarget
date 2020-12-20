@@ -116,7 +116,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          _mimeType = "application/x-brewtarget-ingredient";
          break;
       default:
-         Brewtarget::logW(QString("Invalid treemask: %1").arg(type));
+         qWarning() << QString("Invalid treemask: %1").arg(type);
    }
 
    treeMask = type;
@@ -371,7 +371,7 @@ QVariant BtTreeModel::recipeHeader(int section) const
       return QVariant(tr("Style"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getRecipeHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getRecipeHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -385,7 +385,7 @@ QVariant BtTreeModel::equipmentHeader(int section) const
       return QVariant(tr("Boil Time"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getEquipmentHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getEquipmentHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -401,7 +401,7 @@ QVariant BtTreeModel::fermentableHeader(int section) const
       return QVariant(tr("Type"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getFermentableHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getFermentableHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -417,7 +417,7 @@ QVariant BtTreeModel::hopHeader(int section) const
       return QVariant(tr("Use"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getHopHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getHopHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -433,7 +433,7 @@ QVariant BtTreeModel::miscHeader(int section) const
       return QVariant(tr("Use"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getMiscHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getMiscHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -449,7 +449,7 @@ QVariant BtTreeModel::yeastHeader(int section) const
       return QVariant(tr("Form"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section) );
+   qWarning() << QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -469,7 +469,7 @@ QVariant BtTreeModel::styleHeader(int section) const
       return QVariant(tr("Guide"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section) );
+   qWarning() << QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -485,7 +485,7 @@ QVariant BtTreeModel::folderHeader(int section) const
          return QVariant(tr("FULLPATH"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getFolderHeader Bad column: %1").arg(section) );
+   qWarning() << QString("BtTreeModel::getFolderHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -510,7 +510,7 @@ QVariant BtTreeModel::waterHeader(int section) const
    case BtTreeItem::WATERpHCOL:
       return QVariant(tr("pH"));
    }
-   Brewtarget::logW( QString("BtTreeModel::waterHeader Bad column: %1").arg(section) );
+   qWarning() << QString("BtTreeModel::waterHeader Bad column: %1").arg(section);
    return QVariant();
 
 }
@@ -630,7 +630,7 @@ QList<Ingredient*> BtTreeModel::elements()
          elements.append(elem);
       break;
    default:
-      Brewtarget::logW(QString("Invalid treemask: %1").arg(treeMask));
+      qWarning() << QString("Invalid treemask: %1").arg(treeMask);
    }
    return elements;
 }
@@ -649,7 +649,7 @@ void BtTreeModel::loadTreeModel()
          ndxLocal = findFolder( elem->folder(), rootItem->child(0), true );
          // I cannot imagine this failing, but what the hell
          if ( ! ndxLocal.isValid() ) {
-            Brewtarget::logW("Invalid return from findFolder in loadTreeModel()");
+            qWarning() << "Invalid return from findFolder in loadTreeModel()";
             continue;
          }
          local = item(ndxLocal);
@@ -662,7 +662,7 @@ void BtTreeModel::loadTreeModel()
       }
 
       if ( ! insertRow(i,ndxLocal,elem,_type) ) {
-         Brewtarget::logW("Insert failed in loadTreeModel()");
+         qWarning() << "Insert failed in loadTreeModel()";
          continue;
       }
 
@@ -687,7 +687,7 @@ void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
       // will do that here too
       if ( ! insertRow(j, createIndex(i,0,temp), note, BtTreeItem::BREWNOTE) )
       {
-         Brewtarget::logW("Brewnote insert failed in loadTreeModel()");
+         qWarning() << "Brewnote insert failed in loadTreeModel()";
          continue;
       }
       observeElement(note);
@@ -899,7 +899,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
                failed = true;
             break;
          default:
-            Brewtarget::logW(QString("copySelected:: unknown type %1").arg(type(ndx)));
+            qWarning() << QString("copySelected:: unknown type %1").arg(type(ndx));
       }
       if ( failed ) {
          QMessageBox::warning(nullptr,
@@ -952,7 +952,7 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
             removeFolder(ndx);
             break;
          default:
-            Brewtarget::logW(QString("deleteSelected:: unknown type %1").arg(type(ndx)));
+            qWarning() << QString("deleteSelected:: unknown type %1").arg(type(ndx));
       }
    }
 }
@@ -980,7 +980,7 @@ void BtTreeModel::folderChanged(QString name)
    ndx = findElement(test);
    if ( ! ndx.isValid() )
    {
-      Brewtarget::logW("folderChanged:: could not find element");
+      qWarning() << "folderChanged:: could not find element";
       return;
    }
 
@@ -994,7 +994,7 @@ void BtTreeModel::folderChanged(QString name)
    // Remove it
    if ( ! removeRows(i, 1, pIndex) )
    {
-      Brewtarget::logW("folderChanged:: could not remove row");
+      qWarning() << "folderChanged:: could not remove row";
       return;
    }
 
@@ -1013,7 +1013,7 @@ void BtTreeModel::folderChanged(QString name)
 
    if ( !  insertRow(j,newNdx,test,_type) )
    {
-      Brewtarget::logW("folderChanged:: could not insert row");
+      qWarning() << "folderChanged:: could not insert row";
       return;
    }
    // If we have brewnotes, set them up here.

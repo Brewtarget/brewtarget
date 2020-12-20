@@ -53,7 +53,7 @@ MashStepTableModel::MashStepTableModel(QTableView* parent)
 
 void MashStepTableModel::addMashStep(MashStep * mashStep)
 {
-   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
    if (mashStep == nullptr || this->steps.contains(mashStep)) {
       return;
@@ -70,7 +70,7 @@ void MashStepTableModel::addMashStep(MashStep * mashStep)
 
 bool MashStepTableModel::removeMashStep(MashStep * mashStep)
 {
-   Brewtarget::logD(QString("%1").arg(Q_FUNC_INFO));
+   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
    int i {this->steps.indexOf(mashStep)};
    if( i >= 0 )
@@ -223,7 +223,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(steps.size()) )
    {
-      Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
+      qWarning() << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -259,7 +259,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
          scale = displayScale(col);
          return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes,3,Unit::noUnit,scale) );
       default :
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return QVariant();
    }
 }

@@ -150,7 +150,7 @@ public:
          q.finish();
       }
       catch (QString e) {
-         Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
+         qCritical() << Q_FUNC_INFO << e << q.lastError().text();
          throw; // rethrow the error until somebody cares
       }
 
@@ -183,7 +183,7 @@ public:
          q.finish();
       }
       catch (QString e) {
-         Brewtarget::logE(QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text()));
+         qCritical() << Q_FUNC_INFO << e << q.lastError().text();
          throw; // rethrow the error until somebody cares
       }
 
@@ -593,7 +593,7 @@ private:
             throw QString("could not execute query: %2 : %3").arg(queryString).arg(q.lastError().text());
       }
       catch (QString e) {
-         Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         qCritical() << Q_FUNC_INFO << e;
          q.finish();
          throw;
       }

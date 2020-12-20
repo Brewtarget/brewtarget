@@ -947,7 +947,7 @@ void BeerXML::fromXml(Ingredient* element, QHash<QString,QString> const& xmlTags
    {
       if( ! node.isElement() )
       {
-         Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         qWarning() << QString("Node at line %1 is not an element.").arg(textNode.lineNumber());
          continue;
       }
 
@@ -990,11 +990,11 @@ void BeerXML::fromXml(Ingredient* element, QHash<QString,QString> const& xmlTags
                element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), stringVal);
                break;
             default:
-               Brewtarget::logW(QString("%1: don't understand property type.").arg(Q_FUNC_INFO));
+               qWarning() << QString("%1: don't understand property type.").arg(Q_FUNC_INFO);
          }
          // Not sure if we should keep processing or just dump?
          if ( ! element->isValid() ) {
-            Brewtarget::logE( QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag));
+            qCritical() << QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag);
             return;
          }
       }
@@ -1019,7 +1019,7 @@ void BeerXML::fromXml(Ingredient* element, QDomNode const& elementNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         qWarning() << QString("Node at line %1 is not an element.").arg(textNode.lineNumber());
          continue;
       }
 
@@ -1062,14 +1062,14 @@ void BeerXML::fromXml(Ingredient* element, QDomNode const& elementNode)
                element->setProperty(pTag.toStdString().c_str(), stringVal);
                break;
             default:
-               Brewtarget::logW(QString("%1: don't understand property type. xmlTag=%2")
+               qWarning() << QString("%1: don't understand property type. xmlTag=%2")
                      .arg(Q_FUNC_INFO)
-                     .arg(xmlTag));
+                     .arg(xmlTag);
                break;
          }
          // Not sure if we should keep processing or just dump?
          if ( ! element->isValid() ) {
-            Brewtarget::logE( QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag));
+            qCritical() << QString("%1 could not populate %2 from XML").arg(Q_FUNC_INFO).arg(xmlTag);
             return;
          }
       }
@@ -1092,7 +1092,7 @@ BrewNote* BeerXML::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 
       if ( ! ret ) {
          QString error = "Could not create new brewnote.";
-         Brewtarget::logE(QString(error));
+         qCritical() << QString(error);
          QMessageBox::critical(nullptr, tr("Import error."),
                error.append("\nUnable to create brew note."));
          return ret;
@@ -1106,7 +1106,7 @@ BrewNote* BeerXML::brewNoteFromXml( QDomNode const& node, Recipe* parent )
       ret->insertInDatabase();
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
    return ret;
 }
@@ -1164,7 +1164,7 @@ Equipment* BeerXML::equipmentFromXml( QDomNode const& node, Recipe* parent )
       }
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       blockSignals(false);
       throw;
    }
@@ -1234,7 +1234,7 @@ Fermentable* BeerXML::fermentableFromXml( QDomNode const& node, Recipe* parent )
          }
 
          if ( ! ret->isValid() ) {
-            Brewtarget::logW( QString("BeerXML::fermentableFromXml: Could convert a recognized type") );
+            qWarning() << QString("BeerXML::fermentableFromXml: Could convert a recognized type");
          }
          ret->insertInDatabase();
 
@@ -1249,7 +1249,7 @@ Fermentable* BeerXML::fermentableFromXml( QDomNode const& node, Recipe* parent )
       if ( parent == nullptr ) {
          db.sqlDatabase().rollback();
       }
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical () << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
    }
 
    if ( parent == nullptr ) {
@@ -1418,7 +1418,7 @@ Hop* BeerXML::hopFromXml( QDomNode const& node, Recipe* parent )
          }
 
          if ( ! ret->isValid() ) {
-            Brewtarget::logW(QString("BeerXML::hopFromXml: Could convert %1 to a recognized type"));
+            qWarning() << QString("BeerXML::hopFromXml: Could convert %1 to a recognized type");
          }
          ret->insertInDatabase();
       }
@@ -1427,7 +1427,7 @@ Hop* BeerXML::hopFromXml( QDomNode const& node, Recipe* parent )
          db.addToRecipe( parent, ret, true );
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       blockSignals(false);
       if ( ! parent )
          db.sqlDatabase().rollback();
@@ -1472,7 +1472,7 @@ Instruction* BeerXML::instructionFromXml( QDomNode const& node, Recipe* parent )
 
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e) );
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       blockSignals(false);
       throw;
    }
@@ -1526,7 +1526,7 @@ Mash* BeerXML::mashFromXml( QDomNode const& node, Recipe* parent )
             MashStep* temp = mashStepFromXml( n, ret );
             if ( ! temp->isValid() ) {
                QString error = QString("Error importing mash step %1. Importing as infusion").arg(temp->name());
-               Brewtarget::logE(error);
+               qCritical() << error;
             }
          }
       }
@@ -1537,7 +1537,7 @@ Mash* BeerXML::mashFromXml( QDomNode const& node, Recipe* parent )
 
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       blockSignals(false);
       db.sqlDatabase().rollback();
       abort();
@@ -1596,7 +1596,7 @@ MashStep* BeerXML::mashStepFromXml( QDomNode const& node, Mash* parent )
       return ret;
    }
    catch (QString e) {
-      Brewtarget::logE( QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << Q_FUNC_INFO << e;
       abort();
    }
 
@@ -1728,7 +1728,7 @@ Misc* BeerXML::miscFromXml( QDomNode const& node, Recipe* parent )
          }
 
          if ( ! ret->isValid() ) {
-            Brewtarget::logW(QString("BeerXML::miscFromXml: Could convert %1 to a recognized type"));
+            qWarning() << QString("BeerXML::miscFromXml: Could convert %1 to a recognized type");
          }
          ret->insertInDatabase();
       }
@@ -1737,7 +1737,7 @@ Misc* BeerXML::miscFromXml( QDomNode const& node, Recipe* parent )
          db.addToRecipe( parent, ret, true );
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( ! parent )
          db.sqlDatabase().rollback();
       blockSignals(false);
@@ -1865,7 +1865,7 @@ Recipe* BeerXML::recipeFromXml( QDomNode const& node )
       blockSignals(false);
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       db.sqlDatabase().rollback();
       blockSignals(false);
       abort();
@@ -1930,7 +1930,7 @@ Style* BeerXML::styleFromXml( QDomNode const& node, Recipe* parent )
 
          // If translating the enums craps out, give a warning
          if (! ret->isValid() ) {
-            Brewtarget::logW(QString("BeerXML::styleFromXml: Could convert %1 to a recognized type"));
+            qWarning() << QString("BeerXML::styleFromXml: Could convert %1 to a recognized type");
          }
          // we need to poke this into the database
          ret->insertInDatabase();
@@ -1940,7 +1940,7 @@ Style* BeerXML::styleFromXml( QDomNode const& node, Recipe* parent )
       }
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( ! parent )
          db.sqlDatabase().rollback();
       blockSignals(false);
@@ -1995,7 +1995,7 @@ Water* BeerXML::waterFromXml( QDomNode const& node, Recipe* parent )
       }
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << Q_FUNC_INFO << e;
       if ( parent == nullptr )
          db.sqlDatabase().rollback();
       blockSignals(false);
@@ -2050,9 +2050,7 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
          // Handle type enums separately.
          n = node.firstChildElement("TYPE");
          if ( n.firstChild().isNull() ) {
-            Brewtarget::logE(
-                  QString("Could not find TYPE in %1.  Please select an appropriate value once the yeast is imported").arg(name)
-                  );
+            qCritical() << QString("Could not find TYPE in %1.  Please select an appropriate value once the yeast is imported").arg(name);
          }
          else {
             QString tname = n.firstChild().toText().nodeValue();
@@ -2062,18 +2060,16 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->setType(static_cast<Yeast::Type>(0));
-               Brewtarget::logE(
+               qCritical() <<
                      QString("Could not translate the type %1 in %2.  Please select an appropriate value once the yeast is imported")
                      .arg(tname)
-                     .arg(name));
+                     .arg(name);
             }
          }
          // Handle form enums separately.
          n = node.firstChildElement("FORM");
          if ( n.firstChild().isNull() ) {
-            Brewtarget::logE(
-                  QString("Could not find FORM in %1.  Please select an appropriate value once the yeast is imported").arg(name)
-                  );
+            qCritical() << QString("Could not find FORM in %1.  Please select an appropriate value once the yeast is imported").arg(name);
          }
          else {
             QString tname = n.firstChild().toText().nodeValue();
@@ -2083,18 +2079,16 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->setForm( static_cast<Yeast::Form>(0) );
-               Brewtarget::logE(
+               qCritical() <<
                      QString("Could not translate the form %1 in %2.  Please select an appropriate value once the yeast is imported")
                      .arg(tname)
-                     .arg(name));
+                     .arg(name);
             }
          }
          // Handle flocc enums separately.
          n = node.firstChildElement("FLOCCULATION");
          if ( n.firstChild().isNull() ) {
-            Brewtarget::logE(
-                  QString("Could not find FLOCCULATION in %1.  Please select an appropriate value once the yeast is imported").arg(name)
-                  );
+            qCritical() << QString("Could not find FLOCCULATION in %1.  Please select an appropriate value once the yeast is imported").arg(name);
          }
          else {
             QString tname = n.firstChild().toText().nodeValue();
@@ -2104,10 +2098,10 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
             }
             else {
                ret->setFlocculation( static_cast<Yeast::Flocculation>(0) );
-               Brewtarget::logE(
+               qCritical() <<
                      QString("Could not translate the flocculation %1 in %2.  Please select an appropriate value once the yeast is imported")
                      .arg(tname)
-                     .arg(name));
+                     .arg(name);
             }
          }
 
@@ -2123,7 +2117,7 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
       }
    }
    catch (QString e) {
-      Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+      qCritical() << Q_FUNC_INFO<< e;
       if ( ! parent )
          db.sqlDatabase().rollback();
       blockSignals(false);

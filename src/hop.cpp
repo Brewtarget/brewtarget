@@ -176,7 +176,7 @@ void Hop::setAlpha_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < alpha < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < alpha < 100: %1").arg(num);
       return;
    }
    else
@@ -192,7 +192,7 @@ void Hop::setAmount_kg( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: amount < 0: %1").arg(num) );
+      qWarning() << QString("Hop: amount < 0: %1").arg(num);
       return;
    }
    else
@@ -208,7 +208,7 @@ void Hop::setInventoryAmount( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: inventory < 0: %1").arg(num) );
+      qWarning() << QString("Hop: inventory < 0: %1").arg(num);
       return;
    }
    else
@@ -243,7 +243,7 @@ void Hop::setTime_min( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: time < 0: %1").arg(num) );
+      qWarning() << QString("Hop: time < 0: %1").arg(num);
       return;
    }
    else
@@ -289,7 +289,7 @@ void Hop::setBeta_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < beta < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < beta < 100: %1").arg(num);
       return;
    }
    else
@@ -305,7 +305,7 @@ void Hop::setHsi_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < hsi < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < hsi < 100: %1").arg(num);
       return;
    }
    else
@@ -337,7 +337,7 @@ void Hop::setHumulene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < humulene < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < humulene < 100: %1").arg(num);
       return;
    }
    else
@@ -353,7 +353,7 @@ void Hop::setCaryophyllene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < cary < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < cary < 100: %1").arg(num);
       return;
    }
    else
@@ -369,7 +369,7 @@ void Hop::setCohumulone_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < cohumulone < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < cohumulone < 100: %1").arg(num);
       return;
    }
    else
@@ -385,7 +385,7 @@ void Hop::setMyrcene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < myrcene < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < myrcene < 100: %1").arg(num);
       return;
    }
    else

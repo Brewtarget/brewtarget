@@ -520,6 +520,10 @@ ADD_TEST(
    NAME postBoilLossOgTest
    COMMAND brewtarget_tests postBoilLossOgTest
 )
+add_test(
+   NAME testLogRotation
+   COMMAND brewtarget_tests testLogRotation
+)
 #=================================Installs=====================================
 
 # Install executable.

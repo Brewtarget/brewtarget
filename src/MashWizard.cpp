@@ -144,7 +144,7 @@ double MashWizard::calcDecoctionAmount( MashStep* step, Mash* mash, double water
    if( r < 0 || r > 1 )
    {
       QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation.") );
-      Brewtarget::logE(QString("%1: r=%2").arg(Q_FUNC_INFO).arg(r));
+      qCritical() << Q_FUNC_INFO << "r=" << r;
       return -1;
    }
    return r * (waterMass + grainMass/grainDensity);
@@ -182,7 +182,7 @@ void MashWizard::wizardry()
    // We ensured that there was at least one mash step when we displayed the thickness dialog in show().
    mashStep = steps.at(0);
    if ( mashStep == nullptr ) {
-      Brewtarget::logE( "MashWizard::wizardry(): first mash step was null." );
+      qCritical() << "MashWizard::wizardry(): first mash step was null.";
       return;
    }
 
@@ -278,7 +278,7 @@ void MashWizard::wizardry()
          r = ((m_w*c_w + m_g*c_g + m_e*c_e)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(boilingPoint_c-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
          if( r < 0 || r > 1 ) {
             QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation.") );
-            Brewtarget::logE(QString("Decoction: r=%1").arg(r));
+            qCritical().nospace() << "Decoction: r=" << r;
             return;
          }
 
@@ -347,7 +347,7 @@ void MashWizard::wizardry()
          t1 = steps[lastMashStep]->stepTemp_c() - 10.0; // You will lose about 10C from last step.
       else
       {
-         Brewtarget::logE( "MashWizard::wizardry(): Should have had at least one mash step before getting to sparging." );
+         qCritical() << "MashWizard::wizardry(): Should have had at least one mash step before getting to sparging.";
          return;
       }
       MC = recObs->grainsInMash_kg() * HeatCalculations::Cgrain_calGC

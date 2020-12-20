@@ -116,7 +116,7 @@ bool DatabaseSchemaHelper::create(QSqlDatabase db, DatabaseSchema* defn, Brewtar
       ret = db.commit();
 
    if ( ! ret ) {
-      Brewtarget::logE("db.commit() failed");
+      qCritical() << "db.commit() failed";
    }
 
    return ret;
@@ -160,7 +160,7 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db )
          ret &= migrate_to_9(q,defn);
          break;
       default:
-         Brewtarget::logE(QString("Unknown version %1").arg(oldVersion));
+         qCritical() << QString("Unknown version %1").arg(oldVersion);
          return false;
    }
 
@@ -206,7 +206,7 @@ bool DatabaseSchemaHelper::migrate(int oldVersion, int newVersion, QSqlDatabase 
       ret &= db.commit();
    else
    {
-      Brewtarget::logE("Rolling back");
+      qCritical() << "Rolling back";
       db.rollback();
    }
 
@@ -248,7 +248,7 @@ int DatabaseSchemaHelper::currentVersion(QSqlDatabase db)
          return 3;
    }
 
-   Brewtarget::logE("Could not find database version");
+   qCritical() << "Could not find database version";
    return -1;
 }
 
@@ -587,7 +587,7 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
    ret = drop_columns(q,defn->table(Brewtarget::BREWNOTETABLE),QStringList() << "predicted_og" << "predicted_abv");
 
    // Now that we've had that fun, let's have this fun
-   Brewtarget::logI(QString("rearranging inventory"));
+   qInfo() << QString("rearranging inventory");
    ret &= migration_aide_8(q, defn, Brewtarget::FERMTABLE);
    if ( ret )
       ret &= migration_aide_8(q, defn, Brewtarget::HOPTABLE);
@@ -601,7 +601,7 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
    // Instead of inventory knowing about ingredients, we now have ingredients
    // knowing about inventory. I am concerned that leaving these in place
    // will cause circular references
-   Brewtarget::logI(QString("dropping inventory columns"));
+   qInfo() << QString("dropping inventory columns");
    if ( ret ) {
       ret &= drop_columns(q, defn->table(Brewtarget::FERMINVTABLE),  QStringList() << "fermentable_id");
    }
@@ -616,7 +616,7 @@ bool DatabaseSchemaHelper::migrate_to_8(QSqlQuery q, DatabaseSchema* defn)
    }
 
    // Finally, the btalltables table isn't needed, so drop it
-   Brewtarget::logI(QString("dropping bt_alltables"));
+   qInfo() << QString("dropping bt_alltables");
    if ( ret )
       ret &= q.exec( DROPTABLE + SEP + "IF EXISTS bt_alltables");
 

@@ -412,7 +412,7 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
 
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(saltObs.size()) ) {
-      Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
+      qWarning() << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -446,7 +446,7 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
          }
          return QVariant();
       default :
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return QVariant();
    }
 }
@@ -464,7 +464,7 @@ QVariant SaltTableModel::headerData( int section, Qt::Orientation orientation, i
          case SALTPCTACIDCOL:
                return  QVariant(tr("% Acid"));
          default:
-            Brewtarget::logW(tr("Bad column: %1").arg(section));
+            qWarning() << tr("Bad column: %1").arg(section);
             return QVariant();
       }
    }
@@ -539,7 +539,7 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
          break;
       default:
          retval = false;
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
    }
 
    if ( retval && row->addTo() != Salt::NEVER )
