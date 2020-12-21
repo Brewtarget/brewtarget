@@ -53,8 +53,8 @@ namespace Log
    };
 
    // options set by the end user.
-   bool loggingEnabled = false;
-   LogType logLevel = LogType_INFO;
+   bool loggingEnabled(true);
+   LogType logLevel = LogType_DEBUG;
    QDir logFilePath;
    bool logUseConfigDir = true;
    int const logFileSize = 500 * 1024;
@@ -71,6 +71,7 @@ namespace Log
          .arg(logFileName)
          .arg(logFileNameSuffix);
    }
+
    bool initializeLog()
    {
       timeFormat = "hh:mm:ss.zzz";
@@ -80,22 +81,8 @@ namespace Log
       {
          logFilePath.setPath(QDir::tempPath());
       }
-      else
-      {
-         logFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-      }
-      //check if Logging directory exists and if not create it.
-      if (!QDir(logFilePath).exists())
-      {
-         QDir().mkpath(logFilePath.canonicalPath());
-      }
-      //Delete old files
-      pruneLogFiles();
-      //Generate a new logfile and open a stream for writing
-      initLogFileName();
-      //Register the Message handler with QT framwork to enable the qDebug macro
       qInstallMessageHandler(Log::logMessageHandler);
-
+      qDebug() << Q_FUNC_INFO << "Logging initialized ";
       return true;
    }
 
@@ -123,6 +110,7 @@ namespace Log
    }
 
    void changeDirectory() {
+      qDebug() << Q_FUNC_INFO;
       //If it's the same, just return, no need to do anything.
       if (logFilePath.filePath(logFileFullName()) == logFile.fileName()) {
          return;
@@ -131,6 +119,7 @@ namespace Log
       //Check if the new directory exists, if not create it.
       if (!logFilePath.exists())
       {
+         qDebug() << Q_FUNC_INFO << logFilePath.canonicalPath() << "does not exist, creating";
          if (!logFilePath.mkpath(logFilePath.canonicalPath()))
          {
             qCritical() << QString("Could not create directory as location '%1'").arg(logFilePath.canonicalPath());

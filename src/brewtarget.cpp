@@ -467,7 +467,7 @@ bool Brewtarget::initialize(const QString &userDirectory)
    qRegisterMetaType< QList<Water*> >();
    qRegisterMetaType< QList<Salt*> >();
 
-    Log::initializeLog();
+   Log::initializeLog();
 
    // Use overwride if present.
    if (!userDirectory.isEmpty() && QDir(userDirectory).exists()) {
