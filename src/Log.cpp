@@ -187,7 +187,7 @@ namespace Log
       //emit wroteEntry(logEntry);
    }
 
-   QString Log::getTypeName(const LogType type) {
+   QString getTypeName(const LogType type) {
       return QString(logLevelNames[type]);
    }
 
