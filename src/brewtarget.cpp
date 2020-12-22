@@ -1214,7 +1214,7 @@ double Brewtarget::toDouble(QString text, QString caller)
    ret = toDouble(text,&success);
 
    if ( ! success )
-      QString("%1 could not convert %2 to double").arg(caller).arg(text);
+      qWarning() << QString("%1 could not convert %2 to double").arg(caller).arg(text);
 
    return ret;
 }

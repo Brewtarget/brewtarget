@@ -60,7 +60,7 @@ namespace Log
    int const logFileSize = 500 * 1024;
    int const logFileCount = 5;
    // \brief this is the file we're always logging to.
-   QString logFileName("Brewtarget_Log");
+   QString logFileName("brewtarget_log");
    // \brief what file ending to use for the file.
    QString logFileNameSuffix("txt");
    QString timeFormat;
