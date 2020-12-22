@@ -1257,10 +1257,8 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    Mash* m = recipeObs->mash();
    if( m )
    {
-      m->setTunWeight_kg( kit->tunWeight_kg() );
-      m->setTunSpecificHeat_calGC( kit->tunSpecificHeat_calGC() );
-      new SimpleUndoableUpdate(*m, "tunWeight_kg", m->tunWeight_kg(), tr("Change Tun Weight"), equipmentUpdate);
-      new SimpleUndoableUpdate(*m, "tunSpecificHeat_calGC", m->tunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
+      new SimpleUndoableUpdate(*m, "tunWeight_kg", kit->tunWeight_kg(), tr("Change Tun Weight"), equipmentUpdate);
+      new SimpleUndoableUpdate(*m, "tunSpecificHeat_calGC", kit->tunSpecificHeat_calGC(), tr("Change Tun Specific Heat"), equipmentUpdate);
    }
 
    if( QMessageBox::question(this,
