@@ -467,6 +467,10 @@ bool Brewtarget::initialize(const QString &userDirectory)
    qRegisterMetaType< QList<Water*> >();
    qRegisterMetaType< QList<Salt*> >();
 
+   /* Here we initialize the logging to log to stderr to start with.
+    * this is to get the really early logging out put to the console.
+    * further down we read in the users settings and then update the settings in the logging library
+    */
    Log::initializeLog();
 
    // Use overwride if present.
@@ -492,7 +496,10 @@ bool Brewtarget::initialize(const QString &userDirectory)
 
    readSystemOptions();
    loadMap();
-    Log::changeDirectory();
+   /* Here we update the settings opening the file at the location specified in the Application settings and users settings.
+    * the readSystemOptions(); will update the the logFilePath in the Log library, then we run the changeDirectory to apply the settings.
+    */
+   Log::changeDirectory();
 
    // Make sure all the necessary directories and files we need exist before starting.
    ensureDirectoriesExist();
@@ -1051,16 +1058,18 @@ void Brewtarget::readSystemOptions()
    _dbType = static_cast<Brewtarget::DBTypes>(option("dbType",Brewtarget::SQLITE).toInt());
 
    //======================Logging options =======================
-    Log::loggingEnabled = option("LoggingEnabled", false).toBool();
-    Log::logLevel = Log::getLogTypeFromString(QString(option("LoggingLevel", "INFO").toString()));
-    Log::logFilePath = QDir(option("LogFilePath", getUserDataDir().canonicalPath()).toString());
-    Log::logUseConfigDir = option("LoggingUseConfigDir", true).toBool();
+   Log::loggingEnabled = option("LoggingEnabled", false).toBool();
+   Log::logLevel = Log::getLogTypeFromString(QString(option("LoggingLevel", "INFO").toString()));
+   Log::logFilePath = QDir(option("LogFilePath", getUserDataDir().canonicalPath()).toString());
+   Log::logUseConfigDir = option("LoggingUseConfigDir", true).toBool();
    if( Log::logUseConfigDir )
+   {
 #if QT_VERSION < QT_VERSION_CHECK(5,15,0)
-        Log::logFilePath = getUserDataDir().canonicalPath();
+      Log::logFilePath = getUserDataDir().canonicalPath();
 #else
       Log::logFilePath.setPath(getUserDataDir().canonicalPath());
 #endif
+   }
 }
 
 void Brewtarget::saveSystemOptions()

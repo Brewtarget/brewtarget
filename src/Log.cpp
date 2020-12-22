@@ -53,11 +53,17 @@ namespace Log
    };
 
    // options set by the end user.
+   // Default logging set to enable to get the first logs out.
    bool loggingEnabled(true);
-   LogType logLevel = LogType_DEBUG;
+   // Default logging level set to INFO, to get only status logs.
+   LogType logLevel = LogType_INFO;
+   // Stores the path to the logfiles
    QDir logFilePath;
+   // Set to true if you want brewtarget to figure out where to put the logs.
    bool logUseConfigDir = true;
+   // Set the log file size for the rotation.
    int const logFileSize = 500 * 1024;
+   // set the number of files to keep when rotating.
    int const logFileCount = 5;
    // \brief this is the file we're always logging to.
    QString logFileName("brewtarget_log");
