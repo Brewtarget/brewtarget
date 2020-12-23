@@ -157,6 +157,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    loggingLevelComboBox->addItem(tr("Warning"), QVariant(Log::LogType_WARNING));
    loggingLevelComboBox->addItem(tr("Error"), QVariant(Log::LogType_ERROR));
    loggingLevelComboBox->addItem(tr("Debug"), QVariant(Log::LogType_DEBUG));
+   loggingLevelComboBox->setCurrentIndex(Log::logLevel);
    checkBox_enableLogging->setChecked(Log::loggingEnabled);
    checkBox_LogFileLocationUseDefault->setChecked(Log::logUseConfigDir);
    lineEdit_LogFileLocation->setText(Log::logFilePath.absolutePath());
