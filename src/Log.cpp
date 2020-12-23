@@ -53,14 +53,14 @@ namespace Log
    };
 
    // options set by the end user.
-   bool loggingEnabled = false;
-   LogType logLevel = LogType_INFO;
+   bool loggingEnabled = true;
+   LogType logLevel = LogType_DEBUG;
    QDir logFilePath;
    bool logUseConfigDir = true;
    int const logFileSize = 500 * 1024;
    int const logFileCount = 5;
    // \brief this is the file we're always logging to.
-   QString logFileName("Brewtarget_Log");
+   QString logFileName("brewtarget_log");
    // \brief what file ending to use for the file.
    QString logFileNameSuffix("txt");
    QString timeFormat;
@@ -80,7 +80,7 @@ namespace Log
       {
          logFilePath.setPath(QDir::tempPath());
       }
-      else
+/*      else
       {
          logFilePath.setPath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
       }
@@ -93,8 +93,10 @@ namespace Log
       pruneLogFiles();
       //Generate a new logfile and open a stream for writing
       initLogFileName();
-      //Register the Message handler with QT framwork to enable the qDebug macro
+*/      //Register the Message handler with QT framwork to enable the qDebug macro
       qInstallMessageHandler(Log::logMessageHandler);
+
+      qDebug() << Q_FUNC_INFO << "Logging initialized ";
 
       return true;
    }
@@ -187,7 +189,7 @@ namespace Log
       //emit wroteEntry(logEntry);
    }
 
-   QString Log::getTypeName(const LogType type) {
+   QString getTypeName(const LogType type) {
       return QString(logLevelNames[type]);
    }
 

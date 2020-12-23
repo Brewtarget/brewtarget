@@ -40,7 +40,7 @@ int main(int argc, char **argv)
    try {
       xercesc::XMLPlatformUtils::Initialize();
    } catch (xercesc::XMLException const & xercesInitException) {
-      Brewtarget::logE(QString("%1 Xerces XML Parser Initialisation Failed: %2").arg(Q_FUNC_INFO).arg(xercesInitException.getMessage()));
+      qCritical() << QString("%1 Xerces XML Parser Initialisation Failed: %2").arg(Q_FUNC_INFO).arg(xercesInitException.getMessage());
       return 1;
    }
 

@@ -268,16 +268,14 @@ public:
       if (!schemaFile.open(QIODevice::ReadOnly)) {
          // This should pretty much never happen, as we're loading from a QResource compiled into the binary rather
          // than reading from the file system at run-time.
-         Brewtarget::logE(
-            QString("%1 Could not open schema file resource %2 for reading").arg(Q_FUNC_INFO).arg(schemaFile.fileName())
-         );
+         qCritical() <<
+            Q_FUNC_INFO << "Could not open schema file resource " << schemaFile.fileName() << " for reading";
          throw std::runtime_error("Could not open schema file resource");
       }
 
       QByteArray schemaData = schemaFile.readAll();
-      Brewtarget::logD(
-         QString("%1 Schema file %2: %3 bytes").arg(Q_FUNC_INFO).arg(schemaFile.fileName()).arg(schemaData.length())
-      );
+      qDebug() <<
+         Q_FUNC_INFO << "Schema file " << schemaFile.fileName() << ": " << schemaData.length() << " bytes";
 
       xercesc::MemBufInputSource schemaAsInputSource{reinterpret_cast<const XMLByte *>(schemaData.constData()), static_cast<XMLSize_t>(schemaData.length()), "dummy name"};
 
@@ -286,7 +284,7 @@ public:
       // Load the schema and cache its grammar
       if (!this->parser->loadGrammar(&schemaAsDOMLSInput, xercesc::Grammar::SchemaGrammarType, true)) {
          // As above, this shouldn't happen "in production" as it's our own schema file, so we should make it parseable
-         Brewtarget::logE(QString("%1 Error parsing %2").arg(Q_FUNC_INFO).arg(schemaFile.fileName()));
+         qCritical() << Q_FUNC_INFO << "Error parsing " << schemaFile.fileName();
          throw std::runtime_error("Could not open schema file resource");
       }
 
@@ -304,16 +302,15 @@ public:
       inputFile.setFileName(fileName);
 
       if(! inputFile.open(QIODevice::ReadOnly)) {
-         Brewtarget::logW(QString("%1: Could not open %2 for reading.").arg(Q_FUNC_INFO).arg(fileName));
+         qWarning() << Q_FUNC_INFO << ": Could not open " << fileName << " for reading";
          return false;
       }
 
       QByteArray documentData = inputFile.readAll();
-      Brewtarget::logD(
-         QString("%1 Schema file %2: %3 bytes").arg(Q_FUNC_INFO).arg(inputFile.fileName()).arg(documentData.length())
-      );
+      qDebug() << Q_FUNC_INFO << "Schema file " << inputFile.fileName() << ": " << documentData.length() << " bytes";
 
 
+      // See https://www.codesynthesis.com/pipermail/xsd-users/2010-April/002805.html for list of all exceptions Xerces can throw
       try {
       // Probably not 100% necessary to lock the pool against modifications, as we're not planning any after start-up, but...
       this->grammarPool.lockPool();
@@ -347,27 +344,16 @@ public:
       return parsedOk;
 
       } catch(const std::exception& se) {
-         Brewtarget::logE(
-            QString("%1 Caught std::exception: %2").arg(Q_FUNC_INFO).arg(se.what())
-         );
+         qCritical() << Q_FUNC_INFO << "Caught std::exception: " << se.what();
          return false;
       } catch (const xercesc::XMLException & xe) {
-         XQString message {xe.getMessage()};
-         Brewtarget::logE(
-            QString("%1 Caught xerces::XMLException: %2").arg(Q_FUNC_INFO).arg(message)
-         );
+         qCritical() << Q_FUNC_INFO << "Caught xerces::XMLException at line " << xe.getSrcLine() << ": " << XQString(xe.getType())  << ": " << XQString(xe.getMessage());
          return false;
       } catch (const xercesc::DOMException & de) {
-         XQString message {de.getMessage()};
-         Brewtarget::logE(
-            QString("%1 Caught xerces::DOMException: %2").arg(Q_FUNC_INFO).arg(message)
-         );
+         qCritical() << Q_FUNC_INFO << "Caught xerces::DOMException: " << XQString(de.getMessage());
          return false;
       } catch (const xercesc::SAXException & se) {
-         XQString message {se.getMessage()};
-         Brewtarget::logE(
-            QString("%1 Caught xerces::SAXException: %2").arg(Q_FUNC_INFO).arg(message)
-         );
+         qCritical() << Q_FUNC_INFO << "Caught xerces::SAXException: " << XQString(se.getMessage());
          return false;
       }
 
@@ -2151,12 +2137,12 @@ bool BeerXML::importFromXML(const QString& filename)
 
    if( ! inFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::logW(QString("%1: Could not open %2 for reading.").arg(Q_FUNC_INFO).arg(filename));
+      qWarning() << Q_FUNC_INFO << "Could not open " << filename << " for reading";
       return false;
    }
 
    if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-      Brewtarget::logW(QString("%1: Bad document formatting in %2 %3:%4. %5").arg(Q_FUNC_INFO).arg(filename).arg(line).arg(col).arg(err) );
+      qWarning() << Q_FUNC_INFO << ": Bad document formatting in " << filename << " " << line << ":" << col << ". " << err;
 
 /////////////////////////////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
    // Ultimately 3 returns - completely invalid (can't parse) / slightly invalid (but we can fix) / valid
