@@ -314,7 +314,7 @@ QVariant BtTreeItem::dataMisc(int column)
             return QVariant(misc->useStringTr());
          break;
       default :
-         QString("BtTreeItem::dataMisc Bad column: %1").arg(column);
+         qWarning() << QString("BtTreeItem::dataMisc Bad column: %1").arg(column);
    }
    return QVariant();
 }
