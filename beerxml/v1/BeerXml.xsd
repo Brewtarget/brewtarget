@@ -19,13 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <!--
+  elementFormDefault="qualified" just means we have to specify the namespace of all the tags in this schema document,
+  which keeps them out of the default (unnamed) namespace of the XML documents we'll be parsing
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-            elementFormDefault="qualified">
+           elementFormDefault="qualified">
 <xs:element name="RECIPES">
    <xs:complexType>
       <xs:sequence>
-         <xs:element ref="recipe" maxOccurs="unbounded"/>
+         <xs:element name="RECIPE" maxOccurs="unbounded"/>
       </xs:sequence>
    </xs:complexType>
 </xs:element>

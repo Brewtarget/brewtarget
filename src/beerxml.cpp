@@ -347,15 +347,15 @@ public:
       // Don't want qDebug to escape newlines, as there will be lots in the list of parameter settings, hence
       // ".noquote()" here.
       qDebug().noquote() <<
-         Q_FUNC_INFO << "Settings for reading schema file " << schemaFile.fileName() << ": " <<
-         this->getParameterSettings(*config);
+         Q_FUNC_INFO << "Settings for reading schema file " << schemaFile.fileName() << ": " << this->getParameterSettings(*config);
 
       // The third parameter is just a name for the object.  It's not used by Xerces, but does show up in error
       // messages (as the URI of the error location), so we use the file name as something vaguely helpful to show
       // there.
+      QByteArray schemaFileNameAsCString = schemaFile.fileName().toLocal8Bit();
       xercesc::MemBufInputSource schemaAsInputSource{reinterpret_cast<const XMLByte *>(schemaData.constData()),
                                                      static_cast<XMLSize_t>(schemaData.length()),
-                                                     schemaFile.fileName()};
+                                                     schemaFileNameAsCString};
 
       xercesc::Wrapper4InputSource schemaAsDOMLSInput{&schemaAsInputSource, false};
 
