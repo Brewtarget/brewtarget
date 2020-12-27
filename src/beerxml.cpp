@@ -79,13 +79,32 @@
  *
  * Xerces and Qt both represent strings internally using UTF-16.  However, Xerces uses a base type (uint16_t) to define
  * its 16-bit chars (XMLCh), whereas Qt uses a small class (QChar) for the same data.  So we need a reinterpret_cast to
- * switch between the two.
+ * switch between the two.  This is preferable to using the Xerces built-in string handling, which is a bit clunky: you
+ * either have to create fixed-sized arrays of XMLCh and call xercesc::XMLString::transcode() to fill them from a
+ * char * source, or manually declare constant strings as null-terminated arrays, eg
+ *   XMLCh features[] {xercesc::chLatin_L, xercesc::chLatin_S, xercesc::chNull};
  */
 class XQString : public QString {
 public:
+   // Ensure access to QString's existing constructors, even though we add another one below
+   using QString::QString;
+
+   /**
+    * Construct from a Xerces null-terminated UTF-16 string
+    */
    XQString(XMLCh const * xercesString) : QString(reinterpret_cast<QChar const *>(xercesString)) {
       return;
    }
+
+   /**
+    * Return a pointer to a Xerces-friendly null-terminated UTF-16 string
+    */
+   XMLCh const * getXercesString() const {
+      // NB we need to use QString::data() rather than QString::constData() to guaranteed that the returned string is
+      // null-terminated.
+      return reinterpret_cast<XMLCh const *>(this->data());
+   }
+
 };
 
 class BtDomErrorHandler: public xercesc::DOMErrorHandler {
@@ -96,6 +115,12 @@ public:
    static char const * const XercesErrorSeverities[];
 
    bool failed() const { return this->couldntHandleError; }
+
+   void reset() {
+      this->couldntHandleError = false;
+      return;
+   }
+
    /**
     * If the handleError method returns true the DOM implementation should continue as if the error didn't happen when
     * possible, if the method returns false then the DOM implementation should stop the current processing when possible.
@@ -106,7 +131,19 @@ public:
       xercesc::DOMLocator* location {domError.getLocation()};
       XQString uri{location->getURI()};
 
-      qDebug() <<
+      //
+      // There is sometimes a bit of an art to decrypting Xerces error messages.  Eg "no declaration found for element"
+      // for the first tag in an XML document can (but does not necessarily) mean that Xerces could not find the schema
+      // to validate the document against (see https://www.codesynthesis.com/pipermail/xsd-users/2009-February/002217.html
+      // and
+      // http://wiki.codesynthesis.com/Tree/FAQ#Why_do_I_get_.22error:_no_declaration_found_for_element_.27root-element.27.22_when_I_try_to_parse_a_valid_XML_document.3F).
+      // It could also mean you've turned off namespace processing (which breaks schema validation) or just that the
+      // first element in the document isn't specified in the schema.
+      //
+      // Nonetheless, knowing the first point in the document where there was a problem with parsing is usually pretty
+      // helpful.
+      //
+      qWarning() <<
          Q_FUNC_INFO << uri << ": " << XercesErrorSeverities[severity] << " at line " << location->getLineNumber() <<
          ", column " << location->getColumnNumber() << ": " << message;
 
@@ -134,6 +171,8 @@ public:
     */
    impl() : grammarPool(xercesc::XMLPlatformUtils::fgMemoryManager) {
       this->loadSchemas();
+
+      this->validate(QString("/home/matt/Shared/Data/Syncthing/Brewing/Software/recipes-edit.xml")); ///////!!!!!!!!!!!
       return;
    }
 
@@ -200,15 +239,10 @@ public:
       // In practice, since we are not extending Xerces (eg to parse other SGML-derived languages), I'm not sure how much
       // it matters what features we request.  (The xercesc::DOMImplementation class inherits from
       // xercesc::DOMImplementationLS for instance.)  Most of the easily-found example code seems to use "LS" (or
-      // sometimes   "Range") but this is perhaps because "LS" is the shortest!
+      // sometimes "Range") but this is perhaps because "LS" is the shortest!
       //
-      // Note that we have to think carefully about character sets even when passing in lists of requested features
-      // because Xerces encodes information as UTF-16 internally (using the XMLCh datatype), hence the slightly funky way
-      // feature strings are defined.  (There's an alternative of using xercesc::XMLString::transcode to copy a char *
-      // string into an array of XMLCh, but it's a bit clunky.)
-      //
-      XMLCh features[] {xercesc::chLatin_L, xercesc::chLatin_S, xercesc::chNull};
-      this->domImplementation = xercesc::DOMImplementationRegistry::getDOMImplementation(features);
+      XQString const features("LS");
+      this->domImplementation = xercesc::DOMImplementationRegistry::getDOMImplementation(features.getXercesString());
 
       //
       // According to https://xerces.apache.org/xerces-c/program-dom-3.html, DOMLSParser is a new interface introduced by
@@ -217,48 +251,81 @@ public:
       // https://markmail.org/message/5ztcgzgb5a7ldys3, DOMLSParser supersedes XercesDOMParser (which is nonetheless still
       // available to use).
       //
+      // The second parameter here is, per https://xerces.apache.org/xerces-c/apiDocs-3/classDOMImplementationLS.html,
+      // set to null "to create a DOMLSParser for any kind of schema types (i.e. the DOMLSParser will be free to use
+      // any schema found)".  (The description goes on to say you "must" use the value
+      // "http://www.w3.org/2001/XMLSchema" for W3C XML Schema [XML Schema Part 1], but I think this actually just
+      // means you _can_ do that _if_ you want to restrict schema types to XML Schemas (as opposed to DTDs or some
+      // other schema language).   Since we completely control the schemas we're using, there seems little benefit in
+      // trying to specify such restrictions here.
+      //
       this->parser =
          domImplementation->createLSParser(xercesc::DOMImplementationLS::MODE_SYNCHRONOUS,
-                                           nullptr, ////TBD do we need "http://www.w3.org/2001/XMLSchema" for XML schema?
-                                           xercesc::XMLPlatformUtils::fgMemoryManager,
-                                           &this->grammarPool);
+                                           nullptr  /*,
+                                           xercesc::XMLPlatformUtils::fgMemoryManager, .:TBD:. Shall we reenable the grammar pool stuff?
+                                           &this->grammarPool*/);
 
       //
       // See https://xerces.apache.org/xerces-c/program-dom-3.html for full details of these config options
       //
+      // Note that, although each parameter is defined by a string name (eg "comments"), the name must be passed in as
+      // a UTF-16 string.  To make this easy/efficient, Xerces has predefined all the names as suitable UTF-16 strings.
+      // Thus, to set the "comments" parameter, you pass in xercesc::XMLUni::fgDOMComments, which is just a pointer to
+      // a predefined UTF-16 string saying "comments".  The link above has both, but not every documentation page does.
+      //
+      // Note too that some of these parameters are defined by the W3C DOM Level 3 standard, and some are Xerces
+      // extensions to that standard.  The latter have long names that begin with "http://apache.org/xml/features/"
+      //
+      // Finally, be aware that some parameter settings from the DOM standard are not supported, but there is no return
+      // code from setParameter() to tell you this.  (You would have to call canSetParameter() first.)  So, for
+      // example, setting "namespace-declarations" (aka fgDOMNamespaceDeclarations) to false will not immediately break
+      // anything but will cause a subsequent error of "implementation does not support the requested type of object or
+      // operation" when you, say, try to parse a document.
+      //
       xercesc::DOMConfiguration * config = this->parser->getDomConfig();
-      config->setParameter(xercesc::XMLUni::fgDOMComments, false);                 // Discard Comment nodes in document
-      config->setParameter(xercesc::XMLUni::fgDOMDatatypeNormalization, true);     // Let validation process do datatype normalization
-      config->setParameter(xercesc::XMLUni::fgDOMEntities, false);                 // Do not create EntityReference nodes
-      config->setParameter(xercesc::XMLUni::fgDOMNamespaces, true);                // Perform Namespace processing
-      config->setParameter(xercesc::XMLUni::fgDOMElementContentWhitespace, false); // Do not include ignorable whitespace in DOM tree
 
-      config->setParameter(xercesc::XMLUni::fgXercesSchema, true); // Enable parser's schema support
-      config->setParameter(xercesc::XMLUni::fgDOMValidate, true);  // Report all validation errors
+      // "comments" - false = Discard Comment nodes in document
+      config->setParameter(xercesc::XMLUni::fgDOMComments, false); // =====
 
-      // Disable full schema constraint checking.  (Setting this to true would merely check the schema grammar itself
-      // for additional errors that are time-consuming or memory intensive to perform.  Given that we know in advance
-      // all the schemas we are going to use, this is something only to enable in dev when tweaking one or more of
-      // those schemas.)
-      config->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false);
+      // "datatype-normalization" - true = Let validation process do datatype normalization
+      config->setParameter(xercesc::XMLUni::fgDOMDatatypeNormalization, true); // =====
 
-      // Cache the grammar in the pool for re-use in subsequent parses - but you need to have a grammar pool first!
-      //config->setParameter(xercesc::XMLUni::fgXercesCacheGrammarFromParse, true);
-      //
-      // Use cached grammar if it exists in the pool - but you need to have a grammar pool first!
-      //
-      //config->setParameter(xercesc::XMLUni::fgXercesUseCachedGrammarInParse, true);
+      // "entities" - false = Do not create EntityReference nodes
+      config->setParameter(xercesc::XMLUni::fgDOMEntities, false); // =====
 
-      // Don't load schemas from any other source (e.g., from XML document's
-      // xsi:schemaLocation attributes).
-      //
-      config->setParameter(xercesc::XMLUni::fgXercesLoadSchema, false); // Don't load the schema if it wasn't found in the grammar pool
+      // "namespaces"
+      // true = Perform Namespace processing
+      //        NB: This must be turned on if "http://apache.org/xml/features/validation/schema" is enabled.  (It's a
+      //        logical requirement, given that schemas need to use namespaces, but it's worth remembering because the
+      //        errors that you get trying to use schemas without namespace processing enabled are pretty cryptic!)
+      config->setParameter(xercesc::XMLUni::fgDOMNamespaces, true); // =====
 
-      // During schema validation allow multiple schemas with the same namespace to be imported
-      config->setParameter(xercesc::XMLUni::fgXercesHandleMultipleImports, true);
+      // "whitespace-in-element-content" - false = Do not include ignorable whitespace in DOM tree
+      config->setParameter(xercesc::XMLUni::fgDOMElementContentWhitespace, false); // =====
 
-      // We will release the DOM document ourselves.
-      config->setParameter(xercesc::XMLUni::fgXercesUserAdoptsDOMDocument, true);
+      // "validation" - true = Report all validation errors
+      config->setParameter(xercesc::XMLUni::fgDOMValidate, true); // =====
+
+      // "http://apache.org/xml/features/validation/schema"
+      // true = Enable parser's schema support
+      //        NB: If set to true, namespace processing must also be turned on.
+      config->setParameter(xercesc::XMLUni::fgXercesSchema, true); // =====
+
+      // "http://apache.org/xml/features/validation/schema-full-checking"
+      // false = Disable full schema constraint checking.
+      //         (Setting this to true would merely check the schema grammar itself for additional errors that are
+      //         time-consuming or memory intensive to perform.  Given that we know in advance all the schemas we are
+      //         going to use, this is something only to enable in dev when tweaking one or more of those schemas.)
+      config->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false); // =====
+
+      // "http://apache.org/xml/features/validation/schema/handle-multiple-imports"
+      // true = During schema validation allow multiple schemas with the same namespace to be imported
+      config->setParameter(xercesc::XMLUni::fgXercesHandleMultipleImports, true); // =====
+
+      // "http://apache.org/xml/features/validation/cache-grammarFromParse"
+      // true = Cache the grammar in the pool for re-use in subsequent parses
+//      config->setParameter(xercesc::XMLUni::fgXercesCacheGrammarFromParse, true);
+
 
 
       BtDomErrorHandler domErrorHandler;
@@ -277,16 +344,56 @@ public:
       qDebug() <<
          Q_FUNC_INFO << "Schema file " << schemaFile.fileName() << ": " << schemaData.length() << " bytes";
 
-      xercesc::MemBufInputSource schemaAsInputSource{reinterpret_cast<const XMLByte *>(schemaData.constData()), static_cast<XMLSize_t>(schemaData.length()), "dummy name"};
+      // Don't want qDebug to escape newlines, as there will be lots in the list of parameter settings, hence
+      // ".noquote()" here.
+      qDebug().noquote() <<
+         Q_FUNC_INFO << "Settings for reading schema file " << schemaFile.fileName() << ": " <<
+         this->getParameterSettings(*config);
+
+      // The third parameter is just a name for the object.  It's not used by Xerces, but does show up in error
+      // messages (as the URI of the error location), so we use the file name as something vaguely helpful to show
+      // there.
+      xercesc::MemBufInputSource schemaAsInputSource{reinterpret_cast<const XMLByte *>(schemaData.constData()),
+                                                     static_cast<XMLSize_t>(schemaData.length()),
+                                                     schemaFile.fileName()};
 
       xercesc::Wrapper4InputSource schemaAsDOMLSInput{&schemaAsInputSource, false};
 
-      // Load the schema and cache its grammar
-      if (!this->parser->loadGrammar(&schemaAsDOMLSInput, xercesc::Grammar::SchemaGrammarType, true)) {
+      // Load the schema and cache its grammar (third parameter = true does the latter)
+      // The returned preparsed schema grammar object (SchemaGrammar or DTDGrammar) is owned by the parser and should
+      // not be deleted by the user.
+      // Strictly, we should try/catch this for SAXException, XMLException. DOMException.  However, we are not
+      // expecting any of these because we are parsing our own XSD file that is compiled into the program binary.
+      xercesc::Grammar * grammar = this->parser->loadGrammar(&schemaAsDOMLSInput, xercesc::Grammar::SchemaGrammarType, true);
+      if (!grammar) {
          // As above, this shouldn't happen "in production" as it's our own schema file, so we should make it parseable
-         qCritical() << Q_FUNC_INFO << "Error parsing " << schemaFile.fileName();
-         throw std::runtime_error("Could not open schema file resource");
+         qCritical() << Q_FUNC_INFO << "Unable to parse schema " << schemaFile.fileName();
+         throw std::runtime_error("Unable to parse schema -- see log file for more details");
       }
+
+      if (domErrorHandler.failed()) {
+         qCritical() << Q_FUNC_INFO << "Error parsing schema " << schemaFile.fileName();
+         throw std::runtime_error("Error parsing schema -- see log file for more details");
+      }
+
+      xercesc::Grammar * rootGrammar = this->parser->getRootGrammar();
+
+      qDebug() << Q_FUNC_INFO << "Schema " << schemaFile.fileName() << " loaded OK.  Grammar:" << grammar << ", root grammar:" << rootGrammar;
+
+      // "http://apache.org/xml/features/validation/use-cachedGrammarInParse"
+      // true = Use cached grammar if it exists in the pool
+      config->setParameter(xercesc::XMLUni::fgXercesUseCachedGrammarInParse, true); // =====
+
+      // "http://apache.org/xml/features/validating/load-schema"
+      // false = Don't load the schema if it wasn't found in the grammar pool, ie don't load schemas from any other
+      //         source (e.g., from XML document's xsi:schemaLocation attributes).
+      config->setParameter(xercesc::XMLUni::fgXercesLoadSchema, false); // =====
+
+      // "http://apache.org/xml/features/dom/user-adopts-DOMDocument"
+      // true = The caller will adopt the DOMDocument that is returned from the parse method and thus is responsible to
+      //        call xercesc::DOMDocument::release() to release the associated memory. The parser will not release it.
+      //        The ownership is transferred from the parser to the caller.
+      config->setParameter(xercesc::XMLUni::fgXercesUserAdoptsDOMDocument, true); // =====
 
       return;
    }
@@ -307,41 +414,45 @@ public:
       }
 
       QByteArray documentData = inputFile.readAll();
-      qDebug() << Q_FUNC_INFO << "Schema file " << inputFile.fileName() << ": " << documentData.length() << " bytes";
+      qDebug() << Q_FUNC_INFO << "Input file " << inputFile.fileName() << ": " << documentData.length() << " bytes";
 
 
       // See https://www.codesynthesis.com/pipermail/xsd-users/2010-April/002805.html for list of all exceptions Xerces can throw
       try {
-      // Probably not 100% necessary to lock the pool against modifications, as we're not planning any after start-up, but...
-      this->grammarPool.lockPool();
+         // Probably not 100% necessary to lock the pool against modifications, as we're not planning any after start-up, but...
+         this->grammarPool.lockPool();
 
-      /// TBD probably need to lock other things here ///
-
-
-      BtDomErrorHandler domErrorHandler;
-      xercesc::DOMConfiguration * config = this->parser->getDomConfig();
-      config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &domErrorHandler);
-
-      config->setParameter(xercesc::XMLUni::fgDOMNamespaces, false);  // Do not perform the namespace processing
-      config->setParameter(xercesc::XMLUni::fgDOMNamespaceDeclarations, false); // Discard  all namespace declaration attributes (though namespace prefixes are retained).
+         /// TBD probably need to lock other things here ///
 
 
+         BtDomErrorHandler domErrorHandler;
+         xercesc::DOMConfiguration * config = this->parser->getDomConfig();
+         config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &domErrorHandler);
 
-      QByteArray fileNameAsCString = fileName.toLocal8Bit();
+         // Don't want qDebug to escape newlines, as there will be lots in the list of parameter settings, hence ".noquote()" here.
+         qDebug().noquote() << Q_FUNC_INFO << "Settings for reading input " << inputFile.fileName() << ": " << this->getParameterSettings(*config);
 
-      xercesc::MemBufInputSource documentAsInputSource{reinterpret_cast<const XMLByte *>(documentData.constData()), static_cast<XMLSize_t>(documentData.length()), fileNameAsCString.constData()};
+         QByteArray fileNameAsCString = fileName.toLocal8Bit();
 
-      xercesc::Wrapper4InputSource documentAsDOMLSInput{&documentAsInputSource, false};
+         // Per comment above, third parameter is just a name for the object, which will show up in error messages.
+         // File name seems sensible.
+         xercesc::MemBufInputSource documentAsInputSource{reinterpret_cast<const XMLByte *>(documentData.constData()),
+                                                          static_cast<XMLSize_t>(documentData.length()),
+                                                          fileNameAsCString.constData()};
 
-      xercesc::DOMDocument* document{this->parser->parse(&documentAsDOMLSInput)};
-
-      if (document) {
-        document->release ();
-      }
-      bool parsedOk = !domErrorHandler.failed();
+         xercesc::Wrapper4InputSource documentAsDOMLSInput{&documentAsInputSource, false};
 
 
-      return parsedOk;
+         xercesc::DOMDocument * document{this->parser->parse(&documentAsDOMLSInput)};
+
+         if (document) {
+            document->release ();
+         }
+         bool parsedOk = !domErrorHandler.failed();
+         qDebug() << Q_FUNC_INFO << "Parse of input file " << inputFile.fileName() << (parsedOk ? "succeeded" : "FAILED");
+
+
+         return parsedOk;
 
       } catch(const std::exception& se) {
          qCritical() << Q_FUNC_INFO << "Caught std::exception: " << se.what();
@@ -350,7 +461,7 @@ public:
          qCritical() << Q_FUNC_INFO << "Caught xerces::XMLException at line " << xe.getSrcLine() << ": " << XQString(xe.getType())  << ": " << XQString(xe.getMessage());
          return false;
       } catch (const xercesc::DOMException & de) {
-         qCritical() << Q_FUNC_INFO << "Caught xerces::DOMException: " << XQString(de.getMessage());
+         qCritical() << Q_FUNC_INFO << "Caught xerces::DOMException #" << de.code << ": " << XQString(de.getMessage());
          return false;
       } catch (const xercesc::SAXException & se) {
          qCritical() << Q_FUNC_INFO << "Caught xerces::SAXException: " << XQString(se.getMessage());
@@ -358,6 +469,54 @@ public:
       }
 
 
+   }
+
+   /**
+    * \brief Extract the settings of the supplied DOMConfiguration into a string that we can log for debugging purposes.
+    *        Typically you get back a lot of parameters (50) so they are broken out onto separate lines.
+    */
+   QString getParameterSettings(xercesc::DOMConfiguration & domConfiguration) {
+      QString settings;
+      QTextStream settingsAsStream(&settings);
+      xercesc::DOMStringList const * parameterNames = domConfiguration.getParameterNames();
+      if (parameterNames) {
+         int const numberOfParameters = parameterNames->getLength();
+         settingsAsStream << numberOfParameters << " parameters:\n";
+         for (int ii = 0; ii < numberOfParameters; ++ii) {
+            if (ii != 0) {
+               settingsAsStream << ";\n";
+            }
+            XMLCh const * currentParameter = parameterNames->item(ii);
+            if (currentParameter) {
+               settingsAsStream << "   #" << ii << ":" << XQString(currentParameter) << " = ";
+               try {
+                  void const * parameterValue = domConfiguration.getParameter(currentParameter);
+                  // Depending on the parameter, its value is either a boolean (0 or 1) or a real pointer to something
+                  if (0 == parameterValue) {
+                     // We can't infer just from the value whether this is a pointer or a boolean
+                     settingsAsStream << "unset (false)";
+                  } else if (reinterpret_cast<void const *>(1) == parameterValue) {
+                     // Must be a boolean
+                     settingsAsStream << "set (true)";
+                  } else {
+                     // It's a pointer to something, but it's beyond the scope of this function to know what
+                     settingsAsStream << "set (to " << parameterValue << ")";
+                  }
+               } catch (const xercesc::DOMException & de) {
+                  // Yes, you really can generate an exception just by trying to read a config parameter. Sigh.
+                  settingsAsStream << "Unreadable! (xerces::DOMException #" << de.code << ": " << XQString(de.getMessage()) << ")";
+               }
+
+            } else {
+               settingsAsStream << "(Parameter " << ii << " not set!)";
+            }
+         }
+      } else {
+         settingsAsStream << "None!";
+      }
+
+      settingsAsStream.flush();
+      return settings;
    }
 
 private:

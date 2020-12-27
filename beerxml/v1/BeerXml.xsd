@@ -18,8 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <xsd:complexType name="TopLevel">
+<!--
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+<xs:element name="RECIPES">
+   <xs:complexType>
+      <xs:sequence>
+         <xs:element ref="recipe" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:element>
+   <!--xsd:complexType name="TopLevel">
       <xsd:sequence>
          <xsd:choice maxOccurs="unbounded" minOccurs="1">
             <xsd:element name="HOPS">
@@ -42,5 +52,5 @@
             </xsd:element>
          </xsd:choice>
       </xsd:sequence>
-   </xsd:complexType>
-</xsd:schema>
+   </xsd:complexType-->
+</xs:schema>
