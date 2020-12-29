@@ -143,12 +143,53 @@ public:
       // Nonetheless, knowing the first point in the document where there was a problem with parsing is usually pretty
       // helpful.
       //
-      qWarning() <<
+      QString fullErrorMessage;
+      QTextStream fullErrorMessageAsTextStream(&fullErrorMessage);
+      fullErrorMessageAsTextStream <<
          Q_FUNC_INFO << uri << ": " << XercesErrorSeverities[severity] << " at line " << location->getLineNumber() <<
          ", column " << location->getColumnNumber() << ": " << message;
 
-     this->couldntHandleError = true;
-     return false;
+      //
+      // Some errors we explicitly want to ignore.  In particular, the BeerXML 1.0 standard says:
+      //
+      //    Non-Standard Tags
+      //    Per the XML standard, all non-standard tags will be ignored by the importing program.  This allows programs
+      //    to store additional information if desired using their own tags.  Any tags not defined as part of this
+      //    standard may safely be ignored by the importing program.
+      //
+      // This is a problem because the BeerXML 1.0 standard also says that tags inside a containing element may occur
+      // in any order.  So, in our XSD, we have to to use <xs:all> rather than <xs:sequence> for the containing tags,
+      // which, in turn, means we cannot use <xs:any> to allow unrecognised tags.  This is disallowed by the W3C XML
+      // Schema standard because it would make validation harder (and slower).  See
+      // https://stackoverflow.com/questions/3347822/validating-xml-with-xsds-but-still-allow-extensibility for a good
+      // explanation.
+      //
+      // So, our workaround for this is to ignore errors that say:
+      //   • "no declaration found for element 'ABC'"
+      //   • "element 'ABC' is not allowed for content model 'XYZ'.
+      //
+      static QVector<QString> errorPatternsToIgnore {
+         "^no declaration found for element",
+         "^element '[^']*' is not allowed for content model"
+      };
+      for (auto ii = errorPatternsToIgnore.cbegin(); ii != errorPatternsToIgnore.cend(); ++ii) {
+         QRegExp pattern(*ii);
+         if (pattern.indexIn(message) != -1) {
+            // We want to force the parse error onto a separate line, as it will be quite long, hence
+            // ".noquote()" here.
+            qWarning().noquote() <<
+               "IGNORING the following parse error on the assumption that this is just a non-standard tag in the BeerXML "
+               "file:\n   " << fullErrorMessage;
+            return true;
+         }
+      }
+
+      //
+      // Other errors get logged as such and cause us to stop processing the document
+      //
+      qCritical() << fullErrorMessage;
+      this->couldntHandleError = true;
+      return false;
   }
 
 private:
@@ -488,7 +529,7 @@ public:
             }
             XMLCh const * currentParameter = parameterNames->item(ii);
             if (currentParameter) {
-               settingsAsStream << "   #" << ii << ":" << XQString(currentParameter) << " = ";
+               settingsAsStream << "   #" << ii << ": " << XQString(currentParameter) << " = ";
                try {
                   void const * parameterValue = domConfiguration.getParameter(currentParameter);
                   // Depending on the parameter, its value is either a boolean (0 or 1) or a real pointer to something
