@@ -26,8 +26,8 @@
 
   Although they are generally helpful examples, there are some obvious errors in the BeerXML sample files downloadable
   from www.beerxml.com:
-  • Everywhere the <CARB_MAX>...</CARB_MAX> tag is used (eg lines 268, 605, 977, 1278 of recipes.xml) the value has a
-    spurious '>', eg:
+  • Everywhere the <CARB_MAX>...</CARB_MAX> tag is used (eg lines 268, 605, 977, 1278 of recipes.xml and on multiple
+    lines of style.xml) the value has a spurious '>', eg:
        "<CARB_MAX>2.4></CARB_MAX>" = actual
        "<CARB_MAX>2.4</CARB_MAX>"  = correct
     This will (correctly) generate an "invalid character encountered" error when parsed against this schema document.
@@ -184,7 +184,10 @@
 
 
 
-   <!-- Now begins the real substance.  *** In the following, pay attention to singular vs plural. ***
+   <!--
+        ************************************************************************************************
+        * Now begins the real substance.  *** In the following, pay attention to singular vs plural. ***
+        ************************************************************************************************
 
    At heart, a BeerXML consists of lists of HOPS, FERMENTABLES, YEASTS, MISCS, WATERS, STYLES, MASHS [sic], RECIPES and
    EQUIPMENTS.  In each case, the structure is similar, eg <HOPS>...</HOPS> contains "zero or more" HOP records, each
@@ -741,33 +744,49 @@
       </xs:sequence>
    </xs:complexType>
 
-      <!-- Definitions of complex types : END -->
+   <!-- Definitions of complex types : END -->
 
 
-   <xs:element name="RECIPES" type="RecipesType"/>
+   <!-- Finally, there's one more trick we need to pull.  The BeerXML 1.0 Standard says a BeerXML document consists, at
+        its top level, of one or more of the following "record sets":
+           <HOPS>...</HOPS>
+           <FERMENTABLES>...</FERMENTABLES>
+           <YEASTS>...</YEASTS>
+           <MISCS>...</MISCS>
+           <WATERS>...</WATERS>
+           <STYLES>...</STYLES>
+           <MASHS>...</MASHS>
+           <RECIPES>...</RECIPES>
+           <EQUIPMENTS>...</EQUIPMENTS>
+        This would be relatively easy to represent here _IF_ such "record sets" were inside another tag.  But they are
+        not.  What to do?  Well, to the accompanying sound of Vincent Price saying "Bwahahaha", we simply solve the
+        problem in the C++ code by inserting a root node in the document before parsing it against this XSD.
 
-   <!--xsd:complexType name="TopLevel">
-      <xsd:sequence>
-         <xsd:choice maxOccurs="unbounded" minOccurs="1">
-            <xsd:element name="HOPS">
-            </xsd:element>
-            <xsd:element name="FERMENTABLES">
-            </xsd:element>
-            <xsd:element name="YEASTS">
-            </xsd:element>
-            <xsd:element name="MISCS">
-            </xsd:element>
-            <xsd:element name="WATERS">
-            </xsd:element>
-            <xsd:element name="STYLES">
-            </xsd:element>
-            <xsd:element name="MASHS">
-            </xsd:element>
-            <xsd:element name="RECIPES">
-            </xsd:element>
-            <xsd:element name="EQUIPMENTS">
-            </xsd:element>
-         </xsd:choice>
-      </xsd:sequence>
-   </xsd:complexType-->
+        Specifically, we load the BeerXML 1.0 document we want to process into memory, then edit that in-memory copy on
+        the fly to add our <BEER_XML>...</BEER_XML> tag around the contents, then parse that amended copy of the
+        document against this XSD.
+
+        So, to be clear, you should not expect to see <BEER_XML>...</BEER_XML> tags in a BeerXML 1.0 file (whether it's
+        one we created or one originating elsewhere).  It is just something that we pretend is present (by adding it to
+        our in-memory copy of a document we are parsing) to make this part of the XSD at least an order of magnitude
+        simpler than it would otherwise be.
+   -->
+   <xs:element name="BEER_XML">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:choice maxOccurs="unbounded" minOccurs="1">
+               <xs:element name="HOPS" type="HopsType"/>
+               <xs:element name="FERMENTABLES" type="FermentablesType"/>
+               <xs:element name="YEASTS" type="YeastsType"/>
+               <xs:element name="MISCS" type="MiscsType"/>
+               <xs:element name="WATERS" type="WatersType"/>
+               <xs:element name="STYLES" type="StylesType"/>
+               <xs:element name="MASHS" type="MashsType"/>
+               <xs:element name="RECIPES" type="RecipesType"/>
+               <xs:element name="EQUIPMENTS" type="EquipmentsType"/>
+            </xs:choice>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
 </xs:schema>

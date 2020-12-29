@@ -169,9 +169,6 @@ INCLUDE_DIRECTORIES(${Qt5Svg_INCLUDE_DIRS})
 FIND_PACKAGE(Qt5Xml ${QT5_MIN_VERSION} REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Xml_INCLUDE_DIRS})
 
-FIND_PACKAGE(Qt5XmlPatterns ${QT5_MIN_VERSION} REQUIRED)
-INCLUDE_DIRECTORIES(${Qt5XmlPatterns_INCLUDE_DIRS})
-
 IF( NOT ${NO_QTMULTIMEDIA} )
    FIND_PACKAGE(Qt5Multimedia ${QT5_MIN_VERSION} REQUIRED)
    INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
@@ -205,8 +202,9 @@ SET_PROPERTY(
 # https://cmake.org/cmake/help/latest/module/FindXercesC.html
 FIND_PACKAGE(XercesC REQUIRED)
 INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
-message( "Xerces-C++ include directories: " ${XercesC_INCLUDE_DIRS} )
-message( "Xerces-C++ libraries: " ${XercesC_LIBRARIES} )
+# Uncomment the next two lines if you want to find where Xerces headers and DLLs are on your system
+#message( "Xerces-C++ include directories: " ${XercesC_INCLUDE_DIRS} )
+#message( "Xerces-C++ libraries: " ${XercesC_LIBRARIES} )
 
 #=========================Configure brewtarget.qrc.in==========================
 
@@ -391,7 +389,7 @@ SET( brewtarget_INFO_PLIST "${ROOTDIR}/mac/Info.plist" )
 SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 
 #==========================Find dlls for Win32=================================
-
+# .:TBD:. MY 2020-12-29 What do we need to do for Xerces here?
 IF( WIN32 )
    IF( NOT ${NO_QTMULTIMEDIA} )
    FIND_PACKAGE(Qt5MultimediaWidgets REQUIRED)
@@ -411,7 +409,6 @@ IF( WIN32 )
    GET_TARGET_PROPERTY(QtSvg_location Qt5::Svg LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtWidgets_location Qt5::Widgets LOCATION_${CMAKE_BUILD_TYPE})
    GET_TARGET_PROPERTY(QtXml_location Qt5::Xml LOCATION_${CMAKE_BUILD_TYPE})
-   GET_TARGET_PROPERTY(Qt5XmlPatterns_location Qt5::XmlPatterns LOCATION_${CMAKE_BUILD_TYPE})
 
    GET_TARGET_PROPERTY(QtSqliteDriver_location Qt5::QSQLiteDriverPlugin LOCATION_${CMAKE_BUILD_TYPE})
 
@@ -432,7 +429,6 @@ IF( WIN32 )
         ${QtSql_location}
         ${QtSvg_location}
         ${QtXml_location}
-        ${QtXmlPatterns_location}
         ${QtWebKit_location}
         ${QtGui_location}
         ${QtWebKitWidgets_location}
@@ -541,7 +537,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     #-----------------DEB----------------
     SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
     # NOTE: Use the getdependencies script to get the dependencies!
-    SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.1.3), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-network (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqtwebkit4 (>= 2.3.4.dfsg-9.1), libqt4-xml (>= 4:4.5.3),  libqt4-xmlpatterns (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), phonon (>= 4:4.5.2)" )
+    SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.1.3), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-network (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqtwebkit4 (>= 2.3.4.dfsg-9.1), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), phonon (>= 4:4.5.2)" )
 
     SET( CPACK_DEBIAN_PACKAGE_SECTION "misc" )
     SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")

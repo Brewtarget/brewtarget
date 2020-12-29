@@ -107,9 +107,32 @@ public:
 
 };
 
+/**
+ * Although some Xerces errors generate exceptions, others are handled through a callback to an object you provide
+ * which needs to implement the xercesc::DOMErrorHandler interface.
+ *
+ * Aside from "just" logging errors passed to us we need to:
+ *  - decide whether the error is one we can safely deal with (including by ignoring!) or whether it should prevent
+ *    further processing of the document,
+ *  - apply any "corrections" needed the location of the error, which are required when we have made temporary
+ *    modifications to the document being parsed (see comments elsewhere for why we would want to do this)
+ */
 class BtDomErrorHandler: public xercesc::DOMErrorHandler {
 public:
-   BtDomErrorHandler() : couldntHandleError(false) {}
+   /**
+    * \brief Constructor
+    *
+    * \param numberOfLinesInserted  If we have (post-reading in but pre-parsing) inserted a block of text other than at
+    *                               the end of the document, this says how many lines we inserted.  Default is 0.
+    * \param lineAfterWhichInserted If numberOfLinesInserted is not 0 then this says at which point in the document the
+    *                               insertion was made.
+    */
+   BtDomErrorHandler(unsigned int numberOfLinesInserted = 0,
+                     unsigned int lineAfterWhichInserted = 0) : couldntHandleError(false),
+                                                                numberOfLinesInserted(numberOfLinesInserted),
+                                                                lineAfterWhichInserted(lineAfterWhichInserted) {
+      return;
+   }
 
    // See https://xerces.apache.org/xerces-c/apiDocs-3/classDOMError.html for possible indexes into this array
    static char const * const XercesErrorSeverities[];
@@ -122,6 +145,23 @@ public:
    }
 
    /**
+    * Adjusts the location of an error to take account of any insertions we made to the file after reading it in (but
+    * before parsing).  See comments elsewhere for _why_ we want to make such insertions.  Note that we assume the
+    * insertions themselves will never cause an error!
+    */
+   unsigned int correctErrorLine(unsigned int lineNumberOfError) {
+      if (this->numberOfLinesInserted > 0 &&
+          lineNumberOfError > (this->lineAfterWhichInserted + this->numberOfLinesInserted)) {
+         qDebug() <<
+            Q_FUNC_INFO << "Removing " << this->numberOfLinesInserted << " from raw line number of error ("<<
+            lineNumberOfError << ")";
+         return lineNumberOfError - this->numberOfLinesInserted;
+      }
+
+      return lineNumberOfError;
+   }
+
+   /**
     * If the handleError method returns true the DOM implementation should continue as if the error didn't happen when
     * possible, if the method returns false then the DOM implementation should stop the current processing when possible.
     */
@@ -130,6 +170,7 @@ public:
       XQString message{domError.getMessage()};
       xercesc::DOMLocator* location {domError.getLocation()};
       XQString uri{location->getURI()};
+      unsigned int lineNumberOfError = this->correctErrorLine(location->getLineNumber());
 
       //
       // There is sometimes a bit of an art to decrypting Xerces error messages.  Eg "no declaration found for element"
@@ -146,16 +187,16 @@ public:
       QString fullErrorMessage;
       QTextStream fullErrorMessageAsTextStream(&fullErrorMessage);
       fullErrorMessageAsTextStream <<
-         Q_FUNC_INFO << uri << ": " << XercesErrorSeverities[severity] << " at line " << location->getLineNumber() <<
+         Q_FUNC_INFO << uri << ": " << XercesErrorSeverities[severity] << " at line " << lineNumberOfError <<
          ", column " << location->getColumnNumber() << ": " << message;
 
       //
       // Some errors we explicitly want to ignore.  In particular, the BeerXML 1.0 standard says:
       //
-      //    Non-Standard Tags
-      //    Per the XML standard, all non-standard tags will be ignored by the importing program.  This allows programs
+      //    "Non-Standard Tags
+      //    "Per the XML standard, all non-standard tags will be ignored by the importing program.  This allows programs
       //    to store additional information if desired using their own tags.  Any tags not defined as part of this
-      //    standard may safely be ignored by the importing program.
+      //    standard may safely be ignored by the importing program."
       //
       // This is a problem because the BeerXML 1.0 standard also says that tags inside a containing element may occur
       // in any order.  So, in our XSD, we have to to use <xs:all> rather than <xs:sequence> for the containing tags,
@@ -194,6 +235,8 @@ public:
 
 private:
   bool couldntHandleError;
+  unsigned int numberOfLinesInserted;
+  unsigned int lineAfterWhichInserted;
 };
 
 constexpr char const * const BtDomErrorHandler::XercesErrorSeverities[] {
@@ -202,6 +245,7 @@ constexpr char const * const BtDomErrorHandler::XercesErrorSeverities[] {
    "Error",       // DOM_SEVERITY_ERROR = 2
    "Fatal Error"  // DOM_SEVERITY_FATAL_ERROR = 3
 };
+
 
 // This private implementation class holds all private non-virtual members of BeerXML
 class BeerXML::impl {
@@ -212,10 +256,13 @@ public:
     */
    impl() : grammarPool(xercesc::XMLPlatformUtils::fgMemoryManager) {
       this->loadSchemas();
-
-      this->validate(QString("/home/matt/Shared/Data/Syncthing/Brewing/Software/recipes-edit.xml")); ///////!!!!!!!!!!!
       return;
    }
+
+   /**
+    * Destructor
+    */
+   ~impl() = default;
 
    //
    // Frustratingly, although Qt has support for XML parsing, it would  not be wise to use it for dealing with XML
@@ -443,6 +490,9 @@ public:
     * Validate XML file against schema
     *
     * @param fileName
+    *
+    * @return true if file validated OK (including if there were "errors" that we can safely ignore)
+    *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
    bool validate(const QString& fileName) {
 
@@ -454,9 +504,37 @@ public:
          return false;
       }
 
-      QByteArray documentData = inputFile.readAll();
+      //
+      // Rather than just read the XML file into memory, we actually make a small on-the-fly modification to it to
+      // place all the top-level content inside a <BEER_XML>...</BEER_XML> field.  This massively simplifies the XSD
+      // (as explained in a comment therein) at the cost of some minor complexity here.  Essentially, the added tag
+      // pair is (much as we might have wished it were part of the original BeerXML 1.0 Specification) something we
+      // need to hide from the user to avoid confusion (as the tag does not and is not supposed to exist in the
+      // document they are asking us to process).
+      //
+      // Fortunately the edit is simple:
+      //  - We retain unchanged the first line of the file (which will be something along the lines of
+      //    "<?xml version="1.0" blah blah ?>"
+      //  - We insert a new line 2 that says "<BEER_XML>"
+      //  - We read in the rest of the file unchanged (so what was line 2 on disk will be line 3 in memory and so on)
+      //  - We append a new final line that says "</BEER_XML>"
+      //
+      // We then give enough information to our instance of BtDomErrorHandler to allow it to correct the line numbers
+      // for any errors it needs to log.  (And we get a bit of help from this class when we need to make similar
+      // adjustments during exception processing.)
+      //
+      QByteArray documentData = inputFile.readLine();
+      qDebug() << Q_FUNC_INFO << "First line of " << inputFile.fileName() << " was " << QString(documentData);
+      documentData += QByteArray("<BEER_XML>\n");
+      documentData += inputFile.readAll();
+      documentData += QByteArray("\n</BEER_XML>");
       qDebug() << Q_FUNC_INFO << "Input file " << inputFile.fileName() << ": " << documentData.length() << " bytes";
 
+      // It is sometimes helpful to uncomment the next line for debugging, but usually leave it commented out as can
+      // put a _lot_ of data in the logs in DEBUG mode.
+      // qDebug().noquote() << Q_FUNC_INFO << "Full content of " << inputFile.fileName() << " is:\n" << QString(documentData);
+
+      BtDomErrorHandler domErrorHandler(1 , 1);
 
       // See https://www.codesynthesis.com/pipermail/xsd-users/2010-April/002805.html for list of all exceptions Xerces can throw
       try {
@@ -466,7 +544,6 @@ public:
          /// TBD probably need to lock other things here ///
 
 
-         BtDomErrorHandler domErrorHandler;
          xercesc::DOMConfiguration * config = this->parser->getDomConfig();
          config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &domErrorHandler);
 
@@ -499,7 +576,8 @@ public:
          qCritical() << Q_FUNC_INFO << "Caught std::exception: " << se.what();
          return false;
       } catch (const xercesc::XMLException & xe) {
-         qCritical() << Q_FUNC_INFO << "Caught xerces::XMLException at line " << xe.getSrcLine() << ": " << XQString(xe.getType())  << ": " << XQString(xe.getMessage());
+         unsigned int lineNumberOfError = domErrorHandler.correctErrorLine(xe.getSrcLine());
+         qCritical() << Q_FUNC_INFO << "Caught xerces::XMLException at line " << lineNumberOfError << ": " << XQString(xe.getType())  << ": " << XQString(xe.getMessage());
          return false;
       } catch (const xercesc::DOMException & de) {
          qCritical() << Q_FUNC_INFO << "Caught xerces::DOMException #" << de.code << ": " << XQString(de.getMessage());
@@ -574,134 +652,12 @@ BeerXML::BeerXML(DatabaseSchema* tables) : QObject(), pimpl{ new impl{} },
    m_tables(tables)
 {
 
-
-/*
-   bool succeeded = this->schema.setContent(&schemaFile);
-   schemaFile.close();
-   if (!succeeded) {
-      // This could happen in dev, if you've messed up the contents of the schema file, but shouldn't be something end
-      // users see.
-      Brewtarget::logE(QString("%1 Could not parse schema file %2").arg(Q_FUNC_INFO).arg(schemaFile.fileName()));
-      return;
-   }
-
-
-
-
-   QByteArray schemaAsByteArray = this->schema.toByteArray();
-   // By default, Wrapper4InputSource will 'adopt' the MemBufInputSource we pass to it
-   xercesc::Wrapper4InputSource schemaInputSource(new xercesc::MemBufInputSource(schemaAsByteArray.constData(), schemaAsByteArray.length(), "Dummy schema name"));
-   xercesc::DOMLSParser domParser;
-   domParser.loadGrammar(schemaInputSource,
-                         Grammar::SchemaGrammarType
-
-   QDomElement docElem = this->schema.documentElement();
-
-   Brewtarget::logD(QString("%1 docElem %2/%3").arg(Q_FUNC_INFO).arg(docElem.nodeName()).arg(docElem.nodeValue()));
-
-   QDomNode n = docElem.firstChild();
-    while(!n.isNull()) {
-      QDomElement e = n.toElement(); // try to convert the node to an element.
-      if(!e.isNull()) {
-         Brewtarget::logD(QString("%1 element %2").arg(Q_FUNC_INFO).arg(qPrintable(e.tagName())));
-      }
-      n = n.nextSibling();
-   }
-*/
-
    return;
 }
 
 // See https://herbsutter.com/gotw/_100/ for why we need to explicitly define the destructor here (and not in the header file)
 BeerXML::~BeerXML() = default;
 
-/*
-int BeerXML::validate(QDomNode schemaNode, QDomNode inputDocNode, BeerXML::ValidationType validationType) {
-   auto schemaNodeType = schemaNode.nodeType();
-   auto schemaNodeName = schemaNode.nodeName();
-   auto schemaNodeValue = schemaNode.nodeValue();
-   auto inputDocNodeType = inputDocNode.nodeType();
-   auto inputDocNodeName = inputDocNode.nodeName();
-   auto inputDocNodeValue = inputDocNode.nodeValue();
-
-   Brewtarget::logD(
-      QString("%1 schema node %2:%3/%4, BeerXML node %5:%6/%7")
-      .arg(Q_FUNC_INFO)
-      .arg(schemaNodeType)
-      .arg(schemaNodeName)
-      .arg(schemaNodeValue)
-      .arg(inputDocNodeType)
-      .arg(inputDocNodeName)
-      .arg(inputDocNodeValue)
-   );
-
-   if (schemaNodeName == "xsd:complexType") {
-      // complexType just means there's something inside
-      return this->validate(schemaNode.firstChild(), inputDocNode);
-   }
-
-   if (schemaNodeName == "xsd:sequence") {
-      // The sequence element specifies that the child elements must appear in a sequence. Each child element can occur
-      // from 0 to any number of times.
-      for (auto child = schemaNode.firstChild(); !child.isNull(); child = child.nextSibling()) {
-         this->validate(child, inputDocNode, BeerXML::ZeroOrMore);
-      }
-   }
-   if (schemaNodeName == "xsd:choice") {
-      //
-      // The choice element allows only one of the elements contained in the <choice> declaration to be present within
-      // the containing element.
-      // Attributes:
-      //    maxOccurs -- Optional. Specifies the maximum number of times the choice element can occur in the parent
-      //                 element. The value can be any number >= 0, or if you want to set no limit on the maximum
-      //                 number, use the value "unbounded". Default value is 1.  (We take 0 to mean unbounded too as it
-      //                 is otherwise meaningless.)
-      //    minOccurs -- Optional. Specifies the minimum number of times the choice element can occur in the parent
-      //                 element. The value can be any number >= 0. Default value is 1
-      //
-      QDomNamedNodeMap schemaNodeAttributes = schemaNode.attributes();
-
-      int maxOccurs = 0;
-      QDomNode maxOccursNode = schemaNodeAttributes.namedItem(QString("maxOccurs"));
-      if (!maxOccursNode.isNull()) {
-         QString maxOccursValue = maxOccursNode.nodeValue();
-         Brewtarget::logD(QString("%1 xsd:choice attribute maxOccurs %2").arg(Q_FUNC_INFO).arg(maxOccursValue));
-         if (maxOccursValue != "unbounded") {
-            maxOccurs = maxOccursValue.toInt();
-         }
-      }
-
-      int minOccurs = 0;
-      QDomNode minOccursNode = schemaNodeAttributes.namedItem(QString("minOccurs"));
-      if (!minOccursNode.isNull()) {
-         QString minOccursValue = minOccursNode.nodeValue();
-         Brewtarget::logD(QString("%1 xsd:choice attribute minOccurs %2").arg(Q_FUNC_INFO).arg(minOccursValue));
-         minOccurs = minOccursValue.toInt();
-      }
-
-      Brewtarget::logD(QString("%1 xsd:choice node maxOccurs %2, minOccurs %3").arg(Q_FUNC_INFO).arg(maxOccurs).arg(minOccurs));
-
-      for (auto child = schemaNode.firstChild(); !child.isNull(); child = child.nextSibling()) {
-
-      }
-   }
-
-
-   return 0;
-}
-
-
-void BeerXML::validate(QDomDocument & beerXmlDoc) {
-   QDomElement schemaDocElement = this->schema.documentElement();
-   QDomNode schemaDocNode = schemaDocElement.firstChild();
-
-   QDomElement beerXmlDocElement = beerXmlDoc.documentElement();
-   QDomNode beerXmlDocNode = beerXmlDocElement;
-
-   this->validate(schemaDocNode, beerXmlDocNode);
-   return;
-}
-*/
 
 QString BeerXML::textFromValue(QVariant value, QString type)
 {
@@ -2324,6 +2280,14 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
 
 bool BeerXML::importFromXML(const QString& filename)
 {
+   //
+   // Before we try to read the data in from the file, we validate it against an XSD
+   //
+   bool validatedOk = this->pimpl->validate(filename);
+   return true;
+/////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^!!!!!!!!!!!!!!!!!!1
+
+
    int count;
    int line, col;
    QDomDocument xmlDoc;
@@ -2343,12 +2307,6 @@ bool BeerXML::importFromXML(const QString& filename)
 
    if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
       qWarning() << Q_FUNC_INFO << ": Bad document formatting in " << filename << " " << line << ":" << col << ". " << err;
-
-/////////////////////////////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-   // Ultimately 3 returns - completely invalid (can't parse) / slightly invalid (but we can fix) / valid
-   this->pimpl->validate(filename);
-   return true;
-/////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    list = xmlDoc.elementsByTagName("RECIPE");
    if ( list.count() )

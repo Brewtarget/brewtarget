@@ -29,6 +29,8 @@
 
 class MainWindow;
 
+#include <memory> // For PImpl
+
 #include <QWidget>
 #include <QMainWindow>
 #include <QString>
@@ -111,7 +113,8 @@ class MainWindow : public QMainWindow, public Ui::mainWindow
    friend class OptionDialog;
 public:
    MainWindow(QWidget* parent=nullptr);
-   virtual ~MainWindow() {}
+   virtual ~MainWindow();
+
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
    //! \brief Display a file dialog for writing xml files.
@@ -322,6 +325,9 @@ private slots:
    void setUndoRedoEnable();
 
 private:
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
 
    void removeHop(Hop * itemToRemove);
    void removeFermentable(Fermentable * itemToRemove);
@@ -456,7 +462,6 @@ private:
    void updateColorSlider(QString attribute, RangedSlider* slider);
 
    void convertedMsg();
-   void importMsg();
 
 };
 

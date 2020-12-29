@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-       <file alias="beerxml/v1/BeerXml.xsd">beerxml/v1/BeerXml.xsd</file>
+        <file alias="beerxml/v1/BeerXml.xsd">beerxml/v1/BeerXml.xsd</file>
         <file alias="beerxml/v3/BeerXML.xsd">beerxml/v3/BeerXML.xsd</file>
         <file alias="beerxml/v3/grain.xsd">beerxml/v3/grain.xsd</file>
         <file alias="beerxml/v3/hops.xsd">beerxml/v3/hops.xsd</file>

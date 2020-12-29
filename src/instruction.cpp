@@ -38,7 +38,8 @@ Instruction::Instruction(Brewtarget::DBTable table, int key)
      m_timerValue(QString()),
      m_completed (false),
      m_interval  (0.0),
-     m_cacheOnly(false)
+     m_cacheOnly(false),
+     m_recipe   (nullptr)
 {
 }
 
@@ -49,7 +50,8 @@ Instruction::Instruction(QString name, bool cache)
      m_timerValue(QString()),
      m_completed (false),
      m_interval  (0.0),
-     m_cacheOnly(cache)
+     m_cacheOnly(cache),
+     m_recipe   (nullptr)
 {
 }
 
@@ -60,7 +62,8 @@ Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
      m_timerValue(rec.value(kcolInstructionTimerValue).toString()),
      m_completed (rec.value(kcolInstructionCompleted).toBool()),
      m_interval  (rec.value(kcolInstructionInterval).toDouble()),
-     m_cacheOnly(false)
+     m_cacheOnly(false),
+     m_recipe   (nullptr)
 {
 }
 
@@ -139,5 +142,8 @@ int Instruction::instructionNumber() const { return Database::instance().instruc
 bool Instruction::cacheOnly() { return m_cacheOnly; }
 
 int Instruction::insertInDatabase() {
-   return Database::instance().insertInstruction(this, this->m_recipe);
+   qDebug() << Q_FUNC_INFO << "this->m_recipe:" << static_cast<void *>(this->m_recipe);
+//   return Database::instance().insertInstruction(this, this->m_recipe);
+   return Database::instance().insertElement(this);
+
 }

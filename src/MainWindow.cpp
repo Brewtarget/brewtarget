@@ -131,8 +131,28 @@
 
 #include <memory>
 
+// This private implementation class holds all private non-virtual members of MainWindow
+class MainWindow::impl {
+public:
+
+   impl() {
+      return;
+   }
+
+   ~impl() = default;
+
+   void importMsg(QString & fileName) {
+      QMessageBox msgBox;
+      msgBox.setText( tr("The import from \"%1\" contained invalid beerXML. It has been imported, but please make certain it makes sense.").arg(fileName));
+      msgBox.exec();
+      return;
+   }
+
+};
+
+
 MainWindow::MainWindow(QWidget* parent)
-        : QMainWindow(parent)
+        : QMainWindow(parent), pimpl{ new impl{} }
 {
    undoStack = new QUndoStack(this);
 
@@ -203,6 +223,11 @@ MainWindow::MainWindow(QWidget* parent)
 
    return;
 }
+
+
+// See https://herbsutter.com/gotw/_100/ for why we need to explicitly define the destructor here (and not in the header file)
+MainWindow::~MainWindow() = default;
+
 
 void MainWindow::setSizesInPixelsBasedOnDpi()
 {
@@ -2245,8 +2270,9 @@ void MainWindow::importFiles()
 
    foreach( QString filename, fileOpener->selectedFiles() )
    {
-      if ( ! Database::instance().getBeerXml()->importFromXML(filename) )
-         importMsg();
+      if ( ! Database::instance().getBeerXml()->importFromXML(filename) ) {
+         this->pimpl->importMsg(filename);
+      }
    }
 
    showChanges();
@@ -2866,13 +2892,6 @@ void MainWindow::convertedMsg()
    msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir().canonicalPath() + "obsolete");
    msgBox.exec();
 
-}
-
-void MainWindow::importMsg()
-{
-   QMessageBox msgBox;
-   msgBox.setText( tr("The import contained invalid beerXML. It has been imported, but please make certain it makes sense."));
-   msgBox.exec();
 }
 
 void MainWindow::changeBrewDate()

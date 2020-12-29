@@ -1193,6 +1193,7 @@ void Database::insertInstruction(Instruction* in, int pos)
          .arg( tbl->recipeIndexName() )
          .arg(parentRecipeKey)
          .arg(pos);
+      qDebug() << Q_FUNC_INFO << "Update 1 SQL:" << update;
 
       if ( !q.exec(update) )
          throw QString("failed to renumber instructions recipe");
@@ -1206,6 +1207,7 @@ void Database::insertInstruction(Instruction* in, int pos)
          .arg( tbl->recipeIndexName())
          .arg(parentRecipeKey)
          .arg(pos);
+      qDebug() << Q_FUNC_INFO << "Query SQL:" << query;
 
       if ( !q.exec(query) )
          throw QString("failed to find renumbered instructions");
@@ -1225,6 +1227,7 @@ void Database::insertInstruction(Instruction* in, int pos)
          .arg(pos)
          .arg( tbl->inRecIndexName() )
          .arg(in->_key);
+      qDebug() << Q_FUNC_INFO << "Update 2 SQL:" << update;
 
       if ( !q.exec(update) )
          throw QString("failed to insert new instruction recipe");
@@ -1558,6 +1561,7 @@ Instruction* Database::newInstruction(Recipe* rec)
 
    try {
       tmp = newIngredient(&allInstructions);
+      tmp->setRecipe(rec);
 
       // Add without copying to "instruction_in_recipe". We already have a
       // transaction open, so tell addIng to not worry about it
@@ -1973,8 +1977,10 @@ Yeast* Database::newYeast(Yeast* other)
 
 int Database::insertElement(Ingredient* ins)
 {
+   qDebug() << Q_FUNC_INFO;
    // Check whether this ingredient is already in the DB.  If so, bail here.
    if (this->isStored(*ins)) {
+      qDebug() << Q_FUNC_INFO << "Already stored";
       return ins->key();
    }
 
@@ -2102,6 +2108,7 @@ int Database::insertHop(Hop* ins)
 
 int Database::insertInstruction(Instruction* ins, Recipe* parent)
 {
+   qDebug() << Q_FUNC_INFO << "ins: " << static_cast<void *>(ins) << ", parent" << static_cast<void *>(parent);
    int key;
    sqlDatabase().transaction();
 
@@ -2335,6 +2342,7 @@ template<class T> T* Database::addIngredientToRecipe(
    bool transact
 )
 {
+   qDebug() << Q_FUNC_INFO << "Add ingredient to recipe. ing:" << reinterpret_cast<void *>(ing) << ", rec:" << reinterpret_cast<void *>(rec);
    T* newIng = nullptr;
    QString propName, relTableName, ingKeyName, childTableName;
    TableSchema* table;
@@ -2364,7 +2372,6 @@ template<class T> T* Database::addIngredientToRecipe(
       table = dbDefn->table( dbDefn->classNameToTable(meta->className()) );
       child = dbDefn->table( table->childTable() );
       inrec = dbDefn->table( table->inRecTable() );
-
       // Ensure this ingredient is not already in the recipe.
       QString select = QString("SELECT %5 from %1 WHERE %2=%3 AND %5=%4")
                            .arg(inrec->tableName())
@@ -2372,7 +2379,7 @@ template<class T> T* Database::addIngredientToRecipe(
                            .arg(ing->_key)
                            .arg(reinterpret_cast<Ingredient*>(rec)->_key)
                            .arg(inrec->recipeIndexName());
-      qDebug() << QString("%1 Ingredient in recipe search: %2").arg(Q_FUNC_INFO).arg(select);
+      qDebug() << Q_FUNC_INFO << "Ingredient in recipe search:" << select;
       if (! q.exec(select) ) {
          throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
             .arg(q.lastQuery()).arg(q.lastError().text());
@@ -2384,6 +2391,8 @@ template<class T> T* Database::addIngredientToRecipe(
       }
 
       q.finish();
+
+      qDebug() << Q_FUNC_INFO << "noCopy=" << noCopy;
 
       if ( noCopy ) {
          newIng = qobject_cast<T*>(ing);
