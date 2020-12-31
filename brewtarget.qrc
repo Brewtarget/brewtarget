@@ -1,17 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file alias="beerxml/v1/BeerXml.xsd">beerxml/v1/BeerXml.xsd</file>
-        <file alias="beerxml/v3/BeerXML.xsd">beerxml/v3/BeerXML.xsd</file>
-        <file alias="beerxml/v3/grain.xsd">beerxml/v3/grain.xsd</file>
-        <file alias="beerxml/v3/hops.xsd">beerxml/v3/hops.xsd</file>
-        <file alias="beerxml/v3/mash_step.xsd">beerxml/v3/mash_step.xsd</file>
-        <file alias="beerxml/v3/mash.xsd">beerxml/v3/mash.xsd</file>
-        <file alias="beerxml/v3/measureable_units.xsd">beerxml/v3/measureable_units.xsd</file>
-        <file alias="beerxml/v3/misc.xsd">beerxml/v3/misc.xsd</file>
-        <file alias="beerxml/v3/recipes.xsd">beerxml/v3/recipes.xsd</file>
-        <file alias="beerxml/v3/style.xsd">beerxml/v3/style.xsd</file>
-        <file alias="beerxml/v3/water.xsd">beerxml/v3/water.xsd</file>
-        <file alias="beerxml/v3/yeast.xsd">beerxml/v3/yeast.xsd</file>
         <file alias="images/backup.png">images/backup.png</file>
         <file alias="images/brewtarget.svg">images/brewtarget.svg</file>
         <file alias="images/bubbles.svg">images/bubbles.svg</file>

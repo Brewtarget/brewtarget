@@ -98,8 +98,12 @@ public:
    void fromXml(Ingredient* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
    void fromXml(Ingredient* element, QDomNode const& elementNode);
 
-   //! Import ingredients from BeerXML documents.
-   bool importFromXML(const QString& filename);
+   /*! Import ingredients, recipes, etc from BeerXML documents.
+    * \param filename
+    * \param errorMessage
+    * \return true if succeeded, false otherwise
+    */
+   bool importFromXML(QString const & filename, QString & errorMessage);
 
    // Import from BeerXML =====================================================
    BrewNote*    brewNoteFromXml(    QDomNode const& node, Recipe* parent );
@@ -122,7 +126,16 @@ private:
 
    DatabaseSchema* m_tables;
 
+   /**
+    * Private constructor means our friend class (Database) can construct us
+    */
    BeerXML(DatabaseSchema* tables);
+
+   //! No copy constructor, as never want anyone, not even our friends, to make copies of a singleton
+   BeerXML(BeerXML const&) = delete;
+   //! No assignment operator , as never want anyone, not even our friends, to make copies of a singleton.
+   BeerXML& operator=(BeerXML const&) = delete;
+
    QString textFromValue(QVariant value, QString type);
    int getQualifiedHopTypeIndex(QString type, Hop* hop);
    int getQualifiedHopUseIndex(QString use, Hop* hop);

@@ -61,43 +61,43 @@ ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
 SET( brewtarget_SRCS
     ${SRCDIR}/AboutDialog.cpp
     ${SRCDIR}/Algorithms.cpp
-    ${SRCDIR}/ingredient.cpp
+    ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/beerxml.cpp
-    ${SRCDIR}/IngredientSortProxyModel.cpp
     ${SRCDIR}/boiltime.cpp
-    ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
+    ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/brewnote.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
-    ${SRCDIR}/BtTabWidget.cpp
-    ${SRCDIR}/BtTreeItem.cpp
-    ${SRCDIR}/BtTreeModel.cpp
-    ${SRCDIR}/BtTreeView.cpp
-    ${SRCDIR}/BtTreeFilterProxyModel.cpp
-    ${SRCDIR}/BeerColorWidget.cpp
+    ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/BtDatePopup.cpp
+    ${SRCDIR}/BtDigitWidget.cpp
     ${SRCDIR}/BtFolder.cpp
     ${SRCDIR}/BtLabel.cpp
     ${SRCDIR}/BtLineEdit.cpp
-    ${SRCDIR}/BtTextEdit.cpp
-    ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/BtSplashScreen.cpp
+    ${SRCDIR}/BtTabWidget.cpp
+    ${SRCDIR}/BtTextEdit.cpp
+    ${SRCDIR}/BtTreeFilterProxyModel.cpp
+    ${SRCDIR}/BtTreeItem.cpp
+    ${SRCDIR}/BtTreeModel.cpp
+    ${SRCDIR}/BtTreeView.cpp
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/CustomComboBox.cpp
     ${SRCDIR}/database.cpp
+    ${SRCDIR}/DatabaseSchema.cpp
     ${SRCDIR}/DatabaseSchemaHelper.cpp
     ${SRCDIR}/DiastaticPowerUnitSystem.cpp
-    ${SRCDIR}/equipment.cpp
     ${SRCDIR}/EbcColorUnitSystem.cpp
     ${SRCDIR}/EquipmentButton.cpp
-    ${SRCDIR}/EquipmentListModel.cpp
+    ${SRCDIR}/equipment.cpp
     ${SRCDIR}/EquipmentEditor.cpp
+    ${SRCDIR}/EquipmentListModel.cpp
     ${SRCDIR}/FahrenheitTempUnitSystem.cpp
     ${SRCDIR}/fermentable.cpp
-    ${SRCDIR}/FermentableEditor.cpp
     ${SRCDIR}/FermentableDialog.cpp
+    ${SRCDIR}/FermentableEditor.cpp
     ${SRCDIR}/FermentableSortFilterProxyModel.cpp
     ${SRCDIR}/FermentableTableModel.cpp
     ${SRCDIR}/HeatCalculations.cpp
@@ -108,16 +108,19 @@ SET( brewtarget_SRCS
     ${SRCDIR}/HopTableModel.cpp
     ${SRCDIR}/Html.cpp
     ${SRCDIR}/HydrometerTool.cpp
-    ${SRCDIR}/instruction.cpp
     ${SRCDIR}/IbuGuSlider.cpp
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
-    ${SRCDIR}/InventoryFormatter.cpp
+    ${SRCDIR}/ingredient.cpp
+    ${SRCDIR}/IngredientSortProxyModel.cpp
+    ${SRCDIR}/instruction.cpp
     ${SRCDIR}/InstructionWidget.cpp
+    ${SRCDIR}/InventoryFormatter.cpp
     ${SRCDIR}/Log.cpp
     ${SRCDIR}/MainWindow.cpp
-    ${SRCDIR}/mash.cpp
     ${SRCDIR}/MashButton.cpp
+    ${SRCDIR}/mash.cpp
+    ${SRCDIR}/MashDesigner.cpp
     ${SRCDIR}/MashEditor.cpp
     ${SRCDIR}/MashListModel.cpp
     ${SRCDIR}/mashstep.cpp
@@ -127,19 +130,22 @@ SET( brewtarget_SRCS
     ${SRCDIR}/MashWizard.cpp
     ${SRCDIR}/matrix.cpp
     ${SRCDIR}/misc.cpp
-    ${SRCDIR}/MiscEditor.cpp
     ${SRCDIR}/MiscDialog.cpp
+    ${SRCDIR}/MiscEditor.cpp
     ${SRCDIR}/MiscSortFilterProxyModel.cpp
     ${SRCDIR}/MiscTableModel.cpp
     ${SRCDIR}/NamedMashEditor.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
+    ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/PlatoDensityUnitSystem.cpp
     ${SRCDIR}/PreInstruction.cpp
     ${SRCDIR}/PrimingDialog.cpp
+    ${SRCDIR}/PropertySchema.cpp
     ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/RangedSlider.cpp
     ${SRCDIR}/recipe.cpp
+    ${SRCDIR}/RecipeExtrasWidget.cpp
     ${SRCDIR}/RecipeFormatter.cpp
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/salt.cpp
@@ -151,12 +157,13 @@ SET( brewtarget_SRCS
     ${SRCDIR}/SIWeightUnitSystem.cpp
     ${SRCDIR}/SrmColorUnitSystem.cpp
     ${SRCDIR}/StrikeWaterDialog.cpp
-    ${SRCDIR}/style.cpp
     ${SRCDIR}/StyleButton.cpp
-    ${SRCDIR}/StyleListModel.cpp
+    ${SRCDIR}/style.cpp
     ${SRCDIR}/StyleEditor.cpp
+    ${SRCDIR}/StyleListModel.cpp
     ${SRCDIR}/StyleRangeWidget.cpp
     ${SRCDIR}/StyleSortFilterProxyModel.cpp
+    ${SRCDIR}/TableSchema.cpp
     ${SRCDIR}/TimerListDialog.cpp
     ${SRCDIR}/TimerMainDialog.cpp
     ${SRCDIR}/TimerWidget.cpp
@@ -166,26 +173,21 @@ SET( brewtarget_SRCS
     ${SRCDIR}/UnitSystems.cpp
     ${SRCDIR}/USVolumeUnitSystem.cpp
     ${SRCDIR}/USWeightUnitSystem.cpp
-    ${SRCDIR}/water.cpp
-    ${SRCDIR}/WaterTableModel.cpp
-    ${SRCDIR}/WaterListModel.cpp
-    ${SRCDIR}/WaterTableWidget.cpp
     ${SRCDIR}/WaterButton.cpp
-    ${SRCDIR}/WaterEditor.cpp
+    ${SRCDIR}/water.cpp
     ${SRCDIR}/WaterDialog.cpp
+    ${SRCDIR}/WaterEditor.cpp
+    ${SRCDIR}/WaterListModel.cpp
     ${SRCDIR}/WaterSortFilterProxyModel.cpp
+    ${SRCDIR}/WaterTableModel.cpp
+    ${SRCDIR}/WaterTableWidget.cpp
     ${SRCDIR}/yeast.cpp
     ${SRCDIR}/YeastDialog.cpp
     ${SRCDIR}/YeastEditor.cpp
-    ${SRCDIR}/YeastTableModel.cpp
     ${SRCDIR}/YeastSortFilterProxyModel.cpp
-    ${SRCDIR}/MashDesigner.cpp
-    ${SRCDIR}/BtDigitWidget.cpp
-    ${SRCDIR}/PitchDialog.cpp
-    ${SRCDIR}/RecipeExtrasWidget.cpp
-    ${SRCDIR}/PropertySchema.cpp
-    ${SRCDIR}/TableSchema.cpp
-    ${SRCDIR}/DatabaseSchema.cpp
+    ${SRCDIR}/YeastTableModel.cpp
+    ${SRCDIR}/xml/BtDomErrorHandler.cpp
+    ${SRCDIR}/xml/XercesHelpers.cpp
 )
 
 # List of all the *.ui.

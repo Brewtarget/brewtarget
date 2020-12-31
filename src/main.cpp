@@ -1,10 +1,11 @@
 /*
  * main.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - A.J. Drobnich <aj.drobnich@gmail.com>
+ * - Matt Young <mfsy@yahoo.com>
+ * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Maxime Lavigne <duguigne@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +41,7 @@ int main(int argc, char **argv)
    try {
       xercesc::XMLPlatformUtils::Initialize();
    } catch (xercesc::XMLException const & xercesInitException) {
-      qCritical() << QString("%1 Xerces XML Parser Initialisation Failed: %2").arg(Q_FUNC_INFO).arg(xercesInitException.getMessage());
+      qCritical() << Q_FUNC_INFO << "Xerces XML Parser Initialisation Failed: " << xercesInitException.getMessage();
       return 1;
    }
 
@@ -116,7 +117,12 @@ int main(int argc, char **argv)
  * Use at your own risk.
  */
 void importFromXml(const QString & filename) {
-    Database::instance().getBeerXml()->importFromXML(filename);
+
+   QString errorMessage;
+   if (!Database::instance().getBeerXml()->importFromXML(filename, errorMessage)) {
+      qCritical() << "Unable to import" << filename << "Error: " << errorMessage;
+      exit(1);
+   }
     Database::dropInstance();
     Brewtarget::setOption("converted", QDate().currentDate().toString());
     exit(0);

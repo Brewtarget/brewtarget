@@ -135,19 +135,104 @@
 class MainWindow::impl {
 public:
 
-   impl() {
+   impl() : fileOpenDirectory{QDir::homePath()} {
       return;
    }
 
    ~impl() = default;
 
-   void importMsg(QString & fileName) {
-      QMessageBox msgBox;
-      msgBox.setText( tr("The import from \"%1\" contained invalid beerXML. It has been imported, but please make certain it makes sense.").arg(fileName));
+   /**
+    * @brief Import recipes, hops, equipment, etc from files specified by the user.  (Currently this is just BeerXML,
+    *        but in future could well be other formats too.
+    *
+    * @param mainWindow Back pointer to MainWindow class
+    */
+   void importFromFiles(MainWindow * mainWindow) {
+      // Since we can only be called from an instance of MainWindow, it should be impossible for it to give us null as
+      // the pointer to itself!
+      Q_ASSERT(mainWindow != nullptr);
+
+      // Set up the fileOpener dialog.  In previous versions of the code, this was created once and reused every time
+      // we want to open a file.  The advantage of that is that, on subsequent uses, the file dialog is going to open
+      // wherever you navigated to when you last opened a file.  However, as at 2020-12-30, there is a known bug in Qt
+      // (https://bugreports.qt.io/browse/QTBUG-88971) which means you cannot make a QFileDialog "forget" previous
+      // files you have selected with it.  So each time you you show it, the subsequent list returned from
+      // selectedFiles() is actually all files _ever_ selected with this dialog object.  (The bug report is a bit bare
+      // bones, but https://forum.qt.io/topic/121235/qfiledialog-has-memory has more detail.)
+      //
+      // Our workaround is to use a new QFileDialog each time, and manually keep track of the current directory
+      QFileDialog fileOpener{mainWindow,
+                             tr("Open"),
+                             this->fileOpenDirectory,
+                             tr("BeerXML files (*.xml)")};
+      fileOpener.setAcceptMode(QFileDialog::AcceptOpen);
+      fileOpener.setFileMode(QFileDialog::ExistingFiles);
+      fileOpener.setViewMode(QFileDialog::List);
+
+      if ( ! fileOpener.exec() ) {
+         // User clicked cancel, so nothing more to do
+         return;
+      }
+
+      qDebug() << Q_FUNC_INFO << "Importing " << fileOpener.selectedFiles().length() << " files";
+      qDebug() << Q_FUNC_INFO << "Directory " << fileOpener.directory();
+      this->fileOpenDirectory = fileOpener.directory().canonicalPath();
+
+      QString filesImportedOk{};
+      QTextStream filesImportedOkAsStream(&filesImportedOk);
+      QString errorMessage;
+      foreach( QString filename, fileOpener.selectedFiles() )
+      {
+         qDebug() << Q_FUNC_INFO << "Importing " << filename;
+         errorMessage.clear();
+         bool succeeded = Database::instance().getBeerXml()->importFromXML(filename, errorMessage);
+         if ( ! succeeded ) {
+            // Show one pop-up for each file that failed
+            qDebug() << Q_FUNC_INFO << "Import failed";
+            this->importMsg(filename, succeeded, errorMessage);
+         } else {
+            qDebug() << Q_FUNC_INFO << "Import succeeded";
+            if (filesImportedOk.length() > 0) {
+               filesImportedOkAsStream << "\n";
+            }
+            filesImportedOkAsStream << filename;
+         }
+      }
+      // Group all the files that succeeded into a single message
+      if (filesImportedOk.length() > 0) {
+         this->importMsg(filesImportedOk, true, errorMessage);
+      }
+
+      mainWindow->showChanges();
+
+      return;
+   }
+
+   void importMsg(QString const & fileName, bool succeeded, QString const & errorMessage) {
+      // This will allow us to drop the directory path to the file, as it is often long and makes the message box a
+      // "wall of text" that will put a lot of users off.
+      QFileInfo fileInfo(fileName);
+
+
+      QString messageBoxTitle{succeeded ? tr("Success!") : tr("ERROR")};
+      QString messageBoxText{
+         succeeded ? tr("Successfully imported file \"%1\"").arg(fileInfo.fileName()) :
+                     tr("Unable to import file \"%1\"\n\n"
+                        "%2\n\n"
+                        "See log file for more details.").arg(fileInfo.fileName()).arg(errorMessage)
+      };
+      qDebug() << Q_FUNC_INFO << "Message box text : " << messageBoxText;
+      QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
+                         messageBoxTitle,
+                         messageBoxText};
       msgBox.exec();
       return;
    }
 
+private:
+   QFileDialog* fileOpener;
+
+   QString fileOpenDirectory;
 };
 
 
@@ -320,7 +405,7 @@ void MainWindow::setupCSS()
    lineEdit_boilSg->setStyleSheet(boldSS);
 }
 
-// Any dialogs should be initialized in here. That should include any initial
+// Most dialogs are initialized in here. That should include any initial
 // configurations as well
 void MainWindow::setupDialogs()
 {
@@ -356,12 +441,6 @@ void MainWindow::setupDialogs()
 
    waterDialog = new WaterDialog(this);
    waterEditor = new WaterEditor(this);
-
-   // Set up the fileOpener dialog.
-   fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
-   fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
-   fileOpener->setFileMode(QFileDialog::ExistingFiles);
-   fileOpener->setViewMode(QFileDialog::List);
 
    // Set up the fileSaver dialog.
    fileSaver = new QFileDialog(this, tr("Save"), QDir::homePath(), tr("BeerXML files (*.xml)") );
@@ -614,8 +693,8 @@ void MainWindow::setupTriggers()
    connect( actionExit, &QAction::triggered, this, &QWidget::close );                                                   // > File > Exit
    connect( actionAbout_BrewTarget, &QAction::triggered, dialog_about, &QWidget::show );                                // > About > About Brewtarget
    connect( actionNewRecipe, &QAction::triggered, this, &MainWindow::newRecipe );                                       // > File > New Recipe
-   connect( actionImport_Recipes, &QAction::triggered, this, &MainWindow::importFiles );                                // > File > Import Recipes
-   connect( actionExportRecipe, &QAction::triggered, this, &MainWindow::exportRecipe );                                 // > File > Export Recipes
+   connect( actionImportFromXml, &QAction::triggered, this, &MainWindow::importFiles );                                // > File > Import Recipes
+   connect( actionExportToXml, &QAction::triggered, this, &MainWindow::exportRecipe );                                 // > File > Export Recipes
    connect( actionUndo, &QAction::triggered, this, &MainWindow::editUndo );                                             // > Edit > Undo
    connect( actionRedo, &QAction::triggered, this, &MainWindow::editRedo );                                             // > Edit > Redo
    setUndoRedoEnable();
@@ -1494,6 +1573,9 @@ void MainWindow::addMashStepToMash(MashStep * mashStep)
    //         even by pulling out some of the common/similar code into a base class or template...
 }
 
+/**
+ * .:TODO:. (MY 2020-12-30) We ought to be able to export more than recipes
+ */
 void MainWindow::exportRecipe()
 {
    QFile* outFile;
@@ -2262,20 +2344,10 @@ void MainWindow::restoreFromBackup()
    //TODO: do this without requiring restarting :)
 }
 
-// Imports all the recipes from a file into the database.
+// Imports all the recipes, hops, equipment or whatever from a BeerXML file into the database.
 void MainWindow::importFiles()
 {
-   if ( ! fileOpener->exec() )
-      return;
-
-   foreach( QString filename, fileOpener->selectedFiles() )
-   {
-      if ( ! Database::instance().getBeerXml()->importFromXML(filename) ) {
-         this->pimpl->importMsg(filename);
-      }
-   }
-
-   showChanges();
+   this->pimpl->importFromFiles(this);
 }
 
 bool MainWindow::verifyImport(QString tag, QString name)

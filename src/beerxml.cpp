@@ -41,12 +41,11 @@
 
 #include <xercesc/dom/DOMConfiguration.hpp>
 #include <xercesc/dom/DOMDocument.hpp>
-#include <xercesc/dom/DOMError.hpp>
-#include <xercesc/dom/DOMErrorHandler.hpp>
+#include <xercesc/dom/DOMException.hpp>
 #include <xercesc/dom/DOMImplementation.hpp>
 #include <xercesc/dom/DOMImplementationRegistry.hpp>
-#include <xercesc/dom/DOMLocator.hpp>
 #include <xercesc/dom/DOMLSParser.hpp>
+#include <xercesc/dom/DOMNodeList.hpp>
 #include <xercesc/framework/MemBufInputSource.hpp>
 #include <xercesc/framework/Wrapper4InputSource.hpp>
 #include <xercesc/framework/XMLGrammarPoolImpl.hpp>
@@ -70,181 +69,14 @@
 #include "water.h"
 #include "salt.h"
 #include "yeast.h"
+#include "xml/BtDomDocumentOwner.h"
+#include "xml/BtDomErrorHandler.h"
+#include "xml/XercesHelpers.h"
+#include "xml/XQString.h"
 
 #include "TableSchema.h"
 
-/**
- * \brief This class extends QString to allow you to construct Qt QStrings from Xerces null-terminated XMLCh strings
- *        without having to do lots of reinterpret_cast.
- *
- * Xerces and Qt both represent strings internally using UTF-16.  However, Xerces uses a base type (uint16_t) to define
- * its 16-bit chars (XMLCh), whereas Qt uses a small class (QChar) for the same data.  So we need a reinterpret_cast to
- * switch between the two.  This is preferable to using the Xerces built-in string handling, which is a bit clunky: you
- * either have to create fixed-sized arrays of XMLCh and call xercesc::XMLString::transcode() to fill them from a
- * char * source, or manually declare constant strings as null-terminated arrays, eg
- *   XMLCh features[] {xercesc::chLatin_L, xercesc::chLatin_S, xercesc::chNull};
- */
-class XQString : public QString {
-public:
-   // Ensure access to QString's existing constructors, even though we add another one below
-   using QString::QString;
 
-   /**
-    * Construct from a Xerces null-terminated UTF-16 string
-    */
-   XQString(XMLCh const * xercesString) : QString(reinterpret_cast<QChar const *>(xercesString)) {
-      return;
-   }
-
-   /**
-    * Return a pointer to a Xerces-friendly null-terminated UTF-16 string
-    */
-   XMLCh const * getXercesString() const {
-      // NB we need to use QString::data() rather than QString::constData() to guaranteed that the returned string is
-      // null-terminated.
-      return reinterpret_cast<XMLCh const *>(this->data());
-   }
-
-};
-
-/**
- * Although some Xerces errors generate exceptions, others are handled through a callback to an object you provide
- * which needs to implement the xercesc::DOMErrorHandler interface.
- *
- * Aside from "just" logging errors passed to us we need to:
- *  - decide whether the error is one we can safely deal with (including by ignoring!) or whether it should prevent
- *    further processing of the document,
- *  - apply any "corrections" needed the location of the error, which are required when we have made temporary
- *    modifications to the document being parsed (see comments elsewhere for why we would want to do this)
- */
-class BtDomErrorHandler: public xercesc::DOMErrorHandler {
-public:
-   /**
-    * \brief Constructor
-    *
-    * \param numberOfLinesInserted  If we have (post-reading in but pre-parsing) inserted a block of text other than at
-    *                               the end of the document, this says how many lines we inserted.  Default is 0.
-    * \param lineAfterWhichInserted If numberOfLinesInserted is not 0 then this says at which point in the document the
-    *                               insertion was made.
-    */
-   BtDomErrorHandler(unsigned int numberOfLinesInserted = 0,
-                     unsigned int lineAfterWhichInserted = 0) : couldntHandleError(false),
-                                                                numberOfLinesInserted(numberOfLinesInserted),
-                                                                lineAfterWhichInserted(lineAfterWhichInserted) {
-      return;
-   }
-
-   // See https://xerces.apache.org/xerces-c/apiDocs-3/classDOMError.html for possible indexes into this array
-   static char const * const XercesErrorSeverities[];
-
-   bool failed() const { return this->couldntHandleError; }
-
-   void reset() {
-      this->couldntHandleError = false;
-      return;
-   }
-
-   /**
-    * Adjusts the location of an error to take account of any insertions we made to the file after reading it in (but
-    * before parsing).  See comments elsewhere for _why_ we want to make such insertions.  Note that we assume the
-    * insertions themselves will never cause an error!
-    */
-   unsigned int correctErrorLine(unsigned int lineNumberOfError) {
-      if (this->numberOfLinesInserted > 0 &&
-          lineNumberOfError > (this->lineAfterWhichInserted + this->numberOfLinesInserted)) {
-         qDebug() <<
-            Q_FUNC_INFO << "Removing " << this->numberOfLinesInserted << " from raw line number of error ("<<
-            lineNumberOfError << ")";
-         return lineNumberOfError - this->numberOfLinesInserted;
-      }
-
-      return lineNumberOfError;
-   }
-
-   /**
-    * If the handleError method returns true the DOM implementation should continue as if the error didn't happen when
-    * possible, if the method returns false then the DOM implementation should stop the current processing when possible.
-    */
-   virtual bool handleError (const xercesc::DOMError& domError) {
-      xercesc::DOMError::ErrorSeverity severity = domError.getSeverity();
-      XQString message{domError.getMessage()};
-      xercesc::DOMLocator* location {domError.getLocation()};
-      XQString uri{location->getURI()};
-      unsigned int lineNumberOfError = this->correctErrorLine(location->getLineNumber());
-
-      //
-      // There is sometimes a bit of an art to decrypting Xerces error messages.  Eg "no declaration found for element"
-      // for the first tag in an XML document can (but does not necessarily) mean that Xerces could not find the schema
-      // to validate the document against (see https://www.codesynthesis.com/pipermail/xsd-users/2009-February/002217.html
-      // and
-      // http://wiki.codesynthesis.com/Tree/FAQ#Why_do_I_get_.22error:_no_declaration_found_for_element_.27root-element.27.22_when_I_try_to_parse_a_valid_XML_document.3F).
-      // It could also mean you've turned off namespace processing (which breaks schema validation) or just that the
-      // first element in the document isn't specified in the schema.
-      //
-      // Nonetheless, knowing the first point in the document where there was a problem with parsing is usually pretty
-      // helpful.
-      //
-      QString fullErrorMessage;
-      QTextStream fullErrorMessageAsTextStream(&fullErrorMessage);
-      fullErrorMessageAsTextStream <<
-         Q_FUNC_INFO << uri << ": " << XercesErrorSeverities[severity] << " at line " << lineNumberOfError <<
-         ", column " << location->getColumnNumber() << ": " << message;
-
-      //
-      // Some errors we explicitly want to ignore.  In particular, the BeerXML 1.0 standard says:
-      //
-      //    "Non-Standard Tags
-      //    "Per the XML standard, all non-standard tags will be ignored by the importing program.  This allows programs
-      //    to store additional information if desired using their own tags.  Any tags not defined as part of this
-      //    standard may safely be ignored by the importing program."
-      //
-      // This is a problem because the BeerXML 1.0 standard also says that tags inside a containing element may occur
-      // in any order.  So, in our XSD, we have to to use <xs:all> rather than <xs:sequence> for the containing tags,
-      // which, in turn, means we cannot use <xs:any> to allow unrecognised tags.  This is disallowed by the W3C XML
-      // Schema standard because it would make validation harder (and slower).  See
-      // https://stackoverflow.com/questions/3347822/validating-xml-with-xsds-but-still-allow-extensibility for a good
-      // explanation.
-      //
-      // So, our workaround for this is to ignore errors that say:
-      //   • "no declaration found for element 'ABC'"
-      //   • "element 'ABC' is not allowed for content model 'XYZ'.
-      //
-      static QVector<QString> errorPatternsToIgnore {
-         "^no declaration found for element",
-         "^element '[^']*' is not allowed for content model"
-      };
-      for (auto ii = errorPatternsToIgnore.cbegin(); ii != errorPatternsToIgnore.cend(); ++ii) {
-         QRegExp pattern(*ii);
-         if (pattern.indexIn(message) != -1) {
-            // We want to force the parse error onto a separate line, as it will be quite long, hence
-            // ".noquote()" here.
-            qWarning().noquote() <<
-               "IGNORING the following parse error on the assumption that this is just a non-standard tag in the BeerXML "
-               "file:\n   " << fullErrorMessage;
-            return true;
-         }
-      }
-
-      //
-      // Other errors get logged as such and cause us to stop processing the document
-      //
-      qCritical() << fullErrorMessage;
-      this->couldntHandleError = true;
-      return false;
-  }
-
-private:
-  bool couldntHandleError;
-  unsigned int numberOfLinesInserted;
-  unsigned int lineAfterWhichInserted;
-};
-
-constexpr char const * const BtDomErrorHandler::XercesErrorSeverities[] {
-   "Not Used",
-   "Warning",     // DOM_SEVERITY_WARNING = 1
-   "Error",       // DOM_SEVERITY_ERROR = 2
-   "Fatal Error"  // DOM_SEVERITY_FATAL_ERROR = 3
-};
 
 
 // This private implementation class holds all private non-virtual members of BeerXML
@@ -435,7 +267,7 @@ public:
       // Don't want qDebug to escape newlines, as there will be lots in the list of parameter settings, hence
       // ".noquote()" here.
       qDebug().noquote() <<
-         Q_FUNC_INFO << "Settings for reading schema file " << schemaFile.fileName() << ": " << this->getParameterSettings(*config);
+         Q_FUNC_INFO << "Settings for reading schema file " << schemaFile.fileName() << ": " << XercesHelpers::getParameterSettings(*config);
 
       // The third parameter is just a name for the object.  It's not used by Xerces, but does show up in error
       // messages (as the URI of the error location), so we use the file name as something vaguely helpful to show
@@ -466,22 +298,27 @@ public:
 
       xercesc::Grammar * rootGrammar = this->parser->getRootGrammar();
 
-      qDebug() << Q_FUNC_INFO << "Schema " << schemaFile.fileName() << " loaded OK.  Grammar:" << grammar << ", root grammar:" << rootGrammar;
+      qDebug() <<
+         Q_FUNC_INFO << "Schema " << schemaFile.fileName() << " loaded OK.  Grammar:" << grammar << ", root grammar:" <<
+         rootGrammar;
 
       // "http://apache.org/xml/features/validation/use-cachedGrammarInParse"
       // true = Use cached grammar if it exists in the pool
-      config->setParameter(xercesc::XMLUni::fgXercesUseCachedGrammarInParse, true); // =====
+      config->setParameter(xercesc::XMLUni::fgXercesUseCachedGrammarInParse, true);
 
       // "http://apache.org/xml/features/validating/load-schema"
       // false = Don't load the schema if it wasn't found in the grammar pool, ie don't load schemas from any other
       //         source (e.g., from XML document's xsi:schemaLocation attributes).
-      config->setParameter(xercesc::XMLUni::fgXercesLoadSchema, false); // =====
+      config->setParameter(xercesc::XMLUni::fgXercesLoadSchema, false);
 
       // "http://apache.org/xml/features/dom/user-adopts-DOMDocument"
       // true = The caller will adopt the DOMDocument that is returned from the parse method and thus is responsible to
       //        call xercesc::DOMDocument::release() to release the associated memory. The parser will not release it.
       //        The ownership is transferred from the parser to the caller.
-      config->setParameter(xercesc::XMLUni::fgXercesUserAdoptsDOMDocument, true); // =====
+      //
+      // The reason for setting this to true is that we reuse the parser, so we don't want to wait until its destructor
+      // is called for all the DOMDocument objects to be released.
+      config->setParameter(xercesc::XMLUni::fgXercesUserAdoptsDOMDocument, true);
 
       return;
    }
@@ -489,12 +326,15 @@ public:
    /**
     * Validate XML file against schema
     *
-    * @param fileName
+    * @param fileName Fully-qualified name of the file to validate
+    * @param errorMessage If the function returns false, an error message suitable to display to the user will be
+    *                     appended to this string
     *
     * @return true if file validated OK (including if there were "errors" that we can safely ignore)
     *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
-   bool validate(const QString& fileName) {
+   bool validate(QString const & fileName, QString & errorMessage) {
+      QTextStream errorMessageAsStream(&errorMessage);
 
       QFile inputFile;
       inputFile.setFileName(fileName);
@@ -534,9 +374,39 @@ public:
       // put a _lot_ of data in the logs in DEBUG mode.
       // qDebug().noquote() << Q_FUNC_INFO << "Full content of " << inputFile.fileName() << " is:\n" << QString(documentData);
 
-      BtDomErrorHandler domErrorHandler(1 , 1);
+      //
+      // Some errors we explicitly want to ignore.  In particular, the BeerXML 1.0 standard says:
+      //
+      //    "Non-Standard Tags
+      //    "Per the XML standard, all non-standard tags will be ignored by the importing program.  This allows programs
+      //    to store additional information if desired using their own tags.  Any tags not defined as part of this
+      //    standard may safely be ignored by the importing program."
+      //
+      // There are two problems with this.  One is that it does not prevent two different programs creating
+      // identically-named custom tags with different meanings.  (And note that it is observably NOT the case that
+      // existing implementations take any care to make their custom tag names unique to the program using them.)
+      //
+      // The second problem is that, because the BeerXML 1.0 standard also says that tags inside a containing element
+      // may occur in any order, we cannot easily tell the XSD to ignore unkonwn tags.  (The issue is that, in the XSD,
+      // we have to to use <xs:all> rather than <xs:sequence> for the containing tags, as this allows the contained
+      // tags to appear in any order.  In turn, this means we cannot use <xs:any> to allow unrecognised tags.  This is
+      // disallowed by the W3C XML Schema standard because it would make validation harder (and slower).  See
+      // https://stackoverflow.com/questions/3347822/validating-xml-with-xsds-but-still-allow-extensibility for a good
+      // explanation.)
+      //
+      // So, our workaround for this is to ignore errors that say:
+      //   • "no declaration found for element 'ABC'"
+      //   • "element 'ABC' is not allowed for content model 'XYZ'.
+      //
+      static QVector<BtDomErrorHandler::PatternAndReason> const errorPatternsToIgnore {
+         //       Reg-ex to match                                               Reason to ignore errors matching this pattern
+         {QString("^no declaration found for element"),                 QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")},
+         {QString("^element '[^']*' is not allowed for content model"), QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")}
+      };
+      BtDomErrorHandler domErrorHandler(&errorPatternsToIgnore, 1 , 1);
 
-      // See https://www.codesynthesis.com/pipermail/xsd-users/2010-April/002805.html for list of all exceptions Xerces can throw
+      // See https://www.codesynthesis.com/pipermail/xsd-users/2010-April/002805.html for list of all exceptions Xerces
+      // can throw.
       try {
          // Probably not 100% necessary to lock the pool against modifications, as we're not planning any after start-up, but...
          this->grammarPool.lockPool();
@@ -547,8 +417,11 @@ public:
          xercesc::DOMConfiguration * config = this->parser->getDomConfig();
          config->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &domErrorHandler);
 
-         // Don't want qDebug to escape newlines, as there will be lots in the list of parameter settings, hence ".noquote()" here.
-         qDebug().noquote() << Q_FUNC_INFO << "Settings for reading input " << inputFile.fileName() << ": " << this->getParameterSettings(*config);
+         // Don't want qDebug to escape newlines, as there will be lots in the list of parameter settings, hence
+         // ".noquote()" here.
+         qDebug().noquote() <<
+            Q_FUNC_INFO << "Settings for reading input " << inputFile.fileName() <<
+            ": " << XercesHelpers::getParameterSettings(*config);
 
          QByteArray fileNameAsCString = fileName.toLocal8Bit();
 
@@ -561,82 +434,136 @@ public:
          xercesc::Wrapper4InputSource documentAsDOMLSInput{&documentAsInputSource, false};
 
 
-         xercesc::DOMDocument * document{this->parser->parse(&documentAsDOMLSInput)};
+         BtDomDocumentOwner domDocumentOwner{this->parser->parse(&documentAsDOMLSInput)};
 
-         if (document) {
-            document->release ();
-         }
          bool parsedOk = !domErrorHandler.failed();
          qDebug() << Q_FUNC_INFO << "Parse of input file " << inputFile.fileName() << (parsedOk ? "succeeded" : "FAILED");
 
+         if (!parsedOk) {
+            errorMessage = domErrorHandler.getlastError();
+            return false;
+         }
+
+         if (nullptr == domDocumentOwner.getDomDocument()) {
+            //
+            // This really should never happen.  Xerces is only supposed to return null from parse() if it in
+            // asynchronous mode (which it shouln't be).
+            //
+            qCritical() << Q_FUNC_INFO << "Got null pointer back from document parse!";
+            errorMessage = tr("Internal Error! (Document parse returned null pointer.)");
+            return false;
+         }
+
+         // The other advantage of having inserted our <BEER_XML> root node is that it's a bit easier to navigate
+         // the document.  (Note here that we don't care if we find _more_ than one <BEER_XML> node.  The first
+         // one in the list will be the root node of the document.)
+         xercesc::DOMNodeList * listOfRootNodes =
+            domDocumentOwner.getDomDocument()->getElementsByTagName(XQString("BEER_XML").getXercesString());
+         int numberOfRootNodesFound = listOfRootNodes->getLength();
+         qDebug() << Q_FUNC_INFO << "Found " << numberOfRootNodesFound << "<BEER_XML> nodes";
+         if (numberOfRootNodesFound == 0) {
+            // This should never happen as we're looking for a node we ourselves inserted in the in-memory copy of the
+            // file.  The main circumstance in which that node insertion would fail (eg if user tries to import a
+            // document that isn't XML) would have led to earlier errors in the parsing.  But, just in case, let's give
+            // the user a potentially useful message.
+            qCritical() << Q_FUNC_INFO << "Couldn't find the <BEER_XML> node we inserted in the document!";
+            errorMessage = tr("Contents of file were unexpected format");
+            return false;
+         }
+
+         xercesc::DOMNode * rootNode = listOfRootNodes->item(0); // 0 is the first node
+         qDebug() << Q_FUNC_INFO << "Root <BEER_XML> node is type " << rootNode->getNodeType();
+
+         //
+         // It should now be the case that all the children of our inserted root node are the "record sets" of
+         // the BeerXML document, ie one ore more of the following:
+         //    <HOPS>...</HOPS>
+         //    <FERMENTABLES>...</FERMENTABLES>
+         //    <YEASTS>...</YEASTS>
+         //    <MISCS>...</MISCS>
+         //    <WATERS>...</WATERS>
+         //    <STYLES>...</STYLES>
+         //    <MASHS>...</MASHS>
+         //    <RECIPES>...</RECIPES>
+         //    <EQUIPMENTS>...</EQUIPMENTS>
+         //
+         // Note, that, in the extreme case that there are no child nodes (eg someone tried to import an empty
+         // XML doc) getChildNodes() returns an empty DOMNodeList (NOT nullptr).
+         //
+         xercesc::DOMNodeList * recordSets = rootNode->getChildNodes();
+         int numberOfRecordSets = recordSets->getLength();
+         qDebug() << Q_FUNC_INFO << "Found " << numberOfRecordSets << "record sets";
+         if (0 == numberOfRecordSets) {
+            errorMessage = tr("Found no data to import in the file");
+            return false;
+         }
+
+         //
+         // So now let's look at, and process, each record set
+         //
+
+         for (int ii = 0; ii < numberOfRecordSets; ++ii) {
+            xercesc::DOMNode * currentRecordSet = recordSets->item(ii);
+            XQString recordSetName (currentRecordSet->getNodeName());
+            xercesc::DOMNodeList * records = currentRecordSet->getChildNodes();
+            qDebug() <<
+               Q_FUNC_INFO << "Record set" << ii << ":" << recordSetName << "has" << records->getLength() <<
+               "records";
+            if (recordSetName == QString("HOPS")) {
+               parsedOk = this->importHops(records, errorMessage);
+            } else {
+               qWarning() << Q_FUNC_INFO << "Ignoring unrecognised record set: " << recordSetName;
+            }
+
+            //
+            // .:TBD:. For the moment, we assume we should stop processing the input file once we hit an error
+            //
+            if (!parsedOk) {
+               return false;
+            }
+         }
 
          return parsedOk;
 
       } catch(const std::exception& se) {
-         qCritical() << Q_FUNC_INFO << "Caught std::exception: " << se.what();
-         return false;
+         errorMessageAsStream << "Caught std::exception: " << se.what();
       } catch (const xercesc::XMLException & xe) {
          unsigned int lineNumberOfError = domErrorHandler.correctErrorLine(xe.getSrcLine());
-         qCritical() << Q_FUNC_INFO << "Caught xerces::XMLException at line " << lineNumberOfError << ": " << XQString(xe.getType())  << ": " << XQString(xe.getMessage());
-         return false;
+         errorMessageAsStream <<
+            "Caught xerces::XMLException at line " << lineNumberOfError << ": " << XQString(xe.getType())  << ": " <<
+            XQString(xe.getMessage());
       } catch (const xercesc::DOMException & de) {
-         qCritical() << Q_FUNC_INFO << "Caught xerces::DOMException #" << de.code << ": " << XQString(de.getMessage());
-         return false;
+         errorMessageAsStream << "Caught xerces::DOMException #" << de.code << ": " << XQString(de.getMessage());
       } catch (const xercesc::SAXException & se) {
-         qCritical() << Q_FUNC_INFO << "Caught xerces::SAXException: " << XQString(se.getMessage());
-         return false;
+         errorMessageAsStream << "Caught xerces::SAXException: " << XQString(se.getMessage());
       }
-
-
+      //
+      // If we reach here it's because we caught an exception
+      //
+      qCritical() << Q_FUNC_INFO << errorMessage;
+      return false;
    }
 
    /**
-    * \brief Extract the settings of the supplied DOMConfiguration into a string that we can log for debugging purposes.
-    *        Typically you get back a lot of parameters (50) so they are broken out onto separate lines.
+    * Import records inside <HOPS>...</HOPS>
     */
-   QString getParameterSettings(xercesc::DOMConfiguration & domConfiguration) {
-      QString settings;
-      QTextStream settingsAsStream(&settings);
-      xercesc::DOMStringList const * parameterNames = domConfiguration.getParameterNames();
-      if (parameterNames) {
-         int const numberOfParameters = parameterNames->getLength();
-         settingsAsStream << numberOfParameters << " parameters:\n";
-         for (int ii = 0; ii < numberOfParameters; ++ii) {
-            if (ii != 0) {
-               settingsAsStream << ";\n";
-            }
-            XMLCh const * currentParameter = parameterNames->item(ii);
-            if (currentParameter) {
-               settingsAsStream << "   #" << ii << ": " << XQString(currentParameter) << " = ";
-               try {
-                  void const * parameterValue = domConfiguration.getParameter(currentParameter);
-                  // Depending on the parameter, its value is either a boolean (0 or 1) or a real pointer to something
-                  if (0 == parameterValue) {
-                     // We can't infer just from the value whether this is a pointer or a boolean
-                     settingsAsStream << "unset (false)";
-                  } else if (reinterpret_cast<void const *>(1) == parameterValue) {
-                     // Must be a boolean
-                     settingsAsStream << "set (true)";
-                  } else {
-                     // It's a pointer to something, but it's beyond the scope of this function to know what
-                     settingsAsStream << "set (to " << parameterValue << ")";
-                  }
-               } catch (const xercesc::DOMException & de) {
-                  // Yes, you really can generate an exception just by trying to read a config parameter. Sigh.
-                  settingsAsStream << "Unreadable! (xerces::DOMException #" << de.code << ": " << XQString(de.getMessage()) << ")";
-               }
+   static bool importHops(xercesc::DOMNodeList * hopRecords, QString & errorMessage) {
+      //
+      // Required fields of each HOP record are:
+      //    NAME, VERSION, ALPHA, AMOUNT, USE, TIME
+      // Optional fields are:
+      //    NOTES, TYPE, FORM, BETA, HSI, ORIGIN, SUBSTITUTES, HUMULENE, CARYOPHYLLENE, COHUMULONE, MYRCENE
+      // Extension fields are:
+      //    DISPLAY_AMOUNT, INVENTORY, DISPLAY_TIME
+      //
+      int numberOfRecords = hopRecords->getLength();
+      for (int ii = 0; ii < numberOfRecords; ++ii) {
+         xercesc::DOMNode * currentHopRecord = hopRecords->item(ii);
 
-            } else {
-               settingsAsStream << "(Parameter " << ii << " not set!)";
-            }
-         }
-      } else {
-         settingsAsStream << "None!";
       }
-
-      settingsAsStream.flush();
-      return settings;
+      return false;
    }
+
 
 private:
    // XMLGrammarPoolImpl is a bit lacking in documentation, probably because it used to be an "internal" class of
@@ -648,12 +575,12 @@ private:
 };
 
 
-BeerXML::BeerXML(DatabaseSchema* tables) : QObject(), pimpl{ new impl{} },
-   m_tables(tables)
-{
-
+BeerXML::BeerXML(DatabaseSchema* tables) : QObject(),
+                                           pimpl{ new impl{} },
+                                           m_tables(tables) {
    return;
 }
+
 
 // See https://herbsutter.com/gotw/_100/ for why we need to explicitly define the destructor here (and not in the header file)
 BeerXML::~BeerXML() = default;
@@ -2278,15 +2205,24 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
 }
 
 
-bool BeerXML::importFromXML(const QString& filename)
+bool BeerXML::importFromXML(QString const & filename, QString & errorMessage)
 {
    //
    // Before we try to read the data in from the file, we validate it against an XSD
    //
-   bool validatedOk = this->pimpl->validate(filename);
-   return true;
-/////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^!!!!!!!!!!!!!!!!!!1
+   bool validatedOk = this->pimpl->validate(filename, errorMessage);
+   if (!validatedOk) {
+      // If we couldn't even validate the import file, there's no point trying to process it
+      return false;
+   }
 
+
+////////////////////////////
+   return validatedOk; ///<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+/////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^!!!!!!!!!!!!!!!!!!1
+//
+// STOP PROCESSING HERE JUST WHILE WE DEVELOP THE VALIDATION!
+/////////////////////////
 
    int count;
    int line, col;

@@ -481,7 +481,12 @@ void Database::convertFromXml()
          // If the old file exists, import.
          if( oldXmlFile.exists() )
          {
-            m_beerxml->importFromXML( oldXmlFile.fileName() );
+            QString errorMessage;
+            if (!m_beerxml->importFromXML( oldXmlFile.fileName(), errorMessage )) {
+               QString exceptionMessage = QString("Error importing old XML file: %1").arg(errorMessage);
+               qCritical() << exceptionMessage;
+               throw std::runtime_error(exceptionMessage.toLocal8Bit().constData());
+            }
 
             // Move to obsolete/ directory.
             if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
@@ -1977,7 +1982,6 @@ Yeast* Database::newYeast(Yeast* other)
 
 int Database::insertElement(Ingredient* ins)
 {
-   qDebug() << Q_FUNC_INFO;
    // Check whether this ingredient is already in the DB.  If so, bail here.
    if (this->isStored(*ins)) {
       qDebug() << Q_FUNC_INFO << "Already stored";
@@ -1991,8 +1995,7 @@ int Database::insertElement(Ingredient* ins)
    QString insertQ = schema->generateInsertProperties(Brewtarget::dbType());
    QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
 
-   ///qDebug() << Q_FUNC_INFO << "SQL:" << insertQ;
-   qDebug() << QString("%1 SQL: %2").arg(Q_FUNC_INFO).arg(insertQ);
+   qDebug() << Q_FUNC_INFO << "SQL:" << insertQ;
    q.prepare(insertQ);
 
    QString sqlParameters;
@@ -2108,7 +2111,6 @@ int Database::insertHop(Hop* ins)
 
 int Database::insertInstruction(Instruction* ins, Recipe* parent)
 {
-   qDebug() << Q_FUNC_INFO << "ins: " << static_cast<void *>(ins) << ", parent" << static_cast<void *>(parent);
    int key;
    sqlDatabase().transaction();
 
@@ -2342,7 +2344,6 @@ template<class T> T* Database::addIngredientToRecipe(
    bool transact
 )
 {
-   qDebug() << Q_FUNC_INFO << "Add ingredient to recipe. ing:" << reinterpret_cast<void *>(ing) << ", rec:" << reinterpret_cast<void *>(rec);
    T* newIng = nullptr;
    QString propName, relTableName, ingKeyName, childTableName;
    TableSchema* table;
@@ -2391,8 +2392,6 @@ template<class T> T* Database::addIngredientToRecipe(
       }
 
       q.finish();
-
-      qDebug() << Q_FUNC_INFO << "noCopy=" << noCopy;
 
       if ( noCopy ) {
          newIng = qobject_cast<T*>(ing);

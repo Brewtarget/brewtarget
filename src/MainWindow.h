@@ -346,7 +346,6 @@ private:
    QString highSS, lowSS, goodSS, boldSS; // Palette replacements
 
    AboutDialog* dialog_about;
-   QFileDialog* fileOpener;
    QFileDialog* fileSaver;
    QList<QMenu*> contextMenus;
    EquipmentEditor* equipEditor;

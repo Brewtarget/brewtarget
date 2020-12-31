@@ -57,6 +57,23 @@
         field" but <ABV_MIN>...</ABV_MIN> can only contain a decimal number becuase it is a core field.)
    -->
 
+   <!-- In the world of XSD, any field defined simply as xs:string is allowed to be empty (ie "") or to contain only
+        blanks (tabs, spaces, etc).  Whilst neither of these cases is explicitly prohibited in the BeerXML 1.0
+        Standard, there are some cases where both are clearly unhelpful.  Eg, whilst it is almost certainly fine for
+        the "required" fields BREWER to be blank, it is hard to justify having a blank NAME field in a RECIPE or a HOP
+        for example.
+
+        All that said, we try to use this stronger requirement sparingly, as there are cases that are open to
+        interpretation, eg should NAME be required to be non-blank for MASH and for MASH_STEP?  And, even if not, if we
+        are, say, trying to import a RECIPE that has a blank NAME in one or more of its MASH_STEPs, could we generate a
+        suitable name on the fly and allow the import to succeed?
+   -->
+   <xs:simpleType name="NonBlankString">
+      <xs:restriction base="xs:string">
+         <xs:pattern value=".*\S.*"/>
+      </xs:restriction>
+   </xs:simpleType>
+
    <!-- What we call a SimplePercentage is one where the value is no less than 0% and no greater than 100%
         NB as noted above the XML should contain just the number, not the % symbol -->
    <xs:simpleType name="SimplePercentage">
@@ -208,7 +225,7 @@
    <!-- Type for <STYLE>...</STYLE> records -->
    <xs:complexType name="StyleType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="CATEGORY" type="xs:string"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="CATEGORY_NUMBER" type="xs:string"/>
@@ -269,7 +286,7 @@
    <!-- Type for <EQUIPMENT>...</EQUIPMENT> records -->
    <xs:complexType name="EquipmentType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="BOIL_SIZE" type="VolumeInLiters"/>
          <xs:element name="BATCH_SIZE" type="VolumeInLiters"/>
@@ -297,6 +314,13 @@
          <xs:element name="DISPLAY_TRUB_CHILLER_LOSS" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_LAUTER_DEADSPACE" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_TOP_UP_KETTLE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- ************************************************************************************
+              *** Extra fields not included in the BeerXML 1.0 standard but used by Brewtarget ***
+              ************************************************************************************ -->
+         <xs:element name="REAL_EVAP_RATE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ABSORPTION" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="BOILING_POINT" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -310,7 +334,7 @@
    <!-- Type for <HOP>...</HOP> records -->
    <xs:complexType name="HopType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="ALPHA" type="SimplePercentage"/>
          <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In kg -->
@@ -371,7 +395,7 @@
    <!-- Type for <FERMENTABLE>...</FERMENTABLE> records -->
    <xs:complexType name="FermentableType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="TYPE">
             <xs:simpleType>
@@ -409,6 +433,11 @@
          <xs:element name="POTENTIAL" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_COLOR" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- ***********************************************************************************
+              *** Extra field not included in the BeerXML 1.0 standard but used by Brewtarget ***
+              *********************************************************************************** -->
+         <xs:element name="IS_MASHED" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
       </xs:all>
    </xs:complexType>
 
@@ -422,7 +451,7 @@
    <!-- Type for <MISC>...</MISC> records -->
    <xs:complexType name="MiscType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="TYPE">
             <xs:simpleType>
@@ -472,7 +501,7 @@
    <!-- Type for <YEAST>...</YEAST> records -->
    <xs:complexType name="YeastType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="TYPE">
             <xs:simpleType>
@@ -537,7 +566,7 @@
    <!-- Type for <WATER>...</WATER> records -->
    <xs:complexType name="WaterType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="AMOUNT" type="VolumeInLiters"/>
          <xs:element name="CALCIUM" type="xs:decimal"/> <!-- In parts per million of Ca -->
@@ -564,7 +593,7 @@
    <!-- Type for <MASH_STEP>...</MASH_STEP> records -->
    <xs:complexType name="MashStepType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="xs:string"/> <!-- TBD whether this should be NonBlankString -->
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="TYPE">
             <xs:simpleType>
@@ -592,6 +621,12 @@
          <xs:element name="INFUSE_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_STEP_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
          <xs:element name="DISPLAY_INFUSE_AMT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- ***********************************************************************************
+              *** Extra field not included in the BeerXML 1.0 standard but used by Brewtarget ***
+              *********************************************************************************** -->
+         <xs:element name="DECOCTION_AMOUNT" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+
       </xs:all>
    </xs:complexType>
 
@@ -607,7 +642,7 @@
    <!-- Type for <MASH>...</MASH> records -->
    <xs:complexType name="MashType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="xs:string"/> <!-- TBD whether this should be NonBlankString -->
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="GRAIN_TEMP" type="TemperatureInCelsius"/>
          <xs:element name="MASH_STEPS" type="MashStepsType"/>
@@ -638,7 +673,7 @@
    <!-- Type for <RECIPE>...</RECIPE> records -->
    <xs:complexType name="RecipeType">
       <xs:all>
-         <xs:element name="NAME" type="xs:string"/>
+         <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
          <xs:element name="TYPE">
             <xs:simpleType>
