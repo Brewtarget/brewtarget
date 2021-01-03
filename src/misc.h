@@ -24,7 +24,7 @@
 #define _MISC_H
 
 #include <QString>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 
 // Forward declarations.
 class Misc;

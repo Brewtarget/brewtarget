@@ -32,7 +32,7 @@ class BtTreeModel;
 #include <QSqlRelationalTableModel>
 
 // Forward declarations
-class Ingredient;
+class NamedEntity;
 class Recipe;
 class BtFolder;
 class BtTreeItem;
@@ -168,11 +168,11 @@ public:
    BtFolder* folder(const QModelIndex &index) const;
    //! \brief Get folder at \c index
    Water* water(const QModelIndex &index) const;
-   //! \brief Get Ingredient at \c index.
-   Ingredient* thing(const QModelIndex &index) const;
+   //! \brief Get NamedEntity at \c index.
+   NamedEntity* thing(const QModelIndex &index) const;
 
    //! \brief one find method to find them all, and in darkness bind them
-   QModelIndex findElement(Ingredient* thing, BtTreeItem* parent = nullptr);
+   QModelIndex findElement(NamedEntity* thing, BtTreeItem* parent = nullptr);
 
    //! \brief Get index of \c Folder
    QModelIndex findFolder(QString folder, BtTreeItem* parent=nullptr, bool create=false);
@@ -231,13 +231,13 @@ private:
 
    //! \brief add and remove an element from the, respectively. All of the
    //slots actually call these two methods
-   void elementAdded(Ingredient* victim);
-   void elementRemoved(Ingredient* victim);
+   void elementAdded(NamedEntity* victim);
+   void elementRemoved(NamedEntity* victim);
 
    //! \brief connects the changedName() signal and changedFolder() signals to
    //! the proper methods for most things, and the same for changedBrewDate
    //! and brewNotes
-   void observeElement(Ingredient*);
+   void observeElement(NamedEntity*);
 
    //! \brief returns the \c section header from a recipe
    QVariant recipeHeader(int section) const;
@@ -262,9 +262,9 @@ private:
    QVariant toolTipData(const QModelIndex &index) const;
 
    //! \brief Returns the list of things in a tree (e.g., recipes) as a list
-   //! of Ingredients. It's a convenience method to make loadTree()
+   //! of NamedEntitys. It's a convenience method to make loadTree()
    //! cleaner
-   QList<Ingredient*> elements();
+   QList<NamedEntity*> elements();
    //! \brief creates a folder tree. It's mostly a helper function.
    QModelIndex createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath);
 

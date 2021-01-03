@@ -47,7 +47,7 @@ class Database;
 #include <QDebug>
 #include <QRegExp>
 #include <QMap>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include "brewtarget.h"
 #include "recipe.h"
 #include "DatabaseSchema.h"
@@ -81,6 +81,14 @@ class QThread;
  * the Ingredients in the app. The Database should be the only way
  * we ever get pointers to BeerXML ingredients and the like. This is our
  * big model class.
+ *
+ * .:TBD:. (MY 2020-01-03) The trouble with having such a broad purpose to this class is that it ends up being enormous
+ * and very complicated.  It would be better IMHO to separate things out to:
+ *  - one or more registries of NamedEntity derivatives (Hops, Fermentables, Recipes etc)
+ *  - a set of mappings and classes that know how to store and retrieve each of these things in the DB
+ * Because we load everything into memory, searching for a Yeast etc doesn't require us to access the DB.  We just ask
+ * the relevant registry "give me Yeast X".  If we then create a new Yeast (either via the UI or by reading it in from
+ * a BeerXML file) we can then ask for it to be saved in the database.
  */
 class Database : public QObject
 {

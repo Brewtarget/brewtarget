@@ -26,7 +26,7 @@
 
 #include <QStringList>
 #include <QString>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include "unit.h"
 
 // Forward declarations.
@@ -52,7 +52,7 @@ class Fermentable : public Ingredient
 public:
 
    //! \brief The type of Fermentable.
-   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct}; // NOTE: BeerXML expects a space for "Dry_Extract". We're screwed.
+   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct};
    //! \brief The addition method.
    enum AdditionMethod {Mashed, Steeped, Not_Mashed};
    //! \brief The addition time.
@@ -186,7 +186,9 @@ private:
    Fermentable(Brewtarget::DBTable table, int key);
    Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Fermentable( Fermentable &other );
+public:
    Fermentable( QString name, bool cache = true );
+private:
 
    static bool isValidType( const QString& str );
    static QStringList types;

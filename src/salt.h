@@ -23,7 +23,7 @@
 #define _SALT_H
 
 #include <QString>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 
 // Forward declarations.
 class Salt;

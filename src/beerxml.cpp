@@ -54,6 +54,14 @@
 #include <xercesc/util/XMLException.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
 
+#include <xalanc/XalanDOM/XalanDocument.hpp>
+#include <xalanc/XalanDOM/XalanNode.hpp>
+#include <xalanc/XalanDOM/XalanNodeList.hpp>
+#include <xalanc/XercesParserLiaison/XercesParserLiaisonDefinitions.hpp>
+#include <xalanc/XercesParserLiaison/XercesParserLiaison.hpp>
+#include <xalanc/XercesParserLiaison/XercesDOMSupport.hpp>
+#include <xalanc/XPath/XPathEvaluator.hpp>
+
 #include "Algorithms.h"
 #include "DatabaseSchema.h"
 #include "brewnote.h"
@@ -72,7 +80,11 @@
 #include "xml/BtDomDocumentOwner.h"
 #include "xml/BtDomErrorHandler.h"
 #include "xml/XercesHelpers.h"
+#include "xml/XPathRecordLoader.h"
 #include "xml/XQString.h"
+#include "xml/BeerXmlFermentableRecordLoader.h"
+#include "xml/BeerXmlHopRecordLoader.h"
+#include "xml/BeerXmlYeastRecordLoader.h"
 
 #include "TableSchema.h"
 
@@ -134,6 +146,12 @@ public:
    // options are.  We try to include such explanations in comments, which is partly why they are a bit more
    // substantial than in some other areas of the code base.
    //
+
+   /**
+    * \brief Load in the schema(s) we're going to use for validating XML documents.
+    *
+    * This is the complicated bit of using Xerces.  Once this is done, remaining usage is pretty straightforward!
+    */
    void loadSchemas() {
       //
       // See https://stackoverflow.com/questions/52275608/xerces-c-validate-xml-with-hardcoded-xsd and
@@ -323,18 +341,18 @@ public:
       return;
    }
 
+
    /**
-    * Validate XML file against schema
+    * \brief Validate XML file against schema and load its contents
     *
-    * @param fileName Fully-qualified name of the file to validate
-    * @param errorMessage If the function returns false, an error message suitable to display to the user will be
-    *                     appended to this string
+    * \param fileName Fully-qualified name of the file to validate
+    * \param userMessage Any message that we want the top-level caller to display to the user (either about an error
+    *                    or, in the event of success, summarising what was read in) should be appended to this string.
     *
-    * @return true if file validated OK (including if there were "errors" that we can safely ignore)
+    * \return true if file validated OK (including if there were "errors" that we can safely ignore)
     *         false if there was a problem that means it's not worth trying to read in the data from the file
     */
-   bool validate(QString const & fileName, QString & errorMessage) {
-      QTextStream errorMessageAsStream(&errorMessage);
+   bool validateAndLoad(QString const & fileName, QTextStream & userMessage) {
 
       QFile inputFile;
       inputFile.setFileName(fileName);
@@ -363,11 +381,18 @@ public:
       // for any errors it needs to log.  (And we get a bit of help from this class when we need to make similar
       // adjustments during exception processing.)
       //
+      // Note here that we are assuming the on-disk format of the file is single-byte (UTF-8 or ASCII or ISO-8859-1).
+      // This is a reasonably safe assumption but, in theory, we could examine the first line to verify it.
+      //
       QByteArray documentData = inputFile.readLine();
       qDebug() << Q_FUNC_INFO << "First line of " << inputFile.fileName() << " was " << QString(documentData);
-      documentData += QByteArray("<BEER_XML>\n");
+      documentData += "<";
+      documentData += INSERTED_ROOT_NODE_NAME;
+      documentData += ">\n";
       documentData += inputFile.readAll();
-      documentData += QByteArray("\n</BEER_XML>");
+      documentData += "\n</";
+      documentData += INSERTED_ROOT_NODE_NAME;
+      documentData += ">";
       qDebug() << Q_FUNC_INFO << "Input file " << inputFile.fileName() << ": " << documentData.length() << " bytes";
 
       // It is sometimes helpful to uncomment the next line for debugging, but usually leave it commented out as can
@@ -434,13 +459,16 @@ public:
          xercesc::Wrapper4InputSource documentAsDOMLSInput{&documentAsInputSource, false};
 
 
+         // The BtDomDocumentOwner object will, in its destructor, handle telling Xerces to release resources related
+         // to the document
+         // std::shared_ptr<BtDomDocumentOwner> domDocumentOwner{new BtDomDocumentOwner{this->parser->parse(&documentAsDOMLSInput)}}
          BtDomDocumentOwner domDocumentOwner{this->parser->parse(&documentAsDOMLSInput)};
 
          bool parsedOk = !domErrorHandler.failed();
          qDebug() << Q_FUNC_INFO << "Parse of input file " << inputFile.fileName() << (parsedOk ? "succeeded" : "FAILED");
 
          if (!parsedOk) {
-            errorMessage = domErrorHandler.getlastError();
+            userMessage << domErrorHandler.getlastError();
             return false;
          }
 
@@ -450,118 +478,206 @@ public:
             // asynchronous mode (which it shouln't be).
             //
             qCritical() << Q_FUNC_INFO << "Got null pointer back from document parse!";
-            errorMessage = tr("Internal Error! (Document parse returned null pointer.)");
+            userMessage << tr("Internal Error! (Document parse returned null pointer.)");
             return false;
          }
 
-         // The other advantage of having inserted our <BEER_XML> root node is that it's a bit easier to navigate
-         // the document.  (Note here that we don't care if we find _more_ than one <BEER_XML> node.  The first
-         // one in the list will be the root node of the document.)
-         xercesc::DOMNodeList * listOfRootNodes =
-            domDocumentOwner.getDomDocument()->getElementsByTagName(XQString("BEER_XML").getXercesString());
-         int numberOfRootNodesFound = listOfRootNodes->getLength();
-         qDebug() << Q_FUNC_INFO << "Found " << numberOfRootNodesFound << "<BEER_XML> nodes";
-         if (numberOfRootNodesFound == 0) {
-            // This should never happen as we're looking for a node we ourselves inserted in the in-memory copy of the
-            // file.  The main circumstance in which that node insertion would fail (eg if user tries to import a
-            // document that isn't XML) would have led to earlier errors in the parsing.  But, just in case, let's give
-            // the user a potentially useful message.
-            qCritical() << Q_FUNC_INFO << "Couldn't find the <BEER_XML> node we inserted in the document!";
-            errorMessage = tr("Contents of file were unexpected format");
-            return false;
-         }
-
-         xercesc::DOMNode * rootNode = listOfRootNodes->item(0); // 0 is the first node
-         qDebug() << Q_FUNC_INFO << "Root <BEER_XML> node is type " << rootNode->getNodeType();
-
-         //
-         // It should now be the case that all the children of our inserted root node are the "record sets" of
-         // the BeerXML document, ie one ore more of the following:
-         //    <HOPS>...</HOPS>
-         //    <FERMENTABLES>...</FERMENTABLES>
-         //    <YEASTS>...</YEASTS>
-         //    <MISCS>...</MISCS>
-         //    <WATERS>...</WATERS>
-         //    <STYLES>...</STYLES>
-         //    <MASHS>...</MASHS>
-         //    <RECIPES>...</RECIPES>
-         //    <EQUIPMENTS>...</EQUIPMENTS>
-         //
-         // Note, that, in the extreme case that there are no child nodes (eg someone tried to import an empty
-         // XML doc) getChildNodes() returns an empty DOMNodeList (NOT nullptr).
-         //
-         xercesc::DOMNodeList * recordSets = rootNode->getChildNodes();
-         int numberOfRecordSets = recordSets->getLength();
-         qDebug() << Q_FUNC_INFO << "Found " << numberOfRecordSets << "record sets";
-         if (0 == numberOfRecordSets) {
-            errorMessage = tr("Found no data to import in the file");
-            return false;
-         }
-
-         //
-         // So now let's look at, and process, each record set
-         //
-
-         for (int ii = 0; ii < numberOfRecordSets; ++ii) {
-            xercesc::DOMNode * currentRecordSet = recordSets->item(ii);
-            XQString recordSetName (currentRecordSet->getNodeName());
-            xercesc::DOMNodeList * records = currentRecordSet->getChildNodes();
-            qDebug() <<
-               Q_FUNC_INFO << "Record set" << ii << ":" << recordSetName << "has" << records->getLength() <<
-               "records";
-            if (recordSetName == QString("HOPS")) {
-               parsedOk = this->importHops(records, errorMessage);
-            } else {
-               qWarning() << Q_FUNC_INFO << "Ignoring unrecognised record set: " << recordSetName;
-            }
-
-            //
-            // .:TBD:. For the moment, we assume we should stop processing the input file once we hit an error
-            //
-            if (!parsedOk) {
-               return false;
-            }
-         }
-
-         return parsedOk;
+         // If we got this far, the validation has succeeded, and we can now proceed to loading
+         return this->loadValidated(domDocumentOwner.getDomDocument(), userMessage);
 
       } catch(const std::exception& se) {
-         errorMessageAsStream << "Caught std::exception: " << se.what();
+         qCritical() << Q_FUNC_INFO << "Caught std::exception: " << se.what();
+         userMessage << "Caught std::exception: " << se.what();
       } catch (const xercesc::XMLException & xe) {
          unsigned int lineNumberOfError = domErrorHandler.correctErrorLine(xe.getSrcLine());
-         errorMessageAsStream <<
-            "Caught xerces::XMLException at line " << lineNumberOfError << ": " << XQString(xe.getType())  << ": " <<
+         qCritical() <<
+            Q_FUNC_INFO << "Caught xerces::XMLException at line " << lineNumberOfError << ": " <<
+            XQString(xe.getType()) << ": " << XQString(xe.getMessage());
+         userMessage <<
+            "XMLException at line " << lineNumberOfError << ": " << XQString(xe.getType())  << ": " <<
             XQString(xe.getMessage());
       } catch (const xercesc::DOMException & de) {
-         errorMessageAsStream << "Caught xerces::DOMException #" << de.code << ": " << XQString(de.getMessage());
+         qCritical() <<
+            Q_FUNC_INFO << "Caught xerces::DOMException #" << de.code << ": " << XQString(de.getMessage());
+         userMessage << "DOMException #" << de.code << ": " << XQString(de.getMessage());
       } catch (const xercesc::SAXException & se) {
-         errorMessageAsStream << "Caught xerces::SAXException: " << XQString(se.getMessage());
+         qCritical() <<
+            Q_FUNC_INFO << "Caught xerces::SAXException: " << XQString(se.getMessage());
+
+         userMessage << "SAXException: " << XQString(se.getMessage());
       }
       //
       // If we reach here it's because we caught an exception
       //
-      qCritical() << Q_FUNC_INFO << errorMessage;
       return false;
    }
 
-   /**
-    * Import records inside <HOPS>...</HOPS>
-    */
-   static bool importHops(xercesc::DOMNodeList * hopRecords, QString & errorMessage) {
-      //
-      // Required fields of each HOP record are:
-      //    NAME, VERSION, ALPHA, AMOUNT, USE, TIME
-      // Optional fields are:
-      //    NOTES, TYPE, FORM, BETA, HSI, ORIGIN, SUBSTITUTES, HUMULENE, CARYOPHYLLENE, COHUMULONE, MYRCENE
-      // Extension fields are:
-      //    DISPLAY_AMOUNT, INVENTORY, DISPLAY_TIME
-      //
-      int numberOfRecords = hopRecords->getLength();
-      for (int ii = 0; ii < numberOfRecords; ++ii) {
-         xercesc::DOMNode * currentHopRecord = hopRecords->item(ii);
 
+   /**
+    * \brief Read data in from a validated & loaded XML file
+    *
+    * \param domDocument Pointer to the Xerces document created by loading and validating the XML file.  Caller owns
+    *                    the Xerces document and is responsible for releasing its resources (after this function
+    *                    returns).
+    * \param userMessage Any message that we want the top-level caller to display to the user (either about an error
+    *                    or, in the event of success, summarising what was read in) should be appended to this.
+    *
+    * \return true if file validated OK (including if there were "errors" that we can safely ignore)
+    *         false if there was a problem that means it's not worth trying to read in the data from the file
+    */
+   bool loadValidated(xercesc::DOMDocument * domDocument, QTextStream & userMessage) {
+
+      //
+      // Now we've used Xerces to validate the XML against an XSD, we switch over to using Xalan to explore the
+      // document structure because it has much superior XPath implementation to Xerces.
+      //
+      // Xalan is pretty tried-and-tested, but there's a bit of a learning curve as the documentation isn't quite as
+      // good as that of Xerces.  Fortunately, a lot of the basics are very similar to Xerces.
+      //
+      // Some of the initial things we're doing here are just as easy to do in Xerces, but it's easiest to start
+      // with the document when we switch over to Xalan (rather than some node inside it).
+      //
+      xalanc::XercesParserLiaison xalanXercesLiaison;
+      xalanc::XercesDOMSupport domSupport(xalanXercesLiaison);
+
+      xalanc::XalanDocument * xalanDocument {xalanXercesLiaison.createDocument(domDocument)};
+
+      //
+      // It should be a slam-dunk for us to get the root <BEER_XML> node we inserted in the document - unless the
+      // file we were reading was really broken (in which case we would usually expect it to have failed validation
+      // prior to this point).  Nevertheless, if there is some problem here, we bail out gracefully.
+      //
+      // One way to get the root node in Xerces would be:
+      //    xercesc::DOMNodeList * listOfRootNodes =
+      //       domDocument->getElementsByTagName(XQString("BEER_XML").getXercesString());
+      //    xercesc::DOMNode * rootNode = listOfRootNodes->item(0); // 0 is the first node
+      //
+      xalanc::XalanNode * rootNode = xalanDocument->getFirstChild();
+      if (nullptr == rootNode) {
+         qCritical() << Q_FUNC_INFO << "Couldn't find any nodes in the document!";
+         userMessage << tr("Contents of file were not readable");
+         return false;
       }
-      return false;
+      XQString firstChildName{rootNode->getNodeName()};
+      if (firstChildName != INSERTED_ROOT_NODE_NAME) {
+         qCritical() <<
+            Q_FUNC_INFO << "First node in document was not the one we inserted!  Found " << firstChildName <<
+            "instead of " << INSERTED_ROOT_NODE_NAME;
+         userMessage << tr("Could not understand file format");
+         return false;
+      }
+
+      //
+      // It should now be the case that all the children of our inserted root node are the "record sets" of
+      // the BeerXML document, ie one ore more of the following:
+      //    <HOPS>...</HOPS>
+      //    <FERMENTABLES>...</FERMENTABLES>
+      //    <YEASTS>...</YEASTS>
+      //    <MISCS>...</MISCS>
+      //    <WATERS>...</WATERS>
+      //    <STYLES>...</STYLES>
+      //    <MASHS>...</MASHS>
+      //    <RECIPES>...</RECIPES>
+      //    <EQUIPMENTS>...</EQUIPMENTS>
+      //
+      // In Xerces, we would just do this:
+      //    xercesc::DOMNodeList * recordSets = rootNode->getChildNodes();
+      //
+      // Note, that, in the extreme case that there are no child nodes (eg someone tried to import an empty
+      // XML doc) getChildNodes() returns a list containing no nodes, NOT nullptr.  (This is the same in Xerces
+      // and Xalan.)
+      //
+      xalanc::XalanNodeList const * recordSets = rootNode->getChildNodes();
+      int numberOfRecordSets = recordSets->getLength();
+      qDebug() << Q_FUNC_INFO << "Found " << numberOfRecordSets << "record sets";
+      if (0 == numberOfRecordSets) {
+         userMessage << tr("Found no data to import in the file");
+         return false;
+      }
+
+      //
+      // So now let's look at, and process, each record set
+      //
+      QHash<QString, int> importCount{};
+      for (int ii = 0; ii < numberOfRecordSets; ++ii) {
+         xalanc::XalanNode * currentRecordSet = recordSets->item(ii);
+         XQString recordSetName (currentRecordSet->getNodeName());
+         xalanc::XalanNodeList const * records = currentRecordSet->getChildNodes();
+         int numberOfRecords = records->getLength();
+         qDebug() <<
+            Q_FUNC_INFO << "Record set" << ii << ":" << recordSetName << "has" << numberOfRecords << "records";
+         if (!RECORD_SET_TO_LOADER_LOOKUP.contains(recordSetName)) {
+            //
+            // This should only happen if the BeerXML file contains non-standard record sets -- something that is
+            // (IMHO incorrectly) technically allowed by the BeerXML 1.0 Standard.
+            //
+            qWarning() << Q_FUNC_INFO << "Ignoring unrecognised record set: " << recordSetName;
+         } else {
+            //
+            // Process each record in the set
+            //
+            XPathRecordLoader::Factory const xPathRecordLoaderFactory{RECORD_SET_TO_LOADER_LOOKUP.value(recordSetName)};
+            for (int ii = 0; ii < numberOfRecords; ++ii) {
+               //
+               // In theory each record set only contains (as its immediate children) one type of record...
+               // ...but, because the BeerXML 1.0 Standard allows non-standard tags to appear pretty much anywhere
+               // in a document, we have to check each child node and skip lightly over anything unrecognised (eg
+               // <YEASTS><HUMBUG>...</HUMBUG></YEAST>) or  unexpected (eg <YEASTS><HOP>...</HOP></YEAST>).
+               //
+               // We've already eliminated the possibility that we hit an unrecognised record set, so it's a
+               // programming error if we can't find the XPathRecordLoader the record type we're expecting.
+               //
+               std::unique_ptr<XPathRecordLoader> xPathRecordLoader{xPathRecordLoaderFactory()};
+               Q_ASSERT(nullptr != xPathRecordLoader.get());
+               QString const expectedRecordName = xPathRecordLoader->getRecordName();
+
+               xalanc::XalanNode * currentRecord = records->item(ii);
+               XQString actualRecordName{currentRecord->getNodeName()};
+               if (expectedRecordName != actualRecordName) {
+                  qWarning() <<
+                     Q_FUNC_INFO << "Ignoring unexpected record " << actualRecordName << " inside record set " <<
+                     recordSetName << " (was expecting " << expectedRecordName << ")";
+               } else {
+                  if (!xPathRecordLoader->load(domSupport, currentRecord, userMessage)) {
+                     //
+                     // Technically we could just continue on to the next record and try to load that, but, given that we've
+                     // already done XSD validation, it's likely that we've got substantive problem if we couldn't load the
+                     // record.  So, it's better to break off processing now and show the user the first error we've hit, rather
+                     // than potentially produce some enormous list of errors by trying to process the rest of the input file.
+                     //
+                     return false;
+                  }
+                  if (!xPathRecordLoader->normalise(userMessage)) {
+                     return false;
+                  }
+                  // TBD: Should distinguish between error and skipped duplicates
+                  if (!xPathRecordLoader->storeInDb(userMessage)) {
+                     return false;
+                  }
+
+                  // To get here, we must have read something in OK!  Add it to the tally
+                  int tally = 0;
+                  if (importCount.contains(expectedRecordName)) {
+                     tally = importCount.value(expectedRecordName);
+                  }
+                  ++tally;
+                  importCount.insert(expectedRecordName, tally);
+               }
+            }
+         }
+      }
+
+      // Summarise what we read in into the message displayed on-screen to the user
+      userMessage << tr("Read ");
+      int typesOfRecordsRead = 0;
+      for (auto ii = importCount.constBegin(); ii != importCount.constEnd(); ++ii, ++typesOfRecordsRead) {
+         if (0 != typesOfRecordsRead) {
+            userMessage << ", ";
+         }
+         userMessage << ii.value() << " " << ii.key() << (1 == ii.value() ? tr(" record") : " records");
+      }
+
+      return true;
    }
 
 
@@ -572,6 +688,29 @@ private:
    xercesc::XMLGrammarPoolImpl grammarPool;
    xercesc::DOMImplementation * domImplementation;
    xercesc::DOMLSParser * parser;
+
+   // Note that any change to this needs to be reflected in beerxml/v1/BeerXml.xsd
+   constexpr static char const * const INSERTED_ROOT_NODE_NAME = "BEER_XML";
+
+   static QHash<QString, XPathRecordLoader::Factory> RECORD_SET_TO_LOADER_LOOKUP;
+};
+
+// In theory, once we know the record set name, we can deduce the name of the records and vice versa (HOPS <-> HOP etc)
+// but this is only because BeerXML uses "MASHS" as a mangled plural of "MASH" (instead of "MASHES").  Doing a proper
+// mapping keeps things open for, say, possible future improved versions of BeerXML.
+//
+// And we can't just look at the child node of the record set, as the BeerXML 1.0 Standard allows extra undefined tags
+// to be added to a document.
+QHash<QString, XPathRecordLoader::Factory> BeerXML::impl::RECORD_SET_TO_LOADER_LOOKUP {
+   {"HOPS",          &XPathRecordLoaderFactory<BeerXmlHopRecordLoader>},
+   {"FERMENTABLES",  &XPathRecordLoaderFactory<BeerXmlFermentableRecordLoader>},
+   {"YEASTS",        &XPathRecordLoaderFactory<BeerXmlYeastRecordLoader>},
+   {"MISCS",         nullptr}, //TODO
+   {"WATERS",        nullptr}, //TODO
+   {"STYLES",        nullptr}, //TODO
+   {"MASHS",         nullptr}, //TODO
+   {"RECIPES",       nullptr}, //TODO
+   {"EQUIPMENTS",    nullptr} //TODO
 };
 
 
@@ -2205,23 +2344,16 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
 }
 
 
-bool BeerXML::importFromXML(QString const & filename, QString & errorMessage)
+bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage)
 {
    //
-   // Before we try to read the data in from the file, we validate it against an XSD
+   // Call the new code that attempts to validate the file before reading in its data
    //
-   bool validatedOk = this->pimpl->validate(filename, errorMessage);
-   if (!validatedOk) {
-      // If we couldn't even validate the import file, there's no point trying to process it
-      return false;
-   }
+   return this->pimpl->validateAndLoad(filename, userMessage);
 
-
-////////////////////////////
-   return validatedOk; ///<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-/////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^!!!!!!!!!!!!!!!!!!1
+   /////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^!!!!!!!!!!!!!!!!!!1
 //
-// STOP PROCESSING HERE JUST WHILE WE DEVELOP THE VALIDATION!
+// STOP PROCESSING HERE .  SHOULD ULTIMATELY BE ABLE TO DELETE THE REST OF THIS CODE
 /////////////////////////
 
    int count;

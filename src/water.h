@@ -23,7 +23,7 @@
 #define _WATER_H
 
 #include <QString>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 
 // Forward declarations.
 class Water;

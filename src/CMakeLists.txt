@@ -111,7 +111,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/IbuGuSlider.cpp
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
-    ${SRCDIR}/ingredient.cpp
+    ${SRCDIR}/model/NamedEntity.cpp
     ${SRCDIR}/IngredientSortProxyModel.cpp
     ${SRCDIR}/instruction.cpp
     ${SRCDIR}/InstructionWidget.cpp
@@ -186,8 +186,12 @@ SET( brewtarget_SRCS
     ${SRCDIR}/YeastEditor.cpp
     ${SRCDIR}/YeastSortFilterProxyModel.cpp
     ${SRCDIR}/YeastTableModel.cpp
+    ${SRCDIR}/xml/BeerXmlFermentableRecordLoader.cpp
+    ${SRCDIR}/xml/BeerXmlHopRecordLoader.cpp
+    ${SRCDIR}/xml/BeerXmlYeastRecordLoader.cpp
     ${SRCDIR}/xml/BtDomErrorHandler.cpp
     ${SRCDIR}/xml/XercesHelpers.cpp
+    ${SRCDIR}/xml/XPathRecordLoader.cpp
 )
 
 # List of all the *.ui.
@@ -481,7 +485,7 @@ IF( NOT ${NO_QTMULTIMEDIA})
    SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-target_link_libraries( ${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES})
+target_link_libraries( ${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES} ${XalanC_LIBRARIES})
 
 #=================================Tests========================================
 
@@ -508,7 +512,7 @@ IF( NOT ${NO_QTMULTIMEDIA})
 SET( QT5_USE_MODULES_LIST ${QT5_USE_MODULES_LIST} Qt5::Multimedia)
 ENDIF()
 
-target_link_libraries(${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES})
+target_link_libraries(${QT5_USE_MODULES_LIST} ${XercesC_LIBRARIES} ${XalanC_LIBRARIES})
 
 ADD_TEST(
    NAME pstdintTest

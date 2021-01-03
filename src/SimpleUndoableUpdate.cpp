@@ -65,6 +65,7 @@ void SimpleUndoableUpdate::undo()
 
 bool SimpleUndoableUpdate::undoOrRedo(bool const isUndo)
 {
+   // This is where we call the setter for propertyName on updatee, via the magic of the Qt Property System
    bool success = this->metaProperty.write(&updatee, isUndo ? this->oldValue : this->newValue);
    if (!success)
    {

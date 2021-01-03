@@ -1,6 +1,6 @@
 /*
- * Ingredient.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2025
+ * model/NamedEntity.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2020-2021
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include <QDomElement>
 #include <QDomNode>
 #include <QMetaProperty>
@@ -30,7 +30,7 @@
 
 static const char* kVersion = "version";
 
-Ingredient::Ingredient(Brewtarget::DBTable table, int key, QString t_name, bool t_display, QString folder)
+NamedEntity::NamedEntity(Brewtarget::DBTable table, int key, QString t_name, bool t_display, QString folder)
    : QObject(nullptr),
      _key(key),
      _table(table),
@@ -43,7 +43,7 @@ Ingredient::Ingredient(Brewtarget::DBTable table, int key, QString t_name, bool 
 {
 }
 
-Ingredient::Ingredient(Ingredient const& other)
+NamedEntity::NamedEntity(NamedEntity const& other)
    : QObject(nullptr),
      _key(other._key),
      _table(other._table),
@@ -56,37 +56,37 @@ Ingredient::Ingredient(Ingredient const& other)
 {
 }
 
-bool Ingredient::deleted() const
+bool NamedEntity::deleted() const
 {
    return _deleted.toBool();
 }
 
-bool Ingredient::display() const
+bool NamedEntity::display() const
 {
    return _display.toBool();
 }
 
 // Sigh. New databases, more complexity
-void Ingredient::setDeleted(const bool var, bool cachedOnly)
+void NamedEntity::setDeleted(const bool var, bool cachedOnly)
 {
    _deleted = var;
    if ( ! cachedOnly )
       setEasy(kpropDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
-void Ingredient::setDisplay(bool var, bool cachedOnly)
+void NamedEntity::setDisplay(bool var, bool cachedOnly)
 {
    _display = var;
    if ( ! cachedOnly )
       setEasy(kpropDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
-QString Ingredient::folder() const
+QString NamedEntity::folder() const
 {
    return _folder;
 }
 
-void Ingredient::setFolder(const QString var, bool signal, bool cachedOnly)
+void NamedEntity::setFolder(const QString var, bool signal, bool cachedOnly)
 {
    _folder = var;
    if ( ! cachedOnly )
@@ -97,12 +97,12 @@ void Ingredient::setFolder(const QString var, bool signal, bool cachedOnly)
       emit changedFolder(var);
 }
 
-QString Ingredient::name() const
+QString NamedEntity::name() const
 {
    return _name;
 }
 
-void Ingredient::setName(const QString var, bool cachedOnly)
+void NamedEntity::setName(const QString var, bool cachedOnly)
 {
 
    _name = var;
@@ -112,33 +112,33 @@ void Ingredient::setName(const QString var, bool cachedOnly)
    }
 }
 
-int Ingredient::key() const
+int NamedEntity::key() const
 {
    return _key;
 }
 
-Brewtarget::DBTable Ingredient::table() const
+Brewtarget::DBTable NamedEntity::table() const
 {
    return _table;
 }
 
-int Ingredient::version() const
+int NamedEntity::version() const
 {
    return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo(kVersion)).value()).toInt();
 }
 
-QMetaProperty Ingredient::metaProperty(const char* name) const
+QMetaProperty NamedEntity::metaProperty(const char* name) const
 {
    return metaObject()->property(metaObject()->indexOfProperty(name));
 }
 
-QMetaProperty Ingredient::metaProperty(QString const& name) const
+QMetaProperty NamedEntity::metaProperty(QString const& name) const
 {
    return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
 }
 
 // getVal =====================================================================
-double Ingredient::getDouble(const QDomText& textNode)
+double NamedEntity::getDouble(const QDomText& textNode)
 {
    bool ok;
    double ret;
@@ -148,12 +148,12 @@ double Ingredient::getDouble(const QDomText& textNode)
    // ret = text.toDouble(&ok);
    ret = Brewtarget::toDouble(text,&ok);
    if( !ok )
-      qCritical() << QString("Ingredient::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber());
+      qCritical() << QString("NamedEntity::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber());
 
    return ret;
 }
 
-bool Ingredient::getBool(const QDomText& textNode)
+bool NamedEntity::getBool(const QDomText& textNode)
 {
    QString text = textNode.nodeValue();
 
@@ -162,12 +162,12 @@ bool Ingredient::getBool(const QDomText& textNode)
    else if( text == "FALSE" )
       return false;
    else
-      qCritical() << QString("Ingredient::getBool: %1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber());
+      qCritical() << QString("NamedEntity::getBool: %1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber());
 
    return false;
 }
 
-int Ingredient::getInt(const QDomText& textNode)
+int NamedEntity::getInt(const QDomText& textNode)
 {
    bool ok;
    int ret;
@@ -175,17 +175,17 @@ int Ingredient::getInt(const QDomText& textNode)
 
    ret = text.toInt(&ok);
    if( !ok )
-      qCritical() << QString("Ingredient::getInt: %1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber());
+      qCritical() << QString("NamedEntity::getInt: %1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber());
 
    return ret;
 }
 
-QString Ingredient::getString( QDomText const& textNode )
+QString NamedEntity::getString( QDomText const& textNode )
 {
    return textNode.nodeValue();
 }
 
-QDateTime Ingredient::getDateTime( QDomText const& textNode )
+QDateTime NamedEntity::getDateTime( QDomText const& textNode )
 {
    bool ok = true;
    QDateTime ret;
@@ -194,12 +194,12 @@ QDateTime Ingredient::getDateTime( QDomText const& textNode )
    ret = QDateTime::fromString(text, Qt::ISODate);
    ok = ret.isValid();
    if( !ok )
-      qCritical() << QString("Ingredient::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber());
+      qCritical() << QString("NamedEntity::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber());
 
    return ret;
 }
 
-QDate Ingredient::getDate( QDomText const& textNode )
+QDate NamedEntity::getDate( QDomText const& textNode )
 {
    bool ok = true;
    QDate ret;
@@ -215,14 +215,14 @@ QDate Ingredient::getDate( QDomText const& textNode )
    }
 
    if ( !ok )
-      qCritical() << QString("Ingredient::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber());
+      qCritical() << QString("NamedEntity::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber());
 
    return ret;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-QDateTime Ingredient::getDateTime(QString const& str)
+QDateTime NamedEntity::getDateTime(QString const& str)
 {
    QDateTime temp;
 
@@ -232,7 +232,7 @@ QDateTime Ingredient::getDateTime(QString const& str)
       return QDateTime::currentDateTime();
 }
 
-QString Ingredient::text(bool val)
+QString NamedEntity::text(bool val)
 {
    if( val )
       return QString("TRUE");
@@ -240,61 +240,61 @@ QString Ingredient::text(bool val)
       return QString("FALSE");
 }
 
-QString Ingredient::text(double val)
+QString NamedEntity::text(double val)
 {
    return QString("%1").arg(val, 0, 'f', 8);
 }
 
-QString Ingredient::text(int val)
+QString NamedEntity::text(int val)
 {
    return QString("%1").arg(val);
 }
 
-QString Ingredient::text(QDate const& val)
+QString NamedEntity::text(QDate const& val)
 {
    return val.toString(Qt::ISODate);
 }
 
-void Ingredient::setEasy(QString prop_name, QVariant value, bool notify)
+void NamedEntity::setEasy(QString prop_name, QVariant value, bool notify)
 {
    Database::instance().updateEntry(this,prop_name,value,notify);
 }
 
 
-QVariant Ingredient::get( const QString& col_name ) const
+QVariant NamedEntity::get( const QString& col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
 }
 
-void Ingredient::setInventory( const QVariant& value, int invKey, bool notify )
+void NamedEntity::setInventory( const QVariant& value, int invKey, bool notify )
 {
    Database::instance().setInventory( this, value, invKey, notify );
 }
 
-QVariant Ingredient::getInventory( const QString& col_name ) const
+QVariant NamedEntity::getInventory( const QString& col_name ) const
 {
    QVariant val = 0.0;
    val = Database::instance().getInventoryAmt(col_name, _table, _key);
    return val;
 }
 
-bool Ingredient::isValid()
+bool NamedEntity::isValid()
 {
    return _valid;
 }
 
-void Ingredient::invalidate()
+void NamedEntity::invalidate()
 {
    _valid = false;
 }
 
-void Ingredient::setParent(Ingredient const & parentIngredient)
+void NamedEntity::setParent(NamedEntity const & parentNamedEntity)
 {
-   this->parentKey = parentIngredient._key;
+   this->parentKey = parentNamedEntity._key;
    return;
 }
 
-QVariantMap Ingredient::getColumnValueMap() const
+QVariantMap NamedEntity::getColumnValueMap() const
 {
    QVariantMap map;
    map.insert(kpropFolder, folder());

@@ -482,7 +482,8 @@ void Database::convertFromXml()
          if( oldXmlFile.exists() )
          {
             QString errorMessage;
-            if (!m_beerxml->importFromXML( oldXmlFile.fileName(), errorMessage )) {
+            QTextStream errorMessageAsStream{&errorMessage};
+            if (!m_beerxml->importFromXML( oldXmlFile.fileName(), errorMessageAsStream )) {
                QString exceptionMessage = QString("Error importing old XML file: %1").arg(errorMessage);
                qCritical() << exceptionMessage;
                throw std::runtime_error(exceptionMessage.toLocal8Bit().constData());

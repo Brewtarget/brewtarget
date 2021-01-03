@@ -40,7 +40,7 @@ class BeerXML;
 #include <QRegExp>
 #include <QMap>
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include "brewtarget.h"
 #include "database.h"
 #include "TableSchema.h"
@@ -100,10 +100,11 @@ public:
 
    /*! Import ingredients, recipes, etc from BeerXML documents.
     * \param filename
-    * \param errorMessage
+    * \param userMessage Where to write any (brief!) message we want to be shown to the user after the import.
+    *                    Typically this is either the reason the import failed or a summary of what was imported.
     * \return true if succeeded, false otherwise
     */
-   bool importFromXML(QString const & filename, QString & errorMessage);
+   bool importFromXML(QString const & filename, QTextStream & userMessage);
 
    // Import from BeerXML =====================================================
    BrewNote*    brewNoteFromXml(    QDomNode const& node, Recipe* parent );

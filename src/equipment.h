@@ -23,7 +23,7 @@
 #define _EQUIPMENT_H
 
 #include <QDomNode>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 
 /*!
  * \class Equipment

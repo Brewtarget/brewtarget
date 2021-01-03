@@ -23,7 +23,7 @@
 #ifndef _YEAST_H
 #define _YEAST_H
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include <QString>
 #include <QStringList>
 
@@ -160,7 +160,9 @@ signals:
 private:
    Yeast(Brewtarget::DBTable table, int key);
    Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
+public:
    Yeast(QString name, bool cache = true);
+private:
    Yeast(Yeast & other);
 
    QString m_typeString;

@@ -178,29 +178,17 @@ public:
       qDebug() << Q_FUNC_INFO << "Directory " << fileOpener.directory();
       this->fileOpenDirectory = fileOpener.directory().canonicalPath();
 
-      QString filesImportedOk{};
-      QTextStream filesImportedOkAsStream(&filesImportedOk);
-      QString errorMessage;
-      foreach( QString filename, fileOpener.selectedFiles() )
-      {
+      foreach( QString filename, fileOpener.selectedFiles() ) {
+         //
+         // I guess if the user were importing a lot of files in one go, it might be annoying to have a separate result
+         // message for each one, but TBD whether that's much of a use case.  For now, we keep things simple.
+         //
          qDebug() << Q_FUNC_INFO << "Importing " << filename;
-         errorMessage.clear();
-         bool succeeded = Database::instance().getBeerXml()->importFromXML(filename, errorMessage);
-         if ( ! succeeded ) {
-            // Show one pop-up for each file that failed
-            qDebug() << Q_FUNC_INFO << "Import failed";
-            this->importMsg(filename, succeeded, errorMessage);
-         } else {
-            qDebug() << Q_FUNC_INFO << "Import succeeded";
-            if (filesImportedOk.length() > 0) {
-               filesImportedOkAsStream << "\n";
-            }
-            filesImportedOkAsStream << filename;
-         }
-      }
-      // Group all the files that succeeded into a single message
-      if (filesImportedOk.length() > 0) {
-         this->importMsg(filesImportedOk, true, errorMessage);
+         QString userMessage;
+         QTextStream userMessageAsStream{&userMessage};
+         bool succeeded = Database::instance().getBeerXml()->importFromXML(filename, userMessageAsStream);
+         qDebug() << Q_FUNC_INFO << "Import " << (succeeded ? "succeeded" : "failed");
+         this->importMsg(filename, succeeded, userMessage);
       }
 
       mainWindow->showChanges();
@@ -208,19 +196,28 @@ public:
       return;
    }
 
-   void importMsg(QString const & fileName, bool succeeded, QString const & errorMessage) {
+   /**
+    * \brief Show a success/failure message to the user after we attempted to import one or more BeerXML files
+    */
+   void importMsg(QString const & fileName, bool succeeded, QString const & userMessage) {
       // This will allow us to drop the directory path to the file, as it is often long and makes the message box a
       // "wall of text" that will put a lot of users off.
       QFileInfo fileInfo(fileName);
 
 
       QString messageBoxTitle{succeeded ? tr("Success!") : tr("ERROR")};
-      QString messageBoxText{
-         succeeded ? tr("Successfully imported file \"%1\"").arg(fileInfo.fileName()) :
-                     tr("Unable to import file \"%1\"\n\n"
-                        "%2\n\n"
-                        "See log file for more details.").arg(fileInfo.fileName()).arg(errorMessage)
-      };
+      QString messageBoxText;
+      if (succeeded) {
+         messageBoxText = QString(
+            tr("Successfully imported data from file \"%1\"\n\n%2").arg(fileInfo.fileName()).arg(userMessage)
+         );
+      } else {
+         messageBoxText = QString(
+            tr("Unable to import file \"%1\"\n\n"
+               "%2\n\n"
+               "See log file for more details.").arg(fileInfo.fileName()).arg(userMessage)
+         );
+      }
       qDebug() << Q_FUNC_INFO << "Message box text : " << messageBoxText;
       QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
                          messageBoxTitle,

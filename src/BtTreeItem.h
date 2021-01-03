@@ -31,7 +31,7 @@ class BtTreeItem;
 #include <QVector>
 #include <QObject>
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 
 // Forward declarations.
 class BrewNote;

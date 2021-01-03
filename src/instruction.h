@@ -28,7 +28,7 @@
 #include <QString>
 #include <QVector>
 #include <QDomNode>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include "recipe.h"
 
 /*!

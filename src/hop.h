@@ -25,7 +25,7 @@
 
 #include <QString>
 #include <QStringList>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 
 // Forward declarations.
 class Hop;
@@ -53,8 +53,11 @@ public:
    enum Type {Bittering, Aroma, Both};
    //! \brief The form of the hop.
    enum Form {Leaf, Pellet, Plug};
+
    //! \brief The way the hop is used.
-   enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma), and BeerXML expects a space for "Dry Hop" and "First Wort". Damn. Damn damn.
+   // .:TBD:. (MY 2021-01-01) Shall we perhaps change "UseAroma" to "PostBoil", since this is what BeerXML means by
+   // Aroma in this context?
+   enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma)
    Q_ENUMS( Type Form Use )
 
    virtual ~Hop() {}
@@ -156,6 +159,10 @@ public:
    static QString classNameStr();
 
    Ingredient * getParent();
+
+   /**
+    * \return DB key of the stored Hop
+    */
    int insertInDatabase();
 
 signals:
@@ -163,7 +170,9 @@ signals:
 private:
    Hop(Brewtarget::DBTable table, int key);
    Hop(Brewtarget::DBTable table, int key, QSqlRecord rec);
+public:
    Hop(QString name, bool cache = true);
+private:
    Hop( Hop & other );
 
    QString m_useStr;

@@ -28,7 +28,7 @@
 #include <QStringList>
 #include <QDate>
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 
 // Forward declarations;
 class Recipe;

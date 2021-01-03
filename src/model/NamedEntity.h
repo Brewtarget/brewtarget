@@ -1,6 +1,6 @@
 /*
- * Ingredient.h is part of Brewtarget, and is Copyright the following
- * authors 2020-2025
+ * model/NamedEntity.h is part of Brewtarget, and is Copyright the following
+ * authors 2020-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -21,8 +21,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _INGREDIENT_H
-#define _INGREDIENT_H
+#ifndef _MODEL_NAMEDENTITY_H
+#define _MODEL_NAMEDENTITY_H
+#pragma once
 
 #include <QDomText>
 #include <QDomNode>
@@ -44,15 +45,18 @@
 // Make uintptr_t available in QVariant.
 Q_DECLARE_METATYPE( uintptr_t )
 
-class Ingredient;
-
 /*!
- * \class Ingredient
- * \author Philip G. Lee
+ * \class NamedEntity
  *
- * \brief The base class for our database items.
+ * \brief The base class for our substantive storable items.
+ *
+ * Note that this class has previously been called \b Ingredient and \b BeerXMLElement, neither of which is an entirely
+ * satisfactory name.  Some of the classes derived from this one (eg Instruction, Equipment, Style, Mash) are not really
+ * ingredients in the normal sense of the word.  And the fact that derived classes can be instantiated from BeerXML is
+ * not their defining characteristic (and indeed Instruction does not even represent something that can be stored in a
+ * standard BeerXML document).
  */
-class Ingredient : public QObject
+class NamedEntity : public QObject
 {
    Q_OBJECT
    Q_CLASSINFO("version","1")
@@ -60,9 +64,9 @@ class Ingredient : public QObject
    friend class Database;
    friend class BeerXML;
 public:
-   Ingredient(Brewtarget::DBTable table, int key, QString t_name = QString(),
+   NamedEntity(Brewtarget::DBTable table, int key, QString t_name = QString(),
                   bool t_display = false, QString folder = QString());
-   Ingredient( Ingredient const& other );
+   NamedEntity( NamedEntity const& other );
 
    // Everything that inherits from BeerXML has a name, delete, display and a folder
    Q_PROPERTY( QString name   READ name WRITE setName )
@@ -118,34 +122,34 @@ public:
    static QString text(QDate const& val);
 
    //! Use this to pass pointers around in QVariants.
-   static inline QVariant qVariantFromPtr( Ingredient* ptr )
+   static inline QVariant qVariantFromPtr( NamedEntity* ptr )
    {
       uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
       return QVariant::fromValue<uintptr_t>(addr);
    }
 
-   static inline Ingredient* extractPtr( QVariant ptrVal )
+   static inline NamedEntity* extractPtr( QVariant ptrVal )
    {
       uintptr_t addr = ptrVal.value<uintptr_t>();
-      return reinterpret_cast<Ingredient*>(addr);
+      return reinterpret_cast<NamedEntity*>(addr);
    }
 
    bool isValid();
    void invalidate();
 
    /*!
-    * \brief Some ingredients (eg Fermentable, Hop) get copied when added to a recipe, but others (eg Instruction) don't.
-    *        For those that do, we think of the copy as being a child of the original ingredient.  This function allows
+    * \brief Some entities (eg Fermentable, Hop) get copied when added to a recipe, but others (eg Instruction) don't.
+    *        For those that do, we think of the copy as being a child of the original NamedEntity.  This function allows
     *        us to access that parent.
-    * \return Pointer to the parent ingredient from which this one was originally copied, or null if no such parent exists.
+    * \return Pointer to the parent NamedEntity from which this one was originally copied, or null if no such parent exists.
     */
-   virtual Ingredient * getParent() = 0;
+   virtual NamedEntity * getParent() = 0;
 
-   void setParent(Ingredient const & parentIngredient);
+   void setParent(NamedEntity const & parentNamedEntity);
 
    /*!
-    * \brief When we create an ingredient, or undelete a deleted one, we need to put it in the database.  For the case of
-    *        undelete, it's helpful for the caller not to have to know what subclass of ingredient we are resurrecting.
+    * \brief When we create an NamedEntity, or undelete a deleted one, we need to put it in the database.  For the case of
+    *        undelete, it's helpful for the caller not to have to know what subclass of NamedEntity we are resurrecting.
     * \return Key of element inserted in database.
     */
    virtual int insertInDatabase() = 0;
@@ -162,9 +166,9 @@ signals:
 
 protected:
 
-   //! The key of this ingredient in its table.
+   //! The key of this entity in its table.
    int _key;
-   //! The table where this ingredient is stored.
+   //! The table where this entity is stored.
    Brewtarget::DBTable _table;
    // This is 0 if there is no parent (or parent is not yet known)
    int parentKey;
@@ -208,6 +212,6 @@ private:
 
 };
 
+typedef NamedEntity Ingredient; // .:TODO:. Temporary hack to keep Ingredient as a valid class name until we can refactor the rest of the code
 
-#endif   /* _BEERXMLELEMENT_H */
-
+#endif

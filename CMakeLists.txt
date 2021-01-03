@@ -206,6 +206,13 @@ INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
 #message( "Xerces-C++ include directories: " ${XercesC_INCLUDE_DIRS} )
 #message( "Xerces-C++ libraries: " ${XercesC_LIBRARIES} )
 
+#===============================Find Xalan-C++================================
+# Same comments apply here as for Xerces above
+FIND_PACKAGE(XalanC REQUIRED)
+INCLUDE_DIRECTORIES(${XalanC_INCLUDE_DIRS})
+message( "Xalan-C++ include directories: " ${XalanC_INCLUDE_DIRS} )
+message( "Xalan-C++ libraries: " ${XalanC_LIBRARIES} )
+
 #=========================Configure brewtarget.qrc.in==========================
 
 SET( brewtarget_QRC "${CMAKE_CURRENT_SOURCE_DIR}/brewtarget.qrc" )
@@ -389,7 +396,7 @@ SET( brewtarget_INFO_PLIST "${ROOTDIR}/mac/Info.plist" )
 SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 
 #==========================Find dlls for Win32=================================
-# .:TBD:. MY 2020-12-29 What do we need to do for Xerces here?
+# .:TBD:. MY 2020-12-29 What do we need to do for Xerces and Xalan here?
 IF( WIN32 )
    IF( NOT ${NO_QTMULTIMEDIA} )
    FIND_PACKAGE(Qt5MultimediaWidgets REQUIRED)

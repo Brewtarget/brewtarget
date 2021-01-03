@@ -1810,7 +1810,7 @@
      <normaloff>:/images/smallOutArrow.svg</normaloff>:/images/smallOutArrow.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Export to XML</string>
+    <string>&amp;Export to File</string>
    </property>
   </action>
   <action name="actionFermentables">
@@ -1903,7 +1903,7 @@
      <normaloff>:/images/smallArrow.svg</normaloff>:/images/smallArrow.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Import from XML</string>
+    <string>&amp;Import from File</string>
    </property>
   </action>
   <action name="actionOptions">

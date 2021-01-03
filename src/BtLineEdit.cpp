@@ -21,7 +21,6 @@
 
 #include "BtLineEdit.h"
 #include "brewtarget.h"
-#include "ingredient.h"
 #include "UnitSystems.h"
 #include "UnitSystem.h"
 #include "unit.h"

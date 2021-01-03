@@ -33,7 +33,7 @@ class Recipe;
 #include <QString>
 #include <QDate>
 #include <QMutex>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
 #include "misc.h"
 #include "salt.h"

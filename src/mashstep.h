@@ -21,7 +21,7 @@
 #ifndef _MASHSTEP_H
 #define _MASHSTEP_H
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include <QStringList>
 #include <QString>
 #include "mash.h"
