@@ -186,8 +186,14 @@ SET( brewtarget_SRCS
     ${SRCDIR}/YeastEditor.cpp
     ${SRCDIR}/YeastSortFilterProxyModel.cpp
     ${SRCDIR}/YeastTableModel.cpp
+    ${SRCDIR}/xml/BeerXmlEquipmentRecordLoader.cpp
     ${SRCDIR}/xml/BeerXmlFermentableRecordLoader.cpp
     ${SRCDIR}/xml/BeerXmlHopRecordLoader.cpp
+    ${SRCDIR}/xml/BeerXmlMashRecordLoader.cpp
+    ${SRCDIR}/xml/BeerXmlMashStepRecordLoader.cpp
+    ${SRCDIR}/xml/BeerXmlMiscRecordLoader.cpp
+    ${SRCDIR}/xml/BeerXmlStyleRecordLoader.cpp
+    ${SRCDIR}/xml/BeerXmlWaterRecordLoader.cpp
     ${SRCDIR}/xml/BeerXmlYeastRecordLoader.cpp
     ${SRCDIR}/xml/BtDomErrorHandler.cpp
     ${SRCDIR}/xml/XercesHelpers.cpp

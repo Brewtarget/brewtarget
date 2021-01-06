@@ -1,7 +1,8 @@
 /*
  * brewnote.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -42,7 +43,7 @@ bool operator==(BrewNote const& lhs, BrewNote const& rhs);
  *
  * \brief Model for a brewnote record, which records what you did on brewday.
  */
-class BrewNote : public Ingredient
+class BrewNote : public NamedEntity
 {
    Q_OBJECT
    friend class Database;

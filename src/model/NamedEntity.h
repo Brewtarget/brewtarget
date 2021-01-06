@@ -28,6 +28,7 @@
 #include <QDomText>
 #include <QDomNode>
 #include <QDomDocument>
+#include <QList>
 #include <QString>
 #include <QObject>
 #include <QMetaProperty>

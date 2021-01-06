@@ -21,6 +21,7 @@
 #pragma once
 
 #include "xml/XPathRecordLoader.h"
+#include "hop.h"
 
 /**
  * \brief Loads a <HOP>...</HOP> record in from a BeerXML file
@@ -28,5 +29,6 @@
 class BeerXmlHopRecordLoader : public XPathRecordLoader {
 public:
    BeerXmlHopRecordLoader();
+   virtual Hop * findByName(QString nameToFind) { return XPathRecordLoader::findByName<Hop>(nameToFind); }
 };
 #endif

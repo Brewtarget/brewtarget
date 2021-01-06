@@ -82,13 +82,16 @@
 #include "xml/XercesHelpers.h"
 #include "xml/XPathRecordLoader.h"
 #include "xml/XQString.h"
+#include "xml/BeerXmlEquipmentRecordLoader.h"
 #include "xml/BeerXmlFermentableRecordLoader.h"
 #include "xml/BeerXmlHopRecordLoader.h"
+#include "xml/BeerXmlMashRecordLoader.h"
+#include "xml/BeerXmlMiscRecordLoader.h"
+#include "xml/BeerXmlStyleRecordLoader.h"
+#include "xml/BeerXmlWaterRecordLoader.h"
 #include "xml/BeerXmlYeastRecordLoader.h"
 
 #include "TableSchema.h"
-
-
 
 
 // This private implementation class holds all private non-virtual members of BeerXML
@@ -702,15 +705,19 @@ private:
 // And we can't just look at the child node of the record set, as the BeerXML 1.0 Standard allows extra undefined tags
 // to be added to a document.
 QHash<QString, XPathRecordLoader::Factory> BeerXML::impl::RECORD_SET_TO_LOADER_LOOKUP {
-   {"HOPS",          &XPathRecordLoaderFactory<BeerXmlHopRecordLoader>},
-   {"FERMENTABLES",  &XPathRecordLoaderFactory<BeerXmlFermentableRecordLoader>},
-   {"YEASTS",        &XPathRecordLoaderFactory<BeerXmlYeastRecordLoader>},
-   {"MISCS",         nullptr}, //TODO
-   {"WATERS",        nullptr}, //TODO
-   {"STYLES",        nullptr}, //TODO
-   {"MASHS",         nullptr}, //TODO
+   {"HOPS",          &XPathRecordLoader::construct<BeerXmlHopRecordLoader>},
+   {"FERMENTABLES",  &XPathRecordLoader::construct<BeerXmlFermentableRecordLoader>},
+   {"YEASTS",        &XPathRecordLoader::construct<BeerXmlYeastRecordLoader>},
+   {"MISCS",         &XPathRecordLoader::construct<BeerXmlMiscRecordLoader>},
+   {"WATERS",        &XPathRecordLoader::construct<BeerXmlWaterRecordLoader>},
+   {"STYLES",        &XPathRecordLoader::construct<BeerXmlStyleRecordLoader>},
+   {"MASHS",         &XPathRecordLoader::construct<BeerXmlMashRecordLoader>},
    {"RECIPES",       nullptr}, //TODO
-   {"EQUIPMENTS",    nullptr} //TODO
+   {"EQUIPMENTS",    &XPathRecordLoader::construct<BeerXmlEquipmentRecordLoader>}
+
+   //////// Once we are done here, remove all    friend class BeerXML from codebase
+
+
 };
 
 

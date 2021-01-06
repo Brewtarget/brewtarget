@@ -2,6 +2,7 @@
  * hop.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2020
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -35,11 +36,10 @@ bool operator==( Hop &h1, Hop &h2 );
 
 /*!
  * \class Hop
- * \author Philip G. Lee
  *
  * \brief Model class for a hop record in the database.
  */
-class Hop : public Ingredient
+class Hop : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "hops")

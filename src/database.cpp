@@ -3454,6 +3454,25 @@ QList<Yeast*> Database::yeasts()
    return tmp;
 }
 
+
+//
+// These templated wrappers of the member functions make it easier for callers to use templates to do generic
+// processing of NamedEntity derivatives (ie Hop, Yeast, Equipment, etc objects).
+//
+template<> QList<BrewNote*>    Database::getAll<BrewNote>()    { return this->brewNotes();    }
+template<> QList<Equipment*>   Database::getAll<Equipment>()   { return this->equipments();   }
+template<> QList<Fermentable*> Database::getAll<Fermentable>() { return this->fermentables(); }
+template<> QList<Hop*>         Database::getAll<Hop>()         { return this->hops();         }
+template<> QList<Mash*>        Database::getAll<Mash>()        { return this->mashs();        }
+template<> QList<MashStep*>    Database::getAll<MashStep>()    { return this->mashSteps();    }
+template<> QList<Misc*>        Database::getAll<Misc>()        { return this->miscs();        }
+template<> QList<Recipe*>      Database::getAll<Recipe>()      { return this->recipes();      }
+template<> QList<Style*>       Database::getAll<Style>()       { return this->styles();       }
+template<> QList<Water*>       Database::getAll<Water>()       { return this->waters();       }
+template<> QList<Salt*>        Database::getAll<Salt>()        { return this->salts();        }
+template<> QList<Yeast*>       Database::getAll<Yeast>()       { return this->yeasts();       }
+
+
 bool Database::updateSchema(bool* err)
 {
    int currentVersion = DatabaseSchemaHelper::currentVersion( sqlDatabase() );

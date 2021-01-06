@@ -432,6 +432,24 @@ public:
    QList<Salt*> salts();
    QList<Yeast*> yeasts();
 
+   /**
+    * Templated static versions of the above functions, so other parts of the code can call Database::getAll<Hop>,
+    * Database::getAll<Yeast>, etc.
+    *
+    * This is a template where we _only_ use the specialisations - ie there isn't a general definition.  The
+    * specialisations are trivial functions and, in theory, since C++17, we should be able to define them here, eg
+    * immediately after the template declaration:
+    *   template<class S> static QList<S *> getAll();
+    *   template<> QList<BrewNote*>  getAll<BrewNote>()   { return Database::instance().brewNotes(); }
+    *   template<> QList<Equipment*> getAll<Equipment>() { return Database::instance().equipments(); }
+    *   etc
+    * However, due to bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85282, this won't compile in gcc.  So we
+    * we therefore put them in the cpp file.  (This is fine because callers to getAll<T>() just need the generic bit
+    * here in the header file to compile, and the specific implementations of getAll<BrewNote>(), getAll<Equipment>()
+    * are only required by the linker.
+    */
+   template<class S> QList<S *> getAll();
+
    //! \b returns a list of the brew notes in a recipe.
    QList<BrewNote*> brewNotes(Recipe const* parent);
    //! Return a list of all the fermentables in a recipe.

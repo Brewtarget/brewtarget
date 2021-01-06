@@ -228,7 +228,7 @@
          <xs:element name="NAME" type="NonBlankString"/>
          <xs:element name="CATEGORY" type="xs:string"/>
          <xs:element name="VERSION" type="xs:positiveInteger"/>
-         <xs:element name="CATEGORY_NUMBER" type="xs:string"/>
+         <xs:element name="CATEGORY_NUMBER" type="xs:string"/> <!-- Despite the name, this is a string because it could be something like "8A" -->
          <xs:element name="STYLE_LETTER" type="xs:string"/>
          <xs:element name="STYLE_GUIDE" type="xs:string"/>
          <xs:element name="TYPE">

@@ -1,8 +1,9 @@
 /*
  * mash.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -33,11 +34,10 @@ bool operator==(Mash &m1, Mash &m2);
 
 /*!
  * \class Mash
- * \author Philip G. Lee
  *
  * \brief Model class for a mash record in the database.
  */
-class Mash : public Ingredient
+class Mash : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashs")
@@ -133,8 +133,10 @@ private:
    Mash(Brewtarget::DBTable table, int key);
    Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Mash( Mash const& other );
+public:
    Mash( QString name, bool cache = true );
 
+private:
    double m_grainTemp_c;
    QString m_notes;
    double m_tunTemp_c;

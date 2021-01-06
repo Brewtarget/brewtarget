@@ -18,8 +18,6 @@
  */
 #include "xml/BeerXmlHopRecordLoader.h"
 
-#include "hop.h"
-
 static XPathRecordLoader::EnumLookupMap const HOP_USE_MAPPER {
    {"Boil",       Hop::Boil},
    {"Dry Hop",    Hop::Dry_Hop},
@@ -43,7 +41,7 @@ static XPathRecordLoader::EnumLookupMap const HOP_FORM_MAPPER {
 static QVector<XPathRecordLoader::Field> const HOP_RECORD_FIELDS {
    // Type                      XML Name          Q_PROPERTY           Enum Mapper
    {XPathRecordLoader::String,  "NAME",           "name",              nullptr},
-   {XPathRecordLoader::String,  "VERSION",        nullptr,             nullptr},
+   {XPathRecordLoader::UInt,    "VERSION",        nullptr,             nullptr},
    {XPathRecordLoader::Double,  "ALPHA",          "alpha_pct",         nullptr},
    {XPathRecordLoader::Double,  "AMOUNT",         "amount_kg",         nullptr},
    {XPathRecordLoader::Enum,    "USE",            "use",               &HOP_USE_MAPPER},
@@ -59,13 +57,15 @@ static QVector<XPathRecordLoader::Field> const HOP_RECORD_FIELDS {
    {XPathRecordLoader::Double,  "CARYOPHYLLENE",  "caryophyllene_pct", nullptr},
    {XPathRecordLoader::Double,  "COHUMULONE",     "cohumulone_pct",    nullptr},
    {XPathRecordLoader::Double,  "MYRCENE",        "myrcene_pct",       nullptr},
-   {XPathRecordLoader::String,  "DISPLAY_AMOUNT", nullptr,             nullptr},
-   {XPathRecordLoader::String,  "INVENTORY",      nullptr,             nullptr},
-   {XPathRecordLoader::String,  "DISPLAY_TIME",   nullptr,             nullptr}
+   {XPathRecordLoader::String,  "DISPLAY_AMOUNT", nullptr,             nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "INVENTORY",      nullptr,             nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "DISPLAY_TIME",   nullptr,             nullptr}  // Extension tag
 };
 
 BeerXmlHopRecordLoader::BeerXmlHopRecordLoader() : XPathRecordLoader{"HOP",
+                                                                     XPathRecordLoader::EachInstanceNameShouldBeUnique,
                                                                      HOP_RECORD_FIELDS,
-                                                                     new Hop{"Empty Hop Object"}} {
+                                                                     new Hop{"Empty Hop Object"},
+                                                                     "hops"} {
    return;
 }

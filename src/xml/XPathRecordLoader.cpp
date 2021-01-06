@@ -27,6 +27,8 @@
 #include <xalanc/XPath/XPathEvaluator.hpp>
 #include <xalanc/XalanDOM/XalanNodeList.hpp>
 
+#include "database.h"
+
 
 constexpr char const * const XPathRecordLoader::XALAN_NODE_TYPES[] {
    "UNKNOWN_NODE",                 //= 0,
@@ -46,11 +48,16 @@ constexpr char const * const XPathRecordLoader::XALAN_NODE_TYPES[] {
 };
 
 XPathRecordLoader::XPathRecordLoader(QString const recordName,
+                                     XPathRecordLoader::NameUniqueness uniquenessOfInstanceNames,
                                      QVector<Field> const & fieldDefinitions,
-                                     NamedEntity * entityToPopulate) : recordName{recordName},
-                                                                       fieldDefinitions{fieldDefinitions},
-                                                                       entityToPopulate{entityToPopulate},
-                                                                       fieldsRead{} {
+                                     NamedEntity * entityToPopulate,
+                                     char const * const dbPropertyNameForAllStoredInstances) :
+   recordName{recordName},
+   uniquenessOfInstanceNames{uniquenessOfInstanceNames},
+   fieldDefinitions{fieldDefinitions},
+   entityToPopulate{entityToPopulate},
+   dbPropertyNameForAllStoredInstances{dbPropertyNameForAllStoredInstances},
+   fieldsRead{} {
    Q_ASSERT(nullptr != entityToPopulate);
    return;
 }
@@ -254,13 +261,57 @@ bool XPathRecordLoader::load(xalanc::DOMSupport & domSupport,
    return true;
 }
 
+
 bool XPathRecordLoader::normalise(QTextStream & userMessage) {
-   // TODO Write!
+   if (XPathRecordLoader::EachInstanceNameShouldBeUnique == this->uniquenessOfInstanceNames) {
+      QString currentName = this->entityToPopulate->name();
+
+      for (NamedEntity * matchingEntity = this->findByName(currentName);
+           nullptr != matchingEntity;
+           matchingEntity = this->findByName(currentName)) {
+
+         qDebug() <<
+            Q_FUNC_INFO << "Existing " << this->recordName << "named" << currentName << "was" <<
+            ((nullptr == matchingEntity) ? "not" : "") << "found";
+
+         //
+         // Amend currentName and see if it's still a clash.  Eg if the clashing name is "Oatmeal Stout", we'll try
+         // adding a "duplicate number" in brackets to the end of the name, ie amending it to "Oatmeal Stout (1)".  If
+         // that clashes too then we want to try "Oatmeal Stout (2)" (and NOT "Oatmeal Stout (1) (1)"!).
+         //
+         // First, see whether there's already a (n) (ie "(1)", "(2)" etc) at the end of the name (with or without
+         // space(s) preceding the left bracket.  If so, we want to replace this with " (n+1)".  If not, we try " (1)".
+         //
+         // Note that, in the regexp, to match a bracket, we need to escape it, thus "\(" instead of "(".  However, we
+         // must also escape the backslash so that the C++ compiler doesn't think we want a special character (such as
+         // '\n') and barf a "unknown escape sequence" warning at us.  So "\\(" is needed in the string literal here to
+         // pass "\(" to the regexp to match literal "(" (and similarly for close bracket).
+         //
+         int duplicateNumber = 1;
+         QRegExp nameNumberMatcher{" *\\(([0-9]+)\\)$"};
+         int positionOfMatch = nameNumberMatcher.indexIn(currentName);
+         if (positionOfMatch > -1) {
+            // There's already some integer in brackets at the end of the name, extract it, add one, and truncate the
+            // name.
+            duplicateNumber = nameNumberMatcher.cap(1).toInt() + 1;
+            currentName.truncate(positionOfMatch);
+         }
+         currentName += QString(" (%1)").arg(duplicateNumber);
+
+         //
+         // Now the for loop will search again with the new name
+         //
+         qDebug() << Q_FUNC_INFO << "Trying " << currentName;
+      }
+
+      this->entityToPopulate->setName(currentName);
+   }
    return true;
 }
 
+
 bool XPathRecordLoader::storeInDb(QTextStream & userMessage) {
-   // Simple entities know how to save themselves
+   // Most entities know how to save themselves to the DB
    this->entityToPopulate->insertInDatabase();
 
    // Once we've stored the object, we no longer have to take responsibility for destroying it because its registry

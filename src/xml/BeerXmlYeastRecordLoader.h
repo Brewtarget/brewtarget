@@ -22,11 +22,14 @@
 
 #include "xml/XPathRecordLoader.h"
 
+#include "yeast.h"
+
 /**
  * \brief Loads a <YEAST>...</YEAST> record in from a BeerXML file
  */
 class BeerXmlYeastRecordLoader : public XPathRecordLoader {
 public:
    BeerXmlYeastRecordLoader();
+   virtual Yeast * findByName(QString nameToFind) { return XPathRecordLoader::findByName<Yeast>(nameToFind); }
 };
 #endif

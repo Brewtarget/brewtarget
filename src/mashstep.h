@@ -1,7 +1,8 @@
 /*
  * mashstep.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -33,11 +34,10 @@ bool operator==(MashStep &m1, MashStep &m2);
 
 /*!
  * \class MashStep
- * \author Philip G. Lee
  *
  * \brief Model for a mash step record in the database.
  */
-class MashStep : public Ingredient
+class MashStep : public NamedEntity
 {
    Q_OBJECT
 
@@ -124,8 +124,10 @@ private:
    MashStep(Brewtarget::DBTable table, int key);
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
    MashStep( MashStep const& other );
-   MashStep(bool cache);
+public:
+   MashStep(bool cache = true);
 
+private:
    QString m_typeStr;
    Type m_type;
    double m_infuseAmount_l;

@@ -18,11 +18,6 @@
  */
 #include "xml/BeerXmlYeastRecordLoader.h"
 
-#include <QVector>
-
-#include "yeast.h"
-
-
 static XPathRecordLoader::EnumLookupMap const YEAST_TYPE_MAPPER {
    {"Ale",       Yeast::Ale},
    {"Lager",     Yeast::Lager},
@@ -47,9 +42,9 @@ static XPathRecordLoader::EnumLookupMap const YEAST_FLOCCULATION_MAPPER {
 
 
 static QVector<XPathRecordLoader::Field> const YEAST_RECORD_FIELDS {
-   // Type                     XML Name             Q_PROPERTY                Enum Mapper
+   // Type                      XML Name            Q_PROPERTY                Enum Mapper
    {XPathRecordLoader::String,  "NAME",             "name",                   nullptr},
-   {XPathRecordLoader::String,  "VERSION",          nullptr,                  nullptr},
+   {XPathRecordLoader::UInt,    "VERSION",          nullptr,                  nullptr},
    {XPathRecordLoader::Enum,    "TYPE",             "type",                   &YEAST_TYPE_MAPPER},
    {XPathRecordLoader::Enum,    "TYPE",             "type",                   &YEAST_FORM_MAPPER},
    {XPathRecordLoader::Double,  "AMOUNT",           "amount",                 nullptr},
@@ -65,15 +60,17 @@ static QVector<XPathRecordLoader::Field> const YEAST_RECORD_FIELDS {
    {XPathRecordLoader::Int,     "TIMES_CULTURED",   "timesCultured",          nullptr},
    {XPathRecordLoader::Int,     "MAX_REUSE",        "maxReuse",               nullptr},
    {XPathRecordLoader::Bool,    "ADD_TO_SECONDARY", "addToSecondary",         nullptr},
-   {XPathRecordLoader::String,  "DISPLAY_AMOUNT",   nullptr,                  nullptr},
-   {XPathRecordLoader::String,  "DISP_MIN_TEMP",    nullptr,                  nullptr},
-   {XPathRecordLoader::String,  "DISP_MAX_TEMP",    nullptr,                  nullptr},
-   {XPathRecordLoader::String,  "INVENTORY",        nullptr,                  nullptr},
-   {XPathRecordLoader::String,  "CULTURE_DATE",     nullptr,                  nullptr}
+   {XPathRecordLoader::String,  "DISPLAY_AMOUNT",   nullptr,                  nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "DISP_MIN_TEMP",    nullptr,                  nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "DISP_MAX_TEMP",    nullptr,                  nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "INVENTORY",        nullptr,                  nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "CULTURE_DATE",     nullptr,                  nullptr}  // Extension tag
 };
 
 BeerXmlYeastRecordLoader::BeerXmlYeastRecordLoader() : XPathRecordLoader{"YEAST",
+                                                                         XPathRecordLoader::EachInstanceNameShouldBeUnique,
                                                                          YEAST_RECORD_FIELDS,
-                                                                         new Yeast{"Empty Yeast Object"}} {
+                                                                         new Yeast{"Empty Yeast Object"},
+                                                                         "yeasts"} {
    return;
 }

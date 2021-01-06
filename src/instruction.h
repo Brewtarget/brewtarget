@@ -1,6 +1,6 @@
 /*
  * instruction.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -33,11 +33,10 @@
 
 /*!
  * \class Instruction
- * \author Philip G. Lee
  *
  * \brief Model class for an instruction record in the database.
  */
-class Instruction : public Ingredient
+class Instruction : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "instructions")

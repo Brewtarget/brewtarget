@@ -1,5 +1,5 @@
 /*
- * xml/BeerXmlFermentableRecordLoader.h is part of Brewtarget, and is Copyright the following
+ * xml/BeerXmlWaterRecordLoader.h is part of Brewtarget, and is Copyright the following
  * authors 2020-2021
  * - Matt Young <mfsy@yahoo.com>
  *
@@ -16,19 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _XML_BEERXMLFERMENTABLERECORDLOADER_H
-#define _XML_BEERXMLFERMENTABLERECORDLOADER_H
+#ifndef _XML_BEERXMLWATERRECORDLOADER_H
+#define _XML_BEERXMLWATERRECORDLOADER_H
 #pragma once
 
 #include "xml/XPathRecordLoader.h"
-#include "fermentable.h"
+
+#include "water.h"
 
 /**
- * \brief Loads a <FERMENTABLE>...</FERMENTABLE> record in from a BeerXML file
+ * \brief Loads a <WATER>...</WATER> record in from a BeerXML file
  */
-class BeerXmlFermentableRecordLoader : public XPathRecordLoader {
+class BeerXmlWaterRecordLoader : public XPathRecordLoader {
 public:
-   BeerXmlFermentableRecordLoader();
-   virtual Fermentable * findByName(QString nameToFind) { return XPathRecordLoader::findByName<Fermentable>(nameToFind); }
+   BeerXmlWaterRecordLoader();
+   virtual Water * findByName(QString nameToFind) { return XPathRecordLoader::findByName<Water>(nameToFind); }
 };
 #endif

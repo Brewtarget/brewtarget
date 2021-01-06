@@ -1,7 +1,8 @@
 /*
  * equipment.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -27,11 +28,10 @@
 
 /*!
  * \class Equipment
- * \author Philip G. Lee
  *
  * \brief Model representing a single equipment record.
  */
-class Equipment : public Ingredient
+class Equipment : public NamedEntity
 {
    Q_OBJECT
 
@@ -149,7 +149,9 @@ signals:
 
 private:
    Equipment(Brewtarget::DBTable table, int key);
+public:
    Equipment(QString t_name, bool cacheOnly = true);
+private:
    Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Equipment( Equipment const& other);
 

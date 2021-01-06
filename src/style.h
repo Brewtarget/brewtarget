@@ -33,11 +33,10 @@ bool operator==(Style &s1, Style &s2);
 
 /*!
  * \class Style
- * \author Philip G. Lee
  *
  * \brief Model for style records in the database.
  */
-class Style : public Ingredient
+class Style : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "styles")
@@ -154,7 +153,9 @@ signals:
 
 private:
    Style(Brewtarget::DBTable table, int key);
+public:
    Style(QString t_name, bool cacheOnly = true);
+private:
    Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
 

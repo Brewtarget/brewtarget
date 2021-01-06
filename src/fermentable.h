@@ -1,8 +1,9 @@
 /*
  * fermentable.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -36,11 +37,10 @@ bool operator==(Fermentable &f1, Fermentable &f2);
 
 /*!
  * \class Fermentable
- * \author Philip G. Lee
  *
  * \brief Model for a fermentable record in the database.
  */
-class Fermentable : public Ingredient
+class Fermentable : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "fermentables")

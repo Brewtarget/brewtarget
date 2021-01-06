@@ -31,19 +31,10 @@
 #include <xalanc/DOMSupport/DOMSupport.hpp>
 #include <xalanc/XalanDOM/XalanNode.hpp>
 
+#include "database.h"
 #include "model/NamedEntity.h"
 #include "xml/XQString.h"
 
-class XPathRecordLoader;
-
-/**
- * C++ does not permit you to have a function pointer to a class constructor, so this is a "trick" that allows us to
- * come close enough for our purposes.
- */
-template<typename T>
-XPathRecordLoader * XPathRecordLoaderFactory () {
-   return new T();
-}
 
 /**
  * This is a base class for parsing individual "object" records (ie corresponding to Hop, Yeast, Equipment, Recipe etc)
@@ -92,7 +83,7 @@ XPathRecordLoader * XPathRecordLoaderFactory () {
  *                    XPathRecordLoaders to process HOPS, MISCS, STYLE, etc.
  *
  *    \b propertyName If set, this is the name of the Q_PROPERTY on the object we're constructing from this XML record.
-   *                  Via the magic of the Qt Property System, we'll then be able to pass the field value in to the
+ *                    Via the magic of the Qt Property System, we'll then be able to pass the field value in to the
  *                    object via its setter without having to deal with a lot of pointers to functions etc.
  *
  *                    If not set, then we'll read the property from the file and make it available to the caller via
@@ -113,6 +104,14 @@ public:
     */
    typedef XPathRecordLoader * (*Factory)();
 
+   /**
+   * C++ does not permit you to have a function pointer to a class constructor, so this is a "trick" that allows us to
+   * come close enough for our purposes.
+   */
+   template<typename T>
+   static XPathRecordLoader * construct() {
+      return new T();
+   }
 
    // Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data /
    // number of look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering,
@@ -130,6 +129,8 @@ public:
       Double,
       String,
       Enum
+      //RecordSet
+      //Record
    };
 
    /**
@@ -146,14 +147,74 @@ public:
 protected:
 
    /**
+    * \brief type for constructor paramater
+    * Using a boolean enum makes calling code more readable
+    */
+   enum NameUniqueness : bool {
+      EachInstanceNameShouldBeUnique = true,
+      InstancesWithDuplicateNamesOk = false,
+   };
+
+   /**
     * \brief Constructor for derived classes to call
     * \param recordName Name of the type of XML record we are parsing (eg "HOP").
+    * \param uniquenessOfInstanceNames If \b EachInstanceNameShouldBeUnique, then we try to ensure that what we load in
+    *        does not create duplicate names.  Eg, if we already have a Recipe called "Oatmeal Stout" and then read in
+    *        a (different) recipe with the same name, then we will change the name of the newly read-in one to "Oatmeal
+    *        Stout (1)" (or "Oatmeal Stout (2)" if "Oatmeal Stout (1)" is taken, and so on).  Where we don't care about
+    *        duplicate names (eg loading in MashStep records), this parameter should be set to
+    *        \b InstancesWithDuplicateNamesOk.
     * \param fieldDefinitions List of field infos for this record type (see class description for more details).
-    * \param entityToPopulate
+    * \param entityToPopulate A new/empty instance of a suitable subclass of NamedEntity for us to populate (eg a Hop if
+    *        we are reading a HOP record)
     */
    XPathRecordLoader(QString const recordName,
+                     NameUniqueness uniquenessOfInstanceNames,
                      QVector<Field> const & fieldDefinitions,
-                     NamedEntity * entityToPopulate);
+                     NamedEntity * entityToPopulate,
+                     char const * const dbPropertyNameForAllStoredInstances);
+
+   /**
+    * \brief Finds the first instance of \b T with \b name() matching \b nameToFind.  (This static template function is
+    *        intended to be called, with suitable template parameter, by child classes to implement the virtual member
+    *        function of the same name.)
+    * \param nameToFind
+    * \return A pointer to a T with a matching \b name(), if there is one, or \b nullptr if not.  Note that this function
+    *         does not tell you whether more than one T has the name \b nameToFind
+    */
+   template<class T>
+   static T * findByName(QString nameToFind) {
+      //
+      // In this instance, using a combination of run-time and compile-time polymorphism seems more elegant than doing
+      // something generic via the Qt Property System.  In theory, we could use the existing Q_PROPERTY declarations on
+      // Database to use a string key ("hop" / "yeast" / etc) to retrieve a QList<Hop *> / QList<Yeast *> / etc list of
+      // all currently-stored instances of the subclass of NamedEntity we are trying to read in (Hop / Yeast / etc).
+      // However, what you'd actually get back via QMetaProperty would be a QVariant of type QMetaType::User, which you
+      // then need to manually cast to QList<Foo *> for some suitable value of Foo (Hop / Yeast / etc).  So you'd be
+      // back to square one of needing to know the type of the NamedEntity you're reading in.
+      //
+      // This bit of the implementation would be even more elegant if we just templated XPathRecordLoader and used
+      // template specialisations instead of inheriting from it.  But, we'd end up having to put a lot of code (from
+      // XPathRecordLoader.cpp) into this header file, which all seems a bit messy.
+      //
+      QList<T *> listOfAllStored = Database::instance().getAll<T>();
+      auto found = std::find_if(listOfAllStored.begin(),
+                              listOfAllStored.end(),
+                              [nameToFind](T * t) {return t->name() == nameToFind;});
+      if (found == listOfAllStored.end()) {
+         return nullptr;
+      }
+      return *found;
+   }
+
+   /**
+    * \brief Finds the first instance of \b T with \b name() matching \b nameToFind.  (Child classes should implement
+    *        this virtual member function by making a suitable call to the templated static function of the same name.)
+    * \param nameToFind
+    * \return A pointer to a T with a matching \b name(), if there is one, or \b nullptr if not.  Note that this function
+    *         does not tell you whether more than one T has the name \b nameToFind
+    */
+   virtual NamedEntity * findByName(QString nameToFind) = 0;
 
 public:
    /**
@@ -194,9 +255,26 @@ public:
     */
    virtual bool storeInDb(QTextStream & userMessage);
 
+   /**
+    * \brief You can't cast Container<Derived *> to Container<Base *> for any Container (be it QList, QVector,
+    *        std::vector, etc).  This utility function takes a QList of pointers to objects derived from NamedEntity
+    *        and returns a QList of all the same pointers but now as NamedEntity *
+    * \param listToDownCast
+    * \return
+    */
+/*   template<class T>
+   QList<NamedEntity *> downCastListOfEntities(QList<T *> const & listToDownCast) {
+      QList<NamedEntity *> listToReturn;
+      listToReturn.reserve(listToDownCast.size());
+      std::copy(listToDownCast.constBegin(), listToDownCast.constEnd(), std::back_inserter(listToReturn));
+
+      return listToReturn;
+   }
+*/
 
 protected:
    QString const            recordName; // Eg "HOP", "YEAST", etc
+   NameUniqueness           uniquenessOfInstanceNames;
    QVector<Field> const &   fieldDefinitions;
 
    // It's the job of each subclass to create a suitable object (Hop, Yeast, etc)
@@ -204,6 +282,8 @@ protected:
    // release(), otherwise, entityToPopulate will get destroyed when the XPathRecordLoader containing it goes out of
    // scope.
    std::unique_ptr<NamedEntity> entityToPopulate;
+   char const * const dbPropertyNameForAllStoredInstances; // Eg "hops", "yeasts", etc
+
    QHash<QString, QVariant> fieldsRead; // Keeps track of all the fields we read in
 
    // See https://apache.github.io/xalan-c/api/XalanNode_8hpp_source.html for possible indexes into this array

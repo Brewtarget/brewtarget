@@ -18,8 +18,6 @@
  */
 #include "xml/BeerXmlFermentableRecordLoader.h"
 
-#include "fermentable.h"
-
 static XPathRecordLoader::EnumLookupMap const FERMENTABLE_TYPE_MAPPER {
    {"Grain",       Fermentable::Grain},
    {"Sugar",       Fermentable::Sugar},
@@ -31,7 +29,7 @@ static XPathRecordLoader::EnumLookupMap const FERMENTABLE_TYPE_MAPPER {
 static QVector<XPathRecordLoader::Field> const FERMENTABLE_RECORD_FIELDS {
    // Type                     XML Name             Q_PROPERTY                Enum Mapper
    {XPathRecordLoader::String,  "NAME",             "name",                   nullptr},
-   {XPathRecordLoader::String,  "VERSION",          nullptr,                  nullptr},
+   {XPathRecordLoader::UInt,    "VERSION",          nullptr,                  nullptr},
    {XPathRecordLoader::Enum,    "TYPE",             "type",                   &FERMENTABLE_TYPE_MAPPER},
    {XPathRecordLoader::Double,  "AMOUNT",           "amount_kg",              nullptr},
    {XPathRecordLoader::Double,  "YIELD",            "yield_pct",              nullptr},
@@ -47,16 +45,18 @@ static QVector<XPathRecordLoader::Field> const FERMENTABLE_RECORD_FIELDS {
    {XPathRecordLoader::Double,  "MAX_IN_BATCH",     "maxInBatch_pct",         nullptr},
    {XPathRecordLoader::Bool,    "RECOMMEND_MASH",   "recommendMash",          nullptr},
    {XPathRecordLoader::Double,  "IBU_GAL_PER_LB",   "ibuGalPerLb",            nullptr},
-   {XPathRecordLoader::String,  "DISPLAY_AMOUNT",   nullptr,                  nullptr},
-   {XPathRecordLoader::String,  "POTENTIAL",        nullptr,                  nullptr},
-   {XPathRecordLoader::String,  "INVENTORY",        nullptr,                  nullptr},
-   {XPathRecordLoader::String,  "DISPLAY_COLOR",    nullptr,                  nullptr},
-   {XPathRecordLoader::Bool,    "IS_MASHED",        "isMashed",               nullptr}
+   {XPathRecordLoader::String,  "DISPLAY_AMOUNT",   nullptr,                  nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "POTENTIAL",        nullptr,                  nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "INVENTORY",        nullptr,                  nullptr}, // Extension tag
+   {XPathRecordLoader::String,  "DISPLAY_COLOR",    nullptr,                  nullptr}, // Extension tag
+   {XPathRecordLoader::Bool,    "IS_MASHED",        "isMashed",               nullptr}  // Non-standard tag, not part of BeerXML 1.0 standard
 };
 
 BeerXmlFermentableRecordLoader::BeerXmlFermentableRecordLoader() :
    XPathRecordLoader{"FERMENTABLE",
+                     XPathRecordLoader::EachInstanceNameShouldBeUnique,
                      FERMENTABLE_RECORD_FIELDS,
-                     new Fermentable{"Empty Fermentable Object"}} {
+                     new Fermentable{"Empty Fermentable Object"},
+                     "fermentables"} {
    return;
 }
