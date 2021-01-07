@@ -20,7 +20,7 @@
 #define _XML_BEERXMLMASHRECORDLOADER_H
 #pragma once
 
-#include "xml/XPathRecordLoader.h"
+#include "xml/BeerXmlSimpleRecordLoader.h"
 #include "xml/BeerXmlMashStepRecordLoader.h"
 
 #include "mash.h"
@@ -28,12 +28,13 @@
 
 /**
  * \brief Loads a <MASH>...</MASH> record in from a BeerXML file, including the <MASH_STEP>...</MASH_STEP> records it
- * contains (via \b BeerXmlMashStepRecordLoader)
+ * contains (via \b BeerXmlMashStepRecordLoader).  See comment in xml/XPathRecordLoader.h for more complete
+ * explanation.
  */
-class BeerXmlMashRecordLoader : public XPathRecordLoader {
+class BeerXmlMashRecordLoader : public BeerXmlSimpleRecordLoader<Mash> {
 public:
    BeerXmlMashRecordLoader();
-   virtual Mash * findByName(QString nameToFind) { return XPathRecordLoader::findByNameOld<Mash>(nameToFind); }
+
    virtual bool load(xalanc::DOMSupport & domSupport,
                      xalanc::XalanNode * rootNodeOfRecord,
                      QTextStream & userMessage);
@@ -44,6 +45,6 @@ private:
    // https://doc.qt.io/qt-5/qlist.html#details.   Either way, it's unlikely to be a long enough list to make any
    // noticeable performance difference.
    QVector<std::shared_ptr<BeerXmlMashStepRecordLoader> > mashStepRecordLoaders;
-
 };
+
 #endif

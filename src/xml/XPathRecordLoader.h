@@ -199,41 +199,6 @@ protected:
                      NamedEntity * entityToPopulate);
 
    /**
-    * \brief Finds the first instance of \b T with \b name() matching \b nameToFind.  (This static template function is
-    *        intended to be called, with suitable template parameter, by child classes to implement the virtual member
-    *        function of the same name.)
-    * \param nameToFind
-    * \return A pointer to a T with a matching \b name(), if there is one, or \b nullptr if not.  Note that this function
-    *         does not tell you whether more than one T has the name \b nameToFind
-    */
-   template<class T>
-   static T * findByNameOld(QString nameToFind) {
-      //
-      // In this instance, using a combination of run-time and compile-time polymorphism seems more elegant than doing
-      // something generic via the Qt Property System.  In theory, we could use the existing Q_PROPERTY declarations on
-      // Database to use a string key ("hop" / "yeast" / etc) to retrieve a QList<Hop *> / QList<Yeast *> / etc list of
-      // all currently-stored instances of the subclass of NamedEntity we are trying to read in (Hop / Yeast / etc).
-      // However, what you'd actually get back via QMetaProperty would be a QVariant of type QMetaType::User, which you
-      // then need to manually cast to QList<Foo *> for some suitable value of Foo (Hop / Yeast / etc).  So you'd be
-      // back to square one of needing to know the type of the NamedEntity you're reading in.
-      //
-      // This bit of the implementation would be even more elegant if we just templated XPathRecordLoader and used
-      // template specialisations instead of inheriting from it.  But, we'd end up having to put a lot of code (from
-      // XPathRecordLoader.cpp) into this header file, which all seems a bit messy.
-      //
-      // TODO *****************REMOVE THIS*************************
-      //
-      QList<T *> listOfAllStored = Database::instance().getAll<T>();
-      auto found = std::find_if(listOfAllStored.begin(),
-                              listOfAllStored.end(),
-                              [nameToFind](T * t) {return t->name() == nameToFind;});
-      if (found == listOfAllStored.end()) {
-         return nullptr;
-      }
-      return *found;
-   }
-
-   /**
     * \brief Finds the first instance of \b T with \b name() matching \b nameToFind.  (Child classes should implement
     *        this virtual member function by making a suitable call to the templated static function of the same name.)
     * \param nameToFind

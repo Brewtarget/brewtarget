@@ -18,6 +18,9 @@
  */
 #include "xml/BeerXmlMashStepRecordLoader.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Field mappings for <MASH_STEP>...</MASH_STEP> BeerXML records
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 static XPathRecordLoader::EnumLookupMap const MASH_STEP_TYPE_MAPPER {
    {"Infusion",     MashStep::Infusion},
    {"Temperature",  MashStep::Temperature},
@@ -45,10 +48,19 @@ static QVector<XPathRecordLoader::Field> const MASH_STEP_RECORD_FIELDS {
    {XPathRecordLoader::Double,  "DECOCTION_AMOUNT",   "decoctionAmount_l", nullptr}  // Non-standard tag, not part of BeerXML 1.0 standard
 };
 
-BeerXmlMashStepRecordLoader::BeerXmlMashStepRecordLoader() : XPathRecordLoader{"MASH_STEP",
+/**
+ * \brief BeerXmlSimpleRecordLoader<MashStep> specialisation for reading <MASH_STEP>...</MASH_STEP> BeerXML records
+ * into \b MashStep objects.  Note that this class is further specialised by \b BeerXmlMashStepRecordLoader
+ */
+template<>
+BeerXmlSimpleRecordLoader<MashStep>::BeerXmlSimpleRecordLoader(): XPathRecordLoader{"MASH_STEP",
                                                                                XPathRecordLoader::InstancesWithDuplicateNamesOk,
                                                                                MASH_STEP_RECORD_FIELDS,
                                                                                new MashStep{}} {
+   return;
+}
+
+BeerXmlMashStepRecordLoader::BeerXmlMashStepRecordLoader() : BeerXmlSimpleRecordLoader<MashStep>{} {
    return;
 }
 

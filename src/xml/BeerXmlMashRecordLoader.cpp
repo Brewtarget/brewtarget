@@ -26,6 +26,9 @@
 
 #include "database.h"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Field mappings for <MASH>...</MASH> BeerXML records
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 static QVector<XPathRecordLoader::Field> const MASH_RECORD_FIELDS {
    // Type                      XML Name              Q_PROPERTY               Enum Mapper
    {XPathRecordLoader::String,  "NAME",               "name",                  nullptr},
@@ -45,10 +48,20 @@ static QVector<XPathRecordLoader::Field> const MASH_RECORD_FIELDS {
    {XPathRecordLoader::String,  "DISPLAY_TUN_WEIGHT",  nullptr,                nullptr}  // Extension tag
 };
 
-BeerXmlMashRecordLoader::BeerXmlMashRecordLoader() : XPathRecordLoader{"MASH",
+
+/**
+ * \brief BeerXmlSimpleRecordLoader<Mash> specialisation for reading <MASH>...</MASH> BeerXML records
+ * into \b Mash objects.  Note that this class is further specialised by \b BeerXmlMashRecordLoader
+ */
+template<>
+BeerXmlSimpleRecordLoader<Mash>::BeerXmlSimpleRecordLoader() : XPathRecordLoader{"MASH",
                                                                        XPathRecordLoader::InstancesWithDuplicateNamesOk,
                                                                        MASH_RECORD_FIELDS,
-                                                                       new Mash{"Empty Mash Object"}},
+                                                                       new Mash{"Empty Mash Object"}} {
+   return;
+}
+
+BeerXmlMashRecordLoader::BeerXmlMashRecordLoader() : BeerXmlSimpleRecordLoader<Mash>{},
                                                      mashStepRecordLoaders{} {
    return;
 }

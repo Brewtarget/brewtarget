@@ -20,18 +20,19 @@
 #define _XML_BEERXMLMASHSTEPRECORDLOADER_H
 #pragma once
 
-#include "xml/XPathRecordLoader.h"
+#include "xml/BeerXmlSimpleRecordLoader.h"
 #include "mashstep.h"
 
 class Mash;
 
 /**
- * \brief Loads a <MASH_STEP>...</MASH_STEP> record in from a BeerXML file
+ * \brief Loads a <MASH_STEP>...</MASH_STEP> record in from a BeerXML file.  See comment in xml/XPathRecordLoader.h for
+ * more complete explanation.
  */
-class BeerXmlMashStepRecordLoader : public XPathRecordLoader {
+class BeerXmlMashStepRecordLoader : public BeerXmlSimpleRecordLoader<MashStep> {
 public:
    BeerXmlMashStepRecordLoader();
-   virtual MashStep * findByName(QString nameToFind) { return XPathRecordLoader::findByNameOld<MashStep>(nameToFind); }
+
    virtual bool normalise(QTextStream & userMessage);
 
    /**
