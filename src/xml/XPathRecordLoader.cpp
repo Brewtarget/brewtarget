@@ -29,6 +29,8 @@
 
 #include "database.h"
 
+#include "xml/BeerXmlSimpleRecordLoader.h"
+#include "xml/BeerXmlMashRecordLoader.h"
 
 constexpr char const * const XPathRecordLoader::XALAN_NODE_TYPES[] {
    "UNKNOWN_NODE",                 //= 0,
@@ -47,16 +49,40 @@ constexpr char const * const XPathRecordLoader::XALAN_NODE_TYPES[] {
    "UNRECOGNISED!"
 };
 
+// In theory, once we know the record set name, we can deduce the name of the records and vice versa (HOPS <-> HOP etc)
+// but this is only because BeerXML uses "MASHS" as a mangled plural of "MASH" (instead of "MASHES").  Doing a proper
+// mapping keeps things open for, say, possible future improved versions of BeerXML.
+//
+// And we can't just look at the child node of the record set, as the BeerXML 1.0 Standard allows extra undefined tags
+// to be added to a document.
+QHash<QString, XPathRecordLoader::Factory> XPathRecordLoader::RECORD_SET_TO_LOADER_LOOKUP {
+   {"HOPS",          &XPathRecordLoader::construct< BeerXmlSimpleRecordLoader<Hop> >},
+   {"FERMENTABLES",  &XPathRecordLoader::construct< BeerXmlSimpleRecordLoader<Fermentable> >},
+   {"YEASTS",        &XPathRecordLoader::construct< BeerXmlSimpleRecordLoader<Yeast> >},
+   {"MISCS",         &XPathRecordLoader::construct< BeerXmlSimpleRecordLoader<Misc> >},
+   {"WATERS",        &XPathRecordLoader::construct< BeerXmlSimpleRecordLoader<Water> >},
+   {"STYLES",        &XPathRecordLoader::construct< BeerXmlSimpleRecordLoader<Style> >},
+   {"MASHS",         &XPathRecordLoader::construct<BeerXmlMashRecordLoader>},
+   {"RECIPES",       nullptr}, //TODO
+   {"EQUIPMENTS",    &XPathRecordLoader::construct< BeerXmlSimpleRecordLoader<Equipment> > }
+};
+
+bool XPathRecordLoader::factoryExists(QString recordSetName) {
+   return XPathRecordLoader::RECORD_SET_TO_LOADER_LOOKUP.contains(recordSetName);
+}
+
+XPathRecordLoader::Factory XPathRecordLoader::getFactory(QString recordSetName) {
+   return XPathRecordLoader::RECORD_SET_TO_LOADER_LOOKUP.value(recordSetName);
+}
+
 XPathRecordLoader::XPathRecordLoader(QString const recordName,
                                      XPathRecordLoader::NameUniqueness uniquenessOfInstanceNames,
                                      QVector<Field> const & fieldDefinitions,
-                                     NamedEntity * entityToPopulate,
-                                     char const * const dbPropertyNameForAllStoredInstances) :
+                                     NamedEntity * entityToPopulate) :
    recordName{recordName},
    uniquenessOfInstanceNames{uniquenessOfInstanceNames},
    fieldDefinitions{fieldDefinitions},
    entityToPopulate{entityToPopulate},
-   dbPropertyNameForAllStoredInstances{dbPropertyNameForAllStoredInstances},
    fieldsRead{} {
    Q_ASSERT(nullptr != entityToPopulate);
    return;

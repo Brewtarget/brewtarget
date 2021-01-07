@@ -37,10 +37,35 @@
 
 
 /**
- * This is a base class for parsing individual "object" records (ie corresponding to Hop, Yeast, Equipment, Recipe etc)
- * from an XML document.  An object of this base class (initialised with a suitable mapping) can read fields in to a
- * hash map and simultaneously populate scalar attributes of an object.  Child classes (such as BeerXmlHopRecordLoader)
- * extend this functionality with any processing specific to the type of object being read in.
+ * \brief \b XPathRecordLoader is a base class that provides the generic functionality for parsing individual "object"
+ * records (eg corresponding to Hop, Yeast, Equipment, Recipe etc) from an XML document.  An object of this base class
+ * (initialised with suitable mapping data) can read "simple" fields (strings, decimals, integers, booleans, enums)
+ * into a hash map and simultaneously populate scalar attributes of an object that inherits from NamedEntity.  (And the
+ * implementation for doing this is mostly hidden from users of the class.)  However, what this base class can't do is:
+ *   (a) create a new Hop/Yeast/Equipment/etc object or get a list of all existing stored Hop/Yeast/Equipment/etc objects
+ *   (b) handle nested records (eg the fact that a Recipe records contains Hop records)
+ * For that, child classes are needed.
+ *
+ * For BeerXML specifically, we have several child classes.
+ *
+ * \b BeerXmlSimpleRecordLoader is a templated class that inherits from \b XPathRecordLoader and solves (a) by being
+ * able to do class-specific things with the class of its template parameter.  (It also, via template specialisations,
+ * initialises mapping data for its base class.)  In a number of cases, this is all that is needed:
+ *    \b BeerXmlSimpleRecordLoader<Equipment> suffices to read EQUIPMENT records
+ *    \b BeerXmlSimpleRecordLoader<Fermentable> suffices to read FERMENTABLE records
+ *    \b BeerXmlSimpleRecordLoader<Hop> suffices to read HOP records
+ *    \b BeerXmlSimpleRecordLoader<Misc> suffices to read MISC records
+ *    \b BeerXmlSimpleRecordLoader<Style> suffices to read STYLE records
+ *    \b BeerXmlSimpleRecordLoader<Water> suffices to read WATER records
+ *    \b BeerXmlSimpleRecordLoader<Yeast> suffices to read YEAST records
+ * For other cases, this needs to be extended further:
+ *    \b BeerXmlMashRecordLoader : public BeerXmlSimpleRecordLoader<Mash> - handles fact that Mash - contains MashStep
+ *    \b BeerXmlMashStepRecordLoader : public BeerXmlSimpleRecordLoader<MashStep> - handles fact that MashStep needs to
+ *                                                                                  know its Mash
+ *    \b BeerXmlRecipeRecordLoader : public BeerXmlSimpleRecordLoader<Recipe> - handles fact that Recipe contains lots
+ *                                                                              of other things
+ * Finally, the templated class \b BeerXmlRecordSetLoader handles reading in records sets (eg HOPS, EQUIPMENTS) which
+ * contain multiple records of the same type.
  *
  * Eg say you have the following section in an XML document (amended and simplified from real BeerXML):
  *    <HOPS>
@@ -171,8 +196,7 @@ protected:
    XPathRecordLoader(QString const recordName,
                      NameUniqueness uniquenessOfInstanceNames,
                      QVector<Field> const & fieldDefinitions,
-                     NamedEntity * entityToPopulate,
-                     char const * const dbPropertyNameForAllStoredInstances);
+                     NamedEntity * entityToPopulate);
 
    /**
     * \brief Finds the first instance of \b T with \b name() matching \b nameToFind.  (This static template function is
@@ -183,7 +207,7 @@ protected:
     *         does not tell you whether more than one T has the name \b nameToFind
     */
    template<class T>
-   static T * findByName(QString nameToFind) {
+   static T * findByNameOld(QString nameToFind) {
       //
       // In this instance, using a combination of run-time and compile-time polymorphism seems more elegant than doing
       // something generic via the Qt Property System.  In theory, we could use the existing Q_PROPERTY declarations on
@@ -196,6 +220,8 @@ protected:
       // This bit of the implementation would be even more elegant if we just templated XPathRecordLoader and used
       // template specialisations instead of inheriting from it.  But, we'd end up having to put a lot of code (from
       // XPathRecordLoader.cpp) into this header file, which all seems a bit messy.
+      //
+      // TODO *****************REMOVE THIS*************************
       //
       QList<T *> listOfAllStored = Database::instance().getAll<T>();
       auto found = std::find_if(listOfAllStored.begin(),
@@ -272,6 +298,19 @@ public:
    }
 */
 
+
+
+
+   /**
+    * \brief
+    */
+   static bool factoryExists(QString recordSetName);
+
+   /**
+    * \brief For a given record set name ("HOPS", "YEASTS", etc) get the corresponding factory for the loader for the contained records
+    */
+   static Factory getFactory(QString recordSetName);
+
 protected:
    QString const            recordName; // Eg "HOP", "YEAST", etc
    NameUniqueness           uniquenessOfInstanceNames;
@@ -282,12 +321,14 @@ protected:
    // release(), otherwise, entityToPopulate will get destroyed when the XPathRecordLoader containing it goes out of
    // scope.
    std::unique_ptr<NamedEntity> entityToPopulate;
-   char const * const dbPropertyNameForAllStoredInstances; // Eg "hops", "yeasts", etc
 
    QHash<QString, QVariant> fieldsRead; // Keeps track of all the fields we read in
 
    // See https://apache.github.io/xalan-c/api/XalanNode_8hpp_source.html for possible indexes into this array
    static char const * const XALAN_NODE_TYPES[];
+
+private:
+   static QHash<QString, XPathRecordLoader::Factory> RECORD_SET_TO_LOADER_LOOKUP;
 
 };
 

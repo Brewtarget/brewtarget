@@ -48,8 +48,7 @@ static QVector<XPathRecordLoader::Field> const MASH_STEP_RECORD_FIELDS {
 BeerXmlMashStepRecordLoader::BeerXmlMashStepRecordLoader() : XPathRecordLoader{"MASH_STEP",
                                                                                XPathRecordLoader::InstancesWithDuplicateNamesOk,
                                                                                MASH_STEP_RECORD_FIELDS,
-                                                                               new MashStep{},
-                                                                               "mashSteps"} {
+                                                                               new MashStep{}} {
    return;
 }
 

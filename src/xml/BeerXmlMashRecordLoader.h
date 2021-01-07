@@ -33,7 +33,7 @@
 class BeerXmlMashRecordLoader : public XPathRecordLoader {
 public:
    BeerXmlMashRecordLoader();
-   virtual Mash * findByName(QString nameToFind) { return XPathRecordLoader::findByName<Mash>(nameToFind); }
+   virtual Mash * findByName(QString nameToFind) { return XPathRecordLoader::findByNameOld<Mash>(nameToFind); }
    virtual bool load(xalanc::DOMSupport & domSupport,
                      xalanc::XalanNode * rootNodeOfRecord,
                      QTextStream & userMessage);

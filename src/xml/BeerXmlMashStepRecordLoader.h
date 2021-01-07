@@ -31,7 +31,7 @@ class Mash;
 class BeerXmlMashStepRecordLoader : public XPathRecordLoader {
 public:
    BeerXmlMashStepRecordLoader();
-   virtual MashStep * findByName(QString nameToFind) { return XPathRecordLoader::findByName<MashStep>(nameToFind); }
+   virtual MashStep * findByName(QString nameToFind) { return XPathRecordLoader::findByNameOld<MashStep>(nameToFind); }
    virtual bool normalise(QTextStream & userMessage);
 
    /**

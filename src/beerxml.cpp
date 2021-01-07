@@ -82,14 +82,6 @@
 #include "xml/XercesHelpers.h"
 #include "xml/XPathRecordLoader.h"
 #include "xml/XQString.h"
-#include "xml/BeerXmlEquipmentRecordLoader.h"
-#include "xml/BeerXmlFermentableRecordLoader.h"
-#include "xml/BeerXmlHopRecordLoader.h"
-#include "xml/BeerXmlMashRecordLoader.h"
-#include "xml/BeerXmlMiscRecordLoader.h"
-#include "xml/BeerXmlStyleRecordLoader.h"
-#include "xml/BeerXmlWaterRecordLoader.h"
-#include "xml/BeerXmlYeastRecordLoader.h"
 
 #include "TableSchema.h"
 
@@ -609,17 +601,17 @@ public:
          int numberOfRecords = records->getLength();
          qDebug() <<
             Q_FUNC_INFO << "Record set" << ii << ":" << recordSetName << "has" << numberOfRecords << "records";
-         if (!RECORD_SET_TO_LOADER_LOOKUP.contains(recordSetName)) {
+         if (!XPathRecordLoader::factoryExists(recordSetName)) {
             //
-            // This should only happen if the BeerXML file contains non-standard record sets -- something that is
-            // (IMHO incorrectly) technically allowed by the BeerXML 1.0 Standard.
+            // This should only happen if the BeerXML file contains non-standard record sets -- something that is (IMHO
+            // unwisely) technically allowed by the BeerXML 1.0 Standard.
             //
             qWarning() << Q_FUNC_INFO << "Ignoring unrecognised record set: " << recordSetName;
          } else {
             //
             // Process each record in the set
             //
-            XPathRecordLoader::Factory const xPathRecordLoaderFactory{RECORD_SET_TO_LOADER_LOOKUP.value(recordSetName)};
+            XPathRecordLoader::Factory const xPathRecordLoaderFactory{XPathRecordLoader::getFactory(recordSetName)};
             for (int ii = 0; ii < numberOfRecords; ++ii) {
                //
                // In theory each record set only contains (as its immediate children) one type of record...
@@ -695,31 +687,7 @@ private:
    // Note that any change to this needs to be reflected in beerxml/v1/BeerXml.xsd
    constexpr static char const * const INSERTED_ROOT_NODE_NAME = "BEER_XML";
 
-   static QHash<QString, XPathRecordLoader::Factory> RECORD_SET_TO_LOADER_LOOKUP;
 };
-
-// In theory, once we know the record set name, we can deduce the name of the records and vice versa (HOPS <-> HOP etc)
-// but this is only because BeerXML uses "MASHS" as a mangled plural of "MASH" (instead of "MASHES").  Doing a proper
-// mapping keeps things open for, say, possible future improved versions of BeerXML.
-//
-// And we can't just look at the child node of the record set, as the BeerXML 1.0 Standard allows extra undefined tags
-// to be added to a document.
-QHash<QString, XPathRecordLoader::Factory> BeerXML::impl::RECORD_SET_TO_LOADER_LOOKUP {
-   {"HOPS",          &XPathRecordLoader::construct<BeerXmlHopRecordLoader>},
-   {"FERMENTABLES",  &XPathRecordLoader::construct<BeerXmlFermentableRecordLoader>},
-   {"YEASTS",        &XPathRecordLoader::construct<BeerXmlYeastRecordLoader>},
-   {"MISCS",         &XPathRecordLoader::construct<BeerXmlMiscRecordLoader>},
-   {"WATERS",        &XPathRecordLoader::construct<BeerXmlWaterRecordLoader>},
-   {"STYLES",        &XPathRecordLoader::construct<BeerXmlStyleRecordLoader>},
-   {"MASHS",         &XPathRecordLoader::construct<BeerXmlMashRecordLoader>},
-   {"RECIPES",       nullptr}, //TODO
-   {"EQUIPMENTS",    &XPathRecordLoader::construct<BeerXmlEquipmentRecordLoader>}
-
-   //////// Once we are done here, remove all    friend class BeerXML from codebase
-
-
-};
-
 
 BeerXML::BeerXML(DatabaseSchema* tables) : QObject(),
                                            pimpl{ new impl{} },
