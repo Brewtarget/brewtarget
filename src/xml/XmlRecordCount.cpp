@@ -1,0 +1,75 @@
+/*
+ * xml/XmlRecordCount.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2020-2021
+ * - Matt Young <mfsy@yahoo.com>
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "xml/XmlRecordCount.h"
+
+XmlRecordCount::XmlRecordCount() : skips{}, oks{} {
+   return;
+}
+
+void XmlRecordCount::skipped(QString recordName) {
+   // If we already have a count, get it and add one, otherwise start from 1
+   // If QMap holds an item with key recordName then insert() will just replace its existing value
+   this->skips.insert(recordName,
+                      this->skips.contains(recordName) ? (this->skips.value(recordName) + 1) : 1);
+   return;
+}
+
+void XmlRecordCount::processedOk(QString recordName) {
+   // Same implementation as skipped() above, but not (IMHO) enough code duplication to pull out into a common
+   // function
+   this->oks.insert(recordName,
+                    this->oks.contains(recordName) ? (this->oks.value(recordName) + 1) : 1);
+   return;
+}
+
+void XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
+
+   if (this->oks.isEmpty() && this->skips.isEmpty()) {
+      //
+      // This is often impossible - eg reading in a BeerXML file, the XSD parsing will have enforced that the file has
+      // some content - but include some handling just in case.
+      //
+      userMessage << this->tr("Nothing to process!");
+      return;
+   }
+
+   if (!this->oks.isEmpty()) {
+      userMessage << this->tr("Read ");
+      int typesOfRecordsRead = 0;
+      for (auto ii = this->oks.constBegin(); ii != this->oks.constEnd(); ++ii, ++typesOfRecordsRead) {
+         if (0 != typesOfRecordsRead) {
+            userMessage << ", ";
+         }
+         userMessage << ii.value() << " " << ii.key() << (1 == ii.value() ? this->tr(" record") : this->tr(" records"));
+      }
+   }
+
+   if (!this->skips.isEmpty()) {
+      userMessage << this->tr("Skipped ");
+      int typesOfRecordsRead = 0;
+      for (auto ii = this->skips.constBegin(); ii != this->skips.constEnd(); ++ii, ++typesOfRecordsRead) {
+         if (0 != typesOfRecordsRead) {
+            userMessage << ", ";
+         }
+         userMessage << ii.value() << " " << ii.key() << (1 == ii.value() ? this->tr(" record") : this->tr(" records"));
+      }
+   }
+
+   return;
+}

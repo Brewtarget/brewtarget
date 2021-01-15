@@ -207,18 +207,27 @@
         ************************************************************************************************
 
    At heart, a BeerXML consists of lists of HOPS, FERMENTABLES, YEASTS, MISCS, WATERS, STYLES, MASHS [sic], RECIPES and
-   EQUIPMENTS.  In each case, the structure is similar, eg <HOPS>...</HOPS> contains "zero or more" HOP records, each
-   of which is <HOP>...</HOP> with various required and optional fields (which unfortunately are allowed to be in any
-   order, something that makes validation harder than it otherwise would be for, IMHO, very little benefit).
+   EQUIPMENTS.  (In the standard these lists are called "record sets".)  In each case, the structure is similar, eg
+   <HOPS>...</HOPS> contains (depending on which bit of the standard you're looking at) either "one or more" or "zero
+   or more" HOP records, each of which is <HOP>...</HOP> with various required and optional fields (which unfortunately
+   are allowed to be in any order, something that makes validation harder than it otherwise would be for, IMHO, very
+   little benefit).
 
    These lists can occur in multiple places.  Eg, inside each <RECIPE>...</RECIPE> is a list of "zero or more" hops (ie
    a <HOPS>...</HOPS> record containing zero or more <HOP>...</HOP> records.  But <HOPS>...</HOPS> is also a valid top-
-   level record in its own right.
+   level record in its own right, where it must contain "one or more Hop records".  It's annoying that the standard is
+   (needlessly) inconsistent in whether the minimum number of contained records is zero or one, but there is a way to
+   deal with it.
 
-   Our approach is that, for each of the base types, we first define a type for the individual record.  Eg StyleType is
-   used for <STYLE>...</STYLE> records.  We then easily define a type for a list of (zero or more) of these records, eg
-   StylesType is used for <STYLES>...</STYLES> records which, of courses are either empty or contain some
-   <STYLE>...</STYLE> records.
+   Our approach is that, for each of the base types, we first define a type for the individual record.  Eg HopType is
+   used for <HOP>...</HOP> records.  We then easily define two further types, one for a list of "one or more" of
+   these records, and another for the case where a list is allowed to conntain "zero or more" records.  Eg
+   HopsType is used for a <HOPS>...</HOPS> record that contains one or more <HOP>...</HOP> records, and
+   HopsEmptyAllowedType is used for a <HOPS>...</HOPS> record that my be empty but otherwise one or more
+   <HOP>...</HOP> records.
+
+   Note that not every type of "record set" needs an "EmptyAllowed" version of its type.  We only define types we're
+   going to use elsewhere.
 
    -->
 
@@ -276,10 +285,11 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <STYLES>...</STYLES> records -->
+   <!-- Type for <STYLES>...</STYLES> records
+        Note that we don't need a StylesEmptyAllowedType because a RECIPE only uses STYLE not STYLES -->
    <xs:complexType name="StylesType">
       <xs:sequence>
-         <xs:element name="STYLE" type="StyleType" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="STYLE" type="StyleType" minOccurs="1" maxOccurs="unbounded"/>
       </xs:sequence>
    </xs:complexType>
 
@@ -324,10 +334,11 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <EQUIPMENTS>...</EQUIPMENTS> records -->
+   <!-- Type for <EQUIPMENTS>...</EQUIPMENTS> records
+        Note that we don't need a EquipmentsEmptyAllowedType because a RECIPE only uses EQUIPMENT not EQUIPMENTS -->
    <xs:complexType name="EquipmentsType">
       <xs:sequence>
-         <xs:element name="EQUIPMENT" type="EquipmentType" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="EQUIPMENT" type="EquipmentType" minOccurs="1" maxOccurs="unbounded"/>
       </xs:sequence>
    </xs:complexType>
 
@@ -385,8 +396,13 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <HOPS>...</HOPS> records -->
+   <!-- Types for <HOPS>...</HOPS> records -->
    <xs:complexType name="HopsType">
+      <xs:sequence>
+         <xs:element name="HOP" type="HopType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="HopsEmptyAllowedType">
       <xs:sequence>
          <xs:element name="HOP" type="HopType" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -441,8 +457,13 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <FERMENTABLES>...</FERMENTABLES> records -->
+   <!-- Types for <FERMENTABLES>...</FERMENTABLES> records -->
    <xs:complexType name="FermentablesType">
+      <xs:sequence>
+         <xs:element name="FERMENTABLE" type="FermentableType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="FermentablesEmptyAllowedType">
       <xs:sequence>
          <xs:element name="FERMENTABLE" type="FermentableType" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -491,8 +512,13 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <MISCS>...</MISCS> records -->
+   <!-- Types for <MISCS>...</MISCS> records -->
    <xs:complexType name="MiscsType">
+      <xs:sequence>
+         <xs:element name="MISC" type="MiscType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="MiscsEmptyAllowedType">
       <xs:sequence>
          <xs:element name="MISC" type="MiscType" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -556,8 +582,13 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <YEASTS>...</YEASTS> records -->
+   <!-- Types for <YEASTS>...</YEASTS> records -->
    <xs:complexType name="YeastsType">
+      <xs:sequence>
+         <xs:element name="YEAST" type="YeastType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="YeastsEmptyAllowedType">
       <xs:sequence>
          <xs:element name="YEAST" type="YeastType" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -583,8 +614,13 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <WATERS>...</WATERS> records -->
+   <!-- Types for <WATERS>...</WATERS> records -->
    <xs:complexType name="WatersType">
+      <xs:sequence>
+         <xs:element name="WATER" type="WaterType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="WatersEmptyAllowedType">
       <xs:sequence>
          <xs:element name="WATER" type="WaterType" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -631,8 +667,8 @@
    </xs:complexType>
 
    <!-- Type for <MASH_STEPS>...</MASH_STEPS> records
-        Unlike a lot of the other BeerXML building blocks, the spec seems to imply there is at least one
-        <MASH_STEP>...</MASH_STEP> record in a <MASH_STEPS>...</MASH_STEPS> record. -->
+        These only exist inside <MASH>...</MASH> record sets, and, in this case, the BeerXML spec seems to imply there
+        is always at least one <MASH_STEP>...</MASH_STEP> record in a <MASH_STEPS>...</MASH_STEPS> record. -->
    <xs:complexType name="MashStepsType">
       <xs:sequence>
          <xs:element name="MASH_STEP" type="MashStepType" minOccurs="1" maxOccurs="unbounded"/>
@@ -662,11 +698,13 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <MASHS>...</MASHS> records.
-        Perhaps in a future version of BeerXML this might be corrected to MASHES... :o) -->
+   <!-- Types for <MASHS>...</MASHS> records.
+        Perhaps in a future version of BeerXML this might be corrected to MASHES, but, for now, we'll keep our type
+        name consistent with the tag name.
+        Note that we don't need a MashsEmptyAllowedType because a RECIPE only uses MASH not MASHS -->
    <xs:complexType name="MashsType">
       <xs:sequence>
-         <xs:element name="MASH" type="MashType" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="MASH" type="MashType" minOccurs="1" maxOccurs="unbounded"/>
       </xs:sequence>
    </xs:complexType>
 
@@ -698,11 +736,11 @@
             However, XSD asserts are part of the XML Schema 1.1 specifications and Xerces-C++
             (in contrast to Xerces-J) only supports XML Schema 1.0 - ie it doesn't understand
             the assert tag. -->
-         <xs:element name="HOPS" type="HopsType"/>
-         <xs:element name="FERMENTABLES" type="FermentablesType"/>
-         <xs:element name="MISCS" type="MiscsType"/>
-         <xs:element name="YEASTS" type="YeastsType"/>
-         <xs:element name="WATERS" type="WatersType"/>
+         <xs:element name="HOPS" type="HopsEmptyAllowedType"/>
+         <xs:element name="FERMENTABLES" type="FermentablesEmptyAllowedType"/>
+         <xs:element name="MISCS" type="MiscsEmptyAllowedType"/>
+         <xs:element name="YEASTS" type="YeastsEmptyAllowedType"/>
+         <xs:element name="WATERS" type="WatersEmptyAllowedType"/>
          <!-- The BeerXML 1.0 Standard defines the next field as required, but then goes on to say in its description
               that 'No Mash record is needed for “Extract” type brews'.  We'll take the description as accurate.
               As noted above for EFFICIENCY and INFUSE_AMOUNT, we ideally would include an xs:assert tag here to
@@ -772,10 +810,11 @@
       </xs:all>
    </xs:complexType>
 
-   <!-- Type for <RECIPES>...</RECIPES> records -->
+   <!-- Type for <RECIPES>...</RECIPES> records
+        Note that we don't need a RecipesEmptyAllowedType because a RECIPE doesn't refer to other RECIPES -->
    <xs:complexType name="RecipesType">
       <xs:sequence>
-         <xs:element name="RECIPE" type="RecipeType" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="RECIPE" type="RecipeType" minOccurs="1" maxOccurs="unbounded"/>
       </xs:sequence>
    </xs:complexType>
 

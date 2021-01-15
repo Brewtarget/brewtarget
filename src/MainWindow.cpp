@@ -2366,7 +2366,7 @@ void MainWindow::addMashStep()
       return;
    }
 
-   MashStep* step = new MashStep(true);
+   MashStep* step = new MashStep("", true);
    step->setMash(mash);
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);

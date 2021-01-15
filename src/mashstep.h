@@ -125,7 +125,7 @@ private:
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
    MashStep( MashStep const& other );
 public:
-   MashStep(bool cache = true);
+   MashStep(QString name, bool cache = true);
 
 private:
    QString m_typeStr;

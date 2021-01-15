@@ -62,8 +62,8 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
 {
 }
 
-MashStep::MashStep(bool cache)
-   : Ingredient(Brewtarget::MASHSTEPTABLE, -1, QString(), true),
+MashStep::MashStep(QString name, bool cache)
+   : Ingredient(Brewtarget::MASHSTEPTABLE, -1, name, true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),

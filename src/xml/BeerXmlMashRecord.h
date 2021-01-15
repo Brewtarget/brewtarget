@@ -1,5 +1,5 @@
 /*
- * xml/BeerXmlMashRecordLoader.h is part of Brewtarget, and is Copyright the following
+ * xml/BeerXmlMashRecord.h is part of Brewtarget, and is Copyright the following
  * authors 2020-2021
  * - Matt Young <mfsy@yahoo.com>
  *
@@ -16,35 +16,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _XML_BEERXMLMASHRECORDLOADER_H
-#define _XML_BEERXMLMASHRECORDLOADER_H
+#ifndef _XML_BEERXMLMASHRECORD_H
+#define _XML_BEERXMLMASHRECORD_H
 #pragma once
 
-#include "xml/BeerXmlSimpleRecordLoader.h"
-#include "xml/BeerXmlMashStepRecordLoader.h"
+#include "xml/XmlNamedEntityRecord.h"
+#include "xml/BeerXmlMashStepRecord.h"
 
 #include "mash.h"
 
 
 /**
  * \brief Loads a <MASH>...</MASH> record in from a BeerXML file, including the <MASH_STEP>...</MASH_STEP> records it
- * contains (via \b BeerXmlMashStepRecordLoader).  See comment in xml/XPathRecordLoader.h for more complete
- * explanation.
+ * contains (via \b BeerXmlMashStepRecord).
  */
-class BeerXmlMashRecordLoader : public BeerXmlSimpleRecordLoader<Mash> {
+class BeerXmlMashRecord : public XmlNamedEntityRecord<Mash> {
 public:
-   BeerXmlMashRecordLoader();
+   BeerXmlMashRecord(XmlCoding const & xmlCoding,
+                        QString const recordName,
+                        XmlRecord::FieldDefinitions const & fieldDefinitions) :
+   XmlNamedEntityRecord<Mash>{xmlCoding,
+             recordName,
+             fieldDefinitions} { return; }
 
+
+   //   BeerXmlMashRecord(XmlCoding const & xmlCoding);
+
+/*
    virtual bool load(xalanc::DOMSupport & domSupport,
                      xalanc::XalanNode * rootNodeOfRecord,
-                     QTextStream & userMessage);
-   virtual bool normalise(QTextStream & userMessage);
-   virtual bool storeInDb(QTextStream & userMessage);
+                     QTextStream & userMessage);*/
+   virtual bool normaliseAndStoreInDb(QTextStream & userMessage,
+                                      XmlRecordCount & stats);
 private:
    // We only need a list here, but Qt docs steer you towards using QVector rather than QList -- see
    // https://doc.qt.io/qt-5/qlist.html#details.   Either way, it's unlikely to be a long enough list to make any
    // noticeable performance difference.
-   QVector<std::shared_ptr<BeerXmlMashStepRecordLoader> > mashStepRecordLoaders;
+///   QVector<std::shared_ptr<BeerXmlMashStepRecord> > mashStepRecords;
 };
 
 #endif

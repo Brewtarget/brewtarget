@@ -1,5 +1,5 @@
 /*
- * xml/XPathRecordLoader.h is part of Brewtarget, and is Copyright the following
+ * xml/XmlNamedEntityRecord.h is part of Brewtarget, and is Copyright the following
  * authors 2020-2021
  * - Matt Young <mfsy@yahoo.com>
  *
@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _XML_XPATHRECORDLOADER_H
-#define _XML_XPATHRECORDLOADER_H
+#ifndef _XML_XMLNAMEDENTITYRECORD_H
+#define _XML_XMLNAMEDENTITYRECORD_H
 #pragma once
 
 #include <memory> // For smart pointers
@@ -28,16 +28,24 @@
 #include <QVariant>
 #include <QVector>
 
-#include <xalanc/DOMSupport/DOMSupport.hpp>
-#include <xalanc/XalanDOM/XalanNode.hpp>
-
 #include "database.h"
+
 #include "model/NamedEntity.h"
 #include "xml/XQString.h"
+#include "xml/XmlRecord.h"
+
+/////////////////
+//
+// TODO Still need to sort out MashStep getting pointer to the Mash
+//
+// TODO Still need to do Recipe
+//
+/////////////////
 
 
 /**
- * \brief \b XPathRecordLoader is a base class that provides the generic functionality for parsing individual "object"
+ * TODO Rewrite this! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+ * \brief \b XmlNamedEntityRecord is a base class that provides the generic functionality for parsing individual "object"
  * records (eg corresponding to Hop, Yeast, Equipment, Recipe etc) from an XML document.  An object of this base class
  * (initialised with suitable mapping data) can read "simple" fields (strings, decimals, integers, booleans, enums)
  * into a hash map and simultaneously populate scalar attributes of an object that inherits from NamedEntity.  (And the
@@ -48,7 +56,7 @@
  *
  * For BeerXML specifically, we have several child classes.
  *
- * \b BeerXmlSimpleRecordLoader is a templated class that inherits from \b XPathRecordLoader and solves (a) by being
+ * \b BeerXmlSimpleRecordLoader is a templated class that inherits from \b XmlNamedEntityRecord and solves (a) by being
  * able to do class-specific things with the class of its template parameter.  (It also, via template specialisations,
  * initialises mapping data for its base class.)  In a number of cases, this is all that is needed:
  *    \b BeerXmlSimpleRecordLoader<Equipment> suffices to read EQUIPMENT records
@@ -64,8 +72,6 @@
  *                                                                                  know its Mash
  *    \b BeerXmlRecipeRecordLoader : public BeerXmlSimpleRecordLoader<Recipe> - handles fact that Recipe contains lots
  *                                                                              of other things
- * Finally, the templated class \b BeerXmlRecordSetLoader handles reading in records sets (eg HOPS, EQUIPMENTS) which
- * contain multiple records of the same type.
  *
  * Eg say you have the following section in an XML document (amended and simplified from real BeerXML):
  *    <HOPS>
@@ -89,11 +95,11 @@
  *       </HOP>
  *    </HOPS>
  * As we process the XML document, at each of the <HOP> tags, we can use a BeerXmlHopRecordLoader object (which
- * inherits from XPathRecordLoader) to parse the contents (ie everything inside the current <HOP>...</HOP> pair) into a
+ * inherits from XmlNamedEntityRecord) to parse the contents (ie everything inside the current <HOP>...</HOP> pair) into a
  * new Hop object.  If that parsing succeeds then the object can be saved (or, as the case may be, passed back to code
  * in BeerXmlRecipeRecordLoader that is processing a containing <RECIPE>...</RECIPE> tag pair).
  *
- * For every field in the XML that we want to be able to process, we need an \b XPathRecordLoader::Field entry which
+ * For every field in the XML that we want to be able to process, we need an \b XmlNamedEntityRecord::Field entry which
  * has:
  *
  *    \b fieldType    The base data type we want to read the XML field into (QString, double, int, etc).  Though NB for
@@ -104,8 +110,8 @@
  *                    too(eg "WEIGHT/UNIT_OF_MEASUREMENT" and "WEIGHT/VALUE" in our example above).
  *
  *                    Note, however, that where there is a complex contained item, we'll usually want to process that
- *                    separately with its own XPathRecordLoader.  Eg, inside a RECIPE, we'll want separate
- *                    XPathRecordLoaders to process HOPS, MISCS, STYLE, etc.
+ *                    separately with its own XmlNamedEntityRecord.  Eg, inside a RECIPE, we'll want separate
+ *                    XmlNamedEntityRecords to process HOPS, MISCS, STYLE, etc.
  *
  *    \b propertyName If set, this is the name of the Q_PROPERTY on the object we're constructing from this XML record.
  *                    Via the magic of the Qt Property System, we'll then be able to pass the field value in to the
@@ -118,67 +124,35 @@
  *                    record, we want to map "TYPE" string field to a Hop::Type enum value.
  *
  */
-class XPathRecordLoader {
+template<class NE>
+class XmlNamedEntityRecord : public XmlRecord {
 public:
-   ~XPathRecordLoader() = default;
-   QString const & getRecordName() const;
-
    /**
-    * Used in conjunction with \b XPathRecordLoaderFactory to allow caller's to map from a record set name to the
-    * address of a function that will create the appropriate subclass of \b XPathRecordLoader
+    * \brief This constructor does all the boilerplate work and then calls init() to do the template parameter specific
+    *        stuff.  (We could do template specialisations of the constructor and do away with init(), but it's a lot
+    *        of copy-and-paste code.)  TODO EXPLAIN THIS BETTER
     */
-   typedef XPathRecordLoader * (*Factory)();
-
-   /**
-   * C++ does not permit you to have a function pointer to a class constructor, so this is a "trick" that allows us to
-   * come close enough for our purposes.
-   */
-   template<typename T>
-   static XPathRecordLoader * construct() {
-      return new T();
+   XmlNamedEntityRecord(XmlCoding const & xmlCoding,
+                        QString const recordName,
+                        XmlRecord::FieldDefinitions const & fieldDefinitions) :
+   XmlRecord{xmlCoding,
+             recordName,
+             fieldDefinitions},
+   instanceNamesAreUnique{true}, // This is the default value, but might be changed in init()
+   entityToPopulate{new NE{"Empty Object"} } {
+      this->init();
+      return;
    }
 
-   // Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data /
-   // number of look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering,
-   // but some people say that's only true beyond a certain number of elements stored.  We could benchmark it if we
-   // were anxious about performance here.)
-   typedef QHash<QString, int> EnumLookupMap;
-
    /**
-    * The types of fields that we know how to process
+    * \brief Called by the constructor to the template parameter specific initialisation.
+    *
+    *        We only use template specialisations of this member function, so just declare here and put specialisation
+    *        definitions in xml/XmlNamedEntityRecord.cpp
     */
-   enum FieldType {
-      Bool,
-      Int,
-      UInt,
-      Double,
-      String,
-      Enum
-      //RecordSet
-      //Record
-   };
-
-   /**
-    * \brief How to parse every field that we want to be able to read out of the XML file.  See class description for
-    *        more details.
-    */
-   struct Field {
-      XPathRecordLoader::FieldType             fieldType;
-      XQString                                 xPath;
-      char const * const                       propertyName;
-      XPathRecordLoader::EnumLookupMap const * stringToEnum;
-   };
+   void init();
 
 protected:
-
-   /**
-    * \brief type for constructor paramater
-    * Using a boolean enum makes calling code more readable
-    */
-   enum NameUniqueness : bool {
-      EachInstanceNameShouldBeUnique = true,
-      InstancesWithDuplicateNamesOk = false,
-   };
 
    /**
     * \brief Constructor for derived classes to call
@@ -189,15 +163,17 @@ protected:
     *        Stout (1)" (or "Oatmeal Stout (2)" if "Oatmeal Stout (1)" is taken, and so on).  Where we don't care about
     *        duplicate names (eg loading in MashStep records), this parameter should be set to
     *        \b InstancesWithDuplicateNamesOk.
-    * \param fieldDefinitions List of field infos for this record type (see class description for more details).
+    * \param fieldDefinitions A list of fields we expect to find in this record (other fields will be ignored) and how
+    *                         they relate to Brewtarget objects.  See class description for more details.
     * \param entityToPopulate A new/empty instance of a suitable subclass of NamedEntity for us to populate (eg a Hop if
     *        we are reading a HOP record)
     */
-   XPathRecordLoader(QString const recordName,
-                     NameUniqueness uniquenessOfInstanceNames,
-                     QVector<Field> const & fieldDefinitions,
-                     NamedEntity * entityToPopulate);
-
+//   XmlNamedEntityRecord(XmlCoding const & xmlCoding,
+//                        QString const recordName,
+//                        NameUniqueness uniquenessOfInstanceNames,
+//                        QVector<Field> const & fieldDefinitions,
+//                        NamedEntity * entityToPopulate);
+//
    /**
     * \brief Finds the first instance of \b T with \b name() matching \b nameToFind.  (Child classes should implement
     *        this virtual member function by making a suitable call to the templated static function of the same name.)
@@ -205,95 +181,110 @@ protected:
     * \return A pointer to a T with a matching \b name(), if there is one, or \b nullptr if not.  Note that this function
     *         does not tell you whether more than one T has the name \b nameToFind
     */
-   virtual NamedEntity * findByName(QString nameToFind) = 0;
+//   virtual NamedEntity * findByName(QString nameToFind) = 0;
+   /**
+    * \brief Finds the first instance of \b NE with \b name() matching \b nameToFind.  This is used to avoid name
+    *        clashes when loading some subclass of NamedEntity (eg Hop, Yeast, Equipment, Recipe) from an XML file (eg
+    *        if are reading in a Recipe called "Oatmeal Stout" then this function can check whether we already have a
+    *        Recipe with that name so that, assuming the new one is not a duplicate, we can amend its name to "Oatmeal
+    *        Stout (1)" or some such.
+    *
+    *        Note that caller does not need to know which subclass of NamedEntity we are reading in, whereas, the
+    *        implementation is specific to a subclass (albeit that we can write it once for all subclasses with the
+    *        magic of templates).
+    * \param nameToFind
+    * \return A pointer to a \b NE with a matching \b name(), if there is one, or \b nullptr if not.  Note that this
+    *         function does not tell you whether more than one \b NE has the name \b nameToFind
+    */
+   NamedEntity * findByName(QString nameToFind) {
+      QList<NE *> listOfAllStored = Database::instance().getAll<NE>();
+      auto found = std::find_if(listOfAllStored.begin(),
+                                listOfAllStored.end(),
+                                [nameToFind](NE * ne) {return ne->name() == nameToFind;});
+      if (found == listOfAllStored.end()) {
+         return nullptr;
+      }
+      return *found;
+   }
 
 public:
-   /**
-    * \brief Load a data record in from given the sub-section of the XML document.   Child classes should extend this
-    * member function for any class-specific load logic.
-    *
-    * \param domSupport
-    * \param rootNodeOfRecord
-    * \param userMessage Where to append any error messages that we want the user to see on the screen
-    *
-    * \return \b true if load succeeded, \b false if there was an error
-    */
-   virtual bool load(xalanc::DOMSupport & domSupport,
-                     xalanc::XalanNode * rootNodeOfRecord,
-                     QTextStream & userMessage);
 
    /**
-    * \brief Having loaded in the entity, this function will attempt to ensure it is usable.  If there are problems
-    * with the data that can be easily and safely fixed, it will do so.  If there are more fundamental problems, eg the
-    * entity read in contains some nonsensical combination of field values that could not be validated at the XML level,
-    * this will be reported as an error.  Child classes should extend this member function for any class-specific
-    * normalisation and verification.
-    *
-    * \param userMessage Where to append any error messages that we want the user to see on the screen
-    *
-    * \return \b true if everything went well succeeded, \b false if there was an error
+    * \brief Implementation of \b XmlRecord::storeField()
     */
-   virtual bool normalise(QTextStream & userMessage);
+   virtual void storeField(Field const & fieldDefinition,
+                           QVariant parsedValue) {
+      int propertyIndex = this->entityToPopulate->metaObject()->indexOfProperty(fieldDefinition.propertyName);
 
-   /**
-    * \brief Once the entity is loaded and normalised, this function will check whether it is a duplicate of an
-    * existing entity and, if not, store it in the database.  Child classes should extend this member function for any
-    * class-specific logic.
-    *
-    * \param userMessage Where to append any error messages that we want the user to see on the screen
-    *
-    * \return \b true if entity was stored, \b false if we detected a duplicate or there was another problem
-    */
-   virtual bool storeInDb(QTextStream & userMessage);
+      //
+      // It's a coding error if we are trying to read and store a field that does not exist on the object we are loading
+      //
+      Q_ASSERT(propertyIndex >= 0 && "Trying to update undeclared property");
+      if ( propertyIndex < 0 ) {
+         //
+         // If asserts are disabled, we may be able to continue past this coding error by ignoring the current field
+         //
+         qCritical() <<
+            Q_FUNC_INFO << "Trying to update undeclared property " << fieldDefinition.propertyName << " of " <<
+            this->entityToPopulate->metaObject()->className();
+         return;
+      }
 
-   /**
-    * \brief You can't cast Container<Derived *> to Container<Base *> for any Container (be it QList, QVector,
-    *        std::vector, etc).  This utility function takes a QList of pointers to objects derived from NamedEntity
-    *        and returns a QList of all the same pointers but now as NamedEntity *
-    * \param listToDownCast
-    * \return
-    */
-/*   template<class T>
-   QList<NamedEntity *> downCastListOfEntities(QList<T *> const & listToDownCast) {
-      QList<NamedEntity *> listToReturn;
-      listToReturn.reserve(listToDownCast.size());
-      std::copy(listToDownCast.constBegin(), listToDownCast.constEnd(), std::back_inserter(listToReturn));
-
-      return listToReturn;
+      QMetaProperty metaProperty = this->entityToPopulate->metaObject()->property(propertyIndex);
+      metaProperty.write(this->entityToPopulate.get(), parsedValue);
+      return;
    }
-*/
-
-
 
 
    /**
-    * \brief
+    * \brief Implementation of \b XmlRecord::normaliseAndStoreInDb(). Child classes should extend this member
+    *        function for any class-specific logic.
     */
-   static bool factoryExists(QString recordSetName);
+   virtual bool normaliseAndStoreInDb(QTextStream & userMessage,
+                                      XmlRecordCount & stats) {
+      if (this->instanceNamesAreUnique) {
+         QString currentName = this->entityToPopulate->name();
 
-   /**
-    * \brief For a given record set name ("HOPS", "YEASTS", etc) get the corresponding factory for the loader for the contained records
-    */
-   static Factory getFactory(QString recordSetName);
+         for (NamedEntity * matchingEntity = this->findByName(currentName);
+            nullptr != matchingEntity;
+            matchingEntity = this->findByName(currentName)) {
+
+            qDebug() <<
+               Q_FUNC_INFO << "Existing " << this->recordName << "named" << currentName << "was" <<
+               ((nullptr == matchingEntity) ? "not" : "") << "found";
+
+            XmlRecord::modifyClashingName(currentName);
+
+            //
+            // Now the for loop will search again with the new name
+            //
+            qDebug() << Q_FUNC_INFO << "Trying " << currentName;
+         }
+
+         this->entityToPopulate->setName(currentName);
+      }
+
+      // Now we're ready to store in the DB, something the NamedEntity knows how to make happen
+      this->entityToPopulate->insertInDatabase();
+
+      // Once we've stored the object, we no longer have to take responsibility for destroying it because its registry
+      // (currently the Database singleton) will now own it.
+      this->entityToPopulate.release();
+
+      stats.processedOk(this->recordName.toLower());
+
+      return true;
+   }
 
 protected:
-   QString const            recordName; // Eg "HOP", "YEAST", etc
-   NameUniqueness           uniquenessOfInstanceNames;
-   QVector<Field> const &   fieldDefinitions;
+
+   bool instanceNamesAreUnique;
 
    // It's the job of each subclass to create a suitable object (Hop, Yeast, etc)
    // Once the object is populated, if we give ownership to something else (eg Database class), we should call
-   // release(), otherwise, entityToPopulate will get destroyed when the XPathRecordLoader containing it goes out of
+   // release(), otherwise, entityToPopulate will get destroyed when the XmlNamedEntityRecord containing it goes out of
    // scope.
    std::unique_ptr<NamedEntity> entityToPopulate;
-
-   QHash<QString, QVariant> fieldsRead; // Keeps track of all the fields we read in
-
-   // See https://apache.github.io/xalan-c/api/XalanNode_8hpp_source.html for possible indexes into this array
-   static char const * const XALAN_NODE_TYPES[];
-
-private:
-   static QHash<QString, XPathRecordLoader::Factory> RECORD_SET_TO_LOADER_LOOKUP;
 
 };
 
