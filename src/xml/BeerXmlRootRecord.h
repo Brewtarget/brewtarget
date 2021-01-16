@@ -33,12 +33,12 @@
  * \brief TODO We should get rid of this class!
  *
  */
-class BeerXmlRootRecord : public XmlRecord {
-public:
-   BeerXmlRootRecord(XmlCoding const & xmlCoding);
-
-
-private:
-
-};
+//class BeerXmlRootRecord : public XmlRecord {
+//public:
+//   BeerXmlRootRecord(XmlCoding const & xmlCoding);
+//
+//
+//private:
+//
+//};
 #endif

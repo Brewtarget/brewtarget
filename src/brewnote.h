@@ -52,7 +52,7 @@ class BrewNote : public NamedEntity
    friend bool operator==(BrewNote &lhs, BrewNote &rhs);
 
 public:
-   enum {DONOTUSE, RECIPE};
+//// TBD What this for?   enum {DONOTUSE, RECIPE};
 
    virtual ~BrewNote() {}
 

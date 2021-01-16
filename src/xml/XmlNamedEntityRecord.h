@@ -214,24 +214,19 @@ public:
     */
    virtual void storeField(Field const & fieldDefinition,
                            QVariant parsedValue) {
-      int propertyIndex = this->entityToPopulate->metaObject()->indexOfProperty(fieldDefinition.propertyName);
 
-      //
-      // It's a coding error if we are trying to read and store a field that does not exist on the object we are loading
-      //
-      Q_ASSERT(propertyIndex >= 0 && "Trying to update undeclared property");
-      if ( propertyIndex < 0 ) {
+      if (!this->entityToPopulate->setProperty(fieldDefinition.propertyName, parsedValue)) {
          //
-         // If asserts are disabled, we may be able to continue past this coding error by ignoring the current field
+         // It's a coding error if we are trying to read and store a field that does not exist on the object we are
+         // loading (because we only try to store fields we (a) recognise and (b) are interested in).  Nonetheless, if
+         // asserts are disabled, we may be able to continue past this coding error by ignoring the current field.
          //
+         Q_ASSERT(false && "Trying to update undeclared property");
          qCritical() <<
             Q_FUNC_INFO << "Trying to update undeclared property " << fieldDefinition.propertyName << " of " <<
             this->entityToPopulate->metaObject()->className();
-         return;
       }
 
-      QMetaProperty metaProperty = this->entityToPopulate->metaObject()->property(propertyIndex);
-      metaProperty.write(this->entityToPopulate.get(), parsedValue);
       return;
    }
 

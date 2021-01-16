@@ -187,7 +187,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/YeastSortFilterProxyModel.cpp
     ${SRCDIR}/YeastTableModel.cpp
     ${SRCDIR}/xml/BeerXmlRootRecord.cpp
-    ${SRCDIR}/xml/BeerXmlSimpleRecord.cpp
     ${SRCDIR}/xml/BeerXmlMashRecord.cpp
     ${SRCDIR}/xml/BeerXmlMashStepRecord.cpp
     ${SRCDIR}/xml/BtDomErrorHandler.cpp

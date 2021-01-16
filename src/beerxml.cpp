@@ -77,8 +77,6 @@
 #include "water.h"
 #include "salt.h"
 #include "yeast.h"
-#include "xml/BeerXmlRootRecord.h"
-#include "xml/BeerXmlSimpleRecord.h"
 #include "xml/BeerXmlMashRecord.h"
 #include "xml/BeerXmlMashStepRecord.h"
 #include "xml/BtDomDocumentOwner.h"
@@ -86,6 +84,7 @@
 #include "xml/XercesHelpers.h"
 #include "xml/XmlNamedEntityRecord.h"
 #include "xml/XmlCoding.h"
+#include "xml/XmlRecord.h"
 #include "xml/XQString.h"
 
 #include "TableSchema.h"
@@ -1548,7 +1547,7 @@ BrewNote* BeerXML::brewNoteFromXml( QDomNode const& node, Recipe* parent )
    }
    return ret;
 }
-
+/*
 Equipment* BeerXML::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
    // When loading from XML, we need to delay the signals until after
@@ -1920,6 +1919,7 @@ Instruction* BeerXML::instructionFromXml( QDomNode const& node, Recipe* parent )
    return ret;
 }
 
+
 Mash* BeerXML::mashFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
@@ -2281,10 +2281,10 @@ Recipe* BeerXML::recipeFromXml( QDomNode const& node )
       for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
          waterFromXml(n, ret);
 
-      /* That ends the beerXML defined objects. I'm not going to do the
-       * validation for these last two. We write em, and we had better be
-       * writing them properly
-       */
+      // That ends the beerXML defined objects. I'm not going to do the
+      // validation for these last two. We write em, and we had better be
+      // writing them properly
+      //
       // Get instructions.
       n = node.firstChildElement("INSTRUCTIONS");
       for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -2572,7 +2572,7 @@ Yeast* BeerXML::yeastFromXml( QDomNode const& node, Recipe* parent )
 
    return ret;
 }
-
+*/
 
 bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage)
 {
@@ -2581,11 +2581,7 @@ bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage)
    //
    return this->pimpl->validateAndLoad(filename, userMessage);
 
-   /////////////////////////////^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^!!!!!!!!!!!!!!!!!!1
-//
-// STOP PROCESSING HERE .  SHOULD ULTIMATELY BE ABLE TO DELETE THE REST OF THIS CODE
-/////////////////////////
-
+/*
    int count;
    int line, col;
    QDomDocument xmlDoc;
@@ -2708,4 +2704,5 @@ bool BeerXML::importFromXML(QString const & filename, QTextStream & userMessage)
       }
    }
    return ret;
+   */
 }
