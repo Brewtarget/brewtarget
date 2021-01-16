@@ -45,10 +45,14 @@ constexpr char const * const XmlRecord::XALAN_NODE_TYPES[] {
 
 XmlRecord::XmlRecord(XmlCoding const & xmlCoding,
                      QString const recordName,
-                     QVector<Field> const & fieldDefinitions) : xmlCoding{xmlCoding},
-                                                 recordName{recordName},
-                                                 fieldDefinitions{fieldDefinitions},
-                                                 childRecords{} {
+                     QVector<Field> const & fieldDefinitions) :
+   xmlCoding{xmlCoding},
+   recordName{recordName},
+   fieldDefinitions{fieldDefinitions},
+   instanceNamesAreUnique{true}, // Default value. Child class constructors may modify
+   namedEntity{nullptr},
+   namedEntityRaiiContainer{nullptr},
+   childRecords{} {
    return;
 }
 
@@ -259,7 +263,24 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                // If we do need it, we now store the value
                //
                if (nullptr != fieldDefinition->propertyName) {
-                  this->storeField(*fieldDefinition, parsedValue);
+                  //
+                  // It's a coding error if we're trying to store a simple field without somewhere to store it.  It
+                  // should only be the root record that doesn't have a NamedEntity to populate, and, equally, the root
+                  // record should not be configured to parse anything other than contained records.
+                  //
+                  Q_ASSERT(nullptr != this->namedEntity && "Trying to parse simple field on root record");
+                  if (!this->namedEntity->setProperty(fieldDefinition->propertyName, parsedValue)) {
+                     //
+                     // It's also a coding error if we are trying to read and store a field that does not exist on the
+                     // object we are loading (because we only try to store fields we (a) recognise and (b) are
+                     // interested in).  Nonetheless, if asserts are disabled, we may be able to continue past this
+                     // coding error by ignoring the current field.
+                     //
+                     Q_ASSERT(false && "Trying to update undeclared property");
+                     qCritical() <<
+                        Q_FUNC_INFO << "Trying to update undeclared property " << fieldDefinition->propertyName << " of " <<
+                        this->namedEntity->metaObject()->className();
+                  }
                }
             }
          }
@@ -268,12 +289,52 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
    return true;
 }
 
-
-bool XmlRecord::normaliseAndStoreInDb(QTextStream & userMessage,
+bool XmlRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
+                                      QTextStream & userMessage,
                                       XmlRecordCount & stats) {
+   if (nullptr != this->namedEntity) {
+      if (this->instanceNamesAreUnique) {
+         QString currentName = this->namedEntity->name();
+
+         for (NamedEntity * matchingEntity = this->findByName(currentName);
+            nullptr != matchingEntity;
+            matchingEntity = this->findByName(currentName)) {
+
+            qDebug() <<
+               Q_FUNC_INFO << "Existing " << this->recordName << "named" << currentName << "was" <<
+               ((nullptr == matchingEntity) ? "not" : "") << "found";
+
+            XmlRecord::modifyClashingName(currentName);
+
+            //
+            // Now the for loop will search again with the new name
+            //
+            qDebug() << Q_FUNC_INFO << "Trying " << currentName;
+         }
+
+         this->namedEntity->setName(currentName);
+      }
+
+      // Now we're ready to store in the DB, something the NamedEntity knows how to make happen
+      this->namedEntity->insertInDatabase();
+
+      // Once we've stored the object, we no longer have to take responsibility for destroying it because its registry
+      // (currently the Database singleton) will now own it.
+      this->namedEntityRaiiContainer.release();
+
+      stats.processedOk(this->recordName.toLower());
+   }
+
+   // Finally orchestrate storing any contained records
+   return this->normaliseAndStoreChildRecordsInDb(userMessage, stats);
+}
+
+
+bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
+                                                  XmlRecordCount & stats) {
    for (auto ii = this->childRecords.begin(); ii != this->childRecords.end(); ++ii) {
       qDebug() << Q_FUNC_INFO << "Storing" << ii.key();
-      if (!ii.value()->normaliseAndStoreInDb(userMessage, stats)) {
+      if (!ii.value()->normaliseAndStoreInDb(this->namedEntity, userMessage, stats)) {
          return false;
       }
    }
@@ -327,11 +388,11 @@ bool XmlRecord::loadChildRecords(xalanc::DOMSupport & domSupport,
    return true;
 }
 
-void XmlRecord::storeField(Field const & fieldDefinition,
-                           QVariant parsedValue) {
-   // TBD We shouldn't really ever have to call this function
-   qCritical() << Q_FUNC_INFO << "Calling base function";
-   return;
+
+NamedEntity * XmlRecord::findByName(QString nameToFind) {
+   // It's actually a coding error for this base class implementation to be called
+   Q_ASSERT(false && "Base class should not be trying to store a NamedEntity itself!");
+   return nullptr;
 }
 
 

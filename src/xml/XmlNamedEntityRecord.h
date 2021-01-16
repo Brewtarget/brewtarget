@@ -36,9 +36,11 @@
 
 /////////////////
 //
-// TODO Still need to sort out MashStep getting pointer to the Mash
+// TODO Still need to test MashStep and Mash
 //
 // TODO Still need to do Recipe
+//
+// TODO What about BrewNotes
 //
 /////////////////
 
@@ -128,60 +130,22 @@ template<class NE>
 class XmlNamedEntityRecord : public XmlRecord {
 public:
    /**
-    * \brief This constructor does all the boilerplate work and then calls init() to do the template parameter specific
-    *        stuff.  (We could do template specialisations of the constructor and do away with init(), but it's a lot
-    *        of copy-and-paste code.)  TODO EXPLAIN THIS BETTER
+    * \brief This constructor really just has to create an appropriate new subclass of NamedEntity.  Everything else is
+    *        done in the base class.
     */
    XmlNamedEntityRecord(XmlCoding const & xmlCoding,
                         QString const recordName,
                         XmlRecord::FieldDefinitions const & fieldDefinitions) :
    XmlRecord{xmlCoding,
              recordName,
-             fieldDefinitions},
-   instanceNamesAreUnique{true}, // This is the default value, but might be changed in init()
-   entityToPopulate{new NE{"Empty Object"} } {
-      this->init();
+             fieldDefinitions} {
+      this->namedEntityRaiiContainer.reset(new NE{"Empty Object"});
+      this->namedEntity = this->namedEntityRaiiContainer.get();
       return;
    }
 
-   /**
-    * \brief Called by the constructor to the template parameter specific initialisation.
-    *
-    *        We only use template specialisations of this member function, so just declare here and put specialisation
-    *        definitions in xml/XmlNamedEntityRecord.cpp
-    */
-   void init();
-
 protected:
 
-   /**
-    * \brief Constructor for derived classes to call
-    * \param recordName Name of the type of XML record we are parsing (eg "HOP").
-    * \param uniquenessOfInstanceNames If \b EachInstanceNameShouldBeUnique, then we try to ensure that what we load in
-    *        does not create duplicate names.  Eg, if we already have a Recipe called "Oatmeal Stout" and then read in
-    *        a (different) recipe with the same name, then we will change the name of the newly read-in one to "Oatmeal
-    *        Stout (1)" (or "Oatmeal Stout (2)" if "Oatmeal Stout (1)" is taken, and so on).  Where we don't care about
-    *        duplicate names (eg loading in MashStep records), this parameter should be set to
-    *        \b InstancesWithDuplicateNamesOk.
-    * \param fieldDefinitions A list of fields we expect to find in this record (other fields will be ignored) and how
-    *                         they relate to Brewtarget objects.  See class description for more details.
-    * \param entityToPopulate A new/empty instance of a suitable subclass of NamedEntity for us to populate (eg a Hop if
-    *        we are reading a HOP record)
-    */
-//   XmlNamedEntityRecord(XmlCoding const & xmlCoding,
-//                        QString const recordName,
-//                        NameUniqueness uniquenessOfInstanceNames,
-//                        QVector<Field> const & fieldDefinitions,
-//                        NamedEntity * entityToPopulate);
-//
-   /**
-    * \brief Finds the first instance of \b T with \b name() matching \b nameToFind.  (Child classes should implement
-    *        this virtual member function by making a suitable call to the templated static function of the same name.)
-    * \param nameToFind
-    * \return A pointer to a T with a matching \b name(), if there is one, or \b nullptr if not.  Note that this function
-    *         does not tell you whether more than one T has the name \b nameToFind
-    */
-//   virtual NamedEntity * findByName(QString nameToFind) = 0;
    /**
     * \brief Finds the first instance of \b NE with \b name() matching \b nameToFind.  This is used to avoid name
     *        clashes when loading some subclass of NamedEntity (eg Hop, Yeast, Equipment, Recipe) from an XML file (eg
@@ -196,7 +160,7 @@ protected:
     * \return A pointer to a \b NE with a matching \b name(), if there is one, or \b nullptr if not.  Note that this
     *         function does not tell you whether more than one \b NE has the name \b nameToFind
     */
-   NamedEntity * findByName(QString nameToFind) {
+   virtual NamedEntity * findByName(QString nameToFind) {
       QList<NE *> listOfAllStored = Database::instance().getAll<NE>();
       auto found = std::find_if(listOfAllStored.begin(),
                                 listOfAllStored.end(),
@@ -206,80 +170,6 @@ protected:
       }
       return *found;
    }
-
-public:
-
-   /**
-    * \brief Implementation of \b XmlRecord::storeField()
-    */
-   virtual void storeField(Field const & fieldDefinition,
-                           QVariant parsedValue) {
-
-      if (!this->entityToPopulate->setProperty(fieldDefinition.propertyName, parsedValue)) {
-         //
-         // It's a coding error if we are trying to read and store a field that does not exist on the object we are
-         // loading (because we only try to store fields we (a) recognise and (b) are interested in).  Nonetheless, if
-         // asserts are disabled, we may be able to continue past this coding error by ignoring the current field.
-         //
-         Q_ASSERT(false && "Trying to update undeclared property");
-         qCritical() <<
-            Q_FUNC_INFO << "Trying to update undeclared property " << fieldDefinition.propertyName << " of " <<
-            this->entityToPopulate->metaObject()->className();
-      }
-
-      return;
-   }
-
-
-   /**
-    * \brief Implementation of \b XmlRecord::normaliseAndStoreInDb(). Child classes should extend this member
-    *        function for any class-specific logic.
-    */
-   virtual bool normaliseAndStoreInDb(QTextStream & userMessage,
-                                      XmlRecordCount & stats) {
-      if (this->instanceNamesAreUnique) {
-         QString currentName = this->entityToPopulate->name();
-
-         for (NamedEntity * matchingEntity = this->findByName(currentName);
-            nullptr != matchingEntity;
-            matchingEntity = this->findByName(currentName)) {
-
-            qDebug() <<
-               Q_FUNC_INFO << "Existing " << this->recordName << "named" << currentName << "was" <<
-               ((nullptr == matchingEntity) ? "not" : "") << "found";
-
-            XmlRecord::modifyClashingName(currentName);
-
-            //
-            // Now the for loop will search again with the new name
-            //
-            qDebug() << Q_FUNC_INFO << "Trying " << currentName;
-         }
-
-         this->entityToPopulate->setName(currentName);
-      }
-
-      // Now we're ready to store in the DB, something the NamedEntity knows how to make happen
-      this->entityToPopulate->insertInDatabase();
-
-      // Once we've stored the object, we no longer have to take responsibility for destroying it because its registry
-      // (currently the Database singleton) will now own it.
-      this->entityToPopulate.release();
-
-      stats.processedOk(this->recordName.toLower());
-
-      return true;
-   }
-
-protected:
-
-   bool instanceNamesAreUnique;
-
-   // It's the job of each subclass to create a suitable object (Hop, Yeast, etc)
-   // Once the object is populated, if we give ownership to something else (eg Database class), we should call
-   // release(), otherwise, entityToPopulate will get destroyed when the XmlNamedEntityRecord containing it goes out of
-   // scope.
-   std::unique_ptr<NamedEntity> entityToPopulate;
 
 };
 

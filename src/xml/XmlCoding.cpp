@@ -66,7 +66,7 @@ bool XmlCoding::loadNormaliseAndStoreInDb(xalanc::DOMSupport & domSupport,
       return false;
    }
 
-   if (!rootRecord->normaliseAndStoreInDb(userMessage, stats)) {
+   if (!rootRecord->normaliseAndStoreInDb(nullptr, userMessage, stats)) {
       return false;
    }
 

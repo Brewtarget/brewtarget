@@ -69,6 +69,11 @@ public:
                   bool t_display = false, QString folder = QString());
    NamedEntity( NamedEntity const& other );
 
+   // Our destructor needs to be virtual because we sometimes point to an instance of a derived class through a pointer
+   // to this class -- ie NamedEntity * namedEntity = new Hop() and suchlike.  We do already get a virtual destructor by
+   // virtue of inheriting from QObject, but this declaration does no harm.
+   virtual ~NamedEntity() = default;
+
    // Everything that inherits from BeerXML has a name, delete, display and a folder
    Q_PROPERTY( QString name   READ name WRITE setName )
    Q_PROPERTY( bool deleted   READ deleted WRITE setDeleted )

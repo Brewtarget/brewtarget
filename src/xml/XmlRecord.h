@@ -28,6 +28,7 @@
 #include <xalanc/XalanDOM/XalanNode.hpp>
 #include <xalanc/XPath/NodeRefList.hpp>
 
+#include "model/NamedEntity.h"
 #include "xml/XmlRecordCount.h"
 #include "xml/XQString.h"
 
@@ -50,16 +51,36 @@ class XmlCoding;
 ///
 ///
 /**
- * Broadly speaking we think of an "brewing" XML document (eg a BeerXML document) as a tree of "records", and of each
- * of these "records" being fundamentally one of two types.  (Note that this is a simpler, and subtly different, way of
- * abstracting things than the BeerXML terminology, which distinguishes between "records" and "record sets".)
+ * Broadly speaking we think of an "brewing" XML document (eg a BeerXML document) as a tree of "records".  (Note that
+ * this is a simpler, and subtly different, way of abstracting things than the BeerXML terminology, which distinguishes
+ * between "records" and "record sets".)
  *
- * In our model, both types of record can themselves contain other records.  In fact, the simpler of our two types of
- * record, which we represent with \b XmlRecord, can only do this.  It is just a grouping record that contain other
- * records.  The other type of record, which we represent with (specialisations of) \b XmlNamedEntityRecord, is a data
- * record.  It corresponds to an object of a subclass of \b NamedEntity (ie a Hop, a Yeast, a Recipe, an  Equipment, a Style,
- * etc) and so can contain other records when this makes sense.  Eg a recipe record will usually contain a style record,
- * one ore more hop records, and so on.  Similarly, a mash record will contain a number of mash step records.
+ * In our model, a record usually corresponds to some subclass of \b NamedEntity (ie a Hop, a Yeast, a Recipe, an
+ * Equipment, a Style, etc) and so can contain other records when this makes sense.  Eg a recipe record will usually
+ * contain a style record, one ore more hop records, and so on.  Similarly, a mash record will contain a number of mash
+ * step records.
+ *
+ * However, there is one special circumstance, the root record of the document, which is just a container for other
+ * records.
+ *
+ * Most of the generic functionality for a record is implemented in the \b XmlRecord class (which includes handling the
+ * special case of the root record).  Some code is class-specific (eg creating a Hop object to read a hop record into)
+ * but a lot of this can be handled by the templated class \b XmlNamedEntityRecord which extends \b XmlRecord:
+ *    \b XmlNamedEntityRecord<Equipment> suffices to read Equipment records
+ *    \b XmlNamedEntityRecord<Fermentable> suffices to read Fermentable records
+ *    \b XmlNamedEntityRecord<Hop> suffices to read Hop records
+ *    \b XmlNamedEntityRecord<Misc> suffices to read Misc records
+ *    \b XmlNamedEntityRecord<Style> suffices to read Style records
+ *    \b XmlNamedEntityRecord<Water> suffices to read Water records
+ *    \b XmlNamedEntityRecord<Yeast> suffices to read Yeast records
+ * For a couple of other cases, this needs to be extended further:
+ *    \b XmlMashRecord : public XmlNamedEntityRecord<Mash> - handles fact that Mash - contains MashStep
+ *    \b XmlMashStepRecord: public XmlNamedEntityRecord<MashStep> - handles fact that MashStep needs to
+ *                                                                                  know its Mash
+ *    \b XmlRecipeRecord : public XmlNamedEntityRecord<Recipe> - handles fact that Recipe contains lots
+ *                                                                              of other things
+ *
+ * BELOW CAN PROBABLY BE DELETED, BUT CHECK!
  *
  * Thus \b XmlNamedEntityRecord inherits from (ie generalises) \b XmlRecord.  (Actually \b XmlNamedEntityRecord is a
  * templated class so a hop record will be processed by \b XmlNamedEntityRecord<Hop>, a recipe record by
@@ -194,11 +215,10 @@ public:
    QString const & getRecordName() const;
 
    /**
-    * \brief From the supplied record (ie node) in an XML document, load into memory the data it contains, including
-    *        any other records nested inside it.  Although most validation should have been done by the XSD, if there
-    *        are any rules that cannot be expressed in the XSD then they should be done in this method.
+    * TODO Get rid of fieldsRead
     *
-    * TBD DOES THIS NEED TO BE VIRTUAL ANY MORE?
+    * \brief From the supplied record (ie node) in an XML document, load into memory the data it contains, including
+    *        any other records nested inside it.
     *
     * \param domSupport
     * \param rootNodeOfRecord
@@ -209,29 +229,23 @@ public:
     *
     * \return \b true if load succeeded, \b false if there was an error
     */
-   virtual bool load(xalanc::DOMSupport & domSupport,
-                     xalanc::XalanNode * rootNodeOfRecord,
-                     QTextStream & userMessage,
-                     std::shared_ptr< QHash<QString, QVariant> > fieldsRead = nullptr);
-
-   /**
-    * \brief Store the value of a field we have read in.  TBD NB the default implementation of this does nothing, as it is not required for pure container records (ie records that only contain other records).  Child
-    *        classes should override this method.
-    * \param fieldDefinition
-    * \param parsedValue
-    */
-   virtual void storeField(Field const & fieldDefinition,
-                           QVariant parsedValue);
+   bool load(xalanc::DOMSupport & domSupport,
+             xalanc::XalanNode * rootNodeOfRecord,
+             QTextStream & userMessage,
+             std::shared_ptr< QHash<QString, QVariant> > fieldsRead = nullptr);
 
    /**
     * \brief Once the record (including all its sub-records) is loaded into memory, we this function does any final
     *        validation and data correction before then storing the object(s) in the database.  Most validation should
-    *        already have been done via the XSD, but there are some validation rules have to be done in code, in
-    *        particular checking for duplicates and name clashes.
+    *        already have been done via the XSD, but there are some validation rules have to be done in code, including
+    *        checking for duplicates and name clashes.
     *
     *        Child classes may override this function to extend functionality but should make sure to call this base
     *        class version to ensure child nodes are saved.
     *
+    * \param containingEntity If not null, this is the entity that contains this one.  Eg, for a MashStep it should
+    *                         always be the containing Mash.  For a Style inside a Recipe, this will be a pointer to
+    *                         the Recipe, but for a freestanding Style, this will be null.
     * \param userMessage Where to append any error messages that we want the user to see on the screen
     * \param stats This object keeps tally of how many records (of each type) we skipped or stored
     *
@@ -239,8 +253,13 @@ public:
     *         skipping over duplicates nor amending names counts as an error.  The skipping or amending will be logged,
     *         but it will not prevent the funciton from returning \b true.
     */
-   virtual bool normaliseAndStoreInDb(QTextStream & userMessage,
+   virtual bool normaliseAndStoreInDb(NamedEntity * containingEntity,
+                                      QTextStream & userMessage,
                                       XmlRecordCount & stats);
+
+   bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
+                                          XmlRecordCount & stats);
+
 
 private:
    /**
@@ -253,11 +272,55 @@ private:
                          QTextStream & userMessage);
 
 protected:
+   /**
+    * \brief Finds the first instance of \b NE with \b name() matching \b nameToFind.  This is used to avoid name
+    *        clashes when loading some subclass of NamedEntity (eg Hop, Yeast, Equipment, Recipe) from an XML file (eg
+    *        if are reading in a Recipe called "Oatmeal Stout" then this function can check whether we already have a
+    *        Recipe with that name so that, assuming the new one is not a duplicate, we can amend its name to "Oatmeal
+    *        Stout (1)" or some such.
+    *
+    *        Note child classes need to override this for the subclass of NamedEntity they handle.
+    *        The default implementation does nothing and always returns \b nullptr (because it should never actually
+    *        get called).
+    *
+    * \param nameToFind
+    * \return A pointer to a \b NE with a matching \b name(), if there is one, or \b nullptr if not.  Note that this
+    *         function does not tell you whether more than one \b NE has the name \b nameToFind
+    */
+   virtual NamedEntity * findByName(QString nameToFind);
+
    static void modifyClashingName(QString & candidateName);
 
-   XmlCoding const &      xmlCoding;
-   QString const          recordName;
+   XmlCoding const &        xmlCoding;
+   QString const            recordName;
    FieldDefinitions const & fieldDefinitions;
+
+   // If this is true (the default), then, in normaliseAndStoreInDb(), before storing, we try to ensure that what we
+   // load in does not create duplicate names.  Eg, if we already have a Recipe called "Oatmeal Stout" and then read in
+   // a (different) recipe with the same name, then we will change the name of the newly read-in one to "Oatmeal Stout
+   // (1)" (or "Oatmeal Stout (2)" if "Oatmeal Stout (1)" is taken, and so on).  For those NamedEntity subclasses where
+   // we don't care about duplicate names (eg MashStep records), this attribute should be set to false.
+   bool instanceNamesAreUnique;
+
+   NamedEntity *            namedEntity; // This is null for the root record of a document
+
+   //
+   // If we created a new NamedEntity (ie Hop/Yeast/Recipe/etc) object to populate with data read in from an XML file,
+   // then we need to ensure it is properly destroyed if we abort that processing.  Putting it in this RAII container
+   // handles that automatically for us.
+   //
+   // Once the object is populated, and we give ownership to something else (eg Database class), we should call
+   // release(), because we no longer want the new Hop/Yeast/Recipe/etc object to be destroyed when the
+   // XmlNamedEntityRecord is destroyed (typically at end of document processing).
+   //
+   // HOWEVER, we might still need access to the object even after we are no longer its owner.  This is why we also
+   // have this->namedEntity.
+   //
+   // An alternative approach would be to do replace this->namedEntityRaiiContainer with some boolean flag saying
+   // whether we own the object and then write a custom destructor to check the flag and delete this->namedEntity if
+   // necessary.
+   //
+   std::unique_ptr<NamedEntity> namedEntityRaiiContainer;
 
    /**
     * Keep track of any child records

@@ -26,15 +26,15 @@
 
 #include "xml/XmlCoding.h"
 
-template<> void XmlNamedEntityRecord<Hop>::init()         { return; }
-template<> void XmlNamedEntityRecord<Fermentable>::init() { return; }
-template<> void XmlNamedEntityRecord<Yeast>::init()       { return; }
-template<> void XmlNamedEntityRecord<Misc>::init()        { return; }
-template<> void XmlNamedEntityRecord<Water>::init()       { return; }
-template<> void XmlNamedEntityRecord<Style>::init()       { return; }
-template<> void XmlNamedEntityRecord<MashStep>::init()    { this->instanceNamesAreUnique = false; return; }
-template<> void XmlNamedEntityRecord<Mash>::init()        { return; }
-template<> void XmlNamedEntityRecord<Equipment>::init()   { return; }
+//template<> void XmlNamedEntityRecord<Hop>::init()         { return; }
+//template<> void XmlNamedEntityRecord<Fermentable>::init() { return; }
+//template<> void XmlNamedEntityRecord<Yeast>::init()       { return; }
+//template<> void XmlNamedEntityRecord<Misc>::init()        { return; }
+//template<> void XmlNamedEntityRecord<Water>::init()       { return; }
+//template<> void XmlNamedEntityRecord<Style>::init()       { return; }
+//template<> void XmlNamedEntityRecord<MashStep>::init()    { this->instanceNamesAreUnique = false; return; } /// TODO Do this in XmlMashStepRecord
+//template<> void XmlNamedEntityRecord<Mash>::init()        { return; }
+//template<> void XmlNamedEntityRecord<Equipment>::init()   { return; }
 
 
 /*

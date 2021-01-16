@@ -77,11 +77,11 @@
 #include "water.h"
 #include "salt.h"
 #include "yeast.h"
-#include "xml/BeerXmlMashRecord.h"
-#include "xml/BeerXmlMashStepRecord.h"
 #include "xml/BtDomDocumentOwner.h"
 #include "xml/BtDomErrorHandler.h"
 #include "xml/XercesHelpers.h"
+#include "xml/XmlMashRecord.h"
+#include "xml/XmlMashStepRecord.h"
 #include "xml/XmlNamedEntityRecord.h"
 #include "xml/XmlCoding.h"
 #include "xml/XmlRecord.h"
@@ -934,8 +934,8 @@ XmlCoding const BeerXML::impl::BEER_XML_1_CODING{
       {"MISC",        {&XmlCoding::construct< XmlNamedEntityRecord<Misc> >,        &BEER_XML_MISC_RECORD_FIELDS} },
       {"WATER",       {&XmlCoding::construct< XmlNamedEntityRecord<Water> >,       &BEER_XML_WATER_RECORD_FIELDS} },
       {"STYLE",       {&XmlCoding::construct< XmlNamedEntityRecord<Style> >,       &BEER_XML_STYLE_RECORD_FIELDS} },
-      {"MASH_STEP",   {&XmlCoding::construct< BeerXmlMashStepRecord >,             &BEER_XML_MASH_STEP_RECORD_FIELDS} },
-      {"MASH",        {&XmlCoding::construct< BeerXmlMashRecord >,                 &BEER_XML_MASH_RECORD_FIELDS} },
+      {"MASH_STEP",   {&XmlCoding::construct< XmlMashStepRecord >,                 &BEER_XML_MASH_STEP_RECORD_FIELDS} },
+      {"MASH",        {&XmlCoding::construct< XmlMashRecord >,                     &BEER_XML_MASH_RECORD_FIELDS} },
 //      {"RECIPE",       nullptr}, //TODO
       {"EQUIPMENT",   {&XmlCoding::construct< XmlNamedEntityRecord<Equipment> >,   &BEER_XML_EQUIPMENT_RECORD_FIELDS} }
    }
