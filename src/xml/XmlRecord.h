@@ -34,126 +34,20 @@
 
 class XmlCoding;
 
-///
-/// XmlCoding - provides the look-up for XmlRecords
-///
-/// XmlRecord
-///   recordName = name of the XML tag containing this record
-///   fieldDefinitions = the fields we expect to find in this record (other fields will be ignored)
-///   XALAN_NODE_TYPES
-///
-/// XmlNamedEntityRecord aka Record corresponding to a NamedEntity
-///    entityToPopulate = namedEntityToPopulate
-///    uniquenessOfInstanceNames
-///    fieldsRead - though we might ditch this
-///
-/// XmlMultipleRecord aka RecordSet corresponding to a collection of XmlRecords records
-///
-///
-/**
- * Broadly speaking we think of an "brewing" XML document (eg a BeerXML document) as a tree of "records".  (Note that
- * this is a simpler, and subtly different, way of abstracting things than the BeerXML terminology, which distinguishes
- * between "records" and "record sets".)
- *
- * In our model, a record usually corresponds to some subclass of \b NamedEntity (ie a Hop, a Yeast, a Recipe, an
- * Equipment, a Style, etc) and so can contain other records when this makes sense.  Eg a recipe record will usually
- * contain a style record, one ore more hop records, and so on.  Similarly, a mash record will contain a number of mash
- * step records.
- *
- * However, there is one special circumstance, the root record of the document, which is just a container for other
- * records.
- *
- * Most of the generic functionality for a record is implemented in the \b XmlRecord class (which includes handling the
- * special case of the root record).  Some code is class-specific (eg creating a Hop object to read a hop record into)
- * but a lot of this can be handled by the templated class \b XmlNamedEntityRecord which extends \b XmlRecord:
- *    \b XmlNamedEntityRecord<Equipment> suffices to read Equipment records
- *    \b XmlNamedEntityRecord<Fermentable> suffices to read Fermentable records
- *    \b XmlNamedEntityRecord<Hop> suffices to read Hop records
- *    \b XmlNamedEntityRecord<Misc> suffices to read Misc records
- *    \b XmlNamedEntityRecord<Style> suffices to read Style records
- *    \b XmlNamedEntityRecord<Water> suffices to read Water records
- *    \b XmlNamedEntityRecord<Yeast> suffices to read Yeast records
- * For a couple of other cases, this needs to be extended further:
- *    \b XmlMashRecord : public XmlNamedEntityRecord<Mash> - handles fact that Mash - contains MashStep
- *    \b XmlMashStepRecord: public XmlNamedEntityRecord<MashStep> - handles fact that MashStep needs to
- *                                                                                  know its Mash
- *    \b XmlRecipeRecord : public XmlNamedEntityRecord<Recipe> - handles fact that Recipe contains lots
- *                                                                              of other things
- *
- * BELOW CAN PROBABLY BE DELETED, BUT CHECK!
- *
- * Thus \b XmlNamedEntityRecord inherits from (ie generalises) \b XmlRecord.  (Actually \b XmlNamedEntityRecord is a
- * templated class so a hop record will be processed by \b XmlNamedEntityRecord<Hop>, a recipe record by
- * \b XmlNamedEntityRecord<Recipe>, and so on.)  In both cases, each record that we're parsing (either reading from or
- * writing to an XML file) is represented by an object of type \b XmlRecord or some subclass thereof.
- *
- * Each \b XmlRecord object has one or more fields.   Each field is either another \b XmlRecord or a simple value (ie a
- * string, some sort of number, a boolean or an enum).  There may be further constraints on these fields, eg a number
- * that is only supposed to be between 0 and 100, but we mostly do not need to worry about them here.  Data that we are
- * exporting to an XML document is assumed to be valid already.  And data we are importing from an XML document is
- * validated against an XML Schema Document (XSD).
- *
- * In a given type of record, each field has a type (\b XmlRecord::FieldType) and an XPath within that containing
- * record.  There can be multiple instances of a field in a record (but all these instances must be of the same type,
- * and we currently only need to support multiple instances where that type is \b Record).  Where a field is a record,
- * its XML tag tells us what type of record it is (via a look-up explained below).  The use of XPaths is a key
- * simplification, as the following example illustrates.  Consider a simplified BeerXML RECIPE record:
- *    <RECIPE>
- *       <NAME>Oatmeal Stout</NAME>
- *       <STYLE>...</STYLE>
- *       <HOPS>
- *          <HOP><NAME>Fuggle</NAME>...</HOP>
- *          <HOP><NAME>Golding</NAME>...</HOP>
- *       </HOPS>
- *       ...
- *    <RECIPE>
- * In our model the part of the RECIPE record shown here has three fields:
- *    • NAME, which is a string, and of which there is one instance
- *    • STYLE, which is a record (of type \b XmlNamedEntityRecord<Recipe>), and of which there is also one instance
- *    • HOPS/HOP, which is a record (of type \b XmlNamedEntityRecord<Hop>), and of which there are two instances
- * Using XPath saves us from having to create special processing to handle the <HOPS>...</HOPS> element.  We an just
- * "see through" it to the records it wraps.  Moreover, although the Fuggle and Golding hop fields have XPath
- * "HOPS/HOP", it is the HOP tag alone that tells us what type of record they are.
- *
- * For a given XML encoding (eg BeerXML 1.0) we have various bits of mapping data stored in an instance of \b XmlCoding.
- * These suffice for it to know, for any XML element in this encoding that holds a record (eg <HOP>...</HOP>):
- *    • Which class handles that type of record (eg \b XmlNamedEntityRecord<Hop>).  (Actually what we need to know is
- *      how to construct an instance of the class that handles this type of record.  So instead of storing a class name,
- *      we store a pointer to a function that can invoke the constructor on the class we want.)
- *    • For this class, what mappings are needed to construct an instance of it that works with this encoding.
- *      Specifically this is a list of field definitions, each being an \b XmlRecord::Field that holds.
- *       ‣ Field type (encodes as \b XmlRecord::FieldType enum)
- *       ‣ The XPath within this record of this field
- *       ‣ For a simple field that is not a record, where to store it (via the name of the name of the Q_PROPERTY of
- *         the subclass of \b NamedEntity that this type of record corresponds to).  This can be null for fields that
- *         either will not be stored or will be handled by special processing.  (TBD We could theoretically use
- *         Q_PROPERTY to store records inside their parents, provided we think about when to do it...)
- *       ‣ If the field type is an enum (XmlRecord::Enum) then we also have a mapping between the string representation (in
- *         the XML file) and our internal numeric representation.
- * Thus very little of the _code_ for handling XML is specific to a particular encoding, which should make it easy to
- * add support for new encodings (eg future versions of BeerXML).
- *
- *
- *
- *
- */
+/////////////////
+//
+// TODO Still need to test MashStep and Mash
+//
+// TODO Still need to do Recipe
+//
+// TODO What about BrewNotes
+//
+/////////////////
 
 
 /**
- * \brief \b XmlRecord is one of a set of classes for dealing reading/writing data from/to XML documents.
- *
- *        An \b XmlCoding object is a stateless object representing a particular XML encoding, eg BeerXML 1.0.
- *        Each such an encoding needs a number of classes corresponding to different types of "records".  For the most
- *        part, a record stores a subclass of \b NamedEntity (eg Hop, Yeast, Recipe, Equipment, Style) and so, for each
- *        subclass of \b NamedEntity, there is a subclass of \b XmlNamedEntityRecord that knows *** its encoding
- *        rules (ie how to )
- *  CHOP IN THE TEXT FROM ABOVE TODO TODO
- *
- *
- * provides a base class for representing how part of an XML document maps to and from either (a) a
- *        particular NamedEntity (eg Hop, Yeast, Recipe) or (b) a list/set of a particular NamedEntity (eg multiple
- *        Hops, multiple Recipes, etc).  \b XmlRecord itself handles It has two child classes, \b XmlNamedEntityRecord and \b XmlMultipleRecord.
- *        \b XmlNamedEntityRecord
+ * \brief This class and its derived classes represent a record in an XML document.  See comment in xml/XmlCoding.h for
+ *        more detail.
  */
 class XmlRecord {
 public:
@@ -257,10 +151,6 @@ public:
                                       QTextStream & userMessage,
                                       XmlRecordCount & stats);
 
-   bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
-                                          XmlRecordCount & stats);
-
-
 private:
    /**
     * \brief Load in child records.  It is for derived classes to determine whether and when they have child records to
@@ -272,6 +162,9 @@ private:
                          QTextStream & userMessage);
 
 protected:
+   bool normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
+                                          XmlRecordCount & stats);
+
    /**
     * \brief Finds the first instance of \b NE with \b name() matching \b nameToFind.  This is used to avoid name
     *        clashes when loading some subclass of NamedEntity (eg Hop, Yeast, Equipment, Recipe) from an XML file (eg
@@ -302,8 +195,6 @@ protected:
    // we don't care about duplicate names (eg MashStep records), this attribute should be set to false.
    bool instanceNamesAreUnique;
 
-   NamedEntity *            namedEntity; // This is null for the root record of a document
-
    //
    // If we created a new NamedEntity (ie Hop/Yeast/Recipe/etc) object to populate with data read in from an XML file,
    // then we need to ensure it is properly destroyed if we abort that processing.  Putting it in this RAII container
@@ -320,11 +211,12 @@ protected:
    // whether we own the object and then write a custom destructor to check the flag and delete this->namedEntity if
    // necessary.
    //
+   NamedEntity * namedEntity; // This is null for the root record of a document
    std::unique_ptr<NamedEntity> namedEntityRaiiContainer;
 
-   /**
-    * Keep track of any child records
-    */
+   //
+   // Keep track of any child records
+   //
    QMultiHash< QString, std::shared_ptr<XmlRecord> > childRecords;
 
    // See https://apache.github.io/xalan-c/api/XalanNode_8hpp_source.html for possible indexes into this array

@@ -32,13 +32,12 @@
  */
 class XmlMashRecord : public XmlNamedEntityRecord<Mash> {
 public:
-   XmlMashRecord(XmlCoding const & xmlCoding,
-                        QString const recordName,
-                        XmlRecord::FieldDefinitions const & fieldDefinitions) :
-   XmlNamedEntityRecord<Mash>{xmlCoding,
-                              recordName,
-                              fieldDefinitions} { return; }
+   // We only want to override one method, so the parent class's constructors are fine for us
+   using XmlNamedEntityRecord<Mash>::XmlNamedEntityRecord;
 
+   /**
+    * \brief Overrides (extends) XmlRecord::normaliseAndStoreInDb() to add extra clean-up logic
+    */
    virtual bool normaliseAndStoreInDb(NamedEntity * containingEntity,
                                       QTextStream & userMessage,
                                       XmlRecordCount & stats);

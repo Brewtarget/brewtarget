@@ -26,18 +26,12 @@
 class Mash;
 
 /**
- * \brief Loads a \b MashStep record in from an XML file.  This extends \b XmlNamedEntityRecord<MashStep> as there is
- *        some small additional logic required.
+ * \brief Loads a \b MashStep record in from an XML file.
  */
 class XmlMashStepRecord : public XmlNamedEntityRecord<MashStep> {
 public:
-
-   XmlMashStepRecord(XmlCoding const & xmlCoding,
-                        QString const recordName,
-                        XmlRecord::FieldDefinitions const & fieldDefinitions) :
-   XmlNamedEntityRecord<MashStep>{xmlCoding,
-                                  recordName,
-                                  fieldDefinitions} { return; }
+   // We only want to override one method, so the parent class's constructors are fine for us
+   using XmlNamedEntityRecord<MashStep>::XmlNamedEntityRecord;
 
    /**
     * \brief We override \b XmlNamedEntityRecord<MashStep>::normaliseAndStoreInDb because a MashStep can only be stored

@@ -191,7 +191,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/xml/XmlCoding.cpp
     ${SRCDIR}/xml/XmlMashRecord.cpp
     ${SRCDIR}/xml/XmlMashStepRecord.cpp
-    ${SRCDIR}/xml/XmlNamedEntityRecord.cpp
     ${SRCDIR}/xml/XmlRecord.cpp
     ${SRCDIR}/xml/XmlRecordCount.cpp
 )

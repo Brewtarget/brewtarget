@@ -18,33 +18,8 @@
  */
 #include "xml/XmlMashRecord.h"
 
-#include <memory> // For smart pointers
-
-#include <xalanc/XalanDOM/XalanNode.hpp>
-#include <xalanc/XPath/NodeRefList.hpp>
-#include <xalanc/XPath/XPathEvaluator.hpp>
-
 #include "database.h"
 
-/**
- * \brief BeerXmlSimpleRecord<Mash> specialisation for reading <MASH>...</MASH> BeerXML records
- * into \b Mash objects.  Note that this class is further specialised by \b BeerXmlMashRecord
- *
-template<>
-BeerXmlSimpleRecord<Mash>::BeerXmlSimpleRecord(XmlCoding const & xmlCoding) :
-   XmlNamedEntityRecord{xmlCoding,
-                        "MASH",
-                        XmlNamedEntityRecord::InstancesWithDuplicateNamesOk,
-                        MASH_RECORD_FIELDS,
-                        new Mash{"Empty Mash Object"}} {
-   return;
-}
-
-BeerXmlMashRecord::BeerXmlMashRecord(XmlCoding const & xmlCoding) :
-   BeerXmlSimpleRecord<Mash>{xmlCoding} {
-   return;
-}
-*/
 bool XmlMashRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
                                           QTextStream & userMessage,
                                           XmlRecordCount & stats) {
