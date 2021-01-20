@@ -1,6 +1,6 @@
 /*
  * WaterDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Philip G. Lee <rocketman768@gmail.com>
  *
@@ -159,7 +159,7 @@ void WaterDialog::setDigits(Water* target)
       double ppm = target->ppm(static_cast<Water::Ions>(i));
       double min_ppm = ppm * 0.95;
       double max_ppm = ppm * 1.05;
-      QStringList msgs = QStringList() 
+      QStringList msgs = QStringList()
          << tr("Minimum expected concentration is %1 ppm").arg(min_ppm)
          << tr("In range for target profile.")
          << tr("Maximum expected concentration is %1 ppm").arg(max_ppm);
@@ -181,7 +181,7 @@ void WaterDialog::setRecipe(Recipe *rec)
    m_salt_delegate->observeRecipe(m_rec);
 
    if ( mash == nullptr || mash->mashSteps().size() == 0 ) {
-      Brewtarget::logW(QString("Can not set water chemistry without a mash"));
+      qWarning() << QString("Can not set water chemistry without a mash");
       return;
    }
 
@@ -280,7 +280,7 @@ void WaterDialog::newTotals()
    double allTheWaters = mash->totalMashWater_l();
 
    if ( qFuzzyCompare(allTheWaters,0.0) ) {
-      Brewtarget::logW(QString("Can not set strike water chemistry without a mash"));
+      qWarning() << QString("Can not set strike water chemistry without a mash");
       return;
    }
    // Two major things need to happen here:
@@ -308,7 +308,7 @@ void WaterDialog::newTotals()
          Water::Ions ion = static_cast<Water::Ions>(i);
          double mPPM = modifier * m_base->ppm(ion);
          m_ppm_digits[i]->setText( m_salt_table_model->total(ion) / allTheWaters + mPPM, 0 );
-                                   
+
       }
       btDigit_ph->setText( calculateMashpH(), 2 );
 
@@ -499,11 +499,11 @@ void WaterDialog::saveAndClose()
 {
    m_salt_table_model->saveAndClose();
    if ( m_base != nullptr && m_base->cacheOnly() ) {
-      Database::instance().insertWater(m_base);
+      m_base->insertInDatabase();
       Database::instance().addToRecipe(m_rec,m_base,true);
    }
    if ( m_target != nullptr && m_target->cacheOnly() ) {
-      Database::instance().insertWater(m_target);
+      m_target->insertInDatabase();
       Database::instance().addToRecipe(m_rec,m_target,true);
    }
 

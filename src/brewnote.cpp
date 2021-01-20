@@ -1,6 +1,7 @@
 /*
  * brewnote.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -36,7 +37,7 @@
 #include "equipment.h"
 #include "mash.h"
 #include "yeast.h"
-
+#include "database.h"
 #include "TableSchemaConst.h"
 #include "BrewnoteSchema.h"
 
@@ -65,7 +66,7 @@ bool operator==(BrewNote const& lhs, BrewNote const& rhs)
 
 // Initializers
 BrewNote::BrewNote(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
      loading(false),
      m_brewDate(QDateTime()),
      m_fermentDate(QDateTime()),
@@ -102,7 +103,7 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key)
 }
 
 BrewNote::BrewNote(QDateTime dateNow, bool cache)
-   : BeerXMLElement(Brewtarget::BREWNOTETABLE,-1,QString(),true),
+   : Ingredient(Brewtarget::BREWNOTETABLE,-1,QString(),true),
      loading(false),
      m_brewDate(dateNow),
      m_fermentDate(QDateTime()),
@@ -139,7 +140,7 @@ BrewNote::BrewNote(QDateTime dateNow, bool cache)
 }
 
 BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolBNoteFermDate).toString(), rec.value(kcolDisplay).toBool()),
+   : Ingredient(table, key, rec.value(kcolBNoteFermDate).toString(), rec.value(kcolDisplay).toBool()),
      m_brewDate(QDateTime::fromString(rec.value(kcolBNoteBrewDate).toString(), Qt::ISODate)),
      m_fermentDate(QDateTime::fromString(rec.value(kcolBNoteFermDate).toString(), Qt::ISODate)),
      m_notes(rec.value(kcolBNoteNotes).toString()),
@@ -176,7 +177,7 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
 
 void BrewNote::populateNote(Recipe* parent)
 {
-
+   this->m_recipe = parent;
    Equipment* equip = parent->equipment();
    Mash* mash = parent->mash();
    QList<MashStep*> steps;
@@ -269,6 +270,7 @@ void BrewNote::populateNote(Recipe* parent)
 // This should allow the users to redo those calculations
 void BrewNote::recalculateEff(Recipe* parent)
 {
+   this->m_recipe = parent;
 
    QHash<QString,double> sugars;
 
@@ -283,7 +285,7 @@ void BrewNote::recalculateEff(Recipe* parent)
 }
 
 BrewNote::BrewNote(BrewNote const& other)
-   : BeerXMLElement(other),
+   : Ingredient(other),
      m_brewDate(other.m_brewDate),
      m_fermentDate(other.m_fermentDate),
      m_notes(other.m_notes),
@@ -631,6 +633,9 @@ void BrewNote::setBoilOff_l(double var)
 
 void BrewNote::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
+void BrewNote::setRecipe(Recipe * recipe) { this->m_recipe = recipe; }
+
+
 // Getters
 QDateTime BrewNote::brewDate() const { return m_brewDate; }
 QString BrewNote::brewDate_str() const { return m_brewDate.toString(); }
@@ -771,4 +776,8 @@ double BrewNote::calculateAttenuation_pct()
     setAttenuation(attenuation);
 
     return attenuation;
+}
+
+int BrewNote::insertInDatabase() {
+   return Database::instance().insertBrewNote(this, this->m_recipe);
 }

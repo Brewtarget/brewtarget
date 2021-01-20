@@ -1,6 +1,6 @@
 /*
  * WaterEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -45,7 +45,7 @@ void WaterEditor::setWater(Water *water)
    obs = water;
    if( obs )
    {
-      connect( obs, &BeerXMLElement::changed, this, &WaterEditor::changed );
+      connect( obs, &Ingredient::changed, this, &WaterEditor::changed );
       showChanges();
    }
 }
@@ -154,7 +154,7 @@ void WaterEditor::saveAndClose()
 
    if ( obs->cacheOnly() ) {
       qDebug() << Q_FUNC_INFO << "writing " << obs->name();
-      Database::instance().insertWater(obs);
+      obs->insertInDatabase();
    }
 
    setVisible(false);

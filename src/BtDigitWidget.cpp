@@ -64,11 +64,9 @@ void BtDigitWidget::display(QString str)
       display(m_lastNum,m_lastPrec);
    else
    {
-      Brewtarget::logW( 
-            QString("%1 : could not convert %2 to double")
+      qWarning() << QString("%1 : could not convert %2 to double")
             .arg(Q_FUNC_INFO)
-            .arg(str)
-      );
+            .arg(str);
       QLabel::setText("-");
    }
 }
@@ -175,7 +173,7 @@ void BtDigitWidget::setHighMsg( QString msg ) { m_high_msg = msg; update();}
 void BtDigitWidget::setMessages( QStringList msgs )
 {
    if ( msgs.size() != 3 ) {
-      Brewtarget::logW("Wrong number of messages");
+      qWarning() << "Wrong number of messages";
       return;
    }
    m_low_msg = msgs[0];
@@ -275,7 +273,7 @@ void BtDigitWidget::displayChanged(Unit::unitDisplay oldUnit, Unit::unitScale ol
       default:
          val = Brewtarget::toDouble(text(),&ok);
          if ( ! ok )
-            Brewtarget::logW( QString("%1: failed to convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(text()).arg(m_section).arg(m_editField) );
+            qWarning() << QString("%1: failed to convert %2 (%3:%4) to double").arg(Q_FUNC_INFO).arg(text()).arg(m_section).arg(m_editField);
          amt = displayAmount(val);
    }
    QLabel::setText(amt);
@@ -308,11 +306,11 @@ void BtDigitWidget::setText(QString amount, int precision)
    {
       amt = Brewtarget::toDouble(amount,&ok);
       if ( !ok ) {
-         Brewtarget::logW( QString("%1 could not convert %2 (%3:%4) to double")
+         qWarning() << QString("%1 could not convert %2 (%3:%4) to double")
                .arg(Q_FUNC_INFO)
                .arg(amount)
                .arg(m_section)
-               .arg(m_editField) );
+               .arg(m_editField);
       }
       m_lastNum = amt;
       m_lastPrec = precision;

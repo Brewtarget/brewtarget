@@ -37,7 +37,7 @@ void WaterButton::setRecipe(Recipe* rec)
 
    m_rec = rec;
    if ( m_rec && m_rec->waters().size() > 0 ) {
-      connect( m_rec, &BeerXMLElement::changed, this, &WaterButton::recChanged );
+      connect( m_rec, &Ingredient::changed, this, &WaterButton::recChanged );
       setWater( m_rec->waters().at(0) );
    }
    else {
@@ -52,7 +52,7 @@ void WaterButton::setWater(Water* water)
 
    m_water = water;
    if ( m_water ) {
-      connect( m_water, &BeerXMLElement::changed, this, &WaterButton::waterChanged );
+      connect( m_water, &Ingredient::changed, this, &WaterButton::waterChanged );
       setText( m_water->name() );
    }
    else {
@@ -73,6 +73,6 @@ void WaterButton::recChanged(QMetaProperty prop, QVariant val)
    QString propName(prop.name());
 
    if ( propName == "water" ) {
-      setWater( qobject_cast<Water*>(BeerXMLElement::extractPtr(val)) );
+      setWater( qobject_cast<Water*>(Ingredient::extractPtr(val)) );
    }
 }

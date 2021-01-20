@@ -20,12 +20,21 @@
 #include <QPixmap>
 #include "BtSplashScreen.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
 BtSplashScreen::BtSplashScreen(QWidget* parent) :
    QSplashScreen(parent, QPixmap(":/images/brewtarget.svg"))
 {
    setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
    showMessage(tr("Loading..."));
 }
+#else
+BtSplashScreen::BtSplashScreen(QScreen* parent) :
+   QSplashScreen(parent, QPixmap(":/images/brewtarget.svg"))
+{
+   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+   showMessage(tr("Loading..."));
+}
+#endif
 
 void BtSplashScreen::showMessage(QString const& message)
 {

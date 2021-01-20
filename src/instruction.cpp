@@ -32,7 +32,7 @@ QString Instruction::classNameStr()
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
@@ -43,7 +43,7 @@ Instruction::Instruction(Brewtarget::DBTable table, int key)
 }
 
 Instruction::Instruction(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
+   : Ingredient(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
@@ -54,7 +54,7 @@ Instruction::Instruction(QString name, bool cache)
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
      m_directions(rec.value(kcolInstructionDirections).toString()),
      m_hasTimer  (rec.value(kcolInstructionHasTimer).toBool()),
      m_timerValue(rec.value(kcolInstructionTimerValue).toString()),
@@ -105,7 +105,7 @@ void Instruction::setReagent(const QString& reagent)
 }
 */
 
-void Instruction::setInterval(double time) 
+void Instruction::setInterval(double time)
 {
    m_interval = time;
    if ( ! m_cacheOnly ) {
@@ -117,6 +117,8 @@ void Instruction::addReagent(const QString& reagent)
 {
    m_reagents.append(reagent);
 }
+
+void Instruction::setRecipe(Recipe * const recipe) { this->m_recipe = recipe; }
 
 void Instruction::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 // Accessors ==================================================================
@@ -135,3 +137,7 @@ double Instruction::interval() { return m_interval; }
 int Instruction::instructionNumber() const { return Database::instance().instructionNumber(this); }
 
 bool Instruction::cacheOnly() { return m_cacheOnly; }
+
+int Instruction::insertInDatabase() {
+   return Database::instance().insertInstruction(this, this->m_recipe);
+}

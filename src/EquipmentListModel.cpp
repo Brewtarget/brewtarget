@@ -44,7 +44,7 @@ void EquipmentListModel::addEquipment(Equipment* equipment)
    int size = equipments.size();
    beginInsertRows( QModelIndex(), size, size );
    equipments.append(equipment);
-   connect( equipment, &BeerXMLElement::changed, this, &EquipmentListModel::equipChanged );
+   connect( equipment, &Ingredient::changed, this, &EquipmentListModel::equipChanged );
    endInsertRows();
 }
 
@@ -71,7 +71,7 @@ void EquipmentListModel::addEquipments(QList<Equipment*> equips)
       equipments.append(tmp);
    
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &BeerXMLElement::changed, this, &EquipmentListModel::equipChanged );
+         connect( *i, &Ingredient::changed, this, &EquipmentListModel::equipChanged );
    
       endInsertRows();
    }
@@ -125,7 +125,7 @@ void EquipmentListModel::recChanged(QMetaProperty prop, QVariant val)
    QString propName(prop.name());
    if( propName == "equipment" )
    {
-      Equipment* newEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(val));
+      Equipment* newEquip = qobject_cast<Equipment*>(Ingredient::extractPtr(val));
       // Now do something with the equipment.
       Q_UNUSED(newEquip); // Until then, this will keep the compiler happy
    }
@@ -166,7 +166,7 @@ void EquipmentListModel::observeRecipe(Recipe* rec)
    recipe = rec;
    
    if( recipe )
-      connect( recipe, &BeerXMLElement::changed, this, &EquipmentListModel::recChanged );
+      connect( recipe, &Ingredient::changed, this, &EquipmentListModel::recChanged );
 }
 
 int EquipmentListModel::rowCount( QModelIndex const& parent ) const

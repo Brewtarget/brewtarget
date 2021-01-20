@@ -31,7 +31,9 @@ void importFromXml(const QString & filename);
 void createBlankDb(const QString & filename);
 
 int main(int argc, char **argv)
-{  
+{
+   QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+
    QApplication app(argc, argv);
    app.setOrganizationName("brewtarget");
 

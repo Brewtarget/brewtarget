@@ -1,7 +1,8 @@
 /*
  * fermentable.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -31,7 +32,7 @@
 
 #include "TableSchemaConst.h"
 #include "FermentableSchema.h"
-#define SUPER BeerXMLElement
+#define SUPER Ingredient
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
 
@@ -52,7 +53,7 @@ QString Fermentable::classNameStr()
 }
 
 Fermentable::Fermentable(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::FERMTABLE, -1, name, true),
+   : Ingredient(Brewtarget::FERMTABLE, -1, name, true),
      m_typeStr(QString()),
      m_type(static_cast<Fermentable::Type>(0)),
      m_amountKg(0.0),
@@ -77,7 +78,7 @@ Fermentable::Fermentable(QString name, bool cache)
 }
 
 Fermentable::Fermentable(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_typeStr(QString()),
      m_type(static_cast<Fermentable::Type>(0)),
      m_amountKg(0.0),
@@ -102,7 +103,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key)
 }
 
 Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_typeStr(rec.value(kcolFermType).toString()),
      m_type(static_cast<Fermentable::Type>(types.indexOf(m_typeStr))),
      m_amountKg(rec.value(kcolFermAmount).toDouble()),
@@ -127,7 +128,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Fermentable::Fermentable( Fermentable &other )
-        : BeerXMLElement( other ),
+        : Ingredient( other ),
      m_typeStr(other.m_typeStr),
      m_type(other.m_type),
      m_amountKg(other.m_amountKg),
@@ -368,7 +369,7 @@ void Fermentable::setAmount_kg( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Fermentable: negative amount: %1").arg(num) );
+      qWarning() << QString("Fermentable: negative amount: %1").arg(num);
       return;
    }
    else
@@ -383,7 +384,7 @@ void Fermentable::setAmount_kg( double num )
 void Fermentable::setInventoryAmount( double num )
 {
    if( num < 0.0 ) {
-      Brewtarget::logW( QString("Fermentable: negative inventory: %1").arg(num) );
+      qWarning() << QString("Fermentable: negative inventory: %1").arg(num);
       return;
    }
    else
@@ -397,7 +398,7 @@ void Fermentable::setInventoryAmount( double num )
 void Fermentable::setInventoryId( int key )
 {
    if( key < 1 ) {
-      Brewtarget::logW( QString("Fermentable: bad inventory id: %1").arg(key) );
+      qWarning() << QString("Fermentable: bad inventory id: %1").arg(key);
       return;
    }
    else
@@ -432,7 +433,7 @@ void Fermentable::setYield_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < yield < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < yield < 100: %1").arg(num);
    }
 }
 
@@ -440,7 +441,7 @@ void Fermentable::setColor_srm( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Fermentable: negative color: %1").arg(num) );
+      qWarning() << QString("Fermentable: negative color: %1").arg(num);
       return;
    }
    else
@@ -463,7 +464,7 @@ void Fermentable::setCoarseFineDiff_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < coarsefinediff < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < coarsefinediff < 100: %1").arg(num);
    }
 }
 
@@ -478,7 +479,7 @@ void Fermentable::setMoisture_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < moisture < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < moisture < 100: %1").arg(num);
    }
 }
 
@@ -486,7 +487,7 @@ void Fermentable::setDiastaticPower_lintner( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Fermentable: negative DP: %1").arg(num) );
+      qWarning() << QString("Fermentable: negative DP: %1").arg(num);
       return;
    }
    else
@@ -509,7 +510,7 @@ void Fermentable::setProtein_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < protein < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < protein < 100: %1").arg(num);
    }
 }
 
@@ -524,9 +525,29 @@ void Fermentable::setMaxInBatch_pct( double num )
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num) );
+      qWarning() << QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num);
    }
 }
 
 void Fermentable::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
+Ingredient * Fermentable::getParent() {
+   Fermentable * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().fermentable(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Fermentable::insertInDatabase() {
+   return Database::instance().insertFermentable(this);
+}

@@ -46,10 +46,11 @@ extern void qt_set_sequence_auto_mnemonic(bool b);
 #include <QMenu>
 #include <QMetaProperty>
 #include <QList>
+#include <QDebug>
 #include "UnitSystem.h"
 #include "Log.h"
 
-class BeerXMLElement;
+class Ingredient;
 class MainWindow;
 
 // Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
@@ -72,6 +73,7 @@ class Brewtarget : public QObject
    friend class RecipeFormatter;
    friend class Unit;
    friend class Database;
+   friend class BeerXML;
    friend class MainWindow;
    friend class Testing;
 
@@ -177,6 +179,8 @@ public:
    static const QDir getConfigDir();
    //! \return user-specified directory where the database files reside.
    static QDir getUserDataDir();
+   //! \return The System path for users applicationpath. on windows: c:\\users\\<USERNAME>\\AppData\\Roaming\\<APPNAME>
+   static QDir getDefaultUserDataDir();
    /*!
     * \brief Blocking call that executes the application.
     * \param userDirectory If !isEmpty, overwrites the current settings.
@@ -185,17 +189,8 @@ public:
    static int run(const QString &userDirectory = QString());
 
    static double toDouble(QString text, bool* ok = nullptr);
-   static double toDouble(const BeerXMLElement* element, QString attribute, QString caller);
+   static double toDouble(const Ingredient* element, QString attribute, QString caller);
    static double toDouble(QString text, QString caller);
-
-   //! \brief Log an error message.
-   static void logE( QString message );
-   //! \brief Log a warning message.
-   static void logW( QString message );
-   //! \brief Log an info message.
-   static void logI( QString message );
-   //! \brief Log a debug message.
-   static void logD( QString message );
 
    /*!
     *  \brief Displays an amount in the appropriate units.
@@ -217,7 +212,7 @@ public:
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
+   static QString displayAmount( Ingredient* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
 
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -246,7 +241,7 @@ public:
     * \param attribute the \c QObject::property of \c element that returns the
     *        amount we wish to display
     */
-   static double amountDisplay( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
+   static double amountDisplay( Ingredient* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
 
    //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
@@ -257,7 +252,7 @@ public:
    //! \brief Appropriate thickness units will be placed in \c *volumeUnit and \c *weightUnit.
    static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
 
-   static QPair<double,double> displayRange(BeerXMLElement* element, QObject *object, QString attribute, RangeType _type = DENSITY);
+   static QPair<double,double> displayRange(Ingredient* element, QObject *object, QString attribute, RangeType _type = DENSITY);
    static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
 
    //! \return SI amount for the string
@@ -357,8 +352,6 @@ private:
    static QDomDocument* optionsDoc;
    static QTranslator* defaultTrans;
    static QTranslator* btTrans;
-   //! \brief OS-Agnostic RAII style Thread-safe Log file.
-   static Log log;
    static QString currentLanguage;
    static QSettings btSettings;
    static bool userDatabaseDidNotExist;

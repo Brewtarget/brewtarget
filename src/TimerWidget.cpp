@@ -202,9 +202,9 @@ void TimerWidget::setSound(QString s)
     //Taken from old brewtarget timers
 #ifndef NO_QTMULTIMEDIA
    if( !playlist->clear() )
-      Brewtarget::logW(playlist->errorString());
+      qWarning() << playlist->errorString();
    if( !playlist->addMedia(QUrl::fromLocalFile(s)) )
-      Brewtarget::logW(playlist->errorString());
+      qWarning() << playlist->errorString();
    playlist->setCurrentIndex(0);
 #endif
 }

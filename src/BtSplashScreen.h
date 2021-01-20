@@ -36,7 +36,11 @@ class BtSplashScreen : public QSplashScreen
    Q_OBJECT
 
 public:
-   BtSplashScreen(QWidget* parent=0);
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
+   BtSplashScreen(QWidget* parent=nullptr);
+#else
+   BtSplashScreen(QScreen* parent=nullptr);
+#endif
 
    void showMessage(QString const& message);
 };

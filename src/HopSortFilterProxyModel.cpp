@@ -48,11 +48,11 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
       case HOPALPHACOL:
          lAlpha = Brewtarget::toDouble(leftHop.toString(), &ok );
          if ( ! ok )
-            Brewtarget::logW( QString("HopSortFilterProxyModel::lessThan() could not convert %1 to double").arg(leftHop.toString()));
+            qWarning() << QString("HopSortFilterProxyModel::lessThan() could not convert %1 to double").arg(leftHop.toString());
 
          rAlpha = Brewtarget::toDouble(rightHop.toString(), &ok );
          if ( ! ok )
-            Brewtarget::logW( QString("HopSortFilterProxyModel::lessThan() could not convert %1 to double").arg(rightHop.toString()));
+            qWarning() << QString("HopSortFilterProxyModel::lessThan() could not convert %1 to double").arg(rightHop.toString());
 
          return lAlpha < rAlpha;
 

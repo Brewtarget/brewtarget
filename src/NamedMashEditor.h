@@ -32,7 +32,7 @@ class NamedMashEditor;
 #include "MashListModel.h"
 #include "MashStepEditor.h"
 #include "EquipmentListModel.h"
-#include "BeerXMLSortProxyModel.h"
+#include "IngredientSortProxyModel.h"
 
 
 // Forward declarations.

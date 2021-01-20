@@ -1,6 +1,6 @@
 /*
  * SaltTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - swstim <swstim@gmail.com>
@@ -93,7 +93,7 @@ void SaltTableModel::observeRecipe(Recipe* rec)
    m_rec = rec;
    if ( m_rec ) {
       QList<Salt*> salts = m_rec->salts();
-      connect( m_rec, &BeerXMLElement::changed, this, &SaltTableModel::changed );
+      connect( m_rec, &Ingredient::changed, this, &SaltTableModel::changed );
       if (salts.size() > 0 ) {
          addSalts( salts );
       }
@@ -111,7 +111,7 @@ void SaltTableModel::addSalt(Salt* salt)
 
    beginInsertRows( QModelIndex(), saltObs.size(), saltObs.size() );
    saltObs.append(salt);
-   connect( salt, &BeerXMLElement::changed, this, &SaltTableModel::changed );
+   connect( salt, &Ingredient::changed, this, &SaltTableModel::changed );
    endInsertRows();
 
    if (parentTableWidget) {
@@ -136,7 +136,7 @@ void SaltTableModel::addSalts(QList<Salt*> salts)
       endInsertRows();
 
       foreach (Salt* i, tmp) {
-         connect( i, &BeerXMLElement::changed, this, &SaltTableModel::changed );
+         connect( i, &Ingredient::changed, this, &SaltTableModel::changed );
       }
 
    }
@@ -412,7 +412,7 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
 
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(saltObs.size()) ) {
-      Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
+      qWarning() << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -446,7 +446,7 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
          }
          return QVariant();
       default :
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return QVariant();
    }
 }
@@ -464,7 +464,7 @@ QVariant SaltTableModel::headerData( int section, Qt::Orientation orientation, i
          case SALTPCTACIDCOL:
                return  QVariant(tr("% Acid"));
          default:
-            Brewtarget::logW(tr("Bad column: %1").arg(section));
+            qWarning() << tr("Bad column: %1").arg(section);
             return QVariant();
       }
    }
@@ -539,7 +539,7 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
          break;
       default:
          retval = false;
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
    }
 
    if ( retval && row->addTo() != Salt::NEVER )
@@ -653,7 +653,7 @@ void SaltTableModel::saveAndClose()
    // we've added a new salt. Wonder if this will work?
    foreach( Salt* i, saltObs ) {
       if ( i->cacheOnly() && i->type() != Salt::NONE && i->addTo() != Salt::NEVER ) {
-         Database::instance().insertSalt(i);
+         i->insertInDatabase();
          Database::instance().addToRecipe(m_rec,i,true);
       }
    }
@@ -703,7 +703,7 @@ QWidget* SaltItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
          if ( ! m_mash->hasSparge() ) {
             for( int i = 2; i < 5; ++i ) {
                QStandardItem* entry = i_model->item(i);
-               if ( entry ) 
+               if ( entry )
                   entry->setEnabled(false);
             }
          }

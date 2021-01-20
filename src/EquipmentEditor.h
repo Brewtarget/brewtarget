@@ -37,6 +37,7 @@
 #include <QFormLayout>
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QEvent>
 
 #include "BtLabel.h"
 // Forward declarations
@@ -50,7 +51,7 @@ class BtVolumeLabel;
 class BtVolumeEdit;
 class Equipment;
 class EquipmentListModel;
-class BeerXMLSortProxyModel;
+class IngredientSortProxyModel;
 
 /*!
  * \class EquipmentEditor
@@ -180,7 +181,7 @@ protected:
 private:
    Equipment* obsEquip;
    EquipmentListModel* equipmentListModel;
-   BeerXMLSortProxyModel* equipmentSortProxyModel;
+   IngredientSortProxyModel* equipmentSortProxyModel;
 
    void showChanges();
 

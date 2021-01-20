@@ -87,7 +87,7 @@ double FermentableSortFilterProxyModel::toDouble(QVariant side) const
 
    amt = Brewtarget::toDouble(side.toString(), &ok);
    if ( ! ok )
-      Brewtarget::logW( QString("FermentableSortFilterProxyModel::lessThan could not convert %1 to double").arg(side.toString()));
+      qWarning() << QString("FermentableSortFilterProxyModel::lessThan could not convert %1 to double").arg(side.toString());
    return amt;
 }
 

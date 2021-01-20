@@ -50,6 +50,7 @@ static const QString kcolBNoteProjBoilGrav("projected_boil_grav");
 static const QString kcolBNoteProjVolIntoBoil("projected_vol_into_bk");
 static const QString kcolBNoteProjStrikeTemp("projected_strike_temp");
 static const QString kcolBNoteProjMashFinTemp("projected_mash_fin_temp");
+static const QString kcolBNoteProjFinTemp("projected_fin_temp");
 static const QString kcolBNoteProjOG("projected_og");
 static const QString kcolBNoteProjVolIntoFerm("projected_vol_into_ferm");
 static const QString kcolBNoteProjFG("projected_fg");

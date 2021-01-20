@@ -1,6 +1,7 @@
 /*
  * YeastTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -39,6 +40,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include "recipe.h"
+#include "MainWindow.h"
 
 YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
    : QAbstractTableModel(parent),
@@ -77,7 +79,7 @@ void YeastTableModel::addYeast(Yeast* yeast)
    int size = yeastObs.size();
    beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);
-   connect( yeast, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+   connect( yeast, &Ingredient::changed, this, &YeastTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
@@ -93,7 +95,7 @@ void YeastTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+      connect( recObs, &Ingredient::changed, this, &YeastTableModel::changed );
       addYeasts( recObs->yeasts() );
    }
 }
@@ -137,7 +139,7 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
       yeastObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+         connect( *i, &Ingredient::changed, this, &YeastTableModel::changed );
 
       endInsertRows();
    }
@@ -236,7 +238,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= static_cast<int>(yeastObs.size() ))
    {
-      Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
+      qWarning() << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -293,7 +295,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
                         );
 
       default :
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return QVariant();
    }
 }
@@ -319,7 +321,7 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
          case YEASTPRODIDCOL:
              return QVariant(tr("Product ID"));
          default:
-            Brewtarget::logW(tr("Bad column: %1").arg(section));
+            qWarning() << tr("Bad column: %1").arg(section);
             return QVariant();
       }
    }
@@ -360,32 +362,50 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTNAMECOL:
          if( ! value.canConvert(QVariant::String))
             return false;
-         row->setName(value.toString());
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "name",
+                                                  value.toString(),
+                                                  tr("Change Yeast Name"));
          break;
       case YEASTLABCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
-         row->setLaboratory(value.toString());
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "laboratory",
+                                                  value.toString(),
+                                                  tr("Change Yeast Laboratory"));
          break;
       case YEASTPRODIDCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
-         row->setProductID(value.toString());
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "productID",
+                                                  value.toString(),
+                                                  tr("Change Yeast Product ID"));
          break;
       case YEASTTYPECOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
-         row->setType(static_cast<Yeast::Type>(value.toInt()));
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "type",
+                                                  static_cast<Yeast::Type>(value.toInt()),
+                                                  tr("Change Yeast Type"));
          break;
       case YEASTFORMCOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
-         row->setForm(static_cast<Yeast::Form>(value.toInt()));
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "form",
+                                                  static_cast<Yeast::Form>(value.toInt()),
+                                                  tr("Change Yeast Form"));
          break;
       case YEASTINVENTORYCOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
-         row->setInventoryQuanta( value.toInt() );
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "inventoryQuanta",
+                                                  value.toInt(),
+                                                  tr("Change Yeast Inventory Unit Size")); // .:TBD:. MY 2020-12-11 Whilst it's admirably concise, I find "quanta" unclear, and I'm not sure it's that easy to translate either
          break;
       case YEASTAMOUNTCOL:
          if( ! value.canConvert(QVariant::String) )
@@ -393,11 +413,14 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
 
          unit = row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
 
-         row->setAmount(Brewtarget::qStringToSI(value.toString(),unit,dspUnit,dspScl));
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "amount",
+                                                  Brewtarget::qStringToSI(value.toString(), unit, dspUnit, dspScl),
+                                                  tr("Change Yeast Amount"));
          break;
 
       default:
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return false;
    }
    return true;

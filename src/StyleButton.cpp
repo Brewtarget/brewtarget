@@ -40,7 +40,7 @@ void StyleButton::setRecipe(Recipe* rec)
    _rec = rec;
    if( _rec )
    {
-      connect( _rec, &BeerXMLElement::changed, this, &StyleButton::recChanged );
+      connect( _rec, &Ingredient::changed, this, &StyleButton::recChanged );
       setStyle( _rec->style() );
    }
    else
@@ -55,7 +55,7 @@ void StyleButton::setStyle(Style* style)
    _style = style;
    if( _style )
    {
-      connect( _style, &BeerXMLElement::changed, this, &StyleButton::styleChanged );
+      connect( _style, &Ingredient::changed, this, &StyleButton::styleChanged );
       setText( _style->name() );
    }
    else
@@ -74,5 +74,5 @@ void StyleButton::recChanged(QMetaProperty prop, QVariant val)
    QString propName(prop.name());
 
    if( propName == "style" )
-      setStyle( qobject_cast<Style*>(BeerXMLElement::extractPtr(val)) );
+      setStyle( qobject_cast<Style*>(Ingredient::extractPtr(val)) );
 }

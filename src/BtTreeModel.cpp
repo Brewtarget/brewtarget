@@ -116,7 +116,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          _mimeType = "application/x-brewtarget-ingredient";
          break;
       default:
-         Brewtarget::logW(QString("Invalid treemask: %1").arg(type));
+         qWarning() << QString("Invalid treemask: %1").arg(type);
    }
 
    treeMask = type;
@@ -371,7 +371,7 @@ QVariant BtTreeModel::recipeHeader(int section) const
       return QVariant(tr("Style"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getRecipeHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getRecipeHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -385,7 +385,7 @@ QVariant BtTreeModel::equipmentHeader(int section) const
       return QVariant(tr("Boil Time"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getEquipmentHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getEquipmentHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -401,7 +401,7 @@ QVariant BtTreeModel::fermentableHeader(int section) const
       return QVariant(tr("Type"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getFermentableHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getFermentableHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -417,7 +417,7 @@ QVariant BtTreeModel::hopHeader(int section) const
       return QVariant(tr("Use"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getHopHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getHopHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -433,7 +433,7 @@ QVariant BtTreeModel::miscHeader(int section) const
       return QVariant(tr("Use"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getMiscHeader Bad column: %1").arg(section));
+   qWarning() << QString("BtTreeModel::getMiscHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -449,7 +449,7 @@ QVariant BtTreeModel::yeastHeader(int section) const
       return QVariant(tr("Form"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section) );
+   qWarning() << QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -469,7 +469,7 @@ QVariant BtTreeModel::styleHeader(int section) const
       return QVariant(tr("Guide"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section) );
+   qWarning() << QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -485,7 +485,7 @@ QVariant BtTreeModel::folderHeader(int section) const
          return QVariant(tr("FULLPATH"));
    }
 
-   Brewtarget::logW( QString("BtTreeModel::getFolderHeader Bad column: %1").arg(section) );
+   qWarning() << QString("BtTreeModel::getFolderHeader Bad column: %1").arg(section);
    return QVariant();
 }
 
@@ -510,7 +510,7 @@ QVariant BtTreeModel::waterHeader(int section) const
    case BtTreeItem::WATERpHCOL:
       return QVariant(tr("pH"));
    }
-   Brewtarget::logW( QString("BtTreeModel::waterHeader Bad column: %1").arg(section) );
+   qWarning() << QString("BtTreeModel::waterHeader Bad column: %1").arg(section);
    return QVariant();
 
 }
@@ -555,7 +555,7 @@ bool BtTreeModel::removeRows(int row, int count, const QModelIndex &parent)
 // =========================================================================
 
 // One find method for all things. This .. is nice
-QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
+QModelIndex BtTreeModel::findElement(Ingredient* thing, BtTreeItem* parent)
 {
    BtTreeItem* pItem;
    QList<BtTreeItem*> folders;
@@ -592,45 +592,45 @@ QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
    return QModelIndex();
 }
 
-QList<BeerXMLElement*> BtTreeModel::elements()
+QList<Ingredient*> BtTreeModel::elements()
 {
-   QList<BeerXMLElement*> elements;
+   QList<Ingredient*> elements;
    switch(treeMask)
    {
    case RECIPEMASK:
-      foreach( BeerXMLElement* elem, Database::instance().recipes() )
+      foreach( Ingredient* elem, Database::instance().recipes() )
          elements.append(elem);
       break;
    case EQUIPMASK:
-      foreach( BeerXMLElement* elem, Database::instance().equipments() )
+      foreach( Ingredient* elem, Database::instance().equipments() )
          elements.append(elem);
       break;
    case FERMENTMASK:
-      foreach( BeerXMLElement* elem, Database::instance().fermentables() )
+      foreach( Ingredient* elem, Database::instance().fermentables() )
          elements.append(elem);
       break;
    case HOPMASK:
-      foreach( BeerXMLElement* elem, Database::instance().hops() )
+      foreach( Ingredient* elem, Database::instance().hops() )
          elements.append(elem);
       break;
    case MISCMASK:
-      foreach( BeerXMLElement* elem, Database::instance().miscs() )
+      foreach( Ingredient* elem, Database::instance().miscs() )
          elements.append(elem);
       break;
    case YEASTMASK:
-      foreach( BeerXMLElement* elem, Database::instance().yeasts() )
+      foreach( Ingredient* elem, Database::instance().yeasts() )
          elements.append(elem);
       break;
    case STYLEMASK:
-      foreach( BeerXMLElement* elem, Database::instance().styles() )
+      foreach( Ingredient* elem, Database::instance().styles() )
          elements.append(elem);
       break;
    case WATERMASK:
-      foreach( BeerXMLElement* elem, Database::instance().waters() )
+      foreach( Ingredient* elem, Database::instance().waters() )
          elements.append(elem);
       break;
    default:
-      Brewtarget::logW(QString("Invalid treemask: %1").arg(treeMask));
+      qWarning() << QString("Invalid treemask: %1").arg(treeMask);
    }
    return elements;
 }
@@ -641,15 +641,15 @@ void BtTreeModel::loadTreeModel()
 
    QModelIndex ndxLocal;
    BtTreeItem* local = nullptr;
-   QList<BeerXMLElement*> elems = elements();
+   QList<Ingredient*> elems = elements();
 
-   foreach( BeerXMLElement* elem, elems ) {
+   foreach( Ingredient* elem, elems ) {
 
       if (! elem->folder().isEmpty() ) {
          ndxLocal = findFolder( elem->folder(), rootItem->child(0), true );
          // I cannot imagine this failing, but what the hell
          if ( ! ndxLocal.isValid() ) {
-            Brewtarget::logW("Invalid return from findFolder in loadTreeModel()");
+            qWarning() << "Invalid return from findFolder in loadTreeModel()";
             continue;
          }
          local = item(ndxLocal);
@@ -662,7 +662,7 @@ void BtTreeModel::loadTreeModel()
       }
 
       if ( ! insertRow(i,ndxLocal,elem,_type) ) {
-         Brewtarget::logW("Insert failed in loadTreeModel()");
+         qWarning() << "Insert failed in loadTreeModel()";
          continue;
       }
 
@@ -687,7 +687,7 @@ void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
       // will do that here too
       if ( ! insertRow(j, createIndex(i,0,temp), note, BtTreeItem::BREWNOTE) )
       {
-         Brewtarget::logW("Brewnote insert failed in loadTreeModel()");
+         qWarning() << "Brewnote insert failed in loadTreeModel()";
          continue;
       }
       observeElement(note);
@@ -745,7 +745,7 @@ Water* BtTreeModel::water(const QModelIndex &index) const
    return index.isValid() ? item(index)->water() : nullptr;
 }
 
-BeerXMLElement* BtTreeModel::thing(const QModelIndex &index) const
+Ingredient* BtTreeModel::thing(const QModelIndex &index) const
 {
    return index.isValid() ? item(index)->thing() : nullptr;
 }
@@ -899,7 +899,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
                failed = true;
             break;
          default:
-            Brewtarget::logW(QString("copySelected:: unknown type %1").arg(type(ndx)));
+            qWarning() << QString("copySelected:: unknown type %1").arg(type(ndx));
       }
       if ( failed ) {
          QMessageBox::warning(nullptr,
@@ -952,7 +952,7 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
             removeFolder(ndx);
             break;
          default:
-            Brewtarget::logW(QString("deleteSelected:: unknown type %1").arg(type(ndx)));
+            qWarning() << QString("deleteSelected:: unknown type %1").arg(type(ndx));
       }
    }
 }
@@ -968,7 +968,7 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
 //
 void BtTreeModel::folderChanged(QString name)
 {
-   BeerXMLElement* test = qobject_cast<BeerXMLElement*>(sender());
+   Ingredient* test = qobject_cast<Ingredient*>(sender());
    QModelIndex ndx, pIndex;
    bool expand = true;
 
@@ -980,7 +980,7 @@ void BtTreeModel::folderChanged(QString name)
    ndx = findElement(test);
    if ( ! ndx.isValid() )
    {
-      Brewtarget::logW("folderChanged:: could not find element");
+      qWarning() << "folderChanged:: could not find element";
       return;
    }
 
@@ -994,7 +994,7 @@ void BtTreeModel::folderChanged(QString name)
    // Remove it
    if ( ! removeRows(i, 1, pIndex) )
    {
-      Brewtarget::logW("folderChanged:: could not remove row");
+      qWarning() << "folderChanged:: could not remove row";
       return;
    }
 
@@ -1013,7 +1013,7 @@ void BtTreeModel::folderChanged(QString name)
 
    if ( !  insertRow(j,newNdx,test,_type) )
    {
-      Brewtarget::logW("folderChanged:: could not insert row");
+      qWarning() << "folderChanged:: could not insert row";
       return;
    }
    // If we have brewnotes, set them up here.
@@ -1274,7 +1274,7 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
 void BtTreeModel::elementChanged()
 {
-   BeerXMLElement* d = qobject_cast<BeerXMLElement*>(sender());
+   Ingredient* d = qobject_cast<Ingredient*>(sender());
    if( !d )
       return;
 
@@ -1291,18 +1291,18 @@ void BtTreeModel::elementChanged()
  * liners is required to give the right signature and to be able to call
  * addElement() properly
  */
-void BtTreeModel::elementAdded(Recipe* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementAdded(Equipment* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementAdded(Fermentable* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementAdded(Hop* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementAdded(Misc* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementAdded(Style* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementAdded(Yeast* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementAdded(BrewNote* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementAdded(Water* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
+void BtTreeModel::elementAdded(Recipe* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementAdded(Equipment* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementAdded(Fermentable* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementAdded(Hop* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementAdded(Misc* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementAdded(Style* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementAdded(Yeast* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementAdded(BrewNote* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementAdded(Water* victim) { elementAdded(qobject_cast<Ingredient*>(victim)); }
 
 // I guess this isn't too bad. Better than this same function copied 7 times
-void BtTreeModel::elementAdded(BeerXMLElement* victim)
+void BtTreeModel::elementAdded(Ingredient* victim)
 {
    QModelIndex pIdx;
    int lType = _type;
@@ -1343,17 +1343,17 @@ void BtTreeModel::elementAdded(BeerXMLElement* victim)
    observeElement(victim);
 }
 
-void BtTreeModel::elementRemoved(Recipe* victim)      { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementRemoved(Equipment* victim)   { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementRemoved(Fermentable* victim) { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementRemoved(Hop* victim)         { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementRemoved(Misc* victim)        { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementRemoved(Style* victim)       { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementRemoved(Yeast* victim)       { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementRemoved(BrewNote* victim)    { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
-void BtTreeModel::elementRemoved(Water* victim)       { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
+void BtTreeModel::elementRemoved(Recipe* victim)      { elementRemoved(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementRemoved(Equipment* victim)   { elementRemoved(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementRemoved(Fermentable* victim) { elementRemoved(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementRemoved(Hop* victim)         { elementRemoved(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementRemoved(Misc* victim)        { elementRemoved(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementRemoved(Style* victim)       { elementRemoved(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementRemoved(Yeast* victim)       { elementRemoved(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementRemoved(BrewNote* victim)    { elementRemoved(qobject_cast<Ingredient*>(victim)); }
+void BtTreeModel::elementRemoved(Water* victim)       { elementRemoved(qobject_cast<Ingredient*>(victim)); }
 
-void BtTreeModel::elementRemoved(BeerXMLElement* victim)
+void BtTreeModel::elementRemoved(Ingredient* victim)
 {
    QModelIndex index,pIndex;
 
@@ -1374,7 +1374,7 @@ void BtTreeModel::elementRemoved(BeerXMLElement* victim)
    disconnect( victim, nullptr, this, nullptr );
 }
 
-void BtTreeModel::observeElement(BeerXMLElement* d)
+void BtTreeModel::observeElement(Ingredient* d)
 {
    if ( ! d )
       return;
@@ -1419,7 +1419,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
       target = folder(parent)->fullPath();
    else
    {
-      BeerXMLElement* _thing = thing(parent);
+      Ingredient* _thing = thing(parent);
 
       // Did you know there's a space between elements in a tree, and you can
       // actually drop things there? If somebody drops something there, don't
@@ -1435,7 +1435,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
    {
       QString text;
       stream >> oType >> id >> name;
-      BeerXMLElement* elem = nullptr;
+      Ingredient* elem = nullptr;
       switch(oType)
       {
          case BtTreeItem::RECIPE:

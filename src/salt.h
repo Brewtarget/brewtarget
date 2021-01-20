@@ -23,7 +23,7 @@
 #define _SALT_H
 
 #include <QString>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 // Forward declarations.
 class Salt;
@@ -34,12 +34,13 @@ class Salt;
  *
  * \brief Model for salt records in the database.
  */
-class Salt : public BeerXMLElement
+class Salt : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "salts")
 
    friend class Database;
+   friend class BeerXML;
    friend class WaterDialog;
    friend class SaltTableModel;
 public:
@@ -117,6 +118,10 @@ public:
    double Mg() const;
    double Na() const;
    double SO4() const;
+
+   // Salt objects do not have parents
+   Ingredient * getParent() { return nullptr; }
+   int insertInDatabase();
 
 signals:
 

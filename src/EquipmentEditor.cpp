@@ -38,7 +38,7 @@
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
-#include "BeerXMLSortProxyModel.h"
+#include "IngredientSortProxyModel.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    : QDialog(parent)
@@ -65,7 +65,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
 
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
-   equipmentSortProxyModel = new BeerXMLSortProxyModel(equipmentListModel);
+   equipmentSortProxyModel = new IngredientSortProxyModel(equipmentListModel);
    equipmentComboBox->setModel(equipmentSortProxyModel);
 
    obsEquip = nullptr;
@@ -595,7 +595,7 @@ void EquipmentEditor::save()
 
    double grainAbs = Brewtarget::toDouble( lineEdit_grainAbsorption->text(), &ok );
    if ( ! ok )
-      Brewtarget::logW( QString("EquipmentEditor::save() could not convert %1 to double").arg(lineEdit_grainAbsorption->text()));
+      qWarning() << QString("EquipmentEditor::save() could not convert %1 to double").arg(lineEdit_grainAbsorption->text());
 
    double ga_LKg = grainAbs * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
 
@@ -662,7 +662,7 @@ void EquipmentEditor::save()
    obsEquip->setCalcBoilVolume(checkBox_calcBoilVolume->checkState() == Qt::Checked);
 
    if ( obsEquip->cacheOnly() ) {
-      Database::instance().insertEquipment(obsEquip);
+      obsEquip->insertInDatabase();
       obsEquip->setCacheOnly(false);
    }
    setVisible(false);

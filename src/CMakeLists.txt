@@ -55,8 +55,9 @@ ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
 SET( brewtarget_SRCS
     ${SRCDIR}/AboutDialog.cpp
     ${SRCDIR}/Algorithms.cpp
-    ${SRCDIR}/BeerXMLElement.cpp
-    ${SRCDIR}/BeerXMLSortProxyModel.cpp
+    ${SRCDIR}/ingredient.cpp
+    ${SRCDIR}/beerxml.cpp
+    ${SRCDIR}/IngredientSortProxyModel.cpp
     ${SRCDIR}/boiltime.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
@@ -139,6 +140,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/SaltTableModel.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SgDensityUnitSystem.cpp
+    ${SRCDIR}/SimpleUndoableUpdate.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
     ${SRCDIR}/SrmColorUnitSystem.cpp
@@ -218,8 +220,9 @@ SET( brewtarget_UIS
 SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/AboutDialog.h
     ${SRCDIR}/BeerColorWidget.h
-    ${SRCDIR}/BeerXMLElement.h
-    ${SRCDIR}/BeerXMLSortProxyModel.h
+    ${SRCDIR}/ingredient.h
+    ${SRCDIR}/beerxml.h
+    ${SRCDIR}/IngredientSortProxyModel.h
     ${SRCDIR}/boiltime.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
@@ -510,6 +513,10 @@ ADD_TEST(
 ADD_TEST(
    NAME postBoilLossOgTest
    COMMAND brewtarget_tests postBoilLossOgTest
+)
+add_test(
+   NAME testLogRotation
+   COMMAND brewtarget_tests testLogRotation
 )
 #=================================Installs=====================================
 
