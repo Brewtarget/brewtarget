@@ -96,19 +96,19 @@ void BrewDayWidget::removeSelectedInstruction()
       return;
    listWidget->takeItem(row);
    repopulateListWidget();
-   recObs->remove(recObs->instructions()[row]);
+   recObs->removeInstruction(recObs->instructions()[row]);
 }
 
 void BrewDayWidget::pushInstructionUp()
 {
    if( recObs == 0 )
       return;
-   
+
    QList<Instruction*> ins = recObs->instructions();
    int row = listWidget->currentRow();
    if( row <= 0 )
       return;
-   
+
    recObs->swapInstructions(ins[row], ins[row-1]);
    QString instrStep = listWidget->item(row)->text();
    listWidget->insertItem(row, listWidget->item(row-1)->text());
@@ -121,12 +121,12 @@ void BrewDayWidget::pushInstructionDown()
 {
    if( recObs == 0 )
       return;
-   
+
    QList<Instruction*> ins = recObs->instructions();
    int row = listWidget->currentRow();
    if( row >= listWidget->count() )
       return;
-   
+
    recObs->swapInstructions(ins[row], ins[row+1]);
   QString instrStep = listWidget->item(row+1)->text();
    listWidget->insertItem(row+1, listWidget->item(row)->text());
@@ -135,7 +135,7 @@ void BrewDayWidget::pushInstructionDown()
   // repopulateListWidget();
 }
 
-QString BrewDayWidget::getCSS() 
+QString BrewDayWidget::getCSS()
 {
    if ( cssName == NULL )
        cssName = ":/css/brewday.css";
@@ -235,7 +235,7 @@ QString BrewDayWidget::buildInstructionTable()
       reagents = instructions[i]->reagents();
       if ( reagents.size() > 1 ) {
          tmp = "<ul>";
-         for ( j = 0; j < reagents.size(); j++ ) 
+         for ( j = 0; j < reagents.size(); j++ )
          {
             tmp += QString("<li>%1</li>")
                    .arg(reagents[j]);
@@ -279,7 +279,7 @@ QString BrewDayWidget::buildFooterTable()
    return bottom;
 }
 
-bool BrewDayWidget::loadComplete(bool ok) 
+bool BrewDayWidget::loadComplete(bool ok)
 {
    doc->print(printer);
    return ok;
@@ -332,11 +332,11 @@ void BrewDayWidget::setRecipe(Recipe* rec)
 {
    if( recObs )
       disconnect( recObs, 0, this, 0 );
-   
+
    recObs = rec;
    if( recObs )
-      connect( recObs, &BeerXMLElement::changed, this, &BrewDayWidget::changed );
-   
+      connect( recObs, &Ingredient::changed, this, &BrewDayWidget::changed );
+
    showChanges();
 }
 

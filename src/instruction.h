@@ -1,7 +1,8 @@
 /*
  * instruction.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -27,7 +28,8 @@
 #include <QString>
 #include <QVector>
 #include <QDomNode>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
+#include "recipe.h"
 
 /*!
  * \class Instruction
@@ -35,13 +37,14 @@
  *
  * \brief Model class for an instruction record in the database.
  */
-class Instruction : public BeerXMLElement
+class Instruction : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "instructions")
    friend class Database;
+   friend class BeerXML;
 public:
-   
+
    virtual ~Instruction() {}
 
    Q_PROPERTY( QString directions READ directions WRITE setDirections /*NOTIFY changed*/ /*changedDirections*/ )
@@ -50,9 +53,9 @@ public:
    Q_PROPERTY( bool completed READ completed WRITE setCompleted /*NOTIFY changed*/ /*changedCompleted*/ )
    Q_PROPERTY( double interval READ interval WRITE setInterval /*NOTIFY changed*/ /*changedInterval*/ )
    Q_PROPERTY( QList<QString> reagents READ reagents /*WRITE*/ /*NOTIFY changed*/ /*changedReagents*/ )
-   
+
    Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
-   
+
    // "set" methods.
    void setDirections(const QString& dir);
    void setHasTimer(bool has);
@@ -61,6 +64,7 @@ public:
    void setInterval(double interval);
    void setCacheOnly(bool cache);
    void addReagent(const QString& reagent);
+   void setRecipe(Recipe * const recipe);
 
    // "get" methods.
    QString directions();
@@ -76,6 +80,10 @@ public:
 
    static QString classNameStr();
 
+   // Instruction objects do not have parents
+   Ingredient * getParent() { return nullptr; }
+   int insertInDatabase();
+
 signals:
 
 private:
@@ -90,9 +98,10 @@ private:
    bool    m_completed;
    double  m_interval;
    bool    m_cacheOnly;
+   Recipe * m_recipe;
 
    QList<QString> m_reagents;
-   
+
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };

@@ -40,7 +40,7 @@ void MashButton::setRecipe(Recipe* rec)
    _rec = rec;
    if( _rec )
    {
-      connect( _rec, &BeerXMLElement::changed, this, &MashButton::recChanged );
+      connect( _rec, &Ingredient::changed, this, &MashButton::recChanged );
       setMash( _rec->mash() );
    }
    else
@@ -55,7 +55,7 @@ void MashButton::setMash(Mash* mash)
    _mash = mash;
    if( _mash )
    {
-      connect( _mash, &BeerXMLElement::changed, this, &MashButton::mashChanged );
+      connect( _mash, &Ingredient::changed, this, &MashButton::mashChanged );
       setText( _mash->name() );
    }
    else
@@ -78,5 +78,5 @@ void MashButton::recChanged(QMetaProperty prop, QVariant val)
    QString propName(prop.name());
    
    if( propName == "mash" )
-      setMash( qobject_cast<Mash*>(BeerXMLElement::extractPtr(val)) );
+      setMash( qobject_cast<Mash*>(Ingredient::extractPtr(val)) );
 }

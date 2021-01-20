@@ -1,6 +1,7 @@
 /*
  * mash.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -49,7 +50,7 @@ QString Mash::classNameStr()
 }
 
 Mash::Mash(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
@@ -63,7 +64,7 @@ Mash::Mash(Brewtarget::DBTable table, int key)
 }
 
 Mash::Mash(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::MASHTABLE, -1, name, true),
+   : Ingredient(Brewtarget::MASHTABLE, -1, name, true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
@@ -77,7 +78,7 @@ Mash::Mash(QString name, bool cache)
 }
 
 Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
      m_grainTemp_c(rec.value(kcolMashGrainTemp).toDouble()),
      m_notes(rec.value(kcolNotes).toString()),
      m_tunTemp_c(rec.value(kcolMashTunTemp).toDouble()),
@@ -134,7 +135,7 @@ void Mash::setPh( double var )
 {
    if( var < 0.0 || var > 14.0 )
    {
-      Brewtarget::logW( QString("Mash: 0 < pH < 14: %1").arg(var) );
+      qWarning() << QString("Mash: 0 < pH < 14: %1").arg(var);
       return;
    }
    else
@@ -150,7 +151,7 @@ void Mash::setTunWeight_kg( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Mash: tun weight < 0: %1").arg(var) );
+      qWarning() << QString("Mash: tun weight < 0: %1").arg(var);
       return;
    }
    else
@@ -166,7 +167,7 @@ void Mash::setTunSpecificHeat_calGC( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Mash: sp heat < 0: %1").arg(var) );
+      qWarning() << QString("Mash: sp heat < 0: %1").arg(var);
       return;
    }
    else
@@ -299,4 +300,20 @@ void Mash::acceptMashStepChange(QMetaProperty prop, QVariant /*val*/)
       emit changed(metaProperty("totalMashWater_l"), QVariant());
       emit changed(metaProperty("totalTime"), QVariant());
    }
+}
+
+MashStep * Mash::addMashStep(MashStep * mashStep) {
+   mashStep->setMash(this);
+   mashStep->insertInDatabase();
+   return mashStep;
+}
+
+MashStep * Mash::removeMashStep(MashStep * mashStep) {
+   Database::instance().removeFrom(this, mashStep);
+   return mashStep;
+}
+
+
+int Mash::insertInDatabase() {
+   return Database::instance().insertMash(this);
 }

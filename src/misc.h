@@ -24,7 +24,7 @@
 #define _MISC_H
 
 #include <QString>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 // Forward declarations.
 class Misc;
@@ -35,12 +35,13 @@ class Misc;
  *
  * \brief Model for a misc record in the database.
  */
-class Misc : public BeerXMLElement
+class Misc : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "miscs")
 
    friend class Database;
+   friend class BeerXML;
    friend class MiscDialog;
 public:
 
@@ -121,6 +122,9 @@ public:
    bool cacheOnly() const;
 
    static QString classNameStr();
+
+   Ingredient * getParent();
+   int insertInDatabase();
 
 signals:
 

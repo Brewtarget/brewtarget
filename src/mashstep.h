@@ -21,9 +21,10 @@
 #ifndef _MASHSTEP_H
 #define _MASHSTEP_H
 
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 #include <QStringList>
 #include <QString>
+#include "mash.h"
 
 // Forward declarations.
 class MashStep;
@@ -36,12 +37,13 @@ bool operator==(MashStep &m1, MashStep &m2);
  *
  * \brief Model for a mash step record in the database.
  */
-class MashStep : public BeerXMLElement
+class MashStep : public Ingredient
 {
    Q_OBJECT
 
    // this seems to be a class with a lot of friends
    friend class Database;
+   friend class BeerXML;
    friend class MashStepItemDelegate;
    friend class MashWizard;
    friend class MashDesigner;
@@ -86,6 +88,7 @@ public:
    void setInfuseTemp_c( double var);
    void setDecoctionAmount_l( double var);
    void setCacheOnly(bool cache);
+   void setMash(Mash * mash);
 
    Type type() const;
    const QString typeString() const;
@@ -98,6 +101,7 @@ public:
    double infuseTemp_c() const;
    double decoctionAmount_l() const;
    bool cacheOnly() const;
+   Mash * mash() const;
 
    //! What number this step is in the mash.
    int stepNumber() const;
@@ -109,6 +113,10 @@ public:
    bool isDecoction() const;
 
    static QString classNameStr();
+
+   // MashStep objects do not have parents
+   Ingredient * getParent() { return nullptr; }
+   int insertInDatabase();
 
 signals:
 
@@ -129,6 +137,7 @@ private:
    double m_decoctionAmount_l;
    int m_stepNumber;
    bool m_cacheOnly;
+   Mash * m_mash;
 
    bool isValidType( const QString &str ) const;
 

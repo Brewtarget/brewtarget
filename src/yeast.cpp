@@ -1,7 +1,8 @@
 /*
  * yeast.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - marker5a
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - plut0nium
  * - Samuel Östling <MrOstling@gmail.com>
@@ -30,6 +31,7 @@
 
 #include "TableSchemaConst.h"
 #include "YeastSchema.h"
+#include "database.h"
 
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
@@ -53,7 +55,7 @@ QString Yeast::classNameStr()
 
 //============================CONSTRUCTORS======================================
 Yeast::Yeast(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true ),
+   : Ingredient(table, key, QString(), true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -79,7 +81,7 @@ Yeast::Yeast(Brewtarget::DBTable table, int key)
 }
 
 Yeast::Yeast(QString name, bool cache )
-   : BeerXMLElement(Brewtarget::YEASTTABLE, -1, name, true ),
+   : Ingredient(Brewtarget::YEASTTABLE, -1, name, true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -105,7 +107,7 @@ Yeast::Yeast(QString name, bool cache )
 }
 
 Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_typeString(rec.value(kcolYeastType).toString()),
      m_type(static_cast<Yeast::Type>(types.indexOf(m_typeString))),
      m_formString(rec.value(kcolYeastForm).toString()),
@@ -130,7 +132,7 @@ Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Yeast::Yeast(Yeast & other) : BeerXMLElement(other),
+Yeast::Yeast(Yeast & other) : Ingredient(other),
      m_typeString(other.m_typeString),
      m_type(other.m_type),
      m_formString(other.m_formString),
@@ -269,7 +271,7 @@ void Yeast::setForm( Yeast::Form f )
 void Yeast::setAmount( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Yeast: amount < 0: %1").arg(var) );
+      qWarning() << QString("Yeast: amount < 0: %1").arg(var);
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
@@ -281,7 +283,7 @@ void Yeast::setAmount( double var )
 void Yeast::setInventoryQuanta( int var )
 {
    if( var < 0.0 ) {
-      Brewtarget::logW( QString("Yeast: inventory < 0: %1").arg(var) );
+      qWarning() << QString("Yeast: inventory < 0: %1").arg(var);
    }
    else {
       m_inventory = var;
@@ -458,4 +460,25 @@ bool Yeast::isValidFlocculation(const QString& str) const
          return true;
 
    return false;
+}
+
+Ingredient * Yeast::getParent() {
+   Yeast * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().yeast(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Yeast::insertInDatabase() {
+   return Database::instance().insertYeast(this);
 }

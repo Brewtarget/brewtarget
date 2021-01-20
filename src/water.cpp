@@ -1,6 +1,7 @@
 /*
  * water.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -28,6 +29,7 @@
 
 #include "TableSchemaConst.h"
 #include "WaterSchema.h"
+#include "database.h"
 
 bool operator<(Water &w1, Water &w2)
 {
@@ -46,7 +48,7 @@ QString Water::classNameStr()
 }
 
 Water::Water(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -66,7 +68,7 @@ Water::Water(Brewtarget::DBTable table, int key)
 }
 
 Water::Water(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::WATERTABLE, -1, name, true),
+   : Ingredient(Brewtarget::WATERTABLE, -1, name, true),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -86,7 +88,7 @@ Water::Water(QString name, bool cache)
 }
 
 Water::Water(Water const& other, bool cache)
-   : BeerXMLElement(Brewtarget::WATERTABLE, -1, other.name(), true),
+   : Ingredient(Brewtarget::WATERTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_calcium_ppm(other.m_calcium_ppm),
    m_bicarbonate_ppm(other.m_bicarbonate_ppm),
@@ -106,7 +108,7 @@ Water::Water(Water const& other, bool cache)
 }
 
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_amount(rec.value(kcolAmount).toDouble()),
    m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
    m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),
@@ -261,7 +263,7 @@ double Water::mashRO() const { return m_mash_ro; }
 double Water::spargeRO() const { return m_sparge_ro; }
 bool Water::alkalinityAsHCO3() const { return m_alkalinity_as_hco3; }
 
-double Water::ppm( Water::Ions ion ) 
+double Water::ppm( Water::Ions ion )
 {
    switch(ion) {
       case Water::Ca:   return m_calcium_ppm;
@@ -274,4 +276,25 @@ double Water::ppm( Water::Ions ion )
    }
 
    return 0.0;
+}
+
+Ingredient * Water::getParent() {
+   Water * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().water(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Water::insertInDatabase() {
+   return Database::instance().insertWater(this);
 }

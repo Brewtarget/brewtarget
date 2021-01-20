@@ -1,6 +1,7 @@
 /*
  * equipment.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -28,6 +29,8 @@
 
 #include "TableSchemaConst.h"
 #include "EquipmentSchema.h"
+#include "database.h"
+
 
 bool operator<(Equipment &e1, Equipment &e2)
 {
@@ -41,7 +44,7 @@ bool operator==(Equipment &e1, Equipment &e2)
 
 //=============================CONSTRUCTORS=====================================
 Equipment::Equipment(QString t_name, bool cacheOnly)
-   : BeerXMLElement(Brewtarget::EQUIPTABLE, -1, t_name, true),
+   : Ingredient(Brewtarget::EQUIPTABLE, -1, t_name, true),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -64,7 +67,7 @@ Equipment::Equipment(QString t_name, bool cacheOnly)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true ),
+   : Ingredient(table, key, QString(), true ),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -87,7 +90,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_boilSize_l(rec.value(kcolEquipBoilSize).toDouble()),
    m_batchSize_l(rec.value(kcolEquipBatchSize).toDouble()),
    m_tunVolume_l(rec.value(kcolEquipTunVolume).toDouble()),
@@ -110,7 +113,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Equipment::Equipment( Equipment const& other )
-   : BeerXMLElement(other),
+   : Ingredient(other),
    m_boilSize_l(other.m_boilSize_l),
    m_batchSize_l(other.m_batchSize_l),
    m_tunVolume_l(other.m_tunVolume_l),
@@ -144,7 +147,7 @@ void Equipment::setBoilSize_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: boil size negative: %1").arg(var) );
+      qWarning() << QString("Equipment: boil size negative: %1").arg(var);
       return;
    }
    else
@@ -161,7 +164,7 @@ void Equipment::setBatchSize_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: batch size negative: %1").arg(var) );
+      qWarning() << QString("Equipment: batch size negative: %1").arg(var);
       return;
    }
    else
@@ -178,7 +181,7 @@ void Equipment::setTunVolume_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: tun volume negative: %1").arg(var) );
+      qWarning() << QString("Equipment: tun volume negative: %1").arg(var);
       return;
    }
    else
@@ -194,7 +197,7 @@ void Equipment::setTunWeight_kg( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: tun weight negative: %1").arg(var) );
+      qWarning() << QString("Equipment: tun weight negative: %1").arg(var);
       return;
    }
    else
@@ -210,7 +213,7 @@ void Equipment::setTunSpecificHeat_calGC( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: tun sp heat negative: %1").arg(var) );
+      qWarning() << QString("Equipment: tun sp heat negative: %1").arg(var);
       return;
    }
    else
@@ -226,7 +229,7 @@ void Equipment::setTopUpWater_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: top up water negative: %1").arg(var) );
+      qWarning() << QString("Equipment: top up water negative: %1").arg(var);
       return;
    }
    else
@@ -243,7 +246,7 @@ void Equipment::setTrubChillerLoss_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: trub chiller loss negative: %1").arg(var) );
+      qWarning() << QString("Equipment: trub chiller loss negative: %1").arg(var);
       return;
    }
    else
@@ -260,7 +263,7 @@ void Equipment::setEvapRate_pctHr( double var )
 {
    if( var < 0.0 || var > 100.0)
    {
-      Brewtarget::logW( QString("Equipment: 0 < evap rate < 100: %1").arg(var) );
+      qWarning() << QString("Equipment: 0 < evap rate < 100: %1").arg(var);
       return;
    }
    else
@@ -282,7 +285,7 @@ void Equipment::setEvapRate_lHr( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: evap rate negative: %1").arg(var) );
+      qWarning() << QString("Equipment: evap rate negative: %1").arg(var);
       return;
    }
    else
@@ -301,7 +304,7 @@ void Equipment::setBoilTime_min( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: boil time negative: %1").arg(var) );
+      qWarning() << QString("Equipment: boil time negative: %1").arg(var);
       return;
    }
    else
@@ -330,7 +333,7 @@ void Equipment::setLauterDeadspace_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: deadspace negative: %1").arg(var) );
+      qWarning() << QString("Equipment: deadspace negative: %1").arg(var);
       return;
    }
    else
@@ -346,7 +349,7 @@ void Equipment::setTopUpKettle_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: top up kettle negative: %1").arg(var) );
+      qWarning() << QString("Equipment: top up kettle negative: %1").arg(var);
       return;
    }
    else
@@ -362,7 +365,7 @@ void Equipment::setHopUtilization_pct( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: 0 < hop utilization: %1").arg(var) );
+      qWarning() << QString("Equipment: 0 < hop utilization: %1").arg(var);
       return;
    }
    else
@@ -386,7 +389,7 @@ void Equipment::setGrainAbsorption_LKg(double var)
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: absorption < 0: %1").arg(var) );
+      qWarning() << QString("Equipment: absorption < 0: %1").arg(var);
       return;
    }
    else
@@ -402,7 +405,7 @@ void Equipment::setBoilingPoint_c(double var)
 {
    if ( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: boiling point of water < 0: %1").arg(var));
+      qWarning() << QString("Equipment: boiling point of water < 0: %1").arg(var);
       return;
    }
    else
@@ -451,4 +454,25 @@ double Equipment::wortEndOfBoil_l( double kettleWort_l ) const
    //return kettleWort_l * (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
 
    return kettleWort_l - (boilTime_min()/(double)60)*evapRate_lHr();
+}
+
+Ingredient * Equipment::getParent() {
+   Equipment * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().equipment(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Equipment::insertInDatabase() {
+   return Database::instance().insertEquipment(this);
 }

@@ -157,11 +157,12 @@ OptionDialog::OptionDialog(QWidget* parent)
    loggingLevelComboBox->addItem(tr("Warning"), QVariant(Log::LogType_WARNING));
    loggingLevelComboBox->addItem(tr("Error"), QVariant(Log::LogType_ERROR));
    loggingLevelComboBox->addItem(tr("Debug"), QVariant(Log::LogType_DEBUG));
-   checkBox_enableLogging->setChecked(Brewtarget::log.LoggingEnabled);
-   checkBox_LogFileLocationUseDefault->setChecked(Brewtarget::log.LoggingUseConfigDir);
-   lineEdit_LogFileLocation->setText(Brewtarget::log.LogFilePath.absolutePath());
-   setLoggingControlsState(Brewtarget::log.LoggingEnabled);
-   setFileLocationState(Brewtarget::log.LoggingUseConfigDir);
+   loggingLevelComboBox->setCurrentIndex(Log::logLevel);
+   checkBox_enableLogging->setChecked(Log::loggingEnabled);
+   checkBox_LogFileLocationUseDefault->setChecked(Log::logUseConfigDir);
+   lineEdit_LogFileLocation->setText(Log::logFilePath.absolutePath());
+   setLoggingControlsState(Log::loggingEnabled);
+   setFileLocationState(Log::logUseConfigDir);
 
    // database panel stuff
    comboBox_engine->addItem( tr("SQLite (default)"), QVariant(Brewtarget::SQLITE));
@@ -318,7 +319,7 @@ void OptionDialog::saveAndClose()
          QMessageBox::information(this, tr("Restart"), tr("Please restart brewtarget to connect to the new database"));
       }
       catch (QString e) {
-         Brewtarget::logE(QString("%1 %2").arg(Q_FUNC_INFO).arg(e));
+         qCritical() << Q_FUNC_INFO << e;
          saveDbConfig = false;
       }
    }
@@ -477,19 +478,19 @@ void OptionDialog::saveAndClose()
    Brewtarget::setOption("firstWortHopAdjustment", ibuAdjustmentFirstWortDoubleSpinBox->value() / 100);
 
    // Saving Logging Options to the Log object
-   Brewtarget::log.LoggingEnabled = checkBox_enableLogging->isChecked();
-   Brewtarget::log.LoggingLevel = static_cast<Log::LogType>(loggingLevelComboBox->currentData().toInt());
-   Brewtarget::log.LogFilePath = QDir(lineEdit_LogFileLocation->text());
-   Brewtarget::log.LoggingUseConfigDir = checkBox_LogFileLocationUseDefault->isChecked();
-   if ( Brewtarget::log.LoggingUseConfigDir )
+   Log::loggingEnabled = checkBox_enableLogging->isChecked();
+   Log::logLevel = static_cast<Log::LogType>(loggingLevelComboBox->currentData().toInt());
+   Log::logFilePath = QDir(lineEdit_LogFileLocation->text());
+   Log::logUseConfigDir = checkBox_LogFileLocationUseDefault->isChecked();
+   if ( Log::logUseConfigDir )
    {
-      Brewtarget::log.LogFilePath = Brewtarget::getConfigDir();
+      Log::logFilePath = Brewtarget::getConfigDir();
    }
-   Brewtarget::setOption("LoggingEnabled", Brewtarget::log.LoggingEnabled);
-   Brewtarget::setOption("LoggingLevel", Brewtarget::log.getOptionStringFromLogType(Brewtarget::log.LoggingLevel));
-   Brewtarget::setOption("LogFilePath", Brewtarget::log.LogFilePath.absolutePath());
-   Brewtarget::setOption("LoggingUseConfigDir", Brewtarget::log.LoggingUseConfigDir);
-   Brewtarget::log.changeDirectory();
+   Brewtarget::setOption("LoggingEnabled", Log::loggingEnabled);
+   Brewtarget::setOption("LoggingLevel", Log::getTypeName(Log::logLevel));
+   Brewtarget::setOption("LogFilePath", Log::logFilePath.absolutePath());
+   Brewtarget::setOption("LoggingUseConfigDir", Log::logUseConfigDir);
+   Log::changeDirectory();
    // Make sure the main window updates.
    if( Brewtarget::mainWindow() )
       Brewtarget::mainWindow()->showChanges();

@@ -1,6 +1,6 @@
 /*
  * hop.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -25,7 +25,7 @@
 
 #include <QString>
 #include <QStringList>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 // Forward declarations.
 class Hop;
@@ -39,12 +39,13 @@ bool operator==( Hop &h1, Hop &h2 );
  *
  * \brief Model class for a hop record in the database.
  */
-class Hop : public BeerXMLElement
+class Hop : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "hops")
 
    friend class Database;
+   friend class BeerXML;
    friend class HopDialog;
 public:
 
@@ -153,6 +154,10 @@ public:
    void setInventoryId(int key);
 
    static QString classNameStr();
+
+   Ingredient * getParent();
+   int insertInDatabase();
+
 signals:
 
 private:

@@ -1,7 +1,8 @@
 /*
  * hop.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -29,6 +30,7 @@
 
 #include "TableSchemaConst.h"
 #include "HopSchema.h"
+#include "database.h"
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
@@ -66,7 +68,7 @@ QString Hop::classNameStr()
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString()),
+   : Ingredient(table, key, QString()),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -92,7 +94,7 @@ Hop::Hop(Brewtarget::DBTable table, int key)
 }
 
 Hop::Hop(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::HOPTABLE, -1, name, true),
+   : Ingredient(Brewtarget::HOPTABLE, -1, name, true),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -118,7 +120,7 @@ Hop::Hop(QString name, bool cache)
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_useStr(rec.value(kcolUse).toString()),
      m_use(static_cast<Hop::Use>(uses.indexOf(m_useStr))),
      m_typeStr(rec.value(kcolHopType).toString()),
@@ -144,7 +146,7 @@ Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Hop::Hop( Hop & other )
-   : BeerXMLElement(other),
+   : Ingredient(other),
      m_useStr(other.m_useStr),
      m_use(other.m_use),
      m_typeStr(other.m_typeStr),
@@ -174,7 +176,7 @@ void Hop::setAlpha_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < alpha < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < alpha < 100: %1").arg(num);
       return;
    }
    else
@@ -190,7 +192,7 @@ void Hop::setAmount_kg( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: amount < 0: %1").arg(num) );
+      qWarning() << QString("Hop: amount < 0: %1").arg(num);
       return;
    }
    else
@@ -206,7 +208,7 @@ void Hop::setInventoryAmount( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: inventory < 0: %1").arg(num) );
+      qWarning() << QString("Hop: inventory < 0: %1").arg(num);
       return;
    }
    else
@@ -241,7 +243,7 @@ void Hop::setTime_min( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: time < 0: %1").arg(num) );
+      qWarning() << QString("Hop: time < 0: %1").arg(num);
       return;
    }
    else
@@ -287,7 +289,7 @@ void Hop::setBeta_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < beta < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < beta < 100: %1").arg(num);
       return;
    }
    else
@@ -303,7 +305,7 @@ void Hop::setHsi_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < hsi < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < hsi < 100: %1").arg(num);
       return;
    }
    else
@@ -335,7 +337,7 @@ void Hop::setHumulene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < humulene < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < humulene < 100: %1").arg(num);
       return;
    }
    else
@@ -351,7 +353,7 @@ void Hop::setCaryophyllene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < cary < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < cary < 100: %1").arg(num);
       return;
    }
    else
@@ -367,7 +369,7 @@ void Hop::setCohumulone_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < cohumulone < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < cohumulone < 100: %1").arg(num);
       return;
    }
    else
@@ -383,7 +385,7 @@ void Hop::setMyrcene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < myrcene < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < myrcene < 100: %1").arg(num);
       return;
    }
    else
@@ -466,3 +468,23 @@ const QString Hop::formStringTr() const
    }
 }
 
+Ingredient * Hop::getParent() {
+   Hop * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().hop(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Hop::insertInDatabase() {
+   return Database::instance().insertHop(this);
+}

@@ -26,7 +26,7 @@
 
 #include <QStringList>
 #include <QString>
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 #include "unit.h"
 
 // Forward declarations.
@@ -40,12 +40,13 @@ bool operator==(Fermentable &f1, Fermentable &f2);
  *
  * \brief Model for a fermentable record in the database.
  */
-class Fermentable : public BeerXMLElement
+class Fermentable : public Ingredient
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "fermentables")
 
    friend class Brewtarget;
+   friend class BeerXML;
    friend class Database;
    friend class FermentableDialog;
 public:
@@ -175,6 +176,9 @@ public:
    void save();
 
    static QString classNameStr();
+
+   Ingredient * getParent();
+   int insertInDatabase();
 
 signals:
 

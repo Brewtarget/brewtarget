@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="sv">
+    <extra-po-header-language_team>LANGUAGE &lt;LL@li.org&gt;</extra-po-header-language_team>
+    <extra-po-header-last_translator>Mattias Måhl &lt;Unknown&gt;</extra-po-header-last_translator>
+    <extra-po-header-po_revision_date>2020-09-14 10:55+0000</extra-po-header-po_revision_date>
+    <extra-po-header-pot_creation_date>2016-09-17 16:22+0000</extra-po-header-pot_creation_date>
+    <extra-po-header-project_id_version>PACKAGE VERSION</extra-po-header-project_id_version>
+    <extra-po-header-report_msgid_bugs_to></extra-po-header-report_msgid_bugs_to>
+    <extra-po-header-x_generator>Launchpad (build 83bdf6c8a3a5f87722c8927e54838522f3e57504)</extra-po-header-x_generator>
+    <extra-po-header-x_launchpad_export_date>2020-09-14 11:04+0000</extra-po-header-x_launchpad_export_date>
+    <extra-po-headers>Project-Id-Version,Report-Msgid-Bugs-To,POT-Creation-Date,PO-Revision-Date,Last-Translator,Language-Team,MIME-Version,Content-Type,Content-Transfer-Encoding,X-Launchpad-Export-Date,X-Generator,X-Qt-Contexts,X-Language</extra-po-headers>
 <context>
     <name>AboutDialog</name>
     <message>
@@ -112,11 +121,11 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräknat energiinnehåll (kcal/33cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Uppskattade kalorier (per 12 oz)</translation>
+        <translation>Beräknat energiinnehåll (kcal/12oz)</translation>
     </message>
 </context>
 <context>
@@ -187,15 +196,15 @@
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation>Volym efter kok</translation>
+        <translation>Volym efter kok:</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation>Densitet efter kok</translation>
+        <translation>Densitet efter kok:</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation>Volym i jäskar</translation>
+        <translation>Volym i jäskar:</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -211,7 +220,7 @@
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräknat energiinnehåll (kcal/33cl)</translation>
     </message>
 </context>
 <context>
@@ -302,7 +311,7 @@
     </message>
     <message>
         <source>Gallons</source>
-        <translation>Gallons</translation>
+        <translation>Gallon</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -338,26 +347,26 @@
     </message>
     <message>
         <source>Barrels</source>
-        <translation type="unfinished"></translation>
+        <translation>Fat</translation>
     </message>
     <message>
         <source>Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Skala</translation>
     </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>För låg för vald stil</translation>
+        <translation>För låg för vald stil.</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>I intervall för stilen,</translation>
+        <translation>I intervall för stilen.</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>För högt för stilen,</translation>
+        <translation>För högt för stilen.</translation>
     </message>
 </context>
 <context>
@@ -371,7 +380,7 @@
     <name>BtSplashScreen</name>
     <message>
         <source>Loading...</source>
-        <translation>Laddar</translation>
+        <translation>Laddar...</translation>
     </message>
 </context>
 <context>
@@ -434,11 +443,11 @@
     </message>
     <message>
         <source>Could not copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte kopiera</translation>
     </message>
     <message>
         <source>There was an unexpected error creating %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett oväntat fel uppstod när %1 skulle skapas</translation>
     </message>
 </context>
 <context>
@@ -517,7 +526,7 @@
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation>Ta bort %1 %2</translation>
+        <translation>Ta bort %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
@@ -537,22 +546,22 @@
     </message>
     <message>
         <source>An empty name will skip copying this %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett tomt namn kommer inte att kopiera %1.</translation>
     </message>
     <message>
         <source>To XML</source>
-        <translation type="unfinished"></translation>
+        <translation>Till XML</translation>
     </message>
     <message>
         <source>To HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>Till HTML</translation>
     </message>
 </context>
 <context>
     <name>ConverterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Konverteringsverktyg</translation>
     </message>
     <message>
         <source>Input</source>
@@ -560,7 +569,7 @@
     </message>
     <message>
         <source>Output Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Till enhet</translation>
     </message>
     <message>
         <source>Output</source>
@@ -572,15 +581,15 @@
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation type="unfinished"></translation>
+        <translation>Mängd och enheter för  konvertering</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation type="unfinished"></translation>
+        <translation>Enheter som du vill konvertera till</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Utmatnings konvertering</translation>
     </message>
 </context>
 <context>
@@ -595,19 +604,19 @@
     </message>
     <message>
         <source>Database password</source>
-        <translation type="unfinished"></translation>
+        <translation>Databaslösenord</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <source>Connection failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Anslutningen misslyckades</translation>
     </message>
     <message>
         <source>Could not connect to %1 : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunde inte ansluta till %1 %2</translation>
     </message>
 </context>
 <context>
@@ -615,14 +624,6 @@
     <message>
         <source>Grain absorption (%1/%2)</source>
         <translation>Malt upptag (%1/%2)</translation>
-    </message>
-    <message>
-        <source>Tun Volume Warning</source>
-        <translation type="vanished">Tunnvolyms-varning</translation>
-    </message>
-    <message>
-        <source>Batch Size Warning</source>
-        <translation type="vanished">Satsstorlekeks Varning</translation>
     </message>
     <message>
         <source>Equipment name</source>
@@ -633,24 +634,8 @@
         <translation>Utrustningsnamn:</translation>
     </message>
     <message>
-        <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="vanished">Den tun volym du angav är 0. Detta kan orsaka problem</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="vanished">Satsstorleken du angav är 0. Detta kan orsaka problem</translation>
-    </message>
-    <message>
-        <source>Hop Utilization Warning</source>
-        <translation type="vanished">Humle användnings varning</translation>
-    </message>
-    <message>
-        <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="vanished">Nyttjandegraden för humlen du angav är 0. Detta kan orsaka problem</translation>
-    </message>
-    <message>
         <source>Equipment Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Utrustningseditor</translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -658,7 +643,7 @@
     </message>
     <message>
         <source>Set as Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd som standard</translation>
     </message>
     <message>
         <source>Required Fields</source>
@@ -670,19 +655,19 @@
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volym för kok</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkäknad volym för kok</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation type="unfinished"></translation>
+        <translation>Satsens storlek</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Kokning och Vatten</translation>
     </message>
     <message>
         <source>Boil time</source>
@@ -690,35 +675,35 @@
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation type="unfinished"></translation>
+        <translation>Avdunstning (per timme)</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation type="unfinished"></translation>
+        <translation>Kittel uppfyllning vatten</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation type="unfinished"></translation>
+        <translation>Avslutande uppfyllning Vatten</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sädens absorberingsförmåga</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard Absorberingsförmåga</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation type="unfinished"></translation>
+        <translation>Humlens utnyttjandegrad </translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Vattnets kokpunkt</translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäsktunna</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -726,51 +711,51 @@
     </message>
     <message>
         <source>Mass</source>
-        <translation type="unfinished"></translation>
+        <translation>Massa</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort utrustning</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Markera om volym före kok ska baseras på satsens storlek, koktid, avdunstning, förluster mm.</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Fyll i förkokets volym automatiskt</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation type="unfinished"></translation>
+        <translation>MÄngd vatten som avdunstar per timme</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Hur mycket vatten läggs till i kitteln vif förkoket</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Vatten som adderas till jäskaret</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäsktunnans volym</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation type="unfinished"></translation>
+        <translation>Massa eller vikt på Mäsktunnan</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Vörtförlust mellan kittel och jäskärl</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappad volym till</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny utrustning</translation>
     </message>
     <message>
         <source>Save</source>
@@ -778,54 +763,54 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <source>This equipment profile may break brewtarget&apos;s maths</source>
-        <translation type="unfinished"></translation>
+        <translation>Vald utrustning kanstöra brewtargets uträkningar</translation>
     </message>
     <message>
         <source>The following values are not set:</source>
-        <translation type="unfinished"></translation>
+        <translation>Följande värden är inte satta:</translation>
     </message>
     <message>
         <source>mash tun volume (all-grain and BIAB only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäsktunnans volym (endast för BIAB och all grain)</translation>
     </message>
     <message>
         <source>batch size</source>
-        <translation type="unfinished"></translation>
+        <translation>Satsens storlek</translation>
     </message>
     <message>
         <source>hop utilization</source>
-        <translation type="unfinished"></translation>
+        <translation>Utnyttjande humle</translation>
     </message>
     <message>
         <source>Calculation Warnings</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalkylerings varningar</translation>
     </message>
 </context>
 <context>
     <name>Fermentable</name>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Mäskat</translation>
+        <translation>Mäskas</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished"></translation>
+        <translation>Stöpts</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskas ej</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Sent</translation>
+        <translation>Sen</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
 </context>
 <context>
@@ -836,15 +821,15 @@
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Jästnamn</translation>
+        <translation>Jästnamn:</translation>
     </message>
     <message>
         <source>Fermentable Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Jäsningsdatabas</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till i receptet</translation>
     </message>
     <message>
         <source>New</source>
@@ -852,19 +837,19 @@
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Addera vald ingrediens till receptet</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra vald ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort vald ingrediens</translation>
     </message>
 </context>
 <context>
@@ -891,23 +876,23 @@
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Mäskat</translation>
+        <translation>Mäskas</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation type="unfinished"></translation>
+        <translation>Stöpts</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskas ej</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation type="unfinished">Sent</translation>
+        <translation>Sen</translation>
     </message>
 </context>
 <context>
@@ -946,11 +931,11 @@
     </message>
     <message>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Metod</translation>
     </message>
     <message>
         <source>Addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillägg</translation>
     </message>
 </context>
 <context>
@@ -1008,11 +993,11 @@
     </message>
     <message>
         <source>Hop Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Humledatabas</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till i receptet</translation>
     </message>
     <message>
         <source>New</source>
@@ -1020,19 +1005,19 @@
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Addera vald ingrediens till receptet</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra vald ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort vald ingrediens</translation>
     </message>
 </context>
 <context>
@@ -1105,38 +1090,38 @@
     <name>HydrometerTool</name>
     <message>
         <source>Hydrometer Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Hydrometer verktyg</translation>
     </message>
     <message>
         <source>SG Reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Avläst SG värde</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished">Temperatur</translation>
+        <translation>Temperatur</translation>
     </message>
     <message>
         <source>Adjust SG</source>
-        <translation type="unfinished"></translation>
+        <translation>Justera SG</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation type="unfinished">Konvertera</translation>
+        <translation>Konvertera</translation>
     </message>
     <message>
         <source>Measured gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppmätt specifik vikt</translation>
     </message>
     <message>
         <source>Corrected gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Korrigerad specifik vikt</translation>
     </message>
 </context>
 <context>
     <name>IbuGuSlider</name>
     <message>
         <source>Cloying</source>
-        <translation type="unfinished"></translation>
+        <translation>Söthetsgrad</translation>
     </message>
     <message>
         <source>Extra Malty</source>
@@ -1171,7 +1156,7 @@
     </message>
     <message>
         <source>BeerXML files (*.xml)</source>
-        <translation>BeerXML-fil (*.xml)</translation>
+        <translation>BeerXML-filer (*.xml)</translation>
     </message>
     <message>
         <source>Save</source>
@@ -1187,7 +1172,7 @@
     </message>
     <message>
         <source>HTML files (*.html)</source>
-        <translation>HTML-fil (*.html)</translation>
+        <translation>HTML-filer (*.html)</translation>
     </message>
     <message>
         <source>Database Update</source>
@@ -1223,7 +1208,7 @@
     </message>
     <message>
         <source>Could not copy the files for some reason.</source>
-        <translation>Kunde inte kopiera filen.</translation>
+        <translation>Det gick inte att kopiera filerna av någon anledning.</translation>
     </message>
     <message>
         <source>A Warning</source>
@@ -1299,7 +1284,7 @@
     </message>
     <message>
         <source>The original XML files can be found in </source>
-        <translation>Den ursprungliga XML-filen finns i </translation>
+        <translation>De ursprungliga XML-filerna kan hittas i </translation>
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
@@ -1319,19 +1304,19 @@
     </message>
     <message>
         <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation>Ett katalognamn måste innehålla minst ett icke blankstegs-tecken.</translation>
+        <translation>Ett katalognamn måste innehålla minst ett icke blankstegs-tecken</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
-        <translation>Ett katalognamn måste innehålla något annat än bara specialtecken.</translation>
+        <translation>Ett katalognamn måste innehålla något annat än bara specialtecken</translation>
     </message>
     <message>
         <source>Error copying recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel vid kopiering av recept</translation>
     </message>
     <message>
         <source>An error was returned while creating %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod vid skapande av %1</translation>
     </message>
 </context>
 <context>
@@ -1342,7 +1327,7 @@
     </message>
     <message>
         <source>Your recipe must have fermentables to design a mash.</source>
-        <translation>Ditt recept måste innehålla förjäsningsbara råvaror för att kunna designa en mäskning</translation>
+        <translation>Ditt recept måste innehålla förjäsningsbara råvaror för att kunna designa en mäskning.</translation>
     </message>
     <message>
         <source>No Equipment</source>
@@ -1354,11 +1339,11 @@
     </message>
     <message>
         <source>Tun Temp</source>
-        <translation>Kärlets temp.</translation>
+        <translation>Kärlets temperatur</translation>
     </message>
     <message>
         <source>Enter the temperature of the tun before your first infusion.</source>
-        <translation>Ange kärlets temperatur före den första infusionen</translation>
+        <translation>Ange kärlets temperatur före den första infusionen.</translation>
     </message>
     <message>
         <source>Decoction error</source>
@@ -1366,7 +1351,7 @@
     </message>
     <message>
         <source>The first mash step cannot be a decoction.</source>
-        <translation>Det första mäsksteget kan inte vara en dekoktion</translation>
+        <translation>Det första mäsksteget kan inte vara en dekoktion.</translation>
     </message>
 </context>
 <context>
@@ -1393,7 +1378,7 @@
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Infusionstemp.</translation>
+        <translation>Infusionstemperatur</translation>
     </message>
     <message>
         <source>Target Temp</source>
@@ -1424,7 +1409,7 @@
     </message>
     <message>
         <source>There must be at least one mash step to run the wizard.</source>
-        <translation>Det måste finnas minst ett mäskningssteg för att kunna köra guiden</translation>
+        <translation>Det måste finnas minst ett mäskningssteg för att kunna köra guiden.</translation>
     </message>
     <message>
         <source>First step</source>
@@ -1448,7 +1433,7 @@
     </message>
     <message>
         <source>Something went wrong in decoction calculation.</source>
-        <translation>Ett fel uppstod vid beräkningav dekoktion</translation>
+        <translation>Ett fel uppstod vid beräkningav dekoktion.</translation>
     </message>
     <message>
         <source>Sparge temp.</source>
@@ -1468,66 +1453,66 @@
     </message>
     <message>
         <source>Batch Sparge %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Batch vattning %1</translation>
     </message>
     <message>
         <source>Fly Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation>Löpande vattning</translation>
     </message>
 </context>
 <context>
     <name>Misc</name>
     <message>
         <source>Spice</source>
-        <translation type="unfinished">Krydda</translation>
+        <translation>Krydda</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished">Klarningsmedel</translation>
+        <translation>Klarningsmedel</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished">Vattenbehandling</translation>
+        <translation>Vattenbehandling</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation type="unfinished">Örtkrydda</translation>
+        <translation>Ört</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation type="unfinished">Smak</translation>
+        <translation>Smak</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Övrigt</translation>
+        <translation>Övrigt</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Kokning</translation>
+        <translation>Kokning</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mäsk</translation>
+        <translation>Mäskning</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Primär</translation>
+        <translation>Primär</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Sekundär</translation>
+        <translation>Sekundär</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Flasktappning</translation>
+        <translation>Flasktappning</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Vikt</translation>
+        <translation>Vikt</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volym</translation>
+        <translation>Volym</translation>
     </message>
 </context>
 <context>
@@ -1538,15 +1523,15 @@
     </message>
     <message>
         <source>Misc name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Diverse namn:</translation>
     </message>
     <message>
         <source>Misc Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Diverse databas</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till i receptet</translation>
     </message>
     <message>
         <source>New</source>
@@ -1554,19 +1539,19 @@
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Addera vald ingrediens till receptet</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra vald ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort vald ingrediens</translation>
     </message>
 </context>
 <context>
@@ -1617,11 +1602,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Vikt</translation>
+        <translation>Vikt</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volym</translation>
+        <translation>Volym</translation>
     </message>
 </context>
 <context>
@@ -1731,143 +1716,143 @@
     </message>
     <message>
         <source>SI units</source>
-        <translation type="unfinished"></translation>
+        <translation>SI-Enheter</translation>
     </message>
     <message>
         <source>US traditional units</source>
-        <translation type="unfinished"></translation>
+        <translation>Amerikanska enheter</translation>
     </message>
     <message>
         <source>British imperial units</source>
-        <translation type="unfinished"></translation>
+        <translation>brittiska enheter</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation type="unfinished">Celsius</translation>
+        <translation>Celsius</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished">Fahrenheit</translation>
+        <translation>Fahrenheit</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>20C/68F</translation>
     </message>
     <message>
         <source>Plato/Brix/Balling</source>
-        <translation type="unfinished"></translation>
+        <translation>Plato/Brix/Balling</translation>
     </message>
     <message>
         <source>mm-dd-YYYY</source>
-        <translation type="unfinished">dd-mm-YYYY</translation>
+        <translation>dd-mm-YYYY</translation>
     </message>
     <message>
         <source>dd-mm-YYYY</source>
-        <translation type="unfinished">dd-mm-YYYY</translation>
+        <translation>dd-mm-YYYY</translation>
     </message>
     <message>
         <source>YYYY-mm-dd</source>
-        <translation type="unfinished">YYYY-mm-dd</translation>
+        <translation>YYYY-mm-dd</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished">SRM</translation>
+        <translation>SRM</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished">EBC</translation>
+        <translation>EBC</translation>
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Tinseths metod</translation>
     </message>
     <message>
         <source>Rager&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Ragers metod</translation>
     </message>
     <message>
         <source>Noonan&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Nonnans metod</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Moshers metod</translation>
     </message>
     <message>
         <source>Daniel&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Daniels metod</translation>
     </message>
     <message>
         <source>Morey&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Moreys metod</translation>
     </message>
     <message>
         <source>SQLite (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>SQLite (standard)</translation>
     </message>
     <message>
         <source>PostgreSQL</source>
-        <translation type="unfinished"></translation>
+        <translation>PostgreSQL</translation>
     </message>
     <message>
         <source>Danish</source>
-        <translation type="unfinished"></translation>
+        <translation>Danska</translation>
     </message>
     <message>
         <source>Estonian</source>
-        <translation type="unfinished"></translation>
+        <translation>Estniska</translation>
     </message>
     <message>
         <source>Basque</source>
-        <translation type="unfinished"></translation>
+        <translation>Baskiska</translation>
     </message>
     <message>
         <source>Galician</source>
-        <translation type="unfinished"></translation>
+        <translation>Galiciska</translation>
     </message>
     <message>
         <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungerska</translation>
     </message>
     <message>
         <source>Latvian</source>
-        <translation type="unfinished"></translation>
+        <translation>Lettiska</translation>
     </message>
     <message>
         <source>Norwegian Bokmål</source>
-        <translation type="unfinished"></translation>
+        <translation>Norskt bokmål</translation>
     </message>
     <message>
         <source>Serbian</source>
-        <translation type="unfinished"></translation>
+        <translation>Serbiska</translation>
     </message>
     <message>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Svenska</translation>
     </message>
     <message>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>Turkiska</translation>
     </message>
     <message>
         <source>Test connection or cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Testa uppkopplingen eller avbryt</translation>
     </message>
     <message>
         <source>Saving the options without testing the connection can cause brewtarget to not restart. Your changes have been discarded, which is likely really, really crappy UX. Please open a bug explaining exactly how you got to this message.</source>
-        <translation type="unfinished"></translation>
+        <translation>Att spara installningarna utan att testa kopplingen kan orsaka Brewtarget att inte starta om. Dina ändringar har ångrats, vilket troligen är väldigt dålig UX, Vänligen öppna en felrapport och förklara exakt hur du fick detta felmeddelande.</translation>
     </message>
     <message>
         <source>Would you like brewtarget to transfer your data to the new database? NOTE: If you&apos;ve already loaded the data, say No</source>
-        <translation type="unfinished"></translation>
+        <translation>Vill du att Brewtarget ska föra över data till den nya databasen? NOTERA! om du redan har laddat in data så ska du svara NEJ här</translation>
     </message>
     <message>
         <source>Transfer database</source>
-        <translation type="unfinished"></translation>
+        <translation>Överför databasen</translation>
     </message>
     <message>
         <source>Please restart brewtarget to connect to the new database</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta om Brewtarget för att koppla upp dig mot den nya databasen</translation>
     </message>
 </context>
 <context>
@@ -1907,46 +1892,6 @@
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
         <translation>Kunde inte öppna databasen &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Save Database Changes</source>
-        <translation type="vanished">Spara Databasändringar</translation>
-    </message>
-    <message>
-        <source>Would you like to save the changes you made?</source>
-        <translation type="vanished">Vill du spara de ändringar som gjorts?</translation>
-    </message>
-    <message>
-        <source>Multiple Databases Found</source>
-        <translation type="vanished">Hittade Flera Databaser</translation>
-    </message>
-    <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
-        <translation type="vanished">Flera databaser hittades. Vill du återskapa ändringarna som gjordes under din förra session eller vill du återställa till före förra sessionens ändringar?</translation>
-    </message>
-    <message>
-        <source>Restore</source>
-        <translation type="vanished">Återskapa</translation>
-    </message>
-    <message>
-        <source>Rollback</source>
-        <translation type="vanished">Återställ</translation>
-    </message>
-    <message>
-        <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
-        <translation type="vanished">Kunde inte ta bort den temporära databasbackupen. Öppna &apos;%1&apos; och ta bort &apos;tempBackupDatabase.sqlite&apos;.</translation>
-    </message>
-    <message>
-        <source>Failed to rollback to the backup database.  Navigate to &apos;%1&apos;, remove &apos;database.sqlite&apos; if it exists, and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation type="vanished">Kunde inte återställa till föregående backup. Öppna &apos;%1&apos; och ta bort &apos;database.sqlite&apos; Döp sedan om  &apos;tempBackupDatabase.sqlite&apos; till &apos;database.sqlite&apos;.</translation>
-    </message>
-    <message>
-        <source>Database Restore Failure</source>
-        <translation type="vanished">Databasåterställning misslyckades</translation>
-    </message>
-    <message>
-        <source>Failed to restore the backup database. Navigate to &apos;%1&apos; and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation type="vanished">Kunde inte återskapa föregående backup. Öppna &apos;%1&apos; och ta bort &apos;database.sqlite&apos; Döp sedan om  &apos;tempBackupDatabase.sqlite&apos; till &apos;database.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Grain</source>
@@ -2066,39 +2011,39 @@
     </message>
     <message>
         <source>Failed to update the database</source>
-        <translation type="unfinished"></translation>
+        <translation>Misslyckades att uppdatera databasen</translation>
     </message>
     <message>
         <source>Error attempting to create directory &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ett fel uppstod när katalogen %1 skulle skapas</translation>
     </message>
     <message>
         <source>Data directory &quot;%1&quot; is missing.  Some features will be unavaliable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalogen &quot;%1&quot; saknas. Vissa funktioner kommer att inaktiveras.</translation>
     </message>
     <message>
         <source>Fly Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation>Löpande vattning</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation>Batch vattning</translation>
     </message>
     <message>
         <source>Connection Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopplingstest</translation>
     </message>
     <message>
         <source>Connection to database was successful</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopplingen till databsen lyckades</translation>
     </message>
     <message>
         <source>Plaintext</source>
-        <translation type="unfinished"></translation>
+        <translation>Ren text</translation>
     </message>
     <message>
         <source>Passwords are saved in plaintext. We make no effort to hide, obscure or otherwise protect the password. By enabling this option, you take full responsibility for any potential problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenorden sparas som ren text. Inga försök att gömma, förvanska eller på annat sätt att skydda lösenorden utförs. Genom att välja detta alternativ så är du helt och hållet ansvarig för eventuella problem som kan uppstå.</translation>
     </message>
 </context>
 <context>
@@ -2113,7 +2058,7 @@
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation>till mäsktunnan</translation>
+        <translation>till mäsktun.</translation>
     </message>
     <message>
         <source>Heat water</source>
@@ -2129,11 +2074,11 @@
     </message>
     <message>
         <source>for upcoming infusions.</source>
-        <translation>för kommande avkok</translation>
+        <translation>för kommande infusion.</translation>
     </message>
     <message>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation>Addera %1 vatten vid %2 till mäsken för att få den till %3</translation>
+        <translation>Addera %1 vatten vid %2 till mäsken för att få den till %3.</translation>
     </message>
     <message>
         <source>Heat mash to %1.</source>
@@ -2141,27 +2086,27 @@
     </message>
     <message>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation>Koka %1 av mäsken och häll tillbaka det i mäsktunnan för att nå %2</translation>
+        <translation>Koka %1 av mäsken och häll tillbaka det i mäsktunnan för att nå %2.</translation>
     </message>
     <message>
         <source> Hold for %1.</source>
-        <translation> Håll den här för %1</translation>
+        <translation> Håll den här för %1.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Lägg i %1 %2 i koket vid %3</translation>
+        <translation>Lägg i %1 %2 i koket vid %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Lägg i %1 %2 i jäskaret vid %3</translation>
+        <translation>Lägg i %1 %2 i jäskaret vid %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Lägg i %1 %2 i primären vid %3</translation>
+        <translation>Lägg i %1 %2 i primären vid %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Lägg i %1 %2 i mäsken vid %3</translation>
+        <translation>Lägg i %1 %2 i mäsken vid %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
@@ -2177,19 +2122,19 @@
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Används %1 %2 vid buteljering med %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Tillsätt %1 %2 till primären vid %3</translation>
+        <translation>Tillsätt %1 %2 till primären vid %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Tillsätt %1 %2 till sekundären vid %3</translation>
+        <translation>Tillsätt %1 %2 till sekundären vid %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>Använd %1 %2 till %3</translation>
+        <translation>Använd %1 %2 till %3.</translation>
     </message>
     <message>
         <source>Misc addition</source>
@@ -2205,7 +2150,7 @@
     </message>
     <message>
         <source>You should now have %1 wort.</source>
-        <translation>Du borde nu ha %1 mäsk</translation>
+        <translation>Du borde nu ha %1 vört.</translation>
     </message>
     <message>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
@@ -2225,11 +2170,11 @@
     </message>
     <message>
         <source>to the boil at knockout.</source>
-        <translation type="unfinished"></translation>
+        <translation>till koket vid knockout.</translation>
     </message>
     <message>
         <source>Knockout additions</source>
-        <translation type="unfinished"></translation>
+        <translation>Knockout tillägg</translation>
     </message>
     <message>
         <source>You should have %1 wort post-boil.</source>
@@ -2238,18 +2183,20 @@
     <message>
         <source>
 You anticipate losing %1 to trub and chiller loss.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Du förutses förlora %1 vid trub och chiller förlusten.</translation>
     </message>
     <message>
         <source>
 Add %1 top up water into primary.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Lägg till %1 påfyllningsvatten till den primära satsen.</translation>
     </message>
     <message>
         <source>
 The final volume in the primary is %1.</source>
         <translation>
-Primärens slutgiltiga volym är %1</translation>
+Primärens slutgiltiga volym är %1.</translation>
     </message>
     <message>
         <source>Post boil</source>
@@ -2261,11 +2208,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation>Du har inte ställt in din utrustning (vilket du bör göra), så ange din koktid</translation>
+        <translation>Du har inte ställt in din utrustning (vilket du bör göra), så ange din koktid.</translation>
     </message>
     <message>
         <source>Bring the wort to a boil and hold for %1.</source>
-        <translation>Koka upp vörten och låt den koka i %1</translation>
+        <translation>Koka upp vörten och låt den koka i %1.</translation>
     </message>
     <message>
         <source>Start boil</source>
@@ -2277,7 +2224,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Stop boiling the wort.</source>
-        <translation>Stoppa vörtens kokning</translation>
+        <translation>Stoppa vörtkokningen.</translation>
     </message>
     <message>
         <source>Cool wort and pitch </source>
@@ -2289,7 +2236,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>to the primary.</source>
-        <translation>till primären</translation>
+        <translation>till primären.</translation>
     </message>
     <message>
         <source>Pitch yeast</source>
@@ -2297,7 +2244,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Let ferment until FG is %1.</source>
-        <translation>Lät det jäsa till slutdensiteten är %1</translation>
+        <translation>Lät det jäsa till slutdensiteten är %1.</translation>
     </message>
     <message>
         <source>Ferment</source>
@@ -2305,7 +2252,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Transfer beer to secondary.</source>
-        <translation>Överför ölen till sekundären</translation>
+        <translation>Överför ölen till sekundären.</translation>
     </message>
     <message>
         <source>Transfer to secondary</source>
@@ -2313,7 +2260,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Add %1 %2 to boil at %3.</source>
-        <translation>Tillsätt %1 %2 till koket vid %3</translation>
+        <translation>Tillsätt %1 %2 till koket vid %3.</translation>
     </message>
     <message>
         <source>Raise water to boil and then remove from heat. Stir in  </source>
@@ -2496,11 +2443,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Volume into BK</source>
-        <translation type="unfinished"></translation>
+        <translation>Volym i kokkärl</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Strike Temp</translation>
     </message>
     <message>
         <source>Final Temp</source>
@@ -2508,7 +2455,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation type="unfinished"></translation>
+        <translation>Eff till BK</translation>
     </message>
     <message>
         <source>Projected OG</source>
@@ -2572,7 +2519,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation>Förjäsningsgrad</translation>
     </message>
     <message>
         <source>Id</source>
@@ -2584,55 +2531,55 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>Diverse</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>Jäst</translation>
     </message>
     <message>
         <source>Estimated calories (per 33 cl)</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräknat energiinnehåll (kcal/33cl)</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished">Uppskattade kalorier (per 12 oz)</translation>
+        <translation>Beräknat energiinnehåll (kcal/12oz)</translation>
     </message>
     <message>
         <source>Bitterness</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitterhetsgrad</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation>Målsättning</translation>
     </message>
     <message>
         <source>Total</source>
-        <translation type="unfinished"></translation>
+        <translation>Totalt</translation>
     </message>
     <message>
         <source>Hostname</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdnamn</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <source>Schema</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema</translation>
     </message>
     <message>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Databas</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnamn</translation>
     </message>
     <message>
         <source>Saved Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparat Lösenord</translation>
     </message>
 </context>
 <context>
@@ -2650,30 +2597,30 @@ Primärens slutgiltiga volym är %1</translation>
     <name>ScaleRecipeEquipmentPage</name>
     <message>
         <source>Select Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj utrustning</translation>
     </message>
     <message>
         <source>The recipe will be scaled to match the batch size and efficiency of the selected equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Receptet kommer att skalas för att matcha satsens storlek och effektiviteten av den valda utrustningen</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny utrustning</translation>
     </message>
     <message>
         <source>New Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny effektivitet (%)</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeIntroPage</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Skala recept</translation>
     </message>
     <message>
         <source>This wizard will help you scale a recipe to another size or efficiency.Select another equipment with the new batch size and/or efficiency andthe wizard will scale the recipe ingredients automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>Den här guiden kommer hjälpa dig att skala receptet till en annan volym eller effektivitet. Välj en annan utrustning med den nya satsens volym och/eller effektivitet och guiden kommer att skala alla ingredienser automatiskt.</translation>
     </message>
 </context>
 <context>
@@ -2684,7 +2631,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utrustningen och mäsken har återställts på grund av att mäskens temperatur inte enkelt går att skala, vänligen kör Skalningsguiden igen.</translation>
     </message>
 </context>
 <context>
@@ -2702,184 +2649,176 @@ Primärens slutgiltiga volym är %1</translation>
     <name>TimerDialog</name>
     <message>
         <source>Addition Timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillsats timer</translation>
     </message>
     <message>
         <source>Set Addition Time(min):</source>
-        <translation type="unfinished"></translation>
+        <translation>Sätt Tillsats tid(min):</translation>
     </message>
     <message>
         <source>Time Remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation>Återstående tid:</translation>
     </message>
     <message>
         <source>Notes: </source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckningar: </translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckningar...</translation>
     </message>
     <message>
         <source>Set Alarm sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Sätt alarmljud</translation>
     </message>
     <message>
         <source>Stop Alarm</source>
-        <translation type="unfinished"></translation>
+        <translation>Stoppa alarm</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
     <name>TimerListDialog</name>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillsats Timers</translation>
     </message>
 </context>
 <context>
     <name>TimerMainDialog</name>
     <message>
         <source>Main Boil Timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Huvudkoks timer</translation>
     </message>
     <message>
         <source>Add Timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till timer</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Start</translation>
+        <translation>Starta</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished">Stopp</translation>
+        <translation>Stopp</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Nollställ</translation>
     </message>
     <message>
         <source>Hide Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Göm Timers</translation>
     </message>
     <message>
         <source>Show Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa Timers</translation>
     </message>
     <message>
         <source>Cancel Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt Timers</translation>
     </message>
     <message>
         <source>Load Current Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Ladda nuvarande Recept</translation>
     </message>
     <message>
         <source>Set Boil Timer (mins):</source>
-        <translation type="unfinished"></translation>
+        <translation>Sätt koktid (min):</translation>
     </message>
     <message>
         <source>Set Boil Time Here</source>
-        <translation type="unfinished"></translation>
+        <translation>Sätt koktid här</translation>
     </message>
     <message>
         <source>Limit Alarm Ring Time </source>
-        <translation type="unfinished"></translation>
+        <translation>Begränsa Alarmets ringtid </translation>
     </message>
     <message>
         <source>Alarm Ring Time (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation>Alarmets ringtid (sek):</translation>
     </message>
     <message>
         <source>No Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Inga timers</translation>
     </message>
     <message>
         <source>There are currently no timers to show.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det finns närvarande inge timers att visa.</translation>
     </message>
     <message>
         <source>KNOCKOUT</source>
-        <translation type="unfinished"></translation>
+        <translation>KNOCKOUT</translation>
     </message>
     <message>
         <source>Active Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiva timers</translation>
     </message>
     <message>
         <source>You currently have active timers, would you like to replace them or add to them?</source>
-        <translation type="unfinished"></translation>
+        <translation>Du har aktiva timers igång, vill du ersätta dem eller addera till dem?</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersätt</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till</translation>
     </message>
     <message>
         <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 av %2</translation>
     </message>
     <message>
         <source>%1 hop addition is already timed and has been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 humle tillsatsen är redan tajmad och har ignorerats.</translation>
     </message>
     <message>
         <source>%1 hop additions are already timed and have been ignored.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 humle tillsatserna är redan tajmad och har ignorerats.</translation>
     </message>
     <message>
         <source>Duplicate Timers Ignored</source>
-        <translation type="unfinished"></translation>
+        <translation>Duplicerade Timers ignorerade</translation>
     </message>
     <message>
         <source>No Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen tillsats timer</translation>
     </message>
     <message>
         <source>There are no boil addition, no timers generated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det finns inga koktillsatser, inga timers genererade.</translation>
     </message>
 </context>
 <context>
     <name>TimerWidget</name>
     <message>
         <source>Open Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppna ljud</translation>
     </message>
     <message>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
         <translation>Ljudfiler (*.wav *.ogg *.mp3 *.aiff)</translation>
     </message>
     <message>
-        <source>Stop</source>
-        <translation type="vanished">Stopp</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Start</translation>
-    </message>
-    <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckningar...</translation>
     </message>
     <message>
         <source> and </source>
-        <translation type="unfinished"></translation>
+        <translation> och </translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fel</translation>
     </message>
     <message>
         <source>Addition time cannot be longer than remaining boil time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilläggstid kan inte vara längre än kvarstående koktid</translation>
     </message>
 </context>
 <context>
@@ -2937,11 +2876,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Yeast Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Jästdatabas</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till i receptet</translation>
     </message>
     <message>
         <source>New</source>
@@ -2949,19 +2888,19 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Addera vald ingrediens till receptet</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ny ingrediens</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändra vald ingrediens</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort vald ingrediens</translation>
     </message>
 </context>
 <context>
@@ -3097,7 +3036,7 @@ Primärens slutgiltiga volym är %1</translation>
     <name>brewDayWidget</name>
     <message>
         <source>Brewday Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Bryggdagsläge</translation>
     </message>
     <message>
         <source>Instructions</source>
@@ -3180,11 +3119,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Strike Temp</translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur på mäsk efter dough in</translation>
     </message>
     <message>
         <source>Final Temp</source>
@@ -3212,7 +3151,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Vörtvolymen i BK efter koket</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
@@ -3228,7 +3167,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation>Vörtens temperatur när jästen tillsätts.</translation>
+        <translation>Vörtens temperatur när jästen tillsätts</translation>
     </message>
     <message>
         <source>Postferment</source>
@@ -3240,19 +3179,19 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation type="unfinished"></translation>
+        <translation>Volymen Öl till serveringskaggen/flaskor</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation>procent effektivitet i kokkittelen</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation type="unfinished"></translation>
+        <translation>Eff till BK</translation>
     </message>
     <message>
         <source>Expected OG, based on measure fg</source>
-        <translation type="unfinished"></translation>
+        <translation>Förväntad OG, baserad på mätning FG</translation>
     </message>
     <message>
         <source>Projected OG</source>
@@ -3276,7 +3215,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>ABV based on FG</source>
-        <translation type="unfinished"></translation>
+        <translation>ABV baserad på FG</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -3288,41 +3227,41 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>brewNote</source>
-        <translation type="unfinished"></translation>
+        <translation>Bryggnotering</translation>
     </message>
     <message>
         <source>yyyy-dd-MM</source>
-        <translation type="unfinished"></translation>
+        <translation>yyyy-dd-MM</translation>
     </message>
 </context>
 <context>
     <name>equipmentEditor</name>
     <message>
         <source>Specific heat (cal/(g*K))</source>
-        <translation type="unfinished"></translation>
+        <translation>Specificerad värme (cal/(g*K))</translation>
     </message>
     <message>
         <source>Losses</source>
-        <translation type="unfinished"></translation>
+        <translation>Förluster</translation>
     </message>
     <message>
         <source>Kettle to fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Kittel till jäskärl</translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Lauter dödutrymme</translation>
     </message>
     <message>
         <source>equipmentEditor</source>
-        <translation type="unfinished"></translation>
+        <translation>Utrusnings-editor</translation>
     </message>
 </context>
 <context>
     <name>fermentableEditor</name>
     <message>
         <source>Fermentable Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Jäsbart-editor</translation>
     </message>
     <message>
         <source>Required Fields</source>
@@ -3362,95 +3301,95 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Yield (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Avkastning (%)</translation>
     </message>
     <message>
         <source>Yield as compared to glucose</source>
-        <translation type="unfinished"></translation>
+        <translation>Avkastning jämfört med glukos</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
-        <translation type="unfinished"></translation>
+        <translation>Lovibond skala</translation>
     </message>
     <message>
         <source>Add After Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>addera efter kok</translation>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
-        <translation type="unfinished"></translation>
+        <translation>Denna ingrediens adderas efter koket.</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished"></translation>
+        <translation>Ursprung</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation type="unfinished"></translation>
+        <translation>Leverantör</translation>
     </message>
     <message>
         <source>Coarse/Fine Diff (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grov/fin diff (%)</translation>
     </message>
     <message>
         <source>Yield difference between coarse and fine grind</source>
-        <translation type="unfinished"></translation>
+        <translation>Avkastningsdifferens mellan grov och fin malning</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuktighet (%)</translation>
     </message>
     <message>
         <source>Moisture percentage by mass</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuktighetsgrad per massa</translation>
     </message>
     <message>
         <source>DP (Lintner)</source>
-        <translation type="unfinished"></translation>
+        <translation>DP (Lintner)</translation>
     </message>
     <message>
         <source>Diastatic power in Lintner</source>
-        <translation type="unfinished"></translation>
+        <translation>Diastatisk effekten på Lintner</translation>
     </message>
     <message>
         <source>Protein (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Protein (%)</translation>
     </message>
     <message>
         <source>Protein percentage by mass</source>
-        <translation type="unfinished"></translation>
+        <translation>Procent av protein per massa</translation>
     </message>
     <message>
         <source>Max In Batch (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Max i Sats (%)</translation>
     </message>
     <message>
         <source>Maximum recommended percentage of total grist</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximalt rekommenderad procent av total mäld</translation>
     </message>
     <message>
         <source>Recommend Mash</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekommenderad mäsk</translation>
     </message>
     <message>
         <source>Recommend this be mashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekommenderas att detta mäskas</translation>
     </message>
     <message>
         <source>Is Mashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Är mäskat</translation>
     </message>
     <message>
         <source>Checked if it is present in mash</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrollera om det finns i mäsken</translation>
     </message>
     <message>
         <source>Bitterness (IBU*gal/lb)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitterhet (IBU*gal/lb)</translation>
     </message>
     <message>
         <source>Bitterness of pre-hopped extracts</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitterhet av extrakt före Humlen</translation>
     </message>
     <message>
         <source>Notes:</source>
@@ -3462,11 +3401,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal i Lager</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal i Lager</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3477,7 +3416,7 @@ Primärens slutgiltiga volym är %1</translation>
     <name>hopEditor</name>
     <message>
         <source>Hop Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Humle-editor</translation>
     </message>
     <message>
         <source>Required Fields</source>
@@ -3489,11 +3428,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alfa (%)</translation>
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation>Alfasyror som Procent per massa</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3557,59 +3496,59 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Beta (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Beta (%)</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
-        <translation type="unfinished"></translation>
+        <translation>Betasyror som Procent per massa</translation>
     </message>
     <message>
         <source>HSI</source>
-        <translation type="unfinished"></translation>
+        <translation>HSI</translation>
     </message>
     <message>
         <source>Hop Stability/Storage index</source>
-        <translation type="unfinished"></translation>
+        <translation>Humlestabilitet/förvaringsindex</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation type="unfinished"></translation>
+        <translation>Ursprung</translation>
     </message>
     <message>
         <source>Humulene (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Terpener (%)</translation>
     </message>
     <message>
         <source>Humulene</source>
-        <translation type="unfinished"></translation>
+        <translation>Terpener</translation>
     </message>
     <message>
         <source>Caryophyllene (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Karyofyllen (%)</translation>
     </message>
     <message>
         <source>Caryophyllene</source>
-        <translation type="unfinished"></translation>
+        <translation>Karyofyllen</translation>
     </message>
     <message>
         <source>Cohumulone (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cohumulone (%)</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation type="unfinished"></translation>
+        <translation>Cohumulone</translation>
     </message>
     <message>
         <source>Myrcene (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Myrcen (%)</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation type="unfinished"></translation>
+        <translation>Myrcen</translation>
     </message>
     <message>
         <source>Substitutes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ersättning:</translation>
     </message>
     <message>
         <source>Notes:</source>
@@ -3617,15 +3556,15 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Default Amount </source>
-        <translation type="unfinished"></translation>
+        <translation>Förinställt antal </translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal i Lager</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal i Lager</translation>
     </message>
 </context>
 <context>
@@ -3636,19 +3575,19 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa en timer</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa timer</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Markera steg som slutfört</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Steg slutfört</translation>
     </message>
 </context>
 <context>
@@ -3659,7 +3598,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilar</translation>
     </message>
     <message>
         <source>Fermentables</source>
@@ -3671,11 +3610,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>Diverse</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>Jäst</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -3687,27 +3626,27 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Name of recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Namn på recept</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation type="unfinished"></translation>
+        <translation>Måsättning kokstorlek</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Effektivitet (%)</translation>
     </message>
     <message>
         <source>Calculated Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräknad kokstorlek</translation>
     </message>
     <message>
         <source>Calculated Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräknad Satsstorlek</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
-        <translation type="unfinished"></translation>
+        <translation>Utvinningseffektiviteten du förväntas</translation>
     </message>
     <message>
         <source>Style</source>
@@ -3719,11 +3658,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Target batch size</source>
-        <translation type="unfinished"></translation>
+        <translation>Målsättning satsstorlek</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Målsättning satsstorlek</translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -3731,7 +3670,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Target Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Målsättning Kokstorlek</translation>
     </message>
     <message>
         <source>OG</source>
@@ -3739,7 +3678,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Boil SG</source>
-        <translation type="unfinished"></translation>
+        <translation>Kok SG</translation>
     </message>
     <message>
         <source>FG</source>
@@ -3751,7 +3690,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Bitterness (IBU)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitterhet (IBU)</translation>
     </message>
     <message>
         <source>Color</source>
@@ -3759,43 +3698,43 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>IBU/GU</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU/GU</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalorier/12oz</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation type="unfinished"></translation>
+        <translation>Extra</translation>
     </message>
     <message>
         <source>Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>Bryggdagen</translation>
     </message>
     <message>
         <source>Add a fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till en jäsbar produkt</translation>
     </message>
     <message>
         <source>Remove selected fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort Jäsbar produkt</translation>
     </message>
     <message>
         <source>Edit selected fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera jäsbar produkt</translation>
     </message>
     <message>
         <source>Add hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till Humle</translation>
     </message>
     <message>
         <source>Remove selected hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort Vald Humle</translation>
     </message>
     <message>
         <source>Edit selected hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera Vald Humle</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
@@ -3803,15 +3742,15 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Add misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till Diverse</translation>
     </message>
     <message>
         <source>Remove selected misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort vald Diverse</translation>
     </message>
     <message>
         <source>Edit selected misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera vald Diverse</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -3819,7 +3758,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Add yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till Jäst</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
@@ -3835,91 +3774,91 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till Mäsk-steg</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort valt Mäsk-steg</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera valt Mäsk-steg</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera Mäsk-egenskaper</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation type="unfinished"></translation>
+        <translation>Redigera Mäsk</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäsk Des</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta mäskguiden</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskguide</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskar</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskning steg upp</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskning steg ner</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara Mäskprofilen</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara Mäsk</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Om</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Arkiv</translation>
     </message>
     <message>
         <source>&amp;Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bryggdagen</translation>
     </message>
     <message>
         <source>&amp;Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Recept</translation>
     </message>
     <message>
         <source>&amp;Database</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Databas</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Visa</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Verk&amp;tyg</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Verktygsrad</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation type="unfinished"></translation>
+        <translation>Om &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -3927,91 +3866,91 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exportera Recept</translation>
     </message>
     <message>
         <source>&amp;Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Jäsbara produkter</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Humle</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Diverse</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>&amp;Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Jäst</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Y</translation>
     </message>
     <message>
         <source>&amp;Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Utrustning</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+E</translation>
     </message>
     <message>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Stilar</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Avsluta</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importera Recept</translation>
     </message>
     <message>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar (&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Manual</translation>
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Skala Recept</translation>
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Recept till Urklipp som &amp;Text</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;OG korrigerings Hjälp</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertera Enheter (&amp;C)</translation>
     </message>
     <message>
         <source>Backup Database</source>
@@ -4019,83 +3958,83 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Restore Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ databas</translation>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kopiera Recept</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Pr&amp;iming Kalkulator</translation>
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Refraktometer verktyg</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Förkultiverings kalkulator (&amp;P)</translation>
     </message>
     <message>
         <source>Merge Databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Sammanfoga databaser</translation>
     </message>
     <message>
         <source>Select another database to merge into the current one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Välj en annan databas för att sammanfoga till den aktuella.</translation>
     </message>
     <message>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Skriv ut</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Förhandsgranskning</translation>
     </message>
     <message>
         <source>&amp;Export To HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exportera till HTML</translation>
     </message>
     <message>
         <source>&amp;Export to HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exportera till HTML</translation>
     </message>
     <message>
         <source>&amp;Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Säkerhetskopiera</translation>
     </message>
     <message>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara alla recept, ingredienser o.s.v. till en säkerhetskopieringsmapp</translation>
     </message>
     <message>
         <source>&amp;Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Återställ</translation>
     </message>
     <message>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ recept, ingredienser o.s.v. från en tidigare säkerhetskopiering</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sammanfoga</translation>
     </message>
     <message>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
-        <translation type="unfinished"></translation>
+        <translation>Sammanfoga en annan uppsättning recept, ingredienser o.s.v. i den aktuella uppsättningen</translation>
     </message>
     <message>
         <source>&amp;New Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nytt recept</translation>
     </message>
     <message>
         <source>Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidtagare</translation>
     </message>
     <message>
         <source>Show timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa tidtagare</translation>
     </message>
     <message>
         <source>Save</source>
@@ -4103,54 +4042,46 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Delete selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort valda</translation>
     </message>
     <message>
         <source>Delete recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort recept</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mäskningar</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskningar</translation>
     </message>
     <message>
         <source>1.0</source>
-        <translation type="unfinished"></translation>
+        <translation>1.0</translation>
     </message>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillsatsvatten kalkylator</translation>
     </message>
     <message>
         <source>tab_recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>tab_recipe</translation>
     </message>
     <message>
         <source>Export to &amp;BBCode</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportera till &amp;BBCode</translation>
     </message>
     <message>
         <source>Hydrometer Temp Adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation>Justering av hydrometer temperatur</translation>
     </message>
 </context>
 <context>
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Namn</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="vanished">Stil</translation>
+        <translation>Mäskningsdesigner</translation>
     </message>
     <message>
         <source>Time</source>
@@ -4158,70 +4089,70 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Nästa</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation>Slutför</translation>
     </message>
     <message>
         <source>Infusion/Decoction Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusions-/Avkokningsmängd</translation>
     </message>
     <message>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>min</translation>
     </message>
     <message>
         <source>max</source>
-        <translation type="unfinished"></translation>
+        <translation>max</translation>
     </message>
     <message>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Infusionstemp.</translation>
+        <translation>Infusionstemperatur</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
-        <translation type="unfinished"></translation>
+        <translation>Totalt insamlad vört</translation>
     </message>
     <message>
         <source>vol</source>
-        <translation type="unfinished"></translation>
+        <translation>vol</translation>
     </message>
     <message>
         <source>Tun Fullness</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun Fullhet</translation>
     </message>
     <message>
         <source>tunVol</source>
-        <translation type="unfinished"></translation>
+        <translation>tunVol</translation>
     </message>
     <message>
         <source>thickness</source>
-        <translation type="unfinished"></translation>
+        <translation>tjocklek</translation>
     </message>
     <message>
         <source>&amp;Name</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Namn</translation>
     </message>
     <message>
         <source>&amp;Type</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Typ</translation>
     </message>
     <message>
         <source>Tar&amp;get temp.</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Måltemp.</translation>
     </message>
 </context>
 <context>
     <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskningsredigerare</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4229,19 +4160,19 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Initial korntemperatur</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparge temp</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparge Måltemperatur</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparge pH</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -4249,38 +4180,38 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Initial tun temp</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation type="unfinished"></translation>
+        <translation>Få följande parametrar från receptets utrustning.</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Från utrustning</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun mass</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun sp. värme</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun specifik värme (cal/(g*K))</translation>
     </message>
 </context>
 <context>
     <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskningsstegredigerare</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4304,35 +4235,35 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation type="unfinished"></translation>
+        <translation>Måltemp.</translation>
     </message>
     <message>
         <source>Target temp. of this step</source>
-        <translation type="unfinished"></translation>
+        <translation>Måltemp. av detta steg</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>infusionsmängd</translation>
     </message>
     <message>
         <source>Amount of water to infuse</source>
-        <translation type="unfinished"></translation>
+        <translation>Mängd vatten att fylla på</translation>
     </message>
     <message>
         <source>Infuse temp.</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusionstemp.</translation>
     </message>
     <message>
         <source>Temperature of infusion water</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur på påfyllnadsvattnet</translation>
     </message>
     <message>
         <source>Decoction Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Avkoksmänd</translation>
     </message>
     <message>
         <source>Amount of mash to decoct</source>
-        <translation type="unfinished"></translation>
+        <translation>Mängd av vatten att koka bort</translation>
     </message>
     <message>
         <source>Time</source>
@@ -4340,57 +4271,57 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
-        <translation type="unfinished"></translation>
+        <translation>Tid att utföra steg</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. fördröjningstid</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation type="unfinished"></translation>
+        <translation>Fördröjningstid</translation>
     </message>
     <message>
         <source>End temp.</source>
-        <translation type="unfinished"></translation>
+        <translation>Slutlig temp.</translation>
     </message>
     <message>
         <source>Final temp. of this step</source>
-        <translation type="unfinished"></translation>
+        <translation>Slutlig temp. av det här steget</translation>
     </message>
 </context>
 <context>
     <name>mashWizard</name>
     <message>
         <source>Mash Wizard</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäsk Guide</translation>
     </message>
     <message>
         <source>Mash thickness (L/kg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäsktjocklek</translation>
     </message>
     <message>
         <source>No Spar&amp;ge</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen Spar&amp;ge</translation>
     </message>
     <message>
         <source>Fl&amp;y Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparge injektion (&amp;y)</translation>
     </message>
     <message>
         <source>Ba&amp;tch Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation>Ba&amp;tch Sparge</translation>
     </message>
     <message>
         <source>Batches</source>
-        <translation type="unfinished"></translation>
+        <translation>Satser</translation>
     </message>
 </context>
 <context>
     <name>miscEditor</name>
     <message>
         <source>Misc Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Misc Editor</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4458,11 +4389,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrollera om mängden är listad i kg istället för L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished"></translation>
+        <translation>Mängden är i vikt?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
@@ -4470,7 +4401,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Use for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd för:</translation>
     </message>
     <message>
         <source>Notes:</source>
@@ -4482,18 +4413,18 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal i Lager</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal i Lager</translation>
     </message>
 </context>
 <context>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Namngiben Mäsk Redigerare</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -4501,7 +4432,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort vald Stil</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4509,19 +4440,19 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Initial korntemperatur</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparge temp</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparge Måltemperatur</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparge pH</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -4529,54 +4460,54 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Initial tun temp</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Från utrustning</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun mass</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun sp. värme</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished"></translation>
+        <translation>Tun specifik värme (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till Mäsk-steg</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort valt Mäsk-steg</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskning steg upp</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskning steg ner</translation>
     </message>
 </context>
 <context>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation type="unfinished"></translation>
+        <translation>Justera Mängd för att träffa OG</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Inmatning</translation>
+        <translation>Inmatning</translation>
     </message>
     <message>
         <source>SG</source>
@@ -4584,7 +4515,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Mätt densitet före kok</translation>
     </message>
     <message>
         <source>Temp</source>
@@ -4592,19 +4523,19 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatur vid SG avläsning</translation>
     </message>
     <message>
         <source>Calibration Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalibrations temperatur</translation>
     </message>
     <message>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. som hydrometer är kalibrerad till</translation>
     </message>
     <message>
         <source>-or-</source>
-        <translation type="unfinished"></translation>
+        <translation>-eller-</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -4612,62 +4543,62 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation type="unfinished"></translation>
+        <translation>Plato (viktprocent av likvärdig sackaros)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volym före kok</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppmätt volym före kok</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Output</translation>
+        <translation>Resultat</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
-        <translation type="unfinished"></translation>
+        <translation>OG utan korrigering</translation>
     </message>
     <message>
         <source>OG if you boil as planned</source>
-        <translation type="unfinished"></translation>
+        <translation>OG om du kokar som planerat</translation>
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till i kok</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mängd vatten du behöver lägga till för att träffa planerad OG ( eller koka bort om negativt)</translation>
     </message>
     <message>
         <source>Final Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Slutlig Batch storlek</translation>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppskattad batch storlek efter korrigering</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräkna</translation>
     </message>
     <message>
         <source>ogAdjuster</source>
-        <translation type="unfinished"></translation>
+        <translation>ogJusterare</translation>
     </message>
 </context>
 <context>
     <name>optionsDialog</name>
     <message>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <source>Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Enhet</translation>
     </message>
     <message>
         <source>Weight</source>
@@ -4678,20 +4609,12 @@ Primärens slutgiltiga volym är %1</translation>
         <translation>Temperatur</translation>
     </message>
     <message>
-        <source>Celsius</source>
-        <translation type="vanished">Celsius</translation>
-    </message>
-    <message>
-        <source>Fahrenheit</source>
-        <translation type="vanished">Fahrenheit</translation>
-    </message>
-    <message>
         <source>Volume</source>
         <translation>Volym</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravitation</translation>
     </message>
     <message>
         <source>Color</source>
@@ -4699,7 +4622,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Formulas</source>
-        <translation type="unfinished"></translation>
+        <translation>Formler</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -4707,23 +4630,15 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="vanished">Första Vörten</translation>
+        <translation>IBU justeringar</translation>
     </message>
     <message>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="vanished">Förvalt</translation>
+        <translation>Bläddra</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Språk</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4733,7 +4648,13 @@ Primärens slutgiltiga volym är %1</translation>
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;
+   &lt;b&gt;Känner du till ett annat språk?&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   Eller, vill du förbättra en översättning? Hjälp oss att
+  &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
+  skapa en översättning&lt;/a&gt; så att dina vänner kan använda Brewtarget!
+&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>Date</source>
@@ -4741,138 +4662,138 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Forumulas</source>
-        <translation type="unfinished"></translation>
+        <translation>Formler</translation>
     </message>
     <message>
         <source>Mash Hop (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäsk Humle (%)</translation>
     </message>
     <message>
         <source>First Wort (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Första vörten (%)</translation>
     </message>
     <message>
         <source>Databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Databaser</translation>
     </message>
     <message>
         <source>Engines</source>
-        <translation type="unfinished"></translation>
+        <translation>Databasmotorer</translation>
     </message>
     <message>
         <source>RDBMS Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>RDBMS motor</translation>
     </message>
     <message>
         <source>Test Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Testa kopplingen</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfigurering</translation>
     </message>
     <message>
         <source>Restore defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ standardvärden</translation>
     </message>
     <message>
         <source>Hostname</source>
-        <translation type="unfinished"></translation>
+        <translation>Värdnamn</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <source>Schema</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema</translation>
     </message>
     <message>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Databas</translation>
     </message>
     <message>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>Användarnam</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord</translation>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara lösenord</translation>
     </message>
     <message>
         <source>Data Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Datakatalog</translation>
     </message>
     <message>
         <source>Backup Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhetskopiekatalog</translation>
     </message>
     <message>
         <source>Number of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal Säkerhetskopior</translation>
     </message>
     <message>
         <source>Frequency of Backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Säkerhetskopiefrekvens</translation>
     </message>
     <message>
         <source>PostgresSQL&apos;s host name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>PostgresSQL värdnamn eller IP address</translation>
     </message>
     <message>
         <source>Port the PostgreSQL is listening on</source>
-        <translation type="unfinished"></translation>
+        <translation>Port som PostgreSQL servern lyssnar på</translation>
     </message>
     <message>
         <source>The schema containing the database</source>
-        <translation type="unfinished"></translation>
+        <translation>Schemat innehållandes databasen</translation>
     </message>
     <message>
         <source>User with create/delete table access</source>
-        <translation type="unfinished"></translation>
+        <translation>Användare med Skapa/ta bort tabell tillgång</translation>
     </message>
     <message>
         <source>Password for the user</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösenord för användaren</translation>
     </message>
     <message>
         <source>The name of the database</source>
-        <translation type="unfinished"></translation>
+        <translation>Namnet på databasen</translation>
     </message>
     <message>
         <source>Where your database file is</source>
-        <translation type="unfinished"></translation>
+        <translation>Där din databasfil är</translation>
     </message>
     <message>
         <source>Where to save your backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Var du vill spara dina Säkerhetskopior</translation>
     </message>
     <message>
         <source>Number of backups to keep: -1 means never remove, 0 means never backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal säkerhetskopior att spara: -1 betyder Aldrig ta bort, 0 betyder Aldrig ta säkerhetskopia</translation>
     </message>
     <message>
         <source>How frequently a backup is made: 1 means always backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Hur ofta ska säkerhetskopior tas: 1 betyder Alltid ta säkerhetskopia</translation>
     </message>
 </context>
 <context>
     <name>pitchDialog</name>
     <message>
         <source>Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Förkulturs kalkylator</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Inmatning</translation>
+        <translation>Indata</translation>
     </message>
     <message>
         <source>Wort Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Vörtvolym</translation>
     </message>
     <message>
         <source>OG</source>
@@ -4880,186 +4801,186 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation type="unfinished"></translation>
+        <translation>för Ale, 0.76-1. För Lager, 1.5-2.</translation>
     </message>
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Förkultur (M celler)/(mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Luftningsmetod</translation>
     </message>
     <message>
         <source>Yeast Production Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Jästens produktionsdatum</translation>
     </message>
     <message>
         <source>Yeast Viability</source>
-        <translation type="unfinished"></translation>
+        <translation>Jästens livskraft</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen</translation>
     </message>
     <message>
         <source>O2 At Start</source>
-        <translation type="unfinished"></translation>
+        <translation>O2 vid start</translation>
     </message>
     <message>
         <source>Stir Plate</source>
-        <translation type="unfinished"></translation>
+        <translation>Omrörningsplatta</translation>
     </message>
     <message>
         <source>MM/dd/yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation>MM/dd/yyyy</translation>
     </message>
     <message>
         <source>%</source>
-        <translation type="unfinished"></translation>
+        <translation>%</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Textetikett</translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräkna livskraft från datum</translation>
     </message>
     <message>
         <source># Vials/Smack Packs Pitched</source>
-        <translation type="unfinished"></translation>
+        <translation># flaktor/paket använda</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Output</translation>
+        <translation>Resultat</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Miljarder av Jästceller som krävs</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
-        <translation type="unfinished"></translation>
+        <translation># Flaskor/Paket utan startare</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Torrjäst</translation>
     </message>
     <message>
         <source>Starter Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Startvolym</translation>
     </message>
     <message>
         <source>Volume of wort</source>
-        <translation type="unfinished"></translation>
+        <translation>Vörtvolym</translation>
     </message>
     <message>
         <source>Starting gravity of the wort</source>
-        <translation type="unfinished"></translation>
+        <translation>Startgravitaion av vörten</translation>
     </message>
     <message>
         <source>Aeration method</source>
-        <translation type="unfinished"></translation>
+        <translation>Luftningsmetod</translation>
     </message>
     <message>
         <source>Production date (Best By date less three months)</source>
-        <translation type="unfinished"></translation>
+        <translation>Produktionsdatum (Bäst föredatum mindre än tre månader)</translation>
     </message>
     <message>
         <source>Estimated viability of the yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppskattad livskraft på jästen</translation>
     </message>
     <message>
         <source>Desired pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Önskad förkultivering</translation>
     </message>
     <message>
         <source>Number of vials/smack packs added to starter</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal Flaskor/smack-packs tillagda till startern</translation>
     </message>
     <message>
         <source>How much yeast you will need</source>
-        <translation type="unfinished"></translation>
+        <translation>Hur mycket jäst du behöver</translation>
     </message>
     <message>
         <source>How many smack packs or vials required to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Hur många Smack-packs eller flaskor som krävs till förkultiveringen</translation>
     </message>
     <message>
         <source>Amount of dry yeast needed to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Mängd Torrjäst som behövs för till förkultiveringen</translation>
     </message>
     <message>
         <source>Starter size to reach pitch rate</source>
-        <translation type="unfinished"></translation>
+        <translation>startstorlek till förkultiveringen</translation>
     </message>
 </context>
 <context>
     <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Priming kalkylator</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Inmatning</translation>
+        <translation>Indata</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Tappad Ölvolym</translation>
     </message>
     <message>
         <source>Amount of beer to prime</source>
-        <translation type="unfinished"></translation>
+        <translation>Mängd öl att kultivera</translation>
     </message>
     <message>
         <source>Beer Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Öltemperatur</translation>
     </message>
     <message>
         <source>Temp of the beer</source>
-        <translation type="unfinished"></translation>
+        <translation>Öltemp</translation>
     </message>
     <message>
         <source>Desired Volumes</source>
-        <translation type="unfinished"></translation>
+        <translation>Önskad Volym</translation>
     </message>
     <message>
         <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hur mycket CO2 du vill ha (1L CO2 @ STP per L öl)</translation>
     </message>
     <message>
         <source>Glucose Monohydrate (corn sugar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Glykosmonohydrat (majssocker)</translation>
     </message>
     <message>
         <source>Anhydrous Glucose</source>
-        <translation type="unfinished"></translation>
+        <translation>Vattenfri glykos</translation>
     </message>
     <message>
         <source>Sucrose (table sugar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Socker (Bordssocker)</translation>
     </message>
     <message>
         <source>Dry Malt Extract</source>
-        <translation type="unfinished"></translation>
+        <translation>Torrt maltextrakt</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Output</translation>
+        <translation>Resultat</translation>
     </message>
     <message>
         <source>Prime with</source>
-        <translation type="unfinished"></translation>
+        <translation>Prime med</translation>
     </message>
     <message>
         <source>How much priming ingredient to use</source>
-        <translation type="unfinished"></translation>
+        <translation>Hur mycket Primingingrediens att använda</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräkna</translation>
     </message>
 </context>
 <context>
@@ -5074,59 +4995,59 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Assist. bryggare</translation>
     </message>
     <message>
         <source>Taste Rating</source>
-        <translation type="unfinished"></translation>
+        <translation>Smakbetyg</translation>
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation type="unfinished"></translation>
+        <translation>Primär ålder (dagar)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Primärens temperatur</translation>
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation type="unfinished"></translation>
+        <translation>secundär ålder (dagar)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Secundärens temperatur</translation>
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tertiär ålder (dagar)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Tertiärens temperatur</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation type="unfinished"></translation>
+        <translation>Flaska/Tunna ålder (dagar)</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Flaska/Tunna temperatur</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation type="unfinished"></translation>
+        <translation>Första bryggdatum</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation>dd MMM yyyy</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation type="unfinished"></translation>
+        <translation>kolsydningsvolym</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Smakprov noteringar</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -5137,35 +5058,35 @@ Primärens slutgiltiga volym är %1</translation>
     <name>refractoDialog</name>
     <message>
         <source>Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Refraktometer verktyg</translation>
     </message>
     <message>
         <source>Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Indata</translation>
     </message>
     <message>
         <source>Original Plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Original Plato</translation>
     </message>
     <message>
         <source>OG (20 C)</source>
-        <translation type="unfinished"></translation>
+        <translation>OG (20 C)</translation>
     </message>
     <message>
         <source>Current Plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuvarande Plato</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräkna</translation>
     </message>
     <message>
         <source>Outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Resultat</translation>
     </message>
     <message>
         <source>SG (20C)</source>
-        <translation type="unfinished"></translation>
+        <translation>SG (20C)</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -5173,101 +5094,101 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>ABW</source>
-        <translation type="unfinished"></translation>
+        <translation>Viktprocent (ABW)</translation>
     </message>
     <message>
         <source>Refractive Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Brytningsindex</translation>
     </message>
     <message>
         <source>Real Extract (Plato)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verkligt extrakt (Plato)</translation>
     </message>
     <message>
         <source>OG (20C)</source>
-        <translation type="unfinished"></translation>
+        <translation>OG (20C)</translation>
     </message>
     <message>
         <source>Measured original plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppmätt verkligt Plato</translation>
     </message>
     <message>
         <source>Measured original gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppmätt ursprungling gravitation</translation>
     </message>
     <message>
         <source>Current measured plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Nu uppmätt Plato</translation>
     </message>
 </context>
 <context>
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillsatsvatten kalkylator</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation>Initial insats</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Ursprunglig Korn temperatur</translation>
     </message>
     <message>
         <source>Target Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Måltemperatur för Mäsk</translation>
     </message>
     <message>
         <source>Weight of Grain</source>
-        <translation type="unfinished"></translation>
+        <translation>Kornvikt</translation>
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Vattenvolym</translation>
     </message>
     <message>
         <source>Mash Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation>Mäskinfusion</translation>
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Totalvolym av vatten</translation>
     </message>
     <message>
         <source>Grain Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Kornvikt</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Faktisk Mäsktemperatur</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Infutsionsvattentemperatur</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation>Beräkna</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillsatsvattentemperatur</translation>
     </message>
     <message>
         <source>Volume to add</source>
-        <translation type="unfinished"></translation>
+        <translation>Volym att lägga till</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation>Not.: Kalkylatorn utgår ifrån en förvärmd mäsk tun.</translation>
     </message>
 </context>
 <context>
     <name>styleEditor</name>
     <message>
         <source>Style Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilredigerare</translation>
     </message>
     <message>
         <source>Style</source>
@@ -5275,11 +5196,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta bort vald Stil</translation>
     </message>
     <message>
         <source>Basic Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Grundläggande information</translation>
     </message>
     <message>
         <source>Name</source>
@@ -5291,15 +5212,15 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Category number</source>
-        <translation type="unfinished"></translation>
+        <translation>Kategorinummer</translation>
     </message>
     <message>
         <source>Style letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilbrev</translation>
     </message>
     <message>
         <source>Style guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilguide</translation>
     </message>
     <message>
         <source>Type</source>
@@ -5307,7 +5228,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Type of beverage</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ av dryck</translation>
     </message>
     <message>
         <source>Lager</source>
@@ -5319,7 +5240,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Mead</source>
-        <translation type="unfinished"></translation>
+        <translation>Mjöd</translation>
     </message>
     <message>
         <source>Wheat</source>
@@ -5327,23 +5248,23 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Mixed</source>
-        <translation type="unfinished"></translation>
+        <translation>Blandad</translation>
     </message>
     <message>
         <source>Cider</source>
-        <translation type="unfinished"></translation>
+        <translation>Cider</translation>
     </message>
     <message>
         <source>Vital Statistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Vital statestik</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Max</translation>
     </message>
     <message>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation>Min</translation>
     </message>
     <message>
         <source>OG</source>
@@ -5355,7 +5276,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>IBUs</source>
-        <translation type="unfinished"></translation>
+        <translation>IBUs</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
@@ -5363,23 +5284,23 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolsyrning (vols)</translation>
     </message>
     <message>
         <source>ABV (pct)</source>
-        <translation type="unfinished"></translation>
+        <translation>ABV (pct)</translation>
     </message>
     <message>
         <source>Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil</translation>
     </message>
     <message>
         <source>Ingredients</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingredienser</translation>
     </message>
     <message>
         <source>Examples</source>
-        <translation type="unfinished"></translation>
+        <translation>Exempel</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -5395,44 +5316,44 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Avbryt</translation>
     </message>
 </context>
 <context>
     <name>timerListDialog</name>
     <message>
         <source>Addition Timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Tillsats Timers</translation>
     </message>
 </context>
 <context>
     <name>timerWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulär</translation>
+        <translation>Formulär</translation>
     </message>
     <message>
         <source>Add:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägg till:</translation>
     </message>
     <message>
         <source>Notes...</source>
-        <translation type="unfinished"></translation>
+        <translation>Anteckningar...</translation>
     </message>
     <message>
         <source>At:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vid:</translation>
     </message>
     <message>
         <source>mins</source>
-        <translation type="unfinished"></translation>
+        <translation>minuter</translation>
     </message>
 </context>
 <context>
     <name>waterEditor</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialog</translation>
     </message>
     <message>
         <source>Name</source>
@@ -5507,11 +5428,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Markera denna om mängden anges i kilo istället för liter</translation>
+        <translation>Markera denna om mängden anges i kilo istället för liter.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation type="unfinished"></translation>
+        <translation>Mängden är i vikt?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
@@ -5567,7 +5488,7 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppenbar försvagnings som procent av OG värde</translation>
     </message>
     <message>
         <source>Times Recultured</source>
@@ -5579,11 +5500,11 @@ Primärens slutgiltiga volym är %1</translation>
     </message>
     <message>
         <source>Max Recultures</source>
-        <translation type="unfinished"></translation>
+        <translation>Max antal omodlingar</translation>
     </message>
     <message>
         <source>Max recultures</source>
-        <translation type="unfinished"></translation>
+        <translation>Max antal omodlingar</translation>
     </message>
     <message>
         <source>Add to Secondary</source>

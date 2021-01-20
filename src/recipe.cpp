@@ -1,7 +1,8 @@
 /*
  * recipe.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2020
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -100,7 +101,7 @@ QString Recipe::classNameStr()
 }
 
 Recipe::Recipe(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
    m_type(QString()),
    m_brewer(QString()),
    m_asstBrewer(QString()),
@@ -135,7 +136,7 @@ Recipe::Recipe(Brewtarget::DBTable table, int key)
 }
 
 Recipe::Recipe(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::RECTABLE, -1, name, true),
+   : Ingredient(Brewtarget::RECTABLE, -1, name, true),
    m_type(QString()),
    m_brewer(QString()),
    m_asstBrewer(QString()),
@@ -170,7 +171,7 @@ Recipe::Recipe(QString name, bool cache)
 }
 
 Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_type(rec.value(kcolRecipeType).toString()),
    m_brewer(rec.value(kcolRecipeBrewer).toString()),
    m_asstBrewer(rec.value(kcolRecipeAsstBrewer).toString()),
@@ -204,7 +205,7 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other),
+Recipe::Recipe( Recipe const& other ) : Ingredient(other),
    m_type(other.m_type),
    m_brewer(other.m_brewer),
    m_asstBrewer(other.m_asstBrewer),
@@ -411,7 +412,7 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type)
             str = tr("Steep %1 %2 in wort for %3.");
          else
          {
-            Brewtarget::logW("Recipe::hopSteps(): Unrecognized hop use.");
+            qWarning() << "Recipe::hopSteps(): Unrecognized hop use.";
             str = tr("Use %1 %2 for %3");
          }
 
@@ -452,7 +453,7 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type)
             str = tr("Put %1 %2 into secondary for %3.");
          else
          {
-            Brewtarget::logW("Recipe::getMiscSteps(): Unrecognized misc use.");
+            qWarning() << "Recipe::getMiscSteps(): Unrecognized misc use.";
             str = tr("Use %1 %2 for %3.");
          }
 
@@ -905,33 +906,19 @@ QString Recipe::nextAddToBoil(double& time)
 }
 
 //============================Relational Setters===============================
+Hop *         Recipe::addHop(Hop * var)                 { return this->add<Hop>(var); }
+Fermentable * Recipe::addFermentable(Fermentable * var) { return this->add<Fermentable>(var); }
+Misc *        Recipe::addMisc(Misc * var)               { return this->add<Misc>(var); }
+Yeast *       Recipe::addYeast(Yeast * var)             { return this->add<Yeast>(var); }
+Water *       Recipe::addWater(Water * var)             { return this->add<Water>(var); }
+Salt *        Recipe::addSalt(Salt * var)               { return this->add<Salt>(var); }
 
-void Recipe::addHop( Hop *var )
+void Recipe::setStyle( Style* var )
 {
    Database::instance().addToRecipe( this, var );
 }
 
-void Recipe::addFermentable( Fermentable* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addMisc( Misc* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addYeast( Yeast* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addWater( Water* var )
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addSalt( Salt* var )
+void Recipe::setEquipment( Equipment* var )
 {
    Database::instance().addToRecipe( this, var );
 }
@@ -941,7 +928,7 @@ void Recipe::setType( const QString &var )
 {
    QString tmp;
    if ( ! isValidType(var) ) {
-      Brewtarget::logW( QString("Recipe: invalid type: %1").arg(var) );
+      qWarning() << QString("Recipe: invalid type: %1").arg(var);
       tmp = "All Grain";
    }
    else {
@@ -966,7 +953,7 @@ void Recipe::setBatchSize_l( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: batch size < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: batch size < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -990,7 +977,7 @@ void Recipe::setBoilSize_l( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: boil size < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: boil size < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1014,7 +1001,7 @@ void Recipe::setBoilTime_min( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: boil time < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: boil time < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1033,7 +1020,7 @@ void Recipe::setEfficiency_pct( double var )
    double tmp;
    if( var < 0.0  || var > 100.0 )
    {
-      Brewtarget::logW( QString("Recipe: 0 < efficiency < 100: %1").arg(var) );
+      qWarning() << QString("Recipe: 0 < efficiency < 100: %1").arg(var);
       tmp = 70;
    }
    else
@@ -1081,7 +1068,7 @@ void Recipe::setTasteRating( double var )
    double tmp;
    if( var < 0.0 || var > 50.0 )
    {
-      Brewtarget::logW( QString("Recipe: 0 < taste rating < 50: %1").arg(var) );
+      qWarning() << QString("Recipe: 0 < taste rating < 50: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1100,7 +1087,7 @@ void Recipe::setOg( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: og < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: og < 0: %1").arg(var);
       tmp = 1.0;
    }
    else
@@ -1119,7 +1106,7 @@ void Recipe::setFg( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: fg < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: fg < 0: %1").arg(var);
       tmp = 1.0;
    }
    else
@@ -1138,7 +1125,7 @@ void Recipe::setFermentationStages( int var )
    int tmp;
    if( var < 0 )
    {
-      Brewtarget::logW( QString("Recipe: stages < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: stages < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1157,7 +1144,7 @@ void Recipe::setPrimaryAge_days( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: primary age < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: primary age < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1184,7 +1171,7 @@ void Recipe::setSecondaryAge_days( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: secondary age < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: secondary age < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1211,7 +1198,7 @@ void Recipe::setTertiaryAge_days( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: tertiary age < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: tertiary age < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1238,7 +1225,7 @@ void Recipe::setAge_days( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: age < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: age < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1275,7 +1262,7 @@ void Recipe::setCarbonation_vols( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: carb < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: carb < 0: %1").arg(var);
       tmp = 0;
    }
    else
@@ -1318,7 +1305,7 @@ void Recipe::setPrimingSugarEquiv( double var )
    double tmp;
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: primingsugarequiv < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: primingsugarequiv < 0: %1").arg(var);
       tmp = 1;
    }
    else
@@ -1338,7 +1325,7 @@ void Recipe::setKegPrimingFactor( double var )
 
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Recipe: keg priming factor < 0: %1").arg(var) );
+      qWarning() << QString("Recipe: keg priming factor < 0: %1").arg(var);
       tmp = 1;
    }
    else
@@ -1536,17 +1523,27 @@ int Recipe::fermentationStages() const { return m_fermentationStages; }
 QDate Recipe::date() const { return m_date; }
 bool Recipe::cacheOnly() const { return m_cacheOnly; }
 
-//=============================Removers========================================
+//=============================Adders and Removers========================================
+template<class T> T * Recipe::add(T * var) {
+   // If the supplied ingredient has no parent then we need to make a copy of it - or rather tell the Database object
+   // to make a copy.  We'll then get back a pointer to the copy.  If it does have a parent then we can just add it
+   // directly, and we'll get back the same pointer we passed in.
+   bool noCopy = (var->getParent() != nullptr);
+   return Database::instance().addToRecipe(this, var, noCopy);
+}
 
-// Returns true if var is found and removed.
-void Recipe::remove( BeerXMLElement *var )
+Ingredient * Recipe::removeIngredient( Ingredient *var )
 {
+//   qDebug() << QString("%1").arg(Q_FUNC_INFO);
+
    // brewnotes a bit odd
-   if ( dynamic_cast<BrewNote*>(var) )
+   if ( dynamic_cast<BrewNote*>(var) ) {
       // the cast is required to force the template to gets it thing right
       Database::instance().remove(qobject_cast<BrewNote*>(var));
-   else
-      Database::instance().removeIngredientFromRecipe( this, var );
+      return var;
+   } else {
+      return Database::instance().removeIngredientFromRecipe( this, var );
+   }
 }
 
 double Recipe::batchSizeNoLosses_l()
@@ -2365,4 +2362,25 @@ double Recipe::targetTotalMashVol_l()
 
 
    return targetCollectedWortVol_l() + absorption_lKg * grainsInMash_kg();
+}
+
+Ingredient * Recipe::getParent() {
+   Recipe * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().recipe(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Recipe::insertInDatabase() {
+   return Database::instance().insertRecipe(this);
 }

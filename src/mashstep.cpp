@@ -21,7 +21,7 @@
 #include <QDebug>
 #include "mashstep.h"
 #include "brewtarget.h"
-
+#include "database.h"
 #include "TableSchemaConst.h"
 #include "MashStepSchema.h"
 
@@ -47,7 +47,7 @@ QString MashStep::classNameStr()
 //==============================CONSTRUCTORS====================================
 
 MashStep::MashStep(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key, QString(), true),
+   : Ingredient(table, key, QString(), true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -63,7 +63,7 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
 }
 
 MashStep::MashStep(bool cache)
-   : BeerXMLElement(Brewtarget::MASHSTEPTABLE, -1, QString(), true),
+   : Ingredient(Brewtarget::MASHSTEPTABLE, -1, QString(), true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -79,7 +79,7 @@ MashStep::MashStep(bool cache)
 }
 
 MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
      m_typeStr(rec.value(kcolMashstepType).toString()),
      m_type(static_cast<MashStep::Type>(types.indexOf(m_typeStr))),
      m_infuseAmount_l(rec.value(kcolMashstepInfuseAmt).toDouble()),
@@ -116,7 +116,7 @@ void MashStep::setInfuseAmount_l( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("%1 number cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1 number cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
       return;
    }
    else
@@ -132,7 +132,7 @@ void MashStep::setStepTemp_c( double var )
 {
    if( var < -273.15 )
    {
-      Brewtarget::logW( QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var);
       return;
    }
    else
@@ -148,7 +148,7 @@ void MashStep::setStepTime_min( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("%1: step time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1: step time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
       return;
    }
    else
@@ -164,7 +164,7 @@ void MashStep::setRampTime_min( double var )
 {
    if( var < 0.0 )
    {
-      Brewtarget::logW( QString("%1: ramp time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1: ramp time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
 
       return;
    }
@@ -181,7 +181,7 @@ void MashStep::setEndTemp_c( double var )
 {
    if( var < -273.15 )
    {
-      Brewtarget::logW( QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var) );
+      qWarning() << QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var);
       return;
    }
    else
@@ -203,13 +203,15 @@ void MashStep::setDecoctionAmount_l(double var )
 
 void MashStep::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
+void MashStep::setMash( Mash * mash ) { this->m_mash = mash; }
+
 //============================="GET" METHODS====================================
 MashStep::Type MashStep::type() const { return m_type; }
 const QString MashStep::typeString() const { return m_typeStr; }
-const QString MashStep::typeStringTr() const { 
-   if ( m_type < 0 || m_type > typesTr.length() ) { 
-      return ""; 
-   } 
+const QString MashStep::typeStringTr() const {
+   if ( m_type < 0 || m_type > typesTr.length() ) {
+      return "";
+   }
    return typesTr.at(m_type);
 }
 double MashStep::infuseTemp_c() const { return m_infuseTemp_c; }
@@ -221,6 +223,7 @@ double MashStep::endTemp_c() const { return m_endTemp_c; }
 double MashStep::decoctionAmount_l() const { return m_decoctionAmount_l; }
 int MashStep::stepNumber() const { return m_stepNumber; }
 bool MashStep::cacheOnly( ) const { return m_cacheOnly; }
+Mash * MashStep::mash( ) const { return m_mash; }
 
 bool MashStep::isInfusion() const
 {
@@ -232,7 +235,7 @@ bool MashStep::isInfusion() const
 bool MashStep::isSparge() const
 {
    return ( m_type == MashStep::batchSparge ||
-            m_type == MashStep::flySparge   || 
+            m_type == MashStep::flySparge   ||
             name() == "Final Batch Sparge" );
 }
 
@@ -249,4 +252,8 @@ bool MashStep::isDecoction() const
 bool MashStep::isValidType( const QString &str ) const
 {
    return MashStep::types.contains(str);
+}
+
+int MashStep::insertInDatabase() {
+   return Database::instance().insertMashStep(this, this->m_mash);
 }

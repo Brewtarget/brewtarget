@@ -43,7 +43,7 @@ void MashListModel::addMash(Mash* m)
       int size = mashes.size();
       beginInsertRows( QModelIndex(), size, size );
       mashes.append(m);
-      connect( m, &BeerXMLElement::changed, this, &MashListModel::mashChanged );
+      connect( m, &Ingredient::changed, this, &MashListModel::mashChanged );
       endInsertRows();
    }
 }
@@ -66,7 +66,7 @@ void MashListModel::addMashes(QList<Mash*> m)
       mashes.append(tmp);
       
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &BeerXMLElement::changed, this, &MashListModel::mashChanged );
+         connect( *i, &Ingredient::changed, this, &MashListModel::mashChanged );
       
       endInsertRows();
    }

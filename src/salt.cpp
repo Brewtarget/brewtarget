@@ -1,7 +1,8 @@
 /*
  * salt.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - mik fml firestone
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +28,7 @@
 #include "brewtarget.h"
 #include "TableSchemaConst.h"
 #include "SaltSchema.h"
+#include "database.h"
 
 bool operator<(const Salt &s1, const Salt &s2)
 {
@@ -45,7 +47,7 @@ QString Salt::classNameStr()
 }
 
 Salt::Salt(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
@@ -58,7 +60,7 @@ Salt::Salt(Brewtarget::DBTable table, int key)
 }
 
 Salt::Salt(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::SALTTABLE, -1, name, true),
+   : Ingredient(Brewtarget::SALTTABLE, -1, name, true),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
@@ -71,7 +73,7 @@ Salt::Salt(QString name, bool cache)
 }
 
 Salt::Salt(Salt & other)
-   : BeerXMLElement(Brewtarget::SALTTABLE, -1, other.name(), true),
+   : Ingredient(Brewtarget::SALTTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_add_to(other.m_add_to),
    m_type(other.m_type),
@@ -84,7 +86,7 @@ Salt::Salt(Salt & other)
 }
 
 Salt::Salt(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
    m_amount(rec.value(kcolAmount).toDouble()),
    m_add_to(static_cast<Salt::WhenToAdd>(rec.value(kcolSaltAddTo).toInt())),
    m_type(static_cast<Salt::Types>(rec.value(kcolSaltType).toInt())),
@@ -252,4 +254,8 @@ double Salt::SO4() const
       case Salt::MGSO4: return 389.0 * m_amount * 1000.0;
       default: return 0.0;
    }
+}
+
+int Salt::insertInDatabase() {
+   return Database::instance().insertSalt(this);
 }

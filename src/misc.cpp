@@ -1,7 +1,8 @@
 /*
  * misc.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - mik firestone <mikfire@gmail.com>
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
  *
@@ -32,6 +33,7 @@
 
 #include "TableSchemaConst.h"
 #include "MiscSchema.h"
+#include "database.h"
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
@@ -45,7 +47,7 @@ QString Misc::classNameStr()
 
 //============================CONSTRUCTORS======================================
 Misc::Misc(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key),
+   : Ingredient(table, key),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
    m_useString(QString()),
@@ -62,7 +64,7 @@ Misc::Misc(Brewtarget::DBTable table, int key)
 }
 
 Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : BeerXMLElement(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_typeString(rec.value(kcolMiscType).toString()),
    m_type(static_cast<Misc::Type>(types.indexOf(m_typeString))),
    m_useString(rec.value(kcolUse).toString()),
@@ -78,7 +80,7 @@ Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Misc::Misc(Misc & other) : BeerXMLElement(other),
+Misc::Misc(Misc & other) : Ingredient(other),
    m_typeString(other.m_typeString),
    m_type(other.m_type),
    m_useString(other.m_useString),
@@ -95,7 +97,7 @@ Misc::Misc(Misc & other) : BeerXMLElement(other),
 }
 
 Misc::Misc(QString name, bool cache)
-   : BeerXMLElement(Brewtarget::MISCTABLE, -1, name, true),
+   : Ingredient(Brewtarget::MISCTABLE, -1, name, true),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
    m_useString(QString()),
@@ -233,7 +235,7 @@ void Misc::setAmountIsWeight( bool var )
 void Misc::setAmount( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
+      qWarning() << QString("Misc: amount < 0: %1").arg(var);
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
@@ -245,7 +247,7 @@ void Misc::setAmount( double var )
 void Misc::setInventoryAmount( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: inventory < 0: %1").arg(var) );
+      qWarning() << QString("Misc: inventory < 0: %1").arg(var);
    else {
       m_inventory = var;
       if ( ! m_cacheOnly )
@@ -263,7 +265,7 @@ void Misc::setInventoryId( int key )
 void Misc::setTime( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
+      qWarning() << QString("Misc: time < 0: %1").arg(var);
    else {
       m_time = var;
       if ( ! m_cacheOnly ) {
@@ -300,4 +302,25 @@ bool Misc::isValidType( const QString& var )
          return true;
 
    return false;
+}
+
+Ingredient * Misc::getParent() {
+   Misc * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentIngredientKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().misc(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Misc::insertInDatabase() {
+   return Database::instance().insertMisc(this);
 }

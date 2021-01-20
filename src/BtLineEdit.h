@@ -1,7 +1,9 @@
 /*
- * BtLineEdit.h is part of Brewtarget and was written by Mik Firestone
- * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
- * (rocketman768@gmail.com), 2009-2013.
+ * BtLineEdit.h is part of Brewtarget, and is Copyright the following
+ * authors 2009-2020:
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
+ * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +26,7 @@
 #include <QLineEdit>
 #include "unit.h"
 #include "UnitSystem.h"
-#include "BeerXMLElement.h"
+#include "ingredient.h"
 
 class BtGenericEdit;
 class BtMassEdit;
@@ -60,18 +62,19 @@ public:
    /*! \brief Initialize the BtLineEdit with the parent and do some things with the type
    * \param parent - QWidget* to the parent object
    * \param lType - the type of label: none, gravity, mass or volume
+   * \param maximalDisplayString - an example of the widest string this widget would be expected to need to display
    * \return the initialized widget
    * \todo Not sure if I can get the name of the widget being created.
    *       Not sure how to signal the parent to redisplay
    */
 
-   BtLineEdit(QWidget* parent = 0, Unit::UnitType type = Unit::None);
+   BtLineEdit(QWidget* parent = 0, Unit::UnitType type = Unit::None, QString const & maximalDisplayString = "100.000 L");
    double toSI(Unit::unitDisplay oldUnit = Unit::noUnit, Unit::unitScale oldScale = Unit::noScale, bool force = false);
    // Use this when you want to do something with the returned QString
    QString displayAmount( double amount, int precision = 3);
 
    // Use one of these when you just want to set the text
-   void    setText( BeerXMLElement* element, int precision=3 );
+   void    setText( Ingredient* element, int precision=3 );
    void    setText( double amount, int precision = 3);
    void    setText( QString amount, int precision=3 );
    void    setText( QVariant amount, int precision=3 );
@@ -103,6 +106,11 @@ public slots:
 
 signals:
    void textModified();
+
+private:
+   void calculateDisplaySize(QString const & maximalDisplayString);
+   void setDisplaySize();
+   int desiredWidthInPixels;
 
 protected:
    QWidget *btParent;
