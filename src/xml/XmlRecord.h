@@ -72,7 +72,8 @@ public:
    /**
     * \brief Map from a string in an XML file to the value of an enum in a Brewtarget class
     *
-    * .:TODO:. In theory we'll need to make this two-way when we extend to support saving XML, but a straight search through the whole map is not actually that burdensome
+    * .:TODO:. In theory we'll need to make this two-way when we extend to support saving XML, but a straight search
+    *          through the whole map is not actually that burdensome
     *
     * Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data /
     * number of look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering,
@@ -183,20 +184,15 @@ protected:
    virtual void setContainingEntity(NamedEntity * containingEntity);
 
    /**
-    * TODO REWRITE THIS COMMENT
-    * \brief Finds the first instance of \b NE with \b name() matching \b nameToFind.  This is used to avoid name
-    *        clashes when loading some subclass of NamedEntity (eg Hop, Yeast, Equipment, Recipe) from an XML file (eg
-    *        if are reading in a Recipe called "Oatmeal Stout" then this function can check whether we already have a
-    *        Recipe with that name so that, assuming the new one is not a duplicate, we can amend its name to "Oatmeal
-    *        Stout (1)" or some such.
+    * \brief Given a name that is a duplicate of an existing one, modify it to a potential alternative.
+    *        Callers should call this function as many times as necessary to find a non-clashing name.
     *
-    *        Note child classes need to override this for the subclass of NamedEntity they handle.
-    *        The default implementation does nothing and always returns \b nullptr (because it should never actually
-    *        get called).
+    *        Eg if the supplied clashing name is "Oatmeal Stout", we'll try adding a "duplicate number" in brackets to
+    *        the end of the name, ie amending it to "Oatmeal Stout (1)".  If the caller determines that that clashes too
+    *        then the next call (supplying "Oatmeal Stout (1)") will make us modify the name to "Oatmeal Stout (2)" (and
+    *        NOT "Oatmeal Stout (1) (1)"!).
     *
-    * \param nameToFind
-    * \return A pointer to a \b NE with a matching \b name(), if there is one, or \b nullptr if not.  Note that this
-    *         function does not tell you whether more than one \b NE has the name \b nameToFind
+    * \param candidateName The name that we should attempt to modify.  (Modification is done in place.)
     */
    static void modifyClashingName(QString & candidateName);
 
@@ -249,9 +245,6 @@ protected:
    //
    typedef std::pair<char const * const, std::shared_ptr<XmlRecord> > ChildRecord;
    QMultiHash<QString const &, ChildRecord> childRecords;
-
-   // See https://apache.github.io/xalan-c/api/XalanNode_8hpp_source.html for possible indexes into this array
-   static char const * const XALAN_NODE_TYPES[];
 };
 
 #endif

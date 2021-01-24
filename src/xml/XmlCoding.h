@@ -33,7 +33,9 @@
 
 #include "xml/BtDomErrorHandler.h"
 #include "xml/XmlRecord.h"
-
+#include "xml/XmlNamedEntityRecord.h"
+#include "xml/XmlMashStepRecord.h"
+#include "xml/XmlRecipeRecord.h"
 
 /**
  * \brief An instance of this class holds information about a particular XML encoding (eg BeerXML 1.0) including the
@@ -55,13 +57,12 @@
  *    \b XmlNamedEntityRecord<Equipment> suffices to read Equipment records
  *    \b XmlNamedEntityRecord<Fermentable> suffices to read Fermentable records
  *    \b XmlNamedEntityRecord<Hop> suffices to read Hop records
+ *    \b XmlNamedEntityRecord<Mash> suffices to read Misc records
  *    \b XmlNamedEntityRecord<Misc> suffices to read Misc records
  *    \b XmlNamedEntityRecord<Style> suffices to read Style records
  *    \b XmlNamedEntityRecord<Water> suffices to read Water records
  *    \b XmlNamedEntityRecord<Yeast> suffices to read Yeast records
  * For a couple of other cases, this needs to be extended further:
- *    \b XmlMashRecord : public XmlNamedEntityRecord<Mash> - handles fact that a \b Mash owns (rather than just
- *                                                           contains) its \b MashStep objects
  *    \b XmlMashStepRecord: public XmlNamedEntityRecord<MashStep> - handles extra validation for \b MashStep
  *    \b XmlRecipeRecord : public XmlNamedEntityRecord<Recipe> - handles fact that \b Recipe contains lots
  *                                                               of other things
@@ -109,10 +110,11 @@
  *      Specifically this is a list of field definitions, each being an \b XmlRecord::Field that holds.
  *       ‣ \b fieldType : Field type (encodes as \b XmlRecord::FieldType enum)
  *       ‣ \b xPath : The XPath within this record of this field
- *       ‣ \b propertyName : For a simple field that is not a record, where to store it (via the name of the name of
- *         the Q_PROPERTY of the subclass of \b NamedEntity that this type of record corresponds to).  This can be null
- *         for fields that either will not be stored or will be handled by special processing.  (TBD We could
- *         theoretically use Q_PROPERTY to store records inside their parents, provided we think about when to do it...)
+ *       ‣ \b propertyName : Where to store the field (via the name of the name of the Q_PROPERTY of the subclass of
+ *                           \b NamedEntity that this type of record corresponds to).  This can be null for fields that
+ *                           either will not be stored or will be handled by special processing.
+ *                           (Strictly speaking we don't need field definitions for fields we don't want to store, but
+ *                           the "no store" definitions might be useful in future.)
  *       ‣ \b stringToEnum : If the field type is an enum (XmlRecord::Enum) then we also have a mapping between the
  *         string representation (in the XML file) and our internal numeric representation.
  * Thus very little of the _code_ for handling XML is specific to a particular encoding, which should make it easy to
@@ -136,12 +138,21 @@ public:
     *
     * \param xmlCoding passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
     * \param fieldDefinitions passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
-    * \return A new T constructed on the heap.  The caller owns this object and is responsible for its deletion.
+    * \return Pointer to a new instance, constructed on the heap, of an XmlRecord (or subclass thereof) suitable for
+    *         reading in objects of type T (where T ie expected either to be some subclass of NamedEntity or void to
+    *         signify the root element). Eg:
+    *           XmlCoding::construct<Hop>() will construct an XmlNamedEntityRecord<Hop> object
+    *           XmlCoding::construct<Yeast>() will construct an XmlNamedEntityRecord<Yeast> object
+    *           XmlCoding::construct<Recipe>() will construct an XmlRecipeRecord object ‡
+    *           XmlCoding::construct<void>() will construct an XmlRecipe object ‡
+    *         ‡ courtesy of template specialisation below
+    *
+    *         NB: The caller owns this object and is responsible for its deletion.
     */
    template<typename T>
    static XmlRecord * construct(XmlCoding const & xmlCoding,
                                 XmlRecord::FieldDefinitions const & fieldDefinitions) {
-      return new T{xmlCoding, fieldDefinitions};
+      return new XmlNamedEntityRecord<T>{xmlCoding, fieldDefinitions};
    }
 
    /**
@@ -224,5 +235,23 @@ private:
    class impl;
    std::unique_ptr<impl> pimpl;
 };
+
+// Specialisations for classes that aren't handled by XmlNamedEntityRecord
+template<> inline
+XmlRecord * XmlCoding::construct<void>(XmlCoding const & xmlCoding,
+                                       XmlRecord::FieldDefinitions const & fieldDefinitions) {
+   return new XmlRecord{xmlCoding, fieldDefinitions};
+}
+template<> inline
+XmlRecord * XmlCoding::construct<MashStep>(XmlCoding const & xmlCoding,
+                                           XmlRecord::FieldDefinitions const & fieldDefinitions) {
+   return new XmlMashStepRecord{xmlCoding, fieldDefinitions};
+}
+template<> inline
+XmlRecord * XmlCoding::construct<Recipe>(XmlCoding const & xmlCoding,
+                                         XmlRecord::FieldDefinitions const & fieldDefinitions) {
+   return new XmlRecipeRecord{xmlCoding, fieldDefinitions};
+}
+
 
 #endif

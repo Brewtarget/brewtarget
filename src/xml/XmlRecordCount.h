@@ -59,8 +59,9 @@ public:
     * \brief Construct a user-readable string summarising how many records of each type were skipped and/or successfully
     *        processed.
     * \param userMessage Where to write the text suitable for showing on-screen to the user
+    * \return \b false if no records at all were skipped or processed, \b true otherwise
     */
-   void writeToUserMessage(QTextStream & userMessage);
+   bool writeToUserMessage(QTextStream & userMessage);
 
 private:
    QMap<QString, int> skips;

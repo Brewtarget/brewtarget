@@ -510,10 +510,10 @@ public:
          return false;
       }
 
-      // Everything went OK, so summarise what we read in into the message displayed on-screen to the user
-      stats.writeToUserMessage(userMessage);
-
-      return true;
+      // Everything went OK - unless we found no content to read.
+      // Summarise what we read in into the message displayed on-screen to the user, and return false if no content,
+      // true otherwise
+      return stats.writeToUserMessage(userMessage);
    }
 
 private:
@@ -526,7 +526,8 @@ private:
    xercesc::DOMLSParser * parser;
 };
 
-///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 XmlCoding::XmlCoding(QString const name,
                      QString const schemaResource,
                      QHash<QString, XmlRecordDefinition> const & entityNameToXmlRecordDefinition) :

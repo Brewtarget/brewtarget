@@ -27,22 +27,28 @@
 
 #include "xml/XmlCoding.h"
 
-constexpr char const * const XmlRecord::XALAN_NODE_TYPES[] {
-   "UNKNOWN_NODE",                 //= 0,
-   "ELEMENT_NODE",                 //= 1,
-   "ATTRIBUTE_NODE",               //= 2,
-   "TEXT_NODE",                    //= 3,
-   "CDATA_SECTION_NODE",           //= 4,
-   "ENTITY_REFERENCE_NODE",        //= 5,
-   "ENTITY_NODE",                  //= 6,
-   "PROCESSING_INSTRUCTION_NODE",  //= 7,
-   "COMMENT_NODE",                 //= 8,
-   "DOCUMENT_NODE",                //= 9,
-   "DOCUMENT_TYPE_NODE",           //= 10,
-   "DOCUMENT_FRAGMENT_NODE",       //= 11,
-   "NOTATION_NODE",                //= 12
-   "UNRECOGNISED!"
-};
+//
+// Variables and constant definitions that we need only in this file
+//
+namespace {
+   // See https://apache.github.io/xalan-c/api/XalanNode_8hpp_source.html for possible indexes into this array
+   char const * const XALAN_NODE_TYPES[] {
+      "UNKNOWN_NODE",                 //= 0,
+      "ELEMENT_NODE",                 //= 1,
+      "ATTRIBUTE_NODE",               //= 2,
+      "TEXT_NODE",                    //= 3,
+      "CDATA_SECTION_NODE",           //= 4,
+      "ENTITY_REFERENCE_NODE",        //= 5,
+      "ENTITY_NODE",                  //= 6,
+      "PROCESSING_INSTRUCTION_NODE",  //= 7,
+      "COMMENT_NODE",                 //= 8,
+      "DOCUMENT_NODE",                //= 9,
+      "DOCUMENT_TYPE_NODE",           //= 10,
+      "DOCUMENT_FRAGMENT_NODE",       //= 11,
+      "NOTATION_NODE",                //= 12
+      "UNRECOGNISED!"
+   };
+}
 
 XmlRecord::XmlRecord(XmlCoding const & xmlCoding,
                      FieldDefinitions const & fieldDefinitions) :
@@ -118,7 +124,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
          int numChildrenOfContainerNode = fieldContents->getLength();
          qDebug() <<
             Q_FUNC_INFO << "Node " << fieldDefinition->xPath << "(" << fieldName << ":" <<
-            XmlRecord::XALAN_NODE_TYPES[fieldContainerNode->getNodeType()] << ") has " <<
+            XALAN_NODE_TYPES[fieldContainerNode->getNodeType()] << ") has " <<
             numChildrenOfContainerNode << " children";
          if (0 == numChildrenOfContainerNode) {
             qDebug() << Q_FUNC_INFO << "Empty!";
@@ -460,17 +466,6 @@ void XmlRecord::setContainingEntity(NamedEntity * containingEntity) {
 }
 
 
-/**
- * \brief Given a name that is a duplicate of an existing one, modify it to a potential alternative.
- *        Callers should call this function as many times as necessary to find a non-clashing name.
- *
- *        Eg if the supplied clashing name is "Oatmeal Stout", we'll try adding a "duplicate number" in brackets to
- *        the end of the name, ie amending it to "Oatmeal Stout (1)".  If the caller determines that that clashes too
- *        then the next call (supplying "Oatmeal Stout (1)") will make us modify the name to "Oatmeal Stout (2)" (and
- *        NOT "Oatmeal Stout (1) (1)"!).
- *
- * \param candidateName The name that we should attempt to modify.  (Modification is done in place.)
- */
 void XmlRecord::modifyClashingName(QString & candidateName) {
    //
    // First, see whether there's already a (n) (ie "(1)", "(2)" etc) at the end of the name (with or without

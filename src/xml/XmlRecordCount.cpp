@@ -38,15 +38,15 @@ void XmlRecordCount::processedOk(QString recordName) {
    return;
 }
 
-void XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
+bool XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
 
    if (this->oks.isEmpty() && this->skips.isEmpty()) {
       //
-      // This is often impossible - eg reading in a BeerXML file, the XSD parsing will have enforced that the file has
-      // some content - but include some handling just in case.
+      // Haven't managed to get the XSD to enforce that there is at least some recognisable content in the file, so we
+      // need to handle this case ourselves.
       //
-      userMessage << this->tr("Nothing to process!");
-      return;
+      userMessage << this->tr("Couldn't find any recognisable data in the file!");
+      return false;
    }
 
    if (!this->oks.isEmpty()) {
@@ -84,5 +84,5 @@ void XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
          (1 == totalRecordsSkipped ? this->tr(" record") : this->tr(" records")) << " already in database";
    }
 
-   return;
+   return true;
 }

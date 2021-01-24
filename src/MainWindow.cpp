@@ -214,9 +214,9 @@ public:
          );
       } else {
          messageBoxText = QString(
-            tr("Unable to import file \"%1\"\n\n"
+            tr("Unable to import data from \"%1\"\n\n"
                "%2\n\n"
-               "See log file for more details.").arg(fileInfo.fileName()).arg(userMessage)
+               "Log file may contain more details.").arg(fileInfo.fileName()).arg(userMessage)
          );
       }
       qDebug() << Q_FUNC_INFO << "Message box text : " << messageBoxText;
