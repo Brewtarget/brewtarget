@@ -21,7 +21,6 @@
 #pragma once
 
 #include "xml/XmlNamedEntityRecord.h"
-#include "xml/XmlMashStepRecord.h"
 
 #include "mash.h"
 
@@ -30,17 +29,17 @@
  * \brief Loads a \b Mash record in from an XML file, including the \b MashStep records it
  * contains (via \b XmlMashStepRecord).
  */
-class XmlMashRecord : public XmlNamedEntityRecord<Mash> {
+/*class XmlMashRecord : public XmlNamedEntityRecord<Mash> {
 public:
    // We only want to override one method, so the parent class's constructors are fine for us
    using XmlNamedEntityRecord<Mash>::XmlNamedEntityRecord;
-
+*/
    /**
     * \brief Overrides (extends) XmlRecord::normaliseAndStoreInDb() to add extra clean-up logic
     */
-   virtual bool normaliseAndStoreInDb(NamedEntity * containingEntity,
+/*   virtual bool normaliseAndStoreInDb(NamedEntity * containingEntity,
                                       QTextStream & userMessage,
                                       XmlRecordCount & stats);
 };
-
+*/
 #endif

@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _INSTRUCTION_H
 #define _INSTRUCTION_H
 
@@ -80,15 +79,21 @@ public:
    static QString classNameStr();
 
    // Instruction objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Instruction(Brewtarget::DBTable table, int key);
    Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec);
+public:
    Instruction( QString name, bool cache = true );
+private:
    Instruction( Instruction const& other );
 
    QString m_directions;

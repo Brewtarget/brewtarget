@@ -58,6 +58,7 @@
 #include "xml/XmlMashRecord.h"
 #include "xml/XmlMashStepRecord.h"
 #include "xml/XmlNamedEntityRecord.h"
+#include "xml/XmlRecipeRecord.h"
 #include "xml/XmlCoding.h"
 #include "xml/XmlRecord.h"
 #include "xml/XQString.h"
@@ -187,7 +188,7 @@ static XmlRecord::FieldDefinitions const BEER_XML_YEAST_RECORD_FIELDS {
    {XmlRecord::String,  "NAME",             "name",                   nullptr},
    {XmlRecord::UInt,    "VERSION",          nullptr,                  nullptr},
    {XmlRecord::Enum,    "TYPE",             "type",                   &BEER_XML_YEAST_TYPE_MAPPER},
-   {XmlRecord::Enum,    "TYPE",             "type",                   &BEER_XML_YEAST_FORM_MAPPER},
+   {XmlRecord::Enum,    "FORM",             "type",                   &BEER_XML_YEAST_FORM_MAPPER},
    {XmlRecord::Double,  "AMOUNT",           "amount",                 nullptr},
    {XmlRecord::Bool,    "AMOUNT_IS_WEIGHT", "amountIsWeight",         nullptr},
    {XmlRecord::String,  "LABORATORY",       "laboratory",             nullptr},
@@ -321,7 +322,6 @@ static XmlRecord::EnumLookupMap const BEER_XML_MASH_STEP_TYPE_MAPPER {
    // Inside Brewtarget we also have MashStep::flySparge and MashStep::batchSparge which are not mentioned in the
    // BeerXML 1.0 Standard.  They get treated as "Infusion" when we write to BeerXML
 };
-
 static XmlRecord::FieldDefinitions const BEER_XML_MASH_STEP_RECORD_FIELDS {
    // Type              XPath                 Q_PROPERTY           Enum Mapper
    {XmlRecord::String,  "NAME",               "name",              nullptr},
@@ -397,6 +397,129 @@ static XmlRecord::FieldDefinitions const BEER_XML_EQUIPMENT_RECORD_FIELDS {
    {XmlRecord::Double,  "BOILING_POINT",             "boilingPoint_c",        nullptr}  // Non-standard tag, not part of BeerXML 1.0 standard
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Field mappings for <INSTRUCTION>...</INSTRUCTION> BeerXML records
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+static XmlRecord::FieldDefinitions const BEER_XML_INSTRUCTION_RECORD_FIELDS {
+   // Type              XPath            Q_PROPERTY      Enum Mapper
+   {XmlRecord::String,  "NAME",          "name",         nullptr},
+   {XmlRecord::UInt,    "VERSION",       nullptr,        nullptr},
+   {XmlRecord::String,  "directions",    "directions",   nullptr},
+   {XmlRecord::Bool,    "hasTimer",      "hasTimer",     nullptr},
+   {XmlRecord::String,  "timervalue",    "timerValue",   nullptr}, // NB XPath is lowercase and property is camelCase
+   {XmlRecord::Bool,    "completed",     "completed",    nullptr},
+   {XmlRecord::Double,  "interval",      "interval",     nullptr}
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Field mappings for <BREWNOTE>...</BREWNOTE> BeerXML records
+// NB There is no NAME field on a BREWNOTE
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+static XmlRecord::FieldDefinitions const BEER_XML_BREWNOTE_RECORD_FIELDS {
+   // Type              XPath                         Q_PROPERTY              Enum Mapper
+   {XmlRecord::UInt,    "VERSION",                    nullptr,                nullptr},
+   {XmlRecord::Date,    "BREWDATE",                   "brewDate",             nullptr},
+   {XmlRecord::Date,    "DATE_FERMENTED_OUT",         "fermentDate",          nullptr},
+   {XmlRecord::String,  "NOTES",                      "notes",                nullptr},
+   {XmlRecord::Double,  "SG",                         "sg",                   nullptr},
+   {XmlRecord::Double,  "ACTUAL_ABV",                 "abv",                  nullptr},
+   {XmlRecord::Double,  "EFF_INTO_BK",                "effIntoBK_pct",        nullptr},
+   {XmlRecord::Double,  "BREWHOUSE_EFF",              "brewhouseEff_pct",     nullptr},
+   {XmlRecord::Double,  "VOLUME_INTO_BK",             "volumeIntoBK_l",       nullptr},
+   {XmlRecord::Double,  "STRIKE_TEMP",                "strikeTemp_c",         nullptr},
+   {XmlRecord::Double,  "MASH_FINAL_TEMP",            "mashFinTemp_c",        nullptr},
+   {XmlRecord::Double,  "OG",                         "og",                   nullptr},
+   {XmlRecord::Double,  "POST_BOIL_VOLUME",           "postBoilVolume_l",     nullptr},
+   {XmlRecord::Double,  "VOLUME_INTO_FERMENTER",      "volumeIntoFerm_l",     nullptr},
+   {XmlRecord::Double,  "PITCH_TEMP",                 "pitchTemp_c",          nullptr},
+   {XmlRecord::Double,  "FG",                         "fg",                   nullptr},
+   {XmlRecord::Double,  "ATTENUATION",                "attenuation",          nullptr},
+   {XmlRecord::Double,  "FINAL_VOLUME",               "finalVolume_l",        nullptr},
+   {XmlRecord::Double,  "BOIL_OFF",                   "boilOff_l",            nullptr},
+   {XmlRecord::Double,  "PROJECTED_BOIL_GRAV",        "projBoilGrav",         nullptr},
+   {XmlRecord::Double,  "PROJECTED_VOL_INTO_BK",      "projVolIntoBK_l",      nullptr},
+   {XmlRecord::Double,  "PROJECTED_STRIKE_TEMP",      "projStrikeTemp_c",     nullptr},
+   {XmlRecord::Double,  "PROJECTED_MASH_FIN_TEMP",    "projMashFinTemp_c",    nullptr},
+   {XmlRecord::Double,  "PROJECTED_OG",               "projOg",               nullptr},
+   {XmlRecord::Double,  "PROJECTED_VOL_INTO_FERM",    "projVolIntoFerm_l",    nullptr},
+   {XmlRecord::Double,  "FG",                         "projFg",               nullptr},
+   {XmlRecord::Double,  "PROJECTED_EFF",              "projEff_pct",          nullptr},
+   {XmlRecord::Double,  "PROJECTED_ABV",              "projABV_pct",          nullptr},
+   {XmlRecord::Double,  "PROJECTED_POINTS",           "projPoints",           nullptr},
+   {XmlRecord::Double,  "PROJECTED_FERM_POINTS",      "projFermPoints",       nullptr},
+   {XmlRecord::Double,  "PROJECTED_ATTEN",            "projAtten",            nullptr}
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Field mappings for <RECIPE>...</RECIPE> BeerXML records
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+static XmlRecord::EnumLookupMap const BEER_XML_RECIPE_STEP_TYPE_MAPPER {
+   {"Extract",      Recipe::Extract},
+   {"Partial Mash", Recipe::PartialMash},
+   {"All Grain",    Recipe::AllGrain}
+};
+static XmlRecord::FieldDefinitions const BEER_XML_RECIPE_RECORD_FIELDS {
+   // Type               XPath                      Q_PROPERTY               Enum Mapper
+   {XmlRecord::String,  "NAME",                     "name",                  nullptr},
+   {XmlRecord::UInt,    "VERSION",                  nullptr,                 nullptr},
+   {XmlRecord::Enum,    "TYPE",                     "recipeType",            &BEER_XML_RECIPE_STEP_TYPE_MAPPER},
+   {XmlRecord::Record,  "STYLE",                    "style",                 nullptr},
+   {XmlRecord::Record,  "EQUIPMENT",                "equipment",             nullptr},
+   {XmlRecord::String,  "BREWER",                   "brewer",                nullptr},
+   {XmlRecord::String,  "ASST_BREWER",              "asstBrewer",            nullptr},
+   {XmlRecord::Double,  "BATCH_SIZE",               "batchSize_l",           nullptr},
+   {XmlRecord::Double,  "BOIL_SIZE",                "boilSize_l",            nullptr},
+   {XmlRecord::Double,  "BOIL_TIME",                "boilTime_min",          nullptr},
+   {XmlRecord::Double,  "EFFICIENCY",               "efficiency_pct",        nullptr},
+   {XmlRecord::Record,  "HOPS/HOP",                 nullptr,                 nullptr}, // Additional logic for "HOPS" is handled in xml/XmlRecipeRecord.cpp
+   {XmlRecord::Record,  "FERMENTABLES/FERMENTABLE", nullptr,                 nullptr}, // Additional logic for "FERMENTABLES" is handled in xml/XmlRecipeRecord.cpp
+   {XmlRecord::Record,  "MISCS/MISC",               nullptr,                 nullptr}, // Additional logic for "MISCS" is handled in xml/XmlRecipeRecord.cpp
+   {XmlRecord::Record,  "YEASTS/YEAST",             nullptr,                 nullptr}, // Additional logic for "YEASTS" is handled in xml/XmlRecipeRecord.cpp
+   {XmlRecord::Record,  "WATERS/WATER",             nullptr,                 nullptr}, // Additional logic for "WATERS" is handled in xml/XmlRecipeRecord.cpp
+   {XmlRecord::Record,  "MASH",                     "mash",                  nullptr},
+   {XmlRecord::Record,  "INSTRUCTIONS/INSTRUCTION", nullptr,                 nullptr}, // Additional logic for "INSTRUCTIONS" is handled in xml/XmlNamedEntityRecord.h
+   {XmlRecord::Record,  "BREWNOTES/BREWNOTE",       nullptr,                 nullptr}, // Additional logic for "BREWNOTES" is handled in xml/XmlNamedEntityRecord.h
+   {XmlRecord::String,  "NOTES",                    "notes",                 nullptr},
+   {XmlRecord::String,  "TASTE_NOTES",              "tasteNotes",            nullptr},
+   {XmlRecord::Double,  "TASTE_RATING",             "tasteRating",           nullptr},
+   {XmlRecord::Double,  "OG",                       "og",                    nullptr},
+   {XmlRecord::Double,  "FG",                       "fg",                    nullptr},
+   {XmlRecord::UInt,    "FERMENTATION_STAGES",      "fermentationStages",    nullptr},
+   {XmlRecord::Double,  "PRIMARY_AGE",              "primaryAge_days",       nullptr},
+   {XmlRecord::Double,  "PRIMARY_TEMP",             "primaryTemp_c",         nullptr},
+   {XmlRecord::Double,  "SECONDARY_AGE",            "secondaryAge_days",     nullptr},
+   {XmlRecord::Double,  "SECONDARY_TEMP",           "secondaryTemp_c",       nullptr},
+   {XmlRecord::Double,  "TERTIARY_AGE",             "tertiaryAge_days",      nullptr},
+   {XmlRecord::Double,  "TERTIARY_TEMP",            "tertiaryTemp_c",        nullptr},
+   {XmlRecord::Double,  "AGE",                      "age",                   nullptr},
+   {XmlRecord::Double,  "AGE_TEMP",                 "ageTemp_c",             nullptr},
+   {XmlRecord::Date,    "DATE",                     "date",                  nullptr},
+   {XmlRecord::Double,  "CARBONATION",              "carbonation_vols",      nullptr},
+   {XmlRecord::Bool,    "FORCED_CARBONATION",       "forcedCarbonation",     nullptr},
+   {XmlRecord::String,  "PRIMING_SUGAR_NAME",       "primingSugarName",      nullptr},
+   {XmlRecord::Double,  "CARBONATION_TEMP",         "carbonationTemp_c",     nullptr},
+   {XmlRecord::Double,  "PRIMING_SUGAR_EQUIV",      "primingSugarEquiv",     nullptr},
+   {XmlRecord::Double,  "KEG_PRIMING_FACTOR",       "kegPrimingFactor",      nullptr},
+   {XmlRecord::String,  "EST_OG",                    nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "EST_FG",                    nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "EST_COLOR",                 nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "IBU",                       nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "IBU_METHOD",                nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "EST_ABV",                   nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "ABV",                       nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "ACTUAL_EFFICIENCY",         nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "CALORIES",                  nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_BATCH_SIZE",        nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_BOIL_SIZE",         nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_OG",                nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_FG",                nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_PRIMARY_TEMP",      nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_SECONDARY_TEMP",    nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_TERTIARY_TEMP",     nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_AGE_TEMP",          nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "CARBONATION_USED",          nullptr,                nullptr}, // Extension tag
+   {XmlRecord::String,  "DISPLAY_CARB_TEMP",         nullptr,                nullptr} // Extension tag
+};
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,7 +534,8 @@ public:
     */
    impl() : BeerXml1Coding{
                "BeerXML 1.0",
-               ":/beerxml/v1/BeerXml.xsd",
+               ":/xsd/beerxml/v1/BeerXml.xsd",
+               // .:TODO:. We should make XmlCoding::construct dependent on the NamedEntity rather than the XmlRecord, and delegate those details to XmlRecord or XmlCoding
                QHash<QString, XmlCoding::XmlRecordDefinition>{
                   {"BEER_XML",    {&XmlCoding::construct< XmlRecord >,                         &BEER_XML_ROOT_RECORD_FIELDS} },
                   {"HOP",         {&XmlCoding::construct< XmlNamedEntityRecord<Hop> >,         &BEER_XML_HOP_RECORD_FIELDS} },
@@ -421,9 +545,11 @@ public:
                   {"WATER",       {&XmlCoding::construct< XmlNamedEntityRecord<Water> >,       &BEER_XML_WATER_RECORD_FIELDS} },
                   {"STYLE",       {&XmlCoding::construct< XmlNamedEntityRecord<Style> >,       &BEER_XML_STYLE_RECORD_FIELDS} },
                   {"MASH_STEP",   {&XmlCoding::construct< XmlMashStepRecord >,                 &BEER_XML_MASH_STEP_RECORD_FIELDS} },
-                  {"MASH",        {&XmlCoding::construct< XmlMashRecord >,                     &BEER_XML_MASH_RECORD_FIELDS} },
-            //      {"RECIPE",       nullptr}, //TODO
-                  {"EQUIPMENT",   {&XmlCoding::construct< XmlNamedEntityRecord<Equipment> >,   &BEER_XML_EQUIPMENT_RECORD_FIELDS} }
+                  {"MASH",        {&XmlCoding::construct< XmlNamedEntityRecord<Mash> >,        &BEER_XML_MASH_RECORD_FIELDS} },
+                  {"EQUIPMENT",   {&XmlCoding::construct< XmlNamedEntityRecord<Equipment> >,   &BEER_XML_EQUIPMENT_RECORD_FIELDS} },
+                  {"INSTRUCTION", {&XmlCoding::construct< XmlNamedEntityRecord<Instruction> >, &BEER_XML_INSTRUCTION_RECORD_FIELDS} },
+                  {"BREWNOTE",    {&XmlCoding::construct< XmlNamedEntityRecord<BrewNote> >,    &BEER_XML_BREWNOTE_RECORD_FIELDS} },
+                  {"RECIPE",      {&XmlCoding::construct< XmlRecipeRecord >,                   &BEER_XML_RECIPE_RECORD_FIELDS} }
                }
             } {
       return;
@@ -459,9 +585,18 @@ public:
       // Rather than just read the XML file into memory, we actually make a small on-the-fly modification to it to
       // place all the top-level content inside a <BEER_XML>...</BEER_XML> field.  This massively simplifies the XSD
       // (as explained in a comment therein) at the cost of some minor complexity here.  Essentially, the added tag
-      // pair is (much as we might have wished it were part of the original BeerXML 1.0 Specification) something we
-      // need to hide from the user to avoid confusion (as the tag does not and is not supposed to exist in the
-      // document they are asking us to process).
+      // pair is (much as we might have wished it were part of the original BeerXML 1.0 Specification to make BeerXML
+      // actually valid XML †) something we need to hide from the user to avoid confusion (as the tag does not and is
+      // not supposed to exist in the document they are asking us to process).
+      //
+      // † The BeerXML 1.0 standard diverges from valid/standard XML in a few ways:
+      //    • It mandates an XML Declaration (which it calls the "XML Header"), which is normally an optional part of
+      //       any UTF-8 encoded XML document.  (This is perhaps because it seems to mandate an ISO-8859-1 coding of
+      //       BeerXML files, though there is no explicit discussion of file encodings in the standard, and this seems
+      //       an unnecessary constraint to place on files.)
+      //    • It omits to specify a single root element, even though this is a required part of any valid XML document.
+      //    • It uses "TRUE" and "FALSE" (ie caps) for boolean values instead of the XML standard "true" and "false"
+      //      (ie lower case).
       //
       // Fortunately the edit is simple:
       //  - We retain unchanged the first line of the file (which will be something along the lines of
@@ -524,7 +659,7 @@ public:
          {QString("^no declaration found for element"),                 QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")},
          {QString("^element '[^']*' is not allowed for content model"), QString("we are assuming unrecognised tags are just non-standard tags in the BeerXML")}
       };
-      BtDomErrorHandler domErrorHandler(&errorPatternsToIgnore, 1 , 1);
+      BtDomErrorHandler domErrorHandler(&errorPatternsToIgnore, 1, 1);
 
       return this->BeerXml1Coding.validateLoadAndStoreInDb(documentData, fileName, domErrorHandler, userMessage);
 
@@ -960,6 +1095,7 @@ void BeerXML::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
    parent.appendChild(node);
 }
 
+/*
 // fromXml ====================================================================
 void BeerXML::fromXml(Ingredient* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode)
 {
@@ -1140,7 +1276,7 @@ BrewNote* BeerXML::brewNoteFromXml( QDomNode const& node, Recipe* parent )
    }
    return ret;
 }
-/*
+
 Equipment* BeerXML::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
    // When loading from XML, we need to delay the signals until after

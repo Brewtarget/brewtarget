@@ -516,6 +516,7 @@ signals:
    void deletedSignal(Equipment*);
    void deletedSignal(Fermentable*);
    void deletedSignal(Hop*);
+   void deletedSignal(Instruction*);
    void deletedSignal(Mash*);
    void deletedSignal(Misc*);
    void deletedSignal(Recipe*);

@@ -20,18 +20,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _YEAST_H
 #define _YEAST_H
 
 #include "model/NamedEntity.h"
 #include <QString>
 #include <QStringList>
-
-// Forward declarations.
-class Yeast;
-bool operator<(Yeast &y1, Yeast &y2);
-bool operator==(Yeast &y1, Yeast &y2);
 
 /*!
  * \class Yeast
@@ -152,10 +146,14 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Yeast(Brewtarget::DBTable table, int key);

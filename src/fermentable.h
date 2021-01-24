@@ -21,7 +21,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _FERMENTABLE_H
 #define _FERMENTABLE_H
 
@@ -30,10 +29,6 @@
 #include "model/NamedEntity.h"
 #include "unit.h"
 
-// Forward declarations.
-class Fermentable;
-bool operator<(Fermentable &f1, Fermentable &f2);
-bool operator==(Fermentable &f1, Fermentable &f2);
 
 /*!
  * \class Fermentable
@@ -177,10 +172,14 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Fermentable(Brewtarget::DBTable table, int key);
@@ -220,16 +219,9 @@ private:
 
 Q_DECLARE_METATYPE( QList<Fermentable*> )
 
-inline bool FermentablePtrLt( Fermentable* lhs, Fermentable* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool FermentablePtrEq( Fermentable* lhs, Fermentable* rhs)
-{
-   return *lhs == *rhs;
-}
-
+/**
+ * This function is used for sorting in the recipe formatter
+ */
 inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentable* rhs)
 {
    // Sort by name if the two fermentables are of equal weight
@@ -240,21 +232,5 @@ inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentab
    // descending not ascending order.
    return lhs->amount_kg() > rhs->amount_kg();
 }
-
-struct Fermentable_ptr_cmp
-{
-   bool operator()( Fermentable* lhs, Fermentable* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Fermentable_ptr_equals
-{
-   bool operator()( Fermentable* lhs, Fermentable* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
 
 #endif

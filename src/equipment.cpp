@@ -1,6 +1,6 @@
 /*
  * equipment.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <QVector>
 #include <QDomElement>
 #include <QDomText>
@@ -32,19 +31,31 @@
 #include "database.h"
 
 
-bool operator<(Equipment &e1, Equipment &e2)
-{
-   return e1.name() < e2.name();
+bool Equipment::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Equipment const & rhs = static_cast<Equipment const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_boilSize_l            == rhs.m_boilSize_l            &&
+      this->m_batchSize_l           == rhs.m_batchSize_l           &&
+      this->m_tunVolume_l           == rhs.m_tunVolume_l           &&
+      this->m_tunWeight_kg          == rhs.m_tunWeight_kg          &&
+      this->m_tunSpecificHeat_calGC == rhs.m_tunSpecificHeat_calGC &&
+      this->m_topUpWater_l          == rhs.m_topUpWater_l          &&
+      this->m_trubChillerLoss_l     == rhs.m_trubChillerLoss_l     &&
+      this->m_evapRate_pctHr        == rhs.m_evapRate_pctHr        &&
+      this->m_evapRate_lHr          == rhs.m_evapRate_lHr          &&
+      this->m_boilTime_min          == rhs.m_boilTime_min          &&
+      this->m_lauterDeadspace_l     == rhs.m_lauterDeadspace_l     &&
+      this->m_topUpKettle_l         == rhs.m_topUpKettle_l         &&
+      this->m_hopUtilization_pct    == rhs.m_hopUtilization_pct
+   );
 }
 
-bool operator==(Equipment &e1, Equipment &e2)
-{
-   return e1.name() == e2.name();
-}
 
 //=============================CONSTRUCTORS=====================================
 Equipment::Equipment(QString t_name, bool cacheOnly)
-   : Ingredient(Brewtarget::EQUIPTABLE, -1, t_name, true),
+   : NamedEntity(Brewtarget::EQUIPTABLE, -1, t_name, true),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -475,4 +486,8 @@ Ingredient * Equipment::getParent() {
 
 int Equipment::insertInDatabase() {
    return Database::instance().insertEquipment(this);
+}
+
+void Equipment::removeFromDatabase() {
+   Database::instance().remove(this);
 }

@@ -18,6 +18,7 @@
  */
 #include "xml/XmlRecord.h"
 
+#include <QDate>
 #include <QDebug>
 
 #include <xalanc/XalanDOM/XalanNodeList.hpp>
@@ -44,26 +45,25 @@ constexpr char const * const XmlRecord::XALAN_NODE_TYPES[] {
 };
 
 XmlRecord::XmlRecord(XmlCoding const & xmlCoding,
-                     QString const recordName,
-                     QVector<Field> const & fieldDefinitions) :
+                     FieldDefinitions const & fieldDefinitions) :
    xmlCoding{xmlCoding},
-   recordName{recordName},
    fieldDefinitions{fieldDefinitions},
-   instanceNamesAreUnique{true}, // Default value. Child class constructors may modify
+   namedEntityClassName{},
    namedEntity{nullptr},
    namedEntityRaiiContainer{nullptr},
+   includeInStats{true},
    childRecords{} {
    return;
 }
 
-QString const & XmlRecord::getRecordName() const {
-   return this->recordName;
+NamedEntity * XmlRecord::getNamedEntity() const {
+   return this->namedEntity;
 }
+
 
 bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                      xalanc::XalanNode * rootNodeOfRecord,
-                     QTextStream & userMessage,
-                     std::shared_ptr< QHash<QString, QVariant> > fieldsRead) {
+                     QTextStream & userMessage) {
    qDebug() << Q_FUNC_INFO;
 
    xalanc::XPathEvaluator xPathEvaluator;
@@ -95,7 +95,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
          // a Recipe might have multiple Hops but it only has one Equipment).  We don't really have to worry about that
          // here though as any rules should have been enforced in the XSD.
          //
-         if (!this->loadChildRecords(domSupport, nodesForCurrentXPath, userMessage)) {
+         if (!this->loadChildRecords(domSupport, fieldDefinition, nodesForCurrentXPath, userMessage)) {
             return false;
          }
       } else if (numChildNodes > 0) {
@@ -148,18 +148,18 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                switch(fieldDefinition->fieldType) {
 
                   case XmlRecord::Bool:
-                     // Unlike other XML documents, boolean fields in BeerXML are caps
-                     if (value == "TRUE") {
+                     // Unlike other XML documents, boolean fields in BeerXML are caps, so we have to accommodate that
+                     if (value.toLower() == "true") {
                         parsedValue.setValue(true);
                         parsedValueOk = true;
-                     } else if (value == "FALSE") {
+                     } else if (value.toLower() == "false") {
                         parsedValue.setValue(true);
                         parsedValueOk = true;
                      } else {
-                        // This is almost certainly a coding error, as we should have already validated that the field is
-                        // TRUE or FALSE via XSD parsing.
+                        // This is almost certainly a coding error, as we should have already validated that the field
+                        // via XSD parsing.
                         qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->recordName << " node " << fieldDefinition->xPath << "=" <<
+                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
                            value << " as could not be parsed as BOOLEAN";
                      }
                      break;
@@ -171,7 +171,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                         // This is almost certainly a coding error, as we should have already validated the field via XSD
                         // parsing.
                         qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->recordName << " node " << fieldDefinition->xPath << "=" <<
+                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
                            value << " as could not be parsed as integer";
                      }
                      break;
@@ -183,7 +183,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                         // This is almost certainly a coding error, as we should have already validated the field via XSD
                         // parsing.
                         qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->recordName << " node " << fieldDefinition->xPath << "=" <<
+                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
                            value << " as could not be parsed as unsigned integer";
                      }
                      break;
@@ -195,8 +195,26 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                         // This is almost certainly a coding error, as we should have already validated the field via XSD
                         // parsing.
                         qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->recordName << " node " << fieldDefinition->xPath << "=" <<
+                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
                            value << " as could not be parsed as decimal number (double)";
+                     }
+                     break;
+
+                  case XmlRecord::Date:
+                     {
+                        // We only want this variable (date) in this case, so we need to restrict its scope, otherwise
+                        // the compiler will complain about the variable initialisation being "jumped over" in the other
+                        // case labels.
+                        QDate date = QDate::fromString(value, Qt::ISODate);
+                        parsedValueOk = date.isValid();
+                        parsedValue.setValue(date);
+                     }
+                     if (!parsedValueOk) {
+                        // This is almost certainly a coding error, as we should have already validated the field via XSD
+                        // parsing.
+                        qWarning() <<
+                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
+                           value << " as could not be parsed as ISO 8601 date";
                      }
                      break;
 
@@ -207,7 +225,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                         // This is probably a coding error as the XSD parsing should already have verified that the
                         // contents of the node are one of the expected values.
                         qWarning() <<
-                           Q_FUNC_INFO << "Ignoring " << this->recordName << " node " << fieldDefinition->xPath << "=" <<
+                           Q_FUNC_INFO << "Ignoring " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
                            value << " as value not recognised";
                      } else {
                         parsedValue.setValue(fieldDefinition->stringToEnum->value(value));
@@ -222,26 +240,12 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                         // This is almost certainly a coding error in this class as we should be able to parse all the
                         // types callers need us to.
                         qWarning() <<
-                           Q_FUNC_INFO << "Treating " << this->recordName << " node " << fieldDefinition->xPath << "=" <<
+                           Q_FUNC_INFO << "Treating " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" <<
                            value << " as string because did not recognise requested parse type " << fieldDefinition->fieldType;
                      }
                      parsedValue.setValue(static_cast<QString>(value));
                      parsedValueOk = true;
                      break;
-               }
-
-               //
-               // If we parsed the value OK, and a look-up map was supplied, store the value.  Likely our caller needs
-               // access to at least some of the read in values for further validation or processing.
-               //
-               if (parsedValueOk && nullptr != fieldsRead.get()) {
-                  // (It's a programming error if we already have a node of this name in the fieldsRead map.  Most probably
-                  // either the caller didn't provide an empty map, or there was a duplicate entry in
-                  // this->fieldDefinitions.)
-                  //
-                  Q_ASSERT(!fieldsRead->contains(fieldDefinition->xPath));
-
-                  fieldsRead->insert(fieldDefinition->xPath, parsedValue);
                }
 
                //
@@ -252,7 +256,7 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                //
                if (!parsedValueOk && nullptr != fieldDefinition->propertyName) {
                   userMessage <<
-                     "Could not parse " << this->recordName << " node " << fieldDefinition->xPath << "=" << value << " into " <<
+                     "Could not parse " << this->namedEntityClassName << " node " << fieldDefinition->xPath << "=" << value << " into " <<
                      fieldDefinition->propertyName;
                   return false;
                }
@@ -289,31 +293,32 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
    return true;
 }
 
-bool XmlRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
-                                      QTextStream & userMessage,
-                                      XmlRecordCount & stats) {
+XmlRecord::ProcessingResult XmlRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
+                                                             QTextStream & userMessage,
+                                                             XmlRecordCount & stats) {
    if (nullptr != this->namedEntity) {
-      if (this->instanceNamesAreUnique) {
-         QString currentName = this->namedEntity->name();
+      qDebug() <<
+         Q_FUNC_INFO << "Normalise and store " << this->namedEntityClassName << ": " << this->namedEntity->name();
 
-         for (NamedEntity * matchingEntity = this->findByName(currentName);
-            nullptr != matchingEntity;
-            matchingEntity = this->findByName(currentName)) {
-
-            qDebug() <<
-               Q_FUNC_INFO << "Existing " << this->recordName << "named" << currentName << "was" <<
-               ((nullptr == matchingEntity) ? "not" : "") << "found";
-
-            XmlRecord::modifyClashingName(currentName);
-
-            //
-            // Now the for loop will search again with the new name
-            //
-            qDebug() << Q_FUNC_INFO << "Trying " << currentName;
+      // If the object we are reading in is a duplicate of something we already have (and duplicates are not allowed)
+      // then skip over this record (and any records it contains).  (This is _not_ an error, so we return true not
+      // false in this event.)
+      if (this->isDuplicate()) {
+         qDebug() <<
+            Q_FUNC_INFO << "Duplicate " << this->namedEntityClassName << (this->includeInStats ? " will" : " won't") <<
+            " be included in stats";
+         if (this->includeInStats) {
+            stats.skipped(this->namedEntityClassName.toLower());
          }
-
-         this->namedEntity->setName(currentName);
+         return XmlRecord::FoundDuplicate;
       }
+
+      this->normaliseName();
+
+      // Some classes of object are owned by their containing entity and can't sensibly be saved without knowing what it
+      // is.  Subclasses of XmlRecord will override setContainingEntity() to pass the info in if it is needed (or ignore
+      // it if not).
+      this->setContainingEntity(containingEntity);
 
       // Now we're ready to store in the DB, something the NamedEntity knows how to make happen
       this->namedEntity->insertInDatabase();
@@ -322,11 +327,27 @@ bool XmlRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
       // (currently the Database singleton) will now own it.
       this->namedEntityRaiiContainer.release();
 
-      stats.processedOk(this->recordName.toLower());
+      if (this->includeInStats) {
+         stats.processedOk(this->namedEntityClassName.toLower());
+      }
    }
 
    // Finally orchestrate storing any contained records
-   return this->normaliseAndStoreChildRecordsInDb(userMessage, stats);
+   if (this->normaliseAndStoreChildRecordsInDb(userMessage, stats)) {
+      return XmlRecord::Succeeded;
+   }
+
+   // If we reach here, it means there was a problem with one of our child records.  We've already stored our
+   // NamedEntity record in the DB, so we need to try to undo that by deleting it.  It should be the case that this
+   // deletion will also take care of deleting any owned child records that have already been stored.  (Eg if this is
+   // a Mash, and we stored it and 2 MashSteps before hitting an error on the 3rd MashStep, then deleting the Mash
+   // from the DB should also result in those 2 stored MashSteps getting deleted from the DB.)
+   this->namedEntity->removeFromDatabase();
+
+   // Now we removed the object from the database, we're responsible for calling its destructor
+   this->namedEntityRaiiContainer.reset(this->namedEntity);
+
+   return XmlRecord::Failed;
 }
 
 
@@ -334,8 +355,31 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
                                                   XmlRecordCount & stats) {
    for (auto ii = this->childRecords.begin(); ii != this->childRecords.end(); ++ii) {
       qDebug() << Q_FUNC_INFO << "Storing" << ii.key();
-      if (!ii.value()->normaliseAndStoreInDb(this->namedEntity, userMessage, stats)) {
+      if (XmlRecord::Failed == ii.value().second->normaliseAndStoreInDb(this->namedEntity, userMessage, stats)) {
          return false;
+      }
+      // Now we've stored the child record (or recognised it as a duplicate of one we already hold), we want to link it
+      // (or as the case may be the record it's a duplicate of) to the parent.  If this is possible via a property (eg
+      // the style on a recipe), then we can just do that here.  Otherwise the work needs to be done in the appropriate
+      // subclass of XmlNamedEntityRecord
+      char const * const propertyName = ii.value().first;
+      if (nullptr != propertyName) {
+         // It's a coding error if we had a property defined for a record that's not trying to populate a NamedEntity
+         // (ie for the root record).
+         Q_ASSERT(nullptr != this->namedEntity);
+         // It's a coding error if we're trying to set a non-existent property on the NamedEntity subclass for this
+         // record.
+         Q_ASSERT(this->namedEntity->metaObject()->indexOfProperty(propertyName) > 0);
+         // It's a coding error if we can't create a valid QVariant from a pointer to class we are trying to "set"
+         Q_ASSERT(QVariant::fromValue(ii.value().second->namedEntity).isValid());
+
+         qDebug() <<
+            Q_FUNC_INFO << "Setting" << propertyName << "property (type = " <<
+            this->namedEntity->metaObject()->property(
+               this->namedEntity->metaObject()->indexOfProperty(propertyName)
+            ).typeName() << ") on" << this->namedEntityClassName << "object";
+         this->namedEntity->setProperty(propertyName,
+                                        QVariant::fromValue(ii.value().second->namedEntity));
       }
    }
    return true;
@@ -343,6 +387,7 @@ bool XmlRecord::normaliseAndStoreChildRecordsInDb(QTextStream & userMessage,
 
 
 bool XmlRecord::loadChildRecords(xalanc::DOMSupport & domSupport,
+                                 XmlRecord::FieldDefinition const * fieldDefinition,
                                  xalanc::NodeRefList & nodesForCurrentXPath,
                                  QTextStream & userMessage) {
    //
@@ -379,7 +424,8 @@ bool XmlRecord::loadChildRecords(xalanc::DOMSupport & domSupport,
       Q_ASSERT(this->xmlCoding.isKnownXmlRecordType(childRecordName));
 
       std::shared_ptr<XmlRecord> xmlRecord = this->xmlCoding.getNewXmlRecord(childRecordName);
-      this->childRecords.insert(childRecordName, xmlRecord);
+      this->childRecords.insert(xmlRecord->namedEntityClassName,
+                                XmlRecord::ChildRecord(fieldDefinition->propertyName, xmlRecord));
       if (!xmlRecord->load(domSupport, childRecordNode, userMessage)) {
          return false;
       }
@@ -389,10 +435,28 @@ bool XmlRecord::loadChildRecords(xalanc::DOMSupport & domSupport,
 }
 
 
-NamedEntity * XmlRecord::findByName(QString nameToFind) {
-   // It's actually a coding error for this base class implementation to be called
-   Q_ASSERT(false && "Base class should not be trying to store a NamedEntity itself!");
-   return nullptr;
+bool XmlRecord::isDuplicate() {
+   // Base class does not have a NamedEntity so nothing to check
+   // Stictly, it's a coding error if this function is called, as caller should first check whether there is a
+   // NamedEntity, and subclasses that do have one should override this function.
+   Q_ASSERT(false && "Trying to check for duplicate NamedEntity when there is none");
+   return false;
+}
+
+void XmlRecord::normaliseName() {
+   // Base class does not have a NamedEntity so nothing to normalise
+   // Stictly, it's a coding error if this function is called, as caller should first check whether there is a
+   // NamedEntity, and subclasses that do have one should override this function.
+   Q_ASSERT(false && "Trying to normalise name of NamedEntity when there is none");
+   return;
+}
+
+void XmlRecord::setContainingEntity(NamedEntity * containingEntity) {
+   // Base class does not have a NamedEntity or a container, so nothing to do
+   // Stictly, it's a coding error if this function is called, as caller should first check whether there is a
+   // NamedEntity, and subclasses that do have one should override this function.
+   Q_ASSERT(false && "Trying to set containing entity when there is none");
+   return;
 }
 
 
@@ -412,13 +476,8 @@ void XmlRecord::modifyClashingName(QString & candidateName) {
    // First, see whether there's already a (n) (ie "(1)", "(2)" etc) at the end of the name (with or without
    // space(s) preceding the left bracket.  If so, we want to replace this with " (n+1)".  If not, we try " (1)".
    //
-   // Note that, in the regexp, to match a bracket, we need to escape it, thus "\(" instead of "(".  However, we
-   // must also escape the backslash so that the C++ compiler doesn't think we want a special character (such as
-   // '\n') and barf a "unknown escape sequence" warning at us.  So "\\(" is needed in the string literal here to
-   // pass "\(" to the regexp to match literal "(" (and similarly for close bracket).
-   //
    int duplicateNumber = 1;
-   QRegExp nameNumberMatcher{" *\\(([0-9]+)\\)$"};
+   QRegExp const & nameNumberMatcher = NamedEntity::getDuplicateNameNumberMatcher();
    int positionOfMatch = nameNumberMatcher.indexIn(candidateName);
    if (positionOfMatch > -1) {
       // There's already some integer in brackets at the end of the name, extract it, add one, and truncate the

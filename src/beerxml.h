@@ -107,6 +107,7 @@ public:
    bool importFromXML(QString const & filename, QTextStream & userMessage);
 
    // Import from BeerXML =====================================================
+/*
    BrewNote*    brewNoteFromXml(    QDomNode const& node, Recipe* parent );
    Equipment*   equipmentFromXml(   QDomNode const& node, Recipe* parent = nullptr );
    Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = nullptr );
@@ -119,6 +120,7 @@ public:
    Water*       waterFromXml(       QDomNode const& node, Recipe* parent = nullptr );
    Yeast*       yeastFromXml(       QDomNode const& node, Recipe* parent = nullptr );
    Recipe*      recipeFromXml(      QDomNode const& node);
+*/
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/

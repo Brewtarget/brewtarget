@@ -1,6 +1,6 @@
 /*
  * hop.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -28,11 +28,6 @@
 #include <QStringList>
 #include "model/NamedEntity.h"
 
-// Forward declarations.
-class Hop;
-class HopException;
-bool operator<( Hop &h1, Hop &h2 );
-bool operator==( Hop &h1, Hop &h2 );
 
 /*!
  * \class Hop
@@ -158,14 +153,14 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-
-   /**
-    * \return DB key of the stored Hop
-    */
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Hop(Brewtarget::DBTable table, int key);

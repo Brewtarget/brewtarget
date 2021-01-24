@@ -18,13 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "yeast.h"
 
 #include <QDomNode>
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
 #include <QDebug>
-#include "yeast.h"
 #include "brewtarget.h"
 
 #include "TableSchemaConst.h"
@@ -35,14 +35,17 @@ QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
 QStringList Yeast::flocculations = QStringList() << "Low" << "Medium" << "High" << "Very High";
 
-bool operator<(Yeast &y1, Yeast &y2)
-{
-   return y1.name() < y2.name();
-}
-
-bool operator==(Yeast &y1, Yeast &y2)
-{
-   return y1.name() == y2.name();
+bool Yeast::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Yeast const & rhs = static_cast<Yeast const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_type         == rhs.m_type         &&
+      this->m_form         == rhs.m_form         &&
+      this->m_laboratory   == rhs.m_laboratory   &&
+      this->m_productID    == rhs.m_productID    &&
+      this->m_flocculation == rhs.m_flocculation
+   );
 }
 
 QString Yeast::classNameStr()
@@ -479,4 +482,8 @@ Ingredient * Yeast::getParent() {
 
 int Yeast::insertInDatabase() {
    return Database::instance().insertYeast(this);
+}
+
+void Yeast::removeFromDatabase() {
+   Database::instance().remove(this);
 }

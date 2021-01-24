@@ -19,17 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _WATER_H
 #define _WATER_H
 
 #include <QString>
 #include "model/NamedEntity.h"
-
-// Forward declarations.
-class Water;
-bool operator<(Water &w1, Water &w2);
-bool operator==(Water &w1, Water &w2);
 
 /*!
  * \class Water
@@ -133,11 +127,14 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
 
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Water(Brewtarget::DBTable table, int key);

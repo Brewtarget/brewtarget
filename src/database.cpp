@@ -851,7 +851,7 @@ int Database::getParentIngredientKey(Ingredient const & ingredient) {
                                                  .arg(parentToChildTable->tableName())
                                                  .arg(parentToChildTable->childIndexName())
                                                  .arg(ingredient.key());
-      qDebug() << QString("%1 Find Parent Ingredient SQL: %2").arg(Q_FUNC_INFO).arg(findParentIngredient);
+      qDebug() << Q_FUNC_INFO << "Find Parent Ingredient SQL: " << findParentIngredient;
 
       QSqlQuery query(this->sqlDatabase());
       if (!query.exec(findParentIngredient)) {
@@ -1981,7 +1981,7 @@ Yeast* Database::newYeast(Yeast* other)
    return tmp;
 }
 
-int Database::insertElement(Ingredient* ins)
+int Database::insertElement(NamedEntity * ins)
 {
    // Check whether this ingredient is already in the DB.  If so, bail here.
    if (this->isStored(*ins)) {
@@ -2010,7 +2010,7 @@ int Database::insertElement(Ingredient* ins)
       q.bindValue( QString(":%1").arg(prop), val_to_ins);
       sqlParametersConcat << prop << " = " << val_to_ins.toString() << " || ";
    }
-   qDebug() << QString("%1 SQL Parameters: %2").arg(Q_FUNC_INFO).arg(*sqlParametersConcat.string());
+   qDebug() << Q_FUNC_INFO << "SQL Parameters: " << *sqlParametersConcat.string();
 
    try {
       if ( ! q.exec() ) {
@@ -2019,6 +2019,7 @@ int Database::insertElement(Ingredient* ins)
                .arg(insertQ);
       }
 
+      qDebug() << Q_FUNC_INFO << "Query succeeded";
       key = q.lastInsertId().toInt();
       q.finish();
    }
@@ -2030,8 +2031,8 @@ int Database::insertElement(Ingredient* ins)
    ins->_key = key;
 
    return key;
-
 }
+
 
 // I need to break each of these out because of our signals. I will someday
 // find a way to determine which signals are sent, when, from what and then
@@ -2283,10 +2284,15 @@ int Database::insertSalt(Salt* ins)
 
    return key;
 }
+
 // This is more similar to a mashstep in that we need to link the brewnote to
 // the parent recipe.
-int Database::insertBrewNote(BrewNote* ins, Recipe* parent)
-{
+int Database::insertBrewNote(BrewNote* ins, Recipe* parent) {
+   // It's a coding error to try to insert a BrewNote without a Recipe
+   Q_ASSERT(nullptr != parent);
+   // It's a coding error to try to insert a null BrewNote!
+   Q_ASSERT(nullptr != ins);
+
    int key;
    TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
    sqlDatabase().transaction();
@@ -2295,9 +2301,10 @@ int Database::insertBrewNote(BrewNote* ins, Recipe* parent)
       key = insertElement(ins);
       ins->setCacheOnly(false);
 
-      sqlUpdate( Brewtarget::BREWNOTETABLE,
-               QString("%1=%2").arg(tbl->foreignKeyToColumn()).arg(parent->_key),
-               QString("%1=%2").arg(tbl->keyName()).arg(key) );
+      QString const setClause = QString("%1=%2").arg(tbl->foreignKeyToColumn()).arg(parent->_key);
+      QString const whereClause = QString("%1=%2").arg(tbl->keyName()).arg(key);
+
+      sqlUpdate(Brewtarget::BREWNOTETABLE, setClause, whereClause);
 
    }
    catch (QString e) {
@@ -2306,9 +2313,10 @@ int Database::insertBrewNote(BrewNote* ins, Recipe* parent)
       throw;
    }
 
+   qDebug() << Q_FUNC_INFO << "DB update succeeded; key =" << key;
    sqlDatabase().commit();
 
-   allBrewNotes.insert(key,ins);
+   this->allBrewNotes.insert(key,ins);
    emit changed( metaProperty("brewNotes"), QVariant() );
    emit newBrewNoteSignal(ins);
 
@@ -2472,7 +2480,11 @@ template<class T> T* Database::addIngredientToRecipe(
          q.bindValue(":parent", key);
          q.bindValue(":child", newIng->key());
 
-         qDebug() << QString("%1 Parent-Child Insert: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(key).arg(newIng->key());
+         qDebug() <<
+            Q_FUNC_INFO << "Parent-Child Insert:" << insert << "with args" << key << "," << newIng->key();
+
+         // It's a coding error if we're trying to make something its own parent!
+         Q_ASSERT(key != newIng->key());
 
          if ( ! q.exec() ) {
             throw QString("%1 %2.").arg(q.lastQuery()).arg(q.lastError().text());
@@ -2623,7 +2635,7 @@ void Database::updateEntry( Ingredient* object, QString propName, QVariant value
    }
 
    if ( colName.isEmpty() ) {
-      qCritical() << QString("Could not translate %1 to a column name").arg(propName);
+      qCritical() << Q_FUNC_INFO << "Could not translate " << propName << " to a column name";
       throw  QString("Could not translate %1 to a column name").arg(propName);
    }
    if ( transact )

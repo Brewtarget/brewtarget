@@ -504,7 +504,9 @@ public:
          return false;
       }
 
-      if (!rootRecord->normaliseAndStoreInDb(nullptr, userMessage, stats)) {
+      // At the root level, Succeeded and FoundDuplicate are both OK return values.  It's only Failed that indicates an
+      // error (rather than in info) message for the user in userMessage.
+      if (XmlRecord::Failed == rootRecord->normaliseAndStoreInDb(nullptr, userMessage, stats)) {
          return false;
       }
 
@@ -550,7 +552,7 @@ std::shared_ptr<XmlRecord> XmlCoding::getNewXmlRecord(QString recordName) const 
    XmlRecord::FieldDefinitions const * fieldDefinitions =
       this->entityNameToXmlRecordDefinition.value(recordName).fieldDefinitions;
 
-   return std::shared_ptr<XmlRecord>(constructorWrapper(*this, recordName, *fieldDefinitions));
+   return std::shared_ptr<XmlRecord>(constructorWrapper(*this, *fieldDefinitions));
 }
 
 

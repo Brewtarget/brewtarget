@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _EQUIPMENT_H
 #define _EQUIPMENT_H
 
@@ -125,8 +124,9 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
    void changedBoilSize_l(double);
@@ -146,6 +146,9 @@ signals:
    void changedNotes(QString);
    void changedGrainAbsorption_LKg(double);
    void changedBoilingPoint_c(double);
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Equipment(Brewtarget::DBTable table, int key);
@@ -182,35 +185,6 @@ private:
 };
 
 Q_DECLARE_METATYPE( Equipment* )
-
-bool operator<(Equipment &e1, Equipment &e2);
-bool operator==(Equipment &e1, Equipment &e2);
-
-inline bool EquipmentPtrLt( Equipment* lhs, Equipment* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool EquipmentPtrEq( Equipment* lhs, Equipment* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct Equipment_ptr_cmp
-{
-   bool operator()( Equipment* lhs, Equipment* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Equipment_ptr_equals
-{
-   bool operator()( Equipment* lhs, Equipment* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
 
 #endif   /* _EQUIPMENT_H */
 

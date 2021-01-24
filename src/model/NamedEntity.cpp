@@ -1,6 +1,6 @@
 /*
  * model/NamedEntity.cpp is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -22,9 +22,13 @@
  */
 
 #include "model/NamedEntity.h"
+
+#include <typeinfo>
+
 #include <QDomElement>
 #include <QDomNode>
 #include <QMetaProperty>
+
 #include "brewtarget.h"
 #include "database.h"
 
@@ -41,6 +45,7 @@ NamedEntity::NamedEntity(Brewtarget::DBTable table, int key, QString t_name, boo
      _display(t_display),
      _deleted(QVariant())
 {
+   return;
 }
 
 NamedEntity::NamedEntity(NamedEntity const& other)
@@ -54,7 +59,75 @@ NamedEntity::NamedEntity(NamedEntity const& other)
      _display(other._display),
      _deleted(other._deleted)
 {
+   return;
 }
+
+
+QRegExp const & NamedEntity::getDuplicateNameNumberMatcher() {
+   //
+   // Note that, in the regexp, to match a bracket, we need to escape it, thus "\(" instead of "(".  However, we
+   // must also escape the backslash so that the C++ compiler doesn't think we want a special character (such as
+   // '\n') and barf a "unknown escape sequence" warning at us.  So "\\(" is needed in the string literal here to
+   // pass "\(" to the regexp to match literal "(" (and similarly for close bracket).
+   //
+   static QRegExp const duplicateNameNumberMatcher{" *\\(([0-9]+)\\)$"};
+   return duplicateNameNumberMatcher;
+}
+
+
+// See https://zpz.github.io/blog/overloading-equality-operator-in-cpp-class-hierarchy/ (and cross-references to
+// http://www.gotw.ca/publications/mill18.htm) for good discussion on implementation of operator== in a class
+// hierarchy.  Our implementation differs slightly for a couple of reasons:
+//   - This class is already abstract so it's good to force subclasses to implement isEqualTo() by making it pure
+//     virtual here.  (Of course that doesn't help us for sub-sub-classes etc, but it's better than nothing)
+//   - We want to do the type comparison first, as this saves us repeating this test in each subclass
+//
+bool NamedEntity::operator==(NamedEntity const & other) const {
+   // The first thing to do is check we are even comparing two objects of the same class.  A Hop is never equal to
+   // a Recipe etc.
+   if (typeid(*this) != typeid(other)) {
+//      qDebug() << Q_FUNC_INFO << "No type id match (" << typeid(*this).name() << "/" << typeid(other).name() << ")";
+      return false;
+   }
+
+   //
+   // For the base class attributes, we deliberately don't compare _key, parentKey, table or _folder.  If we've read
+   // in an object from a file and want to  see if it's the same as one in the database, then the DB-related info and
+   // folder classification are not a helpful part of that comparison.  Similarly, we do not compare _display and
+   // _deleted as they are more related to the UI than whether, in essence, two objects are the same.
+   //
+   if (this->_name != other._name) {
+//      qDebug() << Q_FUNC_INFO << "No name match (" << this->_name << "/" << other._name << ")";
+      //
+      // If the names don't match, let's check it's not for a trivial reason.  Eg, if you have one Hop called
+      // "Tettnang" and another called "Tettnang (1)" we wouldn't say they are different just because of the names.
+      // So we want to strip off any number in brackets at the ends of the names and then compare again.
+      //
+      QRegExp const & duplicateNameNumberMatcher = NamedEntity::getDuplicateNameNumberMatcher();
+      QString names[2] {this->_name, other._name};
+      for (auto ii = 0; ii < 2; ++ii) {
+         int positionOfMatch = duplicateNameNumberMatcher.indexIn(names[ii]);
+         if (positionOfMatch > -1) {
+            // There's some integer in brackets at the end of the name.  Chop it off.
+            names[ii].truncate(positionOfMatch);
+         }
+      }
+//      qDebug() << Q_FUNC_INFO << "Adjusted names to " << names[0] << " & " << names[1];
+      if (names[0] != names[1]) {
+         return false;
+      }
+   }
+
+   return this->isEqualTo(other);
+}
+
+bool NamedEntity::operator!=(NamedEntity const & other) const {
+   // Don't reinvent the wheel '!=' should just be the opposite of '=='
+   return !(*this == other);
+}
+
+bool NamedEntity::operator<(const NamedEntity & other) const { return (this->_name < other._name); }
+bool NamedEntity::operator>(const NamedEntity & other) const { return (this->_name > other._name); }
 
 bool NamedEntity::deleted() const
 {

@@ -1,6 +1,6 @@
 /*
  * misc.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "misc.h"
 
 #include "brewtarget.h"
 #include <iostream>
 #include <string>
 #include <QVector>
-#include "misc.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
@@ -43,6 +43,16 @@ QString Misc::classNameStr()
 {
    static const QString name("Misc");
    return name;
+}
+
+bool Misc::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Misc const & rhs = static_cast<Misc const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_type == rhs.m_type &&
+      this->m_use  == rhs.m_use
+   );
 }
 
 //============================CONSTRUCTORS======================================
@@ -323,4 +333,8 @@ Ingredient * Misc::getParent() {
 
 int Misc::insertInDatabase() {
    return Database::instance().insertMisc(this);
+}
+
+void Misc::removeFromDatabase() {
+   Database::instance().remove(this);
 }

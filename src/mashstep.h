@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _MASHSTEP_H
 #define _MASHSTEP_H
 
@@ -26,11 +25,6 @@
 #include <QStringList>
 #include <QString>
 #include "mash.h"
-
-// Forward declarations.
-class MashStep;
-bool operator<(MashStep &m1, MashStep &m2);
-bool operator==(MashStep &m1, MashStep &m2);
 
 /*!
  * \class MashStep
@@ -115,10 +109,14 @@ public:
    static QString classNameStr();
 
    // MashStep objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    MashStep(Brewtarget::DBTable table, int key);

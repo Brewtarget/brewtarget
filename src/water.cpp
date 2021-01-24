@@ -1,6 +1,6 @@
 /*
  * water.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "water.h"
 
 #include <QVector>
-#include "water.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
@@ -31,14 +31,20 @@
 #include "WaterSchema.h"
 #include "database.h"
 
-bool operator<(Water &w1, Water &w2)
-{
-   return w1.name() < w2.name();
-}
 
-bool operator==(Water &w1, Water &w2)
-{
-   return w1.name() == w2.name();
+bool Water::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Water const & rhs = static_cast<Water const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_calcium_ppm      == rhs.m_calcium_ppm      &&
+      this->m_bicarbonate_ppm  == rhs.m_bicarbonate_ppm  &&
+      this->m_sulfate_ppm      == rhs.m_sulfate_ppm      &&
+      this->m_chloride_ppm     == rhs.m_chloride_ppm     &&
+      this->m_sodium_ppm       == rhs.m_sodium_ppm       &&
+      this->m_magnesium_ppm    == rhs.m_magnesium_ppm    &&
+      this->m_ph               == rhs.m_ph
+   );
 }
 
 QString Water::classNameStr()
@@ -297,4 +303,8 @@ Ingredient * Water::getParent() {
 
 int Water::insertInDatabase() {
    return Database::instance().insertWater(this);
+}
+
+void Water::removeFromDatabase() {
+   Database::instance().remove(this);
 }

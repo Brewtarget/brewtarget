@@ -19,15 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _SALT_H
 #define _SALT_H
 
 #include <QString>
 #include "model/NamedEntity.h"
 
-// Forward declarations.
-class Salt;
 
 /*!
  * \class Salt
@@ -45,9 +42,6 @@ class Salt : public NamedEntity
    friend class WaterDialog;
    friend class SaltTableModel;
 public:
-
-   friend bool operator<( const Salt &s1, const Salt &s2 );
-   friend bool operator==( const Salt &s1, const Salt &s2 );
 
    enum WhenToAdd {
       NEVER,
@@ -121,10 +115,14 @@ public:
    double SO4() const;
 
    // Salt objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Salt(Brewtarget::DBTable table, int key);

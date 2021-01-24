@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "xml/XmlMashStepRecord.h"
+#include "mash.h"
 
-
-bool XmlMashStepRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
-                                              QTextStream & userMessage,
-                                              XmlRecordCount & stats) {
+XmlRecord::ProcessingResult XmlMashStepRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
+                                                                     QTextStream & userMessage,
+                                                                     XmlRecordCount & stats) {
    // It's a coding error if either there's no containing entity or it's not a Mash.  Both conditions should have been
    // enforced by XSD parsing.  Thus static_cast should be safe.
    Mash * mash = static_cast<Mash *>(containingEntity);
@@ -82,7 +82,7 @@ bool XmlMashStepRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
    } catch (QString ex) {
       // Error will already have been logged by caller
       userMessage << "Database error: " << ex;
-      return false;
+      return XmlRecord::Failed;
    }
 
    //
@@ -93,8 +93,8 @@ bool XmlMashStepRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
    //
    // We deliberately don't update the stats
    //
-   // This probably isn't necessary, as none of the current XML encodings we know of have child records of MashStep,
-   // but it doesn't hurt to be consistent.
+   // This is the point where we would call XmlRecord::normaliseAndStoreChildRecordsInDb(), but that would be a no-op
+   // because MashStep records are not expected to have any children, so we don't bother.
    //
-   return XmlRecord::normaliseAndStoreChildRecordsInDb(userMessage, stats);
+   return XmlRecord::Succeeded;
 }

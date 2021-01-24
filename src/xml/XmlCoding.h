@@ -135,15 +135,13 @@ public:
     *        a function of this type.
     *
     * \param xmlCoding passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
-    * \param entityName passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
     * \param fieldDefinitions passed into the constructor of T (which should be \b XmlRecord or a subclass thereof)
     * \return A new T constructed on the heap.  The caller owns this object and is responsible for its deletion.
     */
    template<typename T>
    static XmlRecord * construct(XmlCoding const & xmlCoding,
-                                QString const & entityName,
                                 XmlRecord::FieldDefinitions const & fieldDefinitions) {
-      return new T{xmlCoding, entityName, fieldDefinitions};
+      return new T{xmlCoding, fieldDefinitions};
    }
 
    /**
@@ -151,7 +149,6 @@ public:
     *        \b XmlCoding::construct().
     */
    typedef XmlRecord * (*XmlRecordConstructorWrapper)(XmlCoding const &,
-                                                      QString const &,
                                                       XmlRecord::FieldDefinitions const &);
 
    /**

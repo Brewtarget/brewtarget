@@ -1,6 +1,6 @@
 /*
  * MainWindow.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - David Grundberg <individ@acc.umu.se>
@@ -208,8 +208,9 @@ public:
       QString messageBoxTitle{succeeded ? tr("Success!") : tr("ERROR")};
       QString messageBoxText;
       if (succeeded) {
+         // The userMessage parameter will tell how many files were imported and/or skipped (as duplicates)
          messageBoxText = QString(
-            tr("Successfully imported data from file \"%1\"\n\n%2").arg(fileInfo.fileName()).arg(userMessage)
+            tr("Successfully read \"%1\"\n\n%2").arg(fileInfo.fileName()).arg(userMessage)
          );
       } else {
          messageBoxText = QString(
@@ -1499,7 +1500,7 @@ void MainWindow::addFermentableToRecipe(Fermentable* ferm)
 {
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::addFermentable,
+                             &Recipe::add<Fermentable>,
                              ferm,
                              &Recipe::remove<Fermentable>,
                              tr("Add fermentable to recipe"))
@@ -1512,7 +1513,7 @@ void MainWindow::addHopToRecipe(Hop *hop)
 {
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::addHop,
+                             &Recipe::add<Hop>,
                              hop,
                              &Recipe::remove<Hop>,
                              tr("Add hop to recipe"))
@@ -1525,7 +1526,7 @@ void MainWindow::addMiscToRecipe(Misc* misc)
 {
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::addMisc,
+                             &Recipe::add<Misc>,
                              misc,
                              &Recipe::remove<Misc>,
                              tr("Add misc to recipe"))
@@ -1538,7 +1539,7 @@ void MainWindow::addYeastToRecipe(Yeast* yeast)
 {
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::addYeast,
+                             &Recipe::add<Yeast>,
                              yeast,
                              &Recipe::remove<Yeast>,
                              tr("Add yeast to recipe"))
@@ -1824,7 +1825,7 @@ void MainWindow::removeSelectedFermentable()
          newUndoableAddOrRemove(*this->recipeObs,
                                 &Recipe::remove<Fermentable>,
                                 itemsToRemove.at(i),
-                                &Recipe::addFermentable,
+                                &Recipe::add<Fermentable>,
                                 &MainWindow::removeFermentable,
                                 static_cast<void (MainWindow::*)(Fermentable *)>(nullptr),
                                 tr("Remove fermentable from recipe"))
@@ -1901,7 +1902,7 @@ void MainWindow::removeSelectedHop()
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Hop>,
                                  itemsToRemove.at(i),
-                                 &Recipe::addHop,
+                                 &Recipe::add<Hop>,
                                  &MainWindow::removeHop,
                                  static_cast<void (MainWindow::*)(Hop *)>(nullptr),
                                  tr("Remove hop from recipe"))
@@ -1937,7 +1938,7 @@ void MainWindow::removeSelectedMisc()
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Misc>,
                                  itemsToRemove.at(i),
-                                 &Recipe::addMisc,
+                                 &Recipe::add<Misc>,
                                  &MainWindow::removeMisc,
                                  static_cast<void (MainWindow::*)(Misc *)>(nullptr),
                                  tr("Remove misc from recipe"))
@@ -1971,7 +1972,7 @@ void MainWindow::removeSelectedYeast()
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Yeast>,
                                  itemsToRemove.at(i),
-                                 &Recipe::addYeast,
+                                 &Recipe::add<Yeast>,
                                  &MainWindow::removeYeast,
                                  static_cast<void (MainWindow::*)(Yeast *)>(nullptr),
                                  tr("Remove yeast from recipe"))

@@ -36,15 +36,24 @@
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
 
-bool operator<(Fermentable &f1, Fermentable &f2)
-{
-   return f1.name() < f2.name();
+bool Fermentable::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Fermentable const & rhs = static_cast<Fermentable const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_type           == rhs.m_type           &&
+      this->m_yieldPct       == rhs.m_yieldPct       &&
+      this->m_colorSrm       == rhs.m_colorSrm       &&
+      this->m_origin         == rhs.m_origin         &&
+      this->m_supplier       == rhs.m_supplier       &&
+      this->m_coarseFineDiff == rhs.m_coarseFineDiff &&
+      this->m_moisturePct    == rhs.m_moisturePct    &&
+      this->m_diastaticPower == rhs.m_diastaticPower &&
+      this->m_proteinPct     == rhs.m_proteinPct     &&
+      this->m_maxInBatchPct  == rhs.m_maxInBatchPct
+   );
 }
 
-bool operator==(Fermentable &f1, Fermentable &f2)
-{
-   return f1.name() == f2.name();
-}
 
 QString Fermentable::classNameStr()
 {
@@ -550,4 +559,8 @@ Ingredient * Fermentable::getParent() {
 
 int Fermentable::insertInDatabase() {
    return Database::instance().insertFermentable(this);
+}
+
+void Fermentable::removeFromDatabase() {
+   Database::instance().remove(this);
 }

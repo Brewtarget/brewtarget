@@ -1,6 +1,6 @@
 /*
  * misc.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -20,7 +20,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _MISC_H
 #define _MISC_H
 
@@ -121,14 +120,18 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
 
    //! \brief Emitted when \c name() changes.
    // Declared in Base Class BeerXMLElement, should not be overloaded
    //void changedName(QString);
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Misc(Brewtarget::DBTable table, int key);
@@ -163,7 +166,7 @@ private:
 };
 
 Q_DECLARE_METATYPE( QList<Misc*> )
-
+/*
 inline bool MiscPtrLt( Misc* lhs, Misc* rhs)
 {
    return lhs->name() < rhs->name();
@@ -189,5 +192,5 @@ struct Misc_ptr_equals
       return lhs->name() == rhs->name();
    }
 };
-
+*/
 #endif   /* _MISC_H */

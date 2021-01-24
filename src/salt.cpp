@@ -1,6 +1,6 @@
 /*
  * salt.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "salt.h"
 
 #include <QVector>
 #include <QDomElement>
@@ -24,20 +25,25 @@
 #include <QObject>
 #include <QDebug>
 
-#include "salt.h"
 #include "brewtarget.h"
 #include "TableSchemaConst.h"
 #include "SaltSchema.h"
 #include "database.h"
 
-bool operator<(const Salt &s1, const Salt &s2)
-{
-   return s1.m_add_to < s2.m_add_to;
-}
+// TBD Not clear why we use this ordering for salts.  Let's see what happens if we let it use the default ordering (name) of NamedEntity
+//bool operator<(const Salt &s1, const Salt &s2)
+//{
+//   return s1.m_add_to < s2.m_add_to;
+//}
 
-bool operator==(const Salt &s1, const Salt &s2)
-{
-   return s1.m_add_to == s2.m_add_to;
+bool Salt::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Salt const & rhs = static_cast<Salt const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_add_to == rhs.m_add_to &&
+      this->m_type   == rhs.m_type
+   );
 }
 
 QString Salt::classNameStr()
@@ -258,4 +264,8 @@ double Salt::SO4() const
 
 int Salt::insertInDatabase() {
    return Database::instance().insertSalt(this);
+}
+
+void Salt::removeFromDatabase() {
+   Database::instance().remove(this);
 }

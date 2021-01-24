@@ -20,17 +20,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _MASH_H
 #define _MASH_H
 
 #include "model/NamedEntity.h"
 
 // Forward declarations.
-class Mash;
 class MashStep;
-bool operator<(Mash &m1, Mash &m2);
-bool operator==(Mash &m1, Mash &m2);
 
 /*!
  * \class Mash
@@ -117,8 +113,9 @@ public:
    static QString classNameStr();
 
    // Mash objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
@@ -128,6 +125,9 @@ public slots:
 signals:
    // Emitted when the number of steps change, or when you should call mashSteps() again.
    void mashStepsChanged();
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Mash(Brewtarget::DBTable table, int key);

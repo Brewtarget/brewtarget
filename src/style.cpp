@@ -1,6 +1,6 @@
 /*
  * style.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,9 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "style.h"
 
 #include "brewtarget.h"
-#include "style.h"
 #include <QDebug>
 
 #include "TableSchemaConst.h"
@@ -29,14 +29,17 @@
 
 QStringList Style::m_types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 
-bool operator<(Style &s1, Style &s2)
-{
-   return s1.name() < s2.name();
-}
-
-bool operator==(Style &s1, Style &s2)
-{
-   return s1.key() == s2.key();
+bool Style::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Style const & rhs = static_cast<Style const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_category       == rhs.m_category       &&
+      this->m_categoryNumber == rhs.m_categoryNumber &&
+      this->m_styleLetter    == rhs.m_styleLetter    &&
+      this->m_styleGuide     == rhs.m_styleGuide     &&
+      this->m_type           == rhs.m_type
+   );
 }
 
 QString Style::classNameStr()
@@ -428,4 +431,8 @@ Ingredient * Style::getParent() {
 
 int Style::insertInDatabase() {
    return Database::instance().insertStyle(this);
+}
+
+void Style::removeFromDatabase() {
+   Database::instance().remove(this);
 }

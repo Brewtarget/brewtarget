@@ -1,7 +1,8 @@
 /*
  * style.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _STYLE_H
 #define _STYLE_H
 
@@ -26,10 +26,6 @@
 #include <QStringList>
 #include "model/NamedEntity.h"
 
-// Forward declarations.
-class Style;
-bool operator<(Style &s1, Style &s2);
-bool operator==(Style &s1, Style &s2);
 
 /*!
  * \class Style
@@ -146,10 +142,14 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Style(Brewtarget::DBTable table, int key);

@@ -1,6 +1,6 @@
 /*
  * model/NamedEntity.h is part of Brewtarget, and is Copyright the following
- * authors 2020-2021
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -49,13 +49,28 @@ Q_DECLARE_METATYPE( uintptr_t )
 /*!
  * \class NamedEntity
  *
- * \brief The base class for our substantive storable items.
+ * \brief The base class for our substantive storable items.  There are really two sorts of storable items: ones that
+ *        are freestanding and ones that are owned by other storable items.  Eg, a Hop exists in its own right and may
+ *        or may not be used in one or more Recipes, but a MashStep only exists as part of a single Mash.
+ *           \b BrewNote is owned by its \b Recipe
+ *           \b Equipment
+ *           \b Fermentable
+ *           \b Hop
+ *           \b Instruction is owned by its \b Recipe
+ *           \b Mash
+ *           \b MashStep is owned by its \b Mash
+ *           \b Misc
+ *           \b Recipe
+ *           \b Salt
+ *           \b Style
+ *           \b Water
+ *           \b Yeast
  *
- * Note that this class has previously been called \b Ingredient and \b BeerXMLElement, neither of which is an entirely
- * satisfactory name.  Some of the classes derived from this one (eg Instruction, Equipment, Style, Mash) are not really
- * ingredients in the normal sense of the word.  And the fact that derived classes can be instantiated from BeerXML is
- * not their defining characteristic (and indeed Instruction does not even represent something that can be stored in a
- * standard BeerXML document).
+ * Note that this class has previously been called \b Ingredient and \b BeerXMLElement.  We've changed the name to try
+ * to best reflect what the class represents.  Although some of this class's subclasses (eg \b Hop, \b Fermentable,
+ * \b Yeast) are ingredients in the normal sense of the word, others (eg \b Instruction, \b Equipment, \b Style,
+ * \b Mash) are not really.  Equally, the fact that derived classes can be instantiated from BeerXML is not their
+ * defining characteristic.
  */
 class NamedEntity : public QObject
 {
@@ -74,6 +89,27 @@ public:
    // virtue of inheriting from QObject, but this declaration does no harm.
    virtual ~NamedEntity() = default;
 
+   /**
+    * \brief This generic version of operator== should work for subclasses provided they correctly _override_ (NB not
+    *        overload) the protected virtual isEqualTo() function.
+    */
+   bool operator==(NamedEntity const & other) const;
+
+   /**
+    * \brief This generic version of operator!= should work for subclasses provided they correctly _override_ (NB not
+    *        overload) the protected virtual isEqualTo() function.
+    */
+   bool operator!=(NamedEntity const & other) const;
+
+   //
+   // TODO We should replace the following with the spaceship operator once compiler support for C++20 is more widespread
+   //
+   /**
+    * \brief As you might expect, this ensures we order \b NamedEntity objects by name
+    */
+   bool operator<(NamedEntity const & other) const;
+   bool operator>(NamedEntity const & other) const;
+
    // Everything that inherits from BeerXML has a name, delete, display and a folder
    Q_PROPERTY( QString name   READ name WRITE setName )
    Q_PROPERTY( bool deleted   READ deleted WRITE setDeleted )
@@ -90,6 +126,12 @@ public:
    QString folder() const;
    //! Access to the name attribute.
    QString name() const;
+
+   /**
+    * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
+    *        prevent name clashes.  It will also "capture" n to allow you to extract it.
+    */
+   static QRegExp const & getDuplicateNameNumberMatcher();
 
    //! And ways to set those flags
    void setDeleted(const bool var, bool cachedOnly = false);
@@ -160,6 +202,12 @@ public:
     */
    virtual int insertInDatabase() = 0;
 
+   /*!
+    * \brief If we can put something in the database, then we also need to be able to remove it.
+    *        Note that, once removed from the DB, the caller is responsible for deleting this object.
+    */
+   virtual void removeFromDatabase() = 0;
+
 signals:
    /*!
     * Passes the meta property that has changed about this object.
@@ -171,6 +219,17 @@ signals:
    void changedName(QString);
 
 protected:
+   /**
+    * \brief Subclasses need to overload (NB not override) this function to do the substantive work for operator==.
+    *        By the time this function is called on a subclass, we will already have established that the two objects
+    *        being compared are of the same class (eg we are not comparing a Hop with a Yeast) and that the names match,
+    *        so subclasses do not need to repeat these tests.
+    *
+    *        We do not currently anticipate sub-sub-classes of \b NamedEntity but if one ever were created, it should
+    *        call its parent's implementation of this function before doing its own class-specific tests.
+    * \return \b true if this object is, in all the ways that matter, equal to \b other
+    */
+   virtual bool isEqualTo(NamedEntity const & other) const = 0;
 
    //! The key of this entity in its table.
    int _key;

@@ -50,25 +50,38 @@ void XmlRecordCount::writeToUserMessage(QTextStream & userMessage) {
    }
 
    if (!this->oks.isEmpty()) {
-      userMessage << this->tr("Read ");
+      userMessage << this->tr("🗸 Read ");
+      int totalRecordsRead = 0;
       int typesOfRecordsRead = 0;
       for (auto ii = this->oks.constBegin(); ii != this->oks.constEnd(); ++ii, ++typesOfRecordsRead) {
          if (0 != typesOfRecordsRead) {
             userMessage << ", ";
          }
-         userMessage << ii.value() << " " << ii.key() << (1 == ii.value() ? this->tr(" record") : this->tr(" records"));
+         userMessage << ii.value() << " " << ii.key();
+         totalRecordsRead += ii.value();
       }
+      userMessage << (1 == totalRecordsRead ? this->tr(" record") : this->tr(" records"));
    }
 
    if (!this->skips.isEmpty()) {
-      userMessage << this->tr("Skipped ");
-      int typesOfRecordsRead = 0;
-      for (auto ii = this->skips.constBegin(); ii != this->skips.constEnd(); ++ii, ++typesOfRecordsRead) {
-         if (0 != typesOfRecordsRead) {
+      // If we read some records _and_ skipped some, then we need some space between the two messages (about what we
+      // read and what we skipped).
+      if (!this->oks.isEmpty()) {
+         userMessage << this->tr("\n\n");
+      }
+
+      userMessage << this->tr("↷ Skipped ");
+      int totalRecordsSkipped = 0;
+      int typesOfRecordsSkipped = 0;
+      for (auto ii = this->skips.constBegin(); ii != this->skips.constEnd(); ++ii, ++typesOfRecordsSkipped) {
+         if (0 != typesOfRecordsSkipped) {
             userMessage << ", ";
          }
-         userMessage << ii.value() << " " << ii.key() << (1 == ii.value() ? this->tr(" record") : this->tr(" records"));
+         userMessage << ii.value() << " " << ii.key();
+         totalRecordsSkipped += ii.value();
       }
+      userMessage <<
+         (1 == totalRecordsSkipped ? this->tr(" record") : this->tr(" records")) << " already in database";
    }
 
    return;

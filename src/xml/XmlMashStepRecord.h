@@ -23,8 +23,6 @@
 #include "xml/XmlNamedEntityRecord.h"
 #include "mashstep.h"
 
-class Mash;
-
 /**
  * \brief Loads a \b MashStep record in from an XML file.
  */
@@ -38,8 +36,8 @@ public:
     *        in the DB other in association with its Mash.
     * \param containingEntity The Mash with which the MashStep needs to be associated
     */
-   virtual bool normaliseAndStoreInDb(NamedEntity * containingEntity,
-                                      QTextStream & userMessage,
-                                      XmlRecordCount & stats);
+   virtual XmlRecord::ProcessingResult normaliseAndStoreInDb(NamedEntity * containingEntity,
+                                                             QTextStream & userMessage,
+                                                             XmlRecordCount & stats);
 };
 #endif

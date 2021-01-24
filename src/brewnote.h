@@ -33,9 +33,6 @@
 
 // Forward declarations;
 class Recipe;
-class BrewNote;
-bool operator<(BrewNote const& lhs, BrewNote const& rhs);
-bool operator==(BrewNote const& lhs, BrewNote const& rhs);
 
 /*!
  * \class BrewNote
@@ -48,13 +45,12 @@ class BrewNote : public NamedEntity
    Q_OBJECT
    friend class Database;
    friend class BeerXML;
-   friend bool operator<(BrewNote &lhs, BrewNote &rhs);
-   friend bool operator==(BrewNote &lhs, BrewNote &rhs);
 
 public:
-//// TBD What this for?   enum {DONOTUSE, RECIPE};
+   virtual ~BrewNote() = default;
 
-   virtual ~BrewNote() {}
+   bool operator<(BrewNote const & other) const;
+   bool operator>(BrewNote const & other) const;
 
    static QString classNameStr();
 
@@ -187,17 +183,23 @@ public:
    bool cacheOnly() const;
 
    // BrewNote objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
-
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
    void brewDateChanged(const QDateTime&);
 
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
    BrewNote(Brewtarget::DBTable table, int key);
    BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   BrewNote(QDateTime dateNow, bool cache = true);
+public:
+   BrewNote(QString name, bool cache = true);
+private:
+   BrewNote(QDateTime dateNow, bool cache = true, QString const & name = "");
    BrewNote(BrewNote const& other);
    bool loading;
 

@@ -34,16 +34,6 @@
 
 class XmlCoding;
 
-/////////////////
-//
-// TODO Still need to test MashStep and Mash
-//
-// TODO Still need to do Recipe
-//
-// TODO What about BrewNotes
-//
-/////////////////
-
 
 /**
  * \brief This class and its derived classes represent a record in an XML document.  See comment in xml/XmlCoding.h for
@@ -51,6 +41,19 @@ class XmlCoding;
  */
 class XmlRecord {
 public:
+   /**
+    * At various stages of reading in an XML file, we need to distinguish between three cases:
+    *   \c Succeeded - everything went OK and we should continue
+    *   \c Failed - there was a problem and we should stop trying to read in the file
+    *   \c FoundDuplicate - we realised that the record we are processing is a duplicate of one we already have in the
+    *                       DB, in which case we should skip over this record and carry on processing the rest of the
+    *                       file
+    */
+   enum ProcessingResult {
+      Succeeded,
+      Failed,
+      FoundDuplicate
+   };
 
    /**
     * \brief The types of fields that we know how to process.  Used in \b Field records
@@ -61,6 +64,7 @@ public:
       UInt,
       Double,
       String,
+      Date,
       Enum,
       Record
    };
@@ -68,7 +72,7 @@ public:
    /**
     * \brief Map from a string in an XML file to the value of an enum in a Brewtarget class
     *
-    * .:TODO:. Need to make this two-way
+    * .:TODO:. In theory we'll need to make this two-way when we extend to support saving XML, but a straight search through the whole map is not actually that burdensome
     *
     * Could use QMap or QHash here.  Doubt it makes much difference either way for the quantity of data /
     * number of look-ups we're doing.  (Documentation says QHash is "significantly faster" if you don't need ordering,
@@ -81,52 +85,44 @@ public:
     * \brief How to parse every field that we want to be able to read out of the XML file.  See class description for
     *        more details.
     */
-   struct Field {
+   struct FieldDefinition {
       FieldType           fieldType;
       XQString            xPath;
       char const * const  propertyName;
       EnumLookupMap const * stringToEnum;
    };
 
-   typedef QVector<Field> FieldDefinitions;
+   typedef QVector<FieldDefinition> FieldDefinitions;
 
    /**
     * \brief Constructor
     * \param xmlCoding An \b XmlCoding object representing the XML Coding we are using (eg BeerXML 1.0).  This is what
     *                  we'll need to look up how to handle nested records inside this one.
-    * \param recordName The name of the XML tag containing this type of record, eg "HOP", "YEAST", etc
     * \param fieldDefinitions A list of fields we expect to find in this record (other fields will be ignored) and how
     *                         to parse them.
     */
    XmlRecord(XmlCoding const & xmlCoding,
-             QString const recordName,
              FieldDefinitions const & fieldDefinitions);
 
    /**
-    * \brief
-    * \return
+    * \brief Getter for the NamedEntity we are reading in from this record
+    * \return Pointer to an object that the caller does NOT own (or nullptr for the root record)
     */
-   QString const & getRecordName() const;
+   NamedEntity * getNamedEntity() const;
 
    /**
-    * TODO Get rid of fieldsRead
-    *
     * \brief From the supplied record (ie node) in an XML document, load into memory the data it contains, including
     *        any other records nested inside it.
     *
     * \param domSupport
     * \param rootNodeOfRecord
     * \param userMessage Where to append any error messages that we want the user to see on the screen
-    * \param fieldsRead Optional pointer to an empty hashmap.  If set, this method should populate it with what fields
-    *                   it read in.  (This is useful for child classes that override this method and want to do further
-    *                   validation after calling the parent class method.)
     *
     * \return \b true if load succeeded, \b false if there was an error
     */
    bool load(xalanc::DOMSupport & domSupport,
              xalanc::XalanNode * rootNodeOfRecord,
-             QTextStream & userMessage,
-             std::shared_ptr< QHash<QString, QVariant> > fieldsRead = nullptr);
+             QTextStream & userMessage);
 
    /**
     * \brief Once the record (including all its sub-records) is loaded into memory, we this function does any final
@@ -143,13 +139,12 @@ public:
     * \param userMessage Where to append any error messages that we want the user to see on the screen
     * \param stats This object keeps tally of how many records (of each type) we skipped or stored
     *
-    * \return \b true if processing succeeded, \b false if there was an unresolvable problem.  Note that neither
-    *         skipping over duplicates nor amending names counts as an error.  The skipping or amending will be logged,
-    *         but it will not prevent the funciton from returning \b true.
+    * \return \b Succeeded, if processing succeeded, \b Failed, if there was an unresolvable problem, \b FoundDuplicate
+    *         if the current record is a duplicate of one already in the DB and should be skipped.
     */
-   virtual bool normaliseAndStoreInDb(NamedEntity * containingEntity,
-                                      QTextStream & userMessage,
-                                      XmlRecordCount & stats);
+   virtual ProcessingResult normaliseAndStoreInDb(NamedEntity * containingEntity,
+                                                  QTextStream & userMessage,
+                                                  XmlRecordCount & stats);
 
 private:
    /**
@@ -158,6 +153,7 @@ private:
     *        in this base class.
     */
    bool loadChildRecords(xalanc::DOMSupport & domSupport,
+                         FieldDefinition const * fieldDefinition,
                          xalanc::NodeRefList & nodesForCurrentXPath,
                          QTextStream & userMessage);
 
@@ -166,6 +162,28 @@ protected:
                                           XmlRecordCount & stats);
 
    /**
+    * \brief Checks whether the \b NamedEntity for this record is, in all the ways that count, a duplicate of one we
+    *        already have stored in the DB
+    * \return \b true if this is a duplicate and should be skipped rather than stored
+    */
+   virtual bool isDuplicate();
+
+   /**
+    * \brief If the \b NamedEntity for this record is supposed to have globally unique names, then this method will
+    *        check the current name and modify it if necessary.  NB: This function should be called _after_
+    *        \b isDuplicate().
+    */
+   virtual void normaliseName();
+
+   /**
+    * \brief If the \b NamedEntity for this record needs to know about its containing entity (because it is owned by
+    *        that containing entity), this function should set it - eg this is where a \b BrewNote gets its \b Recipe
+    *        set.  For other classes, this function is a no-op.
+    */
+   virtual void setContainingEntity(NamedEntity * containingEntity);
+
+   /**
+    * TODO REWRITE THIS COMMENT
     * \brief Finds the first instance of \b NE with \b name() matching \b nameToFind.  This is used to avoid name
     *        clashes when loading some subclass of NamedEntity (eg Hop, Yeast, Equipment, Recipe) from an XML file (eg
     *        if are reading in a Recipe called "Oatmeal Stout" then this function can check whether we already have a
@@ -180,20 +198,15 @@ protected:
     * \return A pointer to a \b NE with a matching \b name(), if there is one, or \b nullptr if not.  Note that this
     *         function does not tell you whether more than one \b NE has the name \b nameToFind
     */
-   virtual NamedEntity * findByName(QString nameToFind);
-
    static void modifyClashingName(QString & candidateName);
 
    XmlCoding const &        xmlCoding;
-   QString const            recordName;
+
    FieldDefinitions const & fieldDefinitions;
 
-   // If this is true (the default), then, in normaliseAndStoreInDb(), before storing, we try to ensure that what we
-   // load in does not create duplicate names.  Eg, if we already have a Recipe called "Oatmeal Stout" and then read in
-   // a (different) recipe with the same name, then we will change the name of the newly read-in one to "Oatmeal Stout
-   // (1)" (or "Oatmeal Stout (2)" if "Oatmeal Stout (1)" is taken, and so on).  For those NamedEntity subclasses where
-   // we don't care about duplicate names (eg MashStep records), this attribute should be set to false.
-   bool instanceNamesAreUnique;
+   // The name of the class of object contained in this type of record, eg "Hop", "Yeast", etc.
+   // Blank for the root record (which is just a container and doesn't have a NamedEntity).
+   QString namedEntityClassName;
 
    //
    // If we created a new NamedEntity (ie Hop/Yeast/Recipe/etc) object to populate with data read in from an XML file,
@@ -207,17 +220,35 @@ protected:
    // HOWEVER, we might still need access to the object even after we are no longer its owner.  This is why we also
    // have this->namedEntity.
    //
-   // An alternative approach would be to do replace this->namedEntityRaiiContainer with some boolean flag saying
+   // MOREOVER, there are circumstances where we want this->namedEntity and this->namedEntityRaiiContainer to point to
+   // different things.  Specifically, if we are reading in, say a Hop and we discover that we already have the same
+   // Hop (where "the same" means "as determined by NamedEntity.operator==") in the Database, then we will want to set
+   // this->namedEntity to the Hop we already have stored (in case other objects we are reading in need to cross-refer
+   // to it) and leave this->namedEntityRaiiContainer holding the newly-created Hop object that needs to be discarded.
+   //
+   // (An alternative approach would be to do replace this->namedEntityRaiiContainer with some boolean flag saying
    // whether we own the object and then write a custom destructor to check the flag and delete this->namedEntity if
-   // necessary.
+   // necessary.  But this creates complication for dealing with duplicates.)
    //
    NamedEntity * namedEntity; // This is null for the root record of a document
    std::unique_ptr<NamedEntity> namedEntityRaiiContainer;
 
+   // This determines whether we include this record in the stats we show the user (about how many records were read in
+   // or skipped from a file.  By default it's true.  Subclass constructors set it to false for types of record that
+   // are entirely owned and contained by other records (eg MashSteps are just part of a Mash, so we tell the user
+   // about reading in a Mash but not about reading in a MashStep).
+   bool includeInStats;
+
    //
-   // Keep track of any child records
+   // Keep track of any child (ie contained) records
+   // Key is the name of the class of the NamedEntity (eg "Hop", "Yeast", "MashStep", etc)
+   // Value is a pair of:
+   //   • The name, if any, of the property of this class that stores this child
+   //   • A smart pointer to the child XmlRecord.  (Smart pointer ensures each child record is destroyed properly when
+   //     our own destructor is called.
    //
-   QMultiHash< QString, std::shared_ptr<XmlRecord> > childRecords;
+   typedef std::pair<char const * const, std::shared_ptr<XmlRecord> > ChildRecord;
+   QMultiHash<QString const &, ChildRecord> childRecords;
 
    // See https://apache.github.io/xalan-c/api/XalanNode_8hpp_source.html for possible indexes into this array
    static char const * const XALAN_NODE_TYPES[];

@@ -19,7 +19,7 @@
 #include "xml/XmlMashRecord.h"
 
 #include "database.h"
-
+/*
 bool XmlMashRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
                                           QTextStream & userMessage,
                                           XmlRecordCount & stats) {
@@ -52,3 +52,4 @@ bool XmlMashRecord::normaliseAndStoreInDb(NamedEntity * containingEntity,
 
    return false;
 }
+*/

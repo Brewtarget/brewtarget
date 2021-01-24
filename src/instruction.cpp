@@ -1,6 +1,6 @@
 /*
  * instruction.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -24,6 +24,18 @@
 
 #include "TableSchemaConst.h"
 #include "InstructionSchema.h"
+
+bool Instruction::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Instruction const & rhs = static_cast<Instruction const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_directions == rhs.m_directions &&
+      this->m_hasTimer   == rhs.m_hasTimer   &&
+      this->m_timerValue == rhs.m_timerValue
+   );
+}
+
 
 QString Instruction::classNameStr()
 {
@@ -146,4 +158,8 @@ int Instruction::insertInDatabase() {
 //   return Database::instance().insertInstruction(this, this->m_recipe);
    return Database::instance().insertElement(this);
 
+}
+
+void Instruction::removeFromDatabase() {
+   Database::instance().remove(this);
 }
