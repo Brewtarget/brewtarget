@@ -2353,6 +2353,10 @@ template<class T> T* Database::addIngredientToRecipe(
    bool transact
 )
 {
+   qDebug() <<
+     Q_FUNC_INFO << "noCopy:" << (noCopy ? "true" : "false") << ", doNotDisplay:" <<
+     (doNotDisplay ? "true" : "false") << ", transact" << (transact ? "true" : "false");
+
    T* newIng = nullptr;
    QString propName, relTableName, ingKeyName, childTableName;
    TableSchema* table;
@@ -2482,9 +2486,6 @@ template<class T> T* Database::addIngredientToRecipe(
 
          qDebug() <<
             Q_FUNC_INFO << "Parent-Child Insert:" << insert << "with args" << key << "," << newIng->key();
-
-         // It's a coding error if we're trying to make something its own parent!
-         Q_ASSERT(key != newIng->key());
 
          if ( ! q.exec() ) {
             throw QString("%1 %2.").arg(q.lastQuery()).arg(q.lastError().text());
@@ -3235,13 +3236,15 @@ template<class T> T* Database::copy( Ingredient const* object, QHash<int,T*>* ke
    try {
       QString select = QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key);
 
-      ///qDebug() << Q_FUNC_INFO << "SELECT SQL:" << select;
-      qDebug() << QString("%1 SELECT SQL: %2").arg(Q_FUNC_INFO).arg(select);
+      qDebug() << Q_FUNC_INFO << "SELECT SQL:" << select;
 
-      if( !q.exec(select) )
+      if( !q.exec(select) ) {
          throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
-      else
-         q.next();
+      }
+
+      qDebug() << Q_FUNC_INFO << "Returned " << q.size() << " rows";
+
+      q.next();
 
       QSqlRecord oldRecord = q.record();
       q.finish();
@@ -3262,8 +3265,7 @@ template<class T> T* Database::copy( Ingredient const* object, QHash<int,T*>* ke
                            .arg(fields)
                            .arg(holder);
 
-      ///qDebug() << Q_FUNC_INFO << "INSERT SQL:" << prepString;
-      qDebug() << QString("%1 INSERT SQL: %2").arg(Q_FUNC_INFO).arg(prepString);
+      qDebug() << Q_FUNC_INFO << "INSERT SQL:" << prepString;
 
       QSqlQuery insert = QSqlQuery( sqlDatabase() );
       insert.prepare(prepString);
@@ -3282,6 +3284,12 @@ template<class T> T* Database::copy( Ingredient const* object, QHash<int,T*>* ke
          else if ( name != tbl->keyName() ) {
             insert.bindValue(QString(":%1").arg(name), val);
          }
+      }
+
+      // For debugging, it's useful to know what the SQL parameters were
+      auto boundValues = insert.boundValues();
+      for (auto ii : boundValues.keys()) {
+         qDebug() << Q_FUNC_INFO << ii << "=" << boundValues.value(ii);
       }
 
       if (! insert.exec() )
