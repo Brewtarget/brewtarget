@@ -73,7 +73,6 @@ private:
    QObject & updatee;
    char const * const propertyName;
    QVariant oldValue, newValue;
-///   QMetaProperty metaProperty;
 };
 
 #endif /*SIMPLE_UNDOABLE_UPDATE_H*/
