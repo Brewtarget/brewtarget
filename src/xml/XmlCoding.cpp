@@ -197,42 +197,42 @@ public:
       xercesc::DOMConfiguration * config = this->parser->getDomConfig();
 
       // "comments" - false = Discard Comment nodes in document
-      config->setParameter(xercesc::XMLUni::fgDOMComments, false); // =====
+      config->setParameter(xercesc::XMLUni::fgDOMComments, false);
 
       // "datatype-normalization" - true = Let validation process do datatype normalization
-      config->setParameter(xercesc::XMLUni::fgDOMDatatypeNormalization, true); // =====
+      config->setParameter(xercesc::XMLUni::fgDOMDatatypeNormalization, true);
 
       // "entities" - false = Do not create EntityReference nodes
-      config->setParameter(xercesc::XMLUni::fgDOMEntities, false); // =====
+      config->setParameter(xercesc::XMLUni::fgDOMEntities, false);
 
       // "namespaces"
       // true = Perform Namespace processing
       //        NB: This must be turned on if "http://apache.org/xml/features/validation/schema" is enabled.  (It's a
       //        logical requirement, given that schemas need to use namespaces, but it's worth remembering because the
       //        errors that you get trying to use schemas without namespace processing enabled are pretty cryptic!)
-      config->setParameter(xercesc::XMLUni::fgDOMNamespaces, true); // =====
+      config->setParameter(xercesc::XMLUni::fgDOMNamespaces, true);
 
       // "whitespace-in-element-content" - false = Do not include ignorable whitespace in DOM tree
-      config->setParameter(xercesc::XMLUni::fgDOMElementContentWhitespace, false); // =====
+      config->setParameter(xercesc::XMLUni::fgDOMElementContentWhitespace, false);
 
       // "validation" - true = Report all validation errors
-      config->setParameter(xercesc::XMLUni::fgDOMValidate, true); // =====
+      config->setParameter(xercesc::XMLUni::fgDOMValidate, true);
 
       // "http://apache.org/xml/features/validation/schema"
       // true = Enable parser's schema support
       //        NB: If set to true, namespace processing must also be turned on.
-      config->setParameter(xercesc::XMLUni::fgXercesSchema, true); // =====
+      config->setParameter(xercesc::XMLUni::fgXercesSchema, true);
 
       // "http://apache.org/xml/features/validation/schema-full-checking"
       // false = Disable full schema constraint checking.
       //         (Setting this to true would merely check the schema grammar itself for additional errors that are
       //         time-consuming or memory intensive to perform.  Given that we know in advance all the schemas we are
       //         going to use, this is something only to enable in dev when tweaking one or more of those schemas.)
-      config->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false); // =====
+      config->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false);
 
       // "http://apache.org/xml/features/validation/schema/handle-multiple-imports"
       // true = During schema validation allow multiple schemas with the same namespace to be imported
-      config->setParameter(xercesc::XMLUni::fgXercesHandleMultipleImports, true); // =====
+      config->setParameter(xercesc::XMLUni::fgXercesHandleMultipleImports, true);
 
       // "http://apache.org/xml/features/validation/cache-grammarFromParse"
       // true = Cache the grammar in the pool for re-use in subsequent parses

@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _BEERXML_H
 #define _BEERXML_H
 
@@ -105,22 +104,6 @@ public:
     * \return true if succeeded, false otherwise
     */
    bool importFromXML(QString const & filename, QTextStream & userMessage);
-
-   // Import from BeerXML =====================================================
-/*
-   BrewNote*    brewNoteFromXml(    QDomNode const& node, Recipe* parent );
-   Equipment*   equipmentFromXml(   QDomNode const& node, Recipe* parent = nullptr );
-   Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = nullptr );
-   Hop*         hopFromXml(         QDomNode const& node, Recipe* parent = nullptr );
-   Instruction* instructionFromXml( QDomNode const& node, Recipe* parent );
-   Mash*        mashFromXml(        QDomNode const& node, Recipe* parent = nullptr );
-   MashStep*    mashStepFromXml(    QDomNode const& node, Mash* parent );
-   Misc*        miscFromXml(        QDomNode const& node, Recipe* parent = nullptr );
-   Style*       styleFromXml(       QDomNode const& node, Recipe* parent = nullptr );
-   Water*       waterFromXml(       QDomNode const& node, Recipe* parent = nullptr );
-   Yeast*       yeastFromXml(       QDomNode const& node, Recipe* parent = nullptr );
-   Recipe*      recipeFromXml(      QDomNode const& node);
-*/
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 private:
    // Private implementation details - see https://herbsutter.com/gotw/_100/
@@ -140,12 +123,6 @@ private:
    BeerXML& operator=(BeerXML const&) = delete;
 
    QString textFromValue(QVariant value, QString type);
-   int getQualifiedHopTypeIndex(QString type, Hop* hop);
-   int getQualifiedHopUseIndex(QString use, Hop* hop);
-
-   int getQualifiedMiscTypeIndex(QString type, Misc* misc);
-   int getQualifiedMiscUseIndex(QString use, Misc* misc);
-
 };
 
 #endif
