@@ -1,8 +1,0 @@
-#! /bin/bash
-while true
-do
-    read -n 1 -s -r -p "Press any key to start BrewTarget"
-    echo -e "\n\n"
-    /usr/local/bin/brewtarget --user-dir /brewtarget
-    echo -e "\n\n"
-done
