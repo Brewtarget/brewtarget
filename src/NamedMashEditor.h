@@ -32,7 +32,7 @@ class NamedMashEditor;
 #include "MashListModel.h"
 #include "MashStepEditor.h"
 #include "EquipmentListModel.h"
-#include "IngredientSortProxyModel.h"
+#include "NamedEntitySortProxyModel.h"
 
 
 // Forward declarations.
@@ -61,7 +61,7 @@ public slots:
    void saveAndClose();
    //! Set the mash we wish to view/edit.
    void setMash(Mash* mash);
-  
+
    //! add a mash step to the mash
    void addMashStep();
    //! remove a mash step to the mash

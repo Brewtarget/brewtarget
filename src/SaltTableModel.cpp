@@ -93,7 +93,7 @@ void SaltTableModel::observeRecipe(Recipe* rec)
    m_rec = rec;
    if ( m_rec ) {
       QList<Salt*> salts = m_rec->salts();
-      connect( m_rec, &Ingredient::changed, this, &SaltTableModel::changed );
+      connect( m_rec, &NamedEntity::changed, this, &SaltTableModel::changed );
       if (salts.size() > 0 ) {
          addSalts( salts );
       }
@@ -111,7 +111,7 @@ void SaltTableModel::addSalt(Salt* salt)
 
    beginInsertRows( QModelIndex(), saltObs.size(), saltObs.size() );
    saltObs.append(salt);
-   connect( salt, &Ingredient::changed, this, &SaltTableModel::changed );
+   connect( salt, &NamedEntity::changed, this, &SaltTableModel::changed );
    endInsertRows();
 
    if (parentTableWidget) {
@@ -136,7 +136,7 @@ void SaltTableModel::addSalts(QList<Salt*> salts)
       endInsertRows();
 
       foreach (Salt* i, tmp) {
-         connect( i, &Ingredient::changed, this, &SaltTableModel::changed );
+         connect( i, &NamedEntity::changed, this, &SaltTableModel::changed );
       }
 
    }
@@ -351,7 +351,7 @@ void SaltTableModel::removeSalts(QList<int>deadSalts)
          // Dead salts do not malinger in the database. This will
          // delete the thing, not just mark it deleted
          if ( ! zombie->cacheOnly() )
-            Database::instance().removeIngredientFromRecipe(m_rec,zombie);
+            Database::instance().removeNamedEntityFromRecipe(m_rec,zombie);
       }
    }
    emit newTotals();

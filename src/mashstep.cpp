@@ -71,7 +71,7 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
 }
 
 MashStep::MashStep(QString name, bool cache)
-   : Ingredient(Brewtarget::MASHSTEPTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::MASHSTEPTABLE, -1, name, true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -87,7 +87,7 @@ MashStep::MashStep(QString name, bool cache)
 }
 
 MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
      m_typeStr(rec.value(kcolMashstepType).toString()),
      m_type(static_cast<MashStep::Type>(types.indexOf(m_typeStr))),
      m_infuseAmount_l(rec.value(kcolMashstepInfuseAmt).toDouble()),

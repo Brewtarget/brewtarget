@@ -264,8 +264,8 @@ public:
    BtFolder*   folder();
    //! \brief returns data as a water
    Water*   water();
-   //! \brief returns the data as a Ingredient
-   Ingredient* thing();
+   //! \brief returns the data as a NamedEntity
+   NamedEntity* thing();
 
    //! \brief inserts \c count new items of \c type, starting at \c position
    bool insertChildren(int position, int count, int _type = RECIPE);

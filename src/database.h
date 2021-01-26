@@ -1,6 +1,6 @@
 /*
  * database.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Kregg K <gigatropolis@yahoo.com>
@@ -74,11 +74,11 @@ class QThread;
  * \class Database
  * \author Philip G. Lee
  *
- * \brief Model for lists of all the Ingredient items in the database.
+ * \brief Model for lists of all the NamedEntity items in the database.
  *
  * This class is a singleton, meaning that there should only ever be one
  * instance of this floating around, and its purpose is to manage all of
- * the Ingredients in the app. The Database should be the only way
+ * the NamedEntitys in the app. The Database should be the only way
  * we ever get pointers to BeerXML ingredients and the like. This is our
  * big model class.
  *
@@ -127,7 +127,7 @@ public:
                                    QString const& password="brewtarget");
    bool loadSuccessful();
 
-   void updateEntry( Ingredient* object, QString propName, QVariant value, bool notify = true, bool transact = false );
+   void updateEntry( NamedEntity* object, QString propName, QVariant value, bool notify = true, bool transact = false );
 
    //! \brief Get the contents of the cell specified by table/key/col_name
    QVariant get( Brewtarget::DBTable table, int key, QString col_name );
@@ -140,7 +140,7 @@ public:
    // Named constructors ======================================================
    //! Create new brew note attached to \b parent.
    // maybe I should have never learned templates?
-   template<class T> T* newIngredient(QHash<int,T*>* all) {
+   template<class T> T* newNamedEntity(QHash<int,T*>* all) {
       int key;
       // To quote the talking heads, my god what have I done?
       Brewtarget::DBTable table = dbDefn->classNameToTable( T::classNameStr() );
@@ -168,7 +168,7 @@ public:
       return tmp;
    }
 
-   template<class T> T* newIngredient(QString name, QHash<int,T*>* all) {
+   template<class T> T* newNamedEntity(QString name, QHash<int,T*>* all) {
       int key;
       // To quote the talking heads, my god what have I done?
       TableSchema* tbl = dbDefn->table(dbDefn->classNameToTable(T::classNameStr()));
@@ -232,7 +232,7 @@ public:
    Salt* newSalt(Salt* other = nullptr);
    Yeast* newYeast(Yeast* other = nullptr);
 
-   int    insertElement(Ingredient* ins);
+   int    insertElement(NamedEntity* ins);
    int    insertEquipment(Equipment* ins);
    int    insertFermentable(Fermentable* ins);
    int    insertHop(Hop* ins);
@@ -262,13 +262,13 @@ public:
    int getParentID(TableSchema* table, int childKey);
 
    //! \returns true if this ingredient is stored in the DB, false otherwise
-   bool isStored(Ingredient const & ingredient);
+   bool isStored(NamedEntity const & ingredient);
 
    //! Inserts an new inventory row in the appropriate table
    int newInventory(TableSchema* schema);
 
    int getInventoryId(TableSchema* tbl, int key );
-   void setInventory(Ingredient* ins, QVariant value, int invKey = 0, bool notify=true );
+   void setInventory(NamedEntity* ins, QVariant value, int invKey = 0, bool notify=true );
 
    //! \returns The entire inventory for a table.
    QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
@@ -319,7 +319,7 @@ public:
    * \brief  This function is intended to be called by an ingredient that has not already cached its parent's key
    * \return Key of parent ingredient if there is one, 0 otherwise
    */
-   int getParentIngredientKey(Ingredient const & ingredient);
+   int getParentNamedEntityKey(NamedEntity const & ingredient);
 
    /*! \brief Removes the specified ingredient from the recipe, then calls the changed()
     *         signal corresponding to the appropriate QList
@@ -328,7 +328,7 @@ public:
     *  \param ing
     *  \returns the parent of the ingredient deleted (which is needed to be able to undo the removal)
     */
-   Ingredient * removeIngredientFromRecipe( Recipe* rec, Ingredient* ing );
+   NamedEntity * removeNamedEntityFromRecipe( Recipe* rec, NamedEntity* ing );
 
    // An odd ball I can't resolve quite yet. But I will.
    // This one isn't even needed. remove does it
@@ -418,7 +418,7 @@ public:
    Q_PROPERTY( QList<Salt*> salts READ salts /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false )
 
-   // Returns non-deleted Ingredients.
+   // Returns non-deleted NamedEntitys.
    QList<BrewNote*> brewNotes();
    QList<Equipment*> equipments();
    QList<Fermentable*> fermentables();
@@ -591,7 +591,7 @@ private:
    //! Get the right database connection for the calling thread.
    static QSqlDatabase sqlDatabase();
 
-   //! Helper to populate all* hashes. T should be a Ingredient subclass.
+   //! Helper to populate all* hashes. T should be a NamedEntity subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table );
 
    //! we search by name enough that this is actually not a bad idea
@@ -654,7 +654,7 @@ private:
    QMetaProperty metaProperty(const char* name);
 
    //! Mark the \b object in \b table as deleted.
-   void deleteRecord( Ingredient* object );
+   void deleteRecord( NamedEntity* object );
 
    // Note -- this has to happen on a transactional boundary. We are touching
    // something like four tables, and just sort of hoping it all works.
@@ -662,7 +662,7 @@ private:
     * Create a \e copy (by default) of \b ing and add the copy to \b recipe where \b ing's
     * key is \b ingKeyName and the relational table is \b relTableName.
     *
-    * \tparam T the type of ingredient. Must inherit Ingredient.
+    * \tparam T the type of ingredient. Must inherit NamedEntity.
     * \param rec the recipe to add the ingredient to
     * \param ing the ingredient to add to the recipe
     * \param propName the Recipe property that will change when we add \c ing to it
@@ -674,9 +674,9 @@ private:
     * \param doNotDisplay if true (default), calls \c setDisplay(\c false) on the new ingredient
     * \returns the new ingredient.
     */
-   template<class T> T* addIngredientToRecipe(
+   template<class T> T* addNamedEntityToRecipe(
       Recipe* rec,
-      Ingredient* ing,
+      NamedEntity* ing,
       bool noCopy = false,
       QHash<int,T*>* keyHash = 0,
       bool doNotDisplay = true,
@@ -685,7 +685,7 @@ private:
 
    /*!
     * \brief Create a deep copy of the \b object.
-    * \em T must be a subclass of \em Ingredient.
+    * \em T must be a subclass of \em NamedEntity.
     * \returns a pointer to the new copy. You must manually emit the changed()
     * signal after a copy() call. Also, does not insert things magically into
     * allHop or allInstructions etc. hashes. This just simply duplicates a
@@ -694,7 +694,7 @@ private:
     * \param displayed is true if you want the \em displayed column set to true.
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
-   template<class T> T* copy( Ingredient const* object, QHash<int,T*>* keyHash, bool displayed = true );
+   template<class T> T* copy( NamedEntity const* object, QHash<int,T*>* keyHash, bool displayed = true );
 
    // Do an sql update.
    void sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );
@@ -707,7 +707,7 @@ private:
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
 
-   QMap<QString, std::function<Ingredient*(QString name)> > makeTableParams();
+   QMap<QString, std::function<NamedEntity*(QString name)> > makeTableParams();
 
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.

@@ -45,7 +45,7 @@ void WaterEditor::setWater(Water *water)
    obs = water;
    if( obs )
    {
-      connect( obs, &Ingredient::changed, this, &WaterEditor::changed );
+      connect( obs, &NamedEntity::changed, this, &WaterEditor::changed );
       showChanges();
    }
 }

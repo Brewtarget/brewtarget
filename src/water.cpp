@@ -54,7 +54,7 @@ QString Water::classNameStr()
 }
 
 Water::Water(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key),
+   : NamedEntity(table, key),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -74,7 +74,7 @@ Water::Water(Brewtarget::DBTable table, int key)
 }
 
 Water::Water(QString name, bool cache)
-   : Ingredient(Brewtarget::WATERTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::WATERTABLE, -1, name, true),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -94,7 +94,7 @@ Water::Water(QString name, bool cache)
 }
 
 Water::Water(Water const& other, bool cache)
-   : Ingredient(Brewtarget::WATERTABLE, -1, other.name(), true),
+   : NamedEntity(Brewtarget::WATERTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_calcium_ppm(other.m_calcium_ppm),
    m_bicarbonate_ppm(other.m_bicarbonate_ppm),
@@ -114,7 +114,7 @@ Water::Water(Water const& other, bool cache)
 }
 
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_amount(rec.value(kcolAmount).toDouble()),
    m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
    m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),
@@ -284,12 +284,12 @@ double Water::ppm( Water::Ions ion )
    return 0.0;
 }
 
-Ingredient * Water::getParent() {
+NamedEntity * Water::getParent() {
    Water * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it

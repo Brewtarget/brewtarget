@@ -182,9 +182,6 @@ public:
       return reinterpret_cast<NamedEntity*>(addr);
    }
 
-   bool isValid();
-   void invalidate();
-
    /*!
     * \brief Some entities (eg Fermentable, Hop) get copied when added to a recipe, but others (eg Instruction) don't.
     *        For those that do, we think of the copy as being a child of the original NamedEntity.  This function allows
@@ -265,18 +262,11 @@ protected:
    QVariantMap getColumnValueMap() const;
 
 private:
-   /*!
-    * \param valid - Indicates if the beerXML element was valid. There is a problem with importing invalid
-    * XML. I'm hoping this helps fix it
-    */
-  bool _valid;
   mutable QString _folder;
   mutable QString _name;
   mutable QVariant _display;
   mutable QVariant _deleted;
 
 };
-
-typedef NamedEntity Ingredient; // .:TODO:. Temporary hack to keep Ingredient as a valid class name until we can refactor the rest of the code
 
 #endif

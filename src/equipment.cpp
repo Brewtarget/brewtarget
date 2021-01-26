@@ -78,7 +78,7 @@ Equipment::Equipment(QString t_name, bool cacheOnly)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true ),
+   : NamedEntity(table, key, QString(), true ),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -101,7 +101,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_boilSize_l(rec.value(kcolEquipBoilSize).toDouble()),
    m_batchSize_l(rec.value(kcolEquipBatchSize).toDouble()),
    m_tunVolume_l(rec.value(kcolEquipTunVolume).toDouble()),
@@ -124,7 +124,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Equipment::Equipment( Equipment const& other )
-   : Ingredient(other),
+   : NamedEntity(other),
    m_boilSize_l(other.m_boilSize_l),
    m_batchSize_l(other.m_batchSize_l),
    m_tunVolume_l(other.m_tunVolume_l),
@@ -467,12 +467,12 @@ double Equipment::wortEndOfBoil_l( double kettleWort_l ) const
    return kettleWort_l - (boilTime_min()/(double)60)*evapRate_lHr();
 }
 
-Ingredient * Equipment::getParent() {
+NamedEntity * Equipment::getParent() {
    Equipment * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it

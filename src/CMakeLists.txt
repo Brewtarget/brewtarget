@@ -112,7 +112,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
     ${SRCDIR}/model/NamedEntity.cpp
-    ${SRCDIR}/IngredientSortProxyModel.cpp
+    ${SRCDIR}/NamedEntitySortProxyModel.cpp
     ${SRCDIR}/instruction.cpp
     ${SRCDIR}/InstructionWidget.cpp
     ${SRCDIR}/InventoryFormatter.cpp
@@ -235,7 +235,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/ingredient.h
     ${SRCDIR}/beerxml.h
-    ${SRCDIR}/IngredientSortProxyModel.h
+    ${SRCDIR}/NamedEntitySortProxyModel.h
     ${SRCDIR}/boiltime.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h

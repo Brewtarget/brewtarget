@@ -699,11 +699,11 @@ QString BeerXML::textFromValue(QVariant value, QString type)
    QString retval = value.toString();
 
    if (type == "boolean" )
-      retval = Ingredient::text(value.toBool());
+      retval = NamedEntity::text(value.toBool());
    else if (type == "real")
-      retval = Ingredient::text(value.toDouble());
+      retval = NamedEntity::text(value.toDouble());
    else if (type == "timestamp")
-      retval = Ingredient::text(value.toDate());
+      retval = NamedEntity::text(value.toDate());
 
    return retval;
 }
@@ -719,7 +719,7 @@ void BeerXML::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
 
    // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -745,7 +745,7 @@ void BeerXML::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
 
    // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -771,7 +771,7 @@ void BeerXML::toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent )
 
    // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -799,7 +799,7 @@ void BeerXML::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
 
    // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -827,7 +827,7 @@ void BeerXML::toXml( Instruction* a, QDomDocument& doc, QDomNode& parent )
 
    // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -856,7 +856,7 @@ void BeerXML::toXml( Mash* a, QDomDocument& doc, QDomNode& parent )
 
    // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -891,7 +891,7 @@ void BeerXML::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
 
    // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -932,7 +932,7 @@ void BeerXML::toXml( Misc* a, QDomDocument& doc, QDomNode& parent )
 
    // This sucks. Not quite sure what to do, but hard code it
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -959,7 +959,7 @@ void BeerXML::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    node = doc.createElement("RECIPE");
 
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -1039,7 +1039,7 @@ void BeerXML::toXml( Style* a, QDomDocument& doc, QDomNode& parent )
    node = doc.createElement("STYLE");
 
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -1065,7 +1065,7 @@ void BeerXML::toXml( Water* a, QDomDocument& doc, QDomNode& parent )
    node = doc.createElement("WATER");
 
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
@@ -1092,7 +1092,7 @@ void BeerXML::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
    node = doc.createElement("YEAST");
 
    tmpElement = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(Ingredient::text(a->version()));
+   tmpText = doc.createTextNode(NamedEntity::text(a->version()));
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 

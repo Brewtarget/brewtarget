@@ -206,7 +206,7 @@ public:
    // One method to bring them all and in darkness bind them
    // .:TBD:. (MY 2020-11-23) At the moment, it feels like there are a lot of places in the code that keep the object
    //         model and the database in sync, which can get complicated.  In the long run, it would be simpler to have
-   //         the GUI interact with the object model (Recipes, Ingredients, etc) and make it the responsibility of the
+   //         the GUI interact with the object model (Recipes, NamedEntitys, etc) and make it the responsibility of the
    //         object model to store/retrieve/modify what's in the database via some abstraction layer.  Might be worth
    //         looking at https://www.qxorm.com or similar for this.
    //            In the meantime, we cannot define a templated member function _in this header_ that calls
@@ -218,7 +218,7 @@ private:
    /*!
     * \brief Remove \c var from the recipe and return what was removed - ie \c var
     */
-   Ingredient * removeIngredient( Ingredient *var);
+   NamedEntity * removeNamedEntity( NamedEntity *var);
 
 public:
    /*!
@@ -229,7 +229,7 @@ public:
     */
    template<class T> T * remove(T * var) {
 //      qDebug() << QString("%1").arg(Q_FUNC_INFO);
-      return static_cast<T *>(this->removeIngredient(var));
+      return static_cast<T *>(this->removeNamedEntity(var));
    }
 
    /*!
@@ -249,7 +249,7 @@ public:
     *    Fermentable * newCopyOfSomeFermentable = myRecipe->addFermentable(&someFermentable);   // DO
     *    myRecipe->removeFermentable(newCopyOfSomeFermentable);                                 // UNDO
     *
-    * The remover function returns a pointer to the Ingredient that it removed.  This is useful because it makes add and
+    * The remover function returns a pointer to the NamedEntity that it removed.  This is useful because it makes add and
     * remove symmetric and simplifies the implementation of UndoableAddOrRemove.
     *
     * TBD: (MY 2020-11-23) It would be good one day to pull out all the non-changeable aspects of ingredients and keep

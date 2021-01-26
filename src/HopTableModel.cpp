@@ -92,7 +92,7 @@ void HopTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &Ingredient::changed, this, &HopTableModel::changed );
+      connect( recObs, &NamedEntity::changed, this, &HopTableModel::changed );
       addHops( recObs->hops() );
    }
 }

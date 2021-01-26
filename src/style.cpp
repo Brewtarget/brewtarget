@@ -52,7 +52,7 @@ QString Style::classNameStr()
 
 // suitable for something that will be written to the db later
 Style::Style(QString t_name, bool cacheOnly)
-   : Ingredient(Brewtarget::STYLETABLE, -1, t_name, true),
+   : NamedEntity(Brewtarget::STYLETABLE, -1, t_name, true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -82,7 +82,7 @@ Style::Style(QString t_name, bool cacheOnly)
 // suitable for something that needs to be created in the db when the object is, but all the other
 // fields will be filled in later (shouldn't be used that much)
 Style::Style(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true),
+   : NamedEntity(table, key, QString(), true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -111,7 +111,7 @@ Style::Style(Brewtarget::DBTable table, int key)
 
 // suitable for creating a Style from a database record
 Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_category(rec.value(kcolStyleCat).toString()),
      m_categoryNumber(rec.value(kcolStyleCatNum).toString()),
      m_styleLetter(rec.value(kcolStyleLetter).toString()),
@@ -363,7 +363,7 @@ void Style::setProfile( const QString& var )
    }
 }
 
-void Style::setIngredients( const QString& var )
+void Style::setNamedEntitys( const QString& var )
 {
     m_ingredients = var;
    if ( ! m_cacheOnly ) {
@@ -412,12 +412,12 @@ bool Style::isValidType( const QString &str )
    return m_types.contains( str );
 }
 
-Ingredient * Style::getParent() {
+NamedEntity * Style::getParent() {
    Style * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it

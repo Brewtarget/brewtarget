@@ -37,7 +37,7 @@ void EquipmentButton::setRecipe(Recipe* rec)
    _rec = rec;
    if( _rec )
    {
-      connect( _rec, &Ingredient::changed, this, &EquipmentButton::recChanged );
+      connect( _rec, &NamedEntity::changed, this, &EquipmentButton::recChanged );
       setEquipment( _rec->equipment() );
    }
    else
@@ -52,7 +52,7 @@ void EquipmentButton::setEquipment(Equipment* equip)
    _equip = equip;
    if( _equip )
    {
-      connect( _equip, &Ingredient::changed, this, &EquipmentButton::equipChanged );
+      connect( _equip, &NamedEntity::changed, this, &EquipmentButton::equipChanged );
       setText( _equip->name() );
    }
    else
@@ -71,5 +71,5 @@ void EquipmentButton::recChanged(QMetaProperty prop, QVariant val)
    QString propName(prop.name());
 
    if( propName == "equipment" )
-      setEquipment( qobject_cast<Equipment*>(Ingredient::extractPtr(val)) );
+      setEquipment( qobject_cast<Equipment*>(NamedEntity::extractPtr(val)) );
 }

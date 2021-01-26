@@ -39,7 +39,6 @@ NamedEntity::NamedEntity(Brewtarget::DBTable table, int key, QString t_name, boo
      _key(key),
      _table(table),
      parentKey(0),
-     _valid(true),
      _folder(folder),
      _name(t_name),
      _display(t_display),
@@ -53,7 +52,6 @@ NamedEntity::NamedEntity(NamedEntity const& other)
      _key(other._key),
      _table(other._table),
      parentKey(other.parentKey),
-     _valid(true),
      _folder(other._folder),
      _name(QString()),
      _display(other._display),
@@ -349,16 +347,6 @@ QVariant NamedEntity::getInventory( const QString& col_name ) const
    QVariant val = 0.0;
    val = Database::instance().getInventoryAmt(col_name, _table, _key);
    return val;
-}
-
-bool NamedEntity::isValid()
-{
-   return _valid;
-}
-
-void NamedEntity::invalidate()
-{
-   _valid = false;
 }
 
 void NamedEntity::setParent(NamedEntity const & parentNamedEntity)

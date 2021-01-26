@@ -89,7 +89,7 @@ public:
    //! \brief The profile.
    Q_PROPERTY( QString profile READ profile WRITE setProfile /*NOTIFY changed*/ /*changedProfile*/ )
    //! \brief The ingredients.
-   Q_PROPERTY( QString ingredients READ ingredients WRITE setIngredients /*NOTIFY changed*/ /*changedIngredients*/ )
+   Q_PROPERTY( QString ingredients READ ingredients WRITE setNamedEntitys /*NOTIFY changed*/ /*changedNamedEntitys*/ )
    //! \brief The commercial examples.
    Q_PROPERTY( QString examples READ examples WRITE setExamples /*NOTIFY changed*/ /*changedExamples*/ )
 
@@ -112,7 +112,7 @@ public:
    void setAbvMax_pct( double var);
    void setNotes( const QString& var);
    void setProfile( const QString& var);
-   void setIngredients( const QString& var);
+   void setNamedEntitys( const QString& var);
    void setExamples( const QString& var);
    void setCacheOnly(const bool cache);
 

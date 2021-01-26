@@ -44,7 +44,7 @@ QString Instruction::classNameStr()
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true),
+   : NamedEntity(table, key, QString(), true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
@@ -56,7 +56,7 @@ Instruction::Instruction(Brewtarget::DBTable table, int key)
 }
 
 Instruction::Instruction(QString name, bool cache)
-   : Ingredient(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
@@ -68,7 +68,7 @@ Instruction::Instruction(QString name, bool cache)
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
      m_directions(rec.value(kcolInstructionDirections).toString()),
      m_hasTimer  (rec.value(kcolInstructionHasTimer).toBool()),
      m_timerValue(rec.value(kcolInstructionTimerValue).toString()),

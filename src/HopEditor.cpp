@@ -46,7 +46,7 @@ void HopEditor::setHop( Hop* h )
    obsHop = h;
    if( obsHop )
    {
-      connect( obsHop, &Ingredient::changed, this, &HopEditor::changed );
+      connect( obsHop, &NamedEntity::changed, this, &HopEditor::changed );
       showChanges();
    }
 }

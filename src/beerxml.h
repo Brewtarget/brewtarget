@@ -94,8 +94,8 @@ public:
     * \param xmlTagsToProperties is a hash from xml tags to meta property names.
     * \param elementNode is the root node of the element we are reading from.
     */
-   void fromXml(Ingredient* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
-   void fromXml(Ingredient* element, QDomNode const& elementNode);
+   void fromXml(NamedEntity* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
+   void fromXml(NamedEntity* element, QDomNode const& elementNode);
 
    /*! Import ingredients, recipes, etc from BeerXML documents.
     * \param filename

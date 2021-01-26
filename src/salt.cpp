@@ -53,7 +53,7 @@ QString Salt::classNameStr()
 }
 
 Salt::Salt(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key),
+   : NamedEntity(table, key),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
@@ -66,7 +66,7 @@ Salt::Salt(Brewtarget::DBTable table, int key)
 }
 
 Salt::Salt(QString name, bool cache)
-   : Ingredient(Brewtarget::SALTTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::SALTTABLE, -1, name, true),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
@@ -79,7 +79,7 @@ Salt::Salt(QString name, bool cache)
 }
 
 Salt::Salt(Salt & other)
-   : Ingredient(Brewtarget::SALTTABLE, -1, other.name(), true),
+   : NamedEntity(Brewtarget::SALTTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_add_to(other.m_add_to),
    m_type(other.m_type),
@@ -92,7 +92,7 @@ Salt::Salt(Salt & other)
 }
 
 Salt::Salt(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
    m_amount(rec.value(kcolAmount).toDouble()),
    m_add_to(static_cast<Salt::WhenToAdd>(rec.value(kcolSaltAddTo).toInt())),
    m_type(static_cast<Salt::Types>(rec.value(kcolSaltType).toInt())),

@@ -292,7 +292,7 @@ void BrewNote::recalculateEff(Recipe* parent)
 }
 
 BrewNote::BrewNote(BrewNote const& other)
-   : Ingredient(other),
+   : NamedEntity(other),
      m_brewDate(other.m_brewDate),
      m_fermentDate(other.m_fermentDate),
      m_notes(other.m_notes),

@@ -40,19 +40,6 @@ bool Hop::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
    Hop const & rhs = static_cast<Hop const &>(other);
    // Base class will already have ensured names are equal
-   qDebug() <<
-     Q_FUNC_INFO <<
-     "m_use              " << this->m_use               << ":" << rhs.m_use               <<
-     "m_type             " << this->m_type              << ":" << rhs.m_type              <<
-     "m_form             " << this->m_form              << ":" << rhs.m_form              <<
-     "m_alpha_pct        " << this->m_alpha_pct         << ":" << rhs.m_alpha_pct         <<
-     "m_beta_pct         " << this->m_beta_pct          << ":" << rhs.m_beta_pct          <<
-     "m_hsi_pct          " << this->m_hsi_pct           << ":" << rhs.m_hsi_pct           <<
-     "m_origin           " << this->m_origin            << ":" << rhs.m_origin            <<
-     "m_humulene_pct     " << this->m_humulene_pct      << ":" << rhs.m_humulene_pct      <<
-     "m_caryophyllene_pct" << this->m_caryophyllene_pct << ":" << rhs.m_caryophyllene_pct <<
-     "m_cohumulone_pct   " << this->m_cohumulone_pct    << ":" << rhs.m_cohumulone_pct    <<
-     "m_myrcene_pct      " << this->m_myrcene_pct       << ":" << rhs.m_myrcene_pct;
    return (
       this->m_use               == rhs.m_use               &&
       this->m_type              == rhs.m_type              &&
@@ -90,7 +77,7 @@ QString Hop::classNameStr()
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString()),
+   : NamedEntity(table, key, QString()),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -116,7 +103,7 @@ Hop::Hop(Brewtarget::DBTable table, int key)
 }
 
 Hop::Hop(QString name, bool cache)
-   : Ingredient(Brewtarget::HOPTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::HOPTABLE, -1, name, true),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -142,7 +129,7 @@ Hop::Hop(QString name, bool cache)
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_useStr(rec.value(kcolUse).toString()),
      m_use(static_cast<Hop::Use>(uses.indexOf(m_useStr))),
      m_typeStr(rec.value(kcolHopType).toString()),
@@ -168,7 +155,7 @@ Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Hop::Hop( Hop & other )
-   : Ingredient(other),
+   : NamedEntity(other),
      m_useStr(other.m_useStr),
      m_use(other.m_use),
      m_typeStr(other.m_typeStr),
@@ -490,12 +477,12 @@ const QString Hop::formStringTr() const
    }
 }
 
-Ingredient * Hop::getParent() {
+NamedEntity * Hop::getParent() {
    Hop * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it

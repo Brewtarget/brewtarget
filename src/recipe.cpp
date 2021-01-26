@@ -226,7 +226,7 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Recipe::Recipe( Recipe const& other ) : Ingredient(other),
+Recipe::Recipe( Recipe const& other ) : NamedEntity(other),
    m_type(other.m_type),
    m_brewer(other.m_brewer),
    m_asstBrewer(other.m_asstBrewer),
@@ -1570,7 +1570,7 @@ bool Recipe::cacheOnly() const { return m_cacheOnly; }
 
 //=============================Adders and Removers========================================
 
-Ingredient * Recipe::removeIngredient( Ingredient *var )
+NamedEntity * Recipe::removeNamedEntity( NamedEntity *var )
 {
 //   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
@@ -1580,7 +1580,7 @@ Ingredient * Recipe::removeIngredient( Ingredient *var )
       Database::instance().remove(qobject_cast<BrewNote*>(var));
       return var;
    } else {
-      return Database::instance().removeIngredientFromRecipe( this, var );
+      return Database::instance().removeNamedEntityFromRecipe( this, var );
    }
 }
 
@@ -2400,12 +2400,12 @@ double Recipe::targetTotalMashVol_l()
    return targetCollectedWortVol_l() + absorption_lKg * grainsInMash_kg();
 }
 
-Ingredient * Recipe::getParent() {
+NamedEntity * Recipe::getParent() {
    Recipe * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it

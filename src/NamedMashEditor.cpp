@@ -102,7 +102,7 @@ void NamedMashEditor::saveAndClose()
    mashObs->setName( lineEdit_name->text(), mashObs->cacheOnly());
    mashObs->setGrainTemp_c(lineEdit_grainTemp->toSI());
    mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toSI());
-   mashObs->setPh(lineEdit_spargePh->toSI()); 
+   mashObs->setPh(lineEdit_spargePh->toSI());
    mashObs->setTunTemp_c(lineEdit_tunTemp->toSI());
    mashObs->setTunWeight_kg(lineEdit_tunMass->toSI());
    mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toSI());
@@ -120,7 +120,7 @@ void NamedMashEditor::setMash(Mash* mash)
 
    if( mashObs )
    {
-      connect( mashObs, &Ingredient::changed, this, &NamedMashEditor::changed );
+      connect( mashObs, &NamedEntity::changed, this, &NamedMashEditor::changed );
       showChanges();
    }
 }

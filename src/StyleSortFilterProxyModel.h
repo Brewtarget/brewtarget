@@ -28,15 +28,15 @@
  *
  * \brief Proxy model for sorting/filtering Styles.
  * This should really be a base filter for all ingredient models that filters
- * based on the Ingredient::display() field.
+ * based on the NamedEntity::display() field.
  */
 class StyleSortFilterProxyModel : public QSortFilterProxyModel
 {
    Q_OBJECT
-   
+
    public:
       StyleSortFilterProxyModel(QObject* parent = 0);
-      
+
    protected:
       bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 };

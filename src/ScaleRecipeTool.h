@@ -34,7 +34,7 @@
 #include <QLineEdit>
 
 // Forward declarations
-class IngredientSortProxyModel;
+class NamedEntitySortProxyModel;
 class Equipment;
 class EquipmentListModel;
 class Recipe;
@@ -45,7 +45,7 @@ class Recipe;
 class ScaleRecipeTool : public QWizard
 {
    Q_OBJECT
-   
+
 public:
    ScaleRecipeTool(QWidget* parent=0);
    //! \brief Set the observed \c Recipe
@@ -62,7 +62,7 @@ private:
    Recipe* recObs;
    QButtonGroup scaleGroup;
    EquipmentListModel* equipListModel;
-   IngredientSortProxyModel* equipSortProxyModel;
+   NamedEntitySortProxyModel* equipSortProxyModel;
 };
 
 class ScaleRecipeIntroPage : public QWizardPage {

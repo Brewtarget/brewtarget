@@ -56,7 +56,7 @@ QString Yeast::classNameStr()
 
 //============================CONSTRUCTORS======================================
 Yeast::Yeast(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true ),
+   : NamedEntity(table, key, QString(), true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -82,7 +82,7 @@ Yeast::Yeast(Brewtarget::DBTable table, int key)
 }
 
 Yeast::Yeast(QString name, bool cache )
-   : Ingredient(Brewtarget::YEASTTABLE, -1, name, true ),
+   : NamedEntity(Brewtarget::YEASTTABLE, -1, name, true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -108,7 +108,7 @@ Yeast::Yeast(QString name, bool cache )
 }
 
 Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_typeString(rec.value(kcolYeastType).toString()),
      m_type(static_cast<Yeast::Type>(types.indexOf(m_typeString))),
      m_formString(rec.value(kcolYeastForm).toString()),
@@ -133,7 +133,7 @@ Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Yeast::Yeast(Yeast & other) : Ingredient(other),
+Yeast::Yeast(Yeast & other) : NamedEntity(other),
      m_typeString(other.m_typeString),
      m_type(other.m_type),
      m_formString(other.m_formString),
@@ -463,12 +463,12 @@ bool Yeast::isValidFlocculation(const QString& str) const
    return false;
 }
 
-Ingredient * Yeast::getParent() {
+NamedEntity * Yeast::getParent() {
    Yeast * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it

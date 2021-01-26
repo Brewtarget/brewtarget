@@ -57,7 +57,7 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
 
 //============================CONSTRUCTORS======================================
 Misc::Misc(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key),
+   : NamedEntity(table, key),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
    m_useString(QString()),
@@ -74,7 +74,7 @@ Misc::Misc(Brewtarget::DBTable table, int key)
 }
 
 Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_typeString(rec.value(kcolMiscType).toString()),
    m_type(static_cast<Misc::Type>(types.indexOf(m_typeString))),
    m_useString(rec.value(kcolUse).toString()),
@@ -90,7 +90,7 @@ Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Misc::Misc(Misc & other) : Ingredient(other),
+Misc::Misc(Misc & other) : NamedEntity(other),
    m_typeString(other.m_typeString),
    m_type(other.m_type),
    m_useString(other.m_useString),
@@ -107,7 +107,7 @@ Misc::Misc(Misc & other) : Ingredient(other),
 }
 
 Misc::Misc(QString name, bool cache)
-   : Ingredient(Brewtarget::MISCTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::MISCTABLE, -1, name, true),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
    m_useString(QString()),
@@ -314,12 +314,12 @@ bool Misc::isValidType( const QString& var )
    return false;
 }
 
-Ingredient * Misc::getParent() {
+NamedEntity * Misc::getParent() {
    Misc * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it
