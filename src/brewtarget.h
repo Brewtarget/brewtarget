@@ -20,13 +20,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _BREWTARGET_H
 #define _BREWTARGET_H
-
-// I think this will make things restart. I hope this will make things
-// restart.
-#define RESTART_CODE 0x1000
 
 #define CONFIG_VERSION 1
 
