@@ -1,6 +1,8 @@
 /*
- * InventoryFormatter.cpp is part of Brewtarget, and was written by
- * Mark de Wever (koraq@xs4all.nl), copyright 2016
+ * InventoryFormatter.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2016-2021
+ * - Mark de Wever <koraq@xs4all.nl>
+ * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "InventoryFormatter.h"
 
 #include "Html.h"
@@ -97,10 +98,12 @@ static QString createInventoryTableHop()
       result += QString("<h2>%1</h2>").arg(QObject::tr("Hops"));
       result += "<table id=\"hops\">";
       result += QString("<tr>"
-                        "<th align=\"left\" width=\"40%\">%1</th>"
-                        "<th align=\"left\" width=\"60%\">%2</th>"
+                        "<th align=\"left\" width=\"30%\">%1</th>"
+                        "<th align=\"left\" width=\"20%\">%2</th>"
+                        "<th align=\"left\" width=\"50%\">%3</th>"
                         "</tr>")
                       .arg(QObject::tr("Name"))
+                      .arg(QObject::tr("Alpha %"))
                       .arg(QObject::tr("Amount"));
 
       for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
@@ -118,8 +121,10 @@ static QString createInventoryTableHop()
          result += QString("<tr>"
                            "<td>%1</td>"
                            "<td>%2</td>"
+                           "<td>%3</td>"
                            "</tr>")
                          .arg(hop->name())
+                         .arg(hop->alpha_pct())
                          .arg(Brewtarget::displayAmount(itor.value(),
                                "hopTable", "inventory_kg", Units::kilograms));
       }
