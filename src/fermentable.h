@@ -192,9 +192,6 @@ private:
    static bool isValidType( const QString& str );
    static QStringList types;
 
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
-
    QString m_typeStr;
    Type m_type;
    double m_amountKg;

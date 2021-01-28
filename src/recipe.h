@@ -535,11 +535,8 @@ private:
    //void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );
    bool isValidType( const QString &str );
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
-
+/*
 inline bool RecipePtrLt( Recipe* lhs, Recipe* rhs)
 {
    return *lhs < *rhs;
@@ -565,5 +562,5 @@ struct Recipe_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif /* _RECIPE_H */

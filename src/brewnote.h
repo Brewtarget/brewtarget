@@ -236,11 +236,7 @@ private:
    bool m_cacheOnly;
    Recipe * m_recipe;
 
-   QHash<QString,double> info;
-   QHash<QString,QString> XMLTagToName();
-   QHash<QString,QString> NameToXMLTag();
-   static QHash<QString,QString> tagToPropHash();
-   static QHash<QString,QString> tagToProp;
+///   QHash<QString,double> info;
 };
 
 Q_DECLARE_METATYPE( QList<BrewNote*> )

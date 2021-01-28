@@ -105,9 +105,6 @@ private:
    Recipe * m_recipe;
 
    QList<QString> m_reagents;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Instruction*> )

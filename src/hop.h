@@ -201,13 +201,10 @@ private:
    static QStringList uses;
    static QStringList types;
    static QStringList forms;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Hop*> )
-
+/*
 inline bool HopPtrLt( Hop* lhs, Hop* rhs)
 {
    return *lhs < *rhs;
@@ -217,7 +214,7 @@ inline bool HopPtrEq( Hop* lhs, Hop* rhs)
 {
    return *lhs == *rhs;
 }
-
+*/
 inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
 {
    if ( lhs->use() == rhs->use() )
@@ -229,7 +226,7 @@ inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
    }
    return lhs->use() < rhs->use();
 }
-
+/*
 struct Hop_ptr_cmp
 {
    bool operator()( Hop* lhs, Hop* rhs)
@@ -245,5 +242,5 @@ struct Hop_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif // _HOP_H

@@ -143,11 +143,8 @@ private:
 
    static QStringList types;
    static QStringList typesTr;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
-
+/*
 inline bool MashStepPtrLt( MashStep* lhs, MashStep* rhs)
 {
    return *lhs < *rhs;
@@ -173,5 +170,5 @@ struct MashStep_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif //_MASHSTEP_H

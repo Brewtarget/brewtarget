@@ -186,15 +186,10 @@ private:
 
    bool isValidType( const QString &str );
    static QStringList m_types;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
-   static QHash<QString,QString> columnToProp;
-   static QHash<QString,QString> columnToPropHash();
 };
 
 Q_DECLARE_METATYPE( Style* )
-
+/*
 inline bool StylePtrLt( Style* lhs, Style* rhs)
 {
    return *lhs < *rhs;
@@ -220,5 +215,5 @@ struct Style_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif //_STYLE_H

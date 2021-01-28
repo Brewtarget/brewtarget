@@ -149,13 +149,10 @@ private:
 
    QList<MashStep*> m_mashSteps;
 
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
-
 };
 
 Q_DECLARE_METATYPE( Mash* )
-
+/*
 inline bool MashPtrLt( Mash* lhs, Mash* rhs)
 {
    return *lhs < *rhs;
@@ -181,5 +178,5 @@ struct Mash_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif //_MASH_H

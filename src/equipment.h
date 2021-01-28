@@ -179,9 +179,6 @@ private:
 
    // Calculate the boil size.
    void doCalculations();
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( Equipment* )

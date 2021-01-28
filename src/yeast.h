@@ -193,13 +193,10 @@ private:
    bool isValidType(const QString& str) const;
    bool isValidForm(const QString& str) const;
    bool isValidFlocculation(const QString& str) const;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Yeast*> )
-
+/*
 inline bool YeastPtrLt( Yeast* lhs, Yeast* rhs)
 {
    return *lhs < *rhs;
@@ -225,6 +222,6 @@ struct Yeast_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif   /* _YEAST_H */
 
