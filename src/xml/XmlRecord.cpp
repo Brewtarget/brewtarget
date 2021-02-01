@@ -208,11 +208,68 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
 
                   case XmlRecord::Date:
                      {
-                        // We only want this variable (date) in this case, so we need to restrict its scope, otherwise
-                        // the compiler will complain about the variable initialisation being "jumped over" in the other
-                        // case labels.
+                        //
+                        // Extra braces here as we have a variable (date) that is only used in this case of the switch,
+                        // so we need to restrict its scope, otherwise the compiler will complain about the variable
+                        // initialisation being "jumped over" in the other case labels.
+                        //
+                        // Dates are a bit annoying because, in some cases, fields are not restricted to using the One
+                        // True Date Format™ (aka ISO 8601).  Eg, in the BeerXML 1.0 standard, for the DATE field of a
+                        // Recipe, it merely says 'Date brewed in a easily recognizable format such as “3 Dec 04”', yet
+                        // internally we want to store this as a date rather than just a text field.
+                        //
+                        // So, we make several attempts to parse a date, using various different "standard" encodings.
+                        // There is a risk that certain formats are ambiguous - eg 01/04/2021 is 4 January 2021 in
+                        // the USA, but 1 April 2021 in most of the rest of the world (except the enlightened countries
+                        // that use the One True Date Format) - but there is little we can do about this.
+                        //
+                        // Start by trying ISO 8601, which is the most logical format :-)
+                        //
                         QDate date = QDate::fromString(value, Qt::ISODate);
                         parsedValueOk = date.isValid();
+                        if (!parsedValueOk) {
+                           // If not ISO 8601, try RFC 2822 Internet Message Format, which is horrible because it
+                           // assumes everyone speaks English, but (a) widely used and (b) unambiguous
+                           date = QDate::fromString(value, Qt::RFC2822Date);
+                           parsedValueOk = date.isValid();
+                        }
+                        if (!parsedValueOk) {
+                           // Next we'll try Qt's "default" date format, which is good for display but not for file
+                           // interchange, as it's locale-specific
+                           date = QDate::fromString(value, Qt::TextDate);
+                           parsedValueOk = date.isValid();
+                        }
+                        if (!parsedValueOk) {
+                           // Now we're rolling our own formats.  See https://doc.qt.io/qt-5/qdate.html for details of
+                           // the codes in the format strings.
+                           //
+                           // Try USA / Philippines numeric format next, though NB this could mis-parse some
+                           // non-USA-format dates per example above.  (Historically we assumed USA format dates before
+                           // non-USA-format ones, so we're retaining existing behaviour by trying things in this order.)
+                           date = QDate::fromString(value, "M/d/yyyy");
+                           parsedValueOk = date.isValid();
+                        }
+                        if (!parsedValueOk) {
+                           // Now try the numeric version that is widely used outside the USA & the Philippines
+                           date = QDate::fromString(value, "d/M/yyyy");
+                           parsedValueOk = date.isValid();
+                        }
+                        if (!parsedValueOk) {
+                           // Now try the numeric version that is widely used outside the USA & the Philippines
+                           date = QDate::fromString(value, "d/M/yyyy");
+                           parsedValueOk = date.isValid();
+                        }
+                        if (!parsedValueOk) {
+                           // Now try the example "easily recognizable" format from the BeerXML 1.0 standard.
+                           //
+                           // Of course, this is a horrible format because it is not Y2K compliant.  So the actual date
+                           // we store may be out by 100 years.  Hopefully the user will notice and correct this, and
+                           // then if we export we can use a non-ambiguous format.
+                           date = QDate::fromString(value, "d MMM yy");
+                           parsedValueOk = date.isValid();
+                        }
+                        // .:TBD:. Maybe we could try some more formats here
+
                         parsedValue.setValue(date);
                      }
                      if (!parsedValueOk) {
