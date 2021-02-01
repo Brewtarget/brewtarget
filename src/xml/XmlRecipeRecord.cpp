@@ -39,10 +39,18 @@ void XmlRecipeRecord::addChildren() {
    //
    QByteArray childClassName = CNE::classNameStr().toLatin1();
 
-   auto records = this->childRecords.values(childClassName.constData());
-   qDebug() << Q_FUNC_INFO << "Adding " << records.size() << " " << childClassName.constData() << "(s) to Recipe";
+   //
+   // QMultiHash guarantees that items that share the same key will appear consecutively, from the most recently to
+   // the least recently inserted value.  So the most efficient way to obtain all values with the same key is to call
+   // find() and iterate from there.  (The alternative, is to call values() which returns a QList of matching values,
+   // but requires a copy which is (a) less efficient and (b) not accepted by all compilers for the types we are
+   // using.)
+   //
+   for (auto ii = this->childRecords.find(childClassName.constData());
+        ii != this->childRecords.end() && ii.key() == childClassName.constData();
+        ++ii) {
+      qDebug() << Q_FUNC_INFO << "Adding " << childClassName.constData() << " to Recipe";
 
-   for (auto ii = records.begin(); ii != records.end(); ++ii) {
       // It would be a (pretty unexpected) coding error if the NamedEntity subclass object stored against a class name
       // isn't of the same class against which it was stored.
       Q_ASSERT(ii->second->getNamedEntity()->metaObject()->className() == QString(childClassName.constData()));

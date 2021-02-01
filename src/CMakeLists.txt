@@ -190,7 +190,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/xml/XercesHelpers.cpp
     ${SRCDIR}/xml/XmlCoding.cpp
     ${SRCDIR}/xml/XmlMashStepRecord.cpp
-    ${SRCDIR}/xml/XmlRecipeRecord
+    ${SRCDIR}/xml/XmlRecipeRecord.cpp
     ${SRCDIR}/xml/XmlRecord.cpp
     ${SRCDIR}/xml/XmlRecordCount.cpp
 )
