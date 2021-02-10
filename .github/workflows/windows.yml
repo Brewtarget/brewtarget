@@ -68,6 +68,18 @@ jobs:
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: |
+          make
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
+          make test
+
+      - name: Package
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
           make package
 
       - name: Archive the installer
