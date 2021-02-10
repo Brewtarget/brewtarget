@@ -40,6 +40,9 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         shell: bash
+        env:
+          CTEST_OUTPUT_ON_FAILURE: TRUE
+          QT_QPA_PLATFORM: minimal
         run: |
           make test
 
