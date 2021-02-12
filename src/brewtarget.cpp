@@ -637,6 +637,7 @@ int Brewtarget::run(const QString &userDirectory)
    }
    qDebug() << QString("Starting Brewtarget v%1 on %2.").arg(VERSIONSTRING).arg(QSysInfo::prettyProductName());
    _mainWindow = new MainWindow();
+   _mainWindow->init();
    _mainWindow->setVisible(true);
    splashScreen.finish(_mainWindow);
 
