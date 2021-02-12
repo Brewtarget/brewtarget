@@ -27,8 +27,12 @@ jobs:
         shell: bash
         working-directory: ${{github.workspace}}/build
         run: |
+          umask 022
           cmake \
             -DDO_RELEASE_BUILD=ON \
+            -DNO_QTMULTIMEDIA=ON \
+            -DNO_MESSING_WITH_FLAGS=ON \
+            -DEXEC_PREFIX=/usr \
             $GITHUB_WORKSPACE
 
       - name: Build
@@ -50,6 +54,7 @@ jobs:
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: |
+          umask 022
           make package
 
       - name: Upload Brewtarget Installers
