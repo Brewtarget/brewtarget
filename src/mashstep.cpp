@@ -107,7 +107,7 @@ void MashStep::setInfuseTemp_c(double var )
 {
    m_infuseTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropInfuseTemp, var);
+      setEasy(PropertyNames::MashStep::infuseTemp_c, var);
    }
 }
 
@@ -116,7 +116,7 @@ void MashStep::setType( Type t )
    m_type = t;
    m_typeStr = types.at(t);
    if ( ! m_cacheOnly ) {
-      setEasy(kpropType, m_typeStr);
+      setEasy(PropertyNames::MashStep::type, m_typeStr);
    }
 }
 
@@ -131,7 +131,7 @@ void MashStep::setInfuseAmount_l( double var )
    {
       m_infuseAmount_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropInfuseAmt, var);
+         setEasy(PropertyNames::MashStep::infuseAmount_l, var);
       }
    }
 }
@@ -147,7 +147,7 @@ void MashStep::setStepTemp_c( double var )
    {
       m_stepTemp_c = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropStepTemp, var);
+         setEasy(PropertyNames::MashStep::stepTemp_c, var);
       }
    }
 }
@@ -163,7 +163,7 @@ void MashStep::setStepTime_min( double var )
    {
       m_stepTime_min = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropStepTime, var);
+         setEasy(PropertyNames::MashStep::stepTime_min, var);
       }
    }
 }
@@ -180,7 +180,7 @@ void MashStep::setRampTime_min( double var )
    {
       m_rampTime_min = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropRampTime, var);
+         setEasy(PropertyNames::MashStep::rampTime_min, var);
       }
    }
 }
@@ -196,7 +196,7 @@ void MashStep::setEndTemp_c( double var )
    {
       m_endTemp_c = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropEndTemp, var);
+         setEasy(PropertyNames::MashStep::endTemp_c, var);
       }
    }
 }
@@ -205,7 +205,7 @@ void MashStep::setDecoctionAmount_l(double var )
 {
    m_decoctionAmount_l = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropDecoctAmt, var);
+      setEasy(PropertyNames::MashStep::decoctionAmount_l, var);
    }
 }
 

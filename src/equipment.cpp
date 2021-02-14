@@ -165,7 +165,7 @@ void Equipment::setBoilSize_l( double var )
    {
       m_boilSize_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropBoilSize, var);
+         setEasy(PropertyNames::Equipment::boilSize_l, var);
          emit changedBoilSize_l(var);
       }
    }
@@ -182,7 +182,7 @@ void Equipment::setBatchSize_l( double var )
    {
       m_batchSize_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropBatchSize, var);
+         setEasy(PropertyNames::Equipment::batchSize_l, var);
          doCalculations();
       }
    }
@@ -199,7 +199,7 @@ void Equipment::setTunVolume_l( double var )
    {
       m_tunVolume_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTunVolume, var);
+         setEasy(PropertyNames::Equipment::tunVolume_l, var);
       }
    }
 }
@@ -215,7 +215,7 @@ void Equipment::setTunWeight_kg( double var )
    {
       m_tunWeight_kg = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTunWeight, var);
+         setEasy(PropertyNames::Equipment::tunWeight_kg, var);
       }
    }
 }
@@ -231,7 +231,7 @@ void Equipment::setTunSpecificHeat_calGC( double var )
    {
       m_tunSpecificHeat_calGC = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTunSpecHeat, var);
+         setEasy(PropertyNames::Equipment::tunSpecificHeat_calGC, var);
       }
    }
 }
@@ -247,7 +247,7 @@ void Equipment::setTopUpWater_l( double var )
    {
       m_topUpWater_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTopUpWater,var);
+         setEasy(PropertyNames::Equipment::topUpWater_l,var);
          doCalculations();
       }
    }
@@ -264,7 +264,7 @@ void Equipment::setTrubChillerLoss_l( double var )
    {
       m_trubChillerLoss_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTrubChillLoss, var);
+         setEasy(PropertyNames::Equipment::trubChillerLoss_l, var);
          doCalculations();
       }
    }
@@ -283,8 +283,8 @@ void Equipment::setEvapRate_pctHr( double var )
       m_evapRate_lHr = var/100.0 * m_batchSize_l;
 
       if ( ! m_cacheOnly ) {
-         setEasy(kpropEvapRate, var);
-         setEasy(kpropRealEvapRate, var/100.0 * batchSize_l() ); // We always use this one, so set it.
+         setEasy(PropertyNames::Equipment::evapRate_pctHr, var);
+         setEasy(PropertyNames::Equipment::evapRate_lHr, var/100.0 * batchSize_l() ); // We always use this one, so set it.
       }
       // Right now, I am claiming this needs to happen regardless m_cacheOnly.
       // I could be wrong
@@ -304,8 +304,8 @@ void Equipment::setEvapRate_lHr( double var )
       m_evapRate_lHr = var;
       m_evapRate_pctHr = var/batchSize_l() * 100.0;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropRealEvapRate, var);
-         setEasy(kpropEvapRate, var/batchSize_l() * 100.0 ); // We don't use it, but keep it current.
+         setEasy(PropertyNames::Equipment::evapRate_lHr, var);
+         setEasy(PropertyNames::Equipment::evapRate_pctHr, var/batchSize_l() * 100.0 ); // We don't use it, but keep it current.
       }
       doCalculations();
    }
@@ -322,7 +322,7 @@ void Equipment::setBoilTime_min( double var )
    {
       m_boilTime_min = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropBoilTime, var);
+         setEasy(PropertyNames::Equipment::boilTime_min, var);
          emit changedBoilTime_min(var);
       }
       doCalculations();
@@ -333,7 +333,7 @@ void Equipment::setCalcBoilVolume( bool var )
 {
    m_calcBoilVolume = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropCalcBoilVol, var);
+      setEasy(PropertyNames::Equipment::calcBoilVolume, var);
    }
    if ( var ) {
       doCalculations();
@@ -351,7 +351,7 @@ void Equipment::setLauterDeadspace_l( double var )
    {
       m_lauterDeadspace_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropLauterSpace, var);
+         setEasy(PropertyNames::Equipment::lauterDeadspace_l, var);
       }
    }
 }
@@ -367,7 +367,7 @@ void Equipment::setTopUpKettle_l( double var )
    {
       m_topUpKettle_l = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTopUpKettle, var);
+         setEasy(PropertyNames::Equipment::topUpKettle_l, var);
       }
    }
 }
@@ -383,7 +383,7 @@ void Equipment::setHopUtilization_pct( double var )
    {
       m_hopUtilization_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropHopUtil, var);
+         setEasy(PropertyNames::Equipment::hopUtilization_pct, var);
       }
    }
 }
@@ -392,7 +392,7 @@ void Equipment::setNotes( const QString &var )
 {
    m_notes = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropNotes, var);
+      setEasy(PropertyNames::Equipment::notes, var);
    }
 }
 
@@ -407,7 +407,7 @@ void Equipment::setGrainAbsorption_LKg(double var)
    {
       m_grainAbsorption_LKg = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropAbsorption, var);
+         setEasy(PropertyNames::Equipment::grainAbsorption_LKg, var);
       }
    }
 }
@@ -423,7 +423,7 @@ void Equipment::setBoilingPoint_c(double var)
    {
       m_boilingPoint_c = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropBoilingPoint, var);
+         setEasy(PropertyNames::Equipment::boilingPoint_c, var);
       }
    }
 }

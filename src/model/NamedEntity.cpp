@@ -142,14 +142,14 @@ void NamedEntity::setDeleted(const bool var, bool cachedOnly)
 {
    _deleted = var;
    if ( ! cachedOnly )
-      setEasy(kpropDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+      setEasy(PropertyNames::NamedEntity::deleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
 void NamedEntity::setDisplay(bool var, bool cachedOnly)
 {
    _display = var;
    if ( ! cachedOnly )
-      setEasy(kpropDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+      setEasy(PropertyNames::NamedEntity::display, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
 QString NamedEntity::folder() const
@@ -162,7 +162,7 @@ void NamedEntity::setFolder(const QString var, bool signal, bool cachedOnly)
    _folder = var;
    if ( ! cachedOnly )
       // set( kFolder, kFolder, var );
-      setEasy( kpropFolder, var );
+      setEasy( PropertyNames::NamedEntity::folder, var );
    // not sure if I should only signal when not caching?
    if ( signal )
       emit changedFolder(var);
@@ -178,7 +178,7 @@ void NamedEntity::setName(const QString var, bool cachedOnly)
 
    _name = var;
    if ( ! cachedOnly ) {
-      setEasy( kpropName, var );
+      setEasy( PropertyNames::NamedEntity::name, var );
       emit changedName(var);
    }
 }
@@ -358,7 +358,7 @@ void NamedEntity::setParent(NamedEntity const & parentNamedEntity)
 QVariantMap NamedEntity::getColumnValueMap() const
 {
    QVariantMap map;
-   map.insert(kpropFolder, folder());
-   map.insert(kpropName, name());
+   map.insert(PropertyNames::NamedEntity::folder, folder());
+   map.insert(PropertyNames::NamedEntity::name, name());
    return map;
 }

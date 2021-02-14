@@ -138,7 +138,7 @@ void Water::setAmount( double var )
 {
    m_amount = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAmount, var);
+      setEasy(PropertyNames::Water::amount, var);
    }
 }
 
@@ -146,7 +146,7 @@ void Water::setCalcium_ppm( double var )
 {
    m_calcium_ppm = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropCalcium, var);
+      setEasy(PropertyNames::Water::calcium_ppm, var);
    }
 }
 
@@ -154,7 +154,7 @@ void Water::setBicarbonate_ppm( double var )
 {
    m_bicarbonate_ppm = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropBiCarbonate, var);
+      setEasy(PropertyNames::Water::bicarbonate_ppm, var);
    }
 }
 
@@ -162,7 +162,7 @@ void Water::setChloride_ppm( double var )
 {
    m_chloride_ppm = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropChloride, var);
+      setEasy(PropertyNames::Water::chloride_ppm, var);
    }
 }
 
@@ -170,7 +170,7 @@ void Water::setSodium_ppm( double var )
 {
    m_sodium_ppm = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropSodium, var);
+      setEasy(PropertyNames::Water::sodium_ppm, var);
    }
 }
 
@@ -178,7 +178,7 @@ void Water::setMagnesium_ppm( double var )
 {
    m_magnesium_ppm = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropMagnesium, var);
+      setEasy(PropertyNames::Water::magnesium_ppm, var);
    }
 }
 
@@ -186,7 +186,7 @@ void Water::setPh( double var )
 {
    m_ph = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropPH, var);
+      setEasy(PropertyNames::Water::ph, var);
    }
 }
 
@@ -194,7 +194,7 @@ void Water::setAlkalinity(double var)
 {
    m_alkalinity = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAlkalinity, var);
+      setEasy(PropertyNames::Water::alkalinity, var);
    }
 }
 
@@ -202,7 +202,7 @@ void Water::setSulfate_ppm( double var )
 {
    m_sulfate_ppm = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropSulfate, var);
+      setEasy(PropertyNames::Water::sulfate_ppm, var);
    }
 }
 
@@ -210,7 +210,7 @@ void Water::setNotes( const QString &var )
 {
    m_notes = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropNotes, var);
+      setEasy(PropertyNames::Water::notes, var);
    }
 }
 
@@ -224,7 +224,7 @@ void Water::setType(Types type)
 
    m_type = type;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropType, type);
+      setEasy(PropertyNames::Water::type, type);
    }
 }
 
@@ -232,7 +232,7 @@ void Water::setMashRO( double var )
 {
    m_mash_ro = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropMashRO, var);
+      setEasy(PropertyNames::Water::mashRO, var);
    }
 }
 
@@ -240,7 +240,7 @@ void Water::setSpargeRO( double var )
 {
    m_sparge_ro = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropSpargeRO, var);
+      setEasy(PropertyNames::Water::spargeRO, var);
    }
 }
 
@@ -248,7 +248,7 @@ void Water::setAlkalinityAsHCO3(bool var)
 {
    m_alkalinity_as_hco3 = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAsHCO3, var);
+      setEasy(PropertyNames::Water::alkalinityAsHCO3, var);
    }
 }
 

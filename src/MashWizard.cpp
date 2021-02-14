@@ -381,7 +381,7 @@ void MashWizard::wizardry()
             steps.append(mashStep);
             emit mashStep->changed(
                         mashStep->metaObject()->property(
-                            mashStep->metaObject()->indexOfProperty(kpropType.toUtf8().data())
+                            mashStep->metaObject()->indexOfProperty(PropertyNames::MashStep::type)
                         )
             );
          }
@@ -403,7 +403,7 @@ void MashWizard::wizardry()
          steps.append(mashStep);
          emit mashStep->changed(
                      mashStep->metaObject()->property(
-                         mashStep->metaObject()->indexOfProperty(kpropType.toUtf8().data())
+                         mashStep->metaObject()->indexOfProperty(PropertyNames::MashStep::type)
                      )
          );
       }

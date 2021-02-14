@@ -36,16 +36,6 @@ static const QString kcolWaterAsHCO3("as_hco3");
 static const QString kcolWaterType("wtype");
 
 // properties for objects
-static const QString kpropCalcium("calcium_ppm");
-static const QString kpropBiCarbonate("bicarbonate_ppm");
-static const QString kpropSulfate("sulfate_ppm");
-static const QString kpropChloride("chloride_ppm");
-static const QString kpropSodium("sodium_ppm");
-static const QString kpropMagnesium("magnesium_ppm");
-static const QString kpropAlkalinity("alkalinity");
-static const QString kpropMashRO("mashRO");
-static const QString kpropSpargeRO("spargeRO");
-static const QString kpropAsHCO3("alkalinityAsHCO3");
 
 // XML properties
 static const QString kxmlPropCalcium("CALCIUM");

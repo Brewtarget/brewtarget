@@ -56,30 +56,8 @@ static const QString kcolRecipeStyleId("style_id");
 static const QString kcolRecipeAncestorId("ancestor_id");
 
 // properties for the recipe object
-static const QString kpropBrewer("brewer");
-static const QString kpropEffPct("efficiency_pct");
-static const QString kpropAsstBrewer("asstBrewer");
-static const QString kpropTasteNotes("tasteNotes");
-static const QString kpropTasteRating("tasteRating");
-static const QString kpropFermStages("fermentationStages");
-static const QString kpropPrimAgeDays("primaryAge_days");
-static const QString kpropPrimTemp("primaryTemp_c");
-static const QString kpropSecAgeDays("secondaryAge_days");
-static const QString kpropSecTemp("secondaryTemp_c");
-static const QString kpropTertAgeDays("tertiaryAge_days");
-static const QString kpropTertTemp("tertiaryTemp_c");
-static const QString kpropAge("age");
-static const QString kpropAgeTemp("ageTemp_c");
-static const QString kpropDate("date");
-static const QString kpropPoints("points");
-static const QString kpropCarbVols("carbonation_vols");
-static const QString kpropForcedCarb("forcedCarbonation");
-static const QString kpropPrimSugName("primingSugarName");
-static const QString kpropCarbTemp("carbonationTemp_c");
-static const QString kpropPrimSugEquiv("primingSugarEquiv");
-static const QString kpropKegPrimFact("kegPrimingFactor");
 
-static const QString kpropAncestorId("ancestor_id");
+ static char const * const kpropAncestorId = "ancestor_id";
 
 // Huh. Took a long time for a xmlPropType to show up
 static const QString kxmlPropType("TYPE");

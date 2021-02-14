@@ -54,66 +54,43 @@ static const QString ktableYeastInventory("yeast_in_inventory");
 
 // These properties are pretty consistent over all objects, so defined them
 // once and be done with it
-static const QString kpropName("name");
-static const QString kpropNotes("notes");
-static const QString kpropType("type");
-static const QString kpropTypeString("typeString");
-static const QString kpropDeleted("deleted");
-static const QString kpropAmountKg("amount_kg");
-static const QString kpropDisplay("display");
-static const QString kpropLocked("locked");
-static const QString kpropFolder("folder");
-static const QString kpropOrigin("origin");
-static const QString kpropUse("use");
-static const QString kpropUseString("useString");
-static const QString kpropInventory("inventory");
-static const QString kpropTime("time_min");
-static const QString kpropKey("_key");
+ static char const * const kpropLocked = "locked";
+ static char const * const kpropInventory = "inventory";
+ static char const * const kpropKey = "_key";
 
 // needed by both mash and equipment
-static const QString kpropTunWeight("tunWeight_kg");
-static const QString kpropTunSpecHeat("tunSpecificHeat_calGC");
 
 // needed by both misc and yeast
-static const QString kpropAmtIsWgt("amountIsWeight");
 
 /// used by both hops and yeast
-static const QString kpropForm("form");
 
 // used by recipe and yeast
-static const QString kpropAmount("amount");
 
 // used by recipe and equipment
-static const QString kpropBatchSize("batchSize_l");
-static const QString kpropBoilSize("boilSize_l");
-static const QString kpropBoilTime("boilTime_min");
 
 // A rename later, and both brewnotes and recipes use this
-static const QString kpropOG("og");
-static const QString kpropFG("fg");
 
 // I am not sure this makes sense, but it is consistent
-static const QString kpropParentId("parent_id");
-static const QString kpropChildId("child_id");
+ static char const * const kpropParentId = "parent_id";
+ static char const * const kpropChildId = "child_id";
 
 // water and mash
-static const QString kpropPH("ph");
 
 // properties for foreign keys. This is being done for consistency
 // later. They are exactly the same as the kcol elements later, but
 // it really got annoying trying to remember when to use kprop or kcol.
-static const QString kpropRecipeId("recipe_id");
-static const QString kpropEquipmentId("equipment_id");
-static const QString kpropFermentableId("fermentable_id");
-static const QString kpropHopId("hop_id");
-static const QString kpropInstructionId("instruction_id");
-static const QString kpropInventoryId("inventory_id");
-static const QString kpropMashId("mash_id");
-static const QString kpropMiscId("misc_id");
-static const QString kpropStyleId("style_id");
-static const QString kpropWaterId("water_id");
-static const QString kpropSaltId("salt_id");
-static const QString kpropYeastId("yeast_id");
+ static char const * const kpropRecipeId = "recipe_id";
+ static char const * const kpropEquipmentId = "equipment_id";
+ static char const * const kpropFermentableId = "fermentable_id";
+ static char const * const kpropHopId = "hop_id";
+ static char const * const kpropInstructionId = "instruction_id";
+ static char const * const kpropInventoryId = "inventory_id";
+ static char const * const kpropMashId = "mash_id";
+ static char const * const kpropMiscId = "misc_id";
+ static char const * const kpropStyleId = "style_id";
+ static char const * const kpropWaterId = "water_id";
+ static char const * const kpropSaltId = "salt_id";
+ static char const * const kpropYeastId = "yeast_id";
 
 // Same for these column names. Yes, but I think the consistency is better
 // this way

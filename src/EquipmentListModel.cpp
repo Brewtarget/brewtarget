@@ -112,7 +112,7 @@ void EquipmentListModel::equipChanged(QMetaProperty prop, QVariant val)
       return;
 
    QString propName(prop.name());
-   if( propName == "name" )
+   if( propName == PropertyNames::NamedEntity::name )
    {
       int ndx = equipments.indexOf(eSend);
       if( ndx >= 0 )

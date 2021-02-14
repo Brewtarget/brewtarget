@@ -1478,8 +1478,8 @@ QPair<double,double> Brewtarget::displayRange(NamedEntity* element, QObject *obj
    }
    else if ( _type != DENSITY )
    {
-      range.first  = amountDisplay(element, object, "colorMin_srm", Units::srm,0);
-      range.second = amountDisplay(element, object, "colorMax_srm", Units::srm,0);
+      range.first  = amountDisplay(element, object, PropertyNames::Style::colorMin_srm, Units::srm,0);
+      range.second = amountDisplay(element, object, PropertyNames::Style::colorMax_srm, Units::srm,0);
    }
    else
    {

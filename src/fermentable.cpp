@@ -293,7 +293,7 @@ void Fermentable::setType( Type t )
 {
    m_type = t;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropType, types.at(t));
+      setEasy(PropertyNames::Fermentable::type, types.at(t));
    }
 }
 
@@ -311,7 +311,7 @@ void Fermentable::setAddAfterBoil( bool b )
 {
    m_isAfterBoil = b;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAddAfterBoil, b);
+      setEasy(PropertyNames::Fermentable::addAfterBoil, b);
    }
 }
 
@@ -319,7 +319,7 @@ void Fermentable::setOrigin( const QString& str )
 {
    m_origin = str;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropOrigin, str);
+      setEasy( PropertyNames::Fermentable::origin, str);
    }
 }
 
@@ -327,7 +327,7 @@ void Fermentable::setSupplier( const QString& str)
 {
    m_supplier = str;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropSupplier, str);
+      setEasy( PropertyNames::Fermentable::supplier, str);
    }
 }
 
@@ -335,7 +335,7 @@ void Fermentable::setNotes( const QString& str )
 {
    m_notes = str;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropNotes, str);
+      setEasy( PropertyNames::Fermentable::notes, str);
    }
 }
 
@@ -343,7 +343,7 @@ void Fermentable::setRecommendMash( bool b )
 {
    m_recommendMash = b;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropRecommendMash, b);
+      setEasy( PropertyNames::Fermentable::recommendMash, b);
    }
 }
 
@@ -351,7 +351,7 @@ void Fermentable::setIsMashed(bool var)
 {
    m_isMashed = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropIsMashed, var);
+      setEasy( PropertyNames::Fermentable::isMashed, var);
    }
 }
 
@@ -359,7 +359,7 @@ void Fermentable::setIbuGalPerLb( double num )
 {
    m_ibuGalPerLb = num;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropIBUGalPerLb, num);
+      setEasy( PropertyNames::Fermentable::ibuGalPerLb, num);
    }
 }
 
@@ -385,7 +385,7 @@ void Fermentable::setAmount_kg( double num )
    {
       m_amountKg = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropAmountKg, num);
+         setEasy( PropertyNames::Fermentable::amount_kg, num);
       }
    }
 }
@@ -421,7 +421,7 @@ void Fermentable::setInventoryId( int key )
 double Fermentable::inventory()
 {
    if ( m_inventory < 0 ) {
-      m_inventory = getInventory(kpropInventory).toDouble();
+      m_inventory = getInventory(PropertyNames::Fermentable::inventory).toDouble();
    }
    return m_inventory;
 }
@@ -437,7 +437,7 @@ void Fermentable::setYield_pct( double num )
    {
       m_yieldPct = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropYield, num);
+         setEasy( PropertyNames::Fermentable::yield_pct, num);
       }
    }
    else
@@ -457,7 +457,7 @@ void Fermentable::setColor_srm( double num )
    {
       m_colorSrm = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropColor, num);
+         setEasy( PropertyNames::Fermentable::color_srm, num);
       }
    }
 }
@@ -468,7 +468,7 @@ void Fermentable::setCoarseFineDiff_pct( double num )
    {
       m_coarseFineDiff = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropCoarseFineDiff, num);
+         setEasy( PropertyNames::Fermentable::coarseFineDiff_pct, num);
       }
    }
    else
@@ -483,7 +483,7 @@ void Fermentable::setMoisture_pct( double num )
    {
       m_moisturePct = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropMoisture, num);
+         setEasy( PropertyNames::Fermentable::moisture_pct, num);
       }
    }
    else
@@ -503,7 +503,7 @@ void Fermentable::setDiastaticPower_lintner( double num )
    {
       m_diastaticPower = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropDiastaticPower, num);
+         setEasy( PropertyNames::Fermentable::diastaticPower_lintner, num);
       }
    }
 }
@@ -514,7 +514,7 @@ void Fermentable::setProtein_pct( double num )
    {
       m_proteinPct = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropProtein, num);
+         setEasy( PropertyNames::Fermentable::protein_pct, num);
       }
    }
    else
@@ -529,7 +529,7 @@ void Fermentable::setMaxInBatch_pct( double num )
    {
       m_maxInBatchPct = num;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropMaxInBatch, num);
+         setEasy( PropertyNames::Fermentable::maxInBatch_pct, num);
       }
    }
    else

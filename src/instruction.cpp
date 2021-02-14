@@ -84,7 +84,7 @@ void Instruction::setDirections(const QString& dir)
 {
    m_directions = dir;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropDirections,  dir);
+      setEasy(PropertyNames::Instruction::directions,  dir);
    }
 }
 
@@ -92,7 +92,7 @@ void Instruction::setHasTimer(bool has)
 {
    m_hasTimer = has;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropHasTimer,  has);
+      setEasy(PropertyNames::Instruction::hasTimer,  has);
    }
 }
 
@@ -100,7 +100,7 @@ void Instruction::setTimerValue(const QString& timerVal)
 {
    m_timerValue = timerVal;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropTimerValue,  timerVal);
+      setEasy(PropertyNames::Instruction::timerValue,  timerVal);
    }
 }
 
@@ -108,7 +108,7 @@ void Instruction::setCompleted(bool comp)
 {
    m_completed = comp;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropCompleted,  comp);
+      setEasy(PropertyNames::Instruction::completed,  comp);
    }
 }
 
@@ -124,7 +124,7 @@ void Instruction::setInterval(double time)
 {
    m_interval = time;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropInterval,  time);
+      setEasy(PropertyNames::Instruction::interval,  time);
    }
 }
 
