@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1050</width>
-    <height>829</height>
+    <width>1200</width>
+    <height>900</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -744,6 +744,16 @@
                      </layout>
                     </item>
                    </layout>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButton_brewIt">
+                    <property name="text">
+                     <string>Brew It!</string>
+                    </property>
+                    <property name="toolTip">
+                     <string>Record what happened on brew day</string>
+                    </property>
+                   </widget>
                   </item>
                   <item>
                    <spacer name="verticalSpacer_7">
