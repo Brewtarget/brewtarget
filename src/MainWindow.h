@@ -115,6 +115,14 @@ public:
    MainWindow(QWidget* parent=nullptr);
    virtual ~MainWindow();
 
+   /**
+    * \brief This needs to be called immediately after the constructor.  It does the remaining initialisation of the
+    *        object.  This function cannot be called from the constructor as, in certain circumstances, it will invoke
+    *        code that calls Brewtarget::mainWindow() which returns a pointer to the MainWindow and therefore needs the
+    *        MainWindow constructor to have returned!
+    */
+   void init();
+
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
    //! \brief Display a file dialog for writing xml files.
@@ -408,7 +416,7 @@ private:
    int confirmDelete;
 
    // Undo / Redo, using the Qt Undo framework
-   QUndoStack* undoStack = nullptr;
+   QUndoStack * undoStack = nullptr;
 
    //! \brief Fix pixel dimensions according to dots-per-inch (DPI) of screen we're on.
    void setSizesInPixelsBasedOnDpi();

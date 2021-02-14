@@ -26,7 +26,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <QWidget>
 #include <QMainWindow>
 #include <QMessageBox>
@@ -237,6 +236,8 @@ private:
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent), pimpl{ new impl{} }
 {
+   qDebug() << Q_FUNC_INFO;
+
    undoStack = new QUndoStack(this);
 
    // Need to call this parent class method to get all the widgets added (I think).
@@ -267,7 +268,11 @@ MainWindow::MainWindow(QWidget* parent)
    // Set up the printer
    printer = new QPrinter;
    printer->setPageSize(QPrinter::Letter);
+   return;
+}
 
+void MainWindow::init() {
+   qDebug() << Q_FUNC_INFO;
    this->setupCSS();
    // initialize all of the dialog windows
    this->setupDialogs();
@@ -304,6 +309,7 @@ MainWindow::MainWindow(QWidget* parent)
    // doing it wrong again.
    connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
 
+   qDebug() << Q_FUNC_INFO << "MainWindow initialisation complete";
    return;
 }
 
@@ -1629,7 +1635,8 @@ void MainWindow::setUndoRedoEnable()
 
 void MainWindow::doOrRedoUpdate(QUndoCommand * update)
 {
-   Q_ASSERT(this->undoStack != 0);
+   Q_ASSERT(this->undoStack != nullptr);
+   Q_ASSERT(update != nullptr);
    this->undoStack->push(update);
    this->setUndoRedoEnable();
    return;
@@ -1640,6 +1647,8 @@ void MainWindow::doOrRedoUpdate(QObject & updatee,
                                 QVariant newValue,
                                 QString const & description,
                                 QUndoCommand * parent) {
+///   qDebug() << Q_FUNC_INFO << "Updating" << propertyName << "on" << updatee.metaObject()->className();
+///   qDebug() << Q_FUNC_INFO << "this=" << static_cast<void *>(this);
    this->doOrRedoUpdate(new SimpleUndoableUpdate(updatee, propertyName, newValue, description));
    return;
 }
