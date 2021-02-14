@@ -325,7 +325,7 @@ void BrewNote::setBrewDate(QDateTime const& date)
 {
    m_brewDate = date;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropBrewDate, date.toString(Qt::ISODate));
+      setEasy(PropertyNames::BrewNote::brewDate, date.toString(Qt::ISODate));
       emit brewDateChanged(date);
    }
 }
@@ -334,7 +334,7 @@ void BrewNote::setFermentDate(QDateTime const& date)
 {
    m_fermentDate = date;
    if (! m_cacheOnly ) {
-      setEasy(kpropFermDate, date.toString(Qt::ISODate));
+      setEasy(PropertyNames::BrewNote::fermentDate, date.toString(Qt::ISODate));
    }
 }
 
@@ -342,7 +342,7 @@ void BrewNote::setNotes(QString const& var)
 {
    m_notes = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropNotes, var, false);
+      setEasy(PropertyNames::BrewNote::notes, var, false);
    }
 }
 
@@ -357,7 +357,7 @@ void BrewNote::setSg(double var)
    m_sg = var;
 
    if ( ! m_cacheOnly ) {
-      setEasy(kpropSG, var);
+      setEasy(PropertyNames::BrewNote::sg, var);
    }
    // write the value to the DB if requested
    if ( ! loading ) {
@@ -372,7 +372,7 @@ void BrewNote::setVolumeIntoBK_l(double var)
    m_volumeIntoBK_l = var;
 
    if ( ! m_cacheOnly ) {
-      setEasy(kpropVolIntoBoil, var);
+      setEasy(PropertyNames::BrewNote::volumeIntoBK_l, var);
    }
 
    if ( ! loading ) {
@@ -387,7 +387,7 @@ void BrewNote::setOg(double var)
    m_og = var;
 
    if ( ! m_cacheOnly ) {
-      setEasy(kpropOG, var);
+      setEasy(PropertyNames::BrewNote::og, var);
    }
 
    if ( ! loading ) {
@@ -403,7 +403,7 @@ void BrewNote::setVolumeIntoFerm_l(double var)
    m_volumeIntoFerm_l = var;
 
    if ( ! m_cacheOnly ) {
-      setEasy(kpropVolIntoFerm, var);
+      setEasy(PropertyNames::BrewNote::volumeIntoFerm_l, var);
    }
 
    if ( ! loading ) {
@@ -415,7 +415,7 @@ void BrewNote::setFg(double var)
 {
    m_fg = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropFG, var);
+      setEasy(PropertyNames::BrewNote::fg, var);
    }
 
    if ( !loading ) {
@@ -443,7 +443,7 @@ void BrewNote::setProjPoints(double var)
 
       m_projPoints = convertPnts;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropProjPnts, convertPnts);
+         setEasy(PropertyNames::BrewNote::projPoints, convertPnts);
       }
 
    }
@@ -466,7 +466,7 @@ void BrewNote::setProjFermPoints(double var)
 
       m_projFermPoints = convertPnts;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropProjFermPnts, convertPnts);
+         setEasy(PropertyNames::BrewNote::projFermPoints, convertPnts);
       }
    }
 }
@@ -475,7 +475,7 @@ void BrewNote::setABV(double var)
 {
    m_abv = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropABV, var);
+      setEasy(PropertyNames::BrewNote::abv, var);
    }
 }
 
@@ -483,7 +483,7 @@ void BrewNote::setAttenuation(double var)
 {
    m_attenuation = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAtten, var);
+      setEasy(PropertyNames::BrewNote::attenuation, var);
    }
 }
 
@@ -491,7 +491,7 @@ void BrewNote::setEffIntoBK_pct(double var)
 {
    m_effIntoBK_pct = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropEffIntoBoil, var);
+      setEasy(PropertyNames::BrewNote::effIntoBK_pct, var);
    }
 }
 
@@ -499,7 +499,7 @@ void BrewNote::setBrewhouseEff_pct(double var)
 {
    m_brewhouseEff_pct = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropBrewhsEff, var);
+      setEasy(PropertyNames::BrewNote::brewhouseEff_pct, var);
    }
 }
 
@@ -507,7 +507,7 @@ void BrewNote::setStrikeTemp_c(double var)
 {
    m_strikeTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropStrikeTemp, var);
+      setEasy(PropertyNames::BrewNote::strikeTemp_c, var);
    }
 }
 
@@ -515,7 +515,7 @@ void BrewNote::setMashFinTemp_c(double var)
 {
    m_mashFinTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropMashFinTemp, var);
+      setEasy(PropertyNames::BrewNote::mashFinTemp_c, var);
    }
 }
 
@@ -523,7 +523,7 @@ void BrewNote::setPostBoilVolume_l(double var)
 {
    m_postBoilVolume_l = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropPostBoilVol, var);
+      setEasy(PropertyNames::BrewNote::postBoilVolume_l, var);
    }
 }
 
@@ -531,7 +531,7 @@ void BrewNote::setPitchTemp_c(double var)
 {
    m_pitchTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropPitchTemp, var);
+      setEasy(PropertyNames::BrewNote::pitchTemp_c, var);
    }
 }
 
@@ -539,7 +539,7 @@ void BrewNote::setFinalVolume_l(double var)
 {
    m_finalVolume_l = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropFinVol, var);
+      setEasy(PropertyNames::BrewNote::finalVolume_l, var);
    }
 }
 
@@ -547,7 +547,7 @@ void BrewNote::setProjBoilGrav(double var)
 {
    m_projBoilGrav = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjBoilGrav, var);
+      setEasy(PropertyNames::BrewNote::projBoilGrav, var);
    }
 }
 
@@ -555,7 +555,7 @@ void BrewNote::setProjVolIntoBK_l(double var)
 {
    m_projVolIntoBK_l = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjVolIntoBoil, var);
+      setEasy(PropertyNames::BrewNote::projVolIntoBK_l, var);
    }
 }
 
@@ -563,7 +563,7 @@ void BrewNote::setProjStrikeTemp_c(double var)
 {
    m_projStrikeTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjStrikeTemp, var);
+      setEasy(PropertyNames::BrewNote::projStrikeTemp_c, var);
    }
 }
 
@@ -571,7 +571,7 @@ void BrewNote::setProjMashFinTemp_c(double var)
 {
    m_projMashFinTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjMashFinTemp, var);
+      setEasy(PropertyNames::BrewNote::projMashFinTemp_c, var);
    }
 }
 
@@ -579,7 +579,7 @@ void BrewNote::setProjOg(double var)
 {
    m_projOg = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjOG, var);
+      setEasy(PropertyNames::BrewNote::projOg, var);
    }
 }
 
@@ -587,7 +587,7 @@ void BrewNote::setProjVolIntoFerm_l(double var)
 {
    m_projVolIntoFerm_l = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjVolIntoFerm, var);
+      setEasy(PropertyNames::BrewNote::projVolIntoFerm_l, var);
    }
 }
 
@@ -595,7 +595,7 @@ void BrewNote::setProjFg(double var)
 {
    m_projFg = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjFG, var);
+      setEasy(PropertyNames::BrewNote::projFg, var);
    }
 }
 
@@ -603,7 +603,7 @@ void BrewNote::setProjEff_pct(double var)
 {
    m_projEff_pct = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjEff, var);
+      setEasy(PropertyNames::BrewNote::projEff_pct, var);
    }
 }
 
@@ -611,7 +611,7 @@ void BrewNote::setProjABV_pct(double var)
 {
    m_projABV_pct = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjABV, var);
+      setEasy(PropertyNames::BrewNote::projABV_pct, var);
    }
 }
 
@@ -619,7 +619,7 @@ void BrewNote::setProjAtten(double var)
 {
    m_projAtten = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProjAtten, var);
+      setEasy(PropertyNames::BrewNote::projAtten, var);
    }
 }
 
@@ -627,7 +627,7 @@ void BrewNote::setBoilOff_l(double var)
 {
    m_boilOff_l = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropBoilOff, var);
+      setEasy(PropertyNames::BrewNote::boilOff_l, var);
    }
 }
 

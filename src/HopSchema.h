@@ -36,16 +36,7 @@ static const QString kcolHopCohumulone("cohumulone");
 static const QString kcolHopMyrcene("myrcene");
 
 // properties for objects
-static const QString kpropAlpha("alpha_pct");
-static const QString kpropBeta("beta_pct");
-static const QString kpropHSI("hsi_pct");
-static const QString kpropSubstitutes("substitutes");
-static const QString kpropHumulene("humulene_pct");
-static const QString kpropCaryophyllene("caryophyllene_pct");
-static const QString kpropCohumulone("cohumulone_pct");
-static const QString kpropMyrcene("myrcene_pct");
 
-static const QString kpropFormString("formString");
 
 // these are also in the main constants file
 static const QString kxmlPropAlpha("ALPHA");

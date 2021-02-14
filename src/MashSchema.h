@@ -28,10 +28,6 @@ static const QString kcolMashTunWeight("tun_weight");
 static const QString kcolMashTunSpecHeat("tun_specific_heat");
 static const QString kcolMashEquipAdjust("equip_adjust");
 
-static const QString kpropGrainTemp("grainTemp_c");
-static const QString kpropTunTemp("tunTemp_c");
-static const QString kpropSpargeTemp("spargeTemp_c");
-static const QString kpropEquipAdjust("equipAdjust");
 
 static const QString kxmlPropGrainTemp("GRAIN_TEMP");
 static const QString kxmlPropTunTemp("TUN_TEMP");

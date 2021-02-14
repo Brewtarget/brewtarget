@@ -71,14 +71,14 @@ void Ingredient::setDeleted(const bool var, bool cachedOnly)
 {
    _deleted = var;
    if ( ! cachedOnly )
-      setEasy(kpropDeleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+      setEasy(PropertyNames::Ingredient::deleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
 void Ingredient::setDisplay(bool var, bool cachedOnly)
 {
    _display = var;
    if ( ! cachedOnly )
-      setEasy(kpropDisplay, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+      setEasy(PropertyNames::Ingredient::display, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
 }
 
 QString Ingredient::folder() const
@@ -91,7 +91,7 @@ void Ingredient::setFolder(const QString var, bool signal, bool cachedOnly)
    _folder = var;
    if ( ! cachedOnly )
       // set( kFolder, kFolder, var );
-      setEasy( kpropFolder, var );
+      setEasy( PropertyNames::Ingredient::folder, var );
    // not sure if I should only signal when not caching?
    if ( signal )
       emit changedFolder(var);
@@ -107,7 +107,7 @@ void Ingredient::setName(const QString var, bool cachedOnly)
 
    _name = var;
    if ( ! cachedOnly ) {
-      setEasy( kpropName, var );
+      setEasy( PropertyNames::Ingredient::name, var );
       emit changedName(var);
    }
 }
@@ -297,7 +297,7 @@ void Ingredient::setParent(Ingredient const & parentIngredient)
 QVariantMap Ingredient::getColumnValueMap() const
 {
    QVariantMap map;
-   map.insert(kpropFolder, folder());
-   map.insert(kpropName, name());
+   map.insert(PropertyNames::Ingredient::folder, folder());
+   map.insert(PropertyNames::Ingredient::name, name());
    return map;
 }

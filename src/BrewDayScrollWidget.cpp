@@ -250,7 +250,7 @@ void BrewDayScrollWidget::acceptInsChanges(QMetaProperty prop, QVariant /*value*
       std::sort( recIns.begin(), recIns.end(), insPtrLtByNumber );
       showChanges();
    }
-   else if( propName == "directions" )
+   else if( propName == PropertyNames::Instruction::directions )
    {
       // This will make the displayed text directions update.
       listWidget->setCurrentRow( listWidget->currentRow() );

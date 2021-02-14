@@ -386,7 +386,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          retVal = value.canConvert(QVariant::String);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "name",
+                                                     PropertyNames::Ingredient::name,
                                                      value.toString(),
                                                      tr("Change Hop Name"));
          }
@@ -399,7 +399,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
             if ( ! retVal )
                qWarning() << QString("HopTableModel::setData() could not convert %1 to double").arg(value.toString());
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "alpha_pct",
+                                                     PropertyNames::Hop::alpha_pct,
                                                      amt,
                                                      tr("Change Hop Alpha %"));
          }
@@ -445,7 +445,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          retVal = value.canConvert(QVariant::String);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "time_min",
+                                                     PropertyNames::Hop::time_min,
                                                      Brewtarget::qStringToSI(value.toString(),Units::minutes,dspUnit,dspScl),
                                                      tr("Change Hop Time"));
          }
@@ -524,7 +524,7 @@ QString HopTableModel::generateName(int column) const
          attribute = "amount_kg";
          break;
       case HOPTIMECOL:
-         attribute = "time_min";
+         attribute = PropertyNames::Hop::time_min;
          break;
       default:
          attribute = "";

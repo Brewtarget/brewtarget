@@ -266,7 +266,7 @@ void BeerXML::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
          QString val;
          // flySparge and batchSparge aren't part of the BeerXML spec.
          // This makes sure we give BeerXML something it understands.
-         if ( element == kpropType ) {
+         if ( element == PropertyNames::MashStep::type ) {
             if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) {
                val = MashStep::types[0];
             }
@@ -817,9 +817,9 @@ int BeerXML::getQualifiedHopTypeIndex(QString type, Hop* hop)
    if ( Hop::types.indexOf(type) < 0 ) {
       // look for a valid hop type from our database to use
       QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
-         .arg(tbl->propertyToColumn(kpropType))
+         .arg(tbl->propertyToColumn(PropertyNames::Hop::type))
          .arg(tbl->tableName())
-         .arg(tbl->propertyToColumn(kpropName));
+         .arg(tbl->propertyToColumn(PropertyNames::Ingredient::name));
       // Check to see if there is an hop already in the DB with the same name.
       QSqlQuery q(db.sqlDatabase());
       q.prepare(query);
@@ -851,9 +851,9 @@ int BeerXML::getQualifiedHopUseIndex(QString use, Hop* hop)
    if ( Hop::uses.indexOf(use) < 0 ) {
       // look for a valid hop type from our database to use
       QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
-         .arg(tbl->propertyToColumn(kpropUse))
+         .arg(tbl->propertyToColumn(PropertyNames::Hop::use))
          .arg(tbl->tableName())
-         .arg(tbl->propertyToColumn(kpropName));
+         .arg(tbl->propertyToColumn(PropertyNames::Ingredient::name));
 
       QSqlQuery q(db.sqlDatabase());
       q.prepare(query);
@@ -1154,9 +1154,9 @@ int BeerXML::getQualifiedMiscTypeIndex(QString type, Misc* misc)
    if ( Misc::types.indexOf(type) < 0 ) {
       // look for a valid mash type from our database to use
       QString query = QString("SELECT %1 FROM %2 WHERE %3=:name AND %1 != ''")
-         .arg(tbl->propertyToColumn(kpropType))
+         .arg(tbl->propertyToColumn(PropertyNames::Misc::type))
          .arg(tbl->tableName())
-         .arg(tbl->propertyToColumn(kpropName));
+         .arg(tbl->propertyToColumn(PropertyNames::Ingredient::name));
       QSqlQuery q(db.sqlDatabase());
 
       q.prepare(query);
@@ -1189,9 +1189,9 @@ int BeerXML::getQualifiedMiscUseIndex(QString use, Misc* misc)
    if ( Misc::uses.indexOf(use) < 0 ) {
       // look for a valid misc type from our database to use
       QString query = QString("SELECT %1 FROM %2 WHERE %3=:use AND %1 != ''")
-         .arg(tbl->propertyToColumn(kpropType))
+         .arg(tbl->propertyToColumn(PropertyNames::Misc::type))
          .arg(tbl->tableName())
-         .arg(tbl->propertyToColumn(kpropUse));
+         .arg(tbl->propertyToColumn(PropertyNames::Misc::use));
       QSqlQuery q(db.sqlDatabase());
 
       q.prepare(query);

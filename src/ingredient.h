@@ -34,6 +34,10 @@
 #include <QDateTime>
 #include <QSqlRecord>
 #include "brewtarget.h"
+namespace PropertyNames::Ingredient { static char const * const folder = "folder"; /* previously kpropFolder */ }
+namespace PropertyNames::Ingredient { static char const * const display = "display"; /* previously kpropDisplay */ }
+namespace PropertyNames::Ingredient { static char const * const deleted = "deleted"; /* previously kpropDeleted */ }
+namespace PropertyNames::Ingredient { static char const * const name = "name"; /* previously kpropName */ }
 // For uintptr_t.
 #if HAVE_STDINT_H
 #   include <stdint.h>

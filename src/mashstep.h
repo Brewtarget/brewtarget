@@ -26,6 +26,15 @@
 #include <QString>
 #include "mash.h"
 
+namespace PropertyNames::MashStep { static char const * const stepNumber = "stepNumber"; /* previously kpropStepNumber */ }
+namespace PropertyNames::MashStep { static char const * const decoctionAmount_l = "decoctionAmount_l"; /* previously kpropDecoctAmt */ }
+namespace PropertyNames::MashStep { static char const * const infuseTemp_c = "infuseTemp_c"; /* previously kpropInfuseTemp */ }
+namespace PropertyNames::MashStep { static char const * const endTemp_c = "endTemp_c"; /* previously kpropEndTemp */ }
+namespace PropertyNames::MashStep { static char const * const rampTime_min = "rampTime_min"; /* previously kpropRampTime */ }
+namespace PropertyNames::MashStep { static char const * const stepTime_min = "stepTime_min"; /* previously kpropStepTime */ }
+namespace PropertyNames::MashStep { static char const * const stepTemp_c = "stepTemp_c"; /* previously kpropStepTemp */ }
+namespace PropertyNames::MashStep { static char const * const infuseAmount_l = "infuseAmount_l"; /* previously kpropInfuseAmt */ }
+
 // Forward declarations.
 class MashStep;
 bool operator<(MashStep &m1, MashStep &m2);

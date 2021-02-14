@@ -63,7 +63,7 @@ void WaterButton::setWater(Water* water)
 void WaterButton::waterChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   if ( propName == "name" ) {
+   if ( propName == PropertyNames::Ingredient::name ) {
       setText( val.toString() );
    }
 }

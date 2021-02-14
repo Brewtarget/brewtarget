@@ -25,6 +25,16 @@
 
 #include <QString>
 #include "ingredient.h"
+namespace PropertyNames::Misc { static char const * const amount = "amount"; /* previously kpropAmount */ }
+namespace PropertyNames::Misc { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
+namespace PropertyNames::Misc { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
+namespace PropertyNames::Misc { static char const * const useString = "useString"; /* previously kpropUseString */ }
+namespace PropertyNames::Misc { static char const * const use = "use"; /* previously kpropUse */ }
+namespace PropertyNames::Misc { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::Misc { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Misc { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Misc { static char const * const time = "time"; /* previously kpropMiscTime */ }
+namespace PropertyNames::Misc { static char const * const useFor = "useFor"; /* previously kpropUseFor */ }
 
 // Forward declarations.
 class Misc;

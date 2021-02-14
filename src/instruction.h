@@ -30,6 +30,11 @@
 #include <QDomNode>
 #include "ingredient.h"
 #include "recipe.h"
+namespace PropertyNames::Instruction { static char const * const interval = "interval"; /* previously kpropInterval */ }
+namespace PropertyNames::Instruction { static char const * const completed = "completed"; /* previously kpropCompleted */ }
+namespace PropertyNames::Instruction { static char const * const timerValue = "timerValue"; /* previously kpropTimerValue */ }
+namespace PropertyNames::Instruction { static char const * const hasTimer = "hasTimer"; /* previously kpropHasTimer */ }
+namespace PropertyNames::Instruction { static char const * const directions = "directions"; /* previously kpropDirections */ }
 
 /*!
  * \class Instruction

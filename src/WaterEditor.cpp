@@ -84,44 +84,44 @@ void WaterEditor::showChanges(QMetaProperty* prop)
       val = prop->read(obs);
    }
 
-   if ( propName == kpropName || updateAll ) {
+   if ( propName == PropertyNames::Ingredient::name || updateAll ) {
       lineEdit_name->setText(obs->name());
       if ( ! updateAll ) return;
    }
-   if( propName == kpropCalcium || updateAll ) {
+   if( propName == PropertyNames::Water::calcium_ppm || updateAll ) {
       lineEdit_ca->setText(obs->calcium_ppm(),2);
       if ( ! updateAll ) return;
    }
-   if( propName == kpropMagnesium || updateAll ) {
+   if( propName == PropertyNames::Water::magnesium_ppm || updateAll ) {
       lineEdit_mg->setText(obs->magnesium_ppm(),2);
       if ( ! updateAll ) return;
    }
-   if( propName == kpropSulfate || updateAll ){
+   if( propName == PropertyNames::Water::sulfate_ppm || updateAll ){
       lineEdit_so4->setText(obs->sulfate_ppm(),2);
       if ( ! updateAll ) return;
    }
-   if( propName == kpropSodium || updateAll ){
+   if( propName == PropertyNames::Water::sodium_ppm || updateAll ){
       lineEdit_na->setText(obs->sodium_ppm(),2);
       if ( ! updateAll ) return;
    }
-   if( propName == kpropChloride || updateAll ){
+   if( propName == PropertyNames::Water::chloride_ppm || updateAll ){
       lineEdit_cl->setText(obs->chloride_ppm(),2);
       if ( ! updateAll ) return;
    }
-   if( propName == kpropBiCarbonate || updateAll ){
+   if( propName == PropertyNames::Water::bicarbonate_ppm || updateAll ){
       lineEdit_alk->setText(obs->bicarbonate_ppm(),2);
       if ( ! updateAll ) return;
    }
-   if( propName == kpropPH || updateAll ){
+   if( propName == PropertyNames::Water::ph || updateAll ){
       lineEdit_ph->setText(obs->ph(),2);
       if ( ! updateAll ) return;
    }
-   if (propName == kpropAsHCO3 || updateAll ) {
+   if (propName == PropertyNames::Water::alkalinityAsHCO3 || updateAll ) {
       bool typeless = obs->alkalinityAsHCO3();
       comboBox_alk->setCurrentIndex(comboBox_alk->findText(typeless ? "HCO3" : "CO3"));
       if ( ! updateAll ) return;
    }
-   if (propName == kpropNotes || updateAll ) {
+   if (propName == PropertyNames::Water::notes || updateAll ) {
       plainTextEdit_notes->setPlainText(obs->notes());
       if ( ! updateAll ) return;
    }

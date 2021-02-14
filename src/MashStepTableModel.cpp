@@ -185,7 +185,7 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
    if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
    {
-      if ( prop.name() == QStringLiteral("stepNumber") ) {
+      if ( prop.name() == QString(PropertyNames::MashStep::stepNumber) ) {
          reorderMashStep(stepSender,i);
       }
 
@@ -324,7 +324,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          if( value.canConvert(QVariant::String))
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "name",
+                                                     PropertyNames::Ingredient::name,
                                                      value.toString(),
                                                      tr("Change Mash Step Name"));
             return true;
@@ -347,12 +347,12 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          {
             if( row->type() == MashStep::Decoction ) {
                Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                        "decoctionAmount_l",
+                                                        PropertyNames::MashStep::decoctionAmount_l,
                                                         Brewtarget::qStringToSI(value.toString(),Units::liters,dspUnit,dspScl),
                                                         tr("Change Mash Step Decoction Amount"));
             } else {
                Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                        "infuseAmount_l",
+                                                        PropertyNames::MashStep::infuseAmount_l,
                                                         Brewtarget::qStringToSI(value.toString(),Units::liters,dspUnit,dspScl),
                                                         tr("Change Mash Step Infuse Amount"));
             }
@@ -364,7 +364,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          if( value.canConvert(QVariant::String) && row->type() != MashStep::Decoction )
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                      "infuseTemp_c",
+                                                      PropertyNames::MashStep::infuseTemp_c,
                                                       Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
                                                       tr("Change Mash Step Infuse Temp"));
             return true;
@@ -379,11 +379,11 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
             // We don't assign the pointer (returned by new) to second SimpleUndoableUpdate we create because, in the
             // constructor, it gets linked to the first one, which then "owns" it.
             auto targetTempUpdate = new SimpleUndoableUpdate(*row,
-                                                             "stepTemp_c",
+                                                             PropertyNames::MashStep::stepTemp_c,
                                                              Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
                                                              tr("Change Mash Step Temp"));
             new SimpleUndoableUpdate(*row,
-                                     "endTemp_c",
+                                     PropertyNames::MashStep::endTemp_c,
                                      Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
                                      tr("Change Mash Step End Temp"),
                                      targetTempUpdate);
@@ -396,7 +396,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          if( value.canConvert(QVariant::String) )
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                      "stepTime_min",
+                                                      PropertyNames::MashStep::stepTime_min,
                                                       Brewtarget::qStringToSI(value.toString(),Units::minutes,dspUnit,dspScl),
                                                       tr("Change Mash Step Time"));
             return true;
@@ -499,13 +499,13 @@ QString MashStepTableModel::generateName(int column) const
          attribute = "amount";
          break;
       case MASHSTEPTEMPCOL:
-         attribute = "infuseTemp_c";
+         attribute = PropertyNames::MashStep::infuseTemp_c;
          break;
       case MASHSTEPTARGETTEMPCOL:
-         attribute = "stepTemp_c";
+         attribute = PropertyNames::MashStep::stepTemp_c;
          break;
       case MASHSTEPTIMECOL:
-         attribute = "time";
+         attribute = PropertyNames::Misc::time;
          break;
       default:
          attribute = "";

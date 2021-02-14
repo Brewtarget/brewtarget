@@ -183,7 +183,7 @@ void Hop::setAlpha_pct( double num )
    {
       m_alpha_pct = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropAlpha, num);
+         setEasy(PropertyNames::Hop::alpha_pct, num);
       }
    }
 }
@@ -199,7 +199,7 @@ void Hop::setAmount_kg( double num )
    {
       m_amount_kg = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropAmountKg,num);
+         setEasy(PropertyNames::Hop::amount_kg,num);
       }
    }
 }
@@ -234,7 +234,7 @@ void Hop::setUse(Use u)
       m_use = u;
       m_useStr = uses.at(u);
       if ( ! m_cacheOnly ) {
-         setEasy(kpropUse, uses.at(u));
+         setEasy(PropertyNames::Hop::use, uses.at(u));
       }
    }
 }
@@ -250,7 +250,7 @@ void Hop::setTime_min( double num )
    {
       m_time_min = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTime, num);
+         setEasy(PropertyNames::Hop::time_min, num);
       }
    }
 }
@@ -259,7 +259,7 @@ void Hop::setNotes( const QString& str )
 {
    m_notes = str;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropNotes, str);
+      setEasy(PropertyNames::Hop::notes, str);
    }
 }
 
@@ -269,7 +269,7 @@ void Hop::setType(Type t)
      m_type = t;
      m_typeStr = types.at(t);
      if ( ! m_cacheOnly ) {
-      setEasy(kpropType, m_typeStr);
+      setEasy(PropertyNames::Hop::type, m_typeStr);
      }
   }
 }
@@ -280,7 +280,7 @@ void Hop::setForm( Form f )
       m_form = f;
       m_formStr = forms.at(f);
       if ( ! m_cacheOnly ) {
-         setEasy(kpropForm, m_formStr);
+         setEasy(PropertyNames::Hop::form, m_formStr);
       }
    }
 }
@@ -296,7 +296,7 @@ void Hop::setBeta_pct( double num )
    {
       m_beta_pct = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropBeta, num);
+         setEasy(PropertyNames::Hop::beta_pct, num);
       }
    }
 }
@@ -312,7 +312,7 @@ void Hop::setHsi_pct( double num )
    {
       m_hsi_pct = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropHSI, num);
+         setEasy(PropertyNames::Hop::hsi_pct, num);
       }
    }
 }
@@ -321,7 +321,7 @@ void Hop::setOrigin( const QString& str )
 {
    m_origin = str;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropOrigin, str);
+      setEasy(PropertyNames::Hop::origin, str);
    }
 }
 
@@ -329,7 +329,7 @@ void Hop::setSubstitutes( const QString& str )
 {
    m_substitutes = str;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropSubstitutes, str);
+      setEasy(PropertyNames::Hop::substitutes, str);
    }
 }
 
@@ -344,7 +344,7 @@ void Hop::setHumulene_pct( double num )
    {
       m_humulene_pct = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropHumulene,num);
+         setEasy(PropertyNames::Hop::humulene_pct,num);
       }
    }
 }
@@ -360,7 +360,7 @@ void Hop::setCaryophyllene_pct( double num )
    {
       m_caryophyllene_pct = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropCaryophyllene, num);
+         setEasy(PropertyNames::Hop::caryophyllene_pct, num);
       }
    }
 }
@@ -376,7 +376,7 @@ void Hop::setCohumulone_pct( double num )
    {
       m_cohumulone_pct = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropCohumulone, num);
+         setEasy(PropertyNames::Hop::cohumulone_pct, num);
       }
    }
 }
@@ -392,7 +392,7 @@ void Hop::setMyrcene_pct( double num )
    {
       m_myrcene_pct = num;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropMyrcene, num);
+         setEasy(PropertyNames::Hop::myrcene_pct, num);
       }
    }
 }
@@ -425,7 +425,7 @@ bool   Hop::cacheOnly() const { return m_cacheOnly; }
 double Hop::inventory()
 {
    if ( m_inventory < 0 ) {
-      m_inventory = getInventory(kpropInventory).toDouble();
+      m_inventory = getInventory(PropertyNames::Hop::inventory).toDouble();
    }
    return m_inventory;
 }

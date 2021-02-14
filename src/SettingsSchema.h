@@ -22,8 +22,8 @@
 
 // this is kind of weird, as this table has no properties. But I've decided
 // that all of the propertyTo* calls should only take kprops.
-static const QString kpropSettingsVersion("version");
-static const QString kpropSettingsRepopulate("repopulatechildrenonnextstart");
+ static char const * const kpropSettingsVersion = "version";
+ static char const * const kpropSettingsRepopulate = "repopulatechildrenonnextstart";
 // Columns for the settings table
 static const QString kcolSettingsVersion("version");
 static const QString kcolSettingsRepopulate("repopulatechildrenonnextstart");

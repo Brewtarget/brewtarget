@@ -40,18 +40,7 @@ static const QString kcolYeastMaxReuse("max_reuse");
 static const QString kcolYeastAddToSec("add_to_secondary");
 
 // properties for objects
-static const QString kpropLab("laboratory");
-static const QString kpropQuanta("quanta");
-static const QString kpropProductID("productID");
-static const QString kpropMinTemp("minTemperature_c");
-static const QString kpropMaxTemp("maxTemperature_c");
-static const QString kpropFloc("flocculation");
-static const QString kpropFlocString("flocculationString");
-static const QString kpropAttenPct("attenuation_pct");
-static const QString kpropBestFor("bestFor");
-static const QString kpropTimesCultd("timesCultured");
-static const QString kpropMaxReuse("maxReuse");
-static const QString kpropAddToSec("addToSecondary");
+ static char const * const kpropQuanta = "quanta";
 
 // XML properties
 // Note -- no XML props for type, form and flocculation

@@ -148,17 +148,17 @@ void MashEditor::showChanges(QMetaProperty* prop)
    else
       propName = prop->name();
 
-   if( propName == "name" || updateAll ) {
+   if( propName == PropertyNames::Ingredient::name || updateAll ) {
       lineEdit_name->setText(mashObs->name());
       if( ! updateAll )
          return;
    }
-   if( propName == "grainTemp_c" || updateAll ) {
+   if( propName == PropertyNames::Mash::grainTemp_c || updateAll ) {
       lineEdit_grainTemp->setText(mashObs);
       if( ! updateAll )
          return;
    }
-   if( propName == "spargeTemp_c" || updateAll ) {
+   if( propName == PropertyNames::Mash::spargeTemp_c || updateAll ) {
       lineEdit_spargeTemp->setText(mashObs);
       if( ! updateAll )
          return;
@@ -168,7 +168,7 @@ void MashEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "tunTemp_c" || updateAll ) {
+   if( propName == PropertyNames::Mash::tunTemp_c || updateAll ) {
       lineEdit_tunTemp->setText(mashObs);
       if( ! updateAll )
          return;

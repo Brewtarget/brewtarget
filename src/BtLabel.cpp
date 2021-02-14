@@ -22,6 +22,8 @@
 #include "brewtarget.h"
 #include <QSettings>
 #include <QDebug>
+#include "style.h"
+#include "recipe.h"
 
 /*! \brief Initialize the BtLabel with the parent and do some things with the type
  * \param parent - QWidget* to the parent object
@@ -169,18 +171,18 @@ void BtLabel::popContextMenu(const QPoint& point)
    // To make this all work, I need to set ogMin and ogMax when og is set.
    if ( propertyName == "og" )
    {
-      Brewtarget::setOption("ogMin", invoked->data(),_section, Brewtarget::UNIT);
-      Brewtarget::setOption("ogMax", invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption(PropertyNames::Style::ogMin, invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption(PropertyNames::Style::ogMax, invoked->data(),_section, Brewtarget::UNIT);
    }
    else if ( propertyName == "fg" )
    {
-      Brewtarget::setOption("fgMin", invoked->data(),_section, Brewtarget::UNIT);
-      Brewtarget::setOption("fgMax", invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption(PropertyNames::Style::fgMin, invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption(PropertyNames::Style::fgMax, invoked->data(),_section, Brewtarget::UNIT);
    }
    else if ( propertyName == "color_srm" )
    {
-      Brewtarget::setOption("colorMin_srm", invoked->data(),_section, Brewtarget::UNIT);
-      Brewtarget::setOption("colorMax_srm", invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption(PropertyNames::Style::colorMin_srm, invoked->data(),_section, Brewtarget::UNIT);
+      Brewtarget::setOption(PropertyNames::Style::colorMax_srm, invoked->data(),_section, Brewtarget::UNIT);
    }
 
    // Hmm. For the color fields, I want to include the ecb or srm in the label

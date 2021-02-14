@@ -69,7 +69,7 @@ Mash* MashButton::mash() { return _mash; }
 void MashButton::mashChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   if( propName == "name" )
+   if( propName == PropertyNames::Ingredient::name )
       setText( val.toString() );
 }
 

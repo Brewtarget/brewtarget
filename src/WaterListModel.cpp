@@ -101,7 +101,7 @@ void WaterListModel::waterChanged(QMetaProperty prop, QVariant val)
       return;
 
    QString propName(prop.name());
-   if ( propName == "name" ) {
+   if ( propName == PropertyNames::Ingredient::name ) {
       int ndx = m_waters.indexOf(eSend);
       if ( ndx >= 0 )
          emit dataChanged( createIndex(ndx,0), createIndex(ndx,0) );

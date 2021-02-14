@@ -166,7 +166,7 @@ public:
       TableSchema* tbl = dbDefn->table(dbDefn->classNameToTable(T::classNameStr()));
       QString insert = QString("INSERT INTO %1 (%2) VALUES (:name)")
               .arg(tbl->tableName())
-              .arg(tbl->propertyToColumn(kpropName));
+              .arg(tbl->propertyToColumn(PropertyNames::Ingredient::name));
 
       QSqlQuery q(sqlDatabase());
 
@@ -586,7 +586,7 @@ private:
       queryString = QString("SELECT %1 as id FROM %2 WHERE %3=:name")
             .arg(id)
             .arg(tbl->tableName())
-            .arg(tbl->propertyToColumn(kpropName));
+            .arg(tbl->propertyToColumn(PropertyNames::Ingredient::name));
 
       try {
          q.prepare(queryString);

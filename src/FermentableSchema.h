@@ -49,18 +49,6 @@ static const QString kcolFermIBUGalPerLb("ibu_gal_per_lb");
 // const QString kpropInventory("inventory");
 // static const QString kpropAmountKg("amount_kg");
 // static const QString kpropOrigin("origin");
-static const QString kpropYield("yield_pct");
-static const QString kpropColor("color_srm");
-static const QString kpropAddAfterBoil("addAfterBoil");
-static const QString kpropSupplier("supplier");
-static const QString kpropCoarseFineDiff("coarseFineDiff_pct");
-static const QString kpropMoisture("moisture_pct");
-static const QString kpropDiastaticPower("diastaticPower_lintner");
-static const QString kpropProtein("protein_pct");
-static const QString kpropMaxInBatch("maxInBatch_pct");
-static const QString kpropRecommendMash("recommendMash");
-static const QString kpropIsMashed("isMashed");
-static const QString kpropIBUGalPerLb("ibuGalPerLb");
 
 // XML prop names
 // const QString kXmlNameProp("NAME");

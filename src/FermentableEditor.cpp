@@ -107,7 +107,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       propName = metaProp->name();
    }
 
-   if( propName == "name" || updateAll )
+   if( propName == PropertyNames::Ingredient::name || updateAll )
    {
       lineEdit_name->setText(obsFerm->name());
       lineEdit_name->setCursorPosition(0);
@@ -131,7 +131,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "yield_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::yield_pct || updateAll) {
       lineEdit_yield->setText(obsFerm);
       if( ! updateAll )
          return;
@@ -141,7 +141,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
        if( ! updateAll )
          return;
    }
-   if( propName == "addAfterBoil" || updateAll) {
+   if( propName == PropertyNames::Fermentable::addAfterBoil || updateAll) {
       checkBox_addAfterBoil->setCheckState( obsFerm->addAfterBoil() ? Qt::Checked : Qt::Unchecked );
        if( ! updateAll )
          return;
@@ -153,49 +153,49 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "supplier" || updateAll)
+   if( propName == PropertyNames::Fermentable::supplier || updateAll)
    {
       lineEdit_supplier->setText(obsFerm->supplier());
       lineEdit_supplier->setCursorPosition(0);
        if( ! updateAll )
          return;
    }
-   if( propName == "coarseFineDiff_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::coarseFineDiff_pct || updateAll) {
       lineEdit_coarseFineDiff->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "moisture_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::moisture_pct || updateAll) {
       lineEdit_moisture->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "diastaticPower_lintner" || updateAll) {
+   if( propName == PropertyNames::Fermentable::diastaticPower_lintner || updateAll) {
       lineEdit_diastaticPower->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "protein_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::protein_pct || updateAll) {
       lineEdit_protein->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "maxInBatch_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::maxInBatch_pct || updateAll) {
       lineEdit_maxInBatch->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "recommendMash" || updateAll) {
+   if( propName == PropertyNames::Fermentable::recommendMash || updateAll) {
       checkBox_recommendMash->setCheckState( obsFerm->recommendMash() ? Qt::Checked : Qt::Unchecked );
       if( ! updateAll )
          return;
    }
-   if( propName == "isMashed" || updateAll) {
+   if( propName == PropertyNames::Fermentable::isMashed || updateAll) {
       checkBox_isMashed->setCheckState( obsFerm->isMashed() ? Qt::Checked : Qt::Unchecked );
        if( ! updateAll )
          return;
    }
-   if( propName == "ibuGalPerLb" || updateAll) {
+   if( propName == PropertyNames::Fermentable::ibuGalPerLb || updateAll) {
       lineEdit_ibuGalPerLb->setText(obsFerm);
       if( ! updateAll )
          return;

@@ -620,7 +620,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          retVal = value.canConvert(QVariant::String);
          if ( retVal )
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "name",
+                                                     PropertyNames::Ingredient::name,
                                                      value.toString(),
                                                      tr("Change Fermentable Name"));
          break;
@@ -681,7 +681,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          retVal = value.canConvert(QVariant::Double);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "yield_pct",
+                                                     PropertyNames::Fermentable::yield_pct,
                                                      value.toDouble(),
                                                      tr("Change Yield"));
          }

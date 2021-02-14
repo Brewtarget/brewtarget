@@ -27,6 +27,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include "Algorithms.h"
+#include "brewnote.h"
 
 QMultiMap<QString, Unit*> Unit::nameToUnit;
 bool Unit::isMapSetup = false;
@@ -776,8 +777,8 @@ double EBCUnit::fromSI( double amt ) const
 // === Density ===
 SgUnit::SgUnit()
 {
-   unitName   = "sg";
-   SIUnitName = "sg";
+   unitName   = PropertyNames::BrewNote::sg;
+   SIUnitName = PropertyNames::BrewNote::sg;
    _type = Density;
    _unitSystem = Any;
 }
@@ -789,7 +790,7 @@ double SgUnit::fromSI( double amt ) const { return amt; }
 PlatoUnit::PlatoUnit()
 {
    unitName = "P";
-   SIUnitName = "sg";
+   SIUnitName = PropertyNames::BrewNote::sg;
    _type = Density;
    _unitSystem = Any;
 }

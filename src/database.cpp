@@ -1012,7 +1012,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
    // Just mark the step as deleted.
    try {
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
-               QString("%1 = %2").arg(tbl->propertyToColumn(kpropDeleted)).arg(Brewtarget::dbTrue()),
+               QString("%1 = %2").arg(tbl->propertyToColumn(PropertyNames::Ingredient::deleted)).arg(Brewtarget::dbTrue()),
                QString("%1 = %2").arg(tbl->keyName()).arg(step->_key));
    }
    catch ( QString e ) {
@@ -1082,7 +1082,7 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
                             "END "
                             "WHERE %3 IN (%4,%6)")
                 .arg(tbl->tableName() )
-                .arg(tbl->propertyToColumn(kpropStepNumber))
+                .arg(tbl->propertyToColumn(PropertyNames::MashStep::stepNumber))
                 .arg(tbl->keyName())
                 .arg(m1->_key)
                 .arg(m2->stepNumber())
@@ -1107,8 +1107,8 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 
    q.finish();
 
-   emit m1->changed( m1->metaProperty("stepNumber") );
-   emit m2->changed( m2->metaProperty("stepNumber") );
+   emit m1->changed( m1->metaProperty(PropertyNames::MashStep::stepNumber) );
+   emit m2->changed( m2->metaProperty(PropertyNames::MashStep::stepNumber) );
 }
 
 void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
@@ -1255,7 +1255,7 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent)
    QString filterString = QString("%1 = %2 AND %3 = %4")
            .arg( tbl->recipeIndexName() )
            .arg(parent->_key)
-           .arg(tbl->propertyToColumn(kpropDeleted))
+           .arg(tbl->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
 
    getElements(ret, filterString, Brewtarget::BREWNOTETABLE, allBrewNotes);
@@ -1347,9 +1347,9 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
    QString filterString = QString("%1 = %2 AND %3 = %4 order by %5 ASC")
          .arg(tbl->foreignKeyToColumn())
          .arg(parent->_key)
-         .arg(tbl->propertyToColumn(kpropDeleted))
+         .arg(tbl->propertyToColumn(PropertyNames::Ingredient::deleted))
          .arg(Brewtarget::dbFalse())
-         .arg(tbl->propertyToColumn(kpropStepNumber));
+         .arg(tbl->propertyToColumn(PropertyNames::MashStep::stepNumber));
 
    getElements(ret, filterString, Brewtarget::MASHSTEPTABLE, allMashSteps);
 
@@ -1687,9 +1687,9 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
    // WHERE deleted=false AND mash_id=[mash->key] )
    QString coalesce = QString( "%1 = (SELECT COALESCE(MAX(%1)+1,0) FROM %2 "
                                       "WHERE %3=%4 AND %5=%6 )")
-                        .arg(tbl->propertyToColumn(kpropStepNumber))
+                        .arg(tbl->propertyToColumn(PropertyNames::MashStep::stepNumber))
                         .arg(tbl->tableName())
-                        .arg(tbl->propertyToColumn(kpropDeleted))
+                        .arg(tbl->propertyToColumn(PropertyNames::Ingredient::deleted))
                         .arg(Brewtarget::dbFalse())
                         .arg(tbl->foreignKeyToColumn())
                         .arg(mash->_key);
@@ -1993,7 +1993,7 @@ int Database::insertElement(Ingredient* ins)
    QTextStream sqlParametersConcat(&sqlParameters);
    foreach (QString prop, allProps) {
       QVariant val_to_ins = ins->property(prop.toUtf8().data());
-      if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == kpropBrewDate ) {
+      if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == PropertyNames::BrewNote::brewDate ) {
          val_to_ins = val_to_ins.toString();
       }
       // I've arranged it such that the bindings are on the property names. It simplifies a lot
@@ -2145,9 +2145,9 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
    TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
    // step_number = (SELECT COALESCE(MAX(step_number)+1,0) FROM mashstep WHERE deleted=false AND mash_id=[key] )
    QString coalesce = QString( "%1 = (SELECT COALESCE(MAX(%1)+1,0) FROM %2 WHERE %3=%4 AND %5=%6 )")
-                        .arg(tbl->propertyToColumn(kpropStepNumber))
+                        .arg(tbl->propertyToColumn(PropertyNames::MashStep::stepNumber))
                         .arg(tbl->tableName())
-                        .arg(tbl->propertyToColumn(kpropDeleted))
+                        .arg(tbl->propertyToColumn(PropertyNames::Ingredient::deleted))
                         .arg(Brewtarget::dbFalse())
                         .arg(tbl->foreignKeyToColumn())
                         .arg(parent->_key);
@@ -2316,7 +2316,7 @@ QMetaProperty Database::metaProperty(const char* name)
 void Database::deleteRecord( Ingredient* object )
 {
    try {
-      updateEntry( object, kpropDeleted, Brewtarget::dbTrue(), true);
+      updateEntry( object, PropertyNames::Ingredient::deleted, Brewtarget::dbTrue(), true);
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -2706,7 +2706,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
    try {
       // "SELECT DISTINCT name FROM [tablename]"
       QString queryString = QString("SELECT DISTINCT %1 FROM %2")
-            .arg(tbl->propertyToColumn(kpropName)).arg(tbl->tableName());
+            .arg(tbl->propertyToColumn(PropertyNames::Ingredient::name)).arg(tbl->tableName());
 
       QSqlQuery nameq( queryString, sqlDatabase() );
 
@@ -2718,8 +2718,8 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
          queryString = QString( "SELECT %1 FROM %2 WHERE ( %3=:name AND %4=:boolean ) ORDER BY %1 ASC LIMIT 1")
                      .arg(tbl->keyName())
                      .arg(tbl->tableName())
-                     .arg(tbl->propertyToColumn(kpropName))
-                     .arg(tbl->propertyToColumn(kpropDisplay));
+                     .arg(tbl->propertyToColumn(PropertyNames::Ingredient::name))
+                     .arg(tbl->propertyToColumn(PropertyNames::Ingredient::display));
          QSqlQuery query( sqlDatabase() );
 
          query.prepare(queryString);
@@ -2848,9 +2848,9 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
          .arg(inv->propertyToColumn(kpropInventory))
          .arg(tbl->foreignKeyToColumn())
          .arg(inv->keyName())
-         .arg(tbl->propertyToColumn(kpropDisplay))
+         .arg(tbl->propertyToColumn(PropertyNames::Ingredient::display))
          .arg(Brewtarget::dbTrue())
-         .arg(tbl->propertyToColumn(kpropDeleted))
+         .arg(tbl->propertyToColumn(PropertyNames::Ingredient::deleted))
          .arg(Brewtarget::dbFalse());
 
    QSqlQuery sql(query, sqlDatabase());
@@ -3254,7 +3254,7 @@ template<class T> T* Database::copy( Ingredient const* object, QHash<int,T*>* ke
          QVariant val = oldRecord.value(i);
 
          // We have never had an attribute called 'parent'. See the git logs to understand this comment
-         if ( name == tbl->propertyToColumn(kpropDisplay) ) {
+         if ( name == tbl->propertyToColumn(PropertyNames::Ingredient::display) ) {
             insert.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
          }
          // Ignore ID again, for the same reasons as before.
@@ -3335,7 +3335,7 @@ QList<Equipment*> Database::equipments()
 {
    QList<Equipment*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::EQUIPTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::EQUIPTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::EQUIPTABLE, allEquipments);
    return tmp;
@@ -3345,7 +3345,7 @@ QList<Fermentable*> Database::fermentables()
 {
    QList<Fermentable*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::FERMTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::FERMTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::FERMTABLE, allFermentables);
    return tmp;
@@ -3355,7 +3355,7 @@ QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::HOPTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::HOPTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::HOPTABLE, allHops);
    return tmp;
@@ -3365,7 +3365,7 @@ QList<Mash*> Database::mashs()
 {
    QList<Mash*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::MASHTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::MASHTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    //! Mashs and mashsteps are the odd balls.
    getElements( tmp, query, Brewtarget::MASHTABLE, allMashs);
@@ -3377,9 +3377,9 @@ QList<MashStep*> Database::mashSteps()
    QList<MashStep*> tmp;
    TableSchema* tbl = dbDefn->table(Brewtarget::MASHSTEPTABLE);
    QString query = QString("%1=%2 order by %3")
-           .arg(tbl->propertyToColumn(kpropDeleted))
+           .arg(tbl->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse())
-           .arg(tbl->propertyToColumn(kpropStepNumber));
+           .arg(tbl->propertyToColumn(PropertyNames::MashStep::stepNumber));
    getElements( tmp, query, Brewtarget::MASHSTEPTABLE, allMashSteps);
    return tmp;
 }
@@ -3388,7 +3388,7 @@ QList<Misc*> Database::miscs()
 {
    QList<Misc*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::MISCTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::MISCTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::MISCTABLE, allMiscs );
    return tmp;
@@ -3398,7 +3398,7 @@ QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::RECTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::RECTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    // This is gonna kill me.
    getElements( tmp, query, Brewtarget::RECTABLE, allRecipes );
@@ -3409,7 +3409,7 @@ QList<Style*> Database::styles()
 {
    QList<Style*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::STYLETABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::STYLETABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::STYLETABLE, allStyles );
    return tmp;
@@ -3419,7 +3419,7 @@ QList<Water*> Database::waters()
 {
    QList<Water*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::WATERTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::WATERTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::WATERTABLE, allWaters );
    return tmp;
@@ -3429,7 +3429,7 @@ QList<Salt*> Database::salts()
 {
    QList<Salt*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::SALTTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::SALTTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::SALTTABLE, allSalts );
    return tmp;
@@ -3439,7 +3439,7 @@ QList<Yeast*> Database::yeasts()
 {
    QList<Yeast*> tmp;
    QString query = QString("%1=%2")
-           .arg(dbDefn->table(Brewtarget::YEASTTABLE)->propertyToColumn(kpropDeleted))
+           .arg(dbDefn->table(Brewtarget::YEASTTABLE)->propertyToColumn(PropertyNames::Ingredient::deleted))
            .arg(Brewtarget::dbFalse());
    getElements( tmp, query, Brewtarget::YEASTTABLE, allYeasts );
    return tmp;
@@ -3748,7 +3748,7 @@ void Database::updateDatabase(QString const& filename)
             // the new table, then into the new bt_ table.
             else {
                // Create a new ingredient.
-               oldid = makeObject.value(tbl->tableName())(qNewBtIng.record().value("name").toString())->_key;
+               oldid = makeObject.value(tbl->tableName())(qNewBtIng.record().value(PropertyNames::Ingredient::name).toString())->_key;
 
                // Copy in the new data.
                qUpdateOldIng.bindValue( ":id", oldid );
@@ -3940,7 +3940,7 @@ QVariant Database::convertValue(Brewtarget::DBTypes newType, QSqlField field)
             break;
       }
    }
-   else if ( field.name() == "fermentDate" && field.value().toString() == "CURRENT_DATETIME" ) {
+   else if ( field.name() == PropertyNames::BrewNote::fermentDate && field.value().toString() == "CURRENT_DATETIME" ) {
       retVar = "'now()'";
    }
    return retVar;
@@ -3996,7 +3996,7 @@ void Database::copyDatabase( Brewtarget::DBTypes oldType, Brewtarget::DBTypes ne
             // All that's left is to bind
             for(int i = 0; i < here.count(); ++i) {
                if ( table->dbTable() == Brewtarget::BREWNOTETABLE
-                    && here.fieldName(i) == kpropBrewDate ) {
+                    && here.fieldName(i) == PropertyNames::BrewNote::brewDate ) {
                   QVariant helpme(here.field(i).value().toString());
                   upsertNew.bindValue(":brewdate",helpme);
                }

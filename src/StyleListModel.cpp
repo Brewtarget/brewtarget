@@ -103,7 +103,7 @@ void StyleListModel::styleChanged(QMetaProperty prop, QVariant val)
       return;
    
    QString propName(prop.name());
-   if( propName == "name" )
+   if( propName == PropertyNames::Ingredient::name )
    {
       int ndx = styles.indexOf(sSend);
       if( ndx >= 0 )

@@ -71,23 +71,23 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_endTemp->setText(obs);
    }
 
-   else if( propName == "name" )
+   else if( propName == PropertyNames::Ingredient::name )
       lineEdit_name->setText(obs->name());
    else if( propName == "type" )
       comboBox_type->setCurrentIndex(obs->type());
-   else if( propName == "infuseAmount_l" )
+   else if( propName == PropertyNames::MashStep::infuseAmount_l )
       lineEdit_infuseAmount->setText(obs);
-   else if( propName == "infuseTemp_c" )
+   else if( propName == PropertyNames::MashStep::infuseTemp_c )
       lineEdit_infuseTemp->setText(obs);
-   else if( propName == "decoctionAmount_l" )
+   else if( propName == PropertyNames::MashStep::decoctionAmount_l )
       lineEdit_decoctionAmount->setText(obs);
-   else if( propName == "stepTemp_c" )
+   else if( propName == PropertyNames::MashStep::stepTemp_c )
       lineEdit_stepTemp->setText(obs);
-   else if( propName == "stepTime_min" )
+   else if( propName == PropertyNames::MashStep::stepTime_min )
       lineEdit_stepTime->setText(obs);
-   else if( propName == "rampTime_min" )
+   else if( propName == PropertyNames::MashStep::rampTime_min )
       lineEdit_rampTime->setText(obs);
-   else if( propName == "endTemp_c" )
+   else if( propName == PropertyNames::MashStep::endTemp_c )
       lineEdit_endTemp->setText(obs);
 }
 

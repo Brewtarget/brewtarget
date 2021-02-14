@@ -65,7 +65,7 @@ void StyleButton::setStyle(Style* style)
 void StyleButton::styleChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   if( propName == "name" )
+   if( propName == PropertyNames::Ingredient::name )
       setText( val.toString() );
 }
 

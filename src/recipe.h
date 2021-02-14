@@ -38,6 +38,38 @@ class Recipe;
 #include "misc.h"
 #include "salt.h"
 #include "brewnote.h"
+namespace PropertyNames::Recipe { static char const * const fg = "fg"; /* previously kpropFG */ }
+namespace PropertyNames::Recipe { static char const * const og = "og"; /* previously kpropOG */ }
+namespace PropertyNames::Recipe { static char const * const boilTime_min = "boilTime_min"; /* previously kpropBoilTime */ }
+namespace PropertyNames::Recipe { static char const * const boilSize_l = "boilSize_l"; /* previously kpropBoilSize */ }
+namespace PropertyNames::Recipe { static char const * const batchSize_l = "batchSize_l"; /* previously kpropBatchSize */ }
+namespace PropertyNames::Recipe { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Recipe { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Recipe { static char const * const kegPrimingFactor = "kegPrimingFactor"; /* previously kpropKegPrimFact */ }
+namespace PropertyNames::Recipe { static char const * const primingSugarEquiv = "primingSugarEquiv"; /* previously kpropPrimSugEquiv */ }
+namespace PropertyNames::Recipe { static char const * const carbonationTemp_c = "carbonationTemp_c"; /* previously kpropCarbTemp */ }
+namespace PropertyNames::Recipe { static char const * const primingSugarName = "primingSugarName"; /* previously kpropPrimSugName */ }
+namespace PropertyNames::Recipe { static char const * const forcedCarbonation = "forcedCarbonation"; /* previously kpropForcedCarb */ }
+namespace PropertyNames::Recipe { static char const * const carbonation_vols = "carbonation_vols"; /* previously kpropCarbVols */ }
+namespace PropertyNames::Recipe { static char const * const points = "points"; /* previously kpropPoints */ }
+namespace PropertyNames::Recipe { static char const * const date = "date"; /* previously kpropDate */ }
+namespace PropertyNames::Recipe { static char const * const ageTemp_c = "ageTemp_c"; /* previously kpropAgeTemp */ }
+namespace PropertyNames::Recipe { static char const * const age = "age"; /* previously kpropAge */ }
+namespace PropertyNames::Recipe { static char const * const tertiaryTemp_c = "tertiaryTemp_c"; /* previously kpropTertTemp */ }
+namespace PropertyNames::Recipe { static char const * const tertiaryAge_days = "tertiaryAge_days"; /* previously kpropTertAgeDays */ }
+namespace PropertyNames::Recipe { static char const * const secondaryTemp_c = "secondaryTemp_c"; /* previously kpropSecTemp */ }
+namespace PropertyNames::Recipe { static char const * const secondaryAge_days = "secondaryAge_days"; /* previously kpropSecAgeDays */ }
+namespace PropertyNames::Recipe { static char const * const primaryTemp_c = "primaryTemp_c"; /* previously kpropPrimTemp */ }
+namespace PropertyNames::Recipe { static char const * const primaryAge_days = "primaryAge_days"; /* previously kpropPrimAgeDays */ }
+namespace PropertyNames::Recipe { static char const * const fermentationStages = "fermentationStages"; /* previously kpropFermStages */ }
+namespace PropertyNames::Recipe { static char const * const tasteRating = "tasteRating"; /* previously kpropTasteRating */ }
+namespace PropertyNames::Recipe { static char const * const tasteNotes = "tasteNotes"; /* previously kpropTasteNotes */ }
+namespace PropertyNames::Recipe { static char const * const asstBrewer = "asstBrewer"; /* previously kpropAsstBrewer */ }
+namespace PropertyNames::Recipe { static char const * const efficiency_pct = "efficiency_pct"; /* previously kpropEffPct */ }
+namespace PropertyNames::Recipe { static char const * const brewer = "brewer"; /* previously kpropBrewer */ }
+namespace PropertyNames::Recipe { static char const * const color_srm = "color_srm"; /* previously kpropColor */ }
+namespace PropertyNames::Recipe { static char const * const postBoilVolume_l = "postBoilVolume_l"; /* previously kpropPostBoilVol */ }
+namespace PropertyNames::Recipe { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
 
 
 // Forward declarations.

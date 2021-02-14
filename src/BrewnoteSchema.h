@@ -62,34 +62,7 @@ static const QString kcolBNoteProjFermPnts("projected_ferm_points");
 
 
 // Properties
-static const QString kpropBrewDate("brewDate");
-static const QString kpropFermDate("fermentDate");
-static const QString kpropSG("sg");
-static const QString kpropABV("abv");
-static const QString kpropAtten("attenuation");
-static const QString kpropEffIntoBoil("effIntoBK_pct");
-static const QString kpropStrikeTemp("strikeTemp_c");
-static const QString kpropMashFinTemp("mashFinTemp_c");
-static const QString kpropPitchTemp("pitchTemp_c");
-static const QString kpropFinVol("finalVolume_l");
-static const QString kpropBrewhsEff("brewhouseEff_pct");
-static const QString kpropVolIntoBoil("volumeIntoBK_l");
-static const QString kpropVolIntoFerm("volumeIntoFerm_l");
-static const QString kpropBoilOff("boilOff_l");
 
-static const QString kpropProjStrikeTemp("projStrikeTemp_c");
-static const QString kpropProjMashFinTemp("projMashFinTemp_c");
-static const QString kpropProjAtten("projAtten");
-static const QString kpropProjABV("projABV_pct");
-static const QString kpropProjEff("projEff_pct");
-static const QString kpropProjFG("projFg");
-static const QString kpropProjOG("projOg");
-static const QString kpropProjPnts("projPoints");
-static const QString kpropProjFermPnts("projFermPoints");
-static const QString kpropProjBoilGrav("projBoilGrav");
-static const QString kpropPostBoilVol("postBoilVolume_l");
-static const QString kpropProjVolIntoBoil("projVolIntoBK_l");
-static const QString kpropProjVolIntoFerm("projVolIntoFerm_l");
 
 // finally, XML props
 static const QString kxmlPropBrewDate("BREWDATE");

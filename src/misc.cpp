@@ -135,7 +135,7 @@ QString Misc::notes() const { return m_notes; }
 double Misc::inventory()
 {
    if ( m_inventory < 0.0 ) {
-      m_inventory = getInventory(kpropInventory).toDouble();
+      m_inventory = getInventory(PropertyNames::Misc::inventory).toDouble();
    }
    return m_inventory;
 }
@@ -187,7 +187,7 @@ void Misc::setType( Type t )
    m_type = t;
    m_typeString = types.at(t);
    if ( ! m_cacheOnly ) {
-      setEasy( kpropType, m_typeString );
+      setEasy( PropertyNames::Misc::type, m_typeString );
    }
 }
 
@@ -196,7 +196,7 @@ void Misc::setUse( Use u )
    m_use = u;
    m_useString = uses.at(u);
    if ( ! m_cacheOnly ) {
-      setEasy( kpropUse, m_useString );
+      setEasy( PropertyNames::Misc::use, m_useString );
    }
 }
 
@@ -204,7 +204,7 @@ void Misc::setUseFor( const QString& var )
 {
    m_useFor = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropUseFor, var );
+      setEasy( PropertyNames::Misc::useFor, var );
    }
 }
 
@@ -212,7 +212,7 @@ void Misc::setNotes( const QString& var )
 {
    m_notes = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropNotes, var );
+      setEasy( PropertyNames::Misc::notes, var );
    }
 }
 
@@ -228,7 +228,7 @@ void Misc::setAmountIsWeight( bool var )
 {
    m_amountIsWeight = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropAmtIsWgt, var );
+      setEasy( PropertyNames::Misc::amountIsWeight, var );
    }
 }
 
@@ -239,7 +239,7 @@ void Misc::setAmount( double var )
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropAmount, var );
+         setEasy( PropertyNames::Misc::amount, var );
       }
    }
 }
@@ -269,7 +269,7 @@ void Misc::setTime( double var )
    else {
       m_time = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropTime, var );
+         setEasy( PropertyNames::Hop::time_min, var );
       }
    }
 }

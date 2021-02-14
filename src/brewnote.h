@@ -29,6 +29,36 @@
 #include <QDate>
 
 #include "ingredient.h"
+namespace PropertyNames::BrewNote { static char const * const fg = "fg"; /* previously kpropFG */ }
+namespace PropertyNames::BrewNote { static char const * const og = "og"; /* previously kpropOG */ }
+namespace PropertyNames::BrewNote { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::BrewNote { static char const * const projVolIntoFerm_l = "projVolIntoFerm_l"; /* previously kpropProjVolIntoFerm */ }
+namespace PropertyNames::BrewNote { static char const * const projVolIntoBK_l = "projVolIntoBK_l"; /* previously kpropProjVolIntoBoil */ }
+namespace PropertyNames::BrewNote { static char const * const postBoilVolume_l = "postBoilVolume_l"; /* previously kpropPostBoilVol */ }
+namespace PropertyNames::BrewNote { static char const * const projBoilGrav = "projBoilGrav"; /* previously kpropProjBoilGrav */ }
+namespace PropertyNames::BrewNote { static char const * const projFermPoints = "projFermPoints"; /* previously kpropProjFermPnts */ }
+namespace PropertyNames::BrewNote { static char const * const projPoints = "projPoints"; /* previously kpropProjPnts */ }
+namespace PropertyNames::BrewNote { static char const * const projOg = "projOg"; /* previously kpropProjOG */ }
+namespace PropertyNames::BrewNote { static char const * const projFg = "projFg"; /* previously kpropProjFG */ }
+namespace PropertyNames::BrewNote { static char const * const projEff_pct = "projEff_pct"; /* previously kpropProjEff */ }
+namespace PropertyNames::BrewNote { static char const * const projABV_pct = "projABV_pct"; /* previously kpropProjABV */ }
+namespace PropertyNames::BrewNote { static char const * const projAtten = "projAtten"; /* previously kpropProjAtten */ }
+namespace PropertyNames::BrewNote { static char const * const projMashFinTemp_c = "projMashFinTemp_c"; /* previously kpropProjMashFinTemp */ }
+namespace PropertyNames::BrewNote { static char const * const projStrikeTemp_c = "projStrikeTemp_c"; /* previously kpropProjStrikeTemp */ }
+namespace PropertyNames::BrewNote { static char const * const boilOff_l = "boilOff_l"; /* previously kpropBoilOff */ }
+namespace PropertyNames::BrewNote { static char const * const volumeIntoFerm_l = "volumeIntoFerm_l"; /* previously kpropVolIntoFerm */ }
+namespace PropertyNames::BrewNote { static char const * const volumeIntoBK_l = "volumeIntoBK_l"; /* previously kpropVolIntoBoil */ }
+namespace PropertyNames::BrewNote { static char const * const brewhouseEff_pct = "brewhouseEff_pct"; /* previously kpropBrewhsEff */ }
+namespace PropertyNames::BrewNote { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
+namespace PropertyNames::BrewNote { static char const * const pitchTemp_c = "pitchTemp_c"; /* previously kpropPitchTemp */ }
+namespace PropertyNames::BrewNote { static char const * const mashFinTemp_c = "mashFinTemp_c"; /* previously kpropMashFinTemp */ }
+namespace PropertyNames::BrewNote { static char const * const strikeTemp_c = "strikeTemp_c"; /* previously kpropStrikeTemp */ }
+namespace PropertyNames::BrewNote { static char const * const effIntoBK_pct = "effIntoBK_pct"; /* previously kpropEffIntoBoil */ }
+namespace PropertyNames::BrewNote { static char const * const attenuation = "attenuation"; /* previously kpropAtten */ }
+namespace PropertyNames::BrewNote { static char const * const abv = "abv"; /* previously kpropABV */ }
+namespace PropertyNames::BrewNote { static char const * const sg = "sg"; /* previously kpropSG */ }
+namespace PropertyNames::BrewNote { static char const * const fermentDate = "fermentDate"; /* previously kpropFermDate */ }
+namespace PropertyNames::BrewNote { static char const * const brewDate = "brewDate"; /* previously kpropBrewDate */ }
 
 // Forward declarations;
 class Recipe;

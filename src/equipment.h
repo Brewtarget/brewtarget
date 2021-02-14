@@ -24,6 +24,23 @@
 
 #include <QDomNode>
 #include "ingredient.h"
+namespace PropertyNames::Equipment { static char const * const boilTime_min = "boilTime_min"; /* previously kpropBoilTime */ }
+namespace PropertyNames::Equipment { static char const * const boilSize_l = "boilSize_l"; /* previously kpropBoilSize */ }
+namespace PropertyNames::Equipment { static char const * const batchSize_l = "batchSize_l"; /* previously kpropBatchSize */ }
+namespace PropertyNames::Equipment { static char const * const tunSpecificHeat_calGC = "tunSpecificHeat_calGC"; /* previously kpropTunSpecHeat */ }
+namespace PropertyNames::Equipment { static char const * const tunWeight_kg = "tunWeight_kg"; /* previously kpropTunWeight */ }
+namespace PropertyNames::Equipment { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Equipment { static char const * const boilingPoint_c = "boilingPoint_c"; /* previously kpropBoilingPoint */ }
+namespace PropertyNames::Equipment { static char const * const grainAbsorption_LKg = "grainAbsorption_LKg"; /* previously kpropAbsorption */ }
+namespace PropertyNames::Equipment { static char const * const hopUtilization_pct = "hopUtilization_pct"; /* previously kpropHopUtil */ }
+namespace PropertyNames::Equipment { static char const * const topUpKettle_l = "topUpKettle_l"; /* previously kpropTopUpKettle */ }
+namespace PropertyNames::Equipment { static char const * const lauterDeadspace_l = "lauterDeadspace_l"; /* previously kpropLauterSpace */ }
+namespace PropertyNames::Equipment { static char const * const calcBoilVolume = "calcBoilVolume"; /* previously kpropCalcBoilVol */ }
+namespace PropertyNames::Equipment { static char const * const evapRate_lHr = "evapRate_lHr"; /* previously kpropRealEvapRate */ }
+namespace PropertyNames::Equipment { static char const * const evapRate_pctHr = "evapRate_pctHr"; /* previously kpropEvapRate */ }
+namespace PropertyNames::Equipment { static char const * const trubChillerLoss_l = "trubChillerLoss_l"; /* previously kpropTrubChillLoss */ }
+namespace PropertyNames::Equipment { static char const * const topUpWater_l = "topUpWater_l"; /* previously kpropTopUpWater */ }
+namespace PropertyNames::Equipment { static char const * const tunVolume_l = "tunVolume_l"; /* previously kpropTunVolume */ }
 
 /*!
  * \class Equipment

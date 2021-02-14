@@ -32,6 +32,8 @@
 #include "BrewnoteSchema.h"
 #include "SettingsSchema.h"
 #include "WaterSchema.h"
+#include "brewnote.h"
+#include "water.h"
 
 const int DatabaseSchemaHelper::dbVersion = 9;
 
@@ -263,13 +265,13 @@ bool DatabaseSchemaHelper::migrate_to_202(QSqlQuery q, DatabaseSchema* defn)
    // Add "projected_ferm_points" to brewnote table
    ret &= q.exec(
       ALTERTABLE + SEP + tbl->tableName() + SEP +
-      ADDCOLUMN + SEP + tbl->propertyToColumn(kpropProjFermPnts) + SEP +
-            tbl->propertyColumnType(kpropProjFermPnts) + SEP + DEFAULT + SEP + "0.0"
+      ADDCOLUMN + SEP + tbl->propertyToColumn(PropertyNames::BrewNote::projFermPoints) + SEP +
+            tbl->propertyColumnType(PropertyNames::BrewNote::projFermPoints) + SEP + DEFAULT + SEP + "0.0"
    );
 
    ret &= q.exec(
       UPDATE + SEP + tbl->tableName() + SEP +
-      SET + SEP + tbl->propertyColumnType(kpropProjFermPnts) + " = -1.0"
+      SET + SEP + tbl->propertyColumnType(PropertyNames::BrewNote::projFermPoints) + " = -1.0"
    );
 
    tbl = defn->table(Brewtarget::SETTINGTABLE);
@@ -287,8 +289,8 @@ bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q, DatabaseSchema* defn)
    foreach( TableSchema* tbl, defn->baseTables() ) {
       ret &= q.exec(
                ALTERTABLE + SEP + tbl->tableName() + SEP +
-               ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropFolder) + SEP +
-               tbl->propertyColumnType(kpropFolder) + SEP + DEFAULT + " ''"
+               ADDCOLUMN  + SEP + tbl->propertyToColumn(PropertyNames::Ingredient::folder) + SEP +
+               tbl->propertyColumnType(PropertyNames::Ingredient::folder) + SEP + DEFAULT + " ''"
             );
    }
 
@@ -296,7 +298,7 @@ bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q, DatabaseSchema* defn)
    // Put the "Bt:.*" recipes into /brewtarget folder
    ret &= q.exec(
       UPDATE + SEP + tbl->tableName() + SEP +
-      SET + SEP + tbl->propertyToColumn(kpropFolder) + "='/brewtarget' WHERE name LIKE 'Bt:%'"
+      SET + SEP + tbl->propertyToColumn(PropertyNames::Ingredient::folder) + "='/brewtarget' WHERE name LIKE 'Bt:%'"
    );
 
    tbl = defn->table(Brewtarget::SETTINGTABLE);
@@ -398,8 +400,8 @@ bool DatabaseSchemaHelper::migrate_to_7(QSqlQuery q, DatabaseSchema* defn)
    // Add "attenuation" to brewnote table
    ret &= q.exec(
       ALTERTABLE + SEP + tbl->tableName() + SEP +
-      ADDCOLUMN +  SEP + tbl->propertyToColumn(kpropAtten) +
-                   SEP +  tbl->propertyColumnType(kpropAtten) +
+      ADDCOLUMN +  SEP + tbl->propertyToColumn(PropertyNames::BrewNote::attenuation) +
+                   SEP +  tbl->propertyColumnType(PropertyNames::BrewNote::attenuation) +
                    SEP + DEFAULT + SEP + "0.0"
    );
 
@@ -631,33 +633,33 @@ bool DatabaseSchemaHelper::migrate_to_9(QSqlQuery q, DatabaseSchema* defn)
    TableSchema* tbl = defn->table(Brewtarget::WATERTABLE);
    ret &= q.exec(
             ALTERTABLE + SEP + tbl->tableName() + SEP +
-            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropType) +
-                         SEP + tbl->propertyColumnType(kpropType) +
-                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropType).toString()
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(PropertyNames::Water::type) +
+                         SEP + tbl->propertyColumnType(PropertyNames::Water::type) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Water::type).toString()
    );
    ret &= q.exec(
             ALTERTABLE + SEP + tbl->tableName() + SEP +
-            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropAlkalinity) +
-                         SEP + tbl->propertyColumnType(kpropAlkalinity) +
-                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropAlkalinity).toString()
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(PropertyNames::Water::alkalinity) +
+                         SEP + tbl->propertyColumnType(PropertyNames::Water::alkalinity) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Water::alkalinity).toString()
    );
    ret &= q.exec(
             ALTERTABLE + SEP + tbl->tableName() + SEP +
-            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropAsHCO3) +
-                         SEP + tbl->propertyColumnType(kpropAsHCO3) +
-                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropAsHCO3).toString()
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(PropertyNames::Water::alkalinityAsHCO3) +
+                         SEP + tbl->propertyColumnType(PropertyNames::Water::alkalinityAsHCO3) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Water::alkalinityAsHCO3).toString()
    );
    ret &= q.exec(
             ALTERTABLE + SEP + tbl->tableName() + SEP +
-            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropSpargeRO) +
-                         SEP + tbl->propertyColumnType(kpropSpargeRO) +
-                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropSpargeRO).toString()
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(PropertyNames::Water::spargeRO) +
+                         SEP + tbl->propertyColumnType(PropertyNames::Water::spargeRO) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Water::spargeRO).toString()
    );
    ret &= q.exec(
             ALTERTABLE + SEP + tbl->tableName() + SEP +
-            ADDCOLUMN  + SEP + tbl->propertyToColumn(kpropMashRO) +
-                         SEP + tbl->propertyColumnType(kpropMashRO) +
-                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(kpropMashRO).toString()
+            ADDCOLUMN  + SEP + tbl->propertyToColumn(PropertyNames::Water::mashRO) +
+                         SEP + tbl->propertyColumnType(PropertyNames::Water::mashRO) +
+                         SEP + DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Water::mashRO).toString()
    );
    ret &= q.exec(defn->generateCreateTable(Brewtarget::SALTTABLE));
    ret &= q.exec(defn->generateCreateTable(Brewtarget::SALTINRECTABLE));
