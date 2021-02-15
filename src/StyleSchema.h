@@ -44,25 +44,6 @@ static const QString kcolStyleIngreds("ingredients");
 static const QString kcolStyleExamples("examples");
 
 // properties for objects
-static const QString kpropCat("category");
-static const QString kpropCatNum("categoryNumber");
-static const QString kpropLetter("styleLetter");
-static const QString kpropGuide("styleGuide");
-static const QString kpropOGMin("ogMin");
-static const QString kpropOGMax("ogMax");
-static const QString kpropFGMin("fgMin");
-static const QString kpropFGMax("fgMax");
-static const QString kpropIBUMin("ibuMin");
-static const QString kpropIBUMax("ibuMax");
-static const QString kpropColorMin("colorMin_srm");
-static const QString kpropColorMax("colorMax_srm");
-static const QString kpropCarbMin("carbMin_vol");
-static const QString kpropCarbMax("carbMax_vol");
-static const QString kpropABVMin("abvMin_pct");
-static const QString kpropABVMax("abvMax_pct");
-static const QString kpropProfile("profile");
-static const QString kpropIngreds("ingredients");
-static const QString kpropExamples("examples");
 
 // these are also in the main constants file
 static const QString kxmlPropCat("CATEGORY");

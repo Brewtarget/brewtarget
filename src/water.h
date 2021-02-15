@@ -24,6 +24,20 @@
 
 #include <QString>
 #include "ingredient.h"
+namespace PropertyNames::Water { static char const * const ph = "ph"; /* previously kpropPH */ }
+namespace PropertyNames::Water { static char const * const amount = "amount"; /* previously kpropAmount */ }
+namespace PropertyNames::Water { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Water { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Water { static char const * const alkalinityAsHCO3 = "alkalinityAsHCO3"; /* previously kpropAsHCO3 */ }
+namespace PropertyNames::Water { static char const * const spargeRO = "spargeRO"; /* previously kpropSpargeRO */ }
+namespace PropertyNames::Water { static char const * const mashRO = "mashRO"; /* previously kpropMashRO */ }
+namespace PropertyNames::Water { static char const * const alkalinity = "alkalinity"; /* previously kpropAlkalinity */ }
+namespace PropertyNames::Water { static char const * const magnesium_ppm = "magnesium_ppm"; /* previously kpropMagnesium */ }
+namespace PropertyNames::Water { static char const * const sodium_ppm = "sodium_ppm"; /* previously kpropSodium */ }
+namespace PropertyNames::Water { static char const * const chloride_ppm = "chloride_ppm"; /* previously kpropChloride */ }
+namespace PropertyNames::Water { static char const * const sulfate_ppm = "sulfate_ppm"; /* previously kpropSulfate */ }
+namespace PropertyNames::Water { static char const * const bicarbonate_ppm = "bicarbonate_ppm"; /* previously kpropBiCarbonate */ }
+namespace PropertyNames::Water { static char const * const calcium_ppm = "calcium_ppm"; /* previously kpropCalcium */ }
 
 // Forward declarations.
 class Water;

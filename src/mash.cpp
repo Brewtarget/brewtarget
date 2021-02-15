@@ -95,7 +95,7 @@ void Mash::setGrainTemp_c( double var )
 {
    m_grainTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropGrainTemp, var);
+      setEasy(PropertyNames::Mash::grainTemp_c, var);
    }
 }
 
@@ -103,7 +103,7 @@ void Mash::setNotes( const QString& var )
 {
    m_notes = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropNotes, var);
+      setEasy(PropertyNames::Mash::notes, var);
    }
 }
 
@@ -111,7 +111,7 @@ void Mash::setTunTemp_c( double var )
 {
    m_tunTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropTunTemp, var);
+      setEasy(PropertyNames::Mash::tunTemp_c, var);
    }
 }
 
@@ -119,7 +119,7 @@ void Mash::setSpargeTemp_c( double var )
 {
    m_spargeTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropSpargeTemp, var);
+      setEasy(PropertyNames::Mash::spargeTemp_c, var);
    }
 }
 
@@ -127,7 +127,7 @@ void Mash::setEquipAdjust( bool var )
 {
    m_equipAdjust = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropEquipAdjust, var);
+      setEasy(PropertyNames::Mash::equipAdjust, var);
    }
 }
 
@@ -142,7 +142,7 @@ void Mash::setPh( double var )
    {
       m_ph = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropPH, var);
+         setEasy(PropertyNames::Mash::ph, var);
       }
    }
 }
@@ -158,7 +158,7 @@ void Mash::setTunWeight_kg( double var )
    {
       m_tunWeight_kg = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTunWeight, var);
+         setEasy(PropertyNames::Mash::tunWeight_kg, var);
       }
    }
 }
@@ -174,7 +174,7 @@ void Mash::setTunSpecificHeat_calGC( double var )
    {
       m_tunSpecificHeat_calGC = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTunSpecHeat, var);
+         setEasy(PropertyNames::Mash::tunSpecificHeat_calGC, var);
       }
    }
 }

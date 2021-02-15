@@ -114,7 +114,7 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
       value = metaProp->read(y);
    }
 
-   if( propName == "name" || updateAll )
+   if( propName == PropertyNames::Ingredient::name || updateAll )
    {
       lineEdit_name->setText(obsYeast->name());
       lineEdit_name->setCursorPosition(0);
@@ -146,54 +146,54 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "laboratory" || updateAll ) {
+   if( propName == PropertyNames::Yeast::laboratory || updateAll ) {
       lineEdit_laboratory->setText(obsYeast->laboratory());
       lineEdit_laboratory->setCursorPosition(0);
       if( ! updateAll )
          return;
    }
-   if( propName == "productID" || updateAll ) {
+   if( propName == PropertyNames::Yeast::productID || updateAll ) {
       lineEdit_productID->setText(obsYeast->productID());
       lineEdit_productID->setCursorPosition(0);
       if( ! updateAll )
          return;
    }
-   if( propName == "minTemperature_c" || updateAll ) {
+   if( propName == PropertyNames::Yeast::minTemperature_c || updateAll ) {
       lineEdit_minTemperature->setText(obsYeast);
       if( ! updateAll )
          return;
    }
-   if( propName == "maxTemperature_c" || updateAll ) {
+   if( propName == PropertyNames::Yeast::maxTemperature_c || updateAll ) {
       lineEdit_maxTemperature->setText(obsYeast);
       if( ! updateAll )
          return;
    }
-   if( propName == "flocculation" || updateAll ) {
+   if( propName == PropertyNames::Yeast::flocculation || updateAll ) {
       comboBox_flocculation->setCurrentIndex( obsYeast->flocculation() );
       if( ! updateAll )
          return;
    }
-   if( propName == "attenuation_pct" || updateAll ) {
+   if( propName == PropertyNames::Yeast::attenuation_pct || updateAll ) {
       lineEdit_attenuation->setText( obsYeast);
       if( ! updateAll )
          return;
    }
-   if( propName == "timesCultured" || updateAll ) {
+   if( propName == PropertyNames::Yeast::timesCultured || updateAll ) {
       lineEdit_timesCultured->setText(QString::number(obsYeast->timesCultured()));
       if( ! updateAll )
          return;
    }
-   if( propName == "maxReuse" || updateAll ) {
+   if( propName == PropertyNames::Yeast::maxReuse || updateAll ) {
       lineEdit_maxReuse->setText(QString::number(obsYeast->maxReuse()));
       if( ! updateAll )
          return;
    }
-   if( propName == "addToSecondary" || updateAll ) {
+   if( propName == PropertyNames::Yeast::addToSecondary || updateAll ) {
       checkBox_addToSecondary->setCheckState( (obsYeast->addToSecondary())? Qt::Checked : Qt::Unchecked );
       if( ! updateAll )
          return;
    }
-   if( propName == "bestFor" || updateAll ) {
+   if( propName == PropertyNames::Yeast::bestFor || updateAll ) {
       textEdit_bestFor->setPlainText(obsYeast->bestFor());
       if( ! updateAll )
          return;

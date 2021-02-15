@@ -231,47 +231,47 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       return;
    }
 
-   if( propName == "name" )
+   if( propName == PropertyNames::Ingredient::name )
       lineEdit_name->setText(val.toString());
-   else if( propName == "category" )
+   else if( propName == PropertyNames::Style::category )
       lineEdit_category->setText(val.toString());
-   else if( propName == "categoryNumber" )
+   else if( propName == PropertyNames::Style::categoryNumber )
       lineEdit_categoryNumber->setText(val.toString());
-   else if( propName == "styleLetter" )
+   else if( propName == PropertyNames::Style::styleLetter )
       lineEdit_styleLetter->setText(val.toString());
-   else if( propName == "styleGuide" )
+   else if( propName == PropertyNames::Style::styleGuide )
       lineEdit_styleGuide->setText(val.toString());
    else if( propName == "type" )
       comboBox_type->setCurrentIndex(val.toInt());
-   else if( propName == "ogMin" )
+   else if( propName == PropertyNames::Style::ogMin )
       lineEdit_ogMin->setText(val);
-   else if( propName == "ogMax" )
+   else if( propName == PropertyNames::Style::ogMax )
       lineEdit_ogMax->setText(val);
-   else if( propName == "fgMin" )
+   else if( propName == PropertyNames::Style::fgMin )
       lineEdit_fgMin->setText(val);
-   else if( propName == "fgMax" )
+   else if( propName == PropertyNames::Style::fgMax )
       lineEdit_fgMax->setText(val);
-   else if( propName == "ibuMin" )
+   else if( propName == PropertyNames::Style::ibuMin )
       lineEdit_ibuMin->setText(val);
-   else if( propName == "ibuMax" )
+   else if( propName == PropertyNames::Style::ibuMax )
       lineEdit_ibuMax->setText(val);
-   else if( propName == "colorMin_srm" )
+   else if( propName == PropertyNames::Style::colorMin_srm )
       lineEdit_colorMin->setText(val);
-   else if( propName == "colorMax_srm" )
+   else if( propName == PropertyNames::Style::colorMax_srm )
       lineEdit_colorMax->setText(val);
-   else if( propName == "carbMin_vol" )
+   else if( propName == PropertyNames::Style::carbMin_vol )
       lineEdit_carbMin->setText(val);
-   else if( propName == "carbMax_vol" )
+   else if( propName == PropertyNames::Style::carbMax_vol )
       lineEdit_carbMax->setText(val);
-   else if( propName == "abvMin_pct" )
+   else if( propName == PropertyNames::Style::abvMin_pct )
       lineEdit_abvMin->setText(val);
-   else if( propName == "abvMax_pct" )
+   else if( propName == PropertyNames::Style::abvMax_pct )
       lineEdit_abvMax->setText(val);
-   else if( propName == "profile" )
+   else if( propName == PropertyNames::Style::profile )
       textEdit_profile->setText(val.toString());
-   else if( propName == "ingredients" )
+   else if( propName == PropertyNames::Style::ingredients )
       textEdit_ingredients->setText(val.toString());
-   else if( propName == "examples" )
+   else if( propName == PropertyNames::Style::examples )
       textEdit_examples->setText(val.toString());
    else if( propName == "notes" )
       textEdit_notes->setText(val.toString());

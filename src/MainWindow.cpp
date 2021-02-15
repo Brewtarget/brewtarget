@@ -1168,7 +1168,7 @@ void MainWindow::updateRecipeName()
    if( recipeObs == nullptr || ! lineEdit_name->isModified())
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, "name", lineEdit_name->text(), tr("Change Recipe Name"));
+   this->doOrRedoUpdate(*this->recipeObs, PropertyNames::Ingredient::name, lineEdit_name->text(), tr("Change Recipe Name"));
 }
 
 void MainWindow::displayRangesEtcForCurrentRecipeStyle()
@@ -1396,7 +1396,7 @@ void MainWindow::updateRecipeEfficiency()
    if( recipeObs == nullptr )
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, "efficiency_pct", lineEdit_efficiency->toSI(), tr("Change Recipe Efficiency"));
+   this->doOrRedoUpdate(*this->recipeObs, PropertyNames::Recipe::efficiency_pct, lineEdit_efficiency->toSI(), tr("Change Recipe Efficiency"));
    return;
 }
 

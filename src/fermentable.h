@@ -28,6 +28,24 @@
 #include <QString>
 #include "ingredient.h"
 #include "unit.h"
+namespace PropertyNames::Fermentable { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
+namespace PropertyNames::Fermentable { static char const * const origin = "origin"; /* previously kpropOrigin */ }
+namespace PropertyNames::Fermentable { static char const * const amount_kg = "amount_kg"; /* previously kpropAmountKg */ }
+namespace PropertyNames::Fermentable { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::Fermentable { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Fermentable { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Fermentable { static char const * const ibuGalPerLb = "ibuGalPerLb"; /* previously kpropIBUGalPerLb */ }
+namespace PropertyNames::Fermentable { static char const * const isMashed = "isMashed"; /* previously kpropIsMashed */ }
+namespace PropertyNames::Fermentable { static char const * const recommendMash = "recommendMash"; /* previously kpropRecommendMash */ }
+namespace PropertyNames::Fermentable { static char const * const maxInBatch_pct = "maxInBatch_pct"; /* previously kpropMaxInBatch */ }
+namespace PropertyNames::Fermentable { static char const * const protein_pct = "protein_pct"; /* previously kpropProtein */ }
+namespace PropertyNames::Fermentable { static char const * const diastaticPower_lintner = "diastaticPower_lintner"; /* previously kpropDiastaticPower */ }
+namespace PropertyNames::Fermentable { static char const * const moisture_pct = "moisture_pct"; /* previously kpropMoisture */ }
+namespace PropertyNames::Fermentable { static char const * const coarseFineDiff_pct = "coarseFineDiff_pct"; /* previously kpropCoarseFineDiff */ }
+namespace PropertyNames::Fermentable { static char const * const supplier = "supplier"; /* previously kpropSupplier */ }
+namespace PropertyNames::Fermentable { static char const * const addAfterBoil = "addAfterBoil"; /* previously kpropAddAfterBoil */ }
+namespace PropertyNames::Fermentable { static char const * const color_srm = "color_srm"; /* previously kpropColor */ }
+namespace PropertyNames::Fermentable { static char const * const yield_pct = "yield_pct"; /* previously kpropYield */ }
 
 // Forward declarations.
 class Fermentable;

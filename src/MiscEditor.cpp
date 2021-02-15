@@ -106,7 +106,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       value = metaProp->read(obsMisc);
    }
 
-   if( propName == "name" || updateAll )
+   if( propName == PropertyNames::Ingredient::name || updateAll )
    {
       lineEdit_name->setText(obsMisc->name());
       lineEdit_name->setCursorPosition(0);
@@ -125,7 +125,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "time" || updateAll )
+   if( propName == PropertyNames::Misc::time || updateAll )
    {
       lineEdit_time->setText(obsMisc);
       if( ! updateAll )
@@ -149,7 +149,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "useFor" || updateAll )
+   if( propName == PropertyNames::Misc::useFor || updateAll )
    {
       textEdit_useFor->setPlainText( obsMisc->useFor() );
       if( ! updateAll )

@@ -114,14 +114,14 @@ void HopEditor::showChanges(QMetaProperty* prop)
       propName = prop->name();
    }
 
-   if( propName == "name" || updateAll )
+   if( propName == PropertyNames::Ingredient::name || updateAll )
    {
       lineEdit_name->setText(obsHop->name());
       lineEdit_name->setCursorPosition(0);
       if( ! updateAll )
          return;
    }
-   if( propName == "alpha_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::alpha_pct || updateAll ) {
       lineEdit_alpha->setText(obsHop);
       if( ! updateAll )
          return;
@@ -141,7 +141,7 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "time_min" || updateAll ) {
+   if( propName == PropertyNames::Hop::time_min || updateAll ) {
       lineEdit_time->setText(obsHop);
       if( ! updateAll )
          return;
@@ -156,12 +156,12 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "beta_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::beta_pct || updateAll ) {
       lineEdit_beta->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "hsi_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::hsi_pct || updateAll ) {
       lineEdit_HSI->setText(obsHop);
       if( ! updateAll )
          return;
@@ -173,27 +173,27 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "humulene_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::humulene_pct || updateAll ) {
       lineEdit_humulene->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "caryophyllene_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::caryophyllene_pct || updateAll ) {
       lineEdit_caryophyllene->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "cohumulone_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::cohumulone_pct || updateAll ) {
       lineEdit_cohumulone->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "myrcene_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::myrcene_pct || updateAll ) {
       lineEdit_myrcene->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "substitutes" || updateAll ) {
+   if( propName == PropertyNames::Hop::substitutes || updateAll ) {
       textEdit_substitutes->setPlainText(obsHop->substitutes());
       if( ! updateAll )
          return;

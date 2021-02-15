@@ -38,6 +38,14 @@
 #include "SaltSchema.h"
 #include "BrewnoteSchema.h"
 #include "SettingsSchema.h"
+#include "water.h"
+#include "yeast.h"
+#include "mashstep.h"
+#include "mash.h"
+#include "instruction.h"
+#include "fermentable.h"
+#include "equipment.h"
+#include "style.h"
 
 static const QString kDefault("DEFAULT");
 
@@ -765,33 +773,33 @@ void TableSchema::defineStyleTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropName]      = new PropertySchema( kpropName,       kpropName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropType]      = new PropertySchema( kpropTypeString, kcolStyleType,     kxmlPropType,     QString("text"), QString("'Ale'"));
-   m_properties[kpropCat]       = new PropertySchema( kpropCat,        kcolStyleCat,      kxmlPropCat,      QString("text"), QString("''"));
-   m_properties[kpropCatNum]    = new PropertySchema( kpropCatNum,     kcolStyleCatNum,   kxmlPropCatNum,   QString("text"), QString("''"));
-   m_properties[kpropLetter]    = new PropertySchema( kpropLetter,     kcolStyleLetter,   kxmlPropLetter,   QString("text"), QString("''"));
-   m_properties[kpropGuide]     = new PropertySchema( kpropGuide,      kcolStyleGuide,    kxmlPropGuide,    QString("text"), QString("''"));
-   m_properties[kpropOGMin]     = new PropertySchema( kpropOGMin,      kcolStyleOGMin,    kxmlPropOGMin,    QString("real"), QVariant(0.0));
-   m_properties[kpropOGMax]     = new PropertySchema( kpropOGMax,      kcolStyleOGMax,    kxmlPropOGMax,    QString("real"), QVariant(0.0));
-   m_properties[kpropFGMin]     = new PropertySchema( kpropFGMin,      kcolStyleFGMin,    kxmlPropFGMin,    QString("real"), QVariant(0.0));
-   m_properties[kpropFGMax]     = new PropertySchema( kpropFGMax,      kcolStyleFGMax,    kxmlPropFGMax,    QString("real"), QVariant(0.0));
-   m_properties[kpropIBUMin]    = new PropertySchema( kpropIBUMin,     kcolStyleIBUMin,   kxmlPropIBUMin,   QString("real"), QVariant(0.0));
-   m_properties[kpropIBUMax]    = new PropertySchema( kpropIBUMax,     kcolStyleIBUMax,   kxmlPropIBUMax,   QString("real"), QVariant(0.0));
-   m_properties[kpropColorMin]  = new PropertySchema( kpropColorMin,   kcolStyleColorMin, kxmlPropColorMin, QString("real"), QVariant(0.0));
-   m_properties[kpropColorMax]  = new PropertySchema( kpropColorMax,   kcolStyleColorMax, kxmlPropColorMax, QString("real"), QVariant(0.0));
-   m_properties[kpropABVMin]    = new PropertySchema( kpropABVMin,     kcolStyleABVMin,   kxmlPropABVMin,   QString("real"), QVariant(0.0));
-   m_properties[kpropABVMax]    = new PropertySchema( kpropABVMax,     kcolStyleABVMax,   kxmlPropABVMax,   QString("real"), QVariant(0.0));
-   m_properties[kpropCarbMin]   = new PropertySchema( kpropCarbMin,    kcolStyleCarbMin,  kxmlPropCarbMin,  QString("real"), QVariant(0.0));
-   m_properties[kpropCarbMax]   = new PropertySchema( kpropCarbMax,    kcolStyleCarbMax,  kxmlPropCarbMax,  QString("real"), QVariant(0.0));
-   m_properties[kpropNotes]     = new PropertySchema( kpropNotes,      kcolNotes,         kxmlPropNotes,    QString("text"), QString("''"));
-   m_properties[kpropProfile]   = new PropertySchema( kpropProfile,    kcolStyleProfile,  kxmlPropProfile,  QString("text"), QString("''"));
-   m_properties[kpropIngreds]   = new PropertySchema( kpropIngreds,    kcolStyleIngreds,  kxmlPropIngreds,  QString("text"), QString("''"));
-   m_properties[kpropExamples]  = new PropertySchema( kpropExamples,   kcolStyleExamples, kxmlPropExamples, QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::name]      = new PropertySchema( PropertyNames::Ingredient::name,       PropertyNames::Ingredient::name,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Style::type]      = new PropertySchema( PropertyNames::Style::typeString, kcolStyleType,     kxmlPropType,     QString("text"), QString("'Ale'"));
+   m_properties[PropertyNames::Style::category]       = new PropertySchema( PropertyNames::Style::category,        kcolStyleCat,      kxmlPropCat,      QString("text"), QString("''"));
+   m_properties[PropertyNames::Style::categoryNumber]    = new PropertySchema( PropertyNames::Style::categoryNumber,     kcolStyleCatNum,   kxmlPropCatNum,   QString("text"), QString("''"));
+   m_properties[PropertyNames::Style::styleLetter]    = new PropertySchema( PropertyNames::Style::styleLetter,     kcolStyleLetter,   kxmlPropLetter,   QString("text"), QString("''"));
+   m_properties[PropertyNames::Style::styleGuide]     = new PropertySchema( PropertyNames::Style::styleGuide,      kcolStyleGuide,    kxmlPropGuide,    QString("text"), QString("''"));
+   m_properties[PropertyNames::Style::ogMin]     = new PropertySchema( PropertyNames::Style::ogMin,      kcolStyleOGMin,    kxmlPropOGMin,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::ogMax]     = new PropertySchema( PropertyNames::Style::ogMax,      kcolStyleOGMax,    kxmlPropOGMax,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::fgMin]     = new PropertySchema( PropertyNames::Style::fgMin,      kcolStyleFGMin,    kxmlPropFGMin,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::fgMax]     = new PropertySchema( PropertyNames::Style::fgMax,      kcolStyleFGMax,    kxmlPropFGMax,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::ibuMin]    = new PropertySchema( PropertyNames::Style::ibuMin,     kcolStyleIBUMin,   kxmlPropIBUMin,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::ibuMax]    = new PropertySchema( PropertyNames::Style::ibuMax,     kcolStyleIBUMax,   kxmlPropIBUMax,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::colorMin_srm]  = new PropertySchema( PropertyNames::Style::colorMin_srm,   kcolStyleColorMin, kxmlPropColorMin, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::colorMax_srm]  = new PropertySchema( PropertyNames::Style::colorMax_srm,   kcolStyleColorMax, kxmlPropColorMax, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::abvMin_pct]    = new PropertySchema( PropertyNames::Style::abvMin_pct,     kcolStyleABVMin,   kxmlPropABVMin,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::abvMax_pct]    = new PropertySchema( PropertyNames::Style::abvMax_pct,     kcolStyleABVMax,   kxmlPropABVMax,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::carbMin_vol]   = new PropertySchema( PropertyNames::Style::carbMin_vol,    kcolStyleCarbMin,  kxmlPropCarbMin,  QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::carbMax_vol]   = new PropertySchema( PropertyNames::Style::carbMax_vol,    kcolStyleCarbMax,  kxmlPropCarbMax,  QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Style::notes]     = new PropertySchema( PropertyNames::Style::notes,      kcolNotes,         kxmlPropNotes,    QString("text"), QString("''"));
+   m_properties[PropertyNames::Style::profile]   = new PropertySchema( PropertyNames::Style::profile,    kcolStyleProfile,  kxmlPropProfile,  QString("text"), QString("''"));
+   m_properties[PropertyNames::Style::ingredients]   = new PropertySchema( PropertyNames::Style::ingredients,    kcolStyleIngreds,  kxmlPropIngreds,  QString("text"), QString("''"));
+   m_properties[PropertyNames::Style::examples]  = new PropertySchema( PropertyNames::Style::examples,   kcolStyleExamples, kxmlPropExamples, QString("text"), QString("''"));
 
    // not sure about these, but I think I'm gonna need them anyway
-   m_properties[kpropDisplay]   = new PropertySchema(kpropDisplay,   kcolDisplay,       QString(),        QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]   = new PropertySchema(kpropDeleted,   kcolDeleted,       QString(),        QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]    = new PropertySchema(kpropFolder,    kcolFolder,        QString(),        QString("text"),    QString("''"));
+   m_properties[PropertyNames::Ingredient::display]   = new PropertySchema(PropertyNames::Ingredient::display,   kcolDisplay,       QString(),        QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]   = new PropertySchema(PropertyNames::Ingredient::deleted,   kcolDeleted,       QString(),        QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]    = new PropertySchema(PropertyNames::Ingredient::folder,    kcolFolder,        QString(),        QString("text"),    QString("''"));
 }
 
 void TableSchema::defineEquipmentTable()
@@ -805,28 +813,28 @@ void TableSchema::defineEquipmentTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropName]          = new PropertySchema( kpropName,          kpropName,         kxmlPropName,            QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropBoilSize]      = new PropertySchema( kpropBoilSize,      kcolEquipBoilSize,      kxmlPropBoilSize,        QString("real"), QVariant(0.0));
-   m_properties[kpropBatchSize]     = new PropertySchema( kpropBatchSize,     kcolEquipBatchSize,     kxmlPropBatchSize,       QString("real"), QVariant(0.0));
-   m_properties[kpropTunVolume]     = new PropertySchema( kpropTunVolume,     kcolEquipTunVolume,     kxmlPropTunVolume,       QString("real"), QVariant(0.0));
-   m_properties[kpropTunWeight]     = new PropertySchema( kpropTunWeight,     kcolEquipTunWeight,     kxmlPropTunWeight,       QString("real"), QVariant(0.0));
-   m_properties[kpropTunSpecHeat]   = new PropertySchema( kpropTunSpecHeat,   kcolEquipTunSpecHeat,   kxmlPropTunSpecHeat,     QString("real"), QVariant(0.0));
-   m_properties[kpropTopUpWater]    = new PropertySchema( kpropTopUpWater,    kcolEquipTopUpWater,    kxmlPropTopUpWater,      QString("real"), QVariant(0.0));
-   m_properties[kpropTrubChillLoss] = new PropertySchema( kpropTrubChillLoss, kcolEquipTrubChillLoss, kxmlPropTrubChillLoss,   QString("real"), QVariant(0.0));
-   m_properties[kpropEvapRate]      = new PropertySchema( kpropEvapRate,      kcolEquipEvapRate,      kxmlPropEvapRate,        QString("real"), QVariant(0.0));
-   m_properties[kpropBoilTime]      = new PropertySchema( kpropBoilTime,      kcolEquipBoilTime,      kxmlPropBoilTime,        QString("real"), QVariant(0.0));
-   m_properties[kpropCalcBoilVol]   = new PropertySchema( kpropCalcBoilVol,   kcolEquipCalcBoilVol,   kxmlPropCalcBoilVol,     QString("boolean"), QVariant(false));
-   m_properties[kpropLauterSpace]   = new PropertySchema( kpropLauterSpace,   kcolEquipLauterSpace,   kxmlPropLauterSpace,     QString("real"), QVariant(0.0));
-   m_properties[kpropTopUpKettle]   = new PropertySchema( kpropTopUpKettle,   kcolEquipTopUpKettle,   kxmlPropTopUpKettle,     QString("real"), QVariant(0.0));
-   m_properties[kpropHopUtil]       = new PropertySchema( kpropHopUtil,       kcolEquipHopUtil,       kxmlPropHopUtil,         QString("real"), QVariant(0.0));
-   m_properties[kpropNotes]         = new PropertySchema( kpropNotes,         kcolNotes,              kxmlPropNotes,           QString("text"), QString("''"));
-   m_properties[kpropRealEvapRate]  = new PropertySchema( kpropRealEvapRate,  kcolEquipRealEvapRate,  kxmlPropRealEvapRate,    QString("real"), QVariant(0.0));
-   m_properties[kpropBoilingPoint]  = new PropertySchema( kpropBoilingPoint,  kcolEquipBoilingPoint,  kxmlPropBoilingPoint,    QString("real"), QVariant(100.0));
-   m_properties[kpropAbsorption]    = new PropertySchema( kpropAbsorption,    kcolEquipAbsorption,    kxmlPropGrainAbsorption, QString("real"), QVariant(1.085));
+   m_properties[PropertyNames::Ingredient::name]          = new PropertySchema( PropertyNames::Ingredient::name,          PropertyNames::Ingredient::name,         kxmlPropName,            QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Equipment::boilSize_l]      = new PropertySchema( PropertyNames::Equipment::boilSize_l,      kcolEquipBoilSize,      kxmlPropBoilSize,        QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::batchSize_l]     = new PropertySchema( PropertyNames::Equipment::batchSize_l,     kcolEquipBatchSize,     kxmlPropBatchSize,       QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::tunVolume_l]     = new PropertySchema( PropertyNames::Equipment::tunVolume_l,     kcolEquipTunVolume,     kxmlPropTunVolume,       QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::tunWeight_kg]     = new PropertySchema( PropertyNames::Equipment::tunWeight_kg,     kcolEquipTunWeight,     kxmlPropTunWeight,       QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::tunSpecificHeat_calGC]   = new PropertySchema( PropertyNames::Equipment::tunSpecificHeat_calGC,   kcolEquipTunSpecHeat,   kxmlPropTunSpecHeat,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::topUpWater_l]    = new PropertySchema( PropertyNames::Equipment::topUpWater_l,    kcolEquipTopUpWater,    kxmlPropTopUpWater,      QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::trubChillerLoss_l] = new PropertySchema( PropertyNames::Equipment::trubChillerLoss_l, kcolEquipTrubChillLoss, kxmlPropTrubChillLoss,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::evapRate_pctHr]      = new PropertySchema( PropertyNames::Equipment::evapRate_pctHr,      kcolEquipEvapRate,      kxmlPropEvapRate,        QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::boilTime_min]      = new PropertySchema( PropertyNames::Equipment::boilTime_min,      kcolEquipBoilTime,      kxmlPropBoilTime,        QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::calcBoilVolume]   = new PropertySchema( PropertyNames::Equipment::calcBoilVolume,   kcolEquipCalcBoilVol,   kxmlPropCalcBoilVol,     QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Equipment::lauterDeadspace_l]   = new PropertySchema( PropertyNames::Equipment::lauterDeadspace_l,   kcolEquipLauterSpace,   kxmlPropLauterSpace,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::topUpKettle_l]   = new PropertySchema( PropertyNames::Equipment::topUpKettle_l,   kcolEquipTopUpKettle,   kxmlPropTopUpKettle,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::hopUtilization_pct]       = new PropertySchema( PropertyNames::Equipment::hopUtilization_pct,       kcolEquipHopUtil,       kxmlPropHopUtil,         QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::notes]         = new PropertySchema( PropertyNames::Equipment::notes,         kcolNotes,              kxmlPropNotes,           QString("text"), QString("''"));
+   m_properties[PropertyNames::Equipment::evapRate_lHr]  = new PropertySchema( PropertyNames::Equipment::evapRate_lHr,  kcolEquipRealEvapRate,  kxmlPropRealEvapRate,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Equipment::boilingPoint_c]  = new PropertySchema( PropertyNames::Equipment::boilingPoint_c,  kcolEquipBoilingPoint,  kxmlPropBoilingPoint,    QString("real"), QVariant(100.0));
+   m_properties[PropertyNames::Equipment::grainAbsorption_LKg]    = new PropertySchema( PropertyNames::Equipment::grainAbsorption_LKg,    kcolEquipAbsorption,    kxmlPropGrainAbsorption, QString("real"), QVariant(1.085));
 
-   m_properties[kpropDisplay]       = new PropertySchema( kpropDisplay,       kcolDisplay,       QString(),               QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]       = new PropertySchema( kpropDeleted,       kcolDeleted,       QString(),               QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]        = new PropertySchema( kpropFolder,        kcolFolder,       QString(),               QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::display]       = new PropertySchema( PropertyNames::Ingredient::display,       kcolDisplay,       QString(),               QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]       = new PropertySchema( PropertyNames::Ingredient::deleted,       kcolDeleted,       QString(),               QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]        = new PropertySchema( PropertyNames::Ingredient::folder,        kcolFolder,       QString(),               QString("text"), QString("''"));
 
 }
 
@@ -843,27 +851,27 @@ void TableSchema::defineFermentableTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropName]           = new PropertySchema( kpropName,           kcolName,               kxmlPropName,           QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropNotes]          = new PropertySchema( kpropNotes,          kcolNotes,              kxmlPropNotes,          QString("text"), QString("''"));
-   m_properties[kpropType]           = new PropertySchema( kpropTypeString,     kcolFermType,           kxmlPropType,           QString("text"), QString("'Grain'"));
-   m_properties[kpropAmountKg]       = new PropertySchema( kpropAmountKg,       kcolAmount,             kxmlPropAmount,         QString("real"), QVariant(0.0));
-   m_properties[kpropYield]          = new PropertySchema( kpropYield,          kcolFermYield,          kxmlPropYield,          QString("real"), QVariant(0.0));
-   m_properties[kpropColor]          = new PropertySchema( kpropColor,          kcolFermColor,          kxmlPropColor,          QString("real"), QVariant(0.0));
-   m_properties[kpropAddAfterBoil]   = new PropertySchema( kpropAddAfterBoil,   kcolFermAddAfterBoil,   kxmlPropAddAfterBoil,   QString("boolean"), QVariant(false));
-   m_properties[kpropOrigin]         = new PropertySchema( kpropOrigin,         kcolFermOrigin,         kxmlPropOrigin,         QString("text"), QString("''"));
-   m_properties[kpropSupplier]       = new PropertySchema( kpropSupplier,       kcolFermSupplier,       kxmlPropSupplier,       QString("text"), QString("''"));
-   m_properties[kpropCoarseFineDiff] = new PropertySchema( kpropCoarseFineDiff, kcolFermCoarseFineDiff, kxmlPropCoarseFineDiff, QString("real"), QVariant(0.0));
-   m_properties[kpropMoisture]       = new PropertySchema( kpropMoisture,       kcolFermMoisture,       kxmlPropMoisture,       QString("real"), QVariant(0.0));
-   m_properties[kpropDiastaticPower] = new PropertySchema( kpropDiastaticPower, kcolFermDiastaticPower, kxmlPropDiastaticPower, QString("real"), QVariant(0.0));
-   m_properties[kpropProtein]        = new PropertySchema( kpropProtein,        kcolFermProtein,        kxmlPropProtein,        QString("real"), QVariant(0.0));
-   m_properties[kpropMaxInBatch]     = new PropertySchema( kpropMaxInBatch,     kcolFermMaxInBatch,     kxmlPropMaxInBatch,     QString("real"), QVariant(100.0));
-   m_properties[kpropRecommendMash]  = new PropertySchema( kpropRecommendMash,  kcolFermRecommendMash,  kxmlPropRecommendMash,  QString("boolean"), QVariant(false));
-   m_properties[kpropIsMashed]       = new PropertySchema( kpropIsMashed,       kcolFermIsMashed,       kxmlPropIsMashed,       QString("boolean"), QVariant(false));
-   m_properties[kpropIBUGalPerLb]    = new PropertySchema( kpropIBUGalPerLb,    kcolFermIBUGalPerLb,    kxmlPropIBUGalPerLb,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Ingredient::name]           = new PropertySchema( PropertyNames::Ingredient::name,           kcolName,               kxmlPropName,           QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Fermentable::notes]          = new PropertySchema( PropertyNames::Fermentable::notes,          kcolNotes,              kxmlPropNotes,          QString("text"), QString("''"));
+   m_properties[PropertyNames::Fermentable::type]           = new PropertySchema( PropertyNames::Fermentable::typeString,     kcolFermType,           kxmlPropType,           QString("text"), QString("'Grain'"));
+   m_properties[PropertyNames::Fermentable::amount_kg]       = new PropertySchema( PropertyNames::Fermentable::amount_kg,       kcolAmount,             kxmlPropAmount,         QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Fermentable::yield_pct]          = new PropertySchema( PropertyNames::Fermentable::yield_pct,          kcolFermYield,          kxmlPropYield,          QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Fermentable::color_srm]          = new PropertySchema( PropertyNames::Fermentable::color_srm,          kcolFermColor,          kxmlPropColor,          QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Fermentable::addAfterBoil]   = new PropertySchema( PropertyNames::Fermentable::addAfterBoil,   kcolFermAddAfterBoil,   kxmlPropAddAfterBoil,   QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Fermentable::origin]         = new PropertySchema( PropertyNames::Fermentable::origin,         kcolFermOrigin,         kxmlPropOrigin,         QString("text"), QString("''"));
+   m_properties[PropertyNames::Fermentable::supplier]       = new PropertySchema( PropertyNames::Fermentable::supplier,       kcolFermSupplier,       kxmlPropSupplier,       QString("text"), QString("''"));
+   m_properties[PropertyNames::Fermentable::coarseFineDiff_pct] = new PropertySchema( PropertyNames::Fermentable::coarseFineDiff_pct, kcolFermCoarseFineDiff, kxmlPropCoarseFineDiff, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Fermentable::moisture_pct]       = new PropertySchema( PropertyNames::Fermentable::moisture_pct,       kcolFermMoisture,       kxmlPropMoisture,       QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Fermentable::diastaticPower_lintner] = new PropertySchema( PropertyNames::Fermentable::diastaticPower_lintner, kcolFermDiastaticPower, kxmlPropDiastaticPower, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Fermentable::protein_pct]        = new PropertySchema( PropertyNames::Fermentable::protein_pct,        kcolFermProtein,        kxmlPropProtein,        QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Fermentable::maxInBatch_pct]     = new PropertySchema( PropertyNames::Fermentable::maxInBatch_pct,     kcolFermMaxInBatch,     kxmlPropMaxInBatch,     QString("real"), QVariant(100.0));
+   m_properties[PropertyNames::Fermentable::recommendMash]  = new PropertySchema( PropertyNames::Fermentable::recommendMash,  kcolFermRecommendMash,  kxmlPropRecommendMash,  QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Fermentable::isMashed]       = new PropertySchema( PropertyNames::Fermentable::isMashed,       kcolFermIsMashed,       kxmlPropIsMashed,       QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Fermentable::ibuGalPerLb]    = new PropertySchema( PropertyNames::Fermentable::ibuGalPerLb,    kcolFermIBUGalPerLb,    kxmlPropIBUGalPerLb,    QString("real"), QVariant(0.0));
 
-   m_properties[kpropDisplay]        = new PropertySchema( kpropDisplay,        kcolDisplay,            QString(),              QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]        = new PropertySchema( kpropDeleted,        kcolDeleted,            QString(),              QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]         = new PropertySchema( kpropFolder,         kcolFolder,             QString(),              QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::display]        = new PropertySchema( PropertyNames::Ingredient::display,        kcolDisplay,            QString(),              QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]        = new PropertySchema( PropertyNames::Ingredient::deleted,        kcolDeleted,            QString(),              QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]         = new PropertySchema( PropertyNames::Ingredient::folder,         kcolFolder,             QString(),              QString("text"), QString("''"));
 
    // the inventory system is getting interesting
    m_foreignKeys[kpropInventoryId]   = new PropertySchema( kpropInventoryId,    kcolInventoryId,        QString("integer"),    m_invTable);
@@ -884,26 +892,26 @@ void TableSchema::defineHopTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]          = new PropertySchema( kpropName,          kcolName,             kxmlPropName,          QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropNotes]         = new PropertySchema( kpropNotes,         kcolNotes,            kxmlPropNotes,         QString("text"), QString("''"));
-   m_properties[kpropAmountKg]      = new PropertySchema( kpropAmountKg,      kcolAmount,           kxmlPropAmount,        QString("real"), QVariant(0.0));
-   m_properties[kpropUse]           = new PropertySchema( kpropUseString,     kcolUse,              kxmlPropUse,           QString("text"), QString("'Boil'"));
-   m_properties[kpropTime]          = new PropertySchema( kpropTime,          kcolTime,             kxmlPropTime,          QString("real"), QVariant(0.0));
-   m_properties[kpropOrigin]        = new PropertySchema( kpropOrigin,        kcolOrigin,           kxmlPropOrigin,        QString("text"), QString("''"));
-   m_properties[kpropSubstitutes]   = new PropertySchema( kpropSubstitutes,   kcolSubstitutes,      kxmlPropSubstitutes,   QString("text"), QString("''"));
-   m_properties[kpropAlpha]         = new PropertySchema( kpropAlpha,         kcolHopAlpha,         kxmlPropAlpha,         QString("real"), QVariant(0.0));
-   m_properties[kpropType]          = new PropertySchema( kpropTypeString,    kcolHopType,          kxmlPropType,          QString("text"), QString("'Boil'"));
-   m_properties[kpropForm]          = new PropertySchema( kpropFormString,    kcolHopForm,          kxmlPropForm,          QString("text"), QString("'Pellet'"));
-   m_properties[kpropBeta]          = new PropertySchema( kpropBeta,          kcolHopBeta,          kxmlPropBeta,          QString("real"), QVariant(0.0));
-   m_properties[kpropHSI]           = new PropertySchema( kpropHSI,           kcolHopHSI,           kxmlPropHSI,           QString("real"), QVariant(0.0));
-   m_properties[kpropHumulene]      = new PropertySchema( kpropHumulene,      kcolHopHumulene,      kxmlPropHumulene,      QString("real"), QVariant(0.0));
-   m_properties[kpropCaryophyllene] = new PropertySchema( kpropCaryophyllene, kcolHopCaryophyllene, kxmlPropCaryophyllene, QString("real"), QVariant(0.0));
-   m_properties[kpropCohumulone]    = new PropertySchema( kpropCohumulone,    kcolHopCohumulone,    kxmlPropCohumulone,    QString("real"), QVariant(0.0));
-   m_properties[kpropMyrcene]       = new PropertySchema( kpropMyrcene,       kcolHopMyrcene,       kxmlPropMyrcene,       QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Ingredient::name]          = new PropertySchema( PropertyNames::Ingredient::name,          kcolName,             kxmlPropName,          QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Hop::notes]         = new PropertySchema( PropertyNames::Hop::notes,         kcolNotes,            kxmlPropNotes,         QString("text"), QString("''"));
+   m_properties[PropertyNames::Hop::amount_kg]      = new PropertySchema( PropertyNames::Hop::amount_kg,      kcolAmount,           kxmlPropAmount,        QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::use]           = new PropertySchema( PropertyNames::Hop::useString,     kcolUse,              kxmlPropUse,           QString("text"), QString("'Boil'"));
+   m_properties[PropertyNames::Hop::time_min]          = new PropertySchema( PropertyNames::Hop::time_min,          kcolTime,             kxmlPropTime,          QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::origin]        = new PropertySchema( PropertyNames::Hop::origin,        kcolOrigin,           kxmlPropOrigin,        QString("text"), QString("''"));
+   m_properties[PropertyNames::Hop::substitutes]   = new PropertySchema( PropertyNames::Hop::substitutes,   kcolSubstitutes,      kxmlPropSubstitutes,   QString("text"), QString("''"));
+   m_properties[PropertyNames::Hop::alpha_pct]         = new PropertySchema( PropertyNames::Hop::alpha_pct,         kcolHopAlpha,         kxmlPropAlpha,         QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::type]          = new PropertySchema( PropertyNames::Hop::typeString,    kcolHopType,          kxmlPropType,          QString("text"), QString("'Boil'"));
+   m_properties[PropertyNames::Hop::form]          = new PropertySchema( PropertyNames::Hop::formString,    kcolHopForm,          kxmlPropForm,          QString("text"), QString("'Pellet'"));
+   m_properties[PropertyNames::Hop::beta_pct]          = new PropertySchema( PropertyNames::Hop::beta_pct,          kcolHopBeta,          kxmlPropBeta,          QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::hsi_pct]           = new PropertySchema( PropertyNames::Hop::hsi_pct,           kcolHopHSI,           kxmlPropHSI,           QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::humulene_pct]      = new PropertySchema( PropertyNames::Hop::humulene_pct,      kcolHopHumulene,      kxmlPropHumulene,      QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::caryophyllene_pct] = new PropertySchema( PropertyNames::Hop::caryophyllene_pct, kcolHopCaryophyllene, kxmlPropCaryophyllene, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::cohumulone_pct]    = new PropertySchema( PropertyNames::Hop::cohumulone_pct,    kcolHopCohumulone,    kxmlPropCohumulone,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::myrcene_pct]       = new PropertySchema( PropertyNames::Hop::myrcene_pct,       kcolHopMyrcene,       kxmlPropMyrcene,       QString("real"), QVariant(0.0));
 
-   m_properties[kpropDisplay]       = new PropertySchema( kpropDisplay,       kcolDisplay,          QString(),             QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]       = new PropertySchema( kpropDeleted,       kcolDeleted,          QString(),             QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]        = new PropertySchema( kpropFolder,        kcolFolder,           QString(),             QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::display]       = new PropertySchema( PropertyNames::Ingredient::display,       kcolDisplay,          QString(),             QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]       = new PropertySchema( PropertyNames::Ingredient::deleted,       kcolDeleted,          QString(),             QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]        = new PropertySchema( PropertyNames::Ingredient::folder,        kcolFolder,           QString(),             QString("text"), QString("''"));
 
    m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
@@ -919,15 +927,15 @@ void TableSchema::defineInstructionTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]          = new PropertySchema( kpropName,          kcolName,                  kxmlPropName,       QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropDirections]    = new PropertySchema( kpropDirections,    kcolInstructionDirections, kxmlPropDirections, QString("text"), QString("''"));
-   m_properties[kpropHasTimer]      = new PropertySchema( kpropHasTimer,      kcolInstructionHasTimer,   kxmlPropHasTimer,   QString("boolean"), QVariant(false));
-   m_properties[kpropTimerValue]    = new PropertySchema( kpropTimerValue,    kcolInstructionTimerValue, kxmlPropTimerValue, QString("text"), QVariant("'00:00:00'"));
-   m_properties[kpropCompleted]     = new PropertySchema( kpropCompleted,     kcolInstructionCompleted,  kxmlPropCompleted,  QString("boolean"), QVariant(false));
-   m_properties[kpropInterval]      = new PropertySchema( kpropInterval,      kcolInstructionInterval,   kxmlPropInterval,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Ingredient::name]          = new PropertySchema( PropertyNames::Ingredient::name,          kcolName,                  kxmlPropName,       QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Instruction::directions]    = new PropertySchema( PropertyNames::Instruction::directions,    kcolInstructionDirections, kxmlPropDirections, QString("text"), QString("''"));
+   m_properties[PropertyNames::Instruction::hasTimer]      = new PropertySchema( PropertyNames::Instruction::hasTimer,      kcolInstructionHasTimer,   kxmlPropHasTimer,   QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Instruction::timerValue]    = new PropertySchema( PropertyNames::Instruction::timerValue,    kcolInstructionTimerValue, kxmlPropTimerValue, QString("text"), QVariant("'00:00:00'"));
+   m_properties[PropertyNames::Instruction::completed]     = new PropertySchema( PropertyNames::Instruction::completed,     kcolInstructionCompleted,  kxmlPropCompleted,  QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Instruction::interval]      = new PropertySchema( PropertyNames::Instruction::interval,      kcolInstructionInterval,   kxmlPropInterval,   QString("real"), QVariant(0.0));
 
-   m_properties[kpropDisplay]       = new PropertySchema( kpropDisplay,       kcolDisplay,               QString(),          QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]       = new PropertySchema( kpropDeleted,       kcolDeleted,               QString(),          QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::display]       = new PropertySchema( PropertyNames::Ingredient::display,       kcolDisplay,               QString(),          QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]       = new PropertySchema( PropertyNames::Ingredient::deleted,       kcolDeleted,               QString(),          QString("boolean"), QVariant(false));
 }
 
 void TableSchema::defineMashTable()
@@ -940,19 +948,19 @@ void TableSchema::defineMashTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]        = new PropertySchema( kpropName,        kcolName,            kxmlPropName,        QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropNotes]       = new PropertySchema( kpropNotes,       kcolNotes,           kxmlPropNotes,       QString("text"), QString("''"));
-   m_properties[kpropGrainTemp]   = new PropertySchema( kpropGrainTemp,   kcolMashGrainTemp,   kxmlPropGrainTemp,   QString("real"), QVariant(0.0));
-   m_properties[kpropTunTemp]     = new PropertySchema( kpropTunTemp,     kcolMashTunTemp,     kxmlPropTunTemp,     QString("real"), QVariant(20.0));
-   m_properties[kpropSpargeTemp]  = new PropertySchema( kpropSpargeTemp,  kcolMashSpargeTemp,  kxmlPropSpargeTemp,  QString("real"), QVariant(74.0));
-   m_properties[kpropPH]          = new PropertySchema( kpropPH,          kcolPH,              kxmlPropPH,          QString("real"), QVariant(7.0));
-   m_properties[kpropTunWeight]   = new PropertySchema( kpropTunWeight,   kcolMashTunWeight,   kxmlPropTunWeight,   QString("real"), QVariant(0.0));
-   m_properties[kpropTunSpecHeat] = new PropertySchema( kpropTunSpecHeat, kcolMashTunSpecHeat, kxmlPropTunSpecHeat, QString("real"), QVariant(0.0));
-   m_properties[kpropEquipAdjust] = new PropertySchema( kpropEquipAdjust, kcolMashEquipAdjust, kxmlPropEquipAdjust, QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::name]        = new PropertySchema( PropertyNames::Ingredient::name,        kcolName,            kxmlPropName,        QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Mash::notes]       = new PropertySchema( PropertyNames::Mash::notes,       kcolNotes,           kxmlPropNotes,       QString("text"), QString("''"));
+   m_properties[PropertyNames::Mash::grainTemp_c]   = new PropertySchema( PropertyNames::Mash::grainTemp_c,   kcolMashGrainTemp,   kxmlPropGrainTemp,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Mash::tunTemp_c]     = new PropertySchema( PropertyNames::Mash::tunTemp_c,     kcolMashTunTemp,     kxmlPropTunTemp,     QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::Mash::spargeTemp_c]  = new PropertySchema( PropertyNames::Mash::spargeTemp_c,  kcolMashSpargeTemp,  kxmlPropSpargeTemp,  QString("real"), QVariant(74.0));
+   m_properties[PropertyNames::Mash::ph]          = new PropertySchema( PropertyNames::Mash::ph,          kcolPH,              kxmlPropPH,          QString("real"), QVariant(7.0));
+   m_properties[PropertyNames::Mash::tunWeight_kg]   = new PropertySchema( PropertyNames::Mash::tunWeight_kg,   kcolMashTunWeight,   kxmlPropTunWeight,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Mash::tunSpecificHeat_calGC] = new PropertySchema( PropertyNames::Mash::tunSpecificHeat_calGC, kcolMashTunSpecHeat, kxmlPropTunSpecHeat, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Mash::equipAdjust] = new PropertySchema( PropertyNames::Mash::equipAdjust, kcolMashEquipAdjust, kxmlPropEquipAdjust, QString("boolean"), QVariant(true));
 
-   m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,         QString(),           QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,         QString(),           QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,         QString(),           QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::display]     = new PropertySchema( PropertyNames::Ingredient::display,     kcolDisplay,         QString(),           QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]     = new PropertySchema( PropertyNames::Ingredient::deleted,     kcolDeleted,         QString(),           QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]      = new PropertySchema( PropertyNames::Ingredient::folder,      kcolFolder,         QString(),           QString("text"), QString("''"));
 }
 
 // property name, column name, xml property name, column type, column default, column constraint
@@ -965,19 +973,19 @@ void TableSchema::defineMashstepTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropName]       = new PropertySchema( kpropName,       kcolName,               kxmlPropName,       QString("text"), QString("''"),QString("not null"));
-   m_properties[kpropType]       = new PropertySchema( kpropTypeString, kcolMashstepType,       kxmlPropType,       QString("text"), QString("'Infusion'"));
-   m_properties[kpropInfuseAmt]  = new PropertySchema( kpropInfuseAmt,  kcolMashstepInfuseAmt,  kxmlPropInfuseAmt,  QString("real"), QVariant(0.0));
-   m_properties[kpropStepTemp]   = new PropertySchema( kpropStepTemp,   kcolMashstepStepTemp,   kxmlPropStepTemp,   QString("real"), QVariant(67.0));
-   m_properties[kpropStepTime]   = new PropertySchema( kpropStepTime,   kcolMashstepStepTime,   kxmlPropStepTime,   QString("real"), QVariant(0.0));
-   m_properties[kpropRampTime]   = new PropertySchema( kpropRampTime,   kcolMashstepRampTime,   kxmlPropRampTime,   QString("real"), QVariant(0.0));
-   m_properties[kpropEndTemp]    = new PropertySchema( kpropEndTemp,    kcolMashstepEndTemp,    kxmlPropEndTemp,    QString("real"), QVariant(67.0));
-   m_properties[kpropInfuseTemp] = new PropertySchema( kpropInfuseTemp, kcolMashstepInfuseTemp, kxmlPropInfuseTemp, QString("real"), QVariant(67.0));
-   m_properties[kpropDecoctAmt]  = new PropertySchema( kpropDecoctAmt,  kcolMashstepDecoctAmt,  kxmlPropDecoctAmt,  QString("real"), QVariant(67.0));
-   m_properties[kpropStepNumber] = new PropertySchema( kpropStepNumber, kcolMashstepStepNumber, QString(),          QString("integer"), QVariant(0));
+   m_properties[PropertyNames::Ingredient::name]       = new PropertySchema( PropertyNames::Ingredient::name,       kcolName,               kxmlPropName,       QString("text"), QString("''"),QString("not null"));
+   m_properties[PropertyNames::MashStep::type]       = new PropertySchema( PropertyNames::MashStep::typeString, kcolMashstepType,       kxmlPropType,       QString("text"), QString("'Infusion'"));
+   m_properties[PropertyNames::MashStep::infuseAmount_l]  = new PropertySchema( PropertyNames::MashStep::infuseAmount_l,  kcolMashstepInfuseAmt,  kxmlPropInfuseAmt,  QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::MashStep::stepTemp_c]   = new PropertySchema( PropertyNames::MashStep::stepTemp_c,   kcolMashstepStepTemp,   kxmlPropStepTemp,   QString("real"), QVariant(67.0));
+   m_properties[PropertyNames::MashStep::stepTime_min]   = new PropertySchema( PropertyNames::MashStep::stepTime_min,   kcolMashstepStepTime,   kxmlPropStepTime,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::MashStep::rampTime_min]   = new PropertySchema( PropertyNames::MashStep::rampTime_min,   kcolMashstepRampTime,   kxmlPropRampTime,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::MashStep::endTemp_c]    = new PropertySchema( PropertyNames::MashStep::endTemp_c,    kcolMashstepEndTemp,    kxmlPropEndTemp,    QString("real"), QVariant(67.0));
+   m_properties[PropertyNames::MashStep::infuseTemp_c] = new PropertySchema( PropertyNames::MashStep::infuseTemp_c, kcolMashstepInfuseTemp, kxmlPropInfuseTemp, QString("real"), QVariant(67.0));
+   m_properties[PropertyNames::MashStep::decoctionAmount_l]  = new PropertySchema( PropertyNames::MashStep::decoctionAmount_l,  kcolMashstepDecoctAmt,  kxmlPropDecoctAmt,  QString("real"), QVariant(67.0));
+   m_properties[PropertyNames::MashStep::stepNumber] = new PropertySchema( PropertyNames::MashStep::stepNumber, kcolMashstepStepNumber, QString(),          QString("integer"), QVariant(0));
 
-   m_properties[kpropDisplay]    = new PropertySchema( kpropDisplay,    kcolDisplay,            QString(),          QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]    = new PropertySchema( kpropDeleted,    kcolDeleted,            QString(),          QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::display]    = new PropertySchema( PropertyNames::Ingredient::display,    kcolDisplay,            QString(),          QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]    = new PropertySchema( PropertyNames::Ingredient::deleted,    kcolDeleted,            QString(),          QString("boolean"), QVariant(false));
 
    m_foreignKeys[kpropMashId]    = new PropertySchema( kpropMashId,     kcolMashId,       QString("integer"), Brewtarget::MASHTABLE);
 
@@ -997,18 +1005,18 @@ void TableSchema::defineMiscTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]     = new PropertySchema( kpropName,       kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropNotes]    = new PropertySchema( kpropNotes,      kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
-   m_properties[kpropAmount]   = new PropertySchema( kpropAmount,     kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
-   m_properties[kpropUse]      = new PropertySchema( kpropUseString,  kcolUse,          kxmlPropUse,      QString("text"), QString("'Boil'"));
-   m_properties[kpropTime]     = new PropertySchema( kpropTime,       kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
-   m_properties[kpropType]     = new PropertySchema( kpropTypeString, kcolMiscType,     kxmlPropType,     QString("text"), QString("'Other'"));
-   m_properties[kpropAmtIsWgt] = new PropertySchema( kpropAmtIsWgt,   kcolMiscAmtIsWgt, kxmlPropAmtIsWgt, QString("boolean"), QVariant(true));
-   m_properties[kpropUseFor]   = new PropertySchema( kpropUseFor,     kcolMiscUseFor,   kxmlPropUseFor,   QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::name]     = new PropertySchema( PropertyNames::Ingredient::name,       kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Misc::notes]    = new PropertySchema( PropertyNames::Misc::notes,      kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
+   m_properties[PropertyNames::Misc::amount]   = new PropertySchema( PropertyNames::Misc::amount,     kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Misc::use]      = new PropertySchema( PropertyNames::Misc::useString,  kcolUse,          kxmlPropUse,      QString("text"), QString("'Boil'"));
+   m_properties[PropertyNames::Hop::time_min]     = new PropertySchema( PropertyNames::Hop::time_min,       kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Misc::type]     = new PropertySchema( PropertyNames::Misc::typeString, kcolMiscType,     kxmlPropType,     QString("text"), QString("'Other'"));
+   m_properties[PropertyNames::Misc::amountIsWeight] = new PropertySchema( PropertyNames::Misc::amountIsWeight,   kcolMiscAmtIsWgt, kxmlPropAmtIsWgt, QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Misc::useFor]   = new PropertySchema( PropertyNames::Misc::useFor,     kcolMiscUseFor,   kxmlPropUseFor,   QString("text"), QString("''"));
 
-   m_properties[kpropDisplay]  = new PropertySchema( kpropDisplay,  kcolDisplay,      QString(),        QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]  = new PropertySchema( kpropDeleted,  kcolDeleted,      QString(),        QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]   = new PropertySchema( kpropFolder,   kcolFolder,      QString(),        QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::display]  = new PropertySchema( PropertyNames::Ingredient::display,  kcolDisplay,      QString(),        QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]  = new PropertySchema( PropertyNames::Ingredient::deleted,  kcolDeleted,      QString(),        QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]   = new PropertySchema( PropertyNames::Ingredient::folder,   kcolFolder,      QString(),        QString("text"), QString("''"));
 
    m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
@@ -1023,39 +1031,39 @@ void TableSchema::defineRecipeTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropName]        = new PropertySchema( kpropName,        kcolName,               kxmlPropName,         QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropNotes]       = new PropertySchema( kpropNotes,       kcolNotes,              kxmlPropNotes,        QString("text"), QString("''"));
-   m_properties[kpropType]        = new PropertySchema( kpropType,        kcolRecipeType,         kxmlPropType,         QString("text"), QString("'All Grain'"));
-   m_properties[kpropBrewer]      = new PropertySchema( kpropBrewer,      kcolRecipeBrewer,       kxmlPropBrewer,       QString("text"), QString("''"));
-   m_properties[kpropAsstBrewer]  = new PropertySchema( kpropAsstBrewer,  kcolRecipeAsstBrewer,   kxmlPropAsstBrewer,   QString("text"), QString("'Brewtarget'"));
-   m_properties[kpropBatchSize]   = new PropertySchema( kpropBatchSize,   kcolRecipeBatchSize,    kxmlPropBatchSize,    QString("real"), QVariant(0.0));
-   m_properties[kpropBoilSize]    = new PropertySchema( kpropBoilSize,    kcolRecipeBoilSize,     kxmlPropBoilSize,     QString("real"), QVariant(0.0));
-   m_properties[kpropBoilTime]    = new PropertySchema( kpropBoilTime,    kcolRecipeBoilTime,     kxmlPropBoilTime,     QString("real"), QVariant(0.0));
-   m_properties[kpropEffPct]      = new PropertySchema( kpropEffPct,      kcolRecipeEff,          kxmlPropEff,          QString("real"), QVariant(70.0));
-   m_properties[kpropOG]          = new PropertySchema( kpropOG,          kcolRecipeOG,           kxmlPropOG,           QString("real"), QVariant(1.0));
-   m_properties[kpropFG]          = new PropertySchema( kpropFG,          kcolRecipeFG,           kxmlPropFG,           QString("real"), QVariant(1.0));
-   m_properties[kpropFermStages]  = new PropertySchema( kpropFermStages,  kcolRecipeFermStages,   kxmlPropFermStages,   QString("int"), QVariant(0));
-   m_properties[kpropPrimAgeDays] = new PropertySchema( kpropPrimAgeDays, kcolRecipePrimAgeDays,  kxmlPropPrimAgeDays,  QString("real"), QVariant(0.0));
-   m_properties[kpropPrimTemp]    = new PropertySchema( kpropPrimTemp,    kcolRecipePrimTemp,     kxmlPropPrimTemp,     QString("real"), QVariant(20.0));
-   m_properties[kpropSecAgeDays]  = new PropertySchema( kpropSecAgeDays,  kcolRecipeSecAgeDays,   kxmlPropSecAgeDays,   QString("real"), QVariant(0.0));
-   m_properties[kpropSecTemp]     = new PropertySchema( kpropSecTemp,     kcolRecipeSecTemp,      kxmlPropSecTemp,      QString("real"), QVariant(20.0));
-   m_properties[kpropTertAgeDays] = new PropertySchema( kpropTertAgeDays, kcolRecipeTertAgeDays,  kxmlPropTertAgeDays,  QString("real"), QVariant(0.0));
-   m_properties[kpropTertTemp]    = new PropertySchema( kpropTertTemp,    kcolRecipeTertTemp,     kxmlPropTertTemp,     QString("real"), QVariant(20.0));
-   m_properties[kpropAge]         = new PropertySchema( kpropAge,         kcolRecipeAge,          kxmlPropAge,          QString("real"), QVariant(0.0));
-   m_properties[kpropAgeTemp]     = new PropertySchema( kpropAgeTemp,     kcolRecipeAgeTemp,      kxmlPropAgeTemp,      QString("real"), QVariant(20.0));
-   m_properties[kpropDate]        = new PropertySchema( kpropDate,        kcolRecipeDate,         kxmlPropDate,         QString("date"), QString("CURRENT_TIMESTAMP"));
-   m_properties[kpropCarbVols]    = new PropertySchema( kpropCarbVols,    kcolRecipeCarbVols,     kxmlPropCarbVols,     QString("real"), QVariant(0.0));
-   m_properties[kpropForcedCarb]  = new PropertySchema( kpropForcedCarb,  kcolRecipeForcedCarb,   kxmlPropForcedCarb,   QString("boolean"), QVariant(false));
-   m_properties[kpropPrimSugName] = new PropertySchema( kpropPrimSugName, kcolRecipePrimSugName,  kxmlPropPrimSugName,  QString("text"), QString("''"));
-   m_properties[kpropCarbTemp]    = new PropertySchema( kpropCarbTemp,    kcolRecipeCarbTemp,     kxmlPropCarbTemp,     QString("real"), QVariant(20.0));
-   m_properties[kpropPrimSugEquiv]= new PropertySchema( kpropPrimSugEquiv,kcolRecipePrimSugEquiv, kxmlPropPrimSugEquiv, QString("real"), QVariant(1.0));
-   m_properties[kpropKegPrimFact] = new PropertySchema( kpropKegPrimFact, kcolRecipeKegPrimFact,  kxmlPropKegPrimFact,  QString("real"), QVariant(1.0));
-   m_properties[kpropTasteNotes]  = new PropertySchema( kpropTasteNotes,  kcolRecipeTasteNotes,   kxmlPropTasteNotes,   QString("text"), QString("''"));
-   m_properties[kpropTasteRating] = new PropertySchema( kpropTasteRating, kcolRecipeTasteRating,  kxmlPropTasteRating,  QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::Ingredient::name]        = new PropertySchema( PropertyNames::Ingredient::name,        kcolName,               kxmlPropName,         QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Recipe::notes]       = new PropertySchema( PropertyNames::Recipe::notes,       kcolNotes,              kxmlPropNotes,        QString("text"), QString("''"));
+   m_properties[PropertyNames::Recipe::type]        = new PropertySchema( PropertyNames::Recipe::type,        kcolRecipeType,         kxmlPropType,         QString("text"), QString("'All Grain'"));
+   m_properties[PropertyNames::Recipe::brewer]      = new PropertySchema( PropertyNames::Recipe::brewer,      kcolRecipeBrewer,       kxmlPropBrewer,       QString("text"), QString("''"));
+   m_properties[PropertyNames::Recipe::asstBrewer]  = new PropertySchema( PropertyNames::Recipe::asstBrewer,  kcolRecipeAsstBrewer,   kxmlPropAsstBrewer,   QString("text"), QString("'Brewtarget'"));
+   m_properties[PropertyNames::Recipe::batchSize_l]   = new PropertySchema( PropertyNames::Recipe::batchSize_l,   kcolRecipeBatchSize,    kxmlPropBatchSize,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Recipe::boilSize_l]    = new PropertySchema( PropertyNames::Recipe::boilSize_l,    kcolRecipeBoilSize,     kxmlPropBoilSize,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Recipe::boilTime_min]    = new PropertySchema( PropertyNames::Recipe::boilTime_min,    kcolRecipeBoilTime,     kxmlPropBoilTime,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Recipe::efficiency_pct]      = new PropertySchema( PropertyNames::Recipe::efficiency_pct,      kcolRecipeEff,          kxmlPropEff,          QString("real"), QVariant(70.0));
+   m_properties[PropertyNames::Recipe::og]          = new PropertySchema( PropertyNames::Recipe::og,          kcolRecipeOG,           kxmlPropOG,           QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::Recipe::fg]          = new PropertySchema( PropertyNames::Recipe::fg,          kcolRecipeFG,           kxmlPropFG,           QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::Recipe::fermentationStages]  = new PropertySchema( PropertyNames::Recipe::fermentationStages,  kcolRecipeFermStages,   kxmlPropFermStages,   QString("int"), QVariant(0));
+   m_properties[PropertyNames::Recipe::primaryAge_days] = new PropertySchema( PropertyNames::Recipe::primaryAge_days, kcolRecipePrimAgeDays,  kxmlPropPrimAgeDays,  QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Recipe::primaryTemp_c]    = new PropertySchema( PropertyNames::Recipe::primaryTemp_c,    kcolRecipePrimTemp,     kxmlPropPrimTemp,     QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::Recipe::secondaryAge_days]  = new PropertySchema( PropertyNames::Recipe::secondaryAge_days,  kcolRecipeSecAgeDays,   kxmlPropSecAgeDays,   QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Recipe::secondaryTemp_c]     = new PropertySchema( PropertyNames::Recipe::secondaryTemp_c,     kcolRecipeSecTemp,      kxmlPropSecTemp,      QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::Recipe::tertiaryAge_days] = new PropertySchema( PropertyNames::Recipe::tertiaryAge_days, kcolRecipeTertAgeDays,  kxmlPropTertAgeDays,  QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Recipe::tertiaryTemp_c]    = new PropertySchema( PropertyNames::Recipe::tertiaryTemp_c,    kcolRecipeTertTemp,     kxmlPropTertTemp,     QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::Recipe::age]         = new PropertySchema( PropertyNames::Recipe::age,         kcolRecipeAge,          kxmlPropAge,          QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Recipe::ageTemp_c]     = new PropertySchema( PropertyNames::Recipe::ageTemp_c,     kcolRecipeAgeTemp,      kxmlPropAgeTemp,      QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::Recipe::date]        = new PropertySchema( PropertyNames::Recipe::date,        kcolRecipeDate,         kxmlPropDate,         QString(PropertyNames::Recipe::date), QString("CURRENT_TIMESTAMP"));
+   m_properties[PropertyNames::Recipe::carbonation_vols]    = new PropertySchema( PropertyNames::Recipe::carbonation_vols,    kcolRecipeCarbVols,     kxmlPropCarbVols,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Recipe::forcedCarbonation]  = new PropertySchema( PropertyNames::Recipe::forcedCarbonation,  kcolRecipeForcedCarb,   kxmlPropForcedCarb,   QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Recipe::primingSugarName] = new PropertySchema( PropertyNames::Recipe::primingSugarName, kcolRecipePrimSugName,  kxmlPropPrimSugName,  QString("text"), QString("''"));
+   m_properties[PropertyNames::Recipe::carbonationTemp_c]    = new PropertySchema( PropertyNames::Recipe::carbonationTemp_c,    kcolRecipeCarbTemp,     kxmlPropCarbTemp,     QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::Recipe::primingSugarEquiv]= new PropertySchema( PropertyNames::Recipe::primingSugarEquiv,kcolRecipePrimSugEquiv, kxmlPropPrimSugEquiv, QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::Recipe::kegPrimingFactor] = new PropertySchema( PropertyNames::Recipe::kegPrimingFactor, kcolRecipeKegPrimFact,  kxmlPropKegPrimFact,  QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::Recipe::tasteNotes]  = new PropertySchema( PropertyNames::Recipe::tasteNotes,  kcolRecipeTasteNotes,   kxmlPropTasteNotes,   QString("text"), QString("''"));
+   m_properties[PropertyNames::Recipe::tasteRating] = new PropertySchema( PropertyNames::Recipe::tasteRating, kcolRecipeTasteRating,  kxmlPropTasteRating,  QString("real"), QVariant(20.0));
 
-   m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,            QString(),            QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,            QString(),            QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,            QString(),            QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::display]     = new PropertySchema( PropertyNames::Ingredient::display,     kcolDisplay,            QString(),            QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]     = new PropertySchema( PropertyNames::Ingredient::deleted,     kcolDeleted,            QString(),            QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]      = new PropertySchema( PropertyNames::Ingredient::folder,      kcolFolder,            QString(),            QString("text"), QString("''"));
    // m_properties[kpropLocked]      = new PropertySchema( kpropLocked,      kcolLocked,             QString(),            QString("boolean"), QVariant(false));
 
    // enough properties, now some foreign keys
@@ -1080,26 +1088,26 @@ void TableSchema::defineYeastTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]       = new PropertySchema( kpropName,       kcolName,            kxmlPropName,       QString("text"), QString("''"), QString("not null"));
-   m_properties[kpropNotes]      = new PropertySchema( kpropNotes,      kcolNotes,           kxmlPropNotes,      QString("text"), QString("''"));
-   m_properties[kpropType]       = new PropertySchema( kpropTypeString, kcolYeastType,       kxmlPropType,       QString("text"), QObject::tr("'Ale'"));
-   m_properties[kpropForm]       = new PropertySchema( kpropFormString, kcolYeastForm,       kxmlPropForm,       QString("text"), QObject::tr("'Liquid'"));
-   m_properties[kpropAmount]     = new PropertySchema( kpropAmount,     kcolYeastAmount,     kxmlPropAmount,     QString("real"), QVariant(0.0));
-   m_properties[kpropAmtIsWgt]   = new PropertySchema( kpropAmtIsWgt,   kcolYeastAmtIsWgt,   kxmlPropAmtIsWgt,   QString("boolean"), QVariant(false));
-   m_properties[kpropLab]        = new PropertySchema( kpropLab,        kcolYeastLab,        kxmlPropLab,        QString("text"), QString("''"));
-   m_properties[kpropProductID]  = new PropertySchema( kpropProductID,  kcolYeastProductID,  kxmlPropProductID,  QString("text"), QString("''"));
-   m_properties[kpropMinTemp]    = new PropertySchema( kpropMinTemp,    kcolYeastMinTemp,    kxmlPropMinTemp,    QString("real"), QVariant(0.0));
-   m_properties[kpropMaxTemp]    = new PropertySchema( kpropMaxTemp,    kcolYeastMaxTemp,    kxmlPropMaxTemp,    QString("real"), QVariant(0.0));
-   m_properties[kpropFloc]       = new PropertySchema( kpropFlocString, kcolYeastFloc,       kxmlPropFloc,       QString("text"), QObject::tr("'Medium'"));
-   m_properties[kpropAttenPct]   = new PropertySchema( kpropAttenPct,   kcolYeastAtten,      kxmlPropAtten,      QString("real"), QVariant(75.0));
-   m_properties[kpropBestFor]    = new PropertySchema( kpropBestFor,    kcolYeastBestFor,    kxmlPropBestFor,    QString("text"), QString("''"));
-   m_properties[kpropTimesCultd] = new PropertySchema( kpropTimesCultd, kcolYeastTimesCultd, kxmlPropTimesCultd, QString("int"), QVariant(0));
-   m_properties[kpropMaxReuse]   = new PropertySchema( kpropMaxReuse,   kcolYeastMaxReuse,   kxmlPropMaxReuse,   QString("int"), QVariant(10));
-   m_properties[kpropAddToSec]   = new PropertySchema( kpropAddToSec,   kcolYeastAddToSec,   kxmlPropAddToSec,   QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::name]       = new PropertySchema( PropertyNames::Ingredient::name,       kcolName,            kxmlPropName,       QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::Yeast::notes]      = new PropertySchema( PropertyNames::Yeast::notes,      kcolNotes,           kxmlPropNotes,      QString("text"), QString("''"));
+   m_properties[PropertyNames::Yeast::type]       = new PropertySchema( PropertyNames::Yeast::typeString, kcolYeastType,       kxmlPropType,       QString("text"), QObject::tr("'Ale'"));
+   m_properties[PropertyNames::Yeast::form]       = new PropertySchema( PropertyNames::Yeast::formString, kcolYeastForm,       kxmlPropForm,       QString("text"), QObject::tr("'Liquid'"));
+   m_properties[PropertyNames::Yeast::amount]     = new PropertySchema( PropertyNames::Yeast::amount,     kcolYeastAmount,     kxmlPropAmount,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Yeast::amountIsWeight]   = new PropertySchema( PropertyNames::Yeast::amountIsWeight,   kcolYeastAmtIsWgt,   kxmlPropAmtIsWgt,   QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Yeast::laboratory]        = new PropertySchema( PropertyNames::Yeast::laboratory,        kcolYeastLab,        kxmlPropLab,        QString("text"), QString("''"));
+   m_properties[PropertyNames::Yeast::productID]  = new PropertySchema( PropertyNames::Yeast::productID,  kcolYeastProductID,  kxmlPropProductID,  QString("text"), QString("''"));
+   m_properties[PropertyNames::Yeast::minTemperature_c]    = new PropertySchema( PropertyNames::Yeast::minTemperature_c,    kcolYeastMinTemp,    kxmlPropMinTemp,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Yeast::maxTemperature_c]    = new PropertySchema( PropertyNames::Yeast::maxTemperature_c,    kcolYeastMaxTemp,    kxmlPropMaxTemp,    QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Yeast::flocculation]       = new PropertySchema( PropertyNames::Yeast::flocculationString, kcolYeastFloc,       kxmlPropFloc,       QString("text"), QObject::tr("'Medium'"));
+   m_properties[PropertyNames::Yeast::attenuation_pct]   = new PropertySchema( PropertyNames::Yeast::attenuation_pct,   kcolYeastAtten,      kxmlPropAtten,      QString("real"), QVariant(75.0));
+   m_properties[PropertyNames::Yeast::bestFor]    = new PropertySchema( PropertyNames::Yeast::bestFor,    kcolYeastBestFor,    kxmlPropBestFor,    QString("text"), QString("''"));
+   m_properties[PropertyNames::Yeast::timesCultured] = new PropertySchema( PropertyNames::Yeast::timesCultured, kcolYeastTimesCultd, kxmlPropTimesCultd, QString("int"), QVariant(0));
+   m_properties[PropertyNames::Yeast::maxReuse]   = new PropertySchema( PropertyNames::Yeast::maxReuse,   kcolYeastMaxReuse,   kxmlPropMaxReuse,   QString("int"), QVariant(10));
+   m_properties[PropertyNames::Yeast::addToSecondary]   = new PropertySchema( PropertyNames::Yeast::addToSecondary,   kcolYeastAddToSec,   kxmlPropAddToSec,   QString("boolean"), QVariant(false));
 
-   m_properties[kpropDisplay]    = new PropertySchema( kpropDisplay,    kcolDisplay,         QString(),          QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]    = new PropertySchema( kpropDeleted,    kcolDeleted,         QString(),          QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]     = new PropertySchema( kpropFolder,     kcolFolder,          QString(),          QString("text"),    QString("''"));
+   m_properties[PropertyNames::Ingredient::display]    = new PropertySchema( PropertyNames::Ingredient::display,    kcolDisplay,         QString(),          QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]    = new PropertySchema( PropertyNames::Ingredient::deleted,    kcolDeleted,         QString(),          QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]     = new PropertySchema( PropertyNames::Ingredient::folder,     kcolFolder,          QString(),          QString("text"),    QString("''"));
 
    m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
@@ -1113,42 +1121,42 @@ void TableSchema::defineBrewnoteTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropNotes]           = new PropertySchema( kpropNotes,           kcolNotes,                kxmlPropNotes,           QString("text"),    QString("''"));
+   m_properties[PropertyNames::BrewNote::notes]           = new PropertySchema( PropertyNames::BrewNote::notes,           kcolNotes,                kxmlPropNotes,           QString("text"),    QString("''"));
 
-   m_properties[kpropBrewDate]        = new PropertySchema( kpropBrewDate,        kcolBNoteBrewDate,        kxmlPropBrewDate,        QString("timestamp"), QString("CURRENT_TIMESTAMP"));
-   m_properties[kpropFermDate]        = new PropertySchema( kpropFermDate,        kcolBNoteFermDate,        kxmlPropFermDate,        QString("timestamp"), QString("CURRENT_TIMESTAMP"));
-   m_properties[kpropSG]              = new PropertySchema( kpropSG,              kcolBNoteSG,              kxmlPropSG,              QString("real"), QVariant(1.0));
-   m_properties[kpropVolIntoBoil]     = new PropertySchema( kpropVolIntoBoil,     kcolBNoteVolIntoBoil,     kxmlPropVolIntoBoil,     QString("real"), QVariant(0.0));
-   m_properties[kpropStrikeTemp]      = new PropertySchema( kpropStrikeTemp,      kcolBNoteStrikeTemp,      kxmlPropStrikeTemp,      QString("real"), QVariant(70.0));
-   m_properties[kpropMashFinTemp]     = new PropertySchema( kpropMashFinTemp,     kcolBNoteMashFinTemp,     kxmlPropMashFinTemp,     QString("real"), QVariant(67.0));
-   m_properties[kpropOG]              = new PropertySchema( kpropOG,              kcolBNoteOG,              kxmlPropOG,              QString("real"), QVariant(1.0));
-   m_properties[kpropPostBoilVol]     = new PropertySchema( kpropPostBoilVol,     kcolBNotePostBoilVol,     kxmlPropPostBoilVol,     QString("real"), QVariant(0.0));
-   m_properties[kpropVolIntoFerm]     = new PropertySchema( kpropVolIntoFerm,     kcolBNoteVolIntoFerm,     kxmlPropVolIntoFerm,     QString("real"), QVariant(0.0));
-   m_properties[kpropPitchTemp]       = new PropertySchema( kpropPitchTemp,       kcolBNotePitchTemp,       kxmlPropPitchTemp,       QString("real"), QVariant(20.0));
-   m_properties[kpropFG]              = new PropertySchema( kpropFG,              kcolBNoteFG,              kxmlPropFG,              QString("real"), QVariant(1.0));
-   m_properties[kpropEffIntoBoil]     = new PropertySchema( kpropEffIntoBoil,     kcolBNoteEffIntoBoil,     kxmlPropEffIntoBoil,     QString("real"), QVariant(70.0));
-   m_properties[kpropABV]             = new PropertySchema( kpropABV,             kcolBNoteABV,             kxmlPropABV,             QString("real"), QVariant(0.0));
-   m_properties[kpropProjOG]          = new PropertySchema( kpropProjOG,          kcolBNoteProjOG,          kxmlPropProjOG,          QString("real"), QVariant(1.0));
-   m_properties[kpropBrewhsEff]       = new PropertySchema( kpropBrewhsEff,       kcolBNoteBrewhsEff,       kxmlPropBrewhsEff,       QString("real"), QVariant(70.0));
-   m_properties[kpropProjBoilGrav]    = new PropertySchema( kpropProjBoilGrav,    kcolBNoteProjBoilGrav,    kxmlPropProjBoilGrav,    QString("real"), QVariant(1.0));
-   m_properties[kpropProjStrikeTemp]  = new PropertySchema( kpropProjStrikeTemp,  kcolBNoteProjStrikeTemp,  kxmlPropProjStrikeTemp,  QString("real"), QVariant(70.0));
-   m_properties[kpropProjMashFinTemp] = new PropertySchema( kpropProjMashFinTemp, kcolBNoteProjMashFinTemp, kxmlPropProjMashFinTemp, QString("real"), QVariant(67.0));
-   m_properties[kpropProjVolIntoBoil] = new PropertySchema( kpropProjVolIntoBoil, kcolBNoteProjVolIntoBoil, kxmlPropProjVolIntoBoil, QString("real"), QVariant(1.0));
-   m_properties[kpropProjOG]          = new PropertySchema( kpropProjOG,          kcolBNoteProjOG,          kxmlPropProjOG,          QString("real"), QVariant(1.0));
-   m_properties[kpropProjVolIntoFerm] = new PropertySchema( kpropProjVolIntoFerm, kcolBNoteProjVolIntoFerm, kxmlPropProjVolIntoFerm, QString("real"), QVariant(0.0));
-   m_properties[kpropProjFG]          = new PropertySchema( kpropProjFG,          kcolBNoteProjFG,          kxmlPropProjFG,          QString("real"), QVariant(1.0));
-   m_properties[kpropProjEff]         = new PropertySchema( kpropProjEff,         kcolBNoteProjEff,         kxmlPropProjEff,         QString("real"), QVariant(1.0));
-   m_properties[kpropProjABV]         = new PropertySchema( kpropProjABV,         kcolBNoteProjABV,         kxmlPropProjABV,         QString("real"), QVariant(1.0));
-   m_properties[kpropProjAtten]       = new PropertySchema( kpropProjAtten,       kcolBNoteProjAtten,       kxmlPropProjAtten,       QString("real"), QVariant(75.0));
-   m_properties[kpropProjPnts]        = new PropertySchema( kpropProjPnts,        kcolBNoteProjPnts,        kxmlPropProjPnts,        QString("real"), QVariant(1.0));
-   m_properties[kpropProjFermPnts]    = new PropertySchema( kpropProjFermPnts,    kcolBNoteProjFermPnts,    kxmlPropProjFermPnts,    QString("real"), QVariant(1.0));
-   m_properties[kpropBoilOff]         = new PropertySchema( kpropBoilOff,         kcolBNoteBoilOff,         kxmlPropBoilOff,         QString("real"), QVariant(1.0));
-   m_properties[kpropFinVol]          = new PropertySchema( kpropFinVol,          kcolBNoteFinVol,          kxmlPropFinVol,          QString("real"), QVariant(1.0));
-   m_properties[kpropAtten]           = new PropertySchema( kpropAtten,           kcolBNoteAtten,           kxmlPropAtten,           QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::brewDate]        = new PropertySchema( PropertyNames::BrewNote::brewDate,        kcolBNoteBrewDate,        kxmlPropBrewDate,        QString("timestamp"), QString("CURRENT_TIMESTAMP"));
+   m_properties[PropertyNames::BrewNote::fermentDate]        = new PropertySchema( PropertyNames::BrewNote::fermentDate,        kcolBNoteFermDate,        kxmlPropFermDate,        QString("timestamp"), QString("CURRENT_TIMESTAMP"));
+   m_properties[PropertyNames::BrewNote::sg]              = new PropertySchema( PropertyNames::BrewNote::sg,              kcolBNoteSG,              kxmlPropSG,              QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::volumeIntoBK_l]     = new PropertySchema( PropertyNames::BrewNote::volumeIntoBK_l,     kcolBNoteVolIntoBoil,     kxmlPropVolIntoBoil,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::BrewNote::strikeTemp_c]      = new PropertySchema( PropertyNames::BrewNote::strikeTemp_c,      kcolBNoteStrikeTemp,      kxmlPropStrikeTemp,      QString("real"), QVariant(70.0));
+   m_properties[PropertyNames::BrewNote::mashFinTemp_c]     = new PropertySchema( PropertyNames::BrewNote::mashFinTemp_c,     kcolBNoteMashFinTemp,     kxmlPropMashFinTemp,     QString("real"), QVariant(67.0));
+   m_properties[PropertyNames::BrewNote::og]              = new PropertySchema( PropertyNames::BrewNote::og,              kcolBNoteOG,              kxmlPropOG,              QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::postBoilVolume_l]     = new PropertySchema( PropertyNames::BrewNote::postBoilVolume_l,     kcolBNotePostBoilVol,     kxmlPropPostBoilVol,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::BrewNote::volumeIntoFerm_l]     = new PropertySchema( PropertyNames::BrewNote::volumeIntoFerm_l,     kcolBNoteVolIntoFerm,     kxmlPropVolIntoFerm,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::BrewNote::pitchTemp_c]       = new PropertySchema( PropertyNames::BrewNote::pitchTemp_c,       kcolBNotePitchTemp,       kxmlPropPitchTemp,       QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::BrewNote::fg]              = new PropertySchema( PropertyNames::BrewNote::fg,              kcolBNoteFG,              kxmlPropFG,              QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::effIntoBK_pct]     = new PropertySchema( PropertyNames::BrewNote::effIntoBK_pct,     kcolBNoteEffIntoBoil,     kxmlPropEffIntoBoil,     QString("real"), QVariant(70.0));
+   m_properties[PropertyNames::BrewNote::abv]             = new PropertySchema( PropertyNames::BrewNote::abv,             kcolBNoteABV,             kxmlPropABV,             QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::BrewNote::projOg]          = new PropertySchema( PropertyNames::BrewNote::projOg,          kcolBNoteProjOG,          kxmlPropProjOG,          QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::brewhouseEff_pct]       = new PropertySchema( PropertyNames::BrewNote::brewhouseEff_pct,       kcolBNoteBrewhsEff,       kxmlPropBrewhsEff,       QString("real"), QVariant(70.0));
+   m_properties[PropertyNames::BrewNote::projBoilGrav]    = new PropertySchema( PropertyNames::BrewNote::projBoilGrav,    kcolBNoteProjBoilGrav,    kxmlPropProjBoilGrav,    QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::projStrikeTemp_c]  = new PropertySchema( PropertyNames::BrewNote::projStrikeTemp_c,  kcolBNoteProjStrikeTemp,  kxmlPropProjStrikeTemp,  QString("real"), QVariant(70.0));
+   m_properties[PropertyNames::BrewNote::projMashFinTemp_c] = new PropertySchema( PropertyNames::BrewNote::projMashFinTemp_c, kcolBNoteProjMashFinTemp, kxmlPropProjMashFinTemp, QString("real"), QVariant(67.0));
+   m_properties[PropertyNames::BrewNote::projVolIntoBK_l] = new PropertySchema( PropertyNames::BrewNote::projVolIntoBK_l, kcolBNoteProjVolIntoBoil, kxmlPropProjVolIntoBoil, QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::projOg]          = new PropertySchema( PropertyNames::BrewNote::projOg,          kcolBNoteProjOG,          kxmlPropProjOG,          QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::projVolIntoFerm_l] = new PropertySchema( PropertyNames::BrewNote::projVolIntoFerm_l, kcolBNoteProjVolIntoFerm, kxmlPropProjVolIntoFerm, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::BrewNote::projFg]          = new PropertySchema( PropertyNames::BrewNote::projFg,          kcolBNoteProjFG,          kxmlPropProjFG,          QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::projEff_pct]         = new PropertySchema( PropertyNames::BrewNote::projEff_pct,         kcolBNoteProjEff,         kxmlPropProjEff,         QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::projABV_pct]         = new PropertySchema( PropertyNames::BrewNote::projABV_pct,         kcolBNoteProjABV,         kxmlPropProjABV,         QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::projAtten]       = new PropertySchema( PropertyNames::BrewNote::projAtten,       kcolBNoteProjAtten,       kxmlPropProjAtten,       QString("real"), QVariant(75.0));
+   m_properties[PropertyNames::BrewNote::projPoints]        = new PropertySchema( PropertyNames::BrewNote::projPoints,        kcolBNoteProjPnts,        kxmlPropProjPnts,        QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::projFermPoints]    = new PropertySchema( PropertyNames::BrewNote::projFermPoints,    kcolBNoteProjFermPnts,    kxmlPropProjFermPnts,    QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::boilOff_l]         = new PropertySchema( PropertyNames::BrewNote::boilOff_l,         kcolBNoteBoilOff,         kxmlPropBoilOff,         QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::finalVolume_l]          = new PropertySchema( PropertyNames::BrewNote::finalVolume_l,          kcolBNoteFinVol,          kxmlPropFinVol,          QString("real"), QVariant(1.0));
+   m_properties[PropertyNames::BrewNote::attenuation]           = new PropertySchema( PropertyNames::BrewNote::attenuation,           kcolBNoteAtten,           kxmlPropAtten,           QString("real"), QVariant(1.0));
 
-   m_properties[kpropDisplay]         = new PropertySchema( kpropDisplay,         kcolDisplay,              QString(),               QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]         = new PropertySchema( kpropDeleted,         kcolDeleted,              QString(),               QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]          = new PropertySchema( kpropFolder,          kcolFolder,              QString(),               QString("text"), QString("''"));
+   m_properties[PropertyNames::Ingredient::display]         = new PropertySchema( PropertyNames::Ingredient::display,         kcolDisplay,              QString(),               QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]         = new PropertySchema( PropertyNames::Ingredient::deleted,         kcolDeleted,              QString(),               QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]          = new PropertySchema( PropertyNames::Ingredient::folder,          kcolFolder,              QString(),               QString("text"), QString("''"));
 
    m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, QString("integer"), Brewtarget::RECTABLE);
 
@@ -1167,26 +1175,26 @@ void TableSchema::defineWaterTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]        = new PropertySchema( kpropName,        kcolName,             kxmlPropName,        QString("text"),    QString("''"), QString("not null"));
-   m_properties[kpropNotes]       = new PropertySchema( kpropNotes,       kcolNotes,            kxmlPropNotes,       QString("text"),    QString("''"));
-   m_properties[kpropAmount]      = new PropertySchema( kpropAmount,      kcolAmount,           kxmlPropAmount,      QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Ingredient::name]        = new PropertySchema( PropertyNames::Ingredient::name,        kcolName,             kxmlPropName,        QString("text"),    QString("''"), QString("not null"));
+   m_properties[PropertyNames::Water::notes]       = new PropertySchema( PropertyNames::Water::notes,       kcolNotes,            kxmlPropNotes,       QString("text"),    QString("''"));
+   m_properties[PropertyNames::Water::amount]      = new PropertySchema( PropertyNames::Water::amount,      kcolAmount,           kxmlPropAmount,      QString("real"),    QVariant(0.0));
 
-   m_properties[kpropCalcium]     = new PropertySchema( kpropCalcium,     kcolWaterCalcium,     kxmlPropCalcium,     QString("real"),    QVariant(0.0));
-   m_properties[kpropBiCarbonate] = new PropertySchema( kpropBiCarbonate, kcolWaterBiCarbonate, kxmlPropBiCarbonate, QString("real"),    QVariant(0.0));
-   m_properties[kpropSulfate]     = new PropertySchema( kpropSulfate,     kcolWaterSulfate,     kxmlPropSulfate,     QString("real"),    QVariant(0.0));
-   m_properties[kpropSodium]      = new PropertySchema( kpropSodium,      kcolWaterSodium,      kxmlPropSodium,      QString("real"),    QVariant(0.0));
-   m_properties[kpropChloride]    = new PropertySchema( kpropChloride,    kcolWaterChloride,    kxmlPropChloride,    QString("real"),    QVariant(0.0));
-   m_properties[kpropMagnesium]   = new PropertySchema( kpropMagnesium,   kcolWaterMagnesium,   kxmlPropMagnesium,   QString("real"),    QVariant(0.0));
-   m_properties[kpropPH]          = new PropertySchema( kpropPH,          kcolPH,               kxmlPropPH,          QString("real"),    QVariant(0.0));
-   m_properties[kpropAlkalinity]  = new PropertySchema( kpropAlkalinity,  kcolWaterAlkalinity,  QString(),           QString("real"),    QVariant(0.0));
-   m_properties[kpropType]        = new PropertySchema( kpropType,        kcolWaterType,        QString(),           QString("int"),     QVariant(0));
-   m_properties[kpropMashRO]      = new PropertySchema( kpropMashRO,      kcolWaterMashRO,      QString(),           QString("real"),    QVariant(0.0));
-   m_properties[kpropSpargeRO]    = new PropertySchema( kpropSpargeRO,    kcolWaterSpargeRO,    QString(),           QString("real"),    QVariant(0.0));
-   m_properties[kpropAsHCO3]      = new PropertySchema( kpropAsHCO3,      kcolWaterAsHCO3,      QString(),           QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Water::calcium_ppm]     = new PropertySchema( PropertyNames::Water::calcium_ppm,     kcolWaterCalcium,     kxmlPropCalcium,     QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::bicarbonate_ppm] = new PropertySchema( PropertyNames::Water::bicarbonate_ppm, kcolWaterBiCarbonate, kxmlPropBiCarbonate, QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::sulfate_ppm]     = new PropertySchema( PropertyNames::Water::sulfate_ppm,     kcolWaterSulfate,     kxmlPropSulfate,     QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::sodium_ppm]      = new PropertySchema( PropertyNames::Water::sodium_ppm,      kcolWaterSodium,      kxmlPropSodium,      QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::chloride_ppm]    = new PropertySchema( PropertyNames::Water::chloride_ppm,    kcolWaterChloride,    kxmlPropChloride,    QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::magnesium_ppm]   = new PropertySchema( PropertyNames::Water::magnesium_ppm,   kcolWaterMagnesium,   kxmlPropMagnesium,   QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::ph]          = new PropertySchema( PropertyNames::Water::ph,          kcolPH,               kxmlPropPH,          QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::alkalinity]  = new PropertySchema( PropertyNames::Water::alkalinity,  kcolWaterAlkalinity,  QString(),           QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::type]        = new PropertySchema( PropertyNames::Water::type,        kcolWaterType,        QString(),           QString("int"),     QVariant(0));
+   m_properties[PropertyNames::Water::mashRO]      = new PropertySchema( PropertyNames::Water::mashRO,      kcolWaterMashRO,      QString(),           QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::spargeRO]    = new PropertySchema( PropertyNames::Water::spargeRO,    kcolWaterSpargeRO,    QString(),           QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Water::alkalinityAsHCO3]      = new PropertySchema( PropertyNames::Water::alkalinityAsHCO3,      kcolWaterAsHCO3,      QString(),           QString("boolean"), QVariant(true));
 
-   m_properties[kpropDisplay]     = new PropertySchema( kpropDisplay,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]     = new PropertySchema( kpropDeleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]      = new PropertySchema( kpropFolder,      kcolFolder,           QString(),           QString("text"),    QString("''"));
+   m_properties[PropertyNames::Ingredient::display]     = new PropertySchema( PropertyNames::Ingredient::display,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]     = new PropertySchema( PropertyNames::Ingredient::deleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]      = new PropertySchema( PropertyNames::Ingredient::folder,      kcolFolder,           QString(),           QString("text"),    QString("''"));
 
 }
 
@@ -1201,18 +1209,18 @@ void TableSchema::defineSaltTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[kpropName]     = new PropertySchema( kpropName,     kcolName,         QString(), QString("text"),    QString("''"), QString("not null"));
-   m_properties[kpropAmount]   = new PropertySchema( kpropAmount,   kcolAmount,       QString(), QString("real"),    QVariant(0.0));
-   m_properties[kpropAmtIsWgt] = new PropertySchema( kpropAmtIsWgt, kcolSaltAmtIsWgt, QString(), QString("boolean"), QVariant(true));
-   m_properties[kpropPctAcid]  = new PropertySchema( kpropPctAcid,  kcolSaltPctAcid,  QString(), QString("real"),    QVariant(0.0));
-   m_properties[kpropIsAcid]   = new PropertySchema( kpropIsAcid,   kcolSaltIsAcid,   QString(), QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::name]     = new PropertySchema( PropertyNames::Ingredient::name,     kcolName,         QString(), QString("text"),    QString("''"), QString("not null"));
+   m_properties[PropertyNames::Salt::amount]   = new PropertySchema( PropertyNames::Salt::amount,   kcolAmount,       QString(), QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Salt::amountIsWeight] = new PropertySchema( PropertyNames::Salt::amountIsWeight, kcolSaltAmtIsWgt, QString(), QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Salt::percentAcid]  = new PropertySchema( PropertyNames::Salt::percentAcid,  kcolSaltPctAcid,  QString(), QString("real"),    QVariant(0.0));
+   m_properties[PropertyNames::Salt::isAcid]   = new PropertySchema( PropertyNames::Salt::isAcid,   kcolSaltIsAcid,   QString(), QString("boolean"), QVariant(false));
 
-   m_properties[kpropType]     = new PropertySchema( kpropType,    kcolSaltType,  QString(), QString("int"),     QVariant(0));
-   m_properties[kpropAddTo]    = new PropertySchema( kpropAddTo,   kcolSaltAddTo, QString(), QString("int"),     QVariant(0));
+   m_properties[PropertyNames::Salt::type]     = new PropertySchema( PropertyNames::Salt::type,    kcolSaltType,  QString(), QString("int"),     QVariant(0));
+   m_properties[PropertyNames::Salt::addTo]    = new PropertySchema( PropertyNames::Salt::addTo,   kcolSaltAddTo, QString(), QString("int"),     QVariant(0));
 
-   m_properties[kpropDisplay]  = new PropertySchema( kpropDisplay, kcolDisplay,   QString(), QString("boolean"), QVariant(true));
-   m_properties[kpropDeleted]  = new PropertySchema( kpropDeleted, kcolDeleted,   QString(), QString("boolean"), QVariant(false));
-   m_properties[kpropFolder]   = new PropertySchema( kpropFolder,  kcolFolder,    QString(), QString("text"),    QString("''"));
+   m_properties[PropertyNames::Ingredient::display]  = new PropertySchema( PropertyNames::Ingredient::display, kcolDisplay,   QString(), QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::Ingredient::deleted]  = new PropertySchema( PropertyNames::Ingredient::deleted, kcolDeleted,   QString(), QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::Ingredient::folder]   = new PropertySchema( PropertyNames::Ingredient::folder,  kcolFolder,    QString(), QString("text"),    QString("''"));
 
    m_foreignKeys[kpropMiscId]  = new PropertySchema( kpropMiscId, kcolMiscId, QString("integer"), Brewtarget::MISCTABLE);
 }
@@ -1284,7 +1292,7 @@ void TableSchema::defineFermInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropInventory]      = new PropertySchema( kpropInventory,     kcolAmount,        kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Fermentable::inventory]      = new PropertySchema( PropertyNames::Fermentable::inventory,     kcolAmount,        kxmlPropAmount, QString("real"), QVariant(0.0));
 }
 
 void TableSchema::defineHopInventoryTable()
@@ -1295,7 +1303,7 @@ void TableSchema::defineHopInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropInventory] = new PropertySchema( kpropInventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Hop::inventory] = new PropertySchema( PropertyNames::Hop::inventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
 }
 
 void TableSchema::defineMiscInventoryTable()
@@ -1306,7 +1314,7 @@ void TableSchema::defineMiscInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropInventory] = new PropertySchema( kpropInventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Misc::inventory] = new PropertySchema( PropertyNames::Misc::inventory, kcolAmount, kxmlPropAmount, QString("real"), QVariant(0.0));
 
 }
 
@@ -1318,7 +1326,7 @@ void TableSchema::defineYeastInventoryTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[kpropInventory] = new PropertySchema( kpropQuanta,  kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Yeast::inventory] = new PropertySchema( kpropQuanta,  kcolYeastQuanta, kxmlPropAmount, QString("real"), QVariant(0.0));
 
 }
 

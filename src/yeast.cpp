@@ -182,7 +182,7 @@ double Yeast::attenuation_pct() const { return m_attenuation_pct; }
 
 int Yeast::inventory() {
    if ( m_inventory < 0 ) {
-      m_inventory = getInventory(kpropInventory).toInt();
+      m_inventory = getInventory(PropertyNames::Yeast::inventory).toInt();
    }
    return m_inventory;
 }
@@ -255,7 +255,7 @@ void Yeast::setType( Yeast::Type t )
    m_type = t;
    m_typeString = types.at(t);
    if ( ! m_cacheOnly ) {
-      setEasy(kpropType, m_typeString);
+      setEasy(PropertyNames::Yeast::type, m_typeString);
    }
 }
 
@@ -264,7 +264,7 @@ void Yeast::setForm( Yeast::Form f )
    m_form = f;
    m_formString = forms.at(f);
    if ( ! m_cacheOnly ) {
-      setEasy(kpropForm, m_formString);
+      setEasy(PropertyNames::Yeast::form, m_formString);
    }
 }
 
@@ -275,7 +275,7 @@ void Yeast::setAmount( double var )
    else {
       m_amount = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropAmount, var);
+         setEasy(PropertyNames::Yeast::amount, var);
       }
    }
 }
@@ -305,7 +305,7 @@ void Yeast::setAmountIsWeight( bool var )
 {
    m_amountIsWeight = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAmtIsWgt, var);
+      setEasy(PropertyNames::Yeast::amountIsWeight, var);
    }
 }
 
@@ -313,7 +313,7 @@ void Yeast::setLaboratory( const QString& var )
 {
    m_laboratory = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropLab, var);
+      setEasy(PropertyNames::Yeast::laboratory, var);
    }
 }
 
@@ -321,7 +321,7 @@ void Yeast::setProductID( const QString& var )
 {
    m_productID = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropProductID, var);
+      setEasy(PropertyNames::Yeast::productID, var);
    }
 }
 
@@ -332,7 +332,7 @@ void Yeast::setMinTemperature_c( double var )
    else {
       m_minTemperature_c = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropMinTemp, var);
+         setEasy(PropertyNames::Yeast::minTemperature_c, var);
       }
    }
 }
@@ -344,7 +344,7 @@ void Yeast::setMaxTemperature_c( double var )
    else {
       m_maxTemperature_c = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropMaxTemp, var);
+         setEasy(PropertyNames::Yeast::maxTemperature_c, var);
       }
    }
 }
@@ -358,7 +358,7 @@ void Yeast::setFlocculation( Yeast::Flocculation f)
       m_flocculationString = flocculations.at(f);
 
       if ( ! m_cacheOnly ) {
-         setEasy(kpropFloc, flocculations.at(f));
+         setEasy(PropertyNames::Yeast::flocculation, flocculations.at(f));
       }
    }
 }
@@ -370,7 +370,7 @@ void Yeast::setAttenuation_pct( double var )
    else {
       m_attenuation_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropAttenPct, var);
+         setEasy(PropertyNames::Yeast::attenuation_pct, var);
       }
    }
 }
@@ -379,7 +379,7 @@ void Yeast::setNotes( const QString& var )
 {
    m_notes = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropNotes, var);
+      setEasy(PropertyNames::Yeast::notes, var);
    }
 }
 
@@ -387,7 +387,7 @@ void Yeast::setBestFor( const QString& var )
 {
    m_bestFor = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropBestFor, var);
+      setEasy(PropertyNames::Yeast::bestFor, var);
    }
 }
 
@@ -398,7 +398,7 @@ void Yeast::setTimesCultured( int var )
    else {
       m_timesCultured = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropTimesCultd, var);
+         setEasy(PropertyNames::Yeast::timesCultured, var);
       }
    }
 }
@@ -410,7 +410,7 @@ void Yeast::setMaxReuse( int var )
    else {
       m_maxReuse = var;
       if ( ! m_cacheOnly ) {
-         setEasy(kpropMaxReuse, var);
+         setEasy(PropertyNames::Yeast::maxReuse, var);
       }
    }
 }
@@ -419,7 +419,7 @@ void Yeast::setAddToSecondary( bool var )
 {
    m_addToSecondary = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAddToSec, var);
+      setEasy(PropertyNames::Yeast::addToSecondary, var);
    }
 }
 

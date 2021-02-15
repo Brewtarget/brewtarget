@@ -105,7 +105,7 @@ void MashListModel::mashChanged(QMetaProperty prop, QVariant val)
       return;
    
    QString propName(prop.name());
-   if( propName == "name" )
+   if( propName == PropertyNames::Ingredient::name )
    {
       int ndx = mashes.indexOf(mSend);
       if( ndx >= 0 )

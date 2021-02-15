@@ -363,7 +363,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::String))
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                  "name",
+                                                  PropertyNames::Ingredient::name,
                                                   value.toString(),
                                                   tr("Change Yeast Name"));
          break;
@@ -371,7 +371,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::String) )
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                  "laboratory",
+                                                  PropertyNames::Yeast::laboratory,
                                                   value.toString(),
                                                   tr("Change Yeast Laboratory"));
          break;
@@ -379,7 +379,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::String) )
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                  "productID",
+                                                  PropertyNames::Yeast::productID,
                                                   value.toString(),
                                                   tr("Change Yeast Product ID"));
          break;

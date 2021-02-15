@@ -24,6 +24,16 @@
 #define _MASH_H
 
 #include "ingredient.h"
+namespace PropertyNames::Mash { static char const * const ph = "ph"; /* previously kpropPH */ }
+namespace PropertyNames::Mash { static char const * const tunSpecificHeat_calGC = "tunSpecificHeat_calGC"; /* previously kpropTunSpecHeat */ }
+namespace PropertyNames::Mash { static char const * const tunWeight_kg = "tunWeight_kg"; /* previously kpropTunWeight */ }
+namespace PropertyNames::MashStep { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::MashStep { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Mash { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Mash { static char const * const equipAdjust = "equipAdjust"; /* previously kpropEquipAdjust */ }
+namespace PropertyNames::Mash { static char const * const spargeTemp_c = "spargeTemp_c"; /* previously kpropSpargeTemp */ }
+namespace PropertyNames::Mash { static char const * const tunTemp_c = "tunTemp_c"; /* previously kpropTunTemp */ }
+namespace PropertyNames::Mash { static char const * const grainTemp_c = "grainTemp_c"; /* previously kpropGrainTemp */ }
 
 // Forward declarations.
 class Mash;

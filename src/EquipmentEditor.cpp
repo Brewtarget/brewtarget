@@ -224,7 +224,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_evaporationRate->setSizePolicy(sizePolicy2);
                      lineEdit_evaporationRate->setMinimumSize(QSize(100, 0));
                      lineEdit_evaporationRate->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_evaporationRate->setProperty("editField", QVariant(QStringLiteral("evapRate_lHr")));
+                     lineEdit_evaporationRate->setProperty("editField", QVariant(QString(PropertyNames::Equipment::evapRate_lHr)));
                   label_topUpKettle = new BtVolumeLabel(groupBox_water);
                      label_topUpKettle->setObjectName(QStringLiteral("label_topUpKettle"));
                      sizePolicy1.setHeightForWidth(label_topUpKettle->sizePolicy().hasHeightForWidth());
@@ -236,7 +236,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_topUpKettle->setSizePolicy(sizePolicy2);
                      lineEdit_topUpKettle->setMinimumSize(QSize(100, 0));
                      lineEdit_topUpKettle->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_topUpKettle->setProperty("editField", QVariant(QStringLiteral("topUpKettle_l")));
+                     lineEdit_topUpKettle->setProperty("editField", QVariant(QString(PropertyNames::Equipment::topUpKettle_l)));
                   label_topUpWater = new BtVolumeLabel(groupBox_water);
                      label_topUpWater->setObjectName(QStringLiteral("label_topUpWater"));
                      sizePolicy1.setHeightForWidth(label_topUpWater->sizePolicy().hasHeightForWidth());
@@ -248,7 +248,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_topUpWater->setSizePolicy(sizePolicy2);
                      lineEdit_topUpWater->setMinimumSize(QSize(100, 0));
                      lineEdit_topUpWater->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_topUpWater->setProperty("editField", QVariant(QStringLiteral("topUpWater_l")));
+                     lineEdit_topUpWater->setProperty("editField", QVariant(QString(PropertyNames::Equipment::topUpWater_l)));
                   label_absorption = new QLabel(groupBox_water);
                      label_absorption->setObjectName(QStringLiteral("label_absorption"));
                   lineEdit_grainAbsorption = new BtGenericEdit(groupBox_water);
@@ -259,7 +259,7 @@ void EquipmentEditor::doLayout()
                      sizePolicy3.setHeightForWidth(lineEdit_grainAbsorption->sizePolicy().hasHeightForWidth());
                      lineEdit_grainAbsorption->setSizePolicy(sizePolicy3);
                      lineEdit_grainAbsorption->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_grainAbsorption->setProperty("editField", QVariant(QStringLiteral("grainAbsorption_LKg")));
+                     lineEdit_grainAbsorption->setProperty("editField", QVariant(QString(PropertyNames::Equipment::grainAbsorption_LKg)));
                   pushButton_absorption = new QPushButton(groupBox_water);
                      pushButton_absorption->setObjectName(QStringLiteral("pushButton_absorption"));
                   label_boilingPoint = new BtTemperatureLabel(groupBox_water);
@@ -270,7 +270,7 @@ void EquipmentEditor::doLayout()
                      sizePolicy3.setHeightForWidth(lineEdit_boilingPoint->sizePolicy().hasHeightForWidth());
                      lineEdit_boilingPoint->setSizePolicy(sizePolicy3);
                      lineEdit_boilingPoint->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_boilingPoint->setProperty("editField", QVariant(QStringLiteral("boilingPoint_c")));
+                     lineEdit_boilingPoint->setProperty("editField", QVariant(QString(PropertyNames::Equipment::boilingPoint_c)));
                   label_hopUtilization = new QLabel(groupBox_water);
                      label_hopUtilization->setObjectName(QStringLiteral("label_hopUtilization"));
                   lineEdit_hopUtilization = new BtGenericEdit(groupBox_water);
@@ -278,7 +278,7 @@ void EquipmentEditor::doLayout()
                      sizePolicy3.setHeightForWidth(lineEdit_hopUtilization->sizePolicy().hasHeightForWidth());
                      lineEdit_hopUtilization->setSizePolicy(sizePolicy3);
                      lineEdit_hopUtilization->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_hopUtilization->setProperty("editField", QVariant(QStringLiteral("hopUtilization_pct")));
+                     lineEdit_hopUtilization->setProperty("editField", QVariant(QString(PropertyNames::Equipment::hopUtilization_pct)));
                   formLayout_water->setWidget(0, QFormLayout::LabelRole, label_boilTime);
                   formLayout_water->setWidget(0, QFormLayout::FieldRole, lineEdit_boilTime);
                   formLayout_water->setWidget(1, QFormLayout::LabelRole, label_evaporationRate);
@@ -315,7 +315,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_tunVolume->setSizePolicy(sizePolicy2);
                      lineEdit_tunVolume->setMinimumSize(QSize(100, 0));
                      lineEdit_tunVolume->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_tunVolume->setProperty("editField", QVariant(QStringLiteral("tunVolume_l")));
+                     lineEdit_tunVolume->setProperty("editField", QVariant(QString(PropertyNames::Equipment::tunVolume_l)));
                   label_tunWeight = new BtMassLabel(groupBox_mashTun);
                      label_tunWeight->setObjectName(QStringLiteral("label_tunWeight"));
                      sizePolicy1.setHeightForWidth(label_tunWeight->sizePolicy().hasHeightForWidth());
@@ -359,7 +359,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_trubChillerLoss->setSizePolicy(sizePolicy2);
                      lineEdit_trubChillerLoss->setMinimumSize(QSize(100, 0));
                      lineEdit_trubChillerLoss->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_trubChillerLoss->setProperty("editField", QVariant(QStringLiteral("trubChillerLoss_l")));
+                     lineEdit_trubChillerLoss->setProperty("editField", QVariant(QString(PropertyNames::Equipment::trubChillerLoss_l)));
                   label_lauterDeadspace = new BtVolumeLabel(groupBox_losses);
                      label_lauterDeadspace->setObjectName(QStringLiteral("label_lauterDeadspace"));
                      sizePolicy1.setHeightForWidth(label_lauterDeadspace->sizePolicy().hasHeightForWidth());
@@ -371,7 +371,7 @@ void EquipmentEditor::doLayout()
                      lineEdit_lauterDeadspace->setSizePolicy(sizePolicy2);
                      lineEdit_lauterDeadspace->setMinimumSize(QSize(100, 0));
                      lineEdit_lauterDeadspace->setMaximumSize(QSize(100, 16777215));
-                     lineEdit_lauterDeadspace->setProperty("editField", QVariant(QStringLiteral("lauterDeadspace_l")));
+                     lineEdit_lauterDeadspace->setProperty("editField", QVariant(QString(PropertyNames::Equipment::lauterDeadspace_l)));
                   formLayout_losses->setWidget(0, QFormLayout::LabelRole, label_trubChillerLoss);
                   formLayout_losses->setWidget(0, QFormLayout::FieldRole, lineEdit_trubChillerLoss);
                   formLayout_losses->setWidget(1, QFormLayout::LabelRole, label_lauterDeadspace);

@@ -72,9 +72,10 @@ SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 #==============================Compile flags===================================
 
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
-# Enable and enforce c++11 standards, so that we may lambda
-set(CMAKE_CXX_STANDARD 11)
+# We need C++17 or later for nested namespaces (and C++11 or later for lambdas)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED_ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )
@@ -105,7 +106,7 @@ IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
 
-ADD_DEFINITIONS("-std=c++14")
+
 
 #============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")

@@ -313,7 +313,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
          if( value.canConvert(QVariant::String) )
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     "name",
+                                                     PropertyNames::Ingredient::name,
                                                      value.toString(),
                                                      tr("Change Misc Name"));
          }
@@ -341,7 +341,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
             return false;
 
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                   "time",
+                                                   PropertyNames::Misc::time,
                                                    Brewtarget::qStringToSI(value.toString(), Units::minutes, dspUnit, dspScl),
                                                    tr("Change Misc Time"));
          break;
@@ -501,7 +501,7 @@ QString MiscTableModel::generateName(int column) const
          attribute = "amount";
          break;
       case MISCTIMECOL:
-         attribute = "time";
+         attribute = PropertyNames::Misc::time;
          break;
       default:
          attribute = "";

@@ -103,7 +103,7 @@ void Salt::setAmount( double var )
 {
    m_amount = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAmount, var);
+      setEasy(PropertyNames::Salt::amount, var);
    }
 }
 
@@ -115,7 +115,7 @@ void Salt::setAddTo( Salt::WhenToAdd var )
 
    m_add_to = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAddTo, var);
+      setEasy(PropertyNames::Salt::addTo, var);
    }
 }
 
@@ -132,9 +132,9 @@ void Salt::setType(Salt::Types type)
    m_amount_is_weight = ! (type == LACTIC || type == H3PO4);
 
    if ( ! m_cacheOnly ) {
-      setEasy(kpropType, type);
-      setEasy(kpropIsAcid, m_is_acid);
-      setEasy(kpropAmtIsWgt, m_amount_is_weight);
+      setEasy(PropertyNames::Salt::type, type);
+      setEasy(PropertyNames::Salt::isAcid, m_is_acid);
+      setEasy(PropertyNames::Salt::amountIsWeight, m_amount_is_weight);
    }
 }
 
@@ -142,7 +142,7 @@ void Salt::setAmountIsWeight( bool var )
 {
    m_amount_is_weight = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropAmtIsWgt, var);
+      setEasy(PropertyNames::Salt::amountIsWeight, var);
    }
 }
 
@@ -150,7 +150,7 @@ void Salt::setIsAcid( bool var )
 {
    m_is_acid = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropIsAcid, var);
+      setEasy(PropertyNames::Salt::isAcid, var);
    }
 }
 
@@ -158,7 +158,7 @@ void Salt::setPercentAcid(double var)
 {
    m_percent_acid = var;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropPctAcid, var);
+      setEasy(PropertyNames::Salt::percentAcid, var);
    }
 }
 void Salt::setCacheOnly(bool cache) { m_cacheOnly = cache; }

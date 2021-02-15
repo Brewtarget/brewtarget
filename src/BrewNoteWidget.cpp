@@ -63,7 +63,7 @@ void BrewNoteWidget::updateDateFormat(Unit::unitDisplay display,Unit::unitScale 
 {
    QString format;
    // I need the new unit, not the old
-   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option("fermentDate", Brewtarget::getDateFormat(), "page_postferment", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option(PropertyNames::BrewNote::fermentDate, Brewtarget::getDateFormat(), "page_postferment", Brewtarget::UNIT).toInt();
 
    switch(unitDsp)
    {
@@ -89,7 +89,7 @@ void BrewNoteWidget::updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale old
    int precision = 3;
 
    // I don't think we care about the old unit or scale, just the new ones
-   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option("projOg", Unit::noUnit, "page_preboil", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option(PropertyNames::BrewNote::projOg, Unit::noUnit, "page_preboil", Brewtarget::UNIT).toInt();
 
 
    if ( unitDsp == Unit::noUnit )
@@ -98,7 +98,7 @@ void BrewNoteWidget::updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale old
    if ( unitDsp == Unit::displayPlato )
       precision = 0;
 
-   quant = Brewtarget::amountDisplay(bNoteObs, page_preboil, "projOg",Units::sp_grav);
+   quant = Brewtarget::amountDisplay(bNoteObs, page_preboil, PropertyNames::BrewNote::projOg,Units::sp_grav);
    lcdnumber_projectedOG->setLowLim(  low  * quant );
    lcdnumber_projectedOG->setHighLim( high * quant );
    lcdnumber_projectedOG->display(quant, precision);

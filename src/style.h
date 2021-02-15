@@ -25,6 +25,28 @@
 #include <QString>
 #include <QStringList>
 #include "ingredient.h"
+namespace PropertyNames::Style { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::Style { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Style { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Style { static char const * const examples = "examples"; /* previously kpropExamples */ }
+namespace PropertyNames::Style { static char const * const ingredients = "ingredients"; /* previously kpropIngreds */ }
+namespace PropertyNames::Style { static char const * const profile = "profile"; /* previously kpropProfile */ }
+namespace PropertyNames::Style { static char const * const abvMax_pct = "abvMax_pct"; /* previously kpropABVMax */ }
+namespace PropertyNames::Style { static char const * const abvMin_pct = "abvMin_pct"; /* previously kpropABVMin */ }
+namespace PropertyNames::Style { static char const * const carbMax_vol = "carbMax_vol"; /* previously kpropCarbMax */ }
+namespace PropertyNames::Style { static char const * const carbMin_vol = "carbMin_vol"; /* previously kpropCarbMin */ }
+namespace PropertyNames::Style { static char const * const colorMax_srm = "colorMax_srm"; /* previously kpropColorMax */ }
+namespace PropertyNames::Style { static char const * const colorMin_srm = "colorMin_srm"; /* previously kpropColorMin */ }
+namespace PropertyNames::Style { static char const * const ibuMax = "ibuMax"; /* previously kpropIBUMax */ }
+namespace PropertyNames::Style { static char const * const ibuMin = "ibuMin"; /* previously kpropIBUMin */ }
+namespace PropertyNames::Style { static char const * const fgMax = "fgMax"; /* previously kpropFGMax */ }
+namespace PropertyNames::Style { static char const * const fgMin = "fgMin"; /* previously kpropFGMin */ }
+namespace PropertyNames::Style { static char const * const ogMax = "ogMax"; /* previously kpropOGMax */ }
+namespace PropertyNames::Style { static char const * const ogMin = "ogMin"; /* previously kpropOGMin */ }
+namespace PropertyNames::Style { static char const * const styleGuide = "styleGuide"; /* previously kpropGuide */ }
+namespace PropertyNames::Style { static char const * const styleLetter = "styleLetter"; /* previously kpropLetter */ }
+namespace PropertyNames::Style { static char const * const categoryNumber = "categoryNumber"; /* previously kpropCatNum */ }
+namespace PropertyNames::Style { static char const * const category = "category"; /* previously kpropCat */ }
 
 // Forward declarations.
 class Style;

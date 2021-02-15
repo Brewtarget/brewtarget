@@ -26,6 +26,25 @@
 #include "ingredient.h"
 #include <QString>
 #include <QStringList>
+namespace PropertyNames::Yeast { static char const * const amount = "amount"; /* previously kpropAmount */ }
+namespace PropertyNames::Yeast { static char const * const form = "form"; /* previously kpropForm */ }
+namespace PropertyNames::Yeast { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
+namespace PropertyNames::Yeast { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
+namespace PropertyNames::Yeast { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::Yeast { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Yeast { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Yeast { static char const * const addToSecondary = "addToSecondary"; /* previously kpropAddToSec */ }
+namespace PropertyNames::Yeast { static char const * const maxReuse = "maxReuse"; /* previously kpropMaxReuse */ }
+namespace PropertyNames::Yeast { static char const * const timesCultured = "timesCultured"; /* previously kpropTimesCultd */ }
+namespace PropertyNames::Yeast { static char const * const bestFor = "bestFor"; /* previously kpropBestFor */ }
+namespace PropertyNames::Yeast { static char const * const attenuation_pct = "attenuation_pct"; /* previously kpropAttenPct */ }
+namespace PropertyNames::Yeast { static char const * const flocculationString = "flocculationString"; /* previously kpropFlocString */ }
+namespace PropertyNames::Yeast { static char const * const flocculation = "flocculation"; /* previously kpropFloc */ }
+namespace PropertyNames::Yeast { static char const * const maxTemperature_c = "maxTemperature_c"; /* previously kpropMaxTemp */ }
+namespace PropertyNames::Yeast { static char const * const minTemperature_c = "minTemperature_c"; /* previously kpropMinTemp */ }
+namespace PropertyNames::Yeast { static char const * const productID = "productID"; /* previously kpropProductID */ }
+namespace PropertyNames::Yeast { static char const * const laboratory = "laboratory"; /* previously kpropLab */ }
+namespace PropertyNames::Yeast { static char const * const formString = "formString"; /* previously kpropFormString */ }
 
 // Forward declarations.
 class Yeast;

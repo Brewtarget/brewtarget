@@ -140,7 +140,7 @@ void Style::setCategory( const QString& var )
 {
    m_category = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropCat, var );
+      setEasy( PropertyNames::Style::category, var );
    }
 }
 
@@ -148,7 +148,7 @@ void Style::setCategoryNumber( const QString& var )
 {
    m_categoryNumber = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropCatNum, var );
+      setEasy( PropertyNames::Style::categoryNumber, var );
    }
 }
 
@@ -156,7 +156,7 @@ void Style::setStyleLetter( const QString& var )
 {
    m_styleLetter = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropLetter, var );
+      setEasy( PropertyNames::Style::styleLetter, var );
    }
 }
 
@@ -164,7 +164,7 @@ void Style::setStyleGuide( const QString& var )
 {
    m_styleGuide = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropGuide, var );
+      setEasy( PropertyNames::Style::styleGuide, var );
    }
 }
 
@@ -173,7 +173,7 @@ void Style::setType( Type t )
    m_type = t;
    m_typeStr = m_types.at(t);
    if ( ! m_cacheOnly ) {
-      setEasy( kpropType, m_typeStr);
+      setEasy( PropertyNames::Style::type, m_typeStr);
    }
 }
 
@@ -186,7 +186,7 @@ void Style::setOgMin( double var )
    {
       m_ogMin = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropOGMin, var);
+         setEasy( PropertyNames::Style::ogMin, var);
       }
    }
 }
@@ -200,7 +200,7 @@ void Style::setOgMax( double var )
    {
       m_ogMax = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropOGMax, var);
+         setEasy( PropertyNames::Style::ogMax, var);
       }
    }
 }
@@ -214,7 +214,7 @@ void Style::setFgMin( double var )
    {
       m_fgMin = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropFGMin, var);
+         setEasy( PropertyNames::Style::fgMin, var);
       }
    }
 }
@@ -228,7 +228,7 @@ void Style::setFgMax( double var )
    {
       m_fgMax = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropFGMax, var);
+         setEasy( PropertyNames::Style::fgMax, var);
       }
    }
 }
@@ -242,7 +242,7 @@ void Style::setIbuMin( double var )
    {
       m_ibuMin = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropIBUMin, var);
+         setEasy( PropertyNames::Style::ibuMin, var);
       }
    }
 }
@@ -256,7 +256,7 @@ void Style::setIbuMax( double var )
    {
       m_ibuMax = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropIBUMax, var);
+         setEasy( PropertyNames::Style::ibuMax, var);
       }
    }
 }
@@ -270,7 +270,7 @@ void Style::setColorMin_srm( double var )
    {
       m_colorMin_srm = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropColorMin, var);
+         setEasy( PropertyNames::Style::colorMin_srm, var);
       }
    }
 }
@@ -284,7 +284,7 @@ void Style::setColorMax_srm( double var )
    {
       m_colorMax_srm = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropColorMax, var);
+         setEasy( PropertyNames::Style::colorMax_srm, var);
       }
    }
 }
@@ -298,7 +298,7 @@ void Style::setCarbMin_vol( double var )
    {
       m_carbMin_vol = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropCarbMin, var);
+         setEasy( PropertyNames::Style::carbMin_vol, var);
       }
    }
 }
@@ -312,7 +312,7 @@ void Style::setCarbMax_vol( double var )
    {
       m_carbMax_vol = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropCarbMax, var);
+         setEasy( PropertyNames::Style::carbMax_vol, var);
       }
    }
 }
@@ -326,7 +326,7 @@ void Style::setAbvMin_pct( double var )
    {
       m_abvMin_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropABVMin, var);
+         setEasy( PropertyNames::Style::abvMin_pct, var);
       }
    }
 }
@@ -339,7 +339,7 @@ void Style::setAbvMax_pct( double var )
    {
         m_abvMax_pct = var;
       if ( ! m_cacheOnly ) {
-         setEasy( kpropABVMax, var);
+         setEasy( PropertyNames::Style::abvMax_pct, var);
       }
    }
 }
@@ -348,7 +348,7 @@ void Style::setNotes( const QString& var )
 {
     m_notes = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropNotes, var);
+      setEasy( PropertyNames::Style::notes, var);
    }
 }
 
@@ -356,7 +356,7 @@ void Style::setProfile( const QString& var )
 {
     m_profile = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropProfile, var);
+      setEasy( PropertyNames::Style::profile, var);
    }
 }
 
@@ -364,7 +364,7 @@ void Style::setIngredients( const QString& var )
 {
     m_ingredients = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropIngreds, var);
+      setEasy( PropertyNames::Style::ingredients, var);
    }
 }
 
@@ -372,7 +372,7 @@ void Style::setExamples( const QString& var )
 {
     m_examples = var;
    if ( ! m_cacheOnly ) {
-      setEasy( kpropExamples, var);
+      setEasy( PropertyNames::Style::examples, var);
    }
 }
 
