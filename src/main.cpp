@@ -1,7 +1,8 @@
 /*
  * main.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - A.J. Drobnich <aj.drobnich@gmail.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Maxime Lavigne <duguigne@gmail.com>
@@ -23,6 +24,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QMessageBox>
+#include <QSharedMemory>
 #include "config.h"
 #include "brewtarget.h"
 #include "database.h"
@@ -46,6 +48,38 @@ int main(int argc, char **argv)
 #endif
 
    app.setApplicationVersion(VERSIONSTRING);
+
+   //
+   // Check whether another instance of Brewtarget is running.  We want to avoid two instances running at the same time
+   // because, at best, one of them will be locked out of the database (if using SQLite) and, at worst, race conditions
+   // etc between the two instances could lead to data loss/corruption.
+   //
+   // Using QSharedMemory seems to be the standard way to do this in Qt according to various discussions on Stack
+   // Overflow and Qt forums.  Essentially, we try to create one byte of cross-process shared memory with identifier
+   // "Brewtarget".  If this fails, it means another process (ie another instance of Brewtarget) has already created
+   // such shared memory (which gets automatically destroyed when the application exits).
+   //
+   // We want to allow the user to override this warning because, according to the Qt documentation, it is possible, on
+   // Linux, that we get a "false positive".  Specifically, if the application crashed, then the shared memory will not
+   // get cleaned up, so we need the user to be able to override the warning when they next run it.
+   //
+   QSharedMemory sharedMemory("Brewtarget");
+   if (!sharedMemory.create(1)) {
+      enum QMessageBox::StandardButton buttonPressed =
+         QMessageBox::warning(NULL,
+                              QApplication::tr("Brewtarget is already running!"),
+                              QApplication::tr("Another instance of Brewtarget is already running.\n\n"
+                                             "Running two copies of the program at once may lead to data loss.\n\n"
+                                             "Press OK to quit."),
+                              QMessageBox::Ignore | QMessageBox::Ok,
+                              QMessageBox::Ok);
+      if (buttonPressed == QMessageBox::Ok) {
+         // We haven't yet called exec on QApplication, so I'm not sure we _need_ to call exit() here, but it doesn't
+         // seem to hurt.
+         app.exit();
+         return EXIT_SUCCESS;
+      }
+   }
 
    QCommandLineParser parser;
    parser.addHelpOption();
