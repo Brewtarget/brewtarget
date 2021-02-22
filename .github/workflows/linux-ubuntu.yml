@@ -8,6 +8,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Dependencies
+        shell: bash
+        run: |
+          sudo apt-get install -y \
+            lintian \
+            rpmlint
+
 
       - name: Apply Patches
         shell: bash
