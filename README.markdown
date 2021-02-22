@@ -1,8 +1,8 @@
 # Brewtarget
 
-![Linux Workflow](https://github.com/cgspeck/brewtarget/actions/workflows/linux-ubuntu.yml/badge.svg)
+![Linux Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/linux-ubuntu.yml/badge.svg)
 
-![Windows Workflow](https://github.com/cgspeck/brewtarget/actions/workflows/windows.yml/badge.svg)
+![Windows Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/windows.yml/badge.svg)
 
 
 Brewtarget is free open-source brewing software, and a beer recipe creation
