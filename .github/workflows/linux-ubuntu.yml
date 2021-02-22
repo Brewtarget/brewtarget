@@ -57,6 +57,18 @@ jobs:
           umask 022
           make package
 
+      - name: Lintian
+        continue-on-error: true
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: lintian --profile debian --pedantic *.deb | less
+
+      - name: rpmlint
+        continue-on-error: true
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: rpmlint *.rpm | less
+
       - name: Upload Brewtarget Installers
         if: ${{ success() }}
         uses: actions/upload-artifact@v2
