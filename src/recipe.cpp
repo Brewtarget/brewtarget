@@ -1591,7 +1591,7 @@ void Recipe::recalcABV_pct()
       m_ABV_pct = ret;
       if (!m_uninitializedCalcs)
       {
-        emit changed( metaProperty("ABV_pct"), m_ABV_pct );
+        emit changed( metaProperty(PropertyNames::Recipe::ABV_pct), m_ABV_pct );
       }
    }
 }
@@ -1617,7 +1617,7 @@ void Recipe::recalcColor_srm()
       m_color_srm = ret;
       if (!m_uninitializedCalcs)
       {
-        emit changed( metaProperty("color_srm"), m_color_srm );
+        emit changed( metaProperty(PropertyNames::Recipe::color_srm), m_color_srm );
       }
    }
 
@@ -1651,7 +1651,7 @@ void Recipe::recalcIBU()
       m_IBU = ibus;
       if (!m_uninitializedCalcs)
       {
-        emit changed( metaProperty("IBU"), m_IBU );
+        emit changed( metaProperty(PropertyNames::Recipe::IBU), m_IBU );
       }
    }
 }
@@ -1734,28 +1734,28 @@ void Recipe::recalcVolumeEstimates()
    if ( ! qFuzzyCompare(tmp_wfm, m_wortFromMash_l ) ) {
       m_wortFromMash_l = tmp_wfm;
       if (!m_uninitializedCalcs) {
-        emit changed( metaProperty("wortFromMash_l"), m_wortFromMash_l );
+        emit changed( metaProperty(PropertyNames::Recipe::wortFromMash_l), m_wortFromMash_l );
       }
    }
 
    if ( ! qFuzzyCompare(tmp_bv, m_boilVolume_l ) ) {
         m_boilVolume_l = tmp_bv;
       if (!m_uninitializedCalcs) {
-        emit changed( metaProperty("boilVolume_l"), m_boilVolume_l );
+        emit changed( metaProperty(PropertyNames::Recipe::boilVolume_l), m_boilVolume_l );
       }
    }
 
    if ( ! qFuzzyCompare(tmp_fv, m_finalVolume_l ) ) {
        m_finalVolume_l = tmp_fv;
       if (!m_uninitializedCalcs) {
-        emit changed( metaProperty("finalVolume_l"), m_finalVolume_l );
+        emit changed( metaProperty(PropertyNames::Recipe::finalVolume_l), m_finalVolume_l );
       }
    }
 
    if ( ! qFuzzyCompare(tmp_pbv, m_postBoilVolume_l ) ) {
       m_postBoilVolume_l = tmp_pbv;
       if (!m_uninitializedCalcs) {
-        emit changed( metaProperty("postBoilVolume_l"), m_postBoilVolume_l );
+        emit changed( metaProperty(PropertyNames::Recipe::postBoilVolume_l), m_postBoilVolume_l );
       }
    }
 }
@@ -1781,7 +1781,7 @@ void Recipe::recalcGrainsInMash_kg()
    if ( ! qFuzzyCompare(ret, m_grainsInMash_kg )  ) {
       m_grainsInMash_kg = ret;
       if (!m_uninitializedCalcs) {
-        emit changed( metaProperty("grainsInMash_kg"), m_grainsInMash_kg );
+        emit changed( metaProperty(PropertyNames::Recipe::grainsInMash_kg), m_grainsInMash_kg );
       }
    }
 }
@@ -1799,7 +1799,7 @@ void Recipe::recalcGrains_kg()
    if ( ! qFuzzyCompare(ret, m_grains_kg ) ) {
       m_grains_kg = ret;
       if (!m_uninitializedCalcs) {
-        emit changed( metaProperty("grains_kg"), m_grains_kg );
+        emit changed( metaProperty(PropertyNames::Recipe::grains_kg), m_grains_kg );
       }
    }
 }
@@ -1813,7 +1813,7 @@ void Recipe::recalcSRMColor()
       m_SRMColor = tmp;
       if (!m_uninitializedCalcs)
       {
-        emit changed( metaProperty("SRMColor"), m_SRMColor );
+        emit changed( metaProperty(PropertyNames::Recipe::SRMColor), m_SRMColor );
       }
    }
 }
@@ -1851,7 +1851,7 @@ void Recipe::recalcCalories()
    if ( ! qFuzzyCompare(tmp, m_calories ) ) {
       m_calories = tmp;
       if (!m_uninitializedCalcs) {
-        emit changed( metaProperty("calories"), m_calories );
+        emit changed( metaProperty(PropertyNames::Recipe::calories), m_calories );
       }
    }
 }
@@ -1932,7 +1932,7 @@ void Recipe::recalcBoilGrav()
       m_boilGrav = ret;
       if (!m_uninitializedCalcs)
       {
-        emit changed( metaProperty("boilGrav"), m_boilGrav );
+        emit changed( metaProperty(PropertyNames::Recipe::boilGrav), m_boilGrav );
       }
    }
 }

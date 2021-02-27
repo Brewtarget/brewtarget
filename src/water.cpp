@@ -1,6 +1,6 @@
 /*
  * water.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,28 +18,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QVector>
 #include "water.h"
-#include "brewtarget.h"
+#include <QVector>
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
-#include "water.h"
 #include "brewtarget.h"
 
 #include "TableSchemaConst.h"
 #include "WaterSchema.h"
 #include "database.h"
-
-bool operator<(Water &w1, Water &w2)
-{
-   return w1.name() < w2.name();
-}
-
-bool operator==(Water &w1, Water &w2)
-{
-   return w1.name() == w2.name();
-}
 
 QString Water::classNameStr()
 {

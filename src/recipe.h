@@ -72,6 +72,18 @@ namespace PropertyNames::Recipe { static char const * const postBoilVolume_l = "
 namespace PropertyNames::Recipe { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
 
 
+namespace PropertyNames::Recipe { static char const * const ABV_pct = "ABV_pct"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const boilGrav = "boilGrav"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const IBU = "IBU"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const IBUs = "IBUs"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const wortFromMash_l = "wortFromMash_l"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const boilVolume_l = "boilVolume_l"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const calories = "calories"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const grainsInMash_kg = "grainsInMash_kg"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const grains_kg = "grains_kg"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const SRMColor = "SRMColor"; /* not stored */ }
+
+
 // Forward declarations.
 class Style;
 class Mash;

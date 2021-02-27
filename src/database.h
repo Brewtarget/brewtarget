@@ -355,7 +355,7 @@ public:
       if (!ing) return;
 
       const QMetaObject *meta = ing->metaObject();
-      QString propName;
+      char const * propName = "";
       Brewtarget::DBTable ingTable = dbDefn->classNameToTable(meta->className());
 
       if ( ingTable == Brewtarget::BREWNOTETABLE ) {
@@ -381,7 +381,7 @@ public:
 
       // Brewnotes are weird and don't emit a metapropery change
       if ( emitSignal )
-         emit changed( metaProperty(propName.toLatin1().data()), QVariant() );
+         emit changed( metaProperty(propName), QVariant() );
       // This was screaming until I needed to emit a freaking signal
       if ( ingTable != Brewtarget::MASHSTEPTABLE )
          emit deletedSignal(ing);
