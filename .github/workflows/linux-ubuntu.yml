@@ -1,6 +1,15 @@
 name: Linux
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - develop
+      - "stable/**"
+  pull_request:
+    branches:
+      - develop
+  schedule:
+    - cron: "0 2 * * *"
 
 jobs:
   build:
@@ -18,7 +27,6 @@ jobs:
             lintian \
             rpmlint
 
-
       - name: Apply Patches
         shell: bash
         working-directory: ${{github.workspace}}
@@ -28,7 +36,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           version: 5.12.0
-          extra: '-b http://ftp.jaist.ac.jp/pub/qtproject/'
+          extra: "-b http://ftp.jaist.ac.jp/pub/qtproject/"
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -85,6 +93,7 @@ jobs:
         with:
           name: brewtarget-linux-installers
           path: build/brewtarget*
+          retention-days: 7
 
       - name: Recover Debris Artifacts
         if: ${{ failure() }}
@@ -92,4 +101,4 @@ jobs:
         with:
           name: build-results
           path: build
-          retention-days: 2
+          retention-days: 1
