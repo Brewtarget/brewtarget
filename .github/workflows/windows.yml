@@ -17,19 +17,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install NSISLog Plugin
-        shell: bash
-        working-directory: ${{github.workspace}}
+
+      - name: Download and install NSIS plugins
         run: |
-          cp \
-            build-scripts/windows/vendor/NSISlog/plugin/nsislog.dll \
-            "C:/Program Files (x86)/NSIS/Plugins/x86-ansi"
-          cp \
-            build-scripts/windows/vendor/NSISLocate/Plugin/locate.dll \
-            "C:/Program Files (x86)/NSIS/Plugins/x86-ansi"
-          cp \
-            build-scripts/windows/vendor/NSISLocate/Include/Locate.nsh \
-            "C:/Program Files (x86)/NSIS/Include"
+          New-Item -ItemType Directory -Force -Path .\temp\nsis_plugins
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile .\temp\nsis_plugins\Locate.zip
+          Expand-Archive -Path .\temp\nsis_plugins\Locate.zip -DestinationPath .\temp\nsis_plugins\Locate
+          Copy-Item -Path ".\temp\nsis_plugins\Locate\Plugin\locate.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi"
+          Copy-Item -Path ".\temp\nsis_plugins\Locate\Include\Locate.nsh" -Destination "C:\Program Files (x86)\NSIS\Include"
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile .\temp\nsis_plugins\Nsislog.zip
+          Expand-Archive -Path .\temp\nsis_plugins\Nsislog.zip -DestinationPath .\temp\nsis_plugins\Nsislog
+          Copy-Item -Path ".\temp\nsis_plugins\Nsislog\plugin\nsislog.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi"
 
       - name: Apply Patches
         shell: bash
