@@ -838,7 +838,8 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
          case BtTreeItem::FERMENTABLE:
             Fermentable *copyFerm, *oldFerm;
             oldFerm = fermentable(ndx);
-            copyFerm = Database::instance().newFermentable(oldFerm); // Create a deep copy.
+            // Create a deep copy with a new inventory row
+            copyFerm = Database::instance().newFermentable(oldFerm,true); 
             if ( copyFerm )
                copyFerm->setName(name);
             else
@@ -847,7 +848,8 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
          case BtTreeItem::HOP:
             Hop *copyHop,  *oldHop;
             oldHop = hop(ndx);
-            copyHop = Database::instance().newHop(oldHop); // Create a deep copy.
+            // Create a deep copy with a new inventory row
+            copyHop = Database::instance().newHop(oldHop,true); 
             if ( copyHop )
                copyHop->setName(name);
             else
@@ -856,7 +858,8 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
          case BtTreeItem::MISC:
             Misc *copyMisc, *oldMisc;
             oldMisc = misc(ndx);
-            copyMisc = Database::instance().newMisc(oldMisc); // Create a deep copy.
+            // Create a deep copy with a new inventory row
+            copyMisc = Database::instance().newMisc(oldMisc,true);
             if ( copyMisc )
                copyMisc->setName(name);
             else
@@ -883,7 +886,8 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
          case BtTreeItem::YEAST:
             Yeast *copyYeast, *oldYeast;
             oldYeast = yeast(ndx);
-            copyYeast = Database::instance().newYeast(oldYeast); // Create a deep copy.
+            // Create a deep copy with a new inventory row
+            copyYeast = Database::instance().newYeast(oldYeast,true);
             if ( copyYeast )
                copyYeast->setName(name);
             else
