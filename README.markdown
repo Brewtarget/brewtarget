@@ -1,4 +1,8 @@
-# Brewtarget ![Build Status](https://travis-ci.org/Brewtarget/brewtarget.svg?branch=master)
+# Brewtarget
+
+![Linux Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/linux-ubuntu.yml/badge.svg)
+
+![Windows Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/windows.yml/badge.svg)
 
 Brewtarget is free open-source brewing software, and a beer recipe creation
 tool available for Linux, Mac, and Windows. It automatically calculates color,
@@ -48,13 +52,15 @@ Author list created with:
 
 * [Main website](http://www.brewtarget.org)
 * [Help group](https://groups.google.com/forum/?fromgroups=#!forum/brewtarget-help)
-* [Brewtarget PPA](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget-releases)
+* [Latest builds](https://github.com/Brewtarget/brewtarget/actions)
+* [Brewtarget PPA](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget-releases) (out of date)
 * [Bug tracker](https://github.com/Brewtarget/brewtarget/issues)
+
+Latest builds are available by logging into Github, following the "Latest builds" link above, drilling down into the relevant OS and downloading the installer package.
 
 ### For Developers
 
 * [Source code repository](https://github.com/Brewtarget/brewtarget)
-* [Daily builds](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget)
 * [Developers team](https://launchpad.net/~brewtarget-devs)
 * [Developers wiki](https://github.com/Brewtarget/brewtarget/wiki)
 

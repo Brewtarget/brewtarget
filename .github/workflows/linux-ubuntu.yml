@@ -1,0 +1,104 @@
+name: Linux
+
+on:
+  push:
+    branches:
+      - develop
+      - "stable/**"
+  pull_request:
+    branches:
+      - develop
+  schedule:
+    - cron: "0 2 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Dependencies
+        shell: bash
+        run: |
+          sudo apt-get install -y \
+            lintian \
+            rpmlint
+
+      - name: Apply Patches
+        shell: bash
+        working-directory: ${{github.workspace}}
+        run: ./build-scripts/linux/apply-patches.sh $GITHUB_WORKSPACE
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.12.0
+          extra: "-b http://ftp.jaist.ac.jp/pub/qtproject/"
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{github.workspace}}/build
+
+      - name: Configure CMake
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        run: |
+          umask 022
+          cmake \
+            -DDO_RELEASE_BUILD=ON \
+            -DNO_QTMULTIMEDIA=ON \
+            -DNO_MESSING_WITH_FLAGS=ON \
+            -DEXEC_PREFIX=/usr \
+            $GITHUB_WORKSPACE
+
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
+          make
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        env:
+          CTEST_OUTPUT_ON_FAILURE: TRUE
+          QT_QPA_PLATFORM: minimal
+        run: |
+          make test
+
+      - name: Package
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
+          umask 022
+          make package
+
+      - name: Lintian
+        continue-on-error: true
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: lintian --profile debian --pedantic *.deb | less
+
+      - name: rpmlint
+        continue-on-error: true
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: rpmlint *.rpm | less
+
+      - name: Upload Brewtarget Installers
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: brewtarget-linux-installers
+          path: build/brewtarget*
+          retention-days: 7
+
+      - name: Recover Debris Artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-results
+          path: build
+          retention-days: 1
