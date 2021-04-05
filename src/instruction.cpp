@@ -1,6 +1,6 @@
 /*
  * instruction.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -25,6 +25,18 @@
 #include "TableSchemaConst.h"
 #include "InstructionSchema.h"
 
+bool Instruction::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Instruction const & rhs = static_cast<Instruction const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_directions == rhs.m_directions &&
+      this->m_hasTimer   == rhs.m_hasTimer   &&
+      this->m_timerValue == rhs.m_timerValue
+   );
+}
+
+
 QString Instruction::classNameStr()
 {
    static const QString name("Instruction");
@@ -32,35 +44,38 @@ QString Instruction::classNameStr()
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true),
+   : NamedEntity(table, key, QString(), true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
      m_completed (false),
      m_interval  (0.0),
-     m_cacheOnly(false)
+     m_cacheOnly(false),
+     m_recipe   (nullptr)
 {
 }
 
 Instruction::Instruction(QString name, bool cache)
-   : Ingredient(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::INSTRUCTIONTABLE, -1, name, true),
      m_directions(QString()),
      m_hasTimer  (false),
      m_timerValue(QString()),
      m_completed (false),
      m_interval  (0.0),
-     m_cacheOnly(cache)
+     m_cacheOnly(cache),
+     m_recipe   (nullptr)
 {
 }
 
 Instruction::Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool() ),
      m_directions(rec.value(kcolInstructionDirections).toString()),
      m_hasTimer  (rec.value(kcolInstructionHasTimer).toBool()),
      m_timerValue(rec.value(kcolInstructionTimerValue).toString()),
      m_completed (rec.value(kcolInstructionCompleted).toBool()),
      m_interval  (rec.value(kcolInstructionInterval).toDouble()),
-     m_cacheOnly(false)
+     m_cacheOnly(false),
+     m_recipe   (nullptr)
 {
 }
 
@@ -139,5 +154,12 @@ int Instruction::instructionNumber() const { return Database::instance().instruc
 bool Instruction::cacheOnly() { return m_cacheOnly; }
 
 int Instruction::insertInDatabase() {
-   return Database::instance().insertInstruction(this, this->m_recipe);
+   qDebug() << Q_FUNC_INFO << "this->m_recipe:" << static_cast<void *>(this->m_recipe);
+//   return Database::instance().insertInstruction(this, this->m_recipe);
+   return Database::instance().insertElement(this);
+
+}
+
+void Instruction::removeFromDatabase() {
+   Database::instance().remove(this);
 }

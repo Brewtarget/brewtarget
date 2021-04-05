@@ -148,7 +148,7 @@ void MashEditor::showChanges(QMetaProperty* prop)
    else
       propName = prop->name();
 
-   if( propName == PropertyNames::Ingredient::name || updateAll ) {
+   if( propName == PropertyNames::NamedEntity::name || updateAll ) {
       lineEdit_name->setText(mashObs->name());
       if( ! updateAll )
          return;

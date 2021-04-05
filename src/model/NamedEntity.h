@@ -1,6 +1,6 @@
 /*
- * Ingredient.h is part of Brewtarget, and is Copyright the following
- * authors 2020-2025
+ * model/NamedEntity.h is part of Brewtarget, and is Copyright the following
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -21,12 +21,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _INGREDIENT_H
-#define _INGREDIENT_H
+#ifndef _MODEL_NAMEDENTITY_H
+#define _MODEL_NAMEDENTITY_H
+#pragma once
 
 #include <QDomText>
 #include <QDomNode>
 #include <QDomDocument>
+#include <QList>
 #include <QString>
 #include <QObject>
 #include <QMetaProperty>
@@ -34,10 +36,10 @@
 #include <QDateTime>
 #include <QSqlRecord>
 #include "brewtarget.h"
-namespace PropertyNames::Ingredient { static char const * const folder = "folder"; /* previously kpropFolder */ }
-namespace PropertyNames::Ingredient { static char const * const display = "display"; /* previously kpropDisplay */ }
-namespace PropertyNames::Ingredient { static char const * const deleted = "deleted"; /* previously kpropDeleted */ }
-namespace PropertyNames::Ingredient { static char const * const name = "name"; /* previously kpropName */ }
+namespace PropertyNames::NamedEntity { static char const * const folder = "folder"; /* previously kpropFolder */ }
+namespace PropertyNames::NamedEntity { static char const * const display = "display"; /* previously kpropDisplay */ }
+namespace PropertyNames::NamedEntity { static char const * const deleted = "deleted"; /* previously kpropDeleted */ }
+namespace PropertyNames::NamedEntity { static char const * const name = "name"; /* previously kpropName */ }
 // For uintptr_t.
 #if HAVE_STDINT_H
 #   include <stdint.h>
@@ -48,15 +50,33 @@ namespace PropertyNames::Ingredient { static char const * const name = "name"; /
 // Make uintptr_t available in QVariant.
 Q_DECLARE_METATYPE( uintptr_t )
 
-class Ingredient;
-
 /*!
- * \class Ingredient
- * \author Philip G. Lee
+ * \class NamedEntity
  *
- * \brief The base class for our database items.
+ * \brief The base class for our substantive storable items.  There are really two sorts of storable items: ones that
+ *        are freestanding and ones that are owned by other storable items.  Eg, a Hop exists in its own right and may
+ *        or may not be used in one or more Recipes, but a MashStep only exists as part of a single Mash.
+ *           \b BrewNote is owned by its \b Recipe
+ *           \b Equipment
+ *           \b Fermentable
+ *           \b Hop
+ *           \b Instruction is owned by its \b Recipe
+ *           \b Mash
+ *           \b MashStep is owned by its \b Mash
+ *           \b Misc
+ *           \b Recipe
+ *           \b Salt
+ *           \b Style
+ *           \b Water
+ *           \b Yeast
+ *
+ * Note that this class has previously been called \b Ingredient and \b BeerXMLElement.  We've changed the name to try
+ * to best reflect what the class represents.  Although some of this class's subclasses (eg \b Hop, \b Fermentable,
+ * \b Yeast) are ingredients in the normal sense of the word, others (eg \b Instruction, \b Equipment, \b Style,
+ * \b Mash) are not really.  Equally, the fact that derived classes can be instantiated from BeerXML is not their
+ * defining characteristic.
  */
-class Ingredient : public QObject
+class NamedEntity : public QObject
 {
    Q_OBJECT
    Q_CLASSINFO("version","1")
@@ -64,9 +84,35 @@ class Ingredient : public QObject
    friend class Database;
    friend class BeerXML;
 public:
-   Ingredient(Brewtarget::DBTable table, int key, QString t_name = QString(),
+   NamedEntity(Brewtarget::DBTable table, int key, QString t_name = QString(),
                   bool t_display = false, QString folder = QString());
-   Ingredient( Ingredient const& other );
+   NamedEntity( NamedEntity const& other );
+
+   // Our destructor needs to be virtual because we sometimes point to an instance of a derived class through a pointer
+   // to this class -- ie NamedEntity * namedEntity = new Hop() and suchlike.  We do already get a virtual destructor by
+   // virtue of inheriting from QObject, but this declaration does no harm.
+   virtual ~NamedEntity() = default;
+
+   /**
+    * \brief This generic version of operator== should work for subclasses provided they correctly _override_ (NB not
+    *        overload) the protected virtual isEqualTo() function.
+    */
+   bool operator==(NamedEntity const & other) const;
+
+   /**
+    * \brief This generic version of operator!= should work for subclasses provided they correctly _override_ (NB not
+    *        overload) the protected virtual isEqualTo() function.
+    */
+   bool operator!=(NamedEntity const & other) const;
+
+   //
+   // TODO We should replace the following with the spaceship operator once compiler support for C++20 is more widespread
+   //
+   /**
+    * \brief As you might expect, this ensures we order \b NamedEntity objects by name
+    */
+   bool operator<(NamedEntity const & other) const;
+   bool operator>(NamedEntity const & other) const;
 
    // Everything that inherits from BeerXML has a name, delete, display and a folder
    Q_PROPERTY( QString name   READ name WRITE setName )
@@ -84,6 +130,12 @@ public:
    QString folder() const;
    //! Access to the name attribute.
    QString name() const;
+
+   /**
+    * \brief Returns a regexp that will match the " (n)" (for n some positive integer) added on the end of a name to
+    *        prevent name clashes.  It will also "capture" n to allow you to extract it.
+    */
+   static QRegExp const & getDuplicateNameNumberMatcher();
 
    //! And ways to set those flags
    void setDeleted(const bool var, bool cachedOnly = false);
@@ -122,37 +174,40 @@ public:
    static QString text(QDate const& val);
 
    //! Use this to pass pointers around in QVariants.
-   static inline QVariant qVariantFromPtr( Ingredient* ptr )
+   static inline QVariant qVariantFromPtr( NamedEntity* ptr )
    {
       uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
       return QVariant::fromValue<uintptr_t>(addr);
    }
 
-   static inline Ingredient* extractPtr( QVariant ptrVal )
+   static inline NamedEntity* extractPtr( QVariant ptrVal )
    {
       uintptr_t addr = ptrVal.value<uintptr_t>();
-      return reinterpret_cast<Ingredient*>(addr);
+      return reinterpret_cast<NamedEntity*>(addr);
    }
 
-   bool isValid();
-   void invalidate();
-
    /*!
-    * \brief Some ingredients (eg Fermentable, Hop) get copied when added to a recipe, but others (eg Instruction) don't.
-    *        For those that do, we think of the copy as being a child of the original ingredient.  This function allows
+    * \brief Some entities (eg Fermentable, Hop) get copied when added to a recipe, but others (eg Instruction) don't.
+    *        For those that do, we think of the copy as being a child of the original NamedEntity.  This function allows
     *        us to access that parent.
-    * \return Pointer to the parent ingredient from which this one was originally copied, or null if no such parent exists.
+    * \return Pointer to the parent NamedEntity from which this one was originally copied, or null if no such parent exists.
     */
-   virtual Ingredient * getParent() = 0;
+   virtual NamedEntity * getParent() = 0;
 
-   void setParent(Ingredient const & parentIngredient);
+   void setParent(NamedEntity const & parentNamedEntity);
 
    /*!
-    * \brief When we create an ingredient, or undelete a deleted one, we need to put it in the database.  For the case of
-    *        undelete, it's helpful for the caller not to have to know what subclass of ingredient we are resurrecting.
+    * \brief When we create an NamedEntity, or undelete a deleted one, we need to put it in the database.  For the case of
+    *        undelete, it's helpful for the caller not to have to know what subclass of NamedEntity we are resurrecting.
     * \return Key of element inserted in database.
     */
    virtual int insertInDatabase() = 0;
+
+   /*!
+    * \brief If we can put something in the database, then we also need to be able to remove it.
+    *        Note that, once removed from the DB, the caller is responsible for deleting this object.
+    */
+   virtual void removeFromDatabase() = 0;
 
 signals:
    /*!
@@ -165,10 +220,21 @@ signals:
    void changedName(QString);
 
 protected:
+   /**
+    * \brief Subclasses need to overload (NB not override) this function to do the substantive work for operator==.
+    *        By the time this function is called on a subclass, we will already have established that the two objects
+    *        being compared are of the same class (eg we are not comparing a Hop with a Yeast) and that the names match,
+    *        so subclasses do not need to repeat these tests.
+    *
+    *        We do not currently anticipate sub-sub-classes of \b NamedEntity but if one ever were created, it should
+    *        call its parent's implementation of this function before doing its own class-specific tests.
+    * \return \b true if this object is, in all the ways that matter, equal to \b other
+    */
+   virtual bool isEqualTo(NamedEntity const & other) const = 0;
 
-   //! The key of this ingredient in its table.
+   //! The key of this entity in its table.
    int _key;
-   //! The table where this ingredient is stored.
+   //! The table where this entity is stored.
    Brewtarget::DBTable _table;
    // This is 0 if there is no parent (or parent is not yet known)
    int parentKey;
@@ -200,11 +266,6 @@ protected:
    QVariantMap getColumnValueMap() const;
 
 private:
-   /*!
-    * \param valid - Indicates if the beerXML element was valid. There is a problem with importing invalid
-    * XML. I'm hoping this helps fix it
-    */
-  bool _valid;
   mutable QString _folder;
   mutable QString _name;
   mutable QVariant _display;
@@ -212,6 +273,4 @@ private:
 
 };
 
-
-#endif   /* _BEERXMLELEMENT_H */
-
+#endif

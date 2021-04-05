@@ -1,7 +1,8 @@
 /*
  * equipment.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,12 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _EQUIPMENT_H
 #define _EQUIPMENT_H
 
 #include <QDomNode>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 namespace PropertyNames::Equipment { static char const * const boilTime_min = "boilTime_min"; /* previously kpropBoilTime */ }
 namespace PropertyNames::Equipment { static char const * const boilSize_l = "boilSize_l"; /* previously kpropBoilSize */ }
 namespace PropertyNames::Equipment { static char const * const batchSize_l = "batchSize_l"; /* previously kpropBatchSize */ }
@@ -44,11 +44,10 @@ namespace PropertyNames::Equipment { static char const * const tunVolume_l = "tu
 
 /*!
  * \class Equipment
- * \author Philip G. Lee
  *
  * \brief Model representing a single equipment record.
  */
-class Equipment : public Ingredient
+class Equipment : public NamedEntity
 {
    Q_OBJECT
 
@@ -142,8 +141,9 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
    void changedBoilSize_l(double);
@@ -164,9 +164,14 @@ signals:
    void changedGrainAbsorption_LKg(double);
    void changedBoilingPoint_c(double);
 
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
    Equipment(Brewtarget::DBTable table, int key);
+public:
    Equipment(QString t_name, bool cacheOnly = true);
+private:
    Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Equipment( Equipment const& other);
 
@@ -191,41 +196,9 @@ private:
 
    // Calculate the boil size.
    void doCalculations();
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( Equipment* )
-
-bool operator<(Equipment &e1, Equipment &e2);
-bool operator==(Equipment &e1, Equipment &e2);
-
-inline bool EquipmentPtrLt( Equipment* lhs, Equipment* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool EquipmentPtrEq( Equipment* lhs, Equipment* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct Equipment_ptr_cmp
-{
-   bool operator()( Equipment* lhs, Equipment* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Equipment_ptr_equals
-{
-   bool operator()( Equipment* lhs, Equipment* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
 
 #endif   /* _EQUIPMENT_H */
 

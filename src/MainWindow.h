@@ -29,6 +29,8 @@
 
 class MainWindow;
 
+#include <memory> // For PImpl
+
 #include <QWidget>
 #include <QMainWindow>
 #include <QString>
@@ -111,7 +113,7 @@ class MainWindow : public QMainWindow, public Ui::mainWindow
    friend class OptionDialog;
 public:
    MainWindow(QWidget* parent=nullptr);
-   virtual ~MainWindow() {}
+   virtual ~MainWindow();
 
    /**
     * \brief This needs to be called immediately after the constructor.  It does the remaining initialisation of the
@@ -331,6 +333,9 @@ private slots:
    void setUndoRedoEnable();
 
 private:
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
 
    void removeHop(Hop * itemToRemove);
    void removeFermentable(Fermentable * itemToRemove);
@@ -349,7 +354,6 @@ private:
    QString highSS, lowSS, goodSS, boldSS; // Palette replacements
 
    AboutDialog* dialog_about;
-   QFileDialog* fileOpener;
    QFileDialog* fileSaver;
    QList<QMenu*> contextMenus;
    EquipmentEditor* equipEditor;
@@ -465,7 +469,6 @@ private:
    void updateColorSlider(QString attribute, RangedSlider* slider);
 
    void convertedMsg();
-   void importMsg();
 
 };
 

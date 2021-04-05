@@ -1,0 +1,105 @@
+name: Windows
+
+on:
+  push:
+    branches:
+      - develop
+      - "stable/**"
+  pull_request:
+    branches:
+      - develop
+  schedule:
+    - cron: "0 2 * * *"
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download and install NSIS plugins
+        run: |
+          New-Item -ItemType Directory -Force -Path .\temp\nsis_plugins
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile .\temp\nsis_plugins\Locate.zip
+          Expand-Archive -Path .\temp\nsis_plugins\Locate.zip -DestinationPath .\temp\nsis_plugins\Locate
+          Copy-Item -Path ".\temp\nsis_plugins\Locate\Plugin\locate.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi"
+          Copy-Item -Path ".\temp\nsis_plugins\Locate\Include\Locate.nsh" -Destination "C:\Program Files (x86)\NSIS\Include"
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile .\temp\nsis_plugins\Nsislog.zip
+          Expand-Archive -Path .\temp\nsis_plugins\Nsislog.zip -DestinationPath .\temp\nsis_plugins\Nsislog
+          Copy-Item -Path ".\temp\nsis_plugins\Nsislog\plugin\nsislog.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi"
+
+      - name: Apply Patches
+        shell: bash
+        working-directory: ${{github.workspace}}
+        run: ./build-scripts/windows/apply-patches.sh $GITHUB_WORKSPACE
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          arch: win64_mingw81
+          version: 5.15.2
+          extra: "-b http://ftp.jaist.ac.jp/pub/qtproject/"
+
+      - name: Create Build Environment
+        # Some projects don't allow in-source building, so create a separate build directory
+        # We'll use this as our working directory for all subsequent commands
+        run: cmake -E make_directory ${{github.workspace}}/build
+
+      - name: Configure CMake
+        # Use a bash shell so we can use the same syntax for environment variable
+        # access regardless of the host operating system
+        shell: bash
+        working-directory: ${{github.workspace}}/build
+        # Note the current convention is to use the -S and -B options here to specify source
+        # and build directories, but this is only available with CMake 3.13 and higher.
+        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+        run: |
+          cmake \
+            -G "MinGW Makefiles" \
+            -DDO_RELEASE_BUILD=ON \
+            -DCMAKE_PREFIX_PATH=$Qt5_Dir \
+            -DMINGW_BIN_DIR=$Qt5_Dir/bin \
+            $GITHUB_WORKSPACE
+
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
+          make
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
+          make test
+
+      - name: Package
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        run: |
+          make package
+
+      - name: Archive the installer
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Brewtarget Windows Installer
+          path: build/brewtarget_*.exe
+          retention-days: 7
+
+      - name: Recover the debris
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-results
+          path: build
+          retention-days: 1

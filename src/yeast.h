@@ -1,7 +1,8 @@
 /*
  * yeast.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,11 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _YEAST_H
 #define _YEAST_H
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include <QString>
 #include <QStringList>
 namespace PropertyNames::Yeast { static char const * const amount = "amount"; /* previously kpropAmount */ }
@@ -46,18 +46,12 @@ namespace PropertyNames::Yeast { static char const * const productID = "productI
 namespace PropertyNames::Yeast { static char const * const laboratory = "laboratory"; /* previously kpropLab */ }
 namespace PropertyNames::Yeast { static char const * const formString = "formString"; /* previously kpropFormString */ }
 
-// Forward declarations.
-class Yeast;
-bool operator<(Yeast &y1, Yeast &y2);
-bool operator==(Yeast &y1, Yeast &y2);
-
 /*!
  * \class Yeast
- * \author Philip G. Lee
  *
  * \brief Model for yeast records in the database.
  */
-class Yeast : public Ingredient
+class Yeast : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "yeasts")
@@ -171,15 +165,21 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Yeast(Brewtarget::DBTable table, int key);
    Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
+public:
    Yeast(QString name, bool cache = true);
+private:
    Yeast(Yeast & other);
 
    QString m_typeString;
@@ -212,13 +212,10 @@ private:
    bool isValidType(const QString& str) const;
    bool isValidForm(const QString& str) const;
    bool isValidFlocculation(const QString& str) const;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Yeast*> )
-
+/*
 inline bool YeastPtrLt( Yeast* lhs, Yeast* rhs)
 {
    return *lhs < *rhs;
@@ -244,6 +241,6 @@ struct Yeast_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif   /* _YEAST_H */
 

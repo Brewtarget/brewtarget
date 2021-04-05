@@ -1,6 +1,6 @@
 /*
  * style.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,9 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "style.h"
 
 #include "brewtarget.h"
-#include "style.h"
 #include <QDebug>
 
 #include "TableSchemaConst.h"
@@ -29,14 +29,17 @@
 
 QStringList Style::m_types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 
-bool operator<(Style &s1, Style &s2)
-{
-   return s1.name() < s2.name();
-}
-
-bool operator==(Style &s1, Style &s2)
-{
-   return s1.key() == s2.key();
+bool Style::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Style const & rhs = static_cast<Style const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_category       == rhs.m_category       &&
+      this->m_categoryNumber == rhs.m_categoryNumber &&
+      this->m_styleLetter    == rhs.m_styleLetter    &&
+      this->m_styleGuide     == rhs.m_styleGuide     &&
+      this->m_type           == rhs.m_type
+   );
 }
 
 QString Style::classNameStr()
@@ -49,7 +52,7 @@ QString Style::classNameStr()
 
 // suitable for something that will be written to the db later
 Style::Style(QString t_name, bool cacheOnly)
-   : Ingredient(Brewtarget::STYLETABLE, -1, t_name, true),
+   : NamedEntity(Brewtarget::STYLETABLE, -1, t_name, true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -79,7 +82,7 @@ Style::Style(QString t_name, bool cacheOnly)
 // suitable for something that needs to be created in the db when the object is, but all the other
 // fields will be filled in later (shouldn't be used that much)
 Style::Style(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true),
+   : NamedEntity(table, key, QString(), true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -108,7 +111,7 @@ Style::Style(Brewtarget::DBTable table, int key)
 
 // suitable for creating a Style from a database record
 Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_category(rec.value(kcolStyleCat).toString()),
      m_categoryNumber(rec.value(kcolStyleCatNum).toString()),
      m_styleLetter(rec.value(kcolStyleLetter).toString()),
@@ -360,7 +363,7 @@ void Style::setProfile( const QString& var )
    }
 }
 
-void Style::setIngredients( const QString& var )
+void Style::setNamedEntitys( const QString& var )
 {
     m_ingredients = var;
    if ( ! m_cacheOnly ) {
@@ -409,12 +412,12 @@ bool Style::isValidType( const QString &str )
    return m_types.contains( str );
 }
 
-Ingredient * Style::getParent() {
+NamedEntity * Style::getParent() {
    Style * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it
@@ -428,4 +431,8 @@ Ingredient * Style::getParent() {
 
 int Style::insertInDatabase() {
    return Database::instance().insertStyle(this);
+}
+
+void Style::removeFromDatabase() {
+   Database::instance().remove(this);
 }

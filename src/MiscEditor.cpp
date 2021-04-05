@@ -106,7 +106,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       value = metaProp->read(obsMisc);
    }
 
-   if( propName == PropertyNames::Ingredient::name || updateAll )
+   if( propName == PropertyNames::NamedEntity::name || updateAll )
    {
       lineEdit_name->setText(obsMisc->name());
       lineEdit_name->setCursorPosition(0);

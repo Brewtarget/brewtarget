@@ -66,7 +66,7 @@ void StyleEditor::setStyle( Style* s )
    obsStyle = s;
    if( obsStyle )
    {
-      connect( obsStyle, &Ingredient::changed, this, &StyleEditor::changed );
+      connect( obsStyle, &NamedEntity::changed, this, &StyleEditor::changed );
       showChanges();
    }
 
@@ -116,7 +116,7 @@ void StyleEditor::save()
    s->setAbvMin_pct( lineEdit_abvMin->toSI() );
    s->setAbvMax_pct( lineEdit_abvMax->toSI() );
    s->setProfile( textEdit_profile->toPlainText() );
-   s->setIngredients( textEdit_ingredients->toPlainText() );
+   s->setNamedEntitys( textEdit_ingredients->toPlainText() );
    s->setExamples( textEdit_examples->toPlainText() );
    s->setNotes( textEdit_notes->toPlainText() );
 
@@ -231,7 +231,7 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       return;
    }
 
-   if( propName == PropertyNames::Ingredient::name )
+   if( propName == PropertyNames::NamedEntity::name )
       lineEdit_name->setText(val.toString());
    else if( propName == PropertyNames::Style::category )
       lineEdit_category->setText(val.toString());

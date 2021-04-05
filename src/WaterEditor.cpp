@@ -1,7 +1,8 @@
 /*
  * WaterEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -26,50 +27,73 @@
 #include "TableSchemaConst.h"
 #include "water.h"
 #include "brewtarget.h"
-#include "database.h"
 
-WaterEditor::WaterEditor(QWidget *parent) : QDialog(parent)
-{
+WaterEditor::WaterEditor(QWidget *parent) : QDialog(parent), obs{nullptr} {
    setupUi(this);
-   obs = nullptr;
 
    connect( buttonBox, &QDialogButtonBox::accepted, this, &WaterEditor::saveAndClose);
    connect( buttonBox, &QDialogButtonBox::rejected, this, &WaterEditor::clearAndClose);
+
+   this->waterEditRadarChart->init(
+      tr("PPM"),
+      50,
+      {
+         {PropertyNames::Water::calcium_ppm,     tr("Calcium")},
+         {PropertyNames::Water::bicarbonate_ppm, tr("Bicarbonate")},
+         {PropertyNames::Water::sulfate_ppm,     tr("Sulfate")},
+         {PropertyNames::Water::chloride_ppm,    tr("Chloride")},
+         {PropertyNames::Water::sodium_ppm,      tr("Sodium")},
+         {PropertyNames::Water::magnesium_ppm,   tr("Magnesium")}
+      }
+   );
+
+   return;
 }
 
-void WaterEditor::setWater(Water *water)
-{
-   if( obs )
-      disconnect( obs, nullptr, this, nullptr );
+void WaterEditor::setWater(Water *water) {
+   qDebug() << Q_FUNC_INFO;
 
-   obs = water;
-   if( obs )
-   {
-      connect( obs, &Ingredient::changed, this, &WaterEditor::changed );
+   if (this->obs) {
+      disconnect( this->obs, nullptr, this, nullptr );
+   }
+
+   this->obs = water;
+   if (this->obs) {
+      this->waterEditRadarChart->addSeries("Current", Qt::darkGreen, *water);
+
+      connect( this->obs, &NamedEntity::changed, this, &WaterEditor::changed );
       showChanges();
    }
+
+   return;
 }
 
-void WaterEditor::newWater(QString folder)
-{
+void WaterEditor::newWater(QString folder) {
    QString name = QInputDialog::getText(this, tr("Water name"),
                                               tr("Water name:"));
-   if(name.isEmpty())
+   if (name.isEmpty()) {
       return;
+   }
+
+   qDebug() << Q_FUNC_INFO << "Creating new Water, " << name;
 
    Water* w = new Water(name);
-   if ( ! folder.isEmpty() )
+   if ( ! folder.isEmpty() ) {
       w->setFolder(folder);
+   }
 
    setWater(w);
    setVisible(true);
 
+   return;
 }
 
 void WaterEditor::showChanges(QMetaProperty* prop)
 {
-   if( obs == nullptr )
+
+   if (this->obs == nullptr) {
       return;
+   }
 
    QString propName;
    QVariant val;
@@ -81,43 +105,43 @@ void WaterEditor::showChanges(QMetaProperty* prop)
    }
    else {
       propName = prop->name();
-      val = prop->read(obs);
+      val = prop->read(this->obs);
    }
 
-   if ( propName == PropertyNames::Ingredient::name || updateAll ) {
-      lineEdit_name->setText(obs->name());
+   if ( propName == PropertyNames::NamedEntity::name || updateAll ) {
+      lineEdit_name->setText(this->obs->name());
       if ( ! updateAll ) return;
    }
    if( propName == PropertyNames::Water::calcium_ppm || updateAll ) {
-      lineEdit_ca->setText(obs->calcium_ppm(),2);
+      lineEdit_ca->setText(this->obs->calcium_ppm(),2);
       if ( ! updateAll ) return;
    }
    if( propName == PropertyNames::Water::magnesium_ppm || updateAll ) {
-      lineEdit_mg->setText(obs->magnesium_ppm(),2);
+      lineEdit_mg->setText(this->obs->magnesium_ppm(),2);
       if ( ! updateAll ) return;
    }
    if( propName == PropertyNames::Water::sulfate_ppm || updateAll ){
-      lineEdit_so4->setText(obs->sulfate_ppm(),2);
+      lineEdit_so4->setText(this->obs->sulfate_ppm(),2);
       if ( ! updateAll ) return;
    }
    if( propName == PropertyNames::Water::sodium_ppm || updateAll ){
-      lineEdit_na->setText(obs->sodium_ppm(),2);
+      lineEdit_na->setText(this->obs->sodium_ppm(),2);
       if ( ! updateAll ) return;
    }
    if( propName == PropertyNames::Water::chloride_ppm || updateAll ){
-      lineEdit_cl->setText(obs->chloride_ppm(),2);
+      lineEdit_cl->setText(this->obs->chloride_ppm(),2);
       if ( ! updateAll ) return;
    }
    if( propName == PropertyNames::Water::bicarbonate_ppm || updateAll ){
-      lineEdit_alk->setText(obs->bicarbonate_ppm(),2);
+      lineEdit_alk->setText(this->obs->bicarbonate_ppm(),2);
       if ( ! updateAll ) return;
    }
    if( propName == PropertyNames::Water::ph || updateAll ){
-      lineEdit_ph->setText(obs->ph(),2);
+      lineEdit_ph->setText(this->obs->ph(),2);
       if ( ! updateAll ) return;
    }
    if (propName == PropertyNames::Water::alkalinityAsHCO3 || updateAll ) {
-      bool typeless = obs->alkalinityAsHCO3();
+      bool typeless = this->obs->alkalinityAsHCO3();
       comboBox_alk->setCurrentIndex(comboBox_alk->findText(typeless ? "HCO3" : "CO3"));
       if ( ! updateAll ) return;
    }
@@ -126,42 +150,51 @@ void WaterEditor::showChanges(QMetaProperty* prop)
       if ( ! updateAll ) return;
    }
 
+   return;
 }
 
 void WaterEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( sender() == obs )
+   if ( sender() == this->obs ) {
       showChanges(&prop);
+   }
+
+   this->waterEditRadarChart->replot();
+   return;
 }
 
 void WaterEditor::saveAndClose()
 {
-   if( obs == nullptr )
+   if (this->obs == nullptr) {
       return;
+   }
 
-   obs->setName( lineEdit_name->text());
-   obs->setAmount(0.0);
-   obs->setBicarbonate_ppm( lineEdit_alk->toSI() );
-   obs->setCalcium_ppm( lineEdit_ca->toSI() );
-   obs->setMagnesium_ppm( lineEdit_mg->toSI() );
-   obs->setSulfate_ppm( lineEdit_so4->toSI() );
-   obs->setSodium_ppm( lineEdit_na->toSI() );
-   obs->setChloride_ppm( lineEdit_cl->toSI() );
-   obs->setPh( lineEdit_ph->toSI() );
-   obs->setAlkalinity( lineEdit_alk->toSI());
-   obs->setAlkalinityAsHCO3(comboBox_alk->currentText() == QString("HCO3"));
-   obs->setNotes( plainTextEdit_notes->toPlainText());
+   this->obs->setName( lineEdit_name->text());
+   this->obs->setAmount(0.0);
+   this->obs->setBicarbonate_ppm( lineEdit_alk->toSI() );
+   this->obs->setCalcium_ppm( lineEdit_ca->toSI() );
+   this->obs->setMagnesium_ppm( lineEdit_mg->toSI() );
+   this->obs->setSulfate_ppm( lineEdit_so4->toSI() );
+   this->obs->setSodium_ppm( lineEdit_na->toSI() );
+   this->obs->setChloride_ppm( lineEdit_cl->toSI() );
+   this->obs->setPh( lineEdit_ph->toSI() );
+   this->obs->setAlkalinity( lineEdit_alk->toSI());
+   this->obs->setAlkalinityAsHCO3(comboBox_alk->currentText() == QString("HCO3"));
+   this->obs->setNotes( plainTextEdit_notes->toPlainText());
 
-   if ( obs->cacheOnly() ) {
-      qDebug() << Q_FUNC_INFO << "writing " << obs->name();
-      obs->insertInDatabase();
+   if (this->obs->cacheOnly()) {
+      qDebug() << Q_FUNC_INFO << "writing " << this->obs->name();
+      this->obs->insertInDatabase();
    }
 
    setVisible(false);
+   return;
 }
 
 void WaterEditor::clearAndClose()
 {
+   qDebug() << Q_FUNC_INFO;
    setWater(nullptr);
    setVisible(false); // Hide the window.
+   return;
 }

@@ -1,6 +1,6 @@
 /*
  * recipe.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -23,8 +23,6 @@
 #ifndef _RECIPE_H
 #define _RECIPE_H
 
-class Recipe;
-
 #include <QColor>
 #include <QVariant>
 #include <QList>
@@ -33,7 +31,8 @@ class Recipe;
 #include <QString>
 #include <QDate>
 #include <QMutex>
-#include "ingredient.h"
+
+#include "model/NamedEntity.h"
 #include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
 #include "misc.h"
 #include "salt.h"
@@ -72,6 +71,18 @@ namespace PropertyNames::Recipe { static char const * const postBoilVolume_l = "
 namespace PropertyNames::Recipe { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
 
 
+namespace PropertyNames::Recipe { static char const * const ABV_pct = "ABV_pct"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const boilGrav = "boilGrav"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const IBU = "IBU"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const IBUs = "IBUs"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const wortFromMash_l = "wortFromMash_l"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const boilVolume_l = "boilVolume_l"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const calories = "calories"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const grainsInMash_kg = "grainsInMash_kg"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const grains_kg = "grains_kg"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const SRMColor = "SRMColor"; /* not stored */ }
+
+
 // Forward declarations.
 class Style;
 class Mash;
@@ -84,10 +95,6 @@ class PreInstruction;
 class BrewNote;
 class MashStep;
 
-//! \brief Compares recipes based on name.
-bool operator<(Recipe &r1, Recipe &r2 );
-//! \brief Compares recipes based on name.
-bool operator==(Recipe &r1, Recipe &r2 );
 
 /*!
  * \class Recipe
@@ -95,7 +102,7 @@ bool operator==(Recipe &r1, Recipe &r2 );
  *
  * \brief Model class for recipe records in the database.
  */
-class Recipe : public Ingredient
+class Recipe : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "recipes")
@@ -109,14 +116,19 @@ public:
 
    virtual ~Recipe() {}
 
-   friend bool operator<(Recipe &r1, Recipe &r2 );
-   friend bool operator==(Recipe &r1, Recipe &r2 );
-
    // NOTE: move to database?
    //! \brief Retains only the name, but sets everything else to defaults.
    void clear();
 
-   //! \brief The type (lager, ale, etc.).
+   //! \brief The type of recipe
+   enum Type { Extract, PartialMash, AllGrain };
+   Q_ENUMS( Type )
+
+   //! \brief The \b Type
+   Q_PROPERTY( Type recipeType READ recipeType WRITE setRecipeType /*NOTIFY changed*/ /*changedType*/ )
+
+   //! \brief The type (extract, partial mash, all grain) stored as a string
+   //         TBD (MY 2021-01-18) Not sure why this is stored as a string rather than an enum.  Have created an enum wrapper above
    Q_PROPERTY( QString type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The brewer.
    Q_PROPERTY( QString brewer READ brewer WRITE setBrewer /*NOTIFY changed*/ /*changedBrewer*/ )
@@ -209,9 +221,9 @@ public:
 
    // Relational properties.
    //! \brief The mash.
-   Q_PROPERTY( Mash* mash READ mash /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY( Mash* mash READ mash WRITE setMash /*NOTIFY changed*/ STORED false)
    //! \brief The equipment.
-   Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY( Equipment* equipment READ equipment WRITE setEquipment /*NOTIFY changed*/ STORED false)
    //! \brief The style.
    Q_PROPERTY( Style* style READ style WRITE setStyle /*NOTIFY changed*/ STORED false)
    // These QList properties should only emit changed() when their size changes, or when
@@ -238,26 +250,19 @@ public:
    // One method to bring them all and in darkness bind them
    // .:TBD:. (MY 2020-11-23) At the moment, it feels like there are a lot of places in the code that keep the object
    //         model and the database in sync, which can get complicated.  In the long run, it would be simpler to have
-   //         the GUI interact with the object model (Recipes, Ingredients, etc) and make it the responsibility of the
+   //         the GUI interact with the object model (Recipes, NamedEntitys, etc) and make it the responsibility of the
    //         object model to store/retrieve/modify what's in the database via some abstraction layer.  Might be worth
    //         looking at https://www.qxorm.com or similar for this.
-   //            In the meantime, we cannot define a templated member function in this header that calls
+   //            In the meantime, we cannot define a templated member function _in this header_ that calls
    //         Database::instance() (or indeed any other member function of Database) because that would require us to
    //         #include "database.h" and database.h already needs to #include "recipe.h", so we'd be trapped in circular
-   //         dependencies.  This means we cannot template Recipe member functions addHop(Hop *),
-   //         addFermentable(Fermentable *) etc and cannot implement them as addIngredient(Ingredient *) because the
-   //         implementations need to call overloaded member functions on Database:  addToRecipe(Recipe *, Hop *, ...),
-   //         addToRecipe(Recipe *, Fermentable *, ...), etc.  Hence the slightly clunky addHop(), addFermentable() etc
-   //         member functions below.  (We _can_ template remove() because its implementation only needs to pass an
-   //         Ingredient * to a Database member function.  We _could_ also have had Recipe::add(Ingredient *) and done
-   //         lots of if/then/else dynamic casting (or similar jiggery pokery with QMetaObject) in the implementation.
-   //         But that feels wrong as we do actually know at compile time what subclass of Ingredient we are adding.
-   //         We would we risk turning what would otherwise be compile-time errors into run-time ones.)
+   //         dependencies.  Fortunately there is a trick that allows us to declare the function in the header and
+   //         define it in the cpp file, even though it's templated.
 private:
    /*!
     * \brief Remove \c var from the recipe and return what was removed - ie \c var
     */
-   Ingredient * removeIngredient( Ingredient *var);
+   NamedEntity * removeNamedEntity( NamedEntity *var);
 
 public:
    /*!
@@ -268,10 +273,9 @@ public:
     */
    template<class T> T * remove(T * var) {
 //      qDebug() << QString("%1").arg(Q_FUNC_INFO);
-      return static_cast<T *>(this->removeIngredient(var));
+      return static_cast<T *>(this->removeNamedEntity(var));
    }
 
-private:
    /*!
     * \brief Add a copy of \c var from the recipe and return the copy
     *
@@ -289,21 +293,13 @@ private:
     *    Fermentable * newCopyOfSomeFermentable = myRecipe->addFermentable(&someFermentable);   // DO
     *    myRecipe->removeFermentable(newCopyOfSomeFermentable);                                 // UNDO
     *
-    * The remover function returns a pointer to the Ingredient that it removed.  This is useful because it makes add and
+    * The remover function returns a pointer to the NamedEntity that it removed.  This is useful because it makes add and
     * remove symmetric and simplifies the implementation of UndoableAddOrRemove.
     *
     * TBD: (MY 2020-11-23) It would be good one day to pull out all the non-changeable aspects of ingredients and keep
     *      just one copy of them in the DB and in memory.
     */
    template<class T> T * add(T * var);
-
-public:
-   Hop * addHop( Hop *var );
-   Fermentable * addFermentable( Fermentable* var );
-   Misc * addMisc( Misc* var );
-   Yeast * addYeast( Yeast* var );
-   Water * addWater( Water* var );
-   Salt * addSalt( Salt* var );
 
    void removeBrewNote(BrewNote* var);
    void removeInstruction( Instruction* ins );
@@ -326,6 +322,7 @@ public:
    QString nextAddToBoil(double& time);
 
    // Getters
+   Type recipeType() const;
    QString type() const;
    QString brewer() const;
    double batchSize_l() const;
@@ -390,8 +387,9 @@ public:
    Style* style();
 
    // Relational setters
-   void setStyle(Style* style);
-   void setEquipment(Equipment* equipment);
+   void setStyle(Style * style);
+   void setEquipment(Equipment * equipment);
+   void setMash(Mash * var);
 
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
@@ -420,6 +418,7 @@ public:
    static QString classNameStr();
 
    // Setters that are not slots
+   void setRecipeType(Type var);
    void setType( const QString &var );
    void setBrewer( const QString &var );
    void setBatchSize_l( double var );
@@ -450,8 +449,9 @@ public:
    void setKegPrimingFactor( double var );
    void setCacheOnly( bool cache );
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
 
@@ -467,11 +467,15 @@ public slots:
    void acceptYeastChange(Yeast* yeast);
    void acceptMashChange(Mash* mash);
 
-private:
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
+private:
    Recipe(Brewtarget::DBTable table, int key);
    Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec);
+public:
    Recipe(QString name, bool cache = true);
+private:
    Recipe(Recipe const& other);
 
    // Cached properties that are written directly to db
@@ -575,11 +579,8 @@ private:
    //void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );
    bool isValidType( const QString &str );
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
-
+/*
 inline bool RecipePtrLt( Recipe* lhs, Recipe* rhs)
 {
    return *lhs < *rhs;
@@ -605,5 +606,5 @@ struct Recipe_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif /* _RECIPE_H */

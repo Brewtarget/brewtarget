@@ -1,6 +1,6 @@
 /*
  * water.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -17,28 +17,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include <QVector>
 #include "water.h"
-#include "brewtarget.h"
+
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
-#include "water.h"
-#include "brewtarget.h"
 
+#include "brewtarget.h"
 #include "TableSchemaConst.h"
 #include "WaterSchema.h"
 #include "database.h"
 
-bool operator<(Water &w1, Water &w2)
-{
-   return w1.name() < w2.name();
-}
-
-bool operator==(Water &w1, Water &w2)
-{
-   return w1.name() == w2.name();
+bool Water::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Water const & rhs = static_cast<Water const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_calcium_ppm      == rhs.m_calcium_ppm      &&
+      this->m_bicarbonate_ppm  == rhs.m_bicarbonate_ppm  &&
+      this->m_sulfate_ppm      == rhs.m_sulfate_ppm      &&
+      this->m_chloride_ppm     == rhs.m_chloride_ppm     &&
+      this->m_sodium_ppm       == rhs.m_sodium_ppm       &&
+      this->m_magnesium_ppm    == rhs.m_magnesium_ppm    &&
+      this->m_ph               == rhs.m_ph
+   );
 }
 
 QString Water::classNameStr()
@@ -48,7 +50,7 @@ QString Water::classNameStr()
 }
 
 Water::Water(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key),
+   : NamedEntity(table, key),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -68,7 +70,7 @@ Water::Water(Brewtarget::DBTable table, int key)
 }
 
 Water::Water(QString name, bool cache)
-   : Ingredient(Brewtarget::WATERTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::WATERTABLE, -1, name, true),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -88,7 +90,7 @@ Water::Water(QString name, bool cache)
 }
 
 Water::Water(Water const& other, bool cache)
-   : Ingredient(Brewtarget::WATERTABLE, -1, other.name(), true),
+   : NamedEntity(Brewtarget::WATERTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_calcium_ppm(other.m_calcium_ppm),
    m_bicarbonate_ppm(other.m_bicarbonate_ppm),
@@ -108,7 +110,7 @@ Water::Water(Water const& other, bool cache)
 }
 
 Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_amount(rec.value(kcolAmount).toDouble()),
    m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
    m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),
@@ -278,12 +280,12 @@ double Water::ppm( Water::Ions ion )
    return 0.0;
 }
 
-Ingredient * Water::getParent() {
+NamedEntity * Water::getParent() {
    Water * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it
@@ -297,4 +299,8 @@ Ingredient * Water::getParent() {
 
 int Water::insertInDatabase() {
    return Database::instance().insertWater(this);
+}
+
+void Water::removeFromDatabase() {
+   Database::instance().remove(this);
 }

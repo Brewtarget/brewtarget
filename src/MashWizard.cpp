@@ -367,7 +367,7 @@ void MashWizard::wizardry()
          int numSteps = spinBox_batches->value();
          double volPerBatch = spargeWater_l/numSteps; // its evil, but deal with it
          for(int i=0; i < numSteps; ++i ) {
-            mashStep = new MashStep(true);
+            mashStep = new MashStep("", true);
 
             mashStep->setType(MashStep::batchSparge);
             mashStep->setName(tr("Batch Sparge %1").arg(i+1),true);
@@ -389,7 +389,7 @@ void MashWizard::wizardry()
       }
       // fly sparge, I think
       else {
-         mashStep = new MashStep(true);
+         mashStep = new MashStep("", true);
 
          mashStep->setName(tr("Fly Sparge"), true);
          mashStep->setType(MashStep::flySparge);

@@ -1,7 +1,8 @@
 /*
  * water.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,12 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _WATER_H
 #define _WATER_H
 
 #include <QString>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 namespace PropertyNames::Water { static char const * const ph = "ph"; /* previously kpropPH */ }
 namespace PropertyNames::Water { static char const * const amount = "amount"; /* previously kpropAmount */ }
 namespace PropertyNames::Water { static char const * const type = "type"; /* previously kpropType */ }
@@ -39,18 +39,12 @@ namespace PropertyNames::Water { static char const * const sulfate_ppm = "sulfat
 namespace PropertyNames::Water { static char const * const bicarbonate_ppm = "bicarbonate_ppm"; /* previously kpropBiCarbonate */ }
 namespace PropertyNames::Water { static char const * const calcium_ppm = "calcium_ppm"; /* previously kpropCalcium */ }
 
-// Forward declarations.
-class Water;
-bool operator<(Water &w1, Water &w2);
-bool operator==(Water &w1, Water &w2);
-
 /*!
  * \class Water
- * \author Philip G. Lee
  *
  * \brief Model for water records in the database.
  */
-class Water : public Ingredient
+class Water : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "waters")
@@ -83,6 +77,7 @@ public:
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
    //! \brief The amount in liters.
+   // .:TBD:. (MY 2020-01-03) In Hop we have amount_kg, so might be more consistent here to have amount_l or similar
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount_l*/ )
    //! \brief The ppm of calcium.
    Q_PROPERTY( double calcium_ppm READ calcium_ppm WRITE setCalcium_ppm /*NOTIFY changed*/ /*changedCalcium_ppm*/ )
@@ -146,18 +141,23 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
 
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Water(Brewtarget::DBTable table, int key);
    Water(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Water(Water const& other, bool cache = true);
+public:
    Water(QString name, bool cache = true);
 
+private:
    double m_amount;
    double m_calcium_ppm;
    double m_bicarbonate_ppm;
@@ -174,34 +174,6 @@ private:
    double m_sparge_ro;
    bool m_alkalinity_as_hco3;
 
-};
-
-Q_DECLARE_METATYPE( QList<Water*> )
-
-inline bool WaterPtrLt( Water* lhs, Water* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool WaterPtrEq( Water* lhs, Water* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct Water_ptr_cmp
-{
-   bool operator()( Water* lhs, Water* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Water_ptr_equals
-{
-   bool operator()( Water* lhs, Water* rhs )
-   {
-      return *lhs == *rhs;
-   }
 };
 
 #endif   /* _WATER_H */

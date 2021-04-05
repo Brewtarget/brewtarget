@@ -53,20 +53,23 @@ QString BrewNote::classNameStr()
    return name;
 }
 
-// operators for sorts and things
-bool operator<(BrewNote const& lhs, BrewNote const& rhs)
-{
-   return lhs.brewDate() < rhs.brewDate();
-}
+// BrewNote doesn't use its name field, so we sort by brew date
+// TBD: Could consider copying date into name field and leaving the default ordering
+bool BrewNote::operator<(BrewNote const & other) const { return this->m_brewDate < other.m_brewDate; }
+bool BrewNote::operator>(BrewNote const & other) const { return this->m_brewDate > other.m_brewDate; }
 
-bool operator==(BrewNote const& lhs, BrewNote const& rhs)
-{
-   return lhs.brewDate() == rhs.brewDate();
+bool BrewNote::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   BrewNote const & rhs = static_cast<BrewNote const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_brewDate == rhs.m_brewDate
+   );
 }
 
 // Initializers
 BrewNote::BrewNote(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key),
+   : NamedEntity(table, key),
      loading(false),
      m_brewDate(QDateTime()),
      m_fermentDate(QDateTime()),
@@ -102,8 +105,12 @@ BrewNote::BrewNote(Brewtarget::DBTable table, int key)
 {
 }
 
-BrewNote::BrewNote(QDateTime dateNow, bool cache)
-   : Ingredient(Brewtarget::BREWNOTETABLE,-1,QString(),true),
+BrewNote::BrewNote(QString name, bool cache) : BrewNote(QDateTime(), cache, name) {
+   return;
+}
+
+BrewNote::BrewNote(QDateTime dateNow, bool cache, QString const & name)
+   : NamedEntity(Brewtarget::BREWNOTETABLE,-1,name,true),
      loading(false),
      m_brewDate(dateNow),
      m_fermentDate(QDateTime()),
@@ -140,7 +147,7 @@ BrewNote::BrewNote(QDateTime dateNow, bool cache)
 }
 
 BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolBNoteFermDate).toString(), rec.value(kcolDisplay).toBool()),
+   : NamedEntity(table, key, rec.value(kcolBNoteFermDate).toString(), rec.value(kcolDisplay).toBool()),
      m_brewDate(QDateTime::fromString(rec.value(kcolBNoteBrewDate).toString(), Qt::ISODate)),
      m_fermentDate(QDateTime::fromString(rec.value(kcolBNoteFermDate).toString(), Qt::ISODate)),
      m_notes(rec.value(kcolBNoteNotes).toString()),
@@ -285,7 +292,7 @@ void BrewNote::recalculateEff(Recipe* parent)
 }
 
 BrewNote::BrewNote(BrewNote const& other)
-   : Ingredient(other),
+   : NamedEntity(other),
      m_brewDate(other.m_brewDate),
      m_fermentDate(other.m_fermentDate),
      m_notes(other.m_notes),
@@ -780,4 +787,8 @@ double BrewNote::calculateAttenuation_pct()
 
 int BrewNote::insertInDatabase() {
    return Database::instance().insertBrewNote(this, this->m_recipe);
+}
+
+void BrewNote::removeFromDatabase() {
+   Database::instance().remove(this);
 }

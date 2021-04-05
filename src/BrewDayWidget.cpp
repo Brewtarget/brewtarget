@@ -335,7 +335,7 @@ void BrewDayWidget::setRecipe(Recipe* rec)
 
    recObs = rec;
    if( recObs )
-      connect( recObs, &Ingredient::changed, this, &BrewDayWidget::changed );
+      connect( recObs, &NamedEntity::changed, this, &BrewDayWidget::changed );
 
    showChanges();
 }

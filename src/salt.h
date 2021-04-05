@@ -1,7 +1,8 @@
 /*
  * salt.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,12 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _SALT_H
 #define _SALT_H
 
 #include <QString>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 namespace PropertyNames::Salt { static char const * const amount = "amount"; /* previously kpropAmount */ }
 namespace PropertyNames::Salt { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
 namespace PropertyNames::Salt { static char const * const type = "type"; /* previously kpropType */ }
@@ -31,8 +31,6 @@ namespace PropertyNames::Salt { static char const * const isAcid = "isAcid"; /* 
 namespace PropertyNames::Salt { static char const * const percentAcid = "percentAcid"; /* previously kpropPctAcid */ }
 namespace PropertyNames::Salt { static char const * const addTo = "addTo"; /* previously kpropAddTo */ }
 
-// Forward declarations.
-class Salt;
 
 /*!
  * \class Salt
@@ -40,7 +38,7 @@ class Salt;
  *
  * \brief Model for salt records in the database.
  */
-class Salt : public Ingredient
+class Salt : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "salts")
@@ -50,9 +48,6 @@ class Salt : public Ingredient
    friend class WaterDialog;
    friend class SaltTableModel;
 public:
-
-   friend bool operator<( const Salt &s1, const Salt &s2 );
-   friend bool operator==( const Salt &s1, const Salt &s2 );
 
    enum WhenToAdd {
       NEVER,
@@ -126,10 +121,14 @@ public:
    double SO4() const;
 
    // Salt objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Salt(Brewtarget::DBTable table, int key);

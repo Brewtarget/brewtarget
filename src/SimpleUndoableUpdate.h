@@ -1,6 +1,6 @@
 /*
  * SimpleUndoableUpdate.h is part of Brewtarget, and is Copyright the following
- * authors 2020
+ * authors 2020-2021
  * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -73,7 +73,6 @@ private:
    QObject & updatee;
    char const * const propertyName;
    QVariant oldValue, newValue;
-   QMetaProperty metaProperty;
 };
 
 #endif /*SIMPLE_UNDOABLE_UPDATE_H*/

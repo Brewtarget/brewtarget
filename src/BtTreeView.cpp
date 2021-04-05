@@ -125,14 +125,14 @@ QString BtTreeView::folderName(QModelIndex index)
    if ( _model->type(_filter->mapToSource(index)) == BtTreeItem::FOLDER)
       return _model->folder(_filter->mapToSource(index))->fullPath();
 
-   Ingredient* thing = _model->thing(_filter->mapToSource(index));
+   NamedEntity* thing = _model->thing(_filter->mapToSource(index));
    if ( thing )
       return _model->thing(_filter->mapToSource(index))->folder();
    else
       return "";
 }
 
-QModelIndex BtTreeView::findElement(Ingredient* thing)
+QModelIndex BtTreeView::findElement(NamedEntity* thing)
 {
    return _filter->mapFromSource(_model->findElement(thing));
 }
@@ -344,7 +344,7 @@ bool BtTreeView::multiSelected()
    return hasRecipe && hasSomethingElse;
 }
 
-void BtTreeView::newIngredient() {
+void BtTreeView::newNamedEntity() {
 
    QString folder;
    QModelIndexList indexes = selectionModel()->selectedRows();
@@ -411,25 +411,25 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 
          break;
       case BtTreeModel::EQUIPMASK:
-         _newMenu->addAction(tr("Equipment"), this, SLOT(newIngredient()));
+         _newMenu->addAction(tr("Equipment"), this, SLOT(newNamedEntity()));
          break;
       case BtTreeModel::FERMENTMASK:
-         _newMenu->addAction(tr("Fermentable"), this, SLOT(newIngredient()));
+         _newMenu->addAction(tr("Fermentable"), this, SLOT(newNamedEntity()));
          break;
       case BtTreeModel::HOPMASK:
-         _newMenu->addAction(tr("Hop"), this, SLOT(newIngredient()));
+         _newMenu->addAction(tr("Hop"), this, SLOT(newNamedEntity()));
          break;
       case BtTreeModel::MISCMASK:
-         _newMenu->addAction(tr("Misc"), this, SLOT(newIngredient()));
+         _newMenu->addAction(tr("Misc"), this, SLOT(newNamedEntity()));
          break;
       case BtTreeModel::STYLEMASK:
-         _newMenu->addAction(tr("Style"), this, SLOT(newIngredient()));
+         _newMenu->addAction(tr("Style"), this, SLOT(newNamedEntity()));
          break;
       case BtTreeModel::YEASTMASK:
-         _newMenu->addAction(tr("Yeast"), this, SLOT(newIngredient()));
+         _newMenu->addAction(tr("Yeast"), this, SLOT(newNamedEntity()));
          break;
       case BtTreeModel::WATERMASK:
-         _newMenu->addAction(tr("Water"), this, SLOT(newIngredient()));
+         _newMenu->addAction(tr("Water"), this, SLOT(newNamedEntity()));
          break;
       default:
          qWarning() << QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type);

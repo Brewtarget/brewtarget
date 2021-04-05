@@ -118,7 +118,6 @@ namespace Log
 
    /* Get the list of Logfiles present in the directory currently logging in and returns a FileInfoList containing the files.*/
    extern QFileInfoList getLogFileList();
-
 }
 
 #endif /* _LOG_H */

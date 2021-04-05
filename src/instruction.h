@@ -1,6 +1,6 @@
 /*
  * instruction.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _INSTRUCTION_H
 #define _INSTRUCTION_H
 
@@ -28,7 +27,7 @@
 #include <QString>
 #include <QVector>
 #include <QDomNode>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include "recipe.h"
 namespace PropertyNames::Instruction { static char const * const interval = "interval"; /* previously kpropInterval */ }
 namespace PropertyNames::Instruction { static char const * const completed = "completed"; /* previously kpropCompleted */ }
@@ -38,11 +37,10 @@ namespace PropertyNames::Instruction { static char const * const directions = "d
 
 /*!
  * \class Instruction
- * \author Philip G. Lee
  *
  * \brief Model class for an instruction record in the database.
  */
-class Instruction : public Ingredient
+class Instruction : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "instructions")
@@ -86,15 +84,21 @@ public:
    static QString classNameStr();
 
    // Instruction objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Instruction(Brewtarget::DBTable table, int key);
    Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec);
+public:
    Instruction( QString name, bool cache = true );
+private:
    Instruction( Instruction const& other );
 
    QString m_directions;
@@ -106,9 +110,6 @@ private:
    Recipe * m_recipe;
 
    QList<QString> m_reagents;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Instruction*> )

@@ -67,7 +67,7 @@ void RecipeExtrasWidget::setRecipe(Recipe* rec)
    if( rec )
    {
       recipe = rec;
-      connect( recipe, &Ingredient::changed, this, &RecipeExtrasWidget::changed );
+      connect( recipe, &NamedEntity::changed, this, &RecipeExtrasWidget::changed );
       showChanges();
    }
 }

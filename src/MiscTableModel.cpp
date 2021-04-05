@@ -63,7 +63,7 @@ void MiscTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &Ingredient::changed, this, &MiscTableModel::changed );
+      connect( recObs, &NamedEntity::changed, this, &MiscTableModel::changed );
       addMiscs( recObs->miscs() );
    }
 }
@@ -103,7 +103,7 @@ void MiscTableModel::addMisc(Misc* misc)
    int size = miscObs.size();
    beginInsertRows( QModelIndex(), size, size );
    miscObs.append(misc);
-   connect( misc, &Ingredient::changed, this, &MiscTableModel::changed );
+   connect( misc, &NamedEntity::changed, this, &MiscTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
@@ -128,7 +128,7 @@ void MiscTableModel::addMiscs(QList<Misc*> miscs)
       miscObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &Ingredient::changed, this, &MiscTableModel::changed );
+         connect( *i, &NamedEntity::changed, this, &MiscTableModel::changed );
 
       endInsertRows();
    }
@@ -313,7 +313,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
          if( value.canConvert(QVariant::String) )
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Ingredient::name,
+                                                     PropertyNames::NamedEntity::name,
                                                      value.toString(),
                                                      tr("Change Misc Name"));
          }

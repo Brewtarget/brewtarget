@@ -114,7 +114,7 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
       value = metaProp->read(y);
    }
 
-   if( propName == PropertyNames::Ingredient::name || updateAll )
+   if( propName == PropertyNames::NamedEntity::name || updateAll )
    {
       lineEdit_name->setText(obsYeast->name());
       lineEdit_name->setCursorPosition(0);

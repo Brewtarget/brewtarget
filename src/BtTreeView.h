@@ -68,7 +68,7 @@ public:
    //! \brief returns the first \c type element in the tree
    QModelIndex first();
 
-   QModelIndex findElement(Ingredient* thing);
+   QModelIndex findElement(NamedEntity* thing);
 
    //! \brief returns the recipe at \c index
    Recipe* recipe(const QModelIndex &index) const;
@@ -138,7 +138,7 @@ public:
    friend class WaterTreeView;
 
 public slots:
-   void newIngredient();
+   void newNamedEntity();
 
 private slots:
    void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);

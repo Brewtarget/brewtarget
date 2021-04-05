@@ -1,8 +1,9 @@
 /*
  * fermentable.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -20,13 +21,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _FERMENTABLE_H
 #define _FERMENTABLE_H
 
 #include <QStringList>
 #include <QString>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include "unit.h"
 namespace PropertyNames::Fermentable { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
 namespace PropertyNames::Fermentable { static char const * const origin = "origin"; /* previously kpropOrigin */ }
@@ -47,18 +47,13 @@ namespace PropertyNames::Fermentable { static char const * const addAfterBoil = 
 namespace PropertyNames::Fermentable { static char const * const color_srm = "color_srm"; /* previously kpropColor */ }
 namespace PropertyNames::Fermentable { static char const * const yield_pct = "yield_pct"; /* previously kpropYield */ }
 
-// Forward declarations.
-class Fermentable;
-bool operator<(Fermentable &f1, Fermentable &f2);
-bool operator==(Fermentable &f1, Fermentable &f2);
 
 /*!
  * \class Fermentable
- * \author Philip G. Lee
  *
  * \brief Model for a fermentable record in the database.
  */
-class Fermentable : public Ingredient
+class Fermentable : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "fermentables")
@@ -70,7 +65,7 @@ class Fermentable : public Ingredient
 public:
 
    //! \brief The type of Fermentable.
-   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct}; // NOTE: BeerXML expects a space for "Dry_Extract". We're screwed.
+   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct};
    //! \brief The addition method.
    enum AdditionMethod {Mashed, Steeped, Not_Mashed};
    //! \brief The addition time.
@@ -195,22 +190,25 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Fermentable(Brewtarget::DBTable table, int key);
    Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Fermentable( Fermentable &other );
+public:
    Fermentable( QString name, bool cache = true );
+private:
 
    static bool isValidType( const QString& str );
    static QStringList types;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 
    QString m_typeStr;
    Type m_type;
@@ -236,16 +234,9 @@ private:
 
 Q_DECLARE_METATYPE( QList<Fermentable*> )
 
-inline bool FermentablePtrLt( Fermentable* lhs, Fermentable* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool FermentablePtrEq( Fermentable* lhs, Fermentable* rhs)
-{
-   return *lhs == *rhs;
-}
-
+/**
+ * This function is used for sorting in the recipe formatter
+ */
 inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentable* rhs)
 {
    // Sort by name if the two fermentables are of equal weight
@@ -256,21 +247,5 @@ inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentab
    // descending not ascending order.
    return lhs->amount_kg() > rhs->amount_kg();
 }
-
-struct Fermentable_ptr_cmp
-{
-   bool operator()( Fermentable* lhs, Fermentable* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Fermentable_ptr_equals
-{
-   bool operator()( Fermentable* lhs, Fermentable* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
 
 #endif

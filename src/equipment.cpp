@@ -1,6 +1,6 @@
 /*
  * equipment.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <QVector>
 #include <QDomElement>
 #include <QDomText>
@@ -32,19 +31,31 @@
 #include "database.h"
 
 
-bool operator<(Equipment &e1, Equipment &e2)
-{
-   return e1.name() < e2.name();
+bool Equipment::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Equipment const & rhs = static_cast<Equipment const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_boilSize_l            == rhs.m_boilSize_l            &&
+      this->m_batchSize_l           == rhs.m_batchSize_l           &&
+      this->m_tunVolume_l           == rhs.m_tunVolume_l           &&
+      this->m_tunWeight_kg          == rhs.m_tunWeight_kg          &&
+      this->m_tunSpecificHeat_calGC == rhs.m_tunSpecificHeat_calGC &&
+      this->m_topUpWater_l          == rhs.m_topUpWater_l          &&
+      this->m_trubChillerLoss_l     == rhs.m_trubChillerLoss_l     &&
+      this->m_evapRate_pctHr        == rhs.m_evapRate_pctHr        &&
+      this->m_evapRate_lHr          == rhs.m_evapRate_lHr          &&
+      this->m_boilTime_min          == rhs.m_boilTime_min          &&
+      this->m_lauterDeadspace_l     == rhs.m_lauterDeadspace_l     &&
+      this->m_topUpKettle_l         == rhs.m_topUpKettle_l         &&
+      this->m_hopUtilization_pct    == rhs.m_hopUtilization_pct
+   );
 }
 
-bool operator==(Equipment &e1, Equipment &e2)
-{
-   return e1.name() == e2.name();
-}
 
 //=============================CONSTRUCTORS=====================================
 Equipment::Equipment(QString t_name, bool cacheOnly)
-   : Ingredient(Brewtarget::EQUIPTABLE, -1, t_name, true),
+   : NamedEntity(Brewtarget::EQUIPTABLE, -1, t_name, true),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -67,7 +78,7 @@ Equipment::Equipment(QString t_name, bool cacheOnly)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true ),
+   : NamedEntity(table, key, QString(), true ),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -90,7 +101,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key)
 }
 
 Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_boilSize_l(rec.value(kcolEquipBoilSize).toDouble()),
    m_batchSize_l(rec.value(kcolEquipBatchSize).toDouble()),
    m_tunVolume_l(rec.value(kcolEquipTunVolume).toDouble()),
@@ -113,7 +124,7 @@ Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Equipment::Equipment( Equipment const& other )
-   : Ingredient(other),
+   : NamedEntity(other),
    m_boilSize_l(other.m_boilSize_l),
    m_batchSize_l(other.m_batchSize_l),
    m_tunVolume_l(other.m_tunVolume_l),
@@ -456,12 +467,12 @@ double Equipment::wortEndOfBoil_l( double kettleWort_l ) const
    return kettleWort_l - (boilTime_min()/(double)60)*evapRate_lHr();
 }
 
-Ingredient * Equipment::getParent() {
+NamedEntity * Equipment::getParent() {
    Equipment * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it
@@ -475,4 +486,8 @@ Ingredient * Equipment::getParent() {
 
 int Equipment::insertInDatabase() {
    return Database::instance().insertEquipment(this);
+}
+
+void Equipment::removeFromDatabase() {
+   Database::instance().remove(this);
 }

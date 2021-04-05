@@ -289,8 +289,8 @@ bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q, DatabaseSchema* defn)
    foreach( TableSchema* tbl, defn->baseTables() ) {
       ret &= q.exec(
                ALTERTABLE + SEP + tbl->tableName() + SEP +
-               ADDCOLUMN  + SEP + tbl->propertyToColumn(PropertyNames::Ingredient::folder) + SEP +
-               tbl->propertyColumnType(PropertyNames::Ingredient::folder) + SEP + DEFAULT + " ''"
+               ADDCOLUMN  + SEP + tbl->propertyToColumn(PropertyNames::NamedEntity::folder) + SEP +
+               tbl->propertyColumnType(PropertyNames::NamedEntity::folder) + SEP + DEFAULT + " ''"
             );
    }
 
@@ -298,7 +298,7 @@ bool DatabaseSchemaHelper::migrate_to_210(QSqlQuery q, DatabaseSchema* defn)
    // Put the "Bt:.*" recipes into /brewtarget folder
    ret &= q.exec(
       UPDATE + SEP + tbl->tableName() + SEP +
-      SET + SEP + tbl->propertyToColumn(PropertyNames::Ingredient::folder) + "='/brewtarget' WHERE name LIKE 'Bt:%'"
+      SET + SEP + tbl->propertyToColumn(PropertyNames::NamedEntity::folder) + "='/brewtarget' WHERE name LIKE 'Bt:%'"
    );
 
    tbl = defn->table(Brewtarget::SETTINGTABLE);

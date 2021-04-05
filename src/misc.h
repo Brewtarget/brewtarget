@@ -1,7 +1,8 @@
 /*
  * misc.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,12 +20,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _MISC_H
 #define _MISC_H
 
 #include <QString>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 namespace PropertyNames::Misc { static char const * const amount = "amount"; /* previously kpropAmount */ }
 namespace PropertyNames::Misc { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
 namespace PropertyNames::Misc { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
@@ -36,16 +36,12 @@ namespace PropertyNames::Misc { static char const * const notes = "notes"; /* pr
 namespace PropertyNames::Misc { static char const * const time = "time"; /* previously kpropMiscTime */ }
 namespace PropertyNames::Misc { static char const * const useFor = "useFor"; /* previously kpropUseFor */ }
 
-// Forward declarations.
-class Misc;
-
 /*!
  * \class Misc
- * \author Philip G. Lee
  *
  * \brief Model for a misc record in the database.
  */
-class Misc : public Ingredient
+class Misc : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "miscs")
@@ -56,7 +52,7 @@ class Misc : public Ingredient
 public:
 
    //! \brief The type of ingredient.
-   enum Type {Spice, Fining, Water_Agent, Herb, Flavor, Other}; // NOTE: BeerXML expects "Water Agent", but we can't have white space in enums :-/.
+   enum Type {Spice, Fining, Water_Agent, Herb, Flavor, Other};
    //! \brief Where the ingredient is used.
    enum Use { Boil, Mash, Primary, Secondary, Bottling };
    //! \brief What is the type of amount.
@@ -84,6 +80,7 @@ public:
    //! \brief The translated \c Use string.
    Q_PROPERTY( QString amountTypeStringTr READ amountTypeStringTr /*NOTIFY changed*/ /*changedAmountType*/ STORED false )
    //! \brief The time used in minutes.
+   // .:TBD:. (MY 2020-01-03) This property name seems inconsistent with Hop (where we use time_min)
    Q_PROPERTY( double time READ time WRITE setTime /*NOTIFY changed*/ /*changedTime*/ )
    //! \brief The amount in either kg or L, depending on \c amountIsWeight().
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
@@ -133,8 +130,9 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
 
@@ -142,10 +140,15 @@ signals:
    // Declared in Base Class BeerXMLElement, should not be overloaded
    //void changedName(QString);
 
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
    Misc(Brewtarget::DBTable table, int key);
    Misc(Brewtarget::DBTable table, int key, QSqlRecord rec);
+public:
    Misc(QString name, bool cache = true);
+private:
    Misc(Misc & other);
 
    QString m_typeString;
@@ -167,13 +170,10 @@ private:
    static QStringList types;
    static QStringList uses;
    static QStringList amountTypes;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Misc*> )
-
+/*
 inline bool MiscPtrLt( Misc* lhs, Misc* rhs)
 {
    return lhs->name() < rhs->name();
@@ -199,5 +199,5 @@ struct Misc_ptr_equals
       return lhs->name() == rhs->name();
    }
 };
-
+*/
 #endif   /* _MISC_H */

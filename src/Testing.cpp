@@ -18,6 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <xercesc/util/PlatformUtils.hpp>
+
 #include "Testing.h"
 #include <math.h>
 #include "recipe.h"
@@ -38,6 +40,15 @@ QTEST_MAIN(Testing)
 
 void Testing::initTestCase()
 {
+   // Initialize Xerces XML tools
+   // NB: This is also where where we would initialise xalanc::XalanTransformer if we were using it
+   try {
+      xercesc::XMLPlatformUtils::Initialize();
+   } catch (xercesc::XMLException const & xercesInitException) {
+      qCritical() << Q_FUNC_INFO << "Xerces XML Parser Initialisation Failed: " << xercesInitException.getMessage();
+      return;
+   }
+
    // Create a different set of options to avoid clobbering real options
    QCoreApplication::setOrganizationName("brewtarget-test");
    QCoreApplication::setOrganizationDomain("brewtarget.org/test");
@@ -138,7 +149,7 @@ void Testing::recipeCalcTest_allGrain()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   rec->addFermentable(twoRow);
+   rec->add<Fermentable>(twoRow);
 
    // Add mash
    Database::instance().addToRecipe(rec, singleConversion);
@@ -219,8 +230,8 @@ void Testing::postBoilLossOgTest()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   recNoLoss->addFermentable(twoRow);
-   recLoss->addFermentable(twoRow);
+   recNoLoss->add<Fermentable>(twoRow);
+   recLoss->add<Fermentable>(twoRow);
 
    // Single conversion, no sparge
    Mash* singleConversion = Database::instance().newMash();
@@ -294,4 +305,14 @@ void Testing::cleanupTestCase()
    // Clear all persistent properties linked with this test suite.
    // It will clear all settings that are application specific, user-scoped, and in the brewtarget namespace.
    QSettings().clear();
+
+   //
+   // Clean exit of Xerces XML tools
+   // If we, in future, want to use XalanTransformer, this needs to be extended to:
+   //    XalanTransformer::terminate();
+   //    XMLPlatformUtils::Terminate();
+   //    XalanTransformer::ICUCleanUp();
+   //
+   xercesc::XMLPlatformUtils::Terminate();
+
 }

@@ -1,3 +1,8 @@
+#
+# CMakeLists.txt is part of Brewtarget
+#
+# See also src/CMakeLists.txt
+#
 PROJECT(brewtarget)
 CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
 CMAKE_POLICY( VERSION 3.0 )
@@ -193,6 +198,22 @@ SET_PROPERTY(
    "CPackSourceConfig.cmake"
 )
 
+#===============================Find Xerces-C++================================
+# CMake already knows how to find and configure Xerces-C++, see
+# https://cmake.org/cmake/help/latest/module/FindXercesC.html
+FIND_PACKAGE(XercesC REQUIRED)
+INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
+# Uncomment the next two lines if you want to find where Xerces headers and DLLs are on your system
+#message( "Xerces-C++ include directories: " ${XercesC_INCLUDE_DIRS} )
+#message( "Xerces-C++ libraries: " ${XercesC_LIBRARIES} )
+
+#===============================Find Xalan-C++================================
+# Same comments apply here as for Xerces above
+FIND_PACKAGE(XalanC REQUIRED)
+INCLUDE_DIRECTORIES(${XalanC_INCLUDE_DIRS})
+message( "Xalan-C++ include directories: " ${XalanC_INCLUDE_DIRS} )
+message( "Xalan-C++ libraries: " ${XalanC_LIBRARIES} )
+
 #=========================Configure brewtarget.qrc.in==========================
 
 SET( brewtarget_QRC "${CMAKE_CURRENT_SOURCE_DIR}/brewtarget.qrc" )
@@ -376,7 +397,7 @@ SET( brewtarget_INFO_PLIST "${ROOTDIR}/mac/Info.plist" )
 SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 
 #==========================Find dlls for Win32=================================
-
+# .:TBD:. MY 2020-12-29 What do we need to do for Xerces and Xalan here?
 IF( WIN32 )
    IF( NOT ${NO_QTMULTIMEDIA} )
    FIND_PACKAGE(Qt5MultimediaWidgets REQUIRED)

@@ -79,7 +79,7 @@ void YeastTableModel::addYeast(Yeast* yeast)
    int size = yeastObs.size();
    beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);
-   connect( yeast, &Ingredient::changed, this, &YeastTableModel::changed );
+   connect( yeast, &NamedEntity::changed, this, &YeastTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
@@ -95,7 +95,7 @@ void YeastTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &Ingredient::changed, this, &YeastTableModel::changed );
+      connect( recObs, &NamedEntity::changed, this, &YeastTableModel::changed );
       addYeasts( recObs->yeasts() );
    }
 }
@@ -139,7 +139,7 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
       yeastObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &Ingredient::changed, this, &YeastTableModel::changed );
+         connect( *i, &NamedEntity::changed, this, &YeastTableModel::changed );
 
       endInsertRows();
    }
@@ -363,7 +363,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::String))
             return false;
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                  PropertyNames::Ingredient::name,
+                                                  PropertyNames::NamedEntity::name,
                                                   value.toString(),
                                                   tr("Change Yeast Name"));
          break;

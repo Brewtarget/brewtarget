@@ -32,19 +32,28 @@
 
 #include "TableSchemaConst.h"
 #include "FermentableSchema.h"
-#define SUPER Ingredient
+#define SUPER NamedEntity
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
 
-bool operator<(Fermentable &f1, Fermentable &f2)
-{
-   return f1.name() < f2.name();
+bool Fermentable::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Fermentable const & rhs = static_cast<Fermentable const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_type           == rhs.m_type           &&
+      this->m_yieldPct       == rhs.m_yieldPct       &&
+      this->m_colorSrm       == rhs.m_colorSrm       &&
+      this->m_origin         == rhs.m_origin         &&
+      this->m_supplier       == rhs.m_supplier       &&
+      this->m_coarseFineDiff == rhs.m_coarseFineDiff &&
+      this->m_moisturePct    == rhs.m_moisturePct    &&
+      this->m_diastaticPower == rhs.m_diastaticPower &&
+      this->m_proteinPct     == rhs.m_proteinPct     &&
+      this->m_maxInBatchPct  == rhs.m_maxInBatchPct
+   );
 }
 
-bool operator==(Fermentable &f1, Fermentable &f2)
-{
-   return f1.name() == f2.name();
-}
 
 QString Fermentable::classNameStr()
 {
@@ -53,7 +62,7 @@ QString Fermentable::classNameStr()
 }
 
 Fermentable::Fermentable(QString name, bool cache)
-   : Ingredient(Brewtarget::FERMTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::FERMTABLE, -1, name, true),
      m_typeStr(QString()),
      m_type(static_cast<Fermentable::Type>(0)),
      m_amountKg(0.0),
@@ -78,7 +87,7 @@ Fermentable::Fermentable(QString name, bool cache)
 }
 
 Fermentable::Fermentable(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true),
+   : NamedEntity(table, key, QString(), true),
      m_typeStr(QString()),
      m_type(static_cast<Fermentable::Type>(0)),
      m_amountKg(0.0),
@@ -103,7 +112,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key)
 }
 
 Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_typeStr(rec.value(kcolFermType).toString()),
      m_type(static_cast<Fermentable::Type>(types.indexOf(m_typeStr))),
      m_amountKg(rec.value(kcolFermAmount).toDouble()),
@@ -128,7 +137,7 @@ Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Fermentable::Fermentable( Fermentable &other )
-        : Ingredient( other ),
+        : NamedEntity( other ),
      m_typeStr(other.m_typeStr),
      m_type(other.m_type),
      m_amountKg(other.m_amountKg),
@@ -531,12 +540,12 @@ void Fermentable::setMaxInBatch_pct( double num )
 
 void Fermentable::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
-Ingredient * Fermentable::getParent() {
+NamedEntity * Fermentable::getParent() {
    Fermentable * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it
@@ -550,4 +559,8 @@ Ingredient * Fermentable::getParent() {
 
 int Fermentable::insertInDatabase() {
    return Database::instance().insertFermentable(this);
+}
+
+void Fermentable::removeFromDatabase() {
+   Database::instance().remove(this);
 }

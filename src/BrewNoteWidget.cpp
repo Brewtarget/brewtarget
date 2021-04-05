@@ -111,11 +111,11 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
 
    if( bNoteObs != 0 )
       disconnect( bNoteObs, 0, this, 0 );
-   
+
    if ( bNote )
    {
       bNoteObs = bNote;
-      connect( bNoteObs, &Ingredient::changed, this, &BrewNoteWidget::changed );
+      connect( bNoteObs, &NamedEntity::changed, this, &BrewNoteWidget::changed );
 
       // Set the highs and the lows for the lcds
       lcdnumber_effBK->setLowLim(bNoteObs->projEff_pct() * low);

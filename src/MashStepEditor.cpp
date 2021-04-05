@@ -71,7 +71,7 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_endTemp->setText(obs);
    }
 
-   else if( propName == PropertyNames::Ingredient::name )
+   else if( propName == PropertyNames::NamedEntity::name )
       lineEdit_name->setText(obs->name());
    else if( propName == "type" )
       comboBox_type->setCurrentIndex(obs->type());

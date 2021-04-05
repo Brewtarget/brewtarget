@@ -35,13 +35,13 @@ void StyleListModel::addStyle(Style* s)
 {
    if( !s || !s->display() || s->deleted() )
       return;
-   
+
    if( !styles.contains(s) )
    {
       int size = styles.size();
       beginInsertRows( QModelIndex(), size, size );
       styles.append(s);
-      connect( s, &Ingredient::changed, this, &StyleListModel::styleChanged );
+      connect( s, &NamedEntity::changed, this, &StyleListModel::styleChanged );
       endInsertRows();
    }
 }
@@ -50,22 +50,22 @@ void StyleListModel::addStyles(QList<Style*> s)
 {
    QList<Style*>::iterator i;
    QList<Style*> tmp;
-   
+
    for( i = s.begin(); i != s.end(); i++ )
    {
       if( !styles.contains(*i) )
          tmp.append(*i);
    }
-   
+
    int size = styles.size();
    if (size+tmp.size())
    {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       styles.append(tmp);
-      
+
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &Ingredient::changed, this, &StyleListModel::styleChanged );
-      
+         connect( *i, &NamedEntity::changed, this, &StyleListModel::styleChanged );
+
       endInsertRows();
    }
 }
@@ -94,16 +94,16 @@ void StyleListModel::removeAll()
 }
 
 void StyleListModel::styleChanged(QMetaProperty prop, QVariant val)
-{   
+{
    Style* sSend = qobject_cast<Style*>(sender());
-   
+
    // NOTE: how to get around the issue that the sender might live in
    // a different thread and therefore always cause sSend == 0?
    if( sSend == 0 )
       return;
-   
+
    QString propName(prop.name());
-   if( propName == PropertyNames::Ingredient::name )
+   if( propName == PropertyNames::NamedEntity::name )
    {
       int ndx = styles.indexOf(sSend);
       if( ndx >= 0 )

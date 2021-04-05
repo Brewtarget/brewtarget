@@ -3,9 +3,9 @@
  * authors 2009-2021
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
+ * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Maxime Lavigne <duguigne@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,12 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include <QSharedMemory>
+
+#include <xercesc/util/PlatformUtils.hpp>
+#include <xalanc/Include/PlatformDefinitions.hpp>
+
 #include "config.h"
+#include "beerxml.h"
 #include "brewtarget.h"
 #include "database.h"
 
@@ -35,6 +40,15 @@ void createBlankDb(const QString & filename);
 int main(int argc, char **argv)
 {
    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+
+   // Initialize Xerces XML tools
+   // NB: This is also where where we would initialise xalanc::XalanTransformer if we were using it
+   try {
+      xercesc::XMLPlatformUtils::Initialize();
+   } catch (xercesc::XMLException const & xercesInitException) {
+      qCritical() << Q_FUNC_INFO << "Xerces XML Parser Initialisation Failed: " << xercesInitException.getMessage();
+      return 1;
+   }
 
    QApplication app(argc, argv);
    app.setOrganizationName("brewtarget");
@@ -61,23 +75,34 @@ int main(int argc, char **argv)
    //
    // We want to allow the user to override this warning because, according to the Qt documentation, it is possible, on
    // Linux, that we get a "false positive".  Specifically, if the application crashed, then the shared memory will not
-   // get cleaned up, so we need the user to be able to override the warning when they next run it.
+   // get cleaned up.  We do attempt to detect and rectify such cases, with the double-check below, but it still seems
+   // wise to allow the user to override the warning if for any reason it is triggered incorrectly.
    //
    QSharedMemory sharedMemory("Brewtarget");
    if (!sharedMemory.create(1)) {
-      enum QMessageBox::StandardButton buttonPressed =
-         QMessageBox::warning(NULL,
-                              QApplication::tr("Brewtarget is already running!"),
-                              QApplication::tr("Another instance of Brewtarget is already running.\n\n"
-                                             "Running two copies of the program at once may lead to data loss.\n\n"
-                                             "Press OK to quit."),
-                              QMessageBox::Ignore | QMessageBox::Ok,
-                              QMessageBox::Ok);
-      if (buttonPressed == QMessageBox::Ok) {
-         // We haven't yet called exec on QApplication, so I'm not sure we _need_ to call exit() here, but it doesn't
-         // seem to hurt.
-         app.exit();
-         return EXIT_SUCCESS;
+      //
+      // According to
+      // https://stackoverflow.com/questions/42549904/qsharedmemory-is-not-getting-deleted-on-application-crash we can
+      // prevent a lot of false positives by manually calling detach() on the shared memory, as this will delete it if
+      // no other processes are using it.  Of course, in order to call detach(), we must first call attach().
+      //
+      sharedMemory.attach();
+      sharedMemory.detach(); // This should delete the shared memory if no other process is using it
+      if (!sharedMemory.create(1)) {
+         enum QMessageBox::StandardButton buttonPressed =
+            QMessageBox::warning(NULL,
+                                 QApplication::tr("Brewtarget is already running!"),
+                                 QApplication::tr("Another instance of Brewtarget is already running.\n\n"
+                                                  "Running two copies of the program at once may lead to data loss.\n\n"
+                                                  "Press OK to quit."),
+                                 QMessageBox::Ignore | QMessageBox::Ok,
+                                 QMessageBox::Ok);
+         if (buttonPressed == QMessageBox::Ok) {
+            // We haven't yet called exec on QApplication, so I'm not sure we _need_ to call exit() here, but it doesn't
+            // seem to hurt.
+            app.exit();
+            return EXIT_SUCCESS;
+         }
       }
    }
 
@@ -106,7 +131,18 @@ int main(int argc, char **argv)
 
    try
    {
-      return Brewtarget::run(parser.value(userDirectoryOption));
+      auto mainAppReturnValue = Brewtarget::run(parser.value(userDirectoryOption));
+
+      //
+      // Clean exit of Xerces XML tools
+      // If we, in future, want to use XalanTransformer, this needs to be extended to:
+      //    XalanTransformer::terminate();
+      //    XMLPlatformUtils::Terminate();
+      //    XalanTransformer::ICUCleanUp();
+      //
+      xercesc::XMLPlatformUtils::Terminate();
+
+      return mainAppReturnValue;
    }
    catch (const QString &error)
    {
@@ -135,7 +171,13 @@ int main(int argc, char **argv)
  * Use at your own risk.
  */
 void importFromXml(const QString & filename) {
-    Database::instance().importFromXML(filename);
+
+   QString errorMessage;
+   QTextStream errorMessageAsStream{&errorMessage};
+   if (!Database::instance().getBeerXml()->importFromXML(filename, errorMessageAsStream)) {
+      qCritical() << "Unable to import" << filename << "Error: " << errorMessage;
+      exit(1);
+   }
     Database::dropInstance();
     Brewtarget::setOption("converted", QDate().currentDate().toString());
     exit(0);

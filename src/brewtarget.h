@@ -20,13 +20,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _BREWTARGET_H
 #define _BREWTARGET_H
-
-// I think this will make things restart. I hope this will make things
-// restart.
-#define RESTART_CODE 0x1000
 
 #define CONFIG_VERSION 1
 
@@ -50,7 +45,7 @@ extern void qt_set_sequence_auto_mnemonic(bool b);
 #include "UnitSystem.h"
 #include "Log.h"
 
-class Ingredient;
+class NamedEntity;
 class MainWindow;
 
 // Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
@@ -189,7 +184,7 @@ public:
    static int run(const QString &userDirectory = QString());
 
    static double toDouble(QString text, bool* ok = nullptr);
-   static double toDouble(const Ingredient* element, QString attribute, QString caller);
+   static double toDouble(const NamedEntity* element, QString attribute, QString caller);
    static double toDouble(QString text, QString caller);
 
    /*!
@@ -212,7 +207,7 @@ public:
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( Ingredient* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
+   static QString displayAmount( NamedEntity* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
 
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -241,7 +236,7 @@ public:
     * \param attribute the \c QObject::property of \c element that returns the
     *        amount we wish to display
     */
-   static double amountDisplay( Ingredient* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
+   static double amountDisplay( NamedEntity* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
 
    //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
@@ -252,7 +247,7 @@ public:
    //! \brief Appropriate thickness units will be placed in \c *volumeUnit and \c *weightUnit.
    static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
 
-   static QPair<double,double> displayRange(Ingredient* element, QObject *object, QString attribute, RangeType _type = DENSITY);
+   static QPair<double,double> displayRange(NamedEntity* element, QObject *object, QString attribute, RangeType _type = DENSITY);
    static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
 
    //! \return SI amount for the string

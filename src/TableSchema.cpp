@@ -773,7 +773,7 @@ void TableSchema::defineStyleTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Ingredient::name]      = new PropertySchema( PropertyNames::Ingredient::name,       PropertyNames::Ingredient::name,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]      = new PropertySchema( PropertyNames::NamedEntity::name,       PropertyNames::NamedEntity::name,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Style::type]      = new PropertySchema( PropertyNames::Style::typeString, kcolStyleType,     kxmlPropType,     QString("text"), QString("'Ale'"));
    m_properties[PropertyNames::Style::category]       = new PropertySchema( PropertyNames::Style::category,        kcolStyleCat,      kxmlPropCat,      QString("text"), QString("''"));
    m_properties[PropertyNames::Style::categoryNumber]    = new PropertySchema( PropertyNames::Style::categoryNumber,     kcolStyleCatNum,   kxmlPropCatNum,   QString("text"), QString("''"));
@@ -797,9 +797,9 @@ void TableSchema::defineStyleTable()
    m_properties[PropertyNames::Style::examples]  = new PropertySchema( PropertyNames::Style::examples,   kcolStyleExamples, kxmlPropExamples, QString("text"), QString("''"));
 
    // not sure about these, but I think I'm gonna need them anyway
-   m_properties[PropertyNames::Ingredient::display]   = new PropertySchema(PropertyNames::Ingredient::display,   kcolDisplay,       QString(),        QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]   = new PropertySchema(PropertyNames::Ingredient::deleted,   kcolDeleted,       QString(),        QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]    = new PropertySchema(PropertyNames::Ingredient::folder,    kcolFolder,        QString(),        QString("text"),    QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]   = new PropertySchema(PropertyNames::NamedEntity::display,   kcolDisplay,       QString(),        QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]   = new PropertySchema(PropertyNames::NamedEntity::deleted,   kcolDeleted,       QString(),        QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]    = new PropertySchema(PropertyNames::NamedEntity::folder,    kcolFolder,        QString(),        QString("text"),    QString("''"));
 }
 
 void TableSchema::defineEquipmentTable()
@@ -813,7 +813,7 @@ void TableSchema::defineEquipmentTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Ingredient::name]          = new PropertySchema( PropertyNames::Ingredient::name,          PropertyNames::Ingredient::name,         kxmlPropName,            QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]          = new PropertySchema( PropertyNames::NamedEntity::name,          PropertyNames::NamedEntity::name,         kxmlPropName,            QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Equipment::boilSize_l]      = new PropertySchema( PropertyNames::Equipment::boilSize_l,      kcolEquipBoilSize,      kxmlPropBoilSize,        QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Equipment::batchSize_l]     = new PropertySchema( PropertyNames::Equipment::batchSize_l,     kcolEquipBatchSize,     kxmlPropBatchSize,       QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Equipment::tunVolume_l]     = new PropertySchema( PropertyNames::Equipment::tunVolume_l,     kcolEquipTunVolume,     kxmlPropTunVolume,       QString("real"), QVariant(0.0));
@@ -832,9 +832,9 @@ void TableSchema::defineEquipmentTable()
    m_properties[PropertyNames::Equipment::boilingPoint_c]  = new PropertySchema( PropertyNames::Equipment::boilingPoint_c,  kcolEquipBoilingPoint,  kxmlPropBoilingPoint,    QString("real"), QVariant(100.0));
    m_properties[PropertyNames::Equipment::grainAbsorption_LKg]    = new PropertySchema( PropertyNames::Equipment::grainAbsorption_LKg,    kcolEquipAbsorption,    kxmlPropGrainAbsorption, QString("real"), QVariant(1.085));
 
-   m_properties[PropertyNames::Ingredient::display]       = new PropertySchema( PropertyNames::Ingredient::display,       kcolDisplay,       QString(),               QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]       = new PropertySchema( PropertyNames::Ingredient::deleted,       kcolDeleted,       QString(),               QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]        = new PropertySchema( PropertyNames::Ingredient::folder,        kcolFolder,       QString(),               QString("text"), QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]       = new PropertySchema( PropertyNames::NamedEntity::display,       kcolDisplay,       QString(),               QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]       = new PropertySchema( PropertyNames::NamedEntity::deleted,       kcolDeleted,       QString(),               QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]        = new PropertySchema( PropertyNames::NamedEntity::folder,        kcolFolder,       QString(),               QString("text"), QString("''"));
 
 }
 
@@ -851,7 +851,7 @@ void TableSchema::defineFermentableTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Ingredient::name]           = new PropertySchema( PropertyNames::Ingredient::name,           kcolName,               kxmlPropName,           QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]           = new PropertySchema( PropertyNames::NamedEntity::name,           kcolName,               kxmlPropName,           QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Fermentable::notes]          = new PropertySchema( PropertyNames::Fermentable::notes,          kcolNotes,              kxmlPropNotes,          QString("text"), QString("''"));
    m_properties[PropertyNames::Fermentable::type]           = new PropertySchema( PropertyNames::Fermentable::typeString,     kcolFermType,           kxmlPropType,           QString("text"), QString("'Grain'"));
    m_properties[PropertyNames::Fermentable::amount_kg]       = new PropertySchema( PropertyNames::Fermentable::amount_kg,       kcolAmount,             kxmlPropAmount,         QString("real"), QVariant(0.0));
@@ -869,9 +869,9 @@ void TableSchema::defineFermentableTable()
    m_properties[PropertyNames::Fermentable::isMashed]       = new PropertySchema( PropertyNames::Fermentable::isMashed,       kcolFermIsMashed,       kxmlPropIsMashed,       QString("boolean"), QVariant(false));
    m_properties[PropertyNames::Fermentable::ibuGalPerLb]    = new PropertySchema( PropertyNames::Fermentable::ibuGalPerLb,    kcolFermIBUGalPerLb,    kxmlPropIBUGalPerLb,    QString("real"), QVariant(0.0));
 
-   m_properties[PropertyNames::Ingredient::display]        = new PropertySchema( PropertyNames::Ingredient::display,        kcolDisplay,            QString(),              QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]        = new PropertySchema( PropertyNames::Ingredient::deleted,        kcolDeleted,            QString(),              QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]         = new PropertySchema( PropertyNames::Ingredient::folder,         kcolFolder,             QString(),              QString("text"), QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]        = new PropertySchema( PropertyNames::NamedEntity::display,        kcolDisplay,            QString(),              QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]        = new PropertySchema( PropertyNames::NamedEntity::deleted,        kcolDeleted,            QString(),              QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]         = new PropertySchema( PropertyNames::NamedEntity::folder,         kcolFolder,             QString(),              QString("text"), QString("''"));
 
    // the inventory system is getting interesting
    m_foreignKeys[kpropInventoryId]   = new PropertySchema( kpropInventoryId,    kcolInventoryId,        QString("integer"),    m_invTable);
@@ -892,7 +892,7 @@ void TableSchema::defineHopTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[PropertyNames::Ingredient::name]          = new PropertySchema( PropertyNames::Ingredient::name,          kcolName,             kxmlPropName,          QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]          = new PropertySchema( PropertyNames::NamedEntity::name,          kcolName,             kxmlPropName,          QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Hop::notes]         = new PropertySchema( PropertyNames::Hop::notes,         kcolNotes,            kxmlPropNotes,         QString("text"), QString("''"));
    m_properties[PropertyNames::Hop::amount_kg]      = new PropertySchema( PropertyNames::Hop::amount_kg,      kcolAmount,           kxmlPropAmount,        QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Hop::use]           = new PropertySchema( PropertyNames::Hop::useString,     kcolUse,              kxmlPropUse,           QString("text"), QString("'Boil'"));
@@ -909,9 +909,9 @@ void TableSchema::defineHopTable()
    m_properties[PropertyNames::Hop::cohumulone_pct]    = new PropertySchema( PropertyNames::Hop::cohumulone_pct,    kcolHopCohumulone,    kxmlPropCohumulone,    QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Hop::myrcene_pct]       = new PropertySchema( PropertyNames::Hop::myrcene_pct,       kcolHopMyrcene,       kxmlPropMyrcene,       QString("real"), QVariant(0.0));
 
-   m_properties[PropertyNames::Ingredient::display]       = new PropertySchema( PropertyNames::Ingredient::display,       kcolDisplay,          QString(),             QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]       = new PropertySchema( PropertyNames::Ingredient::deleted,       kcolDeleted,          QString(),             QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]        = new PropertySchema( PropertyNames::Ingredient::folder,        kcolFolder,           QString(),             QString("text"), QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]       = new PropertySchema( PropertyNames::NamedEntity::display,       kcolDisplay,          QString(),             QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]       = new PropertySchema( PropertyNames::NamedEntity::deleted,       kcolDeleted,          QString(),             QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]        = new PropertySchema( PropertyNames::NamedEntity::folder,        kcolFolder,           QString(),             QString("text"), QString("''"));
 
    m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
@@ -927,15 +927,15 @@ void TableSchema::defineInstructionTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[PropertyNames::Ingredient::name]          = new PropertySchema( PropertyNames::Ingredient::name,          kcolName,                  kxmlPropName,       QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]          = new PropertySchema( PropertyNames::NamedEntity::name,          kcolName,                  kxmlPropName,       QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Instruction::directions]    = new PropertySchema( PropertyNames::Instruction::directions,    kcolInstructionDirections, kxmlPropDirections, QString("text"), QString("''"));
    m_properties[PropertyNames::Instruction::hasTimer]      = new PropertySchema( PropertyNames::Instruction::hasTimer,      kcolInstructionHasTimer,   kxmlPropHasTimer,   QString("boolean"), QVariant(false));
    m_properties[PropertyNames::Instruction::timerValue]    = new PropertySchema( PropertyNames::Instruction::timerValue,    kcolInstructionTimerValue, kxmlPropTimerValue, QString("text"), QVariant("'00:00:00'"));
    m_properties[PropertyNames::Instruction::completed]     = new PropertySchema( PropertyNames::Instruction::completed,     kcolInstructionCompleted,  kxmlPropCompleted,  QString("boolean"), QVariant(false));
    m_properties[PropertyNames::Instruction::interval]      = new PropertySchema( PropertyNames::Instruction::interval,      kcolInstructionInterval,   kxmlPropInterval,   QString("real"), QVariant(0.0));
 
-   m_properties[PropertyNames::Ingredient::display]       = new PropertySchema( PropertyNames::Ingredient::display,       kcolDisplay,               QString(),          QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]       = new PropertySchema( PropertyNames::Ingredient::deleted,       kcolDeleted,               QString(),          QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::display]       = new PropertySchema( PropertyNames::NamedEntity::display,       kcolDisplay,               QString(),          QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]       = new PropertySchema( PropertyNames::NamedEntity::deleted,       kcolDeleted,               QString(),          QString("boolean"), QVariant(false));
 }
 
 void TableSchema::defineMashTable()
@@ -948,7 +948,7 @@ void TableSchema::defineMashTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[PropertyNames::Ingredient::name]        = new PropertySchema( PropertyNames::Ingredient::name,        kcolName,            kxmlPropName,        QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]        = new PropertySchema( PropertyNames::NamedEntity::name,        kcolName,            kxmlPropName,        QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Mash::notes]       = new PropertySchema( PropertyNames::Mash::notes,       kcolNotes,           kxmlPropNotes,       QString("text"), QString("''"));
    m_properties[PropertyNames::Mash::grainTemp_c]   = new PropertySchema( PropertyNames::Mash::grainTemp_c,   kcolMashGrainTemp,   kxmlPropGrainTemp,   QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Mash::tunTemp_c]     = new PropertySchema( PropertyNames::Mash::tunTemp_c,     kcolMashTunTemp,     kxmlPropTunTemp,     QString("real"), QVariant(20.0));
@@ -958,9 +958,9 @@ void TableSchema::defineMashTable()
    m_properties[PropertyNames::Mash::tunSpecificHeat_calGC] = new PropertySchema( PropertyNames::Mash::tunSpecificHeat_calGC, kcolMashTunSpecHeat, kxmlPropTunSpecHeat, QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Mash::equipAdjust] = new PropertySchema( PropertyNames::Mash::equipAdjust, kcolMashEquipAdjust, kxmlPropEquipAdjust, QString("boolean"), QVariant(true));
 
-   m_properties[PropertyNames::Ingredient::display]     = new PropertySchema( PropertyNames::Ingredient::display,     kcolDisplay,         QString(),           QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]     = new PropertySchema( PropertyNames::Ingredient::deleted,     kcolDeleted,         QString(),           QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]      = new PropertySchema( PropertyNames::Ingredient::folder,      kcolFolder,         QString(),           QString("text"), QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]     = new PropertySchema( PropertyNames::NamedEntity::display,     kcolDisplay,         QString(),           QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]     = new PropertySchema( PropertyNames::NamedEntity::deleted,     kcolDeleted,         QString(),           QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]      = new PropertySchema( PropertyNames::NamedEntity::folder,      kcolFolder,         QString(),           QString("text"), QString("''"));
 }
 
 // property name, column name, xml property name, column type, column default, column constraint
@@ -973,7 +973,7 @@ void TableSchema::defineMashstepTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Ingredient::name]       = new PropertySchema( PropertyNames::Ingredient::name,       kcolName,               kxmlPropName,       QString("text"), QString("''"),QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]       = new PropertySchema( PropertyNames::NamedEntity::name,       kcolName,               kxmlPropName,       QString("text"), QString("''"),QString("not null"));
    m_properties[PropertyNames::MashStep::type]       = new PropertySchema( PropertyNames::MashStep::typeString, kcolMashstepType,       kxmlPropType,       QString("text"), QString("'Infusion'"));
    m_properties[PropertyNames::MashStep::infuseAmount_l]  = new PropertySchema( PropertyNames::MashStep::infuseAmount_l,  kcolMashstepInfuseAmt,  kxmlPropInfuseAmt,  QString("real"), QVariant(0.0));
    m_properties[PropertyNames::MashStep::stepTemp_c]   = new PropertySchema( PropertyNames::MashStep::stepTemp_c,   kcolMashstepStepTemp,   kxmlPropStepTemp,   QString("real"), QVariant(67.0));
@@ -984,8 +984,8 @@ void TableSchema::defineMashstepTable()
    m_properties[PropertyNames::MashStep::decoctionAmount_l]  = new PropertySchema( PropertyNames::MashStep::decoctionAmount_l,  kcolMashstepDecoctAmt,  kxmlPropDecoctAmt,  QString("real"), QVariant(67.0));
    m_properties[PropertyNames::MashStep::stepNumber] = new PropertySchema( PropertyNames::MashStep::stepNumber, kcolMashstepStepNumber, QString(),          QString("integer"), QVariant(0));
 
-   m_properties[PropertyNames::Ingredient::display]    = new PropertySchema( PropertyNames::Ingredient::display,    kcolDisplay,            QString(),          QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]    = new PropertySchema( PropertyNames::Ingredient::deleted,    kcolDeleted,            QString(),          QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::display]    = new PropertySchema( PropertyNames::NamedEntity::display,    kcolDisplay,            QString(),          QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]    = new PropertySchema( PropertyNames::NamedEntity::deleted,    kcolDeleted,            QString(),          QString("boolean"), QVariant(false));
 
    m_foreignKeys[kpropMashId]    = new PropertySchema( kpropMashId,     kcolMashId,       QString("integer"), Brewtarget::MASHTABLE);
 
@@ -1005,7 +1005,7 @@ void TableSchema::defineMiscTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[PropertyNames::Ingredient::name]     = new PropertySchema( PropertyNames::Ingredient::name,       kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]     = new PropertySchema( PropertyNames::NamedEntity::name,       kcolName,         kxmlPropName,     QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Misc::notes]    = new PropertySchema( PropertyNames::Misc::notes,      kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
    m_properties[PropertyNames::Misc::amount]   = new PropertySchema( PropertyNames::Misc::amount,     kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Misc::use]      = new PropertySchema( PropertyNames::Misc::useString,  kcolUse,          kxmlPropUse,      QString("text"), QString("'Boil'"));
@@ -1014,9 +1014,9 @@ void TableSchema::defineMiscTable()
    m_properties[PropertyNames::Misc::amountIsWeight] = new PropertySchema( PropertyNames::Misc::amountIsWeight,   kcolMiscAmtIsWgt, kxmlPropAmtIsWgt, QString("boolean"), QVariant(true));
    m_properties[PropertyNames::Misc::useFor]   = new PropertySchema( PropertyNames::Misc::useFor,     kcolMiscUseFor,   kxmlPropUseFor,   QString("text"), QString("''"));
 
-   m_properties[PropertyNames::Ingredient::display]  = new PropertySchema( PropertyNames::Ingredient::display,  kcolDisplay,      QString(),        QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]  = new PropertySchema( PropertyNames::Ingredient::deleted,  kcolDeleted,      QString(),        QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]   = new PropertySchema( PropertyNames::Ingredient::folder,   kcolFolder,      QString(),        QString("text"), QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]  = new PropertySchema( PropertyNames::NamedEntity::display,  kcolDisplay,      QString(),        QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]  = new PropertySchema( PropertyNames::NamedEntity::deleted,  kcolDeleted,      QString(),        QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]   = new PropertySchema( PropertyNames::NamedEntity::folder,   kcolFolder,      QString(),        QString("text"), QString("''"));
 
    m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
@@ -1031,7 +1031,7 @@ void TableSchema::defineRecipeTable()
    m_key->addProperty(kpropKey, Brewtarget::PGSQL,  kcolKey, QString(""), QString("integer"), QVariant(0), 0, kPgSQLConstraint);
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
-   m_properties[PropertyNames::Ingredient::name]        = new PropertySchema( PropertyNames::Ingredient::name,        kcolName,               kxmlPropName,         QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]        = new PropertySchema( PropertyNames::NamedEntity::name,        kcolName,               kxmlPropName,         QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Recipe::notes]       = new PropertySchema( PropertyNames::Recipe::notes,       kcolNotes,              kxmlPropNotes,        QString("text"), QString("''"));
    m_properties[PropertyNames::Recipe::type]        = new PropertySchema( PropertyNames::Recipe::type,        kcolRecipeType,         kxmlPropType,         QString("text"), QString("'All Grain'"));
    m_properties[PropertyNames::Recipe::brewer]      = new PropertySchema( PropertyNames::Recipe::brewer,      kcolRecipeBrewer,       kxmlPropBrewer,       QString("text"), QString("''"));
@@ -1061,9 +1061,9 @@ void TableSchema::defineRecipeTable()
    m_properties[PropertyNames::Recipe::tasteNotes]  = new PropertySchema( PropertyNames::Recipe::tasteNotes,  kcolRecipeTasteNotes,   kxmlPropTasteNotes,   QString("text"), QString("''"));
    m_properties[PropertyNames::Recipe::tasteRating] = new PropertySchema( PropertyNames::Recipe::tasteRating, kcolRecipeTasteRating,  kxmlPropTasteRating,  QString("real"), QVariant(20.0));
 
-   m_properties[PropertyNames::Ingredient::display]     = new PropertySchema( PropertyNames::Ingredient::display,     kcolDisplay,            QString(),            QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]     = new PropertySchema( PropertyNames::Ingredient::deleted,     kcolDeleted,            QString(),            QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]      = new PropertySchema( PropertyNames::Ingredient::folder,      kcolFolder,            QString(),            QString("text"), QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]     = new PropertySchema( PropertyNames::NamedEntity::display,     kcolDisplay,            QString(),            QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]     = new PropertySchema( PropertyNames::NamedEntity::deleted,     kcolDeleted,            QString(),            QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]      = new PropertySchema( PropertyNames::NamedEntity::folder,      kcolFolder,            QString(),            QString("text"), QString("''"));
    // m_properties[kpropLocked]      = new PropertySchema( kpropLocked,      kcolLocked,             QString(),            QString("boolean"), QVariant(false));
 
    // enough properties, now some foreign keys
@@ -1088,7 +1088,7 @@ void TableSchema::defineYeastTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[PropertyNames::Ingredient::name]       = new PropertySchema( PropertyNames::Ingredient::name,       kcolName,            kxmlPropName,       QString("text"), QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]       = new PropertySchema( PropertyNames::NamedEntity::name,       kcolName,            kxmlPropName,       QString("text"), QString("''"), QString("not null"));
    m_properties[PropertyNames::Yeast::notes]      = new PropertySchema( PropertyNames::Yeast::notes,      kcolNotes,           kxmlPropNotes,      QString("text"), QString("''"));
    m_properties[PropertyNames::Yeast::type]       = new PropertySchema( PropertyNames::Yeast::typeString, kcolYeastType,       kxmlPropType,       QString("text"), QObject::tr("'Ale'"));
    m_properties[PropertyNames::Yeast::form]       = new PropertySchema( PropertyNames::Yeast::formString, kcolYeastForm,       kxmlPropForm,       QString("text"), QObject::tr("'Liquid'"));
@@ -1105,9 +1105,9 @@ void TableSchema::defineYeastTable()
    m_properties[PropertyNames::Yeast::maxReuse]   = new PropertySchema( PropertyNames::Yeast::maxReuse,   kcolYeastMaxReuse,   kxmlPropMaxReuse,   QString("int"), QVariant(10));
    m_properties[PropertyNames::Yeast::addToSecondary]   = new PropertySchema( PropertyNames::Yeast::addToSecondary,   kcolYeastAddToSec,   kxmlPropAddToSec,   QString("boolean"), QVariant(false));
 
-   m_properties[PropertyNames::Ingredient::display]    = new PropertySchema( PropertyNames::Ingredient::display,    kcolDisplay,         QString(),          QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]    = new PropertySchema( PropertyNames::Ingredient::deleted,    kcolDeleted,         QString(),          QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]     = new PropertySchema( PropertyNames::Ingredient::folder,     kcolFolder,          QString(),          QString("text"),    QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]    = new PropertySchema( PropertyNames::NamedEntity::display,    kcolDisplay,         QString(),          QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]    = new PropertySchema( PropertyNames::NamedEntity::deleted,    kcolDeleted,         QString(),          QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]     = new PropertySchema( PropertyNames::NamedEntity::folder,     kcolFolder,          QString(),          QString("text"),    QString("''"));
 
    m_foreignKeys[kpropInventoryId]  = new PropertySchema( kpropInventoryId,   kcolInventoryId,      QString("integer"),    m_invTable);
 }
@@ -1154,9 +1154,9 @@ void TableSchema::defineBrewnoteTable()
    m_properties[PropertyNames::BrewNote::finalVolume_l]          = new PropertySchema( PropertyNames::BrewNote::finalVolume_l,          kcolBNoteFinVol,          kxmlPropFinVol,          QString("real"), QVariant(1.0));
    m_properties[PropertyNames::BrewNote::attenuation]           = new PropertySchema( PropertyNames::BrewNote::attenuation,           kcolBNoteAtten,           kxmlPropAtten,           QString("real"), QVariant(1.0));
 
-   m_properties[PropertyNames::Ingredient::display]         = new PropertySchema( PropertyNames::Ingredient::display,         kcolDisplay,              QString(),               QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]         = new PropertySchema( PropertyNames::Ingredient::deleted,         kcolDeleted,              QString(),               QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]          = new PropertySchema( PropertyNames::Ingredient::folder,          kcolFolder,              QString(),               QString("text"), QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]         = new PropertySchema( PropertyNames::NamedEntity::display,         kcolDisplay,              QString(),               QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]         = new PropertySchema( PropertyNames::NamedEntity::deleted,         kcolDeleted,              QString(),               QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]          = new PropertySchema( PropertyNames::NamedEntity::folder,          kcolFolder,              QString(),               QString("text"), QString("''"));
 
    m_foreignKeys[kpropRecipeId] = new PropertySchema( kpropRecipeId, kcolRecipeId, QString("integer"), Brewtarget::RECTABLE);
 
@@ -1175,7 +1175,7 @@ void TableSchema::defineWaterTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[PropertyNames::Ingredient::name]        = new PropertySchema( PropertyNames::Ingredient::name,        kcolName,             kxmlPropName,        QString("text"),    QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]        = new PropertySchema( PropertyNames::NamedEntity::name,        kcolName,             kxmlPropName,        QString("text"),    QString("''"), QString("not null"));
    m_properties[PropertyNames::Water::notes]       = new PropertySchema( PropertyNames::Water::notes,       kcolNotes,            kxmlPropNotes,       QString("text"),    QString("''"));
    m_properties[PropertyNames::Water::amount]      = new PropertySchema( PropertyNames::Water::amount,      kcolAmount,           kxmlPropAmount,      QString("real"),    QVariant(0.0));
 
@@ -1192,9 +1192,9 @@ void TableSchema::defineWaterTable()
    m_properties[PropertyNames::Water::spargeRO]    = new PropertySchema( PropertyNames::Water::spargeRO,    kcolWaterSpargeRO,    QString(),           QString("real"),    QVariant(0.0));
    m_properties[PropertyNames::Water::alkalinityAsHCO3]      = new PropertySchema( PropertyNames::Water::alkalinityAsHCO3,      kcolWaterAsHCO3,      QString(),           QString("boolean"), QVariant(true));
 
-   m_properties[PropertyNames::Ingredient::display]     = new PropertySchema( PropertyNames::Ingredient::display,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]     = new PropertySchema( PropertyNames::Ingredient::deleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]      = new PropertySchema( PropertyNames::Ingredient::folder,      kcolFolder,           QString(),           QString("text"),    QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]     = new PropertySchema( PropertyNames::NamedEntity::display,     kcolDisplay,          QString(),           QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]     = new PropertySchema( PropertyNames::NamedEntity::deleted,     kcolDeleted,          QString(),           QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]      = new PropertySchema( PropertyNames::NamedEntity::folder,      kcolFolder,           QString(),           QString("text"),    QString("''"));
 
 }
 
@@ -1209,7 +1209,7 @@ void TableSchema::defineSaltTable()
    m_key->addProperty(kpropKey, Brewtarget::SQLITE, kcolKey, QString(""), QString("integer"), QVariant(0), 0, kSQLiteConstraint);
 
    // These are defined in the global file.
-   m_properties[PropertyNames::Ingredient::name]     = new PropertySchema( PropertyNames::Ingredient::name,     kcolName,         QString(), QString("text"),    QString("''"), QString("not null"));
+   m_properties[PropertyNames::NamedEntity::name]     = new PropertySchema( PropertyNames::NamedEntity::name,     kcolName,         QString(), QString("text"),    QString("''"), QString("not null"));
    m_properties[PropertyNames::Salt::amount]   = new PropertySchema( PropertyNames::Salt::amount,   kcolAmount,       QString(), QString("real"),    QVariant(0.0));
    m_properties[PropertyNames::Salt::amountIsWeight] = new PropertySchema( PropertyNames::Salt::amountIsWeight, kcolSaltAmtIsWgt, QString(), QString("boolean"), QVariant(true));
    m_properties[PropertyNames::Salt::percentAcid]  = new PropertySchema( PropertyNames::Salt::percentAcid,  kcolSaltPctAcid,  QString(), QString("real"),    QVariant(0.0));
@@ -1218,9 +1218,9 @@ void TableSchema::defineSaltTable()
    m_properties[PropertyNames::Salt::type]     = new PropertySchema( PropertyNames::Salt::type,    kcolSaltType,  QString(), QString("int"),     QVariant(0));
    m_properties[PropertyNames::Salt::addTo]    = new PropertySchema( PropertyNames::Salt::addTo,   kcolSaltAddTo, QString(), QString("int"),     QVariant(0));
 
-   m_properties[PropertyNames::Ingredient::display]  = new PropertySchema( PropertyNames::Ingredient::display, kcolDisplay,   QString(), QString("boolean"), QVariant(true));
-   m_properties[PropertyNames::Ingredient::deleted]  = new PropertySchema( PropertyNames::Ingredient::deleted, kcolDeleted,   QString(), QString("boolean"), QVariant(false));
-   m_properties[PropertyNames::Ingredient::folder]   = new PropertySchema( PropertyNames::Ingredient::folder,  kcolFolder,    QString(), QString("text"),    QString("''"));
+   m_properties[PropertyNames::NamedEntity::display]  = new PropertySchema( PropertyNames::NamedEntity::display, kcolDisplay,   QString(), QString("boolean"), QVariant(true));
+   m_properties[PropertyNames::NamedEntity::deleted]  = new PropertySchema( PropertyNames::NamedEntity::deleted, kcolDeleted,   QString(), QString("boolean"), QVariant(false));
+   m_properties[PropertyNames::NamedEntity::folder]   = new PropertySchema( PropertyNames::NamedEntity::folder,  kcolFolder,    QString(), QString("text"),    QString("''"));
 
    m_foreignKeys[kpropMiscId]  = new PropertySchema( kpropMiscId, kcolMiscId, QString("integer"), Brewtarget::MISCTABLE);
 }

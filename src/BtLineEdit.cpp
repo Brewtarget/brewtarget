@@ -21,7 +21,6 @@
 
 #include "BtLineEdit.h"
 #include "brewtarget.h"
-#include "ingredient.h"
 #include "UnitSystems.h"
 #include "UnitSystem.h"
 #include "unit.h"
@@ -215,7 +214,7 @@ void BtLineEdit::setText( double amount, int precision)
    return;
 }
 
-void BtLineEdit::setText( Ingredient* element, int precision )
+void BtLineEdit::setText( NamedEntity* element, int precision )
 {
    double amount = 0.0;
    QString display;
