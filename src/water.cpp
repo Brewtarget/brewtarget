@@ -19,18 +19,14 @@
  */
 #include "water.h"
 
-#include <QVector>
-#include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
-#include "water.h"
-#include "brewtarget.h"
 
+#include "brewtarget.h"
 #include "TableSchemaConst.h"
 #include "WaterSchema.h"
 #include "database.h"
-
 
 bool Water::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid

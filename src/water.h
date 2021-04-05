@@ -176,33 +176,5 @@ private:
 
 };
 
-Q_DECLARE_METATYPE( QList<Water*> )
-
-inline bool WaterPtrLt( Water* lhs, Water* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool WaterPtrEq( Water* lhs, Water* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct Water_ptr_cmp
-{
-   bool operator()( Water* lhs, Water* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Water_ptr_equals
-{
-   bool operator()( Water* lhs, Water* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
-
 #endif   /* _WATER_H */
 

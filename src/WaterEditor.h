@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef WATEREDITOR_H
 #define WATEREDITOR_H
 
@@ -31,9 +30,8 @@ class Water;
 
 /*!
  * \class WaterEditor
- * \author Philip G. Lee
  *
- * \brief View/controller class for modifying water records.
+ * \brief View/controller class for creating and modifying water records.
  */
 class WaterEditor : public QDialog, public Ui::waterEditor
 {
@@ -48,10 +46,10 @@ public:
     void setWater(Water* water);
     void newWater(QString folder);
 
- public slots:
+public slots:
     void showChanges(QMetaProperty* prop = nullptr);
     void saveAndClose();
-    void changed(QMetaProperty,QVariant);
+    void changed(QMetaProperty, QVariant);
     void clearAndClose();
 
 private:

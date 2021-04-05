@@ -810,6 +810,8 @@ void MainWindow::setupClicks()
    connect( pushButton_mashUp, &QAbstractButton::clicked, this, &MainWindow::moveSelectedMashStepUp );
    connect( pushButton_mashDown, &QAbstractButton::clicked, this, &MainWindow::moveSelectedMashStepDown );
    connect( pushButton_mashRemove, &QAbstractButton::clicked, this, &MainWindow::removeMash );
+   connect( pushButton_brewIt, &QAbstractButton::clicked, this, &MainWindow::brewItHelper );
+   return;
 }
 
 // anything with a SIGNAL of activated() should go in here.
