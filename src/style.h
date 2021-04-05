@@ -1,7 +1,8 @@
 /*
  * style.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _STYLE_H
 #define _STYLE_H
 
 #include <QString>
 #include <QStringList>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 namespace PropertyNames::Style { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
 namespace PropertyNames::Style { static char const * const type = "type"; /* previously kpropType */ }
 namespace PropertyNames::Style { static char const * const notes = "notes"; /* previously kpropNotes */ }
@@ -48,18 +48,13 @@ namespace PropertyNames::Style { static char const * const styleLetter = "styleL
 namespace PropertyNames::Style { static char const * const categoryNumber = "categoryNumber"; /* previously kpropCatNum */ }
 namespace PropertyNames::Style { static char const * const category = "category"; /* previously kpropCat */ }
 
-// Forward declarations.
-class Style;
-bool operator<(Style &s1, Style &s2);
-bool operator==(Style &s1, Style &s2);
 
 /*!
  * \class Style
- * \author Philip G. Lee
  *
  * \brief Model for style records in the database.
  */
-class Style : public Ingredient
+class Style : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "styles")
@@ -116,7 +111,7 @@ public:
    //! \brief The profile.
    Q_PROPERTY( QString profile READ profile WRITE setProfile /*NOTIFY changed*/ /*changedProfile*/ )
    //! \brief The ingredients.
-   Q_PROPERTY( QString ingredients READ ingredients WRITE setIngredients /*NOTIFY changed*/ /*changedIngredients*/ )
+   Q_PROPERTY( QString ingredients READ ingredients WRITE setNamedEntitys /*NOTIFY changed*/ /*changedNamedEntitys*/ )
    //! \brief The commercial examples.
    Q_PROPERTY( QString examples READ examples WRITE setExamples /*NOTIFY changed*/ /*changedExamples*/ )
 
@@ -139,7 +134,7 @@ public:
    void setAbvMax_pct( double var);
    void setNotes( const QString& var);
    void setProfile( const QString& var);
-   void setIngredients( const QString& var);
+   void setNamedEntitys( const QString& var);
    void setExamples( const QString& var);
    void setCacheOnly(const bool cache);
 
@@ -169,14 +164,20 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
 
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
    Style(Brewtarget::DBTable table, int key);
+public:
    Style(QString t_name, bool cacheOnly = true);
+private:
    Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Style( Style const& other );
 
@@ -207,15 +208,10 @@ private:
 
    bool isValidType( const QString &str );
    static QStringList m_types;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
-   static QHash<QString,QString> columnToProp;
-   static QHash<QString,QString> columnToPropHash();
 };
 
 Q_DECLARE_METATYPE( Style* )
-
+/*
 inline bool StylePtrLt( Style* lhs, Style* rhs)
 {
    return *lhs < *rhs;
@@ -241,5 +237,5 @@ struct Style_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif //_STYLE_H

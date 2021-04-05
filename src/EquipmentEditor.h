@@ -51,7 +51,7 @@ class BtVolumeLabel;
 class BtVolumeEdit;
 class Equipment;
 class EquipmentListModel;
-class IngredientSortProxyModel;
+class NamedEntitySortProxyModel;
 
 /*!
  * \class EquipmentEditor
@@ -181,7 +181,7 @@ protected:
 private:
    Equipment* obsEquip;
    EquipmentListModel* equipmentListModel;
-   IngredientSortProxyModel* equipmentSortProxyModel;
+   NamedEntitySortProxyModel* equipmentSortProxyModel;
 
    void showChanges();
 

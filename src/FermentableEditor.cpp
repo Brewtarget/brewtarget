@@ -107,7 +107,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       propName = metaProp->name();
    }
 
-   if( propName == PropertyNames::Ingredient::name || updateAll )
+   if( propName == PropertyNames::NamedEntity::name || updateAll )
    {
       lineEdit_name->setText(obsFerm->name());
       lineEdit_name->setCursorPosition(0);

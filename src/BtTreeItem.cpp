@@ -511,19 +511,19 @@ Water* BtTreeItem::water()
     return nullptr;
 }
 
-Ingredient* BtTreeItem::thing()
+NamedEntity* BtTreeItem::thing()
 {
     if ( _thing )
-        return qobject_cast<Ingredient*>(_thing);
+        return qobject_cast<NamedEntity*>(_thing);
 
     return nullptr;
 }
 
 QString BtTreeItem::name()
 {
-   Ingredient *tmp;
+   NamedEntity *tmp;
    if ( ! _thing )
       return QString();
-   tmp = qobject_cast<Ingredient*>(_thing);
+   tmp = qobject_cast<NamedEntity*>(_thing);
    return tmp->name();
 }

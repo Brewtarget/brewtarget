@@ -421,7 +421,7 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
    if ( model->isFolder(child) )
       return true;
 
-   Ingredient* thing = model->thing(child);
+   NamedEntity* thing = model->thing(child);
 
    return thing->display();
 

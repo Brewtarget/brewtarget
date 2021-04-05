@@ -1,6 +1,6 @@
 /*
  * recipe.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "recipe.h"
 
 #include "instruction.h"
 #include "brewtarget.h"
@@ -33,7 +34,6 @@
 #include <QDebug>
 #include <QSharedPointer>
 
-#include "recipe.h"
 #include "style.h"
 #include "misc.h"
 #include "mash.h"
@@ -63,16 +63,37 @@ static const QString kSaltTableSection("saltTable");
 static const QString kTabRecipeSection("tab_recipe");
 
 
+static const QHash<QString, Recipe::Type> RECIPE_TYPE_STRING_TO_TYPE {
+   {"Extract",      Recipe::Extract},
+   {"Partial Mash", Recipe::PartialMash},
+   {"All Grain",    Recipe::AllGrain}
+};
 
-bool operator<(Recipe &r1, Recipe &r2 )
-{
-   return r1.name() < r2.name();
+
+bool Recipe::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Recipe const & rhs = static_cast<Recipe const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_type              == rhs.m_type              &&
+      this->m_batchSize_l       == rhs.m_batchSize_l       &&
+      this->m_boilSize_l        == rhs.m_boilSize_l        &&
+      this->m_boilTime_min      == rhs.m_boilTime_min      &&
+      this->m_efficiency_pct    == rhs.m_efficiency_pct    &&
+      this->m_primaryAge_days   == rhs.m_primaryAge_days   &&
+      this->m_primaryTemp_c     == rhs.m_primaryTemp_c     &&
+      this->m_secondaryAge_days == rhs.m_secondaryAge_days &&
+      this->m_secondaryTemp_c   == rhs.m_secondaryTemp_c   &&
+      this->m_tertiaryAge_days  == rhs.m_tertiaryAge_days  &&
+      this->m_tertiaryTemp_c    == rhs.m_tertiaryTemp_c    &&
+      this->m_age               == rhs.m_age               &&
+      this->m_ageTemp_c         == rhs.m_ageTemp_c         &&
+      this->m_style_id          == rhs.m_style_id          &&
+      this->m_og                == rhs.m_og                &&
+      this->m_fg                == rhs.m_fg
+   );
 }
 
-bool operator==(Recipe &r1, Recipe &r2 )
-{
-   return r1.name() == r2.name();
-}
 
 void Recipe::clear()
 {
@@ -92,7 +113,7 @@ QString Recipe::classNameStr()
 }
 
 Recipe::Recipe(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key),
+   : NamedEntity(table, key),
    m_type(QString("All Grain")),
    m_brewer(QString("")),
    m_asstBrewer(QString("Brewtarget: free beer software")),
@@ -127,7 +148,7 @@ Recipe::Recipe(Brewtarget::DBTable table, int key)
 }
 
 Recipe::Recipe(QString name, bool cache)
-   : Ingredient(Brewtarget::RECTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::RECTABLE, -1, name, true),
    m_type(QString("All Grain")),
    m_brewer(QString("")),
    m_asstBrewer(QString("Brewtarget: free beer software")),
@@ -162,7 +183,7 @@ Recipe::Recipe(QString name, bool cache)
 }
 
 Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
    m_type(rec.value(kcolRecipeType).toString()),
    m_brewer(rec.value(kcolRecipeBrewer).toString()),
    m_asstBrewer(rec.value(kcolRecipeAsstBrewer).toString()),
@@ -196,7 +217,7 @@ Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Recipe::Recipe( Recipe const& other ) : Ingredient(other),
+Recipe::Recipe( Recipe const& other ) : NamedEntity(other),
    m_type(other.m_type),
    m_brewer(other.m_brewer),
    m_asstBrewer(other.m_asstBrewer),
@@ -897,24 +918,45 @@ QString Recipe::nextAddToBoil(double& time)
 }
 
 //============================Relational Setters===============================
-Hop *         Recipe::addHop(Hop * var)                 { return this->add<Hop>(var); }
-Fermentable * Recipe::addFermentable(Fermentable * var) { return this->add<Fermentable>(var); }
-Misc *        Recipe::addMisc(Misc * var)               { return this->add<Misc>(var); }
-Yeast *       Recipe::addYeast(Yeast * var)             { return this->add<Yeast>(var); }
-Water *       Recipe::addWater(Water * var)             { return this->add<Water>(var); }
-Salt *        Recipe::addSalt(Salt * var)               { return this->add<Salt>(var); }
+// See comment in header file for why we can't put this template definition there, and hence why we need the subsequent
+// lines as a "trick" to ensure all the right versions of the template are instantiated in an externally-visible way.
+template<class T> T * Recipe::add(T * var) {
+   // If the supplied ingredient has no parent then we need to make a copy of it - or rather tell the Database object
+   // to make a copy.  We'll then get back a pointer to the copy.  If it does have a parent then we can just add it
+   // directly, and we'll get back the same pointer we passed in.
+   bool noCopy = (var->getParent() != nullptr);
+   return Database::instance().addToRecipe(this, var, noCopy);
+}
+template Hop *         Recipe::add(Hop *         var);
+template Fermentable * Recipe::add(Fermentable * var);
+template Misc *        Recipe::add(Misc *        var);
+template Yeast *       Recipe::add(Yeast *       var);
+template Water *       Recipe::add(Water *       var);
+template Salt *        Recipe::add(Salt *        var);
 
-void Recipe::setStyle( Style* var )
+
+void Recipe::setStyle(Style * var)
 {
    Database::instance().addToRecipe( this, var );
 }
 
-void Recipe::setEquipment( Equipment* var )
+void Recipe::setEquipment(Equipment * var)
 {
    Database::instance().addToRecipe( this, var );
 }
+
+void Recipe::setMash(Mash * var) {
+   bool noCopy = (var->getParent() != nullptr);
+   Database::instance().addToRecipe(this, var, noCopy);
+}
+
 
 //==============================="SET" METHODS=================================
+void Recipe::setRecipeType(Recipe::Type var) {
+   this->setType(RECIPE_TYPE_STRING_TO_TYPE.key(var));
+   return;
+}
+
 void Recipe::setType( const QString &var )
 {
    QString tmp;
@@ -1486,6 +1528,9 @@ QList<Water*> Recipe::waters() const { return Database::instance().waters(this);
 QList<Salt*> Recipe::salts() const { return Database::instance().salts(this); }
 
 //==============================Getters===================================
+Recipe::Type Recipe::recipeType() const {
+   return RECIPE_TYPE_STRING_TO_TYPE.value(this->type());
+}
 QString Recipe::type() const { return m_type; }
 QString Recipe::brewer() const { return m_brewer; }
 QString Recipe::asstBrewer() const { return m_asstBrewer; }
@@ -1515,15 +1560,8 @@ QDate Recipe::date() const { return m_date; }
 bool Recipe::cacheOnly() const { return m_cacheOnly; }
 
 //=============================Adders and Removers========================================
-template<class T> T * Recipe::add(T * var) {
-   // If the supplied ingredient has no parent then we need to make a copy of it - or rather tell the Database object
-   // to make a copy.  We'll then get back a pointer to the copy.  If it does have a parent then we can just add it
-   // directly, and we'll get back the same pointer we passed in.
-   bool noCopy = (var->getParent() != nullptr);
-   return Database::instance().addToRecipe(this, var, noCopy);
-}
 
-Ingredient * Recipe::removeIngredient( Ingredient *var )
+NamedEntity * Recipe::removeNamedEntity( NamedEntity *var )
 {
 //   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
@@ -1533,7 +1571,7 @@ Ingredient * Recipe::removeIngredient( Ingredient *var )
       Database::instance().remove(qobject_cast<BrewNote*>(var));
       return var;
    } else {
-      return Database::instance().removeIngredientFromRecipe( this, var );
+      return Database::instance().removeNamedEntityFromRecipe( this, var );
    }
 }
 
@@ -2136,9 +2174,7 @@ double Recipe::ibuFromHop(Hop const* hop)
 // this was fixed, but not with an at
 bool Recipe::isValidType( const QString &str )
 {
-   QStringList types = QStringList() << "Extract" << "Partial Mash" << "All Grain";
-
-   return types.contains(str);
+   return RECIPE_TYPE_STRING_TO_TYPE.contains(str);
 }
 
 QList<QString> Recipe::getReagents( QList<Fermentable*> ferms )
@@ -2355,12 +2391,12 @@ double Recipe::targetTotalMashVol_l()
    return targetCollectedWortVol_l() + absorption_lKg * grainsInMash_kg();
 }
 
-Ingredient * Recipe::getParent() {
+NamedEntity * Recipe::getParent() {
    Recipe * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it
@@ -2374,4 +2410,8 @@ Ingredient * Recipe::getParent() {
 
 int Recipe::insertInDatabase() {
    return Database::instance().insertRecipe(this);
+}
+
+void Recipe::removeFromDatabase() {
+   Database::instance().remove(this);
 }

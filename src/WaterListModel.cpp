@@ -39,7 +39,7 @@ void WaterListModel::addWater(Water* water)
    int size = m_waters.size();
    beginInsertRows( QModelIndex(), size, size );
    m_waters.append(water);
-   connect( water, &Ingredient::changed, this, &WaterListModel::waterChanged );
+   connect( water, &NamedEntity::changed, this, &WaterListModel::waterChanged );
    endInsertRows();
 }
 
@@ -63,7 +63,7 @@ void WaterListModel::addWaters(QList<Water*> waters)
       m_waters.append(tmp);
 
       foreach ( Water* i, tmp) {
-         connect( i, &Ingredient::changed, this, &WaterListModel::waterChanged );
+         connect( i, &NamedEntity::changed, this, &WaterListModel::waterChanged );
       }
       endInsertRows();
    }
@@ -101,7 +101,7 @@ void WaterListModel::waterChanged(QMetaProperty prop, QVariant val)
       return;
 
    QString propName(prop.name());
-   if ( propName == PropertyNames::Ingredient::name ) {
+   if ( propName == PropertyNames::NamedEntity::name ) {
       int ndx = m_waters.indexOf(eSend);
       if ( ndx >= 0 )
          emit dataChanged( createIndex(ndx,0), createIndex(ndx,0) );
@@ -112,7 +112,7 @@ void WaterListModel::recChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
    if ( propName == "water" ) {
-      Water* newWater = qobject_cast<Water*>(Ingredient::extractPtr(val));
+      Water* newWater = qobject_cast<Water*>(NamedEntity::extractPtr(val));
       // Now do something with the water.
       Q_UNUSED(newWater) // Until then, this will keep the compiler happy
    }
@@ -153,7 +153,7 @@ void WaterListModel::observeRecipe(Recipe* rec)
    m_recipe = rec;
 
    if( m_recipe )
-      connect( m_recipe, &Ingredient::changed, this, &WaterListModel::recChanged );
+      connect( m_recipe, &NamedEntity::changed, this, &WaterListModel::recChanged );
 }
 
 int WaterListModel::rowCount( QModelIndex const& parent ) const

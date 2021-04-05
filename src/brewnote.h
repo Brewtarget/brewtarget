@@ -1,7 +1,8 @@
 /*
  * brewnote.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -28,7 +29,7 @@
 #include <QStringList>
 #include <QDate>
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 namespace PropertyNames::BrewNote { static char const * const fg = "fg"; /* previously kpropFG */ }
 namespace PropertyNames::BrewNote { static char const * const og = "og"; /* previously kpropOG */ }
 namespace PropertyNames::BrewNote { static char const * const notes = "notes"; /* previously kpropNotes */ }
@@ -62,9 +63,6 @@ namespace PropertyNames::BrewNote { static char const * const brewDate = "brewDa
 
 // Forward declarations;
 class Recipe;
-class BrewNote;
-bool operator<(BrewNote const& lhs, BrewNote const& rhs);
-bool operator==(BrewNote const& lhs, BrewNote const& rhs);
 
 /*!
  * \class BrewNote
@@ -72,18 +70,17 @@ bool operator==(BrewNote const& lhs, BrewNote const& rhs);
  *
  * \brief Model for a brewnote record, which records what you did on brewday.
  */
-class BrewNote : public Ingredient
+class BrewNote : public NamedEntity
 {
    Q_OBJECT
    friend class Database;
    friend class BeerXML;
-   friend bool operator<(BrewNote &lhs, BrewNote &rhs);
-   friend bool operator==(BrewNote &lhs, BrewNote &rhs);
 
 public:
-   enum {DONOTUSE, RECIPE};
+   virtual ~BrewNote() = default;
 
-   virtual ~BrewNote() {}
+   bool operator<(BrewNote const & other) const;
+   bool operator>(BrewNote const & other) const;
 
    static QString classNameStr();
 
@@ -216,17 +213,23 @@ public:
    bool cacheOnly() const;
 
    // BrewNote objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
-
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
    void brewDateChanged(const QDateTime&);
 
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
    BrewNote(Brewtarget::DBTable table, int key);
    BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   BrewNote(QDateTime dateNow, bool cache = true);
+public:
+   BrewNote(QString name, bool cache = true);
+private:
+   BrewNote(QDateTime dateNow, bool cache = true, QString const & name = "");
    BrewNote(BrewNote const& other);
    bool loading;
 
@@ -263,11 +266,7 @@ private:
    bool m_cacheOnly;
    Recipe * m_recipe;
 
-   QHash<QString,double> info;
-   QHash<QString,QString> XMLTagToName();
-   QHash<QString,QString> NameToXMLTag();
-   static QHash<QString,QString> tagToPropHash();
-   static QHash<QString,QString> tagToProp;
+///   QHash<QString,double> info;
 };
 
 Q_DECLARE_METATYPE( QList<BrewNote*> )

@@ -40,7 +40,7 @@ void MashButton::setRecipe(Recipe* rec)
    _rec = rec;
    if( _rec )
    {
-      connect( _rec, &Ingredient::changed, this, &MashButton::recChanged );
+      connect( _rec, &NamedEntity::changed, this, &MashButton::recChanged );
       setMash( _rec->mash() );
    }
    else
@@ -51,11 +51,11 @@ void MashButton::setMash(Mash* mash)
 {
    if( _mash )
       disconnect( _mash, 0, this, 0 );
-   
+
    _mash = mash;
    if( _mash )
    {
-      connect( _mash, &Ingredient::changed, this, &MashButton::mashChanged );
+      connect( _mash, &NamedEntity::changed, this, &MashButton::mashChanged );
       setText( _mash->name() );
    }
    else
@@ -69,14 +69,14 @@ Mash* MashButton::mash() { return _mash; }
 void MashButton::mashChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   if( propName == PropertyNames::Ingredient::name )
+   if( propName == PropertyNames::NamedEntity::name )
       setText( val.toString() );
 }
 
 void MashButton::recChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   
+
    if( propName == "mash" )
-      setMash( qobject_cast<Mash*>(Ingredient::extractPtr(val)) );
+      setMash( qobject_cast<Mash*>(NamedEntity::extractPtr(val)) );
 }

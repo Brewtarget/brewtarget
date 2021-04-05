@@ -3,9 +3,9 @@
  * authors 2009-2021
  * - A.J. Drobnich <aj.drobnich@gmail.com>
  * - Matt Young <mfsy@yahoo.com>
+ * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
- * - Maxime Lavigne <duguigne@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,12 @@
 #include <QCommandLineParser>
 #include <QMessageBox>
 #include <QSharedMemory>
+
+#include <xercesc/util/PlatformUtils.hpp>
+#include <xalanc/Include/PlatformDefinitions.hpp>
+
 #include "config.h"
+#include "beerxml.h"
 #include "brewtarget.h"
 #include "database.h"
 
@@ -35,6 +40,15 @@ void createBlankDb(const QString & filename);
 int main(int argc, char **argv)
 {
    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+
+   // Initialize Xerces XML tools
+   // NB: This is also where where we would initialise xalanc::XalanTransformer if we were using it
+   try {
+      xercesc::XMLPlatformUtils::Initialize();
+   } catch (xercesc::XMLException const & xercesInitException) {
+      qCritical() << Q_FUNC_INFO << "Xerces XML Parser Initialisation Failed: " << xercesInitException.getMessage();
+      return 1;
+   }
 
    QApplication app(argc, argv);
    app.setOrganizationName("brewtarget");
@@ -117,7 +131,18 @@ int main(int argc, char **argv)
 
    try
    {
-      return Brewtarget::run(parser.value(userDirectoryOption));
+      auto mainAppReturnValue = Brewtarget::run(parser.value(userDirectoryOption));
+
+      //
+      // Clean exit of Xerces XML tools
+      // If we, in future, want to use XalanTransformer, this needs to be extended to:
+      //    XalanTransformer::terminate();
+      //    XMLPlatformUtils::Terminate();
+      //    XalanTransformer::ICUCleanUp();
+      //
+      xercesc::XMLPlatformUtils::Terminate();
+
+      return mainAppReturnValue;
    }
    catch (const QString &error)
    {
@@ -146,7 +171,13 @@ int main(int argc, char **argv)
  * Use at your own risk.
  */
 void importFromXml(const QString & filename) {
-    Database::instance().importFromXML(filename);
+
+   QString errorMessage;
+   QTextStream errorMessageAsStream{&errorMessage};
+   if (!Database::instance().getBeerXml()->importFromXML(filename, errorMessageAsStream)) {
+      qCritical() << "Unable to import" << filename << "Error: " << errorMessage;
+      exit(1);
+   }
     Database::dropInstance();
     Brewtarget::setOption("converted", QDate().currentDate().toString());
     exit(0);

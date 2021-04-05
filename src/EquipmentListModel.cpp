@@ -40,11 +40,11 @@ void EquipmentListModel::addEquipment(Equipment* equipment)
       !equipment->display()
    )
       return;
-   
+
    int size = equipments.size();
    beginInsertRows( QModelIndex(), size, size );
    equipments.append(equipment);
-   connect( equipment, &Ingredient::changed, this, &EquipmentListModel::equipChanged );
+   connect( equipment, &NamedEntity::changed, this, &EquipmentListModel::equipChanged );
    endInsertRows();
 }
 
@@ -52,27 +52,27 @@ void EquipmentListModel::addEquipments(QList<Equipment*> equips)
 {
    QList<Equipment*>::iterator i;
    QList<Equipment*> tmp;
-   
+
    for( i = equips.begin(); i != equips.end(); i++ )
    {
       // if the equipment is not already in the list and
       // if the equipment has not been deleted and
       // if the equipment is to be displayed, then append it
       if( !equipments.contains(*i) &&
-          !(*i)->deleted()         &&  
+          !(*i)->deleted()         &&
            (*i)->display() )
          tmp.append(*i);
    }
-   
+
    int size = equipments.size();
    if (size+tmp.size())
    {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
       equipments.append(tmp);
-   
+
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &Ingredient::changed, this, &EquipmentListModel::equipChanged );
-   
+         connect( *i, &NamedEntity::changed, this, &EquipmentListModel::equipChanged );
+
       endInsertRows();
    }
 }
@@ -103,16 +103,16 @@ void EquipmentListModel::removeAll()
 }
 
 void EquipmentListModel::equipChanged(QMetaProperty prop, QVariant val)
-{   
+{
    Equipment* eSend = qobject_cast<Equipment*>(sender());
-   
+
    // NOTE: how to get around the issue that the sender might live in
    // a different thread and therefore always cause eSend == 0?
    if( eSend == 0 )
       return;
-   
+
    QString propName(prop.name());
-   if( propName == PropertyNames::Ingredient::name )
+   if( propName == PropertyNames::NamedEntity::name )
    {
       int ndx = equipments.indexOf(eSend);
       if( ndx >= 0 )
@@ -125,7 +125,7 @@ void EquipmentListModel::recChanged(QMetaProperty prop, QVariant val)
    QString propName(prop.name());
    if( propName == "equipment" )
    {
-      Equipment* newEquip = qobject_cast<Equipment*>(Ingredient::extractPtr(val));
+      Equipment* newEquip = qobject_cast<Equipment*>(NamedEntity::extractPtr(val));
       // Now do something with the equipment.
       Q_UNUSED(newEquip); // Until then, this will keep the compiler happy
    }
@@ -164,9 +164,9 @@ void EquipmentListModel::observeRecipe(Recipe* rec)
    if( recipe )
       disconnect( recipe, 0, this, 0 );
    recipe = rec;
-   
+
    if( recipe )
-      connect( recipe, &Ingredient::changed, this, &EquipmentListModel::recChanged );
+      connect( recipe, &NamedEntity::changed, this, &EquipmentListModel::recChanged );
 }
 
 int EquipmentListModel::rowCount( QModelIndex const& parent ) const

@@ -1198,7 +1198,7 @@ double Brewtarget::toDouble(QString text, bool* ok)
 }
 
 // And a few convenience methods, just for that sweet, sweet syntatic sugar
-double Brewtarget::toDouble(const Ingredient* element, QString attribute, QString caller)
+double Brewtarget::toDouble(const NamedEntity* element, QString attribute, QString caller)
 {
    double amount = 0.0;
    QString value;
@@ -1261,7 +1261,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, Un
    return ret;
 }
 
-QString Brewtarget::displayAmount(Ingredient* element, QObject* object, QString attribute, Unit* units, int precision )
+QString Brewtarget::displayAmount(NamedEntity* element, QObject* object, QString attribute, Unit* units, int precision )
 {
    double amount = 0.0;
    QString value;
@@ -1329,7 +1329,7 @@ double Brewtarget::amountDisplay( double amount, Unit* units, int precision, Uni
    return ret;
 }
 
-double Brewtarget::amountDisplay(Ingredient* element, QObject* object, QString attribute, Unit* units, int precision )
+double Brewtarget::amountDisplay(NamedEntity* element, QObject* object, QString attribute, Unit* units, int precision )
 {
    double amount = 0.0;
    QString value;
@@ -1343,7 +1343,7 @@ double Brewtarget::amountDisplay(Ingredient* element, QObject* object, QString a
       value = element->property(attribute.toLatin1().constData()).toString();
       amount = toDouble( value, &ok );
       if ( ! ok )
-         qWarning() << QString("Brewtarget::amountDisplay(Ingredient*,QObject*,QString,Unit*,int) could not convert %1 to double").arg(value);
+         qWarning() << QString("Brewtarget::amountDisplay(NamedEntity*,QObject*,QString,Unit*,int) could not convert %1 to double").arg(value);
       // Get the display units and scale
       dispUnit  = static_cast<Unit::unitDisplay>(option(attribute, Unit::noUnit,  object->objectName(), UNIT).toInt());
       dispScale = static_cast<Unit::unitScale>(option(  attribute, Unit::noScale, object->objectName(), SCALE).toInt());
@@ -1466,7 +1466,7 @@ bool Brewtarget::hasUnits(QString qstr)
    return amtUnit.cap(2).size() > 0;
 }
 
-QPair<double,double> Brewtarget::displayRange(Ingredient* element, QObject *object, QString attribute, RangeType _type)
+QPair<double,double> Brewtarget::displayRange(NamedEntity* element, QObject *object, QString attribute, RangeType _type)
 {
    QPair<double,double> range;
    QString minName = QString("%1%2").arg(attribute).arg("Min");

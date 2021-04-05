@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * beerxml/v1/BeerXml.xsd is part of Brewtarget, and is Copyright the following
+ * authors 2020-2021
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--
+  General Notes:
+
+  It is not possible to validate a BeerXML 1.0 document solely with an XSD file, for reasons that are explained in the
+  Brewtarget C++ source code.  Nevertheless, this file goes some considerable way to doing such validation.
+
+  Although they are generally helpful examples, there are some obvious errors in the BeerXML sample files downloadable
+  from www.beerxml.com:
+  • Everywhere the <CARB_MAX>...</CARB_MAX> tag is used (eg lines 268, 605, 977, 1278 of recipes.xml and on multiple
+    lines of style.xml) the value has a spurious '>', eg:
+       "<CARB_MAX>2.4></CARB_MAX>" = actual
+       "<CARB_MAX>2.4</CARB_MAX>"  = correct
+    This will (correctly) generate an "invalid character encountered" error when parsed against this schema document.
+
+  elementFormDefault="qualified" just means we have to specify the namespace of all the tags in this schema document,
+  which keeps them out of the default (unnamed) namespace of the XML documents we'll be parsing
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
+   <!-- Definitions of complex types : START -->
+
+   <!-- As a general rule, for its core "amount" fields, BeerXML 1.0 prescribes a unit of measurement (eg minutes,
+        percent, kilograms, liters, etc) and stores the number (eg <BOIL_TIME>60.0<BOIL_TIME> means boil time of 60
+        minutes.  We could leave all the numeric core fields as decimals and integers, but defining types for them
+        gives some additional sanity checking (eg durations cannot be negative) and makes the field specifications a
+        bit more readable (because the name of the field usually does not specify the units it must be measured in).
+
+        Note, however, that different rules apply for "extension fields", which must be treated as text, even when the
+        "Format" is marked as something else.  This is because the BeerXML 1.0 Standard says extension fields are "not
+        required ... to be supported by a particular program.  Where implemented, these tags provide a consistent
+        method for display only.  None of these values should be used for import as the display value may be rounded
+        from the true value. ... All standards of the original BeerXML description also apply [to these fields] with
+        the exception of units: all fields that are defined for display only may also use a unit tag after them.  For
+        example '3.45 gal' is an acceptable value."  (This is even the case for some fields where you would think there
+        is only one possible unit of measurement.  Eg "<EST_ABV>5.3 %</EST_ABV>" is valid because it is an "extension
+        field" but <ABV_MIN>...</ABV_MIN> can only contain a decimal number becuase it is a core field.)
+   -->
+
+   <!-- In the world of XSD, any field defined simply as xs:string is allowed to be empty (ie "") or to contain only
+        blanks (tabs, spaces, etc).  Whilst neither of these cases is explicitly prohibited in the BeerXML 1.0
+        Standard, there are some cases where both are clearly unhelpful.  Eg, whilst it is almost certainly fine for
+        the "required" fields BREWER to be blank, it is hard to justify having a blank NAME field in a RECIPE or a HOP
+        for example.
+
+        All that said, we try to use this stronger requirement sparingly, as there are cases that are open to
+        interpretation, eg should NAME be required to be non-blank for MASH and for MASH_STEP?  And, even if not, if we
+        are, say, trying to import a RECIPE that has a blank NAME in one or more of its MASH_STEPs, could we generate a
+        suitable name on the fly and allow the import to succeed?
+   -->
+   <xs:simpleType name="NonBlankString">
+      <xs:restriction base="xs:string">
+         <xs:pattern value=".*\S.*"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- What we call a SimplePercentage is one where the value is no less than 0% and no greater than 100%
+        NB as noted above the XML should contain just the number, not the % symbol -->
+   <xs:simpleType name="SimplePercentage">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/>
+         <xs:maxInclusive value="100"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- Volumes can't be negative, but there's no particular reason for an upper limit
+        Sticking with North American spelling of "liters" as, globally, it's probably more widely used than the British
+        "litres". -->
+   <xs:simpleType name="VolumeInLiters">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- Similar comments apply as for liters (litres) above -->
+   <xs:simpleType name="WeightInKg">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- NB: fractions of minutes are explicitly allowed in the BeerXML 1.0 Standard -->
+   <xs:simpleType name="DurationInMinutes">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- The BeerXML 1.0 Standard is not explicit about it, but we infer from the sample files provided at
+        www.beerxml.com that fractions of a day are allowed. -->
+   <xs:simpleType name="DurationInDays">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:simpleType name="SpecificGravity">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0.90"/> <!-- In reality, anything below 0.99 would be pretty surprising -->
+         <xs:maxInclusive value="2.0"/> <!-- In reality, anything above 1.2 would be pretty unusual -->
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:simpleType name="InternationalBitternessUnits">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/> <!-- Normally 5 would be pretty low, but some people do claim 0 IBU beer -->
+         <xs:maxInclusive value="5000"/> <!-- In reality, anything above 120 would be pretty unusual, but people have
+                                              produced things as bitter as 2600 according to
+                                              https://firstwefeast.com/drink/hoppiest-beers-of-all-time/carbon-smith -->
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:simpleType name="StandardReferenceMethod">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/> <!-- In reality, anything below 2 would be unusual -->
+         <xs:maxInclusive value="300"/> <!-- In reality, anything above 40 would be unusual but, eg Uinta's Labyrinth
+                                             Black Ale claims to be 184 SRM according to
+                                             https://www.homebrewtalk.com/threads/184-srm-how.265063/ -->
+      </xs:restriction>
+   </xs:simpleType>
+
+   <xs:simpleType name="TemperatureInCelsius">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/> <!-- In reality, nothing's going to be close to this (freezing) -->
+         <xs:maxInclusive value="150"/> <!-- In reality, nothing's likely to be this hot -->
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- pH is a bit too short to have as a type name, especially when there might be name clash/confusion with
+        <PH>..</PH> tags.  Something longer is always going to be a bit more cumbersome.  Eg, something based on "power
+        of hydrogen" would be reasonably accurate but not exactly obvious to most people.  AcidityOrBasicityIn_pH is a
+        bit more descriptive and we deliberately break our normal CamelCase a bit to avoid odd capitalisation of pH.
+   -->
+   <xs:simpleType name="AcidityOrBasicityIn_pH">
+      <xs:restriction base="xs:decimal">
+         <xs:minInclusive value="0"/> <!-- Technically there are acids with pH less than 0, but we don't use them in brewing -->
+         <xs:maxInclusive value="14"/> <!-- Technically there are bases with pH more than 14, but we don't use them in brewing -->
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- Although it is not explicitly stated in the BeerXML 1.0 standard, it is clear from the sample files
+        downloadable from www.beerxml.com that some "ignorable" percentage and decimal values can be specified as "-".
+        Eg the following is apparently a valid part of a <FERMENTABLE> ... <?FERMENTABLE> record:
+           <COARSE_FINE_DIFF>-</COARSE_FINE_DIFF>
+           <MOISTURE>-</MOISTURE>
+           <DIASTATIC_POWER>-</DIASTATIC_POWER>
+           <PROTEIN>-</PROTEIN>
+        This does not make a huge amount of sense: it would be better either to omit the field altogether or set them
+        to empty string (<COARSE_FINE_DIFF></COARSE_FINE_DIFF> etc) but real world files contain these dash values so
+        we need to extend SimplePercentage to accept them. -->
+   <xs:simpleType name="Null">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="-"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="NullableSimplePercentage">
+      <xs:union memberTypes="SimplePercentage Null"/>
+   </xs:simpleType>
+   <xs:simpleType name="NullableDecimal">
+      <xs:union memberTypes="xs:decimal Null"/>
+   </xs:simpleType>
+
+   <!-- BeerXML 1.0 wants all boolean values to be IN CAPITALS.
+        The W3C XML Schema specification wants them to be in lower case.
+        So we have to roll our own shouty boolean type for BeerXML. -->
+   <xs:simpleType name="CapsBoolean">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="TRUE"/>
+         <xs:enumeration value="FALSE"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+   <!-- Some of the Brewtarget unofficial extensions to BeerXML use ISO 8601 format date fields.  These correspond to
+        standard XML date type, unless they are also fields that are allowed to be blank.   (Ideally, a null value for
+        a date field would have been represented by omiting the element altogether, but that's not how existing files
+        are encoded.)  So we need a type that represents either in ISO 8601 date or blank.
+        First define a blank... -->
+   <xs:simpleType name="Blank">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value=""/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- ...then create a union of blank and date -->
+   <xs:simpleType name="DateOrBlank">
+      <xs:union memberTypes="xs:date Blank" />
+   </xs:simpleType>
+
+   <!-- There is scope for adding more custom types here, eg ABV could be more constrained than just a decimal.
+
+        There are also some areas of ambiguity, eg the BeerXML 1.0 specification describes "a floating point number" as
+        'usually expressed in its simplest form with a decimal point as in "1.2", "0.004", etc...' and goes on to say
+        "Programs shall endeavor to store as many significant digits as possible to avoid truncating or losing small
+        values".  I think we can usually use xs:decimal rather than xs:double (or xs:float) for fields marked "floating
+        point number" in the standard, but this is something we may need to revisit.
+   -->
+
+
+   <!--
+        ************************************************************************************************
+        * Now begins the real substance.  *** In the following, pay attention to singular vs plural. ***
+        ************************************************************************************************
+
+   At heart, a BeerXML consists of lists of HOPS, FERMENTABLES, YEASTS, MISCS, WATERS, STYLES, MASHS [sic], RECIPES and
+   EQUIPMENTS.  (In the standard these lists are called "record sets".)  In each case, the structure is similar, eg
+   <HOPS>...</HOPS> contains (depending on which bit of the standard you're looking at) either "one or more" or "zero
+   or more" HOP records, each of which is <HOP>...</HOP> with various required and optional fields (which unfortunately
+   are allowed to be in any order, something that makes validation harder than it otherwise would be for, IMHO, very
+   little benefit).
+
+   These lists can occur in multiple places.  Eg, inside each <RECIPE>...</RECIPE> is a list of "zero or more" hops (ie
+   a <HOPS>...</HOPS> record containing zero or more <HOP>...</HOP> records.  But <HOPS>...</HOPS> is also a valid top-
+   level record in its own right, where it must contain "one or more Hop records".  It's annoying that the standard is
+   (needlessly) inconsistent in whether the minimum number of contained records is zero or one, but there is a way to
+   deal with it.
+
+   Our approach is that, for each of the base types, we first define a type for the individual record.  Eg HopType is
+   used for <HOP>...</HOP> records.  We then easily define two further types, one for a list of "one or more" of
+   these records, and another for the case where a list is allowed to conntain "zero or more" records.  Eg
+   HopsType is used for a <HOPS>...</HOPS> record that contains one or more <HOP>...</HOP> records, and
+   HopsEmptyAllowedType is used for a <HOPS>...</HOPS> record that my be empty but otherwise one or more
+   <HOP>...</HOP> records.
+
+   Note that not every type of "record set" needs an "EmptyAllowed" version of its type.  We only define types we're
+   going to use elsewhere.
+
+   -->
+
+   <!-- Type for <STYLE>...</STYLE> records -->
+   <xs:complexType name="StyleType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="CATEGORY" type="xs:string"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="CATEGORY_NUMBER" type="xs:string"/> <!-- Despite the name, this is a string because it could be something like "8A" -->
+         <xs:element name="STYLE_LETTER" type="xs:string"/>
+         <xs:element name="STYLE_GUIDE" type="xs:string"/>
+         <xs:element name="TYPE">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Lager"/>
+                  <xs:enumeration value="Ale"/>
+                  <xs:enumeration value="Mead"/>
+                  <xs:enumeration value="Wheat"/>
+                  <xs:enumeration value="Mixed"/>
+                  <xs:enumeration value="Cider"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="OG_MIN" type="SpecificGravity"/>
+         <xs:element name="OG_MAX" type="SpecificGravity"/>
+         <xs:element name="FG_MIN" type="SpecificGravity"/>
+         <xs:element name="FG_MAX" type="SpecificGravity"/>
+         <xs:element name="IBU_MIN" type="InternationalBitternessUnits"/>
+         <xs:element name="IBU_MAX" type="InternationalBitternessUnits"/>
+         <xs:element name="COLOR_MIN" type="StandardReferenceMethod"/>
+         <xs:element name="COLOR_MAX" type="StandardReferenceMethod"/>
+         <xs:element name="CARB_MIN" type="xs:decimal" minOccurs="0" maxOccurs="1"/> <!-- In volumes of CO2 -->
+         <xs:element name="CARB_MAX" type="xs:decimal" minOccurs="0" maxOccurs="1"/> <!-- In volumes of CO2 -->
+         <xs:element name="ABV_MIN" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ABV_MAX" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PROFILE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="INGREDIENTS" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="EXAMPLES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next 12 fields are listed under "Style Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DISPLAY_OG_MIN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_OG_MAX" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_FG_MIN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_FG_MAX" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_COLOR_MIN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_COLOR_MAX" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="OG_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FG_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="IBU_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="CARB_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="COLOR_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ABV_RANGE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Type for <STYLES>...</STYLES> records
+        Note that we don't need a StylesEmptyAllowedType because a RECIPE only uses STYLE not STYLES -->
+   <xs:complexType name="StylesType">
+      <xs:sequence>
+         <xs:element name="STYLE" type="StyleType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <EQUIPMENT>...</EQUIPMENT> records -->
+   <xs:complexType name="EquipmentType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="BOIL_SIZE" type="VolumeInLiters"/>
+         <xs:element name="BATCH_SIZE" type="VolumeInLiters"/>
+         <xs:element name="TUN_VOLUME" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TUN_WEIGHT" type="WeightInKg" minOccurs="0" maxOccurs="1"/>
+         <!-- "Specific heat of the mash tun ... Typical ranges are 0.1-0.25 for metal and 0.2-0.5 for plastic
+              materials." -->
+         <xs:element name="TUN_SPECIFIC_HEAT" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TOP_UP_WATER" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TRUB_CHILLER_LOSS" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="EVAP_RATE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/> <!-- % of wort lost to evaporation per hour of the boil -->
+         <xs:element name="BOIL_TIME" type="DurationInMinutes" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="CALC_BOIL_VOLUME" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LAUTER_DEADSPACE" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TOP_UP_KETTLE" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HOP_UTILIZATION" type="xs:decimal" minOccurs="0" maxOccurs="1"/> <!-- This is a percentage but can be greater than 100% -->
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next eight fields are listed under "Equipment Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DISPLAY_BOIL_SIZE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_BATCH_SIZE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TUN_VOLUME" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TUN_WEIGHT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TOP_UP_WATER" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TRUB_CHILLER_LOSS" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_LAUTER_DEADSPACE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TOP_UP_KETTLE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- ************************************************************************************
+              *** Extra fields not included in the BeerXML 1.0 standard but used by Brewtarget ***
+              ************************************************************************************ -->
+         <xs:element name="REAL_EVAP_RATE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ABSORPTION" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="BOILING_POINT" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Type for <EQUIPMENTS>...</EQUIPMENTS> records
+        Note that we don't need a EquipmentsEmptyAllowedType because a RECIPE only uses EQUIPMENT not EQUIPMENTS -->
+   <xs:complexType name="EquipmentsType">
+      <xs:sequence>
+         <xs:element name="EQUIPMENT" type="EquipmentType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <HOP>...</HOP> records -->
+   <xs:complexType name="HopType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="ALPHA" type="SimplePercentage"/>
+         <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In kg -->
+         <xs:element name="USE">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Boil"/>
+                  <xs:enumeration value="Dry Hop"/>
+                  <xs:enumeration value="Mash"/>
+                  <xs:enumeration value="First Wort"/>
+                  <xs:enumeration value="Aroma"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="TIME" type="DurationInMinutes"/>
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TYPE" minOccurs="0" maxOccurs="1">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Bittering"/>
+                  <xs:enumeration value="Aroma"/>
+                  <xs:enumeration value="Both"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="FORM" minOccurs="0" maxOccurs="1">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Pellet"/>
+                  <xs:enumeration value="Plug"/>
+                  <xs:enumeration value="Leaf"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="BETA" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HSI" type="SimplePercentage" minOccurs="0" maxOccurs="1"/> <!-- Hop Stability Index -->
+         <xs:element name="ORIGIN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="SUBSTITUTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="HUMULENE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="CARYOPHYLLENE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="COHUMULONE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MYRCENE" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next three fields are listed under "Hop Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TIME" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Types for <HOPS>...</HOPS> records -->
+   <xs:complexType name="HopsType">
+      <xs:sequence>
+         <xs:element name="HOP" type="HopType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="HopsEmptyAllowedType">
+      <xs:sequence>
+         <xs:element name="HOP" type="HopType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <FERMENTABLE>...</FERMENTABLE> records -->
+   <xs:complexType name="FermentableType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="TYPE">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Grain"/>
+                  <xs:enumeration value="Sugar"/>
+                  <xs:enumeration value="Extract"/>
+                  <xs:enumeration value="Dry Extract"/>
+                  <xs:enumeration value="Adjunct"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In kg -->
+         <xs:element name="YIELD" type="SimplePercentage"/>
+         <xs:element name="COLOR" type="xs:decimal"/> <!-- In Lovibond Units (SRM for liquid extracts) -->
+         <xs:element name="ADD_AFTER_BOIL" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ORIGIN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="SUPPLIER" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next four fields are only appropriate for a "Grain" or "Adjunct" type, otherwise their values are ignored -->
+         <xs:element name="COARSE_FINE_DIFF" type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MOISTURE" type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DIASTATIC_POWER" type="NullableDecimal" minOccurs="0" maxOccurs="1"/> <!-- In "Lintner" units -->
+         <xs:element name="PROTEIN" type="NullableSimplePercentage" minOccurs="0" maxOccurs="1"/>
+
+         <xs:element name="MAX_IN_BATCH" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="RECOMMEND_MASH" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next field is only appropriate for a "Extract" type, otherwise its value is ignored -->
+         <xs:element name="IBU_GAL_PER_LB" type="xs:decimal" minOccurs="0" maxOccurs="1"/> <!-- The BeerXML standard does not say why this field is not in a metric measurement -->
+
+         <!-- The next four fields are listed under "Fermentable Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="POTENTIAL" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_COLOR" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- ***********************************************************************************
+              *** Extra field not included in the BeerXML 1.0 standard but used by Brewtarget ***
+              *********************************************************************************** -->
+         <xs:element name="IS_MASHED" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Types for <FERMENTABLES>...</FERMENTABLES> records -->
+   <xs:complexType name="FermentablesType">
+      <xs:sequence>
+         <xs:element name="FERMENTABLE" type="FermentableType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="FermentablesEmptyAllowedType">
+      <xs:sequence>
+         <xs:element name="FERMENTABLE" type="FermentableType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <MISC>...</MISC> records -->
+   <xs:complexType name="MiscType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="TYPE">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Spice"/>
+                  <xs:enumeration value="Fining"/>
+                  <xs:enumeration value="Water Agent"/>
+                  <xs:enumeration value="Herb"/>
+                  <xs:enumeration value="Flavor"/>
+                  <xs:enumeration value="Other"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="USE">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Boil"/>
+                  <xs:enumeration value="Mash"/>
+                  <xs:enumeration value="Primary"/>
+                  <xs:enumeration value="Secondary"/>
+                  <xs:enumeration value="Bottling"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="TIME" type="DurationInMinutes"/>
+         <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In liters (litres) unless next field is present and set to TRUE, in which case in kg.
+                                                            NB: We ingore the obvious nonsensical error in the BeerXML description of this field. -->
+         <xs:element name="AMOUNT_IS_WEIGHT" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="USE_FOR" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next three fields are listed under "Misc Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TIME" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Types for <MISCS>...</MISCS> records -->
+   <xs:complexType name="MiscsType">
+      <xs:sequence>
+         <xs:element name="MISC" type="MiscType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="MiscsEmptyAllowedType">
+      <xs:sequence>
+         <xs:element name="MISC" type="MiscType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <YEAST>...</YEAST> records -->
+   <xs:complexType name="YeastType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="TYPE">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Ale"/>
+                  <xs:enumeration value="Lager"/>
+                  <xs:enumeration value="Wheat"/>
+                  <xs:enumeration value="Wine"/>
+                  <xs:enumeration value="Champagne"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="FORM">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Liquid"/>
+                  <xs:enumeration value="Dry"/>
+                  <xs:enumeration value="Slant"/>
+                  <xs:enumeration value="Culture"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="AMOUNT" type="xs:decimal"/> <!-- In liters (litres) unless next field is present and set to TRUE, in which case in kg. -->
+         <xs:element name="AMOUNT_IS_WEIGHT" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="LABORATORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PRODUCT_ID" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MIN_TEMPERATURE" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MAX_TEMPERATURE" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FLOCCULATION" minOccurs="0" maxOccurs="1">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Low"/>
+                  <xs:enumeration value="Medium"/>
+                  <xs:enumeration value="High"/>
+                  <xs:enumeration value="Very High"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="ATTENUATION" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="BEST_FOR" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TIMES_CULTURED" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="MAX_REUSE" type="xs:nonNegativeInteger" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ADD_TO_SECONDARY" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next five fields are listed under "Yeast Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISP_MIN_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISP_MAX_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="INVENTORY" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="CULTURE_DATE" type="xs:string" minOccurs="0" maxOccurs="1"/> <!-- BeerXML 1.0 Standard says "in a neutral date form" -->
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Types for <YEASTS>...</YEASTS> records -->
+   <xs:complexType name="YeastsType">
+      <xs:sequence>
+         <xs:element name="YEAST" type="YeastType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="YeastsEmptyAllowedType">
+      <xs:sequence>
+         <xs:element name="YEAST" type="YeastType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <WATER>...</WATER> records -->
+   <xs:complexType name="WaterType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="AMOUNT" type="VolumeInLiters"/>
+         <xs:element name="CALCIUM" type="xs:decimal"/> <!-- In parts per million of Ca -->
+         <xs:element name="BICARBONATE" type="xs:decimal"/> <!-- In parts per million of HCO3 -->
+         <xs:element name="SULFATE" type="xs:decimal"/> <!-- In parts per million of SO4 -->
+         <xs:element name="CHLORIDE" type="xs:decimal"/> <!-- In parts per million of Cl -->
+         <xs:element name="SODIUM" type="xs:decimal"/> <!-- In parts per million of Na -->
+         <xs:element name="MAGNESIUM" type="xs:decimal"/> <!-- In parts per million of Mg -->
+         <xs:element name="PH" type="AcidityOrBasicityIn_pH" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next field is listed under "Water Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DISPLAY_AMOUNT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Types for <WATERS>...</WATERS> records -->
+   <xs:complexType name="WatersType">
+      <xs:sequence>
+         <xs:element name="WATER" type="WaterType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="WatersEmptyAllowedType">
+      <xs:sequence>
+         <xs:element name="WATER" type="WaterType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <MASH_STEP>...</MASH_STEP> records -->
+   <xs:complexType name="MashStepType">
+      <xs:all>
+         <xs:element name="NAME" type="xs:string"/> <!-- TBD whether this should be NonBlankString -->
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="TYPE">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Infusion"/>
+                  <xs:enumeration value="Temperature"/>
+                  <xs:enumeration value="Decoction"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <!-- Per note below about EFFICIENCY, it woud be nice to add an assert here to enforce that INFUSE_AMOUNT is
+              "required only for infusion steps, though one may also add water for temperature mash steps.  One should
+              not have an  infusion amount for decoction steps."  However, this is not doable for us until Xerces-C++
+              supports the XML Schema 1.1 specifications. -->
+         <xs:element name="INFUSE_AMOUNT" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="STEP_TEMP" type="TemperatureInCelsius"/>
+         <xs:element name="STEP_TIME" type="DurationInMinutes"/>
+         <xs:element name="RAMP_TIME" type="DurationInMinutes" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="END_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next six fields are listed under "Mash Step Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DESCRIPTION" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="WATER_GRAIN_RATIO" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DECOCTION_AMT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="INFUSE_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_STEP_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_INFUSE_AMT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+         <!-- ***********************************************************************************
+              *** Extra field not included in the BeerXML 1.0 standard but used by Brewtarget ***
+              *********************************************************************************** -->
+         <xs:element name="DECOCTION_AMOUNT" type="VolumeInLiters" minOccurs="0" maxOccurs="1"/>
+
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Type for <MASH_STEPS>...</MASH_STEPS> records
+        These only exist inside <MASH>...</MASH> record sets, and, in this case, the BeerXML spec seems to imply there
+        is always at least one <MASH_STEP>...</MASH_STEP> record in a <MASH_STEPS>...</MASH_STEPS> record. -->
+   <xs:complexType name="MashStepsType">
+      <xs:sequence>
+         <xs:element name="MASH_STEP" type="MashStepType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <MASH>...</MASH> records -->
+   <xs:complexType name="MashType">
+      <xs:all>
+         <xs:element name="NAME" type="xs:string"/> <!-- TBD whether this should be NonBlankString -->
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="GRAIN_TEMP" type="TemperatureInCelsius"/>
+         <xs:element name="MASH_STEPS" type="MashStepsType"/>
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TUN_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="SPARGE_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PH" type="AcidityOrBasicityIn_pH" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TUN_WEIGHT" type="WeightInKg" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TUN_SPECIFIC_HEAT" type="xs:decimal" minOccurs="0" maxOccurs="1"/> <!-- In calories per gram-degree C -->
+         <xs:element name="EQUIP_ADJUST" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next four fields are listed under "Mash Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="DISPLAY_GRAIN_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TUN_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_SPARGE_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TUN_WEIGHT" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Types for <MASHS>...</MASHS> records.
+        Perhaps in a future version of BeerXML this might be corrected to MASHES, but, for now, we'll keep our type
+        name consistent with the tag name.
+        Note that we don't need a MashsEmptyAllowedType because a RECIPE only uses MASH not MASHS -->
+   <xs:complexType name="MashsType">
+      <xs:sequence>
+         <xs:element name="MASH" type="MashType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <INSTRUCTION>...</INSTRUCTION> records
+        These are a non-standard extension to BeerXML to support our Instruction class
+        I don't think there's a compelling reason for the element names being a mixture of UPPERCASE, lowercase, and
+        camelCase but XML is case-sensitive so we need to retain case for compatibility with existing files. -->
+   <xs:complexType name="InstructionType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="directions" type="xs:string"/>
+         <xs:element name="hasTimer" type="CapsBoolean"/>
+         <xs:element name="timervalue" type="xs:string"/> <!-- NB lowercase not camelCase. AFAICT this is a display-only value and should be blank if hasTimer is FALSE -->
+         <xs:element name="completed" type="CapsBoolean"/>
+         <xs:element name="interval" type="DurationInMinutes"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Type for <INSTRUCTIONS>...</INSTRUCTIONS> records
+        AFAICT this only appears inside RECIPE.  It is allowed to be empty -->
+   <xs:complexType name="InstructionsType">
+      <xs:sequence>
+         <xs:element name="INSTRUCTION" type="InstructionType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <BREWNOTE>...</BREWNOTE> records
+        These are a non-standard extension to BeerXML to support our BrewNote class, which records what you did on brewday
+        AFAICT this is the only record type that does not have a NAME field -->
+   <xs:complexType name="BrewNoteType">
+      <xs:all>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="ACTUAL_ABV" type="xs:decimal"/>
+         <xs:element name="ATTENUATION" type="SimplePercentage"/>
+         <xs:element name="BOIL_OFF" type="VolumeInLiters"/>
+         <xs:element name="BREWDATE" type="xs:date"/> <!-- By default XML dates are ISO 8601 format aka The One True Date Format -->
+         <xs:element name="BREWHOUSE_EFF" type="SimplePercentage"/>
+         <xs:element name="EFF_INTO_BK" type="SimplePercentage"/>
+         <!-- This is an ISO 8601 format date, unless it's an empty string.  We might want to switch to omitting the
+              element when there is no date, so make it optional too. -->
+         <xs:element name="DATE_FERMENTED_OUT" type="DateOrBlank" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FG" type="SpecificGravity"/>
+         <xs:element name="FINAL_VOLUME" type="VolumeInLiters"/>
+         <xs:element name="MASH_FINAL_TEMP" type="TemperatureInCelsius"/>
+         <xs:element name="NOTES" type="xs:string"/>
+         <xs:element name="OG" type="SpecificGravity"/>
+         <xs:element name="PITCH_TEMP" type="TemperatureInCelsius"/>
+         <xs:element name="POST_BOIL_VOLUME" type="VolumeInLiters"/>
+         <xs:element name="PROJECTED_ABV" type="xs:decimal"/>
+         <xs:element name="PROJECTED_ATTEN" type="SimplePercentage"/>
+         <xs:element name="PROJECTED_BOIL_GRAV" type="SpecificGravity"/>
+         <xs:element name="PROJECTED_EFF" type="SimplePercentage"/>
+         <xs:element name="PROJECTED_FERM_POINTS" type="xs:decimal"/>
+         <xs:element name="PROJECTED_FG" type="SpecificGravity"/>
+         <xs:element name="PROJECTED_MASH_FIN_TEMP" type="TemperatureInCelsius"/>
+         <xs:element name="PROJECTED_OG" type="SpecificGravity"/>
+         <xs:element name="PROJECTED_POINTS" type="xs:decimal"/>
+         <xs:element name="PROJECTED_STRIKE_TEMP" type="TemperatureInCelsius"/>
+         <xs:element name="PROJECTED_VOL_INTO_BK" type="VolumeInLiters"/>
+         <xs:element name="PROJECTED_VOL_INTO_FERM" type="VolumeInLiters"/>
+         <xs:element name="SG" type="SpecificGravity"/>
+         <xs:element name="STRIKE_TEMP" type="TemperatureInCelsius"/>
+         <xs:element name="VOLUME_INTO_BK" type="VolumeInLiters"/>
+         <xs:element name="VOLUME_INTO_FERMENTER" type="VolumeInLiters"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Type for <BREWNOTES>...</BREWNOTES> records
+        AFAICT this only appears inside RECIPE.  It is allowed to be empty -->
+   <xs:complexType name="BrewNotesType">
+      <xs:sequence>
+         <xs:element name="BREWNOTE" type="BrewNoteType" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Type for <RECIPE>...</RECIPE> records -->
+   <xs:complexType name="RecipeType">
+      <xs:all>
+         <xs:element name="NAME" type="NonBlankString"/>
+         <xs:element name="VERSION" type="xs:positiveInteger"/>
+         <xs:element name="TYPE">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Extract"/>
+                  <xs:enumeration value="Partial Mash"/>
+                  <xs:enumeration value="All Grain"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="STYLE" type="StyleType"/> <!-- NB singular not plural here -->
+         <xs:element name="EQUIPMENT" type="EquipmentType"/> <!-- NB singular not plural here -->
+         <xs:element name="BREWER" type="xs:string"/>
+         <xs:element name="ASST_BREWER" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="BATCH_SIZE" type="VolumeInLiters"/>
+         <xs:element name="BOIL_SIZE" type="VolumeInLiters"/>
+         <xs:element name="BOIL_TIME" type="DurationInMinutes"/>
+         <xs:element name="EFFICIENCY" type="SimplePercentage" minOccurs="0" maxOccurs="1"/>
+         <!-- EFFICIENCY is not required for Extract but is required for other types
+            so, ideally, we would have an assert here along the following lines:
+               <xs:assert test="EFFICIENCY or (TYPE = 'Extract')"/>
+            However, XSD asserts are part of the XML Schema 1.1 specifications and Xerces-C++
+            (in contrast to Xerces-J) only supports XML Schema 1.0 - ie it doesn't understand
+            the assert tag. -->
+         <xs:element name="HOPS" type="HopsEmptyAllowedType"/>
+         <xs:element name="FERMENTABLES" type="FermentablesEmptyAllowedType"/>
+         <xs:element name="MISCS" type="MiscsEmptyAllowedType"/>
+         <xs:element name="YEASTS" type="YeastsEmptyAllowedType"/>
+         <xs:element name="WATERS" type="WatersEmptyAllowedType"/>
+         <!-- The BeerXML 1.0 Standard defines the next field as required, but then goes on to say in its description
+              that 'No Mash record is needed for “Extract” type brews'.  We'll take the description as accurate.
+              As noted above for EFFICIENCY and INFUSE_AMOUNT, we ideally would include an xs:assert tag here to
+              enforce the circumstances in which a MASH record is required, but this will have to wait until Xerces-C++
+              supports the XML Schema 1.1 specification. -->
+         <xs:element name="MASH" type="MashType"/> <!-- NB singular not plural here -->
+         <xs:element name="INSTRUCTIONS" type="InstructionsType" minOccurs="0" maxOccurs="1"/> <!-- Non-standard extension, so has to be optional -->
+         <xs:element name="BREWNOTES" type="BrewNotesType" minOccurs="0" maxOccurs="1"/> <!-- Non-standard extension, so has to be optional -->
+         <xs:element name="NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TASTE_NOTES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <!-- TASTE_RATING is a decimal number "between zero and 50.0 denoting the taste rating correspond[ing] to the 50 point BJCP rating system" -->
+         <xs:element name="TASTE_RATING" minOccurs="0" maxOccurs="1">
+            <xs:simpleType>
+               <xs:restriction base="xs:decimal">
+                  <xs:minInclusive value="0"/>
+                  <xs:maxInclusive value="50"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="OG" type="SpecificGravity" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FG" type="SpecificGravity" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FERMENTATION_STAGES" type="xs:positiveInteger" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PRIMARY_AGE" type="DurationInDays" minOccurs="0" maxOccurs="1"/> <!-- Time spent in the primary -->
+         <xs:element name="PRIMARY_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="SECONDARY_AGE" type="DurationInDays" minOccurs="0" maxOccurs="1"/> <!-- Time spent in the secondary -->
+         <xs:element name="SECONDARY_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="TERTIARY_AGE" type="DurationInDays" minOccurs="0" maxOccurs="1"/> <!-- Time spent in the tertiary -->
+         <xs:element name="TERTIARY_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="AGE" type="DurationInDays" minOccurs="0" maxOccurs="1"/> <!-- Time to age the beer after bottling -->
+         <xs:element name="AGE_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DATE" type="xs:string" minOccurs="0" maxOccurs="1"/> <!-- Has to be string as BeerXML Standard only says "in [an] easily recognizable format" -->
+         <xs:element name="CARBONATION" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="FORCED_CARBONATION" type="CapsBoolean" minOccurs="0" maxOccurs="1"/>
+         <!-- The next field should only be present if the previous one was present and set to TRUE
+              See comments elsewhere about the desirability of enforcing this in future via xs:assert tags -->
+         <xs:element name="PRIMING_SUGAR_NAME" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="CARBONATION_TEMP" type="TemperatureInCelsius" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="PRIMING_SUGAR_EQUIV" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="KEG_PRIMING_FACTOR" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
+
+         <!-- The next 19 fields are listed under "Recipe Extensions" in the BeerXML 1.0 standard -->
+         <xs:element name="EST_OG" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="EST_FG" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="EST_COLOR" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="IBU" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="IBU_METHOD" minOccurs="0" maxOccurs="1">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="Rager"/>
+                  <xs:enumeration value="Tinseth"/>
+                  <xs:enumeration value="Garetz"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="EST_ABV" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ABV" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="ACTUAL_EFFICIENCY" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="CALORIES" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_BATCH_SIZE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_BOIL_SIZE" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_OG" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_FG" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_PRIMARY_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_SECONDARY_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_TERTIARY_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_AGE_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="CARBONATION_USED" type="xs:string" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="DISPLAY_CARB_TEMP" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      </xs:all>
+   </xs:complexType>
+
+   <!-- Type for <RECIPES>...</RECIPES> records
+        Note that we don't need a RecipesEmptyAllowedType because a RECIPE doesn't refer to other RECIPES -->
+   <xs:complexType name="RecipesType">
+      <xs:sequence>
+         <xs:element name="RECIPE" type="RecipeType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+
+   <!-- Definitions of complex types : END -->
+
+
+   <!-- Finally, there's one more trick we need to pull.  The BeerXML 1.0 Standard says a BeerXML document consists, at
+        its top level, of one or more of the following "record sets":
+           <HOPS>...</HOPS>
+           <FERMENTABLES>...</FERMENTABLES>
+           <YEASTS>...</YEASTS>
+           <MISCS>...</MISCS>
+           <WATERS>...</WATERS>
+           <STYLES>...</STYLES>
+           <MASHS>...</MASHS>
+           <RECIPES>...</RECIPES>
+           <EQUIPMENTS>...</EQUIPMENTS>
+        This would be relatively easy to represent here _IF_ such "record sets" were inside another tag.  But they are
+        not.  What to do?  Well, to the accompanying sound of Vincent Price saying "Bwahahaha", we simply solve the
+        problem in the C++ code by inserting a root node in the document before parsing it against this XSD.
+
+        Specifically, we load the BeerXML 1.0 document we want to process into memory, then edit that in-memory copy on
+        the fly to add our <BEER_XML>...</BEER_XML> tag around the contents, then parse that amended copy of the
+        document against this XSD.
+
+        So, to be clear, you should not expect to see <BEER_XML>...</BEER_XML> tags in a BeerXML 1.0 file (whether it's
+        one we created or one originating elsewhere).  It is just something that we pretend is present (by adding it to
+        our in-memory copy of a document we are parsing) to make this part of the XSD at least an order of magnitude
+        simpler than it would otherwise be.
+   -->
+   <xs:element name="BEER_XML">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:choice maxOccurs="unbounded" minOccurs="1">
+               <xs:element name="HOPS" type="HopsType"/>
+               <xs:element name="FERMENTABLES" type="FermentablesType"/>
+               <xs:element name="YEASTS" type="YeastsType"/>
+               <xs:element name="MISCS" type="MiscsType"/>
+               <xs:element name="WATERS" type="WatersType"/>
+               <xs:element name="STYLES" type="StylesType"/>
+               <xs:element name="MASHS" type="MashsType"/>
+               <xs:element name="RECIPES" type="RecipesType"/>
+               <xs:element name="EQUIPMENTS" type="EquipmentsType"/>
+            </xs:choice>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+</xs:schema>

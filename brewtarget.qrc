@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file alias="xsd/beerxml/v1/BeerXml.xsd">xsd/beerxml/v1/BeerXml.xsd</file>
         <file alias="images/backup.png">images/backup.png</file>
         <file alias="images/brewtarget.svg">images/brewtarget.svg</file>
         <file alias="images/bubbles.svg">images/bubbles.svg</file>

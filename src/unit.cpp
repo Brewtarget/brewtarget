@@ -72,7 +72,7 @@ EBCUnit* Units::ebc = new EBCUnit();
 SgUnit* Units::sp_grav = new SgUnit();
 PlatoUnit* Units::plato = new PlatoUnit();
 // == diastatic power ==
-LintnerUnit* Units::lintner = new LintnerUnit();;
+LintnerUnit* Units::lintner = new LintnerUnit();
 WKUnit* Units::wk = new WKUnit();
 
 QString Unit::unitFromString(QString qstr)
@@ -309,7 +309,7 @@ double PoundUnit::toSI( double amt ) const
 {
    return amt * 0.45359237;
 }
-      
+
 double PoundUnit::fromSI( double amt ) const
 {
    return amt * 2.2046226;

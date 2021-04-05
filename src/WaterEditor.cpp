@@ -61,7 +61,7 @@ void WaterEditor::setWater(Water *water) {
    if (this->obs) {
       this->waterEditRadarChart->addSeries("Current", Qt::darkGreen, *water);
 
-      connect( this->obs, &Ingredient::changed, this, &WaterEditor::changed );
+      connect( this->obs, &NamedEntity::changed, this, &WaterEditor::changed );
       showChanges();
    }
 
@@ -108,7 +108,7 @@ void WaterEditor::showChanges(QMetaProperty* prop)
       val = prop->read(this->obs);
    }
 
-   if ( propName == PropertyNames::Ingredient::name || updateAll ) {
+   if ( propName == PropertyNames::NamedEntity::name || updateAll ) {
       lineEdit_name->setText(this->obs->name());
       if ( ! updateAll ) return;
    }

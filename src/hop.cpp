@@ -1,6 +1,6 @@
 /*
  * hop.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -20,12 +20,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "hop.h"
 
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
 #include <QDebug>
-#include "hop.h"
 #include "brewtarget.h"
 
 #include "TableSchemaConst.h"
@@ -36,14 +36,23 @@ QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
 QStringList Hop::uses = QStringList() << "Mash" << "First Wort" << "Boil" << "Aroma" << "Dry Hop";
 
-bool operator<( Hop &h1, Hop &h2 )
-{
-   return h1.name() < h2.name();
-}
-
-bool operator==( Hop &h1, Hop &h2 )
-{
-   return h1.name() == h2.name();
+bool Hop::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Hop const & rhs = static_cast<Hop const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_use               == rhs.m_use               &&
+      this->m_type              == rhs.m_type              &&
+      this->m_form              == rhs.m_form              &&
+      this->m_alpha_pct         == rhs.m_alpha_pct         &&
+      this->m_beta_pct          == rhs.m_beta_pct          &&
+      this->m_hsi_pct           == rhs.m_hsi_pct           &&
+      this->m_origin            == rhs.m_origin            &&
+      this->m_humulene_pct      == rhs.m_humulene_pct      &&
+      this->m_caryophyllene_pct == rhs.m_caryophyllene_pct &&
+      this->m_cohumulone_pct    == rhs.m_cohumulone_pct    &&
+      this->m_myrcene_pct       == rhs.m_myrcene_pct
+   );
 }
 
 bool Hop::isValidUse(const QString& str)
@@ -68,7 +77,7 @@ QString Hop::classNameStr()
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString()),
+   : NamedEntity(table, key, QString()),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -94,7 +103,7 @@ Hop::Hop(Brewtarget::DBTable table, int key)
 }
 
 Hop::Hop(QString name, bool cache)
-   : Ingredient(Brewtarget::HOPTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::HOPTABLE, -1, name, true),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -120,7 +129,7 @@ Hop::Hop(QString name, bool cache)
 }
 
 Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_useStr(rec.value(kcolUse).toString()),
      m_use(static_cast<Hop::Use>(uses.indexOf(m_useStr))),
      m_typeStr(rec.value(kcolHopType).toString()),
@@ -146,7 +155,7 @@ Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
 }
 
 Hop::Hop( Hop & other )
-   : Ingredient(other),
+   : NamedEntity(other),
      m_useStr(other.m_useStr),
      m_use(other.m_use),
      m_typeStr(other.m_typeStr),
@@ -468,12 +477,12 @@ const QString Hop::formStringTr() const
    }
 }
 
-Ingredient * Hop::getParent() {
+NamedEntity * Hop::getParent() {
    Hop * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it
@@ -487,4 +496,8 @@ Ingredient * Hop::getParent() {
 
 int Hop::insertInDatabase() {
    return Database::instance().insertHop(this);
+}
+
+void Hop::removeFromDatabase() {
+   Database::instance().remove(this);
 }

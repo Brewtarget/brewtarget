@@ -324,7 +324,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          if( value.canConvert(QVariant::String))
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Ingredient::name,
+                                                     PropertyNames::NamedEntity::name,
                                                      value.toString(),
                                                      tr("Change Mash Step Name"));
             return true;

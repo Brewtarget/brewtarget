@@ -92,7 +92,7 @@ void HopTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &Ingredient::changed, this, &HopTableModel::changed );
+      connect( recObs, &NamedEntity::changed, this, &HopTableModel::changed );
       addHops( recObs->hops() );
    }
 }
@@ -386,7 +386,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          retVal = value.canConvert(QVariant::String);
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Ingredient::name,
+                                                     PropertyNames::NamedEntity::name,
                                                      value.toString(),
                                                      tr("Change Hop Name"));
          }

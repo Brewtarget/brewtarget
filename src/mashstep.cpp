@@ -1,6 +1,7 @@
 /*
  * mashstep.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,10 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "mashstep.h"
 
 #include <QVector>
 #include <QDebug>
-#include "mashstep.h"
 #include "brewtarget.h"
 #include "database.h"
 #include "TableSchemaConst.h"
@@ -28,14 +29,21 @@
 QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction" << "Fly Sparge" << "Batch Sparge";
 QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction") << QObject::tr("Fly Sparge") << QObject::tr("Batch Sparge");
 
-bool operator<(MashStep &m1, MashStep &m2)
-{
-   return m1.name() < m2.name();
-}
-
-bool operator==(MashStep &m1, MashStep &m2)
-{
-   return m1.name() == m2.name();
+bool MashStep::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   MashStep const & rhs = static_cast<MashStep const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_type              == rhs.m_type              &&
+      this->m_infuseAmount_l    == rhs.m_infuseAmount_l    &&
+      this->m_stepTemp_c        == rhs.m_stepTemp_c        &&
+      this->m_stepTime_min      == rhs.m_stepTime_min      &&
+      this->m_rampTime_min      == rhs.m_rampTime_min      &&
+      this->m_endTemp_c         == rhs.m_endTemp_c         &&
+      this->m_infuseTemp_c      == rhs.m_infuseTemp_c      &&
+      this->m_decoctionAmount_l == rhs.m_decoctionAmount_l &&
+      this->m_stepNumber        == rhs.m_stepNumber
+   );
 }
 
 QString MashStep::classNameStr()
@@ -47,7 +55,7 @@ QString MashStep::classNameStr()
 //==============================CONSTRUCTORS====================================
 
 MashStep::MashStep(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true),
+   : NamedEntity(table, key, QString(), true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -62,8 +70,8 @@ MashStep::MashStep(Brewtarget::DBTable table, int key)
 {
 }
 
-MashStep::MashStep(bool cache)
-   : Ingredient(Brewtarget::MASHSTEPTABLE, -1, QString(), true),
+MashStep::MashStep(QString name, bool cache)
+   : NamedEntity(Brewtarget::MASHSTEPTABLE, -1, name, true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -79,7 +87,7 @@ MashStep::MashStep(bool cache)
 }
 
 MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
      m_typeStr(rec.value(kcolMashstepType).toString()),
      m_type(static_cast<MashStep::Type>(types.indexOf(m_typeStr))),
      m_infuseAmount_l(rec.value(kcolMashstepInfuseAmt).toDouble()),
@@ -256,4 +264,8 @@ bool MashStep::isValidType( const QString &str ) const
 
 int MashStep::insertInDatabase() {
    return Database::instance().insertMashStep(this, this->m_mash);
+}
+
+void MashStep::removeFromDatabase() {
+   Database::instance().remove(this);
 }

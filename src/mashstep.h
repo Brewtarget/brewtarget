@@ -1,7 +1,8 @@
 /*
  * mashstep.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,11 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _MASHSTEP_H
 #define _MASHSTEP_H
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 #include <QStringList>
 #include <QString>
 #include "mash.h"
@@ -35,18 +35,12 @@ namespace PropertyNames::MashStep { static char const * const stepTime_min = "st
 namespace PropertyNames::MashStep { static char const * const stepTemp_c = "stepTemp_c"; /* previously kpropStepTemp */ }
 namespace PropertyNames::MashStep { static char const * const infuseAmount_l = "infuseAmount_l"; /* previously kpropInfuseAmt */ }
 
-// Forward declarations.
-class MashStep;
-bool operator<(MashStep &m1, MashStep &m2);
-bool operator==(MashStep &m1, MashStep &m2);
-
 /*!
  * \class MashStep
- * \author Philip G. Lee
  *
  * \brief Model for a mash step record in the database.
  */
-class MashStep : public Ingredient
+class MashStep : public NamedEntity
 {
    Q_OBJECT
 
@@ -124,17 +118,23 @@ public:
    static QString classNameStr();
 
    // MashStep objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    MashStep(Brewtarget::DBTable table, int key);
    MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
    MashStep( MashStep const& other );
-   MashStep(bool cache);
+public:
+   MashStep(QString name, bool cache = true);
 
+private:
    QString m_typeStr;
    Type m_type;
    double m_infuseAmount_l;
@@ -152,11 +152,8 @@ private:
 
    static QStringList types;
    static QStringList typesTr;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
-
+/*
 inline bool MashStepPtrLt( MashStep* lhs, MashStep* rhs)
 {
    return *lhs < *rhs;
@@ -182,5 +179,5 @@ struct MashStep_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif //_MASHSTEP_H

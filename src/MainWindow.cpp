@@ -130,8 +130,111 @@
 
 #include <memory>
 
+// This private implementation class holds all private non-virtual members of MainWindow
+class MainWindow::impl {
+public:
+
+   impl() : fileOpenDirectory{QDir::homePath()} {
+      return;
+   }
+
+   ~impl() = default;
+
+   /**
+    * @brief Import recipes, hops, equipment, etc from files specified by the user.  (Currently this is just BeerXML,
+    *        but in future could well be other formats too.
+    *
+    * @param mainWindow Back pointer to MainWindow class
+    */
+   void importFromFiles(MainWindow * mainWindow) {
+      // Since we can only be called from an instance of MainWindow, it should be impossible for it to give us null as
+      // the pointer to itself!
+      Q_ASSERT(mainWindow != nullptr);
+
+      // Set up the fileOpener dialog.  In previous versions of the code, this was created once and reused every time
+      // we want to open a file.  The advantage of that is that, on subsequent uses, the file dialog is going to open
+      // wherever you navigated to when you last opened a file.  However, as at 2020-12-30, there is a known bug in Qt
+      // (https://bugreports.qt.io/browse/QTBUG-88971) which means you cannot make a QFileDialog "forget" previous
+      // files you have selected with it.  So each time you you show it, the subsequent list returned from
+      // selectedFiles() is actually all files _ever_ selected with this dialog object.  (The bug report is a bit bare
+      // bones, but https://forum.qt.io/topic/121235/qfiledialog-has-memory has more detail.)
+      //
+      // Our workaround is to use a new QFileDialog each time, and manually keep track of the current directory
+      QFileDialog fileOpener{mainWindow,
+                             tr("Open"),
+                             this->fileOpenDirectory,
+                             tr("BeerXML files (*.xml)")};
+      fileOpener.setAcceptMode(QFileDialog::AcceptOpen);
+      fileOpener.setFileMode(QFileDialog::ExistingFiles);
+      fileOpener.setViewMode(QFileDialog::List);
+
+      if ( ! fileOpener.exec() ) {
+         // User clicked cancel, so nothing more to do
+         return;
+      }
+
+      qDebug() << Q_FUNC_INFO << "Importing " << fileOpener.selectedFiles().length() << " files";
+      qDebug() << Q_FUNC_INFO << "Directory " << fileOpener.directory();
+      this->fileOpenDirectory = fileOpener.directory().canonicalPath();
+
+      foreach( QString filename, fileOpener.selectedFiles() ) {
+         //
+         // I guess if the user were importing a lot of files in one go, it might be annoying to have a separate result
+         // message for each one, but TBD whether that's much of a use case.  For now, we keep things simple.
+         //
+         qDebug() << Q_FUNC_INFO << "Importing " << filename;
+         QString userMessage;
+         QTextStream userMessageAsStream{&userMessage};
+         bool succeeded = Database::instance().getBeerXml()->importFromXML(filename, userMessageAsStream);
+         qDebug() << Q_FUNC_INFO << "Import " << (succeeded ? "succeeded" : "failed");
+         this->importMsg(filename, succeeded, userMessage);
+      }
+
+      mainWindow->showChanges();
+
+      return;
+   }
+
+   /**
+    * \brief Show a success/failure message to the user after we attempted to import one or more BeerXML files
+    */
+   void importMsg(QString const & fileName, bool succeeded, QString const & userMessage) {
+      // This will allow us to drop the directory path to the file, as it is often long and makes the message box a
+      // "wall of text" that will put a lot of users off.
+      QFileInfo fileInfo(fileName);
+
+
+      QString messageBoxTitle{succeeded ? tr("Success!") : tr("ERROR")};
+      QString messageBoxText;
+      if (succeeded) {
+         // The userMessage parameter will tell how many files were imported and/or skipped (as duplicates)
+         messageBoxText = QString(
+            tr("Successfully read \"%1\"\n\n%2").arg(fileInfo.fileName()).arg(userMessage)
+         );
+      } else {
+         messageBoxText = QString(
+            tr("Unable to import data from \"%1\"\n\n"
+               "%2\n\n"
+               "Log file may contain more details.").arg(fileInfo.fileName()).arg(userMessage)
+         );
+      }
+      qDebug() << Q_FUNC_INFO << "Message box text : " << messageBoxText;
+      QMessageBox msgBox{succeeded ? QMessageBox::Information : QMessageBox::Critical,
+                         messageBoxTitle,
+                         messageBoxText};
+      msgBox.exec();
+      return;
+   }
+
+private:
+   QFileDialog* fileOpener;
+
+   QString fileOpenDirectory;
+};
+
+
 MainWindow::MainWindow(QWidget* parent)
-        : QMainWindow(parent)
+        : QMainWindow(parent), pimpl{ new impl{} }
 {
    qDebug() << Q_FUNC_INFO;
 
@@ -209,6 +312,11 @@ void MainWindow::init() {
    qDebug() << Q_FUNC_INFO << "MainWindow initialisation complete";
    return;
 }
+
+
+// See https://herbsutter.com/gotw/_100/ for why we need to explicitly define the destructor here (and not in the header file)
+MainWindow::~MainWindow() = default;
+
 
 void MainWindow::setSizesInPixelsBasedOnDpi()
 {
@@ -301,7 +409,7 @@ void MainWindow::setupCSS()
    lineEdit_boilSg->setStyleSheet(boldSS);
 }
 
-// Any dialogs should be initialized in here. That should include any initial
+// Most dialogs are initialized in here. That should include any initial
 // configurations as well
 void MainWindow::setupDialogs()
 {
@@ -337,12 +445,6 @@ void MainWindow::setupDialogs()
 
    waterDialog = new WaterDialog(this);
    waterEditor = new WaterEditor(this);
-
-   // Set up the fileOpener dialog.
-   fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
-   fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
-   fileOpener->setFileMode(QFileDialog::ExistingFiles);
-   fileOpener->setViewMode(QFileDialog::List);
 
    // Set up the fileSaver dialog.
    fileSaver = new QFileDialog(this, tr("Save"), QDir::homePath(), tr("BeerXML files (*.xml)") );
@@ -595,8 +697,8 @@ void MainWindow::setupTriggers()
    connect( actionExit, &QAction::triggered, this, &QWidget::close );                                                   // > File > Exit
    connect( actionAbout_BrewTarget, &QAction::triggered, dialog_about, &QWidget::show );                                // > About > About Brewtarget
    connect( actionNewRecipe, &QAction::triggered, this, &MainWindow::newRecipe );                                       // > File > New Recipe
-   connect( actionImport_Recipes, &QAction::triggered, this, &MainWindow::importFiles );                                // > File > Import Recipes
-   connect( actionExportRecipe, &QAction::triggered, this, &MainWindow::exportRecipe );                                 // > File > Export Recipes
+   connect( actionImportFromXml, &QAction::triggered, this, &MainWindow::importFiles );                                // > File > Import Recipes
+   connect( actionExportToXml, &QAction::triggered, this, &MainWindow::exportRecipe );                                 // > File > Export Recipes
    connect( actionUndo, &QAction::triggered, this, &MainWindow::editUndo );                                             // > Edit > Undo
    connect( actionRedo, &QAction::triggered, this, &MainWindow::editRedo );                                             // > Edit > Redo
    setUndoRedoEnable();
@@ -1020,7 +1122,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
 
    if( propName == "equipment" )
    {
-      Equipment* newRecEquip = qobject_cast<Equipment*>(Ingredient::extractPtr(value));
+      Equipment* newRecEquip = qobject_cast<Equipment*>(NamedEntity::extractPtr(value));
       recEquip = newRecEquip;
 
       singleEquipEditor->setEquipment(recEquip);
@@ -1028,7 +1130,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    else if( propName == "style" )
    {
       //recStyle = recipeObs->style();
-      recStyle = qobject_cast<Style*>(Ingredient::extractPtr(value));
+      recStyle = qobject_cast<Style*>(NamedEntity::extractPtr(value));
       singleStyleEditor->setStyle(recStyle);
 
    }
@@ -1170,7 +1272,7 @@ void MainWindow::updateRecipeName()
    if( recipeObs == nullptr || ! lineEdit_name->isModified())
       return;
 
-   this->doOrRedoUpdate(*this->recipeObs, PropertyNames::Ingredient::name, lineEdit_name->text(), tr("Change Recipe Name"));
+   this->doOrRedoUpdate(*this->recipeObs, PropertyNames::NamedEntity::name, lineEdit_name->text(), tr("Change Recipe Name"));
 }
 
 void MainWindow::displayRangesEtcForCurrentRecipeStyle()
@@ -1406,7 +1508,7 @@ void MainWindow::addFermentableToRecipe(Fermentable* ferm)
 {
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::addFermentable,
+                             &Recipe::add<Fermentable>,
                              ferm,
                              &Recipe::remove<Fermentable>,
                              tr("Add fermentable to recipe"))
@@ -1419,7 +1521,7 @@ void MainWindow::addHopToRecipe(Hop *hop)
 {
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::addHop,
+                             &Recipe::add<Hop>,
                              hop,
                              &Recipe::remove<Hop>,
                              tr("Add hop to recipe"))
@@ -1432,7 +1534,7 @@ void MainWindow::addMiscToRecipe(Misc* misc)
 {
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::addMisc,
+                             &Recipe::add<Misc>,
                              misc,
                              &Recipe::remove<Misc>,
                              tr("Add misc to recipe"))
@@ -1445,7 +1547,7 @@ void MainWindow::addYeastToRecipe(Yeast* yeast)
 {
    this->doOrRedoUpdate(
       newUndoableAddOrRemove(*this->recipeObs,
-                             &Recipe::addYeast,
+                             &Recipe::add<Yeast>,
                              yeast,
                              &Recipe::remove<Yeast>,
                              tr("Add yeast to recipe"))
@@ -1477,6 +1579,10 @@ void MainWindow::addMashStepToMash(MashStep * mashStep)
    //         even by pulling out some of the common/similar code into a base class or template...
 }
 
+/**
+ * .:TODO:. (MY 2020-12-30) See also MainWindow::exportSelected().  I wonder if we could share more code between that
+ *                          function and this one.
+ */
 void MainWindow::exportRecipe()
 {
    QFile* outFile;
@@ -1496,7 +1602,7 @@ void MainWindow::exportRecipe()
 
    // Create the headers to make other BeerXML parsers happy
    QDomProcessingInstruction inst = doc.createProcessingInstruction("xml", xmlHead);
-   QDomComment beerxml = doc.createComment("BeerXML generated by brewtarget");
+   QDomComment beerxml = doc.createComment(QString(" BeerXML generated by Brewtarget %1 ").arg(VERSIONSTRING));
 
    doc.appendChild(inst);
    doc.appendChild(beerxml);
@@ -1731,7 +1837,7 @@ void MainWindow::removeSelectedFermentable()
          newUndoableAddOrRemove(*this->recipeObs,
                                 &Recipe::remove<Fermentable>,
                                 itemsToRemove.at(i),
-                                &Recipe::addFermentable,
+                                &Recipe::add<Fermentable>,
                                 &MainWindow::removeFermentable,
                                 static_cast<void (MainWindow::*)(Fermentable *)>(nullptr),
                                 tr("Remove fermentable from recipe"))
@@ -1808,7 +1914,7 @@ void MainWindow::removeSelectedHop()
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Hop>,
                                  itemsToRemove.at(i),
-                                 &Recipe::addHop,
+                                 &Recipe::add<Hop>,
                                  &MainWindow::removeHop,
                                  static_cast<void (MainWindow::*)(Hop *)>(nullptr),
                                  tr("Remove hop from recipe"))
@@ -1844,7 +1950,7 @@ void MainWindow::removeSelectedMisc()
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Misc>,
                                  itemsToRemove.at(i),
-                                 &Recipe::addMisc,
+                                 &Recipe::add<Misc>,
                                  &MainWindow::removeMisc,
                                  static_cast<void (MainWindow::*)(Misc *)>(nullptr),
                                  tr("Remove misc from recipe"))
@@ -1878,7 +1984,7 @@ void MainWindow::removeSelectedYeast()
          newUndoableAddOrRemove(*this->recipeObs,
                                  &Recipe::remove<Yeast>,
                                  itemsToRemove.at(i),
-                                 &Recipe::addYeast,
+                                 &Recipe::add<Yeast>,
                                  &MainWindow::removeYeast,
                                  static_cast<void (MainWindow::*)(Yeast *)>(nullptr),
                                  tr("Remove yeast from recipe"))
@@ -2248,19 +2354,10 @@ void MainWindow::restoreFromBackup()
    //TODO: do this without requiring restarting :)
 }
 
-// Imports all the recipes from a file into the database.
+// Imports all the recipes, hops, equipment or whatever from a BeerXML file into the database.
 void MainWindow::importFiles()
 {
-   if ( ! fileOpener->exec() )
-      return;
-
-   foreach( QString filename, fileOpener->selectedFiles() )
-   {
-      if ( ! Database::instance().importFromXML(filename) )
-         importMsg();
-   }
-
-   showChanges();
+   this->pimpl->importFromFiles(this);
 }
 
 bool MainWindow::verifyImport(QString tag, QString name)
@@ -2282,7 +2379,7 @@ void MainWindow::addMashStep()
       return;
    }
 
-   MashStep* step = new MashStep(true);
+   MashStep* step = new MashStep("", true);
    step->setMash(mash);
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
@@ -2694,7 +2791,7 @@ void MainWindow::exportSelected()
 
    // Create the headers to make other BeerXML parsers happy
    QDomProcessingInstruction inst = doc.createProcessingInstruction("xml", xmlHead);
-   QDomComment beerxml = doc.createComment("BeerXML generated by brewtarget");
+   QDomComment beerxml = doc.createComment(QString(" BeerXML generated by Brewtarget %1 ").arg(VERSIONSTRING));
 
    doc.appendChild(inst);
    doc.appendChild(beerxml);
@@ -2877,13 +2974,6 @@ void MainWindow::convertedMsg()
    msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir().canonicalPath() + "obsolete");
    msgBox.exec();
 
-}
-
-void MainWindow::importMsg()
-{
-   QMessageBox msgBox;
-   msgBox.setText( tr("The import contained invalid beerXML. It has been imported, but please make certain it makes sense."));
-   msgBox.exec();
 }
 
 void MainWindow::changeBrewDate()

@@ -46,7 +46,7 @@ void HopEditor::setHop( Hop* h )
    obsHop = h;
    if( obsHop )
    {
-      connect( obsHop, &Ingredient::changed, this, &HopEditor::changed );
+      connect( obsHop, &NamedEntity::changed, this, &HopEditor::changed );
       showChanges();
    }
 }
@@ -114,7 +114,7 @@ void HopEditor::showChanges(QMetaProperty* prop)
       propName = prop->name();
    }
 
-   if( propName == PropertyNames::Ingredient::name || updateAll )
+   if( propName == PropertyNames::NamedEntity::name || updateAll )
    {
       lineEdit_name->setText(obsHop->name());
       lineEdit_name->setCursorPosition(0);

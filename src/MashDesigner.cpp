@@ -129,7 +129,7 @@ bool MashDesigner::nextStep(int step)
    if ( step >= 0 && step < mash->mashSteps().size() )
       mashStep = mash->mashSteps()[step];
    else {
-      mashStep = new MashStep(true);
+      mashStep = new MashStep("", true);
    }
 
    // Clear out some of the fields.

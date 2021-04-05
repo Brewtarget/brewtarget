@@ -1,10 +1,8 @@
 /*
  * yeast.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
- * - marker5a
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
- * - plut0nium
  * - Samuel Östling <MrOstling@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -20,13 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "yeast.h"
 
 #include <QDomNode>
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
 #include <QDebug>
-#include "yeast.h"
 #include "brewtarget.h"
 
 #include "TableSchemaConst.h"
@@ -37,14 +35,17 @@ QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
 QStringList Yeast::flocculations = QStringList() << "Low" << "Medium" << "High" << "Very High";
 
-bool operator<(Yeast &y1, Yeast &y2)
-{
-   return y1.name() < y2.name();
-}
-
-bool operator==(Yeast &y1, Yeast &y2)
-{
-   return y1.name() == y2.name();
+bool Yeast::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Yeast const & rhs = static_cast<Yeast const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_type         == rhs.m_type         &&
+      this->m_form         == rhs.m_form         &&
+      this->m_laboratory   == rhs.m_laboratory   &&
+      this->m_productID    == rhs.m_productID    &&
+      this->m_flocculation == rhs.m_flocculation
+   );
 }
 
 QString Yeast::classNameStr()
@@ -55,7 +56,7 @@ QString Yeast::classNameStr()
 
 //============================CONSTRUCTORS======================================
 Yeast::Yeast(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true ),
+   : NamedEntity(table, key, QString(), true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -81,7 +82,7 @@ Yeast::Yeast(Brewtarget::DBTable table, int key)
 }
 
 Yeast::Yeast(QString name, bool cache )
-   : Ingredient(Brewtarget::YEASTTABLE, -1, name, true ),
+   : NamedEntity(Brewtarget::YEASTTABLE, -1, name, true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -107,7 +108,7 @@ Yeast::Yeast(QString name, bool cache )
 }
 
 Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
      m_typeString(rec.value(kcolYeastType).toString()),
      m_type(static_cast<Yeast::Type>(types.indexOf(m_typeString))),
      m_formString(rec.value(kcolYeastForm).toString()),
@@ -132,7 +133,7 @@ Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
 {
 }
 
-Yeast::Yeast(Yeast & other) : Ingredient(other),
+Yeast::Yeast(Yeast & other) : NamedEntity(other),
      m_typeString(other.m_typeString),
      m_type(other.m_type),
      m_formString(other.m_formString),
@@ -462,12 +463,12 @@ bool Yeast::isValidFlocculation(const QString& str) const
    return false;
 }
 
-Ingredient * Yeast::getParent() {
+NamedEntity * Yeast::getParent() {
    Yeast * myParent = nullptr;
 
    // If we don't already know our parent, look it up
    if (!this->parentKey) {
-      this->parentKey = Database::instance().getParentIngredientKey(*this);
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
    }
 
    // If we (now) know our parent, get a pointer to it
@@ -481,4 +482,8 @@ Ingredient * Yeast::getParent() {
 
 int Yeast::insertInDatabase() {
    return Database::instance().insertYeast(this);
+}
+
+void Yeast::removeFromDatabase() {
+   Database::instance().remove(this);
 }

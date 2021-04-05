@@ -1,5 +1,5 @@
 /*
- * IngredientSortProxyModel.cpp is part of Brewtarget, and is Copyright the following
+ * NamedEntitySortProxyModel.h is part of Brewtarget, and is Copyright the following
  * authors 2020-2025
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -18,17 +18,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "IngredientSortProxyModel.h"
-#include <QDebug>
-#include <QAbstractItemModel>
+#ifndef NAMEDENTITYSORTPROXYMODEL_H
+#define NAMEDENTITYSORTPROXYMODEL_H
 
-IngredientSortProxyModel::IngredientSortProxyModel(QAbstractItemModel* sourceModel)
-   : QSortFilterProxyModel(sourceModel)
+#include <QSortFilterProxyModel>
+class QAbstractItemModel;
+
+/*!
+ * \brief Small wrapper on QSortFilterProxyModel for sorting NamedEntity lists.
+ * \author Philip G. Lee
+ *
+ * Sorts models dynamically based on their properties' default sort behavior.
+ */
+class NamedEntitySortProxyModel : public QSortFilterProxyModel
 {
-   if( sourceModel )
-   {
-      setSourceModel(sourceModel);
-      setDynamicSortFilter(true);
-      sort(0);
-   }
-}
+   Q_OBJECT
+
+public:
+   NamedEntitySortProxyModel(QAbstractItemModel* sourceModel = 0);
+
+protected:
+   // Can reimplement if we need something fancy in the future.
+   //bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+};
+
+#endif

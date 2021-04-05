@@ -1,6 +1,6 @@
 /*
  * mash.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,11 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "mash.h"
 
 #include <iostream>
 #include <string>
 #include <QVector>
-#include "mash.h"
 #include "mashstep.h"
 #include "brewtarget.h"
 #include "database.h"
@@ -33,15 +33,20 @@
 #include "TableSchemaConst.h"
 #include "MashSchema.h"
 
-bool operator<(Mash &m1, Mash &m2)
-{
-   return m1.name() < m2.name();
+bool Mash::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Mash const & rhs = static_cast<Mash const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_grainTemp_c           == rhs.m_grainTemp_c           &&
+      this->m_tunTemp_c             == rhs.m_tunTemp_c             &&
+      this->m_spargeTemp_c          == rhs.m_spargeTemp_c          &&
+      this->m_ph                    == rhs.m_ph                    &&
+      this->m_tunWeight_kg          == rhs.m_tunWeight_kg          &&
+      this->m_tunSpecificHeat_calGC == rhs.m_tunSpecificHeat_calGC
+   );
 }
 
-bool operator==(Mash &m1, Mash &m2)
-{
-   return m1.name() == m2.name();
-}
 
 QString Mash::classNameStr()
 {
@@ -50,7 +55,7 @@ QString Mash::classNameStr()
 }
 
 Mash::Mash(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key, QString(), true),
+   : NamedEntity(table, key, QString(), true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
@@ -64,7 +69,7 @@ Mash::Mash(Brewtarget::DBTable table, int key)
 }
 
 Mash::Mash(QString name, bool cache)
-   : Ingredient(Brewtarget::MASHTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::MASHTABLE, -1, name, true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
@@ -78,7 +83,7 @@ Mash::Mash(QString name, bool cache)
 }
 
 Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
      m_grainTemp_c(rec.value(kcolMashGrainTemp).toDouble()),
      m_notes(rec.value(kcolNotes).toString()),
      m_tunTemp_c(rec.value(kcolMashTunTemp).toDouble()),
@@ -316,4 +321,8 @@ MashStep * Mash::removeMashStep(MashStep * mashStep) {
 
 int Mash::insertInDatabase() {
    return Database::instance().insertMash(this);
+}
+
+void Mash::removeFromDatabase() {
+   Database::instance().remove(this);
 }

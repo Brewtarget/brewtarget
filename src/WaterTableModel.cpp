@@ -54,7 +54,7 @@ void WaterTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &Ingredient::changed, this, &WaterTableModel::changed );
+      connect( recObs, &NamedEntity::changed, this, &WaterTableModel::changed );
       addWaters( recObs->waters() );
    }
 }
@@ -93,7 +93,7 @@ void WaterTableModel::addWater(Water* water)
 
    beginInsertRows( QModelIndex(), waterObs.size(), waterObs.size() );
    waterObs.append(water);
-   connect( water, &Ingredient::changed, this, &WaterTableModel::changed );
+   connect( water, &NamedEntity::changed, this, &WaterTableModel::changed );
    endInsertRows();
 
    if(parentTableWidget)
@@ -121,7 +121,7 @@ void WaterTableModel::addWaters(QList<Water*> waters)
       waterObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &Ingredient::changed, this, &WaterTableModel::changed );
+         connect( *i, &NamedEntity::changed, this, &WaterTableModel::changed );
 
       endInsertRows();
    }

@@ -83,7 +83,7 @@ void FermentableTableModel::observeRecipe(Recipe* rec)
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &Ingredient::changed, this, &FermentableTableModel::changed );
+      connect( recObs, &NamedEntity::changed, this, &FermentableTableModel::changed );
       addFermentables( recObs->fermentables() );
    }
 }
@@ -122,7 +122,7 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    int size = fermObs.size();
    beginInsertRows( QModelIndex(), size, size );
    fermObs.append(ferm);
-   connect( ferm, &Ingredient::changed, this, &FermentableTableModel::changed );
+   connect( ferm, &NamedEntity::changed, this, &FermentableTableModel::changed );
    totalFermMass_kg += ferm->amount_kg();
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
@@ -152,7 +152,7 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
       {
-         connect( *i, &Ingredient::changed, this, &FermentableTableModel::changed );
+         connect( *i, &NamedEntity::changed, this, &FermentableTableModel::changed );
          totalFermMass_kg += (*i)->amount_kg();
       }
 
@@ -620,7 +620,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          retVal = value.canConvert(QVariant::String);
          if ( retVal )
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
-                                                     PropertyNames::Ingredient::name,
+                                                     PropertyNames::NamedEntity::name,
                                                      value.toString(),
                                                      tr("Change Fermentable Name"));
          break;

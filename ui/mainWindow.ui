@@ -1712,8 +1712,8 @@
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>
-    <addaction name="actionImport_Recipes"/>
-    <addaction name="actionExportRecipe"/>
+    <addaction name="actionImportFromXml"/>
+    <addaction name="actionExportToXml"/>
     <addaction name="menuDatabase"/>
     <addaction name="separator"/>
     <addaction name="menuBrewday"/>
@@ -1814,13 +1814,13 @@
     <string>About Brewtarget</string>
    </property>
   </action>
-  <action name="actionExportRecipe">
+  <action name="actionExportToXml">
    <property name="icon">
     <iconset resource="../brewtarget.qrc">
      <normaloff>:/images/smallOutArrow.svg</normaloff>:/images/smallOutArrow.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Export Recipe</string>
+    <string>&amp;Export to File</string>
    </property>
   </action>
   <action name="actionFermentables">
@@ -1907,13 +1907,13 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionImport_Recipes">
+  <action name="actionImportFromXml">
    <property name="icon">
     <iconset resource="../brewtarget.qrc">
      <normaloff>:/images/smallArrow.svg</normaloff>:/images/smallArrow.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Import Recipes</string>
+    <string>&amp;Import from File</string>
    </property>
   </action>
   <action name="actionOptions">

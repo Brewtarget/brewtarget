@@ -1,6 +1,6 @@
 /*
  * salt.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  *
@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "salt.h"
 
 #include <QVector>
 #include <QDomElement>
@@ -24,20 +25,25 @@
 #include <QObject>
 #include <QDebug>
 
-#include "salt.h"
 #include "brewtarget.h"
 #include "TableSchemaConst.h"
 #include "SaltSchema.h"
 #include "database.h"
 
-bool operator<(const Salt &s1, const Salt &s2)
-{
-   return s1.m_add_to < s2.m_add_to;
-}
+// TBD Not clear why we use this ordering for salts.  Let's see what happens if we let it use the default ordering (name) of NamedEntity
+//bool operator<(const Salt &s1, const Salt &s2)
+//{
+//   return s1.m_add_to < s2.m_add_to;
+//}
 
-bool operator==(const Salt &s1, const Salt &s2)
-{
-   return s1.m_add_to == s2.m_add_to;
+bool Salt::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Salt const & rhs = static_cast<Salt const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_add_to == rhs.m_add_to &&
+      this->m_type   == rhs.m_type
+   );
 }
 
 QString Salt::classNameStr()
@@ -47,7 +53,7 @@ QString Salt::classNameStr()
 }
 
 Salt::Salt(Brewtarget::DBTable table, int key)
-   : Ingredient(table, key),
+   : NamedEntity(table, key),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
@@ -60,7 +66,7 @@ Salt::Salt(Brewtarget::DBTable table, int key)
 }
 
 Salt::Salt(QString name, bool cache)
-   : Ingredient(Brewtarget::SALTTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::SALTTABLE, -1, name, true),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
@@ -73,7 +79,7 @@ Salt::Salt(QString name, bool cache)
 }
 
 Salt::Salt(Salt & other)
-   : Ingredient(Brewtarget::SALTTABLE, -1, other.name(), true),
+   : NamedEntity(Brewtarget::SALTTABLE, -1, other.name(), true),
    m_amount(other.m_amount),
    m_add_to(other.m_add_to),
    m_type(other.m_type),
@@ -86,7 +92,7 @@ Salt::Salt(Salt & other)
 }
 
 Salt::Salt(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : Ingredient(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
+   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
    m_amount(rec.value(kcolAmount).toDouble()),
    m_add_to(static_cast<Salt::WhenToAdd>(rec.value(kcolSaltAddTo).toInt())),
    m_type(static_cast<Salt::Types>(rec.value(kcolSaltType).toInt())),
@@ -258,4 +264,8 @@ double Salt::SO4() const
 
 int Salt::insertInDatabase() {
    return Database::instance().insertSalt(this);
+}
+
+void Salt::removeFromDatabase() {
+   Database::instance().remove(this);
 }

@@ -1,8 +1,9 @@
 /*
  * mash.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -19,11 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _MASH_H
 #define _MASH_H
 
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 namespace PropertyNames::Mash { static char const * const ph = "ph"; /* previously kpropPH */ }
 namespace PropertyNames::Mash { static char const * const tunSpecificHeat_calGC = "tunSpecificHeat_calGC"; /* previously kpropTunSpecHeat */ }
 namespace PropertyNames::Mash { static char const * const tunWeight_kg = "tunWeight_kg"; /* previously kpropTunWeight */ }
@@ -36,18 +36,14 @@ namespace PropertyNames::Mash { static char const * const tunTemp_c = "tunTemp_c
 namespace PropertyNames::Mash { static char const * const grainTemp_c = "grainTemp_c"; /* previously kpropGrainTemp */ }
 
 // Forward declarations.
-class Mash;
 class MashStep;
-bool operator<(Mash &m1, Mash &m2);
-bool operator==(Mash &m1, Mash &m2);
 
 /*!
  * \class Mash
- * \author Philip G. Lee
  *
  * \brief Model class for a mash record in the database.
  */
-class Mash : public Ingredient
+class Mash : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashs")
@@ -127,8 +123,9 @@ public:
    static QString classNameStr();
 
    // Mash objects do not have parents
-   Ingredient * getParent() { return nullptr; }
-   int insertInDatabase();
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
@@ -139,12 +136,17 @@ signals:
    // Emitted when the number of steps change, or when you should call mashSteps() again.
    void mashStepsChanged();
 
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
    Mash(Brewtarget::DBTable table, int key);
    Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
    Mash( Mash const& other );
+public:
    Mash( QString name, bool cache = true );
 
+private:
    double m_grainTemp_c;
    QString m_notes;
    double m_tunTemp_c;
@@ -157,13 +159,10 @@ private:
 
    QList<MashStep*> m_mashSteps;
 
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
-
 };
 
 Q_DECLARE_METATYPE( Mash* )
-
+/*
 inline bool MashPtrLt( Mash* lhs, Mash* rhs)
 {
    return *lhs < *rhs;
@@ -189,5 +188,5 @@ struct Mash_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif //_MASH_H

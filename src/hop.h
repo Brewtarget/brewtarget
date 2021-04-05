@@ -1,7 +1,8 @@
 /*
  * hop.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -25,7 +26,7 @@
 
 #include <QString>
 #include <QStringList>
-#include "ingredient.h"
+#include "model/NamedEntity.h"
 namespace PropertyNames::Hop { static char const * const form = "form"; /* previously kpropForm */ }
 namespace PropertyNames::Hop { static char const * const time_min = "time_min"; /* previously kpropTime */ }
 namespace PropertyNames::Hop { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
@@ -46,19 +47,13 @@ namespace PropertyNames::Hop { static char const * const hsi_pct = "hsi_pct"; /*
 namespace PropertyNames::Hop { static char const * const beta_pct = "beta_pct"; /* previously kpropBeta */ }
 namespace PropertyNames::Hop { static char const * const alpha_pct = "alpha_pct"; /* previously kpropAlpha */ }
 
-// Forward declarations.
-class Hop;
-class HopException;
-bool operator<( Hop &h1, Hop &h2 );
-bool operator==( Hop &h1, Hop &h2 );
 
 /*!
  * \class Hop
- * \author Philip G. Lee
  *
  * \brief Model class for a hop record in the database.
  */
-class Hop : public Ingredient
+class Hop : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "hops")
@@ -72,8 +67,11 @@ public:
    enum Type {Bittering, Aroma, Both};
    //! \brief The form of the hop.
    enum Form {Leaf, Pellet, Plug};
+
    //! \brief The way the hop is used.
-   enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma), and BeerXML expects a space for "Dry Hop" and "First Wort". Damn. Damn damn.
+   // .:TBD:. (MY 2021-01-01) Shall we perhaps change "UseAroma" to "PostBoil", since this is what BeerXML means by
+   // Aroma in this context?
+   enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma)
    Q_ENUMS( Type Form Use )
 
    virtual ~Hop() {}
@@ -174,15 +172,21 @@ public:
 
    static QString classNameStr();
 
-   Ingredient * getParent();
-   int insertInDatabase();
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
 
 signals:
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
    Hop(Brewtarget::DBTable table, int key);
    Hop(Brewtarget::DBTable table, int key, QSqlRecord rec);
+public:
    Hop(QString name, bool cache = true);
+private:
    Hop( Hop & other );
 
    QString m_useStr;
@@ -216,13 +220,10 @@ private:
    static QStringList uses;
    static QStringList types;
    static QStringList forms;
-
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( QList<Hop*> )
-
+/*
 inline bool HopPtrLt( Hop* lhs, Hop* rhs)
 {
    return *lhs < *rhs;
@@ -232,7 +233,7 @@ inline bool HopPtrEq( Hop* lhs, Hop* rhs)
 {
    return *lhs == *rhs;
 }
-
+*/
 inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
 {
    if ( lhs->use() == rhs->use() )
@@ -244,7 +245,7 @@ inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
    }
    return lhs->use() < rhs->use();
 }
-
+/*
 struct Hop_ptr_cmp
 {
    bool operator()( Hop* lhs, Hop* rhs)
@@ -260,5 +261,5 @@ struct Hop_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif // _HOP_H
