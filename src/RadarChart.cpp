@@ -19,6 +19,10 @@
 #include "RadarChart.h"
 
 #include <algorithm>
+// We need an extra define on Windows to access the M_PI constant in cmath.  (More details in comment below.)
+#ifdef Q_OS_WIN
+#define _USE_MATH_DEFINES
+#endif
 #include <cmath>
 //#include <numbers> Uncomment this when we switch to C++20
 
@@ -27,10 +31,6 @@
 #include <QDebug>
 #include <QHash>
 
-// We need an extra define on Windows to access the M_PI constant in cmath.  (More details in comment below.)
-#ifdef Q_OS_WIN
-#define _USE_MATH_DEFINES
-#endif
 
 // Internal constants
 namespace {
