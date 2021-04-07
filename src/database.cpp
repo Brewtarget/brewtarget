@@ -1490,7 +1490,7 @@ Fermentable* Database::newFermentable(Fermentable* other, bool add_inventory)
          tmp = copy(other, &allFermentables);
       }
       else {
-         tmp = newIngredient(&allFermentables);
+         tmp = newNamedEntity(&allFermentables);
       }
 
       if ( add_inventory ) {
@@ -1527,7 +1527,7 @@ Hop* Database::newHop(Hop* other, bool add_inventory )
       if ( other != nullptr )
          tmp = copy(other, &allHops);
       else
-         tmp = newIngredient(&allHops);
+         tmp = newNamedEntity(&allHops);
 
       if ( add_inventory ) {
          int invkey = newInventory( dbDefn->table(Brewtarget::HOPTABLE));
@@ -1750,7 +1750,7 @@ Misc* Database::newMisc(Misc* other, bool add_inventory)
         tmp = copy(other, &allMiscs);
       }
       else {
-         tmp = newIngredient(&allMiscs);
+         tmp = newNamedEntity(&allMiscs);
       }
 
       if ( add_inventory ) {
@@ -1956,7 +1956,7 @@ Yeast* Database::newYeast(Yeast* other, bool add_inventory)
          tmp = copy(other, &allYeasts);
       }
       else {
-         tmp = newIngredient(&allYeasts);
+         tmp = newNamedEntity(&allYeasts);
       }
 
       if (add_inventory) {
