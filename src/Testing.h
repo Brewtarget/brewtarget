@@ -2,7 +2,7 @@
  * Testing.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2020
  * - Philip G. Lee <rocketman768@gmail.com>
- * - Mattias Måhl <mattias@kejsarsten.com>
+ * - Mattias Mï¿½hl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,9 @@
 #include <QDir>
 #include <QDebug>
 #include <QMutexLocker>
+#if QT_VERSION < QT_VERSION_CHECK(5,10,0)
+#include <QtGlobal>
+#endif
 
 class Equipment;
 class Hop;
@@ -67,7 +70,11 @@ public:
       QString randSTR;
       for (int i = 0; i < randomcharLength; i++)
       {
+         #if QT_VERSION < QT_VERSION_CHECK(5,10,0)
+         int index = qrand() % posChars.length();
+         #else
          int index = QRandomGenerator().generate64() % posChars.length();
+         #endif
          QChar nChar = posChars.at(index);
          randSTR.append(nChar);
       }

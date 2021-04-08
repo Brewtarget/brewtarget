@@ -28,6 +28,8 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
+      with:
+          version: 5.9.5
 
     - name: Install dependencies
       run: brew install xalan-c
