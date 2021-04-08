@@ -47,9 +47,18 @@ jobs:
         make package
 
     - name: 'Upload mac'
-      if: ${{ always() }}
+      if: ${{ success() }}
       uses: actions/upload-artifact@v2
       with:
         name: brewtarget-dev-mac
-        path: ${{github.workspace}}/build/
+        path: |
+          ${{github.workspace}}/build/brewtarget*.sh
         retention-days: 7
+
+    - name: Recover Debris Artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-results
+        path: ${{github.workspace}}/build
+        retention-days: 1
