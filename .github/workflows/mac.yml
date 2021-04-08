@@ -5,7 +5,7 @@ on:
     branches:
       - develop
       - "stable/**"
-      - feature-gha-mac-package # For testing purpose
+
   pull_request:
     branches:
       - develop
