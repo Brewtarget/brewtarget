@@ -217,20 +217,20 @@ public:
    //! \returns a copy of the given note.
    BrewNote* newBrewNote(BrewNote* other, bool signal = true);
    Equipment* newEquipment(Equipment* other = nullptr);
-   Fermentable* newFermentable(Fermentable* other = nullptr);
-   Hop* newHop(Hop* other = nullptr);
+   Fermentable* newFermentable(Fermentable* other = nullptr, bool add_inventory = false);
+   Hop* newHop(Hop* other = nullptr, bool add_inventory = false);
    //! \returns a copy of the given recipe.
    Recipe* newRecipe(Recipe* other);
    /*! \returns a copy of the given mash. Displaces the mash currently in the
     * parent recipe unless \b displace is false.
     */
-   Misc* newMisc(Misc* other = nullptr);
+   Misc* newMisc(Misc* other = nullptr, bool add_inventory = false);
 
    Style* newStyle(Style* other);
    Style* newStyle(QString name);
    Water* newWater(Water* other = nullptr);
    Salt* newSalt(Salt* other = nullptr);
-   Yeast* newYeast(Yeast* other = nullptr);
+   Yeast* newYeast(Yeast* other = nullptr, bool add_inventory = false);
 
    int    insertElement(NamedEntity* ins);
    int    insertEquipment(Equipment* ins);

@@ -1479,35 +1479,33 @@ Equipment* Database::newEquipment(Equipment* other)
    return tmp;
 }
 
-Fermentable* Database::newFermentable(Fermentable* other)
+Fermentable* Database::newFermentable(Fermentable* other, bool add_inventory)
 {
    Fermentable* tmp;
-   bool transact = false;
+   add_inventory = add_inventory || other == nullptr;
 
+   sqlDatabase().transaction();
    try {
-      // copies automatically get their inventory_id properly set
-      if (other) {
+      if (other != nullptr) {
          tmp = copy(other, &allFermentables);
       }
       else {
-         // new ingredients don't. this gets ugly fast, because we are now
-         // writing to two tables and need some transactional protection
-         sqlDatabase().transaction();
-         transact = true;
          tmp = newNamedEntity(&allFermentables);
+      }
+
+      if ( add_inventory ) {
          int invkey = newInventory( dbDefn->table(Brewtarget::FERMTABLE));
          tmp->setInventoryId(invkey);
       }
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
-      if ( transact ) sqlDatabase().rollback();
-      throw;
+      sqlDatabase().rollback();
+      abort();
    }
 
-   if ( transact ) {
-      sqlDatabase().commit();
-   }
+   sqlDatabase().commit();
+
    if ( tmp ) {
       emit changed( metaProperty("fermentables"), QVariant() );
       emit newFermentableSignal(tmp);
@@ -1519,32 +1517,30 @@ Fermentable* Database::newFermentable(Fermentable* other)
    return tmp;
 }
 
-Hop* Database::newHop(Hop* other)
+Hop* Database::newHop(Hop* other, bool add_inventory )
 {
    Hop* tmp;
-   bool transact = false;
+   add_inventory = add_inventory || other == nullptr;
 
+   sqlDatabase().transaction();
    try {
-      if ( other ) {
+      if ( other != nullptr )
          tmp = copy(other, &allHops);
-      }
-      else {
-         sqlDatabase().transaction();
-         transact = true;
+      else
          tmp = newNamedEntity(&allHops);
+
+      if ( add_inventory ) {
          int invkey = newInventory( dbDefn->table(Brewtarget::HOPTABLE));
          tmp->setInventoryId(invkey);
       }
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
-      if ( transact ) sqlDatabase().rollback();
-      throw;
+      sqlDatabase().rollback();
+      abort();
    }
 
-   if ( transact ) {
-      sqlDatabase().commit();
-   }
+   sqlDatabase().commit();
 
    if ( tmp ) {
       emit changed( metaProperty("hops"), QVariant() );
@@ -1743,32 +1739,32 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
    return tmp;
 }
 
-Misc* Database::newMisc(Misc* other)
+Misc* Database::newMisc(Misc* other, bool add_inventory)
 {
    Misc* tmp;
-   bool transact = false;
+   add_inventory = add_inventory || other == nullptr;
 
+   sqlDatabase().transaction();
    try {
-      if ( other ) {
+      if ( other != nullptr ) {
         tmp = copy(other, &allMiscs);
       }
       else {
-         sqlDatabase().transaction();
-         transact = true;
          tmp = newNamedEntity(&allMiscs);
+      }
+
+      if ( add_inventory ) {
          int invkey = newInventory( dbDefn->table(Brewtarget::MISCTABLE));
          tmp->setInventoryId(invkey);
       }
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
-      if ( transact ) sqlDatabase().rollback();
-      throw;
+      sqlDatabase().rollback();
+      abort();
    }
 
-   if ( transact ) {
-      sqlDatabase().commit();
-   }
+   sqlDatabase().commit();
 
    if ( tmp ) {
       emit changed( metaProperty("miscs"), QVariant() );
@@ -1949,19 +1945,21 @@ Salt* Database::newSalt(Salt* other)
    return tmp;
 }
 
-Yeast* Database::newYeast(Yeast* other)
+Yeast* Database::newYeast(Yeast* other, bool add_inventory)
 {
    Yeast* tmp;
-   bool transact = false;
+   add_inventory = add_inventory || other == nullptr;
 
+   sqlDatabase().transaction();
    try {
-      if (other) {
+      if (other != nullptr) {
          tmp = copy(other, &allYeasts);
       }
       else {
-         sqlDatabase().transaction();
-         transact = true;
          tmp = newNamedEntity(&allYeasts);
+      }
+
+      if (add_inventory) {
          int invkey = newInventory( dbDefn->table(Brewtarget::YEASTTABLE));
          tmp->setInventoryId(invkey);
       }
@@ -1972,11 +1970,17 @@ Yeast* Database::newYeast(Yeast* other)
       throw;
    }
 
-   if ( transact ) {
-      sqlDatabase().commit();
+   sqlDatabase().commit();
+
+   if ( tmp ) {
+      emit changed( metaProperty("yeasts"), QVariant() );
+      emit newYeastSignal(tmp);
    }
-   emit changed( metaProperty("yeasts"), QVariant() );
-   emit newYeastSignal(tmp);
+   else {
+      qCritical() << QString("%1 could not %2 yeast")
+            .arg(Q_FUNC_INFO)
+            .arg( other ? "copy" : "create");
+   }
 
    return tmp;
 }
