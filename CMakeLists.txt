@@ -4,8 +4,8 @@
 # See also src/CMakeLists.txt
 #
 PROJECT(brewtarget)
-CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
-CMAKE_POLICY( VERSION 3.0 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.18 )
+CMAKE_POLICY( VERSION 3.18 )
 
 # Creates a Makefile.
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
@@ -140,7 +140,7 @@ ENDIF()
 #==================================Find Qt5====================================
 
 # The minimum QT5 version we need. Keep as low as necessary.
-SET(QT5_MIN_VERSION 5.3)
+SET(QT5_MIN_VERSION 5.12)
 
 # Automatically run moc on source files when necessary
 SET(CMAKE_AUTOMOC ON)
@@ -467,8 +467,17 @@ IF( WIN32 )
       ${QtQWindows_location}
    )
 
-   # This is ugly. UGLY.
-   FIND_PATH(QT5_BIN_DIR "qmake.exe")
+   GET_TARGET_PROPERTY( _qmake_executable Qt5::qmake IMPORTED_LOCATION )
+   GET_FILENAME_COMPONENT( QT5_BIN_DIR "${_qmake_executable}" DIRECTORY )
+   FIND_PROGRAM( WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT5_BIN_DIR}" )
+   IF( EXISTS ${WINDEPLOYQT_EXECUTABLE} )
+        add_executable(Qt5::windeployqt IMPORTED)
+
+        set_target_properties(Qt5::windeployqt PROPERTIES
+            IMPORTED_LOCATION ${WINDEPLOYQT_EXECUTABLE}
+        )
+   ENDIF()
+
    FILE( GLOB IcuDlls
         "${QT5_BIN_DIR}/ic*.dll"
    )
@@ -481,17 +490,12 @@ IF( WIN32 )
      IF( NOT EXISTS ${MINGW_BIN_DIR} )
         MESSAGE( FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw/bin" )
      ELSE()
-        SET( Qt_DLLs
-             ${Qt_DLLs}
-             ${IcuDlls}
-             ${MINGW_BIN_DIR}/libgcc_s_dw2-1.dll
-             ${MINGW_BIN_DIR}/libstdc++-6.dll
-             ${MINGW_BIN_DIR}/libwinpthread-1.dll
-        )
+        get_filename_component( Mingw_Path ${CMAKE_CXX_COMPILER} PATH )
      ENDIF()
    ENDIF()
 ENDIF()
 
+include( InstallRequiredSystemLibraries )
 #===============================Packaging======================================
 # To make the packages, "make package". For source packages, "make package_source"
 
@@ -630,24 +634,9 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
                COMPONENT ${DATA_INSTALL_COMPONENT} )
    ENDIF()
 
-   #--------Windows--------
-   IF( WIN32 )
-      INSTALL( FILES ${Qt_DLLs}
-               DESTINATION "bin"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
-      INSTALL( FILES ${SQL_Drivers_DLLs}
-               DESTINATION "bin/sqldrivers"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
-      INSTALL( FILES ${Image_Formats_DLLs}
-               DESTINATION "bin/imageformats"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
-      INSTALL( FILES ${Icon_Engines_DLLs}
-               DESTINATION "bin/iconengines"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
-      INSTALL( FILES ${Platform_DLLs}
-               DESTINATION "bin/platforms"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT})
-   ENDIF()
+   IF( CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS )
+      INSTALL( PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin COMPONENT System )
+   ENDIF( CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS )
 ENDIF()
 
 # =====================Process other CMakeList.txt's===========================
