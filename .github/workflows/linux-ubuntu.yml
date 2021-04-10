@@ -13,8 +13,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
-
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -23,7 +25,15 @@ jobs:
       - name: Dependencies
         shell: bash
         run: |
-          sudo apt-get install -y \
+          sudo apt-get update && sudo apt-get install -y \
+            qtbase5-dev \
+            qttools5-dev \
+            qttools5-dev-tools \
+            qtmultimedia5-dev \
+            libqt5sql5-sqlite \
+            libqt5sql5-psql \
+            libqt5svg5-dev \
+            libqt5multimedia5-plugins \
             lintian \
             rpmlint \
             libxerces-c-dev \
@@ -33,12 +43,6 @@ jobs:
         shell: bash
         working-directory: ${{github.workspace}}
         run: ./build-scripts/linux/apply-patches.sh $GITHUB_WORKSPACE
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          version: 5.12.0
-          extra: "-b http://ftp.jaist.ac.jp/pub/qtproject/"
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -93,7 +97,7 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@v2
         with:
-          name: brewtarget-linux-installers
+          name: brewtarget-${{matrix.os}}
           path: build/brewtarget*
           retention-days: 7
 
@@ -101,6 +105,6 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: build-results
+          name: build-results-${{matrix.os}}
           path: build
           retention-days: 1
