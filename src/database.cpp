@@ -582,7 +582,7 @@ template <class T> void Database::populateElements( QHash<int,T*>& hash, Brewtar
    while( q.next() ) {
       int key = q.record().value(tbl->keyName(Brewtarget::dbType())).toInt();
 
-      T* e = new T(table, key, q.record());
+      T* e = new T(tbl, q.record());
       if( ! hash.contains(key) )
          hash.insert(key, e);
    }
@@ -1786,7 +1786,7 @@ Recipe* Database::newRecipe(QString name)
    sqlDatabase().transaction();
 
    try {
-      tmp = newNamedEntity(name,&allRecipes);
+      tmp = newNamedEntity(&allRecipes);
 
       newMash(tmp,false);
    }
@@ -1874,7 +1874,7 @@ Style* Database::newStyle(QString name)
    Style* tmp;
 
    try {
-      tmp = newNamedEntity(name, &allStyles);
+      tmp = newNamedEntity(&allStyles);
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -2819,16 +2819,17 @@ void Database::populateChildTablesByName()
    }
 }
 
-QVariant Database::getInventoryAmt(QString col_name, Brewtarget::DBTable table, int key)
+QVariant Database::getInventoryAmt(Brewtarget::DBTable table, int key)
 {
    QVariant val = QVariant(0.0);
    TableSchema* tbl = dbDefn->table(table);
    TableSchema* inv = dbDefn->table(tbl->invTable());
+   QString amount_col = inv->propertyToColumn(kpropInventory);
 
    // select hop_in_inventory.amount from hop_in_inventory,hop where hop.id = key and hop_in_inventory.id = hop.inventory_id
    QString query = QString("select %1.%2 from %1,%3 where %3.%4 = %5 and %1.%6 = %3.%7")
          .arg(inv->tableName())
-         .arg(inv->propertyToColumn(kpropInventory))
+         .arg(amount_col)
          .arg(tbl->tableName())
          .arg(tbl->keyName())
          .arg(key)
@@ -2839,7 +2840,7 @@ QVariant Database::getInventoryAmt(QString col_name, Brewtarget::DBTable table, 
    QSqlQuery q( query, sqlDatabase() );
 
    if ( q.first() ) {
-      val = q.record().value(inv->propertyToColumn(col_name));
+      val = q.record().value(amount_col);
    }
    return val;
 }
@@ -3300,7 +3301,7 @@ template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* k
          throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
 
       newKey = insert.lastInsertId().toInt();
-      newOne = new T(t, newKey, oldRecord);
+      newOne = new T(tbl, oldRecord);
       keyHash->insert( newKey, newOne );
    }
    catch (QString e) {

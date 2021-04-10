@@ -81,6 +81,7 @@ namespace PropertyNames::Recipe { static char const * const calories = "calories
 namespace PropertyNames::Recipe { static char const * const grainsInMash_kg = "grainsInMash_kg"; /* not stored */ }
 namespace PropertyNames::Recipe { static char const * const grains_kg = "grains_kg"; /* not stored */ }
 namespace PropertyNames::Recipe { static char const * const SRMColor = "SRMColor"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const style_id = "styleId"; /* not stored */ }
 
 
 // Forward declarations.
@@ -112,8 +113,10 @@ class Recipe : public NamedEntity
    friend class RecipeFormatter;
    friend class MainWindow;
    friend class WaterDialog;
+
 public:
 
+   Recipe(QString name, bool cache = true);
    virtual ~Recipe() {}
 
    // NOTE: move to database?
@@ -258,13 +261,7 @@ public:
    //         #include "database.h" and database.h already needs to #include "recipe.h", so we'd be trapped in circular
    //         dependencies.  Fortunately there is a trick that allows us to declare the function in the header and
    //         define it in the cpp file, even though it's templated.
-private:
-   /*!
-    * \brief Remove \c var from the recipe and return what was removed - ie \c var
-    */
-   NamedEntity * removeNamedEntity( NamedEntity *var);
 
-public:
    /*!
     * \brief Remove \c var from the recipe and return what was removed - ie \c var
     *
@@ -272,7 +269,6 @@ public:
     * making add and remove more symmetric).
     */
    template<class T> T * remove(T * var) {
-//      qDebug() << QString("%1").arg(Q_FUNC_INFO);
       return static_cast<T *>(this->removeNamedEntity(var));
    }
 
@@ -471,11 +467,8 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Recipe(Brewtarget::DBTable table, int key);
-   Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec);
-public:
-   Recipe(QString name, bool cache = true);
-private:
+//   Recipe(Brewtarget::DBTable table, int key);
+   Recipe(TableSchema* table, QSqlRecord rec);
    Recipe(Recipe const& other);
 
    // Cached properties that are written directly to db
@@ -540,6 +533,11 @@ private:
    double batchSizeNoLosses_l();
 
    // Some recalculators for calculated properties.
+
+   /*!
+    * \brief Remove \c var from the recipe and return what was removed - ie \c var
+    */
+   NamedEntity * removeNamedEntity( NamedEntity *var);
 
    /* Recalculates all the calculated properties.
     *
