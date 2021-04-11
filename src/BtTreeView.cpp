@@ -612,7 +612,7 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
             confirmDelete = verifyDelete(confirmDelete,tr("BrewNote"),_model->brewNote(trans)->brewDate_short());
             break;
          case BtTreeItem::FOLDER:
-            confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(trans));
+            confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->folder(trans)->fullPath());
             break;
          case BtTreeItem::WATER:
             confirmDelete = verifyDelete(confirmDelete,tr("Water"),_model->name(trans));
