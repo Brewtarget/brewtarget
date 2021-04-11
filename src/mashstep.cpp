@@ -71,8 +71,8 @@ MashStep::MashStep(QString name, bool cache)
 {
 }
 
-MashStep::MashStep(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+MashStep::MashStep(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_cacheOnly(false)
 {
      m_typeStr = rec.value( table->propertyToColumn( PropertyNames::MashStep::type)).toString();

@@ -143,10 +143,9 @@ protected:
 
 private:
 // Mash(Brewtarget::DBTable table, int key);
-   Mash( TableSchema* table, QSqlRecord rec );
+   Mash( TableSchema* table, QSqlRecord rec, int t_key = -1 );
    Mash( Mash const& other );
 
-private:
    double m_grainTemp_c;
    QString m_notes;
    double m_tunTemp_c;

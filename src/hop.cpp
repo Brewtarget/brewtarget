@@ -102,8 +102,8 @@ Hop::Hop(QString name, bool cache)
 {
 }
 
-Hop::Hop(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+Hop::Hop(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_inventory(-1.0),
      m_cacheOnly(false)
 {

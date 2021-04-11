@@ -68,8 +68,8 @@ Mash::Mash(QString name, bool cache)
 {
 }
 
-Mash::Mash(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+Mash::Mash(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_cacheOnly(false)
 {
      m_grainTemp_c = rec.value( table->propertyToColumn(PropertyNames::Mash::grainTemp_c)).toDouble();

@@ -134,7 +134,7 @@ protected:
 
 private:
 //   Salt(Brewtarget::DBTable table, int key);
-   Salt(TableSchema* table, QSqlRecord rec);
+   Salt(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Salt(Salt & other );
 
    double m_amount;

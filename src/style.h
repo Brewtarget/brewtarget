@@ -178,7 +178,7 @@ protected:
 private:
 
 //   Style(Brewtarget::DBTable table, int key);
-   Style( TableSchema* table, QSqlRecord rec);
+   Style( TableSchema* table, QSqlRecord rec, int t_key = -1);
    Style( Style const& other);
 
    QString m_category;

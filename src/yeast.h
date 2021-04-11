@@ -179,7 +179,7 @@ protected:
 
 private:
 //   Yeast(Brewtarget::DBTable table, int key);
-   Yeast(TableSchema* table, QSqlRecord rec);
+   Yeast(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Yeast(Yeast & other);
 
    QString m_typeString;

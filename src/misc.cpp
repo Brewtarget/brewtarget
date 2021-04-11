@@ -57,8 +57,8 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
 
 //============================CONSTRUCTORS======================================
 
-Misc::Misc(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+Misc::Misc(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
    m_inventory(-1.0),
    m_cacheOnly(false)
 {

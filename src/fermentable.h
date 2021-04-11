@@ -203,7 +203,7 @@ protected:
 
 private:
 //   Fermentable(Brewtarget::DBTable table, int key);
-   Fermentable(TableSchema* table, QSqlRecord rec);
+   Fermentable(TableSchema* table, QSqlRecord rec, int t_key = -1);
 
    Fermentable( Fermentable &other );
 

@@ -56,7 +56,11 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) :
 
 
    // Set up the printer stuff
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
    printer->setPageSize(QPrinter::Letter);
+#else
+   printer->setPageSize(QPageSize(QPageSize::Letter));
+#endif
 
    // populate the drop down list
 

@@ -92,7 +92,7 @@ public:
 */
    NamedEntity(Brewtarget::DBTable table, QString t_name = QString(), bool t_display = false);
 
-   NamedEntity(TableSchema* table, QSqlRecord rec);
+   NamedEntity(TableSchema* table, QSqlRecord rec, int t_key );
 
    NamedEntity( NamedEntity const& other );
 

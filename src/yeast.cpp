@@ -82,8 +82,8 @@ Yeast::Yeast(QString name, bool cache )
 {
 }
 
-Yeast::Yeast(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+Yeast::Yeast(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_inventory(-1),
      m_cacheOnly(false)
 {

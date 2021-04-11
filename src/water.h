@@ -156,7 +156,7 @@ protected:
 
 private:
 //   Water(Brewtarget::DBTable table, int key);
-   Water( TableSchema* table, QSqlRecord rec);
+   Water( TableSchema* table, QSqlRecord rec, int t_key = -1);
    Water( Water const& other, bool cache = true);
 
    double m_amount;

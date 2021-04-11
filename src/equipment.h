@@ -169,7 +169,7 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Equipment(TableSchema* table, QSqlRecord rec);
+   Equipment(TableSchema* table, QSqlRecord rec, int t_key = -1);
    // Equipment(Brewtarget::DBTable table, int key);
    Equipment( Equipment const& other);
 

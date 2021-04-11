@@ -105,8 +105,8 @@ BrewNote::BrewNote(QString name, bool cache)
 {
 }
 
-BrewNote::BrewNote(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+BrewNote::BrewNote(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_cacheOnly(false)
 {
      m_brewDate = QDateTime::fromString( rec.value( table->propertyToColumn( PropertyNames::BrewNote::brewDate )).toString(), Qt::ISODate);

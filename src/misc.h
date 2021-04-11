@@ -146,7 +146,7 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Misc(TableSchema* table, QSqlRecord rec);
+   Misc(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Misc(Misc & other);
 
    QString m_typeString;

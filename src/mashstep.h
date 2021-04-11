@@ -130,7 +130,7 @@ protected:
 
 private:
 //   MashStep(Brewtarget::DBTable table, int key);
-   MashStep( TableSchema* table, QSqlRecord rec );
+   MashStep( TableSchema* table, QSqlRecord rec, int t_key = -1 );
    MashStep( MashStep const& other );
 
    QString m_typeStr;

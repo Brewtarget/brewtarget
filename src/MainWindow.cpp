@@ -267,7 +267,11 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Set up the printer
    printer = new QPrinter;
+#if QT_VERSION < QT_VERSION_CHECK(5,15,0)
    printer->setPageSize(QPrinter::Letter);
+#else
+   printer->setPageSize(QPageSize(QPageSize::Letter));
+#endif
    return;
 }
 

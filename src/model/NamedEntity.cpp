@@ -48,12 +48,18 @@ NamedEntity::NamedEntity(Brewtarget::DBTable table, QString t_name, bool t_displ
 }
 
 // othertimes, we creating a thing from a record in the db
-NamedEntity::NamedEntity(TableSchema* table, QSqlRecord rec )
+NamedEntity::NamedEntity(TableSchema* table, QSqlRecord rec, int t_key )
    : QObject(nullptr),
      parentKey(0),
      _deleted(QVariant())
 {
-   _key     = rec.value( table->keyName()                                             ).toInt();
+   if ( t_key == -1 ) {
+      _key = rec.value( table->keyName() ).toInt();
+   }
+   else {
+      _key = t_key;
+   }
+      
    _folder  = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::folder)  ).toString();
    _name    = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::name)    ).toString();
    _display = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::display) ).toBool();

@@ -80,8 +80,8 @@ Style::Style(QString t_name, bool cacheOnly)
 }
 
 // suitable for creating a Style from a database record
-Style::Style(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+Style::Style(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_cacheOnly(false)
 {
      m_category = rec.value( table->propertyToColumn( PropertyNames::Style::category)).toString();

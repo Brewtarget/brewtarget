@@ -81,8 +81,8 @@ Salt::Salt(Salt & other)
 {
 }
 
-Salt::Salt(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+Salt::Salt(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
    m_cacheOnly(false)
 {
    m_amount = rec.value(table->propertyToColumn( PropertyNames::Salt::amount)).toDouble();

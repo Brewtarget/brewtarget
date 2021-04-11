@@ -225,7 +225,7 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   BrewNote(TableSchema* table, QSqlRecord rec);
+   BrewNote(TableSchema* table, QSqlRecord rec, int t_key = -1);
    /*
    BrewNote(Brewtarget::DBTable table, int key);
    BrewNote(QDateTime dateNow, bool cache = true, QString const & name = "");

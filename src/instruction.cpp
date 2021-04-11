@@ -55,8 +55,8 @@ Instruction::Instruction(QString name, bool cache)
 {
 }
 
-Instruction::Instruction(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+Instruction::Instruction(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_cacheOnly(false),
      m_recipe   (nullptr)
 {

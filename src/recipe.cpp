@@ -147,8 +147,8 @@ Recipe::Recipe(QString name, bool cache)
 {
 }
 
-Recipe::Recipe(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec ),
+Recipe::Recipe(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
    m_cacheOnly(false)
 {
    m_type = rec.value( table->propertyToColumn( PropertyNames::Recipe::type)).toString();

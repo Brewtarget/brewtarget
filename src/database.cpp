@@ -2431,7 +2431,7 @@ template<class T> T* Database::addNamedEntityToRecipe(
       }
 
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
-      // q.setForwardOnly(true);
+      q.setForwardOnly(true);
 
       // Link the ingredient to the recipe in the DB
       // Eg, for a fermentable, this is INSERT INTO fermentable_in_recipe (fermentable_id, recipe_id) VALUES (:ingredient, :recipe)
@@ -3301,13 +3301,13 @@ template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* k
          throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
 
       newKey = insert.lastInsertId().toInt();
-      newOne = new T(tbl, oldRecord);
+      newOne = new T(tbl, oldRecord, newKey);
       keyHash->insert( newKey, newOne );
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       q.finish();
-      throw;
+      abort();
    }
 
    q.finish();

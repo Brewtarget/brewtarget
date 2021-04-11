@@ -89,8 +89,8 @@ Water::Water(Water const& other, bool cache)
 {
 }
 
-Water::Water(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec ),
+Water::Water(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
    m_cacheOnly(false)
 {
    m_amount = rec.value( table->propertyToColumn( PropertyNames::Water::amount)).toDouble();

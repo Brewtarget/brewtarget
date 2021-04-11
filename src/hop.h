@@ -190,7 +190,7 @@ protected:
 
 private:
    // Hop(Brewtarget::DBTable table, int key);
-   Hop(TableSchema* table, QSqlRecord rec);
+   Hop(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Hop( Hop & other );
 
    QString m_useStr;

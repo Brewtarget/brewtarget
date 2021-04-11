@@ -77,8 +77,8 @@ Equipment::Equipment(QString t_name, bool cacheOnly)
 {
 }
 
-Equipment::Equipment(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec ),
+Equipment::Equipment(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key ),
    m_cacheOnly(false)
 {
    m_boilSize_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::boilSize_l)).toDouble();

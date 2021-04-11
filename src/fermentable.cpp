@@ -86,8 +86,8 @@ Fermentable::Fermentable(QString name, bool cache)
 {
 }
 
-Fermentable::Fermentable(TableSchema* table, QSqlRecord rec)
-   : NamedEntity(table, rec),
+Fermentable::Fermentable(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_inventory(-1.0),
      m_cacheOnly(false)
 {

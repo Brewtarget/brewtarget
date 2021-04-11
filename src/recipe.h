@@ -468,7 +468,7 @@ protected:
 
 private:
 //   Recipe(Brewtarget::DBTable table, int key);
-   Recipe(TableSchema* table, QSqlRecord rec);
+   Recipe(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Recipe(Recipe const& other);
 
    // Cached properties that are written directly to db

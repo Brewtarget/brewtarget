@@ -97,7 +97,7 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Instruction(TableSchema* table, QSqlRecord rec);
+   Instruction(TableSchema* table, QSqlRecord rec,int t_key = -1);
    Instruction( Instruction const& other );
 
    QString m_directions;
