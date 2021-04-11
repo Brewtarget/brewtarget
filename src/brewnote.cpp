@@ -55,6 +55,17 @@ QString BrewNote::classNameStr()
 
 // BrewNote doesn't use its name field, so we sort by brew date
 // TBD: Could consider copying date into name field and leaving the default ordering
+// MAF: In all the databases, names are strings but any date is the proper
+//      date/timestamp type. Swapping a name for a date field would require
+//      much conversion between them, would cause endless confusion given that
+//      Americans don't believe in normal date formats and will end up
+//      generating a LOT of work so we can avoid two lines of code.
+//
+//      I mean. Suppose you could make the brewnote name property a time/date
+//      and set it to the brewdate when the object is loaded/created. That
+//      would generate a lot of confusion for me at least.
+//
+//      Personally, I like two lines of code to avoid lots of confusion.
 bool BrewNote::operator<(BrewNote const & other) const { return this->m_brewDate < other.m_brewDate; }
 bool BrewNote::operator>(BrewNote const & other) const { return this->m_brewDate > other.m_brewDate; }
 
@@ -107,6 +118,7 @@ BrewNote::BrewNote(QString name, bool cache)
 
 BrewNote::BrewNote(TableSchema* table, QSqlRecord rec, int t_key)
    : NamedEntity(table, rec, t_key),
+     loading(false),
      m_cacheOnly(false)
 {
      m_brewDate = QDateTime::fromString( rec.value( table->propertyToColumn( PropertyNames::BrewNote::brewDate )).toString(), Qt::ISODate);
@@ -658,13 +670,14 @@ double BrewNote::calculateEffIntoBK_pct()
    // translated from SG into pure glucose points
    maxPoints = m_projPoints * m_projVolIntoBK_l;
 
-   actualPoints = (m_sg - 1) * 1000 * m_volumeIntoBK_l;
-
    // this can happen under normal circumstances (eg, load)
-   if (maxPoints <= 0.0)
+   if (maxPoints <= 0.0) {
       return 0.0;
+   }
 
+   actualPoints = (m_sg - 1) * 1000 * m_volumeIntoBK_l;
    effIntoBK = actualPoints/maxPoints * 100;
+
    setEffIntoBK_pct(effIntoBK);
 
    return effIntoBK;
