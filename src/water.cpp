@@ -49,28 +49,8 @@ QString Water::classNameStr()
    return name;
 }
 
-Water::Water(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key),
-   m_amount(0.0),
-   m_calcium_ppm(0.0),
-   m_bicarbonate_ppm(0.0),
-   m_sulfate_ppm(0.0),
-   m_chloride_ppm(0.0),
-   m_sodium_ppm(0.0),
-   m_magnesium_ppm(0.0),
-   m_ph(0.0),
-   m_alkalinity(0.0),
-   m_notes(QString()),
-   m_cacheOnly(false),
-   m_type(NONE),
-   m_mash_ro(0.0),
-   m_sparge_ro(0.0),
-   m_alkalinity_as_hco3(true)
-{
-}
-
 Water::Water(QString name, bool cache)
-   : NamedEntity(Brewtarget::WATERTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::WATERTABLE, name, true),
    m_amount(0.0),
    m_calcium_ppm(0.0),
    m_bicarbonate_ppm(0.0),
@@ -90,7 +70,7 @@ Water::Water(QString name, bool cache)
 }
 
 Water::Water(Water const& other, bool cache)
-   : NamedEntity(Brewtarget::WATERTABLE, -1, other.name(), true),
+   : NamedEntity(Brewtarget::WATERTABLE, other.name(), true),
    m_amount(other.m_amount),
    m_calcium_ppm(other.m_calcium_ppm),
    m_bicarbonate_ppm(other.m_bicarbonate_ppm),
@@ -109,24 +89,26 @@ Water::Water(Water const& other, bool cache)
 {
 }
 
-Water::Water(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-   m_amount(rec.value(kcolAmount).toDouble()),
-   m_calcium_ppm(rec.value(kcolWaterCalcium).toDouble()),
-   m_bicarbonate_ppm(rec.value(kcolWaterBiCarbonate).toDouble()),
-   m_sulfate_ppm(rec.value(kcolWaterSulfate).toDouble()),
-   m_chloride_ppm(rec.value(kcolWaterChloride).toDouble()),
-   m_sodium_ppm(rec.value(kcolWaterSodium).toDouble()),
-   m_magnesium_ppm(rec.value(kcolWaterMagnesium).toDouble()),
-   m_ph(rec.value(kcolPH).toDouble()),
-   m_alkalinity(rec.value(kcolWaterAlkalinity).toDouble()),
-   m_notes(rec.value(kcolNotes).toString()),
-   m_cacheOnly(false),
-   m_type(static_cast<Water::Types>(rec.value(kcolWaterType).toInt())),
-   m_mash_ro(rec.value(kcolWaterMashRO).toDouble()),
-   m_sparge_ro(rec.value(kcolWaterSpargeRO).toDouble()),
-   m_alkalinity_as_hco3(rec.value(kcolWaterAsHCO3).toBool())
+Water::Water(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
+   m_cacheOnly(false)
 {
+   m_amount = rec.value( table->propertyToColumn( PropertyNames::Water::amount)).toDouble();
+   m_calcium_ppm = rec.value( table->propertyToColumn( PropertyNames::Water::calcium_ppm)).toDouble();
+   m_bicarbonate_ppm = rec.value( table->propertyToColumn( PropertyNames::Water::bicarbonate_ppm)).toDouble();
+   m_sulfate_ppm = rec.value( table->propertyToColumn( PropertyNames::Water::sulfate_ppm)).toDouble();
+   m_chloride_ppm = rec.value( table->propertyToColumn( PropertyNames::Water::chloride_ppm)).toDouble();
+   m_sodium_ppm = rec.value( table->propertyToColumn( PropertyNames::Water::sodium_ppm)).toDouble();
+   m_magnesium_ppm = rec.value( table->propertyToColumn( PropertyNames::Water::magnesium_ppm)).toDouble();
+   m_ph = rec.value( table->propertyToColumn( PropertyNames::Water::ph)).toDouble();
+   m_alkalinity = rec.value( table->propertyToColumn( PropertyNames::Water::alkalinity)).toDouble();
+   m_notes = rec.value( table->propertyToColumn( PropertyNames::Water::notes)).toString();
+   m_type = static_cast<Water::Types>(rec.value( table->propertyToColumn( PropertyNames::Water::type)).toInt());
+   m_mash_ro = rec.value( table->propertyToColumn( PropertyNames::Water::mashRO)).toDouble();
+   m_sparge_ro = rec.value( table->propertyToColumn( PropertyNames::Water::spargeRO)).toDouble();
+
+   m_alkalinity_as_hco3 = rec.value( table->propertyToColumn( PropertyNames::Water::alkalinityAsHCO3)).toBool();
+
 }
 
 //================================"SET" METHODS=================================

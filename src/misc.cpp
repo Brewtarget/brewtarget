@@ -56,38 +56,25 @@ bool Misc::isEqualTo(NamedEntity const & other) const {
 }
 
 //============================CONSTRUCTORS======================================
-Misc::Misc(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key),
-   m_typeString(QString()),
-   m_type(static_cast<Misc::Type>(0)),
-   m_useString(QString()),
-   m_use(static_cast<Misc::Use>(0)),
-   m_time(0.0),
-   m_amount(0.0),
-   m_amountIsWeight(false),
-   m_useFor(QString()),
-   m_notes(QString()),
-   m_inventory(-1.0),
-   m_inventory_id(0),
-   m_cacheOnly(false)
-{
-}
 
-Misc::Misc(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-   m_typeString(rec.value(kcolMiscType).toString()),
-   m_type(static_cast<Misc::Type>(types.indexOf(m_typeString))),
-   m_useString(rec.value(kcolUse).toString()),
-   m_use(static_cast<Misc::Use>(uses.indexOf(m_useString))),
-   m_time(rec.value(kcolTime).toDouble()),
-   m_amount(rec.value(kcolAmount).toDouble()),
-   m_amountIsWeight(rec.value(kcolMiscAmtIsWgt).toBool()),
-   m_useFor(rec.value(kcolMiscUseFor).toString()),
-   m_notes(rec.value(kcolNotes).toString()),
+Misc::Misc(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
    m_inventory(-1.0),
-   m_inventory_id(rec.value(kcolInventoryId).toInt()),
    m_cacheOnly(false)
 {
+   m_typeString = rec.value( table->propertyToColumn( PropertyNames::Misc::type)).toString();
+   m_useString = rec.value( table->propertyToColumn( PropertyNames::Misc::use)).toString();
+   m_time = rec.value( table->propertyToColumn( PropertyNames::Misc::time)).toDouble();
+   m_amount = rec.value( table->propertyToColumn( PropertyNames::Misc::amount)).toDouble();
+   m_amountIsWeight = rec.value( table->propertyToColumn( PropertyNames::Misc::amountIsWeight)).toBool();
+   m_useFor = rec.value( table->propertyToColumn( PropertyNames::Misc::useFor)).toString();
+   m_notes = rec.value( table->propertyToColumn( PropertyNames::Misc::notes)).toString();
+
+   // handle foreign keys properly
+   m_inventory_id = rec.value( table->foreignKeyToColumn( PropertyNames::Misc::inventory_id)).toInt();
+   // not read from the db
+   m_type = static_cast<Misc::Type>(types.indexOf(m_typeString));
+   m_use = static_cast<Misc::Use>(uses.indexOf(m_useString));
 }
 
 Misc::Misc(Misc & other) : NamedEntity(other),
@@ -107,7 +94,7 @@ Misc::Misc(Misc & other) : NamedEntity(other),
 }
 
 Misc::Misc(QString name, bool cache)
-   : NamedEntity(Brewtarget::MISCTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::MISCTABLE, name, true),
    m_typeString(QString()),
    m_type(static_cast<Misc::Type>(0)),
    m_useString(QString()),
@@ -145,7 +132,7 @@ QString Misc::notes() const { return m_notes; }
 double Misc::inventory()
 {
    if ( m_inventory < 0.0 ) {
-      m_inventory = getInventory(PropertyNames::Misc::inventory).toDouble();
+      m_inventory = getInventory().toDouble();
    }
    return m_inventory;
 }

@@ -62,7 +62,7 @@ QString Fermentable::classNameStr()
 }
 
 Fermentable::Fermentable(QString name, bool cache)
-   : NamedEntity(Brewtarget::FERMTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::FERMTABLE, name, true),
      m_typeStr(QString()),
      m_type(static_cast<Fermentable::Type>(0)),
      m_amountKg(0.0),
@@ -86,54 +86,33 @@ Fermentable::Fermentable(QString name, bool cache)
 {
 }
 
-Fermentable::Fermentable(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key, QString(), true),
-     m_typeStr(QString()),
-     m_type(static_cast<Fermentable::Type>(0)),
-     m_amountKg(0.0),
-     m_yieldPct(0.0),
-     m_colorSrm(0.0),
-     m_isAfterBoil(false),
-     m_origin(QString()),
-     m_supplier(QString()),
-     m_notes(QString()),
-     m_coarseFineDiff(0.0),
-     m_moisturePct(0.0),
-     m_diastaticPower(0.0),
-     m_proteinPct(0.0),
-     m_maxInBatchPct(0.0),
-     m_recommendMash(true),
-     m_ibuGalPerLb(0.0),
+Fermentable::Fermentable(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_inventory(-1.0),
-     m_inventory_id(0),
-     m_isMashed(true),
      m_cacheOnly(false)
 {
-}
+     m_typeStr = rec.value( table->propertyToColumn( PropertyNames::Fermentable::type)).toString();
+     m_amountKg = rec.value( table->propertyToColumn( PropertyNames::Fermentable::amount_kg)).toDouble();
+     m_yieldPct = rec.value( table->propertyToColumn( PropertyNames::Fermentable::yield_pct)).toDouble();
+     m_colorSrm = rec.value( table->propertyToColumn( PropertyNames::Fermentable::color_srm)).toDouble();
+     m_isAfterBoil = rec.value( table->propertyToColumn( PropertyNames::Fermentable::addAfterBoil)).toBool();
+     m_origin = rec.value( table->propertyToColumn( PropertyNames::Fermentable::origin)).toString();
+     m_supplier = rec.value( table->propertyToColumn( PropertyNames::Fermentable::supplier)).toString();
+     m_notes = rec.value(table->propertyToColumn( PropertyNames::Fermentable::notes)).toString();
+     m_coarseFineDiff = rec.value( table->propertyToColumn( PropertyNames::Fermentable::coarseFineDiff_pct)).toDouble();
+     m_moisturePct = rec.value( table->propertyToColumn( PropertyNames::Fermentable::moisture_pct)).toDouble();
+     m_diastaticPower = rec.value( table->propertyToColumn( PropertyNames::Fermentable::diastaticPower_lintner)).toDouble();
+     m_proteinPct = rec.value( table->propertyToColumn( PropertyNames::Fermentable::protein_pct)).toDouble();
+     m_maxInBatchPct = rec.value( table->propertyToColumn( PropertyNames::Fermentable::maxInBatch_pct)).toDouble();
+     m_recommendMash = rec.value( table->propertyToColumn( PropertyNames::Fermentable::recommendMash)).toBool();
+     m_ibuGalPerLb = rec.value( table->propertyToColumn( PropertyNames::Fermentable::ibuGalPerLb)).toDouble();
+     m_isMashed = rec.value( table->propertyToColumn( PropertyNames::Fermentable::isMashed)).toBool();
 
-Fermentable::Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-     m_typeStr(rec.value(kcolFermType).toString()),
-     m_type(static_cast<Fermentable::Type>(types.indexOf(m_typeStr))),
-     m_amountKg(rec.value(kcolFermAmount).toDouble()),
-     m_yieldPct(rec.value(kcolFermYield).toDouble()),
-     m_colorSrm(rec.value(kcolFermColor).toDouble()),
-     m_isAfterBoil(rec.value(kcolFermAddAfterBoil).toBool()),
-     m_origin(rec.value(kcolFermOrigin).toString()),
-     m_supplier(rec.value(kcolFermSupplier).toString()),
-     m_notes(rec.value(kcolNotes).toString()),
-     m_coarseFineDiff(rec.value(kcolFermCoarseFineDiff).toDouble()),
-     m_moisturePct(rec.value(kcolFermMoisture).toDouble()),
-     m_diastaticPower(rec.value(kcolFermDiastaticPower).toDouble()),
-     m_proteinPct(rec.value(kcolFermProtein).toDouble()),
-     m_maxInBatchPct(rec.value(kcolFermMaxInBatch).toDouble()),
-     m_recommendMash(rec.value(kcolFermRecommendMash).toBool()),
-     m_ibuGalPerLb(rec.value(kcolFermIBUGalPerLb).toDouble()),
-     m_inventory(-1.0),
-     m_inventory_id(rec.value(kcolInventoryId).toInt()),
-     m_isMashed(rec.value(kcolFermIsMashed).toBool()),
-     m_cacheOnly(false)
-{
+     // keys is different critters
+     m_inventory_id = rec.value( table->foreignKeyToColumn(PropertyNames::Fermentable::inventory_id)).toInt();
+
+     // calculated, not retrieved from the db
+     m_type = static_cast<Fermentable::Type>(types.indexOf(m_typeStr));
 }
 
 Fermentable::Fermentable( Fermentable &other )
@@ -399,8 +378,9 @@ void Fermentable::setInventoryAmount( double num )
    else
    {
       m_inventory = num;
-      if ( ! m_cacheOnly )
+      if ( ! m_cacheOnly ) {
          setInventory(num,m_inventory_id);
+      }
    }
 }
 
@@ -413,15 +393,16 @@ void Fermentable::setInventoryId( int key )
    else
    {
       m_inventory_id = key;
-      if ( ! m_cacheOnly )
+      if ( ! m_cacheOnly ) {
          setEasy(kpropInventoryId,key);
+      }
    }
 }
 
 double Fermentable::inventory()
 {
    if ( m_inventory < 0 ) {
-      m_inventory = getInventory(PropertyNames::Fermentable::inventory).toDouble();
+      m_inventory = getInventory().toDouble();
    }
    return m_inventory;
 }

@@ -31,6 +31,7 @@ namespace PropertyNames::Salt { static char const * const isAcid = "isAcid"; /* 
 namespace PropertyNames::Salt { static char const * const percentAcid = "percentAcid"; /* previously kpropPctAcid */ }
 namespace PropertyNames::Salt { static char const * const addTo = "addTo"; /* previously kpropAddTo */ }
 
+namespace PropertyNames::Salt { static char const * const misc_id = "misc_id"; /* previously kcolMiscId */ }
 
 /*!
  * \class Salt
@@ -73,6 +74,7 @@ public:
 
    Q_ENUMS(WhenToAdd Types)
 
+   Salt(QString name, bool cache = true);
    virtual ~Salt() {}
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
@@ -131,10 +133,9 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Salt(Brewtarget::DBTable table, int key);
-   Salt(Brewtarget::DBTable table, int key, QSqlRecord rec);
+//   Salt(Brewtarget::DBTable table, int key);
+   Salt(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Salt(Salt & other );
-   Salt(QString name, bool cache = true);
 
    double m_amount;
    Salt::WhenToAdd m_add_to;

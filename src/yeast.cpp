@@ -55,34 +55,9 @@ QString Yeast::classNameStr()
 }
 
 //============================CONSTRUCTORS======================================
-Yeast::Yeast(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key, QString(), true ),
-     m_typeString(QString()),
-     m_type(static_cast<Yeast::Type>(0)),
-     m_formString(QString()),
-     m_form(static_cast<Yeast::Form>(0)),
-     m_flocculationString(QString()),
-     m_flocculation(static_cast<Yeast::Flocculation>(0)),
-     m_amount(0.0),
-     m_amountIsWeight(false),
-     m_laboratory(QString()),
-     m_productID(QString()),
-     m_minTemperature_c(0.0),
-     m_maxTemperature_c(0.0),
-     m_attenuation_pct(0.0),
-     m_notes(QString()),
-     m_bestFor(QString()),
-     m_timesCultured(0),
-     m_maxReuse(0),
-     m_addToSecondary(false),
-     m_inventory(-1.0),
-     m_inventory_id(0),
-     m_cacheOnly(false)
-{
-}
 
 Yeast::Yeast(QString name, bool cache )
-   : NamedEntity(Brewtarget::YEASTTABLE, -1, name, true ),
+   : NamedEntity(Brewtarget::YEASTTABLE, name, true ),
      m_typeString(QString()),
      m_type(static_cast<Yeast::Type>(0)),
      m_formString(QString()),
@@ -107,30 +82,33 @@ Yeast::Yeast(QString name, bool cache )
 {
 }
 
-Yeast::Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-     m_typeString(rec.value(kcolYeastType).toString()),
-     m_type(static_cast<Yeast::Type>(types.indexOf(m_typeString))),
-     m_formString(rec.value(kcolYeastForm).toString()),
-     m_form(static_cast<Yeast::Form>(forms.indexOf(m_formString))),
-     m_flocculationString(rec.value(kcolYeastFloc).toString()),
-     m_flocculation(static_cast<Yeast::Flocculation>(flocculations.indexOf(m_flocculationString))),
-     m_amount(rec.value(kcolYeastAmount).toDouble()),
-     m_amountIsWeight(rec.value(kcolYeastAmtIsWgt).toBool()),
-     m_laboratory(rec.value(kcolYeastLab).toString()),
-     m_productID(rec.value(kcolYeastProductID).toString()),
-     m_minTemperature_c(rec.value(kcolYeastMinTemp).toDouble()),
-     m_maxTemperature_c(rec.value(kcolYeastMaxTemp).toDouble()),
-     m_attenuation_pct(rec.value(kcolYeastAtten).toDouble()),
-     m_notes(rec.value(kcolNotes).toString()),
-     m_bestFor(rec.value(kcolYeastBestFor).toString()),
-     m_timesCultured(rec.value(kcolYeastTimesCultd).toInt()),
-     m_maxReuse(rec.value(kcolYeastMaxReuse).toInt()),
-     m_addToSecondary(rec.value(kcolYeastAddToSec).toBool()),
+Yeast::Yeast(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_inventory(-1),
-     m_inventory_id(rec.value(kcolInventoryId).toInt()),
      m_cacheOnly(false)
 {
+     m_typeString = rec.value( table->propertyToColumn( PropertyNames::Yeast::type)).toString();
+     m_formString = rec.value( table->propertyToColumn( PropertyNames::Yeast::form)).toString();
+     m_flocculationString = rec.value( table->propertyToColumn( PropertyNames::Yeast::flocculation)).toString();
+     m_amount = rec.value( table->propertyToColumn( PropertyNames::Yeast::amount)).toDouble();
+     m_amountIsWeight = rec.value( table->propertyToColumn( PropertyNames::Yeast::amountIsWeight)).toBool();
+     m_laboratory = rec.value( table->propertyToColumn( PropertyNames::Yeast::laboratory)).toString();
+     m_productID = rec.value( table->propertyToColumn( PropertyNames::Yeast::productID)).toString();
+     m_minTemperature_c = rec.value( table->propertyToColumn( PropertyNames::Yeast::minTemperature_c)).toDouble();
+     m_maxTemperature_c = rec.value( table->propertyToColumn( PropertyNames::Yeast::maxTemperature_c)).toDouble();
+     m_attenuation_pct = rec.value( table->propertyToColumn( PropertyNames::Yeast::attenuation_pct)).toDouble();
+     m_notes = rec.value( table->propertyToColumn( PropertyNames::Yeast::notes)).toString();
+     m_bestFor = rec.value( table->propertyToColumn( PropertyNames::Yeast::bestFor)).toString();
+     m_timesCultured = rec.value( table->propertyToColumn( PropertyNames::Yeast::timesCultured)).toInt();
+     m_maxReuse = rec.value( table->propertyToColumn( PropertyNames::Yeast::maxReuse)).toInt();
+     m_addToSecondary = rec.value( table->propertyToColumn( PropertyNames::Yeast::addToSecondary)).toBool();
+
+     // foreign keys blow
+     m_inventory_id = rec.value( table->foreignKeyToColumn( PropertyNames::Yeast::inventory_id)).toInt();
+
+     m_type = static_cast<Yeast::Type>(types.indexOf(m_typeString));
+     m_form = static_cast<Yeast::Form>(forms.indexOf(m_formString));
+     m_flocculation = static_cast<Yeast::Flocculation>(flocculations.indexOf(m_flocculationString));
 }
 
 Yeast::Yeast(Yeast & other) : NamedEntity(other),
@@ -183,7 +161,7 @@ double Yeast::attenuation_pct() const { return m_attenuation_pct; }
 
 int Yeast::inventory() {
    if ( m_inventory < 0 ) {
-      m_inventory = getInventory(PropertyNames::Yeast::inventory).toInt();
+      m_inventory = getInventory().toInt();
    }
    return m_inventory;
 }

@@ -112,43 +112,8 @@ QString Recipe::classNameStr()
    return name;
 }
 
-Recipe::Recipe(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key),
-   m_type(QString("All Grain")),
-   m_brewer(QString("")),
-   m_asstBrewer(QString("Brewtarget: free beer software")),
-   m_batchSize_l(0.0),
-   m_boilSize_l(0.0),
-   m_boilTime_min(0.0),
-   m_efficiency_pct(0.0),
-   m_fermentationStages(1),
-   m_primaryAge_days(0.0),
-   m_primaryTemp_c(0.0),
-   m_secondaryAge_days(0.0),
-   m_secondaryTemp_c(0.0),
-   m_tertiaryAge_days(0.0),
-   m_tertiaryTemp_c(0.0),
-   m_age(0.0),
-   m_ageTemp_c(0.0),
-   m_date(QDate::currentDate()),
-   m_carbonation_vols(0.0),
-   m_forcedCarbonation(false),
-   m_primingSugarName(QString("")),
-   m_carbonationTemp_c(0.0),
-   m_primingSugarEquiv(0.0),
-   m_kegPrimingFactor(0.0),
-   m_notes(QString("")),
-   m_tasteNotes(QString("")),
-   m_tasteRating(0.0),
-   m_style_id(0),
-   m_og(1.0),
-   m_fg(1.0),
-   m_cacheOnly(false)
-{
-}
-
 Recipe::Recipe(QString name, bool cache)
-   : NamedEntity(Brewtarget::RECTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::RECTABLE, name, true),
    m_type(QString("All Grain")),
    m_brewer(QString("")),
    m_asstBrewer(QString("Brewtarget: free beer software")),
@@ -182,39 +147,39 @@ Recipe::Recipe(QString name, bool cache)
 {
 }
 
-Recipe::Recipe(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-   m_type(rec.value(kcolRecipeType).toString()),
-   m_brewer(rec.value(kcolRecipeBrewer).toString()),
-   m_asstBrewer(rec.value(kcolRecipeAsstBrewer).toString()),
-   m_batchSize_l(rec.value(kcolRecipeBatchSize).toDouble()),
-   m_boilSize_l(rec.value(kcolRecipeBoilSize).toDouble()),
-   m_boilTime_min(rec.value(kcolRecipeBoilTime).toDouble()),
-   m_efficiency_pct(rec.value(kcolRecipeEff).toDouble()),
-   m_fermentationStages(rec.value(kcolRecipeFermStages).toInt()),
-   m_primaryAge_days(rec.value(kcolRecipePrimAgeDays).toDouble()),
-   m_primaryTemp_c(rec.value(kcolRecipePrimTemp).toDouble()),
-   m_secondaryAge_days(rec.value(kcolRecipeSecAgeDays).toDouble()),
-   m_secondaryTemp_c(rec.value(kcolRecipeSecTemp).toDouble()),
-   m_tertiaryAge_days(rec.value(kcolRecipeTertAgeDays).toDouble()),
-   m_tertiaryTemp_c(rec.value(kcolRecipeTertTemp).toDouble()),
-   m_age(rec.value(kcolRecipeAge).toDouble()),
-   m_ageTemp_c(rec.value(kcolRecipeAgeTemp).toDouble()),
-   m_date(QDate::fromString(rec.value(kcolRecipeDate).toString(), QString("d/M/yyyy"))),
-   m_carbonation_vols(rec.value(kcolRecipeCarbVols).toDouble()),
-   m_forcedCarbonation(rec.value(kcolRecipeForcedCarb).toBool()),
-   m_primingSugarName(rec.value(kcolRecipePrimSugName).toString()),
-   m_carbonationTemp_c(rec.value(kcolRecipeCarbTemp).toDouble()),
-   m_primingSugarEquiv(rec.value(kcolRecipePrimSugEquiv).toDouble()),
-   m_kegPrimingFactor(rec.value(kcolRecipeKegPrimFact).toDouble()),
-   m_notes(rec.value(kcolNotes).toString()),
-   m_tasteNotes(rec.value(kcolRecipeTasteNotes).toString()),
-   m_tasteRating(rec.value(kcolRecipeTasteRating).toDouble()),
-   m_style_id(rec.value(kcolRecipeStyleId).toInt()),
-   m_og(rec.value(kcolRecipeOG).toDouble()),
-   m_fg(rec.value(kcolRecipeFG).toDouble()),
+Recipe::Recipe(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
    m_cacheOnly(false)
 {
+   m_type = rec.value( table->propertyToColumn( PropertyNames::Recipe::type)).toString();
+   m_brewer = rec.value( table->propertyToColumn( PropertyNames::Recipe::brewer)).toString();
+   m_asstBrewer = rec.value( table->propertyToColumn( PropertyNames::Recipe::asstBrewer)).toString();
+   m_batchSize_l = rec.value( table->propertyToColumn( PropertyNames::Recipe::batchSize_l)).toDouble();
+   m_boilSize_l = rec.value( table->propertyToColumn( PropertyNames::Recipe::boilSize_l)).toDouble();
+   m_boilTime_min = rec.value( table->propertyToColumn( PropertyNames::Recipe::boilTime_min)).toDouble();
+   m_efficiency_pct = rec.value( table->propertyToColumn( PropertyNames::Recipe::efficiency_pct)).toDouble();
+   m_fermentationStages = rec.value( table->propertyToColumn( PropertyNames::Recipe::fermentationStages)).toInt();
+   m_primaryAge_days = rec.value( table->propertyToColumn( PropertyNames::Recipe::primaryAge_days)).toDouble();
+   m_primaryTemp_c = rec.value( table->propertyToColumn( PropertyNames::Recipe::primaryTemp_c)).toDouble();
+   m_secondaryAge_days = rec.value( table->propertyToColumn( PropertyNames::Recipe::secondaryAge_days)).toDouble();
+   m_secondaryTemp_c = rec.value( table->propertyToColumn( PropertyNames::Recipe::secondaryTemp_c)).toDouble();
+   m_tertiaryAge_days = rec.value( table->propertyToColumn( PropertyNames::Recipe::tertiaryAge_days)).toDouble();
+   m_tertiaryTemp_c = rec.value( table->propertyToColumn( PropertyNames::Recipe::tertiaryTemp_c)).toDouble();
+   m_age = rec.value( table->propertyToColumn( PropertyNames::Recipe::age)).toDouble();
+   m_ageTemp_c = rec.value( table->propertyToColumn( PropertyNames::Recipe::ageTemp_c)).toDouble();
+   m_date = QDate::fromString(rec.value( table->propertyToColumn( PropertyNames::Recipe::date)).toString(), QString("d/M/yyyy"));
+   m_carbonation_vols = rec.value( table->propertyToColumn( PropertyNames::Recipe::carbonation_vols)).toDouble();
+   m_forcedCarbonation = rec.value( table->propertyToColumn( PropertyNames::Recipe::forcedCarbonation)).toBool();
+   m_primingSugarName = rec.value( table->propertyToColumn( PropertyNames::Recipe::primingSugarName)).toString();
+   m_carbonationTemp_c = rec.value( table->propertyToColumn( PropertyNames::Recipe::carbonationTemp_c)).toDouble();
+   m_primingSugarEquiv = rec.value( table->propertyToColumn( PropertyNames::Recipe::primingSugarEquiv)).toDouble();
+   m_kegPrimingFactor = rec.value( table->propertyToColumn( PropertyNames::Recipe::kegPrimingFactor)).toDouble();
+   m_notes = rec.value( table->propertyToColumn(PropertyNames::Recipe::notes) ).toString();
+   m_tasteNotes = rec.value( table->propertyToColumn( PropertyNames::Recipe::tasteNotes)).toString();
+   m_tasteRating = rec.value( table->propertyToColumn( PropertyNames::Recipe::tasteRating)).toDouble();
+   m_style_id = rec.value( table->propertyToColumn( PropertyNames::Recipe::style_id)).toInt();
+   m_og = rec.value( table->propertyToColumn( PropertyNames::Recipe::og)).toDouble();
+   m_fg = rec.value( table->propertyToColumn( PropertyNames::Recipe::fg)).toDouble();
 }
 
 Recipe::Recipe( Recipe const& other ) : NamedEntity(other),

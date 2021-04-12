@@ -25,6 +25,7 @@
 #include "database.h"
 #include "TableSchemaConst.h"
 #include "MashStepSchema.h"
+#include "mash.h"
 
 QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction" << "Fly Sparge" << "Batch Sparge";
 QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction") << QObject::tr("Fly Sparge") << QObject::tr("Batch Sparge");
@@ -54,24 +55,8 @@ QString MashStep::classNameStr()
 
 //==============================CONSTRUCTORS====================================
 
-MashStep::MashStep(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key, QString(), true),
-     m_typeStr(QString()),
-     m_type(static_cast<MashStep::Type>(0)),
-     m_infuseAmount_l(0.0),
-     m_stepTemp_c(0.0),
-     m_stepTime_min(0.0),
-     m_rampTime_min(0.0),
-     m_endTemp_c(0.0),
-     m_infuseTemp_c(0.0),
-     m_decoctionAmount_l(0.0),
-     m_stepNumber(0.0),
-     m_cacheOnly(false)
-{
-}
-
 MashStep::MashStep(QString name, bool cache)
-   : NamedEntity(Brewtarget::MASHSTEPTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::MASHSTEPTABLE, name, true),
      m_typeStr(QString()),
      m_type(static_cast<MashStep::Type>(0)),
      m_infuseAmount_l(0.0),
@@ -86,20 +71,21 @@ MashStep::MashStep(QString name, bool cache)
 {
 }
 
-MashStep::MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
-     m_typeStr(rec.value(kcolMashstepType).toString()),
-     m_type(static_cast<MashStep::Type>(types.indexOf(m_typeStr))),
-     m_infuseAmount_l(rec.value(kcolMashstepInfuseAmt).toDouble()),
-     m_stepTemp_c(rec.value(kcolMashstepStepTemp).toDouble()),
-     m_stepTime_min(rec.value(kcolMashstepStepTime).toDouble()),
-     m_rampTime_min(rec.value(kcolMashstepRampTime).toDouble()),
-     m_endTemp_c(rec.value(kcolMashstepEndTemp).toDouble()),
-     m_infuseTemp_c(rec.value(kcolMashstepInfuseTemp).toDouble()),
-     m_decoctionAmount_l(rec.value(kcolMashstepDecoctAmt).toDouble()),
-     m_stepNumber(rec.value(kcolMashstepStepNumber).toInt()),
+MashStep::MashStep(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_cacheOnly(false)
 {
+     m_typeStr = rec.value( table->propertyToColumn( PropertyNames::MashStep::type)).toString();
+     m_infuseAmount_l = rec.value( table->propertyToColumn( PropertyNames::MashStep::infuseAmount_l)).toDouble();
+     m_stepTemp_c = rec.value( table->propertyToColumn( PropertyNames::MashStep::stepTemp_c)).toDouble();
+     m_stepTime_min = rec.value( table->propertyToColumn( PropertyNames::MashStep::stepTime_min)).toDouble();
+     m_rampTime_min = rec.value( table->propertyToColumn( PropertyNames::MashStep::rampTime_min)).toDouble();
+     m_endTemp_c = rec.value( table->propertyToColumn( PropertyNames::MashStep::endTemp_c)).toDouble();
+     m_infuseTemp_c = rec.value( table->propertyToColumn( PropertyNames::MashStep::infuseTemp_c)).toDouble();
+     m_decoctionAmount_l = rec.value( table->propertyToColumn( PropertyNames::MashStep::decoctionAmount_l)).toDouble();
+     m_stepNumber = rec.value( table->propertyToColumn( PropertyNames::MashStep::stepNumber)).toInt();
+
+     m_type = static_cast<MashStep::Type>(types.indexOf(m_typeStr));
 }
 
 //================================"SET" METHODS=================================

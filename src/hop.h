@@ -26,10 +26,14 @@
 
 #include <QString>
 #include <QStringList>
+
+#include "TableSchema.h"
 #include "model/NamedEntity.h"
+
 namespace PropertyNames::Hop { static char const * const form = "form"; /* previously kpropForm */ }
 namespace PropertyNames::Hop { static char const * const time_min = "time_min"; /* previously kpropTime */ }
 namespace PropertyNames::Hop { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
+namespace PropertyNames::Hop { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }
 namespace PropertyNames::Hop { static char const * const useString = "useString"; /* previously kpropUseString */ }
 namespace PropertyNames::Hop { static char const * const use = "use"; /* previously kpropUse */ }
 namespace PropertyNames::Hop { static char const * const origin = "origin"; /* previously kpropOrigin */ }
@@ -71,9 +75,12 @@ public:
    //! \brief The way the hop is used.
    // .:TBD:. (MY 2021-01-01) Shall we perhaps change "UseAroma" to "PostBoil", since this is what BeerXML means by
    // Aroma in this context?
+   //         (MF 2021-04-09) Nope. These fields MUST remain as they are until we are certain that we have converted 
+   //                         all existing bt v1.0 XML databases. You know.  Forever.
    enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma)
    Q_ENUMS( Type Form Use )
 
+   Hop(QString name, bool cache = true);
    virtual ~Hop() {}
 
    //! \brief The percent alpha.
@@ -182,11 +189,8 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Hop(Brewtarget::DBTable table, int key);
-   Hop(Brewtarget::DBTable table, int key, QSqlRecord rec);
-public:
-   Hop(QString name, bool cache = true);
-private:
+   // Hop(Brewtarget::DBTable table, int key);
+   Hop(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Hop( Hop & other );
 
    QString m_useStr;

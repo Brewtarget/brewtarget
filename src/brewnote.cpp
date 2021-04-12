@@ -38,7 +38,7 @@
 #include "mash.h"
 #include "yeast.h"
 #include "database.h"
-#include "TableSchemaConst.h"
+#include "TableSchema.h"
 #include "BrewnoteSchema.h"
 
 // These belong here, because they really just are constant strings for
@@ -55,6 +55,17 @@ QString BrewNote::classNameStr()
 
 // BrewNote doesn't use its name field, so we sort by brew date
 // TBD: Could consider copying date into name field and leaving the default ordering
+// MAF: In all the databases, names are strings but any date is the proper
+//      date/timestamp type. Swapping a name for a date field would require
+//      much conversion between them, would cause endless confusion given that
+//      Americans don't believe in normal date formats and will end up
+//      generating a LOT of work so we can avoid two lines of code.
+//
+//      I mean. Suppose you could make the brewnote name property a time/date
+//      and set it to the brewdate when the object is loaded/created. That
+//      would generate a lot of confusion for me at least.
+//
+//      Personally, I like two lines of code to avoid lots of confusion.
 bool BrewNote::operator<(BrewNote const & other) const { return this->m_brewDate < other.m_brewDate; }
 bool BrewNote::operator>(BrewNote const & other) const { return this->m_brewDate > other.m_brewDate; }
 
@@ -68,51 +79,10 @@ bool BrewNote::isEqualTo(NamedEntity const & other) const {
 }
 
 // Initializers
-BrewNote::BrewNote(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key),
+BrewNote::BrewNote(QString name, bool cache)
+   : NamedEntity(Brewtarget::BREWNOTETABLE,name,true),
      loading(false),
      m_brewDate(QDateTime()),
-     m_fermentDate(QDateTime()),
-     m_notes(QString()),
-     m_sg(0.0),
-     m_abv(0.0),
-     m_effIntoBK_pct(0.0),
-     m_brewhouseEff_pct(0.0),
-     m_volumeIntoBK_l(0.0),
-     m_strikeTemp_c(0.0),
-     m_mashFinTemp_c(0.0),
-     m_og(0.0),
-     m_postBoilVolume_l(0.0),
-     m_volumeIntoFerm_l(0.0),
-     m_pitchTemp_c(0.0),
-     m_fg(0.0),
-     m_attenuation(0.0),
-     m_finalVolume_l(0.0),
-     m_boilOff_l(0.0),
-     m_projBoilGrav(0.0),
-     m_projVolIntoBK_l(0.0),
-     m_projStrikeTemp_c(0.0),
-     m_projMashFinTemp_c(0.0),
-     m_projOg(0.0),
-     m_projVolIntoFerm_l(0.0),
-     m_projFg(0.0),
-     m_projEff_pct(0.0),
-     m_projABV_pct(0.0),
-     m_projPoints(0.0),
-     m_projFermPoints(0.0),
-     m_projAtten(0.0),
-     m_cacheOnly(false)
-{
-}
-
-BrewNote::BrewNote(QString name, bool cache) : BrewNote(QDateTime(), cache, name) {
-   return;
-}
-
-BrewNote::BrewNote(QDateTime dateNow, bool cache, QString const & name)
-   : NamedEntity(Brewtarget::BREWNOTETABLE,-1,name,true),
-     loading(false),
-     m_brewDate(dateNow),
      m_fermentDate(QDateTime()),
      m_notes(QString()),
      m_sg(0.0),
@@ -146,40 +116,41 @@ BrewNote::BrewNote(QDateTime dateNow, bool cache, QString const & name)
 {
 }
 
-BrewNote::BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolBNoteFermDate).toString(), rec.value(kcolDisplay).toBool()),
-     m_brewDate(QDateTime::fromString(rec.value(kcolBNoteBrewDate).toString(), Qt::ISODate)),
-     m_fermentDate(QDateTime::fromString(rec.value(kcolBNoteFermDate).toString(), Qt::ISODate)),
-     m_notes(rec.value(kcolBNoteNotes).toString()),
-     m_sg(rec.value(kcolBNoteSG).toDouble()),
-     m_abv(rec.value(kcolBNoteABV).toDouble()),
-     m_effIntoBK_pct(rec.value(kcolBNoteEffIntoBoil).toDouble()),
-     m_brewhouseEff_pct(rec.value(kcolBNoteBrewhsEff).toDouble()),
-     m_volumeIntoBK_l(rec.value(kcolBNoteVolIntoBoil).toDouble()),
-     m_strikeTemp_c(rec.value(kcolBNoteStrikeTemp).toDouble()),
-     m_mashFinTemp_c(rec.value(kcolBNoteMashFinTemp).toDouble()),
-     m_og(rec.value(kcolBNoteOG).toDouble()),
-     m_postBoilVolume_l(rec.value(kcolBNotePostBoilVol).toDouble()),
-     m_volumeIntoFerm_l(rec.value(kcolBNoteVolIntoFerm).toDouble()),
-     m_pitchTemp_c(rec.value(kcolBNotePitchTemp).toDouble()),
-     m_fg(rec.value(kcolBNoteFG).toDouble()),
-     m_attenuation(rec.value(kcolBNoteAtten).toDouble()),
-     m_finalVolume_l(rec.value(kcolBNoteFinVol).toDouble()),
-     m_boilOff_l(rec.value(kcolBNoteBoilOff).toDouble()),
-     m_projBoilGrav(rec.value(kcolBNoteProjBoilGrav).toDouble()),
-     m_projVolIntoBK_l(rec.value(kcolBNoteProjVolIntoBoil).toDouble()),
-     m_projStrikeTemp_c(rec.value(kcolBNoteProjStrikeTemp).toDouble()),
-     m_projMashFinTemp_c(rec.value(kcolBNoteProjMashFinTemp).toDouble()),
-     m_projOg(rec.value(kcolBNoteProjOG).toDouble()),
-     m_projVolIntoFerm_l(rec.value(kcolBNoteProjVolIntoFerm).toDouble()),
-     m_projFg(rec.value(kcolBNoteProjFG).toDouble()),
-     m_projEff_pct(rec.value(kcolBNoteProjEff).toDouble()),
-     m_projABV_pct(rec.value(kcolBNoteProjABV).toDouble()),
-     m_projPoints(rec.value(kcolBNoteProjPnts).toDouble()),
-     m_projFermPoints(rec.value(kcolBNoteProjFermPnts).toDouble()),
-     m_projAtten(rec.value(kcolBNoteProjAtten).toDouble()),
+BrewNote::BrewNote(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
+     loading(false),
      m_cacheOnly(false)
 {
+     m_brewDate = QDateTime::fromString( rec.value( table->propertyToColumn( PropertyNames::BrewNote::brewDate )).toString(), Qt::ISODate);
+     m_fermentDate = QDateTime::fromString(rec.value( table->propertyToColumn(PropertyNames::BrewNote::fermentDate)).toString(), Qt::ISODate);
+     m_notes = rec.value( table->propertyToColumn(PropertyNames::BrewNote::notes)).toString();
+     m_sg = rec.value( table->propertyToColumn(PropertyNames::BrewNote::sg)).toDouble();
+     m_abv = rec.value( table->propertyToColumn(PropertyNames::BrewNote::abv)).toDouble();
+     m_effIntoBK_pct = rec.value( table->propertyToColumn(PropertyNames::BrewNote::effIntoBK_pct)).toDouble();
+     m_brewhouseEff_pct = rec.value( table->propertyToColumn(PropertyNames::BrewNote::brewhouseEff_pct)).toDouble();
+     m_volumeIntoBK_l = rec.value( table->propertyToColumn(PropertyNames::BrewNote::volumeIntoBK_l)).toDouble();
+     m_strikeTemp_c = rec.value( table->propertyToColumn(PropertyNames::BrewNote::strikeTemp_c)).toDouble();
+     m_mashFinTemp_c = rec.value( table->propertyToColumn(PropertyNames::BrewNote::mashFinTemp_c)).toDouble();
+     m_og = rec.value( table->propertyToColumn(PropertyNames::BrewNote::og)).toDouble();
+     m_postBoilVolume_l = rec.value( table->propertyToColumn(PropertyNames::BrewNote::postBoilVolume_l)).toDouble();
+     m_volumeIntoFerm_l = rec.value( table->propertyToColumn(PropertyNames::BrewNote::volumeIntoFerm_l)).toDouble();
+     m_pitchTemp_c = rec.value( table->propertyToColumn(PropertyNames::BrewNote::pitchTemp_c)).toDouble();
+     m_fg = rec.value( table->propertyToColumn(PropertyNames::BrewNote::fg)).toDouble();
+     m_attenuation = rec.value( table->propertyToColumn(PropertyNames::BrewNote::attenuation)).toDouble();
+     m_finalVolume_l = rec.value( table->propertyToColumn(PropertyNames::BrewNote::finalVolume_l)).toDouble();
+     m_boilOff_l = rec.value( table->propertyToColumn(PropertyNames::BrewNote::boilOff_l)).toDouble();
+     m_projBoilGrav = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projBoilGrav)).toDouble();
+     m_projVolIntoBK_l = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projVolIntoBK_l)).toDouble();
+     m_projStrikeTemp_c = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projStrikeTemp_c)).toDouble();
+     m_projMashFinTemp_c = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projMashFinTemp_c)).toDouble();
+     m_projOg = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projOg)).toDouble();
+     m_projVolIntoFerm_l = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projVolIntoFerm_l)).toDouble();
+     m_projFg = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projFg)).toDouble();
+     m_projEff_pct = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projEff_pct)).toDouble();
+     m_projABV_pct = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projABV_pct)).toDouble();
+     m_projPoints = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projPoints)).toDouble();
+     m_projFermPoints = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projFermPoints)).toDouble();
+     m_projAtten = rec.value( table->propertyToColumn(PropertyNames::BrewNote::projAtten)).toDouble();
 }
 
 void BrewNote::populateNote(Recipe* parent)
@@ -699,13 +670,14 @@ double BrewNote::calculateEffIntoBK_pct()
    // translated from SG into pure glucose points
    maxPoints = m_projPoints * m_projVolIntoBK_l;
 
-   actualPoints = (m_sg - 1) * 1000 * m_volumeIntoBK_l;
-
    // this can happen under normal circumstances (eg, load)
-   if (maxPoints <= 0.0)
+   if (maxPoints <= 0.0) {
       return 0.0;
+   }
 
+   actualPoints = (m_sg - 1) * 1000 * m_volumeIntoBK_l;
    effIntoBK = actualPoints/maxPoints * 100;
+
    setEffIntoBK_pct(effIntoBK);
 
    return effIntoBK;

@@ -77,6 +77,7 @@ class BrewNote : public NamedEntity
    friend class BeerXML;
 
 public:
+   BrewNote(QString name, bool cache = true);
    virtual ~BrewNote() = default;
 
    bool operator<(BrewNote const & other) const;
@@ -224,12 +225,11 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
+   BrewNote(TableSchema* table, QSqlRecord rec, int t_key = -1);
+   /*
    BrewNote(Brewtarget::DBTable table, int key);
-   BrewNote(Brewtarget::DBTable table, int key, QSqlRecord rec);
-public:
-   BrewNote(QString name, bool cache = true);
-private:
    BrewNote(QDateTime dateNow, bool cache = true, QString const & name = "");
+   */
    BrewNote(BrewNote const& other);
    bool loading;
 

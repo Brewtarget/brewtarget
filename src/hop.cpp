@@ -76,34 +76,8 @@ QString Hop::classNameStr()
    return name;
 }
 
-Hop::Hop(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key, QString()),
-     m_useStr(QString()),
-     m_use(static_cast<Hop::Use>(0)),
-     m_typeStr(QString()),
-     m_type(static_cast<Hop::Type>(0)),
-     m_formStr(QString()),
-     m_form(static_cast<Hop::Form>(0)),
-     m_alpha_pct(0.0),
-     m_amount_kg(0.0),
-     m_time_min(0.0),
-     m_notes(QString()),
-     m_beta_pct(0.0),
-     m_hsi_pct(0.0),
-     m_origin(QString()),
-     m_substitutes(QString()),
-     m_humulene_pct(0.0),
-     m_caryophyllene_pct(0.0),
-     m_cohumulone_pct(0.0),
-     m_myrcene_pct(0.0),
-     m_inventory(-1.0),
-     m_inventory_id(0),
-     m_cacheOnly(false)
-{
-}
-
 Hop::Hop(QString name, bool cache)
-   : NamedEntity(Brewtarget::HOPTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::HOPTABLE, name, true),
      m_useStr(QString()),
      m_use(static_cast<Hop::Use>(0)),
      m_typeStr(QString()),
@@ -128,30 +102,34 @@ Hop::Hop(QString name, bool cache)
 {
 }
 
-Hop::Hop(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-     m_useStr(rec.value(kcolUse).toString()),
-     m_use(static_cast<Hop::Use>(uses.indexOf(m_useStr))),
-     m_typeStr(rec.value(kcolHopType).toString()),
-     m_type(static_cast<Hop::Type>(types.indexOf(m_typeStr))),
-     m_formStr(rec.value(kcolHopForm).toString()),
-     m_form(static_cast<Hop::Form>(forms.indexOf(m_formStr))),
-     m_alpha_pct(rec.value(kcolHopAlpha).toDouble()),
-     m_amount_kg(rec.value(kcolHopAmount).toDouble()),
-     m_time_min(rec.value(kcolTime).toDouble()),
-     m_notes(rec.value(kcolNotes).toString()),
-     m_beta_pct(rec.value(kcolHopBeta).toDouble()),
-     m_hsi_pct(rec.value(kcolHopHSI).toDouble()),
-     m_origin(rec.value(kcolOrigin).toString()),
-     m_substitutes(rec.value(kcolSubstitutes).toString()),
-     m_humulene_pct(rec.value(kcolHopHumulene).toDouble()),
-     m_caryophyllene_pct(rec.value(kcolHopCaryophyllene).toDouble()),
-     m_cohumulone_pct(rec.value(kcolHopCohumulone).toDouble()),
-     m_myrcene_pct(rec.value(kcolHopMyrcene).toDouble()),
+Hop::Hop(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_inventory(-1.0),
-     m_inventory_id(rec.value(kcolInventoryId).toInt()),
      m_cacheOnly(false)
 {
+     m_useStr = rec.value(table->propertyToColumn(PropertyNames::Hop::use)).toString();
+     m_typeStr = rec.value(table->propertyToColumn(PropertyNames::Hop::type)).toString();
+     m_formStr = rec.value(table->propertyToColumn(PropertyNames::Hop::form)).toString();
+     m_alpha_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::alpha_pct)).toDouble();
+     m_amount_kg = rec.value(table->propertyToColumn(PropertyNames::Hop::amount_kg)).toDouble();
+     m_time_min = rec.value(table->propertyToColumn(PropertyNames::Hop::time_min)).toDouble();
+     m_notes = rec.value(table->propertyToColumn(PropertyNames::Hop::notes)).toString();
+     m_beta_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::beta_pct)).toDouble();
+     m_hsi_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::hsi_pct)).toDouble();
+     m_origin = rec.value(table->propertyToColumn(PropertyNames::Hop::origin)).toString();
+     m_substitutes = rec.value(table->propertyToColumn(PropertyNames::Hop::substitutes)).toString();
+     m_humulene_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::humulene_pct)).toDouble();
+     m_caryophyllene_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::caryophyllene_pct)).toDouble();
+     m_cohumulone_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::cohumulone_pct)).toDouble();
+     m_myrcene_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::myrcene_pct)).toDouble();
+
+     // keys need special handling
+     m_inventory_id = rec.value(table->foreignKeyToColumn(PropertyNames::Hop::inventory_id)).toInt();
+
+     // these are not taken directly from the SQL record
+     m_use  = static_cast<Hop::Use>(uses.indexOf(m_useStr));
+     m_type = static_cast<Hop::Type>(types.indexOf(m_typeStr));
+     m_form = static_cast<Hop::Form>(forms.indexOf(m_formStr));
 }
 
 Hop::Hop( Hop & other )
@@ -233,7 +211,7 @@ void Hop::setInventoryId( int key )
 {
    m_inventory_id = key;
    if ( ! m_cacheOnly ) {
-      setEasy(kpropInventoryId, key);
+      setEasy(PropertyNames::Hop::inventory_id, key);
    }
 }
 
@@ -434,7 +412,7 @@ bool   Hop::cacheOnly() const { return m_cacheOnly; }
 double Hop::inventory()
 {
    if ( m_inventory < 0 ) {
-      m_inventory = getInventory(PropertyNames::Hop::inventory).toDouble();
+      m_inventory = getInventory().toDouble();
    }
    return m_inventory;
 }

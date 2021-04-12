@@ -62,8 +62,10 @@ class Style : public NamedEntity
    friend class Database;
    friend class BeerXML;
    friend class StyleEditor;
+
 public:
 
+   Style( QString t_name, bool cacheOnly = true);
    virtual ~Style() {}
 
    //! \brief The type of beverage.
@@ -174,12 +176,10 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Style(Brewtarget::DBTable table, int key);
-public:
-   Style(QString t_name, bool cacheOnly = true);
-private:
-   Style(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   Style( Style const& other );
+
+//   Style(Brewtarget::DBTable table, int key);
+   Style( TableSchema* table, QSqlRecord rec, int t_key = -1);
+   Style( Style const& other);
 
    QString m_category;
    QString m_categoryNumber;

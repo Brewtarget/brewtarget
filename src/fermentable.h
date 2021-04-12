@@ -29,6 +29,7 @@
 #include "model/NamedEntity.h"
 #include "unit.h"
 namespace PropertyNames::Fermentable { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
+namespace PropertyNames::Fermentable { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }
 namespace PropertyNames::Fermentable { static char const * const origin = "origin"; /* previously kpropOrigin */ }
 namespace PropertyNames::Fermentable { static char const * const amount_kg = "amount_kg"; /* previously kpropAmountKg */ }
 namespace PropertyNames::Fermentable { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
@@ -72,6 +73,7 @@ public:
    enum AdditionTime {Normal, Late};
    Q_ENUMS( Type AdditionMethod AdditionTime )
 
+   Fermentable( QString name, bool cache = true );
    virtual ~Fermentable() {}
 
    //! \brief The \c Type.
@@ -200,12 +202,10 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Fermentable(Brewtarget::DBTable table, int key);
-   Fermentable(Brewtarget::DBTable table, int key, QSqlRecord rec);
+//   Fermentable(Brewtarget::DBTable table, int key);
+   Fermentable(TableSchema* table, QSqlRecord rec, int t_key = -1);
+
    Fermentable( Fermentable &other );
-public:
-   Fermentable( QString name, bool cache = true );
-private:
 
    static bool isValidType( const QString& str );
    static QStringList types;

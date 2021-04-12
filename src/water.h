@@ -24,6 +24,8 @@
 
 #include <QString>
 #include "model/NamedEntity.h"
+#include "TableSchema.h"
+
 namespace PropertyNames::Water { static char const * const ph = "ph"; /* previously kpropPH */ }
 namespace PropertyNames::Water { static char const * const amount = "amount"; /* previously kpropAmount */ }
 namespace PropertyNames::Water { static char const * const type = "type"; /* previously kpropType */ }
@@ -53,6 +55,7 @@ class Water : public NamedEntity
    friend class BeerXML;
    friend class WaterDialog;
    friend class WaterEditor;
+
 public:
 
    enum Types {
@@ -73,6 +76,7 @@ public:
 
    Q_ENUM(Types Ions)
 
+   Water( QString name, bool cache = true);
    virtual ~Water() {}
 
    // On a base or target profile, bicarbonate and alkalinity cannot both be used. I'm gonna have fun figuring that out
@@ -151,13 +155,10 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Water(Brewtarget::DBTable table, int key);
-   Water(Brewtarget::DBTable table, int key, QSqlRecord rec);
-   Water(Water const& other, bool cache = true);
-public:
-   Water(QString name, bool cache = true);
+//   Water(Brewtarget::DBTable table, int key);
+   Water( TableSchema* table, QSqlRecord rec, int t_key = -1);
+   Water( Water const& other, bool cache = true);
 
-private:
    double m_amount;
    double m_calcium_ppm;
    double m_bicarbonate_ppm;

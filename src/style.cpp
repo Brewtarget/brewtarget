@@ -52,7 +52,7 @@ QString Style::classNameStr()
 
 // suitable for something that will be written to the db later
 Style::Style(QString t_name, bool cacheOnly)
-   : NamedEntity(Brewtarget::STYLETABLE, -1, t_name, true),
+   : NamedEntity(Brewtarget::STYLETABLE, t_name, true),
      m_category(QString()),
      m_categoryNumber(QString()),
      m_styleLetter(QString()),
@@ -79,63 +79,34 @@ Style::Style(QString t_name, bool cacheOnly)
 {
 }
 
-// suitable for something that needs to be created in the db when the object is, but all the other
-// fields will be filled in later (shouldn't be used that much)
-Style::Style(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key, QString(), true),
-     m_category(QString()),
-     m_categoryNumber(QString()),
-     m_styleLetter(QString()),
-     m_styleGuide(QString()),
-     m_typeStr(QString()),
-     m_type(static_cast<Style::Type>(0)),
-     m_ogMin(0.0),
-     m_ogMax(0.0),
-     m_fgMin(0.0),
-     m_fgMax(0.0),
-     m_ibuMin(0.0),
-     m_ibuMax(0.0),
-     m_colorMin_srm(0.0),
-     m_colorMax_srm(0.0),
-     m_carbMin_vol(0.0),
-     m_carbMax_vol(0.0),
-     m_abvMin_pct(0.0),
-     m_abvMax_pct(0.0),
-     m_notes(QString()),
-     m_profile(QString()),
-     m_ingredients(QString()),
-     m_examples(QString()),
-     m_cacheOnly(false)
-{
-}
-
 // suitable for creating a Style from a database record
-Style::Style(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-     m_category(rec.value(kcolStyleCat).toString()),
-     m_categoryNumber(rec.value(kcolStyleCatNum).toString()),
-     m_styleLetter(rec.value(kcolStyleLetter).toString()),
-     m_styleGuide(rec.value(kcolStyleGuide).toString()),
-     m_typeStr(rec.value(kcolStyleType).toString()),
-     m_type(static_cast<Style::Type>(m_types.indexOf(m_typeStr))),
-     m_ogMin(rec.value(kcolStyleOGMin).toDouble()),
-     m_ogMax(rec.value(kcolStyleOGMax).toDouble()),
-     m_fgMin(rec.value(kcolStyleFGMin).toDouble()),
-     m_fgMax(rec.value(kcolStyleFGMax).toDouble()),
-     m_ibuMin(rec.value(kcolStyleIBUMin).toDouble()),
-     m_ibuMax(rec.value(kcolStyleIBUMax).toDouble()),
-     m_colorMin_srm(rec.value(kcolStyleColorMin).toDouble()),
-     m_colorMax_srm(rec.value(kcolStyleColorMax).toDouble()),
-     m_carbMin_vol(rec.value(kcolStyleCarbMin).toDouble()),
-     m_carbMax_vol(rec.value(kcolStyleCarbMax).toDouble()),
-     m_abvMin_pct(rec.value(kcolStyleABVMin).toDouble()),
-     m_abvMax_pct(rec.value(kcolStyleABVMax).toDouble()),
-     m_notes(rec.value(kcolNotes).toString()),
-     m_profile(rec.value(kcolStyleProfile).toString()),
-     m_ingredients(rec.value(kcolStyleIngreds).toString()),
-     m_examples(rec.value(kcolStyleExamples).toString()),
+Style::Style(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_cacheOnly(false)
 {
+     m_category = rec.value( table->propertyToColumn( PropertyNames::Style::category)).toString();
+     m_categoryNumber = rec.value( table->propertyToColumn( PropertyNames::Style::categoryNumber)).toString();
+     m_styleLetter = rec.value( table->propertyToColumn( PropertyNames::Style::styleLetter)).toString();
+     m_styleGuide = rec.value( table->propertyToColumn( PropertyNames::Style::styleGuide)).toString();
+     m_typeStr = rec.value( table->propertyToColumn( PropertyNames::Style::type)).toString();
+     m_ogMin = rec.value( table->propertyToColumn( PropertyNames::Style::ogMin)).toDouble();
+     m_ogMax = rec.value( table->propertyToColumn( PropertyNames::Style::ogMax)).toDouble();
+     m_fgMin = rec.value( table->propertyToColumn( PropertyNames::Style::fgMin)).toDouble();
+     m_fgMax = rec.value( table->propertyToColumn( PropertyNames::Style::fgMax)).toDouble();
+     m_ibuMin = rec.value( table->propertyToColumn( PropertyNames::Style::ibuMin)).toDouble();
+     m_ibuMax = rec.value( table->propertyToColumn( PropertyNames::Style::ibuMax)).toDouble();
+     m_colorMin_srm = rec.value( table->propertyToColumn( PropertyNames::Style::colorMin_srm)).toDouble();
+     m_colorMax_srm = rec.value( table->propertyToColumn( PropertyNames::Style::colorMax_srm)).toDouble();
+     m_carbMin_vol = rec.value( table->propertyToColumn( PropertyNames::Style::carbMin_vol)).toDouble();
+     m_carbMax_vol = rec.value( table->propertyToColumn( PropertyNames::Style::carbMax_vol)).toDouble();
+     m_abvMin_pct = rec.value( table->propertyToColumn( PropertyNames::Style::abvMin_pct)).toDouble();
+     m_abvMax_pct = rec.value( table->propertyToColumn( PropertyNames::Style::abvMax_pct)).toDouble();
+     m_notes = rec.value( table->propertyToColumn( PropertyNames::Style::notes)).toString();
+     m_profile = rec.value( table->propertyToColumn( PropertyNames::Style::profile)).toString();
+     m_ingredients = rec.value( table->propertyToColumn( PropertyNames::Style::ingredients)).toString();
+     m_examples = rec.value( table->propertyToColumn( PropertyNames::Style::examples)).toString();
+
+     m_type = static_cast<Style::Type>(m_types.indexOf(m_typeStr));
 }
 
 //==============================="SET" METHODS==================================
@@ -173,8 +144,17 @@ void Style::setStyleGuide( const QString& var )
 
 void Style::setType( Type t )
 {
-   m_type = t;
+
+   if ( t < Type::Lager || t > Type::Cider ) {
+      qCritical() << t << " cannot be converted to a type";
+      m_type = Type::Cider;
+   }
+   else {
+      m_type = t;
+   }
+
    m_typeStr = m_types.at(t);
+
    if ( ! m_cacheOnly ) {
       setEasy( PropertyNames::Style::type, m_typeStr);
    }

@@ -57,6 +57,7 @@ public:
    enum Type { Infusion, Temperature, Decoction, flySparge, batchSparge };
    Q_ENUMS( Type )
 
+   MashStep( QString name, bool cache = true );
    virtual ~MashStep() {}
 
    //! \brief The \c Type.
@@ -128,13 +129,10 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   MashStep(Brewtarget::DBTable table, int key);
-   MashStep(Brewtarget::DBTable table, int key, QSqlRecord rec);
+//   MashStep(Brewtarget::DBTable table, int key);
+   MashStep( TableSchema* table, QSqlRecord rec, int t_key = -1 );
    MashStep( MashStep const& other );
-public:
-   MashStep(QString name, bool cache = true);
 
-private:
    QString m_typeStr;
    Type m_type;
    double m_infuseAmount_l;

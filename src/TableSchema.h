@@ -123,6 +123,7 @@ public:
    bool isBtTable();
    bool isMetaTable();
 
+   // convenience for the name of the key (eg, id) field in the db
    const QString keyName(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
 private:

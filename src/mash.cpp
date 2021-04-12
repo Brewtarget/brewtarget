@@ -54,22 +54,8 @@ QString Mash::classNameStr()
    return name;
 }
 
-Mash::Mash(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key, QString(), true),
-     m_grainTemp_c(0.0),
-     m_notes(QString()),
-     m_tunTemp_c(0.0),
-     m_spargeTemp_c(0.0),
-     m_ph(0.0),
-     m_tunWeight_kg(0.0),
-     m_tunSpecificHeat_calGC(0.0),
-     m_equipAdjust(true),
-     m_cacheOnly(false)
-{
-}
-
 Mash::Mash(QString name, bool cache)
-   : NamedEntity(Brewtarget::MASHTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::MASHTABLE, name, true),
      m_grainTemp_c(0.0),
      m_notes(QString()),
      m_tunTemp_c(0.0),
@@ -82,18 +68,19 @@ Mash::Mash(QString name, bool cache)
 {
 }
 
-Mash::Mash(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
-     m_grainTemp_c(rec.value(kcolMashGrainTemp).toDouble()),
-     m_notes(rec.value(kcolNotes).toString()),
-     m_tunTemp_c(rec.value(kcolMashTunTemp).toDouble()),
-     m_spargeTemp_c(rec.value(kcolMashSpargeTemp).toDouble()),
-     m_ph(rec.value(kcolPH).toDouble()),
-     m_tunWeight_kg(rec.value(kcolMashTunWeight).toDouble()),
-     m_tunSpecificHeat_calGC(rec.value(kcolMashTunSpecHeat).toDouble()),
-     m_equipAdjust(rec.value(kcolMashEquipAdjust).toBool()),
+Mash::Mash(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
      m_cacheOnly(false)
 {
+     m_grainTemp_c = rec.value( table->propertyToColumn(PropertyNames::Mash::grainTemp_c)).toDouble();
+     m_notes = rec.value( table->propertyToColumn(PropertyNames::Mash::notes)).toString();
+     m_tunTemp_c = rec.value( table->propertyToColumn(PropertyNames::Mash::tunTemp_c)).toDouble();
+     m_spargeTemp_c = rec.value( table->propertyToColumn(PropertyNames::Mash::spargeTemp_c)).toDouble();
+     m_ph = rec.value( table->propertyToColumn(PropertyNames::Mash::ph)).toDouble();
+     m_tunWeight_kg = rec.value( table->propertyToColumn(PropertyNames::Mash::tunWeight_kg)).toDouble();
+     m_tunSpecificHeat_calGC = rec.value( table->propertyToColumn(PropertyNames::Mash::tunSpecificHeat_calGC)).toDouble();
+     m_equipAdjust = rec.value( table->propertyToColumn(PropertyNames::Mash::equipAdjust)).toBool();
+
 }
 
 void Mash::setGrainTemp_c( double var )

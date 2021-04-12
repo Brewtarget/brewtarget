@@ -55,7 +55,7 @@ bool Equipment::isEqualTo(NamedEntity const & other) const {
 
 //=============================CONSTRUCTORS=====================================
 Equipment::Equipment(QString t_name, bool cacheOnly)
-   : NamedEntity(Brewtarget::EQUIPTABLE, -1, t_name, true),
+   : NamedEntity(Brewtarget::EQUIPTABLE, t_name, true),
    m_boilSize_l(22.927),
    m_batchSize_l(18.927),
    m_tunVolume_l(0.0),
@@ -77,50 +77,28 @@ Equipment::Equipment(QString t_name, bool cacheOnly)
 {
 }
 
-Equipment::Equipment(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key, QString(), true ),
-   m_boilSize_l(22.927),
-   m_batchSize_l(18.927),
-   m_tunVolume_l(0.0),
-   m_tunWeight_kg(0.0),
-   m_tunSpecificHeat_calGC(0.0),
-   m_topUpWater_l(0.0),
-   m_trubChillerLoss_l(1.0),
-   m_evapRate_pctHr(0.0),
-   m_evapRate_lHr(4.0),
-   m_boilTime_min(60.0),
-   m_calcBoilVolume(true),
-   m_lauterDeadspace_l(0.0),
-   m_topUpKettle_l(0.0),
-   m_hopUtilization_pct(100.0),
-   m_notes(QString()),
-   m_grainAbsorption_LKg(1.086),
-   m_boilingPoint_c(100.0),
+Equipment::Equipment(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key ),
    m_cacheOnly(false)
 {
-}
+   m_boilSize_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::boilSize_l)).toDouble();
+   m_batchSize_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::batchSize_l)).toDouble();
+   m_tunVolume_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::tunVolume_l)).toDouble();
+   m_tunWeight_kg = rec.value( table->propertyToColumn( PropertyNames::Equipment::tunWeight_kg)).toDouble();
+   m_tunSpecificHeat_calGC = rec.value( table->propertyToColumn( PropertyNames::Equipment::tunSpecificHeat_calGC)).toDouble();
+   m_topUpWater_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::topUpWater_l)).toDouble();
+   m_trubChillerLoss_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::trubChillerLoss_l)).toDouble();
+   m_evapRate_pctHr = rec.value( table->propertyToColumn( PropertyNames::Equipment::evapRate_pctHr)).toDouble();
+   m_evapRate_lHr = rec.value( table->propertyToColumn( PropertyNames::Equipment::evapRate_lHr)).toDouble();
+   m_boilTime_min = rec.value( table->propertyToColumn( PropertyNames::Equipment::boilTime_min)).toDouble();
+   m_calcBoilVolume = rec.value( table->propertyToColumn( PropertyNames::Equipment::calcBoilVolume)).toBool();
+   m_lauterDeadspace_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::lauterDeadspace_l)).toDouble();
+   m_topUpKettle_l = rec.value( table->propertyToColumn( PropertyNames::Equipment::topUpKettle_l)).toDouble();
+   m_hopUtilization_pct = rec.value( table->propertyToColumn( PropertyNames::Equipment::hopUtilization_pct)).toDouble();
+   m_notes = rec.value( table->propertyToColumn(PropertyNames::Equipment::notes)).toString();
+   m_grainAbsorption_LKg = rec.value( table->propertyToColumn( PropertyNames::Equipment::grainAbsorption_LKg)).toDouble();
+   m_boilingPoint_c = rec.value( table->propertyToColumn( PropertyNames::Equipment::boilingPoint_c)).toDouble();
 
-Equipment::Equipment(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool(), rec.value(kcolFolder).toString()),
-   m_boilSize_l(rec.value(kcolEquipBoilSize).toDouble()),
-   m_batchSize_l(rec.value(kcolEquipBatchSize).toDouble()),
-   m_tunVolume_l(rec.value(kcolEquipTunVolume).toDouble()),
-   m_tunWeight_kg(rec.value(kcolEquipTunWeight).toDouble()),
-   m_tunSpecificHeat_calGC(rec.value(kcolEquipTunSpecHeat).toDouble()),
-   m_topUpWater_l(rec.value(kcolEquipTopUpWater).toDouble()),
-   m_trubChillerLoss_l(rec.value(kcolEquipTrubChillLoss).toDouble()),
-   m_evapRate_pctHr(rec.value(kcolEquipEvapRate).toDouble()),
-   m_evapRate_lHr(rec.value(kcolEquipRealEvapRate).toDouble()),
-   m_boilTime_min(rec.value(kcolEquipBoilTime).toDouble()),
-   m_calcBoilVolume(rec.value(kcolEquipCalcBoilVol).toBool()),
-   m_lauterDeadspace_l(rec.value(kcolEquipLauterSpace).toDouble()),
-   m_topUpKettle_l(rec.value(kcolEquipTopUpKettle).toDouble()),
-   m_hopUtilization_pct(rec.value(kcolEquipHopUtil).toDouble()),
-   m_notes(rec.value(kcolNotes).toString()),
-   m_grainAbsorption_LKg(rec.value(kcolEquipAbsorption).toDouble()),
-   m_boilingPoint_c(rec.value(kcolEquipBoilingPoint).toDouble()),
-   m_cacheOnly(false)
-{
 }
 
 Equipment::Equipment( Equipment const& other )

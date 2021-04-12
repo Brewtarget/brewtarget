@@ -27,6 +27,7 @@
 #include <QString>
 #include <QVector>
 #include <QDomNode>
+#include "TableSchema.h"
 #include "model/NamedEntity.h"
 #include "recipe.h"
 namespace PropertyNames::Instruction { static char const * const interval = "interval"; /* previously kpropInterval */ }
@@ -46,8 +47,10 @@ class Instruction : public NamedEntity
    Q_CLASSINFO("signal", "instructions")
    friend class Database;
    friend class BeerXML;
+
 public:
 
+   Instruction( QString name, bool cache = true );
    virtual ~Instruction() {}
 
    Q_PROPERTY( QString directions READ directions WRITE setDirections /*NOTIFY changed*/ /*changedDirections*/ )
@@ -94,11 +97,7 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Instruction(Brewtarget::DBTable table, int key);
-   Instruction(Brewtarget::DBTable table, int key, QSqlRecord rec);
-public:
-   Instruction( QString name, bool cache = true );
-private:
+   Instruction(TableSchema* table, QSqlRecord rec,int t_key = -1);
    Instruction( Instruction const& other );
 
    QString m_directions;

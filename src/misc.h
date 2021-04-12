@@ -28,6 +28,7 @@
 namespace PropertyNames::Misc { static char const * const amount = "amount"; /* previously kpropAmount */ }
 namespace PropertyNames::Misc { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
 namespace PropertyNames::Misc { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
+namespace PropertyNames::Misc { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }
 namespace PropertyNames::Misc { static char const * const useString = "useString"; /* previously kpropUseString */ }
 namespace PropertyNames::Misc { static char const * const use = "use"; /* previously kpropUse */ }
 namespace PropertyNames::Misc { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
@@ -59,6 +60,7 @@ public:
    enum AmountType { AmountType_Weight, AmountType_Volume };
    Q_ENUMS( Type Use AmountType )
 
+   Misc(QString name, bool cache = true);
    virtual ~Misc() {}
 
    //! \brief The \c Type.
@@ -144,11 +146,7 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Misc(Brewtarget::DBTable table, int key);
-   Misc(Brewtarget::DBTable table, int key, QSqlRecord rec);
-public:
-   Misc(QString name, bool cache = true);
-private:
+   Misc(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Misc(Misc & other);
 
    QString m_typeString;

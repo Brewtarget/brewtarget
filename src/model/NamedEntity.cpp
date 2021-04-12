@@ -34,19 +34,39 @@
 
 static const char* kVersion = "version";
 
-NamedEntity::NamedEntity(Brewtarget::DBTable table, int key, QString t_name, bool t_display, QString folder)
+// sometimes I just want to create a thing with a name and nothing else
+NamedEntity::NamedEntity(Brewtarget::DBTable table, QString t_name, bool t_display)
    : QObject(nullptr),
-     _key(key),
+     _key(-1),
      _table(table),
      parentKey(0),
-     _folder(folder),
+     _folder(QString()),
      _name(t_name),
      _display(t_display),
      _deleted(QVariant())
 {
-   return;
 }
 
+// othertimes, we creating a thing from a record in the db
+NamedEntity::NamedEntity(TableSchema* table, QSqlRecord rec, int t_key )
+   : QObject(nullptr),
+     parentKey(0),
+     _deleted(QVariant())
+{
+   if ( t_key == -1 ) {
+      _key = rec.value( table->keyName() ).toInt();
+   }
+   else {
+      _key = t_key;
+   }
+      
+   _folder  = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::folder)  ).toString();
+   _name    = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::name)    ).toString();
+   _display = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::display) ).toBool();
+   _table   = table->dbTable();
+}
+
+// and finally sometimes we create a thing from other things
 NamedEntity::NamedEntity(NamedEntity const& other)
    : QObject(nullptr),
      _key(other._key),
@@ -342,10 +362,10 @@ void NamedEntity::setInventory( const QVariant& value, int invKey, bool notify )
    Database::instance().setInventory( this, value, invKey, notify );
 }
 
-QVariant NamedEntity::getInventory( const QString& col_name ) const
+QVariant NamedEntity::getInventory() const
 {
    QVariant val = 0.0;
-   val = Database::instance().getInventoryAmt(col_name, _table, _key);
+   val = Database::instance().getInventoryAmt(_table, _key);
    return val;
 }
 

@@ -138,13 +138,17 @@ public:
    QTableView* createView( Brewtarget::DBTable table );
 
    // Named constructors ======================================================
-   //! Create new brew note attached to \b parent.
    // maybe I should have never learned templates?
+   // We only really need one of these, and the ones like (name, &all)
+   // duplicated work. So I whacked those and made one of these.
    template<class T> T* newNamedEntity(QHash<int,T*>* all) {
       int key;
       // To quote the talking heads, my god what have I done?
       Brewtarget::DBTable table = dbDefn->classNameToTable( T::classNameStr() );
-      QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(dbDefn->tableName(table));
+      TableSchema* tbl = dbDefn->table(table);
+      QSqlRecord rec;
+
+      QString insert = QString("INSERT INTO %1 DEFAULT VALUES").arg(tbl->tableName());
 
       QSqlQuery q(sqlDatabase());
 
@@ -155,6 +159,18 @@ public:
             throw QString("could not insert a record into");
 
          key = q.lastInsertId().toInt();
+
+         // this allows me to simplify things later.
+         QString select = QString("SELECT * FROM %1 WHERE %2 = %3")
+                              .arg(tbl->tableName())
+                              .arg(tbl->keyName())
+                              .arg(key);
+         qDebug() << Q_FUNC_INFO << "SELECT SQL: " << select;
+         if ( ! q.exec(select) ) {
+            throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
+         }
+         q.next();
+         rec = q.record();
          q.finish();
       }
       catch (QString e) {
@@ -162,40 +178,8 @@ public:
          throw; // rethrow the error until somebody cares
       }
 
-      T* tmp = new T(table, key);
-      all->insert(tmp->_key,tmp);
-
-      return tmp;
-   }
-
-   template<class T> T* newNamedEntity(QString name, QHash<int,T*>* all) {
-      int key;
-      // To quote the talking heads, my god what have I done?
-      TableSchema* tbl = dbDefn->table(dbDefn->classNameToTable(T::classNameStr()));
-      QString insert = QString("INSERT INTO %1 (%2) VALUES (:name)")
-              .arg(tbl->tableName())
-              .arg(tbl->propertyToColumn(PropertyNames::NamedEntity::name));
-
-      QSqlQuery q(sqlDatabase());
-
-      q.prepare(insert);
-      q.bindValue(":name",name);
-
-      q.setForwardOnly(true);
-
-      try {
-         if ( ! q.exec() )
-            throw QString("could not insert a record into");
-
-         key = q.lastInsertId().toInt();
-         q.finish();
-      }
-      catch (QString e) {
-         qCritical() << Q_FUNC_INFO << e << q.lastError().text();
-         throw; // rethrow the error until somebody cares
-      }
-
-      T* tmp = new T(tbl->dbTable(), key);
+      // this is weird, but I want the sqlrecord
+      T* tmp = new T(tbl, rec);
       all->insert(tmp->_key,tmp);
 
       return tmp;
@@ -273,7 +257,7 @@ public:
    //! \returns The entire inventory for a table.
    QMap<int, double> getInventory(const Brewtarget::DBTable table) const;
 
-   QVariant getInventoryAmt(QString col_name, Brewtarget::DBTable table, int key);
+   QVariant getInventoryAmt(Brewtarget::DBTable table, int key);
 
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -142,7 +142,7 @@ void WaterEditor::showChanges(QMetaProperty* prop)
    }
    if (propName == PropertyNames::Water::alkalinityAsHCO3 || updateAll ) {
       bool typeless = this->obs->alkalinityAsHCO3();
-      comboBox_alk->setCurrentIndex(comboBox_alk->findText(typeless ? "HCO3" : "CO3"));
+      comboBox_alk->setCurrentIndex(comboBox_alk->findText(typeless ? "HCO3" : "CaCO3"));
       if ( ! updateAll ) return;
    }
    if (propName == PropertyNames::Water::notes || updateAll ) {

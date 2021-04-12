@@ -31,10 +31,13 @@
 #include "database.h"
 
 // TBD Not clear why we use this ordering for salts.  Let's see what happens if we let it use the default ordering (name) of NamedEntity
-//bool operator<(const Salt &s1, const Salt &s2)
-//{
-//   return s1.m_add_to < s2.m_add_to;
-//}
+// MF (2021-04-09): Using this ordering makes the salts display properly in
+//                  the editor -- grouped around when they are added and not
+//                  the name. I'm putting this back 
+bool operator<(const Salt &s1, const Salt &s2)
+{
+   return s1.addTo() < s2.addTo();
+}
 
 bool Salt::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid
@@ -52,21 +55,8 @@ QString Salt::classNameStr()
    return name;
 }
 
-Salt::Salt(Brewtarget::DBTable table, int key)
-   : NamedEntity(table, key),
-   m_amount(0.0),
-   m_add_to(NEVER),
-   m_type(NONE),
-   m_amount_is_weight(true),
-   m_percent_acid(0.0),
-   m_is_acid(false),
-   m_misc_id(-1),
-   m_cacheOnly(false)
-{
-}
-
 Salt::Salt(QString name, bool cache)
-   : NamedEntity(Brewtarget::SALTTABLE, -1, name, true),
+   : NamedEntity(Brewtarget::SALTTABLE, name, true),
    m_amount(0.0),
    m_add_to(NEVER),
    m_type(NONE),
@@ -79,7 +69,7 @@ Salt::Salt(QString name, bool cache)
 }
 
 Salt::Salt(Salt & other)
-   : NamedEntity(Brewtarget::SALTTABLE, -1, other.name(), true),
+   : NamedEntity(Brewtarget::SALTTABLE, other.name(), true),
    m_amount(other.m_amount),
    m_add_to(other.m_add_to),
    m_type(other.m_type),
@@ -91,17 +81,19 @@ Salt::Salt(Salt & other)
 {
 }
 
-Salt::Salt(Brewtarget::DBTable table, int key, QSqlRecord rec)
-   : NamedEntity(table, key, rec.value(kcolName).toString(), rec.value(kcolDisplay).toBool()),
-   m_amount(rec.value(kcolAmount).toDouble()),
-   m_add_to(static_cast<Salt::WhenToAdd>(rec.value(kcolSaltAddTo).toInt())),
-   m_type(static_cast<Salt::Types>(rec.value(kcolSaltType).toInt())),
-   m_amount_is_weight(rec.value(kcolSaltAmtIsWgt).toBool()),
-   m_percent_acid(rec.value(kcolSaltPctAcid).toDouble()),
-   m_is_acid(rec.value(kcolSaltIsAcid).toBool()),
-   m_misc_id(rec.value(kcolMiscId).toInt()),
+Salt::Salt(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
    m_cacheOnly(false)
 {
+   m_amount = rec.value(table->propertyToColumn( PropertyNames::Salt::amount)).toDouble();
+   m_amount_is_weight = rec.value( table->propertyToColumn( PropertyNames::Salt::amountIsWeight)).toBool();
+   m_percent_acid = rec.value( table->propertyToColumn( PropertyNames::Salt::percentAcid)).toDouble();
+   m_is_acid = rec.value( table->propertyToColumn( PropertyNames::Salt::isAcid)).toBool();
+   // foreign keys suck
+   m_misc_id = rec.value(table->foreignKeyToColumn( PropertyNames::Salt::misc_id)).toInt();
+
+   m_add_to = static_cast<Salt::WhenToAdd>(rec.value( table->propertyToColumn( PropertyNames::Salt::addTo)).toInt());
+   m_type = static_cast<Salt::Types>(rec.value( table->propertyToColumn( PropertyNames::Salt::type)).toInt());
 }
 
 //================================"SET" METHODS=================================

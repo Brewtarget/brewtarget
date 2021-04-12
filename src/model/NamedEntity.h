@@ -36,6 +36,8 @@
 #include <QDateTime>
 #include <QSqlRecord>
 #include "brewtarget.h"
+#include "TableSchema.h"
+
 namespace PropertyNames::NamedEntity { static char const * const folder = "folder"; /* previously kpropFolder */ }
 namespace PropertyNames::NamedEntity { static char const * const display = "display"; /* previously kpropDisplay */ }
 namespace PropertyNames::NamedEntity { static char const * const deleted = "deleted"; /* previously kpropDeleted */ }
@@ -84,8 +86,14 @@ class NamedEntity : public QObject
    friend class Database;
    friend class BeerXML;
 public:
+/*
    NamedEntity(Brewtarget::DBTable table, int key, QString t_name = QString(),
                   bool t_display = false, QString folder = QString());
+*/
+   NamedEntity(Brewtarget::DBTable table, QString t_name = QString(), bool t_display = false);
+
+   NamedEntity(TableSchema* table, QSqlRecord rec, int t_key );
+
    NamedEntity( NamedEntity const& other );
 
    // Our destructor needs to be virtual because we sometimes point to an instance of a derived class through a pointer
@@ -261,7 +269,7 @@ protected:
    QVariant get( const QString& col_name ) const;
 
    void setInventory( const QVariant& value, int invKey = 0, bool notify=true );
-   QVariant getInventory( const QString& col_name ) const;
+   QVariant getInventory() const;
 
    QVariantMap getColumnValueMap() const;
 

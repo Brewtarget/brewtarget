@@ -30,6 +30,7 @@ namespace PropertyNames::Yeast { static char const * const amount = "amount"; /*
 namespace PropertyNames::Yeast { static char const * const form = "form"; /* previously kpropForm */ }
 namespace PropertyNames::Yeast { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
 namespace PropertyNames::Yeast { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
+namespace PropertyNames::Yeast { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }
 namespace PropertyNames::Yeast { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
 namespace PropertyNames::Yeast { static char const * const type = "type"; /* previously kpropType */ }
 namespace PropertyNames::Yeast { static char const * const notes = "notes"; /* previously kpropNotes */ }
@@ -59,6 +60,7 @@ class Yeast : public NamedEntity
    friend class Database;
    friend class BeerXML;
    friend class YeastDialog;
+
 public:
    //! \brief What beverage the yeast is for.
    enum Type {Ale, Lager, Wheat, Wine, Champagne};
@@ -68,6 +70,7 @@ public:
    enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
    Q_ENUMS( Type Form Flocculation )
 
+   Yeast(QString name, bool cache = true);
    virtual ~Yeast() {}
 
    //! \brief The \c Type.
@@ -175,11 +178,8 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Yeast(Brewtarget::DBTable table, int key);
-   Yeast(Brewtarget::DBTable table, int key, QSqlRecord rec);
-public:
-   Yeast(QString name, bool cache = true);
-private:
+//   Yeast(Brewtarget::DBTable table, int key);
+   Yeast(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Yeast(Yeast & other);
 
    QString m_typeString;

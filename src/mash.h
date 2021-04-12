@@ -52,8 +52,10 @@ class Mash : public NamedEntity
    friend class BeerXML;
    friend class MashDesigner;
    friend class MashEditor;
+
 public:
 
+   Mash( QString name, bool cache = true );
    virtual ~Mash() {}
 
    //! \brief The initial grain temp in Celsius.
@@ -140,13 +142,10 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   Mash(Brewtarget::DBTable table, int key);
-   Mash(Brewtarget::DBTable table, int key, QSqlRecord rec);
+// Mash(Brewtarget::DBTable table, int key);
+   Mash( TableSchema* table, QSqlRecord rec, int t_key = -1 );
    Mash( Mash const& other );
-public:
-   Mash( QString name, bool cache = true );
 
-private:
    double m_grainTemp_c;
    QString m_notes;
    double m_tunTemp_c;
