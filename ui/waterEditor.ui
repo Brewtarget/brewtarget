@@ -399,6 +399,14 @@
  </customwidgets>
  <tabstops>
   <tabstop>lineEdit_name</tabstop>
+  <tabstop>lineEdit_cl</tabstop>
+  <tabstop>lineEdit_mg</tabstop>
+  <tabstop>lineEdit_na</tabstop>
+  <tabstop>lineEdit_ph</tabstop>
+  <tabstop>lineEdit_ca</tabstop>
+  <tabstop>lineEdit_so4</tabstop>
+  <tabstop>comboBox_alk</tabstop>
+  <tabstop>lineEdit_alk</tabstop>
   <tabstop>plainTextEdit_notes</tabstop>
  </tabstops>
  <resources/>
