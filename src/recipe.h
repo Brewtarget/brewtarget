@@ -70,6 +70,10 @@ namespace PropertyNames::Recipe { static char const * const color_srm = "color_s
 namespace PropertyNames::Recipe { static char const * const postBoilVolume_l = "postBoilVolume_l"; /* previously kpropPostBoilVol */ }
 namespace PropertyNames::Recipe { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
 
+namespace PropertyNames::Recipe { static char const * const recipeType = "recipeType"; }
+namespace PropertyNames::Recipe { static char const * const style = "style"; }
+namespace PropertyNames::Recipe { static char const * const equipment  = "equipment"; }
+namespace PropertyNames::Recipe { static char const * const mash = "mash"; }
 
 namespace PropertyNames::Recipe { static char const * const ABV_pct = "ABV_pct"; /* not stored */ }
 namespace PropertyNames::Recipe { static char const * const boilGrav = "boilGrav"; /* not stored */ }
