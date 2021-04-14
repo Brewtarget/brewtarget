@@ -4,8 +4,8 @@
 # See also src/CMakeLists.txt
 #
 PROJECT(brewtarget)
-CMAKE_MINIMUM_REQUIRED( VERSION 3.18 )
-CMAKE_POLICY( VERSION 3.18 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.16 )
+CMAKE_POLICY( VERSION 3.16 )
 
 # Creates a Makefile.
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
