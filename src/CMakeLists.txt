@@ -387,13 +387,13 @@ ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
 SET(brewtarget_ICON "")
 
 IF( WIN32 AND MINGW )
-  ADD_CUSTOM_COMMAND(OUTPUT ${WINDIR}/icon.o
+  ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_BINARY_DIR}/src/icon.o
                      COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR}
                      -i${RCFILE}
-                     -o${WINDIR}/icon.o
+                     -o${CMAKE_BINARY_DIR}/src/icon.o
                      DEPENDS ${RCFILE}
   )
-  SET(brewtarget_ICON ${WINDIR}/icon.o)
+  SET(brewtarget_ICON ${CMAKE_BINARY_DIR}/src/icon.o)
 ELSEIF(WIN32)
   SET(brewtarget_ICON ${RCFILE})
 ENDIF()
