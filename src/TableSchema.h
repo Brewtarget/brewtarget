@@ -44,54 +44,73 @@ public:
       META
    };
 
+   //!brief get this TableSchema's name
    const QString tableName() const;
+   //!brief get the Brewtarget class associated with this table, if any
    const QString className() const;
+   //!brief get the Brewtarget::DBTable for this TableSchema
    Brewtarget::DBTable dbTable() const;
+   //!brief get the Brewtarget::DBTable for this TableSchema's child table, if any
    Brewtarget::DBTable childTable() const;
+   //!brief get the Brewtarget::DBTable for this TableSchema's _in_recipe table, if any
    Brewtarget::DBTable inRecTable() const;
+   //!brief get the Brewtarget::DBTable for this TableSchema's _inventory table, if any
    Brewtarget::DBTable invTable() const;
+   //!brief get the Brewtarget::DBTable for this TableSchema's bt_ table, if any
    Brewtarget::DBTable btTable() const;
+   //!brief get all the properties in this schema as a map <name,PropertySchema>
    const QMap<QString, PropertySchema*> properties() const;
+   //!brief get all the foreign keys in this schema as a map <name,PropertySchema>
    const QMap<QString, PropertySchema*> foreignKeys() const;
+   //!brief get the PropertySchema for the unique id
    const PropertySchema* key() const;
 
    // Things to do for properties
 
-   // Get the property object. Try not to use this?
+   //!brief Get the property object. Try not to use this?
    const PropertySchema* property(QString prop) const;
-   // some properties may be named differently (like inventory v quanta)
+   //!brief some properties may be named differently (like inventory v quanta)
    const QString propertyName(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // get the database column name for this property
+   //!brief get the database column name for this property
    const QString propertyToColumn(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // get the database column type
+   //!brief get the database column type
    const QString propertyColumnType(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // get the XML tag for this column
+   //!brief get the XML tag for this column
    const QString propertyToXml(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // get the default value for this column
+   //!brief get the default value for this column
    const QVariant propertyColumnDefault(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // get the column size of the property's column
+   //!brief get the column size of the property's column
    int propertyColumnSize(QString prop, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // given an XML tag, get the associated property name
+   //!brief given an XML tag, get the associated property name
    const QString xmlToProperty(QString xmlName, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // returns the property to be used for the increment/decrement triggers
+   //!brief returns the property to be used for the increment/decrement triggers
    const QString triggerProperty() const;
 
+   //!brief get all the property names
    const QStringList allPropertyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   //!brief get all the database column names
    const QStringList allColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   //!brief get keys for the properties
+   const QStringList allProperties() const;
 
    // things to do on foreign keys
-   // get a specific foreign key column name
+
+   //!brief get a specific foreign key column name
    const QString foreignKeyToColumn(QString fkey, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // a lot of tables have one foreign key. This is a nice shortcut for that
+   //!brief a lot of tables have one foreign key. This is a nice shortcut for that
    const QString foreignKeyToColumn(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
-   // which table does this foreign key point to
+   //!brief which table does this foreign key point to
    Brewtarget::DBTable foreignTable(QString fkey, Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
-   // a lot of tables have one foreign key. This is a nice shortcut for that
+   //!brief a lot of tables have one foreign key. This is a nice shortcut for that
    Brewtarget::DBTable foreignTable(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
 
+   //!brief get all the foreign key property names
    const QStringList allForeignKeyNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   //!brief get all the foreign key column names
    const QStringList allForeignKeyColumnNames(Brewtarget::DBTypes type = Brewtarget::ALLDB) const;
+   //!brief get keys for the foreign keys
+   const QStringList allForeignKeys() const;
 
    //!brief Use this to get the not recipe_id index from an inrec table
    const QString inRecIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
@@ -103,24 +122,37 @@ public:
    const QString parentIndexName(Brewtarget::DBTypes type = Brewtarget::ALLDB);
 
    // Not sure these belong here yet, but maybe
+
+   //!brief generates a properly formatted CREATE TABLE
    const QString generateCreateTable(Brewtarget::DBTypes type = Brewtarget::ALLDB, QString tmpName = QString("") );
+
+   //!brief generates a properly formatted UPDATE, and binds the proper ID key
    const QString generateUpdateRow(int key, Brewtarget::DBTypes type = Brewtarget::ALLDB);
+   //!brief generates a properly formatted UPDATE, without binding the ID
    const QString generateUpdateRow(Brewtarget::DBTypes type = Brewtarget::ALLDB);
-   // this one includes the foreign keys and is really only suitable for copying databases
+   //!brief generate an INSERT into a table, including all foreign keys
    const QString generateInsertRow(Brewtarget::DBTypes type = Brewtarget::ALLDB);
-   // this one ignores the foreign keys and is more generally useful
+   //!brief generate an INSERT into a table, ignoring all of the foreign keys
    const QString generateInsertProperties(Brewtarget::DBTypes type = Brewtarget::ALLDB);
-   // when dropping columns, we have to copy tables in sqlite. This does that.
+   //!brief generate a CREATE temp table, needed when dropping columns in SQLite
    const QString generateCopyTable( QString dest, Brewtarget::DBTypes type = Brewtarget::ALLDB);
 
+   //!brief generates a decrementing trigger, based on database type
    const QString generateDecrementTrigger(Brewtarget::DBTypes type);
+   //!brief generates an incrementing trigger, based on database type
    const QString generateIncrementTrigger(Brewtarget::DBTypes type);
 
+   //!brief returns true if this table is an inventory table
    bool isInventoryTable();
+   //!brief returns true if this table is a base table
    bool isBaseTable();
+   //!brief returns true if this table is a _child table
    bool isChildTable();
+   //!brief returns true if this table is an _in_rec table
    bool isInRecTable();
+   //!brief returns true if this table is an bt_ table
    bool isBtTable();
+   //!brief returns true if this table is a table about the database
    bool isMetaTable();
 
    // convenience for the name of the key (eg, id) field in the db

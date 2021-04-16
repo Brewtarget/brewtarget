@@ -148,11 +148,9 @@ bool Database::loadSQLite()
 
    // Set file names.
    dbFileName = Brewtarget::getUserDataDir().filePath("database.sqlite");
-   dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
-   qDebug() << QString("Database::loadSQLite() - dbFileName = \"%1\"\nDatabase::loadSQLite() - dataDbFileName=\"%2\"").arg(dbFileName).arg(dataDbFileName);
+   qDebug() << QString("%1 - dbFileName = \"%2\"").arg(Q_FUNC_INFO).arg(dbFileName);
    // Set the files.
    dbFile.setFileName(dbFileName);
-   dataDbFile.setFileName(dataDbFileName);
 
    // If user restored the database from a backup, make the backup into the primary.
    {
@@ -294,6 +292,10 @@ bool Database::load()
    bool dbIsOpen;
    QSqlDatabase sqldb;
 
+   dataDbFileName = Brewtarget::getDataDir().filePath("default_db.sqlite");
+   dataDbFile.setFileName(dataDbFileName);
+   qDebug() << QString("%1 - dataDbFileName=\"%2\"").arg(Q_FUNC_INFO).arg(dataDbFileName);
+
    createFromScratch=false;
    schemaUpdated=false;
    loadWasSuccessful = false;
@@ -352,6 +354,12 @@ bool Database::load()
          )
          == QMessageBox::Yes
       ) {
+         if ( Brewtarget::dbType() == Brewtarget::SQLITE ) {
+            QString file_name = QString("%1.%2").arg("bt_update").arg(QFileInfo(dataDbFile).lastModified().toSecsSinceEpoch());
+            QString backupDir = Brewtarget::option("directory", Brewtarget::getConfigDir().canonicalPath(),"backups").toString();
+            backupToDir(backupDir, file_name);
+         }
+
          updateDatabase(dataDbFile.fileName());
       }
 
@@ -582,9 +590,12 @@ template <class T> void Database::populateElements( QHash<int,T*>& hash, Brewtar
    while( q.next() ) {
       int key = q.record().value(tbl->keyName(Brewtarget::dbType())).toInt();
 
-      T* e = new T(tbl, q.record());
-      if( ! hash.contains(key) )
+      // if the thing is already in the hash, there's no point making a new
+      // one
+      if( ! hash.contains(key) ) {
+         T* e = new T(tbl, q.record());
          hash.insert(key, e);
+      }
    }
 
    q.finish();
@@ -717,13 +728,13 @@ void Database::automaticBackup()
    while ( fileNames.size() > maxBackups ) {
       // takeFirst() removes the file from the list, which is important
       QString victim = backupDir + "/" + fileNames.takeFirst();
-      QFile *file = new QFile(victim);
       QFileInfo *fileThing = new QFileInfo(victim);
 
       // Make sure it exists, and make sure it is a file before we
       // try remove it
       if ( fileThing->exists() && fileThing->isFile() ) {
          // If we can't remove it, give a warning.
+         QFile *file = new QFile(victim);
          if (! file->remove() ) {
             qWarning() << QString("%1 : could not remove %2 (%3).").arg(Q_FUNC_INFO).arg(victim).arg(file->error());
          }
@@ -1473,7 +1484,10 @@ Equipment* Database::newEquipment(Equipment* other)
       emit newEquipmentSignal(tmp);
    }
    else {
-      qCritical() << QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name());
+      QString msg = QString("%1 couldn't create newEquipment %2")
+                     .arg(Q_FUNC_INFO)
+                     .arg( other != nullptr ? other->name() : "");
+      qCritical() << msg;
    }
 
    return tmp;
@@ -3547,33 +3561,52 @@ bool Database::updateSchema(bool* err)
    return doUpdate;
 }
 
-
-QMap<QString, std::function<NamedEntity*(QString name)> > Database::makeTableParams()
-{
-   QMap<QString, std::function<NamedEntity*(QString name)> > tmp;
-   //=============================Equipment====================================
-
-   tmp.insert(ktableEquipment,   [&](QString name) { return this->newEquipment(); } );
-   tmp.insert(ktableFermentable, [&](QString name) { return this->newFermentable(); } );
-   tmp.insert(ktableHop,         [&](QString name) { return this->newHop(); } );
-   tmp.insert(ktableMisc,        [&](QString name) { return this->newMisc(); } );
-   tmp.insert(ktableStyle,       [&](QString name) { return this->newStyle(name); } );
-   tmp.insert(ktableYeast,       [&](QString name) { return this->newYeast(); } );
-   tmp.insert(ktableWater,       [&](QString name) { return this->newWater(); } );
-   tmp.insert(ktableSalt,        [&](QString name) { return this->newSalt(); } );
-
-   return tmp;
-}
-
+/******* 
+ *
+ * I will be using hop as my example, because it is easy to type.  You should
+ * be able to substitue any of the base tables and it will work the same.
+ *
+ * We maintain a table named bt_hop. The bt_hop table has two columns: id and
+ * hop_id. id is the standard autosequence we use. hop_id is the id of a row
+ * in the hop table for a hop that we shipped. In the default database, the
+ * two values will almost always be equal. In all databases, hop_id will point
+ * to a parent hop.
+ *
+ * When a new hop is added to the default-db.sqlite, a new row has to be
+ * inserted into bt_hop pointing to the new hop. 
+ *
+ * When the user gets the dialog saying "There are new ingredients, would you
+ * like to merge?", updateDatabase() is called and it works like this:
+ *     1. We get all the rows from bt_hop from default_db.sqlite
+ *     2. We seach for each bt.id in the user's database.
+ *     3. If we do not find the bt.id, it means the hop is new to the user and
+ *        we need to add it to their database.
+ *     4. We do the necessary binding and inserting to add the new hop to the
+ *        user's database
+ *     5. We put a new entry in the user's bt_hop table, pointing to the
+ *        record we just added.
+ *     6. Repeat steps 3 - 5 until we run out of rows.
+ * 
+ * It is really important that we DO NOTHING if the user already has the hop.
+ * We should NEVER over write user data without explicit permission. I have no
+ * interest in working up a diff mechanism, a display mechanism, etc. to show
+ * the user what would be done. For now, then, we don't over write any
+ * existing records.
+ *
+ * A few other notes. Any use of TableSchema on the default_db.sqlite must
+ * specify the database type as SQLite. We cannot be sure the user's database
+ * is SQLite. There's no real difference yet, but I am considering tackling
+ * mysql again.
+ */
 void Database::updateDatabase(QString const& filename)
 {
-   // In the naming here "old" means our local database, and
+   // In the naming here "old" means the user's database, and
    // "new" means the database coming from 'filename'.
 
    QVariant btid, newid, oldid;
-   QMap<QString, std::function<NamedEntity*(QString name)> >  makeObject = makeTableParams();
 
    try {
+      // connect to the new database
       QString newCon("newSqldbCon");
       QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
       newSqldb.setDatabaseName(filename);
@@ -3584,70 +3617,96 @@ void Database::updateDatabase(QString const& filename)
          throw QString("Could not open %1 for reading.\n%2").arg(filename).arg(newSqldb.lastError().text());
       }
 
-      // This is the basic gist...
       // For each (id, hop_id) in newSqldb.bt_hop...
 
-      // Call this newRecord
       // SELECT * FROM newSqldb.hop WHERE id=<hop_id>
 
-      // UPDATE hop SET name=:name, alpha=:alpha,... WHERE id=(SELECT hop_id FROM bt_hop WHERE id=:bt_id)
+      // INSERT INTO hop SET name=:name, alpha=:alpha,... WHERE id=(SELECT hop_id FROM bt_hop WHERE id=:bt_id)
 
       // Bind :bt_id from <id>
       // Bind :name, :alpha, ..., from newRecord.
 
       // Execute.
 
-      foreach( TableSchema* tbl, dbDefn->baseTables() )
+      foreach ( TableSchema* tbl, dbDefn->baseTables() )
       {
          TableSchema* btTbl = dbDefn->btTable(tbl->dbTable());
-         // not all tables have bt* tables
+         // skip any table that doesn't have a bt_ table
          if ( btTbl == nullptr ) {
             continue;
          }
-         QSqlQuery qNewBtIng( QString("SELECT * FROM %1").arg(btTbl->tableName()), newSqldb );
 
-         QSqlQuery qNewIng( newSqldb );
-         qNewIng.prepare(QString("SELECT * FROM %1 WHERE %2=:id").arg(tbl->tableName()).arg(tbl->keyName()));
+         // build and prepare all the queries once per table.
 
-         // Construct the big update query.
-         QSqlQuery qUpdateOldIng( sqlDatabase() );
-         QString updateString = tbl->generateUpdateRow();
-         qUpdateOldIng.prepare(updateString);
+         // get the new hop referenced by bt_hop.hop_id
+         QSqlQuery qNewIng(newSqldb);
+         QString   newIngString = QString("SELECT * FROM %1 WHERE %2=:id")
+                                    .arg(tbl->tableName())
+                                    .arg(tbl->keyName(Brewtarget::SQLITE));
+         qNewIng.prepare(newIngString);
+         qDebug() << Q_FUNC_INFO << newIngString;
 
-         QSqlQuery qOldBtIng( sqlDatabase() );
-         qOldBtIng.prepare( QString("SELECT * FROM %1 WHERE %2=:btid").arg(btTbl->tableName()).arg(btTbl->keyName()) );
+         // get the same row from the old bt_hop.
+         QSqlQuery qOldBtIng(sqlDatabase());
+         QString   oldBtIngString = QString("SELECT * FROM %1 WHERE %2=:btid")
+                                    .arg(btTbl->tableName())
+                                    .arg(btTbl->keyName());
+         qOldBtIng.prepare(oldBtIngString);
+         qDebug() << Q_FUNC_INFO << oldBtIngString;
 
-         QSqlQuery qOldBtIngInsert( sqlDatabase() );
-         qOldBtIngInsert.prepare( QString("INSERT INTO %1 (%2,%3) values (:id,:%3)")
-                                  .arg(btTbl->tableName())
-                                  .arg(btTbl->keyName())
-                                  .arg(btTbl->childIndexName()));
+         // insert the new bt_hop row into the old database.
+         QSqlQuery qOldBtIngInsert(sqlDatabase());
+         QString   oldBtIngInsert = QString("INSERT INTO %1 (%2,%3) values (:id,:%3)")
+                                          .arg(btTbl->tableName())
+                                          .arg(btTbl->keyName())
+                                          .arg(btTbl->childIndexName());
+         qOldBtIngInsert.prepare(oldBtIngInsert);
+         qDebug() << Q_FUNC_INFO << oldBtIngInsert;
 
-         while( qNewBtIng.next() ) {
-            btid = qNewBtIng.record().value(btTbl->keyName());
-            newid = qNewBtIng.record().value(btTbl->childIndexName());
+         // Create in insert statement for new records. We will bind this
+         // later
+         QSqlQuery qInsertOldIng(sqlDatabase());
+         QString   insertString = tbl->generateInsertProperties();
+         qInsertOldIng.prepare(insertString);
+         qDebug() << Q_FUNC_INFO << insertString;
 
+         // get the bt_hop rows from the new database
+         QSqlQuery qNewBtIng(newSqldb);
+         QString   newBtIngString = QString("SELECT * FROM %1").arg(btTbl->tableName());
+         qDebug() << Q_FUNC_INFO << newBtIngString;
+
+         if ( ! qNewBtIng.exec(newBtIngString) ) {
+            throw QString("Could not find btID (%1): %2 %3")
+                     .arg(btid.toInt())
+                     .arg(qNewBtIng.lastQuery())
+                     .arg(qNewBtIng.lastError().text());
+         }
+
+         // start processing the ingredients from the new db
+         while ( qNewBtIng.next() ) {
+
+            // get the bt.id and bt.hop_id. Note we specify the db type here
+            btid  = qNewBtIng.record().value(btTbl->keyName(Brewtarget::SQLITE));
+            newid = qNewBtIng.record().value(btTbl->childIndexName(Brewtarget::SQLITE));
+
+            // bind the id to find the hop in the new db
             qNewIng.bindValue(":id", newid);
-            // if we can't run the query
-            if ( ! qNewIng.exec() )
-               throw QString("Could not retrieve new ingredient: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
 
-            // if we can't get the result from the query
-            if( !qNewIng.next() )
-               throw QString("Could not advance query: %1 %2").arg(qNewIng.lastQuery()).arg(qNewIng.lastError().text());
-
-            foreach( QString pn, tbl->allColumnNames()) {
-               // Bind the old values to the new unless it is deleted, which we always set to false
-               if ( pn == kcolDeleted ) {
-                  qUpdateOldIng.bindValue( QString(":%1").arg(pn), Brewtarget::dbFalse());
-               }
-               qUpdateOldIng.bindValue( QString(":%1").arg(pn), qNewIng.record().value(pn));
+            // if we can't execute the search
+            if ( ! qNewIng.exec() ) {
+               throw QString("Could not retrieve new ingredient: %1 %2")
+                        .arg(qNewIng.lastQuery())
+                        .arg(qNewIng.lastError().text());
             }
 
-            // Done retrieving new ingredient data.
-            qNewIng.finish();
+            // if we can't read/find the hop
+            if ( ! qNewIng.next() ) {
+               throw QString("Could not advance query: %1 %2")
+                        .arg(qNewIng.lastQuery())
+                        .arg(qNewIng.lastError().text());
+            }
 
-            // Find the bt_<ingredient> record in the local table.
+            // Find the bt_hop record in the old database.
             qOldBtIng.bindValue( ":btid", btid );
             if ( ! qOldBtIng.exec() ) {
                throw QString("Could not find btID (%1): %2 %3")
@@ -3656,56 +3715,75 @@ void Database::updateDatabase(QString const& filename)
                         .arg(qOldBtIng.lastError().text());
             }
 
-            // If the btid exists in the old bt_hop table, do an update.
-            if( qOldBtIng.next() ) {
-               oldid = qOldBtIng.record().value( btTbl->keyName() );
-               qOldBtIng.finish();
+            // If the new bt_hop.id isn't in the old bt_hop
+            if( ! qOldBtIng.next() ) {
+               // bind the values from the new hop to the insert query
+               bindForUpdateDatabase(tbl,qInsertOldIng,qNewIng.record());
+               // we need a transaction here, as we are updating two tables
+               sqlDatabase().transaction();
 
-               qUpdateOldIng.bindValue( ":id", oldid );
-
-               if ( ! qUpdateOldIng.exec() )
-                  throw QString("Could not update old btID (%1): %2 %3")
-                           .arg(oldid.toInt())
-                           .arg(qUpdateOldIng.lastQuery())
-                           .arg(qUpdateOldIng.lastError().text());
-
-            }
-            // If the btid doesn't exist in the old bt_ table, do an insert into
-            // the new table, then into the new bt_ table.
-            else {
-               // Create a new ingredient.
-               oldid = makeObject.value(tbl->tableName())(qNewBtIng.record().value(PropertyNames::NamedEntity::name).toString())->_key;
-
-               // Copy in the new data.
-               qUpdateOldIng.bindValue( ":id", oldid );
-
-               if ( ! qUpdateOldIng.exec() )
+               // execute the insert
+               if ( ! qInsertOldIng.exec() ) {
                   throw QString("Could not insert new btID (%1): %2 %3")
                            .arg(oldid.toInt())
-                           .arg(qUpdateOldIng.lastQuery())
-                           .arg(qUpdateOldIng.lastError().text());
+                           .arg(qInsertOldIng.lastQuery())
+                           .arg(qInsertOldIng.lastError().text());
+               }
 
+               // get the id from the last insert
+               oldid = qInsertOldIng.lastInsertId().toInt();
 
-               // Insert an entry into our bt_<ingredient> table.
-               qOldBtIngInsert.bindValue( ":id", btid );
-               qOldBtIngInsert.bindValue( QString(":%1").arg(btTbl->childIndexName()), oldid );
+               // Insert an entry into the old bt_hop table.
+               qOldBtIngInsert.bindValue( ":id", btid);
+               qOldBtIngInsert.bindValue( QString(":%1").arg(btTbl->childIndexName()), oldid);
 
-               if ( !  qOldBtIngInsert.exec() )
+               if ( ! qOldBtIngInsert.exec() ) {
                   throw QString("Could not insert btID (%1): %2 %3")
                            .arg(btid.toInt())
                            .arg(qOldBtIngInsert.lastQuery())
                            .arg(qOldBtIngInsert.lastError().text());
+               }
+
+               // finally, commit the transaction
+               sqlDatabase().commit();
             }
          }
       }
-      // If we, by some miracle, get here, commit
-      sqlDatabase().commit();
-      // I think
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       sqlDatabase().rollback();
       abort();
+   }
+}
+
+// updateDatabase is ugly enough. This takes 20-ish lines out of it that do
+// not really enhance understanding
+void Database::bindForUpdateDatabase(TableSchema* tbl, QSqlQuery qry, QSqlRecord rec)
+{
+   foreach( QString prop, tbl->allProperties() ) {
+      // we need to specify the database here. The default database might be
+      // postgres, but the new ingredients are always shipped in sqlite
+      QString col = tbl->propertyToColumn(prop, Brewtarget::SQLITE);
+      QVariant bindVal;
+
+      // deleted is always false, but spell 'false' properly for
+      // the database
+      if ( prop == PropertyNames::NamedEntity::deleted ) {
+         bindVal = Brewtarget::dbFalse();
+      }
+      // boolean values suck, so make sure we spell them properly
+      else if ( tbl->propertyColumnType(prop) == "boolean" ) {
+         // makes the lines short enough
+         bool intermediate = rec.value(col).toBool();
+         bindVal = intermediate ? Brewtarget::dbTrue() : Brewtarget::dbFalse();
+      }
+      // otherwise, just grab the value
+      else {
+         bindVal = rec.value(col);
+      }
+      // and bind it.
+      qry.bindValue(QString(":%1").arg(prop), bindVal);
    }
 }
 
