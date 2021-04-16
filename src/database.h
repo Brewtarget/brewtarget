@@ -470,6 +470,8 @@ public:
     * database file.
     */
    void updateDatabase(QString const& filename);
+   //!brief convenience method for use by updateDatabase
+   void bindForUpdateDatabase(TableSchema* tbl, QSqlQuery qry, QSqlRecord rec);
    void convertFromXml();
 
    bool isConverted();
@@ -690,8 +692,6 @@ private:
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
-
-   QMap<QString, std::function<NamedEntity*(QString name)> > makeTableParams();
 
    // Returns true if the schema gets updated, false otherwise.
    // If err != 0, set it to true if an error occurs, false otherwise.

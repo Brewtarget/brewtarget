@@ -100,6 +100,11 @@ const QStringList TableSchema::allPropertyNames(Brewtarget::DBTypes type) const
    return retval;
 }
 
+const QStringList TableSchema::allProperties() const
+{
+   return m_properties.keys();
+}
+
 const QStringList TableSchema::allForeignKeyNames(Brewtarget::DBTypes type) const
 {
    Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
@@ -136,6 +141,11 @@ const QStringList TableSchema::allForeignKeyColumnNames(Brewtarget::DBTypes type
       i.next();
       tmp.append(i.value()->colName(selected));
    } return tmp;
+}
+
+const QStringList TableSchema::allForeignKeys() const 
+{
+   return m_foreignKeys.keys();
 }
 
 const PropertySchema* TableSchema::property(QString prop) const
@@ -351,7 +361,7 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
 {
    Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
    QString tname = tmpName.isEmpty() ? m_tableName : tmpName;
-   QString retVal = QString("CREATE TABLE %1 (%2 %3 ")
+   QString retVal = QString("CREATE TABLE %1 (\n%2 %3\n")
                      .arg( tname )
                      .arg( m_key->colName(selected) )
                      .arg( m_key->constraint(selected)
@@ -375,13 +385,13 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
          // this isn't quite perfect, as you will get two spaces between the type
          // and DEFAULT if there are no constraints. On the other hand, nobody
          // will know that but me and the person reading this comment.
-         retVal.append( QString(", %1 %2 %3 %4 %5")
+         retVal.append( QString(",\n%1 %2 %3 %4 %5")
                            .arg( prop->colName() ).arg( prop->colType() )
                            .arg( prop->constraint() ).arg( kDefault ).arg( tmp )
          );
       }
       else {
-         retVal.append( QString("%1 %2 %3, ")
+         retVal.append( QString("%1 %2 %3,\n")
                .arg( prop->colName() ).arg( prop->colType() ).arg( prop->constraint() ));
       }
    }
@@ -394,9 +404,9 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
       j.next();
       PropertySchema* key = j.value();
 
-      retVal.append( QString(", %1 %2").arg( key->colName(selected) ).arg( key->colType(selected) ));
+      retVal.append( QString(",\n%1 %2").arg( key->colName(selected) ).arg( key->colType(selected) ));
 
-      retKeys.append( QString(", FOREIGN KEY(%1) REFERENCES %2(id)")
+      retKeys.append( QString(",\nFOREIGN KEY(%1) REFERENCES %2(id)")
                        .arg( key->colName(selected) )
                        .arg( Brewtarget::dbTableToName[ key->fTable() ] )
       );
@@ -422,7 +432,7 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
       PropertySchema* prop = i.value();
 
       columns += QString(",%1").arg( prop->colName(selected));
-      binding += QString(",:%1").arg( prop->colName(selected));
+      binding += QString(",:%1").arg( i.key());
    }
 
    QMapIterator<QString, PropertySchema*> j(m_foreignKeys);
@@ -431,7 +441,7 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
       PropertySchema* key = j.value();
 
       columns += QString(",%1").arg(key->colName(selected));
-      binding += QString(",:%1").arg(key->colName(selected));
+      binding += QString(",:%1").arg( i.key());
    }
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(m_tableName).arg(columns).arg(binding);
 }
@@ -452,13 +462,17 @@ const QString TableSchema::generateInsertProperties(Brewtarget::DBTypes type)
       i.next();
       PropertySchema* prop = i.value();
 
+      if ( prop->colName(selected) == keyName(selected) ) {
+         continue;
+      }
+
       if ( columns.isEmpty() ) {
-         columns = QString("%1").arg( prop->colName(selected));
-         binding = QString(":%1").arg( prop->propName(selected));
+         columns = QString("%1").arg(prop->colName(selected));
+         binding = QString(":%1").arg(i.key());
       }
       else {
-         columns += QString(",%1").arg( prop->colName(selected));
-         binding += QString(",:%1").arg( prop->propName(selected));
+         columns += QString(",%1").arg(prop->colName(selected));
+         binding += QString(",:%1").arg(i.key());
       }
    }
 
@@ -477,10 +491,14 @@ const QString TableSchema::generateUpdateRow(int key, Brewtarget::DBTypes type)
       i.next();
       PropertySchema* prop = i.value();
       if ( ! columns.isEmpty() ) {
-         columns += QString(",%1=:%1").arg( prop->colName(selected));
+         columns += QString(",%1=:%2")
+                        .arg( prop->colName(selected))
+                        .arg( i.key());
       }
       else {
-         columns = QString("%1=:%1").arg( prop->colName(selected) );
+         columns = QString("%1=:%2")
+                       .arg( prop->colName(selected))
+                       .arg( i.key());
       }
    }
 
@@ -503,10 +521,14 @@ const QString TableSchema::generateUpdateRow(Brewtarget::DBTypes type)
       i.next();
       PropertySchema* prop = i.value();
       if ( ! columns.isEmpty() ) {
-         columns += QString(",%1=:%1").arg( prop->colName(selected));
+         columns += QString(",%1=:%2")
+                        .arg( prop->colName(selected))
+                        .arg( i.key());
       }
       else {
-         columns = QString("%1=:%1").arg( prop->colName(selected) );
+         columns = QString("%1=:%2")
+                       .arg( prop->colName(selected))
+                       .arg( i.key());
       }
    }
 
