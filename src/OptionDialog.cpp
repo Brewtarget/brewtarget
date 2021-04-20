@@ -39,6 +39,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "MainWindow.h"
+#include "qsizepolicy.h"
+#include "qwidget.h"
 
 OptionDialog::OptionDialog(QWidget* parent)
 {
@@ -623,19 +625,26 @@ void OptionDialog::setDbDialog(Brewtarget::DBTypes db)
       postgresVisible(false);
       sqliteVisible(true);
 
-      gridLayout->addWidget(label_dataDir,0,0);
+      gridLayout->addWidget(label_dataDir,0,0,1,1);
       gridLayout->addWidget(btStringEdit_dataDir,0,1,1,2);
-      gridLayout->addWidget(pushButton_browseDataDir,0,3);
+      gridLayout->addWidget(pushButton_browseDataDir,0,3,1,1);
 
-      gridLayout->addWidget(label_backupDir,1,0);
+      gridLayout->addWidget(label_backupDir,1,0,1,1);
       gridLayout->addWidget(btStringEdit_backupDir,1,1,1,2);
-      gridLayout->addWidget(pushButton_browseBackupDir,1,3);
+      gridLayout->addWidget(pushButton_browseBackupDir,1,3,1,1);
 
-      gridLayout->addWidget(label_numBackups,3,0);
-      gridLayout->addWidget(spinBox_numBackups,3,1);
+      gridLayout->addWidget(label_numBackups,3,0,1,1);
+      gridLayout->addWidget(spinBox_numBackups,3,1,1,1);
 
-      gridLayout->addWidget(label_frequency,4,0);
-      gridLayout->addWidget(spinBox_frequency,4,1);
+      gridLayout->addWidget(label_frequency,4,0,1,1);
+      gridLayout->addWidget(spinBox_frequency,4,1,1,1);
+
+      /*
+      gridLayout->setColumnStretch(0,0);
+      gridLayout->setColumnStretch(1,2);
+      gridLayout->setColumnStretch(2,0);
+      gridLayout->setColumnStretch(3,0);
+      */
    }
    groupBox_dbConfig->setVisible(true);
 }

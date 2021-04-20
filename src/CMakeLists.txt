@@ -206,6 +206,7 @@ SET( brewtarget_UIS
     ${UIDIR}/mainWindow.ui
     ${UIDIR}/mashStepEditor.ui
     ${UIDIR}/miscEditor.ui
+    ${UIDIR}/equipmentEditor.ui
     ${UIDIR}/fermentableEditor.ui
     ${UIDIR}/hopEditor.ui
     ${UIDIR}/instructionWidget.ui
@@ -250,6 +251,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtDatePopup.h
     ${SRCDIR}/BtFolder.h
+    ${SRCDIR}/BtHorizontalTabs.h
     ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtLineEdit.h
     ${SRCDIR}/BtTextEdit.h

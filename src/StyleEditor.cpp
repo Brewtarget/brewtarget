@@ -20,6 +20,7 @@
 
 #include "database.h"
 #include "StyleEditor.h"
+#include "BtHorizontalTabs.h"
 #include <QInputDialog>
 #include "style.h"
 #include "StyleListModel.h"
@@ -42,6 +43,8 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
 
       pushButton_new->setVisible(false);
    }
+
+   this->tabWidget_profile->tabBar()->setStyle(new BtHorizontalTabs);
 
    styleListModel = new StyleListModel(styleComboBox);
    styleProxyModel = new StyleSortFilterProxyModel(styleComboBox);

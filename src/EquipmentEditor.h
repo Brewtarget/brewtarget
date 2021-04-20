@@ -23,32 +23,12 @@
 #ifndef _EQUIPMENTEDITOR_H
 #define _EQUIPMENTEDITOR_H
 
-#include <QDialog>
+class EquipmentEditor;
+
+#include "ui_equipmentEditor.h"
 #include <QMetaProperty>
 #include <QVariant>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QComboBox>
-#include <QPushButton>
-#include <QSpacerItem>
-#include <QCheckBox>
-#include <QGroupBox>
-#include <QFormLayout>
-#include <QLineEdit>
-#include <QTextEdit>
-#include <QEvent>
 
-#include "BtLabel.h"
-// Forward declarations
-class BtGenericEdit;
-class BtMassEdit;
-class BtMassLabel;
-class BtTemperatureEdit;
-class BtTimeLabel;
-class BtTimeEdit;
-class BtVolumeLabel;
-class BtVolumeEdit;
 class Equipment;
 class EquipmentListModel;
 class NamedEntitySortProxyModel;
@@ -59,7 +39,7 @@ class NamedEntitySortProxyModel;
  *
  * \brief This is a dialog that edits an equipment record.
  */
-class EquipmentEditor : public QDialog
+class EquipmentEditor : public QDialog, private Ui::equipmentEditor
 {
    Q_OBJECT
 
@@ -67,75 +47,6 @@ public:
    //! \param singleEquipEditor true if you do not want the necessary elements for viewing all the database elements.
    EquipmentEditor( QWidget *parent=nullptr, bool singleEquipEditor=false );
    virtual ~EquipmentEditor() {}
-
-   //! \name Public UI Variables
-   //! @{
-   QVBoxLayout *verticalLayout_6;
-   QVBoxLayout *topVLayout;
-   QHBoxLayout *horizontalLayout_equipments;
-   QLabel *label;
-   QComboBox *equipmentComboBox;
-   QPushButton *pushButton_remove;
-   QSpacerItem *horizontalSpacer;
-   QCheckBox *checkBox_defaultEquipment;
-   QHBoxLayout *horizontalLayout;
-   QVBoxLayout *vLayout_left;
-   QGroupBox *groupBox_required;
-   QVBoxLayout *verticalLayout;
-   QFormLayout *formLayout;
-   QLabel *label_name;
-   QLineEdit *lineEdit_name;
-   BtVolumeLabel *label_boilSize;
-   BtVolumeEdit *lineEdit_boilSize;
-   QLabel *label_calcBoilVolume;
-   QCheckBox *checkBox_calcBoilVolume;
-   BtVolumeLabel *label_batchSize;
-   BtVolumeEdit *lineEdit_batchSize;
-   QGroupBox *groupBox_water;
-   QVBoxLayout *verticalLayout_3;
-   QFormLayout *formLayout_water;
-   BtTimeLabel *label_boilTime;
-   BtTimeEdit *lineEdit_boilTime;
-   BtVolumeLabel *label_evaporationRate;
-   BtVolumeEdit *lineEdit_evaporationRate;
-   BtVolumeLabel *label_topUpKettle;
-   BtVolumeEdit *lineEdit_topUpKettle;
-   BtVolumeLabel *label_topUpWater;
-   BtVolumeEdit *lineEdit_topUpWater;
-   QLabel *label_absorption;
-   BtGenericEdit *lineEdit_grainAbsorption;
-   QPushButton *pushButton_absorption;
-   BtTemperatureEdit *lineEdit_boilingPoint;
-   QLabel *label_hopUtilization;
-   BtGenericEdit *lineEdit_hopUtilization;
-   BtTemperatureLabel *label_boilingPoint;
-   QSpacerItem *verticalSpacer_2;
-   QVBoxLayout *vLayout_right;
-   QGroupBox *groupBox_mashTun;
-   QFormLayout *formLayout_mashTun;
-   BtVolumeLabel *label_tunVolume;
-   BtVolumeEdit *lineEdit_tunVolume;
-   BtMassLabel *label_tunWeight;
-   BtMassEdit *lineEdit_tunWeight;
-   QLabel *label_tunSpecificHeat;
-   BtGenericEdit *lineEdit_tunSpecificHeat;
-   QGroupBox *groupBox_losses;
-   QVBoxLayout *verticalLayout_4;
-   QFormLayout *formLayout_losses;
-   BtVolumeLabel *label_trubChillerLoss;
-   BtVolumeEdit *lineEdit_trubChillerLoss;
-   BtVolumeLabel *label_lauterDeadspace;
-   BtVolumeEdit *lineEdit_lauterDeadspace;
-   QGroupBox *groupBox_notes;
-   QVBoxLayout *verticalLayout_notes;
-   QTextEdit *textEdit_notes;
-   QSpacerItem *verticalSpacer;
-   QHBoxLayout *hLayout_buttons;
-   QSpacerItem *horizontalSpacer_2;
-   QPushButton *pushButton_new;
-   QPushButton *pushButton_save;
-   QPushButton *pushButton_cancel;
-   //! @}
 
    //! Edit the given equipment.
    void setEquipment( Equipment* e );
@@ -168,15 +79,7 @@ public slots:
    double calcBatchSize();
 
 protected:
-   //! User closed the dialog
    void closeEvent(QCloseEvent *event);
-
-   virtual void changeEvent(QEvent* event)
-   {
-      if(event->type() == QEvent::LanguageChange)
-         retranslateUi();
-      QDialog::changeEvent(event);
-   }
 
 private:
    Equipment* obsEquip;
@@ -185,8 +88,6 @@ private:
 
    void showChanges();
 
-   void doLayout();
-   void retranslateUi();
 };
 
 #endif   /* _EQUIPMENTEDITOR_H */

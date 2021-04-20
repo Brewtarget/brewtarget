@@ -22,6 +22,7 @@
 
 #include <QIcon>
 #include "FermentableEditor.h"
+#include "BtHorizontalTabs.h"
 #include "fermentable.h"
 #include "database.h"
 #include "config.h"
@@ -33,6 +34,7 @@ FermentableEditor::FermentableEditor( QWidget* parent )
 {
    setupUi(this);
 
+   this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
    connect( this, &QDialog::accepted, this, &FermentableEditor::save);
    connect( this, &QDialog::rejected, this, &FermentableEditor::clearAndClose);
 
@@ -100,8 +102,10 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
 
    QString propName;
    bool updateAll = false;
-   if( metaProp == nullptr )
+
+   if( metaProp == nullptr ) {
       updateAll = true;
+   }
    else
    {
       propName = metaProp->name();
@@ -111,6 +115,8 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
    {
       lineEdit_name->setText(obsFerm->name());
       lineEdit_name->setCursorPosition(0);
+
+      tabWidget_editor->setTabText(0, obsFerm->name() );
       if( ! updateAll )
          return;
    }

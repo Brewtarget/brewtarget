@@ -24,6 +24,7 @@
 #include <QIcon>
 #include "hop.h"
 #include "HopEditor.h"
+#include "BtHorizontalTabs.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
@@ -34,6 +35,7 @@ HopEditor::HopEditor( QWidget* parent )
 {
    setupUi(this);
 
+   this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
    connect( buttonBox, &QDialogButtonBox::accepted, this, &HopEditor::save);
    connect( buttonBox, &QDialogButtonBox::rejected, this, &HopEditor::clearAndClose);
 }
@@ -107,10 +109,10 @@ void HopEditor::showChanges(QMetaProperty* prop)
    if( obsHop == nullptr )
       return;
 
-   if( prop == nullptr )
+   if( prop == nullptr ) {
       updateAll = true;
-   else
-   {
+   }
+   else {
       propName = prop->name();
    }
 
@@ -118,6 +120,7 @@ void HopEditor::showChanges(QMetaProperty* prop)
    {
       lineEdit_name->setText(obsHop->name());
       lineEdit_name->setCursorPosition(0);
+      tabWidget_editor->setTabText(0, obsHop->name() );
       if( ! updateAll )
          return;
    }
