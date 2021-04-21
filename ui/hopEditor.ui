@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>389</width>
-    <height>408</height>
+    <width>472</width>
+    <height>318</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,23 +45,29 @@
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_use">
+         <property name="toolTip">
+          <string>Required</string>
+         </property>
+         <property name="text">
+          <string>Use</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox_use</cstring>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_name">
          <property name="toolTip">
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Name</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_name</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="BtStringEdit" name="lineEdit_name">
-         <property name="toolTip">
-          <string>Name</string>
          </property>
         </widget>
        </item>
@@ -71,10 +77,23 @@
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Alpha %&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Alpha %</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_alpha</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="BtMassLabel" name="label_inventory">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Amount in Inventory</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_inventory</cstring>
          </property>
         </widget>
        </item>
@@ -88,22 +107,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="BtMassLabel" name="label_amount">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="toolTip">
-          <string>Required</string>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Default Amount &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_amount</cstring>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="BtMassEdit" name="lineEdit_amount">
          <property name="toolTip">
@@ -114,20 +117,59 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_use">
+       <item row="0" column="1">
+        <widget class="BtStringEdit" name="lineEdit_name">
+         <property name="toolTip">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="BtMassLabel" name="label_amount">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="toolTip">
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Use&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Default Amount</string>
          </property>
          <property name="buddy">
-          <cstring>comboBox_use</cstring>
+          <cstring>lineEdit_amount</cstring>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="4" column="1">
+        <widget class="BtMassEdit" name="lineEdit_inventory">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Amount in inventory</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">inventory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="3">
         <widget class="QComboBox" name="comboBox_use">
          <property name="toolTip">
           <string>Use</string>
@@ -159,36 +201,7 @@
          </item>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="BtMassLabel" name="label_inventory">
-         <property name="contextMenuPolicy">
-          <enum>Qt::CustomContextMenu</enum>
-         </property>
-         <property name="text">
-          <string>Amount in Inventory</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_inventory</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="BtMassEdit" name="lineEdit_inventory">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Amount in inventory</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">inventory</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
+       <item row="1" column="2">
         <widget class="QLabel" name="label_type">
          <property name="text">
           <string>Type</string>
@@ -198,7 +211,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="1" column="3">
         <widget class="QComboBox" name="comboBox_type">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -226,7 +239,7 @@
          </item>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="2" column="2">
         <widget class="QLabel" name="label_form">
          <property name="text">
           <string>Form</string>
@@ -236,7 +249,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="2" column="3">
         <widget class="QComboBox" name="comboBox_form">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -264,19 +277,6 @@
          </item>
         </widget>
        </item>
-       <item row="7" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabWidget_editorPage2">
@@ -284,7 +284,7 @@
        <string>Extras</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
+       <item row="0" column="2">
         <widget class="BtTimeLabel" name="label_time">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
@@ -294,177 +294,6 @@
          </property>
          <property name="buddy">
           <cstring>lineEdit_time</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="BtTimeEdit" name="lineEdit_time">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Time</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">time_min</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_HSI">
-         <property name="text">
-          <string>HSI</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_HSI</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_HSI">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Hop Stability/Storage index</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">hsi_pct</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_origin">
-         <property name="text">
-          <string>Origin</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_origin</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="BtStringEdit" name="lineEdit_origin">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Origin</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_beta">
-         <property name="text">
-          <string>Beta %</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_beta</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_beta">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Beta acids as percent by mass</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">beta_pct</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_humulene">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Humulene %</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_humulene</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_humulene">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Humulene</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">humulene_pct</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_caryophyllene">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Caryophyllene %</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_caryophyllene</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="BtGenericEdit" name="lineEdit_caryophyllene">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Caryophyllene %</string>
-         </property>
-         <property name="editField" stdset="0">
-          <string notr="true">caryophyllene_pct</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_cohumulone">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Cohumulone %</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_cohumulone</cstring>
          </property>
         </widget>
        </item>
@@ -481,22 +310,6 @@
          </property>
          <property name="editField" stdset="0">
           <string notr="true">cohumulone_pct</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_myrcene">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Myrcene %</string>
-         </property>
-         <property name="buddy">
-          <cstring>lineEdit_myrcene</cstring>
          </property>
         </widget>
        </item>
@@ -528,6 +341,193 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_cohumulone">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Cohumulone %</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_cohumulone</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_myrcene">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Myrcene %</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_myrcene</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="BtTimeEdit" name="lineEdit_time">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Time</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">time_min</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="label_HSI">
+         <property name="text">
+          <string>HSI</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_HSI</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="BtGenericEdit" name="lineEdit_HSI">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Hop Stability/Storage index</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">hsi_pct</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_origin">
+         <property name="text">
+          <string>Origin</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_origin</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="BtStringEdit" name="lineEdit_origin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Origin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_beta">
+         <property name="text">
+          <string>Beta %</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_beta</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="BtGenericEdit" name="lineEdit_beta">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Beta acids as percent by mass</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">beta_pct</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_humulene">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Humulene %</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_humulene</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="BtGenericEdit" name="lineEdit_humulene">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Humulene</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">humulene_pct</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_caryophyllene">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Caryophyllene %</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_caryophyllene</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="BtGenericEdit" name="lineEdit_caryophyllene">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Caryophyllene %</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">caryophyllene_pct</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -592,18 +592,72 @@
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_new">
+       <property name="toolTip">
+        <string>New hop</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../../../brewtarget/mik/brewtarget.qrc">
+         <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_save">
+       <property name="toolTip">
+        <string>Save and close</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../../../brewtarget/mik/brewtarget.qrc">
+         <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_cancel">
+       <property name="toolTip">
+        <string>Discard and close</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../../../brewtarget/mik/brewtarget.qrc">
+         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>BtGenericEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
   <customwidget>
    <class>BtStringEdit</class>
    <extends>QLineEdit</extends>
@@ -624,11 +678,6 @@
    <slots>
     <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtGenericEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>BtMassEdit</class>
@@ -655,54 +704,26 @@
   <tabstop>lineEdit_name</tabstop>
   <tabstop>lineEdit_alpha</tabstop>
   <tabstop>lineEdit_amount</tabstop>
-  <tabstop>comboBox_use</tabstop>
   <tabstop>lineEdit_inventory</tabstop>
+  <tabstop>comboBox_use</tabstop>
   <tabstop>comboBox_type</tabstop>
   <tabstop>comboBox_form</tabstop>
-  <tabstop>lineEdit_time</tabstop>
-  <tabstop>lineEdit_HSI</tabstop>
-  <tabstop>lineEdit_origin</tabstop>
   <tabstop>lineEdit_beta</tabstop>
   <tabstop>lineEdit_humulene</tabstop>
   <tabstop>lineEdit_caryophyllene</tabstop>
   <tabstop>lineEdit_cohumulone</tabstop>
   <tabstop>lineEdit_myrcene</tabstop>
+  <tabstop>lineEdit_time</tabstop>
+  <tabstop>lineEdit_HSI</tabstop>
+  <tabstop>lineEdit_origin</tabstop>
+  <tabstop>pushButton_new</tabstop>
+  <tabstop>pushButton_save</tabstop>
+  <tabstop>pushButton_cancel</tabstop>
   <tabstop>textEdit_substitutes</tabstop>
   <tabstop>textEdit_notes</tabstop>
  </tabstops>
- <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>hopEditor</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>501</x>
-     <y>383</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>hopEditor</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>508</x>
-     <y>383</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <resources>
+  <include location="../../../../../brewtarget/mik/brewtarget.qrc"/>
+ </resources>
+ <connections/>
 </ui>

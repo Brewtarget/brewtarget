@@ -46,10 +46,12 @@ public:
    FermentableEditor( QWidget *parent=nullptr );
    virtual ~FermentableEditor() {}
    void setFermentable( Fermentable* f );
+   void newFermentable( QString folder );
 
 public slots:
    void save();
    void clearAndClose();
+   void newFermentable();
 
 private:
    Fermentable* obsFerm;

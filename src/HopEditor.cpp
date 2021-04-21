@@ -22,6 +22,7 @@
 
 #include <QtGui>
 #include <QIcon>
+#include <QInputDialog>
 #include "hop.h"
 #include "HopEditor.h"
 #include "BtHorizontalTabs.h"
@@ -36,8 +37,10 @@ HopEditor::HopEditor( QWidget* parent )
    setupUi(this);
 
    this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
-   connect( buttonBox, &QDialogButtonBox::accepted, this, &HopEditor::save);
-   connect( buttonBox, &QDialogButtonBox::rejected, this, &HopEditor::clearAndClose);
+
+   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
+   connect( pushButton_save,   &QAbstractButton::clicked, this, &HopEditor::save );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &HopEditor::clearAndClose );
 }
 
 void HopEditor::setHop( Hop* h )
@@ -207,3 +210,25 @@ void HopEditor::showChanges(QMetaProperty* prop)
          return;
    }
 }
+
+void HopEditor::newHop(QString folder)
+{
+   QString name = QInputDialog::getText(this, tr("Hop name"),
+                                          tr("Hop name:"));
+   if( name.isEmpty() )
+      return;
+
+   Hop* h = new Hop(name,true);
+
+   if ( ! folder.isEmpty() )
+      h->setFolder(folder);
+
+   setHop(h);
+   show();
+}
+
+void HopEditor::newHop()
+{
+   newHop(QString());
+}
+

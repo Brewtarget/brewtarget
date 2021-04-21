@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>407</height>
+    <width>501</width>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,442 +16,454 @@
   <property name="configSection" stdset="0">
    <string notr="true">yeastEditor</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_17">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_15">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Required Fields</string>
+    <widget class="QTabWidget" name="tabWidget_editor">
+     <property name="tabPosition">
+      <enum>QTabWidget::West</enum>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="usesScrollButtons">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="tab_main">
+      <attribute name="title">
+       <string>Main</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_name">
+         <property name="text">
+          <string>Name</string>
          </property>
-         <property name="configSection" stdset="0">
-          <string notr="true">yeastEditor</string>
+         <property name="buddy">
+          <cstring>lineEdit_name</cstring>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <property name="leftMargin">
-           <number>2</number>
-          </property>
-          <property name="topMargin">
-           <number>2</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
-           <number>2</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QLabel" name="label_name">
-              <property name="text">
-               <string>Name</string>
-              </property>
-              <property name="buddy">
-               <cstring>lineEdit_name</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEdit_name">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Name</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QLabel" name="label_type">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Type</string>
-              </property>
-              <property name="buddy">
-               <cstring>comboBox_type</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="comboBox_type">
-              <property name="toolTip">
-               <string>Type</string>
-              </property>
-              <item>
-               <property name="text">
-                <string>Ale</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Lager</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Wheat</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Wine</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Champagne</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QLabel" name="label_form">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Form</string>
-              </property>
-              <property name="buddy">
-               <cstring>comboBox_form</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="comboBox_form">
-              <property name="toolTip">
-               <string>Form</string>
-              </property>
-              <item>
-               <property name="text">
-                <string>Liquid</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Dry</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Slant</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Culture</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="BtMixedLabel" name="label_amount">
-              <property name="contextMenuPolicy">
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="text">
-               <string>Default Amount</string>
-              </property>
-              <property name="buddy">
-               <cstring>lineEdit_amount</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="BtMixedEdit" name="lineEdit_amount">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Amount</string>
-              </property>
-              <property name="editField" stdset="0">
-               <string notr="true">amount</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <widget class="QLabel" name="label_amountIsWeight">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Check it if the amount given is in kg instead of L.</string>
-              </property>
-              <property name="text">
-               <string>Amount is weight?</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBox_amountIsWeight">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Checked if the given amount is weight instead of volume</string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
         </widget>
        </item>
-       <item>
-        <spacer name="verticalSpacer_3">
+       <item row="3" column="1">
+        <widget class="BtStringEdit" name="lineEdit_laboratory">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Lab</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_lab">
+         <property name="text">
+          <string>Lab</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_laboratory</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_form">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Form</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox_form</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="BtStringEdit" name="lineEdit_inventory">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Quanta in inventory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_inventory">
+         <property name="text">
+          <string>Quanta in Inventory</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_inventory</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboBox_type">
+         <property name="toolTip">
+          <string>Type</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>Ale</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Lager</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Wheat</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Wine</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Champagne</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_type">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Type</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox_type</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="BtStringEdit" name="lineEdit_name">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="comboBox_form">
+         <property name="toolTip">
+          <string>Form</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>Liquid</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dry</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Slant</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Culture</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Preferred</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>13</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_16">
-         <item>
-          <widget class="QLabel" name="label_inventory">
-           <property name="text">
-            <string>Quanta in Inventory</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_inventory</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_inventory">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Quanta in inventory</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_productID">
+         <property name="text">
+          <string>Product ID</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_productID</cstring>
+         </property>
+        </widget>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item>
-          <widget class="QLabel" name="label_lab">
-           <property name="text">
-            <string>Lab</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_laboratory</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_laboratory">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Lab</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="4" column="1">
+        <widget class="BtStringEdit" name="lineEdit_productID">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Product ID</string>
+         </property>
+        </widget>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QLabel" name="label_productID">
-           <property name="text">
-            <string>Product ID</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_productID</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_productID">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Product ID</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_amountIsWeight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Check it if the amount given is in kg instead of L.</string>
+         </property>
+         <property name="text">
+          <string>Amount is weight?</string>
+         </property>
+        </widget>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <item>
-          <widget class="BtTemperatureLabel" name="label_minTemperature">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Min Temp</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_minTemperature</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="BtTemperatureEdit" name="lineEdit_minTemperature">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Min temp</string>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">minTemperature_c</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="0" column="3">
+        <widget class="QCheckBox" name="checkBox_amountIsWeight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Checked if the given amount is weight instead of volume</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
        </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="BtTemperatureLabel" name="label_maxTemperature">
-           <property name="contextMenuPolicy">
-            <enum>Qt::CustomContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>Max Temp</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_maxTemperature</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="BtTemperatureEdit" name="lineEdit_maxTemperature">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Max temp</string>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">maxTemperature_c</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="1" column="2">
+        <widget class="BtMixedLabel" name="label_amount">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Default Amount</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_amount</cstring>
+         </property>
+        </widget>
        </item>
-       <item>
+       <item row="1" column="3">
+        <widget class="BtMixedEdit" name="lineEdit_amount">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Amount</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">amount</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_extra">
+      <attribute name="title">
+       <string>Extras</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="8" column="3">
+        <widget class="QCheckBox" name="checkBox_addToSecondary">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Checked means add this yeast to secondary instead of primary</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="5">
+        <widget class="QComboBox" name="comboBox_flocculation">
+         <property name="toolTip">
+          <string>Flocculation</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>Low</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Medium</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>High</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Very High</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_attenuation">
+         <property name="text">
+          <string>Attenuation (%)</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_attenuation</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="4">
+        <widget class="QLabel" name="label_flocculation">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Flocculation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="BtTemperatureEdit" name="lineEdit_minTemperature">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Min temp</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">minTemperature_c</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="BtGenericEdit" name="lineEdit_attenuation">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Apparent attenuation as percentage of OG points</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">attenuation_pct</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="BtTemperatureLabel" name="label_minTemperature">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Min Temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_minTemperature</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" colspan="3">
+        <widget class="QLabel" name="label_addToSecondary">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Add to Secondary</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -464,249 +476,179 @@
          </property>
         </spacer>
        </item>
+       <item row="6" column="0">
+        <widget class="BtTemperatureLabel" name="label_maxTemperature">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>Max Temp</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_maxTemperature</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="BtTemperatureEdit" name="lineEdit_maxTemperature">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Max temp</string>
+         </property>
+         <property name="editField" stdset="0">
+          <string notr="true">maxTemperature_c</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="4">
+        <widget class="QLabel" name="label_timesCultured">
+         <property name="text">
+          <string>Times Recultured</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_timesCultured</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="5">
+        <widget class="BtStringEdit" name="lineEdit_timesCultured">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Times this yeast has been recultured</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="4">
+        <widget class="QLabel" name="label_maxReuse">
+         <property name="text">
+          <string>Max Recultures</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_maxReuse</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="5">
+        <widget class="BtStringEdit" name="lineEdit_maxReuse">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Max recultures</string>
+         </property>
+        </widget>
+       </item>
       </layout>
+     </widget>
+     <widget class="QWidget" name="tab_bestfor">
+      <attribute name="title">
+       <string>Best For</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QTextEdit" name="textEdit_bestFor"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_notes">
+      <attribute name="title">
+       <string>Notes</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QTextEdit" name="textEdit_notes"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <property name="spacing">
-        <number>0</number>
+      <widget class="QPushButton" name="pushButton_new">
+       <property name="toolTip">
+        <string>New yeast</string>
        </property>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_10">
-         <item>
-          <widget class="QLabel" name="label_flocculation">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Flocculation</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_flocculation">
-           <property name="toolTip">
-            <string>Flocculation</string>
-           </property>
-           <item>
-            <property name="text">
-             <string>Low</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Medium</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>High</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Very High</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_11">
-         <item>
-          <widget class="QLabel" name="label_attenuation">
-           <property name="text">
-            <string>Attenuation (%)</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_attenuation</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="BtGenericEdit" name="lineEdit_attenuation">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Apparent attenuation as percentage of OG points</string>
-           </property>
-           <property name="editField" stdset="0">
-            <string notr="true">attenuation_pct</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_12">
-         <item>
-          <widget class="QLabel" name="label_timesCultured">
-           <property name="text">
-            <string>Times Recultured</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_timesCultured</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_timesCultured">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Times this yeast has been recultured</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_13">
-         <item>
-          <widget class="QLabel" name="label_maxReuse">
-           <property name="text">
-            <string>Max Recultures</string>
-           </property>
-           <property name="buddy">
-            <cstring>lineEdit_maxReuse</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_maxReuse">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Max recultures</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_14">
-         <item>
-          <widget class="QLabel" name="label_addToSecondary">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Add to Secondary</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_addToSecondary">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Checked means add this yeast to secondary instead of primary</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_bestFor">
-         <property name="text">
-          <string>Best For:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextEdit" name="textEdit_bestFor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>1000</width>
-           <height>1000</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_notes">
-         <property name="text">
-          <string>Notes:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextEdit" name="textEdit_notes">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>1000</width>
-           <height>1000</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDialogButtonBox" name="buttonBox">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="standardButtons">
-          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_save">
+       <property name="toolTip">
+        <string>Save and close</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_cancel">
+       <property name="toolTip">
+        <string>Discard and close</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -751,41 +693,39 @@
     <slot>setIsWeight(bool)</slot>
    </slots>
   </customwidget>
+  <customwidget>
+   <class>BtStringEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+  </customwidget>
  </customwidgets>
- <resources/>
+ <tabstops>
+  <tabstop>tabWidget_editor</tabstop>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>comboBox_type</tabstop>
+  <tabstop>comboBox_form</tabstop>
+  <tabstop>lineEdit_laboratory</tabstop>
+  <tabstop>lineEdit_productID</tabstop>
+  <tabstop>checkBox_amountIsWeight</tabstop>
+  <tabstop>lineEdit_amount</tabstop>
+  <tabstop>lineEdit_inventory</tabstop>
+  <tabstop>lineEdit_attenuation</tabstop>
+  <tabstop>lineEdit_minTemperature</tabstop>
+  <tabstop>lineEdit_maxTemperature</tabstop>
+  <tabstop>comboBox_flocculation</tabstop>
+  <tabstop>lineEdit_maxReuse</tabstop>
+  <tabstop>lineEdit_timesCultured</tabstop>
+  <tabstop>checkBox_addToSecondary</tabstop>
+  <tabstop>pushButton_new</tabstop>
+  <tabstop>pushButton_save</tabstop>
+  <tabstop>pushButton_cancel</tabstop>
+  <tabstop>textEdit_bestFor</tabstop>
+  <tabstop>textEdit_notes</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../brewtarget.qrc"/>
+ </resources>
  <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>yeastEditor</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>yeastEditor</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>label_amount</sender>
    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>

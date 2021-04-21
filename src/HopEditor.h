@@ -46,6 +46,8 @@ public:
    virtual ~HopEditor() {}
    //! Edit the given hop.
    void setHop( Hop* h );
+   //! Create a new hop
+   void newHop(QString folder);
 
 public slots:
    //! Save the changes.
@@ -53,6 +55,7 @@ public slots:
    //! Clear the dialog and close it.
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
+   void newHop();
 
 private:
    Hop* obsHop;

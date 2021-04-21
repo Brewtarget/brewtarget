@@ -55,8 +55,6 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
          if(w)
             w->setVisible(false);
       }
-
-      pushButton_new->setVisible(false);
    }
 
    this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
@@ -73,11 +71,11 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    obsEquip = nullptr;
 
    // Connect all the edit boxen
-   connect(lineEdit_boilTime,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
-   connect(lineEdit_evaporationRate,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
-   connect(lineEdit_topUpWater,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
-   connect(lineEdit_trubChillerLoss,&BtLineEdit::textModified,this,&EquipmentEditor::updateCheckboxRecord);
-   connect(lineEdit_batchSize, &QLineEdit::editingFinished, this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_boilTime,       &BtLineEdit::textModified, this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_evaporationRate,&BtLineEdit::textModified, this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_topUpWater,     &BtLineEdit::textModified, this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_trubChillerLoss,&BtLineEdit::textModified, this,&EquipmentEditor::updateCheckboxRecord);
+   connect(lineEdit_batchSize,      &BtLineEdit::textModified, this,&EquipmentEditor::updateCheckboxRecord);
 
    // Set up the buttons
    connect( pushButton_save, &QAbstractButton::clicked, this, &EquipmentEditor::save );
@@ -85,10 +83,11 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect( pushButton_cancel, &QAbstractButton::clicked, this, &EquipmentEditor::cancel );
    connect( pushButton_remove, &QAbstractButton::clicked, this, &EquipmentEditor::removeEquipment );
    connect( pushButton_absorption, &QAbstractButton::clicked, this, &EquipmentEditor::resetAbsorption );
+
    connect( equipmentComboBox, SIGNAL(activated(const QString&)), this, SLOT( equipmentSelected() ) );
 
    // Check boxen
-   connect(checkBox_calcBoilVolume, &QCheckBox::stateChanged, this, &EquipmentEditor::updateCheckboxRecord);
+   connect(checkBox_calcBoilVolume,   &QCheckBox::stateChanged, this, &EquipmentEditor::updateCheckboxRecord);
    connect(checkBox_defaultEquipment, &QCheckBox::stateChanged, this, &EquipmentEditor::updateDefaultEquipment);
 
    // QMetaObject::connectSlotsByName(this);
@@ -223,6 +222,7 @@ void EquipmentEditor::save()
    }
 
    obsEquip->setName( lineEdit_name->text(), obsEquip->cacheOnly() );
+
    obsEquip->setBoilSize_l( lineEdit_boilSize->toSI() );
    obsEquip->setBatchSize_l( lineEdit_batchSize->toSI() );
    obsEquip->setTunVolume_l( lineEdit_tunVolume->toSI() );
@@ -245,7 +245,6 @@ void EquipmentEditor::save()
 
    if ( obsEquip->cacheOnly() ) {
       obsEquip->insertInDatabase();
-      obsEquip->setCacheOnly(false);
    }
    setVisible(false);
    return;
@@ -290,8 +289,7 @@ void EquipmentEditor::resetAbsorption()
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    double gaCustomUnits = PhysicalConstants::grainAbsorption_Lkg * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
 
-   lineEdit_grainAbsorption->displayAmount(gaCustomUnits);
-   showChanges();
+   lineEdit_grainAbsorption->setText(gaCustomUnits);
 }
 
 void EquipmentEditor::changed(QMetaProperty /*prop*/, QVariant /*val*/)
@@ -319,7 +317,7 @@ void EquipmentEditor::showChanges()
    lineEdit_name->setText(e->name());
    lineEdit_name->setCursorPosition(0);
    tabWidget_editor->setTabText(0, e->name() );
-   lineEdit_boilSize->setText(e);
+   lineEdit_boilSize->setText(e->boilSize_l());
 
    checkBox_calcBoilVolume->blockSignals(true); // Keep next line from emitting a signal and changing e.
    checkBox_calcBoilVolume->setCheckState( (e->calcBoilVolume())? Qt::Checked : Qt::Unchecked );
@@ -363,7 +361,10 @@ void EquipmentEditor::updateCheckboxRecord()
       lineEdit_boilSize->setText(bar);
       lineEdit_boilSize->setEnabled(false);
    }
-   else lineEdit_boilSize->setEnabled(true);
+   else {
+      lineEdit_boilSize->setText(lineEdit_batchSize->toSI());
+      lineEdit_boilSize->setEnabled(true);
+   }
 }
 
 double EquipmentEditor::calcBatchSize()
@@ -375,7 +376,7 @@ double EquipmentEditor::calcBatchSize()
    evapRate = lineEdit_evaporationRate->toSI();
    time     = lineEdit_boilTime->toSI();
 
-   return size - topUp + trubLoss + (time/(double)60)*evapRate;
+   return size - topUp + trubLoss + (time/(double)60.0)*evapRate;
 }
 
 void EquipmentEditor::updateDefaultEquipment(int state)

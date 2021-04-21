@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>466</width>
-    <height>375</height>
+    <height>509</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -108,7 +108,7 @@
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Category&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Category</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_category</cstring>
@@ -239,7 +239,7 @@
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Type&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Type</string>
          </property>
         </widget>
        </item>
@@ -310,7 +310,7 @@
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Name</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_name</cstring>
@@ -329,7 +329,7 @@
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Category number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Category number</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_categoryNumber</cstring>
@@ -348,7 +348,7 @@
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Style letter&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Style letter</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_styleLetter</cstring>
@@ -395,7 +395,7 @@
           <string>Required</string>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Style guide&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>Style guide</string>
          </property>
          <property name="buddy">
           <cstring>lineEdit_styleGuide</cstring>
@@ -898,7 +898,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_new">
        <property name="toolTip">
-        <string>New</string>
+        <string>New style</string>
        </property>
        <property name="text">
         <string/>
@@ -915,7 +915,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_save">
        <property name="toolTip">
-        <string>Save</string>
+        <string>Save and close</string>
        </property>
        <property name="text">
         <string/>
@@ -935,7 +935,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_cancel">
        <property name="toolTip">
-        <string>Cancel</string>
+        <string>Discard and close</string>
        </property>
        <property name="text">
         <string/>
@@ -997,6 +997,36 @@
    </slots>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget_profile</tabstop>
+  <tabstop>styleComboBox</tabstop>
+  <tabstop>pushButton_remove</tabstop>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>lineEdit_category</tabstop>
+  <tabstop>lineEdit_categoryNumber</tabstop>
+  <tabstop>lineEdit_styleLetter</tabstop>
+  <tabstop>lineEdit_styleGuide</tabstop>
+  <tabstop>comboBox_type</tabstop>
+  <tabstop>lineEdit_ogMin</tabstop>
+  <tabstop>lineEdit_ogMax</tabstop>
+  <tabstop>lineEdit_fgMin</tabstop>
+  <tabstop>lineEdit_fgMax</tabstop>
+  <tabstop>lineEdit_ibuMin</tabstop>
+  <tabstop>lineEdit_ibuMax</tabstop>
+  <tabstop>lineEdit_colorMin</tabstop>
+  <tabstop>lineEdit_colorMax</tabstop>
+  <tabstop>lineEdit_carbMin</tabstop>
+  <tabstop>lineEdit_carbMax</tabstop>
+  <tabstop>lineEdit_abvMin</tabstop>
+  <tabstop>lineEdit_abvMax</tabstop>
+  <tabstop>pushButton_new</tabstop>
+  <tabstop>pushButton_save</tabstop>
+  <tabstop>pushButton_cancel</tabstop>
+  <tabstop>textEdit_profile</tabstop>
+  <tabstop>textEdit_ingredients</tabstop>
+  <tabstop>textEdit_examples</tabstop>
+  <tabstop>textEdit_notes</tabstop>
+ </tabstops>
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>

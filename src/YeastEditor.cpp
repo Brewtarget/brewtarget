@@ -20,7 +20,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "math.h"
+#include <QInputDialog>
 #include "YeastEditor.h"
+#include "BtHorizontalTabs.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
@@ -32,8 +35,10 @@ YeastEditor::YeastEditor( QWidget* parent )
 {
    setupUi(this);
 
-   connect( buttonBox, &QDialogButtonBox::accepted, this, &YeastEditor::save);
-   connect( buttonBox, &QDialogButtonBox::rejected, this, &YeastEditor::clearAndClose);
+   tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
+   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
+   connect( pushButton_save,   &QAbstractButton::clicked, this, &YeastEditor::save );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &YeastEditor::clearAndClose );
 }
 
 void YeastEditor::setYeast( Yeast* y )
@@ -71,6 +76,7 @@ void YeastEditor::save()
    y->setMaxTemperature_c( lineEdit_maxTemperature->toSI());
    y->setFlocculation( static_cast<Yeast::Flocculation>(comboBox_flocculation->currentIndex()) );
    y->setAttenuation_pct(lineEdit_attenuation->toSI());
+
    y->setTimesCultured(lineEdit_timesCultured->text().toInt());
    y->setMaxReuse(lineEdit_maxReuse->text().toInt());
    y->setAddToSecondary( (checkBox_addToSecondary->checkState() == Qt::Checked)? true : false );
@@ -118,6 +124,8 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
    {
       lineEdit_name->setText(obsYeast->name());
       lineEdit_name->setCursorPosition(0);
+
+      tabWidget_editor->setTabText(0, obsYeast->name());
       if( ! updateAll )
          return;
    }
@@ -137,7 +145,7 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == "inventory" || updateAll ) {
-      lineEdit_inventory->setText( QString::number(obsYeast->inventory()) );
+      lineEdit_inventory->setText( obsYeast->inventory(),0 );
       if( ! updateAll )
          return;
    }
@@ -179,12 +187,12 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == PropertyNames::Yeast::timesCultured || updateAll ) {
-      lineEdit_timesCultured->setText(QString::number(obsYeast->timesCultured()));
+      lineEdit_timesCultured->setText(obsYeast->timesCultured(),0);
       if( ! updateAll )
          return;
    }
    if( propName == PropertyNames::Yeast::maxReuse || updateAll ) {
-      lineEdit_maxReuse->setText(QString::number(obsYeast->maxReuse()));
+      lineEdit_maxReuse->setText(obsYeast->maxReuse(),0);
       if( ! updateAll )
          return;
    }
@@ -203,4 +211,25 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
+}
+
+void YeastEditor::newYeast()
+{
+   newYeast(QString());
+}
+
+void YeastEditor::newYeast(QString folder)
+{
+   QString name = QInputDialog::getText(this, tr("Yeast name"),
+                                          tr("Yeast name:"));
+   if( name.isEmpty() )
+      return;
+
+   Yeast* y = new Yeast(name);
+
+   if ( ! folder.isEmpty() )
+      y->setFolder(folder);
+
+   setYeast(y);
+   show();
 }

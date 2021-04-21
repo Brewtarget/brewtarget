@@ -21,6 +21,7 @@
  */
 
 #include <QIcon>
+#include <QInputDialog>
 #include "FermentableEditor.h"
 #include "BtHorizontalTabs.h"
 #include "fermentable.h"
@@ -35,9 +36,10 @@ FermentableEditor::FermentableEditor( QWidget* parent )
    setupUi(this);
 
    this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
-   connect( this, &QDialog::accepted, this, &FermentableEditor::save);
-   connect( this, &QDialog::rejected, this, &FermentableEditor::clearAndClose);
 
+   connect( pushButton_new,    SIGNAL( clicked() ),       this, SLOT( newFermentable() ) );
+   connect( pushButton_save,   &QAbstractButton::clicked, this, &FermentableEditor::save );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &FermentableEditor::clearAndClose );
 }
 
 void FermentableEditor::setFermentable( Fermentable* newFerm )
@@ -211,4 +213,24 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
+}
+
+void FermentableEditor::newFermentable(QString folder) 
+{
+   QString name = QInputDialog::getText(this, tr("Fermentable name"),
+                                          tr("Fermentable name:"));
+   if( name.isEmpty() )
+      return;
+
+   Fermentable* f = new Fermentable(name,true);
+
+   if ( ! folder.isEmpty() )
+      f->setFolder(folder);
+
+   setFermentable(f);
+   show();
+}
+void FermentableEditor::newFermentable()
+{
+   newFermentable(QString());
 }
