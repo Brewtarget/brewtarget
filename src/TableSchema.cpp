@@ -441,7 +441,7 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
       PropertySchema* key = j.value();
 
       columns += QString(",%1").arg(key->colName(selected));
-      binding += QString(",:%1").arg( i.key());
+      binding += QString(",:%1").arg( j.key());
    }
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(m_tableName).arg(columns).arg(binding);
 }
