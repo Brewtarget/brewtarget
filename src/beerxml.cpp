@@ -317,7 +317,7 @@ namespace {
       {"Infusion",     MashStep::Infusion},
       {"Temperature",  MashStep::Temperature},
       {"Decoction",    MashStep::Decoction}
-      // Inside Brewken we also have MashStep::flySparge and MashStep::batchSparge which are not mentioned in the
+      // we also have MashStep::flySparge and MashStep::batchSparge which are not mentioned in the
       // BeerXML 1.0 Standard.  They get treated as "Infusion" when we write to BeerXML
    };
    XmlRecord::FieldDefinitions const BEER_XML_MASH_STEP_RECORD_FIELDS {
@@ -333,7 +333,7 @@ namespace {
       {XmlRecord::String,  "DESCRIPTION",        nullptr,                                    nullptr}, // Extension tag
       {XmlRecord::String,  "WATER_GRAIN_RATIO",  nullptr,                                    nullptr}, // Extension tag
       {XmlRecord::String,  "DECOCTION_AMT",      nullptr,                                    nullptr}, // Extension tag
-      {XmlRecord::String,  "INFUSE_TEMP",        nullptr,                                    nullptr}, // Extension tag
+      {XmlRecord::String,  "INFUSE_TEMP",        PropertyNames::MashStep::infuseTemp_c,      nullptr}, // Extension tag
       {XmlRecord::String,  "DISPLAY_STEP_TEMP",  nullptr,                                    nullptr}, // Extension tag
       {XmlRecord::String,  "DISPLAY_INFUSE_AMT", nullptr,                                    nullptr}, // Extension tag
       {XmlRecord::Double,  "DECOCTION_AMOUNT",   PropertyNames::MashStep::decoctionAmount_l, nullptr}  // Non-standard tag, not part of BeerXML 1.0 standard
@@ -723,10 +723,11 @@ void BeerXML::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -749,10 +750,11 @@ void BeerXML::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -775,10 +777,11 @@ void BeerXML::toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -803,10 +806,11 @@ void BeerXML::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -831,10 +835,11 @@ void BeerXML::toXml( Instruction* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -860,10 +865,11 @@ void BeerXML::toXml( Mash* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -895,21 +901,17 @@ void BeerXML::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          QString val;
          // flySparge and batchSparge aren't part of the BeerXML spec.
-         // This makes sure we give BeerXML something it understands.
+         // prop makes sure we give BeerXML something it understands.
          if ( element == PropertyNames::MashStep::type ) {
-            if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) {
-               val = MashStep::types[0];
-            }
-            else {
-               val = a->typeString();
-            }
+            val = a->isSparge() ? MashStep::types[0] : a->typeString();
          }
          else {
-            val = textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element));
+            val = textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element));
          }
          tmpElement = doc.createElement(tbl->propertyToXml(element));
          tmpText    = doc.createTextNode(val);
@@ -936,10 +938,11 @@ void BeerXML::toXml( Misc* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -963,10 +966,11 @@ void BeerXML::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -1043,10 +1047,11 @@ void BeerXML::toXml( Style* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -1069,10 +1074,11 @@ void BeerXML::toXml( Water* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
@@ -1096,10 +1102,11 @@ void BeerXML::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
    tmpElement.appendChild(tmpText);
    node.appendChild(tmpElement);
 
-   foreach (QString element, tbl->allPropertyNames()) {
+   foreach (QString element, tbl->allProperties()) {
       if ( ! tbl->propertyToXml(element).isEmpty() ) {
+         QString prop = tbl->propertyName(element);
          tmpElement = doc.createElement(tbl->propertyToXml(element));
-         tmpText    = doc.createTextNode(textFromValue(a->property(element.toUtf8().data()), tbl->propertyColumnType(element)));
+         tmpText    = doc.createTextNode(textFromValue(a->property(prop.toUtf8().data()), tbl->propertyColumnType(element)));
          tmpElement.appendChild(tmpText);
          node.appendChild(tmpElement);
       }
