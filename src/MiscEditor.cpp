@@ -21,7 +21,9 @@
 
 #include <QtGui>
 #include <QIcon>
+#include <QInputDialog>
 #include "MiscEditor.h"
+#include "BtHorizontalTabs.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
@@ -33,8 +35,11 @@ MiscEditor::MiscEditor( QWidget* parent )
 {
    setupUi(this);
 
-   connect( buttonBox, &QDialogButtonBox::accepted, this, &MiscEditor::save);
-   connect( buttonBox, &QDialogButtonBox::rejected, this, &MiscEditor::clearAndClose);
+   tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
+
+   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newMisc() ) );
+   connect( pushButton_save,   &QAbstractButton::clicked, this, &MiscEditor::save );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &MiscEditor::clearAndClose );
 
 }
 
@@ -61,6 +66,9 @@ void MiscEditor::save()
       return;
    }
 
+   qInfo() << comboBox_type->currentIndex();
+   qInfo() << comboBox_use->currentIndex();
+
    m->setName(lineEdit_name->text(),m->cacheOnly());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
    m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
@@ -71,6 +79,7 @@ void MiscEditor::save()
    m->setNotes( textEdit_notes->toPlainText() );
 
    if ( m->cacheOnly() ) {
+      qInfo() << "Inserting into database";
       m->insertInDatabase();
    }
    // do this late to make sure we've the row in the inventory table
@@ -110,6 +119,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
    {
       lineEdit_name->setText(obsMisc->name());
       lineEdit_name->setCursorPosition(0);
+      tabWidget_editor->setTabText(0, obsMisc->name());
       if( ! updateAll )
          return;
    }
@@ -161,4 +171,24 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
+}
+
+void MiscEditor::newMisc(QString folder) 
+{
+   QString name = QInputDialog::getText(this, tr("Misc name"),
+                                          tr("Misc name:"));
+   if( name.isEmpty() )
+      return;
+
+   Misc* m = new Misc(name,true);
+
+   if ( ! folder.isEmpty() )
+      m->setFolder(folder);
+
+   setMisc(m);
+   show();
+}
+void MiscEditor::newMisc()
+{
+   newMisc(QString());
 }

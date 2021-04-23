@@ -2028,7 +2028,7 @@ int Database::insertElement(NamedEntity * ins)
       }
       // I've arranged it such that the bindings are on the property names. It simplifies a lot
       q.bindValue( QString(":%1").arg(prop), val_to_ins);
-      sqlParametersConcat << prop << " = " << val_to_ins.toString() << " || ";
+      sqlParametersConcat << QString(":%1").arg(prop) << " = " << val_to_ins.toString() << "\n\t";
    }
    qDebug() << Q_FUNC_INFO << "SQL Parameters: " << *sqlParametersConcat.string();
 

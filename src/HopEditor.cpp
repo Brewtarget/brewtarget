@@ -22,8 +22,10 @@
 
 #include <QtGui>
 #include <QIcon>
+#include <QInputDialog>
 #include "hop.h"
 #include "HopEditor.h"
+#include "BtHorizontalTabs.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
@@ -34,8 +36,11 @@ HopEditor::HopEditor( QWidget* parent )
 {
    setupUi(this);
 
-   connect( buttonBox, &QDialogButtonBox::accepted, this, &HopEditor::save);
-   connect( buttonBox, &QDialogButtonBox::rejected, this, &HopEditor::clearAndClose);
+   this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
+
+   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
+   connect( pushButton_save,   &QAbstractButton::clicked, this, &HopEditor::save );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &HopEditor::clearAndClose );
 }
 
 void HopEditor::setHop( Hop* h )
@@ -107,10 +112,10 @@ void HopEditor::showChanges(QMetaProperty* prop)
    if( obsHop == nullptr )
       return;
 
-   if( prop == nullptr )
+   if( prop == nullptr ) {
       updateAll = true;
-   else
-   {
+   }
+   else {
       propName = prop->name();
    }
 
@@ -118,6 +123,7 @@ void HopEditor::showChanges(QMetaProperty* prop)
    {
       lineEdit_name->setText(obsHop->name());
       lineEdit_name->setCursorPosition(0);
+      tabWidget_editor->setTabText(0, obsHop->name() );
       if( ! updateAll )
          return;
    }
@@ -204,3 +210,25 @@ void HopEditor::showChanges(QMetaProperty* prop)
          return;
    }
 }
+
+void HopEditor::newHop(QString folder)
+{
+   QString name = QInputDialog::getText(this, tr("Hop name"),
+                                          tr("Hop name:"));
+   if( name.isEmpty() )
+      return;
+
+   Hop* h = new Hop(name,true);
+
+   if ( ! folder.isEmpty() )
+      h->setFolder(folder);
+
+   setHop(h);
+   show();
+}
+
+void HopEditor::newHop()
+{
+   newHop(QString());
+}
+

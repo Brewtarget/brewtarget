@@ -1034,7 +1034,7 @@ void TableSchema::defineMiscTable()
    m_properties[PropertyNames::Misc::notes]    = new PropertySchema( PropertyNames::Misc::notes,      kcolNotes,        kxmlPropNotes,    QString("text"), QString("''"));
    m_properties[PropertyNames::Misc::amount]   = new PropertySchema( PropertyNames::Misc::amount,     kcolAmount,       kxmlPropAmount,   QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Misc::use]      = new PropertySchema( PropertyNames::Misc::useString,  kcolUse,          kxmlPropUse,      QString("text"), QString("'Boil'"));
-   m_properties[PropertyNames::Hop::time_min]     = new PropertySchema( PropertyNames::Hop::time_min,       kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
+   m_properties[PropertyNames::Misc::time]     = new PropertySchema( PropertyNames::Misc::time, kcolTime,         kxmlPropTime,     QString("real"), QVariant(0.0));
    m_properties[PropertyNames::Misc::type]     = new PropertySchema( PropertyNames::Misc::typeString, kcolMiscType,     kxmlPropType,     QString("text"), QString("'Other'"));
    m_properties[PropertyNames::Misc::amountIsWeight] = new PropertySchema( PropertyNames::Misc::amountIsWeight,   kcolMiscAmtIsWgt, kxmlPropAmtIsWgt, QString("boolean"), QVariant(true));
    m_properties[PropertyNames::Misc::useFor]   = new PropertySchema( PropertyNames::Misc::useFor,     kcolMiscUseFor,   kxmlPropUseFor,   QString("text"), QString("''"));
