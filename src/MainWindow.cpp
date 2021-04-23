@@ -58,6 +58,7 @@
 #include <QDesktopWidget>
 
 #include "Algorithms.h"
+#include "BtTabWidget.h"
 #include "MashStepEditor.h"
 #include "MashStepTableModel.h"
 #include "mash.h"
@@ -123,6 +124,7 @@
 #include "beerxml.h"
 #include "RelationalUndoableUpdate.h"
 #include "UndoableAddOrRemove.h"
+#include "BtHorizontalTabs.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
@@ -245,6 +247,9 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Stop things looking ridiculously tiny on high DPI displays
    this->setSizesInPixelsBasedOnDpi();
+
+   // Horizontal tabs, please
+   tabWidget_Trees->tabBar()->setStyle(new BtHorizontalTabs);
 
    /* PLEASE DO NOT REMOVE.
     This code is left here, commented out, intentionally. The only way I can

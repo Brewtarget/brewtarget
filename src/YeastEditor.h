@@ -47,11 +47,13 @@ public:
    virtual ~YeastEditor() {}
    //! Set the yeast we want to modify.
    void setYeast( Yeast* y );
+   void newYeast(QString folder);
 
 public slots:
    void save();
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
+   void newYeast();
 
 private:
    Yeast* obsYeast;

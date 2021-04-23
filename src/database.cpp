@@ -2012,7 +2012,7 @@ int Database::insertElement(NamedEntity * ins)
 
    TableSchema* schema = dbDefn->table(ins->table());
    QString insertQ = schema->generateInsertProperties(Brewtarget::dbType());
-   QStringList allProps = schema->allPropertyNames(Brewtarget::dbType());
+   QStringList allProps = schema->allProperties();
 
    qDebug() << Q_FUNC_INFO << "SQL:" << insertQ;
    q.prepare(insertQ);
@@ -2020,13 +2020,15 @@ int Database::insertElement(NamedEntity * ins)
    QString sqlParameters;
    QTextStream sqlParametersConcat(&sqlParameters);
    foreach (QString prop, allProps) {
-      QVariant val_to_ins = ins->property(prop.toUtf8().data());
+      QString pname = schema->propertyName(prop);
+      QVariant val_to_ins = ins->property(pname.toUtf8().data());
+
       if ( ins->table() == Brewtarget::BREWNOTETABLE && prop == PropertyNames::BrewNote::brewDate ) {
          val_to_ins = val_to_ins.toString();
       }
       // I've arranged it such that the bindings are on the property names. It simplifies a lot
       q.bindValue( QString(":%1").arg(prop), val_to_ins);
-      sqlParametersConcat << prop << " = " << val_to_ins.toString() << " || ";
+      sqlParametersConcat << QString(":%1").arg(prop) << " = " << val_to_ins.toString() << "\n\t";
    }
    qDebug() << Q_FUNC_INFO << "SQL Parameters: " << *sqlParametersConcat.string();
 

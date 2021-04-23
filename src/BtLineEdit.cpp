@@ -29,6 +29,9 @@
 #include <QDebug>
 #include <QStyle>
 
+const int min_text_size = 8;
+const int max_text_size = 50;
+
 BtLineEdit::BtLineEdit(QWidget *parent, Unit::UnitType type, QString const & maximalDisplayString) :
    QLineEdit(parent),
    btParent(parent),
@@ -245,7 +248,7 @@ void BtLineEdit::setText( NamedEntity* element, int precision )
    }
 
    QLineEdit::setText(display);
-   this->setDisplaySize();
+   this->setDisplaySize( _type == Unit::String);
    return;
 }
 
@@ -253,9 +256,12 @@ void BtLineEdit::setText( QString amount, int precision)
 {
    double amt;
    bool ok = false;
+   bool force = false;
 
-   if ( _type == Unit::String )
+   if ( _type == Unit::String ) {
       QLineEdit::setText(amount);
+      force = true;
+   }
    else
    {
       amt = Brewtarget::toDouble(amount,&ok);
@@ -264,14 +270,13 @@ void BtLineEdit::setText( QString amount, int precision)
       QLineEdit::setText(displayAmount(amt, precision));
    }
 
-   this->setDisplaySize();
+   this->setDisplaySize(force);
    return;
 }
 
 void BtLineEdit::setText( QVariant amount, int precision)
 {
    setText(amount.toString(), precision);
-   this->setDisplaySize();
    return;
 }
 
@@ -369,8 +374,23 @@ void BtLineEdit::calculateDisplaySize(QString const & maximalDisplayString)
    return;
 }
 
-void BtLineEdit::setDisplaySize()
+void BtLineEdit::setDisplaySize(bool recalculate)
 {
+   if ( recalculate ) {
+      QString sizing_string = text();
+
+      // this is a dirty bit of cheating. If we do not reset the minimum
+      // width, the field only ever gets bigger. This forces the resize I
+      // want, but only when we are instructed to force it
+      setMinimumWidth(0);
+      if ( sizing_string.length() < min_text_size ) {
+         sizing_string = QString(min_text_size,'a');
+      }
+      else if ( sizing_string.length() > max_text_size ) {
+         sizing_string = QString(max_text_size,'a');
+      }
+      calculateDisplaySize(sizing_string);
+   }
    this->setFixedWidth(this->desiredWidthInPixels);
    return;
 }

@@ -20,6 +20,7 @@
 
 #include "database.h"
 #include "StyleEditor.h"
+#include "BtHorizontalTabs.h"
 #include <QInputDialog>
 #include "style.h"
 #include "StyleListModel.h"
@@ -42,6 +43,8 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
 
       pushButton_new->setVisible(false);
    }
+
+   this->tabWidget_profile->tabBar()->setStyle(new BtHorizontalTabs);
 
    styleListModel = new StyleListModel(styleComboBox);
    styleProxyModel = new StyleSortFilterProxyModel(styleComboBox);
@@ -206,6 +209,7 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
    if( updateAll )
    {
       lineEdit_name->setText(s->name());
+      tabWidget_profile->setTabText(0, s->name() );
       lineEdit_category->setText(s->category());
       lineEdit_categoryNumber->setText(s->categoryNumber());
       lineEdit_styleLetter->setText(s->styleLetter());
@@ -231,48 +235,71 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       return;
    }
 
-   if( propName == PropertyNames::NamedEntity::name )
+   if( propName == PropertyNames::NamedEntity::name ) {
       lineEdit_name->setText(val.toString());
-   else if( propName == PropertyNames::Style::category )
+      tabWidget_profile->setTabText(0, s->name() );
+   }
+   else if( propName == PropertyNames::Style::category ) {
       lineEdit_category->setText(val.toString());
-   else if( propName == PropertyNames::Style::categoryNumber )
+   }
+   else if( propName == PropertyNames::Style::categoryNumber ) {
       lineEdit_categoryNumber->setText(val.toString());
-   else if( propName == PropertyNames::Style::styleLetter )
+   }
+   else if( propName == PropertyNames::Style::styleLetter ) {
       lineEdit_styleLetter->setText(val.toString());
-   else if( propName == PropertyNames::Style::styleGuide )
+   }
+   else if( propName == PropertyNames::Style::styleGuide ) {
       lineEdit_styleGuide->setText(val.toString());
-   else if( propName == "type" )
+   }
+   else if( propName == "type" ) {
       comboBox_type->setCurrentIndex(val.toInt());
-   else if( propName == PropertyNames::Style::ogMin )
+   }
+   else if( propName == PropertyNames::Style::ogMin ) {
       lineEdit_ogMin->setText(val);
-   else if( propName == PropertyNames::Style::ogMax )
+   }
+   else if( propName == PropertyNames::Style::ogMax ) {
       lineEdit_ogMax->setText(val);
-   else if( propName == PropertyNames::Style::fgMin )
+   }
+   else if( propName == PropertyNames::Style::fgMin ) {
       lineEdit_fgMin->setText(val);
-   else if( propName == PropertyNames::Style::fgMax )
+   }
+   else if( propName == PropertyNames::Style::fgMax ) {
       lineEdit_fgMax->setText(val);
-   else if( propName == PropertyNames::Style::ibuMin )
+   }
+   else if( propName == PropertyNames::Style::ibuMin ) {
       lineEdit_ibuMin->setText(val);
-   else if( propName == PropertyNames::Style::ibuMax )
+   }
+   else if( propName == PropertyNames::Style::ibuMax ) {
       lineEdit_ibuMax->setText(val);
-   else if( propName == PropertyNames::Style::colorMin_srm )
+   }
+   else if( propName == PropertyNames::Style::colorMin_srm ) {
       lineEdit_colorMin->setText(val);
-   else if( propName == PropertyNames::Style::colorMax_srm )
+   }
+   else if( propName == PropertyNames::Style::colorMax_srm ) {
       lineEdit_colorMax->setText(val);
-   else if( propName == PropertyNames::Style::carbMin_vol )
+   }
+   else if( propName == PropertyNames::Style::carbMin_vol ) {
       lineEdit_carbMin->setText(val);
-   else if( propName == PropertyNames::Style::carbMax_vol )
+   }
+   else if( propName == PropertyNames::Style::carbMax_vol ) {
       lineEdit_carbMax->setText(val);
-   else if( propName == PropertyNames::Style::abvMin_pct )
+   }
+   else if( propName == PropertyNames::Style::abvMin_pct ) {
       lineEdit_abvMin->setText(val);
-   else if( propName == PropertyNames::Style::abvMax_pct )
+   }
+   else if( propName == PropertyNames::Style::abvMax_pct ) {
       lineEdit_abvMax->setText(val);
-   else if( propName == PropertyNames::Style::profile )
+   }
+   else if( propName == PropertyNames::Style::profile ) {
       textEdit_profile->setText(val.toString());
-   else if( propName == PropertyNames::Style::ingredients )
+   }
+   else if( propName == PropertyNames::Style::ingredients ) {
       textEdit_ingredients->setText(val.toString());
-   else if( propName == PropertyNames::Style::examples )
+   }
+   else if( propName == PropertyNames::Style::examples ) {
       textEdit_examples->setText(val.toString());
-   else if( propName == "notes" )
+   }
+   else if( propName == "notes" ) {
       textEdit_notes->setText(val.toString());
+   }
 }

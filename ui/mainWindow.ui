@@ -511,6 +511,12 @@
                           <height>16777215</height>
                          </size>
                         </property>
+                        <property name="styleSheet">
+                         <string notr="true">combobox-popup: 0;</string>
+                        </property>
+                        <property name="maxVisibleItems">
+                         <number>15</number>
+                        </property>
                        </widget>
                       </item>
                      </layout>
@@ -2266,6 +2272,22 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtTimeEdit</class>
+   <extends>QLineEdit</extends>
+   <header>BtLineEdit.h</header>
+   <slots>
+    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtTimeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
    <class>BtGenericEdit</class>
    <extends>QLineEdit</extends>
    <header>BtLineEdit.h</header>
@@ -2319,22 +2341,6 @@
   </customwidget>
   <customwidget>
    <class>BtColorLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-   <slots>
-    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeEdit</class>
-   <extends>QLineEdit</extends>
-   <header>BtLineEdit.h</header>
-   <slots>
-    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BtTimeLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
    <slots>

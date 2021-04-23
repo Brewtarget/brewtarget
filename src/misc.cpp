@@ -266,7 +266,7 @@ void Misc::setTime( double var )
    else {
       m_time = var;
       if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Hop::time_min, var );
+         setEasy( PropertyNames::Misc::time, var );
       }
    }
 }
