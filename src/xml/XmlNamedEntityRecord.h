@@ -151,11 +151,13 @@ private:
 
 // Specialisations for cases where duplicates are allowed
 template<> inline bool XmlNamedEntityRecord<Instruction>::isDuplicate() { return false; }
+template<> inline bool XmlNamedEntityRecord<Mash>::isDuplicate() { return false; }
 template<> inline bool XmlNamedEntityRecord<MashStep>::isDuplicate() { return false; }
 template<> inline bool XmlNamedEntityRecord<BrewNote>::isDuplicate() { return false; }
 
 // Specialisations for cases where name is not required to be unique
 template<> inline void XmlNamedEntityRecord<Instruction>::normaliseName() { return; }
+template<> inline void XmlNamedEntityRecord<Mash>::normaliseName() { return; }
 template<> inline void XmlNamedEntityRecord<MashStep>::normaliseName() { return; }
 template<> inline void XmlNamedEntityRecord<BrewNote>::normaliseName() { return; }
 
