@@ -1507,46 +1507,30 @@ Qt::DropActions BtTreeModel::supportedDropActions() const
 //
 void BtTreeModel::showVersions(QModelIndex ndx)
 {
-   QModelIndex pIndex;
    QList<int> ancestors;
+   BtTreeItem* node;
 
    if ( ! ndx.isValid() ) {
       return;
    }
-   pIndex = parent(ndx);
-   if ( ! pIndex.isValid() ) {
-      return;
-   }
 
+   node = item(ndx);
    Recipe *descendant = recipe(ndx);
    ancestors = descendant->ancestors();
 
-   // This is something a hack to quickly remove all of the brewnotes
-   removeRows(ndx.row(),1,pIndex);
-   disconnect( descendant, nullptr, this, nullptr );
-
-   // Add back in what we just removed, but without the brewnotes
-   int i,j;
-   BtTreeItem* local;
-   QModelIndex wtfNdx;
-
-   local = rootItem->child(0);
-   i = local->childCount();
-   wtfNdx = createIndex(i,0,local);
-
-   insertRow(i, wtfNdx, descendant, _type);
-   addBrewNoteSubTree(descendant,i,local);
-
-   local = item(wtfNdx);
-   j = 0;
-   foreach( int key, ancestors ) {
-      Recipe* tempRec = Database::instance().recipe(key);
-      // If this is an ancestor, start mapping the brewnotes
-      if ( tempRec != descendant ) {
-         insertRow(j, createIndex(i,0,local), tempRec, _type);
-         addBrewNoteSubTree(tempRec,j,local,false);
+   // add the brewnotes for this version back
+   addBrewNoteSubTree(descendant, ndx.row(), node->parent(), false);
+   foreach( int ancestor, ancestors ) {
+      int j = node->childCount();
+      Recipe *anc = Database::instance().recipe(ancestor);
+      if ( anc == descendant ) {
+         continue;
       }
+      if ( ! insertRow(j, ndx, anc, BtTreeItem::RECIPE) ) {
+         qWarning() << "Could not add ancestoral brewnotes";
+      }
+
+      addBrewNoteSubTree(anc,j,node,false);
    }
 }
-
 
