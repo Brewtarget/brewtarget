@@ -317,8 +317,8 @@ namespace {
       {"Infusion",     MashStep::Infusion},
       {"Temperature",  MashStep::Temperature},
       {"Decoction",    MashStep::Decoction}
-      // we also have MashStep::flySparge and MashStep::batchSparge which are not mentioned in the
-      // BeerXML 1.0 Standard.  They get treated as "Infusion" when we write to BeerXML
+      // Internally we also have MashStep::flySparge and MashStep::batchSparge which are not mentioned in the
+      // BeerXML 1.0 Standard.  They get treated as "Infusion" when we write to BeerXML.
    };
    XmlRecord::FieldDefinitions const BEER_XML_MASH_STEP_RECORD_FIELDS {
       // Type              XPath                 Q_PROPERTY                                  Enum Mapper
@@ -440,7 +440,7 @@ namespace {
       {XmlRecord::Double,  "PROJECTED_MASH_FIN_TEMP", PropertyNames::BrewNote::projMashFinTemp_c,    nullptr},
       {XmlRecord::Double,  "PROJECTED_OG",            PropertyNames::BrewNote::projOg,               nullptr},
       {XmlRecord::Double,  "PROJECTED_VOL_INTO_FERM", PropertyNames::BrewNote::projVolIntoFerm_l,    nullptr},
-      {XmlRecord::Double,  "FG",                      PropertyNames::BrewNote::projFg,               nullptr},
+      {XmlRecord::Double,  "PROJECTED_FG",            PropertyNames::BrewNote::projFg,               nullptr},
       {XmlRecord::Double,  "PROJECTED_EFF",           PropertyNames::BrewNote::projEff_pct,          nullptr},
       {XmlRecord::Double,  "PROJECTED_ABV",           PropertyNames::BrewNote::projABV_pct,          nullptr},
       {XmlRecord::Double,  "PROJECTED_POINTS",        PropertyNames::BrewNote::projPoints,           nullptr},

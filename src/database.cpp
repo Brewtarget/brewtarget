@@ -1040,6 +1040,35 @@ void Database::removeFrom( Mash* mash, MashStep* step )
    emit mash->mashStepsChanged();
 }
 
+Recipe* Database::getParentRecipe(NamedEntity const * ing) {
+
+   QMetaObject const * meta = ing->metaObject();
+   TableSchema* table = this->dbDefn->table( this->dbDefn->classNameToTable(meta->className()) );
+   TableSchema* inrec = this->dbDefn->table( table->inRecTable() );
+
+   QString select = QString("SELECT %4 from %1 WHERE %2=%3")
+                        .arg(inrec->tableName())
+                        .arg(inrec->inRecIndexName())
+                        .arg(ing->_key)
+                        .arg(inrec->recipeIndexName());
+   qDebug() << Q_FUNC_INFO << "NamedEntity in recipe search:" << select;
+   QSqlQuery q(sqlDatabase());
+   if (! q.exec(select) ) {
+      throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
+         .arg(q.lastQuery()).arg(q.lastError().text());
+   }
+
+   Recipe * parent = nullptr;
+
+   if ( q.next() ) {
+      int key = q.record().value(inrec->recipeIndexName()).toInt();
+      parent = this->allRecipes[key];
+   }
+
+   q.finish();
+   return parent;
+}
+
 Recipe* Database::getParentRecipe( BrewNote const* note )
 {
    int key;
@@ -2772,7 +2801,7 @@ void Database::populateChildTablesByName(Brewtarget::DBTable table)
          query.prepare(queryString);
          query.bindValue(":name", name);
          query.bindValue(":boolean",Brewtarget::dbTrue());
-         
+
          if ( !query.exec() ) {
             throw QString("%1 %2").arg(query.lastQuery()).arg(query.lastError().text());
          }
@@ -3574,7 +3603,7 @@ bool Database::updateSchema(bool* err)
    return doUpdate;
 }
 
-/******* 
+/*******
  *
  * I will be using hop as my example, because it is easy to type.  You should
  * be able to substitue any of the base tables and it will work the same.
@@ -3586,7 +3615,7 @@ bool Database::updateSchema(bool* err)
  * to a parent hop.
  *
  * When a new hop is added to the default-db.sqlite, a new row has to be
- * inserted into bt_hop pointing to the new hop. 
+ * inserted into bt_hop pointing to the new hop.
  *
  * When the user gets the dialog saying "There are new ingredients, would you
  * like to merge?", updateDatabase() is called and it works like this:
@@ -3599,7 +3628,7 @@ bool Database::updateSchema(bool* err)
  *     5. We put a new entry in the user's bt_hop table, pointing to the
  *        record we just added.
  *     6. Repeat steps 3 - 5 until we run out of rows.
- * 
+ *
  * It is really important that we DO NOTHING if the user already has the hop.
  * We should NEVER over write user data without explicit permission. I have no
  * interest in working up a diff mechanism, a display mechanism, etc. to show
