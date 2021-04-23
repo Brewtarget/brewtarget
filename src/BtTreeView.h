@@ -139,6 +139,7 @@ public:
 
 public slots:
    void newNamedEntity();
+   void showVersions();
 
 private slots:
    void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);
@@ -150,6 +151,7 @@ private:
    QMenu* _contextMenu, *subMenu;
    QPoint dragStart;
    QWidget* _editor;
+   QList<Recipe*> m_versionsShown;
 
    bool doubleClick;
 

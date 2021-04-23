@@ -662,20 +662,20 @@ void MainWindow::restoreSavedState()
    }
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
-   if (Brewtarget::hasOption("recipeKey"))
-   {
-      int key = Brewtarget::option("recipeKey").toInt();
+   int key = -1;
+   if (Brewtarget::hasOption("recipeKey")) {
+      key = Brewtarget::option("recipeKey").toInt();
+   }
+   else if ( Database::instance().numberOfRecipes() > 0 ) {
+      key = 0;
+   }
+
+   if ( key > -1 ) {
       recipeObs = Database::instance().recipe( key );
       QModelIndex rIdx = treeView_recipe->findElement(recipeObs);
 
       setRecipe(recipeObs);
       setTreeSelection(rIdx);
-   }
-   else
-   {
-      QList<Recipe*> recs = Database::instance().recipes();
-      if( recs.size() > 0 )
-         setRecipe( recs[0] );
    }
 
    //UI restore state

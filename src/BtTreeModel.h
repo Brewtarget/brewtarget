@@ -192,6 +192,9 @@ public:
    Qt::DropActions supportedDropActions() const;
    QStringList mimeTypes() const;
 
+   //! \b show the versions of the recipe at index
+   void showVersions(QModelIndex ndx);
+
 private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
@@ -269,7 +272,7 @@ private:
    QModelIndex createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath);
 
    //! \brief convenience function to add brewnotes to a recipe as a subtree
-   void addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent);
+   void addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent, bool recurse = true);
 
    BtTreeItem* rootItem;
    BtTreeView *parentTree;

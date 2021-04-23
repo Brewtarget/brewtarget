@@ -127,6 +127,8 @@ public:
                                    QString const& password="brewtarget");
    bool loadSuccessful();
 
+   int numberOfRecipes() const;
+
    void updateEntry( NamedEntity* object, QString propName, QVariant value, bool notify = true, bool transact = false );
 
    //! \brief Get the contents of the cell specified by table/key/col_name
@@ -438,8 +440,10 @@ public:
     */
    template<class S> QList<S *> getAll();
 
+   //! \b returns a list of all ancestors of a recipe
+   QList<int> ancestoralIds(Recipe const* descendant);
    //! \b returns a list of the brew notes in a recipe.
-   QList<BrewNote*> brewNotes(Recipe const* parent);
+   QList<BrewNote*> brewNotes(Recipe const* parent,bool recurse = true);
    //! Return a list of all the fermentables in a recipe.
    QList<Fermentable*> fermentables(Recipe const* parent);
    //! Return a list of all the hops in a recipe.

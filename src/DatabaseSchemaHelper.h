@@ -54,6 +54,7 @@ private:
    static QString ALTERTABLE;
    static QString DROPTABLE;
    static QString ADDCOLUMN;
+   static QString IFNOTEXISTS;
    static QString DROPCOLUMN;
    static QString UPDATE;
    static QString SET;
@@ -91,6 +92,8 @@ private:
    static bool drop_columns(QSqlQuery q, TableSchema* tbl);
    static bool drop_columns(QSqlQuery q, TableSchema* tbl, QStringList colNames);
 
+   static bool columnExists(QSqlDatabase db, QString tableName, QString columnName);
+
    static bool migrate_to_202(QSqlQuery q, DatabaseSchema *defn);
    static bool migrate_to_210(QSqlQuery q, DatabaseSchema *defn);
    static bool migrate_to_4(QSqlQuery q, DatabaseSchema *defn);
@@ -100,6 +103,7 @@ private:
    static bool migration_aide_8(QSqlQuery q, DatabaseSchema* defn, Brewtarget::DBTable table );
    static bool migrate_to_8(QSqlQuery q, DatabaseSchema *defn);
    static bool migrate_to_9(QSqlQuery q, DatabaseSchema *defn);
+   static bool migrate_to_10(QSqlDatabase db, DatabaseSchema *defn);
 };
 
 #endif

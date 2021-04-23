@@ -1512,13 +1512,14 @@ Mash* Recipe::mash() const { return Database::instance().mash( this ); }
 Equipment* Recipe::equipment() const { return Database::instance().equipment(this); }
 
 QList<Instruction*> Recipe::instructions() const { return Database::instance().instructions(this); }
-QList<BrewNote*> Recipe::brewNotes() const { return Database::instance().brewNotes(this); }
+QList<BrewNote*> Recipe::brewNotes(bool recurse) const { return Database::instance().brewNotes(this,recurse); }
 QList<Hop*> Recipe::hops() const { return Database::instance().hops(this); }
 QList<Fermentable*> Recipe::fermentables() const { return Database::instance().fermentables(this); }
 QList<Misc*> Recipe::miscs() const { return Database::instance().miscs(this); }
 QList<Yeast*> Recipe::yeasts() const { return Database::instance().yeasts(this); }
 QList<Water*> Recipe::waters() const { return Database::instance().waters(this); }
 QList<Salt*> Recipe::salts() const { return Database::instance().salts(this); }
+QList<int> Recipe::ancestors() const { return Database::instance().ancestoralIds(this); }
 
 //==============================Getters===================================
 Recipe::Type Recipe::recipeType() const {

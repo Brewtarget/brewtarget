@@ -71,6 +71,8 @@ namespace PropertyNames::Recipe { static char const * const color_srm = "color_s
 namespace PropertyNames::Recipe { static char const * const postBoilVolume_l = "postBoilVolume_l"; /* previously kpropPostBoilVol */ }
 namespace PropertyNames::Recipe { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
 
+namespace PropertyNames::Recipe { static char const * const ancestorId = "ancestor_id"; }
+
 namespace PropertyNames::Recipe { static char const * const recipeType = "recipeType"; }
 namespace PropertyNames::Recipe { static char const * const style = "style"; }
 namespace PropertyNames::Recipe { static char const * const equipment  = "equipment"; }
@@ -398,7 +400,7 @@ public:
    QList<Yeast*> yeasts() const;
    QList<Water*> waters() const;
    QList<Salt*>  salts() const;
-   QList<BrewNote*> brewNotes() const;
+   QList<BrewNote*> brewNotes(bool recurse = true) const;
 
    Mash* mash() const;
    Equipment* equipment() const;
@@ -432,6 +434,7 @@ public:
    //! \brief Formats the salts for instructions
    QStringList getReagents( QList<Salt*> salts, Salt::WhenToAdd wanted);
    QHash<QString,double> calcTotalPoints();
+   QList<int> ancestors() const;
 
    static QString classNameStr();
 

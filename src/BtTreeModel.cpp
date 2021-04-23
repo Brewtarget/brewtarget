@@ -674,9 +674,9 @@ void BtTreeModel::loadTreeModel()
    }
 }
 
-void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
+void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent, bool recurse)
 {
-   QList<BrewNote*> notes = rec->brewNotes();
+   QList<BrewNote*> notes = rec->brewNotes(recurse);
    BtTreeItem* temp = parent->child(i);
 
    int j = 0;
@@ -1372,7 +1372,7 @@ void BtTreeModel::elementRemoved(NamedEntity* victim)
    if ( ! pIndex.isValid() )
       return;
 
-   if ( removeRows(index.row(),1,pIndex) )
+   if ( ! removeRows(index.row(),1,pIndex) )
       return;
 
    disconnect( victim, nullptr, this, nullptr );
@@ -1500,3 +1500,53 @@ Qt::DropActions BtTreeModel::supportedDropActions() const
 {
    return Qt::CopyAction | Qt::MoveAction;
 }
+
+// =========================================================================
+// ===================== RECIPE VERSION STUFF ==============================
+// =========================================================================
+//
+void BtTreeModel::showVersions(QModelIndex ndx)
+{
+   QModelIndex pIndex;
+   QList<int> ancestors;
+
+   if ( ! ndx.isValid() ) {
+      return;
+   }
+   pIndex = parent(ndx);
+   if ( ! pIndex.isValid() ) {
+      return;
+   }
+
+   Recipe *descendant = recipe(ndx);
+   ancestors = descendant->ancestors();
+
+   // This is something a hack to quickly remove all of the brewnotes
+   removeRows(ndx.row(),1,pIndex);
+   disconnect( descendant, nullptr, this, nullptr );
+
+   // Add back in what we just removed, but without the brewnotes
+   int i,j;
+   BtTreeItem* local;
+   QModelIndex wtfNdx;
+
+   local = rootItem->child(0);
+   i = local->childCount();
+   wtfNdx = createIndex(i,0,local);
+
+   insertRow(i, wtfNdx, descendant, _type);
+   addBrewNoteSubTree(descendant,i,local);
+
+   local = item(wtfNdx);
+   j = 0;
+   foreach( int key, ancestors ) {
+      Recipe* tempRec = Database::instance().recipe(key);
+      // If this is an ancestor, start mapping the brewnotes
+      if ( tempRec != descendant ) {
+         insertRow(j, createIndex(i,0,local), tempRec, _type);
+         addBrewNoteSubTree(tempRec,j,local,false);
+      }
+   }
+}
+
+

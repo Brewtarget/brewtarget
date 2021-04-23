@@ -436,6 +436,10 @@ bool Database::load()
    return loadWasSuccessful;
 }
 
+int Database::numberOfRecipes() const {
+   return allRecipes.size();
+}
+
 bool Database::createBlank(QString const& filename)
 {
    {
@@ -1300,17 +1304,75 @@ void Database::insertInstruction(Instruction* in, int pos)
    emit in->changed( in->metaProperty("instructionNumber"), pos );
 }
 
-QList<BrewNote*> Database::brewNotes(Recipe const* parent)
+QList<int> Database::ancestoralIds(Recipe const* descendant)
 {
+   QList<int> ret;
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
+
+   // Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn
+   // WITH RECURSIVE ancestor(id,ancestor_id) AS
+   //  (SELECT id,ancestor_id FROM recipe r WHERE r.id = [key]
+   //   UNION ALL
+   //   SELECT r.id, r.ancestor_id FROM ancestor a, recipe r
+   //     WHERE r.id = a.ancestor_id AND r.ancestor_id != a.id )
+   // SELECT r.id FROM ancestor a, recipe r WHERE a.id = r.id
+   //  
+   QString recursiveQuery =
+      QString("WITH RECURSIVE ancestor(%1,%2) AS "
+               "(SELECT %1,%2 FROM recipe r WHERE r.%1 = %3 "
+                "UNION ALL "
+                "SELECT r.%1, r.%2 FROM ancestor a, recipe r "
+                "WHERE r.%1 = a.%2 AND r.%2 != a.%1 ) "
+              "SELECT r.%1 FROM ancestor a, recipe r WHERE a.%1 = r.%1")
+      .arg( tbl->keyName() )
+      .arg( tbl->foreignKeyToColumn(PropertyNames::Recipe::ancestorId) )
+      .arg( descendant->_key );
+
+   QSqlQuery q( sqlDatabase() );
+
+   try {
+      if ( ! q.exec(recursiveQuery) ) {
+         throw QString("Could not find ancestoral recipes");
+      }
+      while ( q.next() ) {
+         ret.append( q.record().value( tbl->keyName() ).toInt() );
+      }
+   }
+   catch( QString e ) {
+      qCritical() << Q_FUNC_INFO << e << q.lastError().text();
+      abort();
+   }
+
+   return ret;
+}
+
+QList<BrewNote*> Database::brewNotes(Recipe const* parent, bool recurse)
+{
+   QList<int> ancestors;
+   QString inList;
+
    QList<BrewNote*> ret;
    TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
 
-   //  recipe_id = [parent->key] AND deleted = false
-   QString filterString = QString("%1 = %2 AND %3 = %4")
-           .arg( tbl->recipeIndexName() )
-           .arg(parent->_key)
-           .arg(tbl->propertyToColumn(PropertyNames::NamedEntity::deleted))
-           .arg(Brewtarget::dbFalse());
+   if ( recurse ) {
+      ancestors = ancestoralIds(parent);
+      inList = QString("%1").arg(ancestors.takeFirst());
+      foreach(int key, ancestors) {
+         inList.append(QString(",%1").arg(key));
+      }
+   }
+   else {
+      inList = QString("%1").arg(parent->_key);
+   }
+
+   // this may not be the most efficient way to query. It compresses the code
+   // nicely, but maybe that's the wrong optimization
+   //  deleted = false and recipe_id in (LIST)
+   QString filterString = QString("%1 = %2 AND %3 in (%4)")
+         .arg(tbl->propertyToColumn(PropertyNames::NamedEntity::deleted))
+         .arg(Brewtarget::dbFalse())
+         .arg(tbl->recipeIndexName())
+         .arg(inList);
 
    getElements(ret, filterString, Brewtarget::BREWNOTETABLE, allBrewNotes);
 
@@ -3507,9 +3569,12 @@ QList<Misc*> Database::miscs()
 QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
-   QString query = QString("%1=%2")
+   QString query = QString("%1=%2 and %3=%4")
            .arg(dbDefn->table(Brewtarget::RECTABLE)->propertyToColumn(PropertyNames::NamedEntity::deleted))
-           .arg(Brewtarget::dbFalse());
+           .arg(Brewtarget::dbFalse())
+           .arg(dbDefn->table(Brewtarget::RECTABLE)->propertyToColumn(PropertyNames::NamedEntity::display))
+           .arg(Brewtarget::dbTrue());
+
    // This is gonna kill me.
    getElements( tmp, query, Brewtarget::RECTABLE, allRecipes );
    return tmp;

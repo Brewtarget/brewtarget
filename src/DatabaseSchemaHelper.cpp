@@ -34,14 +34,16 @@
 #include "WaterSchema.h"
 #include "model/BrewNote.h"
 #include "model/Water.h"
+#include "RecipeSchema.h"
 
-const int DatabaseSchemaHelper::dbVersion = 9;
+const int DatabaseSchemaHelper::dbVersion = 10;
 
 // Commands and keywords
 QString DatabaseSchemaHelper::CREATETABLE("CREATE TABLE");
 QString DatabaseSchemaHelper::ALTERTABLE("ALTER TABLE");
 QString DatabaseSchemaHelper::DROPTABLE("DROP TABLE");
 QString DatabaseSchemaHelper::ADDCOLUMN("ADD COLUMN");
+QString DatabaseSchemaHelper::IFNOTEXISTS("IF NOT EXISTS");
 QString DatabaseSchemaHelper::DROPCOLUMN("DROP COLUMN");
 QString DatabaseSchemaHelper::UPDATE("UPDATE");
 QString DatabaseSchemaHelper::SET("SET");
@@ -160,6 +162,9 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db )
          break;
       case 8:
          ret &= migrate_to_9(q,defn);
+         break;
+      case 9:
+         ret &= migrate_to_10(db,defn);
          break;
       default:
          qCritical() << QString("Unknown version %1").arg(oldVersion);
@@ -519,6 +524,9 @@ bool DatabaseSchemaHelper::migration_aide_8(QSqlQuery q, DatabaseSchema *defn, B
    // create new inventory rows for parents who have no inventory
    QSqlQuery i(q);
    ret = q.exec(noInventory);
+   if ( !ret ) {
+      return ret;
+   }
 
    while ( q.next() ) {
       int idx = q.record().value(tbl->keyName()).toInt();
@@ -663,6 +671,50 @@ bool DatabaseSchemaHelper::migrate_to_9(QSqlQuery q, DatabaseSchema* defn)
    );
    ret &= q.exec(defn->generateCreateTable(Brewtarget::SALTTABLE));
    ret &= q.exec(defn->generateCreateTable(Brewtarget::SALTINRECTABLE));
+
+   return ret;
+}
+
+bool DatabaseSchemaHelper::columnExists(QSqlDatabase db, QString tableName, QString columnName)
+{
+   bool exists = false;
+   QString pragma = QString( "PRAGMA table_info (%1)").arg(tableName);
+
+   QSqlQuery q = db.exec(pragma);
+   if ( q.isActive() ) {
+      while ( q.next() ) {
+         if ( columnName == q.record().value("name").toString()) {
+            exists = true;
+            break;
+         }
+      }
+   }
+   else {
+      qCritical() << q.lastError().text();
+   }
+
+   q.finish();
+   return exists;
+}
+
+bool DatabaseSchemaHelper::migrate_to_10(QSqlDatabase db, DatabaseSchema* defn)
+{
+   bool ret = true;
+   QString addColumn, populateColumn;
+   TableSchema* tbl = defn->table(Brewtarget::RECTABLE);
+   QString colname = tbl->foreignKeyToColumn( kcolRecipeAncestorId );
+   QString references = QString("references  %1(%2)").arg(tbl->tableName()).arg(tbl->keyName());
+
+   QSqlQuery q(db);
+
+   if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
+      addColumn = ALTERTABLE + SEP + tbl->tableName() + SEP + ADDCOLUMN + SEP + IFNOTEXISTS + SEP + colname + SEP + "INTEGER" + SEP + references;
+      ret &= q.exec(addColumn);
+   }
+   else if ( ! columnExists(db,tbl->tableName(),colname) ) {
+      addColumn = ALTERTABLE + SEP + tbl->tableName() + SEP + ADDCOLUMN + SEP + colname + SEP + "INTEGER" + SEP + references;
+      ret &= q.exec(addColumn);
+   }
 
    return ret;
 }
