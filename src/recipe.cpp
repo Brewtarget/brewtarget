@@ -167,7 +167,7 @@ Recipe::Recipe(TableSchema* table, QSqlRecord rec, int t_key)
    m_tertiaryTemp_c = rec.value( table->propertyToColumn( PropertyNames::Recipe::tertiaryTemp_c)).toDouble();
    m_age = rec.value( table->propertyToColumn( PropertyNames::Recipe::age)).toDouble();
    m_ageTemp_c = rec.value( table->propertyToColumn( PropertyNames::Recipe::ageTemp_c)).toDouble();
-   m_date = QDate::fromString(rec.value( table->propertyToColumn( PropertyNames::Recipe::date)).toString(), QString("d/M/yyyy"));
+   m_date = QDate::fromString(rec.value( table->propertyToColumn( PropertyNames::Recipe::date)).toString(), Qt::ISODate);
    m_carbonation_vols = rec.value( table->propertyToColumn( PropertyNames::Recipe::carbonation_vols)).toDouble();
    m_forcedCarbonation = rec.value( table->propertyToColumn( PropertyNames::Recipe::forcedCarbonation)).toBool();
    m_primingSugarName = rec.value( table->propertyToColumn( PropertyNames::Recipe::primingSugarName)).toString();
@@ -1266,10 +1266,8 @@ void Recipe::setAgeTemp_c( double var )
 void Recipe::setDate( const QDate &var )
 {
    m_date = var;
-   // do not like this. I thought we had everything in ISO format
    if ( ! m_cacheOnly ) {
-      static const QString dateFormat("d/M/yyyy");
-      setEasy(PropertyNames::Recipe::date, var.toString(dateFormat) );
+      setEasy(PropertyNames::Recipe::date, var.toString(Qt::ISODate) );
    }
 }
 
