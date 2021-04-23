@@ -883,14 +883,32 @@ QString Recipe::nextAddToBoil(double& time)
 }
 
 //============================Relational Setters===============================
-// See comment in header file for why we can't put this template definition there, and hence why we need the subsequent
-// lines as a "trick" to ensure all the right versions of the template are instantiated in an externally-visible way.
+// See comment in header file for why we can't put this template definition there (essentially because we can't call a
+// member function of Database in the header without creating circular dependencies), and hence why we need the
+// subsequent lines as a "trick" to ensure all the right versions of the template are instantiated in an externally-
+// visible way.
 template<class T> T * Recipe::add(T * var) {
-   // If the supplied ingredient has no parent then we need to make a copy of it - or rather tell the Database object
-   // to make a copy.  We'll then get back a pointer to the copy.  If it does have a parent then we can just add it
-   // directly, and we'll get back the same pointer we passed in.
-   bool noCopy = (var->getParent() != nullptr);
-   return Database::instance().addToRecipe(this, var, noCopy);
+   // If the supplied parameter has no parent then we need to make a copy of it - or rather tell the Database object
+   // to make a copy.  We'll then get back a pointer to the copy.  If it does have a parent then we need to check
+   // whether it's already in used in another recipe.  If not, wee can just add it directly, and we'll get back the
+   // same pointer we passed in.  Otherwise we get its parent and make another copy of that.
+   T * parentOfVar = static_cast<T *>(var->getParent());
+   if (parentOfVar != nullptr) {
+      // Parameter has a parent.  See if it (the parameter, not its parent!) is used in a recipe.
+      // (NB: The parent of the NamedEntity is not the same thing as its parent recipe.  We should perhaps find some
+      // different terms!)
+      Recipe * usedIn = Database::instance().getParentRecipe(var);
+      if (usedIn == nullptr) {
+         // The parameter is not already used in a recipe, so we can add it without making a copy
+         return Database::instance().addToRecipe(this, var, true);
+      }
+
+      // The parameter is already used in a recipe, so we need to add a copy of its parent
+      return Database::instance().addToRecipe(this, parentOfVar, false);
+   }
+
+   // Parameter has no parent, so add a copy of it
+   return Database::instance().addToRecipe(this, var, false);
 }
 template Hop *         Recipe::add(Hop *         var);
 template Fermentable * Recipe::add(Fermentable * var);

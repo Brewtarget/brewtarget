@@ -1040,6 +1040,35 @@ void Database::removeFrom( Mash* mash, MashStep* step )
    emit mash->mashStepsChanged();
 }
 
+Recipe* Database::getParentRecipe(NamedEntity const * ing) {
+
+   QMetaObject const * meta = ing->metaObject();
+   TableSchema* table = this->dbDefn->table( this->dbDefn->classNameToTable(meta->className()) );
+   TableSchema* inrec = this->dbDefn->table( table->inRecTable() );
+
+   QString select = QString("SELECT %4 from %1 WHERE %2=%3")
+                        .arg(inrec->tableName())
+                        .arg(inrec->inRecIndexName())
+                        .arg(ing->_key)
+                        .arg(inrec->recipeIndexName());
+   qDebug() << Q_FUNC_INFO << "NamedEntity in recipe search:" << select;
+   QSqlQuery q(sqlDatabase());
+   if (! q.exec(select) ) {
+      throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
+         .arg(q.lastQuery()).arg(q.lastError().text());
+   }
+
+   Recipe * parent = nullptr;
+
+   if ( q.next() ) {
+      int key = q.record().value(inrec->recipeIndexName()).toInt();
+      parent = this->allRecipes[key];
+   }
+
+   q.finish();
+   return parent;
+}
+
 Recipe* Database::getParentRecipe( BrewNote const* note )
 {
    int key;

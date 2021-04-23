@@ -377,7 +377,11 @@ public:
          emit deletedSignal(ing);
    }
 
-   //! Get the recipe that this \b note is part of.
+   //! Get the recipe that this \b ing is part of.
+   Recipe* getParentRecipe(NamedEntity const * ing);
+
+   //! Get the recipe that this \b note is part of.  (BrewNotes are stored differently so we need a different function
+   //  for them.)
    Recipe* getParentRecipe( BrewNote const* note );
 
    //! Interchange the step orders of the two steps. Must be in same mash.
