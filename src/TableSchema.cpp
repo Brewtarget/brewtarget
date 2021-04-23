@@ -420,6 +420,9 @@ const QString TableSchema::generateCreateTable(Brewtarget::DBTypes type, QString
    return retVal;
 }
 
+// This version is intended for direct database -> database copies. The
+// returned string is bound by COLUMN NAME, not property. By the time you have
+// properties, you really want the generateInsertProperties() method.
 const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
 {
    Brewtarget::DBTypes selected = type == Brewtarget::ALLDB ? m_defType : type;
@@ -432,7 +435,7 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
       PropertySchema* prop = i.value();
 
       columns += QString(",%1").arg( prop->colName(selected));
-      binding += QString(",:%1").arg( i.key());
+      binding += QString(",:%1").arg( prop->colName(selected));
    }
 
    QMapIterator<QString, PropertySchema*> j(m_foreignKeys);
@@ -440,8 +443,8 @@ const QString TableSchema::generateInsertRow(Brewtarget::DBTypes type)
       j.next();
       PropertySchema* key = j.value();
 
-      columns += QString(",%1").arg(key->colName(selected));
-      binding += QString(",:%1").arg( i.key());
+      columns += QString(",%1").arg( key->colName(selected));
+      binding += QString(",:%1").arg( key->colName(selected));
    }
    return QString("INSERT INTO %1 (%2) VALUES(%3)").arg(m_tableName).arg(columns).arg(binding);
 }
