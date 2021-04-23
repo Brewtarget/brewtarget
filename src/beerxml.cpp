@@ -333,7 +333,7 @@ namespace {
       {XmlRecord::String,  "DESCRIPTION",        nullptr,                                    nullptr}, // Extension tag
       {XmlRecord::String,  "WATER_GRAIN_RATIO",  nullptr,                                    nullptr}, // Extension tag
       {XmlRecord::String,  "DECOCTION_AMT",      nullptr,                                    nullptr}, // Extension tag
-      {XmlRecord::String,  "INFUSE_TEMP",        nullptr,                                    nullptr}, // Extension tag
+      {XmlRecord::String,  "INFUSE_TEMP",        PropertyNames::MashStep::infuseTemp_c,      nullptr}, // Extension tag
       {XmlRecord::String,  "DISPLAY_STEP_TEMP",  nullptr,                                    nullptr}, // Extension tag
       {XmlRecord::String,  "DISPLAY_INFUSE_AMT", nullptr,                                    nullptr}, // Extension tag
       {XmlRecord::Double,  "DECOCTION_AMOUNT",   PropertyNames::MashStep::decoctionAmount_l, nullptr}  // Non-standard tag, not part of BeerXML 1.0 standard
