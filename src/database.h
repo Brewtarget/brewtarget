@@ -206,7 +206,7 @@ public:
    Fermentable* newFermentable(Fermentable* other = nullptr, bool add_inventory = false);
    Hop* newHop(Hop* other = nullptr, bool add_inventory = false);
    //! \returns a copy of the given recipe.
-   Recipe* newRecipe(Recipe* other);
+   Recipe* newRecipe(Recipe* other, bool ancestor = false);
    /*! \returns a copy of the given mash. Displaces the mash currently in the
     * parent recipe unless \b displace is false.
     */
@@ -483,6 +483,8 @@ public:
    void convertFromXml();
 
    bool isConverted();
+   bool wantsVersion(Recipe* rec);
+   Recipe* breed(Recipe* parent);
 
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done.
@@ -526,6 +528,9 @@ signals:
 
    // Sigh
    void changedInventory(Brewtarget::DBTable,int,QVariant);
+
+   // emits a signal when we create a version
+   void spawned(Recipe* ancestor, Recipe* descendant);
 
 private slots:
    //! Load database from file.

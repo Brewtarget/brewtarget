@@ -303,6 +303,7 @@ public slots:
    void droppedRecipeMisc(QList<Misc*>miscs);
    void droppedRecipeYeast(QList<Yeast*>yeasts);
 
+   void versionedRecipe(Recipe* ancestor, Recipe* descendant);
    //! \brief Doing updates via this method makes them undoable (and redoable).  This is the most generic version
    //         which requires the caller to construct a QUndoCommand.
    void doOrRedoUpdate(QUndoCommand * update);

@@ -82,6 +82,8 @@ BtTreeModel* BtTreeView::model()
    return _model;
 }
 
+BtTreeFilterProxyModel* BtTreeView::filter() { return _filter; }
+
 bool BtTreeView::removeRow(const QModelIndex &index)
 {
    QModelIndex modelIndex = _filter->mapToSource(index);

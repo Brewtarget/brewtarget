@@ -318,6 +318,7 @@ void MainWindow::init() {
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
    connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+   connect( &(Database::instance()), SIGNAL( spawned(Recipe*,Recipe*)), this, SLOT( versionedRecipe(Recipe*,Recipe*)));
 
    qDebug() << Q_FUNC_INFO << "MainWindow initialisation complete";
    return;
@@ -3067,6 +3068,12 @@ void MainWindow::fixBrewNote()
 void MainWindow::updateStatus(const QString status) {
    if( statusBar() )
       statusBar()->showMessage(status, 3000);
+}
+
+void MainWindow::versionedRecipe(Recipe* ancestor, Recipe* descendant)
+{
+   setRecipe(descendant);
+   treeView_recipe->filter()->invalidate();
 }
 
 void MainWindow::closeBrewNote(BrewNote* b)

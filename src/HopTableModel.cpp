@@ -128,7 +128,6 @@ void HopTableModel::addHop(Hop* hop)
    beginInsertRows( QModelIndex(), size, size );
    hopObs.append(hop);
    connect( hop, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
 

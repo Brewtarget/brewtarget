@@ -1925,9 +1925,37 @@ Recipe* Database::newRecipe(QString name)
    return tmp;
 }
 
-Recipe* Database::newRecipe(Recipe* other)
+bool Database::wantsVersion(Recipe* rec)
+{
+   bool ret = false;
+   QSqlQuery q(sqlDatabase());
+   TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
+
+   // select id from brewnote where recipe_id = [key]
+   QString queryExistence = QString("SELECT %1 FROM %2 WHERE %3=%4")
+                              .arg( tbl->keyName() )
+                              .arg( tbl->tableName() )
+                              .arg( tbl->foreignKeyToColumn(kpropRecipeId) )
+                              .arg( rec->_key );
+   try {
+      qDebug() << Q_FUNC_INFO << queryExistence;
+      if ( ! q.exec(queryExistence) ) {
+         throw QString("Could not query existence. Seek theological help");
+      }
+      ret =  q.next();
+   }
+   catch (QString e) {
+      qCritical() << Q_FUNC_INFO << e << q.lastError().text();
+   }
+
+   q.finish();
+   return ret;
+}
+
+Recipe* Database::newRecipe(Recipe* other, bool ancestor)
 {
    Recipe* tmp;
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    sqlDatabase().transaction();
    try {
@@ -1946,6 +1974,21 @@ Recipe* Database::newRecipe(Recipe* other)
       addToRecipe( tmp, other->equipment(), false, false);
       addToRecipe( tmp, other->mash(), false, false);
       addToRecipe( tmp, other->style(), false, false);
+
+      // if other is an ancestor, we need to set display false on other and
+      // link the two. This may need some rethinking -- dropping SQL in here
+      // just looks ugly
+      if ( ancestor ) {
+         QSqlQuery q(sqlDatabase());
+         other->setDisplay(false);
+         // update recipe set ancestor_id = [other->key] where id = [new key]
+         QString setAncestor = QString("update %1 set %2 = %3 where %4 = %5")
+                                 .arg( tbl->tableName() )
+                                 .arg( tbl->foreignKeyToColumn(PropertyNames::Recipe::ancestorId) )
+                                 .arg( other->_key )
+                                 .arg( tbl->keyName() )
+                                 .arg( tmp->_key );
+      }
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -3016,6 +3059,16 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
    return result;
 }
 
+Recipe* Database::breed(Recipe* parent)
+{
+   if ( wantsVersion(parent) ) {
+      return newRecipe(parent,true);
+   }
+   else {
+      return parent;
+   }
+}
+
 // Add to recipe ==============================================================
 void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transact )
 {
@@ -3123,17 +3176,22 @@ QList<Fermentable*> Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms
 
 Hop * Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 {
+   Recipe* spawn = breed(rec);
    try {
-      Hop* newHop = addNamedEntityToRecipe<Hop>( rec, hop, noCopy, &allHops, true, transact );
+      Hop* newHop = addNamedEntityToRecipe<Hop>( spawn, hop, noCopy, &allHops, true, transact );
       // it's slightly dirty pool to put this all in the try block. Sue me.
-      connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+      connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), spawn, SLOT(acceptHopChange(QMetaProperty,QVariant)));
       if ( transact ) {
-         rec->recalcIBU();
+         spawn->recalcIBU();
       }
       return newHop;
    }
    catch (QString e) {
       throw;
+   }
+
+   if ( spawn != rec ) {
+      emit spawned(rec,spawn);
    }
 }
 
@@ -3144,14 +3202,15 @@ QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
    if ( hops.size() == 0 )
       return rets;
 
+   Recipe *spawn = breed(rec);
    if ( transact ) {
       sqlDatabase().transaction();
    }
 
    try {
       foreach (Hop* hop, hops ) {
-         Hop* newHop = addNamedEntityToRecipe<Hop>( rec, hop, false, &allHops, true, false );
-         connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+         Hop* newHop = addNamedEntityToRecipe<Hop>( spawn, hop, false, &allHops, true, false );
+         connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), spawn, SLOT(acceptHopChange(QMetaProperty,QVariant)));
          rets.append(newHop);
       }
    }

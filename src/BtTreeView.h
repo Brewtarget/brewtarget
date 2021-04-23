@@ -54,7 +54,10 @@ public:
    //! \brief The standard contructor
    BtTreeView(QWidget *parent = nullptr, BtTreeModel::TypeMasks mask = BtTreeModel::RECIPEMASK);
    //! \brief returns the model associated with this tree
-   BtTreeModel* model();
+   BtTreeModel* model();\
+   //! \b returns the filter associated with this model
+   BtTreeFilterProxyModel* filter();
+
    //! \brief returns the context menu associated with the \c selected item
    QMenu* contextMenu(QModelIndex selected);
 
