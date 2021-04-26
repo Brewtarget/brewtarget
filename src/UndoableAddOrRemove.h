@@ -112,6 +112,26 @@ public:
       return;
    }
 
+   UndoableAddOrRemove(UU & updatee,
+                       VV * (UU::*doer)(VV *),
+                       VV * oneToAddOrRemove,
+                       VV * (UU::*undoer)(VV *),
+                       void (MainWindow::*doCallback)(VV *),
+                       void (MainWindow::*undoCallback)(VV *),
+                       QString const & description,
+                       QUndoCommand * parent = nullptr)
+   : QUndoCommand(parent),
+     updatee(updatee),
+     doer(doer),
+     undoer(undoer),
+     doCallback(doCallback),
+     undoCallback(undoCallback),
+     everDone(false)
+   {
+      this->whatToAddOrRemove.append(oneToAddOrRemove);
+
+      return;
+   }
    ~UndoableAddOrRemove()
    {
       return;
@@ -174,6 +194,7 @@ private:
          if (this->doCallback != nullptr) {
             (Brewtarget::mainWindow()->*(this->doCallback))(whatToAddOrRemove);
          }
+         this->whatToAddOrRemove.append(redone);
 
          // In this implementation "Do" and "Redo" are identical, but it's nonetheless useful for debugging purposes to
          // be able to distinguish the two cases.
@@ -193,6 +214,7 @@ private:
          if (this->undoCallback != nullptr) {
             (Brewtarget::mainWindow()->*(this->undoCallback))(whatToAddOrRemove);
          }
+         this->whatToAddOrRemove.append(undone);
       }
 
       return;
@@ -261,7 +283,7 @@ private:
    UU & updatee;
    // singletons
    VV * (UU::*doer)(VV *);
-   VV * whatToAddOrRemove;
+   QList<VV *> whatToAddOrRemove;
    VV * (UU::*undoer)(VV *);
    void (MainWindow::*doCallback)(VV *);
    void (MainWindow::*undoCallback)(VV *);

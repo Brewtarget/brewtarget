@@ -890,6 +890,7 @@ template<class T> T * Recipe::add(T * var) {
    // to make a copy.  We'll then get back a pointer to the copy.  If it does have a parent then we need to check
    // whether it's already in used in another recipe.  If not, wee can just add it directly, and we'll get back the
    // same pointer we passed in.  Otherwise we get its parent and make another copy of that.
+   qInfo() << Q_FUNC_INFO << var->name();
    T * parentOfVar = static_cast<T *>(var->getParent());
    if (parentOfVar != nullptr) {
       // Parameter has a parent.  See if it (the parameter, not its parent!) is used in a recipe.
