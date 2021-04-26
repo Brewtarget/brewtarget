@@ -975,15 +975,20 @@ NamedEntity * Database::removeNamedEntityFromRecipe( Recipe* rec, NamedEntity* i
                                     .arg(ing->_key);
          qDebug() << QString("Delete From Children SQL: %1").arg(deleteFromChildren);
          if ( ! q.exec( deleteFromChildren ) ) {
+            qInfo() << Q_FUNC_INFO << q.lastQuery() << q.lastError().text();
             throw QString("failed to delete children.");
          }
       }
 
-      if ( ! q.exec(deleteFromInRecipe) )
+      if ( ! q.exec(deleteFromInRecipe) ) {
+         qInfo() << Q_FUNC_INFO << q.lastQuery() << q.lastError().text();
          throw QString("failed to delete in_recipe.");
+      }
 
-      if ( ! q.exec( deleteNamedEntity ) )
+      if ( ! q.exec( deleteNamedEntity ) ) {
+         qInfo() << Q_FUNC_INFO << q.lastQuery() << q.lastError().text();
          throw QString("failed to delete ingredient.");
+      }
 
    }
    catch ( QString e ) {

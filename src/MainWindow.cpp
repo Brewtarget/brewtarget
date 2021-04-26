@@ -1452,7 +1452,13 @@ void MainWindow::droppedRecipeMisc(QList<Misc*>miscs)
 
    if ( tabWidget_ingredients->currentWidget() != miscTab )
       tabWidget_ingredients->setCurrentWidget(miscTab);
-   Database::instance().addToRecipe(recipeObs, miscs);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Misc>,
+                             miscs,
+                             &Recipe::remove<Misc>,
+                             tr("Add misc to recipe"))
+   );
 }
 
 void MainWindow::droppedRecipeYeast(QList<Yeast*>yeasts)

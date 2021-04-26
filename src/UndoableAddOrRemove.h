@@ -56,11 +56,11 @@ public:
     * \param parent This is for grouping updates together.
     */
    UndoableAddOrRemove(UU & updatee,
-                       VV * (UU::*doer)(VV *),
-                       VV * whatToAddOrRemove,
-                       VV * (UU::*undoer)(VV *),
-                       void (MainWindow::*doCallback)(VV *),
-                       void (MainWindow::*undoCallback)(VV *),
+                       QList<VV *> (UU::*doer)(QList<VV *>),
+                       QList<VV *> whatToAddOrRemove,
+                       QList<VV *> (UU::*undoer)(QList<VV *>),
+                       void (MainWindow::*doCallback)(QList<VV *>),
+                       void (MainWindow::*undoCallback)(QList<VV *>),
                        QString const & description,
                        QUndoCommand * parent = nullptr)
    : QUndoCommand(parent),
@@ -78,6 +78,26 @@ public:
       return;
    }
 
+   UndoableAddOrRemove(UU & updatee,
+                       VV * (UU::*doer)(VV *),
+                       VV * oneToAddOrRemove,
+                       VV * (UU::*undoer)(VV *),
+                       void (MainWindow::*doCallback)(VV *),
+                       void (MainWindow::*undoCallback)(VV *),
+                       QString const & description,
+                       QUndoCommand * parent = nullptr)
+   : QUndoCommand(parent),
+     updatee(updatee),
+     doer(doer),
+     undoer(undoer),
+     doCallback(doCallback),
+     undoCallback(undoCallback),
+     everDone(false)
+   {
+      this->whatToAddOrRemove.append(oneToAddOrRemove);
+
+      return;
+   }
    ~UndoableAddOrRemove()
    {
       return;
@@ -123,27 +143,30 @@ private:
       // will cause it to be stored in the DB with a new ID.
       //
       if (!isUndo) {
-         qDebug() << QString("%1: %2 \"%3\" for #%4").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->text()).arg(this->whatToAddOrRemove->key());
+         qDebug() << QString("%1: %2 \"%3\" for #%4").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->text()).arg(this->whatToAddOrRemove.size());
+         QList<VV*> redone;
+         redone.append((this->updatee.*(this->doer))(whatToAddOrRemove));
 
-         this->whatToAddOrRemove = (this->updatee.*(this->doer))(this->whatToAddOrRemove);
-
-         qDebug() << QString("%1: %2 Returned #%3").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->whatToAddOrRemove->key());
+         qDebug() << QString("%1: %2 Returned #%3").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->whatToAddOrRemove.last()->key());
          if (this->doCallback != nullptr) {
-            (Brewtarget::mainWindow()->*(this->doCallback))(this->whatToAddOrRemove);
+            (Brewtarget::mainWindow()->*(this->doCallback))(whatToAddOrRemove);
          }
+         this->whatToAddOrRemove.append(redone);
 
          // In this implementation "Do" and "Redo" are identical, but it's nonetheless useful for debugging purposes to
          // be able to distinguish the two cases.
          this->everDone = true;
       } else {
-         qDebug() << QString("%1: Undo \"%2\" for #%3").arg(Q_FUNC_INFO).arg(this->text()).arg(this->whatToAddOrRemove->key());
+         qDebug() << QString("%1: Undo \"%2\" for #%3").arg(Q_FUNC_INFO).arg(this->text()).arg(this->whatToAddOrRemove.size());
 
-         this->whatToAddOrRemove = (this->updatee.*(this->undoer))(this->whatToAddOrRemove);
+         QList<VV*> undone;
+         undone.append((this->updatee.*(this->undoer))(whatToAddOrRemove));
 
-         qDebug() << QString("%1: Undo Returned #%2").arg(Q_FUNC_INFO).arg(this->whatToAddOrRemove->key());
+         qDebug() << QString("%1: Undo Returned #%2").arg(Q_FUNC_INFO).arg(undone.size());
          if (this->undoCallback != nullptr) {
-            (Brewtarget::mainWindow()->*(this->undoCallback))(this->whatToAddOrRemove);
+            (Brewtarget::mainWindow()->*(this->undoCallback))(whatToAddOrRemove);
          }
+         this->whatToAddOrRemove.append(undone);
       }
 
       return;
@@ -151,7 +174,7 @@ private:
 
    UU & updatee;
    VV * (UU::*doer)(VV *);
-   VV * whatToAddOrRemove;
+   QList<VV *> whatToAddOrRemove;
    VV * (UU::*undoer)(VV *);
    void (MainWindow::*doCallback)(VV *);
    void (MainWindow::*undoCallback)(VV *);
@@ -167,10 +190,28 @@ private:
  */
 template<class UU, class VV> UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemove(UU & updatee,
                                                                                   VV * (UU::*doer)(VV *),
-                                                                                  VV * whatToAddOrRemove,
+                                                                                  VV * oneToAddOrRemove,
                                                                                   VV * (UU::*undoer)(VV *),
                                                                                   void (MainWindow::*doCallback)(VV *),
                                                                                   void (MainWindow::*undoCallback)(VV *),
+                                                                                  QString const & description,
+                                                                                  QUndoCommand * parent = nullptr) {
+   return new UndoableAddOrRemove<UU, VV>(updatee,
+                                          doer,
+                                          oneToAddOrRemove,
+                                          undoer,
+                                          doCallback,
+                                          undoCallback,
+                                          description,
+                                          parent);
+}
+
+template<class UU, class VV> UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemove(UU & updatee,
+                                                                                  QList<VV *> (UU::*doer)(QList<VV *>),
+                                                                                  QList<VV *> whatToAddOrRemove,
+                                                                                  QList<VV *> (UU::*undoer)(QList<VV *>),
+                                                                                  void (MainWindow::*doCallback)(QList<VV *>),
+                                                                                  void (MainWindow::*undoCallback)(QList<VV *>),
                                                                                   QString const & description,
                                                                                   QUndoCommand * parent = nullptr) {
    return new UndoableAddOrRemove<UU, VV>(updatee,
@@ -182,7 +223,6 @@ template<class UU, class VV> UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemov
                                           description,
                                           parent);
 }
-
 /*!
  * \brief Helper function that allows UndoableAddOrRemove to be instantiated with automatic template argument deduction.
  *
@@ -190,16 +230,32 @@ template<class UU, class VV> UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemov
  */
 template<class UU, class VV> UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemove(UU & updatee,
                                                                                   VV * (UU::*doer)(VV *),
-                                                                                  VV * whatToAddOrRemove,
+                                                                                  VV * oneToAddOrRemove,
                                                                                   VV * (UU::*undoer)(VV *),
+                                                                                  QString const & description,
+                                                                                  QUndoCommand * parent = nullptr) {
+   return new UndoableAddOrRemove<UU, VV>(updatee,
+                                          doer,
+                                          oneToAddOrRemove,
+                                          undoer,
+                                          static_cast<void (MainWindow::*)(VV *)>(nullptr),
+                                          static_cast<void (MainWindow::*)(VV *)>(nullptr),
+                                          description,
+                                          parent);
+}
+
+template<class UU, class VV> UndoableAddOrRemove<UU, VV> * newUndoableAddOrRemove(UU & updatee,
+                                                                                  QList<VV *> (UU::*doer)(QList<VV *>),
+                                                                                  QList<VV *> whatToAddOrRemove,
+                                                                                  QList<VV *> (UU::*undoer)(QList<VV *>),
                                                                                   QString const & description,
                                                                                   QUndoCommand * parent = nullptr) {
    return new UndoableAddOrRemove<UU, VV>(updatee,
                                           doer,
                                           whatToAddOrRemove,
                                           undoer,
-                                          static_cast<void (MainWindow::*)(VV *)>(nullptr),
-                                          static_cast<void (MainWindow::*)(VV *)>(nullptr),
+                                          static_cast<void (MainWindow::*)(QList<VV *>)>(nullptr),
+                                          static_cast<void (MainWindow::*)(QList<VV *>)>(nullptr),
                                           description,
                                           parent);
 }
