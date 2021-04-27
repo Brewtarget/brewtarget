@@ -38,6 +38,7 @@ class MiscItemDelegate;
 #include <QTableView>
 
 #include "unit.h"
+#include "brewtarget.h"
 
 // Forward declarations.
 class Misc;
@@ -55,9 +56,9 @@ enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCINVEN
 class MiscTableModel : public QAbstractTableModel
 {
    Q_OBJECT
-   
+
 public:
-   MiscTableModel(QTableView* parent=0, bool editable=true);
+   MiscTableModel(QTableView* parent=nullptr, bool editable=true);
    virtual ~MiscTableModel() {}
    //! \brief Observe a recipe's list of miscs.
    void observeRecipe(Recipe* rec);
@@ -69,14 +70,14 @@ public:
    Misc* getMisc(unsigned int i);
    //! \brief Clear the model.
    void removeAll();
-   
+
    /*!
     * \brief True if the inventory column should be editable, false otherwise.
-    * 
+    *
     * The default is that the inventory column is not editable
     */
    void setInventoryEditable( bool var ) { _inventoryEditable = var; }
-   
+
    //! \brief Reimplemented from QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
    //! \brief Reimplemented from QAbstractTableModel
@@ -107,6 +108,7 @@ public slots:
 private slots:
    //! \brief Catch changes to Recipe, Database, and Misc.
    void changed(QMetaProperty, QVariant);
+   void changedInventory(Brewtarget::DBTable,int,QVariant);
 
 private:
    bool editable;
@@ -126,16 +128,16 @@ private:
 class MiscItemDelegate : public QItemDelegate
 {
    Q_OBJECT
-           
+
 public:
-   MiscItemDelegate(QObject* parent = 0);
-   
+   MiscItemDelegate(QObject* parent = nullptr);
+
    // Inherited functions.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-   
+
 private:
 };
 

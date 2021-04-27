@@ -1,8 +1,9 @@
 /*
  * fermentable.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -20,46 +21,61 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _FERMENTABLE_H
 #define _FERMENTABLE_H
 
 #include <QStringList>
 #include <QString>
-#include "BeerXMLElement.h"
+#include "model/NamedEntity.h"
 #include "unit.h"
+namespace PropertyNames::Fermentable { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
+namespace PropertyNames::Fermentable { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }
+namespace PropertyNames::Fermentable { static char const * const origin = "origin"; /* previously kpropOrigin */ }
+namespace PropertyNames::Fermentable { static char const * const amount_kg = "amount_kg"; /* previously kpropAmountKg */ }
+namespace PropertyNames::Fermentable { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::Fermentable { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Fermentable { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Fermentable { static char const * const ibuGalPerLb = "ibuGalPerLb"; /* previously kpropIBUGalPerLb */ }
+namespace PropertyNames::Fermentable { static char const * const isMashed = "isMashed"; /* previously kpropIsMashed */ }
+namespace PropertyNames::Fermentable { static char const * const recommendMash = "recommendMash"; /* previously kpropRecommendMash */ }
+namespace PropertyNames::Fermentable { static char const * const maxInBatch_pct = "maxInBatch_pct"; /* previously kpropMaxInBatch */ }
+namespace PropertyNames::Fermentable { static char const * const protein_pct = "protein_pct"; /* previously kpropProtein */ }
+namespace PropertyNames::Fermentable { static char const * const diastaticPower_lintner = "diastaticPower_lintner"; /* previously kpropDiastaticPower */ }
+namespace PropertyNames::Fermentable { static char const * const moisture_pct = "moisture_pct"; /* previously kpropMoisture */ }
+namespace PropertyNames::Fermentable { static char const * const coarseFineDiff_pct = "coarseFineDiff_pct"; /* previously kpropCoarseFineDiff */ }
+namespace PropertyNames::Fermentable { static char const * const supplier = "supplier"; /* previously kpropSupplier */ }
+namespace PropertyNames::Fermentable { static char const * const addAfterBoil = "addAfterBoil"; /* previously kpropAddAfterBoil */ }
+namespace PropertyNames::Fermentable { static char const * const color_srm = "color_srm"; /* previously kpropColor */ }
+namespace PropertyNames::Fermentable { static char const * const yield_pct = "yield_pct"; /* previously kpropYield */ }
 
-// Forward declarations.
-class Fermentable;
-bool operator<(Fermentable &f1, Fermentable &f2);
-bool operator==(Fermentable &f1, Fermentable &f2);
 
 /*!
  * \class Fermentable
- * \author Philip G. Lee
  *
  * \brief Model for a fermentable record in the database.
  */
-class Fermentable : public BeerXMLElement
+class Fermentable : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "fermentables")
-   Q_CLASSINFO("prefix", "fermentable")
 
    friend class Brewtarget;
+   friend class BeerXML;
    friend class Database;
+   friend class FermentableDialog;
 public:
 
    //! \brief The type of Fermentable.
-   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct}; // NOTE: BeerXML expects a space for "Dry_Extract". We're screwed.
+   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct};
    //! \brief The addition method.
    enum AdditionMethod {Mashed, Steeped, Not_Mashed};
    //! \brief The addition time.
    enum AdditionTime {Normal, Late};
    Q_ENUMS( Type AdditionMethod AdditionTime )
 
+   Fermentable( QString name, bool cache = true );
    virtual ~Fermentable() {}
-   
+
    //! \brief The \c Type.
    Q_PROPERTY( Type type                     READ type                   WRITE setType                   /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The \c Type string.
@@ -77,7 +93,9 @@ public:
    //! \brief The amount in kg.
    Q_PROPERTY( double amount_kg              READ amount_kg              WRITE setAmount_kg              /*NOTIFY changed*/ /*changedAmount_kg*/ )
    //! \brief The amount in inventory in kg.
-   Q_PROPERTY( double inventory              READ inventory              WRITE setInventoryAmount              /*NOTIFY changed*/ /*changedInventory*/ )
+   Q_PROPERTY( double inventory              READ inventory              WRITE setInventoryAmount        /*NOTIFY changed*/ /*changedInventory*/ )
+   //! \brief The inventory table id, needed for signals
+   Q_PROPERTY( double inventoryId            READ inventoryId            WRITE setInventoryId            /*NOTIFY changed*/ /*changedInventoryId*/ )
    //! \brief The yield (when finely milled) as a percentage of equivalent glucose.
    Q_PROPERTY( double yield_pct              READ yield_pct              WRITE setYield_pct              /*NOTIFY changed*/ /*changedYield_pct*/ )
    //! \brief The color in SRM.
@@ -112,38 +130,40 @@ public:
    Q_PROPERTY( bool isExtract                READ isExtract STORED false)
    //! \brief Whether this fermentable is a sugar. Somewhat redundant, but it makes for nice symetry elsewhere
    Q_PROPERTY( bool isSugar                  READ isSugar STORED false)
-   
-   const Type type() const { return _type; }
-   double amount_kg() const { return _amountKg; }
-   double inventory() const { return _inventoryAmt; }
-   double yield_pct() const { return _yieldPct; }
-   double color_srm() const { return _colorSrm; }
-   bool addAfterBoil() const { return _isAfterBoil; }
-   const QString origin() const { return _origin; }
-   const QString supplier() const { return _supplier; }
-   const QString notes() const { return _notes; }
-   double coarseFineDiff_pct() const { return _coarseFineDiff; }
-   double moisture_pct() const { return _moisturePct; }
-   double diastaticPower_lintner() const { return _diastaticPower; }
-   double protein_pct() const { return _proteinPct; }
-   double maxInBatch_pct() const { return _maxInBatchPct; }
-   bool recommendMash() const { return _recommendMash; }
-   double ibuGalPerLb() const { return _ibuGalPerLb; }
-   bool isMashed() const { return _isMashed; }
+
+   Type type() const;
+   double amount_kg() const;
+   double inventory();
+   int inventoryId();
+   double yield_pct() const;
+   double color_srm() const;
+   bool addAfterBoil() const;
+   const QString origin() const;
+   const QString supplier() const;
+   const QString notes() const;
+   double coarseFineDiff_pct() const;
+   double moisture_pct() const;
+   double diastaticPower_lintner() const;
+   double protein_pct() const;
+   double maxInBatch_pct() const;
+   bool recommendMash() const;
+   double ibuGalPerLb() const;
+   bool isMashed() const;
 
    const QString typeString() const;
    //! Returns a translated type string.
    const QString typeStringTr() const;
-   const AdditionMethod additionMethod() const;
+   AdditionMethod additionMethod() const;
    //! Returns a translated addition method string.
    const QString additionMethodStringTr() const;
-   const AdditionTime additionTime() const;
+   AdditionTime additionTime() const;
    //! Returns a translated addition time string.
    const QString additionTimeStringTr() const;
    // Calculated getters.
    double equivSucrose_kg() const;
    bool isExtract() const;
    bool isSugar() const;
+   bool cacheOnly() const;
 
 
    void setType( Type t );
@@ -152,7 +172,7 @@ public:
    void setAmount_kg( double num );
    void setInventoryAmount( double num );
    void setYield_pct( double num );
-   void setColor_srm( double num );   
+   void setColor_srm( double num );
    void setAddAfterBoil( bool b );
    void setOrigin( const QString& str );
    void setSupplier( const QString& str);
@@ -164,84 +184,68 @@ public:
    void setMaxInBatch_pct( double num );
    void setRecommendMash( bool b );
    void setIbuGalPerLb( double num );
-   void setIsMashed(bool var);
+   void setIsMashed(bool var );
+   void setCacheOnly(bool cache );
+   void setInventoryId(int key);
 
    void save();
 
    static QString classNameStr();
 
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
+
 signals:
-   
-   //! \brief Emitted when \c name() changes.
-   void changedName(QString);
-   void saved();
-   
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
-   Fermentable(Brewtarget::DBTable table, int key);
-   Fermentable( Fermentable const& other );
-   
+//   Fermentable(Brewtarget::DBTable table, int key);
+   Fermentable(TableSchema* table, QSqlRecord rec, int t_key = -1);
+
+   Fermentable( Fermentable &other );
+
    static bool isValidType( const QString& str );
    static QStringList types;
-   
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 
-   Type _type;
-   double _amountKg;
-   double _inventoryAmt;
-   double _yieldPct;
-   double _colorSrm;
-   bool _isAfterBoil;
-   QString _origin;
-   QString _supplier;
-   QString _notes;
-   double _coarseFineDiff;
-   double _moisturePct;
-   double _diastaticPower;
-   double _proteinPct;
-   double _maxInBatchPct;
-   bool _recommendMash;
-   double _ibuGalPerLb;
-   bool _isMashed;
+   QString m_typeStr;
+   Type m_type;
+   double m_amountKg;
+   double m_yieldPct;
+   double m_colorSrm;
+   bool m_isAfterBoil;
+   QString m_origin;
+   QString m_supplier;
+   QString m_notes;
+   double m_coarseFineDiff;
+   double m_moisturePct;
+   double m_diastaticPower;
+   double m_proteinPct;
+   double m_maxInBatchPct;
+   bool m_recommendMash;
+   double m_ibuGalPerLb;
+   double m_inventory;
+   int m_inventory_id;
+   bool m_isMashed;
+   bool m_cacheOnly;
 };
 
 Q_DECLARE_METATYPE( QList<Fermentable*> )
 
-inline bool FermentablePtrLt( Fermentable* lhs, Fermentable* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool FermentablePtrEq( Fermentable* lhs, Fermentable* rhs)
-{
-   return *lhs == *rhs;
-}
-
+/**
+ * This function is used for sorting in the recipe formatter
+ */
 inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentable* rhs)
 {
    // Sort by name if the two fermentables are of equal weight
-   if ( lhs->amount_kg() == rhs->amount_kg() )
+   if ( qFuzzyCompare(lhs->amount_kg(), rhs->amount_kg() ) )
       return lhs->name() < rhs->name();
-   
+
    // Yes. I know. This seems silly, but I want the returned list in
    // descending not ascending order.
    return lhs->amount_kg() > rhs->amount_kg();
 }
-
-struct Fermentable_ptr_cmp
-{
-   bool operator()( Fermentable* lhs, Fermentable* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Fermentable_ptr_equals
-{
-   bool operator()( Fermentable* lhs, Fermentable* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
 
 #endif

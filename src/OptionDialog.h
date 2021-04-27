@@ -34,6 +34,7 @@ class OptionDialog;
 #include "BtLineEdit.h"
 #include "ui_optionsDialog.h"
 #include "unit.h"
+#include "Log.h"
 
 /*!
  * \class OptionDialog
@@ -95,6 +96,8 @@ public slots:
    //! \brief Pop up a dialog to choose the data directory.
    void setDataDir();
    void setBackupDir();
+   //! \brief Pop up a dialog to choose the Log file directory.
+   void setLogDir();
    //! \brief Reset data directory to default.
    void resetToDefault();
 
@@ -106,7 +109,10 @@ public slots:
    void testRequired();
    //! \brief handle the dialogs for saving passwords
    void savePassword(bool state);
-  
+
+   //! \brief enables/disables controls in Loggingtab based on checkboxes.
+   void setLoggingControlsState(bool state);
+   void setFileLocationState(bool state);
 
 protected:
    

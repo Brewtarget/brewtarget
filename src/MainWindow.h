@@ -1,8 +1,9 @@
  /*
  * MainWindow.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Dan Cavanagh <dan@dancavanagh.com>
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Maxime Lavigne <duguigne@gmail.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -28,6 +29,8 @@
 
 class MainWindow;
 
+#include <memory> // For PImpl
+
 #include <QWidget>
 #include <QMainWindow>
 #include <QString>
@@ -38,7 +41,9 @@ class MainWindow;
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTimer>
+#include <QUndoStack>
 #include "ui_mainWindow.h"
+#include "SimpleUndoableUpdate.h"
 
 #include <functional>
 
@@ -92,6 +97,10 @@ class StyleSortFilterProxyModel;
 class NamedMashEditor;
 class BtDatePopup;
 
+class WaterDialog;
+class WaterListModel;
+class WaterEditor;
+
 /*!
  * \class MainWindow
  * \author Philip G. Lee
@@ -104,8 +113,17 @@ class MainWindow : public QMainWindow, public Ui::mainWindow
 
    friend class OptionDialog;
 public:
-   MainWindow(QWidget* parent=0);
-   virtual ~MainWindow() {}
+   MainWindow(QWidget* parent=nullptr);
+   virtual ~MainWindow();
+
+   /**
+    * \brief This needs to be called immediately after the constructor.  It does the remaining initialisation of the
+    *        object.  This function cannot be called from the constructor as, in certain circumstances, it will invoke
+    *        code that calls Brewtarget::mainWindow() which returns a pointer to the MainWindow and therefore needs the
+    *        MainWindow constructor to have returned!
+    */
+   void init();
+
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
    //! \brief Display a file dialog for writing xml files.
@@ -128,6 +146,8 @@ public slots:
 
    //! \brief Update Recipe name to that given by the relevant widget.
    void updateRecipeName();
+   //! \brief Redisplay the OG, FG, etc ranges for the style of the current recipe.  Needs to be called whenever the recipe style is changed.
+   void displayRangesEtcForCurrentRecipeStyle();
    //! \brief Update Recipe Style to that given by the relevant widget.
    void updateRecipeStyle();
    //! \brief Update Recipe Equipment to that given by the relevant widget.
@@ -179,8 +199,12 @@ public slots:
    //! \brief Edit selected Yeast
    void editSelectedYeast();
 
-   //! \brief Add a new mash step to the recipe.
+   //! \brief Invoke the pop-up Window to add a new mash step to (the mash of) the recipe.
    void addMashStep();
+   //! \brief Actually add the new mash step to (the mash of) the recipe (in an undoable way).
+   void addMashStepToMash(MashStep*);
+   //! \brief Update the display once a mash step is added.
+   void postAddMashStepToMash(MashStep * mashStep);
    //! \brief Move currently selected mash step down.
    void moveSelectedMashStepUp();
    //! \brief Move currently selected mash step up.
@@ -205,10 +229,14 @@ public slots:
    //! \brief Create a duplicate of the current recipe.
    void copyRecipe();
 
+   //! \brief Implements "> Edit > Undo"
+   void editUndo();
+   //! \brief Implements "> Edit > Redo"
+   void editRedo();
+
    //! \brief Create a new folder
    void newFolder();
    void renameFolder();
-   // void deleteFolder();
 
    void deleteSelected();
    void copySelected();
@@ -220,6 +248,8 @@ public slots:
    //! \brief Restore the database.
    void restoreFromBackup();
 
+   //! \brief makes sure we can do water chemistry before we show the window
+   void popChemistry();
    /*!
     * \brief Prints a document.
     *
@@ -258,10 +288,12 @@ public slots:
    //! \brief Catches a QNetworkReply signal and gets info about any new version available.
    void finishCheckingVersion();
 
-   void redisplayLabel(Unit::unitDisplay oldUnit, Unit::unitScale oldScale);
+   void redisplayLabel();
 
    void showEquipmentEditor();
    void showStyleEditor();
+
+   void updateEquipmentButton();
 
    //! \brief Set the equipment based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
@@ -270,6 +302,19 @@ public slots:
    void droppedRecipeHop(QList<Hop*>hops);
    void droppedRecipeMisc(QList<Misc*>miscs);
    void droppedRecipeYeast(QList<Yeast*>yeasts);
+
+   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the most generic version
+   //         which requires the caller to construct a QUndoCommand.
+   void doOrRedoUpdate(QUndoCommand * update);
+
+public:
+   //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
+   //         which suffices for modifications to most individual non-relational attributes.
+   void doOrRedoUpdate(QObject & updatee,
+                       char const * const propertyName,
+                       QVariant newValue,
+                       QString const & description,
+                       QUndoCommand * parent = nullptr);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);
@@ -283,17 +328,33 @@ private slots:
     *
     * \param prop Not yet used. Will indicate which Recipe property has changed.
     */
-   void showChanges(QMetaProperty* prop = 0);
+   void showChanges(QMetaProperty* prop = nullptr);
+
+   //! \brief Set whether undo / redo commands are enabled
+   void setUndoRedoEnable();
 
 private:
+   // Private implementation details - see https://herbsutter.com/gotw/_100/
+   class impl;
+   std::unique_ptr<impl> pimpl;
+
+   void removeHop(Hop * itemToRemove);
+   void removeFermentable(Fermentable * itemToRemove);
+   void removeMisc(Misc * itemToRemove);
+   void removeYeast(Yeast * itemToRemove);
+   void removeMashStep(MashStep * itemToRemove);
+//   void removeWater(Water * itemToRemove);
+//   void removeSalt(Salt * itemToRemove);
+
    Recipe* recipeObs;
+   // TBD: (MY 2020-11-24) Not sure whether we need to store recipe style (since it ought to be available from the
+   //      recipe) or whether this is just for convenience.
    Style* recStyle;
    Equipment* recEquip;
 
    QString highSS, lowSS, goodSS, boldSS; // Palette replacements
 
    AboutDialog* dialog_about;
-   QFileDialog* fileOpener;
    QFileDialog* fileSaver;
    QList<QMenu*> contextMenus;
    EquipmentEditor* equipEditor;
@@ -327,25 +388,40 @@ private:
    PitchDialog* pitchDialog;
    QPrinter *printer;
 
+   WaterDialog* waterDialog;
+   WaterEditor* waterEditor;
+
+   // all things tables should go here.
    FermentableTableModel* fermTableModel;
-   FermentableSortFilterProxyModel* fermTableProxy;
    HopTableModel* hopTableModel;
-   HopSortFilterProxyModel* hopTableProxy;
-   MiscTableModel* miscTableModel;
-   MiscSortFilterProxyModel* miscTableProxy;
-   YeastTableModel* yeastTableModel;
-   YeastSortFilterProxyModel* yeastTableProxy;
    MashStepTableModel* mashStepTableModel;
+   MiscTableModel* miscTableModel;
+   YeastTableModel* yeastTableModel;
+
+   // all things lists should go here
    EquipmentListModel* equipmentListModel;
    MashListModel* mashListModel;
    StyleListModel* styleListModel;
+//   WaterListModel* waterListModel;  Appears to be unused...
+
+   // all things sort/filter proxy go here
+   FermentableSortFilterProxyModel* fermTableProxy;
+   HopSortFilterProxyModel* hopTableProxy;
+   MiscSortFilterProxyModel* miscTableProxy;
    StyleSortFilterProxyModel* styleProxyModel;
+   YeastSortFilterProxyModel* yeastTableProxy;
 
    NamedMashEditor* namedMashEditor;
    NamedMashEditor* singleNamedMashEditor;
 
    BtDatePopup* btDatePopup;
    int confirmDelete;
+
+   // Undo / Redo, using the Qt Undo framework
+   QUndoStack * undoStack = nullptr;
+
+   //! \brief Fix pixel dimensions according to dots-per-inch (DPI) of screen we're on.
+   void setSizesInPixelsBasedOnDpi();
 
    //! \brief Currently highlighted fermentable in the fermentable table.
    Fermentable* selectedFermentable();
@@ -364,7 +440,7 @@ private:
 
    //! \brief Set the keyboard shortcuts.
    void setupShortCuts();
-   //! \brief Set the context menus.
+   //! \brief Set the BtTreeView context menus.
    void setupContextMenu();
    //! \brief Create the CSS strings
    void setupCSS();
@@ -391,13 +467,10 @@ private:
    //! \brief Connect signal/slots drag/drop
    void setupDrops();
 
-
-
    void updateDensitySlider(QString attribute, RangedSlider* slider, double max);
    void updateColorSlider(QString attribute, RangedSlider* slider);
 
    void convertedMsg();
-   void importMsg();
 
 };
 

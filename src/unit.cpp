@@ -27,6 +27,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include "Algorithms.h"
+#include "brewnote.h"
 
 QMultiMap<QString, Unit*> Unit::nameToUnit;
 bool Unit::isMapSetup = false;
@@ -71,7 +72,7 @@ EBCUnit* Units::ebc = new EBCUnit();
 SgUnit* Units::sp_grav = new SgUnit();
 PlatoUnit* Units::plato = new PlatoUnit();
 // == diastatic power ==
-LintnerUnit* Units::lintner = new LintnerUnit();;
+LintnerUnit* Units::lintner = new LintnerUnit();
 WKUnit* Units::wk = new WKUnit();
 
 QString Unit::unitFromString(QString qstr)
@@ -308,7 +309,7 @@ double PoundUnit::toSI( double amt ) const
 {
    return amt * 0.45359237;
 }
-      
+
 double PoundUnit::fromSI( double amt ) const
 {
    return amt * 2.2046226;
@@ -776,8 +777,8 @@ double EBCUnit::fromSI( double amt ) const
 // === Density ===
 SgUnit::SgUnit()
 {
-   unitName   = "sg";
-   SIUnitName = "sg";
+   unitName   = PropertyNames::BrewNote::sg;
+   SIUnitName = PropertyNames::BrewNote::sg;
    _type = Density;
    _unitSystem = Any;
 }
@@ -789,19 +790,19 @@ double SgUnit::fromSI( double amt ) const { return amt; }
 PlatoUnit::PlatoUnit()
 {
    unitName = "P";
-   SIUnitName = "sg";
+   SIUnitName = PropertyNames::BrewNote::sg;
    _type = Density;
    _unitSystem = Any;
 }
 
 double PlatoUnit::toSI( double amt ) const
 {
-   return Algorithms::PlatoToSG_20C20C( amt );
+   return amt == 0.0 ? 0.0 : Algorithms::PlatoToSG_20C20C( amt );
 }
 
 double PlatoUnit::fromSI(double amt) const
 {
-   return Algorithms::SG_20C20C_toPlato(amt);
+   return amt == 0.0 ? 0.0 : Algorithms::SG_20C20C_toPlato(amt);
 }
 
 // == diastatic power ==

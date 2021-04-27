@@ -1,4 +1,8 @@
-# Brewtarget ![Build Status](https://travis-ci.org/Brewtarget/brewtarget.svg?branch=master)
+# Brewtarget
+
+![Linux Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/linux-ubuntu.yml/badge.svg)
+
+![Windows Workflow](https://github.com/brewtarget/brewtarget/actions/workflows/windows.yml/badge.svg)
 
 Brewtarget is free open-source brewing software, and a beer recipe creation
 tool available for Linux, Mac, and Windows. It automatically calculates color,
@@ -11,51 +15,74 @@ is your single, free, go-to tool when crafting your beer recipes.
 
 ## Authors
 
-* Philip G. Lee <rocketman768@gmail.com> - Lead developer
-* Mik Firestone <mikfire@gmail.com>
-* Maxime Lavigne <duguigne@gmail.com>
-* Theophane Martin <theophane.m@gmail.com>
-* Dan Cavanagh <dan@dancavanagh.com>
-* Rob Taylor <robtaylor@floopily.org>
-* Kregg K <gigatropolis@yahoo.com>
+* Adam Hawes <ach@hawes.net.au>
+* Aidan Roberts <aidanr67@gmail.com>
 * A.J. Drobnich <aj.drobnich@gmail.com>
-* Ted Wright <tedwright@users.sourceforge.net>
-* Charles Fourneau (plut0nium) <charles.fourneau@gmail.com>
-* Samuel Östling <MrOstling@gmail.com>
-* Peter Buelow <goballstate@gmail.com>
-* David Grundberg <individ@acc.umu.se>
-* Daniel Pettersson <pettson81@gmail.com>
-* Tim Payne <swstim@gmail.com>
-* Luke Vincent <luke.r.vincent@gmail.com>
-* Eric Tamme <etamme@gmail.com>
+* André Rodrigues <andre@sabayon.local>
+* Blair Bonnett <blair.bonnett@gmail.com>
+* Brian Rower <brian.rower@gmail.com>
+* Carles Muñoz Gorriz <carlesmu@internautas.org>
 * Chris Pavetto <chrispavetto@gmail.com>
-* Markus Mårtensson <mackan.90@gmail.com>
-* Julein <j2bweb@gmail.com>
-* Jeff Bailey <skydvr38@verizon.net>
-* Piotr Przybyla (przybysh) <przybysh@gmail.com>
-* Chris Hamilton <marker5a@gmail.com>
-* Julian Volodia <julianvolodia@gmail.com>
-* Jerry Jacobs <jerry@xor-gate.org>
+* Chris Speck <cgspeck@gmail.com>
+* Dan Cavanagh <dan@dancavanagh.com>
+* Daniel Moreno <danielm5@users.noreply.github.com>
+* Daniel Pettersson <pettson81@gmail.com>
+* David Grundberg <individ@acc.umu.se>
+* Eric Tamme <etamme@gmail.com>
+* Greg Greenaae <ggreenaae@gmail.com>
 * Greg Meess <Daedalus12@gmail.com>
+* Idar Lund <idarlund@gmail.com>
+* Jamie Daws <jdelectronics1@gmail.com>
+* Jean-Baptiste Wons <wonsjb@gmail.com>
+* Jeff Bailey <skydvr38@verizon.net>
+* Jerry Jacobs <jerry@xor-gate.org>
+* Jonatan Pålsson <jonatan.p@gmail.com>
+* Jonathon Harding <github@jrhardin.net>
+* Julian Volodia <julianvolodia@gmail.com>
+* Kregg Kemper <gigatropolis@yahoo.com>
+* Luke Vincent <luke.r.vincent@gmail.com>
+* Marcel Koek <koek.marcel@gmail.com>
+* Mark de Wever <koraq@xs4all.nl>
+* Markus Mårtensson <mackan.90@gmail.com>
+* Matt Anderson <matt.anderson@is4s.com>
+* Mattias Måhl <mattias@kejsarsten.com>
+* Matt Young <mfsy@yahoo.com>
+* Maxime Lavigne <duguigne@gmail.com>
+* Medic Momcilo <medicmomcilo@gmail.com>
+* Mike Evans <mikee@saxicola.co.uk>
+* Mik Firestone <mikfire@gmail.com>
+* Mikhail Gorbunov <mikhail@sirena2000.ru>
+* Mitch Lillie <mitch@mitchlillie.com>
+* Padraic Stack <padraic.stack@gmail.com>
+* Peter Buelow <goballstate@gmail.com>
+* Peter Urbanec <git.user@urbanec.net>
+* Philip Greggory Lee <rocketman768@gmail.com> -- Original developer
+* Rob Taylor <robtaylor@floopily.org>
+* Samuel Östling <MrOstling@gmail.com>
+* Scott Peshak <scott@peshak.net>
+* Théophane MARTIN <theophane.m@gmail.com>
+* Tyler Cipriani <tcipriani@wikimedia.org>
 
-Author list created with:
+Author list created with the help of the following command:
 
-    $ git log --raw | grep "^Author: " | sort | uniq -c | sort -nr
+    $ git log --raw | grep "^Author: " | sort -u
 
 ## Websites
 
 ### For Users
 
-* [Main website](http://www.brewtarget.org)
-* [Help group](https://groups.google.com/forum/?fromgroups=#!forum/brewtarget-help)
-* [Brewtarget PPA](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget-releases)
+* [Main website](http://www.brewtarget.org) (No longer updated and has some out-of-date links)
+* [Help group](https://groups.google.com/forum/?fromgroups=#!forum/brewtarget-help) (Linked to from the website, but it's better to raise issues on GitHub than post here)
+* [Latest builds](https://github.com/Brewtarget/brewtarget/actions)
+* [Brewtarget PPA](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget-releases) (out of date)
 * [Bug tracker](https://github.com/Brewtarget/brewtarget/issues)
+
+Latest builds are available by logging into Github, following the "Latest builds" link above, drilling down into the relevant OS and downloading the installer package.
 
 ### For Developers
 
 * [Source code repository](https://github.com/Brewtarget/brewtarget)
-* [Daily builds](https://launchpad.net/~brewtarget-devs/+archive/ubuntu/brewtarget)
-* [Developers team](https://launchpad.net/~brewtarget-devs)
+* [Developers team](https://launchpad.net/~brewtarget-devs) (No longer used)
 * [Developers wiki](https://github.com/Brewtarget/brewtarget/wiki)
 
 ## Compiling and Installing
@@ -66,6 +93,10 @@ On Debian systems like Ubuntu, the packages for dependencies are:
 
 * cmake (>= 2.8.11)
 * git
+* libxerces-c-dev
+* libxerces-c-doc
+* libxalan-c-dev
+* libxalan-c-doc
 * qtbase5-dev
 * qttools5-dev
 * qttools5-dev-tools

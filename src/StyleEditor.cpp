@@ -1,6 +1,6 @@
 /*
  * StyleEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -20,6 +20,7 @@
 
 #include "database.h"
 #include "StyleEditor.h"
+#include "BtHorizontalTabs.h"
 #include <QInputDialog>
 #include "style.h"
 #include "StyleListModel.h"
@@ -31,7 +32,7 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    : QDialog(parent), obsStyle(0)
 {
    setupUi(this);
-   if ( singleStyleEditor ) 
+   if ( singleStyleEditor )
    {
       for(int i = 0; i < horizontalLayout_styles->count(); ++i)
       {
@@ -39,16 +40,18 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
          if(w)
             w->setVisible(false);
       }
-      
+
       pushButton_new->setVisible(false);
    }
+
+   this->tabWidget_profile->tabBar()->setStyle(new BtHorizontalTabs);
 
    styleListModel = new StyleListModel(styleComboBox);
    styleProxyModel = new StyleSortFilterProxyModel(styleComboBox);
    styleProxyModel->setDynamicSortFilter(true);
    styleProxyModel->setSourceModel(styleListModel);
    styleComboBox->setModel(styleProxyModel);
-   
+
    connect( pushButton_save, &QAbstractButton::clicked, this, &StyleEditor::save );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
    connect( pushButton_cancel, &QAbstractButton::clicked, this, &StyleEditor::clearAndClose );
@@ -62,14 +65,14 @@ void StyleEditor::setStyle( Style* s )
 {
    if( obsStyle )
       disconnect( obsStyle, 0, this, 0 );
-   
+
    obsStyle = s;
    if( obsStyle )
    {
-      connect( obsStyle, &BeerXMLElement::changed, this, &StyleEditor::changed );
+      connect( obsStyle, &NamedEntity::changed, this, &StyleEditor::changed );
       showChanges();
    }
- 
+
    styleComboBox->setCurrentIndex(styleListModel->indexOf(obsStyle));
 }
 
@@ -96,8 +99,8 @@ void StyleEditor::save()
       setVisible(false);
       return;
    }
-   
-   s->setName( lineEdit_name->text() );
+
+   s->setName( lineEdit_name->text(), s->cacheOnly());
    s->setCategory( lineEdit_category->text() );
    s->setCategoryNumber( lineEdit_categoryNumber->text() );
    s->setStyleLetter( lineEdit_styleLetter->text() );
@@ -116,9 +119,14 @@ void StyleEditor::save()
    s->setAbvMin_pct( lineEdit_abvMin->toSI() );
    s->setAbvMax_pct( lineEdit_abvMax->toSI() );
    s->setProfile( textEdit_profile->toPlainText() );
-   s->setIngredients( textEdit_ingredients->toPlainText() );
+   s->setNamedEntitys( textEdit_ingredients->toPlainText() );
    s->setExamples( textEdit_examples->toPlainText() );
    s->setNotes( textEdit_notes->toPlainText() );
+
+   if ( s->cacheOnly() ) {
+      s->insertInDatabase();
+      s->setCacheOnly(false);
+   }
 
    setVisible(false);
 }
@@ -135,10 +143,9 @@ void StyleEditor::newStyle(QString folder)
    if( name.isEmpty() )
       return;
 
-   Style *s = Database::instance().newStyle();
-   s->setName( name );
-   if ( ! folder.isEmpty() ) 
-      s->setFolder(folder);
+   Style *s = new Style(name);
+   if ( ! folder.isEmpty() )
+      s->setFolder(folder,true);
 
    setStyle(s);
    show();
@@ -202,6 +209,7 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
    if( updateAll )
    {
       lineEdit_name->setText(s->name());
+      tabWidget_profile->setTabText(0, s->name() );
       lineEdit_category->setText(s->category());
       lineEdit_categoryNumber->setText(s->categoryNumber());
       lineEdit_styleLetter->setText(s->styleLetter());
@@ -223,52 +231,75 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       textEdit_ingredients->setText(s->ingredients());
       textEdit_examples->setText(s->examples());
       textEdit_notes->setText(s->notes());
-      
+
       return;
    }
-   
-   if( propName == "name" )
+
+   if( propName == PropertyNames::NamedEntity::name ) {
       lineEdit_name->setText(val.toString());
-   else if( propName == "category" )
+      tabWidget_profile->setTabText(0, s->name() );
+   }
+   else if( propName == PropertyNames::Style::category ) {
       lineEdit_category->setText(val.toString());
-   else if( propName == "categoryNumber" )
+   }
+   else if( propName == PropertyNames::Style::categoryNumber ) {
       lineEdit_categoryNumber->setText(val.toString());
-   else if( propName == "styleLetter" )
+   }
+   else if( propName == PropertyNames::Style::styleLetter ) {
       lineEdit_styleLetter->setText(val.toString());
-   else if( propName == "styleGuide" )
+   }
+   else if( propName == PropertyNames::Style::styleGuide ) {
       lineEdit_styleGuide->setText(val.toString());
-   else if( propName == "type" )
+   }
+   else if( propName == "type" ) {
       comboBox_type->setCurrentIndex(val.toInt());
-   else if( propName == "ogMin" )
+   }
+   else if( propName == PropertyNames::Style::ogMin ) {
       lineEdit_ogMin->setText(val);
-   else if( propName == "ogMax" )
+   }
+   else if( propName == PropertyNames::Style::ogMax ) {
       lineEdit_ogMax->setText(val);
-   else if( propName == "fgMin" )
+   }
+   else if( propName == PropertyNames::Style::fgMin ) {
       lineEdit_fgMin->setText(val);
-   else if( propName == "fgMax" )
+   }
+   else if( propName == PropertyNames::Style::fgMax ) {
       lineEdit_fgMax->setText(val);
-   else if( propName == "ibuMin" )
+   }
+   else if( propName == PropertyNames::Style::ibuMin ) {
       lineEdit_ibuMin->setText(val);
-   else if( propName == "ibuMax" )
+   }
+   else if( propName == PropertyNames::Style::ibuMax ) {
       lineEdit_ibuMax->setText(val);
-   else if( propName == "colorMin_srm" )
+   }
+   else if( propName == PropertyNames::Style::colorMin_srm ) {
       lineEdit_colorMin->setText(val);
-   else if( propName == "colorMax_srm" )
+   }
+   else if( propName == PropertyNames::Style::colorMax_srm ) {
       lineEdit_colorMax->setText(val);
-   else if( propName == "carbMin_vol" )
+   }
+   else if( propName == PropertyNames::Style::carbMin_vol ) {
       lineEdit_carbMin->setText(val);
-   else if( propName == "carbMax_vol" )
+   }
+   else if( propName == PropertyNames::Style::carbMax_vol ) {
       lineEdit_carbMax->setText(val);
-   else if( propName == "abvMin_pct" )
+   }
+   else if( propName == PropertyNames::Style::abvMin_pct ) {
       lineEdit_abvMin->setText(val);
-   else if( propName == "abvMax_pct" )
+   }
+   else if( propName == PropertyNames::Style::abvMax_pct ) {
       lineEdit_abvMax->setText(val);
-   else if( propName == "profile" )
+   }
+   else if( propName == PropertyNames::Style::profile ) {
       textEdit_profile->setText(val.toString());
-   else if( propName == "ingredients" )
+   }
+   else if( propName == PropertyNames::Style::ingredients ) {
       textEdit_ingredients->setText(val.toString());
-   else if( propName == "examples" )
+   }
+   else if( propName == PropertyNames::Style::examples ) {
       textEdit_examples->setText(val.toString());
-   else if( propName == "notes" )
+   }
+   else if( propName == "notes" ) {
       textEdit_notes->setText(val.toString());
+   }
 }

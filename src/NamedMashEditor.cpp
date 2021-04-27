@@ -99,10 +99,10 @@ void NamedMashEditor::saveAndClose()
    // class will do the right thing. That is how a plan comes together.
 
    mashObs->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
-   mashObs->setName( lineEdit_name->text() );
+   mashObs->setName( lineEdit_name->text(), mashObs->cacheOnly());
    mashObs->setGrainTemp_c(lineEdit_grainTemp->toSI());
    mashObs->setSpargeTemp_c(lineEdit_spargeTemp->toSI());
-   mashObs->setPh(lineEdit_spargePh->toSI()); 
+   mashObs->setPh(lineEdit_spargePh->toSI());
    mashObs->setTunTemp_c(lineEdit_tunTemp->toSI());
    mashObs->setTunWeight_kg(lineEdit_tunMass->toSI());
    mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->toSI());
@@ -120,7 +120,7 @@ void NamedMashEditor::setMash(Mash* mash)
 
    if( mashObs )
    {
-      connect( mashObs, &BeerXMLElement::changed, this, &NamedMashEditor::changed );
+      connect( mashObs, &NamedEntity::changed, this, &NamedMashEditor::changed );
       showChanges();
    }
 }
@@ -147,17 +147,17 @@ void NamedMashEditor::showChanges(QMetaProperty* prop)
    else
       propName = prop->name();
 
-   if( propName == "name" || updateAll ) {
+   if( propName == PropertyNames::NamedEntity::name || updateAll ) {
       lineEdit_name->setText(mashObs->name());
       if( ! updateAll )
          return;
    }
-   if( propName == "grainTemp_c" || updateAll ) {
+   if( propName == PropertyNames::Mash::grainTemp_c || updateAll ) {
       lineEdit_grainTemp->setText(mashObs);
       if( ! updateAll )
          return;
    }
-   if( propName == "spargeTemp_c" || updateAll ) {
+   if( propName == PropertyNames::Mash::spargeTemp_c || updateAll ) {
       lineEdit_spargeTemp->setText(mashObs);
       if( ! updateAll )
          return;
@@ -167,7 +167,7 @@ void NamedMashEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "tunTemp_c" || updateAll ) {
+   if( propName == PropertyNames::Mash::tunTemp_c || updateAll ) {
       lineEdit_tunTemp->setText(mashObs);
       if( ! updateAll )
          return;

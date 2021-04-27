@@ -1,6 +1,11 @@
 #!/bin/bash
 
 # sqlitediff.sh file.sqlite commit-a commit-b
+# To compare commit to current (uncommitted) db:
+# sqlitediff.sh file.sqlite commit-a
+# To compare HEAD to current uncommitted db:
+# sqlitediff.sh file.sqlite
+
 DBFILE=$1
 COMMITA=$2
 COMMITB=$3
@@ -11,7 +16,12 @@ DUMPA=$(mktemp)
 DUMPB=$(mktemp)
 
 git show "$COMMITA:$DBFILE" > "$SQLITEA"
-git show "$COMMITB:$DBFILE" > "$SQLITEB"
+if [ $# -ge 3 ]
+then
+	git show "$COMMITB:$DBFILE" > "$SQLITEB"
+else
+	cp "$DBFILE" "$SQLITEB"
+fi
 
 sqlite3 "$SQLITEA" .dump > $DUMPA
 sqlite3 "$SQLITEB" .dump > $DUMPB

@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>waterDialog</class>
+ <widget class="QDialog" name="waterDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>805</width>
+    <height>598</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>30</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_left" stretch="0,0,0">
+       <item>
+        <widget class="QGroupBox" name="groupBox_profiles">
+         <property name="title">
+          <string>Profiles</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_profiles">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_mashRO">
+            <property name="text">
+             <string>% RO in Mash</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_targetProfile">
+            <property name="text">
+             <string>Target Profile</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="spinBox_mashRO">
+            <property name="maximum">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_targetButtons">
+            <item>
+             <widget class="WaterButton" name="targetProfileButton">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="CustomComboBox" name="targetProfileCombo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>30</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_baseProfile">
+            <property name="text">
+             <string>Base Profile</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="spinBox_spargeRO">
+            <property name="maximum">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_baseButtons" stretch="0,1">
+            <item>
+             <widget class="WaterButton" name="baseProfileButton">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="CustomComboBox" name="baseProfileCombo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>30</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_spargeRO">
+            <property name="text">
+             <string>% RO in Sparge</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupbox_ppm">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>PPM</string>
+         </property>
+         <property name="configSection" stdset="0">
+          <string>totalSalts</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_ppm" rowstretch="0,0,0,0">
+          <item row="0" column="3">
+           <widget class="BtGenericDigit" name="btDigit_na">
+            <property name="editField" stdset="0">
+             <string>nappm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_ca">
+            <property name="text">
+             <string>Ca</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="BtGenericDigit" name="btDigit_so4">
+            <property name="editField" stdset="0">
+             <string>so4ppm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_mg">
+            <property name="text">
+             <string>Mg</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="BtGenericDigit" name="btDigit_ca">
+            <property name="editField" stdset="0">
+             <string>cappm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="BtGenericDigit" name="btDigit_ph">
+            <property name="editField" stdset="0">
+             <string>ph</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="BtGenericDigit" name="btDigit_hco3">
+            <property name="editField" stdset="0">
+             <string>hco3ppm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_pH">
+            <property name="text">
+             <string>pH</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_na">
+            <property name="text">
+             <string>Na</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_cl">
+            <property name="text">
+             <string>Cl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_so4">
+            <property name="text">
+             <string>SO&lt;sub&gt;4&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="BtGenericDigit" name="btDigit_mg">
+            <property name="editField" stdset="0">
+             <string>mgppm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="BtGenericDigit" name="btDigit_cl">
+            <property name="editField" stdset="0">
+             <string>clppm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_hco3">
+            <property name="text">
+             <string>HCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_total">
+         <property name="title">
+          <string>Total Salts</string>
+         </property>
+         <property name="configSection" stdset="0">
+          <string>totalSalts</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_total">
+          <item row="0" column="0">
+           <widget class="BtMassLabel" name="label_totalcacl2">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>CaCl&lt;sub&gt;2&lt;/sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalcacl2</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="BtMassDigit" name="btDigit_totalcacl2">
+            <property name="editField" stdset="0">
+             <string>cacl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="BtMassLabel" name="label_totalmgso4">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>MgSO&lt;sub&gt;4&lt;/sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalmgso4</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="BtMassDigit" name="btDigit_totalmgso4">
+            <property name="editField" stdset="0">
+             <string>mgso4</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="BtMassLabel" name="label_totalcaco3">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>CaCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalcaco3</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="BtMassDigit" name="btDigit_totalcaco3">
+            <property name="editField" stdset="0">
+             <string>caco3</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="BtMassLabel" name="label_totalnacl">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>NaCl</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalnacl</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="BtMassDigit" name="btDigit_totalnacl">
+            <property name="editField" stdset="0">
+             <string>nacl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="BtMassLabel" name="label_totalcaso4">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>CaSO&lt;sub&gt;4&lt;?sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalcaso4</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="BtMassDigit" name="btDigit_totalcaso4">
+            <property name="editField" stdset="0">
+             <string>caso4</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="BtMassLabel" name="label_totalnahco3">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="text">
+             <string>NaHCO&lt;sub&gt;3&lt;/sub&gt;</string>
+            </property>
+            <property name="buddy">
+             <cstring>btDigit_totalnahco3</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="BtMassDigit" name="btDigit_totalnahco3">
+            <property name="editField" stdset="0">
+             <string>nahco3</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_right">
+       <item>
+        <widget class="QGroupBox" name="groupBox_salts">
+         <property name="title">
+          <string>Salts</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QTableView" name="tableView_salts">
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_saltButtons">
+            <property name="spacing">
+             <number>1</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="pushButton_addSalt">
+              <property name="toolTip">
+               <string>Add a salt</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../brewtarget.qrc">
+                <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_removeSalt">
+              <property name="toolTip">
+               <string>Remove selected salt</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../brewtarget.qrc">
+                <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox_save">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CustomComboBox</class>
+   <extends>QComboBox</extends>
+   <header>CustomComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WaterButton</class>
+   <extends>QPushButton</extends>
+   <header>WaterButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtMassLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+   <slots>
+    <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>BtGenericDigit</class>
+   <extends>QLabel</extends>
+   <header>BtDigitWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtMassDigit</class>
+   <extends>QLabel</extends>
+   <header>BtDigitWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>baseProfileButton</tabstop>
+  <tabstop>baseProfileCombo</tabstop>
+  <tabstop>targetProfileButton</tabstop>
+  <tabstop>targetProfileCombo</tabstop>
+  <tabstop>spinBox_mashRO</tabstop>
+  <tabstop>spinBox_spargeRO</tabstop>
+  <tabstop>pushButton_addSalt</tabstop>
+  <tabstop>pushButton_removeSalt</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../brewtarget.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox_save</sender>
+   <signal>accepted()</signal>
+   <receiver>waterDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox_save</sender>
+   <signal>rejected()</signal>
+   <receiver>waterDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalcacl2</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalcacl2</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>433</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>160</x>
+     <y>433</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalcaco3</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalcaco3</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>469</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>160</x>
+     <y>469</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalcaso4</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalcaso4</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>160</x>
+     <y>506</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalmgso4</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalmgso4</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>433</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>433</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalnacl</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalnacl</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>469</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>469</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>label_totalnahco3</sender>
+   <signal>labelChanged(Unit::unitDisplay,Unit::unitScale)</signal>
+   <receiver>btDigit_totalnahco3</receiver>
+   <slot>displayChanged(Unit::unitDisplay,Unit::unitScale)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>506</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>506</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -32,7 +32,7 @@ class BtTreeModel;
 #include <QSqlRelationalTableModel>
 
 // Forward declarations
-class BeerXMLElement;
+class NamedEntity;
 class Recipe;
 class BtFolder;
 class BtTreeItem;
@@ -44,6 +44,7 @@ class Hop;
 class Misc;
 class Yeast;
 class Style;
+class Water;
 
 /*!
  * \class BtTreeModel
@@ -80,12 +81,14 @@ public:
       //! Show styles
       STYLEMASK         = 128,
       //! folders. This may actually have worked better than expected.
-      FOLDERMASK        = 256
+      FOLDERMASK        = 256,
+      //! waters.
+      WATERMASK         = 512,
    };
-   
-   BtTreeModel(BtTreeView *parent = 0, TypeMasks type = RECIPEMASK);
+
+   BtTreeModel(BtTreeView *parent = nullptr, TypeMasks type = RECIPEMASK);
    virtual ~BtTreeModel();
-  
+
    //! \brief Reimplemented from QAbstractItemModel
    virtual QVariant data(const QModelIndex &index, int role) const;
    //! \brief Reimplemented from QAbstractItemModel
@@ -103,7 +106,7 @@ public:
    virtual QModelIndex parent( const QModelIndex &index) const;
 
    //! \brief Reimplemented from QAbstractItemModel
-   bool insertRow(int row, const QModelIndex &parent = QModelIndex(), QObject* victim = 0, int victimType = -1);
+   bool insertRow(int row, const QModelIndex &parent = QModelIndex(), QObject* victim = nullptr, int victimType = -1);
    //! \brief Reimplemented from QAbstractItemModel
    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
@@ -130,6 +133,8 @@ public:
    bool isStyle(const QModelIndex &index) const;
    //! \brief Test type at \c index.
    bool isFolder(const QModelIndex &index) const;
+   //! \brief Test type at \c index.
+   bool isWater(const QModelIndex &index) const;
 
    //! \brief Gets the type of item at \c index
    int type(const QModelIndex &index) const;
@@ -161,15 +166,17 @@ public:
    Style* style(const QModelIndex &index) const;
    //! \brief Get folder at \c index
    BtFolder* folder(const QModelIndex &index) const;
-   //! \brief Get BeerXMLElement at \c index.
-   BeerXMLElement* thing(const QModelIndex &index) const;
+   //! \brief Get folder at \c index
+   Water* water(const QModelIndex &index) const;
+   //! \brief Get NamedEntity at \c index.
+   NamedEntity* thing(const QModelIndex &index) const;
 
    //! \brief one find method to find them all, and in darkness bind them
-   QModelIndex findElement(BeerXMLElement* thing, BtTreeItem* parent = NULL);
+   QModelIndex findElement(NamedEntity* thing, BtTreeItem* parent = nullptr);
 
    //! \brief Get index of \c Folder
-   QModelIndex findFolder(QString folder, BtTreeItem* parent=NULL, bool create=false);
-   //! \brief a new folder . 
+   QModelIndex findFolder(QString folder, BtTreeItem* parent=nullptr, bool create=false);
+   //! \brief a new folder .
    bool addFolder(QString name);
    //! \brief renames a folder
    bool renameFolder(BtFolder* victim, QString name);
@@ -182,7 +189,7 @@ public:
    // !\brief accept a drop action.
    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
    // !\brief what our supported drop actions are. Don't know if I need the drag option or not?
-   Qt::DropActions supportedDropActions() const; 
+   Qt::DropActions supportedDropActions() const;
    QStringList mimeTypes() const;
 
 private slots:
@@ -201,7 +208,8 @@ private slots:
    void elementAdded(Style* victim);
    void elementAdded(Yeast* victim);
    void elementAdded(BrewNote* victim);
-   
+   void elementAdded(Water* victim);
+
    void elementChanged();
 
    void elementRemoved(Recipe* victim);
@@ -212,24 +220,25 @@ private slots:
    void elementRemoved(Style* victim);
    void elementRemoved(Yeast* victim);
    void elementRemoved(BrewNote* victim);
+   void elementRemoved(Water* victim);
 
 signals:
    void expandFolder(BtTreeModel::TypeMasks kindofThing, QModelIndex fIdx);
 
 private:
-   //! \brief Loads the tree. 
+   //! \brief Loads the tree.
    void loadTreeModel();
-  
+
    //! \brief add and remove an element from the, respectively. All of the
-   //slots actually call these two methods 
-   void elementAdded(BeerXMLElement* victim);
-   void elementRemoved(BeerXMLElement* victim);
+   //slots actually call these two methods
+   void elementAdded(NamedEntity* victim);
+   void elementRemoved(NamedEntity* victim);
 
    //! \brief connects the changedName() signal and changedFolder() signals to
    //! the proper methods for most things, and the same for changedBrewDate
    //! and brewNotes
-   void observeElement(BeerXMLElement*);
-   
+   void observeElement(NamedEntity*);
+
    //! \brief returns the \c section header from a recipe
    QVariant recipeHeader(int section) const;
    //! \brief returns the \c section header from an equipment
@@ -244,16 +253,18 @@ private:
    QVariant yeastHeader(int section) const;
    //! \brief returns the \c section header from a style
    QVariant styleHeader(int section) const;
-   //! \brief returns the \c section header for a folder. 
+   //! \brief returns the \c section header for a folder.
    QVariant folderHeader(int section) const;
+   //! \brief returns the \c section header for a folder.
+   QVariant waterHeader(int section) const;
 
    //! \brief get a tooltip
    QVariant toolTipData(const QModelIndex &index) const;
 
    //! \brief Returns the list of things in a tree (e.g., recipes) as a list
-   //! of BeerXMLElements. It's a convenience method to make loadTree()
+   //! of NamedEntitys. It's a convenience method to make loadTree()
    //! cleaner
-   QList<BeerXMLElement*> elements();
+   QList<NamedEntity*> elements();
    //! \brief creates a folder tree. It's mostly a helper function.
    QModelIndex createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath);
 

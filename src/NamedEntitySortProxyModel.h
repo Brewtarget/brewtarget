@@ -1,7 +1,8 @@
 /*
- * BeerXMLSortProxyModel.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * NamedEntitySortProxyModel.h is part of Brewtarget, and is Copyright the following
+ * authors 2020-2025
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +18,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BEERXMLSORTPROXYMODEL_H
-#define BEERXMLSORTPROXYMODEL_H
+#ifndef NAMEDENTITYSORTPROXYMODEL_H
+#define NAMEDENTITYSORTPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 class QAbstractItemModel;
 
 /*!
- * \brief Small wrapper on QSortFilterProxyModel for sorting BeerXML lists.
+ * \brief Small wrapper on QSortFilterProxyModel for sorting NamedEntity lists.
  * \author Philip G. Lee
  *
  * Sorts models dynamically based on their properties' default sort behavior.
  */
-class BeerXMLSortProxyModel : public QSortFilterProxyModel
+class NamedEntitySortProxyModel : public QSortFilterProxyModel
 {
    Q_OBJECT
-   
+
 public:
-   BeerXMLSortProxyModel(QAbstractItemModel* sourceModel = 0);
-      
+   NamedEntitySortProxyModel(QAbstractItemModel* sourceModel = 0);
+
 protected:
    // Can reimplement if we need something fancy in the future.
    //bool lessThan(const QModelIndex &left, const QModelIndex &right) const;

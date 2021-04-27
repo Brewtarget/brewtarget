@@ -38,6 +38,8 @@
 #include "yeast.h"
 #include "style.h"
 #include "BtFolder.h"
+#include "water.h"
+#include "FermentableTableModel.h"
 
 bool operator==(BtTreeItem& lhs, BtTreeItem& rhs)
 {
@@ -49,7 +51,7 @@ bool operator==(BtTreeItem& lhs, BtTreeItem& rhs)
 }
 
 BtTreeItem::BtTreeItem(int _type, BtTreeItem *parent)
-   : parentItem(parent), _thing(0)
+   : parentItem(parent), _thing(nullptr)
 {
    setType(_type);
 }
@@ -64,7 +66,7 @@ BtTreeItem* BtTreeItem::child(int number)
    if ( number < childItems.count() )
       return childItems.value(number);
 
-   return 0;
+   return nullptr;
 }
 
 BtTreeItem* BtTreeItem::parent()
@@ -104,8 +106,10 @@ int BtTreeItem::columnCount(int _type) const
             return BREWNUMCOLS;
         case FOLDER:
             return FOLDERNUMCOLS;
+        case WATER:
+            return WATERNUMCOLS;
         default:
-         Brewtarget::logW( QString("BtTreeItem::columnCount Bad column: %1").arg(_type));
+           qWarning() << QString("BtTreeItem::columnCount Bad column: %1").arg(_type);
             return 0;
     }
 
@@ -134,8 +138,10 @@ QVariant BtTreeItem::data(int _type, int column)
          return dataBrewNote(column);
       case FOLDER:
          return dataFolder(column);
+      case WATER:
+         return dataWater(column);
       default:
-         Brewtarget::logW( QString("BtTreeItem::data Bad column: %1").arg(column));
+         qWarning() << QString("BtTreeItem::data Bad column: %1").arg(column);
          return QVariant();
     }
 }
@@ -195,7 +201,6 @@ QVariant BtTreeItem::dataRecipe( int column )
             return QVariant(QObject::tr("Recipes"));
         else
             return QVariant(recipe->name());
-         break;
         case RECIPEBREWDATECOL:
          if ( recipe )
             return Brewtarget::displayDateUserFormated(recipe->date());
@@ -205,7 +210,7 @@ QVariant BtTreeItem::dataRecipe( int column )
             return QVariant(recipe->style()->name());
          break;
       default :
-         Brewtarget::logW( QString("BtTreeItem::dataRecipe Bad column: %1").arg(column));
+         qWarning() << QString("BtTreeItem::dataRecipe Bad column: %1").arg(column);
    }
    return QVariant();
 }
@@ -225,31 +230,43 @@ QVariant BtTreeItem::dataEquipment(int column)
             return QVariant(kit->boilTime_min());
          break;
       default :
-         Brewtarget::logW( QString("BtTreeItem::dataEquipment Bad column: %1").arg(column));
+         qWarning() << QString("BtTreeItem::dataEquipment Bad column: %1").arg(column);
    }
    return QVariant();
 }
 
 QVariant BtTreeItem::dataFermentable(int column)
 {
-    Fermentable* ferm = qobject_cast<Fermentable*>(_thing);
+   Fermentable* ferm = qobject_cast<Fermentable*>(_thing);
+
    switch(column)
    {
-        case FERMENTABLENAMECOL:
-         if ( ferm )
+      case FERMENTABLENAMECOL:
+         if ( ferm ) {
             return QVariant(ferm->name());
-         else
+         }
+         else {
             return QVariant(QObject::tr("Fermentables"));
-        case FERMENTABLETYPECOL:
-         if ( ferm )
+         }
+      case FERMENTABLETYPECOL:
+         if ( ferm ) {
             return QVariant(ferm->typeStringTr());
+         }
          break;
-        case FERMENTABLECOLORCOL:
-         if ( ferm )
-            return QVariant(ferm->color_srm());
+      case FERMENTABLECOLORCOL:
+         if ( ferm ) {
+            return QVariant(
+                     Brewtarget::displayAmount( ferm->color_srm(),
+                                                Units::srm,
+                                                0,
+                                                (Unit::unitDisplay)Brewtarget::option("color_srm",
+                                                                                      QVariant(-1),
+                                                                                      nullptr,
+                                                                                      Brewtarget::UNIT).toInt()));
+         }
          break;
       default :
-         Brewtarget::logW( QString("BtTreeItem::dataFermentable Bad column: %1").arg(column));
+         qWarning() << QString("BtTreeItem::dataFermentable Bad column: %1").arg(column);
    }
    return QVariant();
 }
@@ -273,7 +290,7 @@ QVariant BtTreeItem::dataHop(int column)
             return QVariant(hop->useStringTr());
          break;
       default :
-         Brewtarget::logW( QString("BtTreeItem::dataHop Bad column: %1").arg(column));
+         qWarning() << QString("BtTreeItem::dataHop Bad column: %1").arg(column);
    }
    return QVariant();
 }
@@ -297,7 +314,7 @@ QVariant BtTreeItem::dataMisc(int column)
             return QVariant(misc->useStringTr());
          break;
       default :
-         Brewtarget::logW( QString("BtTreeItem::dataMisc Bad column: %1").arg(column));
+         qWarning() << QString("BtTreeItem::dataMisc Bad column: %1").arg(column);
    }
    return QVariant();
 }
@@ -321,7 +338,7 @@ QVariant BtTreeItem::dataYeast(int column)
             return QVariant(yeast->formStringTr());
          break;
       default :
-         Brewtarget::logW( QString("BtTreeItem::dataYeast Bad column: %1").arg(column));
+         qWarning() << QString("BtTreeItem::dataYeast Bad column: %1").arg(column);
    }
    return QVariant();
 }
@@ -359,7 +376,7 @@ QVariant BtTreeItem::dataStyle(int column)
          case STYLEGUIDECOL:
                return QVariant(style->styleGuide());
          default :
-            Brewtarget::logW( QString("BtTreeItem::dataStyle Bad column: %1").arg(column));
+            qWarning() << QString("BtTreeItem::dataStyle Bad column: %1").arg(column);
       }
    }
    return QVariant();
@@ -381,6 +398,39 @@ QVariant BtTreeItem::dataFolder(int column)
    return QVariant();
 }
 
+QVariant BtTreeItem::dataWater(int column)
+{
+   Water* water = qobject_cast<Water*>(_thing);
+
+   if ( water == nullptr && column == WATERNAMECOL )
+      return QVariant(QObject::tr("Water"));
+   else if ( water ) {
+      switch(column)
+      {
+         case WATERNAMECOL:
+               return QVariant(water->name());
+         case WATERCACOL:
+            return QVariant(water->calcium_ppm());
+         case WATERHCO3COL:
+               return QVariant(water->bicarbonate_ppm());
+         case WATERSO4COL:
+               return QVariant(water->sulfate_ppm());
+         case WATERCLCOL:
+               return QVariant(water->chloride_ppm());
+         case WATERNACOL:
+               return QVariant(water->sodium_ppm());
+         case WATERMGCOL:
+               return QVariant(water->magnesium_ppm());
+         case WATERpHCOL:
+               return QVariant(water->ph());
+         default :
+            qWarning() << QString("BtTreeItem::dataWater Bad column: %1").arg(column);
+      }
+   }
+
+   return QVariant();
+}
+
 void BtTreeItem::setType(int t)
 {
     _type = t;
@@ -391,42 +441,42 @@ Recipe* BtTreeItem::recipe()
     if ( _type == RECIPE && _thing )
         return qobject_cast<Recipe*>(_thing);
 
-    return 0;
+    return nullptr;
 }
 
 Equipment* BtTreeItem::equipment()
 {
     if ( _type == EQUIPMENT )
        return qobject_cast<Equipment*>(_thing);
-    return 0;
+    return nullptr;
 }
 
 Fermentable* BtTreeItem::fermentable()
 {
     if ( _type == FERMENTABLE )
        return qobject_cast<Fermentable*>(_thing);
-    return 0;
+    return nullptr;
 }
 
 Hop* BtTreeItem::hop()
 {
     if ( _type == HOP )
        return qobject_cast<Hop*>(_thing);
-    return 0;
+    return nullptr;
 }
 
 Misc* BtTreeItem::misc()
 {
     if ( _type == MISC )
        return qobject_cast<Misc*>(_thing);
-    return 0;
+    return nullptr;
 }
 
 Yeast* BtTreeItem::yeast()
 {
     if ( _type == YEAST )
        return qobject_cast<Yeast*>(_thing);
-    return 0;
+    return nullptr;
 }
 
 BrewNote* BtTreeItem::brewNote()
@@ -434,7 +484,7 @@ BrewNote* BtTreeItem::brewNote()
     if ( _type == BREWNOTE && _thing )
        return qobject_cast<BrewNote*>(_thing);
 
-    return 0;
+    return nullptr;
 }
 
 Style* BtTreeItem::style()
@@ -442,7 +492,7 @@ Style* BtTreeItem::style()
     if ( _type == STYLE && _thing )
        return qobject_cast<Style*>(_thing);
 
-    return 0;
+    return nullptr;
 }
 
 BtFolder* BtTreeItem::folder()
@@ -450,22 +500,30 @@ BtFolder* BtTreeItem::folder()
     if ( _type == FOLDER && _thing )
        return qobject_cast<BtFolder*>(_thing);
 
-    return 0;
+    return nullptr;
 }
 
-BeerXMLElement* BtTreeItem::thing()
+Water* BtTreeItem::water()
+{
+    if ( _type == WATER && _thing )
+       return qobject_cast<Water*>(_thing);
+
+    return nullptr;
+}
+
+NamedEntity* BtTreeItem::thing()
 {
     if ( _thing )
-        return qobject_cast<BeerXMLElement*>(_thing);
+        return qobject_cast<NamedEntity*>(_thing);
 
-    return 0;
+    return nullptr;
 }
 
 QString BtTreeItem::name()
 {
-   BeerXMLElement *tmp;
+   NamedEntity *tmp;
    if ( ! _thing )
       return QString();
-   tmp = qobject_cast<BeerXMLElement*>(_thing);
+   tmp = qobject_cast<NamedEntity*>(_thing);
    return tmp->name();
 }

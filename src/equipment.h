@@ -1,7 +1,8 @@
 /*
  * equipment.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,31 +19,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _EQUIPMENT_H
 #define _EQUIPMENT_H
 
 #include <QDomNode>
-#include "BeerXMLElement.h"
+#include "model/NamedEntity.h"
+namespace PropertyNames::Equipment { static char const * const boilTime_min = "boilTime_min"; /* previously kpropBoilTime */ }
+namespace PropertyNames::Equipment { static char const * const boilSize_l = "boilSize_l"; /* previously kpropBoilSize */ }
+namespace PropertyNames::Equipment { static char const * const batchSize_l = "batchSize_l"; /* previously kpropBatchSize */ }
+namespace PropertyNames::Equipment { static char const * const tunSpecificHeat_calGC = "tunSpecificHeat_calGC"; /* previously kpropTunSpecHeat */ }
+namespace PropertyNames::Equipment { static char const * const tunWeight_kg = "tunWeight_kg"; /* previously kpropTunWeight */ }
+namespace PropertyNames::Equipment { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Equipment { static char const * const boilingPoint_c = "boilingPoint_c"; /* previously kpropBoilingPoint */ }
+namespace PropertyNames::Equipment { static char const * const grainAbsorption_LKg = "grainAbsorption_LKg"; /* previously kpropAbsorption */ }
+namespace PropertyNames::Equipment { static char const * const hopUtilization_pct = "hopUtilization_pct"; /* previously kpropHopUtil */ }
+namespace PropertyNames::Equipment { static char const * const topUpKettle_l = "topUpKettle_l"; /* previously kpropTopUpKettle */ }
+namespace PropertyNames::Equipment { static char const * const lauterDeadspace_l = "lauterDeadspace_l"; /* previously kpropLauterSpace */ }
+namespace PropertyNames::Equipment { static char const * const calcBoilVolume = "calcBoilVolume"; /* previously kpropCalcBoilVol */ }
+namespace PropertyNames::Equipment { static char const * const evapRate_lHr = "evapRate_lHr"; /* previously kpropRealEvapRate */ }
+namespace PropertyNames::Equipment { static char const * const evapRate_pctHr = "evapRate_pctHr"; /* previously kpropEvapRate */ }
+namespace PropertyNames::Equipment { static char const * const trubChillerLoss_l = "trubChillerLoss_l"; /* previously kpropTrubChillLoss */ }
+namespace PropertyNames::Equipment { static char const * const topUpWater_l = "topUpWater_l"; /* previously kpropTopUpWater */ }
+namespace PropertyNames::Equipment { static char const * const tunVolume_l = "tunVolume_l"; /* previously kpropTunVolume */ }
 
 /*!
  * \class Equipment
- * \author Philip G. Lee
  *
  * \brief Model representing a single equipment record.
  */
-class Equipment : public BeerXMLElement
+class Equipment : public NamedEntity
 {
    Q_OBJECT
 
    Q_CLASSINFO("signal", "equipments")
-   Q_CLASSINFO("prefix", "equipment")
-   
+
    friend class Database;
+   friend class BeerXML;
+   friend class EquipmentEditor;
+
 public:
 
+   Equipment(QString t_name, bool cacheOnly = true);
    virtual ~Equipment() {}
-   
+
    //! \brief The boil size in liters.
    Q_PROPERTY( double boilSize_l            READ boilSize_l            WRITE setBoilSize_l            NOTIFY changedBoilSize_l )
    //! \brief The batch size in liters.
@@ -96,6 +115,7 @@ public:
    void setNotes( const QString &var );
    void setGrainAbsorption_LKg(double var);
    void setBoilingPoint_c(double var);
+   void setCacheOnly(bool cache);
 
    // Get
    double boilSize_l() const;
@@ -115,15 +135,18 @@ public:
    QString notes() const;
    double grainAbsorption_LKg();
    double boilingPoint_c() const;
+   bool cacheOnly() const;
 
    //! \brief Calculate how much wort is left immediately at knockout.
    double wortEndOfBoil_l( double kettleWort_l ) const;
 
    static QString classNameStr();
 
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
+
 signals:
-   
-   void changedName(QString);
    void changedBoilSize_l(double);
    void changedBatchSize_l(double);
    void changedTunVolume_l(double);
@@ -141,48 +164,39 @@ signals:
    void changedNotes(QString);
    void changedGrainAbsorption_LKg(double);
    void changedBoilingPoint_c(double);
-   
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
-   Equipment(Brewtarget::DBTable table, int key);
+   Equipment(TableSchema* table, QSqlRecord rec, int t_key = -1);
+   // Equipment(Brewtarget::DBTable table, int key);
    Equipment( Equipment const& other);
-   
+
+   double m_boilSize_l;
+   double m_batchSize_l;
+   double m_tunVolume_l;
+   double m_tunWeight_kg;
+   double m_tunSpecificHeat_calGC;
+   double m_topUpWater_l;
+   double m_trubChillerLoss_l;
+   double m_evapRate_pctHr;
+   double m_evapRate_lHr;
+   double m_boilTime_min;
+   bool m_calcBoilVolume;
+   double m_lauterDeadspace_l;
+   double m_topUpKettle_l;
+   double m_hopUtilization_pct;
+   QString m_notes;
+   double m_grainAbsorption_LKg;
+   double m_boilingPoint_c;
+   bool m_cacheOnly;
+
    // Calculate the boil size.
    void doCalculations();
-   
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
 
 Q_DECLARE_METATYPE( Equipment* )
-
-bool operator<(Equipment &e1, Equipment &e2);
-bool operator==(Equipment &e1, Equipment &e2);
-
-inline bool EquipmentPtrLt( Equipment* lhs, Equipment* rhs)
-{
-   return *lhs < *rhs;
-}
-
-inline bool EquipmentPtrEq( Equipment* lhs, Equipment* rhs)
-{
-   return *lhs == *rhs;
-}
-
-struct Equipment_ptr_cmp
-{
-   bool operator()( Equipment* lhs, Equipment* rhs)
-   {
-      return *lhs < *rhs;
-   }
-};
-
-struct Equipment_ptr_equals
-{
-   bool operator()( Equipment* lhs, Equipment* rhs )
-   {
-      return *lhs == *rhs;
-   }
-};
 
 #endif   /* _EQUIPMENT_H */
 

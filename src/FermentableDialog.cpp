@@ -169,7 +169,7 @@ void FermentableDialog::editSelected()
 void FermentableDialog::addFermentable(const QModelIndex& index)
 {
    QModelIndex translated;
-   
+
    // If there is no provided index, get the selected index.
    if( !index.isValid() )
    {
@@ -187,7 +187,7 @@ void FermentableDialog::addFermentable(const QModelIndex& index)
          if( selected[i].row() != row )
             return;
       }
-      
+
       translated = fermTableProxy->mapToSource(selected[0]);
    }
    else
@@ -200,10 +200,10 @@ void FermentableDialog::addFermentable(const QModelIndex& index)
       else
          return;
    }
-   
-   Fermentable *ferm = fermTableModel->getFermentable(translated.row());
-   
-   Database::instance().addToRecipe( mainWindow->currentRecipe(), ferm );
+
+   Brewtarget::mainWindow()->addFermentableToRecipe(fermTableModel->getFermentable(translated.row()));
+
+   return;
 }
 
 void FermentableDialog::newFermentable(QString folder)
@@ -212,9 +212,8 @@ void FermentableDialog::newFermentable(QString folder)
                                           tr("Fermentable name:"));
    if( name.isEmpty() )
       return;
-   
-   Fermentable* ferm = Database::instance().newFermentable();
-   ferm->setName(name);
+
+   Fermentable* ferm = new Fermentable(name);
    if ( ! folder.isEmpty() )
       ferm->setFolder(folder);
 

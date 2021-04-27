@@ -40,9 +40,9 @@ class StyleButton : public QPushButton
 {
    Q_OBJECT
 public:
-   StyleButton(QWidget* parent = 0);
+   StyleButton(QWidget* parent = nullptr);
    virtual ~StyleButton(){}
-   
+
    //! Observe a recipe's equipment.
    void setRecipe(Recipe* recipe);
    //! Observe a particular equipment.

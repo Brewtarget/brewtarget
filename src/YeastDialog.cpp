@@ -143,7 +143,7 @@ void YeastDialog::removeYeast()
 void YeastDialog::addYeast(const QModelIndex& index)
 {
    QModelIndex translated;
-   
+
    if( !index.isValid() )
    {
       QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
@@ -173,17 +173,17 @@ void YeastDialog::addYeast(const QModelIndex& index)
       else
          return;
    }
-   
-   Yeast* yeast = yeastTableModel->getYeast(translated.row());
-   
+
    // Adds a copy of yeast.
-   Database::instance().addToRecipe( mainWindow->currentRecipe(), yeast );
+   Brewtarget::mainWindow()->addYeastToRecipe(yeastTableModel->getYeast(translated.row()));
+
+   return;
 }
 
 void YeastDialog::editSelected()
 {
    QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
-   QModelIndex translated; 
+   QModelIndex translated;
 
    int row, size, i;
 
@@ -217,14 +217,12 @@ void YeastDialog::newYeast(QString folder)
    if( name.isEmpty() )
       return;
 
-   Yeast* y = Database::instance().newYeast();
-   y->setName(name);
+   Yeast* y = new Yeast(name);
    if ( ! folder.isEmpty() )
       y->setFolder(folder);
 
    yeastEditor->setYeast(y);
    yeastEditor->show();
-   y->setDisplay(true);
 }
 
 void YeastDialog::filterYeasts(QString searchExpression)

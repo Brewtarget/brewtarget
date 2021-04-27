@@ -42,10 +42,12 @@ class HopEditor : public QDialog, private Ui::hopEditor
    Q_OBJECT
 
 public:
-   HopEditor( QWidget *parent=0 );
+   HopEditor( QWidget *parent=nullptr );
    virtual ~HopEditor() {}
    //! Edit the given hop.
    void setHop( Hop* h );
+   //! Create a new hop
+   void newHop(QString folder);
 
 public slots:
    //! Save the changes.
@@ -53,6 +55,7 @@ public slots:
    //! Clear the dialog and close it.
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
+   void newHop();
 
 private:
    Hop* obsHop;
@@ -60,7 +63,7 @@ private:
    /*! Updates the UI elements based on \b prop.
     *  If null, updates all UI elements.
     */
-   void showChanges(QMetaProperty* prop = 0);
+   void showChanges(QMetaProperty* prop = nullptr);
 };
 
 #endif   /* _HOPEDITOR_H */

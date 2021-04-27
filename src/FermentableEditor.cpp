@@ -21,7 +21,9 @@
  */
 
 #include <QIcon>
+#include <QInputDialog>
 #include "FermentableEditor.h"
+#include "BtHorizontalTabs.h"
 #include "fermentable.h"
 #include "database.h"
 #include "config.h"
@@ -33,9 +35,11 @@ FermentableEditor::FermentableEditor( QWidget* parent )
 {
    setupUi(this);
 
-   connect( this, &QDialog::accepted, this, &FermentableEditor::save);
-   connect( this, &QDialog::rejected, this, &FermentableEditor::clearAndClose);
+   this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
 
+   connect( pushButton_new,    SIGNAL( clicked() ),       this, SLOT( newFermentable() ) );
+   connect( pushButton_save,   &QAbstractButton::clicked, this, &FermentableEditor::save );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &FermentableEditor::clearAndClose );
 }
 
 void FermentableEditor::setFermentable( Fermentable* newFerm )
@@ -55,14 +59,13 @@ void FermentableEditor::save()
       return;
    }
 
-   obsFerm->setName(lineEdit_name->text());
+   obsFerm->setName(lineEdit_name->text(), obsFerm->cacheOnly());
 
    // NOTE: the following assumes that Fermentable::Type is enumerated in the same
    // order as the combobox.
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
 
    obsFerm->setAmount_kg(lineEdit_amount->toSI());
-   obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
    obsFerm->setYield_pct(lineEdit_yield->toSI());
    obsFerm->setColor_srm(lineEdit_color->toSI());
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
@@ -77,14 +80,20 @@ void FermentableEditor::save()
    obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->toSI() );
    obsFerm->setNotes( textEdit_notes->toPlainText() );
-   obsFerm->save();
+
+   if ( obsFerm->cacheOnly() ) {
+      obsFerm->insertInDatabase();
+   }
+
+   // I could do this in the database code, but it makes sense to me here.
+   obsFerm->setInventoryAmount(lineEdit_inventory->toSI());
 
    setVisible(false);
 }
 
 void FermentableEditor::clearAndClose()
 {
-   setFermentable(0);
+   setFermentable(nullptr);
    setVisible(false); // Hide the window.
 }
 
@@ -95,17 +104,21 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
 
    QString propName;
    bool updateAll = false;
-   if( metaProp == 0 )
+
+   if( metaProp == nullptr ) {
       updateAll = true;
+   }
    else
    {
       propName = metaProp->name();
    }
 
-   if( propName == "name" || updateAll )
+   if( propName == PropertyNames::NamedEntity::name || updateAll )
    {
       lineEdit_name->setText(obsFerm->name());
       lineEdit_name->setCursorPosition(0);
+
+      tabWidget_editor->setTabText(0, obsFerm->name() );
       if( ! updateAll )
          return;
    }
@@ -126,7 +139,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "yield_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::yield_pct || updateAll) {
       lineEdit_yield->setText(obsFerm);
       if( ! updateAll )
          return;
@@ -136,7 +149,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
        if( ! updateAll )
          return;
    }
-   if( propName == "addAfterBoil" || updateAll) {
+   if( propName == PropertyNames::Fermentable::addAfterBoil || updateAll) {
       checkBox_addAfterBoil->setCheckState( obsFerm->addAfterBoil() ? Qt::Checked : Qt::Unchecked );
        if( ! updateAll )
          return;
@@ -148,49 +161,49 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "supplier" || updateAll)
+   if( propName == PropertyNames::Fermentable::supplier || updateAll)
    {
       lineEdit_supplier->setText(obsFerm->supplier());
       lineEdit_supplier->setCursorPosition(0);
        if( ! updateAll )
          return;
    }
-   if( propName == "coarseFineDiff_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::coarseFineDiff_pct || updateAll) {
       lineEdit_coarseFineDiff->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "moisture_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::moisture_pct || updateAll) {
       lineEdit_moisture->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "diastaticPower_lintner" || updateAll) {
+   if( propName == PropertyNames::Fermentable::diastaticPower_lintner || updateAll) {
       lineEdit_diastaticPower->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "protein_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::protein_pct || updateAll) {
       lineEdit_protein->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "maxInBatch_pct" || updateAll) {
+   if( propName == PropertyNames::Fermentable::maxInBatch_pct || updateAll) {
       lineEdit_maxInBatch->setText(obsFerm);
       if( ! updateAll )
          return;
    }
-   if( propName == "recommendMash" || updateAll) {
+   if( propName == PropertyNames::Fermentable::recommendMash || updateAll) {
       checkBox_recommendMash->setCheckState( obsFerm->recommendMash() ? Qt::Checked : Qt::Unchecked );
       if( ! updateAll )
          return;
    }
-   if( propName == "isMashed" || updateAll) {
+   if( propName == PropertyNames::Fermentable::isMashed || updateAll) {
       checkBox_isMashed->setCheckState( obsFerm->isMashed() ? Qt::Checked : Qt::Unchecked );
        if( ! updateAll )
          return;
    }
-   if( propName == "ibuGalPerLb" || updateAll) {
+   if( propName == PropertyNames::Fermentable::ibuGalPerLb || updateAll) {
       lineEdit_ibuGalPerLb->setText(obsFerm);
       if( ! updateAll )
          return;
@@ -200,4 +213,24 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
+}
+
+void FermentableEditor::newFermentable(QString folder) 
+{
+   QString name = QInputDialog::getText(this, tr("Fermentable name"),
+                                          tr("Fermentable name:"));
+   if( name.isEmpty() )
+      return;
+
+   Fermentable* f = new Fermentable(name,true);
+
+   if ( ! folder.isEmpty() )
+      f->setFolder(folder);
+
+   setFermentable(f);
+   show();
+}
+void FermentableEditor::newFermentable()
+{
+   newFermentable(QString());
 }

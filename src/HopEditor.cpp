@@ -1,6 +1,6 @@
 /*
  * HopEditor.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Kregg K <gigatropolis@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -22,31 +22,36 @@
 
 #include <QtGui>
 #include <QIcon>
+#include <QInputDialog>
 #include "hop.h"
 #include "HopEditor.h"
+#include "BtHorizontalTabs.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"
 
 HopEditor::HopEditor( QWidget* parent )
-   : QDialog(parent), obsHop(0)
+   : QDialog(parent), obsHop(nullptr)
 {
    setupUi(this);
-   
-   connect( buttonBox, &QDialogButtonBox::accepted, this, &HopEditor::save);
-   connect( buttonBox, &QDialogButtonBox::rejected, this, &HopEditor::clearAndClose);
+
+   this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
+
+   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
+   connect( pushButton_save,   &QAbstractButton::clicked, this, &HopEditor::save );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &HopEditor::clearAndClose );
 }
 
 void HopEditor::setHop( Hop* h )
 {
    if( obsHop )
-      disconnect( obsHop, 0, this, 0 );
-   
+      disconnect( obsHop, nullptr, this, nullptr );
+
    obsHop = h;
    if( obsHop )
    {
-      connect( obsHop, &BeerXMLElement::changed, this, &HopEditor::changed );
+      connect( obsHop, &NamedEntity::changed, this, &HopEditor::changed );
       showChanges();
    }
 }
@@ -55,20 +60,15 @@ void HopEditor::save()
 {
    Hop* h = obsHop;
 
-   if( h == 0 )
+   if( h == nullptr )
    {
       setVisible(false);
       return;
    }
 
-   // TODO: check this out with 1.2.5.
-   // Need to disable notification since every "set" method will cause a "showChanges" that
-   // will revert any changes made.
-
-   h->setName(lineEdit_name->text());
+   h->setName(lineEdit_name->text(), h->cacheOnly());
    h->setAlpha_pct(lineEdit_alpha->toSI());
    h->setAmount_kg(lineEdit_amount->toSI());
-   h->setInventoryAmount(lineEdit_inventory->toSI());
    h->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
    h->setTime_min(lineEdit_time->toSI());
    h->setType(static_cast<Hop::Type>(comboBox_type->currentIndex()));
@@ -84,12 +84,18 @@ void HopEditor::save()
    h->setSubstitutes(textEdit_substitutes->toPlainText());
    h->setNotes(textEdit_notes->toPlainText());
 
+   if ( h->cacheOnly() ) {
+      h->insertInDatabase();
+   }
+
+   // do this late to make sure we've the row in the inventory table
+   h->setInventoryAmount(lineEdit_inventory->toSI());
    setVisible(false);
 }
 
 void HopEditor::clearAndClose()
 {
-   setHop(0);
+   setHop(nullptr);
    setVisible(false); // Hide the window.
 }
 
@@ -103,24 +109,25 @@ void HopEditor::showChanges(QMetaProperty* prop)
 {
    bool updateAll = false;
    QString propName;
-   if( obsHop == 0 )
+   if( obsHop == nullptr )
       return;
 
-   if( prop == 0 )
+   if( prop == nullptr ) {
       updateAll = true;
-   else
-   {
+   }
+   else {
       propName = prop->name();
    }
-   
-   if( propName == "name" || updateAll )
+
+   if( propName == PropertyNames::NamedEntity::name || updateAll )
    {
       lineEdit_name->setText(obsHop->name());
       lineEdit_name->setCursorPosition(0);
+      tabWidget_editor->setTabText(0, obsHop->name() );
       if( ! updateAll )
          return;
    }
-   if( propName == "alpha_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::alpha_pct || updateAll ) {
       lineEdit_alpha->setText(obsHop);
       if( ! updateAll )
          return;
@@ -140,7 +147,7 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "time_min" || updateAll ) {
+   if( propName == PropertyNames::Hop::time_min || updateAll ) {
       lineEdit_time->setText(obsHop);
       if( ! updateAll )
          return;
@@ -155,12 +162,12 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "beta_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::beta_pct || updateAll ) {
       lineEdit_beta->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "hsi_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::hsi_pct || updateAll ) {
       lineEdit_HSI->setText(obsHop);
       if( ! updateAll )
          return;
@@ -172,27 +179,27 @@ void HopEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   if( propName == "humulene_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::humulene_pct || updateAll ) {
       lineEdit_humulene->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "caryophyllene_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::caryophyllene_pct || updateAll ) {
       lineEdit_caryophyllene->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "cohumulone_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::cohumulone_pct || updateAll ) {
       lineEdit_cohumulone->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "myrcene_pct" || updateAll ) {
+   if( propName == PropertyNames::Hop::myrcene_pct || updateAll ) {
       lineEdit_myrcene->setText(obsHop);
       if( ! updateAll )
          return;
    }
-   if( propName == "substitutes" || updateAll ) {
+   if( propName == PropertyNames::Hop::substitutes || updateAll ) {
       textEdit_substitutes->setPlainText(obsHop->substitutes());
       if( ! updateAll )
          return;
@@ -203,3 +210,25 @@ void HopEditor::showChanges(QMetaProperty* prop)
          return;
    }
 }
+
+void HopEditor::newHop(QString folder)
+{
+   QString name = QInputDialog::getText(this, tr("Hop name"),
+                                          tr("Hop name:"));
+   if( name.isEmpty() )
+      return;
+
+   Hop* h = new Hop(name,true);
+
+   if ( ! folder.isEmpty() )
+      h->setFolder(folder);
+
+   setHop(h);
+   show();
+}
+
+void HopEditor::newHop()
+{
+   newHop(QString());
+}
+

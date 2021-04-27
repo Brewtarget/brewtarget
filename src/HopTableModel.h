@@ -48,10 +48,10 @@ enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPINVENTORYCOL, HOPFORMCOL, HOPUSEC
 class HopTableModel : public QAbstractTableModel
 {
    Q_OBJECT
-           
+
 public:
 
-   HopTableModel(QTableView* parent=0, bool editable=true);
+   HopTableModel(QTableView* parent=nullptr, bool editable=true);
    virtual ~HopTableModel();
    //! \brief Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -65,14 +65,14 @@ public:
    Hop* getHop(int i);
    //! \brief Clear the model.
    void removeAll();
-   
+
    /*!
     * \brief True if the inventory column should be editable, false otherwise.
-    * 
+    *
     * The default is that the inventory column is not editable
     */
    void setInventoryEditable( bool var ) { _inventoryEditable = var; colFlags[HOPINVENTORYCOL] = Qt::ItemIsEnabled | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags); }
-   
+
    //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
    //! \brief Reimplemented from QAbstractTableModel.
@@ -85,7 +85,7 @@ public:
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
    //! \brief Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-   
+
    // Stuff for setting display units and scales -- per cell first, then by
    // column
 
@@ -98,6 +98,7 @@ public:
    QString generateName(int column) const;
 public slots:
    void changed(QMetaProperty, QVariant);
+   void changedInventory(Brewtarget::DBTable,int,QVariant);
    //! \brief Add a hop to the model.
    void addHop(Hop* hop);
    //! \returns true if "hop" is successfully found and removed.
@@ -124,16 +125,16 @@ private:
 class HopItemDelegate : public QItemDelegate
 {
    Q_OBJECT
-           
+
 public:
-   HopItemDelegate(QObject* parent = 0);
-   
+   HopItemDelegate(QObject* parent = nullptr);
+
    // Inherited functions.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-   
+
 private:
 };
 

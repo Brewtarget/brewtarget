@@ -1,8 +1,9 @@
 /*
  * recipe.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -22,8 +23,6 @@
 #ifndef _RECIPE_H
 #define _RECIPE_H
 
-class Recipe;
-
 #include <QColor>
 #include <QVariant>
 #include <QList>
@@ -32,14 +31,64 @@ class Recipe;
 #include <QString>
 #include <QDate>
 #include <QMutex>
-#include "BeerXMLElement.h"
+
+#include "model/NamedEntity.h"
 #include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
 #include "misc.h"
+#include "salt.h"
 #include "brewnote.h"
+namespace PropertyNames::Recipe { static char const * const fg = "fg"; /* previously kpropFG */ }
+namespace PropertyNames::Recipe { static char const * const og = "og"; /* previously kpropOG */ }
+namespace PropertyNames::Recipe { static char const * const boilTime_min = "boilTime_min"; /* previously kpropBoilTime */ }
+namespace PropertyNames::Recipe { static char const * const boilSize_l = "boilSize_l"; /* previously kpropBoilSize */ }
+namespace PropertyNames::Recipe { static char const * const batchSize_l = "batchSize_l"; /* previously kpropBatchSize */ }
+namespace PropertyNames::Recipe { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Recipe { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Recipe { static char const * const kegPrimingFactor = "kegPrimingFactor"; /* previously kpropKegPrimFact */ }
+namespace PropertyNames::Recipe { static char const * const primingSugarEquiv = "primingSugarEquiv"; /* previously kpropPrimSugEquiv */ }
+namespace PropertyNames::Recipe { static char const * const carbonationTemp_c = "carbonationTemp_c"; /* previously kpropCarbTemp */ }
+namespace PropertyNames::Recipe { static char const * const primingSugarName = "primingSugarName"; /* previously kpropPrimSugName */ }
+namespace PropertyNames::Recipe { static char const * const forcedCarbonation = "forcedCarbonation"; /* previously kpropForcedCarb */ }
+namespace PropertyNames::Recipe { static char const * const carbonation_vols = "carbonation_vols"; /* previously kpropCarbVols */ }
+namespace PropertyNames::Recipe { static char const * const points = "points"; /* previously kpropPoints */ }
+namespace PropertyNames::Recipe { static char const * const date = "date"; /* previously kpropDate */ }
+namespace PropertyNames::Recipe { static char const * const ageTemp_c = "ageTemp_c"; /* previously kpropAgeTemp */ }
+namespace PropertyNames::Recipe { static char const * const age = "age"; /* previously kpropAge */ }
+namespace PropertyNames::Recipe { static char const * const tertiaryTemp_c = "tertiaryTemp_c"; /* previously kpropTertTemp */ }
+namespace PropertyNames::Recipe { static char const * const tertiaryAge_days = "tertiaryAge_days"; /* previously kpropTertAgeDays */ }
+namespace PropertyNames::Recipe { static char const * const secondaryTemp_c = "secondaryTemp_c"; /* previously kpropSecTemp */ }
+namespace PropertyNames::Recipe { static char const * const secondaryAge_days = "secondaryAge_days"; /* previously kpropSecAgeDays */ }
+namespace PropertyNames::Recipe { static char const * const primaryTemp_c = "primaryTemp_c"; /* previously kpropPrimTemp */ }
+namespace PropertyNames::Recipe { static char const * const primaryAge_days = "primaryAge_days"; /* previously kpropPrimAgeDays */ }
+namespace PropertyNames::Recipe { static char const * const fermentationStages = "fermentationStages"; /* previously kpropFermStages */ }
+namespace PropertyNames::Recipe { static char const * const tasteRating = "tasteRating"; /* previously kpropTasteRating */ }
+namespace PropertyNames::Recipe { static char const * const tasteNotes = "tasteNotes"; /* previously kpropTasteNotes */ }
+namespace PropertyNames::Recipe { static char const * const asstBrewer = "asstBrewer"; /* previously kpropAsstBrewer */ }
+namespace PropertyNames::Recipe { static char const * const efficiency_pct = "efficiency_pct"; /* previously kpropEffPct */ }
+namespace PropertyNames::Recipe { static char const * const brewer = "brewer"; /* previously kpropBrewer */ }
+namespace PropertyNames::Recipe { static char const * const color_srm = "color_srm"; /* previously kpropColor */ }
+namespace PropertyNames::Recipe { static char const * const postBoilVolume_l = "postBoilVolume_l"; /* previously kpropPostBoilVol */ }
+namespace PropertyNames::Recipe { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
+
+namespace PropertyNames::Recipe { static char const * const recipeType = "recipeType"; }
+namespace PropertyNames::Recipe { static char const * const style = "style"; }
+namespace PropertyNames::Recipe { static char const * const equipment  = "equipment"; }
+namespace PropertyNames::Recipe { static char const * const mash = "mash"; }
+
+namespace PropertyNames::Recipe { static char const * const ABV_pct = "ABV_pct"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const boilGrav = "boilGrav"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const IBU = "IBU"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const IBUs = "IBUs"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const wortFromMash_l = "wortFromMash_l"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const boilVolume_l = "boilVolume_l"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const calories = "calories"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const grainsInMash_kg = "grainsInMash_kg"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const grains_kg = "grains_kg"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const SRMColor = "SRMColor"; /* not stored */ }
+namespace PropertyNames::Recipe { static char const * const style_id = "styleId"; /* not stored */ }
+
 
 // Forward declarations.
-//class Hop;
-//class Misc;
 class Style;
 class Mash;
 class Fermentable;
@@ -51,10 +100,6 @@ class PreInstruction;
 class BrewNote;
 class MashStep;
 
-//! \brief Compares recipes based on name.
-bool operator<(Recipe &r1, Recipe &r2 );
-//! \brief Compares recipes based on name.
-bool operator==(Recipe &r1, Recipe &r2 );
 
 /*!
  * \class Recipe
@@ -62,26 +107,35 @@ bool operator==(Recipe &r1, Recipe &r2 );
  *
  * \brief Model class for recipe records in the database.
  */
-class Recipe : public BeerXMLElement
+class Recipe : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "recipes")
-   Q_CLASSINFO("prefix", "recipe")
-   
+
    friend class Database;
+   friend class BeerXML;
+   friend class RecipeFormatter;
+   friend class MainWindow;
+   friend class WaterDialog;
+
 public:
 
+   Recipe(QString name, bool cache = true);
    virtual ~Recipe() {}
 
-   friend bool operator<(Recipe &r1, Recipe &r2 );
-   friend bool operator==(Recipe &r1, Recipe &r2 );
-   friend class RecipeFormatter;
-   
    // NOTE: move to database?
    //! \brief Retains only the name, but sets everything else to defaults.
    void clear();
-   
-   //! \brief The type (lager, ale, etc.).
+
+   //! \brief The type of recipe
+   enum Type { Extract, PartialMash, AllGrain };
+   Q_ENUMS( Type )
+
+   //! \brief The \b Type
+   Q_PROPERTY( Type recipeType READ recipeType WRITE setRecipeType /*NOTIFY changed*/ /*changedType*/ )
+
+   //! \brief The type (extract, partial mash, all grain) stored as a string
+   //         TBD (MY 2021-01-18) Not sure why this is stored as a string rather than an enum.  Have created an enum wrapper above
    Q_PROPERTY( QString type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    //! \brief The brewer.
    Q_PROPERTY( QString brewer READ brewer WRITE setBrewer /*NOTIFY changed*/ /*changedBrewer*/ )
@@ -133,13 +187,13 @@ public:
    Q_PROPERTY( double primingSugarEquiv READ primingSugarEquiv WRITE setPrimingSugarEquiv /*NOTIFY changed*/ /*changedPrimingSugarEquiv*/ )
    //! \brief The factor required to convert the amount of sugar required for bottles to keg (usually about 0.5).
    Q_PROPERTY( double kegPrimingFactor READ kegPrimingFactor WRITE setKegPrimingFactor /*NOTIFY changed*/ /*changedKegPrimingFactor*/ )
-  
+
    // Calculated stored properties.
    //! \brief The calculated OG.
    Q_PROPERTY( double og READ og WRITE setOg /*NOTIFY changed*/ /*changedOg*/ )
    //! \brief The calculated FG.
    Q_PROPERTY( double fg READ fg WRITE setFg /*NOTIFY changed*/ /*changedFg*/ )
-   
+
    // Calculated unstored properties. These need to listen for changes to
    // the uncalculated properties they depend on, and re-emit changed()
    // when appropriate.
@@ -171,14 +225,14 @@ public:
    Q_PROPERTY( double grains_kg READ grains_kg /*WRITE*/ /*NOTIFY changed*/ /*changedGrains_kg*/ STORED false)
    //! \brief The beer color as a displayable QColor.
    Q_PROPERTY( QColor SRMColor READ SRMColor /*WRITE*/ /*NOTIFY changed*/ STORED false )
-   
+
    // Relational properties.
    //! \brief The mash.
-   Q_PROPERTY( Mash* mash READ mash /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY( Mash* mash READ mash WRITE setMash /*NOTIFY changed*/ STORED false)
    //! \brief The equipment.
-   Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY( Equipment* equipment READ equipment WRITE setEquipment /*NOTIFY changed*/ STORED false)
    //! \brief The style.
-   Q_PROPERTY( Style* style READ style /*WRITE*/ /*NOTIFY changed*/ STORED false)
+   Q_PROPERTY( Style* style READ style WRITE setStyle /*NOTIFY changed*/ STORED false)
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
    //! \brief The brew notes.
@@ -195,18 +249,58 @@ public:
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ /*NOTIFY changed*/ STORED false )
    //! \brief The waters.
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ /*NOTIFY changed*/ STORED false )
-   
+   //! \brief The salts.
+   Q_PROPERTY( QList<Salt*> salts READ salts /*WRITE*/ /*NOTIFY changed*/ STORED false )
+
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
    // One method to bring them all and in darkness bind them
-   void remove( BeerXMLElement *var);
+   // .:TBD:. (MY 2020-11-23) At the moment, it feels like there are a lot of places in the code that keep the object
+   //         model and the database in sync, which can get complicated.  In the long run, it would be simpler to have
+   //         the GUI interact with the object model (Recipes, NamedEntitys, etc) and make it the responsibility of the
+   //         object model to store/retrieve/modify what's in the database via some abstraction layer.  Might be worth
+   //         looking at https://www.qxorm.com or similar for this.
+   //            In the meantime, we cannot define a templated member function _in this header_ that calls
+   //         Database::instance() (or indeed any other member function of Database) because that would require us to
+   //         #include "database.h" and database.h already needs to #include "recipe.h", so we'd be trapped in circular
+   //         dependencies.  Fortunately there is a trick that allows us to declare the function in the header and
+   //         define it in the cpp file, even though it's templated.
 
-   // And you do know what happens next right?
-   void addHop( Hop *var );
-   void addFermentable( Fermentable* var );
-   void addMisc( Misc* var );
-   void addYeast( Yeast* var );
-   void addWater( Water* var );
+   /*!
+    * \brief Remove \c var from the recipe and return what was removed - ie \c var
+    *
+    * We want callers to use this strongly-typed version because it makes the implementation of Undo/Redo easier (by
+    * making add and remove more symmetric).
+    */
+   template<class T> T * remove(T * var) {
+      return static_cast<T *>(this->removeNamedEntity(var));
+   }
+
+   /*!
+    * \brief Add a copy of \c var from the recipe and return the copy
+    *
+    * For many types of ingredient, when we add an ingredient to a recipe, we make a copy of it, and it is the copy that
+    * it associated with the recipe.  Amongst other things, this allows the same ingredient to be added multiple times to
+    * a recipe - eg the same type of hops might well be added at multiple points in the recipe.  It also allows an
+    * ingredient in a recipe to be modified without those modifications affecting the use of the ingredient in other
+    * recipes.
+    *
+    * So, calling "myRecipe->addFermentable(&someFermentable)" will result in a COPY of someFermentable
+    * being created and added to the recipe, which means the inverse operation is NOT just
+    * myRecipe->removeFermentable(&someFermentable).  Instead, the add function returns a pointer to the
+    * newly-created ingredient:
+    *
+    *    Fermentable * newCopyOfSomeFermentable = myRecipe->addFermentable(&someFermentable);   // DO
+    *    myRecipe->removeFermentable(newCopyOfSomeFermentable);                                 // UNDO
+    *
+    * The remover function returns a pointer to the NamedEntity that it removed.  This is useful because it makes add and
+    * remove symmetric and simplifies the implementation of UndoableAddOrRemove.
+    *
+    * TBD: (MY 2020-11-23) It would be good one day to pull out all the non-changeable aspects of ingredients and keep
+    *      just one copy of them in the DB and in memory.
+    */
+   template<class T> T * add(T * var);
+
    void removeBrewNote(BrewNote* var);
    void removeInstruction( Instruction* ins );
    /*!
@@ -228,6 +322,7 @@ public:
    QString nextAddToBoil(double& time);
 
    // Getters
+   Type recipeType() const;
    QString type() const;
    QString brewer() const;
    double batchSize_l() const;
@@ -256,7 +351,8 @@ public:
    double carbonationTemp_c() const;
    double primingSugarEquiv() const;
    double kegPrimingFactor() const;
-   
+   bool cacheOnly() const;
+
    // Calculated getters.
    double points();
    double ABV_pct();
@@ -275,20 +371,26 @@ public:
    double grainsInMash_kg();
    double grains_kg();
    QList<double> IBUs();
-   
+
    // Relational getters
    QList<Hop*> hops() const;
    QList<Instruction*> instructions() const;
    QList<Fermentable*> fermentables() const;
-   QList<Misc*> miscs() const;
+   QList<Misc*>  miscs() const;
    QList<Yeast*> yeasts() const;
    QList<Water*> waters() const;
+   QList<Salt*>  salts() const;
    QList<BrewNote*> brewNotes() const;
-   
+
    Mash* mash() const;
    Equipment* equipment() const;
-   Style* style() const;
-   
+   Style* style();
+
+   // Relational setters
+   void setStyle(Style * style);
+   void setEquipment(Equipment * equipment);
+   void setMash(Mash * var);
+
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
    QVector<PreInstruction> mashSteps();
@@ -299,34 +401,24 @@ public:
    bool hasBoilExtract();
    static bool isFermentableSugar(Fermentable*);
    PreInstruction addExtracts(double timeRemaining) const;
-   
+
    // Helpers
    //! \brief Get the ibus from a given \c hop.
    double ibuFromHop(Hop const* hop);
+   //! \brief Formats the fermentables for instructions
    QList<QString> getReagents( QList<Fermentable*> ferms );
+   //! \brief Formats the mashsteps for instructions
    QList<QString> getReagents( QList<MashStep*> msteps );
+   //! \brief Formats the hops for instructions
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
+   //! \brief Formats the salts for instructions
+   QStringList getReagents( QList<Salt*> salts, Salt::WhenToAdd wanted);
    QHash<QString,double> calcTotalPoints();
-   
+
    static QString classNameStr();
 
-signals:
-   //! \brief Emitted when \c name() changes.
-   void changedName(const QString&);
-   
-public slots:
-   void acceptEquipChange(QMetaProperty prop, QVariant val);
-   void acceptFermChange(QMetaProperty prop, QVariant val);
-   void acceptHopChange(QMetaProperty prop, QVariant val);
-   void acceptYeastChange(QMetaProperty prop, QVariant val);
-   void acceptMashChange(QMetaProperty prop, QVariant val);
-
-   void onFermentableChanged();
-   void acceptHopChange(Hop* hop);
-   void acceptYeastChange(Yeast* yeast);
-   void acceptMashChange(Mash* mash);
-
-   // Setters -- why are these slots?
+   // Setters that are not slots
+   void setRecipeType(Type var);
    void setType( const QString &var );
    void setBrewer( const QString &var );
    void setBatchSize_l( double var );
@@ -355,47 +447,104 @@ public slots:
    void setCarbonationTemp_c( double var );
    void setPrimingSugarEquiv( double var );
    void setKegPrimingFactor( double var );
-   
+   void setCacheOnly( bool cache );
+
+   NamedEntity * getParent();
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
+
+signals:
+
+public slots:
+   void acceptEquipChange(QMetaProperty prop, QVariant val);
+   void acceptFermChange(QMetaProperty prop, QVariant val);
+   void acceptHopChange(QMetaProperty prop, QVariant val);
+   void acceptYeastChange(QMetaProperty prop, QVariant val);
+   void acceptMashChange(QMetaProperty prop, QVariant val);
+
+   void onFermentableChanged();
+   void acceptHopChange(Hop* hop);
+   void acceptYeastChange(Yeast* yeast);
+   void acceptMashChange(Mash* mash);
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
-   
-   Recipe(Brewtarget::DBTable table, int key);
+//   Recipe(Brewtarget::DBTable table, int key);
+   Recipe(TableSchema* table, QSqlRecord rec, int t_key = -1);
    Recipe(Recipe const& other);
-   
+
+   // Cached properties that are written directly to db
+   QString m_type;
+   QString m_brewer;
+   QString m_asstBrewer;
+   double m_batchSize_l;
+   double m_boilSize_l;
+   double m_boilTime_min;
+   double m_efficiency_pct;
+   int m_fermentationStages;
+   double m_primaryAge_days;
+   double m_primaryTemp_c;
+   double m_secondaryAge_days;
+   double m_secondaryTemp_c;
+   double m_tertiaryAge_days;
+   double m_tertiaryTemp_c;
+   double m_age;
+   double m_ageTemp_c;
+   QDate m_date;
+   double m_carbonation_vols;
+   bool m_forcedCarbonation;
+   QString m_primingSugarName;
+   double m_carbonationTemp_c;
+   double m_primingSugarEquiv;
+   double m_kegPrimingFactor;
+   QString m_notes;
+   QString m_tasteNotes;
+   double m_tasteRating;
+   int m_style_id;
+
    // Calculated properties.
-   double _ABV_pct;
-   double _color_srm;
-   double _boilGrav;
-   double _IBU;
-   QList<double> _ibus;
-   double _wortFromMash_l;
-   double _boilVolume_l;
-   double _postBoilVolume_l;
-   double _finalVolume_l;
+   double m_ABV_pct;
+   double m_color_srm;
+   double m_boilGrav;
+   double m_IBU;
+   QList<double> m_ibus;
+   double m_wortFromMash_l;
+   double m_boilVolume_l;
+   double m_postBoilVolume_l;
+   double m_finalVolume_l;
    // Final volume before any losses out of the kettle, used in calculations for sg/ibu/etc.
-   double _finalVolumeNoLosses_l;
-   double _calories;
-   double _grainsInMash_kg;
-   double _grains_kg;
-   QColor _SRMColor;
-   
+   double m_finalVolumeNoLosses_l;
+   double m_calories;
+   double m_grainsInMash_kg;
+   double m_grains_kg;
+   QColor m_SRMColor;
+
    // Calculated, but stored...BeerXML is weird sometimes.
-   double _og;
-   double _fg;
-   double _og_fermentable;
-   double _fg_fermentable;
-   
+   double m_og;
+   double m_fg;
+   double m_og_fermentable;
+   double m_fg_fermentable;
+
+   bool m_cacheOnly;
    // True when constructed, indicates whether recalcAll has been called.
-   bool _uninitializedCalcs;
-   QMutex _uninitializedCalcsMutex;
-   QMutex _recalcMutex;
-   
+   bool m_uninitializedCalcs;
+   QMutex m_uninitializedCalcsMutex;
+   QMutex m_recalcMutex;
+
    // Batch size without losses.
    double batchSizeNoLosses_l();
-   
+
    // Some recalculators for calculated properties.
-   
+
+   /*!
+    * \brief Remove \c var from the recipe and return what was removed - ie \c var
+    */
+   NamedEntity * removeNamedEntity( NamedEntity *var);
+
    /* Recalculates all the calculated properties.
-    * 
+    *
     * WARNING: this call took 0.15s in rev 916!
     */
    void recalcAll();
@@ -419,23 +568,21 @@ private:
    Q_INVOKABLE void recalcCalories();
    // Emits changed(og), changed(fg). Depends on: _wortFromMash_l, _finalVolume_l
    Q_INVOKABLE void recalcOgFg();
-   
+
    // Adds instructions to the recipe.
    Instruction* postboilFermentablesIns();
    Instruction* postboilIns();
    Instruction* mashFermentableIns();
-   Instruction* mashWaterIns(unsigned int size);
+   Instruction* mashWaterIns();
    Instruction* firstWortHopsIns();
    Instruction* topOffIns();
-   
+   Instruction* saltWater(Salt::WhenToAdd when);
+
    //void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );
    bool isValidType( const QString &str );
-   
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
 };
-
+/*
 inline bool RecipePtrLt( Recipe* lhs, Recipe* rhs)
 {
    return *lhs < *rhs;
@@ -461,5 +608,5 @@ struct Recipe_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif /* _RECIPE_H */

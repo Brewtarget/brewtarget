@@ -26,8 +26,8 @@
 
 StyleButton::StyleButton(QWidget* parent)
    : QPushButton(parent),
-     _rec(0),
-     _style(0)
+     _rec(nullptr),
+     _style(nullptr)
 {
 }
 
@@ -35,27 +35,27 @@ void StyleButton::setRecipe(Recipe* rec)
 {
 
    if(_rec)
-      disconnect( _rec, 0, this, 0 );
+      disconnect( _rec, nullptr, this, nullptr );
 
    _rec = rec;
    if( _rec )
    {
-      connect( _rec, &BeerXMLElement::changed, this, &StyleButton::recChanged );
+      connect( _rec, &NamedEntity::changed, this, &StyleButton::recChanged );
       setStyle( _rec->style() );
    }
    else
-      setStyle(0);
+      setStyle(nullptr);
 }
 
 void StyleButton::setStyle(Style* style)
 {
    if( _style )
-      disconnect( _style, 0, this, 0 );
-   
+      disconnect( _style, nullptr, this, nullptr );
+
    _style = style;
    if( _style )
    {
-      connect( _style, &BeerXMLElement::changed, this, &StyleButton::styleChanged );
+      connect( _style, &NamedEntity::changed, this, &StyleButton::styleChanged );
       setText( _style->name() );
    }
    else
@@ -65,14 +65,14 @@ void StyleButton::setStyle(Style* style)
 void StyleButton::styleChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   if( propName == "name" )
+   if( propName == PropertyNames::NamedEntity::name )
       setText( val.toString() );
 }
 
 void StyleButton::recChanged(QMetaProperty prop, QVariant val)
 {
    QString propName(prop.name());
-   
+
    if( propName == "style" )
-      setStyle( qobject_cast<Style*>(BeerXMLElement::extractPtr(val)) );
+      setStyle( qobject_cast<Style*>(NamedEntity::extractPtr(val)) );
 }

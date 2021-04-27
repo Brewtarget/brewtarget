@@ -1,6 +1,7 @@
 /*
  * YeastTableModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -39,13 +40,14 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include "recipe.h"
+#include "MainWindow.h"
 
 YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
    : QAbstractTableModel(parent),
      editable(editable),
      _inventoryEditable(false),
      parentTableWidget(parent),
-     recObs(0)
+     recObs(nullptr)
 {
    yeastObs.clear();
    setObjectName("yeastTableModel");
@@ -57,6 +59,7 @@ YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
    parentTableWidget->setWordWrap(false);
 
    connect(headerView, &QWidget::customContextMenuRequested, this, &YeastTableModel::contextMenu);
+   connect( &(Database::instance()), &Database::changedInventory, this, &YeastTableModel::changedInventory );
 }
 
 void YeastTableModel::addYeast(Yeast* yeast)
@@ -66,7 +69,7 @@ void YeastTableModel::addYeast(Yeast* yeast)
    // If we are observing the database, ensure that the item is undeleted and
    // fit to display.
    if(
-      recObs == 0 &&
+      recObs == nullptr &&
       (
          yeast->deleted() ||
          !yeast->display()
@@ -76,7 +79,7 @@ void YeastTableModel::addYeast(Yeast* yeast)
    int size = yeastObs.size();
    beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);
-   connect( yeast, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+   connect( yeast, &NamedEntity::changed, this, &YeastTableModel::changed );
    //reset(); // Tell everybody that the table has changed.
    endInsertRows();
 }
@@ -85,14 +88,14 @@ void YeastTableModel::observeRecipe(Recipe* rec)
 {
    if( recObs )
    {
-      disconnect( recObs, 0, this, 0 );
+      disconnect( recObs, nullptr, this, nullptr );
       removeAll();
    }
 
    recObs = rec;
    if( recObs )
    {
-      connect( recObs, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+      connect( recObs, &NamedEntity::changed, this, &YeastTableModel::changed );
       addYeasts( recObs->yeasts() );
    }
 }
@@ -101,7 +104,7 @@ void YeastTableModel::observeDatabase(bool val)
 {
    if( val )
    {
-      observeRecipe(0);
+      observeRecipe(nullptr);
 
       removeAll();
       connect( &(Database::instance()), &Database::newYeastSignal, this, &YeastTableModel::addYeast );
@@ -111,7 +114,7 @@ void YeastTableModel::observeDatabase(bool val)
    else
    {
       removeAll();
-      disconnect( &(Database::instance()), 0, this, 0 );
+      disconnect( &(Database::instance()), nullptr, this, nullptr );
    }
 }
 
@@ -122,6 +125,9 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
 
    for( i = yeasts.begin(); i != yeasts.end(); i++ )
    {
+      if( recObs == nullptr && ( (*i)->deleted() || !(*i)->display() ) )
+         continue;
+
       if( !yeastObs.contains(*i) )
          tmp.append(*i);
    }
@@ -133,7 +139,7 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
       yeastObs.append(tmp);
 
       for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, &BeerXMLElement::changed, this, &YeastTableModel::changed );
+         connect( *i, &NamedEntity::changed, this, &YeastTableModel::changed );
 
       endInsertRows();
    }
@@ -146,7 +152,7 @@ void YeastTableModel::removeYeast(Yeast* yeast)
    if( i >= 0 )
    {
       beginRemoveRows( QModelIndex(), i, i );
-      disconnect( yeast, 0, this, 0 );
+      disconnect( yeast, nullptr, this, nullptr );
       yeastObs.removeAt(i);
       //reset(); // Tell everybody the table has changed.
       endRemoveRows();
@@ -160,12 +166,28 @@ void YeastTableModel::removeAll()
       beginRemoveRows( QModelIndex(), 0, yeastObs.size()-1 );
       while( !yeastObs.isEmpty() )
       {
-         disconnect( yeastObs.takeLast(), 0, this, 0 );
+         disconnect( yeastObs.takeLast(), nullptr, this, nullptr );
       }
       endRemoveRows();
    }
 }
 
+void YeastTableModel::changedInventory(Brewtarget::DBTable table, int invKey, QVariant val)
+{
+   if ( table == Brewtarget::YEASTTABLE ) {
+      for( int i = 0; i < yeastObs.size(); ++i ) {
+         Yeast* holdmybeer = yeastObs.at(i);
+
+         if ( invKey == holdmybeer->inventoryId() ) {
+            holdmybeer->setCacheOnly(true);
+            holdmybeer->setInventoryQuanta(val.toInt());
+            holdmybeer->setCacheOnly(false);
+            emit dataChanged( QAbstractItemModel::createIndex(i,YEASTINVENTORYCOL),
+                              QAbstractItemModel::createIndex(i,YEASTINVENTORYCOL) );
+         }
+      }
+   }
+}
 void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
@@ -214,9 +236,9 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
    Unit::unitDisplay unit;
 
    // Ensure the row is ok.
-   if( index.row() >= (int)yeastObs.size() )
+   if( index.row() >= static_cast<int>(yeastObs.size() ))
    {
-      Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
+      qWarning() << tr("Bad model index. row = %1").arg(index.row());
       return QVariant();
    }
    else
@@ -265,7 +287,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
 
          return QVariant(
                            Brewtarget::displayAmount( row->amount(),
-                                                      row->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters,
+                                                      row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters),
                                                       3,
                                                       unit,
                                                       Unit::noScale
@@ -273,7 +295,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
                         );
 
       default :
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return QVariant();
    }
 }
@@ -299,7 +321,7 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
          case YEASTPRODIDCOL:
              return QVariant(tr("Product ID"));
          default:
-            Brewtarget::logW(tr("Bad column: %1").arg(section));
+            qWarning() << tr("Bad column: %1").arg(section);
             return QVariant();
       }
    }
@@ -327,7 +349,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
    Yeast *row;
    Unit* unit;
 
-   if( index.row() >= (int)yeastObs.size() || role != Qt::EditRole )
+   if( index.row() >= static_cast<int>(yeastObs.size()) || role != Qt::EditRole )
       return false;
    else
       row = yeastObs[index.row()];
@@ -340,44 +362,65 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTNAMECOL:
          if( ! value.canConvert(QVariant::String))
             return false;
-         row->setName(value.toString());
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  PropertyNames::NamedEntity::name,
+                                                  value.toString(),
+                                                  tr("Change Yeast Name"));
          break;
       case YEASTLABCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
-         row->setLaboratory(value.toString());
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  PropertyNames::Yeast::laboratory,
+                                                  value.toString(),
+                                                  tr("Change Yeast Laboratory"));
          break;
       case YEASTPRODIDCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
-         row->setProductID(value.toString());
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  PropertyNames::Yeast::productID,
+                                                  value.toString(),
+                                                  tr("Change Yeast Product ID"));
          break;
       case YEASTTYPECOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
-         row->setType(static_cast<Yeast::Type>(value.toInt()));
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "type",
+                                                  static_cast<Yeast::Type>(value.toInt()),
+                                                  tr("Change Yeast Type"));
          break;
       case YEASTFORMCOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
-         row->setForm(static_cast<Yeast::Form>(value.toInt()));
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "form",
+                                                  static_cast<Yeast::Form>(value.toInt()),
+                                                  tr("Change Yeast Form"));
          break;
       case YEASTINVENTORYCOL:
          if( ! value.canConvert(QVariant::Int) )
             return false;
-         row->setInventoryQuanta( value.toInt() );
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "inventoryQuanta",
+                                                  value.toInt(),
+                                                  tr("Change Yeast Inventory Unit Size")); // .:TBD:. MY 2020-12-11 Whilst it's admirably concise, I find "quanta" unclear, and I'm not sure it's that easy to translate either
          break;
       case YEASTAMOUNTCOL:
          if( ! value.canConvert(QVariant::String) )
             return false;
 
-         unit = row->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters;
+         unit = row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
 
-         row->setAmount(Brewtarget::qStringToSI(value.toString(),unit,dspUnit,dspScl));
+         Brewtarget::mainWindow()->doOrRedoUpdate(*row,
+                                                  "amount",
+                                                  Brewtarget::qStringToSI(value.toString(), unit, dspUnit, dspScl),
+                                                  tr("Change Yeast Amount"));
          break;
 
       default:
-         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
+         qWarning() << tr("Bad column: %1").arg(index.column());
          return false;
    }
    return true;
@@ -385,7 +428,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
 
 Yeast* YeastTableModel::getYeast(unsigned int i)
 {
-   return yeastObs[i];
+   return yeastObs[static_cast<int>(i)];
 }
 
 Unit::unitDisplay YeastTableModel::displayUnit(int column) const
@@ -395,7 +438,7 @@ Unit::unitDisplay YeastTableModel::displayUnit(int column) const
    if ( attribute.isEmpty() )
       return Unit::noUnit;
 
-   return (Unit::unitDisplay)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt();
+   return static_cast<Unit::unitDisplay>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::UNIT).toInt());
 }
 
 Unit::unitScale YeastTableModel::displayScale(int column) const
@@ -405,7 +448,7 @@ Unit::unitScale YeastTableModel::displayScale(int column) const
    if ( attribute.isEmpty() )
       return Unit::noScale;
 
-   return (Unit::unitScale)Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt();
+   return static_cast<Unit::unitScale>(Brewtarget::option(attribute, QVariant(-1), this->objectName(), Brewtarget::SCALE).toInt());
 }
 
 // We need to:
@@ -493,10 +536,10 @@ void YeastTableModel::contextMenu(const QPoint &point)
    }
 
    invoked = menu->exec(hView->mapToGlobal(point));
-   if ( invoked == 0 )
+   if ( invoked == nullptr )
       return;
 
-   setDisplayUnit(selected,(Unit::unitDisplay)invoked->data().toInt());
+   setDisplayUnit(selected,static_cast<Unit::unitDisplay>(invoked->data().toInt()));
 }
 
 
@@ -567,7 +610,7 @@ void YeastItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
    if( col == YEASTTYPECOL || col == YEASTFORMCOL )
    {
-      QComboBox* box = (QComboBox*)editor;
+      QComboBox* box = static_cast<QComboBox*>(editor);
       int ndx = box->currentIndex();
       int curr = model->data(index,Qt::UserRole).toInt();
 
@@ -576,7 +619,7 @@ void YeastItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
    }
    else
    {
-      QLineEdit* line = (QLineEdit*)editor;
+      QLineEdit* line = static_cast<QLineEdit*>(editor);
 
       if ( line->isModified() )
          model->setData(index, line->text(), Qt::EditRole);

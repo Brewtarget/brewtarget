@@ -51,7 +51,9 @@ QMap<QString, Unit*> const& SIVolumeUnitSystem::qstringToUnit()
    if( _qstringToUnit.empty() )
    {
       _qstringToUnit.insert("mL", Units::milliliters);
+      _qstringToUnit.insert("ml", Units::milliliters);
       _qstringToUnit.insert("L", Units::liters);
+      _qstringToUnit.insert("l", Units::liters);
    }
 
    return _qstringToUnit;

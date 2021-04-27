@@ -1,7 +1,8 @@
 /*
  * hop.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
@@ -19,86 +20,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "hop.h"
 
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
-#include "hop.h"
+#include <QDebug>
 #include "brewtarget.h"
 
-/************* Columns *************/
-const QString kUse("use");
-const QString kForm("form");
-const QString kNotes("notes");
-const QString kType("htype");
-const QString kOrigin("origin");
-const QString kSubstitutes("substitutes");
-const QString kAlpha("alpha");
-const QString kAmount("amount");
-const QString kTime("time");
-const QString kBeta("beta");
-const QString kHSI("hsi");
-const QString kHumulene("humulene");
-const QString kCaryophyllene("caryophyllene");
-const QString kCohumulone("cohumulone");
-const QString kMyrcene("myrcene");
-
-/************** Props **************/
-const QString kNameProp("name");
-const QString kAlphaProp("alpha_pct");
-const QString kAmountProp("amount_kg");
-const QString kInventoryProp("inventory");
-const QString kUseProp("use");
-const QString kTimeProp("time_min");
-const QString kNotesProp("notes");
-const QString kTypeProp("type");
-const QString kFormProp("form");
-const QString kBetaProp("beta_pct");
-const QString kHSIProp("hsi_pct");
-const QString kOriginProp("origin");
-const QString kSubstitutesProp("substitutes");
-const QString kHumuleneProp("humulene_pct");
-const QString kCaryophylleneProp("caryophyllene_pct");
-const QString kCohumuloneProp("cohumulone_pct");
-const QString kMyrceneProp("myrcene_pct");
+#include "TableSchemaConst.h"
+#include "HopSchema.h"
+#include "database.h"
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
 QStringList Hop::uses = QStringList() << "Mash" << "First Wort" << "Boil" << "Aroma" << "Dry Hop";
-QHash<QString,QString> Hop::tagToProp = Hop::tagToPropHash();
 
-QHash<QString,QString> Hop::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   
-   propHash["NAME"] = kNameProp;
-   propHash["ALPHA"] = kAlphaProp;
-   propHash["AMOUNT"] = kAmountProp;
-   propHash["INVENTORY"] = kInventoryProp;
-   //propHash["USE"] = kUseProp;
-   propHash["TIME"] = kTimeProp;
-   propHash["NOTES"] = kNotesProp;
-   //propHash["TYPE"] = kTypeProp;
-   //propHash["FORM"] = kFormProp;
-   propHash["BETA"] = kBetaProp;
-   propHash["HSI"] = kHSIProp;
-   propHash["ORIGIN"] = kOriginProp;
-   propHash["SUBSTITUTES"] = kSubstitutesProp;
-   propHash["HUMULENE"] = kHumuleneProp;
-   propHash["CARYOPHYLLENE"] = kCaryophylleneProp;
-   propHash["COHUMULONE"] = kCohumuloneProp;
-   propHash["MYRCENE"] = kMyrceneProp;
-   return propHash;
-}
-
-bool operator<( Hop &h1, Hop &h2 )
-{
-   return h1.name() < h2.name();
-}
-
-bool operator==( Hop &h1, Hop &h2 )
-{
-   return h1.name() == h2.name();
+bool Hop::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Hop const & rhs = static_cast<Hop const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_use               == rhs.m_use               &&
+      this->m_type              == rhs.m_type              &&
+      this->m_form              == rhs.m_form              &&
+      this->m_alpha_pct         == rhs.m_alpha_pct         &&
+      this->m_beta_pct          == rhs.m_beta_pct          &&
+      this->m_hsi_pct           == rhs.m_hsi_pct           &&
+      this->m_origin            == rhs.m_origin            &&
+      this->m_humulene_pct      == rhs.m_humulene_pct      &&
+      this->m_caryophyllene_pct == rhs.m_caryophyllene_pct &&
+      this->m_cohumulone_pct    == rhs.m_cohumulone_pct    &&
+      this->m_myrcene_pct       == rhs.m_myrcene_pct
+   );
 }
 
 bool Hop::isValidUse(const QString& str)
@@ -122,13 +76,85 @@ QString Hop::classNameStr()
    return name;
 }
 
-Hop::Hop(Brewtarget::DBTable table, int key)
-   : BeerXMLElement(table, key)
+Hop::Hop(QString name, bool cache)
+   : NamedEntity(Brewtarget::HOPTABLE, name, true),
+     m_useStr(QString()),
+     m_use(static_cast<Hop::Use>(0)),
+     m_typeStr(QString()),
+     m_type(static_cast<Hop::Type>(0)),
+     m_formStr(QString()),
+     m_form(static_cast<Hop::Form>(0)),
+     m_alpha_pct(0.0),
+     m_amount_kg(0.0),
+     m_time_min(0.0),
+     m_notes(QString()),
+     m_beta_pct(0.0),
+     m_hsi_pct(0.0),
+     m_origin(QString()),
+     m_substitutes(QString()),
+     m_humulene_pct(0.0),
+     m_caryophyllene_pct(0.0),
+     m_cohumulone_pct(0.0),
+     m_myrcene_pct(0.0),
+     m_inventory(-1.0),
+     m_inventory_id(0),
+     m_cacheOnly(cache)
 {
 }
 
-Hop::Hop( Hop const& other )
-   : BeerXMLElement(other)
+Hop::Hop(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
+     m_inventory(-1.0),
+     m_cacheOnly(false)
+{
+     m_useStr = rec.value(table->propertyToColumn(PropertyNames::Hop::use)).toString();
+     m_typeStr = rec.value(table->propertyToColumn(PropertyNames::Hop::type)).toString();
+     m_formStr = rec.value(table->propertyToColumn(PropertyNames::Hop::form)).toString();
+     m_alpha_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::alpha_pct)).toDouble();
+     m_amount_kg = rec.value(table->propertyToColumn(PropertyNames::Hop::amount_kg)).toDouble();
+     m_time_min = rec.value(table->propertyToColumn(PropertyNames::Hop::time_min)).toDouble();
+     m_notes = rec.value(table->propertyToColumn(PropertyNames::Hop::notes)).toString();
+     m_beta_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::beta_pct)).toDouble();
+     m_hsi_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::hsi_pct)).toDouble();
+     m_origin = rec.value(table->propertyToColumn(PropertyNames::Hop::origin)).toString();
+     m_substitutes = rec.value(table->propertyToColumn(PropertyNames::Hop::substitutes)).toString();
+     m_humulene_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::humulene_pct)).toDouble();
+     m_caryophyllene_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::caryophyllene_pct)).toDouble();
+     m_cohumulone_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::cohumulone_pct)).toDouble();
+     m_myrcene_pct = rec.value(table->propertyToColumn(PropertyNames::Hop::myrcene_pct)).toDouble();
+
+     // keys need special handling
+     m_inventory_id = rec.value(table->foreignKeyToColumn(PropertyNames::Hop::inventory_id)).toInt();
+
+     // these are not taken directly from the SQL record
+     m_use  = static_cast<Hop::Use>(uses.indexOf(m_useStr));
+     m_type = static_cast<Hop::Type>(types.indexOf(m_typeStr));
+     m_form = static_cast<Hop::Form>(forms.indexOf(m_formStr));
+}
+
+Hop::Hop( Hop & other )
+   : NamedEntity(other),
+     m_useStr(other.m_useStr),
+     m_use(other.m_use),
+     m_typeStr(other.m_typeStr),
+     m_type(other.m_type),
+     m_formStr(other.m_formStr),
+     m_form(other.m_form),
+     m_alpha_pct(other.m_alpha_pct),
+     m_amount_kg(other.m_amount_kg),
+     m_time_min(other.m_time_min),
+     m_notes(other.m_notes),
+     m_beta_pct(other.m_beta_pct),
+     m_hsi_pct(other.m_hsi_pct),
+     m_origin(other.m_origin),
+     m_substitutes(other.m_substitutes),
+     m_humulene_pct(other.m_humulene_pct),
+     m_caryophyllene_pct(other.m_caryophyllene_pct),
+     m_cohumulone_pct(other.m_cohumulone_pct),
+     m_myrcene_pct(other.m_myrcene_pct),
+     m_inventory(other.m_inventory),
+     m_inventory_id(other.m_inventory_id),
+     m_cacheOnly(other.m_cacheOnly)
 {
 }
 
@@ -137,12 +163,15 @@ void Hop::setAlpha_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < alpha < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < alpha < 100: %1").arg(num);
       return;
    }
    else
    {
-      set(kAlphaProp, kAlpha, num);
+      m_alpha_pct = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::alpha_pct, num);
+      }
    }
 }
 
@@ -150,12 +179,15 @@ void Hop::setAmount_kg( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: amount < 0: %1").arg(num) );
+      qWarning() << QString("Hop: amount < 0: %1").arg(num);
       return;
    }
    else
    {
-      set(kAmountProp, kAmount, num);
+      m_amount_kg = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::amount_kg,num);
+      }
    }
 }
 
@@ -163,61 +195,96 @@ void Hop::setInventoryAmount( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: inventory < 0: %1").arg(num) );
+      qWarning() << QString("Hop: inventory < 0: %1").arg(num);
       return;
    }
    else
    {
-      setInventory(kInventoryProp, kAmount, num);
+      m_inventory = num;
+      if ( ! m_cacheOnly ) {
+         setInventory(num,m_inventory_id);
+      }
+   }
+}
+
+void Hop::setInventoryId( int key )
+{
+   m_inventory_id = key;
+   if ( ! m_cacheOnly ) {
+      setEasy(PropertyNames::Hop::inventory_id, key);
    }
 }
 
 void Hop::setUse(Use u)
 {
-   if ( u >= 0 )
-      set(kUseProp, kUse, uses.at(u));
+   if ( u < uses.size()) {
+      m_use = u;
+      m_useStr = uses.at(u);
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::use, uses.at(u));
+      }
+   }
 }
 
 void Hop::setTime_min( double num )
 {
    if( num < 0.0 )
    {
-      Brewtarget::logW( QString("Hop: time < 0: %1").arg(num) );
+      qWarning() << QString("Hop: time < 0: %1").arg(num);
       return;
    }
    else
    {
-      set(kTimeProp, kTime, num);
+      m_time_min = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::time_min, num);
+      }
    }
 }
-      
+
 void Hop::setNotes( const QString& str )
 {
-   set(kNotesProp, kNotes, str);
+   m_notes = str;
+   if ( ! m_cacheOnly ) {
+      setEasy(PropertyNames::Hop::notes, str);
+   }
 }
 
 void Hop::setType(Type t)
 {
-  if ( t >= 0 )
-     set(kTypeProp, kType, types.at(t));
+  if ( t < types.size() ) {
+     m_type = t;
+     m_typeStr = types.at(t);
+     if ( ! m_cacheOnly ) {
+      setEasy(PropertyNames::Hop::type, m_typeStr);
+     }
+  }
 }
 
 void Hop::setForm( Form f )
 {
-   if ( f >= 0 )
-     set(kFormProp, kForm, forms.at(f));
+   if ( f < forms.size() ) {
+      m_form = f;
+      m_formStr = forms.at(f);
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::form, m_formStr);
+      }
+   }
 }
 
 void Hop::setBeta_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < beta < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < beta < 100: %1").arg(num);
       return;
    }
    else
    {
-      set(kBetaProp, kBeta, num);
+      m_beta_pct = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::beta_pct, num);
+      }
    }
 }
 
@@ -225,35 +292,47 @@ void Hop::setHsi_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < hsi < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < hsi < 100: %1").arg(num);
       return;
    }
    else
    {
-      set(kHSIProp, kHSI, num);
+      m_hsi_pct = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::hsi_pct, num);
+      }
    }
 }
 
 void Hop::setOrigin( const QString& str )
 {
-   set(kOriginProp, kOrigin, str);
+   m_origin = str;
+   if ( ! m_cacheOnly ) {
+      setEasy(PropertyNames::Hop::origin, str);
+   }
 }
 
 void Hop::setSubstitutes( const QString& str )
 {
-   set(kSubstitutesProp, kSubstitutes, str);
+   m_substitutes = str;
+   if ( ! m_cacheOnly ) {
+      setEasy(PropertyNames::Hop::substitutes, str);
+   }
 }
 
 void Hop::setHumulene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < humulene < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < humulene < 100: %1").arg(num);
       return;
    }
    else
    {
-      set(kHumuleneProp, kHumulene, num);
+      m_humulene_pct = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::humulene_pct,num);
+      }
    }
 }
 
@@ -261,12 +340,15 @@ void Hop::setCaryophyllene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < cary < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < cary < 100: %1").arg(num);
       return;
    }
    else
    {
-      set(kCaryophylleneProp, kCaryophyllene, num);
+      m_caryophyllene_pct = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::caryophyllene_pct, num);
+      }
    }
 }
 
@@ -274,12 +356,15 @@ void Hop::setCohumulone_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < cohumulone < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < cohumulone < 100: %1").arg(num);
       return;
    }
    else
    {
-      set(kCohumuloneProp, kCohumulone, num);
+      m_cohumulone_pct = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::cohumulone_pct, num);
+      }
    }
 }
 
@@ -287,128 +372,110 @@ void Hop::setMyrcene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
    {
-      Brewtarget::logW( QString("Hop: 0 < myrcene < 100: %1").arg(num) );
+      qWarning() << QString("Hop: 0 < myrcene < 100: %1").arg(num);
       return;
    }
    else
    {
-      set(kMyrceneProp, kMyrcene, num);
+      m_myrcene_pct = num;
+      if ( ! m_cacheOnly ) {
+         setEasy(PropertyNames::Hop::myrcene_pct, num);
+      }
    }
 }
 
+void Hop::setCacheOnly(bool cache) { m_cacheOnly = cache; }
+
 //============================="GET" METHODS====================================
 
-Hop::Use Hop::use() const
+Hop::Use Hop::use() const { return m_use; }
+const QString Hop::useString() const { return m_useStr; }
+const QString Hop::notes() const { return m_notes; }
+Hop::Type Hop::type() const { return m_type; }
+const QString Hop::typeString() const { return m_typeStr; }
+Hop::Form Hop::form() const { return m_form; }
+const QString Hop::formString() const { return m_formStr; }
+const QString Hop::origin() const { return m_origin; }
+const QString Hop::substitutes() const { return m_substitutes; }
+double Hop::alpha_pct() const { return m_alpha_pct; }
+double Hop::amount_kg() const { return m_amount_kg; }
+double Hop::time_min() const { return m_time_min; }
+double Hop::beta_pct() const { return m_beta_pct; }
+double Hop::hsi_pct() const { return m_hsi_pct; }
+double Hop::humulene_pct() const { return m_humulene_pct; }
+double Hop::caryophyllene_pct() const { return m_caryophyllene_pct; }
+double Hop::cohumulone_pct() const { return m_cohumulone_pct; }
+double Hop::myrcene_pct() const { return m_myrcene_pct; }
+bool   Hop::cacheOnly() const { return m_cacheOnly; }
+
+// a little different in that we don't get the results in advance, but on the fly. I had to undo some const action to make this work
+double Hop::inventory()
 {
-   return static_cast<Hop::Use>(uses.indexOf(useString()));
+   if ( m_inventory < 0 ) {
+      m_inventory = getInventory().toDouble();
+   }
+   return m_inventory;
 }
 
-const QString Hop::useString() const
+int Hop::inventoryId() const
 {
-   return get(kUse).toString();
-}
-
-const QString Hop::notes() const
-{
-   return get(kNotes).toString();
-}
-
-Hop::Type Hop::type() const
-{
-   return static_cast<Hop::Type>(types.indexOf(typeString()));
-}
-
-const QString Hop::typeString() const
-{
-   return get(kType).toString();
-}
-
-Hop::Form Hop::form() const
-{
-   return static_cast<Hop::Form>(forms.indexOf(formString()));
-}
-
-const QString Hop::formString() const
-{
-   return get(kForm).toString();
-}
-
-const QString Hop::origin() const
-{
-   return get(kOrigin).toString();
-}
-
-const QString Hop::substitutes() const
-{
-   return get(kSubstitutes).toString();
-}
-
-double Hop::alpha_pct() const
-{
-   return get(kAlpha).toDouble();
-}
-
-double Hop::amount_kg() const
-{
-   return get(kAmount).toDouble();
-}
-
-double Hop::time_min() const
-{
-   return get(kTime).toDouble();
-}
-
-double Hop::beta_pct() const
-{
-   return get(kBeta).toDouble();
-}
-
-double Hop::hsi_pct() const
-{
-   return get(kHSI).toDouble();
-}
-
-double Hop::humulene_pct() const
-{
-   return get(kHumulene).toDouble();
-}
-
-double Hop::caryophyllene_pct() const
-{
-   return get(kCaryophyllene).toDouble();
-}
-
-double Hop::cohumulone_pct() const
-{
-   return get(kCohumulone).toDouble();
-}
-
-double Hop::myrcene_pct() const
-{
-   return get(kMyrcene).toDouble();
-}
-
-// inventory still must be handled separately, and I'm still annoyed.
-double Hop::inventory() const
-{
-   return getInventory(kAmount).toDouble();
+   return m_inventory_id;
 }
 
 const QString Hop::useStringTr() const
 {
    static QStringList usesTr = QStringList() << tr("Mash") << tr("First Wort") << tr("Boil") << tr("Aroma") << tr("Dry Hop") ;
-   return usesTr.at(use());
+   if ( m_use < usesTr.size() && m_use >= 0 ) {
+      return usesTr.at(m_use);
+   }
+   else {
+      return "";
+   }
 }
 
 const QString Hop::typeStringTr() const
 {
    static QStringList typesTr = QStringList() << tr("Bittering") << tr("Aroma") << tr("Both");
-   return typesTr.at(type());
+   if ( m_type < typesTr.size()  && m_type >= 0 ) {
+      return typesTr.at(m_type);
+   }
+   else {
+      return "";
+   }
 }
 
 const QString Hop::formStringTr() const
 {
    static QStringList formsTr = QStringList() << tr("Leaf") << tr("Pellet") << tr("Plug");
-   return formsTr.at(form());
+   if ( m_form < formsTr.size() && m_form >= 0 ) {
+      return formsTr.at(m_form);
+   }
+   else {
+      return "";
+   }
 }
 
+NamedEntity * Hop::getParent() {
+   Hop * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().hop(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Hop::insertInDatabase() {
+   return Database::instance().insertHop(this);
+}
+
+void Hop::removeFromDatabase() {
+   Database::instance().remove(this);
+}

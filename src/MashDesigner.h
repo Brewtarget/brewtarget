@@ -42,7 +42,7 @@ class MashDesigner : public QDialog, public Ui::mashDesigner
 {
    Q_OBJECT
 public:
-   MashDesigner(QWidget* parent = 0);
+   MashDesigner(QWidget* parent = nullptr);
    //! Set the recipe we want to design the mash for.
    void setRecipe(Recipe* rec);
 

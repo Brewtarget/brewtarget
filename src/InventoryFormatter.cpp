@@ -1,6 +1,8 @@
 /*
- * InventoryFormatter.cpp is part of Brewtarget, and was written by
- * Mark de Wever (koraq@xs4all.nl), copyright 2016
+ * InventoryFormatter.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2016-2021
+ * - Mark de Wever <koraq@xs4all.nl>
+ * - Matt Young <mfsy@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "InventoryFormatter.h"
 
 #include "Html.h"
@@ -65,9 +66,9 @@ static QString createInventoryTableFermentable()
 
          if (!fermentable)
          {
-            Brewtarget::logE(QString("The fermentable %1 has a record in the "
+            qCritical() << QString("The fermentable %1 has a record in the "
                                      "inventory, but does not exist.")
-                                   .arg(itor.key()));
+                                   .arg(itor.key());
             continue;
          }
 
@@ -97,10 +98,12 @@ static QString createInventoryTableHop()
       result += QString("<h2>%1</h2>").arg(QObject::tr("Hops"));
       result += "<table id=\"hops\">";
       result += QString("<tr>"
-                        "<th align=\"left\" width=\"40%\">%1</th>"
-                        "<th align=\"left\" width=\"60%\">%2</th>"
+                        "<th align=\"left\" width=\"30%\">%1</th>"
+                        "<th align=\"left\" width=\"20%\">%2</th>"
+                        "<th align=\"left\" width=\"50%\">%3</th>"
                         "</tr>")
                       .arg(QObject::tr("Name"))
+                      .arg(QObject::tr("Alpha %"))
                       .arg(QObject::tr("Amount"));
 
       for (auto itor = inventory.begin(); itor != inventory.end(); ++itor)
@@ -109,17 +112,19 @@ static QString createInventoryTableHop()
 
          if (!hop)
          {
-            Brewtarget::logE(QString("The hop %1 has a record in the "
+            qCritical() << QString("The hop %1 has a record in the "
                                      "inventory, but does not exist.")
-                                   .arg(itor.key()));
+                                   .arg(itor.key());
             continue;
          }
 
          result += QString("<tr>"
                            "<td>%1</td>"
                            "<td>%2</td>"
+                           "<td>%3</td>"
                            "</tr>")
                          .arg(hop->name())
+                         .arg(hop->alpha_pct())
                          .arg(Brewtarget::displayAmount(itor.value(),
                                "hopTable", "inventory_kg", Units::kilograms));
       }
@@ -152,9 +157,9 @@ static QString createInventoryTableMiscellaneous()
 
          if (!miscellaneous)
          {
-            Brewtarget::logE(QString("The miscellaneous %1 has a record in the "
+            qCritical() << QString("The miscellaneous %1 has a record in the "
                                      "inventory, but does not exist.")
-                                   .arg(itor.key()));
+                                   .arg(itor.key());
             continue;
          }
 
@@ -197,9 +202,9 @@ static QString createInventoryTableYeast()
 
          if (!yeast)
          {
-            Brewtarget::logE(QString("The yeast %1 has a record in the "
+            qCritical() << QString("The yeast %1 has a record in the "
                                      "inventory, but does not exist.")
-                                   .arg(itor.key()));
+                                   .arg(itor.key());
             continue;
          }
 

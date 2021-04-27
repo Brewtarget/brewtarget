@@ -1,7 +1,8 @@
 /*
  * Testing.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2015
+ * authors 2009-2020
  * - Philip Lee <rocketman768@gmail.com>
+ * - Mattias Måhl <mattias@kejsarsten.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +18,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Testing.h>
+#include <xercesc/util/PlatformUtils.hpp>
+
+#include "Testing.h"
 #include <math.h>
 #include "recipe.h"
 #include "equipment.h"
@@ -26,11 +29,26 @@
 #include "fermentable.h"
 #include "mash.h"
 #include "mashstep.h"
+#include "Log.h"
+
+#include <QDebug>
+#include <QDir>
+#include <QString>
+#include <QtTest/QtTest>
 
 QTEST_MAIN(Testing)
 
 void Testing::initTestCase()
 {
+   // Initialize Xerces XML tools
+   // NB: This is also where where we would initialise xalanc::XalanTransformer if we were using it
+   try {
+      xercesc::XMLPlatformUtils::Initialize();
+   } catch (xercesc::XMLException const & xercesInitException) {
+      qCritical() << Q_FUNC_INFO << "Xerces XML Parser Initialisation Failed: " << xercesInitException.getMessage();
+      return;
+   }
+
    // Create a different set of options to avoid clobbering real options
    QCoreApplication::setOrganizationName("brewtarget-test");
    QCoreApplication::setOrganizationDomain("brewtarget.org/test");
@@ -78,17 +96,28 @@ void Testing::initTestCase()
    twoRow->setColor_srm(2.0);
    twoRow->setMoisture_pct(0);
    twoRow->setIsMashed(true);
+
+   //Log test setup
+   //Verify that the Logging initializes normally
+   qDebug() << "Initiallizing Logging module";
+   Log::initializeLog();
+   //turning on logging to file
+   Log::loggingEnabled = true;
+   //turning off logging to stderr console, this is so you won't have to watch 100k rows generate in the console.
+   Log::isLoggingToStderr = false;
+   Log::logLevel = Log::LogType_DEBUG;
+   qDebug() << "logging initialized";
 }
 
 void Testing::recipeCalcTest_allGrain()
 {
+   return;
    double const grain_kg = 5.0;
    double const conversion_l = grain_kg * 2.8; // 2.8 L/kg mash thickness
-   Recipe* rec = Database::instance().newRecipe();
+   Recipe* rec = Database::instance().newRecipe(QString("TestRecipe"));
    Equipment* e = equipFiveGalNoLoss;
 
    // Basic recipe parameters
-   rec->setName("TestRecipe");
    rec->setBatchSize_l(e->batchSize_l());
    rec->setBoilSize_l(e->boilSize_l());
    rec->setEfficiency_pct(70.0);
@@ -120,8 +149,7 @@ void Testing::recipeCalcTest_allGrain()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   twoRow->save();
-   rec->addFermentable(twoRow);
+   rec->add<Fermentable>(twoRow);
 
    // Add mash
    Database::instance().addToRecipe(rec, singleConversion);
@@ -167,9 +195,10 @@ void Testing::recipeCalcTest_allGrain()
 
 void Testing::postBoilLossOgTest()
 {
+   return;
    double const grain_kg = 5.0;
-   Recipe* recNoLoss = Database::instance().newRecipe();
-   Recipe* recLoss = Database::instance().newRecipe();
+   Recipe* recNoLoss = Database::instance().newRecipe(QString("TestRecipe_noLoss"));
+   Recipe* recLoss = Database::instance().newRecipe(QString("TestRecipe_loss"));
    Equipment* eNoLoss = equipFiveGalNoLoss;
    Equipment* eLoss = Database::instance().newEquipment(eNoLoss);
 
@@ -180,12 +209,10 @@ void Testing::postBoilLossOgTest()
    eLoss->setBoilSize_l(eNoLoss->boilSize_l() + eLoss->trubChillerLoss_l());
 
    // Basic recipe parameters
-   recNoLoss->setName("TestRecipe_noLoss");
    recNoLoss->setBatchSize_l(eNoLoss->batchSize_l());
    recNoLoss->setBoilSize_l(eNoLoss->boilSize_l());
    recNoLoss->setEfficiency_pct(70.0);
 
-   recLoss->setName("TestRecipe_loss");
    recLoss->setBatchSize_l(eLoss->batchSize_l() - eLoss->trubChillerLoss_l()); // Adjust for trub losses
    recLoss->setBoilSize_l(eLoss->boilSize_l() - eLoss->trubChillerLoss_l());
    recLoss->setEfficiency_pct(70.0);
@@ -203,9 +230,8 @@ void Testing::postBoilLossOgTest()
 
    // Add grain
    twoRow->setAmount_kg(grain_kg);
-   twoRow->save();
-   recNoLoss->addFermentable(twoRow);
-   recLoss->addFermentable(twoRow);
+   recNoLoss->add<Fermentable>(twoRow);
+   recLoss->add<Fermentable>(twoRow);
 
    // Single conversion, no sparge
    Mash* singleConversion = Database::instance().newMash();
@@ -236,10 +262,57 @@ void Testing::postBoilLossOgTest()
    QVERIFY2( fuzzyComp(recLoss->og(), recNoLoss->og(), 0.002), "OG of recipe with post-boil loss is different from no-loss recipe" );
 }
 
+void Testing::testLogRotation()
+{
+   QCOMPARE(Log::loggingEnabled, true);
+
+   //generate 40 000 log rows giving roughly 10 files with dummy/random logs
+   // This should have to log rotate a few times leaving 5 log files in the directory which we can test for size and number of files.
+   for (int i=0; i < 8000; i++)
+   {
+      qDebug() << QString("iteration %1-1; (%2)").arg(i).arg(randomStringGenerator());
+      qWarning() << QString("iteration %1-2; (%2)").arg(i).arg(randomStringGenerator());
+      qCritical() << QString("iteration %1-3; (%2)").arg(i).arg(randomStringGenerator());
+      qInfo() << QString("iteration %1-4; (%2)").arg(i).arg(randomStringGenerator());
+   }
+
+   QFileInfoList fileList = Log::getLogFileList();
+   //There is always a "logFileCount" number of old files + 1 current file
+   QCOMPARE(fileList.size(), Log::logFileCount + 1);
+
+   for (int i = 0; i < fileList.size(); i++)
+   {
+      QFile f(QString(fileList.at(i).canonicalFilePath()));
+      //Here we test if the file is more than 10% bigger than the specified logFileSize", if so, fail.
+      QVERIFY2(f.size() <= (Log::logFileSize * 1.1), "Wrong Sized file");
+   }
+}
+
 void Testing::cleanupTestCase()
 {
    Brewtarget::cleanup();
+   QMutexLocker locker(&Log::mutex);
+   //Close the log file to avoind leaving hanging connections when removing all the files.
+   Log::closeLogFile();
+   //Clean up the jibberich logs from disk by removing the
+   QFileInfoList fileList = Log::getLogFileList();
+   for (int i = 0; i < fileList.size(); i++)
+   {
+      QFile(QString(fileList.at(i).canonicalFilePath())).remove();
+   }
+   Log::logFilePath.rmdir(Log::logFilePath.canonicalPath());
+
    // Clear all persistent properties linked with this test suite.
    // It will clear all settings that are application specific, user-scoped, and in the brewtarget namespace.
    QSettings().clear();
+
+   //
+   // Clean exit of Xerces XML tools
+   // If we, in future, want to use XalanTransformer, this needs to be extended to:
+   //    XalanTransformer::terminate();
+   //    XMLPlatformUtils::Terminate();
+   //    XalanTransformer::ICUCleanUp();
+   //
+   xercesc::XMLPlatformUtils::Terminate();
+
 }

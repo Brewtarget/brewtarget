@@ -1,7 +1,8 @@
 /*
  * instruction.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -18,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _INSTRUCTION_H
 #define _INSTRUCTION_H
 
@@ -27,22 +27,30 @@
 #include <QString>
 #include <QVector>
 #include <QDomNode>
-#include "BeerXMLElement.h"
+#include "TableSchema.h"
+#include "model/NamedEntity.h"
+#include "recipe.h"
+namespace PropertyNames::Instruction { static char const * const interval = "interval"; /* previously kpropInterval */ }
+namespace PropertyNames::Instruction { static char const * const completed = "completed"; /* previously kpropCompleted */ }
+namespace PropertyNames::Instruction { static char const * const timerValue = "timerValue"; /* previously kpropTimerValue */ }
+namespace PropertyNames::Instruction { static char const * const hasTimer = "hasTimer"; /* previously kpropHasTimer */ }
+namespace PropertyNames::Instruction { static char const * const directions = "directions"; /* previously kpropDirections */ }
 
 /*!
  * \class Instruction
- * \author Philip G. Lee
  *
  * \brief Model class for an instruction record in the database.
  */
-class Instruction : public BeerXMLElement
+class Instruction : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "instructions")
-   Q_CLASSINFO("prefix", "instruction")
    friend class Database;
+   friend class BeerXML;
+
 public:
-   
+
+   Instruction( QString name, bool cache = true );
    virtual ~Instruction() {}
 
    Q_PROPERTY( QString directions READ directions WRITE setDirections /*NOTIFY changed*/ /*changedDirections*/ )
@@ -51,16 +59,18 @@ public:
    Q_PROPERTY( bool completed READ completed WRITE setCompleted /*NOTIFY changed*/ /*changedCompleted*/ )
    Q_PROPERTY( double interval READ interval WRITE setInterval /*NOTIFY changed*/ /*changedInterval*/ )
    Q_PROPERTY( QList<QString> reagents READ reagents /*WRITE*/ /*NOTIFY changed*/ /*changedReagents*/ )
-   
+
    Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
-   
+
    // "set" methods.
    void setDirections(const QString& dir);
    void setHasTimer(bool has);
    void setTimerValue(const QString& timerVal);
    void setCompleted(bool comp);
    void setInterval(double interval);
+   void setCacheOnly(bool cache);
    void addReagent(const QString& reagent);
+   void setRecipe(Recipe * const recipe);
 
    // "get" methods.
    QString directions();
@@ -70,36 +80,35 @@ public:
    //! This is a non-stored temporary in-memory set.
    QList<QString> reagents();
    double interval();
+   bool cacheOnly();
 
    int instructionNumber() const;
 
    static QString classNameStr();
 
+   // Instruction objects do not have parents
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
+
 signals:
-   /*
-   void changedName(QString);
-   void changedDirections(QString);
-   void changedHasTimer(bool);
-   void changedTimerValue(QString);
-   void changedCompleted(bool);
-   void changedInterval(double);
-   void changedReagents(QVector<QString>);
-   */
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
 
 private:
-   //! Only database gets to construct instances.
-   Instruction(Brewtarget::DBTable table, int key);
+   Instruction(TableSchema* table, QSqlRecord rec,int t_key = -1);
    Instruction( Instruction const& other );
-   /*
-   Instruction( const QString& name,
-                const QString& directions,
-                bool hasTimer = false,
-                const QString& timerVal = "0" );
-   */
-   QList<QString> _reagents;
-   
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
+
+   QString m_directions;
+   bool    m_hasTimer;
+   QString m_timerValue;
+   bool    m_completed;
+   double  m_interval;
+   bool    m_cacheOnly;
+   Recipe * m_recipe;
+
+   QList<QString> m_reagents;
 };
 
 Q_DECLARE_METATYPE( QList<Instruction*> )

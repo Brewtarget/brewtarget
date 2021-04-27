@@ -63,7 +63,7 @@ void BrewNoteWidget::updateDateFormat(Unit::unitDisplay display,Unit::unitScale 
 {
    QString format;
    // I need the new unit, not the old
-   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option("fermentDate", Brewtarget::getDateFormat(), "page_postferment", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option(PropertyNames::BrewNote::fermentDate, Brewtarget::getDateFormat(), "page_postferment", Brewtarget::UNIT).toInt();
 
    switch(unitDsp)
    {
@@ -89,7 +89,7 @@ void BrewNoteWidget::updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale old
    int precision = 3;
 
    // I don't think we care about the old unit or scale, just the new ones
-   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option("projOg", Unit::noUnit, "page_preboil", Brewtarget::UNIT).toInt();
+   Unit::unitDisplay unitDsp = (Unit::unitDisplay)Brewtarget::option(PropertyNames::BrewNote::projOg, Unit::noUnit, "page_preboil", Brewtarget::UNIT).toInt();
 
 
    if ( unitDsp == Unit::noUnit )
@@ -98,7 +98,7 @@ void BrewNoteWidget::updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale old
    if ( unitDsp == Unit::displayPlato )
       precision = 0;
 
-   quant = Brewtarget::amountDisplay(bNoteObs, page_preboil, "projOg",Units::sp_grav);
+   quant = Brewtarget::amountDisplay(bNoteObs, page_preboil, PropertyNames::BrewNote::projOg,Units::sp_grav);
    lcdnumber_projectedOG->setLowLim(  low  * quant );
    lcdnumber_projectedOG->setHighLim( high * quant );
    lcdnumber_projectedOG->display(quant, precision);
@@ -111,11 +111,11 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
 
    if( bNoteObs != 0 )
       disconnect( bNoteObs, 0, this, 0 );
-   
+
    if ( bNote )
    {
       bNoteObs = bNote;
-      connect( bNoteObs, &BeerXMLElement::changed, this, &BrewNoteWidget::changed );
+      connect( bNoteObs, &NamedEntity::changed, this, &BrewNoteWidget::changed );
 
       // Set the highs and the lows for the lcds
       lcdnumber_effBK->setLowLim(bNoteObs->projEff_pct() * low);
@@ -243,7 +243,7 @@ void BrewNoteWidget::updateNotes()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText(), false);
+   bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText() );
 }
 
 void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
@@ -253,29 +253,6 @@ void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
 
    showChanges();
 }
-
-/*
-void BrewNoteWidget::saveAll()
-{
-   if ( ! bNoteObs )
-      return;
-   
-   updateSG();
-   updateVolumeIntoBK_l();
-   updateStrikeTemp_c();
-   updateMashFinTemp_c();
-   updateOG();
-   updatePostBoilVolume_l();
-   updateVolumeIntoFerm_l();
-   updatePitchTemp_c();
-   updateFG();
-   updateFinalVolume_l();
-   updateFermentDate();
-   updateNotes();
-
-   hide();
-}
-*/
 
 void BrewNoteWidget::showChanges(QString field)
 {
@@ -311,5 +288,4 @@ void BrewNoteWidget::showChanges(QString field)
 
 void BrewNoteWidget::focusOutEvent(QFocusEvent *e)
 {
-   //qDebug() << "Notes lost focus";
 }

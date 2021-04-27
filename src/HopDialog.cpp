@@ -174,10 +174,10 @@ void HopDialog::addHop(const QModelIndex& index)
       else
          return;
    }
-   
-   Hop *hop = hopTableModel->getHop(translated.row());
-   
-   Database::instance().addToRecipe( mainWindow->currentRecipe(), hop );
+
+   Brewtarget::mainWindow()->addHopToRecipe(hopTableModel->getHop(translated.row()));
+
+   return;
 }
 
 void HopDialog::editSelected()
@@ -208,15 +208,15 @@ void HopDialog::newHop()
 {
    newHop(QString());
 }
-void HopDialog::newHop(QString folder) 
+
+void HopDialog::newHop(QString folder)
 {
    QString name = QInputDialog::getText(this, tr("Hop name"),
                                           tr("Hop name:"));
    if( name.isEmpty() )
       return;
 
-   Hop* hop = Database::instance().newHop();
-   hop->setName(name);
+   Hop* hop = new Hop(name,true);
    if ( ! folder.isEmpty() )
       hop->setFolder(folder);
 

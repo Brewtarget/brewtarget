@@ -49,7 +49,7 @@ MiscDialog::MiscDialog(MainWindow* parent) :
    tableWidget->sortByColumn( MISCNAMECOL, Qt::AscendingOrder );
    miscTableProxy->setDynamicSortFilter(true);
    miscTableProxy->setFilterKeyColumn(1);
-   
+
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
    connect( pushButton_edit, &QAbstractButton::clicked, this, &MiscDialog::editSelected );
@@ -141,7 +141,7 @@ void MiscDialog::removeMisc()
 void MiscDialog::addMisc(const QModelIndex& index)
 {
    QModelIndex translated;
-   
+
    if( !index.isValid() )
    {
       QModelIndexList selected = tableWidget->selectionModel()->selectedIndexes();
@@ -158,8 +158,8 @@ void MiscDialog::addMisc(const QModelIndex& index)
          if( selected[i].row() != row )
             return;
       }
-     
-      // Always need to translate indices through the proxy 
+
+      // Always need to translate indices through the proxy
       translated = miscTableProxy->mapToSource(selected[0]);
    }
    else
@@ -172,10 +172,10 @@ void MiscDialog::addMisc(const QModelIndex& index)
       else
          return;
    }
-   
-   Misc *misc = miscTableModel->getMisc(translated.row());
-   
-   Database::instance().addToRecipe( mainWindow->currentRecipe(), misc );
+
+   Brewtarget::mainWindow()->addMiscToRecipe(miscTableModel->getMisc(translated.row()));
+
+   return;
 }
 
 void MiscDialog::editSelected()
@@ -205,16 +205,15 @@ void MiscDialog::newMisc()
    newMisc(QString());
 }
 
-void MiscDialog::newMisc(QString folder) 
+void MiscDialog::newMisc(QString folder)
 {
    QString name = QInputDialog::getText(this, tr("Misc name"),
                                               tr("Misc name:"));
    if(name.isEmpty())
       return;
 
-   Misc* m = Database::instance().newMisc();
-   m->setName(name);
-   if ( ! folder.isEmpty() ) 
+   Misc* m = new Misc(name);
+   if ( ! folder.isEmpty() )
       m->setFolder(folder);
 
    miscEdit->setMisc(m);

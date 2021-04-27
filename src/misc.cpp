@@ -1,7 +1,8 @@
 /*
  * misc.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
- * - mik firestone <mikfire@gmail.com>
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
+ * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Samuel Östling <MrOstling@gmail.com>
  *
@@ -18,61 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "misc.h"
 
 #include "brewtarget.h"
 #include <iostream>
 #include <string>
 #include <QVector>
-#include "misc.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
 #include <QDebug>
 
-
-/************* Columns *************/
-const QString kName("name");
-const QString kType("mtype");
-const QString kUse("use");
-const QString kTime("time");
-const QString kAmount("amount");
-const QString kAmountIsWeight("amount_is_weight");
-const QString kInventory("inventory");
-const QString kUseFor("use_for");
-const QString kNotes("notes");
-
-
-/************** Props **************/
-const QString kNameProp("name");
-const QString kTypeProp("type");
-const QString kUseProp("use");
-const QString kTimeProp("time");
-const QString kAmountProp("amount");
-const QString kAmountIsWeightProp("amountIsWeight");
-const QString kInventoryProp("inventory");
-const QString kUseForProp("useFor");
-const QString kNotesProp("notes");
+#include "TableSchemaConst.h"
+#include "MiscSchema.h"
+#include "database.h"
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
 QStringList Misc::amountTypes = QStringList() << "Weight" << "Volume";
-QHash<QString,QString> Misc::tagToProp = Misc::tagToPropHash();
-
-QHash<QString,QString> Misc::tagToPropHash()
-{
-   QHash<QString,QString> propHash;
-   propHash["NAME"] = kNameProp;
-   //propHash["TYPE"] = kTypeProp;
-   //propHash["USE"] = kUseProp";
-   propHash["TIME"] = kTimeProp;
-   propHash["AMOUNT"] = kAmountProp;
-   propHash["AMOUNT_IS_WEIGHT"] = kAmountIsWeightProp;
-   propHash["INVENTORY"] = kInventoryProp;
-   propHash["USE_FOR"] = kUseForProp;
-   propHash["NOTES"] = kNotesProp;
-   return propHash;
-}
 
 QString Misc::classNameStr()
 {
@@ -80,148 +45,233 @@ QString Misc::classNameStr()
    return name;
 }
 
+bool Misc::isEqualTo(NamedEntity const & other) const {
+   // Base class (NamedEntity) will have ensured this cast is valid
+   Misc const & rhs = static_cast<Misc const &>(other);
+   // Base class will already have ensured names are equal
+   return (
+      this->m_type == rhs.m_type &&
+      this->m_use  == rhs.m_use
+   );
+}
+
 //============================CONSTRUCTORS======================================
-Misc::Misc(Brewtarget::DBTable table, int key) : BeerXMLElement(table, key)
+
+Misc::Misc(TableSchema* table, QSqlRecord rec, int t_key)
+   : NamedEntity(table, rec, t_key),
+   m_inventory(-1.0),
+   m_cacheOnly(false)
+{
+   m_typeString = rec.value( table->propertyToColumn( PropertyNames::Misc::type)).toString();
+   m_useString = rec.value( table->propertyToColumn( PropertyNames::Misc::use)).toString();
+   m_time = rec.value( table->propertyToColumn( PropertyNames::Misc::time)).toDouble();
+   m_amount = rec.value( table->propertyToColumn( PropertyNames::Misc::amount)).toDouble();
+   m_amountIsWeight = rec.value( table->propertyToColumn( PropertyNames::Misc::amountIsWeight)).toBool();
+   m_useFor = rec.value( table->propertyToColumn( PropertyNames::Misc::useFor)).toString();
+   m_notes = rec.value( table->propertyToColumn( PropertyNames::Misc::notes)).toString();
+
+   // handle foreign keys properly
+   m_inventory_id = rec.value( table->foreignKeyToColumn( PropertyNames::Misc::inventory_id)).toInt();
+   // not read from the db
+   m_type = static_cast<Misc::Type>(types.indexOf(m_typeString));
+   m_use = static_cast<Misc::Use>(uses.indexOf(m_useString));
+}
+
+Misc::Misc(Misc & other) : NamedEntity(other),
+   m_typeString(other.m_typeString),
+   m_type(other.m_type),
+   m_useString(other.m_useString),
+   m_use(other.m_use),
+   m_time(other.m_time),
+   m_amount(other.m_amount),
+   m_amountIsWeight(other.m_amountIsWeight),
+   m_useFor(other.m_useFor),
+   m_notes(other.m_notes),
+   m_inventory(other.m_inventory),
+   m_inventory_id(other.m_inventory_id),
+   m_cacheOnly(other.m_cacheOnly)
 {
 }
 
-Misc::Misc(Misc const& other) : BeerXMLElement(other)
+Misc::Misc(QString name, bool cache)
+   : NamedEntity(Brewtarget::MISCTABLE, name, true),
+   m_typeString(QString()),
+   m_type(static_cast<Misc::Type>(0)),
+   m_useString(QString()),
+   m_use(static_cast<Misc::Use>(0)),
+   m_time(0.0),
+   m_amount(0.0),
+   m_amountIsWeight(false),
+   m_useFor(QString()),
+   m_notes(QString()),
+   m_inventory(-1.0),
+   m_inventory_id(0),
+   m_cacheOnly(cache)
 {
 }
 
 //============================"GET" METHODS=====================================
-Misc::Type Misc::type() const
+Misc::Type Misc::type() const { return m_type; }
+
+const QString Misc::typeString() const { return m_typeString; }
+
+Misc::Use Misc::use() const { return m_use; }
+
+const QString Misc::useString() const { return m_useString; }
+
+double Misc::amount() const { return m_amount; }
+
+double Misc::time() const { return m_time; }
+
+bool Misc::amountIsWeight() const { return m_amountIsWeight; }
+
+QString Misc::useFor() const { return m_useFor; }
+
+QString Misc::notes() const { return m_notes; }
+
+double Misc::inventory()
 {
-   return static_cast<Misc::Type>(types.indexOf(get(kType).toString()));
+   if ( m_inventory < 0.0 ) {
+      m_inventory = getInventory().toDouble();
+   }
+   return m_inventory;
 }
 
-const QString Misc::typeString() const
-{
-   return types.at(type());
-}
+int Misc::inventoryId() const { return m_inventory_id; }
 
-Misc::Use Misc::use() const
-{
-   return static_cast<Misc::Use>(uses.indexOf(get(kUse).toString()));
-}
+Misc::AmountType Misc::amountType() const { return m_amountIsWeight ? AmountType_Weight : AmountType_Volume; }
 
-const QString Misc::useString() const
-{
-   return uses.at(use());
-}
-
-double Misc::amount()    const
-{
-   return get(kAmount).toDouble();
-}
-
-double Misc::time()      const
-{
-   return get(kTime).toDouble();
-}
-
-bool Misc::amountIsWeight() const
-{
-   return get(kAmountIsWeight).toBool();
-}
-
-QString Misc::useFor() const
-{
-   return get(kUseFor).toString();
-}
-
-QString Misc::notes() const
-{
-   return get(kNotes).toString();
-}
-
-double Misc::inventory() const
-{
-   return getInventory(kAmount).toDouble();
-}
-
-Misc::AmountType Misc::amountType() const
-{
-   return amountIsWeight() ? AmountType_Weight : AmountType_Volume;
-}
-
-const QString Misc::amountTypeString() const
-{
-   return amountTypes.at(amountType());
-}
+const QString Misc::amountTypeString() const { return amountTypes.at(amountType()); }
 
 const QString Misc::typeStringTr() const
 {
    QStringList typesTr = QStringList() << tr("Spice") << tr("Fining") << tr("Water Agent") << tr("Herb") << tr("Flavor") << tr("Other");
-   return typesTr.at(type());
+   if ( m_type >=  Spice && m_type < typesTr.size()  ) {
+      return typesTr.at(m_type);
+   }
+   else {
+      return QString("Spice");
+   }
 }
 
 const QString Misc::useStringTr() const
 {
    QStringList usesTr = QStringList() << tr("Boil") << tr("Mash") << tr("Primary") << tr("Secondary") << tr("Bottling");
-   return usesTr.at(use());
+   if ( m_use >= Boil && m_use < usesTr.size() ) {
+      return usesTr.at(use());
+   }
+   else {
+      return QString("Boil");
+   }
 }
 
 const QString Misc::amountTypeStringTr() const
 {
    QStringList amountTypesTr = QStringList() << tr("Weight") << tr("Volume");
-   return amountTypesTr.at(amountType());
+   if ( amountType() ) {
+      return amountTypesTr.at(amountType());
+   }
+   else {
+      return QString("Weight");
+   }
 }
+
+bool Misc::cacheOnly() const { return m_cacheOnly; }
 
 //============================"SET" METHODS=====================================
 void Misc::setType( Type t )
 {
-   set( kTypeProp, kType, types.at(t) );
+   m_type = t;
+   m_typeString = types.at(t);
+   if ( ! m_cacheOnly ) {
+      setEasy( PropertyNames::Misc::type, m_typeString );
+   }
 }
 
 void Misc::setUse( Use u )
 {
-   set( kUseProp, kUse, uses.at(u) );
+   m_use = u;
+   m_useString = uses.at(u);
+   if ( ! m_cacheOnly ) {
+      setEasy( PropertyNames::Misc::use, m_useString );
+   }
 }
 
 void Misc::setUseFor( const QString& var )
 {
-   set( kUseForProp, kUseFor, var );
+   m_useFor = var;
+   if ( ! m_cacheOnly ) {
+      setEasy( PropertyNames::Misc::useFor, var );
+   }
 }
 
 void Misc::setNotes( const QString& var )
 {
-   set( kNotesProp, kNotes, var );
+   m_notes = var;
+   if ( ! m_cacheOnly ) {
+      setEasy( PropertyNames::Misc::notes, var );
+   }
 }
 
 void Misc::setAmountType( AmountType t )
 {
-   setAmountIsWeight(t == AmountType_Weight ? true : false);
+   m_amountIsWeight = t == AmountType_Weight;
+   if ( ! m_cacheOnly ) {
+      setAmountIsWeight(m_amountIsWeight);
+   }
 }
 
 void Misc::setAmountIsWeight( bool var )
 {
-   set( kAmountIsWeightProp, kAmountIsWeight, var );
+   m_amountIsWeight = var;
+   if ( ! m_cacheOnly ) {
+      setEasy( PropertyNames::Misc::amountIsWeight, var );
+   }
 }
 
 void Misc::setAmount( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
-   else
-      set( kAmountProp, kAmount, var );
+      qWarning() << QString("Misc: amount < 0: %1").arg(var);
+   else {
+      m_amount = var;
+      if ( ! m_cacheOnly ) {
+         setEasy( PropertyNames::Misc::amount, var );
+      }
+   }
 }
 
 void Misc::setInventoryAmount( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: inventory < 0: %1").arg(var) );
-   else
-      setInventory(kInventoryProp, kAmount, var );
+      qWarning() << QString("Misc: inventory < 0: %1").arg(var);
+   else {
+      m_inventory = var;
+      if ( ! m_cacheOnly )
+         setInventory(var,m_inventory_id);
+   }
+}
+
+void Misc::setInventoryId( int key )
+{
+   m_inventory_id = key;
+   if ( ! m_cacheOnly )
+      setEasy(kpropInventoryId, key);
 }
 
 void Misc::setTime( double var )
 {
    if( var < 0.0 )
-      Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
-   else
-      set( kTimeProp, kTime, var );
+      qWarning() << QString("Misc: time < 0: %1").arg(var);
+   else {
+      m_time = var;
+      if ( ! m_cacheOnly ) {
+         setEasy( PropertyNames::Misc::time, var );
+      }
+   }
 }
+
+void Misc::setCacheOnly(bool cache) { m_cacheOnly = cache; }
 
 //========================OTHER METHODS=========================================
 
@@ -230,11 +280,11 @@ bool Misc::isValidUse( const QString& var )
    static const QString uses[] = {"Boil", "Mash", "Primary", "Secondary", "Bottling"};
    static const unsigned int size = 5;
    unsigned int i;
-   
+
    for( i = 0; i < size; ++i )
       if( var == uses[i] )
          return true;
-   
+
    return false;
 }
 
@@ -243,10 +293,35 @@ bool Misc::isValidType( const QString& var )
    static const QString types[] = {"Spice", "Fining", "Water Agent", "Herb", "Flavor", "Other"};
    static const unsigned int size = 6;
    unsigned int i;
-   
+
    for( i = 0; i < size; ++i )
       if( var == types[i] )
          return true;
-   
+
    return false;
+}
+
+NamedEntity * Misc::getParent() {
+   Misc * myParent = nullptr;
+
+   // If we don't already know our parent, look it up
+   if (!this->parentKey) {
+      this->parentKey = Database::instance().getParentNamedEntityKey(*this);
+   }
+
+   // If we (now) know our parent, get a pointer to it
+   if (this->parentKey) {
+      myParent = Database::instance().misc(this->parentKey);
+   }
+
+   // Return whatever we got
+   return myParent;
+}
+
+int Misc::insertInDatabase() {
+   return Database::instance().insertMisc(this);
+}
+
+void Misc::removeFromDatabase() {
+   Database::instance().remove(this);
 }

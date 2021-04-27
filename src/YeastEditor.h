@@ -43,20 +43,22 @@ class YeastEditor : public QDialog, private Ui::yeastEditor
    Q_OBJECT
 
 public:
-   YeastEditor( QWidget *parent=0 );
+   YeastEditor( QWidget *parent=nullptr );
    virtual ~YeastEditor() {}
    //! Set the yeast we want to modify.
    void setYeast( Yeast* y );
+   void newYeast(QString folder);
 
 public slots:
    void save();
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
-   
+   void newYeast();
+
 private:
    Yeast* obsYeast;
 
-   void showChanges(QMetaProperty* prop = 0);
+   void showChanges(QMetaProperty* prop = nullptr);
 };
 
 #endif   /* _YEASTEDITOR_H */

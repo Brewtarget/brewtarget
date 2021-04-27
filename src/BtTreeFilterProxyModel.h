@@ -36,6 +36,7 @@ class BtTreeFilterProxyModel;
 #include "hop.h"
 #include "yeast.h"
 #include "style.h"
+#include "water.h"
 
 /*!
  * \class BtTreeFilterProxyModel
@@ -65,6 +66,7 @@ private:
    bool lessThanHop(BtTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
    bool lessThanYeast(BtTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
    bool lessThanStyle(BtTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanWater(BtTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
 };
 
 #endif

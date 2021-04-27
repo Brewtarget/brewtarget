@@ -24,6 +24,11 @@ bool operator<(const PreInstruction& lhs, const PreInstruction& rhs)
    return lhs.time < rhs.time;
 }
 
+bool operator>(const PreInstruction& lhs, const PreInstruction& rhs)
+{
+   return lhs.time > rhs.time;
+}
+
 PreInstruction::PreInstruction()
 {
    text = "";

@@ -45,7 +45,7 @@ class BrewDayScrollWidget : public QWidget, public Ui::brewDayScrollWidget
 public:
    enum { PRINT, PREVIEW, HTML, NUMACTIONS };
 
-   BrewDayScrollWidget(QWidget* parent=0);
+   BrewDayScrollWidget(QWidget* parent=nullptr);
    virtual ~BrewDayScrollWidget() {}
    //! \brief Sets the observed recipe.
    void setRecipe(Recipe* rec);
@@ -56,7 +56,7 @@ public:
     *  \brief Prints a paper version of the info in this dialog.
     *  Should be moved to its own view class.
     */
-   void print(QPrinter* mainPrinter, int action = PRINT, QFile* outFile = 0);
+   void print(QPrinter* mainPrinter, int action = PRINT, QFile* outFile = nullptr);
 
 public slots:
    //! Automatically generate a new list of instructions.
@@ -75,18 +75,18 @@ private slots:
    void acceptChanges( QMetaProperty prop, QVariant value );
    //! \brief Receive changes from instructions.
    void acceptInsChanges( QMetaProperty prop, QVariant value );
-   
+
 private:
    //! Update the view.
    void showChanges();
    //! Repopulate the list widget with all the instructions.
    void repopulateListWidget();
    void clear();
-   
+
    QString buildTitleTable(bool includeImage = true);
    QString buildInstructionTable();
    QString buildFooterTable();
-   
+
    Recipe* recObs;
    QPrinter* printer;
    QTextBrowser* doc;

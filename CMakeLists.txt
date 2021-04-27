@@ -1,6 +1,11 @@
+#
+# CMakeLists.txt is part of Brewtarget
+#
+# See also src/CMakeLists.txt
+#
 PROJECT(brewtarget)
-CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
-CMAKE_POLICY( VERSION 3.0 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.16 )
+CMAKE_POLICY( VERSION 3.16 )
 
 # Creates a Makefile.
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
@@ -71,9 +76,11 @@ SET( MACOSX_BUNDLE_COPYRIGHT "GPLv3" )
 
 #==============================Compile flags===================================
 
-# Enable and enforce c++11 standards, so that we may lambda
-set(CMAKE_CXX_STANDARD 11)
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# We need C++17 or later for nested namespaces (and C++11 or later for lambdas)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED_ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )
@@ -104,7 +111,7 @@ IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
 
-ADD_DEFINITIONS("-std=c++11")
+
 
 #============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -133,7 +140,7 @@ ENDIF()
 #==================================Find Qt5====================================
 
 # The minimum QT5 version we need. Keep as low as necessary.
-SET(QT5_MIN_VERSION 5.3)
+SET(QT5_MIN_VERSION 5.9.5)
 
 # Automatically run moc on source files when necessary
 SET(CMAKE_AUTOMOC ON)
@@ -190,6 +197,22 @@ SET_PROPERTY(
    "CPackConfig.cmake"
    "CPackSourceConfig.cmake"
 )
+
+#===============================Find Xerces-C++================================
+# CMake already knows how to find and configure Xerces-C++, see
+# https://cmake.org/cmake/help/latest/module/FindXercesC.html
+FIND_PACKAGE(XercesC REQUIRED)
+INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
+# Uncomment the next two lines if you want to find where Xerces headers and DLLs are on your system
+#message( "Xerces-C++ include directories: " ${XercesC_INCLUDE_DIRS} )
+#message( "Xerces-C++ libraries: " ${XercesC_LIBRARIES} )
+
+#===============================Find Xalan-C++================================
+# Same comments apply here as for Xerces above
+FIND_PACKAGE(XalanC REQUIRED)
+INCLUDE_DIRECTORIES(${XalanC_INCLUDE_DIRS})
+message( "Xalan-C++ include directories: " ${XalanC_INCLUDE_DIRS} )
+message( "Xalan-C++ libraries: " ${XalanC_LIBRARIES} )
 
 #=========================Configure brewtarget.qrc.in==========================
 
@@ -374,7 +397,7 @@ SET( brewtarget_INFO_PLIST "${ROOTDIR}/mac/Info.plist" )
 SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 
 #==========================Find dlls for Win32=================================
-
+# .:TBD:. MY 2020-12-29 What do we need to do for Xerces and Xalan here?
 IF( WIN32 )
    IF( NOT ${NO_QTMULTIMEDIA} )
    FIND_PACKAGE(Qt5MultimediaWidgets REQUIRED)
@@ -444,8 +467,17 @@ IF( WIN32 )
       ${QtQWindows_location}
    )
 
-   # This is ugly. UGLY.
-   FIND_PATH(QT5_BIN_DIR "qmake.exe")
+   GET_TARGET_PROPERTY( _qmake_executable Qt5::qmake IMPORTED_LOCATION )
+   GET_FILENAME_COMPONENT( QT5_BIN_DIR "${_qmake_executable}" DIRECTORY )
+   FIND_PROGRAM( WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT5_BIN_DIR}" )
+   IF( EXISTS ${WINDEPLOYQT_EXECUTABLE} )
+        add_executable(Qt5::windeployqt IMPORTED)
+
+        set_target_properties(Qt5::windeployqt PROPERTIES
+            IMPORTED_LOCATION ${WINDEPLOYQT_EXECUTABLE}
+        )
+   ENDIF()
+
    FILE( GLOB IcuDlls
         "${QT5_BIN_DIR}/ic*.dll"
    )
@@ -458,17 +490,12 @@ IF( WIN32 )
      IF( NOT EXISTS ${MINGW_BIN_DIR} )
         MESSAGE( FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw/bin" )
      ELSE()
-        SET( Qt_DLLs
-             ${Qt_DLLs}
-             ${IcuDlls}
-             ${MINGW_BIN_DIR}/libgcc_s_dw2-1.dll
-             ${MINGW_BIN_DIR}/libstdc++-6.dll
-             ${MINGW_BIN_DIR}/libwinpthread-1.dll
-        )
+        get_filename_component( Mingw_Path ${CMAKE_CXX_COMPILER} PATH )
      ENDIF()
    ENDIF()
 ENDIF()
 
+include( InstallRequiredSystemLibraries )
 #===============================Packaging======================================
 # To make the packages, "make package". For source packages, "make package_source"
 
@@ -522,7 +549,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     #-----------------DEB----------------
     SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
     # NOTE: Use the getdependencies script to get the dependencies!
-    SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.1.3), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-network (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqt4-webkit (>= 4:4.5.3), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), phonon (>= 4:4.5.2)" )
+    SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.1.3), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-network (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqtwebkit4 (>= 2.3.4.dfsg-9.1), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), phonon (>= 4:4.5.2)" )
 
     SET( CPACK_DEBIAN_PACKAGE_SECTION "misc" )
     SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
@@ -607,24 +634,9 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
                COMPONENT ${DATA_INSTALL_COMPONENT} )
    ENDIF()
 
-   #--------Windows--------
-   IF( WIN32 )
-      INSTALL( FILES ${Qt_DLLs}
-               DESTINATION "bin"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
-      INSTALL( FILES ${SQL_Drivers_DLLs}
-               DESTINATION "bin/sqldrivers"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
-      INSTALL( FILES ${Image_Formats_DLLs}
-               DESTINATION "bin/imageformats"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
-      INSTALL( FILES ${Icon_Engines_DLLs}
-               DESTINATION "bin/iconengines"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
-      INSTALL( FILES ${Platform_DLLs}
-               DESTINATION "bin/platforms"
-               COMPONENT ${RUNTIME_INSTALL_COMPONENT})
-   ENDIF()
+   IF( CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS )
+      INSTALL( PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION bin COMPONENT System )
+   ENDIF( CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS )
 ENDIF()
 
 # =====================Process other CMakeList.txt's===========================

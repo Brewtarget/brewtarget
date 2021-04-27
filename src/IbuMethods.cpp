@@ -46,7 +46,7 @@ double IbuMethods::getIbus(double AArating, double hops_grams, double finalVolum
          return noonan(AArating, hops_grams, finalVolume_liters, wort_grav, minutes);
          break;
       default:
-         Brewtarget::logE( QObject::tr("Unrecognized IBU formula type. %1").arg(Brewtarget::ibuFormula) );
+         qCritical() << QObject::tr("Unrecognized IBU formula type. %1").arg(Brewtarget::ibuFormula);
          return tinseth(AArating, hops_grams, finalVolume_liters, wort_grav, minutes);
          break;
    }

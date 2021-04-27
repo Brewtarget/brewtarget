@@ -1,7 +1,8 @@
 /*
- * BeerXMLSortProxyModel.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * NamedEntitySortProxyModel.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2020-2025
  * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Mik Firestone <mikfire@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "BeerXMLSortProxyModel.h"
+#include "NamedEntitySortProxyModel.h"
 #include <QDebug>
 #include <QAbstractItemModel>
 
-BeerXMLSortProxyModel::BeerXMLSortProxyModel(QAbstractItemModel* sourceModel)
+NamedEntitySortProxyModel::NamedEntitySortProxyModel(QAbstractItemModel* sourceModel)
    : QSortFilterProxyModel(sourceModel)
 {
    if( sourceModel )

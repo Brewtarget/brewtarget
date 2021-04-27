@@ -1,0 +1,66 @@
+name: Mac
+
+on:
+  push:
+    branches:
+      - develop
+      - "stable/**"
+
+  pull_request:
+    branches:
+      - develop
+  schedule:
+    - cron: "0 2 * * *"
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+    
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+          version: 5.9.5
+
+    - name: Install dependencies
+      run: brew install xalan-c
+
+    - name: Build
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make && (CTEST_OUTPUT_ON_FAILURE=TRUE make test)
+
+    - name: Make package
+      run: |
+        cd build
+        make package
+
+    - name: 'Upload mac'
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: brewtarget-dev-mac
+        path: |
+          ${{github.workspace}}/build/brewtarget*.sh
+        retention-days: 7
+
+    - name: Recover Debris Artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-results
+        path: ${{github.workspace}}/build
+        retention-days: 1

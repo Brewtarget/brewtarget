@@ -1,6 +1,6 @@
 /*
  * MashStepEditor.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2020
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -29,9 +29,11 @@ class MashStepEditor;
 #include <QMetaProperty>
 #include <QVariant>
 #include "ui_mashStepEditor.h"
+#include "MainWindow.h"
 
 // Forward declarations.
 class MashStep;
+class Mash;
 
 /*!
  * \class MashStepEditor
@@ -43,13 +45,14 @@ class MashStepEditor : public QDialog, public Ui::mashStepEditor
 {
    Q_OBJECT
 public:
-   MashStepEditor(QWidget* parent=0);
+   MashStepEditor(QWidget* parent=nullptr);
    virtual ~MashStepEditor() {}
+
+   void setMashStep(MashStep* step);
 
 public slots:
    void saveAndClose();
    //! View/edit the given mash step.
-   void setMashStep(MashStep* step);
    void close();
    /*!
     * Grays out irrelevant portions of the dialog.

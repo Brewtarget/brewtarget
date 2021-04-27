@@ -19,6 +19,7 @@
 #include "SgDensityUnitSystem.h"
 #include <QStringList>
 #include "unit.h"
+#include "brewnote.h"
 
 SgDensityUnitSystem::SgDensityUnitSystem()
    : UnitSystem()
@@ -42,7 +43,7 @@ QMap<QString, Unit*> const& SgDensityUnitSystem::qstringToUnit()
    static QMap<QString, Unit*> _qstringToUnit;
    if( _qstringToUnit.empty() )
    {
-      _qstringToUnit.insert("sg",Units::sp_grav);
+      _qstringToUnit.insert(PropertyNames::BrewNote::sg,Units::sp_grav);
    }
 
    return _qstringToUnit;

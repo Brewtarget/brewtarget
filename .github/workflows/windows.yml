@@ -1,0 +1,104 @@
+name: Windows
+
+on:
+  push:
+    branches:
+      - develop
+      - "stable/**"
+
+  pull_request:
+    branches:
+      - develop
+  schedule:
+    - cron: "0 2 * * *"
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build-win:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: [
+          # Current installer NSIS with required plugins don't support x64 package
+          #{ msystem: MINGW64, arch: x86_64 },
+          { msystem: MINGW32, arch: i686 }
+        ]
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          path: temp
+          fetch-depth: 0
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          install: >-
+            mingw-w64-${{ matrix.arch }}-cmake
+            mingw-w64-${{ matrix.arch }}-make
+            mingw-w64-${{ matrix.arch }}-gcc
+            mingw-w64-${{ matrix.arch }}-qt5
+            mingw-w64-${{ matrix.arch }}-xalan-c
+            mingw-w64-${{ matrix.arch }}-nsis
+          update: true
+          release: true
+          path-type: strict
+
+      - name: Download nsis plugins
+        run: |
+          New-Item -ItemType Directory -Force -Path .\temp\build
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/a/af/Locate.zip -OutFile .\temp\build\Locate.zip
+          Expand-Archive -Path .\temp\build\Locate.zip -DestinationPath .\temp\build\Locate
+          Invoke-WebRequest -Uri https://nsis.sourceforge.io/mediawiki/images/7/76/Nsislog.zip -OutFile .\temp\build\Nsislog.zip
+          Expand-Archive -Path .\temp\build\Nsislog.zip -DestinationPath .\temp\build\Nsislog
+
+      - name: Move Checkout
+        run: |
+          Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
+
+      - name: CMake config
+        shell: msys2 {0}
+        run: |
+             cd /C/_/build
+             cp ./Locate/Include/Locate.nsh /mingw32/share/nsis/Include/
+             cp ./Locate/Plugin/locate.dll /mingw32/share/nsis/Plugins/ansi/
+             cp ./Nsislog/plugin/nsislog.dll /mingw32/share/nsis/Plugins/ansi
+             cmake .. -DCMAKE_RC_COMPILER:FILEPATH=windres.exe -G "MinGW Makefiles"
+
+      - name: Build
+        shell: msys2 {0}
+        run: |
+             cd /C/_/build
+             cmake --build .
+
+      - name: Test
+        shell: msys2 {0}
+        run: |
+             cd /C/_/build
+             cmake --build . --target test
+
+      - name: Package
+        shell: msys2 {0}
+        run: |
+             cd /C/_/build
+             cmake --build . --target package
+
+      - name: "Upload binaries"
+        if: ${{ success()}}
+        uses: actions/upload-artifact@v2
+        with:
+          name: brewtarget-dev-${{ matrix.msystem }}
+          path: C:/_/build/brewtarget*.exe
+          retention-days: 7
+
+      - name: "Upload error build"
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.msystem }}-build
+          path: C:/_/build/
+          retention-days: 1

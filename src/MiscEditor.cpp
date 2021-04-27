@@ -21,7 +21,9 @@
 
 #include <QtGui>
 #include <QIcon>
+#include <QInputDialog>
 #include "MiscEditor.h"
+#include "BtHorizontalTabs.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
@@ -29,20 +31,23 @@
 #include "misc.h"
 
 MiscEditor::MiscEditor( QWidget* parent )
-   : QDialog(parent), obsMisc(0)
+   : QDialog(parent), obsMisc(nullptr)
 {
    setupUi(this);
-   
-   connect( buttonBox, &QDialogButtonBox::accepted, this, &MiscEditor::save);
-   connect( buttonBox, &QDialogButtonBox::rejected, this, &MiscEditor::clearAndClose);
+
+   tabWidget_editor->tabBar()->setStyle(new BtHorizontalTabs);
+
+   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newMisc() ) );
+   connect( pushButton_save,   &QAbstractButton::clicked, this, &MiscEditor::save );
+   connect( pushButton_cancel, &QAbstractButton::clicked, this, &MiscEditor::clearAndClose );
 
 }
 
 void MiscEditor::setMisc( Misc* m )
 {
    if( obsMisc )
-      disconnect( obsMisc, 0, this, 0 );
-   
+      disconnect( obsMisc, nullptr, this, nullptr );
+
    obsMisc = m;
    if( obsMisc )
    {
@@ -54,58 +59,67 @@ void MiscEditor::setMisc( Misc* m )
 void MiscEditor::save()
 {
    Misc* m = obsMisc;
-   
-   if( m == 0 )
+
+   if( m == nullptr )
    {
       setVisible(false);
       return;
    }
-   
-   m->setName(lineEdit_name->text());
+
+   qInfo() << comboBox_type->currentIndex();
+   qInfo() << comboBox_use->currentIndex();
+
+   m->setName(lineEdit_name->text(),m->cacheOnly());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
    m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
    m->setTime(lineEdit_time->toSI());
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
    m->setAmount( lineEdit_amount->toSI());
-   m->setInventoryAmount(lineEdit_inventory->toSI());
    m->setUseFor(textEdit_useFor->toPlainText());
    m->setNotes( textEdit_notes->toPlainText() );
 
+   if ( m->cacheOnly() ) {
+      qInfo() << "Inserting into database";
+      m->insertInDatabase();
+   }
+   // do this late to make sure we've the row in the inventory table
+   m->setInventoryAmount(lineEdit_inventory->toSI());
    setVisible(false);
 }
 
 void MiscEditor::clearAndClose()
 {
-   setMisc(0);
+   setMisc(nullptr);
    setVisible(false); // Hide the window.
 }
 
 void MiscEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( sender() == obsMisc ) 
+   if( sender() == obsMisc )
       showChanges(&prop);
 }
 
 void MiscEditor::showChanges(QMetaProperty* metaProp)
 {
-   if( obsMisc == 0 )
+   if( obsMisc == nullptr )
       return;
-   
+
    QString propName;
    QVariant value;
    bool updateAll = false;
-   if( metaProp == 0 )
+   if( metaProp == nullptr )
       updateAll = true;
    else
    {
       propName = metaProp->name();
       value = metaProp->read(obsMisc);
    }
-   
-   if( propName == "name" || updateAll )
+
+   if( propName == PropertyNames::NamedEntity::name || updateAll )
    {
       lineEdit_name->setText(obsMisc->name());
       lineEdit_name->setCursorPosition(0);
+      tabWidget_editor->setTabText(0, obsMisc->name());
       if( ! updateAll )
          return;
    }
@@ -121,7 +135,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "time" || updateAll )
+   if( propName == PropertyNames::Misc::time || updateAll )
    {
       lineEdit_time->setText(obsMisc);
       if( ! updateAll )
@@ -145,7 +159,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   if( propName == "useFor" || updateAll )
+   if( propName == PropertyNames::Misc::useFor || updateAll )
    {
       textEdit_useFor->setPlainText( obsMisc->useFor() );
       if( ! updateAll )
@@ -157,4 +171,24 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
+}
+
+void MiscEditor::newMisc(QString folder) 
+{
+   QString name = QInputDialog::getText(this, tr("Misc name"),
+                                          tr("Misc name:"));
+   if( name.isEmpty() )
+      return;
+
+   Misc* m = new Misc(name,true);
+
+   if ( ! folder.isEmpty() )
+      m->setFolder(folder);
+
+   setMisc(m);
+   show();
+}
+void MiscEditor::newMisc()
+{
+   newMisc(QString());
 }

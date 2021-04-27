@@ -1,8 +1,9 @@
 /*
  * mash.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  *
@@ -19,35 +20,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef _MASH_H
 #define _MASH_H
 
-#include "BeerXMLElement.h"
+#include "model/NamedEntity.h"
+namespace PropertyNames::Mash { static char const * const ph = "ph"; /* previously kpropPH */ }
+namespace PropertyNames::Mash { static char const * const tunSpecificHeat_calGC = "tunSpecificHeat_calGC"; /* previously kpropTunSpecHeat */ }
+namespace PropertyNames::Mash { static char const * const tunWeight_kg = "tunWeight_kg"; /* previously kpropTunWeight */ }
+namespace PropertyNames::MashStep { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::MashStep { static char const * const type = "type"; /* previously kpropType */ }
+namespace PropertyNames::Mash { static char const * const notes = "notes"; /* previously kpropNotes */ }
+namespace PropertyNames::Mash { static char const * const equipAdjust = "equipAdjust"; /* previously kpropEquipAdjust */ }
+namespace PropertyNames::Mash { static char const * const spargeTemp_c = "spargeTemp_c"; /* previously kpropSpargeTemp */ }
+namespace PropertyNames::Mash { static char const * const tunTemp_c = "tunTemp_c"; /* previously kpropTunTemp */ }
+namespace PropertyNames::Mash { static char const * const grainTemp_c = "grainTemp_c"; /* previously kpropGrainTemp */ }
 
 // Forward declarations.
-class Mash;
 class MashStep;
-bool operator<(Mash &m1, Mash &m2);
-bool operator==(Mash &m1, Mash &m2);
 
 /*!
  * \class Mash
- * \author Philip G. Lee
  *
  * \brief Model class for a mash record in the database.
  */
-class Mash : public BeerXMLElement
+class Mash : public NamedEntity
 {
    Q_OBJECT
    Q_CLASSINFO("signal", "mashs")
-   Q_CLASSINFO("prefix", "mash")
-   
+
    friend class Database;
+   friend class BeerXML;
+   friend class MashDesigner;
+   friend class MashEditor;
+
 public:
 
+   Mash( QString name, bool cache = true );
    virtual ~Mash() {}
-   
+
    //! \brief The initial grain temp in Celsius.
    Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c /*NOTIFY changed*/ /*changedGrainTemp_c*/ )
    //! \brief The notes.
@@ -71,7 +81,7 @@ public:
   // Q_PROPERTY( double tunMass_kg READ tunMass_kg  WRITE setTunMass_kg /*NOTIFY changed*/ /*changedTotalTime*/ )
    //! \brief The individual mash steps.
    Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
-   
+
    // Setters
    void setGrainTemp_c( double var );
    void setNotes( const QString &var );
@@ -81,6 +91,7 @@ public:
    void setTunWeight_kg( double var );
    void setTunSpecificHeat_calGC( double var );
    void setEquipAdjust( bool var );
+   void setCacheOnly( bool cache );
 
    // Getters
    double grainTemp_c() const;
@@ -92,43 +103,65 @@ public:
    double tunWeight_kg() const;
    double tunSpecificHeat_calGC() const;
    bool equipAdjust() const;
-   
+   bool cacheOnly() const;
+
    // Calculated getters
+   //! \brief all the mash water, sparge and strike
    double totalMashWater_l();
+   //! \brief all the infusion water, excluding sparge
+   double totalInfusionAmount_l() const;
+   //! \brief all the sparge water
+   double totalSpargeAmount_l() const;
    double totalTime();
-   
+
+   bool hasSparge() const;
+
    // Relational getters
    QList<MashStep*> mashSteps() const;
-   
+
    // NOTE: should this be completely in Database?
    void removeAllMashSteps();
 
    static QString classNameStr();
 
+   // Mash objects do not have parents
+   NamedEntity * getParent() { return nullptr; }
+   virtual int insertInDatabase();
+   virtual void removeFromDatabase();
+
 public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
-   
+   MashStep * addMashStep(MashStep * mashStep);
+   MashStep * removeMashStep(MashStep * mashStep);
+
 signals:
-   //! \brief Emitted when \c name() changes.
-   void changedName(QString);
-   
    // Emitted when the number of steps change, or when you should call mashSteps() again.
    void mashStepsChanged();
-   
+
+protected:
+   virtual bool isEqualTo(NamedEntity const & other) const;
+
 private:
-   Mash(Brewtarget::DBTable table, int key);
+// Mash(Brewtarget::DBTable table, int key);
+   Mash( TableSchema* table, QSqlRecord rec, int t_key = -1 );
    Mash( Mash const& other );
-   
-   // Get via the relational relationship.
-   //QVector<MashStep *> mashSteps;
-   
-   static QHash<QString,QString> tagToProp;
-   static QHash<QString,QString> tagToPropHash();
+
+   double m_grainTemp_c;
+   QString m_notes;
+   double m_tunTemp_c;
+   double m_spargeTemp_c;
+   double m_ph;
+   double m_tunWeight_kg;
+   double m_tunSpecificHeat_calGC;
+   bool m_equipAdjust;
+   bool m_cacheOnly;
+
+   QList<MashStep*> m_mashSteps;
 
 };
 
 Q_DECLARE_METATYPE( Mash* )
-
+/*
 inline bool MashPtrLt( Mash* lhs, Mash* rhs)
 {
    return *lhs < *rhs;
@@ -154,5 +187,5 @@ struct Mash_ptr_equals
       return *lhs == *rhs;
    }
 };
-
+*/
 #endif //_MASH_H
