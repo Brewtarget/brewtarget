@@ -1,5 +1,5 @@
 /*
- * AlcoholTool.cpp is part of Brewtarget, and is Copyright the following
+ * AlcoholTool.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2018
  * - Ryan Hoobler <rhoob@yahoo.com>
  *
@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _ALCOHOLTOOL_H
-#define  _ALCOHOLTOOL_H
+#ifndef ALCOHOLTOOL_H
+#define ALCOHOLTOOL_H
 
 class AlcoholTool;
 
