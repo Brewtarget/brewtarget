@@ -1754,6 +1754,7 @@
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
     <addaction name="actionHydrometer_Temp_Adjustment"/>
+    <addaction name="actionAlcohol_Percentage_Tool"/>
     <addaction name="actionStrikeWater_Calculator"/>
     <addaction name="actionWater_Chemistry"/>
     <addaction name="actionTimers"/>
@@ -2252,6 +2253,11 @@
    </property>
    <property name="text">
     <string>&amp;Export to HTML</string>
+   </property>
+  </action>
+  <action name="actionAlcohol_Percentage_Tool">
+   <property name="text">
+    <string>Alcohol Percentage Tool</string>
    </property>
   </action>
   <action name="actionWater_Chemistry">
