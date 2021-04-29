@@ -24,7 +24,7 @@
 #include <QInputDialog>
 #include "FermentableEditor.h"
 #include "BtHorizontalTabs.h"
-#include "fermentable.h"
+#include "model/Fermentable.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
@@ -215,7 +215,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
    }
 }
 
-void FermentableEditor::newFermentable(QString folder) 
+void FermentableEditor::newFermentable(QString folder)
 {
    QString name = QInputDialog::getText(this, tr("Fermentable name"),
                                           tr("Fermentable name:"));

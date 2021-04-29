@@ -20,9 +20,9 @@
  */
 
 #include "EquipmentListModel.h"
-#include "equipment.h"
+#include "model/Equipment.h"
 #include "database.h"
-#include "recipe.h"
+#include "model/Recipe.h"
 
 EquipmentListModel::EquipmentListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)

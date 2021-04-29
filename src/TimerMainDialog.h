@@ -28,8 +28,8 @@ class TimerMainDialog;
 #include "TimerListDialog.h"
 #include "TimerWidget.h"
 #include "boiltime.h"
-#include "recipe.h"
-#include "hop.h"
+#include "model/Recipe.h"
+#include "model/Hop.h"
 #include <QString>
 #include <QDebug>
 #include "MainWindow.h"

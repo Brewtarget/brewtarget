@@ -1,5 +1,5 @@
 /*
- * yeast.cpp is part of Brewtarget, and is Copyright the following
+ * model/Yeast.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,18 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "yeast.h"
+#include "model/Yeast.h"
 
-#include <QDomNode>
+#include <QDebug>
 #include <QDomElement>
+#include <QDomNode>
 #include <QDomText>
 #include <QObject>
-#include <QDebug>
-#include "brewtarget.h"
 
+#include "brewtarget.h"
+#include "database.h"
 #include "TableSchemaConst.h"
 #include "YeastSchema.h"
-#include "database.h"
 
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";

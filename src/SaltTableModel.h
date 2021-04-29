@@ -32,7 +32,7 @@ class SaltItemDelegate;
 #include <QItemDelegate>
 #include <QList>
 #include <QTableView>
-#include "salt.h"
+#include "model/Salt.h"
 
 #include "unit.h"
 // Forward declarations.
@@ -137,7 +137,7 @@ public:
    void observeRecipe(Recipe *rec);
 
 private:
-   Mash* m_mash; 
+   Mash* m_mash;
    // I really dislike this
 
 };

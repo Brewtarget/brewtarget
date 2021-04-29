@@ -1,5 +1,5 @@
 /*
- * equipment.h is part of Brewtarget, and is Copyright the following
+ * model/Equipment.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _EQUIPMENT_H
-#define _EQUIPMENT_H
+#ifndef MODEL_EQUIPMENT_H
+#define MODEL_EQUIPMENT_H
 
 #include <QDomNode>
 #include "model/NamedEntity.h"
@@ -198,5 +198,4 @@ private:
 
 Q_DECLARE_METATYPE( Equipment* )
 
-#endif   /* _EQUIPMENT_H */
-
+#endif

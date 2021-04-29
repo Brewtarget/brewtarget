@@ -1,5 +1,5 @@
 /*
- * instruction.cpp is part of Brewtarget, and is Copyright the following
+ * model/Instruction.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -17,13 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "model/Instruction.h"
 
-#include "instruction.h"
 #include "brewtarget.h"
 #include "database.h"
-
-#include "TableSchemaConst.h"
 #include "InstructionSchema.h"
+#include "TableSchemaConst.h"
 
 bool Instruction::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid

@@ -19,7 +19,7 @@
 
 #include "StyleSortFilterProxyModel.h"
 #include "StyleListModel.h"
-#include "style.h"
+#include "model/Style.h"
 
 StyleSortFilterProxyModel::StyleSortFilterProxyModel(QObject* parent)
    : QSortFilterProxyModel(parent)
@@ -34,6 +34,6 @@ bool StyleSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIn
    Style* s = m->at(source_row);
    if( !s )
       return true;
-   
+
    return s->display() && !s->deleted();
 }

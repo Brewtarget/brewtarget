@@ -31,7 +31,7 @@ class BrewDayScrollWidget;
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QFile>
-#include "recipe.h"
+#include "model/Recipe.h"
 
 /*!
  * \class BrewDayScrollWidget

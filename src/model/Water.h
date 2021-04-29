@@ -1,5 +1,5 @@
 /*
- * water.h is part of Brewtarget, and is Copyright the following
+ * model/Water.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _WATER_H
-#define _WATER_H
+#ifndef MODEL_WATER_H
+#define MODEL_WATER_H
 
 #include <QString>
+
 #include "model/NamedEntity.h"
 #include "TableSchema.h"
 
@@ -177,5 +178,4 @@ private:
 
 };
 
-#endif   /* _WATER_H */
-
+#endif

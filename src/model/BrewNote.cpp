@@ -1,6 +1,6 @@
 /*
- * brewnote.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * model/BrewNote.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -18,28 +18,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "model/BrewNote.h"
 
-#include <QDomNode>
-#include <QDomElement>
-#include <QDomText>
-#include <QObject>
-#include <QDateTime>
 #include <algorithm>
-#include <QRegExp>
+#include <QDateTime>
 #include <QDebug>
+#include <QDomElement>
+#include <QDomNode>
+#include <QDomText>
 #include <QLocale>
+#include <QObject>
+#include <QRegExp>
 #include <QString>
-#include "brewnote.h"
-#include "brewtarget.h"
+
 #include "Algorithms.h"
-#include "mashstep.h"
-#include "recipe.h"
-#include "equipment.h"
-#include "mash.h"
-#include "yeast.h"
-#include "database.h"
-#include "TableSchema.h"
 #include "BrewnoteSchema.h"
+#include "brewtarget.h"
+#include "database.h"
+#include "model/Equipment.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
+#include "model/Recipe.h"
+#include "TableSchema.h"
+#include "model/Yeast.h"
 
 // These belong here, because they really just are constant strings for
 // reaching into a hash

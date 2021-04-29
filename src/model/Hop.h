@@ -1,5 +1,5 @@
 /*
- * hop.h is part of Brewtarget, and is Copyright the following
+ * model/Hop.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -20,15 +20,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _HOP_H
-#define _HOP_H
+#ifndef MODEL_HOP_H
+#define MODEL_HOP_H
 
 #include <QString>
 #include <QStringList>
 
-#include "TableSchema.h"
 #include "model/NamedEntity.h"
+#include "TableSchema.h"
 
 namespace PropertyNames::Hop { static char const * const form = "form"; /* previously kpropForm */ }
 namespace PropertyNames::Hop { static char const * const time_min = "time_min"; /* previously kpropTime */ }
@@ -75,7 +74,7 @@ public:
    //! \brief The way the hop is used.
    // .:TBD:. (MY 2021-01-01) Shall we perhaps change "UseAroma" to "PostBoil", since this is what BeerXML means by
    // Aroma in this context?
-   //         (MF 2021-04-09) Nope. These fields MUST remain as they are until we are certain that we have converted 
+   //         (MF 2021-04-09) Nope. These fields MUST remain as they are until we are certain that we have converted
    //                         all existing bt v1.0 XML databases. You know.  Forever.
    enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma)
    Q_ENUMS( Type Form Use )

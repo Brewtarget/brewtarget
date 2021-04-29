@@ -1,5 +1,5 @@
 /*
- * recipe.h is part of Brewtarget, and is Copyright the following
+ * model/Recipe.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
@@ -20,23 +20,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _RECIPE_H
-#define _RECIPE_H
+#ifndef MODEL_RECIPE_H
+#define MODEL_RECIPE_H
 
 #include <QColor>
-#include <QVariant>
-#include <QList>
-#include <QDomNode>
-#include <QDomDocument>
-#include <QString>
 #include <QDate>
+#include <QDomDocument>
+#include <QDomNode>
+#include <QList>
 #include <QMutex>
+#include <QString>
+#include <QVariant>
 
+#include "model/BrewNote.h"
+#include "model/Hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
+#include "model/Misc.h"
 #include "model/NamedEntity.h"
-#include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
-#include "misc.h"
-#include "salt.h"
-#include "brewnote.h"
+#include "model/Salt.h"
+
 namespace PropertyNames::Recipe { static char const * const fg = "fg"; /* previously kpropFG */ }
 namespace PropertyNames::Recipe { static char const * const og = "og"; /* previously kpropOG */ }
 namespace PropertyNames::Recipe { static char const * const boilTime_min = "boilTime_min"; /* previously kpropBoilTime */ }
@@ -262,7 +263,7 @@ public:
    //         looking at https://www.qxorm.com or similar for this.
    //            In the meantime, we cannot define a templated member function _in this header_ that calls
    //         Database::instance() (or indeed any other member function of Database) because that would require us to
-   //         #include "database.h" and database.h already needs to #include "recipe.h", so we'd be trapped in circular
+   //         #include "database.h" and database.h already needs to #include "model/Recipe.h", so we'd be trapped in circular
    //         dependencies.  Fortunately there is a trick that allows us to declare the function in the header and
    //         define it in the cpp file, even though it's templated.
 

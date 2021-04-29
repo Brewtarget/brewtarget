@@ -37,11 +37,11 @@
 #include "database.h"
 #include "WaterDialog.h"
 #include "SaltTableModel.h"
-#include "salt.h"
+#include "model/Salt.h"
 #include "unit.h"
-#include "recipe.h"
-#include "mash.h"
-#include "mashstep.h"
+#include "model/Recipe.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
 #include "brewtarget.h"
 
 static QStringList addToName = QStringList() << QObject::tr("Never")

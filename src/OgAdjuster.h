@@ -21,7 +21,7 @@
 
 #include <QDialog>
 #include "ui_ogAdjuster.h"
-#include "recipe.h"
+#include "model/Recipe.h"
 
 /*!
  * \class OgAdjuster

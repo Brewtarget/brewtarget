@@ -1,5 +1,5 @@
 /*
- * salt.cpp is part of Brewtarget, and is Copyright the following
+ * model/Salt.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -17,23 +17,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "salt.h"
+#include "model/Salt.h"
 
-#include <QVector>
+#include <QDebug>
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
-#include <QDebug>
+#include <QVector>
 
 #include "brewtarget.h"
-#include "TableSchemaConst.h"
-#include "SaltSchema.h"
 #include "database.h"
+#include "SaltSchema.h"
+#include "TableSchemaConst.h"
 
-// TBD Not clear why we use this ordering for salts.  Let's see what happens if we let it use the default ordering (name) of NamedEntity
-// MF (2021-04-09): Using this ordering makes the salts display properly in
-//                  the editor -- grouped around when they are added and not
-//                  the name. I'm putting this back 
+// Salts have a different ordering then the default (by name) to make them display properly in the editor -- grouped
+// around when they are added and not the name.
 bool operator<(const Salt &s1, const Salt &s2)
 {
    return s1.addTo() < s2.addTo();

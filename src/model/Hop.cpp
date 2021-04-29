@@ -1,5 +1,5 @@
 /*
- * hop.cpp is part of Brewtarget, and is Copyright the following
+ * model/Hop.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -20,17 +20,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "hop.h"
+#include "model/Hop.h"
 
+#include <QDebug>
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
-#include <QDebug>
-#include "brewtarget.h"
 
-#include "TableSchemaConst.h"
-#include "HopSchema.h"
+#include "brewtarget.h"
 #include "database.h"
+#include "HopSchema.h"
+#include "TableSchemaConst.h"
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";

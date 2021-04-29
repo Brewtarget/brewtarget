@@ -1,6 +1,6 @@
 /*
  * BtLineEdit.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2020:
+ * authors 2009-2021:
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -9,24 +9,23 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * Brewtarget is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef BTLINEEDIT_H
 #define BTLINEEDIT_H
 
-
 #include <QLineEdit>
+
+#include "model/NamedEntity.h"
 #include "unit.h"
 #include "UnitSystem.h"
-#include "model/NamedEntity.h"
 
 class BtGenericEdit;
 class BtMassEdit;
@@ -68,7 +67,7 @@ public:
    *       Not sure how to signal the parent to redisplay
    */
 
-   BtLineEdit(QWidget* parent = 0, Unit::UnitType type = Unit::None, QString const & maximalDisplayString = "100.000 L");
+   BtLineEdit(QWidget* parent = nullptr, Unit::UnitType type = Unit::None, QString const & maximalDisplayString = "100.000 L");
    double toSI(Unit::unitDisplay oldUnit = Unit::noUnit, Unit::unitScale oldScale = Unit::noScale, bool force = false);
    // Use this when you want to do something with the returned QString
    QString displayAmount( double amount, int precision = 3);
@@ -127,7 +126,7 @@ class BtGenericEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtGenericEdit(QWidget* parent);
+   BtGenericEdit(QWidget* parent = nullptr);
 };
 
 class BtMassEdit : public BtLineEdit
@@ -135,7 +134,7 @@ class BtMassEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtMassEdit(QWidget* parent);
+   BtMassEdit(QWidget* parent = nullptr);
 };
 
 class BtVolumeEdit : public BtLineEdit
@@ -143,7 +142,7 @@ class BtVolumeEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtVolumeEdit(QWidget* parent);
+   BtVolumeEdit(QWidget* parent = nullptr);
 };
 
 class BtTemperatureEdit : public BtLineEdit
@@ -151,7 +150,7 @@ class BtTemperatureEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtTemperatureEdit(QWidget* parent);
+   BtTemperatureEdit(QWidget* parent = nullptr);
 };
 
 class BtTimeEdit : public BtLineEdit
@@ -159,7 +158,7 @@ class BtTimeEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtTimeEdit(QWidget* parent);
+   BtTimeEdit(QWidget* parent = nullptr);
 };
 
 class BtDensityEdit : public BtLineEdit
@@ -167,7 +166,7 @@ class BtDensityEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtDensityEdit(QWidget* parent);
+   BtDensityEdit(QWidget* parent = nullptr);
 };
 
 class BtColorEdit : public BtLineEdit
@@ -175,7 +174,7 @@ class BtColorEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtColorEdit(QWidget* parent);
+   BtColorEdit(QWidget* parent = nullptr);
 };
 
 class BtStringEdit : public BtLineEdit
@@ -183,7 +182,7 @@ class BtStringEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtStringEdit(QWidget* parent);
+   BtStringEdit(QWidget* parent = nullptr);
 };
 
 // mixed objects are a pain.
@@ -192,7 +191,7 @@ class BtMixedEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtMixedEdit(QWidget* parent);
+   BtMixedEdit(QWidget* parent = nullptr);
 
 public slots:
    void setIsWeight(bool state);
@@ -204,7 +203,7 @@ class BtDiastaticPowerEdit : public BtLineEdit
    Q_OBJECT
 
 public:
-   BtDiastaticPowerEdit(QWidget* parent);
+   BtDiastaticPowerEdit(QWidget* parent = nullptr);
 };
 
 #endif

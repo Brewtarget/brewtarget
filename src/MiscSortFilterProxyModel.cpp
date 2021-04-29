@@ -21,7 +21,7 @@
 #include <QAbstractItemModel>
 #include "MiscSortFilterProxyModel.h"
 #include "MiscTableModel.h"
-#include "misc.h"
+#include "model/Misc.h"
 #include "brewtarget.h"
 #include "unit.h"
 
