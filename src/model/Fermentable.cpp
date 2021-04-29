@@ -1,6 +1,6 @@
 /*
- * fermentable.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2020
+ * model/Fermentable.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -20,18 +20,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "model/Fermentable.h"
 
+#include <QDebug>
 #include <QDomElement>
 #include <QDomText>
-#include <QVariant>
 #include <QObject>
-#include <QDebug>
-#include "fermentable.h"
+#include <QVariant>
+
 #include "brewtarget.h"
 #include "database.h"
-
-#include "TableSchemaConst.h"
 #include "FermentableSchema.h"
+#include "TableSchemaConst.h"
+
 #define SUPER NamedEntity
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";

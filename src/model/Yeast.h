@@ -242,5 +242,4 @@ struct Yeast_ptr_equals
    }
 };
 */
-#endif   /* _YEAST_H */
-
+#endif

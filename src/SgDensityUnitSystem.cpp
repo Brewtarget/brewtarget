@@ -19,7 +19,7 @@
 #include "SgDensityUnitSystem.h"
 #include <QStringList>
 #include "unit.h"
-#include "brewnote.h"
+#include "model/BrewNote.h"
 
 SgDensityUnitSystem::SgDensityUnitSystem()
    : UnitSystem()

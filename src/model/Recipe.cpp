@@ -1,5 +1,5 @@
 /*
- * recipe.cpp is part of Brewtarget, and is Copyright the following
+ * model/Recipe.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Kregg K <gigatropolis@yahoo.com>
  * - Matt Young <mfsy@yahoo.com>
@@ -19,41 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "recipe.h"
-
-#include "instruction.h"
-#include "brewtarget.h"
-#include "database.h"
+#include "model/Recipe.h"
 
 #include <cmath> // For pow/log
 
-#include <QList>
 #include <QDate>
-#include <QInputDialog>
-#include <QObject>
 #include <QDebug>
+#include <QInputDialog>
+#include <QList>
+#include <QObject>
 #include <QSharedPointer>
 
-#include "style.h"
-#include "misc.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "hop.h"
-#include "fermentable.h"
-#include "equipment.h"
-#include "yeast.h"
-#include "water.h"
-#include "salt.h"
-#include "PreInstruction.h"
 #include "Algorithms.h"
-#include "IbuMethods.h"
+#include "brewtarget.h"
 #include "ColorMethods.h"
+#include "database.h"
 #include "HeatCalculations.h"
+#include "IbuMethods.h"
+#include "model/Equipment.h"
+#include "model/Fermentable.h"
+#include "model/Hop.h"
+#include "model/Instruction.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
+#include "model/Misc.h"
+#include "model/Salt.h"
+#include "model/Style.h"
+#include "model/Water.h"
+#include "model/Yeast.h"
 #include "PhysicalConstants.h"
+#include "PreInstruction.h"
 #include "QueuedMethod.h"
-
-#include "TableSchemaConst.h"
 #include "RecipeSchema.h"
+#include "TableSchemaConst.h"
 
 static const QString kMashStepSection("mashStepTableModel");
 static const QString kMiscTableSection("miscTableModel");
@@ -1598,13 +1596,8 @@ void Recipe::recalcAll()
    m_recalcMutex.unlock();
 }
 
-void Recipe::recalcABV_pct()
-{
-   double ret;
-
-   // The complex formula, and variations comes from Ritchie Products Ltd, (Zymurgy, Summer 1995, vol. 18, no. 2)
-   // Michael L. Hall’s article Brew by the Numbers: Add Up What’s in Your Beer, and Designing Great Beers by Daniels.
-   ret = (76.08 * (m_og_fermentable - m_fg_fermentable) / (1.775 - m_og_fermentable)) * (m_fg_fermentable / 0.794);
+void Recipe::recalcABV_pct() {
+   double ret = Algorithms::abvFromOgAndFg(this->m_og_fermentable, this->m_fg_fermentable);
 
    if ( ! qFuzzyCompare(ret,m_ABV_pct ) ) {
       m_ABV_pct = ret;

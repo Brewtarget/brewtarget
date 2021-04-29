@@ -26,8 +26,8 @@
 #include <QVector>
 #include "ui_waterDialog.h"
 #include "unit.h"
-#include "water.h"
-#include "salt.h"
+#include "model/Water.h"
+#include "model/Salt.h"
 
 class WaterListModel;
 class WaterSortFilterProxyModel;

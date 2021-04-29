@@ -1,5 +1,5 @@
 /*
- * mashstep.cpp is part of Brewtarget, and is Copyright the following
+ * model/MashStep.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -17,15 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "mashstep.h"
+#include "model/MashStep.h"
 
-#include <QVector>
 #include <QDebug>
+#include <QVector>
+
 #include "brewtarget.h"
 #include "database.h"
-#include "TableSchemaConst.h"
 #include "MashStepSchema.h"
-#include "mash.h"
+#include "model/Mash.h"
+#include "TableSchemaConst.h"
 
 QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction" << "Fly Sparge" << "Batch Sparge";
 QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction") << QObject::tr("Fly Sparge") << QObject::tr("Batch Sparge");

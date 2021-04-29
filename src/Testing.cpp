@@ -22,13 +22,13 @@
 
 #include "Testing.h"
 #include <math.h>
-#include "recipe.h"
-#include "equipment.h"
+#include "model/Recipe.h"
+#include "model/Equipment.h"
 #include "database.h"
-#include "hop.h"
-#include "fermentable.h"
-#include "mash.h"
-#include "mashstep.h"
+#include "model/Hop.h"
+#include "model/Fermentable.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
 #include "Log.h"
 
 #include <QDebug>

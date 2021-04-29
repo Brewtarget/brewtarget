@@ -20,10 +20,10 @@
  */
 
 #include "MashListModel.h"
-#include "style.h"
+#include "model/Style.h"
 #include "database.h"
-#include "recipe.h"
-#include "mash.h"
+#include "model/Recipe.h"
+#include "model/Mash.h"
 
 MashListModel::MashListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)

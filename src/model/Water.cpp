@@ -1,5 +1,5 @@
 /*
- * water.cpp is part of Brewtarget, and is Copyright the following
+ * model/Water.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
@@ -17,16 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "water.h"
+#include "model/Water.h"
 
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
 
 #include "brewtarget.h"
+#include "database.h"
 #include "TableSchemaConst.h"
 #include "WaterSchema.h"
-#include "database.h"
 
 bool Water::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid

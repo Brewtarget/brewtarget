@@ -38,14 +38,14 @@
 #include "SaltSchema.h"
 #include "BrewnoteSchema.h"
 #include "SettingsSchema.h"
-#include "water.h"
-#include "yeast.h"
-#include "mashstep.h"
-#include "mash.h"
-#include "instruction.h"
-#include "fermentable.h"
-#include "equipment.h"
-#include "style.h"
+#include "model/Water.h"
+#include "model/Yeast.h"
+#include "model/MashStep.h"
+#include "model/Mash.h"
+#include "model/Instruction.h"
+#include "model/Fermentable.h"
+#include "model/Equipment.h"
+#include "model/Style.h"
 
 static const QString kDefault("DEFAULT");
 
@@ -143,7 +143,7 @@ const QStringList TableSchema::allForeignKeyColumnNames(Brewtarget::DBTypes type
    } return tmp;
 }
 
-const QStringList TableSchema::allForeignKeys() const 
+const QStringList TableSchema::allForeignKeys() const
 {
    return m_foreignKeys.keys();
 }

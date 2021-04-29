@@ -1,5 +1,5 @@
 /*
- * style.cpp is part of Brewtarget, and is Copyright the following
+ * model/Style.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -18,14 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "style.h"
+#include "model/Style.h"
 
-#include "brewtarget.h"
 #include <QDebug>
 
-#include "TableSchemaConst.h"
-#include "StyleSchema.h"
+#include "brewtarget.h"
 #include "database.h"
+#include "StyleSchema.h"
+#include "TableSchemaConst.h"
 
 QStringList Style::m_types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 

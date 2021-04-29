@@ -18,11 +18,11 @@
  */
 #include "xml/XmlRecipeRecord.h"
 
-#include "hop.h"
-#include "fermentable.h"
-#include "misc.h"
-#include "yeast.h"
-#include "water.h"
+#include "model/Hop.h"
+#include "model/Fermentable.h"
+#include "model/Misc.h"
+#include "model/Yeast.h"
+#include "model/Water.h"
 
 template<typename CNE>
 void XmlRecipeRecord::addChildren() {

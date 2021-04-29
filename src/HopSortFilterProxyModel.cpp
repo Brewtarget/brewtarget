@@ -21,17 +21,17 @@
 #include "brewtarget.h"
 #include "HopSortFilterProxyModel.h"
 #include "HopTableModel.h"
-#include "hop.h"
+#include "model/Hop.h"
 #include "unit.h"
 #include <iostream>
 
-HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent, bool filt) 
+HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent, bool filt)
 : QSortFilterProxyModel(parent)
 {
    filter = filt;
 }
 
-bool HopSortFilterProxyModel::lessThan(const QModelIndex &left, 
+bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
                                          const QModelIndex &right) const
 {
     QVariant leftHop = sourceModel()->data(left);

@@ -19,8 +19,8 @@
  */
 
 #include "StyleButton.h"
-#include "style.h"
-#include "recipe.h"
+#include "model/Style.h"
+#include "model/Recipe.h"
 #include <QWidget>
 #include <QDebug>
 

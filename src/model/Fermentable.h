@@ -1,5 +1,5 @@
 /*
- * fermentable.h is part of Brewtarget, and is Copyright the following
+ * model/Fermentable.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
@@ -21,13 +21,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _FERMENTABLE_H
-#define _FERMENTABLE_H
+#ifndef MODEL_FERMENTABLE_H
+#define MODEL_FERMENTABLE_H
 
 #include <QStringList>
 #include <QString>
+
 #include "model/NamedEntity.h"
 #include "unit.h"
+
 namespace PropertyNames::Fermentable { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
 namespace PropertyNames::Fermentable { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }
 namespace PropertyNames::Fermentable { static char const * const origin = "origin"; /* previously kpropOrigin */ }

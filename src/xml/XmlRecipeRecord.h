@@ -21,7 +21,7 @@
 #pragma once
 
 #include "xml/XmlNamedEntityRecord.h"
-#include "recipe.h"
+#include "model/Recipe.h"
 
 /**
  * \brief Loads a \b Recipe record (including any records it contains) in from an XML file.

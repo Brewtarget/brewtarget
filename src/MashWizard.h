@@ -25,7 +25,7 @@ class MashWizard;
 
 #include "ui_mashWizard.h"
 #include <QDialog>
-#include "recipe.h"
+#include "model/Recipe.h"
 #include "unit.h"
 
 /*!

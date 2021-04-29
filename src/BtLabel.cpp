@@ -22,8 +22,8 @@
 #include "brewtarget.h"
 #include <QSettings>
 #include <QDebug>
-#include "style.h"
-#include "recipe.h"
+#include "model/Style.h"
+#include "model/Recipe.h"
 
 /*! \brief Initialize the BtLabel with the parent and do some things with the type
  * \param parent - QWidget* to the parent object
@@ -32,7 +32,7 @@
  * \todo Not sure if I can get the name of the widget being created.
  *       Not sure how to signal the parent to redisplay
  */
- 
+
 BtLabel::BtLabel(QWidget *parent, LabelType lType) :
    QLabel(parent)
 {
@@ -64,7 +64,7 @@ void BtLabel::initializeSection()
       _section = mybuddy->property("configSection").toString();
    else if ( btParent->property("configSection").isValid() )
       _section = btParent->property("configSection").toString();
-   else 
+   else
    {
       qDebug() << "this failed" << this;
       _section = btParent->objectName();

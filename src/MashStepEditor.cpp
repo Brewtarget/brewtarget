@@ -22,7 +22,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include "MashStepEditor.h"
-#include "mashstep.h"
+#include "model/MashStep.h"
 #include "database.h"
 
 MashStepEditor::MashStepEditor(QWidget* parent)

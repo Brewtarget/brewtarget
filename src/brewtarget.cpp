@@ -55,7 +55,7 @@
 #include "config.h"
 #include "database.h"
 #include "Algorithms.h"
-#include "fermentable.h"
+#include "model/Fermentable.h"
 #include "UnitSystem.h"
 #include "UnitSystems.h"
 #include "unit.h"
@@ -76,10 +76,10 @@
 
 #include "BtSplashScreen.h"
 #include "MainWindow.h"
-#include "mash.h"
-#include "instruction.h"
-#include "water.h"
-#include "salt.h"
+#include "model/Mash.h"
+#include "model/Instruction.h"
+#include "model/Water.h"
+#include "model/Salt.h"
 
 // Needed for kill(2)
 #if defined(Q_OS_UNIX)

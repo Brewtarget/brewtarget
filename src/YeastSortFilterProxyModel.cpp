@@ -20,17 +20,17 @@
 
 #include "YeastSortFilterProxyModel.h"
 #include "YeastTableModel.h"
-#include "yeast.h"
+#include "model/Yeast.h"
 #include "brewtarget.h"
 #include <iostream>
 
-YeastSortFilterProxyModel::YeastSortFilterProxyModel(QObject *parent, bool filt) 
+YeastSortFilterProxyModel::YeastSortFilterProxyModel(QObject *parent, bool filt)
 : QSortFilterProxyModel(parent)
 {
    filter = filt;
 }
 
-bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left, 
+bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
                                          const QModelIndex &right) const
 {
     QVariant leftYeast = sourceModel()->data(left);

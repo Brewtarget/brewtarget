@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "instruction.h"
+#include "model/Instruction.h"
 #include "InstructionWidget.h"
 #include "TimerWidget.h"
 
@@ -46,7 +46,7 @@ void InstructionWidget::setInstruction(Instruction* ins)
 {
    if( insObs )
       disconnect( insObs, 0, this, 0 );
-   
+
    insObs = ins;
    if( insObs )
       connect( insObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
@@ -68,7 +68,7 @@ void InstructionWidget::changed(QMetaProperty prop, QVariant /*val*/)
 {
    if( sender() != insObs )
       return;
-   
+
    showChanges();
 }
 
