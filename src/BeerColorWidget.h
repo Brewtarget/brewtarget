@@ -29,7 +29,7 @@ class BeerColorWidget;
 #include <QImage>
 #include <QMetaProperty>
 #include <QVariant>
-#include "recipe.h"
+#include "model/Recipe.h"
 
 /*!
  * \class BeerColorWidget
@@ -47,17 +47,17 @@ public:
    void setColor( QColor newColor );
    //! Observe \b rec for changes in color, and automatically update.
    void setRecipe( Recipe* rec );
-   
+
 public slots:
    void parseChanges(QMetaProperty prop, QVariant val);
-   
+
 protected:
    virtual void paintEvent(QPaintEvent *);
    QColor color;
 private:
    QImage glass;
    void showColor();
-   
+
    Recipe* recObs;
 };
 

@@ -36,10 +36,10 @@
 #include "BtDigitWidget.h"
 #include "brewtarget.h"
 #include "database.h"
-#include "fermentable.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "salt.h"
+#include "model/Fermentable.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
+#include "model/Salt.h"
 #include "ColorMethods.h"
 
 WaterDialog::WaterDialog(QWidget* parent) : QDialog(parent),

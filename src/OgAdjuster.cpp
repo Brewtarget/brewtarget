@@ -18,11 +18,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OgAdjuster.h"
-#include "equipment.h"
+#include "model/Equipment.h"
 #include "brewtarget.h"
 #include "unit.h"
 #include "Algorithms.h"
-#include "recipe.h"
+#include "model/Recipe.h"
 
 OgAdjuster::OgAdjuster( QWidget* parent ) : QDialog(parent)
 {

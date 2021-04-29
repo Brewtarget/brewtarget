@@ -29,11 +29,11 @@
 #include "database.h"
 #include "InstructionWidget.h"
 #include "TimerWidget.h"
-#include "instruction.h"
+#include "model/Instruction.h"
 #include "brewtarget.h"
 #include "BrewDayWidget.h"
-#include "recipe.h"
-#include "style.h"
+#include "model/Recipe.h"
+#include "model/Style.h"
 
 // NOTE: QPrinter has no parent? Will it get destroyed properly?
 BrewDayWidget::BrewDayWidget(QWidget* parent) :

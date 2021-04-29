@@ -20,21 +20,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef _MODEL_NAMEDENTITY_H
-#define _MODEL_NAMEDENTITY_H
+#ifndef MODEL_NAMEDENTITY_H
+#define MODEL_NAMEDENTITY_H
 #pragma once
 
-#include <QDomText>
-#include <QDomNode>
-#include <QDomDocument>
-#include <QList>
-#include <QString>
-#include <QObject>
-#include <QMetaProperty>
-#include <QVariant>
 #include <QDateTime>
+#include <QDomDocument>
+#include <QDomNode>
+#include <QDomText>
+#include <QList>
+#include <QMetaProperty>
+#include <QObject>
 #include <QSqlRecord>
+#include <QString>
+#include <QVariant>
+
 #include "brewtarget.h"
 #include "TableSchema.h"
 

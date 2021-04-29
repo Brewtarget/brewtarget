@@ -23,7 +23,7 @@
 #include <QtGui>
 #include <QIcon>
 #include <QInputDialog>
-#include "hop.h"
+#include "model/Hop.h"
 #include "HopEditor.h"
 #include "BtHorizontalTabs.h"
 #include "database.h"

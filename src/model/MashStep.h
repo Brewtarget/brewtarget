@@ -1,5 +1,5 @@
 /*
- * mashstep.h is part of Brewtarget, and is Copyright the following
+ * model/MashStep.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -18,13 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _MASHSTEP_H
-#define _MASHSTEP_H
+#ifndef MODEL_MASHSTEP_H
+#define MODEL_MASHSTEP_H
 
 #include "model/NamedEntity.h"
 #include <QStringList>
 #include <QString>
-#include "mash.h"
+#include "model/Mash.h"
 
 namespace PropertyNames::MashStep { static char const * const stepNumber = "stepNumber"; /* previously kpropStepNumber */ }
 namespace PropertyNames::MashStep { static char const * const decoctionAmount_l = "decoctionAmount_l"; /* previously kpropDecoctAmt */ }
@@ -34,6 +34,8 @@ namespace PropertyNames::MashStep { static char const * const rampTime_min = "ra
 namespace PropertyNames::MashStep { static char const * const stepTime_min = "stepTime_min"; /* previously kpropStepTime */ }
 namespace PropertyNames::MashStep { static char const * const stepTemp_c = "stepTemp_c"; /* previously kpropStepTemp */ }
 namespace PropertyNames::MashStep { static char const * const infuseAmount_l = "infuseAmount_l"; /* previously kpropInfuseAmt */ }
+namespace PropertyNames::MashStep { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
+namespace PropertyNames::MashStep { static char const * const type = "type"; /* previously kpropType */ }
 
 /*!
  * \class MashStep

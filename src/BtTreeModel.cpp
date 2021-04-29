@@ -33,15 +33,15 @@
 #include "BtTreeView.h"
 #include "RecipeFormatter.h"
 #include "database.h"
-#include "equipment.h"
-#include "fermentable.h"
-#include "hop.h"
-#include "misc.h"
-#include "recipe.h"
-#include "yeast.h"
-#include "brewnote.h"
-#include "style.h"
-#include "water.h"
+#include "model/Equipment.h"
+#include "model/Fermentable.h"
+#include "model/Hop.h"
+#include "model/Misc.h"
+#include "model/Recipe.h"
+#include "model/Yeast.h"
+#include "model/BrewNote.h"
+#include "model/Style.h"
+#include "model/Water.h"
 
 // =========================================================================
 // ============================ CLASS STUFF ================================
@@ -839,7 +839,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             Fermentable *copyFerm, *oldFerm;
             oldFerm = fermentable(ndx);
             // Create a deep copy with a new inventory row
-            copyFerm = Database::instance().newFermentable(oldFerm,true); 
+            copyFerm = Database::instance().newFermentable(oldFerm,true);
             if ( copyFerm )
                copyFerm->setName(name);
             else
@@ -849,7 +849,7 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             Hop *copyHop,  *oldHop;
             oldHop = hop(ndx);
             // Create a deep copy with a new inventory row
-            copyHop = Database::instance().newHop(oldHop,true); 
+            copyHop = Database::instance().newHop(oldHop,true);
             if ( copyHop )
                copyHop->setName(name);
             else

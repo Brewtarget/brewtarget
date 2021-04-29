@@ -1,6 +1,7 @@
 /*
  * AlcoholTool.h is part of Brewtarget, and is Copyright the following
- * authors 2009-2018
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Ryan Hoobler <rhoob@yahoo.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -19,53 +20,49 @@
 #ifndef ALCOHOLTOOL_H
 #define ALCOHOLTOOL_H
 
-class AlcoholTool;
-
 #include <QDialog>
-#include <QWidget>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QLabel>
 #include <QEvent>
-#include <brewtarget.h>
+#include <QFormLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QVBoxLayout>
+#include <QWidget>
+
 #include "BtLineEdit.h"
-#include "BtLabel.h"
 
 /*!
  * \brief Dialog to convert units.
- * \author Philip G. Lee
  */
-class AlcoholTool : public QDialog
-{
+class AlcoholTool : public QDialog {
    Q_OBJECT
+
 public:
-
-   AlcoholTool(QWidget* parent=0);
-
-   //! \name Public UI Variables
-   //! @{
-   QPushButton* pushButton_convert;
-   QLabel* label_og;
-   BtLineEdit* lineEdit_og;
-   QLabel* label_fg;
-   BtLineEdit* lineEdit_fg;
-   QLabel *label_result;
-   QLineEdit *lineEdit_result;
-   //! @}
+   AlcoholTool(QWidget* parent = nullptr);
+   virtual ~AlcoholTool();
 
 public slots:
    void convert();
 
 protected:
-
-   virtual void changeEvent(QEvent* event)
-   {
-      if(event->type() == QEvent::LanguageChange)
-         retranslateUi();
-      QDialog::changeEvent(event);
-   }
+   virtual void changeEvent(QEvent* event);
 
 private:
+   QPushButton   * pushButton_convert;
+   QLabel        * label_og;
+   BtDensityEdit * input_og;
+   QLabel        * label_fg;
+   BtDensityEdit * input_fg;
+   QLabel        * label_result;
+   QLabel        * output_result;
+   QHBoxLayout   * hLayout;
+   QFormLayout   * formLayout;
+   QVBoxLayout   * vLayout;
+   QSpacerItem   * verticalSpacer;
+   QSpacerItem   * verticalSpacer2;
+   QSpacerItem   * verticalSpacer3;
 
    void doLayout();
    void retranslateUi();

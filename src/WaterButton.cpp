@@ -18,8 +18,8 @@
  */
 
 #include "WaterButton.h"
-#include "water.h"
-#include "recipe.h"
+#include "model/Water.h"
+#include "model/Recipe.h"
 #include <QWidget>
 
 WaterButton::WaterButton(QWidget* parent)

@@ -1,5 +1,5 @@
 /*
- * instruction.h is part of Brewtarget, and is Copyright the following
+ * model/Instruction.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -19,17 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _INSTRUCTION_H
-#define _INSTRUCTION_H
+#ifndef MODEL_INSTRUCTION_H
+#define MODEL_INSTRUCTION_H
 
 // This class is completely outside the BeerXML spec.
 
+#include <QDomNode>
 #include <QString>
 #include <QVector>
-#include <QDomNode>
-#include "TableSchema.h"
+
 #include "model/NamedEntity.h"
-#include "recipe.h"
+#include "model/Recipe.h"
+#include "TableSchema.h"
+
 namespace PropertyNames::Instruction { static char const * const interval = "interval"; /* previously kpropInterval */ }
 namespace PropertyNames::Instruction { static char const * const completed = "completed"; /* previously kpropCompleted */ }
 namespace PropertyNames::Instruction { static char const * const timerValue = "timerValue"; /* previously kpropTimerValue */ }
@@ -119,5 +121,4 @@ inline bool insPtrLtByNumber( Instruction* lhs, Instruction* rhs)
    return lhs->instructionNumber() < rhs->instructionNumber();
 }
 
-#endif   /* _INSTRUCTION_H */
-
+#endif

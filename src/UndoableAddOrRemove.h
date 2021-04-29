@@ -24,8 +24,8 @@
 #include <QString>
 #include <QUndoCommand>
 #include <QVariant>
-#include "recipe.h"
-#include "style.h"
+#include "model/Recipe.h"
+#include "model/Style.h"
 #include "StyleButton.h"
 
 /*!

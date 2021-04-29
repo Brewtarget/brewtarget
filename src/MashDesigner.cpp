@@ -24,7 +24,7 @@
 #include "MashDesigner.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
-#include "fermentable.h"
+#include "model/Fermentable.h"
 #include <QMessageBox>
 #include <QInputDialog>
 

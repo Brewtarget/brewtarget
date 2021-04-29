@@ -1,5 +1,5 @@
 /*
- * brewnote.h is part of Brewtarget, and is Copyright the following
+ * model/BrewNote.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -19,15 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef MODEL_BREWNOTE_H
+#define MODEL_BREWNOTE_H
 
-#ifndef _BREWNOTE_H
-#define _BREWNOTE_H
-
-#include <QDomNode>
+#include <QDate>
 #include <QDomDocument>
+#include <QDomNode>
 #include <QString>
 #include <QStringList>
-#include <QDate>
 
 #include "model/NamedEntity.h"
 namespace PropertyNames::BrewNote { static char const * const fg = "fg"; /* previously kpropFG */ }

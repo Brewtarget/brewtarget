@@ -1,5 +1,5 @@
 /*
- * misc.cpp is part of Brewtarget, and is Copyright the following
+ * model/Misc.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "misc.h"
+#include "model/Misc.h"
 
-#include "brewtarget.h"
 #include <iostream>
 #include <string>
-#include <QVector>
-#include "brewtarget.h"
+
+#include <QDebug>
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
-#include <QDebug>
+#include <QVector>
 
-#include "TableSchemaConst.h"
-#include "MiscSchema.h"
+#include "brewtarget.h"
 #include "database.h"
+#include "MiscSchema.h"
+#include "TableSchemaConst.h"
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";

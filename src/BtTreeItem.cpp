@@ -28,17 +28,17 @@
 #include <QDebug>
 
 #include "BtTreeItem.h"
-#include "brewnote.h"
+#include "model/BrewNote.h"
 #include "brewtarget.h"
-#include "equipment.h"
-#include "fermentable.h"
-#include "hop.h"
-#include "recipe.h"
-#include "misc.h"
-#include "yeast.h"
-#include "style.h"
+#include "model/Equipment.h"
+#include "model/Fermentable.h"
+#include "model/Hop.h"
+#include "model/Recipe.h"
+#include "model/Misc.h"
+#include "model/Yeast.h"
+#include "model/Style.h"
 #include "BtFolder.h"
-#include "water.h"
+#include "model/Water.h"
 #include "FermentableTableModel.h"
 
 bool operator==(BtTreeItem& lhs, BtTreeItem& rhs)

@@ -1,5 +1,5 @@
 /*
- * mash.cpp is part of Brewtarget, and is Copyright the following
+ * model/Mash.cpp is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -18,20 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "mash.h"
+#include "model/Mash.h"
 
 #include <iostream>
 #include <string>
-#include <QVector>
-#include "mashstep.h"
-#include "brewtarget.h"
-#include "database.h"
+
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include <QVector>
 
-#include "TableSchemaConst.h"
+#include "brewtarget.h"
+#include "database.h"
 #include "MashSchema.h"
+#include "model/MashStep.h"
+#include "TableSchemaConst.h"
 
 bool Mash::isEqualTo(NamedEntity const & other) const {
    // Base class (NamedEntity) will have ensured this cast is valid

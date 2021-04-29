@@ -1,5 +1,5 @@
 /*
- * salt.h is part of Brewtarget, and is Copyright the following
+ * model/Salt.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -19,18 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _SALT_H
-#define _SALT_H
+#ifndef MODEL_SALT_H
+#define MODEL_SALT_H
 
 #include <QString>
+
 #include "model/NamedEntity.h"
+
 namespace PropertyNames::Salt { static char const * const amount = "amount"; /* previously kpropAmount */ }
 namespace PropertyNames::Salt { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
 namespace PropertyNames::Salt { static char const * const type = "type"; /* previously kpropType */ }
 namespace PropertyNames::Salt { static char const * const isAcid = "isAcid"; /* previously kpropIsAcid */ }
 namespace PropertyNames::Salt { static char const * const percentAcid = "percentAcid"; /* previously kpropPctAcid */ }
 namespace PropertyNames::Salt { static char const * const addTo = "addTo"; /* previously kpropAddTo */ }
-
 namespace PropertyNames::Salt { static char const * const misc_id = "misc_id"; /* previously kcolMiscId */ }
 
 /*!
@@ -181,5 +182,4 @@ struct Salt_ptr_equals
    }
 };
 
-#endif   /* _SALT_H */
-
+#endif

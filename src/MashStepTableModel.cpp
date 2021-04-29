@@ -32,7 +32,7 @@
 #include <QVector>
 #include <QHeaderView>
 #include "database.h"
-#include "mashstep.h"
+#include "model/MashStep.h"
 #include "MashStepTableModel.h"
 #include "unit.h"
 #include "brewtarget.h"

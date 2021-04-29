@@ -1,5 +1,5 @@
 /*
- * misc.h is part of Brewtarget, and is Copyright the following
+ * model/Misc.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -20,11 +20,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _MISC_H
-#define _MISC_H
+#ifndef MODEL_MISC_H
+#define MODEL_MISC_H
 
 #include <QString>
+
 #include "model/NamedEntity.h"
+
 namespace PropertyNames::Misc { static char const * const amount = "amount"; /* previously kpropAmount */ }
 namespace PropertyNames::Misc { static char const * const amountIsWeight = "amountIsWeight"; /* previously kpropAmtIsWgt */ }
 namespace PropertyNames::Misc { static char const * const inventory = "inventory"; /* previously kpropInventory */ }

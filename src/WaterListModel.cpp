@@ -18,9 +18,9 @@
  */
 
 #include "WaterListModel.h"
-#include "water.h"
+#include "model/Water.h"
 #include "database.h"
-#include "recipe.h"
+#include "model/Recipe.h"
 
 WaterListModel::WaterListModel(QWidget* parent)
    : QAbstractListModel(parent), m_recipe(nullptr)

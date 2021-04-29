@@ -30,7 +30,7 @@
 #include "BtLabel.h"
 
 #include "database.h"
-#include "equipment.h"
+#include "model/Equipment.h"
 #include "EquipmentEditor.h"
 #include "EquipmentListModel.h"
 #include "config.h"

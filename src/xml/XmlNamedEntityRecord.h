@@ -29,8 +29,8 @@
 #include <QVector>
 
 #include "database.h"
-#include "brewnote.h" ///
-#include "instruction.h" ///
+#include "model/BrewNote.h" ///
+#include "model/Instruction.h" ///
 
 #include "model/NamedEntity.h"
 #include "xml/XQString.h"

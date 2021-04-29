@@ -1,5 +1,5 @@
 /*
- * mash.h is part of Brewtarget, and is Copyright the following
+ * model/Mash.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Kregg K <gigatropolis@yahoo.com>
@@ -20,15 +20,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _MASH_H
-#define _MASH_H
+#ifndef MODEL_MASH_H
+#define MODEL_MASH_H
 
 #include "model/NamedEntity.h"
+
 namespace PropertyNames::Mash { static char const * const ph = "ph"; /* previously kpropPH */ }
 namespace PropertyNames::Mash { static char const * const tunSpecificHeat_calGC = "tunSpecificHeat_calGC"; /* previously kpropTunSpecHeat */ }
 namespace PropertyNames::Mash { static char const * const tunWeight_kg = "tunWeight_kg"; /* previously kpropTunWeight */ }
-namespace PropertyNames::MashStep { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
-namespace PropertyNames::MashStep { static char const * const type = "type"; /* previously kpropType */ }
 namespace PropertyNames::Mash { static char const * const notes = "notes"; /* previously kpropNotes */ }
 namespace PropertyNames::Mash { static char const * const equipAdjust = "equipAdjust"; /* previously kpropEquipAdjust */ }
 namespace PropertyNames::Mash { static char const * const spargeTemp_c = "spargeTemp_c"; /* previously kpropSpargeTemp */ }

@@ -57,7 +57,12 @@ MACRO (ADD_PCH_RULE  _header_filename _src_list)
                       DEPENDS ${_header})
 ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
 
+#
 # Variable that contains all the .cpp files in this project.
+#
+# You can recreate the body of this list by running the following from the bash prompt in the build directory:
+#    find ../src -name '*.cpp' | sort  | sed 's+^../src+    ${SRCDIR}+' | grep -v Testing.cpp | grep -v main.cpp
+#
 SET( brewtarget_SRCS
     ${SRCDIR}/AboutDialog.cpp
     ${SRCDIR}/AlcoholTool.cpp
@@ -67,7 +72,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/boiltime.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/BrewDayWidget.cpp
-    ${SRCDIR}/brewnote.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
     ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/BtDatePopup.cpp
@@ -92,17 +96,14 @@ SET( brewtarget_SRCS
     ${SRCDIR}/DiastaticPowerUnitSystem.cpp
     ${SRCDIR}/EbcColorUnitSystem.cpp
     ${SRCDIR}/EquipmentButton.cpp
-    ${SRCDIR}/equipment.cpp
     ${SRCDIR}/EquipmentEditor.cpp
     ${SRCDIR}/EquipmentListModel.cpp
     ${SRCDIR}/FahrenheitTempUnitSystem.cpp
-    ${SRCDIR}/fermentable.cpp
     ${SRCDIR}/FermentableDialog.cpp
     ${SRCDIR}/FermentableEditor.cpp
     ${SRCDIR}/FermentableSortFilterProxyModel.cpp
     ${SRCDIR}/FermentableTableModel.cpp
     ${SRCDIR}/HeatCalculations.cpp
-    ${SRCDIR}/hop.cpp
     ${SRCDIR}/HopDialog.cpp
     ${SRCDIR}/HopEditor.cpp
     ${SRCDIR}/HopSortFilterProxyModel.cpp
@@ -112,29 +113,39 @@ SET( brewtarget_SRCS
     ${SRCDIR}/IbuGuSlider.cpp
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
-    ${SRCDIR}/model/NamedEntity.cpp
-    ${SRCDIR}/NamedEntitySortProxyModel.cpp
-    ${SRCDIR}/instruction.cpp
     ${SRCDIR}/InstructionWidget.cpp
     ${SRCDIR}/InventoryFormatter.cpp
     ${SRCDIR}/Log.cpp
     ${SRCDIR}/MainWindow.cpp
     ${SRCDIR}/MashButton.cpp
-    ${SRCDIR}/mash.cpp
+    ${SRCDIR}/MashComboBox.cpp
     ${SRCDIR}/MashDesigner.cpp
     ${SRCDIR}/MashEditor.cpp
     ${SRCDIR}/MashListModel.cpp
-    ${SRCDIR}/mashstep.cpp
     ${SRCDIR}/MashStepEditor.cpp
     ${SRCDIR}/MashStepTableModel.cpp
     ${SRCDIR}/MashStepTableWidget.cpp
     ${SRCDIR}/MashWizard.cpp
     ${SRCDIR}/matrix.cpp
-    ${SRCDIR}/misc.cpp
     ${SRCDIR}/MiscDialog.cpp
     ${SRCDIR}/MiscEditor.cpp
     ${SRCDIR}/MiscSortFilterProxyModel.cpp
     ${SRCDIR}/MiscTableModel.cpp
+    ${SRCDIR}/model/BrewNote.cpp
+    ${SRCDIR}/model/Equipment.cpp
+    ${SRCDIR}/model/Fermentable.cpp
+    ${SRCDIR}/model/Hop.cpp
+    ${SRCDIR}/model/Instruction.cpp
+    ${SRCDIR}/model/Mash.cpp
+    ${SRCDIR}/model/MashStep.cpp
+    ${SRCDIR}/model/Misc.cpp
+    ${SRCDIR}/model/NamedEntity.cpp
+    ${SRCDIR}/model/Recipe.cpp
+    ${SRCDIR}/model/Salt.cpp
+    ${SRCDIR}/model/Style.cpp
+    ${SRCDIR}/model/Water.cpp
+    ${SRCDIR}/model/Yeast.cpp
+    ${SRCDIR}/NamedEntitySortProxyModel.cpp
     ${SRCDIR}/NamedMashEditor.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
@@ -146,11 +157,9 @@ SET( brewtarget_SRCS
     ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/RadarChart.cpp
     ${SRCDIR}/RangedSlider.cpp
-    ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeExtrasWidget.cpp
     ${SRCDIR}/RecipeFormatter.cpp
     ${SRCDIR}/RefractoDialog.cpp
-    ${SRCDIR}/salt.cpp
     ${SRCDIR}/SaltTableModel.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SgDensityUnitSystem.cpp
@@ -160,7 +169,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/SrmColorUnitSystem.cpp
     ${SRCDIR}/StrikeWaterDialog.cpp
     ${SRCDIR}/StyleButton.cpp
-    ${SRCDIR}/style.cpp
     ${SRCDIR}/StyleEditor.cpp
     ${SRCDIR}/StyleListModel.cpp
     ${SRCDIR}/StyleRangeWidget.cpp
@@ -176,25 +184,23 @@ SET( brewtarget_SRCS
     ${SRCDIR}/USVolumeUnitSystem.cpp
     ${SRCDIR}/USWeightUnitSystem.cpp
     ${SRCDIR}/WaterButton.cpp
-    ${SRCDIR}/water.cpp
     ${SRCDIR}/WaterDialog.cpp
     ${SRCDIR}/WaterEditor.cpp
     ${SRCDIR}/WaterListModel.cpp
     ${SRCDIR}/WaterSortFilterProxyModel.cpp
     ${SRCDIR}/WaterTableModel.cpp
     ${SRCDIR}/WaterTableWidget.cpp
-    ${SRCDIR}/yeast.cpp
-    ${SRCDIR}/YeastDialog.cpp
-    ${SRCDIR}/YeastEditor.cpp
-    ${SRCDIR}/YeastSortFilterProxyModel.cpp
-    ${SRCDIR}/YeastTableModel.cpp
     ${SRCDIR}/xml/BtDomErrorHandler.cpp
     ${SRCDIR}/xml/XercesHelpers.cpp
     ${SRCDIR}/xml/XmlCoding.cpp
     ${SRCDIR}/xml/XmlMashStepRecord.cpp
     ${SRCDIR}/xml/XmlRecipeRecord.cpp
-    ${SRCDIR}/xml/XmlRecord.cpp
     ${SRCDIR}/xml/XmlRecordCount.cpp
+    ${SRCDIR}/xml/XmlRecord.cpp
+    ${SRCDIR}/YeastDialog.cpp
+    ${SRCDIR}/YeastEditor.cpp
+    ${SRCDIR}/YeastSortFilterProxyModel.cpp
+    ${SRCDIR}/YeastTableModel.cpp
 )
 
 # List of all the *.ui.
@@ -231,41 +237,45 @@ SET( brewtarget_UIS
     ${UIDIR}/recipeExtrasWidget.ui
 )
 
+#
 # The list of files that need to be moc'd.
 # In other words, classes that have Q_OBJECT declarations and stuff.
+# NB: This is NOT a list of ALL header files!
+#
+# You can recreate the body of this list by running the following from the bash prompt in the build directory:
+#    grep -rl Q_OBJECT ../src | sort | sed 's+^../src+    ${SRCDIR}+' | grep -v Testing.h
+#
 SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/AboutDialog.h
     ${SRCDIR}/AlcoholTool.h
     ${SRCDIR}/BeerColorWidget.h
-    ${SRCDIR}/ingredient.h
     ${SRCDIR}/beerxml.h
-    ${SRCDIR}/NamedEntitySortProxyModel.h
     ${SRCDIR}/boiltime.h
-    ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
-    ${SRCDIR}/brewnote.h
+    ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewNoteWidget.h
     ${SRCDIR}/brewtarget.h
-    ${SRCDIR}/BtTabWidget.h
-    ${SRCDIR}/BtTreeModel.h
-    ${SRCDIR}/BtTreeView.h
-    ${SRCDIR}/BtTreeFilterProxyModel.h
-    ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtDatePopup.h
+    ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtFolder.h
-    ${SRCDIR}/BtHorizontalTabs.h
     ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtLineEdit.h
-    ${SRCDIR}/BtTextEdit.h
     ${SRCDIR}/BtSplashScreen.h
+    ${SRCDIR}/BtTabWidget.h
+    ${SRCDIR}/BtTextEdit.h
+    ${SRCDIR}/BtTreeFilterProxyModel.h
+    ${SRCDIR}/BtTreeModel.h
+    ${SRCDIR}/BtTreeView.h
+    ${SRCDIR}/CMakeLists.txt
+    ${SRCDIR}/.CMakeLists.txt.kate-swp
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/CustomComboBox.h
     ${SRCDIR}/database.h
     ${SRCDIR}/EquipmentButton.h
-    ${SRCDIR}/EquipmentListModel.h
     ${SRCDIR}/EquipmentEditor.h
-    ${SRCDIR}/FermentableEditor.h
+    ${SRCDIR}/EquipmentListModel.h
     ${SRCDIR}/FermentableDialog.h
+    ${SRCDIR}/FermentableEditor.h
     ${SRCDIR}/FermentableSortFilterProxyModel.h
     ${SRCDIR}/FermentableTableModel.h
     ${SRCDIR}/HopDialog.h
@@ -275,12 +285,11 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/HydrometerTool.h
     ${SRCDIR}/IbuGuSlider.h
     ${SRCDIR}/InstructionWidget.h
-    ${SRCDIR}/Log.h
     ${SRCDIR}/MainWindow.h
     ${SRCDIR}/MashButton.h
+    ${SRCDIR}/MashComboBox.h
     ${SRCDIR}/MashDesigner.h
     ${SRCDIR}/MashEditor.h
-    ${SRCDIR}/NamedMashEditor.h
     ${SRCDIR}/MashListModel.h
     ${SRCDIR}/MashStepEditor.h
     ${SRCDIR}/MashStepTableModel.h
@@ -290,70 +299,57 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/MiscEditor.h
     ${SRCDIR}/MiscSortFilterProxyModel.h
     ${SRCDIR}/MiscTableModel.h
+    ${SRCDIR}/model/BrewNote.h
+    ${SRCDIR}/model/Equipment.h
+    ${SRCDIR}/model/Fermentable.h
+    ${SRCDIR}/model/Hop.h
+    ${SRCDIR}/model/Instruction.h
+    ${SRCDIR}/model/Mash.h
+    ${SRCDIR}/model/MashStep.h
+    ${SRCDIR}/model/Misc.h
+    ${SRCDIR}/model/NamedEntity.h
+    ${SRCDIR}/model/Recipe.h
+    ${SRCDIR}/model/Salt.h
+    ${SRCDIR}/model/Style.h
+    ${SRCDIR}/model/Water.h
+    ${SRCDIR}/model/Yeast.h
+    ${SRCDIR}/NamedEntitySortProxyModel.h
+    ${SRCDIR}/NamedMashEditor.h
     ${SRCDIR}/OgAdjuster.h
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
     ${SRCDIR}/PrimingDialog.h
+    ${SRCDIR}/PropertySchema.h
     ${SRCDIR}/QueuedMethod.h
-    ${SRCDIR}/RadarChart.h
     ${SRCDIR}/RangedSlider.h
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h
     ${SRCDIR}/RefractoDialog.h
-    ${SRCDIR}/salt.h
     ${SRCDIR}/SaltTableModel.h
     ${SRCDIR}/ScaleRecipeTool.h
+    ${SRCDIR}/SimpleUndoableUpdate.h
     ${SRCDIR}/StrikeWaterDialog.h
     ${SRCDIR}/StyleButton.h
-    ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleEditor.h
+    ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleRangeWidget.h
     ${SRCDIR}/StyleSortFilterProxyModel.h
+    ${SRCDIR}/TableSchema.h
     ${SRCDIR}/TimerListDialog.h
     ${SRCDIR}/TimerMainDialog.h
     ${SRCDIR}/TimerWidget.h
     ${SRCDIR}/unit.h
+    ${SRCDIR}/WaterButton.h
+    ${SRCDIR}/WaterDialog.h
+    ${SRCDIR}/WaterEditor.h
     ${SRCDIR}/WaterListModel.h
+    ${SRCDIR}/WaterSortFilterProxyModel.h
     ${SRCDIR}/WaterTableModel.h
     ${SRCDIR}/WaterTableWidget.h
-    ${SRCDIR}/WaterButton.h
-    ${SRCDIR}/WaterEditor.h
-    ${SRCDIR}/WaterDialog.h
-    ${SRCDIR}/WaterSortFilterProxyModel.h
     ${SRCDIR}/YeastDialog.h
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
-    ${SRCDIR}/equipment.h
-    ${SRCDIR}/fermentable.h
-    ${SRCDIR}/hop.h
-    ${SRCDIR}/instruction.h
-    ${SRCDIR}/mash.h
-    ${SRCDIR}/mashstep.h
-    ${SRCDIR}/misc.h
-    ${SRCDIR}/recipe.h
-    ${SRCDIR}/style.h
-    ${SRCDIR}/water.h
-    ${SRCDIR}/yeast.h
-    ${SRCDIR}/BrewnoteSchema.h
-    ${SRCDIR}/BtAllTableSchema.h
-    ${SRCDIR}/DatabaseSchema.h
-    ${SRCDIR}/EquipmentSchema.h
-    ${SRCDIR}/FermentableSchema.h
-    ${SRCDIR}/HopSchema.h
-    ${SRCDIR}/InstructionSchema.h
-    ${SRCDIR}/MashSchema.h
-    ${SRCDIR}/MashStepSchema.h
-    ${SRCDIR}/MiscSchema.h
-    ${SRCDIR}/PropertySchema.h
-    ${SRCDIR}/RecipeSchema.h
-    ${SRCDIR}/SaltSchema.h
-    ${SRCDIR}/SettingsSchema.h
-    ${SRCDIR}/StyleSchema.h
-    ${SRCDIR}/TableSchema.h
-    ${SRCDIR}/WaterSchema.h
-    ${SRCDIR}/YeastSchema.h
-
 )
 
 SET( FILES_TO_TRANSLATE
@@ -562,10 +558,10 @@ INSTALL( TARGETS ${brewtarget_EXECUTABLE}
          COMPONENT ${RUNTIME_INSTALL_COMPONENT} )
 
 IF( WIN32 )
-      install(CODE 
+      install(CODE
       "
-         file(GET_RUNTIME_DEPENDENCIES 
-            RESOLVED_DEPENDENCIES_VAR deps 
+         file(GET_RUNTIME_DEPENDENCIES
+            RESOLVED_DEPENDENCIES_VAR deps
             UNRESOLVED_DEPENDENCIES_VAR confdeps
             EXECUTABLES src/${brewtarget_EXECUTABLE}.exe
             PRE_EXCLUDE_REGEXES \"^api-ms-win.*\$|^ext-ms.*\$\"

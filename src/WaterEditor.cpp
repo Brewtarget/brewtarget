@@ -25,7 +25,7 @@
 #include "WaterEditor.h"
 #include "WaterSchema.h"
 #include "TableSchemaConst.h"
-#include "water.h"
+#include "model/Water.h"
 #include "brewtarget.h"
 
 WaterEditor::WaterEditor(QWidget *parent) : QDialog(parent), obs{nullptr} {

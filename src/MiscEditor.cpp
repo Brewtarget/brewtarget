@@ -28,7 +28,7 @@
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"
-#include "misc.h"
+#include "model/Misc.h"
 
 MiscEditor::MiscEditor( QWidget* parent )
    : QDialog(parent), obsMisc(nullptr)
@@ -173,7 +173,7 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
    }
 }
 
-void MiscEditor::newMisc(QString folder) 
+void MiscEditor::newMisc(QString folder)
 {
    QString name = QInputDialog::getText(this, tr("Misc name"),
                                           tr("Misc name:"));

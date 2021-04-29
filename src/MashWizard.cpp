@@ -24,13 +24,13 @@
 
 #include "database.h"
 #include "MashWizard.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "fermentable.h"
+#include "model/Mash.h"
+#include "model/MashStep.h"
+#include "model/Fermentable.h"
 #include <QMessageBox>
 #include <QButtonGroup>
 #include "HeatCalculations.h"
-#include "equipment.h"
+#include "model/Equipment.h"
 #include "PhysicalConstants.h"
 #include "Algorithms.h"
 

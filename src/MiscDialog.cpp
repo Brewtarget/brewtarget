@@ -25,9 +25,9 @@
 #include <QList>
 #include "MiscDialog.h"
 #include "database.h"
-#include "recipe.h"
+#include "model/Recipe.h"
 #include "MainWindow.h"
-#include "misc.h"
+#include "model/Misc.h"
 #include "MiscEditor.h"
 #include "MiscTableModel.h"
 #include "MiscSortFilterProxyModel.h"

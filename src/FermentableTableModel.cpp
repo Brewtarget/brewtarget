@@ -42,10 +42,10 @@
 #include <QString>
 #include <QVector>
 #include <QHeaderView>
-#include "fermentable.h"
+#include "model/Fermentable.h"
 #include "FermentableTableModel.h"
 #include "unit.h"
-#include "recipe.h"
+#include "model/Recipe.h"
 #include "MainWindow.h"
 
 //=====================CLASS FermentableTableModel==============================

@@ -32,8 +32,8 @@
 #include "BrewnoteSchema.h"
 #include "SettingsSchema.h"
 #include "WaterSchema.h"
-#include "brewnote.h"
-#include "water.h"
+#include "model/BrewNote.h"
+#include "model/Water.h"
 
 const int DatabaseSchemaHelper::dbVersion = 9;
 

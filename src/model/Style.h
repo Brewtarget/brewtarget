@@ -1,5 +1,5 @@
 /*
- * style.h is part of Brewtarget, and is Copyright the following
+ * model/Style.h is part of Brewtarget, and is Copyright the following
  * authors 2009-2021
  * - Jeff Bailey <skydvr38@verizon.net>
  * - Matt Young <mfsy@yahoo.com>
@@ -19,12 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _STYLE_H
-#define _STYLE_H
+#ifndef MODEL_STYLE_H
+#define MODEL_STYLE_H
 
 #include <QString>
 #include <QStringList>
+
 #include "model/NamedEntity.h"
+
 namespace PropertyNames::Style { static char const * const typeString = "typeString"; /* previously kpropTypeString */ }
 namespace PropertyNames::Style { static char const * const type = "type"; /* previously kpropType */ }
 namespace PropertyNames::Style { static char const * const notes = "notes"; /* previously kpropNotes */ }
