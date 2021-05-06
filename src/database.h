@@ -301,10 +301,11 @@ public:
    QList<Misc*> addToRecipe(Recipe* rec, QList<Misc*> miscs, bool transact = true);
    QList<Yeast*> addToRecipe(Recipe* rec, QList<Yeast*> yeasts, bool transact = true);
 
-   void addToRecipe(Recipe *rec, QList<Fermentable*> ferms, Fermentable* exclude = nullptr, bool transact = true );
-   void addToRecipe(Recipe *rec, QList<Hop*> hops, Hop* exclude = nullptr, bool transact = true );
-   void addToRecipe(Recipe *rec, QList<Misc*> miscs, Misc* exclude = nullptr, bool transact = true );
-   void addToRecipe(Recipe *rec, QList<Yeast*> yeasts, Yeast* exclude = nullptr, bool transact = true );
+   //! \brief bulk add to a recipe, with exclusions
+   void addToRecipe(Recipe *rec, QList<Fermentable*> ferms, Fermentable* exclude, bool transact = true );
+   void addToRecipe(Recipe *rec, QList<Hop*> hops, Hop* exclude, bool transact = true );
+   void addToRecipe(Recipe *rec, QList<Misc*> miscs, Misc* exclude, bool transact = true );
+   void addToRecipe(Recipe *rec, QList<Yeast*> yeasts, Yeast* exclude, bool transact = true );
 
    /**
    * \brief  This function is intended to be called by an ingredient that has not already cached its parent's key
