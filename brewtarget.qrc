@@ -62,6 +62,7 @@
         <file alias="images/smallMinus.svg">images/smallMinus.svg</file>
         <file alias="images/title.svg">images/title.svg</file>
         <file alias="images/title.png">images/title.png</file>
+        <file alias="images/circle.png">images/circle.png</file>
         <file alias="css/brewday.css">css/brewday.css</file>
         <file alias="css/inventory.css">css/inventory.css</file>
         <file alias="css/recipe.css">css/recipe.css</file>

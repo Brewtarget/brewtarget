@@ -933,6 +933,15 @@ NamedEntity * Database::removeNamedEntityFromRecipe( Recipe* rec, NamedEntity* i
    int ndx = meta->indexOfClassInfo("signal");
    QString propName;
 
+   // Oh wow. If we are doing versioning, removing a named entity really means
+   // "make a new copy with everything but this". I think I am about to run
+   // headlong into the Undo. I might address that by making the undo test its
+   // returns?
+   if ( wantsVersion(rec) ) {
+      spawnWithExclusion(rec,ing);
+      return ing;
+   }
+
    sqlDatabase().transaction();
    QSqlQuery q(sqlDatabase());
 
@@ -1923,6 +1932,56 @@ Recipe* Database::newRecipe(QString name)
    emit newRecipeSignal(tmp);
 
    return tmp;
+}
+
+void Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude)
+{
+   Recipe *tmp;
+   TableSchema *tbl = dbDefn->table(Brewtarget::RECTABLE);
+
+   sqlDatabase().transaction();
+
+   try {
+      tmp = copy<Recipe>(other, &allRecipes, true);
+
+      // the case will return nullptr if the NamedEntity cannot be cast. The
+      // addToRecipe will do the right thing and simply copy it all.
+      addToRecipe( tmp, other->fermentables(), qobject_cast<Fermentable*>(exclude), false);
+      addToRecipe( tmp, other->hops(),         qobject_cast<Hop*>(exclude),         false);
+      addToRecipe( tmp, other->miscs(),        qobject_cast<Misc*>(exclude),        false);
+      addToRecipe( tmp, other->yeasts(),       qobject_cast<Yeast*>(exclude),       false);
+
+      // copy style/mash/equipment
+      if ( qobject_cast<Equipment*>(exclude) != nullptr ) {
+         addToRecipe(tmp, other->equipment(), false, false);
+      }
+      if ( qobject_cast<Mash*>(exclude) != nullptr ) {
+         addToRecipe(tmp, other->mash(), false, false);
+      }
+      if ( qobject_cast<Style*>(exclude) != nullptr ) {
+         addToRecipe(tmp, other->style(), false, false);
+      }
+
+      // set display to false on the ancestor and link the two together
+      QSqlQuery q(sqlDatabase());
+      other->setDisplay(false);
+      // UPDATE recipe SET ancestor_id = [other.key] where id = [tmp.key]
+      QString setAncestor = QString("UPDATE %1 SET %2 = %3 WHERE %4 = %5")
+                               .arg(tbl->tableName())
+                               .arg(tbl->foreignKeyToColumn(PropertyNames::Recipe::ancestorId))
+                               .arg(other->key())
+                               .arg(tbl->keyName())
+                               .arg(tmp->key());
+      if ( ! q.exec(setAncestor) ) {
+         throw QString("Could not create ancestoral tree: %1 threw %2")
+                  .arg(q.lastQuery())
+                  .arg(q.lastError().text());
+      }
+   }
+   catch (QString e) {
+      qCritical() << Q_FUNC_INFO << e;
+      abort();
+   }
 }
 
 bool Database::wantsVersion(Recipe* rec)
@@ -3174,6 +3233,19 @@ QList<Fermentable*> Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms
    return rets;
 }
 
+void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, Fermentable* exclude, bool transact )
+{
+   if ( ferms.size() == 0 )
+      return;
+
+   int r_ndx = ferms.indexOf(exclude);
+
+   if ( r_ndx != -1 ) {
+      ferms.removeAt(r_ndx);
+   }
+   addToRecipe( rec, ferms, transact );
+}
+
 Hop * Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 {
    Recipe* spawn = breed(rec);
@@ -3229,6 +3301,19 @@ QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
    return rets;
 }
 
+void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, Hop* exclude, bool transact )
+{
+   if ( hops.size() == 0 )
+      return;
+
+   int r_ndx = hops.indexOf(exclude);
+
+   if ( r_ndx != -1 ) {
+      hops.removeAt(r_ndx);
+   }
+   addToRecipe( rec, hops, transact );
+}
+
 Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
    Mash* newMash = m;
@@ -3272,14 +3357,15 @@ Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 Misc * Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy, bool transact )
 {
 
+   Recipe* spawn = breed(rec);
    try {
-      Misc * newMisc = addNamedEntityToRecipe( rec, m, noCopy, &allMiscs, true, transact );
+      Misc * newMisc = addNamedEntityToRecipe( spawn, m, noCopy, &allMiscs, true, transact );
       if ( transact && ! noCopy )
-         rec->recalcAll();
+         spawn->recalcAll();
       return newMisc;
    }
    catch (QString e) {
-      throw;
+      abort();
    }
 }
 
@@ -3294,9 +3380,10 @@ QList<Misc*> Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transac
    if ( transact )
       sqlDatabase().transaction();
 
+   Recipe* spawn = breed(rec);
    try {
       foreach (Misc* misc, miscs ) {
-         rets.append( addNamedEntityToRecipe( rec, misc, false, &allMiscs,true,false ) );
+         rets.append( addNamedEntityToRecipe( spawn, misc, false, &allMiscs,true,false ) );
       }
    }
    catch (QString e) {
@@ -3304,34 +3391,48 @@ QList<Misc*> Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transac
       if ( transact ) {
          sqlDatabase().rollback();
       }
-      throw;
+      abort();
    }
    if ( transact ) {
       sqlDatabase().commit();
-      rec->recalcAll();
+      spawn->recalcAll();
    }
    return rets;
+}
+
+void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, Misc* exclude, bool transact )
+{
+   if ( miscs.size() == 0 )
+      return;
+
+   int r_ndx = miscs.indexOf(exclude);
+
+   if ( r_ndx != -1 ) {
+      miscs.removeAt(r_ndx);
+   }
+   addToRecipe( rec, miscs, transact );
 }
 
 Water * Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
 {
 
+   Recipe* spawn = breed(rec);
    try {
-      return addNamedEntityToRecipe( rec, w, noCopy, &allWaters,true,transact );
+      return addNamedEntityToRecipe( spawn, w, noCopy, &allWaters,true,transact );
    }
    catch (QString e) {
-      throw;
+      abort();
    }
 }
 
 Salt * Database::addToRecipe( Recipe* rec, Salt* s, bool noCopy, bool transact )
 {
-
+   Recipe* spawn = breed(rec);
    try {
-      return addNamedEntityToRecipe( rec, s, noCopy, &allSalts,true,transact );
+      return addNamedEntityToRecipe( spawn, s, noCopy, &allSalts,true,transact );
    }
    catch (QString e) {
-      throw;
+      abort();
    }
 }
 
@@ -3346,44 +3447,46 @@ Style * Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact
    if ( transact )
       sqlDatabase().transaction();
 
+   Recipe* spawn = breed(rec);
    try {
       if ( ! noCopy )
          newStyle = copy<Style>(s, &allStyles, false);
 
       sqlUpdate(Brewtarget::RECTABLE,
                 QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropStyleId)).arg(newStyle->key()),
-                QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
+                QString("%1=%2").arg(tbl->keyName()).arg(spawn->_key));
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact )
          sqlDatabase().rollback();
-      throw;
+      abort();
    }
 
    if ( transact ) {
       sqlDatabase().commit();
    }
    // Emit a changed signal.
-   rec->m_style_id = newStyle->key();
-   emit rec->changed( rec->metaProperty("style"), NamedEntity::qVariantFromPtr(newStyle) );
+   spawn->m_style_id = newStyle->key();
+   emit spawn->changed( spawn->metaProperty("style"), NamedEntity::qVariantFromPtr(newStyle) );
    return newStyle;
 }
 
 Yeast * Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
 {
+   Recipe* spawn = breed(rec);
    try {
-      Yeast* newYeast = addNamedEntityToRecipe<Yeast>( rec, y, noCopy, &allYeasts, true, transact );
-      connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
+      Yeast* newYeast = addNamedEntityToRecipe<Yeast>( spawn, y, noCopy, &allYeasts, true, transact );
+      connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), spawn, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
       if ( transact && ! noCopy )
       {
-         rec->recalcOgFg();
-         rec->recalcABV_pct();
+         spawn->recalcOgFg();
+         spawn->recalcABV_pct();
       }
       return newYeast;
    }
    catch (QString e) {
-      throw;
+      abort();
    }
 }
 
@@ -3397,11 +3500,12 @@ QList<Yeast*> Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool tran
    if ( transact )
       sqlDatabase().transaction();
 
+   Recipe* spawn = breed(rec);
    try {
       foreach (Yeast* yeast, yeasts )
       {
-         Yeast* newYeast = addNamedEntityToRecipe( rec, yeast, false, &allYeasts,true,false );
-         connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
+         Yeast* newYeast = addNamedEntityToRecipe( spawn, yeast, false, &allYeasts,true,false );
+         connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), spawn, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
          rets.append(newYeast);
       }
    }
@@ -3409,15 +3513,29 @@ QList<Yeast*> Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool tran
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
       if ( transact )
          sqlDatabase().rollback();
-      throw;
+      abort();
    }
 
    if ( transact ) {
       sqlDatabase().commit();
-      rec->recalcOgFg();
-      rec->recalcABV_pct();
+      spawn->recalcOgFg();
+      spawn->recalcABV_pct();
    }
+
    return rets;
+}
+
+void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, Yeast* exclude, bool transact )
+{
+   if ( yeasts.size() == 0 )
+      return;
+
+   int r_ndx = yeasts.indexOf(exclude);
+
+   if ( r_ndx != -1 ) {
+      yeasts.removeAt(r_ndx);
+   }
+   addToRecipe( rec, yeasts, transact );
 }
 
 

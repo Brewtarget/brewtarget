@@ -289,10 +289,16 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
    BtTreeItem* itm = item(index);
    if ( role == Qt::DecorationRole && index.column() == 0)
    {
-      if ( itm->type() == BtTreeItem::FOLDER )
+      if ( itm->type() == BtTreeItem::FOLDER ) {
          return QIcon(":images/folder.png");
-      else
-         return QVariant();
+      }
+      else if ( treeMask == RECIPEMASK ) {
+         Recipe *tmp = itm->recipe();
+         if ( tmp && tmp->hasAncestors() ) {
+            return QIcon(":images/circle.png");
+         }
+      }
+      return QVariant();
    }
 
    return itm->data(index.column());
@@ -1507,7 +1513,7 @@ Qt::DropActions BtTreeModel::supportedDropActions() const
 //
 void BtTreeModel::showVersions(QModelIndex ndx)
 {
-   QList<int> ancestors;
+   QList<Recipe*> ancestors;
    BtTreeItem* node;
 
    if ( ! ndx.isValid() ) {
@@ -1520,17 +1526,16 @@ void BtTreeModel::showVersions(QModelIndex ndx)
 
    // add the brewnotes for this version back
    addBrewNoteSubTree(descendant, ndx.row(), node->parent(), false);
-   foreach( int ancestor, ancestors ) {
+   foreach( Recipe* ancestor, ancestors ) {
       int j = node->childCount();
-      Recipe *anc = Database::instance().recipe(ancestor);
-      if ( anc == descendant ) {
+      if ( ancestor == descendant ) {
          continue;
       }
-      if ( ! insertRow(j, ndx, anc, BtTreeItem::RECIPE) ) {
+      if ( ! insertRow(j, ndx, ancestor, BtTreeItem::RECIPE) ) {
          qWarning() << "Could not add ancestoral brewnotes";
       }
 
-      addBrewNoteSubTree(anc,j,node,false);
+      addBrewNoteSubTree(ancestor,j,node,false);
    }
 }
 

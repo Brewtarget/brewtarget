@@ -302,13 +302,13 @@ void MainWindow::init() {
    // Breaks the naming convention, doesn't it?
    this->restoreSavedState();
 
-   // Connect slots to triggered() signals
+   // Connect menu item slots to triggered() signals
    this->setupTriggers();
-   // Connect slots to clicked() signals
+   // Connect pushbutton slots to clicked() signals
    this->setupClicks();
-   // connect slots to activate() signals
+   // connect combobox slots to activate() signals
    this->setupActivate();
-   // connect signal slots for the text editors
+   // connect signal slots for the line edits
    this->setupTextEdit();
    // connect the remaining labels
    this->setupLabels();
@@ -702,7 +702,7 @@ void MainWindow::restoreSavedState()
       mashStepTableWidget->horizontalHeader()->restoreState(Brewtarget::option("MainWindow/mashStepTableWidget_headerState").toByteArray());
 }
 
-// anything with a SIGNAL of triggered() should go in here.
+// menu items with a SIGNAL of triggered() should go in here.
 void MainWindow::setupTriggers()
 {
    // Connect actions defined in *.ui files to methods in code
@@ -795,7 +795,7 @@ void MainWindow::setupTriggers()
    });
 }
 
-// anything with a SIGNAL of clicked() should go in here.
+// pushbuttons with a SIGNAL of clicked() should go in here.
 void MainWindow::setupClicks()
 {
    connect( equipmentButton, &QAbstractButton::clicked, this, &MainWindow::showEquipmentEditor);
@@ -827,7 +827,7 @@ void MainWindow::setupClicks()
    return;
 }
 
-// anything with a SIGNAL of activated() should go in here.
+// comboBoxes with a SIGNAL of activated() should go in here.
 void MainWindow::setupActivate()
 {
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
@@ -835,7 +835,7 @@ void MainWindow::setupActivate()
    connect( mashComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeMash()) );
 }
 
-// anything with either an editingFinished() or a textModified() should go in
+// lineEdits with either an editingFinished() or a textModified() should go in
 // here
 void MainWindow::setupTextEdit()
 {

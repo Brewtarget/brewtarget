@@ -301,6 +301,11 @@ public:
    QList<Misc*> addToRecipe(Recipe* rec, QList<Misc*> miscs, bool transact = true);
    QList<Yeast*> addToRecipe(Recipe* rec, QList<Yeast*> yeasts, bool transact = true);
 
+   void addToRecipe(Recipe *rec, QList<Fermentable*> ferms, Fermentable* exclude = nullptr, bool transact = true );
+   void addToRecipe(Recipe *rec, QList<Hop*> hops, Hop* exclude = nullptr, bool transact = true );
+   void addToRecipe(Recipe *rec, QList<Misc*> miscs, Misc* exclude = nullptr, bool transact = true );
+   void addToRecipe(Recipe *rec, QList<Yeast*> yeasts, Yeast* exclude = nullptr, bool transact = true );
+
    /**
    * \brief  This function is intended to be called by an ingredient that has not already cached its parent's key
    * \return Key of parent ingredient if there is one, 0 otherwise
@@ -485,6 +490,7 @@ public:
    bool isConverted();
    bool wantsVersion(Recipe* rec);
    Recipe* breed(Recipe* parent);
+   void spawnWithExclusion(Recipe *other, NamedEntity* exclude);
 
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done.

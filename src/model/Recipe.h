@@ -254,6 +254,8 @@ public:
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ /*NOTIFY changed*/ STORED false )
    //! \brief The salts.
    Q_PROPERTY( QList<Salt*> salts READ salts /*WRITE*/ /*NOTIFY changed*/ STORED false )
+   //! \brief The ancestors.
+   Q_PROPERTY( QList<Recipe*> ancestors READ ancestors /*WRITE*/ /*NOTIFY changed*/ STORED false )
 
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
@@ -401,6 +403,8 @@ public:
    QList<Water*> waters() const;
    QList<Salt*>  salts() const;
    QList<BrewNote*> brewNotes(bool recurse = true) const;
+   // can't be a const, because it references self
+   QList<Recipe*> ancestors();
 
    Mash* mash() const;
    Equipment* equipment() const;
@@ -420,6 +424,7 @@ public:
    bool hasBoilFermentable();
    bool hasBoilExtract();
    static bool isFermentableSugar(Fermentable*);
+   bool hasAncestors();
    PreInstruction addExtracts(double timeRemaining) const;
 
    // Helpers
@@ -434,7 +439,6 @@ public:
    //! \brief Formats the salts for instructions
    QStringList getReagents( QList<Salt*> salts, Salt::WhenToAdd wanted);
    QHash<QString,double> calcTotalPoints();
-   QList<int> ancestors() const;
 
    static QString classNameStr();
 
@@ -553,6 +557,9 @@ private:
    bool m_uninitializedCalcs;
    QMutex m_uninitializedCalcsMutex;
    QMutex m_recalcMutex;
+
+   // version things
+   QList<Recipe*> m_ancestors;
 
    // Batch size without losses.
    double batchSizeNoLosses_l();

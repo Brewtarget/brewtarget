@@ -1519,7 +1519,21 @@ QList<Misc*> Recipe::miscs() const { return Database::instance().miscs(this); }
 QList<Yeast*> Recipe::yeasts() const { return Database::instance().yeasts(this); }
 QList<Water*> Recipe::waters() const { return Database::instance().waters(this); }
 QList<Salt*> Recipe::salts() const { return Database::instance().salts(this); }
-QList<int> Recipe::ancestors() const { return Database::instance().ancestoralIds(this); }
+QList<Recipe*> Recipe::ancestors()
+{
+   if ( m_ancestors.size() == 0 ) {
+      foreach( int ancestor, Database::instance().ancestoralIds(this) ) {
+         m_ancestors.append(Database::instance().recipe(ancestor));
+      }
+   }
+
+   return m_ancestors;
+}
+
+bool Recipe::hasAncestors()
+{
+   return ancestors().size() > 1;
+}
 
 //==============================Getters===================================
 Recipe::Type Recipe::recipeType() const {
