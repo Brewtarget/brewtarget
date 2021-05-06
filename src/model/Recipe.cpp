@@ -908,6 +908,15 @@ template<class T> T * Recipe::add(T * var) {
    // Parameter has no parent, so add a copy of it
    return Database::instance().addToRecipe(this, var, false);
 }
+
+template<class T> QList<T *> Recipe::add(QList<T *> many) {
+
+   QList<T*> added;
+
+   added = Database::instance().addToRecipe(this, many, true);
+   return added;
+}
+
 template Hop *         Recipe::add(Hop *         var);
 template Fermentable * Recipe::add(Fermentable * var);
 template Misc *        Recipe::add(Misc *        var);
@@ -915,6 +924,11 @@ template Yeast *       Recipe::add(Yeast *       var);
 template Water *       Recipe::add(Water *       var);
 template Salt *        Recipe::add(Salt *        var);
 
+// only these objects need the list version
+template QList<Hop *        > Recipe::add(QList<Hop *        > many);
+template QList<Fermentable *> Recipe::add(QList<Fermentable *> many);
+template QList<Misc *       > Recipe::add(QList<Misc *       > many);
+template QList<Yeast *      > Recipe::add(QList<Yeast *      > many);
 
 void Recipe::setStyle(Style * var)
 {
@@ -1552,6 +1566,24 @@ NamedEntity * Recipe::removeNamedEntity( NamedEntity *var )
    } else {
       return Database::instance().removeNamedEntityFromRecipe( this, var );
    }
+}
+
+QList<NamedEntity *> Recipe::removeNamedEntity( QList<NamedEntity *> many )
+{
+
+   QList<NamedEntity*> removed;
+
+   foreach( NamedEntity* victim, many ) {
+      // brewnotes a bit odd
+      if ( dynamic_cast<BrewNote*>(victim) ) {
+         // the cast is required to force the template to gets it thing right
+         Database::instance().remove(qobject_cast<BrewNote*>(victim));
+         removed.append(victim);
+      } else {
+         removed.append( Database::instance().removeNamedEntityFromRecipe( this, victim ) );
+      }
+   }
+   return removed;
 }
 
 double Recipe::batchSizeNoLosses_l()

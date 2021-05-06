@@ -277,6 +277,22 @@ public:
       return static_cast<T *>(this->removeNamedEntity(var));
    }
 
+   template<class T> QList<T *> remove(QList<T *> many) {
+
+      QList<NamedEntity*> into;
+      QList<T*> outof;
+
+      foreach(auto i, many) {
+         into.append( static_cast<NamedEntity*>(i));
+      }
+
+      foreach(auto i, this->removeNamedEntity(into)) {
+         outof.append( static_cast<T*>(i) );
+      }
+
+      return outof;
+   }
+
    /*!
     * \brief Add a copy of \c var from the recipe and return the copy
     *
@@ -301,6 +317,7 @@ public:
     *      just one copy of them in the DB and in memory.
     */
    template<class T> T * add(T * var);
+   template<class T> QList<T *> add(QList<T *> many);
 
    void removeBrewNote(BrewNote* var);
    void removeInstruction( Instruction* ins );
@@ -543,6 +560,7 @@ private:
     * \brief Remove \c var from the recipe and return what was removed - ie \c var
     */
    NamedEntity * removeNamedEntity( NamedEntity *var);
+   QList<NamedEntity *> removeNamedEntity( QList<NamedEntity *> many);
 
    /* Recalculates all the calculated properties.
     *

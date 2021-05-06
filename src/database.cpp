@@ -975,15 +975,20 @@ NamedEntity * Database::removeNamedEntityFromRecipe( Recipe* rec, NamedEntity* i
                                     .arg(ing->_key);
          qDebug() << QString("Delete From Children SQL: %1").arg(deleteFromChildren);
          if ( ! q.exec( deleteFromChildren ) ) {
+            qInfo() << Q_FUNC_INFO << q.lastQuery() << q.lastError().text();
             throw QString("failed to delete children.");
          }
       }
 
-      if ( ! q.exec(deleteFromInRecipe) )
+      if ( ! q.exec(deleteFromInRecipe) ) {
+         qInfo() << Q_FUNC_INFO << q.lastQuery() << q.lastError().text();
          throw QString("failed to delete in_recipe.");
+      }
 
-      if ( ! q.exec( deleteNamedEntity ) )
+      if ( ! q.exec( deleteNamedEntity ) ) {
+         qInfo() << Q_FUNC_INFO << q.lastQuery() << q.lastError().text();
          throw QString("failed to delete ingredient.");
+      }
 
    }
    catch ( QString e ) {
@@ -3021,10 +3026,12 @@ Fermentable * Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy
    }
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact )
+QList<Fermentable*> Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact )
 {
+   QList<Fermentable*> rets;
+
    if ( ferms.size() == 0 )
-      return;
+      return rets;
 
    if ( transact ) {
       sqlDatabase().transaction();
@@ -3035,6 +3042,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
       {
          Fermentable* newFerm = addNamedEntityToRecipe<Fermentable>(rec,ferm,false,&allFermentables,true,false);
          connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+         rets.append(newFerm);
       }
    }
    catch ( QString e  ) {
@@ -3048,6 +3056,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, bool transact
       sqlDatabase().commit();
       rec->recalcAll();
    }
+   return rets;
 }
 
 Hop * Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
@@ -3066,10 +3075,12 @@ Hop * Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
    }
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
+QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
 {
+   QList<Hop*> rets;
+
    if ( hops.size() == 0 )
-      return;
+      return rets;
 
    if ( transact ) {
       sqlDatabase().transaction();
@@ -3079,6 +3090,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
       foreach (Hop* hop, hops ) {
          Hop* newHop = addNamedEntityToRecipe<Hop>( rec, hop, false, &allHops, true, false );
          connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+         rets.append(newHop);
       }
    }
    catch (QString e) {
@@ -3093,6 +3105,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
       sqlDatabase().commit();
       rec->recalcIBU();
    }
+   return rets;
 }
 
 Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
@@ -3149,17 +3162,20 @@ Misc * Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy, bool transact )
    }
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
+QList<Misc*> Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
 {
+
+   QList<Misc*> rets;
+
    if ( miscs.size() == 0 )
-      return;
+      return rets;
 
    if ( transact )
       sqlDatabase().transaction();
 
    try {
       foreach (Misc* misc, miscs ) {
-         addNamedEntityToRecipe( rec, misc, false, &allMiscs,true,false );
+         rets.append( addNamedEntityToRecipe( rec, misc, false, &allMiscs,true,false ) );
       }
    }
    catch (QString e) {
@@ -3173,6 +3189,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transact )
       sqlDatabase().commit();
       rec->recalcAll();
    }
+   return rets;
 }
 
 Water * Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
@@ -3249,10 +3266,12 @@ Yeast * Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact
    }
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
+QList<Yeast*> Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
 {
+   QList<Yeast*> rets;
+
    if ( yeasts.size() == 0 )
-      return;
+      return rets;
 
    if ( transact )
       sqlDatabase().transaction();
@@ -3262,6 +3281,7 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
       {
          Yeast* newYeast = addNamedEntityToRecipe( rec, yeast, false, &allYeasts,true,false );
          connect( newYeast, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptYeastChange(QMetaProperty,QVariant)));
+         rets.append(newYeast);
       }
    }
    catch (QString e) {
@@ -3276,6 +3296,7 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool transact )
       rec->recalcOgFg();
       rec->recalcABV_pct();
    }
+   return rets;
 }
 
 
