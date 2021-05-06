@@ -2208,15 +2208,64 @@ Yeast* Database::newYeast(Yeast* other, bool add_inventory)
 // newWhatever handles the allWhatever hash, so I can copy the ingredient and
 // insert into the hash in a single step. I don't think these can be templated
 // because we change the names
-Equipment*   Database::clone( Equipment* donor )   { return newEquipment(donor); }
-Fermentable* Database::clone( Fermentable* donor ) { return newFermentable(donor); }
-Hop*         Database::clone( Hop* donor )         { return newHop(donor); }
-Mash*        Database::clone( Mash* donor )        { return newMash(donor); }
-Misc*        Database::clone( Misc* donor )        { return newMisc(donor); }
-Salt*        Database::clone( Salt* donor )        { return newSalt(donor); }
-Style*       Database::clone( Style* donor )       { return newStyle(donor); }
-Water*       Database::clone( Water* donor )       { return newWater(donor); }
-Yeast*       Database::clone( Yeast* donor )       { return newYeast(donor); }
+NamedEntity* Database::clone( NamedEntity* donor, Recipe* rec )
+{
+   if ( qobject_cast<Equipment*>(donor) != nullptr ) {
+      Equipment* tmp = newEquipment(qobject_cast<Equipment*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<Fermentable*>(donor) != nullptr ) {
+      Fermentable* tmp = newFermentable(qobject_cast<Fermentable*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<Hop*>(donor) != nullptr ) {
+      Hop* tmp = newHop(qobject_cast<Hop*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<Mash*>(donor) != nullptr ) {
+      Equipment* tmp = newEquipment(qobject_cast<Equipment*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<Misc*>(donor) != nullptr ) {
+      Misc* tmp = newMisc(qobject_cast<Misc*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<Salt*>(donor) != nullptr ) {
+      Salt* tmp = newSalt(qobject_cast<Salt*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<Style*>(donor) != nullptr ) {
+      Style* tmp = newStyle(qobject_cast<Style*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<Water*>(donor) != nullptr ) {
+      Water* tmp = newWater(qobject_cast<Water*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<Yeast*>(donor) != nullptr ) {
+      Yeast* tmp = newYeast(qobject_cast<Yeast*>(donor));
+      addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   return nullptr;
+}
 
 int Database::insertElement(NamedEntity * ins)
 {
@@ -2861,6 +2910,36 @@ void Database::setInventory(NamedEntity* ins, QVariant value, int invKey, bool n
       emit ins->changed(ins->metaObject()->property(ndx),value);
       emit changedInventory(tbl->dbTable(),invKey, value);
    }
+}
+
+// Versioning when modifying something in a recipe is *hard*. If we copy the
+// recipe, there is no easy way to say "this ingredient in the old recipe is
+// that ingredient in the new". The best I can think of is to use the delete
+// idea -- copy everything but what's being modified, clone what's being
+// modified and add the clone to the copy.  This is named to echo
+// updateEntry()
+void Database::modifyEntry(NamedEntity* object, QString propName, QVariant value, bool notify )
+{
+   // Yog-Sothoth is the gate. Yog-Sothoth is the key and guardian of the
+   // gate. Past, present, future, all are one in Yog-Sothoth
+   Recipe *owner, *spawn;
+   NamedEntity* neClone;
+
+   owner = getParentRecipe(object);
+
+   // if the ingredient is in a recipe and that recipe needs a version
+   if ( owner && wantsVersion(owner) ) {
+      // create the copy of the recipe, excluding the thing
+      spawn = spawnWithExclusion(owner, object, false);
+      // Copy the ingredient we want to change. This is the magix
+      neClone = clone(object,spawn);
+   }
+   else {
+      // we don't want a version, or the ingredient isn't in a recipe
+      neClone = object;
+   }
+
+   updateEntry( neClone, propName, value, notify );
 }
 
 void Database::updateEntry( NamedEntity* object, QString propName, QVariant value, bool notify, bool transact )

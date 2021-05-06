@@ -348,7 +348,12 @@ QString NamedEntity::text(QDate const& val)
 
 void NamedEntity::setEasy(QString prop_name, QVariant value, bool notify)
 {
-   Database::instance().updateEntry(this,prop_name,value,notify);
+   if ( this->metaObject()->className() == QStringLiteral("Recipe") ) {
+      Database::instance().updateEntry(this,prop_name,value,notify);
+   }
+   else {
+      Database::instance().modifyEntry(this, prop_name, value);
+   }
 }
 
 
