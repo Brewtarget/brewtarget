@@ -3846,13 +3846,12 @@ QList<Misc*> Database::miscs()
 QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
-   QString query = QString("%1=%2 and %3=%4")
+   QString query = QString("%1=%2")
            .arg(dbDefn->table(Brewtarget::RECTABLE)->propertyToColumn(PropertyNames::NamedEntity::deleted))
-           .arg(Brewtarget::dbFalse())
-           .arg(dbDefn->table(Brewtarget::RECTABLE)->propertyToColumn(PropertyNames::NamedEntity::display))
-           .arg(Brewtarget::dbTrue());
+           .arg(Brewtarget::dbFalse());
 
-   // This is gonna kill me.
+   // Filters will handle the display flag upstream from here. I can't believe
+   // I ever made this work
    getElements( tmp, query, Brewtarget::RECTABLE, allRecipes );
    return tmp;
 }

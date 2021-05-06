@@ -52,12 +52,6 @@ class BtTreeFilterProxyModel : public QSortFilterProxyModel
 public:
    BtTreeFilterProxyModel(QObject *parent, BtTreeModel::TypeMasks mask);
 
-   void addAncestor(Recipe* ancestor);
-   void addAncestors(QList<Recipe*> ancestor);
-
-   void removeAncestor(Recipe* ancestor);
-   void removeAncestors(QList<Recipe*> ancestor);
-
 protected:
    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
    bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;

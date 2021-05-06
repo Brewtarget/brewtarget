@@ -389,9 +389,7 @@ void BtTreeView::showVersions()
       // I hear a noise at the door, as of some immense slippery body
       // lumbering against it
       foreach( QModelIndex selected,selectionModel()->selectedRows() ) {
-         Recipe* thisOne = recipe(selected);
          // make sure we add the ancestors to the exclusion list
-         _filter->addAncestors( thisOne->ancestors() );
          _model->showVersions(_filter->mapToSource(selected));
       }
    }

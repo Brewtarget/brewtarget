@@ -61,7 +61,8 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
 
 bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelIndex &left, const QModelIndex &right) const
 {
-   // This is a little awkward.
+   // We don't want to sort brewnotes with the recipes, so only do this if
+   // both sides are brewnotes
    if ( model->type(left) == BtTreeItem::BREWNOTE ||
         model->type(right) == BtTreeItem::BREWNOTE ) {
       BrewNote *leftBn = model->brewNote(left);
@@ -70,7 +71,7 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
       return leftBn->brewDate() < rightBn->brewDate();
    }
 
-   // As the models get more complex, so does the sort algorithm
+   // Try to sort folders first.
    if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::RECIPE)
    {
       BtFolder* leftFolder = model->folder(left);
@@ -96,8 +97,8 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
    Recipe* rightRecipe = model->recipe(right);
 
    // Yog-Sothoth knows the gate
-   if ( ancestor_override.contains( leftRecipe ) &&
-        ancestor_override.contains( rightRecipe )) {
+   // This reads soo much better
+   if ( model->showChild(left) && model->showChild(right) ) {
       return leftRecipe->key() > rightRecipe->key();
    }
 
@@ -430,26 +431,16 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
    NamedEntity* thing = model->thing(child);
 
    if ( treeMask == BtTreeModel::RECIPEMASK && thing ) {
-      if ( ancestor_override.size() > 0 ) {
-         Recipe* bar = model->recipe(child);
-         if ( bar != nullptr && ancestor_override.contains(bar) ) {
-            return true;
-         }
-      }
+      // this looks weird, but it says the right thing. showChild over rides
+      // display
+      return model->showChild(child) || thing->display();
    }
 
-   return thing->display();
-
-}
-
-void BtTreeFilterProxyModel::addAncestor(Recipe* ancestor) { ancestor_override.append(ancestor); }
-void BtTreeFilterProxyModel::addAncestors(QList<Recipe*> ancestors) { ancestor_override.append(ancestors); }
-
-void BtTreeFilterProxyModel::removeAncestor(Recipe* ancestor) { ancestor_override.removeOne(ancestor); }
-void BtTreeFilterProxyModel::removeAncestors(QList<Recipe*> ancestors)
-{
-   foreach( Recipe* i, ancestors ) {
-      ancestor_override.removeOne(i);
+   if ( thing ) {
+      return thing->display();
    }
+
+   return false;
+
 }
 

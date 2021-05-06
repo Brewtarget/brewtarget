@@ -51,7 +51,7 @@ bool operator==(BtTreeItem& lhs, BtTreeItem& rhs)
 }
 
 BtTreeItem::BtTreeItem(int _type, BtTreeItem *parent)
-   : parentItem(parent), _thing(nullptr)
+   : parentItem(parent), _thing(nullptr), m_showMe(false)
 {
    setType(_type);
 }
@@ -527,3 +527,7 @@ QString BtTreeItem::name()
    tmp = qobject_cast<NamedEntity*>(_thing);
    return tmp->name();
 }
+
+bool BtTreeItem::showMe() const { return m_showMe; }
+void BtTreeItem::setShowMe(bool val) { m_showMe = val; }
+

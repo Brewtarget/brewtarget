@@ -194,6 +194,8 @@ public:
 
    //! \b show the versions of the recipe at index
    void showVersions(QModelIndex ndx);
+   //! \b show the child of the recipe at index
+   bool showChild(QModelIndex ndx) const;
 
 private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
@@ -273,6 +275,8 @@ private:
 
    //! \brief convenience function to add brewnotes to a recipe as a subtree
    void addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent, bool recurse = true);
+   //! \b flip the switch to show descendants
+   void setShowChild(QModelIndex child, bool val);
 
    BtTreeItem* rootItem;
    BtTreeView *parentTree;

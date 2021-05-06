@@ -291,8 +291,8 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
       case Qt::ToolTipRole:
          return toolTipData(index);
       case Qt::DisplayRole:
-         if ( tmp != nullptr && tmp->hasAncestors() ) {
-            return QString("%1 [ver%2]")
+         if ( tmp != nullptr && ( tmp->hasAncestors() && itm->showMe())) {
+            return QString("%1 [v%2]")
                       .arg(itm->data(index.column()).toString())
                       .arg(tmp->ancestors().size());
          }
@@ -303,7 +303,7 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
          }
          break;
       case Qt::FontRole:
-         if ( tmp != nullptr && tmp->hasAncestors() ) {
+         if ( tmp != nullptr && tmp->hasAncestors() && itm->showMe()) {
             font.setBold(true);
          }
          return font;
@@ -1421,7 +1421,6 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
 
    QDataStream stream( &encodedData, QIODevice::ReadOnly);
    int oType, id;
-   QList<int> droppedIds;
    QString target = "";
    QString name = "";
 
@@ -1481,6 +1480,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
             return false;
       }
 
+      // this is the work.
       if ( oType != BtTreeItem::FOLDER )
          elem->setFolder(target);
       else
@@ -1514,21 +1514,33 @@ Qt::DropActions BtTreeModel::supportedDropActions() const
 // ===================== RECIPE VERSION STUFF ==============================
 // =========================================================================
 //
+bool BtTreeModel::showChild(QModelIndex child) const
+{
+   BtTreeItem* node = item(child);
+   return node->showMe();
+}
+
+void BtTreeModel::setShowChild( QModelIndex child, bool val )
+{
+   BtTreeItem* node = item(child);
+   return node->setShowMe(val);
+}
+
 void BtTreeModel::showVersions(QModelIndex ndx)
 {
-   QList<Recipe*> ancestors;
-   BtTreeItem* node;
 
    if ( ! ndx.isValid() ) {
       return;
    }
 
-   node = item(ndx);
+   BtTreeItem* node = item(ndx);
    Recipe *descendant = recipe(ndx);
-   ancestors = descendant->ancestors();
+   QList<Recipe*> ancestors = descendant->ancestors();
 
+   removeRows(0,node->childCount(),ndx);
    // add the brewnotes for this version back
    addBrewNoteSubTree(descendant, ndx.row(), node->parent(), false);
+
    foreach( Recipe* ancestor, ancestors ) {
       int j = node->childCount();
       if ( ancestor == descendant ) {
@@ -1537,7 +1549,12 @@ void BtTreeModel::showVersions(QModelIndex ndx)
       if ( ! insertRow(j, ndx, ancestor, BtTreeItem::RECIPE) ) {
          qWarning() << "Could not add ancestoral brewnotes";
       }
+      QModelIndex cIndex = findElement(ancestor,node);
+      setShowChild(cIndex,true);
+      // ew, but apparently this has to happen here.
+      emit dataChanged(cIndex,cIndex);
 
+      // add the brewnotes to the ancestors, but make sure we don't recurse
       addBrewNoteSubTree(ancestor,j,node,false);
    }
 }
