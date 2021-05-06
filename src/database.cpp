@@ -2205,21 +2205,18 @@ Yeast* Database::newYeast(Yeast* other, bool add_inventory)
    return tmp;
 }
 
-// I don't like this, but I've written worse. I need these so the templates
-// can do this w/o me having to pass the key hash in
-void Database::addToHash( BrewNote* whatever ) { allBrewNotes.insert(whatever->key(), whatever); }
-void Database::addToHash( Equipment* whatever ) { allEquipments.insert(whatever->key(), whatever); }
-void Database::addToHash( Fermentable* whatever ) { allFermentables.insert(whatever->key(), whatever); }
-void Database::addToHash( Hop* whatever ) { allHops.insert(whatever->key(), whatever); }
-void Database::addToHash( Instruction* whatever ) { allInstructions.insert(whatever->key(), whatever); }
-void Database::addToHash( Mash* whatever ) { allMashs.insert(whatever->key(), whatever); }
-void Database::addToHash( MashStep* whatever ) { allMashSteps.insert(whatever->key(), whatever); }
-void Database::addToHash( Misc* whatever ) { allMiscs.insert(whatever->key(), whatever); }
-void Database::addToHash( Recipe* whatever ) { allRecipes.insert(whatever->key(), whatever); }
-void Database::addToHash( Salt* whatever ) { allSalts.insert(whatever->key(), whatever); }
-void Database::addToHash( Style* whatever ) { allStyles.insert(whatever->key(), whatever); }
-void Database::addToHash( Water* whatever ) { allWaters.insert(whatever->key(), whatever); }
-void Database::addToHash( Yeast* whatever ) { allYeasts.insert(whatever->key(), whatever); }
+// newWhatever handles the allWhatever hash, so I can copy the ingredient and
+// insert into the hash in a single step. I don't think these can be templated
+// because we change the names
+Equipment*   Database::clone( Equipment* donor )   { return newEquipment(donor); }
+Fermentable* Database::clone( Fermentable* donor ) { return newFermentable(donor); }
+Hop*         Database::clone( Hop* donor )         { return newHop(donor); }
+Mash*        Database::clone( Mash* donor )        { return newMash(donor); }
+Misc*        Database::clone( Misc* donor )        { return newMisc(donor); }
+Salt*        Database::clone( Salt* donor )        { return newSalt(donor); }
+Style*       Database::clone( Style* donor )       { return newStyle(donor); }
+Water*       Database::clone( Water* donor )       { return newWater(donor); }
+Yeast*       Database::clone( Yeast* donor )       { return newYeast(donor); }
 
 int Database::insertElement(NamedEntity * ins)
 {

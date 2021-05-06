@@ -197,7 +197,7 @@ public:
       // Yog-Sothoth is the gate. Yog-Sothoth is the key and guardian of the
       // gate. Past, present, future, all are one in Yog-Sothoth
       Recipe *owner, *spawn;
-      T* neSpawn;
+      T* neClone;
 
       // The copy methods expect the proper all[Whatever] hash. I cannot
       // determine in a template if I should use allRecipes, allHops, etc.
@@ -213,22 +213,16 @@ public:
          // create the copy of the recipe, excluding the thing
          spawn = spawnWithExclusion(owner, ing, false);
          // Copy the ingredient we want to change. This is the magix
-         neSpawn = addNamedEntityToRecipe(spawn, ing, false, &nowhere);
-         // This. Is. Evil. And, like so much evil, it has to happen early
-         addToHash(neSpawn);
+         neClone = clone(ing);
+         addToRecipe(spawn, neClone, true);
 
-         // Now for all the signals
-         emit newSignal(neSpawn);
-         emit changed( metaProperty("recipes"), QVariant());
-         emit newSignal(spawn);
-         emit spawned(owner,spawn);
       }
       else {
          // we don't want a version, or the ingredient isn't in a recipe
-         neSpawn = ing;
+         neClone = ing;
       }
 
-      updateEntry( neSpawn, property, value, notify );
+      updateEntry( neClone, property, value, notify );
    }
 
 
@@ -539,19 +533,17 @@ public:
    Recipe* breed(Recipe* parent);
    Recipe* spawnWithExclusion(Recipe *other, NamedEntity* exclude, bool notify = true);
 
-   void addToHash( BrewNote* whatever );
-   void addToHash( Equipment* whatever );
-   void addToHash( Fermentable* whatever );
-   void addToHash( Hop* whatever );
-   void addToHash( Instruction* whatever );
-   void addToHash( Mash* whatever );
-   void addToHash( MashStep* whatever );
-   void addToHash( Misc* whatever );
-   void addToHash( Recipe* whatever );
-   void addToHash( Salt* whatever );
-   void addToHash( Style* whatever );
-   void addToHash( Water* whatever );
-   void addToHash( Yeast* whatever );
+   Equipment* clone( Equipment* donor );
+   Fermentable* clone( Fermentable* donor );
+   Hop* clone( Hop* donor );
+   // void clone( Instruction* whatever );
+   Mash* clone( Mash* donor );
+   // void clone( MashStep* whatever );
+   Misc* clone( Misc* donor );
+   Salt* clone( Salt* donor );
+   Style* clone( Style* donor );
+   Water* clone( Water* donor );
+   Yeast* clone( Yeast* donor );
 
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done.
