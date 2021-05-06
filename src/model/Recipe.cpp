@@ -890,7 +890,6 @@ template<class T> T * Recipe::add(T * var) {
    // to make a copy.  We'll then get back a pointer to the copy.  If it does have a parent then we need to check
    // whether it's already in used in another recipe.  If not, wee can just add it directly, and we'll get back the
    // same pointer we passed in.  Otherwise we get its parent and make another copy of that.
-   qInfo() << Q_FUNC_INFO << var->name();
    T * parentOfVar = static_cast<T *>(var->getParent());
    if (parentOfVar != nullptr) {
       // Parameter has a parent.  See if it (the parameter, not its parent!) is used in a recipe.
@@ -1559,7 +1558,6 @@ NamedEntity * Recipe::removeNamedEntity( NamedEntity *var )
 {
 //   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
-   qInfo() << Q_FUNC_INFO;
    // brewnotes a bit odd
    if ( dynamic_cast<BrewNote*>(var) ) {
       // the cast is required to force the template to gets it thing right
@@ -1575,7 +1573,6 @@ QList<NamedEntity *> Recipe::removeNamedEntity( QList<NamedEntity *> many )
 
    QList<NamedEntity*> removed;
 
-   qInfo() << Q_FUNC_INFO;
    foreach( NamedEntity* victim, many ) {
       // brewnotes a bit odd
       if ( dynamic_cast<BrewNote*>(victim) ) {
