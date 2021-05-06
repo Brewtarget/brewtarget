@@ -214,10 +214,8 @@ private:
       //
       QList<VV*> results;
 
-      qInfo() << Q_FUNC_INFO;
       if (!isUndo) {
-         // qDebug() << QString("%1: %2 \"%3\" for #%4")
-         qInfo() << QString("%1: %2 \"%3\" for #%4")
+         qDebug() << QString("%1: %2 \"%3\" for #%4")
                         .arg(Q_FUNC_INFO)
                         .arg(this->everDone ? "Redo" : "Do" )
                         .arg(this->text())
@@ -226,8 +224,7 @@ private:
          // results.append((this->updatee.*(this->list_doer))(list_whatToAddOrRemove));
          this->list_whatToAddOrRemove = (this->updatee.*(this->list_doer))(list_whatToAddOrRemove);
 
-         // qDebug() << QString("%1: %2 Returned #%3")
-         qInfo() << QString("%1: %2 Returned #%3")
+         qDebug() << QString("%1: %2 Returned #%3")
                         .arg(Q_FUNC_INFO)
                         .arg(this->everDone ? "Redo" : "Do" )
                         .arg(this->list_whatToAddOrRemove.size());
@@ -241,8 +238,7 @@ private:
          // be able to distinguish the two cases.
          this->everDone = true;
       } else {
-         // qDebug() << QString("%1: Undo \"%2\" for #%3")
-         qInfo() << QString("%1: Undo \"%2\" for #%3")
+         qDebug() << QString("%1: Undo \"%2\" for #%3")
             .arg(Q_FUNC_INFO)
             .arg(this->text())
             .arg(this->list_whatToAddOrRemove.size());
@@ -250,8 +246,7 @@ private:
          // results.append((this->updatee.*(this->list_undoer))(list_whatToAddOrRemove));
          this->list_whatToAddOrRemove = (this->updatee.*(this->list_undoer))(list_whatToAddOrRemove);
 
-         // qDebug() << QString("%1: Undo Returned #%2")
-         qInfo() << QString("%1: Undo Returned #%2")
+         qDebug() << QString("%1: Undo Returned #%2")
                         .arg(Q_FUNC_INFO)
                         .arg(this->list_whatToAddOrRemove.size());
 
