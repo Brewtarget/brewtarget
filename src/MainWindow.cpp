@@ -1435,7 +1435,13 @@ void MainWindow::droppedRecipeFermentable(QList<Fermentable*>ferms)
 
    if ( tabWidget_ingredients->currentWidget() != fermentableTab )
       tabWidget_ingredients->setCurrentWidget(fermentableTab);
-   Database::instance().addToRecipe(recipeObs, ferms);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Fermentable>,
+                             ferms,
+                             &Recipe::remove<Fermentable>,
+                             tr("Drop fermentables on a recipe"))
+   );
 }
 
 void MainWindow::droppedRecipeHop(QList<Hop*>hops)
@@ -1445,7 +1451,13 @@ void MainWindow::droppedRecipeHop(QList<Hop*>hops)
 
    if ( tabWidget_ingredients->currentWidget() != hopsTab )
       tabWidget_ingredients->setCurrentWidget(hopsTab);
-   Database::instance().addToRecipe(recipeObs, hops);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Hop>,
+                             hops,
+                             &Recipe::remove<Hop>,
+                             tr("Drop hops on a recipe"))
+   );
 }
 
 void MainWindow::droppedRecipeMisc(QList<Misc*>miscs)
@@ -1455,7 +1467,13 @@ void MainWindow::droppedRecipeMisc(QList<Misc*>miscs)
 
    if ( tabWidget_ingredients->currentWidget() != miscTab )
       tabWidget_ingredients->setCurrentWidget(miscTab);
-   Database::instance().addToRecipe(recipeObs, miscs);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Misc>,
+                             miscs,
+                             &Recipe::remove<Misc>,
+                             tr("Drop misc on a recipe"))
+   );
 }
 
 void MainWindow::droppedRecipeYeast(QList<Yeast*>yeasts)
@@ -1465,7 +1483,13 @@ void MainWindow::droppedRecipeYeast(QList<Yeast*>yeasts)
 
    if ( tabWidget_ingredients->currentWidget() != yeastTab )
       tabWidget_ingredients->setCurrentWidget(yeastTab);
-   Database::instance().addToRecipe(recipeObs, yeasts);
+   this->doOrRedoUpdate(
+      newUndoableAddOrRemove(*this->recipeObs,
+                             &Recipe::add<Yeast>,
+                             yeasts,
+                             &Recipe::remove<Yeast>,
+                             tr("Drop yeast on a recipe"))
+   );
 }
 
 void MainWindow::updateRecipeBatchSize()
