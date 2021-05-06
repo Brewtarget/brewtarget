@@ -343,6 +343,11 @@ public:
     */
    QString nextAddToBoil(double& time);
 
+   //! \brief convenience method to set ancestors
+   void setAncestor(Recipe* ancestor);
+   //! \brief run the queries to load your ancestors
+   void loadAncestors();
+
    // Getters
    Type recipeType() const;
    QString type() const;

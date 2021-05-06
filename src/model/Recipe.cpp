@@ -1530,9 +1530,32 @@ QList<Recipe*> Recipe::ancestors()
    return m_ancestors;
 }
 
+// this looks like ancestors(), but this over writes m_ancestors, not append.
+// I may collapse these later.
+void Recipe::loadAncestors()
+{
+   QList<Recipe*> tmp;
+   foreach( int ancestor, Database::instance().ancestoralIds(this) ) {
+      tmp.append(Database::instance().recipe(ancestor));
+   }
+   m_ancestors = tmp;
+}
+
 bool Recipe::hasAncestors()
 {
    return ancestors().size() > 1;
+}
+
+void Recipe::setAncestor( Recipe* ancestor )
+{
+   if ( ancestor == nullptr ) {
+      return;
+   }
+
+   // Marking an ancestor does two thigns -- it sets the ancestor's display to
+   // false, and the set the ancestor_id
+   Database::instance().setAncestor(this,ancestor);
+   loadAncestors();
 }
 
 //==============================Getters===================================

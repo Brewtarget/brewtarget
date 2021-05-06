@@ -491,6 +491,8 @@ public:
 
    bool isConverted();
    bool wantsVersion(Recipe* rec);
+   void setAncestor(Recipe* descendant, Recipe* ancestor, bool transact = true);
+
    Recipe* breed(Recipe* parent);
    Recipe* spawnWithExclusion(Recipe *other, NamedEntity* exclude, bool notify = true);
 

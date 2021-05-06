@@ -2019,10 +2019,44 @@ bool Database::wantsVersion(Recipe* rec)
    return ret;
 }
 
+// nice way to handle defining an ancestor
+void Database::setAncestor(Recipe* descendant, Recipe* ancestor, bool transact)
+{
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
+
+   if ( transact ) {
+      sqlDatabase().transaction();
+   }
+
+   try {
+      QSqlQuery q(sqlDatabase());
+      ancestor->setDisplay(false);
+
+      // update recipe set ancestor_id = [ancestor->key] where id = [descendant->key]
+      QString setAnc = QString("UPDATE %1 SET %2 = %3 where %4 = %5")
+                          .arg(tbl->tableName())
+                          .arg(tbl->foreignKeyToColumn(kpropAncestorId))
+                          .arg(ancestor->key())
+                          .arg(tbl->keyName())
+                          .arg(descendant->key());
+      if ( ! q.exec( setAnc ) ) {
+         throw QString("Could not define ancestor. %1 : %2")
+                  .arg(q.lastQuery())
+                  .arg(q.lastError().text());
+      }
+      q.finish();
+   }
+   catch( QString e ) {
+      if ( transact ) 
+         sqlDatabase().rollback();
+      qCritical() << Q_FUNC_INFO << e;
+      abort();
+   }
+}
+
 Recipe* Database::newRecipe(Recipe* other, bool ancestor)
 {
    Recipe* tmp;
-   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    sqlDatabase().transaction();
    try {
@@ -2043,18 +2077,9 @@ Recipe* Database::newRecipe(Recipe* other, bool ancestor)
       addToRecipe( tmp, other->style(), false, false);
 
       // if other is an ancestor, we need to set display false on other and
-      // link the two. This may need some rethinking -- dropping SQL in here
-      // just looks ugly
+      // link the two. 
       if ( ancestor ) {
-         QSqlQuery q(sqlDatabase());
-         other->setDisplay(false);
-         // update recipe set ancestor_id = [other->key] where id = [new key]
-         QString setAncestor = QString("update %1 set %2 = %3 where %4 = %5")
-                                 .arg( tbl->tableName() )
-                                 .arg( tbl->foreignKeyToColumn(PropertyNames::Recipe::ancestorId) )
-                                 .arg( other->_key )
-                                 .arg( tbl->keyName() )
-                                 .arg( tmp->_key );
+         setAncestor(tmp,other,false);
       }
    }
    catch (QString e) {

@@ -295,7 +295,7 @@ public slots:
 
    void updateEquipmentButton();
 
-   //! \brief Set the equipment based on a drop event
+   //! \brief Set all the things based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
    void droppedRecipeStyle(Style *style);
    void droppedRecipeFermentable(QList<Fermentable*>ferms);
@@ -303,7 +303,7 @@ public slots:
    void droppedRecipeMisc(QList<Misc*>miscs);
    void droppedRecipeYeast(QList<Yeast*>yeasts);
 
-   void versionedRecipe(Recipe* ancestor, Recipe* descendant);
+   void versionedRecipe(Recipe* descendant);
    //! \brief Doing updates via this method makes them undoable (and redoable).  This is the most generic version
    //         which requires the caller to construct a QUndoCommand.
    void doOrRedoUpdate(QUndoCommand * update);

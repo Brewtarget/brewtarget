@@ -315,10 +315,10 @@ void MainWindow::init() {
    // set up the drag/drop parts
    this->setupDrops();
 
+   connect( treeView_recipe, &BtTreeView::recipeSpawn, this, &MainWindow::versionedRecipe );
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
-   connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
-   connect( &(Database::instance()), SIGNAL( spawned(Recipe*,Recipe*)), this, SLOT( versionedRecipe(Recipe*,Recipe*)));
+   connect( &(Database::instance()), qOverload<BrewNote*>(&Database::deletedSignal), this, &MainWindow::closeBrewNote);
 
    qDebug() << Q_FUNC_INFO << "MainWindow initialisation complete";
    return;
@@ -3070,10 +3070,9 @@ void MainWindow::updateStatus(const QString status) {
       statusBar()->showMessage(status, 3000);
 }
 
-void MainWindow::versionedRecipe(Recipe* ancestor, Recipe* descendant)
+void MainWindow::versionedRecipe(Recipe* descendant)
 {
    setRecipe(descendant);
-   treeView_recipe->filter()->invalidate();
 }
 
 void MainWindow::closeBrewNote(BrewNote* b)

@@ -146,6 +146,10 @@ public slots:
 
 private slots:
    void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);
+   void versionedRecipe(Recipe* descendant);
+
+signals:
+   void recipeSpawn(Recipe* descendant);
 
 private:
    BtTreeModel* _model;

@@ -203,6 +203,8 @@ private slots:
    // pointer I can get. I hope this works.
    void folderChanged(QString name);
 
+   void versionedRecipe(Recipe* ancestor, Recipe* descendant);
+
    //! \brief This is as best as I can see to do it. Qt signaling mechanism is
    //   doing, as I recall, string compares on the signatures. Sigh.
    void elementAdded(Recipe* victim);
@@ -229,6 +231,7 @@ private slots:
 
 signals:
    void expandFolder(BtTreeModel::TypeMasks kindofThing, QModelIndex fIdx);
+   void recipeSpawn(Recipe* descendant);
 
 private:
    //! \brief Loads the tree.
@@ -277,6 +280,8 @@ private:
    void addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent, bool recurse = true);
    //! \b flip the switch to show descendants
    void setShowChild(QModelIndex child, bool val);
+   //! \b link to recipes (this will get reverted later)
+   void makeAncestors(NamedEntity* ancestor, NamedEntity* descendant);
 
    BtTreeItem* rootItem;
    BtTreeView *parentTree;

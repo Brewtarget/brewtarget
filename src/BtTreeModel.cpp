@@ -63,6 +63,9 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          // Brewnotes need love too!
          connect( &(Database::instance()), qOverload<BrewNote*>(&Database::newSignal),     this, qOverload<BrewNote*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<BrewNote*>(&Database::deletedSignal), this, qOverload<BrewNote*>(&BtTreeModel::elementRemoved));
+         // And some versioning stuff, because why not?
+         connect( &(Database::instance()), &Database::spawned, this, &BtTreeModel::versionedRecipe );
+
          _type = BtTreeItem::RECIPE;
          _mimeType = "application/x-brewtarget-recipe";
          break;
@@ -1423,6 +1426,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
    int oType, id;
    QString target = "";
    QString name = "";
+   NamedEntity* something;
 
    if ( ! parent.isValid() )
       return false;
@@ -1431,15 +1435,15 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
       target = folder(parent)->fullPath();
    else
    {
-      NamedEntity* _thing = thing(parent);
+      something = thing(parent);
 
       // Did you know there's a space between elements in a tree, and you can
       // actually drop things there? If somebody drops something there, don't
       // do anything
-      if ( ! _thing )
+      if ( ! something )
          return false;
 
-      target = _thing->folder();
+      target = something->folder();
    }
 
    // Pull the stream apart and do that which needs done. Late binding ftw!
@@ -1481,7 +1485,11 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
       }
 
       // this is the work.
-      if ( oType != BtTreeItem::FOLDER )
+      if ( oType == BtTreeItem::RECIPE && isRecipe(parent) ) {
+         // this will be fun
+         makeAncestors(elem,something);
+      }
+      else if ( oType != BtTreeItem::FOLDER )
          elem->setFolder(target);
       else
       {
@@ -1494,6 +1502,53 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
    }
 
    return true;
+}
+
+// One of those creatures wrote you once, 'do not call up any that you can not
+// put down'
+void BtTreeModel::makeAncestors(NamedEntity* ancestor, NamedEntity* descendant)
+{
+   if ( ancestor == descendant )
+      return;
+
+   // I need these as their recipes later, so cast'em
+   Recipe * r_desc = qobject_cast<Recipe*>(descendant);
+   Recipe * r_anc = qobject_cast<Recipe*>(ancestor);
+
+   // find the ancestor in the tree
+   QModelIndex ancNdx = findElement(ancestor);
+
+   // remove the ancestor
+   removeRows(ancNdx.row(), 1, this->parent(ancNdx));
+
+   // this does the database work
+   r_desc->setAncestor(r_anc);
+
+   // now we need to find the descendant. This has to be done after we remove
+   // the rows.
+   QModelIndex descNdx = findElement(descendant);
+   BtTreeItem* node = item(descNdx);
+
+   // Add the ancestor's brewnotes to the descendant
+   addBrewNoteSubTree( r_desc, descNdx.row(), node->parent(), true);
+
+   // and let the work now we did this
+   emit dataChanged(descNdx,descNdx);
+}
+
+void BtTreeModel::versionedRecipe(Recipe* ancestor, Recipe* descendant)
+{
+   QModelIndex ndx = findElement(ancestor);
+
+   // like before, remove the ancestor
+   removeRows(ndx.row(),1,this->parent(ndx));
+
+   // add the descendant in, but get the index only after we removed the
+   // ancestor
+   ndx = findElement(descendant);
+
+   emit dataChanged(ndx,ndx);
+   emit recipeSpawn(descendant);
 }
 
 QStringList BtTreeModel::mimeTypes() const
