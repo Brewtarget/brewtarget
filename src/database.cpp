@@ -1537,7 +1537,7 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 
    if ( tmp && signal ) {
       emit changed( metaProperty("brewNotes"), QVariant() );
-      emit newBrewNoteSignal(tmp);
+      emit newSignal(tmp);
    }
 
    return tmp;
@@ -1569,7 +1569,7 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
    if ( signal )
    {
       emit changed( metaProperty("brewNotes"), QVariant() );
-      emit newBrewNoteSignal(tmp);
+      emit newSignal(tmp);
    }
 
    return tmp;
@@ -1586,7 +1586,7 @@ Equipment* Database::newEquipment(Equipment* other)
 
    if ( tmp ) {
       emit changed( metaProperty("equipments"), QVariant() );
-      emit newEquipmentSignal(tmp);
+      emit newSignal(tmp);
    }
    else {
       QString msg = QString("%1 couldn't create newEquipment %2")
@@ -1627,7 +1627,7 @@ Fermentable* Database::newFermentable(Fermentable* other, bool add_inventory)
 
    if ( tmp ) {
       emit changed( metaProperty("fermentables"), QVariant() );
-      emit newFermentableSignal(tmp);
+      emit newSignal(tmp);
    }
    else {
       qCritical() << QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name());
@@ -1663,7 +1663,7 @@ Hop* Database::newHop(Hop* other, bool add_inventory )
 
    if ( tmp ) {
       emit changed( metaProperty("hops"), QVariant() );
-      emit newHopSignal(tmp);
+      emit newSignal(tmp);
    }
    else {
       qCritical() << QString("%1 could not %2 hop")
@@ -1760,7 +1760,7 @@ Mash* Database::newMash(Mash* other, bool displace)
    }
 
    emit changed( metaProperty("mashs"), QVariant() );
-   emit newMashSignal(tmp);
+   emit newSignal(tmp);
 
    return tmp;
 }
@@ -1794,7 +1794,7 @@ Mash* Database::newMash(Recipe* parent, bool transact)
    }
 
    emit changed( metaProperty("mashs"), QVariant() );
-   emit newMashSignal(tmp);
+   emit newSignal(tmp);
 
    connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), parent, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
    return tmp;
@@ -1887,7 +1887,7 @@ Misc* Database::newMisc(Misc* other, bool add_inventory)
 
    if ( tmp ) {
       emit changed( metaProperty("miscs"), QVariant() );
-      emit newMiscSignal(tmp);
+      emit newSignal(tmp);
    }
    else {
       qCritical() << QString("%1 could not %2 misc")
@@ -1929,12 +1929,12 @@ Recipe* Database::newRecipe(QString name)
 
    sqlDatabase().commit();
    emit changed( metaProperty("recipes"), QVariant() );
-   emit newRecipeSignal(tmp);
+   emit newSignal(tmp);
 
    return tmp;
 }
 
-void Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude)
+Recipe* Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude, bool notify)
 {
    Recipe *tmp;
    TableSchema *tbl = dbDefn->table(Brewtarget::RECTABLE);
@@ -1944,7 +1944,7 @@ void Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude)
    try {
       tmp = copy<Recipe>(other, &allRecipes, true);
 
-      // the case will return nullptr if the NamedEntity cannot be cast. The
+      // the cast will return nullptr if the NamedEntity cannot be cast. The
       // addToRecipe will do the right thing and simply copy it all.
       addToRecipe( tmp, other->fermentables(), qobject_cast<Fermentable*>(exclude), false);
       addToRecipe( tmp, other->hops(),         qobject_cast<Hop*>(exclude),         false);
@@ -1982,6 +1982,14 @@ void Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude)
       qCritical() << Q_FUNC_INFO << e;
       abort();
    }
+
+   if ( notify ) {
+      emit changed( metaProperty("recipes"), QVariant());
+      emit newSignal(tmp);
+      emit spawned(other,tmp);
+   }
+
+   return tmp;
 }
 
 bool Database::wantsVersion(Recipe* rec)
@@ -2057,7 +2065,7 @@ Recipe* Database::newRecipe(Recipe* other, bool ancestor)
 
    sqlDatabase().commit();
    emit changed( metaProperty("recipes"), QVariant() );
-   emit newRecipeSignal(tmp);
+   emit newSignal(tmp);
 
    return tmp;
 }
@@ -2076,7 +2084,7 @@ Style* Database::newStyle(Style* other)
    }
 
    emit changed( metaProperty("styles"), QVariant() );
-   emit newStyleSignal(tmp);
+   emit newSignal(tmp);
 
    return tmp;
 }
@@ -2108,7 +2116,7 @@ Style* Database::newStyle(QString name)
    }
 
    emit changed( metaProperty("styles"), QVariant() );
-   emit newStyleSignal(tmp);
+   emit newSignal(tmp);
 
    return tmp;
 }
@@ -2130,7 +2138,7 @@ Water* Database::newWater(Water* other)
    }
 
    emit changed( metaProperty("waters"), QVariant() );
-   emit newWaterSignal(tmp);
+   emit newSignal(tmp);
 
    return tmp;
 }
@@ -2152,7 +2160,7 @@ Salt* Database::newSalt(Salt* other)
    }
 
    emit changed( metaProperty("salts"), QVariant() );
-   emit newSaltSignal(tmp);
+   emit newSignal(tmp);
 
    return tmp;
 }
@@ -2186,7 +2194,7 @@ Yeast* Database::newYeast(Yeast* other, bool add_inventory)
 
    if ( tmp ) {
       emit changed( metaProperty("yeasts"), QVariant() );
-      emit newYeastSignal(tmp);
+      emit newSignal(tmp);
    }
    else {
       qCritical() << QString("%1 could not %2 yeast")
@@ -2196,6 +2204,22 @@ Yeast* Database::newYeast(Yeast* other, bool add_inventory)
 
    return tmp;
 }
+
+// I don't like this, but I've written worse. I need these so the templates
+// can do this w/o me having to pass the key hash in
+void Database::addToHash( BrewNote* whatever ) { allBrewNotes.insert(whatever->key(), whatever); }
+void Database::addToHash( Equipment* whatever ) { allEquipments.insert(whatever->key(), whatever); }
+void Database::addToHash( Fermentable* whatever ) { allFermentables.insert(whatever->key(), whatever); }
+void Database::addToHash( Hop* whatever ) { allHops.insert(whatever->key(), whatever); }
+void Database::addToHash( Instruction* whatever ) { allInstructions.insert(whatever->key(), whatever); }
+void Database::addToHash( Mash* whatever ) { allMashs.insert(whatever->key(), whatever); }
+void Database::addToHash( MashStep* whatever ) { allMashSteps.insert(whatever->key(), whatever); }
+void Database::addToHash( Misc* whatever ) { allMiscs.insert(whatever->key(), whatever); }
+void Database::addToHash( Recipe* whatever ) { allRecipes.insert(whatever->key(), whatever); }
+void Database::addToHash( Salt* whatever ) { allSalts.insert(whatever->key(), whatever); }
+void Database::addToHash( Style* whatever ) { allStyles.insert(whatever->key(), whatever); }
+void Database::addToHash( Water* whatever ) { allWaters.insert(whatever->key(), whatever); }
+void Database::addToHash( Yeast* whatever ) { allYeasts.insert(whatever->key(), whatever); }
 
 int Database::insertElement(NamedEntity * ins)
 {
@@ -2263,7 +2287,7 @@ int Database::insertStyle(Style* ins)
    allStyles.insert(key,ins);
 
    emit changed( metaProperty("styles"), QVariant() );
-   emit newStyleSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2275,7 +2299,7 @@ int Database::insertEquipment(Equipment* ins)
 
    allEquipments.insert(key,ins);
    emit changed( metaProperty("equipments"), QVariant() );
-   emit newEquipmentSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2301,7 +2325,7 @@ int Database::insertFermentable(Fermentable* ins)
    sqlDatabase().commit();
    allFermentables.insert(key,ins);
    emit changed( metaProperty("fermentables"), QVariant() );
-   emit newFermentableSignal(ins);
+   emit newSignal(ins);
    return key;
 }
 
@@ -2324,7 +2348,7 @@ int Database::insertHop(Hop* ins)
    sqlDatabase().commit();
    allHops.insert(key,ins);
    emit changed( metaProperty("hops"), QVariant() );
-   emit newHopSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2362,7 +2386,7 @@ int Database::insertMash(Mash* ins)
 
    allMashs.insert(key,ins);
    emit changed( metaProperty("mashs"), QVariant() );
-   emit newMashSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2438,7 +2462,7 @@ int Database::insertMisc(Misc* ins)
    sqlDatabase().commit();
    allMiscs.insert(key,ins);
    emit changed( metaProperty("miscs"), QVariant() );
-   emit newMiscSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2450,7 +2474,7 @@ int Database::insertRecipe(Recipe* ins)
 
    allRecipes.insert(key,ins);
    emit changed( metaProperty("recipes"), QVariant() );
-   emit newRecipeSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2474,7 +2498,7 @@ int Database::insertYeast(Yeast* ins)
    sqlDatabase().commit();
    allYeasts.insert(key,ins);
    emit changed( metaProperty("yeasts"), QVariant() );
-   emit newYeastSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2486,7 +2510,7 @@ int Database::insertWater(Water* ins)
 
    allWaters.insert(key,ins);
    emit changed( metaProperty("waters"), QVariant() );
-   emit newWaterSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2498,7 +2522,7 @@ int Database::insertSalt(Salt* ins)
 
    allSalts.insert(key,ins);
    emit changed( metaProperty("salts"), QVariant() );
-   emit newSaltSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }
@@ -2536,7 +2560,7 @@ int Database::insertBrewNote(BrewNote* ins, Recipe* parent) {
 
    this->allBrewNotes.insert(key,ins);
    emit changed( metaProperty("brewNotes"), QVariant() );
-   emit newBrewNoteSignal(ins);
+   emit newSignal(ins);
 
    return key;
 }

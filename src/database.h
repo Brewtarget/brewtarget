@@ -187,6 +187,52 @@ public:
       return tmp;
    }
 
+   // Versioning when modifying something in a recipe is *hard*. If we copy
+   // the recipe, there is no easy way to say "this ingredient in the old
+   // recipe is that ingredient in the new". The best I can think of is to use
+   // the delete idea -- copy everything but what's being modified, clone
+   // what's being modified and add the clone to the copy.
+   template <class T> void modifyNamedElement(T* ing, QString property, QVariant value, bool notify = true )
+   {
+      // Yog-Sothoth is the gate. Yog-Sothoth is the key and guardian of the
+      // gate. Past, present, future, all are one in Yog-Sothoth
+      Recipe *owner, *spawn;
+      T* neSpawn;
+
+      // The copy methods expect the proper all[Whatever] hash. I cannot
+      // determine in a template if I should use allRecipes, allHops, etc.
+      // This allows me to cheat, but it also means we need to handle putting
+      // the new ingredient into the proper hash.
+      // Is it evil?  Yog-Sothoth knows the gate. Ask him
+      QHash<int,T*> nowhere;
+
+      owner = getParentRecipe(ing);
+
+      // if the ingredient is in a recipe and that recipe needs a version
+      if ( owner && wantsVersion(owner) ) {
+         // create the copy of the recipe, excluding the thing
+         spawn = spawnWithExclusion(owner, ing, false);
+         // Copy the ingredient we want to change. This is the magix
+         neSpawn = addNamedEntityToRecipe(spawn, ing, false, &nowhere);
+         // This. Is. Evil. And, like so much evil, it has to happen early
+         addToHash(neSpawn);
+
+         // Now for all the signals
+         emit newSignal(neSpawn);
+         emit changed( metaProperty("recipes"), QVariant());
+         emit newSignal(spawn);
+         emit spawned(owner,spawn);
+      }
+      else {
+         // we don't want a version, or the ingredient isn't in a recipe
+         neSpawn = ing;
+      }
+
+      updateEntry( neSpawn, property, value, notify );
+   }
+
+
+
    BrewNote* newBrewNote(Recipe* parent, bool signal = true);
    //! Create new instruction attached to \b parent.
    Instruction* newInstruction(Recipe* parent);
@@ -491,7 +537,21 @@ public:
    bool isConverted();
    bool wantsVersion(Recipe* rec);
    Recipe* breed(Recipe* parent);
-   void spawnWithExclusion(Recipe *other, NamedEntity* exclude);
+   Recipe* spawnWithExclusion(Recipe *other, NamedEntity* exclude, bool notify = true);
+
+   void addToHash( BrewNote* whatever );
+   void addToHash( Equipment* whatever );
+   void addToHash( Fermentable* whatever );
+   void addToHash( Hop* whatever );
+   void addToHash( Instruction* whatever );
+   void addToHash( Mash* whatever );
+   void addToHash( MashStep* whatever );
+   void addToHash( Misc* whatever );
+   void addToHash( Recipe* whatever );
+   void addToHash( Salt* whatever );
+   void addToHash( Style* whatever );
+   void addToHash( Water* whatever );
+   void addToHash( Yeast* whatever );
 
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done.
@@ -503,18 +563,18 @@ public:
 
 signals:
    void changed(QMetaProperty prop, QVariant value);
-   void newEquipmentSignal(Equipment*);
-   void newFermentableSignal(Fermentable*);
-   void newHopSignal(Hop*);
-   void newMashSignal(Mash*);
-   void newMiscSignal(Misc*);
-   void newRecipeSignal(Recipe*);
-   void newStyleSignal(Style*);
-   void newWaterSignal(Water*);
-   void newSaltSignal(Salt*);
-   void newYeastSignal(Yeast*);
-   // This is still experimental. Or at least mental
-   void newBrewNoteSignal(BrewNote*);
+
+   void newSignal(BrewNote*);
+   void newSignal(Equipment*);
+   void newSignal(Fermentable*);
+   void newSignal(Hop*);
+   void newSignal(Mash*);
+   void newSignal(Misc*);
+   void newSignal(Recipe*);
+   void newSignal(Style*);
+   void newSignal(Water*);
+   void newSignal(Salt*);
+   void newSignal(Yeast*);
 
    void deletedSignal(Equipment*);
    void deletedSignal(Fermentable*);
