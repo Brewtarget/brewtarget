@@ -56,29 +56,6 @@ public:
     * \param parent This is for grouping updates together.
     */
    UndoableAddOrRemove(UU & updatee,
-                       QList<VV *> (UU::*doer)(QList<VV *>),
-                       QList<VV *> whatToAddOrRemove,
-                       QList<VV *> (UU::*undoer)(QList<VV *>),
-                       void (MainWindow::*doCallback)(QList<VV *>),
-                       void (MainWindow::*undoCallback)(QList<VV *>),
-                       QString const & description,
-                       QUndoCommand * parent = nullptr)
-   : QUndoCommand(parent),
-     updatee(updatee),
-     doer(doer),
-     whatToAddOrRemove(whatToAddOrRemove),
-     undoer(undoer),
-     doCallback(doCallback),
-     undoCallback(undoCallback),
-     everDone(false)
-   {
-      // Parent class handles storing description and making it accessible to the undo stack etc - we just have to give
-      // it the text.
-      this->setText(description);
-      return;
-   }
-
-   UndoableAddOrRemove(UU & updatee,
                        VV * (UU::*doer)(VV *),
                        VV * oneToAddOrRemove,
                        VV * (UU::*undoer)(VV *),
@@ -89,15 +66,52 @@ public:
    : QUndoCommand(parent),
      updatee(updatee),
      doer(doer),
+     whatToAddOrRemove(oneToAddOrRemove),
      undoer(undoer),
      doCallback(doCallback),
      undoCallback(undoCallback),
      everDone(false)
    {
-      this->whatToAddOrRemove.append(oneToAddOrRemove);
-
+      this->setText(description);
       return;
    }
+   /*!
+    * This is the list version of the previous constructor. Some actions --
+    * like dropping hops from the tree on a recipe -- work on lists  of
+    * objects. We need this constructor because casting sucks. 
+    * \param updatee See above
+    * \param doer The method on the updatee to do the addition or removal.
+    *             This should return a QList of objects that need to be passed in to the \c undoer method.
+    * \param listToAddOrRemove The list of things we're adding or removing - eg fermentables
+    * \param undoer See above
+    * \param doCallback See above
+    * \param undoCallback See above
+    * \param description See above
+    * \param parent See above
+    */
+   UndoableAddOrRemove(UU & updatee,
+                       QList<VV *> (UU::*doer)(QList<VV *>),
+                       QList<VV *> listToAddOrRemove,
+                       QList<VV *> (UU::*undoer)(QList<VV *>),
+                       void (MainWindow::*doCallback)(QList<VV *>),
+                       void (MainWindow::*undoCallback)(QList<VV *>),
+                       QString const & description,
+                       QUndoCommand * parent = nullptr)
+   : QUndoCommand(parent),
+     updatee(updatee),
+     list_doer(doer),
+     list_whatToAddOrRemove(listToAddOrRemove),
+     list_undoer(undoer),
+     list_doCallback(doCallback),
+     list_undoCallback(undoCallback),
+     everDone(false)
+   {
+      // Parent class handles storing description and making it accessible to the undo stack etc - we just have to give
+      // it the text.
+      this->setText(description);
+      return;
+   }
+
    ~UndoableAddOrRemove()
    {
       return;
@@ -109,7 +123,8 @@ public:
    void redo()
    {
       QUndoCommand::redo();
-      this->undoOrRedo(false);
+
+      this->whatToAddOrRemove != nullptr ? this->undoOrRedo(false) : this->listUndoOrRedo(false);
       return;
    }
 
@@ -119,7 +134,7 @@ public:
    void undo()
    {
       QUndoCommand::undo();
-      this->undoOrRedo(true);
+      this->whatToAddOrRemove != nullptr ? this->undoOrRedo(true) : this->listUndoOrRedo(true);
       return;
    }
 
@@ -143,41 +158,126 @@ private:
       // will cause it to be stored in the DB with a new ID.
       //
       if (!isUndo) {
-         qDebug() << QString("%1: %2 \"%3\" for #%4").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->text()).arg(this->whatToAddOrRemove.size());
-         QList<VV*> redone;
-         redone.append((this->updatee.*(this->doer))(whatToAddOrRemove));
+         qDebug() << QString("%1: %2 \"%3\" for #%4")
+                        .arg(Q_FUNC_INFO)
+                        .arg(this->everDone ? "Redo" : "Do" )
+                        .arg(this->text())
+                        .arg(this->whatToAddOrRemove->key());
 
-         qDebug() << QString("%1: %2 Returned #%3").arg(Q_FUNC_INFO).arg(this->everDone ? "Redo" : "Do" ).arg(this->whatToAddOrRemove.last()->key());
+         this->whatToAddOrRemove = (this->updatee.*(this->doer))(whatToAddOrRemove);
+
+         qDebug() << QString("%1: %2 Returned #%3")
+                        .arg(Q_FUNC_INFO)
+                        .arg(this->everDone ? "Redo" : "Do" )
+                        .arg(this->whatToAddOrRemove->key());
+
          if (this->doCallback != nullptr) {
             (Brewtarget::mainWindow()->*(this->doCallback))(whatToAddOrRemove);
          }
-         this->whatToAddOrRemove.append(redone);
 
          // In this implementation "Do" and "Redo" are identical, but it's nonetheless useful for debugging purposes to
          // be able to distinguish the two cases.
          this->everDone = true;
       } else {
-         qDebug() << QString("%1: Undo \"%2\" for #%3").arg(Q_FUNC_INFO).arg(this->text()).arg(this->whatToAddOrRemove.size());
+         qDebug() << QString("%1: Undo \"%2\" for #%3")
+            .arg(Q_FUNC_INFO)
+            .arg(this->text())
+            .arg(this->whatToAddOrRemove->key());
 
-         QList<VV*> undone;
-         undone.append((this->updatee.*(this->undoer))(whatToAddOrRemove));
+         this->whatToAddOrRemove = (this->updatee.*(this->undoer))(whatToAddOrRemove);
 
-         qDebug() << QString("%1: Undo Returned #%2").arg(Q_FUNC_INFO).arg(undone.size());
+         qDebug() << QString("%1: Undo Returned #%2")
+                        .arg(Q_FUNC_INFO)
+                        .arg(this->whatToAddOrRemove->key());
+
          if (this->undoCallback != nullptr) {
             (Brewtarget::mainWindow()->*(this->undoCallback))(whatToAddOrRemove);
          }
-         this->whatToAddOrRemove.append(undone);
       }
 
       return;
    }
 
+   void listUndoOrRedo(bool const isUndo)
+   {
+      //
+      // This function works on the assumption that Add and Remove both return "what was changed".
+      //
+      // If the action is Add, and the thing we are adding is of a type that gets copied, then the doer is going to
+      // return the copy that was created and added, which is what we'll want to remove if we undo.  If we then redo
+      // with this object, it will get stored in the DB with a new ID (and the object's key will be updated
+      // accordingly).  The same object (with now modified key) is returned and it's what we'll need if we want to undo
+      // again.
+      //
+      // If the action is Remove, then we'll get back a pointer to what we removed.  When we undo, passing this to added
+      // will cause it to be stored in the DB with a new ID.
+      //
+      QList<VV*> results;
+
+      qInfo() << Q_FUNC_INFO;
+      if (!isUndo) {
+         // qDebug() << QString("%1: %2 \"%3\" for #%4")
+         qInfo() << QString("%1: %2 \"%3\" for #%4")
+                        .arg(Q_FUNC_INFO)
+                        .arg(this->everDone ? "Redo" : "Do" )
+                        .arg(this->text())
+                        .arg(this->list_whatToAddOrRemove.size());
+
+         // results.append((this->updatee.*(this->list_doer))(list_whatToAddOrRemove));
+         this->list_whatToAddOrRemove = (this->updatee.*(this->list_doer))(list_whatToAddOrRemove);
+
+         // qDebug() << QString("%1: %2 Returned #%3")
+         qInfo() << QString("%1: %2 Returned #%3")
+                        .arg(Q_FUNC_INFO)
+                        .arg(this->everDone ? "Redo" : "Do" )
+                        .arg(this->list_whatToAddOrRemove.size());
+
+         if (this->doCallback != nullptr) {
+            (Brewtarget::mainWindow()->*(this->list_doCallback))(list_whatToAddOrRemove);
+         }
+
+
+         // In this implementation "Do" and "Redo" are identical, but it's nonetheless useful for debugging purposes to
+         // be able to distinguish the two cases.
+         this->everDone = true;
+      } else {
+         // qDebug() << QString("%1: Undo \"%2\" for #%3")
+         qInfo() << QString("%1: Undo \"%2\" for #%3")
+            .arg(Q_FUNC_INFO)
+            .arg(this->text())
+            .arg(this->list_whatToAddOrRemove.size());
+
+         // results.append((this->updatee.*(this->list_undoer))(list_whatToAddOrRemove));
+         this->list_whatToAddOrRemove = (this->updatee.*(this->list_undoer))(list_whatToAddOrRemove);
+
+         // qDebug() << QString("%1: Undo Returned #%2")
+         qInfo() << QString("%1: Undo Returned #%2")
+                        .arg(Q_FUNC_INFO)
+                        .arg(this->list_whatToAddOrRemove.size());
+
+         if (this->undoCallback != nullptr) {
+            (Brewtarget::mainWindow()->*(this->list_undoCallback))(list_whatToAddOrRemove);
+         }
+      }
+      this->list_whatToAddOrRemove.append(results);
+
+      return;
+   }
    UU & updatee;
+   // singletons
    VV * (UU::*doer)(VV *);
-   QList<VV *> whatToAddOrRemove;
+   VV * whatToAddOrRemove;
    VV * (UU::*undoer)(VV *);
    void (MainWindow::*doCallback)(VV *);
    void (MainWindow::*undoCallback)(VV *);
+
+   // lists
+   QList<VV *> (UU::*list_doer)(QList<VV *>);
+   QList<VV *> list_whatToAddOrRemove;
+   QList<VV *> (UU::*list_undoer)(QList<VV *>);
+   void (MainWindow::*list_doCallback)(QList<VV *>);
+   void (MainWindow::*list_undoCallback)(QList<VV *>);
+
    bool everDone;
 };
 

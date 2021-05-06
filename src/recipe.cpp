@@ -914,38 +914,12 @@ template<class T> T * Recipe::add(T * var) {
 }
 
 template<class T> QList<T *> Recipe::add(QList<T *> many) {
-   // If the supplied parameter has no parent then we need to make a copy of
-   // it - or rather tell the Database object to make a copy.  We'll then get
-   // back a pointer to the copy.  If it does have a parent then we need to
-   // check whether it's already in used in another recipe.  If not, we can
-   // just add it directly, and we'll get back the same pointer we passed in.
-   // Otherwise we get its parent and make another copy of that.
 
    QList<T*> added;
 
    qInfo() << Q_FUNC_INFO;
-   foreach( T* var, many) {
-      qInfo() << "\t" << var->name();
-      T * parentOfVar = static_cast<T *>(var->getParent());
-      if (parentOfVar != nullptr) {
-         // Parameter has a parent.  See if it (the parameter, not its
-         // parent!) is used in a recipe.  (NB: The parent of the NamedEntity
-         // is not the same thing as its parent recipe.  We should perhaps
-         // find some different terms!)
-         Recipe * usedIn = Database::instance().getParentRecipe(var);
-         if (usedIn == nullptr) {
-            // The parameter is not already used in a recipe, so we can add it without making a copy
-            added.append(Database::instance().addToRecipe(this, var, true));
-         }
 
-         // The parameter is already used in a recipe, so we need to add a copy of its parent
-         added.append(Database::instance().addToRecipe(this, parentOfVar, false));
-      }
-      else {
-         // Parameter has no parent, so add a copy of it
-         added.append(Database::instance().addToRecipe(this, var, false));
-      }
-   }
+   added = Database::instance().addToRecipe(this, many, true);
    return added;
 }
 
@@ -956,12 +930,11 @@ template Yeast *       Recipe::add(Yeast *       var);
 template Water *       Recipe::add(Water *       var);
 template Salt *        Recipe::add(Salt *        var);
 
+// only these objects need the list version
 template QList<Hop *        > Recipe::add(QList<Hop *        > many);
 template QList<Fermentable *> Recipe::add(QList<Fermentable *> many);
 template QList<Misc *       > Recipe::add(QList<Misc *       > many);
 template QList<Yeast *      > Recipe::add(QList<Yeast *      > many);
-template QList<Water *      > Recipe::add(QList<Water *      > many);
-template QList<Salt *       > Recipe::add(QList<Salt *       > many);
 
 void Recipe::setStyle(Style * var)
 {
@@ -1591,6 +1564,7 @@ NamedEntity * Recipe::removeNamedEntity( NamedEntity *var )
 {
 //   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
+   qInfo() << Q_FUNC_INFO;
    // brewnotes a bit odd
    if ( dynamic_cast<BrewNote*>(var) ) {
       // the cast is required to force the template to gets it thing right
@@ -1606,6 +1580,7 @@ QList<NamedEntity *> Recipe::removeNamedEntity( QList<NamedEntity *> many )
 
    QList<NamedEntity*> removed;
 
+   qInfo() << Q_FUNC_INFO;
    foreach( NamedEntity* victim, many ) {
       // brewnotes a bit odd
       if ( dynamic_cast<BrewNote*>(victim) ) {
