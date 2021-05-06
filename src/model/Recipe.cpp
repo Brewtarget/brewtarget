@@ -1559,6 +1559,7 @@ NamedEntity * Recipe::removeNamedEntity( NamedEntity *var )
 {
 //   qDebug() << QString("%1").arg(Q_FUNC_INFO);
 
+   qInfo() << Q_FUNC_INFO;
    // brewnotes a bit odd
    if ( dynamic_cast<BrewNote*>(var) ) {
       // the cast is required to force the template to gets it thing right
@@ -1574,6 +1575,7 @@ QList<NamedEntity *> Recipe::removeNamedEntity( QList<NamedEntity *> many )
 
    QList<NamedEntity*> removed;
 
+   qInfo() << Q_FUNC_INFO;
    foreach( NamedEntity* victim, many ) {
       // brewnotes a bit odd
       if ( dynamic_cast<BrewNote*>(victim) ) {
