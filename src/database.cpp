@@ -2030,7 +2030,9 @@ void Database::setAncestor(Recipe* descendant, Recipe* ancestor, bool transact)
 
    try {
       QSqlQuery q(sqlDatabase());
-      ancestor->setDisplay(false);
+      if ( ancestor != descendant ) {
+         ancestor->setDisplay(false);
+      }
 
       // update recipe set ancestor_id = [ancestor->key] where id = [descendant->key]
       QString setAnc = QString("UPDATE %1 SET %2 = %3 where %4 = %5")

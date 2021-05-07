@@ -1184,7 +1184,6 @@ void MainWindow::lockRecipe(int state)
    lineEdit_boilTime->setEnabled(enabled);
 
    // locked recipes cannot be deleted
-   treeView_recipe->enableDelete(enabled);
    actionDeleteSelected->setEnabled(enabled);
 
    treeView_recipe->setDragDropMode( lockIt ? QAbstractItemView::NoDragDrop : QAbstractItemView::DragDrop);

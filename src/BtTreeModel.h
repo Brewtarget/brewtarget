@@ -193,9 +193,13 @@ public:
    QStringList mimeTypes() const;
 
    //! \b show the versions of the recipe at index
-   void showVersions(QModelIndex ndx);
+   void showAncestors(QModelIndex ndx);
    //! \b show the child of the recipe at index
    bool showChild(QModelIndex ndx) const;
+   //! \b hide the ancestors
+   void hideAncestors(QModelIndex ndx);
+   //! \b orphan a recipe
+   void orphanRecipe(QModelIndex ndx);
 
 private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they

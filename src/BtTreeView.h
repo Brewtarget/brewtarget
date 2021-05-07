@@ -107,9 +107,21 @@ public:
 
    //! \brief enables or disables the delete action when a recipe is unlocked/locked
    void enableDelete(bool enable);
+   //! \brief enables or disables showing ancestors
+   void enableShowAncestor(bool enable);
+   //! \brief enables or disables hiding ancestors
+   void enableHideAncestor(bool enable);
+   //! \brief make a recipe its own ancestor
+   void enableOrphan(bool enable);
 
    //! \brief returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
    bool multiSelected();
+
+   //! \brief sets the underlying BtTreeModel to show or hide ancestors
+   void showAncestors();
+   void hideAncestors();
+   void orphanRecipe();
+
 
    // Another try at drag and drop
    //! \brief starts a drag and drop event
@@ -145,7 +157,6 @@ public:
 
 public slots:
    void newNamedEntity();
-   void showVersions();
 
 private slots:
    void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);
@@ -159,7 +170,7 @@ private:
    BtTreeFilterProxyModel* _filter;
    BtTreeModel::TypeMasks _type;
    QMenu* _contextMenu, *subMenu;
-   QAction* m_deleteAction;
+   QAction *m_deleteAction, *m_showAncestorAction, *m_hideAncestorAction, *m_orphanAction;
    QPoint dragStart;
    QWidget* _editor;
    QList<Recipe*> m_versionsShown;

@@ -549,7 +549,6 @@ QModelIndex BtTreeModel::findElement(NamedEntity* thing, BtTreeItem* parent)
 
    folders.append(pItem);
 
-   // Recursion. Wonderful.
    while ( ! folders.isEmpty() )
    {
       BtTreeItem* target = folders.takeFirst();
@@ -1384,7 +1383,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
    int oType, id;
    QString target = "";
    QString name = "";
-   NamedEntity* something;
+   NamedEntity* something = nullptr;
 
    if ( ! parent.isValid() )
       return false;
@@ -1462,8 +1461,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
    return true;
 }
 
-// One of those creatures wrote you once, 'do not call up any that you can not
-// put down'
+// do not call up any that you can not put down
 void BtTreeModel::makeAncestors(NamedEntity* ancestor, NamedEntity* descendant)
 {
    if ( ancestor == descendant )
@@ -1487,11 +1485,53 @@ void BtTreeModel::makeAncestors(NamedEntity* ancestor, NamedEntity* descendant)
    QModelIndex descNdx = findElement(descendant);
    BtTreeItem* node = item(descNdx);
 
+   // Remove all the brewnotes in the tree first. We get dupes otherwise.
+   removeRows(0, node->childCount(), descNdx);
+
    // Add the ancestor's brewnotes to the descendant
    addBrewNoteSubTree( r_desc, descNdx.row(), node->parent(), true);
+}
 
-   // and let the work now we did this
-   emit dataChanged(descNdx,descNdx);
+void BtTreeModel::orphanRecipe(QModelIndex ndx)
+{
+   BtTreeItem* node = item(ndx);
+   BtTreeItem* pNode = node->parent();
+   QModelIndex pIndex = parent(ndx);
+
+   // I need the recipe referred to by the index
+   Recipe *orphan = recipe(ndx);
+   // And I need its immediate ancestor. Remember, the ancestor list always
+   // has the recipe in it, so we need to reference the second item
+   Recipe *ancestor = orphan->ancestors().at(1);
+
+   // Deal with the soon-to-be orphan first
+   // Remove all the rows associated with the orphan
+   removeRows(0,node->childCount(),ndx);
+
+   // This looks weird, but I think it will do what I need -- basically set
+   // the ancestor_id to itself and reload the ancestors array
+   orphan->setAncestor(orphan);
+   // Display all of its brewnotes
+   addBrewNoteSubTree(orphan, ndx.row(), pNode, false);
+
+   // Now, we need to get busy on the ancestors
+   // Mark the ancestor as visible and unlock it
+   ancestor->setDisplay(true);
+   ancestor->setLocked(false);
+   // Put the ancestor into the tree
+   if ( ! insertRow(pIndex.row(), pIndex, ancestor, BtTreeItem::RECIPE) )
+      qWarning() << Q_FUNC_INFO << "Could not add ancestor to tree";
+
+   // Find the ancestor in the tree
+   QModelIndex ancNdx = findElement(ancestor);
+   if ( ! ancNdx.isValid() ) {
+      qWarning() << Q_FUNC_INFO << "Couldn't find the ancestor";
+   }
+
+   // Add the ancestor's brewnotes to the descendant
+   addBrewNoteSubTree(ancestor,ancNdx.row(),pNode);
+
+   return;
 }
 
 void BtTreeModel::versionedRecipe(Recipe* ancestor, Recipe* descendant)
@@ -1539,7 +1579,7 @@ void BtTreeModel::setShowChild( QModelIndex child, bool val )
    return node->setShowMe(val);
 }
 
-void BtTreeModel::showVersions(QModelIndex ndx)
+void BtTreeModel::showAncestors(QModelIndex ndx)
 {
 
    if ( ! ndx.isValid() ) {
@@ -1551,9 +1591,15 @@ void BtTreeModel::showVersions(QModelIndex ndx)
    QList<Recipe*> ancestors = descendant->ancestors();
 
    removeRows(0,node->childCount(),ndx);
+
    // add the brewnotes for this version back
    addBrewNoteSubTree(descendant, ndx.row(), node->parent(), false);
 
+   // set showChild on the leaf node. I use this for drawing menus
+   setShowChild(ndx,true);
+
+   // Now loop through the ancestors. The nature of the beast is nearest
+   // ancestors are first
    foreach( Recipe* ancestor, ancestors ) {
       int j = node->childCount();
       if ( ancestor == descendant ) {
@@ -1569,6 +1615,33 @@ void BtTreeModel::showVersions(QModelIndex ndx)
 
       // add the brewnotes to the ancestors, but make sure we don't recurse
       addBrewNoteSubTree(ancestor,j,node,false);
+   }
+}
+
+void BtTreeModel::hideAncestors(QModelIndex ndx)
+{
+   BtTreeItem* node = item(ndx);
+
+   // This has no potential to be clever. None.
+   if ( ! ndx.isValid() ) {
+      return;
+   }
+
+   // remove all the currently shown children
+   removeRows(0,node->childCount(),ndx);
+   Recipe *descendant = recipe(ndx);
+
+   // put the brewnotes back, including those from the ancestors.
+   addBrewNoteSubTree(descendant,ndx.row(), node->parent());
+
+   // This is for menus
+   setShowChild(ndx,false);
+
+   // Now we just need to mark each ancestor invisible again
+   foreach( Recipe* ancestor, descendant->ancestors() ) {
+      QModelIndex aIndex = findElement(ancestor,node);
+      setShowChild(aIndex,false);
+      emit dataChanged(aIndex,aIndex);
    }
 }
 
