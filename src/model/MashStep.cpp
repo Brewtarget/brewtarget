@@ -94,7 +94,12 @@ void MashStep::setInfuseTemp_c(double var )
 {
    m_infuseTemp_c = var;
    if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::MashStep::infuseTemp_c, var);
+      if ( m_stepNumber == 1 ) {
+         setEasy(PropertyNames::MashStep::infuseTemp_c, var, true, true);
+      }
+      else {
+         setEasy(PropertyNames::MashStep::infuseTemp_c, var);
+      }
    }
 }
 

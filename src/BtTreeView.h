@@ -119,13 +119,6 @@ public:
    //! \brief returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
    bool multiSelected();
 
-   //! \brief sets the underlying BtTreeModel to show or hide ancestors
-   void showAncestors();
-   void hideAncestors();
-   void orphanRecipe();
-   void spawnRecipe();
-
-
    // Another try at drag and drop
    //! \brief starts a drag and drop event
    void mousePressEvent(QMouseEvent *event);
@@ -164,6 +157,11 @@ public slots:
 private slots:
    void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);
    void versionedRecipe(Recipe* descendant);
+
+   void showAncestors();
+   void hideAncestors();
+   void orphanRecipe();
+   void spawnRecipe();
 
 signals:
    void recipeSpawn(Recipe* descendant);

@@ -260,7 +260,7 @@ protected:
    void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    void set( const QString& prop_name, const QString& col_name, const QVariant& value, bool notify = true );
    */
-   void setEasy( QString prop_name, QVariant value, bool notify = true );
+   void setEasy( QString prop_name, QVariant value, bool notify = true, bool updateEntry = false );
 
    /*!
     * \param col_name - The database column of the attribute we want to get.
