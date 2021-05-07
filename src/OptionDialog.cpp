@@ -605,7 +605,7 @@ void OptionDialog::showChanges()
    status = OptionDialog::NOCHANGE;
    changeColors();
 
-   if ( Brewtarget::option("versioning", true).toBool() ) {
+   if ( Brewtarget::option("versioning", false).toBool() ) {
       checkBox_versioning->setCheckState(Qt::Checked);
       groupBox_deleteBehavior->setEnabled(true);
       switch ( Brewtarget::option("deletewhat", Brewtarget::DESCENDANT).toInt() ) {
