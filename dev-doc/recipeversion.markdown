@@ -4,7 +4,7 @@ Well. There won't be any pictures, but I will try to describe how they work and 
 ## Motivation
 I write and tweak a lot of recipes. I desperately want some way of being able to view that history and maybe say "Yeah, that one wasn't good. Let's go back two versions and try this instead".
 
-My recipes are already littered with "Beer v1", "Beer v2", and so on. I find it to be ugly, and I am not very good at remembering to do it. What I do, I want it automatic.
+My database is already littered with "Beer v1", "Beer v2", and so on. I find it to be ugly, and I am not very good at remembering to do it. And that is exactly the thing computers are supposed to do -- handle routine, mundane tasks that humans are not good at.
 
 ## Background
 The very simple idea is that a copy of a recipe is made before you modify it, and any modifications are made to the copy -- in other words, copy on write.  The tricky parts were how to implement and how to represent it.
@@ -53,11 +53,7 @@ Another important series of considerations were just what manual controls would 
 ### Defining ancestors
 The user will be able to manually mark a recipe as an ancestor of another, by simply dragging the ancestor to the descendant.
 
-To move a recipe into another folder, you simple drag the recipe and drop it anywhere in the other folder -- on the folder icon, on another recipe, etc. If I implement this feature as I want, there is a conflict. Dropping recipe A on recipe B will mean "make A an ancestor of B", where as right now it means "put A into the same folder as B".
-
-My choice here is that if you drop recipe A on recipe B in the same folder, we make recipe A an ancestor of recipe B. If they are in different folder, we just move the dropped recipe into the new folder.
-
-I am concerned this may be a bit confusing, but I can't think of a better idea.
+Dragging recipes around was very confusing and not productive. I ended up having to create a small dialog that allows you to assign an ancestor to a descendant. I still do not think this is the best solution, but it made more sense than drag/drop.
 
 ### Forking
 Users will be able to manually fork a recipe. This will override the usual checks and will be done even if the ancestor didn't get brewed.

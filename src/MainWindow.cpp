@@ -435,7 +435,7 @@ void MainWindow::setupCSS()
 
    // Disabled fields should change color, but not become unreadable. Mucking
    // with the css seems the most reasonable way to do that.
-   QString tabDisabled = QString("QWidget:!enabled { color: #000000, backgroup: #F0F0F0; }");
+   QString tabDisabled = QString("QWidget:disabled { color: #000000; background: #F0F0F0 }");
    tab_recipe->setStyleSheet(tabDisabled);
    tabWidget_ingredients->setStyleSheet(tabDisabled);
 
@@ -762,6 +762,7 @@ void MainWindow::setupTriggers()
    connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
    connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
    connect( actionAncestors, &QAction::triggered, ancestorDialog, &QWidget::show);                                        // > Tools > Ancestors
+   connect( action_brewit, &QAction::triggered, this, &MainWindow::brewItHelper );
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
@@ -846,7 +847,6 @@ void MainWindow::setupClicks()
    connect( pushButton_mashUp, &QAbstractButton::clicked, this, &MainWindow::moveSelectedMashStepUp );
    connect( pushButton_mashDown, &QAbstractButton::clicked, this, &MainWindow::moveSelectedMashStepDown );
    connect( pushButton_mashRemove, &QAbstractButton::clicked, this, &MainWindow::removeMash );
-   connect( pushButton_brewIt, &QAbstractButton::clicked, this, &MainWindow::brewItHelper );
    return;
 }
 
@@ -1132,8 +1132,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    // Start closing from the right (highest index) down. Anything else dumps
    // core in the most unpleasant of fashions
    tabs = tabWidget_recipeView->count() - 1;
-   for (int i = tabs; i >= 0; --i)
-   {
+   for (int i = tabs; i >= 0; --i) {
       if (tabWidget_recipeView->widget(i)->objectName() == "BrewNoteWidget")
          tabWidget_recipeView->removeTab(i);
    }
@@ -1160,6 +1159,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    // Set the locked flag as required
    checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
    lockRecipe( recipe->locked() ? Qt::Checked : Qt::Unchecked );
+
    // Here's the fun part. If the recipe is locked and display is false, then
    // you have said "show versions" and we will not all the recipe to be
    // unlocked. Hmmm. Skeptical Mik is skeptical
@@ -1170,6 +1170,8 @@ void MainWindow::setRecipe(Recipe* recipe)
       checkBox_locked->setEnabled( true );
    }
 
+   checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
+   lockRecipe(recipe->locked() ? Qt::Checked : Qt::Unchecked );
    // changes in how the data is loaded means we may not have fired all the signals we should have
    // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.
    recipe->recalcAll();
@@ -1212,6 +1214,7 @@ void MainWindow::lockRecipe(int state)
    actionDeleteSelected->setEnabled(enabled);
 
    treeView_recipe->setDragDropMode( lockIt ? QAbstractItemView::NoDragDrop : QAbstractItemView::DragDrop);
+   tabWidget_ingredients->setAcceptDrops( enabled );
 
    // Onto the tables. Four lines each to disable edits, drag/drop and deletes
    fermentableTable->setEnabled(enabled);
@@ -1234,6 +1237,10 @@ void MainWindow::lockRecipe(int state)
    pushButton_removeYeast->setEnabled(enabled);
    pushButton_editYeast->setEnabled(enabled);
 
+   fermDialog->pushButton_addToRecipe->setEnabled(enabled);
+   hopDialog->pushButton_addToRecipe->setEnabled(enabled);
+   miscDialog->pushButton_addToRecipe->setEnabled(enabled);
+   yeastDialog->pushButton_addToRecipe->setEnabled(enabled);
    // mashes still need dealing with
 }
 
