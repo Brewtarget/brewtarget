@@ -44,8 +44,6 @@
 
 OptionDialog::OptionDialog(QWidget* parent)
 {
-   int i;
-
    // I need a lot of control over what is displayed on the DbConfig dialog.
    // Maybe designer can do it? No idea. So I did this hybrid model, and I
    // think it will end up biting my ...
@@ -57,6 +55,39 @@ OptionDialog::OptionDialog(QWidget* parent)
    if( parent != nullptr ) {
       setWindowIcon(parent->windowIcon());
    }
+
+   // configure the language panel
+   configure_languages();
+
+   // Call this here to set up translatable strings.
+   retranslate();
+
+   // populate the combo boxes on the units tab
+   configure_unitCombos();
+
+   // populate the combo boxes on the formulas tab
+   configure_formulaCombos();
+
+   // populate the combo boxes on the logging tab
+   configure_logging();
+
+   // database panel stuff
+   comboBox_engine->addItem( tr("SQLite (default)"), QVariant(Brewtarget::SQLITE));
+   comboBox_engine->addItem( tr("PostgreSQL"), QVariant(Brewtarget::PGSQL));
+
+   // figure out which database we have
+   int idx = comboBox_engine->findData(Brewtarget::option("dbType", Brewtarget::SQLITE).toInt());
+   setDbDialog(static_cast<Brewtarget::DBTypes>(idx));
+
+   // connect all the signals
+   connect_signals();
+
+   pushButton_testConnection->setEnabled(false);
+}
+
+void OptionDialog::configure_languages()
+{
+   int i;
 
    ndxToLangCode <<
       "ca" <<
@@ -113,10 +144,10 @@ OptionDialog::OptionDialog(QWidget* parent)
    // Set icons.
    for( i = 0; i < langIcons.size(); ++i )
       comboBox_lang->setItemIcon(i, langIcons[i]);
+}
 
-   // Call this here to set up translatable strings.
-   retranslate();
-
+void OptionDialog::configure_unitCombos()
+{
    // Populate combo boxes on the "Units" tab
    weightComboBox->addItem(tr("SI units"), QVariant(SI));
    weightComboBox->addItem(tr("US traditional units"), QVariant(USCustomary));
@@ -138,7 +169,10 @@ OptionDialog::OptionDialog(QWidget* parent)
 
    colorComboBox->addItem(tr("SRM"), QVariant(Brewtarget::SRM));
    colorComboBox->addItem(tr("EBC"), QVariant(Brewtarget::EBC));
+}
 
+void OptionDialog::configure_formulaCombos()
+{
    diastaticPowerComboBox->addItem(tr("Lintner"), QVariant(Brewtarget::LINTNER));
    diastaticPowerComboBox->addItem(tr("WK"), QVariant(Brewtarget::WK));
 
@@ -150,31 +184,34 @@ OptionDialog::OptionDialog(QWidget* parent)
    colorFormulaComboBox->addItem(tr("Mosher's approximation"), QVariant(Brewtarget::MOSHER));
    colorFormulaComboBox->addItem(tr("Daniel's approximation"), QVariant(Brewtarget::DANIEL));
    colorFormulaComboBox->addItem(tr("Morey's approximation"), QVariant(Brewtarget::MOREY));
+}
 
-   connect( buttonBox, &QDialogButtonBox::accepted, this, &OptionDialog::saveAndClose );
-   connect( buttonBox, &QDialogButtonBox::rejected, this, &OptionDialog::cancel );
-
+void OptionDialog::configure_logging()
+{
    //Populate options on the "Logging" tab
    loggingLevelComboBox->addItem(tr("Information"), QVariant(Log::LogType_INFO));
    loggingLevelComboBox->addItem(tr("Warning"), QVariant(Log::LogType_WARNING));
    loggingLevelComboBox->addItem(tr("Error"), QVariant(Log::LogType_ERROR));
    loggingLevelComboBox->addItem(tr("Debug"), QVariant(Log::LogType_DEBUG));
    loggingLevelComboBox->setCurrentIndex(Log::logLevel);
+
    checkBox_enableLogging->setChecked(Log::loggingEnabled);
    checkBox_LogFileLocationUseDefault->setChecked(Log::logUseConfigDir);
+
    lineEdit_LogFileLocation->setText(Log::logFilePath.absolutePath());
+
    setLoggingControlsState(Log::loggingEnabled);
    setFileLocationState(Log::logUseConfigDir);
+}
 
-   // database panel stuff
-   comboBox_engine->addItem( tr("SQLite (default)"), QVariant(Brewtarget::SQLITE));
-   comboBox_engine->addItem( tr("PostgreSQL"), QVariant(Brewtarget::PGSQL));
+void OptionDialog::connect_signals()
+{
+
+   connect( buttonBox, &QDialogButtonBox::accepted, this, &OptionDialog::saveAndClose );
+   connect( buttonBox, &QDialogButtonBox::rejected, this, &OptionDialog::cancel );
+
    connect( comboBox_engine, SIGNAL( currentIndexChanged(int) ), this, SLOT( setEngine(int) ) );
    connect( pushButton_testConnection, &QAbstractButton::clicked, this, &OptionDialog::testConnection);
-
-   // figure out which database we have
-   int idx = comboBox_engine->findData(Brewtarget::option("dbType", Brewtarget::SQLITE).toInt());
-   setDbDialog(static_cast<Brewtarget::DBTypes>(idx));
 
    // Set the signals
    connect( checkBox_savePassword, &QAbstractButton::clicked, this, &OptionDialog::savePassword);
@@ -192,7 +229,6 @@ OptionDialog::OptionDialog(QWidget* parent)
    connect( pushButton_browseBackupDir, &QAbstractButton::clicked, this, &OptionDialog::setBackupDir );
    connect( pushButton_resetToDefault, &QAbstractButton::clicked, this, &OptionDialog::resetToDefault );
    connect( pushButton_LogFileLocationBrowse, &QAbstractButton::clicked, this, &OptionDialog::setLogDir );
-   pushButton_testConnection->setEnabled(false);
 
 }
 
@@ -497,6 +533,20 @@ void OptionDialog::saveAndClose()
    if( Brewtarget::mainWindow() )
       Brewtarget::mainWindow()->showChanges();
 
+   // Save versioning options
+   if ( checkBox_versioning->checkState() == Qt::Checked ) {
+      Brewtarget::setOption("versioning", true);
+      if ( radioButton_deleteAncestor->isChecked() ) {
+         Brewtarget::setOption( "deletewhat", Brewtarget::ANCESTOR );
+      }
+      else {
+         Brewtarget::setOption( "deletewhat", Brewtarget::DESCENDANT );
+      }
+   }
+   else {
+      Brewtarget::setOption("versioning", false);
+   }
+
    setVisible(false);
 }
 
@@ -554,6 +604,24 @@ void OptionDialog::showChanges()
 
    status = OptionDialog::NOCHANGE;
    changeColors();
+
+   if ( Brewtarget::option("versioning", true).toBool() ) {
+      checkBox_versioning->setCheckState(Qt::Checked);
+      groupBox_deleteBehavior->setEnabled(true);
+      switch ( Brewtarget::option("deletewhat", Brewtarget::DESCENDANT).toInt() ) {
+         case Brewtarget::ANCESTOR:
+            radioButton_deleteAncestor->setChecked(true);
+            break;
+         default:
+            radioButton_deleteDescendant->setChecked(true);
+            break;
+      }
+   }
+   else {
+      checkBox_versioning->setCheckState(Qt::Unchecked);
+      groupBox_deleteBehavior->setEnabled(false);
+   }
+
 }
 
 void OptionDialog::postgresVisible(bool canSee)
@@ -910,4 +978,9 @@ void OptionDialog::setFileLocationState(bool state)
 {
    lineEdit_LogFileLocation->setEnabled( ! state );
    pushButton_LogFileLocationBrowse->setEnabled( ! state );
+}
+
+void OptionDialog::versioningChanged(bool state)
+{
+   groupBox_deleteBehavior->setEnabled(state);
 }

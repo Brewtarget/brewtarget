@@ -110,6 +110,9 @@ public slots:
    //! \brief handle the dialogs for saving passwords
    void savePassword(bool state);
 
+   //! \brief does the version options
+   void versioningChanged(bool state);
+
    //! \brief enables/disables controls in Loggingtab based on checkboxes.
    void setLoggingControlsState(bool state);
    void setFileLocationState(bool state);
@@ -134,9 +137,14 @@ private:
    void showChanges();
    //
    void changeColors();
-   QButtonGroup *colorGroup, *ibuGroup;
    QStringList ndxToLangCode;
    QVector<QIcon> langIcons;
+
+   void configure_unitCombos();
+   void configure_formulaCombos();
+   void configure_languages();
+   void configure_logging();
+   void connect_signals();
 };
 
 #endif   /* _OPTIONDIALOG_H */

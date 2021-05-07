@@ -1998,6 +1998,12 @@ Recipe* Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude, bool n
 bool Database::wantsVersion(Recipe* rec)
 {
    bool ret = false;
+
+   // if the user has said they don't want versioning, just return false
+   if ( ! Brewtarget::option("versioning", false).toBool() ) {
+      return ret;
+   }
+
    QSqlQuery q(sqlDatabase());
    TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
 

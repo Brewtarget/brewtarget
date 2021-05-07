@@ -893,7 +893,11 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
 void BtTreeModel::deleteSelected(QModelIndexList victims)
 {
    QModelIndexList toBeDeleted = victims; // trust me
+   Recipe *rec;
+   int deletewhat;
 
+   // There are black zones of shadow close to our daily paths,
+   // and now and then some evil soul breaks a passage through.
    while ( ! toBeDeleted.isEmpty() )
    {
       QModelIndex ndx = toBeDeleted.takeFirst();
@@ -912,7 +916,16 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
             Database::instance().remove( misc(ndx) );
             break;
          case BtTreeItem::RECIPE:
-            Database::instance().remove( recipe(ndx) );
+            rec = recipe(ndx);
+            deletewhat = Brewtarget::option("deletewhat", Brewtarget::DESCENDANT).toInt();
+
+            if ( deletewhat == Brewtarget::DESCENDANT) {
+               orphanRecipe(ndx);
+               Database::instance().remove( recipe(ndx) );
+            }
+            else {
+               Database::instance().remove(  rec->ancestors() );
+            }
             break;
          case BtTreeItem::STYLE:
             Database::instance().remove( style(ndx) );
@@ -1514,6 +1527,9 @@ void BtTreeModel::orphanRecipe(QModelIndex ndx)
    orphan->setAncestor(orphan);
    // Display all of its brewnotes
    addBrewNoteSubTree(orphan, ndx.row(), pNode, false);
+
+   // set the ancestor to visible. Not sure this is required?
+   ancestor->setDisplay(true);
 
    // Put the ancestor into the tree
    if ( ! insertRow(pIndex.row(), pIndex, ancestor, BtTreeItem::RECIPE) )
