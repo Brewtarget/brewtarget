@@ -1379,6 +1379,32 @@ void BtTreeModel::observeElement(NamedEntity* d)
 // ===================== DRAG AND DROP STUFF ===============================
 // =========================================================================
 
+NamedEntity* getElement(int oType, int id)
+{
+   switch(oType)
+   {
+      case BtTreeItem::RECIPE:
+         return Database::instance().recipe(id);
+      case BtTreeItem::EQUIPMENT:
+         return Database::instance().equipment(id);
+      case BtTreeItem::FERMENTABLE:
+         return Database::instance().fermentable(id);
+      case BtTreeItem::HOP:
+         return Database::instance().hop(id);
+      case BtTreeItem::MISC:
+         return Database::instance().misc(id);
+      case BtTreeItem::STYLE:
+         return Database::instance().style(id);
+      case BtTreeItem::YEAST:
+         return Database::instance().yeast(id);
+      case BtTreeItem::FOLDER:
+         break;
+      default:
+         return nullptr;
+   }
+   return nullptr;
+}
+   
 bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
                                int row, int column, const QModelIndex &parent)
 {
@@ -1421,43 +1447,20 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
    {
       QString text;
       stream >> oType >> id >> name;
-      NamedEntity* elem = nullptr;
-      switch(oType)
-      {
-         case BtTreeItem::RECIPE:
-            elem = Database::instance().recipe(id);
-            break;
-         case BtTreeItem::EQUIPMENT:
-            elem = Database::instance().equipment(id);
-            break;
-         case BtTreeItem::FERMENTABLE:
-            elem = Database::instance().fermentable(id);
-            break;
-         case BtTreeItem::HOP:
-            elem = Database::instance().hop(id);
-            break;
-         case BtTreeItem::MISC:
-            elem = Database::instance().misc(id);
-            break;
-         case BtTreeItem::STYLE:
-            elem = Database::instance().style(id);
-            break;
-         case BtTreeItem::YEAST:
-            elem = Database::instance().yeast(id);
-            break;
-         case BtTreeItem::WATER:
-            elem = Database::instance().water(id);
-            break;
-         case BtTreeItem::FOLDER:
-            break;
-         default:
-            return false;
-      }
+      NamedEntity* elem = getElement(oType,id);
+
+      if ( elem == nullptr && oType != BtTreeItem::FOLDER )
+         return false;
 
       // this is the work.
       if ( oType == BtTreeItem::RECIPE && isRecipe(parent) ) {
-         // this will be fun
-         makeAncestors(elem,something);
+         Recipe *rent = recipe(parent);
+         if ( rent->folder() != elem->folder() ) {
+            elem->setFolder(target);
+         }
+         else {
+            makeAncestors(elem, something);
+         }
       }
       else if ( oType != BtTreeItem::FOLDER )
          elem->setFolder(target);
@@ -1530,6 +1533,7 @@ void BtTreeModel::orphanRecipe(QModelIndex ndx)
 
    // set the ancestor to visible. Not sure this is required?
    ancestor->setDisplay(true);
+   ancestor->setLocked(false);
 
    // Put the ancestor into the tree
    if ( ! insertRow(pIndex.row(), pIndex, ancestor, BtTreeItem::RECIPE) )

@@ -1369,16 +1369,17 @@ QList<int> Database::ancestoralIds(Recipe const* descendant)
    //   UNION ALL
    //   SELECT r.id, r.ancestor_id FROM ancestor a, recipe r
    //     WHERE r.id = a.ancestor_id AND r.ancestor_id != a.id )
-   // SELECT r.id FROM ancestor a, recipe r WHERE a.id = r.id
+   // SELECT id FROM ancestor
    QString recursiveQuery =
       QString("WITH RECURSIVE ancestor(%1,%2) AS "
-               "(SELECT %1,%2 FROM recipe r WHERE r.%1 = %3 "
+               "(SELECT %1,%2 FROM %3 r WHERE r.%1 = %4 "
                 "UNION ALL "
                 "SELECT r.%1, r.%2 FROM ancestor a, recipe r "
                 "WHERE r.%1 = a.%2 AND r.%2 != a.%1 ) "
-              "SELECT r.%1 FROM ancestor a, recipe r WHERE a.%1 = r.%1")
+              "SELECT %1 from ancestor")
       .arg( tbl->keyName() )
       .arg( tbl->foreignKeyToColumn(PropertyNames::Recipe::ancestorId) )
+      .arg( tbl->tableName() )
       .arg( descendant->_key );
 
    QSqlQuery q( sqlDatabase() );

@@ -322,6 +322,10 @@ void MainWindow::init() {
    // doing it wrong again.
    connect( &(Database::instance()), qOverload<BrewNote*>(&Database::deletedSignal), this, &MainWindow::closeBrewNote);
 
+   // setup the pretty tool tip. It doesn't really belong anywhere, so here it
+   // is
+   label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
+
    qDebug() << Q_FUNC_INFO << "MainWindow initialisation complete";
    return;
 }
@@ -758,7 +762,6 @@ void MainWindow::setupTriggers()
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
       actionBackup_Database->setEnabled(false);                                                                         // > File > Database > Backup
       actionRestore_Database->setEnabled(false);                                                                        // > File > Database > Restore
-      label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
    }
    else {
       connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );                                 // > File > Database > Backup
