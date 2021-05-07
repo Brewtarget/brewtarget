@@ -203,13 +203,14 @@ public:
    //! \b spawns a recipe
    void spawnRecipe(QModelIndex ndx);
 
+public slots:
+   void versionedRecipe(Recipe* ancestor, Recipe* descendant);
+
 private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
    // pointer I can get. I hope this works.
    void folderChanged(QString name);
-
-   void versionedRecipe(Recipe* ancestor, Recipe* descendant);
 
    //! \brief This is as best as I can see to do it. Qt signaling mechanism is
    //   doing, as I recall, string compares on the signatures. Sigh.

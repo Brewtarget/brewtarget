@@ -437,6 +437,15 @@ void BtTreeView::spawnRecipe()
    }
 }
 
+bool BtTreeView::ancestorsAreShowing(QModelIndex ndx)
+{
+   if ( _type == BtTreeModel::RECIPEMASK ) {
+      QModelIndex translated = _filter->mapToSource(ndx);
+      return _model->showChild(translated);
+   }
+
+   return false;
+}
 void BtTreeView::enableDelete(bool enable)       { m_deleteAction->setEnabled(enable); }
 void BtTreeView::enableShowAncestor(bool enable) { m_showAncestorAction->setEnabled(enable); }
 void BtTreeView::enableHideAncestor(bool enable) { m_hideAncestorAction->setEnabled(enable); }

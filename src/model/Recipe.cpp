@@ -1534,9 +1534,7 @@ QList<Salt*> Recipe::salts() const { return Database::instance().salts(this); }
 QList<Recipe*> Recipe::ancestors()
 {
    if ( m_ancestors.size() == 0 ) {
-      foreach( int ancestor, Database::instance().ancestoralIds(this) ) {
-         m_ancestors.append(Database::instance().recipe(ancestor));
-      }
+      loadAncestors();
    }
 
    return m_ancestors;
@@ -1556,6 +1554,14 @@ void Recipe::loadAncestors()
 bool Recipe::hasAncestors()
 {
    return ancestors().size() > 1;
+}
+
+bool Recipe::isMyAncestor(Recipe* maybe)
+{
+   if ( m_ancestors.size() == 0 ) {
+      loadAncestors();
+   }
+   return m_ancestors.contains(maybe);
 }
 
 void Recipe::setAncestor( Recipe* ancestor )

@@ -353,6 +353,7 @@ void NamedEntity::setEasy(QString prop_name, QVariant value, bool notify, bool u
    // you can change the recipe and the mash without trying to version
    if ( className == QStringLiteral("Recipe") ||
         className == QStringLiteral("Mash")   ||
+        className == QStringLiteral("BrewNote") ||
         updateEntry ) {
       Database::instance().updateEntry(this,prop_name,value,notify);
    }

@@ -96,6 +96,7 @@ class StyleListModel;
 class StyleSortFilterProxyModel;
 class NamedMashEditor;
 class BtDatePopup;
+class AncestorDialog;
 
 class WaterDialog;
 class WaterListModel;
@@ -394,6 +395,7 @@ private:
    WaterDialog* waterDialog;
    WaterEditor* waterEditor;
 
+   AncestorDialog* ancestorDialog;
    // all things tables should go here.
    FermentableTableModel* fermTableModel;
    HopTableModel* hopTableModel;

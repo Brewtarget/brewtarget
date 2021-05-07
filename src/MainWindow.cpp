@@ -126,6 +126,7 @@
 #include "RelationalUndoableUpdate.h"
 #include "UndoableAddOrRemove.h"
 #include "BtHorizontalTabs.h"
+#include "AncestorDialog.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
@@ -317,6 +318,8 @@ void MainWindow::init() {
    // set up the drag/drop parts
    this->setupDrops();
 
+   // I do not like this connection here.
+   connect( ancestorDialog, &AncestorDialog::ancestoryChanged, treeView_recipe->model(), &BtTreeModel::versionedRecipe);
    connect( treeView_recipe, &BtTreeView::recipeSpawn, this, &MainWindow::versionedRecipe );
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
@@ -475,6 +478,8 @@ void MainWindow::setupDialogs()
 
    waterDialog = new WaterDialog(this);
    waterEditor = new WaterEditor(this);
+
+   ancestorDialog = new AncestorDialog(this);
 
    // Set up the fileSaver dialog.
    fileSaver = new QFileDialog(this, tr("Save"), QDir::homePath(), tr("BeerXML files (*.xml)") );
@@ -756,6 +761,7 @@ void MainWindow::setupTriggers()
    connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );                                       // > Tools > Timers
    connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
    connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
+   connect( actionAncestors, &QAction::triggered, ancestorDialog, &QWidget::show);                                        // > Tools > Ancestors
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
@@ -1032,10 +1038,26 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
    // THERE
 
    Recipe* parent  = Database::instance().getParentRecipe(bNote);
-   // I think this means a brew note for a different recipe has been selected.
-   // We need to select that recipe, which will clear the current tabs
-   if (  parent != recipeObs )
-      setRecipe(parent);
+   QModelIndex pNdx = treeView_recipe->parent(index);
+
+   // this gets complex. Versioning means we can't just clear the open
+   // brewnote tabs out.
+   if ( parent != this->recipeObs ) {
+      if ( ! this->recipeObs->isMyAncestor(parent) ) {
+         setRecipe(parent);
+      }
+      else if ( treeView_recipe->ancestorsAreShowing(pNdx) ) {
+         tabWidget_recipeView->setCurrentIndex(0);
+         // Start closing from the right (highest index) down. Anything else dumps
+         // core in the most unpleasant of fashions
+         int tabs = tabWidget_recipeView->count() - 1;
+         for (int i = tabs; i >= 0; --i) {
+            if (tabWidget_recipeView->widget(i)->objectName() == "BrewNoteWidget")
+               tabWidget_recipeView->removeTab(i);
+         }
+         setRecipe(parent);
+      }
+   }
 
    ni = findBrewNoteWidget(bNote);
    if ( ! ni )

@@ -105,6 +105,8 @@ public:
    //! \brief gets the type of the item at \c index.
    int type(const QModelIndex &index);
 
+   //! \brief returns true if the recipe at ndx is showing its ancestors
+   bool ancestorsAreShowing(QModelIndex ndx);
    //! \brief enables or disables the delete action when a recipe is unlocked/locked
    void enableDelete(bool enable);
    //! \brief enables or disables showing ancestors

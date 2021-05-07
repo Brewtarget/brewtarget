@@ -1762,6 +1762,7 @@
     <addaction name="actionAlcohol_Percentage_Tool"/>
     <addaction name="actionStrikeWater_Calculator"/>
     <addaction name="actionWater_Chemistry"/>
+    <addaction name="actionAncestors"/>
     <addaction name="actionTimers"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
@@ -2215,6 +2216,10 @@
    </property>
   </action>
   <action name="actionStrikeWater_Calculator">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallWater.svg</normaloff>:/images/smallWater.svg</iconset>
+   </property>
    <property name="text">
     <string>Strike &amp;Water Calculator</string>
    </property>
@@ -2229,6 +2234,10 @@
    </property>
   </action>
   <action name="actionHydrometer_Temp_Adjustment">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/hydrometer.svg</normaloff>:/images/hydrometer.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;Hydrometer Temp Adjustment</string>
    </property>
@@ -2266,6 +2275,10 @@
    </property>
   </action>
   <action name="actionWater_Chemistry">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/testtube.svg</normaloff>:/images/testtube.svg</iconset>
+   </property>
    <property name="text">
     <string>Water &amp;Chemistry</string>
    </property>
@@ -2278,6 +2291,15 @@
   <action name="actionRedo">
    <property name="text">
     <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionAncestors">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/merge.png</normaloff>:/images/merge.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ancestors</string>
    </property>
   </action>
  </widget>
