@@ -348,7 +348,11 @@ QString NamedEntity::text(QDate const& val)
 
 void NamedEntity::setEasy(QString prop_name, QVariant value, bool notify)
 {
-   if ( this->metaObject()->className() == QStringLiteral("Recipe") ) {
+   QString className = this->metaObject()->className();
+
+   // you can change the recipe and the mash without trying to version
+   if ( className == QStringLiteral("Recipe") ||
+         className == QStringLiteral("Mash") ) {
       Database::instance().updateEntry(this,prop_name,value,notify);
    }
    else {

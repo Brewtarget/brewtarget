@@ -2969,8 +2969,13 @@ void Database::modifyEntry(NamedEntity* object, QString propName, QVariant value
       // we don't want a version, or the ingredient isn't in a recipe
       neClone = object;
    }
-
    updateEntry( neClone, propName, value, notify );
+
+   if ( owner && wantsVersion(owner) ) {
+      emit changed( metaProperty("recipes"), QVariant() );
+      emit newSignal(spawn);
+      emit spawned(owner,spawn);
+   }
 }
 
 void Database::updateEntry( NamedEntity* object, QString propName, QVariant value, bool notify, bool transact )
