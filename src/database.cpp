@@ -2681,6 +2681,10 @@ template<class T> T* Database::addNamedEntityToRecipe(
    if( rec == nullptr || ing == nullptr )
       return nullptr;
 
+   if ( rec->locked() )
+      return nullptr;
+
+
    // TRANSACTION BEGIN, but only if requested. Yeah. Had to go there.
    if ( transact ) {
       sqlDatabase().transaction();
@@ -3245,7 +3249,9 @@ QMap<int, double> Database::getInventory(const Brewtarget::DBTable table) const
 
 Recipe* Database::breed(Recipe* parent)
 {
-   if ( wantsVersion(parent) ) {
+   // only breed when the parent is unlocked and the recipe wants to be
+   // versioned
+   if ( !parent->locked() && wantsVersion(parent) ) {
       return newRecipe(parent,true);
    }
    else {
@@ -3254,13 +3260,16 @@ Recipe* Database::breed(Recipe* parent)
 }
 
 // Add to recipe ==============================================================
-void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transact )
+Equipment* Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transact )
 {
    Equipment* newEquip = e;
    TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    if( e == nullptr )
-      return;
+      return nullptr;
+
+   if ( rec->locked() )
+      return nullptr;
 
    if ( transact )
       sqlDatabase().transaction();
@@ -3303,11 +3312,17 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool transac
    // attached, etc.
    if ( transact )
       rec->recalcAll();
+
+   return newEquip;
+
 }
 
 Fermentable * Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy, bool transact )
 {
    if ( ferm == nullptr )
+      return nullptr;
+
+   if ( rec->locked() )
       return nullptr;
 
    try {
@@ -3330,6 +3345,9 @@ QList<Fermentable*> Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms
    QList<Fermentable*> rets;
 
    if ( ferms.size() == 0 )
+      return rets;
+
+   if ( rec->locked() )
       return rets;
 
    if ( transact ) {
@@ -3358,21 +3376,28 @@ QList<Fermentable*> Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms
    return rets;
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, Fermentable* exclude, bool transact )
+QList<Fermentable*> Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms, Fermentable* exclude, bool transact )
 {
+   QList<Fermentable*> nothing;
    if ( ferms.size() == 0 )
-      return;
+      return nothing;
+
+   if ( rec->locked() )
+      return nothing;
 
    int r_ndx = ferms.indexOf(exclude);
 
    if ( r_ndx != -1 ) {
       ferms.removeAt(r_ndx);
    }
-   addToRecipe( rec, ferms, transact );
+   return addToRecipe( rec, ferms, transact );
 }
 
 Hop * Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy, bool transact )
 {
+   if ( rec->locked() )
+      return nullptr;
+
    Recipe* spawn = breed(rec);
    try {
       Hop* newHop = addNamedEntityToRecipe<Hop>( spawn, hop, noCopy, &allHops, true, transact );
@@ -3397,6 +3422,9 @@ QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
    QList<Hop*> rets;
 
    if ( hops.size() == 0 )
+      return rets;
+
+   if ( rec->locked() )
       return rets;
 
    Recipe *spawn = breed(rec);
@@ -3426,23 +3454,31 @@ QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
    return rets;
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Hop*>hops, Hop* exclude, bool transact )
+QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, Hop* exclude, bool transact )
 {
+   QList<Hop*> nothing;
+
    if ( hops.size() == 0 )
-      return;
+      return nothing;
+
+   if ( rec->locked() )
+      return nothing;
 
    int r_ndx = hops.indexOf(exclude);
 
    if ( r_ndx != -1 ) {
       hops.removeAt(r_ndx);
    }
-   addToRecipe( rec, hops, transact );
+   return addToRecipe( rec, hops, transact );
 }
 
 Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
    Mash* newMash = m;
    TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
+
+   if ( rec->locked() )
+      return nullptr;
 
    if ( transact )
       sqlDatabase().transaction();
@@ -3481,6 +3517,8 @@ Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 
 Misc * Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy, bool transact )
 {
+   if ( rec->locked() )
+      return nullptr;
 
    Recipe* spawn = breed(rec);
    try {
@@ -3500,6 +3538,9 @@ QList<Misc*> Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transac
    QList<Misc*> rets;
 
    if ( miscs.size() == 0 )
+      return rets;
+
+   if ( rec->locked() )
       return rets;
 
    if ( transact )
@@ -3525,21 +3566,27 @@ QList<Misc*> Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, bool transac
    return rets;
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, Misc* exclude, bool transact )
+QList<Misc*> Database::addToRecipe( Recipe* rec, QList<Misc*>miscs, Misc* exclude, bool transact )
 {
+   QList<Misc*> rets;
    if ( miscs.size() == 0 )
-      return;
+      return rets;
+
+   if ( rec->locked() )
+      return rets;
 
    int r_ndx = miscs.indexOf(exclude);
 
    if ( r_ndx != -1 ) {
       miscs.removeAt(r_ndx);
    }
-   addToRecipe( rec, miscs, transact );
+   return addToRecipe( rec, miscs, transact );
 }
 
 Water * Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact )
 {
+   if ( rec->locked() )
+      return nullptr;
 
    Recipe* spawn = breed(rec);
    try {
@@ -3552,6 +3599,9 @@ Water * Database::addToRecipe( Recipe* rec, Water* w, bool noCopy, bool transact
 
 Salt * Database::addToRecipe( Recipe* rec, Salt* s, bool noCopy, bool transact )
 {
+   if ( rec->locked() )
+      return nullptr;
+
    Recipe* spawn = breed(rec);
    try {
       return addNamedEntityToRecipe( spawn, s, noCopy, &allSalts,true,transact );
@@ -3567,6 +3617,9 @@ Style * Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact
    TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    if ( s == nullptr )
+      return nullptr;
+
+   if ( rec->locked() )
       return nullptr;
 
    if ( transact )
@@ -3599,6 +3652,9 @@ Style * Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact
 
 Yeast * Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy, bool transact )
 {
+   if ( rec->locked() )
+      return nullptr;
+
    Recipe* spawn = breed(rec);
    try {
       Yeast* newYeast = addNamedEntityToRecipe<Yeast>( spawn, y, noCopy, &allYeasts, true, transact );
@@ -3620,6 +3676,9 @@ QList<Yeast*> Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool tran
    QList<Yeast*> rets;
 
    if ( yeasts.size() == 0 )
+      return rets;
+
+   if ( rec->locked() )
       return rets;
 
    if ( transact )
@@ -3650,17 +3709,23 @@ QList<Yeast*> Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, bool tran
    return rets;
 }
 
-void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, Yeast* exclude, bool transact )
+QList<Yeast*> Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, Yeast* exclude, bool transact )
 {
+   QList<Yeast*> nothing;
+
    if ( yeasts.size() == 0 )
-      return;
+      return nothing;
+
+   if ( rec->locked() )
+      return nothing;
 
    int r_ndx = yeasts.indexOf(exclude);
 
    if ( r_ndx != -1 ) {
       yeasts.removeAt(r_ndx);
    }
-   addToRecipe( rec, yeasts, transact );
+
+   return addToRecipe( rec, yeasts, transact );
 }
 
 

@@ -68,6 +68,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
 
          _type = BtTreeItem::RECIPE;
          _mimeType = "application/x-brewtarget-recipe";
+         m_maxColumns = BtTreeItem::RECIPENUMCOLS;
          break;
       case EQUIPMASK:
          rootItem->insertChildren(items,1,BtTreeItem::EQUIPMENT);
@@ -75,6 +76,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), qOverload<Equipment*>(&Database::deletedSignal), this, qOverload<Equipment*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::EQUIPMENT;
          _mimeType = "application/x-brewtarget-recipe";
+         m_maxColumns = BtTreeItem::EQUIPMENTNUMCOLS;
          break;
       case FERMENTMASK:
          rootItem->insertChildren(items,1,BtTreeItem::FERMENTABLE);
@@ -82,6 +84,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), qOverload<Fermentable*>(&Database::deletedSignal), this, qOverload<Fermentable*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::FERMENTABLE;
          _mimeType = "application/x-brewtarget-ingredient";
+         m_maxColumns = BtTreeItem::FERMENTABLENUMCOLS;
          break;
       case HOPMASK:
          rootItem->insertChildren(items,1,BtTreeItem::HOP);
@@ -89,6 +92,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), qOverload<Hop*>(&Database::deletedSignal),this, qOverload<Hop*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::HOP;
          _mimeType = "application/x-brewtarget-ingredient";
+         m_maxColumns = BtTreeItem::HOPNUMCOLS;
          break;
       case MISCMASK:
          rootItem->insertChildren(items,1,BtTreeItem::MISC);
@@ -96,6 +100,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), qOverload<Misc*>(&Database::deletedSignal),this, qOverload<Misc*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::MISC;
          _mimeType = "application/x-brewtarget-ingredient";
+         m_maxColumns = BtTreeItem::MISCNUMCOLS;
          break;
       case STYLEMASK:
          rootItem->insertChildren(items,1,BtTreeItem::STYLE);
@@ -103,6 +108,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), qOverload<Style*>(&Database::deletedSignal),this, qOverload<Style*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::STYLE;
          _mimeType = "application/x-brewtarget-recipe";
+         m_maxColumns = BtTreeItem::STYLENUMCOLS;
          break;
       case YEASTMASK:
          rootItem->insertChildren(items,1,BtTreeItem::YEAST);
@@ -110,6 +116,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), qOverload<Yeast*>(&Database::deletedSignal),this, qOverload<Yeast*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::YEAST;
          _mimeType = "application/x-brewtarget-ingredient";
+         m_maxColumns = BtTreeItem::YEASTNUMCOLS;
          break;
       case WATERMASK:
          rootItem->insertChildren(items,1,BtTreeItem::WATER);
@@ -117,6 +124,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), qOverload<Water*>(&Database::deletedSignal),this, qOverload<Water*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::WATER;
          _mimeType = "application/x-brewtarget-ingredient";
+         m_maxColumns = BtTreeItem::WATERNUMCOLS;
          break;
       default:
          qWarning() << QString("Invalid treemask: %1").arg(type);
@@ -160,27 +168,7 @@ int BtTreeModel::rowCount(const QModelIndex &parent) const
 int BtTreeModel::columnCount( const QModelIndex &parent) const
 {
    Q_UNUSED(parent)
-   switch(treeMask)
-   {
-   case RECIPEMASK:
-      return BtTreeItem::RECIPENUMCOLS;
-   case EQUIPMASK:
-      return BtTreeItem::EQUIPMENTNUMCOLS;
-   case FERMENTMASK:
-      return BtTreeItem::FERMENTABLENUMCOLS;
-   case HOPMASK:
-      return BtTreeItem::HOPNUMCOLS;
-   case MISCMASK:
-      return BtTreeItem::MISCNUMCOLS;
-   case YEASTMASK:
-      return BtTreeItem::YEASTNUMCOLS;
-   case STYLEMASK:
-      return BtTreeItem::STYLENUMCOLS;
-   case WATERMASK:
-      return BtTreeItem::WATERNUMCOLS;
-   default:
-      return 0;
-   }
+   return m_maxColumns;
 }
 
 Qt::ItemFlags BtTreeModel::flags(const QModelIndex &index) const
@@ -243,41 +231,11 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
 {
    int maxColumns;
 
-   switch(treeMask)
-   {
-   case RECIPEMASK:
-      maxColumns = BtTreeItem::RECIPENUMCOLS;
-      break;
-   case EQUIPMASK:
-      maxColumns = BtTreeItem::EQUIPMENTNUMCOLS;
-      break;
-   case FERMENTMASK:
-      maxColumns = BtTreeItem::FERMENTABLENUMCOLS;
-      break;
-   case HOPMASK:
-      maxColumns = BtTreeItem::HOPNUMCOLS;
-      break;
-   case MISCMASK:
-      maxColumns = BtTreeItem::MISCNUMCOLS;
-      break;
-   case YEASTMASK:
-      maxColumns = BtTreeItem::YEASTNUMCOLS;
-      break;
-   case STYLEMASK:
-      maxColumns = BtTreeItem::STYLENUMCOLS;
-      break;
-   case FOLDERMASK:
+   if ( treeMask == FOLDERMASK ) {
       maxColumns = BtTreeItem::FOLDERNUMCOLS;
-      break;
-   case WATERMASK:
-      maxColumns = BtTreeItem::WATERNUMCOLS;
-      break;
-   default:
-      // Backwards compatibility. This MUST be fixed prior to releasing the code
-      // I hate this comment! Why? Why MUST this be fixed prior to release?
-      // It wasn't, so what is "this" and what are the consequences. I am such
-      // an ass.
-      maxColumns = BtTreeItem::RECIPENUMCOLS;
+   }
+   else {
+      maxColumns = m_maxColumns;
    }
 
    if ( !rootItem || !index.isValid() || index.column() < 0 || index.column() >= maxColumns)

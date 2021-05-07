@@ -395,6 +395,8 @@ void BtTreeView::showVersions()
    }
 }
 
+void BtTreeView::enableDelete(bool enable) { m_deleteAction->setEnabled(enable); }
+
 void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 {
    QMenu* _newMenu = new QMenu(this);
@@ -453,8 +455,8 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
    _newMenu->addAction(tr("Folder"), top, SLOT(newFolder()));
    // Copy
    _contextMenu->addAction(tr("Copy"), top, SLOT(copySelected()));
-   // Delete
-   _contextMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
+   // m_deleteAction makes it easier to find this later to disable it
+   m_deleteAction = _contextMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
    // export and import
    _contextMenu->addSeparator();
    _exportMenu->setTitle(tr("Export"));

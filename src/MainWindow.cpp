@@ -296,6 +296,8 @@ void MainWindow::init() {
    this->setupShortCuts();
    // Once more with the context menus too
    this->setupContextMenu();
+   // do all the work for checkboxes (just one right now)
+   this->setUpStateChanges();
 
    // This sets up things that might have been 'remembered' (ie stored in the config file) from a previous run of the
    // program - eg window size, which is stored in MainWindow::closeEvent().
@@ -399,6 +401,11 @@ void MainWindow::setupShortCuts()
    actionRedo->setShortcut(QKeySequence::Redo);
 }
 
+void MainWindow::setUpStateChanges() 
+{
+   connect( checkBox_locked, &QCheckBox::stateChanged, this, &MainWindow::lockRecipe );
+}
+
 // Any manipulation of CSS for the MainWindow should be in here
 void MainWindow::setupCSS()
 {
@@ -418,6 +425,13 @@ void MainWindow::setupCSS()
 
    // The bold style sheet doesn't change, so set it here once.
    lineEdit_boilSg->setStyleSheet(boldSS);
+
+   // Disabled fields should change color, but not become unreadable. Mucking
+   // with the css seems the most reasonable way to do that.
+   QString tabDisabled = QString("QWidget:!enabled { color: #000000, backgroup: #F0F0F0; }");
+   tab_recipe->setStyleSheet(tabDisabled);
+   tabWidget_ingredients->setStyleSheet(tabDisabled);
+
 }
 
 // Most dialogs are initialized in here. That should include any initial
@@ -1118,6 +1132,19 @@ void MainWindow::setRecipe(Recipe* recipe)
    mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
+   // Set the locked flag as required
+   checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
+   lockRecipe( recipe->locked() ? Qt::Checked : Qt::Unchecked );
+   // Here's the fun part. If the recipe is locked and display is false, then
+   // you have said "show versions" and we will not all the recipe to be
+   // unlocked. Hmmm. Skeptical Mik is skeptical
+   if ( recipe->locked() && ! recipe->display() ) {
+      checkBox_locked->setEnabled( false );
+   }
+   else {
+      checkBox_locked->setEnabled( true );
+   }
+
    // changes in how the data is loaded means we may not have fired all the signals we should have
    // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.
    recipe->recalcAll();
@@ -1127,6 +1154,63 @@ void MainWindow::setRecipe(Recipe* recipe)
    // called.
    connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    showChanges();
+}
+
+// When a recipe is locked, many fields need to be disabled.
+void MainWindow::lockRecipe(int state)
+{
+   if ( this->recipeObs == nullptr )
+      return;
+
+   // If I am locking a recipe (lock == true ), I want to disable fields
+   // (enable == false). If I am unlocking (lock == false), I want to enable
+   // fields (enable == true). This just makes that easy
+   bool lockIt = state == Qt::Checked;
+   bool enabled = ! lockIt;
+
+   // Lock/unlock the recipe, then disable/enable the fields. I am leaving the
+   // name field as editable. I may regret that, but if you are defining an
+   // inheritance tree, you may want to remove strings from the ancestoral
+   // names
+   this->recipeObs->setLocked(lockIt);
+
+   // I could disable tab_recipe, but would not prevent you from unlocking the
+   // recipe because that field would also be disabled
+   qWidget_styleBox->setEnabled(enabled);
+   qWidget_equipmentBox->setEnabled(enabled);
+   lineEdit_batchSize->setEnabled(enabled);
+   lineEdit_boilSize->setEnabled(enabled);
+   lineEdit_efficiency->setEnabled(enabled);
+   lineEdit_boilTime->setEnabled(enabled);
+
+   // locked recipes cannot be deleted
+   treeView_recipe->enableDelete(enabled);
+   actionDeleteSelected->setEnabled(enabled);
+
+   treeView_recipe->setDragDropMode( lockIt ? QAbstractItemView::NoDragDrop : QAbstractItemView::DragDrop);
+
+   // Onto the tables. Four lines each to disable edits, drag/drop and deletes
+   fermentableTable->setEnabled(enabled);
+   pushButton_addFerm->setEnabled(enabled);
+   pushButton_removeFerm->setEnabled(enabled);
+   pushButton_editFerm->setEnabled(enabled);
+
+   hopTable->setEnabled(enabled);
+   pushButton_addHop->setEnabled(enabled);
+   pushButton_removeHop->setEnabled(enabled);
+   pushButton_editHop->setEnabled(enabled);
+
+   miscTable->setEnabled(enabled);
+   pushButton_addMisc->setEnabled(enabled);
+   pushButton_removeMisc->setEnabled(enabled);
+   pushButton_editMisc->setEnabled(enabled);
+
+   yeastTable->setEnabled(enabled);
+   pushButton_addYeast->setEnabled(enabled);
+   pushButton_removeYeast->setEnabled(enabled);
+   pushButton_editYeast->setEnabled(enabled);
+
+   // mashes still need dealing with
 }
 
 void MainWindow::changed(QMetaProperty prop, QVariant value)

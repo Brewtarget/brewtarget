@@ -307,6 +307,8 @@ public slots:
    //! \brief Doing updates via this method makes them undoable (and redoable).  This is the most generic version
    //         which requires the caller to construct a QUndoCommand.
    void doOrRedoUpdate(QUndoCommand * update);
+   //! \brief to lock or not was never the question before now.
+   void lockRecipe(int state);
 
 public:
    //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version
@@ -467,6 +469,9 @@ private:
    void setupTextEdit();
    //! \brief Connect signal/slots drag/drop
    void setupDrops();
+   //! \brief Connect signal/slots for check boxes
+   void setUpStateChanges();
+
 
    void updateDensitySlider(QString attribute, RangedSlider* slider, double max);
    void updateColorSlider(QString attribute, RangedSlider* slider);

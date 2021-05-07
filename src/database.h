@@ -282,7 +282,7 @@ public:
    // signal corresponding to the appropriate QList
    // of ingredients in rec. If noCopy is true, then don't copy, and set
    // the ingredient's display parameter to 0 (don't display in lists).
-   void addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false, bool transact = true );
+   Equipment* addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false, bool transact = true );
    Hop * addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false, bool transact = true);
    Fermentable * addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false, bool transact = true);
    //! Add a mash, displacing any current mash.
@@ -303,10 +303,10 @@ public:
    QList<Yeast*> addToRecipe(Recipe* rec, QList<Yeast*> yeasts, bool transact = true);
 
    //! \brief bulk add to a recipe, with exclusions
-   void addToRecipe(Recipe *rec, QList<Fermentable*> ferms, Fermentable* exclude, bool transact = true );
-   void addToRecipe(Recipe *rec, QList<Hop*> hops, Hop* exclude, bool transact = true );
-   void addToRecipe(Recipe *rec, QList<Misc*> miscs, Misc* exclude, bool transact = true );
-   void addToRecipe(Recipe *rec, QList<Yeast*> yeasts, Yeast* exclude, bool transact = true );
+   QList<Fermentable*> addToRecipe(Recipe *rec, QList<Fermentable*> ferms, Fermentable* exclude, bool transact = true );
+   QList<Hop*> addToRecipe(Recipe *rec, QList<Hop*> hops, Hop* exclude, bool transact = true );
+   QList<Misc*> addToRecipe(Recipe *rec, QList<Misc*> miscs, Misc* exclude, bool transact = true );
+   QList<Yeast*> addToRecipe(Recipe *rec, QList<Yeast*> yeasts, Yeast* exclude, bool transact = true );
 
    /**
    * \brief  This function is intended to be called by an ingredient that has not already cached its parent's key

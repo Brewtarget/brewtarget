@@ -105,6 +105,9 @@ public:
    //! \brief gets the type of the item at \c index.
    int type(const QModelIndex &index);
 
+   //! \brief enables or disables the delete action when a recipe is unlocked/locked
+   void enableDelete(bool enable);
+
    //! \brief returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
    bool multiSelected();
 
@@ -156,6 +159,7 @@ private:
    BtTreeFilterProxyModel* _filter;
    BtTreeModel::TypeMasks _type;
    QMenu* _contextMenu, *subMenu;
+   QAction* m_deleteAction;
    QPoint dragStart;
    QWidget* _editor;
    QList<Recipe*> m_versionsShown;

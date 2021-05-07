@@ -141,7 +141,8 @@ Recipe::Recipe(QString name, bool cache)
    m_style_id(0),
    m_og(1.0),
    m_fg(1.0),
-   m_cacheOnly(cache)
+   m_cacheOnly(cache),
+   m_locked(false)
 {
 }
 
@@ -178,6 +179,8 @@ Recipe::Recipe(TableSchema* table, QSqlRecord rec, int t_key)
    m_style_id = rec.value( table->propertyToColumn( PropertyNames::Recipe::style_id)).toInt();
    m_og = rec.value( table->propertyToColumn( PropertyNames::Recipe::og)).toDouble();
    m_fg = rec.value( table->propertyToColumn( PropertyNames::Recipe::fg)).toDouble();
+
+   m_locked = rec.value( table->propertyToColumn( PropertyNames::Recipe::locked)).toBool();
 }
 
 Recipe::Recipe( Recipe const& other ) : NamedEntity(other),
@@ -210,7 +213,8 @@ Recipe::Recipe( Recipe const& other ) : NamedEntity(other),
    m_style_id(other.m_style_id),
    m_og(other.m_og),
    m_fg(other.m_fg),
-   m_cacheOnly(other.m_cacheOnly)
+   m_cacheOnly(other.m_cacheOnly),
+   m_locked(other.m_locked)
 {
    setObjectName("Recipe");
 }
@@ -1365,6 +1369,14 @@ void Recipe::setKegPrimingFactor( double var )
    }
 }
 
+void Recipe::setLocked(bool isLocked )
+{
+   m_locked = isLocked;
+   if ( ! m_cacheOnly ) {
+      setEasy(PropertyNames::Recipe::locked, isLocked);
+   }
+}
+
 void Recipe::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
 //==========================Calculated Getters============================
@@ -1555,6 +1567,7 @@ void Recipe::setAncestor( Recipe* ancestor )
    // Marking an ancestor does two thigns -- it sets the ancestor's display to
    // false, and the set the ancestor_id
    Database::instance().setAncestor(this,ancestor);
+   ancestor->setLocked(true);
    loadAncestors();
 }
 
@@ -1589,6 +1602,7 @@ double Recipe::kegPrimingFactor() const { return m_kegPrimingFactor; }
 int Recipe::fermentationStages() const { return m_fermentationStages; }
 QDate Recipe::date() const { return m_date; }
 bool Recipe::cacheOnly() const { return m_cacheOnly; }
+bool Recipe::locked() const { return m_locked; }
 
 //=============================Adders and Removers========================================
 

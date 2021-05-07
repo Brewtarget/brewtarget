@@ -72,6 +72,7 @@ namespace PropertyNames::Recipe { static char const * const postBoilVolume_l = "
 namespace PropertyNames::Recipe { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
 
 namespace PropertyNames::Recipe { static char const * const ancestorId = "ancestor_id"; }
+namespace PropertyNames::Recipe { static char const * const locked = "locked"; }
 
 namespace PropertyNames::Recipe { static char const * const recipeType = "recipeType"; }
 namespace PropertyNames::Recipe { static char const * const style = "style"; }
@@ -190,6 +191,8 @@ public:
    Q_PROPERTY( double primingSugarEquiv READ primingSugarEquiv WRITE setPrimingSugarEquiv /*NOTIFY changed*/ /*changedPrimingSugarEquiv*/ )
    //! \brief The factor required to convert the amount of sugar required for bottles to keg (usually about 0.5).
    Q_PROPERTY( double kegPrimingFactor READ kegPrimingFactor WRITE setKegPrimingFactor /*NOTIFY changed*/ /*changedKegPrimingFactor*/ )
+   //! \brief Whether the recipe is locked against changes
+   Q_PROPERTY( bool locked READ locked WRITE setLocked /*NOTIFY changed*/ /*changed*/ )
 
    // Calculated stored properties.
    //! \brief The calculated OG.
@@ -379,6 +382,7 @@ public:
    double primingSugarEquiv() const;
    double kegPrimingFactor() const;
    bool cacheOnly() const;
+   bool locked() const;
 
    // Calculated getters.
    double points();
@@ -478,6 +482,7 @@ public:
    void setPrimingSugarEquiv( double var );
    void setKegPrimingFactor( double var );
    void setCacheOnly( bool cache );
+   void setLocked(bool isLocked);
 
    NamedEntity * getParent();
    virtual int insertInDatabase();
@@ -558,6 +563,7 @@ private:
    double m_fg_fermentable;
 
    bool m_cacheOnly;
+   bool m_locked;
    // True when constructed, indicates whether recalcAll has been called.
    bool m_uninitializedCalcs;
    QMutex m_uninitializedCalcsMutex;
