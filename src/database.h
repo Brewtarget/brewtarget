@@ -287,6 +287,8 @@ public:
    Fermentable * addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false, bool transact = true);
    //! Add a mash, displacing any current mash.
    Mash * addToRecipe( Recipe* rec, Mash* m, bool noCopy = false, bool transact = true );
+   //! a no-op to make later code prettier
+   MashStep* addToRecipe( Recipe* rec, MashStep* m) { return m; }
    Misc * addToRecipe( Recipe* rec, Misc* m, bool noCopy = false, bool transact = true);
    //! Add a style, displacing any current style.
    Style * addToRecipe( Recipe* rec, Style* s, bool noCopy = false, bool transact = true );
@@ -392,6 +394,9 @@ public:
    //! Get the recipe that this \b note is part of.  (BrewNotes are stored differently so we need a different function
    //  for them.)
    Recipe* getParentRecipe( BrewNote const* note );
+
+   //! And lets not even get started on mash steps, am I right?
+   Recipe* getParentRecipe( MashStep const* step );
 
    //! Interchange the step orders of the two steps. Must be in same mash.
    void swapMashStepOrder(MashStep* m1, MashStep* m2);

@@ -113,6 +113,8 @@ public:
    void enableHideAncestor(bool enable);
    //! \brief make a recipe its own ancestor
    void enableOrphan(bool enable);
+   //! \brief do we breed, or not
+   void enableSpawn(bool enable);
 
    //! \brief returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
    bool multiSelected();
@@ -121,6 +123,7 @@ public:
    void showAncestors();
    void hideAncestors();
    void orphanRecipe();
+   void spawnRecipe();
 
 
    // Another try at drag and drop
@@ -169,11 +172,16 @@ private:
    BtTreeModel* _model;
    BtTreeFilterProxyModel* _filter;
    BtTreeModel::TypeMasks _type;
-   QMenu* _contextMenu, *subMenu;
-   QAction *m_deleteAction, *m_showAncestorAction, *m_hideAncestorAction, *m_orphanAction;
+   QMenu *_contextMenu, 
+         *subMenu,
+         *m_versionMenu;
+   QAction *m_deleteAction, 
+           *m_showAncestorAction,
+           *m_hideAncestorAction,
+           *m_orphanAction,
+           *m_spawnAction;
    QPoint dragStart;
    QWidget* _editor;
-   QList<Recipe*> m_versionsShown;
 
    bool doubleClick;
 

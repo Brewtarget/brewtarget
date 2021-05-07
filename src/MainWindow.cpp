@@ -3155,7 +3155,9 @@ void MainWindow::updateStatus(const QString status) {
 
 void MainWindow::versionedRecipe(Recipe* descendant)
 {
+   QModelIndex ndx = treeView_recipe->findElement(descendant);
    setRecipe(descendant);
+   treeView_recipe->setCurrentIndex(ndx);
 }
 
 void MainWindow::closeBrewNote(BrewNote* b)

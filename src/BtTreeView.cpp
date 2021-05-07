@@ -425,19 +425,32 @@ void BtTreeView::orphanRecipe()
    }
 }
 
+void BtTreeView::spawnRecipe()
+{
+   if ( _type == BtTreeModel::RECIPEMASK ) {
+      QModelIndexList ndxs = selectionModel()->selectedRows();
+
+      foreach( QModelIndex selected, ndxs ) {
+         // make sure we add the ancestors to the exclusion list
+         _model->spawnRecipe(_filter->mapToSource(selected));
+      }
+   }
+}
+
 void BtTreeView::enableDelete(bool enable)       { m_deleteAction->setEnabled(enable); }
 void BtTreeView::enableShowAncestor(bool enable) { m_showAncestorAction->setEnabled(enable); }
 void BtTreeView::enableHideAncestor(bool enable) { m_hideAncestorAction->setEnabled(enable); }
 void BtTreeView::enableOrphan(bool enable)       { m_orphanAction->setEnabled(enable); }
+void BtTreeView::enableSpawn(bool enable)        { m_spawnAction->setEnabled(enable); }
 
 void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 {
    QMenu* _newMenu = new QMenu(this);
    QMenu* _exportMenu = new QMenu(this);
-   QMenu* m_versionMenu = new QMenu(this);
 
    _contextMenu = new QMenu(this);
    subMenu = new QMenu(this);
+   m_versionMenu = new QMenu(this);
 
    _editor = editor;
 
@@ -455,6 +468,7 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
          m_showAncestorAction = m_versionMenu->addAction( tr("Show Ancestors"), this, SLOT(showAncestors()));
          m_hideAncestorAction = m_versionMenu->addAction( tr("Hide Ancestors"), this, SLOT(hideAncestors()));
          m_orphanAction = m_versionMenu->addAction( tr("Orphan Recipe"), this, SLOT(orphanRecipe()));
+         m_spawnAction  = m_versionMenu->addAction( tr("Version Recipe"), this, SLOT(spawnRecipe()));
          _contextMenu->addMenu(m_versionMenu);
 
          _contextMenu->addSeparator();
@@ -517,14 +531,23 @@ QMenu* BtTreeView::contextMenu(QModelIndex selected)
       Recipe *rec = recipe(selected);
       QModelIndex translated = _filter->mapToSource(selected);
 
+      // you can not delete a locked recipe
       enableDelete( ! rec->locked() );
-      // if we have ancestors and are showing them, enable hideAncestors
-      enableHideAncestor(rec->hasAncestors() && _model->showChild(translated));
+
+      // if we have ancestors and are showing them but are not an actual
+      // ancestor, then enable hide
+      enableHideAncestor(rec->hasAncestors() && _model->showChild(translated) && rec->display());
+
       // if we have ancestors and are not showing them, enable showAncestors
       enableShowAncestor(rec->hasAncestors() && ! _model->showChild(translated));
+
       // if we have ancestors and are not locked, then we are a leaf node and
       // allow orphaning
       enableOrphan(rec->hasAncestors() && ! rec->locked() );
+
+      // if display is true, we can spawn it. This should mean we cannot spawn
+      // ancestors directly, which is what I want.
+      enableSpawn( rec->display() );
    }
 
    return _contextMenu;

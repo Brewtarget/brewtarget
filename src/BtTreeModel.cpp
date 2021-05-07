@@ -1547,6 +1547,22 @@ void BtTreeModel::orphanRecipe(QModelIndex ndx)
    return;
 }
 
+void BtTreeModel::spawnRecipe(QModelIndex ndx)
+{
+   Recipe *ancestor = recipe(ndx);
+   Recipe* descendant = Database::instance().newRecipe(ancestor,true);
+
+   // First, we remove the ancestor from the tree
+   removeRows(ndx.row(),1,this->parent(ndx));
+
+   // Now we need to find the descendant in the tree. This has to be done
+   // after we removed the rows.
+   QModelIndex decNdx = findElement(descendant);
+
+   emit dataChanged(decNdx,decNdx);
+   emit recipeSpawn(descendant);
+}
+
 void BtTreeModel::versionedRecipe(Recipe* ancestor, Recipe* descendant)
 {
    QModelIndex ndx = findElement(ancestor);

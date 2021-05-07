@@ -1121,6 +1121,47 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
    return allRecipes[key];
 }
 
+// Mashsteps need some special handling. Oddly, we don't need to invoke the
+// mash table -- just the recipe and the mashstep.
+Recipe* Database::getParentRecipe( MashStep const* step )
+{
+   int key;
+   TableSchema* rec = dbDefn->table(Brewtarget::RECTABLE);
+   TableSchema* ms  = dbDefn->table(Brewtarget::MASHSTEPTABLE);
+
+   // SELECT recipe.id AS id FROM recipe, mashstep where recipe.mash_id = mashstep.mash_id and mashstep.id = [step->key[
+   QString query = QString("SELECT %1.%2 AS id FROM %1,%3 WHERE %1.%4 = %3.%5 and %3.%6 = %7")
+                      .arg(rec->tableName())  //recipe
+                      .arg(rec->keyName())    //recipe.id
+                      .arg(ms->tableName())   //mashstep
+                      .arg(rec->foreignKeyToColumn(kpropMashId)) // recipe.mash_id
+                      .arg(ms->foreignKeyToColumn(kpropMashId))  // mashstep.mash_id
+                      .arg(ms->keyName())    // mashstep.id
+                      .arg(step->key());
+
+   QSqlQuery q(sqlDatabase());
+
+   try {
+      if ( ! q.exec(query) )
+         throw QString("could not find recipe id");
+   }
+   catch ( QString e ) {
+      qCritical() << QString("%1 %2 %3 %4")
+                           .arg(Q_FUNC_INFO)
+                           .arg(e)
+                           .arg(q.lastQuery())
+                           .arg(q.lastError().text());
+      q.finish();
+      abort();
+   }
+
+   q.next();
+   key = q.record().value("id").toInt();
+   q.finish();
+
+   return allRecipes[key];
+}
+
 Recipe*      Database::recipe(int key)      { return allRecipes[key]; }
 Equipment*   Database::equipment(int key)   { return allEquipments[key]; }
 Fermentable* Database::fermentable(int key) { return allFermentables[key]; }
@@ -2287,8 +2328,14 @@ NamedEntity* Database::clone( NamedEntity* donor, Recipe* rec )
    }
 
    if ( qobject_cast<Mash*>(donor) != nullptr ) {
-      Equipment* tmp = newEquipment(qobject_cast<Equipment*>(donor));
+      Mash* tmp = newMash(qobject_cast<Mash*>(donor));
       addToRecipe(rec, tmp, true);
+      return tmp;
+   }
+
+   if ( qobject_cast<MashStep*>(donor) != nullptr ) {
+      MashStep* whiskey = qobject_cast<MashStep*>(donor);
+      MashStep* tmp = rec->mash()->mashSteps().at( whiskey->stepNumber() - 1);
       return tmp;
    }
 

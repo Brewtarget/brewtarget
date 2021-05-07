@@ -200,6 +200,8 @@ public:
    void hideAncestors(QModelIndex ndx);
    //! \b orphan a recipe
    void orphanRecipe(QModelIndex ndx);
+   //! \b spawns a recipe
+   void spawnRecipe(QModelIndex ndx);
 
 private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
