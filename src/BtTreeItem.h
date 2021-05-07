@@ -68,6 +68,8 @@ public:
    enum RECIPEITEM {
       //! Recipe name
       RECIPENAMECOL,
+      //! Recipe ancestors
+      RECIPEANCCOUNT,
       //! Recipe brewdate
       RECIPEBREWDATECOL,
       //! Recipe style

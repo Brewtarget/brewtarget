@@ -68,7 +68,10 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
       BrewNote *leftBn = model->brewNote(left);
       BrewNote *rightBn = model->brewNote(right);
 
-      return leftBn->brewDate() < rightBn->brewDate();
+      if ( leftBn && rightBn )
+         return leftBn->brewDate() < rightBn->brewDate();
+      else
+         return false;
    }
 
    // Try to sort folders first.
@@ -422,11 +425,13 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
 
    // We shouldn't get here, but if we cannot find the row in the parent,
    // don't display the item.
-   if ( ! child.isValid() )
+   if ( ! child.isValid() ) {
       return false;
+   }
 
-   if ( model->isFolder(child) )
+   if ( model->isFolder(child) ) {
       return true;
+   }
 
    NamedEntity* thing = model->thing(child);
 
@@ -436,11 +441,10 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
       return model->showChild(child) || thing->display();
    }
 
-   if ( thing ) {
+   if ( thing )
       return thing->display();
-   }
-
-   return false;
+   else
+      return true;
 
 }
 

@@ -243,32 +243,18 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
       return QVariant();
 
    BtTreeItem* itm = item(index);
-   Recipe *tmp = nullptr;
-   if ( treeMask == RECIPEMASK ) {
-      tmp = itm->recipe();
-   }
 
    QFont font;
    switch(role) {
       case Qt::ToolTipRole:
          return toolTipData(index);
       case Qt::DisplayRole:
-         if ( tmp != nullptr && ( tmp->hasAncestors() && itm->showMe())) {
-            return QString("%1 [v%2]")
-                      .arg(itm->data(index.column()).toString())
-                      .arg(tmp->ancestors().size());
-         }
-         break;
+         return itm->data(index.column());
       case Qt::DecorationRole:
          if ( index.column() == 0 && itm->type() == BtTreeItem::FOLDER ) {
             return QIcon(":images/folder.png");
          }
          break;
-      case Qt::FontRole:
-         if ( tmp != nullptr && tmp->hasAncestors() && itm->showMe()) {
-            font.setBold(true);
-         }
-         return font;
       default:
          break;
    }
@@ -343,6 +329,8 @@ QVariant BtTreeModel::recipeHeader(int section) const
    {
    case BtTreeItem::RECIPENAMECOL:
       return QVariant(tr("Name"));
+   case BtTreeItem::RECIPEANCCOUNT:
+      return QVariant(tr("Ancestors"));
    case BtTreeItem::RECIPEBREWDATECOL:
       return QVariant(tr("Brew Date"));
    case BtTreeItem::RECIPESTYLECOL:
@@ -922,7 +910,7 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
 
             if ( deletewhat == Brewtarget::DESCENDANT) {
                orphanRecipe(ndx);
-               Database::instance().remove( recipe(ndx) );
+               Database::instance().remove( rec );
             }
             else {
                Database::instance().remove(  rec->ancestors() );
@@ -1454,8 +1442,14 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
          return false;
 
       // this is the work.
-      if ( oType != BtTreeItem::FOLDER )
+      if ( oType != BtTreeItem::FOLDER ) {
          elem->setFolder(target);
+      }
+      else {
+         BtFolder *victim = new BtFolder;
+         victim->setfullPath(name);
+         renameFolder(victim,target);
+      }
    }
 
    return true;

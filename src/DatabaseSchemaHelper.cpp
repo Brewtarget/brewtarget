@@ -708,35 +708,39 @@ bool DatabaseSchemaHelper::migrate_to_10(QSqlDatabase db, DatabaseSchema* defn)
    QString references = QString("references  %1(%2)").arg(tbl->tableName()).arg(tbl->keyName());
 
    QSqlQuery q(db);
+   QString add_id, add_locked;
 
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
-      ret &= q.exec(ALTERTABLE + SEP + tbl->tableName() + SEP + 
-                    ADDCOLUMN +  SEP + IFNOTEXISTS + SEP + 
-                    ancestor_col + SEP + "INTEGER" + SEP + 
-                    references);
-      ret &= q.exec(
-               ALTERTABLE + SEP + tbl->tableName() + SEP +
-               ADDCOLUMN  + SEP + IFNOTEXISTS      + SEP +
-               tbl->propertyToColumn(PropertyNames::Recipe::locked) + SEP +
-               tbl->propertyColumnType(PropertyNames::Recipe::locked) + SEP +
-               DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toString()
-      );
+      add_id = ALTERTABLE + SEP + tbl->tableName() + SEP +
+                    ADDCOLUMN +  SEP + IFNOTEXISTS + SEP +
+                    ancestor_col + SEP + "INTEGER" + SEP +
+                    references;
+
+      add_locked = ALTERTABLE + SEP + tbl->tableName() + SEP +
+                   ADDCOLUMN  + SEP + IFNOTEXISTS      + SEP +
+                   tbl->propertyToColumn(PropertyNames::Recipe::locked)   + SEP +
+                   tbl->propertyColumnType(PropertyNames::Recipe::locked) + SEP +
+                   DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toString();
    }
    else {
       if ( ! columnExists(db,tbl->tableName(),ancestor_col) ) {
-         ret &= q.exec(ALTERTABLE + SEP + tbl->tableName() + SEP + 
-                       ADDCOLUMN  + SEP + ancestor_col + SEP + 
-                       "INTEGER" + SEP + references);
+         add_id = ALTERTABLE + SEP + tbl->tableName() + SEP +
+                  ADDCOLUMN  + SEP + ancestor_col + SEP +
+                  "INTEGER" + SEP + references;
       }
       if ( ! columnExists(db, tbl->tableName(),PropertyNames::Recipe::locked) ) {
-         ret &= q.exec(
-                  ALTERTABLE + SEP + tbl->tableName() + SEP + ADDCOLUMN  + SEP + 
-                  tbl->propertyToColumn(PropertyNames::Recipe::locked) + SEP +
+         add_locked = ALTERTABLE + SEP + tbl->tableName() + SEP + ADDCOLUMN  + SEP +
+                  tbl->propertyToColumn(PropertyNames::Recipe::locked)   + SEP +
                   tbl->propertyColumnType(PropertyNames::Recipe::locked) + SEP +
-                  DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toString()
-         );
+                  DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toString();
       }
    }
 
+   if ( ! add_id.isEmpty() ) {
+      ret &= q.exec(add_id);
+   }
+   if ( ! add_locked.isEmpty() ) {
+      ret &= q.exec(add_locked);
+   }
    return ret;
 }

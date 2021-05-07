@@ -194,18 +194,22 @@ bool BtTreeItem::removeChildren(int position, int count)
 QVariant BtTreeItem::dataRecipe( int column )
 {
    Recipe* recipe = qobject_cast<Recipe*>(_thing);
-   switch(column)
-   {
-        case RECIPENAMECOL:
+   switch(column) {
+      case RECIPENAMECOL:
          if (! _thing)
             return QVariant(QObject::tr("Recipes"));
-        else
+         else
             return QVariant(recipe->name());
-        case RECIPEBREWDATECOL:
+      case RECIPEANCCOUNT:
+         if ( recipe )
+            // the kid is always in the list, damn it
+            return QVariant( recipe->ancestors().size() - 1);
+         break;
+      case RECIPEBREWDATECOL:
          if ( recipe )
             return Brewtarget::displayDateUserFormated(recipe->date());
          break;
-        case RECIPESTYLECOL:
+      case RECIPESTYLECOL:
          if ( recipe && recipe->style() )
             return QVariant(recipe->style()->name());
          break;
