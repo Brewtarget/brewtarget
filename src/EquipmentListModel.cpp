@@ -27,7 +27,7 @@
 EquipmentListModel::EquipmentListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)
 {
-   connect( &(Database::instance()), qOverload<Equipment*>(&Database::newSignal), this, &EquipmentListModel::addEquipment );
+   connect( &(Database::instance()), qOverload<Equipment*>(&Database::createdSignal), this, &EquipmentListModel::addEquipment );
    connect( &(Database::instance()), qOverload<Equipment*>(&Database::deletedSignal), this, &EquipmentListModel::removeEquipment);
    repopulateList();
 }

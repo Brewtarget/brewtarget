@@ -74,7 +74,7 @@ void MiscTableModel::observeDatabase(bool val)
    {
       observeRecipe(nullptr);
       removeAll();
-      connect( &(Database::instance()), qOverload<Misc*>(&Database::newSignal), this, &MiscTableModel::addMisc );
+      connect( &(Database::instance()), qOverload<Misc*>(&Database::createdSignal), this, &MiscTableModel::addMisc );
       connect( &(Database::instance()), qOverload<Misc*>(&Database::deletedSignal), this, &MiscTableModel::removeMisc );
       addMiscs( Database::instance().miscs() );
    }

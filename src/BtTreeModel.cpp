@@ -58,10 +58,10 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
    {
       case RECIPEMASK:
          rootItem->insertChildren(items,1,BtTreeItem::RECIPE);
-         connect( &(Database::instance()), qOverload<Recipe*>(&Database::newSignal),     this, qOverload<Recipe*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<Recipe*>(&Database::createdSignal),     this, qOverload<Recipe*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<Recipe*>(&Database::deletedSignal), this, qOverload<Recipe*>(&BtTreeModel::elementRemoved));
          // Brewnotes need love too!
-         connect( &(Database::instance()), qOverload<BrewNote*>(&Database::newSignal),     this, qOverload<BrewNote*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<BrewNote*>(&Database::createdSignal),     this, qOverload<BrewNote*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<BrewNote*>(&Database::deletedSignal), this, qOverload<BrewNote*>(&BtTreeModel::elementRemoved));
          // And some versioning stuff, because why not?
          connect( &(Database::instance()), &Database::spawned, this, &BtTreeModel::versionedRecipe );
@@ -72,7 +72,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          break;
       case EQUIPMASK:
          rootItem->insertChildren(items,1,BtTreeItem::EQUIPMENT);
-         connect( &(Database::instance()), qOverload<Equipment*>(&Database::newSignal),     this, qOverload<Equipment*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<Equipment*>(&Database::createdSignal),     this, qOverload<Equipment*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<Equipment*>(&Database::deletedSignal), this, qOverload<Equipment*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::EQUIPMENT;
          _mimeType = "application/x-brewtarget-recipe";
@@ -80,7 +80,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          break;
       case FERMENTMASK:
          rootItem->insertChildren(items,1,BtTreeItem::FERMENTABLE);
-         connect( &(Database::instance()), qOverload<Fermentable*>(&Database::newSignal),     this, qOverload<Fermentable*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<Fermentable*>(&Database::createdSignal),     this, qOverload<Fermentable*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<Fermentable*>(&Database::deletedSignal), this, qOverload<Fermentable*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::FERMENTABLE;
          _mimeType = "application/x-brewtarget-ingredient";
@@ -88,7 +88,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          break;
       case HOPMASK:
          rootItem->insertChildren(items,1,BtTreeItem::HOP);
-         connect( &(Database::instance()), qOverload<Hop*>(&Database::newSignal),this, qOverload<Hop*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<Hop*>(&Database::createdSignal),this, qOverload<Hop*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<Hop*>(&Database::deletedSignal),this, qOverload<Hop*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::HOP;
          _mimeType = "application/x-brewtarget-ingredient";
@@ -96,7 +96,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          break;
       case MISCMASK:
          rootItem->insertChildren(items,1,BtTreeItem::MISC);
-         connect( &(Database::instance()), qOverload<Misc*>(&Database::newSignal),this, qOverload<Misc*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<Misc*>(&Database::createdSignal),this, qOverload<Misc*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<Misc*>(&Database::deletedSignal),this, qOverload<Misc*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::MISC;
          _mimeType = "application/x-brewtarget-ingredient";
@@ -104,7 +104,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          break;
       case STYLEMASK:
          rootItem->insertChildren(items,1,BtTreeItem::STYLE);
-         connect( &(Database::instance()), qOverload<Style*>(&Database::newSignal),this, qOverload<Style*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<Style*>(&Database::createdSignal),this, qOverload<Style*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<Style*>(&Database::deletedSignal),this, qOverload<Style*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::STYLE;
          _mimeType = "application/x-brewtarget-recipe";
@@ -112,7 +112,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          break;
       case YEASTMASK:
          rootItem->insertChildren(items,1,BtTreeItem::YEAST);
-         connect( &(Database::instance()), qOverload<Yeast*>(&Database::newSignal),this, qOverload<Yeast*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<Yeast*>(&Database::createdSignal),this, qOverload<Yeast*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<Yeast*>(&Database::deletedSignal),this, qOverload<Yeast*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::YEAST;
          _mimeType = "application/x-brewtarget-ingredient";
@@ -120,7 +120,7 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          break;
       case WATERMASK:
          rootItem->insertChildren(items,1,BtTreeItem::WATER);
-         connect( &(Database::instance()), qOverload<Water*>(&Database::newSignal),this, qOverload<Water*>(&BtTreeModel::elementAdded));
+         connect( &(Database::instance()), qOverload<Water*>(&Database::createdSignal),this, qOverload<Water*>(&BtTreeModel::elementAdded));
          connect( &(Database::instance()), qOverload<Water*>(&Database::deletedSignal),this, qOverload<Water*>(&BtTreeModel::elementRemoved));
          _type = BtTreeItem::WATER;
          _mimeType = "application/x-brewtarget-ingredient";
@@ -1508,16 +1508,13 @@ void BtTreeModel::orphanRecipe(QModelIndex ndx)
    // Remove all the rows associated with the orphan
    removeRows(0,node->childCount(),ndx);
 
-   // This looks weird, but I think it will do what I need -- basically set
-   // the ancestor_id to itself and reload the ancestors array
+   // This looks weird, but I think it will do what I need -- set
+   // the ancestor_id to itself and reload the ancestors array. setAncestor
+   // handles the locked and display flags
    orphan->setAncestor(orphan);
    // Display all of its brewnotes
    addBrewNoteSubTree(orphan, ndx.row(), pNode, false);
 
-   // Now, we need to get busy on the ancestors
-   // Mark the ancestor as visible and unlock it
-   ancestor->setDisplay(true);
-   ancestor->setLocked(false);
    // Put the ancestor into the tree
    if ( ! insertRow(pIndex.row(), pIndex, ancestor, BtTreeItem::RECIPE) )
       qWarning() << Q_FUNC_INFO << "Could not add ancestor to tree";

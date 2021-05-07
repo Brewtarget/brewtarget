@@ -103,7 +103,7 @@ void HopTableModel::observeDatabase(bool val)
    {
       observeRecipe(nullptr);
       removeAll();
-      connect( &(Database::instance()), qOverload<Hop*>(&Database::newSignal), this, &HopTableModel::addHop );
+      connect( &(Database::instance()), qOverload<Hop*>(&Database::createdSignal), this, &HopTableModel::addHop );
       connect( &(Database::instance()), qOverload<Hop*>(&Database::deletedSignal), this, &HopTableModel::removeHop);
       addHops( Database::instance().hops() );
    }

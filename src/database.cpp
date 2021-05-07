@@ -1319,13 +1319,16 @@ QList<int> Database::ancestoralIds(Recipe const* descendant)
    TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    // Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn
+   // The first select initializes the chain, so we get the id and ancestor_id
+   // of the current recipe. The UNION ALL does the recursive trick, where
+   // find all the ancestors. The query stops when recipe.id = ancestor_id.
+   //
    // WITH RECURSIVE ancestor(id,ancestor_id) AS
    //  (SELECT id,ancestor_id FROM recipe r WHERE r.id = [key]
    //   UNION ALL
    //   SELECT r.id, r.ancestor_id FROM ancestor a, recipe r
    //     WHERE r.id = a.ancestor_id AND r.ancestor_id != a.id )
    // SELECT r.id FROM ancestor a, recipe r WHERE a.id = r.id
-   //  
    QString recursiveQuery =
       QString("WITH RECURSIVE ancestor(%1,%2) AS "
                "(SELECT %1,%2 FROM recipe r WHERE r.%1 = %3 "
@@ -1537,7 +1540,7 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 
    if ( tmp && signal ) {
       emit changed( metaProperty("brewNotes"), QVariant() );
-      emit newSignal(tmp);
+      emit createdSignal(tmp);
    }
 
    return tmp;
@@ -1569,7 +1572,7 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
    if ( signal )
    {
       emit changed( metaProperty("brewNotes"), QVariant() );
-      emit newSignal(tmp);
+      emit createdSignal(tmp);
    }
 
    return tmp;
@@ -1586,7 +1589,7 @@ Equipment* Database::newEquipment(Equipment* other)
 
    if ( tmp ) {
       emit changed( metaProperty("equipments"), QVariant() );
-      emit newSignal(tmp);
+      emit createdSignal(tmp);
    }
    else {
       QString msg = QString("%1 couldn't create newEquipment %2")
@@ -1627,7 +1630,7 @@ Fermentable* Database::newFermentable(Fermentable* other, bool add_inventory)
 
    if ( tmp ) {
       emit changed( metaProperty("fermentables"), QVariant() );
-      emit newSignal(tmp);
+      emit createdSignal(tmp);
    }
    else {
       qCritical() << QString("%1 couldn't copy %2").arg(Q_FUNC_INFO).arg(other->name());
@@ -1663,7 +1666,7 @@ Hop* Database::newHop(Hop* other, bool add_inventory )
 
    if ( tmp ) {
       emit changed( metaProperty("hops"), QVariant() );
-      emit newSignal(tmp);
+      emit createdSignal(tmp);
    }
    else {
       qCritical() << QString("%1 could not %2 hop")
@@ -1760,7 +1763,7 @@ Mash* Database::newMash(Mash* other, bool displace)
    }
 
    emit changed( metaProperty("mashs"), QVariant() );
-   emit newSignal(tmp);
+   emit createdSignal(tmp);
 
    return tmp;
 }
@@ -1794,7 +1797,7 @@ Mash* Database::newMash(Recipe* parent, bool transact)
    }
 
    emit changed( metaProperty("mashs"), QVariant() );
-   emit newSignal(tmp);
+   emit createdSignal(tmp);
 
    connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), parent, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
    return tmp;
@@ -1887,7 +1890,7 @@ Misc* Database::newMisc(Misc* other, bool add_inventory)
 
    if ( tmp ) {
       emit changed( metaProperty("miscs"), QVariant() );
-      emit newSignal(tmp);
+      emit createdSignal(tmp);
    }
    else {
       qCritical() << QString("%1 could not %2 misc")
@@ -1929,7 +1932,7 @@ Recipe* Database::newRecipe(QString name)
 
    sqlDatabase().commit();
    emit changed( metaProperty("recipes"), QVariant() );
-   emit newSignal(tmp);
+   emit createdSignal(tmp);
 
    return tmp;
 }
@@ -1985,7 +1988,7 @@ Recipe* Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude, bool n
 
    if ( notify ) {
       emit changed( metaProperty("recipes"), QVariant());
-      emit newSignal(tmp);
+      emit createdSignal(tmp);
       emit spawned(other,tmp);
    }
 
@@ -2019,7 +2022,8 @@ bool Database::wantsVersion(Recipe* rec)
    return ret;
 }
 
-// nice way to handle defining an ancestor
+// nice way to handle defining an ancestor. This does all the work -- setting
+// ancestor_id, locking the ancestor and making the ancestor not display
 void Database::setAncestor(Recipe* descendant, Recipe* ancestor, bool transact)
 {
    TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
@@ -2030,19 +2034,40 @@ void Database::setAncestor(Recipe* descendant, Recipe* ancestor, bool transact)
 
    try {
       QSqlQuery q(sqlDatabase());
-      if ( ancestor != descendant ) {
-         ancestor->setDisplay(false);
-      }
 
       // update recipe set ancestor_id = [ancestor->key] where id = [descendant->key]
-      QString setAnc = QString("UPDATE %1 SET %2 = %3 where %4 = %5")
-                          .arg(tbl->tableName())
-                          .arg(tbl->foreignKeyToColumn(kpropAncestorId))
-                          .arg(ancestor->key())
-                          .arg(tbl->keyName())
-                          .arg(descendant->key());
-      if ( ! q.exec( setAnc ) ) {
+      QString set_ancestor = QString("UPDATE %1 SET %2 = %3 where %4 = %5")
+                                .arg(tbl->tableName())
+                                .arg(tbl->foreignKeyToColumn(kpropAncestorId))
+                                .arg(ancestor->key())
+                                .arg(tbl->keyName())
+                                .arg(descendant->key());
+      // update recipe set display = false where id = [ancestor_id]
+      QString set_display = QString("UPDATE %1 SET %2 = %3 where %4 = %5")
+                               .arg(tbl->tableName())
+                               .arg(tbl->propertyToColumn(PropertyNames::NamedEntity::display))
+                               .arg( ancestor == descendant ? Brewtarget::dbTrue() : Brewtarget::dbFalse())
+                               .arg(tbl->keyName())
+                               .arg(ancestor->key());
+      QString set_locked = QString("UPDATE %1 SET %2 = %3 where %4 = %5")
+                              .arg(tbl->tableName())
+                              .arg(tbl->propertyToColumn(PropertyNames::Recipe::locked))
+                              .arg( ancestor == descendant ? Brewtarget::dbTrue() : Brewtarget::dbFalse())
+                              .arg(tbl->keyName())
+                              .arg(ancestor->key());
+
+      if ( ! q.exec( set_ancestor ) ) {
          throw QString("Could not define ancestor. %1 : %2")
+                  .arg(q.lastQuery())
+                  .arg(q.lastError().text());
+      }
+      if ( ! q.exec( set_display ) ) {
+         throw QString("Could not set ancestor display. %1 : %2")
+                  .arg(q.lastQuery())
+                  .arg(q.lastError().text());
+      }
+      if ( ! q.exec( set_locked ) ) {
+         throw QString("Could not lock ancestor. %1 : %2")
                   .arg(q.lastQuery())
                   .arg(q.lastError().text());
       }
@@ -2092,7 +2117,7 @@ Recipe* Database::newRecipe(Recipe* other, bool ancestor)
 
    sqlDatabase().commit();
    emit changed( metaProperty("recipes"), QVariant() );
-   emit newSignal(tmp);
+   emit createdSignal(tmp);
 
    return tmp;
 }
@@ -2111,7 +2136,7 @@ Style* Database::newStyle(Style* other)
    }
 
    emit changed( metaProperty("styles"), QVariant() );
-   emit newSignal(tmp);
+   emit createdSignal(tmp);
 
    return tmp;
 }
@@ -2143,7 +2168,7 @@ Style* Database::newStyle(QString name)
    }
 
    emit changed( metaProperty("styles"), QVariant() );
-   emit newSignal(tmp);
+   emit createdSignal(tmp);
 
    return tmp;
 }
@@ -2165,7 +2190,7 @@ Water* Database::newWater(Water* other)
    }
 
    emit changed( metaProperty("waters"), QVariant() );
-   emit newSignal(tmp);
+   emit createdSignal(tmp);
 
    return tmp;
 }
@@ -2187,7 +2212,7 @@ Salt* Database::newSalt(Salt* other)
    }
 
    emit changed( metaProperty("salts"), QVariant() );
-   emit newSignal(tmp);
+   emit createdSignal(tmp);
 
    return tmp;
 }
@@ -2221,7 +2246,7 @@ Yeast* Database::newYeast(Yeast* other, bool add_inventory)
 
    if ( tmp ) {
       emit changed( metaProperty("yeasts"), QVariant() );
-      emit newSignal(tmp);
+      emit createdSignal(tmp);
    }
    else {
       qCritical() << QString("%1 could not %2 yeast")
@@ -2360,7 +2385,7 @@ int Database::insertStyle(Style* ins)
    allStyles.insert(key,ins);
 
    emit changed( metaProperty("styles"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2372,7 +2397,7 @@ int Database::insertEquipment(Equipment* ins)
 
    allEquipments.insert(key,ins);
    emit changed( metaProperty("equipments"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2398,7 +2423,7 @@ int Database::insertFermentable(Fermentable* ins)
    sqlDatabase().commit();
    allFermentables.insert(key,ins);
    emit changed( metaProperty("fermentables"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
    return key;
 }
 
@@ -2421,7 +2446,7 @@ int Database::insertHop(Hop* ins)
    sqlDatabase().commit();
    allHops.insert(key,ins);
    emit changed( metaProperty("hops"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2459,7 +2484,7 @@ int Database::insertMash(Mash* ins)
 
    allMashs.insert(key,ins);
    emit changed( metaProperty("mashs"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2535,7 +2560,7 @@ int Database::insertMisc(Misc* ins)
    sqlDatabase().commit();
    allMiscs.insert(key,ins);
    emit changed( metaProperty("miscs"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2547,7 +2572,7 @@ int Database::insertRecipe(Recipe* ins)
 
    allRecipes.insert(key,ins);
    emit changed( metaProperty("recipes"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2571,7 +2596,7 @@ int Database::insertYeast(Yeast* ins)
    sqlDatabase().commit();
    allYeasts.insert(key,ins);
    emit changed( metaProperty("yeasts"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2583,7 +2608,7 @@ int Database::insertWater(Water* ins)
 
    allWaters.insert(key,ins);
    emit changed( metaProperty("waters"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2595,7 +2620,7 @@ int Database::insertSalt(Salt* ins)
 
    allSalts.insert(key,ins);
    emit changed( metaProperty("salts"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2633,7 +2658,7 @@ int Database::insertBrewNote(BrewNote* ins, Recipe* parent) {
 
    this->allBrewNotes.insert(key,ins);
    emit changed( metaProperty("brewNotes"), QVariant() );
-   emit newSignal(ins);
+   emit createdSignal(ins);
 
    return key;
 }
@@ -2973,7 +2998,7 @@ void Database::modifyEntry(NamedEntity* object, QString propName, QVariant value
 
    if ( owner && wantsVersion(owner) ) {
       emit changed( metaProperty("recipes"), QVariant() );
-      emit newSignal(spawn);
+      emit createdSignal(spawn);
       emit spawned(owner,spawn);
    }
 }

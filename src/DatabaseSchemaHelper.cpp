@@ -34,6 +34,7 @@
 #include "WaterSchema.h"
 #include "model/BrewNote.h"
 #include "model/Water.h"
+#include "model/Recipe.h"
 #include "RecipeSchema.h"
 
 const int DatabaseSchemaHelper::dbVersion = 10;
@@ -702,18 +703,39 @@ bool DatabaseSchemaHelper::migrate_to_10(QSqlDatabase db, DatabaseSchema* defn)
    bool ret = true;
    QString addColumn, populateColumn;
    TableSchema* tbl = defn->table(Brewtarget::RECTABLE);
-   QString colname = tbl->foreignKeyToColumn( kcolRecipeAncestorId );
+
+   QString ancestor_col = tbl->foreignKeyToColumn( kcolRecipeAncestorId );
    QString references = QString("references  %1(%2)").arg(tbl->tableName()).arg(tbl->keyName());
 
    QSqlQuery q(db);
 
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
-      addColumn = ALTERTABLE + SEP + tbl->tableName() + SEP + ADDCOLUMN + SEP + IFNOTEXISTS + SEP + colname + SEP + "INTEGER" + SEP + references;
-      ret &= q.exec(addColumn);
+      ret &= q.exec(ALTERTABLE + SEP + tbl->tableName() + SEP + 
+                    ADDCOLUMN +  SEP + IFNOTEXISTS + SEP + 
+                    ancestor_col + SEP + "INTEGER" + SEP + 
+                    references);
+      ret &= q.exec(
+               ALTERTABLE + SEP + tbl->tableName() + SEP +
+               ADDCOLUMN  + SEP + IFNOTEXISTS      + SEP +
+               tbl->propertyToColumn(PropertyNames::Recipe::locked) + SEP +
+               tbl->propertyColumnType(PropertyNames::Recipe::locked) + SEP +
+               DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toString()
+      );
    }
-   else if ( ! columnExists(db,tbl->tableName(),colname) ) {
-      addColumn = ALTERTABLE + SEP + tbl->tableName() + SEP + ADDCOLUMN + SEP + colname + SEP + "INTEGER" + SEP + references;
-      ret &= q.exec(addColumn);
+   else {
+      if ( ! columnExists(db,tbl->tableName(),ancestor_col) ) {
+         ret &= q.exec(ALTERTABLE + SEP + tbl->tableName() + SEP + 
+                       ADDCOLUMN  + SEP + ancestor_col + SEP + 
+                       "INTEGER" + SEP + references);
+      }
+      if ( ! columnExists(db, tbl->tableName(),PropertyNames::Recipe::locked) ) {
+         ret &= q.exec(
+                  ALTERTABLE + SEP + tbl->tableName() + SEP + ADDCOLUMN  + SEP + 
+                  tbl->propertyToColumn(PropertyNames::Recipe::locked) + SEP +
+                  tbl->propertyColumnType(PropertyNames::Recipe::locked) + SEP +
+                  DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toString()
+         );
+      }
    }
 
    return ret;
