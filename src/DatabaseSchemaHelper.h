@@ -67,6 +67,9 @@ private:
    static QString OPENPAREN;
    static QString CLOSEPAREN;
    static QString END;
+   static QString EQUAL;
+   static QString ISNULL;
+   static QString WHERE;
 
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

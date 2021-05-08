@@ -310,6 +310,8 @@ public slots:
    void doOrRedoUpdate(QUndoCommand * update);
    //! \brief to lock or not was never the question before now.
    void lockRecipe(int state);
+   //! \brief prepopulate the ancestorDialog when the menu is selected
+   void setAncestor();
 
 public:
    //! \brief Doing updates via this method makes them undoable (and redoable).  This is the simplified version

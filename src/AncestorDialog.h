@@ -50,6 +50,8 @@ public:
    AncestorDialog(QWidget* parent = nullptr);
    virtual ~AncestorDialog() {}
 
+   void setAncestor(Recipe *anc);
+
 public slots:
    void connectDescendant();
    void activateButton();

@@ -761,7 +761,7 @@ void MainWindow::setupTriggers()
    connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );                                       // > Tools > Timers
    connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
    connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
-   connect( actionAncestors, &QAction::triggered, ancestorDialog, &QWidget::show);                                        // > Tools > Ancestors
+   connect( actionAncestors, &QAction::triggered, this, &MainWindow::setAncestor);                                      // > Tools > Ancestors
    connect( action_brewit, &QAction::triggered, this, &MainWindow::brewItHelper );
 
    // postgresql cannot backup or restore yet. I would like to find some way
@@ -1101,6 +1101,22 @@ void MainWindow::setBrewNote(BrewNote* bNote)
 
    tabWidget_recipeView->addTab(ni,bNote->brewDate_short());
    tabWidget_recipeView->setCurrentWidget(ni);
+}
+
+void MainWindow::setAncestor()
+{
+   Recipe* rec;
+   if ( this->recipeObs ) {
+      rec = this->recipeObs;
+      
+   }
+   else {
+      QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
+      rec = treeView_recipe->recipe(indexes[0]);
+   }
+
+   ancestorDialog->setAncestor(rec);
+   ancestorDialog->show();
 }
 
 // Can handle null recipes.

@@ -77,6 +77,7 @@ void AncestorDialog::buildAncestorBox()
          comboBox_ancestor->addItem(recipe->name(), recipe->key());
       }
    }
+   comboBox_ancestor->setCurrentIndex(-1);
 }
 
 void AncestorDialog::buildDescendantBox(Recipe *ignore)
@@ -106,9 +107,9 @@ void AncestorDialog::connectDescendant()
    ancestor   = Database::instance().recipe( comboBox_ancestor->currentData().toInt() );
    descendant = Database::instance().recipe( comboBox_descendant->currentData().toInt() );
 
+   qInfo() << Q_FUNC_INFO;
    // No loops in the inheritance
-   if ( ! descendant->isMyAncestor(ancestor) )
-   {
+   if ( ! descendant->isMyAncestor(ancestor) ) {
       descendant->setAncestor(ancestor);
 
       emit ancestoryChanged(ancestor,descendant);
@@ -124,6 +125,15 @@ void AncestorDialog::connectDescendant()
    // and rebuild the ancestors box
    comboBox_ancestor->clear();
    buildAncestorBox();
+}
+
+void AncestorDialog::setAncestor(Recipe* anc)
+{
+   comboBox_ancestor->setCurrentText( anc->name() );
+   buildDescendantBox(anc);
+
+   comboBox_descendant->setEnabled(true);
+   activateButton();
 }
 
 void AncestorDialog::ancestorSelected(int ndx)

@@ -50,12 +50,15 @@ QString DatabaseSchemaHelper::UPDATE("UPDATE");
 QString DatabaseSchemaHelper::SET("SET");
 QString DatabaseSchemaHelper::INSERTINTO("INSERT INTO");
 QString DatabaseSchemaHelper::DEFAULT("DEFAULT");
+QString DatabaseSchemaHelper::ISNULL("IS NULL");
 QString DatabaseSchemaHelper::SELECT("SELECT");
+QString DatabaseSchemaHelper::WHERE("WHERE");
 QString DatabaseSchemaHelper::SEP(" ");
 QString DatabaseSchemaHelper::COMMA(",");
 QString DatabaseSchemaHelper::OPENPAREN("(");
 QString DatabaseSchemaHelper::CLOSEPAREN(")");
 QString DatabaseSchemaHelper::END(";");
+QString DatabaseSchemaHelper::EQUAL("=");
 
 QString DatabaseSchemaHelper::UNIQUE("UNIQUE");
 
@@ -705,42 +708,58 @@ bool DatabaseSchemaHelper::migrate_to_10(QSqlDatabase db, DatabaseSchema* defn)
    TableSchema* tbl = defn->table(Brewtarget::RECTABLE);
 
    QString ancestor_col = tbl->foreignKeyToColumn( kcolRecipeAncestorId );
+   QString locked_col   = tbl->propertyToColumn(PropertyNames::Recipe::locked);
+   QString locked_type  = tbl->propertyColumnType(PropertyNames::Recipe::locked);
+   QString locked_deft  = Brewtarget::dbBoolean(tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toBool());
+
+
    QString references = QString("references  %1(%2)").arg(tbl->tableName()).arg(tbl->keyName());
 
    QSqlQuery q(db);
    QString add_id, add_locked;
 
+   // we first add the columns locked and ancestor_id if required
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
       add_id = ALTERTABLE + SEP + tbl->tableName() + SEP +
-                    ADDCOLUMN +  SEP + IFNOTEXISTS + SEP +
-                    ancestor_col + SEP + "INTEGER" + SEP +
-                    references;
+               ADDCOLUMN +  SEP + IFNOTEXISTS + SEP +
+               ancestor_col + SEP + "INTEGER" + SEP + references;
 
       add_locked = ALTERTABLE + SEP + tbl->tableName() + SEP +
                    ADDCOLUMN  + SEP + IFNOTEXISTS      + SEP +
-                   tbl->propertyToColumn(PropertyNames::Recipe::locked)   + SEP +
-                   tbl->propertyColumnType(PropertyNames::Recipe::locked) + SEP +
-                   DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toString();
+                   locked_col + SEP + locked_type + SEP + DEFAULT + SEP + locked_deft;
    }
    else {
       if ( ! columnExists(db,tbl->tableName(),ancestor_col) ) {
          add_id = ALTERTABLE + SEP + tbl->tableName() + SEP +
-                  ADDCOLUMN  + SEP + ancestor_col + SEP +
-                  "INTEGER" + SEP + references;
+                  ADDCOLUMN  + SEP + 
+                  ancestor_col + SEP + "INTEGER" + SEP + references;
       }
       if ( ! columnExists(db, tbl->tableName(),PropertyNames::Recipe::locked) ) {
-         add_locked = ALTERTABLE + SEP + tbl->tableName() + SEP + ADDCOLUMN  + SEP +
-                  tbl->propertyToColumn(PropertyNames::Recipe::locked)   + SEP +
-                  tbl->propertyColumnType(PropertyNames::Recipe::locked) + SEP +
-                  DEFAULT + SEP + tbl->propertyColumnDefault(PropertyNames::Recipe::locked).toString();
+         add_locked = ALTERTABLE + SEP + tbl->tableName() + SEP + 
+                      ADDCOLUMN  + SEP +
+                      locked_col   + SEP + locked_type + SEP + DEFAULT + SEP + locked_deft;
       }
    }
 
    if ( ! add_id.isEmpty() ) {
       ret &= q.exec(add_id);
+      qInfo() << "Add ancestor_id:" << ret;
    }
    if ( ! add_locked.isEmpty() ) {
       ret &= q.exec(add_locked);
+      qInfo() << "Add locked:" << ret;
    }
+
+   // Now, we need to set 
+   // update recipe set ancestor_id = id where display = true and ancestor_id is null
+   QString fry = QString("UPDATE %1 SET %2 = %3 WHERE %4 = %5 and %2 IS NULL")
+                      .arg(tbl->tableName())       // recipe
+                      .arg(ancestor_col)           // ancestor_id
+                      .arg(tbl->keyName())         // id
+                      .arg(tbl->propertyToColumn(PropertyNames::NamedEntity::display)) //display
+                      .arg(Brewtarget::dbBoolean(true));  // true 
+   ret &= q.exec(fry);
+   qInfo() << "Populated ancestors:" << ret;
+
    return ret;
 }

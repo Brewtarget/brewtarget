@@ -2109,6 +2109,7 @@ void Database::setAncestor(Recipe* descendant, Recipe* ancestor, bool transact)
                   .arg(q.lastQuery())
                   .arg(q.lastError().text());
       }
+
       if ( ! q.exec( set_display ) ) {
          throw QString("Could not set ancestor display. %1 : %2")
                   .arg(q.lastQuery())
@@ -2128,11 +2129,13 @@ void Database::setAncestor(Recipe* descendant, Recipe* ancestor, bool transact)
       qCritical() << Q_FUNC_INFO << e;
       abort();
    }
+   sqlDatabase().commit();
+
    // some housekeeping to keep my caches synced
-      ancestor->setCacheOnly(true);
-      ancestor->setDisplay( ancestor == descendant );
-      ancestor->setLocked( ancestor == descendant );
-      ancestor->setCacheOnly(false);
+   ancestor->setCacheOnly(true);
+   ancestor->setDisplay( ancestor == descendant );
+   ancestor->setLocked( ancestor != descendant );
+   ancestor->setCacheOnly(false);
 }
 
 Recipe* Database::newRecipe(Recipe* other, bool ancestor)
