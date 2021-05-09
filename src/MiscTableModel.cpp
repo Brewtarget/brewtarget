@@ -27,7 +27,7 @@
 #include "database.h"
 #include "model/Misc.h"
 #include "MiscTableModel.h"
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 #include "model/Recipe.h"
 #include "MainWindow.h"
@@ -220,19 +220,19 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
 
          scale = displayScale(MISCTIMECOL);
 
-         return QVariant( Brewtarget::displayAmount(row->time(), Units::minutes, 3, Unit::noUnit, scale) );
+         return QVariant( Brewtarget::displayAmount(row->time(), &Units::minutes, 3, Unit::noUnit, scale) );
       case MISCINVENTORYCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
 
          unit = displayUnit(index.column());
-         return QVariant( Brewtarget::displayAmount(row->inventory(), row->amountIsWeight()? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters), 3, unit, Unit::noScale ) );
+         return QVariant( Brewtarget::displayAmount(row->inventory(), row->amountIsWeight()? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters), 3, unit, Unit::noScale ) );
       case MISCAMOUNTCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
 
          unit = displayUnit(index.column());
-         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters), 3, unit, Unit::noScale ) );
+         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters), 3, unit, Unit::noScale ) );
 
       case MISCISWEIGHT:
          if( role == Qt::DisplayRole )
@@ -294,7 +294,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
 {
    Misc *row;
    int col;
-   Unit* unit;
+   Unit const * unit;
 
    if( index.row() >= static_cast<int>(miscObs.size()) )
       return false;
@@ -302,7 +302,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
       row = miscObs[index.row()];
 
    col = index.column();
-   unit = row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms): static_cast<Unit*>(Units::liters);
+   unit = row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms): static_cast<Unit const *>(&Units::liters);
 
    Unit::unitDisplay dspUnit = displayUnit(index.column());
    Unit::unitScale   dspScl  = displayScale(index.column());
@@ -342,7 +342,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
 
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                    PropertyNames::Misc::time,
-                                                   Brewtarget::qStringToSI(value.toString(), Units::minutes, dspUnit, dspScl),
+                                                   Brewtarget::qStringToSI(value.toString(), &Units::minutes, dspUnit, dspScl),
                                                    tr("Change Misc Time"));
          break;
       case MISCINVENTORYCOL:

@@ -32,7 +32,7 @@ class WaterItemDelegate;
 #include <QItemDelegate>
 #include <QList>
 
-#include "unit.h"
+#include "Unit.h"
 // Forward declarations.
 class Water;
 class WaterTableWidget;
@@ -77,7 +77,7 @@ public slots:
    void changed(QMetaProperty,QVariant);
    void addWater(Water* water);
    void removeWater(Water* water);
-   
+
 private:
    QList<Water*> waterObs;
    Recipe* recObs;

@@ -36,7 +36,7 @@ class FermentableItemDelegate;
 #include <QAbstractItemDelegate>
 #include <QList>
 #include "brewtarget.h"
-#include "unit.h"
+#include "Unit.h"
 
 // Forward declarations.
 class Fermentable;

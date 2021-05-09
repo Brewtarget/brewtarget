@@ -183,19 +183,19 @@ QString BrewDayWidget::buildTitleTable()
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Boil Volume"))
-           .arg(Brewtarget::displayAmount(recObs->boilSize_l(),Units::liters,2))
+           .arg(Brewtarget::displayAmount(recObs->boilSize_l(),&Units::liters,2))
            .arg(tr("Preboil Gravity"))
-           .arg(Brewtarget::displayAmount(recObs->boilGrav(), Units::sp_grav, 3));
+           .arg(Brewtarget::displayAmount(recObs->boilGrav(), &Units::sp_grav, 3));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Final Volume"))
-           .arg(Brewtarget::displayAmount(recObs->batchSize_l(), Units::liters,2))
+           .arg(Brewtarget::displayAmount(recObs->batchSize_l(), &Units::liters,2))
            .arg(tr("Starting Gravity"))
-           .arg(Brewtarget::displayAmount(recObs->og(), Units::sp_grav, 3));
+           .arg(Brewtarget::displayAmount(recObs->og(), &Units::sp_grav, 3));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Boil Time"))
-           .arg(Brewtarget::displayAmount(recObs->boilTime_min(),Units::minutes))
+           .arg(Brewtarget::displayAmount(recObs->boilTime_min(),&Units::minutes))
            .arg(tr("IBU"))
            .arg(Brewtarget::displayAmount(recObs->IBU(),0,1));
 
@@ -231,7 +231,7 @@ QString BrewDayWidget::buildInstructionTable()
       QList<QString> reagents;
 
       if(instructions[i]->interval())
-         stepTime = Brewtarget::displayAmount(instructions[i]->interval(), Units::minutes, 0);
+         stepTime = Brewtarget::displayAmount(instructions[i]->interval(), &Units::minutes, 0);
       else
          stepTime = "--";
 

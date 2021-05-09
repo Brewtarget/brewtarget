@@ -24,15 +24,15 @@
 #include <QWidget>
 #include <QButtonGroup>
 #include "ui_strikeWaterDialog.h"
-#include "unit.h"
+#include "Unit.h"
 
-/*! 
+/*!
  * \class StrikeWaterDialog
  * \author Maxime Lavigne
  *
  * \brief Dialog to calculate the amount and temperature of the strike water.
  */
-class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog 
+class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog
 {
   Q_OBJECT
   public:

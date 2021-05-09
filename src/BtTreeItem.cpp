@@ -257,7 +257,7 @@ QVariant BtTreeItem::dataFermentable(int column)
          if ( ferm ) {
             return QVariant(
                      Brewtarget::displayAmount( ferm->color_srm(),
-                                                Units::srm,
+                                                &Units::srm,
                                                 0,
                                                 (Unit::unitDisplay)Brewtarget::option("color_srm",
                                                                                       QVariant(-1),

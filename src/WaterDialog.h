@@ -25,7 +25,7 @@
 #include <QButtonGroup>
 #include <QVector>
 #include "ui_waterDialog.h"
-#include "unit.h"
+#include "Unit.h"
 #include "model/Water.h"
 #include "model/Salt.h"
 

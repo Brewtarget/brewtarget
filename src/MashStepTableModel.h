@@ -37,7 +37,7 @@ class MashStepItemDelegate;
 
 #include "model/MashStep.h"
 #include "model/Mash.h"
-#include "unit.h"
+#include "Unit.h"
 
 enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTARGETTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
 

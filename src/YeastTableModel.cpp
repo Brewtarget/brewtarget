@@ -37,7 +37,7 @@
 #include "database.h"
 #include "model/Yeast.h"
 #include "YeastTableModel.h"
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 #include "model/Recipe.h"
 #include "MainWindow.h"
@@ -287,7 +287,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
 
          return QVariant(
                            Brewtarget::displayAmount( row->amount(),
-                                                      row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters),
+                                                      row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters),
                                                       3,
                                                       unit,
                                                       Unit::noScale
@@ -347,7 +347,7 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
 bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Yeast *row;
-   Unit* unit;
+   Unit const * unit;
 
    if( index.row() >= static_cast<int>(yeastObs.size()) || role != Qt::EditRole )
       return false;
@@ -411,7 +411,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( ! value.canConvert(QVariant::String) )
             return false;
 
-         unit = row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms) : static_cast<Unit*>(Units::liters);
+         unit = row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters);
 
          Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                   "amount",

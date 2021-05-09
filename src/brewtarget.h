@@ -196,7 +196,7 @@ public:
     *  \param unitDisplay which unit system to use, defaulting to "noUnit" which means use the system default
     *  \param Unit::unitScale which scale to use, defaulting to Unit::noScale which means use the largest scale that generates a value > 1
     */
-   static QString displayAmount( double amount, Unit* units=nullptr, int precision=3,
+   static QString displayAmount( double amount, Unit const * units=nullptr, int precision=3,
                                  Unit::unitDisplay displayUnit = Unit::noUnit, Unit::unitScale displayScale = Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -207,7 +207,7 @@ public:
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( NamedEntity* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
+   static QString displayAmount( NamedEntity* element, QObject* object, QString attribute, Unit const * units=nullptr, int precision=3 );
 
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -218,7 +218,7 @@ public:
     * \param units which unit system it is in
     * \param precision how many decimal places to use, defaulting to 3
     */
-   static QString displayAmount( double amount, QString section, QString attribute, Unit* units=nullptr, int precision = 3);
+   static QString displayAmount( double amount, QString section, QString attribute, Unit const * units=nullptr, int precision = 3);
 
    /*!
     *  \brief Displays an amount in the appropriate units.
@@ -227,7 +227,7 @@ public:
     *  \param units the units that \c amount is in
     *  \param precision how many decimal places
     */
-   static double amountDisplay( double amount, Unit* units=nullptr, int precision=3,
+   static double amountDisplay( double amount, Unit const * units=nullptr, int precision=3,
                                  Unit::unitDisplay displayUnit = Unit::noUnit, Unit::unitScale displayScale = Unit::noScale );
    /*!
     * \brief Displays an amount in the appropriate units.
@@ -236,7 +236,7 @@ public:
     * \param attribute the \c QObject::property of \c element that returns the
     *        amount we wish to display
     */
-   static double amountDisplay( NamedEntity* element, QObject* object, QString attribute, Unit* units=nullptr, int precision=3 );
+   static double amountDisplay( NamedEntity* element, QObject* object, QString attribute, Unit const * units=nullptr, int precision=3 );
 
    //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
@@ -245,13 +245,13 @@ public:
    //! \brief Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg, bool showUnits=true );
    //! \brief Appropriate thickness units will be placed in \c *volumeUnit and \c *weightUnit.
-   static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
+   static void getThicknessUnits( Unit const ** volumeUnit, Unit const ** weightUnit );
 
    static QPair<double,double> displayRange(NamedEntity* element, QObject *object, QString attribute, RangeType _type = DENSITY);
    static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = DENSITY);
 
    //! \return SI amount for the string
-   static double qStringToSI( QString qstr, Unit* unit,
+   static double qStringToSI( QString qstr, Unit const * unit,
          Unit::unitDisplay dispUnit = Unit::noUnit, Unit::unitScale dispScale = Unit::noScale);
 
    //! \brief return the bitterness formula's name
@@ -260,7 +260,7 @@ public:
    static QString colorFormulaName();
 
    // One method to rule them all, and in darkness bind them
-   static UnitSystem* findUnitSystem(Unit* unit, Unit::unitDisplay display);
+   static UnitSystem const * findUnitSystem(Unit const * unit, Unit::unitDisplay display);
    static QString colorUnitName(Unit::unitDisplay display);
    static QString diastaticPowerUnitName(Unit::unitDisplay display);
 
@@ -273,7 +273,7 @@ public:
    //! \return the date format
    static Unit::unitDisplay getDateFormat();
    //! \return the volume system
-   static iUnitSystem getVolumeUnitSystem();
+   static SystemOfMeasurement getVolumeUnitSystem();
 
    //! \brief Read options from file. This is deprecated, but we need it
    // around for the conversion
@@ -369,12 +369,12 @@ private:
    // Options to be edited ONLY by the OptionDialog============================
    // Whether or not to display plato instead of SG.
 
-   static iUnitSystem weightUnitSystem;
-   static iUnitSystem volumeUnitSystem;
+   static SystemOfMeasurement weightUnitSystem;
+   static SystemOfMeasurement volumeUnitSystem;
 
    // Sigh. You knew this was coming right? But I think I can clean a lot of
    // shit up with some clever work.
-   static QHash<int, UnitSystem*> thingToUnitSystem;
+   static QHash<int, UnitSystem const *> thingToUnitSystem;
 
    static TempScale tempScale;
    static ColorType colorFormula;
@@ -447,7 +447,7 @@ private:
    static void loadMap();
 
    //! \return the weight system
-   static iUnitSystem getWeightUnitSystem();
+   static SystemOfMeasurement getWeightUnitSystem();
    //! \return the temperature scale
    static TempScale getTemperatureScale();
    //! \return the color units
