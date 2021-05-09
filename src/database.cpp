@@ -1058,32 +1058,75 @@ void Database::removeFrom( Mash* mash, MashStep* step )
    emit mash->mashStepsChanged();
 }
 
+
+Recipe* Database::getParentRecipe(Equipment const * kit)
+{
+   return getRecipeFromForeignKey(kpropEquipmentId,kit->key());
+}
+
+Recipe* Database::getParentRecipe(Mash const * mash)
+{
+   return getRecipeFromForeignKey(kpropMashId,mash->key());
+}
+
+Recipe* Database::getParentRecipe(Style const * style)
+{
+   return getRecipeFromForeignKey(kpropStyleId,style->key());
+}
+
+Recipe* Database::getRecipeFromForeignKey(QString keyName, int key)
+{
+   TableSchema* recTable = this->dbDefn->table( Brewtarget::RECTABLE );
+   QSqlQuery q(sqlDatabase());
+   QString fKey;
+
+   QString select = QString("SELECT %1 FROM %2 WHERE %3 = %4")
+                        .arg(recTable->keyName())
+                        .arg(recTable->tableName())
+                        .arg(keyName)
+                        .arg(key);
+
+   Recipe* parent = nullptr;
+   if (! q.exec(select) ) {
+      throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
+         .arg(q.lastQuery()).arg(q.lastError().text());
+   }
+   if ( q.next() ) {
+      int pKey = q.record().value(recTable->keyName()).toInt();
+      parent = this->allRecipes[pKey];
+   }
+   return parent;
+}
+
 Recipe* Database::getParentRecipe(NamedEntity const * ing) {
 
    QMetaObject const * meta = ing->metaObject();
    TableSchema* table = this->dbDefn->table( this->dbDefn->classNameToTable(meta->className()) );
    TableSchema* inrec = this->dbDefn->table( table->inRecTable() );
+   Recipe * parent = nullptr;
 
+   qInfo() << table->tableName();
+
+   QSqlQuery q(sqlDatabase());
+   if ( inrec == nullptr ) {
+      return parent;
+   }
+   
    QString select = QString("SELECT %4 from %1 WHERE %2=%3")
                         .arg(inrec->tableName())
                         .arg(inrec->inRecIndexName())
                         .arg(ing->_key)
                         .arg(inrec->recipeIndexName());
    qDebug() << Q_FUNC_INFO << "NamedEntity in recipe search:" << select;
-   QSqlQuery q(sqlDatabase());
    if (! q.exec(select) ) {
       throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
          .arg(q.lastQuery()).arg(q.lastError().text());
    }
-
-   Recipe * parent = nullptr;
-
    if ( q.next() ) {
       int key = q.record().value(inrec->recipeIndexName()).toInt();
       parent = this->allRecipes[key];
    }
 
-   q.finish();
    return parent;
 }
 

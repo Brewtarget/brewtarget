@@ -398,6 +398,12 @@ public:
    //! And lets not even get started on mash steps, am I right?
    Recipe* getParentRecipe( MashStep const* step );
 
+   //! These three items don't have inrec tables
+   Recipe* getParentRecipe(Equipment const* kit );
+   Recipe* getParentRecipe(Style const *style);
+   Recipe* getParentRecipe(Mash const *mash);
+   Recipe* getRecipeFromForeignKey(QString keyName, int key);
+
    //! Interchange the step orders of the two steps. Must be in same mash.
    void swapMashStepOrder(MashStep* m1, MashStep* m2);
    //! Interchange the instruction orders. Must be in same recipe.
