@@ -18,7 +18,7 @@
  */
 
 #include "ConverterTool.h"
-#include "unit.h"
+#include "Unit.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFormLayout>
@@ -27,7 +27,7 @@
 ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent)
 {
    doLayout();
-   
+
    connect( pushButton_convert, &QAbstractButton::clicked, this, &ConverterTool::convert );
 }
 

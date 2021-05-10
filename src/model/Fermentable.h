@@ -28,7 +28,7 @@
 #include <QString>
 
 #include "model/NamedEntity.h"
-#include "unit.h"
+#include "Unit.h"
 
 namespace PropertyNames::Fermentable { static char const * const inventory = "inventory"; /* previously kpropInventory */ }
 namespace PropertyNames::Fermentable { static char const * const inventory_id = "inventory_id"; /* previously kpropInventoryId */ }

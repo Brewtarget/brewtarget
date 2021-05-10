@@ -22,7 +22,7 @@
 #include <QChar>
 #include "brewtarget.h"
 #include "Algorithms.h"
-#include "unit.h"
+#include "Unit.h"
 #include <math.h>
 
 PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
@@ -111,7 +111,7 @@ void PitchDialog::calculate()
    switch (comboBox_AerationMethod->currentIndex())
    {
       case 1:   // O2 at the start
-         aerationFactor = 1.33; 
+         aerationFactor = 1.33;
          break;
       case 2:   // Stir plate.
          aerationFactor = 2.66;

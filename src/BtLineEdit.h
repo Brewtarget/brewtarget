@@ -24,7 +24,7 @@
 #include <QLineEdit>
 
 #include "model/NamedEntity.h"
-#include "unit.h"
+#include "Unit.h"
 #include "UnitSystem.h"
 
 class BtGenericEdit;
@@ -117,7 +117,7 @@ protected:
    Unit::UnitType _type;
    Unit::unitDisplay _forceUnit;
    Unit::unitScale _forceScale;
-   Unit* _units;
+   Unit const * _units;
 
 };
 

@@ -44,7 +44,7 @@
 #include <QHeaderView>
 #include "model/Fermentable.h"
 #include "FermentableTableModel.h"
-#include "unit.h"
+#include "Unit.h"
 #include "model/Recipe.h"
 #include "MainWindow.h"
 
@@ -310,7 +310,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
          unit  = displayUnit(col);
          scale = displayScale(col);
 
-         return QVariant( Brewtarget::displayAmount(row->inventory(), Units::kilograms, 3, unit, scale) );
+         return QVariant( Brewtarget::displayAmount(row->inventory(), &Units::kilograms, 3, unit, scale) );
       case FERMAMOUNTCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
@@ -319,7 +319,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
          unit  = displayUnit(col);
          scale = displayScale(col);
 
-         return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms, 3, unit, scale) );
+         return QVariant( Brewtarget::displayAmount(row->amount_kg(), &Units::kilograms, 3, unit, scale) );
       case FERMISMASHEDCOL:
          if( role == Qt::DisplayRole )
             return QVariant(row->additionMethodStringTr());
@@ -345,7 +345,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
 
          unit  = displayUnit(col);
 
-         return QVariant( Brewtarget::displayAmount(row->color_srm(), Units::srm, 0, unit) );
+         return QVariant( Brewtarget::displayAmount(row->color_srm(), &Units::srm, 0, unit) );
       default :
          qCritical() << tr("Bad column: %1").arg(col);
          return QVariant();
@@ -640,7 +640,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // Inventory amount is in kg, but is just called "inventory" rather than "inventory_kg" in the Q_PROPERTY declaration in the Fermentable class
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "inventory",
-                                                     Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl),
+                                                     Brewtarget::qStringToSI(value.toString(), &Units::kilograms,dspUnit,dspScl),
                                                      tr("Change Inventory Amount"));
          }
          break;
@@ -651,7 +651,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
             // We need to refer back to the MainWindow to make this an undoable operation
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "amount_kg",
-                                                     Brewtarget::qStringToSI(value.toString(), Units::kilograms,dspUnit,dspScl),
+                                                     Brewtarget::qStringToSI(value.toString(), &Units::kilograms,dspUnit,dspScl),
                                                      tr("Change Fermentable Amount"));
             if( rowCount() > 0 )
                headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
@@ -691,7 +691,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( retVal ) {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                      "color_srm",
-                                                     Brewtarget::qStringToSI(value.toString(), Units::srm, dspUnit, dspScl),
+                                                     Brewtarget::qStringToSI(value.toString(), &Units::srm, dspUnit, dspScl),
                                                      tr("Change Color"));
          }
          break;

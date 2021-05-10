@@ -37,7 +37,7 @@ class MiscItemDelegate;
 #include <QMetaProperty>
 #include <QTableView>
 
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 
 // Forward declarations.

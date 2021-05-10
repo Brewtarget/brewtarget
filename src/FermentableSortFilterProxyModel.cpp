@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "unit.h"
+#include "Unit.h"
 #include "FermentableSortFilterProxyModel.h"
 #include "FermentableTableModel.h"
 #include "model/Fermentable.h"
@@ -39,8 +39,8 @@ bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left,
    QVariant rightFermentable = sourceModel()->data(right);
    double leftDouble, rightDouble;
 
-   Unit* unit = Units::kilograms;
-   Unit* colorunit = Units::srm;
+   Unit const * unit = &Units::kilograms;
+   Unit const * colorunit = &Units::srm;
 
    switch( left.column() )
    {

@@ -33,7 +33,7 @@ class OptionDialog;
 #include <QCheckBox>
 #include "BtLineEdit.h"
 #include "ui_optionsDialog.h"
-#include "unit.h"
+#include "Unit.h"
 #include "Log.h"
 
 /*!
@@ -115,7 +115,7 @@ public slots:
    void setFileLocationState(bool state);
 
 protected:
-   
+
    //! \brief Reimplemented from QWidget.
    virtual void changeEvent(QEvent* e);
 
