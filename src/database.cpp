@@ -3110,6 +3110,9 @@ QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, bool transact )
 
 Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
+   if ( m == nullptr )
+      return nullptr;
+
    Mash* newMash = m;
    TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
