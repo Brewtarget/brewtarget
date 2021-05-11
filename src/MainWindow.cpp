@@ -1228,6 +1228,7 @@ void MainWindow::lockRecipe(int state)
 
    // locked recipes cannot be deleted
    actionDeleteSelected->setEnabled(enabled);
+   treeView_recipe->enableDelete(enabled);
 
    treeView_recipe->setDragDropMode( lockIt ? QAbstractItemView::NoDragDrop : QAbstractItemView::DragDrop);
    tabWidget_ingredients->setAcceptDrops( enabled );
@@ -1258,6 +1259,8 @@ void MainWindow::lockRecipe(int state)
    miscDialog->pushButton_addToRecipe->setEnabled(enabled);
    yeastDialog->pushButton_addToRecipe->setEnabled(enabled);
    // mashes still need dealing with
+   //
+
 }
 
 void MainWindow::changed(QMetaProperty prop, QVariant value)

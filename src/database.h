@@ -705,6 +705,8 @@ private:
       bool transact = true
    );
 
+   //! fetches one row from the given table. We do this a lot, so do it once.
+   QSqlRecord fetchOne(TableSchema* tbl, int key);
    /*!
     * \brief Create a deep copy of the \b object.
     * \em T must be a subclass of \em NamedEntity.

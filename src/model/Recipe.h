@@ -435,6 +435,7 @@ public:
    static bool isFermentableSugar(Fermentable*);
    bool hasAncestors();
    bool isMyAncestor(Recipe* maybe);
+   bool hasDescendants();
    PreInstruction addExtracts(double timeRemaining) const;
 
    // Helpers
@@ -484,6 +485,7 @@ public:
    void setKegPrimingFactor( double var );
    void setCacheOnly( bool cache );
    void setLocked(bool isLocked);
+   void setHasDescendants(bool spawned);
 
    NamedEntity * getParent();
    virtual int insertInDatabase();
@@ -572,6 +574,7 @@ private:
 
    // version things
    QList<Recipe*> m_ancestors;
+   bool m_hasDescendants;
 
    // Batch size without losses.
    double batchSizeNoLosses_l();

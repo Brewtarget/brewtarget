@@ -107,7 +107,6 @@ void AncestorDialog::connectDescendant()
    ancestor   = Database::instance().recipe( comboBox_ancestor->currentData().toInt() );
    descendant = Database::instance().recipe( comboBox_descendant->currentData().toInt() );
 
-   qInfo() << Q_FUNC_INFO;
    // No loops in the inheritance
    if ( ! descendant->isMyAncestor(ancestor) ) {
       descendant->setAncestor(ancestor);

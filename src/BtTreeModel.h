@@ -254,6 +254,7 @@ private:
    //! and brewNotes
    void observeElement(NamedEntity*);
 
+   void folderChanged(NamedEntity* test);
    //! \brief returns the \c section header from a recipe
    QVariant recipeHeader(int section) const;
    //! \brief returns the \c section header from an equipment

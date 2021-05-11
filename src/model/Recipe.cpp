@@ -142,13 +142,15 @@ Recipe::Recipe(QString name, bool cache)
    m_og(1.0),
    m_fg(1.0),
    m_cacheOnly(cache),
-   m_locked(false)
+   m_locked(false),
+   m_hasDescendants(false)
 {
 }
 
 Recipe::Recipe(TableSchema* table, QSqlRecord rec, int t_key)
    : NamedEntity(table, rec, t_key),
-   m_cacheOnly(false)
+   m_cacheOnly(false),
+   m_hasDescendants(false)
 {
    m_type = rec.value( table->propertyToColumn( PropertyNames::Recipe::type)).toString();
    m_brewer = rec.value( table->propertyToColumn( PropertyNames::Recipe::brewer)).toString();
@@ -214,7 +216,8 @@ Recipe::Recipe( Recipe const& other ) : NamedEntity(other),
    m_og(other.m_og),
    m_fg(other.m_fg),
    m_cacheOnly(other.m_cacheOnly),
-   m_locked(other.m_locked)
+   m_locked(other.m_locked),
+   m_hasDescendants(false)
 {
    setObjectName("Recipe");
 }
@@ -1546,7 +1549,9 @@ void Recipe::loadAncestors()
 {
    QList<Recipe*> tmp;
    foreach( int ancestor, Database::instance().ancestoralIds(this) ) {
-      tmp.append(Database::instance().recipe(ancestor));
+      Recipe* anc = Database::instance().recipe(ancestor);
+      anc->setHasDescendants(true);
+      tmp.append(anc);
    }
    m_ancestors = tmp;
 }
@@ -1564,6 +1569,8 @@ bool Recipe::isMyAncestor(Recipe* maybe)
    return m_ancestors.contains(maybe);
 }
 
+bool Recipe::hasDescendants() { return m_hasDescendants; }
+void Recipe::setHasDescendants(bool spawned) { m_hasDescendants = spawned; }
 void Recipe::setAncestor( Recipe* ancestor )
 {
    if ( ancestor == nullptr ) {

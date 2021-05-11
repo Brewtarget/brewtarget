@@ -1059,6 +1059,8 @@ void Database::removeFrom( Mash* mash, MashStep* step )
 }
 
 
+// Somethings don't have _in_recipe tables. Equipment, Mash and Style don't do
+// in_recipe table.
 Recipe* Database::getParentRecipe(Equipment const * kit)
 {
    return getRecipeFromForeignKey(kpropEquipmentId,kit->key());
@@ -1074,6 +1076,7 @@ Recipe* Database::getParentRecipe(Style const * style)
    return getRecipeFromForeignKey(kpropStyleId,style->key());
 }
 
+// this lets me do those quickly
 Recipe* Database::getRecipeFromForeignKey(QString keyName, int key)
 {
    TableSchema* recTable = this->dbDefn->table( Brewtarget::RECTABLE );
@@ -1098,14 +1101,13 @@ Recipe* Database::getRecipeFromForeignKey(QString keyName, int key)
    return parent;
 }
 
+// this handles all things with in_recipe tables (fermentables, hops, miscs, waters and yeasts)
 Recipe* Database::getParentRecipe(NamedEntity const * ing) {
 
    QMetaObject const * meta = ing->metaObject();
    TableSchema* table = this->dbDefn->table( this->dbDefn->classNameToTable(meta->className()) );
    TableSchema* inrec = this->dbDefn->table( table->inRecTable() );
    Recipe * parent = nullptr;
-
-   qInfo() << table->tableName();
 
    QSqlQuery q(sqlDatabase());
    if ( inrec == nullptr ) {
@@ -1130,6 +1132,7 @@ Recipe* Database::getParentRecipe(NamedEntity const * ing) {
    return parent;
 }
 
+// Finally, brewnotes are always weird.
 Recipe* Database::getParentRecipe( BrewNote const* note )
 {
    int key;
@@ -2187,7 +2190,7 @@ Recipe* Database::newRecipe(Recipe* other, bool ancestor)
 
    sqlDatabase().transaction();
    try {
-      tmp = copy<Recipe>(other, &allRecipes);
+      tmp = copy<Recipe>(other, &allRecipes, true);
 
       // Copy fermentables, hops, miscs and yeasts. We've the convenience
       // methods, so use them? And now I have to instruct all of them to not do
@@ -3866,85 +3869,75 @@ QList<Yeast*> Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts, Yeast* ex
    return addToRecipe( rec, yeasts, transact );
 }
 
+QSqlRecord Database::fetchOne(TableSchema* tbl, int key)
+{
+   QSqlQuery q(sqlDatabase());
+   QString select = QString("SELECT * FROM %1 WHERE %2 = %3")
+                        .arg(tbl->tableName())
+                        .arg(tbl->keyName())
+                        .arg(key);
+
+   qDebug() << Q_FUNC_INFO << "SELECT SQL:" << select;
+
+   if( !q.exec(select) ) {
+      throw QString("%1 %2")
+               .arg(q.lastQuery())
+               .arg(q.lastError().text());
+   }
+
+   qDebug() << Q_FUNC_INFO << "Returned " << q.size() << " rows";
+
+   q.next();
+
+   QSqlRecord record = q.record();
+   q.finish();
+   return record;
+}
 
 template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* keyHash, bool displayed )
 {
    int newKey;
-   int i;
-   QString holder, fields;
    T* newOne;
 
    Brewtarget::DBTable t = dbDefn->classNameToTable(object->metaObject()->className());
    TableSchema* tbl = dbDefn->table(t);
 
-   QString tName = tbl->tableName();
-
    QSqlQuery q(sqlDatabase());
 
    try {
-      QString select = QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key);
+      QSqlRecord oldRecord = this->fetchOne(tbl,object->key());
 
-      qDebug() << Q_FUNC_INFO << "SELECT SQL:" << select;
-
-      if( !q.exec(select) ) {
-         throw QString("%1 %2").arg(q.lastQuery()).arg(q.lastError().text());
-      }
-
-      qDebug() << Q_FUNC_INFO << "Returned " << q.size() << " rows";
-
-      q.next();
-
-      QSqlRecord oldRecord = q.record();
-      q.finish();
-
-      // Get the field names from the oldRecord. But skip ID, because it
-      // won't work to copy it
-      for (i=0; i< oldRecord.count(); ++i) {
-         QString name = oldRecord.fieldName(i);
-         if ( name != tbl->keyName() ) {
-            fields += fields.isEmpty() ? name : QString(",%1").arg(name);
-            holder += holder.isEmpty() ? QString(":%1").arg(name) : QString(",:%1").arg(name);
-         }
-      }
-
-      // Create a new row.
-      QString prepString = QString("INSERT INTO %1 (%2) VALUES(%3)")
-                           .arg(tName)
-                           .arg(fields)
-                           .arg(holder);
-
-      qDebug() << Q_FUNC_INFO << "INSERT SQL:" << prepString;
-
+      QString insert_string = tbl->generateInsertProperties();
       QSqlQuery insert = QSqlQuery( sqlDatabase() );
-      insert.prepare(prepString);
+      insert.prepare(insert_string);
 
-      // Bind, bind like the wind! Or at least like mueslix
-      for (i=0; i< oldRecord.count(); ++i)
-      {
-         QString name = oldRecord.fieldName(i);
-         QVariant val = oldRecord.value(i);
+      foreach (QString prop, tbl->allProperties() ) {
+         QVariant val = oldRecord.value(tbl->propertyToColumn(prop));
 
-         // We have never had an attribute called 'parent'. See the git logs to understand this comment
-         if ( name == tbl->propertyToColumn(PropertyNames::NamedEntity::display) ) {
-            insert.bindValue(":display", displayed ? Brewtarget::dbTrue() : Brewtarget::dbFalse() );
+         // we allow the caller to over ride the display() value
+         if ( prop == PropertyNames::NamedEntity::display) {
+            qInfo() << Q_FUNC_INFO << Brewtarget::dbBoolean(displayed);
+            val = Brewtarget::dbBoolean(displayed);
          }
-         // Ignore ID again, for the same reasons as before.
-         else if ( name != tbl->keyName() ) {
-            insert.bindValue(QString(":%1").arg(name), val);
-         }
+         insert.bindValue(QString(":%1").arg(prop), val);
       }
 
       // For debugging, it's useful to know what the SQL parameters were
       auto boundValues = insert.boundValues();
       for (auto ii : boundValues.keys()) {
-         qDebug() << Q_FUNC_INFO << ii << "=" << boundValues.value(ii);
+         qInfo() << Q_FUNC_INFO << ii << "=" << boundValues.value(ii);
       }
 
       if (! insert.exec() )
          throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
 
       newKey = insert.lastInsertId().toInt();
-      newOne = new T(tbl, oldRecord, newKey);
+      // reusing the old record is cute, but I think it causes way more issues
+      // than it solves. So lets see what it would take to get the new record,
+      // shall we?
+      QSqlRecord newRecord = this->fetchOne(tbl,newKey);
+
+      newOne = new T(tbl, newRecord, newKey);
       keyHash->insert( newKey, newOne );
    }
    catch (QString e) {
@@ -3952,8 +3945,8 @@ template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* k
       q.finish();
       abort();
    }
-
    q.finish();
+
    return newOne;
 }
 

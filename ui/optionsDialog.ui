@@ -472,13 +472,13 @@
      </widget>
      <widget class="QWidget" name="tab_version">
       <attribute name="title">
-       <string>Versioning</string>
+       <string>Recipe Snapshots</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QCheckBox" name="checkBox_versioning">
          <property name="text">
-          <string>Enable Automatic Versioning</string>
+          <string>Enable Automatic Snapshots</string>
          </property>
         </widget>
        </item>
@@ -503,14 +503,14 @@
           <item>
            <widget class="QRadioButton" name="radioButton_deleteAncestor">
             <property name="text">
-             <string>Deletes all the ancestors too</string>
+             <string>Deletes all the snapshots too</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="radioButton_deleteDescendant">
             <property name="text">
-             <string>Deletes only the descendant</string>
+             <string>Deletes only the recipe</string>
             </property>
            </widget>
           </item>

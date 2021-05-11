@@ -283,9 +283,6 @@ QVariant BtTreeModel::toolTipData(const QModelIndex &index) const
       case YEASTMASK:
          return whiskey->getToolTip( qobject_cast<Yeast*>(thing(index)));
       case WATERMASK:
-         // return thing(index)->name();
-         // this must wait until I implement the call. SEE? That's a proper
-         // comment. Not this weaksauce "must be fixed" shit.
          return whiskey->getToolTip( qobject_cast<Water*>(thing(index)));
       default:
          return item(index)->name();
@@ -330,7 +327,7 @@ QVariant BtTreeModel::recipeHeader(int section) const
    case BtTreeItem::RECIPENAMECOL:
       return QVariant(tr("Name"));
    case BtTreeItem::RECIPEANCCOUNT:
-      return QVariant(tr("Ancestors"));
+      return QVariant(tr("Snapshots"));
    case BtTreeItem::RECIPEBREWDATECOL:
       return QVariant(tr("Brew Date"));
    case BtTreeItem::RECIPESTYLECOL:
@@ -783,30 +780,35 @@ int BtTreeModel::mask()
 void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
 {
    bool failed = false;
+
    while ( ! toBeCopied.isEmpty() )
    {
       QPair<QModelIndex,QString> thisPair = toBeCopied.takeFirst();
       QModelIndex ndx = thisPair.first;
       QString name = thisPair.second;
 
-      switch ( type(ndx) )
-      {
+      switch ( type(ndx) ) {
          case BtTreeItem::EQUIPMENT:
-            Equipment *copyKit,  *oldKit;
+            Equipment *oldKit, *copyKit;
             oldKit = equipment(ndx);
             copyKit = Database::instance().newEquipment(oldKit); // Create a deep copy.
-            if ( copyKit)
+            if (copyKit) {
                copyKit->setName(name);
-            else
+               folderChanged(copyKit);
+            }
+            else {
                failed = true;
+            }
             break;
          case BtTreeItem::FERMENTABLE:
-            Fermentable *copyFerm, *oldFerm;
+            Fermentable *oldFerm, *copyFerm;
             oldFerm = fermentable(ndx);
             // Create a deep copy with a new inventory row
             copyFerm = Database::instance().newFermentable(oldFerm,true);
-            if ( copyFerm )
+            if ( copyFerm ) {
                copyFerm->setName(name);
+               folderChanged(copyFerm);
+            }
             else
                failed = true;
             break;
@@ -815,8 +817,10 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             oldHop = hop(ndx);
             // Create a deep copy with a new inventory row
             copyHop = Database::instance().newHop(oldHop,true);
-            if ( copyHop )
+            if ( copyHop ) {
                copyHop->setName(name);
+               folderChanged(copyHop);
+            }
             else
                failed = true;
             break;
@@ -825,8 +829,10 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             oldMisc = misc(ndx);
             // Create a deep copy with a new inventory row
             copyMisc = Database::instance().newMisc(oldMisc,true);
-            if ( copyMisc )
+            if ( copyMisc ) {
                copyMisc->setName(name);
+               folderChanged(copyMisc);
+            }
             else
                failed = true;
             break;
@@ -834,8 +840,11 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             Recipe *copyRec,  *oldRec;
             oldRec = recipe(ndx);
             copyRec = Database::instance().newRecipe(oldRec); // Create a deep copy.
-            if ( copyRec )
+            qInfo() << Q_FUNC_INFO << "display:" <<  copyRec->display() << "isLocked:" << copyRec->locked() << "hasDescendants:" << copyRec->hasDescendants();
+            if ( copyRec ) {
                copyRec->setName(name);
+               folderChanged(copyRec);
+            }
             else
                failed = true;
             break;
@@ -843,8 +852,10 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             Style *copyStyle, *oldStyle;
             oldStyle = style(ndx);
             copyStyle = Database::instance().newStyle(oldStyle); // Create a deep copy.
-            if ( copyStyle )
+            if ( copyStyle ) {
                copyStyle->setName(name);
+               folderChanged(copyStyle);
+            }
             else
                failed = true;
             break;
@@ -853,8 +864,10 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             oldYeast = yeast(ndx);
             // Create a deep copy with a new inventory row
             copyYeast = Database::instance().newYeast(oldYeast,true);
-            if ( copyYeast )
+            if ( copyYeast ) {
                copyYeast->setName(name);
+               folderChanged(copyYeast);
+            }
             else
                failed = true;
             break;
@@ -862,8 +875,10 @@ void BtTreeModel::copySelected(QList< QPair<QModelIndex, QString> > toBeCopied)
             Water *copyWater, *oldWater;
             oldWater = water(ndx);
             copyWater = Database::instance().newWater(oldWater); // Create a deep copy.
-            if ( copyWater )
+            if ( copyWater ) {
                copyWater->setName(name);
+               folderChanged(copyWater);
+            }
             else
                failed = true;
             break;
@@ -951,20 +966,26 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
 void BtTreeModel::folderChanged(QString name)
 {
    NamedEntity* test = qobject_cast<NamedEntity*>(sender());
-   QModelIndex ndx, pIndex;
-   bool expand = true;
 
    Q_UNUSED(name)
    if ( ! test )
       return;
 
+   folderChanged(test);
+}
+
+void BtTreeModel::folderChanged(NamedEntity* test)
+{
    // Find it.
-   ndx = findElement(test);
-   if ( ! ndx.isValid() )
-   {
+   QModelIndex ndx = findElement(test);
+   if ( ! ndx.isValid() ) {
       qWarning() << "folderChanged:: could not find element";
       return;
    }
+
+
+   QModelIndex pIndex;
+   bool expand = true;
 
    pIndex = parent(ndx); // Get the parent
    // If the parent isn't valid, its the root
@@ -974,8 +995,7 @@ void BtTreeModel::folderChanged(QString name)
    int i = item(ndx)->childNumber();
 
    // Remove it
-   if ( ! removeRows(i, 1, pIndex) )
-   {
+   if ( ! removeRows(i, 1, pIndex) ) {
       qWarning() << "folderChanged:: could not remove row";
       return;
    }
@@ -984,8 +1004,7 @@ void BtTreeModel::folderChanged(QString name)
    // That's awkward, but dropping a folder prolly does need a the folder
    // created.
    QModelIndex newNdx = findFolder(test->folder(), rootItem->child(0), true);
-   if ( ! newNdx.isValid() )
-   {
+   if ( ! newNdx.isValid() ) {
       newNdx = createIndex(0,0,rootItem->child(0));
       expand = false;
    }
@@ -993,8 +1012,7 @@ void BtTreeModel::folderChanged(QString name)
    BtTreeItem* local = item(newNdx);
    int j = local->childCount();
 
-   if ( !  insertRow(j,newNdx,test,_type) )
-   {
+   if ( !  insertRow(j,newNdx,test,_type) ) {
       qWarning() << "folderChanged:: could not insert row";
       return;
    }
