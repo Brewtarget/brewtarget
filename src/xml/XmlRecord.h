@@ -29,6 +29,7 @@
 #include <xalanc/XPath/NodeRefList.hpp>
 
 #include "model/NamedEntity.h"
+#include "model/NamedParameterBundle.h"
 #include "xml/XmlRecordCount.h"
 #include "xml/XQString.h"
 
@@ -105,8 +106,24 @@ public:
    XmlRecord(XmlCoding const & xmlCoding,
              FieldDefinitions const & fieldDefinitions);
 
+
+   /**
+    * \brief Getter for the NamedParameterBundle we readin from this record
+    *
+    *        This is needed for the same reasons as \c XmlRecord::getNamedEntity() below
+    *
+    * \return Reference to an object that the caller does NOT own
+    */
+   NamedParameterBundle const & getNamedParameterBundle() const;
+
    /**
     * \brief Getter for the NamedEntity we are reading in from this record
+    *
+    *        This is needed to allow one \c XmlRecord (or subclass) object to read the data from another (eg for
+    *        \c XmlRecipeRecord to work with contained \c XmlRecord objects).  (The protected access on
+    *        \c XmlRecord::namedEntity only allows an instance of a derived class to access this field on its own
+    *         instance.)
+    *
     * \return Pointer to an object that the caller does NOT own (or nullptr for the root record)
     */
    NamedEntity * getNamedEntity() const;
@@ -203,6 +220,10 @@ protected:
    // The name of the class of object contained in this type of record, eg "Hop", "Yeast", etc.
    // Blank for the root record (which is just a container and doesn't have a NamedEntity).
    QString namedEntityClassName;
+
+   // Name-value pairs containing all the field data from the XML record that will be used to construct/populate
+   // this->namedEntity
+   NamedParameterBundle namedParameterBundle;
 
    //
    // If we created a new NamedEntity (ie Hop/Yeast/Recipe/etc) object to populate with data read in from an XML file,

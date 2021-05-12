@@ -68,7 +68,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/AlcoholTool.cpp
     ${SRCDIR}/Algorithms.cpp
     ${SRCDIR}/BeerColorWidget.cpp
-    ${SRCDIR}/beerxml.cpp
     ${SRCDIR}/boiltime.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/BrewDayWidget.cpp
@@ -135,6 +134,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/model/MashStep.cpp
     ${SRCDIR}/model/Misc.cpp
     ${SRCDIR}/model/NamedEntity.cpp
+    ${SRCDIR}/model/NamedParameterBundle.cpp
     ${SRCDIR}/model/Recipe.cpp
     ${SRCDIR}/model/Salt.cpp
     ${SRCDIR}/model/Style.cpp
@@ -176,6 +176,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/WaterSortFilterProxyModel.cpp
     ${SRCDIR}/WaterTableModel.cpp
     ${SRCDIR}/WaterTableWidget.cpp
+    ${SRCDIR}/xml/BeerXml.cpp
     ${SRCDIR}/xml/BtDomErrorHandler.cpp
     ${SRCDIR}/xml/XercesHelpers.cpp
     ${SRCDIR}/xml/XmlCoding.cpp

@@ -71,7 +71,7 @@
 #include "model/Yeast.h"
 
 #include "config.h"
-#include "beerxml.h"
+#include "xml/BeerXml.h"
 #include "brewtarget.h"
 #include "QueuedMethod.h"
 #include "DatabaseSchemaHelper.h"

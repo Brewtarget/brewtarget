@@ -122,7 +122,7 @@
 #include "WaterDialog.h"
 #include "WaterListModel.h"
 #include "WaterEditor.h"
-#include "beerxml.h"
+#include "xml/BeerXml.h"
 #include "RelationalUndoableUpdate.h"
 #include "UndoableAddOrRemove.h"
 #include "BtHorizontalTabs.h"

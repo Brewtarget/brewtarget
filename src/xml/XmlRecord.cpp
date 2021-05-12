@@ -55,11 +55,16 @@ XmlRecord::XmlRecord(XmlCoding const & xmlCoding,
    xmlCoding{xmlCoding},
    fieldDefinitions{fieldDefinitions},
    namedEntityClassName{},
+   namedParameterBundle{},
    namedEntity{nullptr},
    namedEntityRaiiContainer{nullptr},
    includeInStats{true},
    childRecords{} {
    return;
+}
+
+NamedParameterBundle const & XmlRecord::getNamedParameterBundle() const {
+   return this->namedParameterBundle;
 }
 
 NamedEntity * XmlRecord::getNamedEntity() const {
@@ -330,6 +335,8 @@ bool XmlRecord::load(xalanc::DOMSupport & domSupport,
                // If we do need it, we now store the value
                //
                if (nullptr != fieldDefinition->propertyName) {
+                  this->namedParameterBundle.insert(fieldDefinition->propertyName, parsedValue);
+
                   //
                   // It's a coding error if we're trying to store a simple field without somewhere to store it.  It
                   // should only be the root record that doesn't have a NamedEntity to populate, and, equally, the root
