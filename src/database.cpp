@@ -3932,9 +3932,8 @@ template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* k
          throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
 
       newKey = insert.lastInsertId().toInt();
-      // reusing the old record is cute, but I think it causes way more issues
-      // than it solves. So lets see what it would take to get the new record,
-      // shall we?
+      // I was never a fan of using the old record. So get the record we just
+      // created and don't be clever
       QSqlRecord newRecord = this->fetchOne(tbl,newKey);
 
       newOne = new T(tbl, newRecord, newKey);

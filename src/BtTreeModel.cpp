@@ -922,8 +922,7 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
          case BtTreeItem::RECIPE:
             rec = recipe(ndx);
             deletewhat = Brewtarget::option("deletewhat", Brewtarget::DESCENDANT).toInt();
-
-            if ( deletewhat == Brewtarget::DESCENDANT) {
+            if ( deletewhat == Brewtarget::DESCENDANT ) {
                orphanRecipe(ndx);
                Database::instance().remove( rec );
             }
@@ -1512,6 +1511,12 @@ void BtTreeModel::orphanRecipe(QModelIndex ndx)
 
    // I need the recipe referred to by the index
    Recipe *orphan = recipe(ndx);
+
+   // don't do anything if there is nothing to do
+   if ( ! orphan->hasAncestors() ) {
+      return;
+   }
+
    // And I need its immediate ancestor. Remember, the ancestor list always
    // has the recipe in it, so we need to reference the second item
    Recipe *ancestor = orphan->ancestors().at(1);

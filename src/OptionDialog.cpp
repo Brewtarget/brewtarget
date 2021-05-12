@@ -230,6 +230,7 @@ void OptionDialog::connect_signals()
    connect( pushButton_resetToDefault, &QAbstractButton::clicked, this, &OptionDialog::resetToDefault );
    connect( pushButton_LogFileLocationBrowse, &QAbstractButton::clicked, this, &OptionDialog::setLogDir );
 
+   connect( checkBox_versioning, &QAbstractButton::clicked, this, &OptionDialog::versioningChanged);
 }
 
 void OptionDialog::retranslate()
