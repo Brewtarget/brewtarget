@@ -30,7 +30,7 @@
 #include <xalanc/Include/PlatformDefinitions.hpp>
 
 #include "config.h"
-#include "beerxml.h"
+#include "xml/BeerXml.h"
 #include "brewtarget.h"
 #include "database.h"
 
