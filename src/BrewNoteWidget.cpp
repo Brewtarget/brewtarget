@@ -98,7 +98,7 @@ void BrewNoteWidget::updateProjOg(Unit::unitDisplay oldUnit, Unit::unitScale old
    if ( unitDsp == Unit::displayPlato )
       precision = 0;
 
-   quant = Brewtarget::amountDisplay(bNoteObs, page_preboil, PropertyNames::BrewNote::projOg,Units::sp_grav);
+   quant = Brewtarget::amountDisplay(bNoteObs, page_preboil, PropertyNames::BrewNote::projOg,&Units::sp_grav);
    lcdnumber_projectedOG->setLowLim(  low  * quant );
    lcdnumber_projectedOG->setHighLim( high * quant );
    lcdnumber_projectedOG->display(quant, precision);

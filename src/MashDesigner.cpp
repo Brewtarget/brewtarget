@@ -39,8 +39,8 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    mashStep = nullptr;
    prevStep = nullptr;
 
-   label_zeroVol->setText(Brewtarget::displayAmount(0, Units::liters));
-   label_zeroWort->setText(Brewtarget::displayAmount(0, Units::liters));
+   label_zeroVol->setText(Brewtarget::displayAmount(0, &Units::liters));
+   label_zeroWort->setText(Brewtarget::displayAmount(0, &Units::liters));
 
    // Update temp slider when we move amount slider.
    connect( horizontalSlider_amount, &QAbstractSlider::sliderMoved, this, &MashDesigner::updateTempSlider );
@@ -356,7 +356,7 @@ bool MashDesigner::initializeMash()
    // Order matters. Don't do this until every that could return false has
    mash->setTunSpecificHeat_calGC( equip->tunSpecificHeat_calGC() );
    mash->setTunWeight_kg( equip->tunWeight_kg() );
-   mash->setTunTemp_c( Brewtarget::qStringToSI( dialogText, Units::celsius ) );
+   mash->setTunTemp_c( Brewtarget::qStringToSI( dialogText, &Units::celsius ) );
 
    curStep = 0;
    addedWater_l = 0;
@@ -366,8 +366,8 @@ bool MashDesigner::initializeMash()
    MC = recObs->grainsInMash_kg() * HeatCalculations::Cgrain_calGC;
    grain_kg = recObs->grainsInMash_kg();
 
-   label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), Units::liters));
-   label_wortMax->setText(Brewtarget::displayAmount(recObs->targetCollectedWortVol_l(), Units::liters));
+   label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), &Units::liters));
+   label_wortMax->setText(Brewtarget::displayAmount(recObs->targetCollectedWortVol_l(), &Units::liters));
 
    updateMinAmt();
    updateMaxAmt();
@@ -410,7 +410,7 @@ void MashDesigner::updateFullness()
      ratio = 1;
 
    progressBar_fullness->setValue(static_cast<int>(ratio*progressBar_fullness->maximum()));
-   label_mashVol->setText(Brewtarget::displayAmount(vol_l, Units::liters));
+   label_mashVol->setText(Brewtarget::displayAmount(vol_l, &Units::liters));
    label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + (isInfusion() ? selectedAmount_l() : 0) )/grain_kg ));
 }
 
@@ -444,28 +444,28 @@ void MashDesigner::updateCollectedWort()
    if( ratio > 1 )
      ratio = 1;
 
-   label_wort->setText(Brewtarget::displayAmount(wort_l, Units::liters));
+   label_wort->setText(Brewtarget::displayAmount(wort_l, &Units::liters));
    progressBar_wort->setValue( static_cast<int>(ratio * progressBar_wort->maximum() ));
 }
 
 void MashDesigner::updateMinAmt()
 {
-   label_amtMin->setText(Brewtarget::displayAmount(minAmt_l(), Units::liters));
+   label_amtMin->setText(Brewtarget::displayAmount(minAmt_l(), &Units::liters));
 }
 
 void MashDesigner::updateMaxAmt()
 {
-   label_amtMax->setText(Brewtarget::displayAmount(maxAmt_l(), Units::liters));
+   label_amtMax->setText(Brewtarget::displayAmount(maxAmt_l(), &Units::liters));
 }
 
 void MashDesigner::updateMinTemp()
 {
-   label_tempMin->setText(Brewtarget::displayAmount(minTemp_c(), Units::celsius));
+   label_tempMin->setText(Brewtarget::displayAmount(minTemp_c(), &Units::celsius));
 }
 
 void MashDesigner::updateMaxTemp()
 {
-   label_tempMax->setText(Brewtarget::displayAmount(maxTemp_c(), Units::celsius));
+   label_tempMax->setText(Brewtarget::displayAmount(maxTemp_c(), &Units::celsius));
 }
 
 double MashDesigner::selectedAmount_l()
@@ -538,15 +538,15 @@ void MashDesigner::updateAmt()
    {
       double vol = horizontalSlider_amount->sliderPosition() / static_cast<double>(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
 
-      label_amt->setText(Brewtarget::displayAmount( vol, Units::liters));
+      label_amt->setText(Brewtarget::displayAmount( vol, &Units::liters));
 
       if( mashStep != nullptr )
          mashStep->setInfuseAmount_l( vol );
    }
    else if( isDecoction() )
-      label_amt->setText(Brewtarget::displayAmount(mashStep->decoctionAmount_l(), Units::liters));
+      label_amt->setText(Brewtarget::displayAmount(mashStep->decoctionAmount_l(), &Units::liters));
    else
-      label_amt->setText(Brewtarget::displayAmount(0, Units::liters));
+      label_amt->setText(Brewtarget::displayAmount(0, &Units::liters));
 }
 
 void MashDesigner::updateTemp()
@@ -563,16 +563,16 @@ void MashDesigner::updateTemp()
       if ( temp > maxT )
          temp = maxT;
 
-      label_temp->setText(Brewtarget::displayAmount( temp, Units::celsius));
+      label_temp->setText(Brewtarget::displayAmount( temp, &Units::celsius));
 
       if( mashStep != nullptr )
          mashStep->setInfuseTemp_c( temp );
    }
    else if( isDecoction() )
-      label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), Units::celsius));
+      label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), &Units::celsius));
    else {
 
-      label_temp->setText(Brewtarget::displayAmount( stepTemp_c(), Units::celsius));
+      label_temp->setText(Brewtarget::displayAmount( stepTemp_c(), &Units::celsius));
    }
 }
 

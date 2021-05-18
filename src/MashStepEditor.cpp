@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 #include "MashStepEditor.h"
 #include "model/MashStep.h"

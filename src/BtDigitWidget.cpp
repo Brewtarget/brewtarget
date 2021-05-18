@@ -25,11 +25,10 @@
 
 #include "BtDigitWidget.h"
 #include "brewtarget.h"
-#include "UnitSystems.h"
 #include "UnitSystem.h"
-#include "unit.h"
+#include "Unit.h"
 
-BtDigitWidget::BtDigitWidget(QWidget *parent, Unit::UnitType type, Unit* units) : QLabel(parent),
+BtDigitWidget::BtDigitWidget(QWidget *parent, Unit::UnitType type, Unit const * units) : QLabel(parent),
    m_type(type),
    m_forceUnit( Unit::noUnit ),
    m_forceScale( Unit::noScale ),
@@ -57,7 +56,7 @@ BtDigitWidget::BtDigitWidget(QWidget *parent, Unit::UnitType type, Unit* units) 
 void BtDigitWidget::display(QString str)
 {
    static bool converted;
-  
+
    m_lastNum = Brewtarget::toDouble(str,&converted);
    m_lastPrec = str.length() - str.lastIndexOf(QLocale().decimalPoint()) - 1;
    if( converted )
@@ -325,5 +324,5 @@ void BtDigitWidget::setText(double amount, int precision)
    QLabel::setText( displayAmount(amount,precision) );
 }
 
-BtMassDigit::BtMassDigit(QWidget* parent) : BtDigitWidget(parent,Unit::Mass,Units::kilograms) {}
+BtMassDigit::BtMassDigit(QWidget* parent) : BtDigitWidget(parent,Unit::Mass,&Units::kilograms) {}
 BtGenericDigit::BtGenericDigit(QWidget* parent): BtDigitWidget(parent,Unit::None,nullptr) {}

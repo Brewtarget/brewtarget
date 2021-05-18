@@ -34,7 +34,7 @@
 #include "WaterTableModel.h"
 #include "WaterTableWidget.h"
 #include "model/Water.h"
-#include "unit.h"
+#include "Unit.h"
 #include "model/Recipe.h"
 #include "brewtarget.h"
 
@@ -214,7 +214,7 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
       case WATERNAMECOL:
          return QVariant(row->name());
       case WATERAMOUNTCOL:
-         return QVariant( Brewtarget::displayAmount(row->amount(), Units::liters) );
+         return QVariant( Brewtarget::displayAmount(row->amount(), &Units::liters) );
       case WATERCALCIUMCOL:
          return QVariant( Brewtarget::displayAmount(row->calcium_ppm(), nullptr) );
       case WATERBICARBONATECOL:
@@ -300,7 +300,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
          row->setName(value.toString());
          break;
       case WATERAMOUNTCOL:
-         row->setAmount( Brewtarget::qStringToSI(value.toString(), Units::liters, dspUnit, dspScl) );
+         row->setAmount( Brewtarget::qStringToSI(value.toString(), &Units::liters, dspUnit, dspScl) );
          break;
       case WATERCALCIUMCOL:
          row->setCalcium_ppm( Brewtarget::toDouble(value.toString(), "WaterTableModel::setData()"));

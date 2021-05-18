@@ -24,7 +24,7 @@
 #include <QWidget>
 #include <QDebug>
 #include "RecipeExtrasWidget.h"
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 #include "model/Recipe.h"
 #include "BtLabel.h"

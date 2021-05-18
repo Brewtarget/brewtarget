@@ -34,7 +34,7 @@
 #include "database.h"
 #include "model/MashStep.h"
 #include "MashStepTableModel.h"
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 #include "SimpleUndoableUpdate.h"
 #include "MainWindow.h"
@@ -245,19 +245,19 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
          scale = displayScale(col);
 
          return (row->type() == MashStep::Decoction)
-                ? QVariant( Brewtarget::displayAmount(row->decoctionAmount_l(), Units::liters, 3, unit, scale ) )
-                : QVariant( Brewtarget::displayAmount(row->infuseAmount_l(), Units::liters, 3, unit, scale) );
+                ? QVariant( Brewtarget::displayAmount(row->decoctionAmount_l(), &Units::liters, 3, unit, scale ) )
+                : QVariant( Brewtarget::displayAmount(row->infuseAmount_l(), &Units::liters, 3, unit, scale) );
       case MASHSTEPTEMPCOL:
          unit = displayUnit(col);
          return (row->type() == MashStep::Decoction)
                 ? QVariant("---")
-                : QVariant( Brewtarget::displayAmount(row->infuseTemp_c(), Units::celsius, 3, unit, Unit::noScale) );
+                : QVariant( Brewtarget::displayAmount(row->infuseTemp_c(), &Units::celsius, 3, unit, Unit::noScale) );
       case MASHSTEPTARGETTEMPCOL:
          unit = displayUnit(col);
-         return QVariant( Brewtarget::displayAmount(row->stepTemp_c(), Units::celsius,3, unit, Unit::noScale) );
+         return QVariant( Brewtarget::displayAmount(row->stepTemp_c(), &Units::celsius,3, unit, Unit::noScale) );
       case MASHSTEPTIMECOL:
          scale = displayScale(col);
-         return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes,3,Unit::noUnit,scale) );
+         return QVariant( Brewtarget::displayAmount(row->stepTime_min(), &Units::minutes,3,Unit::noUnit,scale) );
       default :
          qWarning() << tr("Bad column: %1").arg(index.column());
          return QVariant();
@@ -348,12 +348,12 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
             if( row->type() == MashStep::Decoction ) {
                Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                         PropertyNames::MashStep::decoctionAmount_l,
-                                                        Brewtarget::qStringToSI(value.toString(),Units::liters,dspUnit,dspScl),
+                                                        Brewtarget::qStringToSI(value.toString(),&Units::liters,dspUnit,dspScl),
                                                         tr("Change Mash Step Decoction Amount"));
             } else {
                Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                         PropertyNames::MashStep::infuseAmount_l,
-                                                        Brewtarget::qStringToSI(value.toString(),Units::liters,dspUnit,dspScl),
+                                                        Brewtarget::qStringToSI(value.toString(),&Units::liters,dspUnit,dspScl),
                                                         tr("Change Mash Step Infuse Amount"));
             }
             return true;
@@ -365,7 +365,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                       PropertyNames::MashStep::infuseTemp_c,
-                                                      Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
+                                                      Brewtarget::qStringToSI(value.toString(),&Units::celsius,dspUnit,dspScl),
                                                       tr("Change Mash Step Infuse Temp"));
             return true;
          }
@@ -380,11 +380,11 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
             // constructor, it gets linked to the first one, which then "owns" it.
             auto targetTempUpdate = new SimpleUndoableUpdate(*row,
                                                              PropertyNames::MashStep::stepTemp_c,
-                                                             Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
+                                                             Brewtarget::qStringToSI(value.toString(),&Units::celsius,dspUnit,dspScl),
                                                              tr("Change Mash Step Temp"));
             new SimpleUndoableUpdate(*row,
                                      PropertyNames::MashStep::endTemp_c,
-                                     Brewtarget::qStringToSI(value.toString(),Units::celsius,dspUnit,dspScl),
+                                     Brewtarget::qStringToSI(value.toString(),&Units::celsius,dspUnit,dspScl),
                                      tr("Change Mash Step End Temp"),
                                      targetTempUpdate);
             Brewtarget::mainWindow()->doOrRedoUpdate(targetTempUpdate);
@@ -397,7 +397,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          {
             Brewtarget::mainWindow()->doOrRedoUpdate(*row,
                                                       PropertyNames::MashStep::stepTime_min,
-                                                      Brewtarget::qStringToSI(value.toString(),Units::minutes,dspUnit,dspScl),
+                                                      Brewtarget::qStringToSI(value.toString(),&Units::minutes,dspUnit,dspScl),
                                                       tr("Change Mash Step Time"));
             return true;
          }

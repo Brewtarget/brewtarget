@@ -22,7 +22,7 @@
 #include "HopSortFilterProxyModel.h"
 #include "HopTableModel.h"
 #include "model/Hop.h"
-#include "unit.h"
+#include "Unit.h"
 #include <iostream>
 
 HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent, bool filt)
@@ -41,7 +41,7 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
     int lUse, rUse;
     double lAlpha, rAlpha;
     bool ok = false;
-    Unit* unit = Units::kilograms;
+    Unit const * unit = &Units::kilograms;
 
    switch( left.column() )
    {
@@ -73,7 +73,7 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
         lUse = uses.indexOf( (sourceModel()->data(lSibling)).toString() );
         rUse = uses.indexOf( (sourceModel()->data(rSibling)).toString() );
 
-        unit = Units::minutes; // not Units::kilogram
+        unit = &Units::minutes; // not &Units::kilogram
         if ( lUse == rUse )
             return Brewtarget::qStringToSI(leftHop.toString(),unit) < Brewtarget::qStringToSI(rightHop.toString(),unit);
 

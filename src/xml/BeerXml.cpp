@@ -1,5 +1,5 @@
 /*
- * beerxml.cpp is part of Brewtarget, and is Copyright the following
+ * BeerXml.cpp is part of Brewtarget, and is Copyright the following
  * authors 2020-2021
  * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "beerxml.h"
+#include "xml/BeerXml.h"
 
 #include <stdexcept>
 

@@ -21,7 +21,7 @@
 
 #include "Algorithms.h"
 #include "brewtarget.h"
-#include "unit.h"
+#include "Unit.h"
 
 AlcoholTool::AlcoholTool(QWidget* parent) : QDialog(parent),
                                             pushButton_convert{new QPushButton  (this)},
