@@ -938,14 +938,14 @@ NamedEntity * Database::removeNamedEntityFromRecipe( Recipe* rec, NamedEntity* i
    // headlong into the Undo. I might address that by making the undo test its
    // returns?
    if ( wantsVersion(rec) ) {
-      spawnWithExclusion(rec,ing);
+      copyRecipeExcept(rec,ing);
       return ing;
    }
 
    sqlDatabase().transaction();
    QSqlQuery q(sqlDatabase());
 
-   qDebug() << QString("%1 Deleting NamedEntity %2 #%3").arg(Q_FUNC_INFO).arg(meta->className()).arg(ing->_key);
+   qDebug() << QString("%1 Deleting NamedEntity %2 #%3").arg(Q_FUNC_INFO).arg(meta->className()).arg(ing->key());
 
    try {
       if ( ndx != -1 ) {
@@ -965,16 +965,16 @@ NamedEntity * Database::removeNamedEntityFromRecipe( Recipe* rec, NamedEntity* i
       QString deleteFromInRecipe = QString("DELETE FROM %1 WHERE %2=%3 AND %4=%5")
                                  .arg(inrec->tableName() )
                                  .arg(inrec->inRecIndexName())
-                                 .arg(ing->_key)
+                                 .arg(ing->key())
                                  .arg(inrec->recipeIndexName())
-                                 .arg(rec->_key);
+                                 .arg(rec->key());
       qDebug() << QString("Delete From In Recipe SQL: %1").arg(deleteFromInRecipe);
 
       // delete from misc where id = [misc key]
       QString deleteNamedEntity = QString("DELETE FROM %1 where %2=%3")
                                  .arg(table->tableName())
                                  .arg(table->keyName())
-                                 .arg(ing->_key);
+                                 .arg(ing->key());
       qDebug() << QString("Delete NamedEntity SQL: %1").arg(deleteNamedEntity);
 
       q.setForwardOnly(true);
@@ -985,7 +985,7 @@ NamedEntity * Database::removeNamedEntityFromRecipe( Recipe* rec, NamedEntity* i
          QString deleteFromChildren = QString("DELETE FROM %1 WHERE %2=%3")
                                     .arg(child->tableName())
                                     .arg( child->childIndexName() )
-                                    .arg(ing->_key);
+                                    .arg(ing->key());
          qDebug() << QString("Delete From Children SQL: %1").arg(deleteFromChildren);
          if ( ! q.exec( deleteFromChildren ) ) {
             qInfo() << Q_FUNC_INFO << q.lastQuery() << q.lastError().text();
@@ -1035,7 +1035,7 @@ void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
       throw; //up the stack!
    }
 
-   allInstructions.remove(ins->_key);
+   allInstructions.remove(ins->key());
    emit changed( metaProperty("instructions"), QVariant() );
 }
 
@@ -1048,7 +1048,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
    try {
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
                QString("%1 = %2").arg(tbl->propertyToColumn(PropertyNames::NamedEntity::deleted)).arg(Brewtarget::dbTrue()),
-               QString("%1 = %2").arg(tbl->keyName()).arg(step->_key));
+               QString("%1 = %2").arg(tbl->keyName()).arg(step->key()));
    }
    catch ( QString e ) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -1117,7 +1117,7 @@ Recipe* Database::getParentRecipe(NamedEntity const * ing) {
    QString select = QString("SELECT %4 from %1 WHERE %2=%3")
                         .arg(inrec->tableName())
                         .arg(inrec->inRecIndexName())
-                        .arg(ing->_key)
+                        .arg(ing->key())
                         .arg(inrec->recipeIndexName());
    qDebug() << Q_FUNC_INFO << "NamedEntity in recipe search:" << select;
    if (! q.exec(select) ) {
@@ -1142,7 +1142,7 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
            .arg( tbl->recipeIndexName())
            .arg( tbl->tableName() )
            .arg( tbl->keyName() )
-           .arg(note->_key);
+           .arg( note->key() );
 
    QSqlQuery q(sqlDatabase());
 
@@ -1235,9 +1235,9 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
                 .arg(tbl->tableName() )
                 .arg(tbl->propertyToColumn(PropertyNames::MashStep::stepNumber))
                 .arg(tbl->keyName())
-                .arg(m1->_key)
+                .arg(m1->key())
                 .arg(m2->stepNumber())
-                .arg(m2->_key)
+                .arg(m2->key())
                 .arg(m1->stepNumber());
 
    QSqlQuery q(sqlDatabase() );
@@ -1280,9 +1280,9 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
       .arg(tbl->tableName())
       .arg(tbl->propertyToColumn(kpropInstructionNumber))
       .arg(tbl->inRecIndexName())
-      .arg(in1->_key)
+      .arg(in1->key())
       .arg(in2->instructionNumber())
-      .arg(in2->_key)
+      .arg(in2->key())
       .arg(in1->instructionNumber());
 
    QSqlQuery q( sqlDatabase());
@@ -1316,7 +1316,7 @@ void Database::insertInstruction(Instruction* in, int pos)
                    .arg( tbl->recipeIndexName())
                    .arg( tbl->tableName() )
                    .arg( tbl->inRecIndexName() )
-                   .arg(in->_key);
+                   .arg(in->key());
    QString update;
 
    sqlDatabase().transaction();
@@ -1377,7 +1377,7 @@ void Database::insertInstruction(Instruction* in, int pos)
          .arg(tbl->propertyToColumn(kpropInstructionNumber))
          .arg(pos)
          .arg( tbl->inRecIndexName() )
-         .arg(in->_key);
+         .arg(in->key());
       qDebug() << Q_FUNC_INFO << "Update 2 SQL:" << update;
 
       if ( !q.exec(update) )
@@ -1426,7 +1426,7 @@ QList<int> Database::ancestoralIds(Recipe const* descendant)
       .arg( tbl->keyName() )
       .arg( tbl->foreignKeyToColumn(PropertyNames::Recipe::ancestorId) )
       .arg( tbl->tableName() )
-      .arg( descendant->_key );
+      .arg( descendant->key() );
 
    QSqlQuery q( sqlDatabase() );
 
@@ -1462,7 +1462,7 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent, bool recurse)
       }
    }
    else {
-      inList = QString("%1").arg(parent->_key);
+      inList = QString("%1").arg(parent->key());
    }
 
    // this may not be the most efficient way to query. It compresses the code
@@ -1484,7 +1484,7 @@ QList<Fermentable*> Database::fermentables(Recipe const* parent)
    QList<Fermentable*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::FERMINRECTABLE);
    // recipe_id = [parent->key]
-   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->key());
 
    getElements(ret,filter, Brewtarget::FERMINRECTABLE, allFermentables, inrec->inRecIndexName());
 
@@ -1495,7 +1495,7 @@ QList<Hop*> Database::hops(Recipe const* parent)
 {
    QList<Hop*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::HOPINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->key());
 
    getElements(ret,filter, Brewtarget::HOPINRECTABLE, allHops, inrec->inRecIndexName());
 
@@ -1506,7 +1506,7 @@ QList<Misc*> Database::miscs(Recipe const* parent)
 {
    QList<Misc*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::MISCINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->key());
 
    getElements(ret,filter, Brewtarget::MISCINRECTABLE, allMiscs, inrec->inRecIndexName());
 
@@ -1562,7 +1562,7 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
    // mash_id = [parent->key] AND deleted = false order by step_number ASC
    QString filterString = QString("%1 = %2 AND %3 = %4 order by %5 ASC")
          .arg(tbl->foreignKeyToColumn())
-         .arg(parent->_key)
+         .arg(parent->key())
          .arg(tbl->propertyToColumn(PropertyNames::NamedEntity::deleted))
          .arg(Brewtarget::dbFalse())
          .arg(tbl->propertyToColumn(PropertyNames::MashStep::stepNumber));
@@ -1579,7 +1579,7 @@ QList<Instruction*> Database::instructions( Recipe const* parent )
    // recipe_id = [parent->key] ORDER BY instruction_number ASC
    QString filter = QString("%1 = %2 ORDER BY %3 ASC")
          .arg( inrec->recipeIndexName())
-         .arg(parent->_key)
+         .arg(parent->key())
          .arg( inrec->propertyToColumn(kpropInstructionNumber));
 
    getElements(ret,filter,Brewtarget::INSTINRECTABLE,allInstructions,inrec->inRecIndexName());
@@ -1591,7 +1591,7 @@ QList<Water*> Database::waters(Recipe const* parent)
 {
    QList<Water*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::WATERINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->key());
 
    getElements(ret,filter,Brewtarget::WATERINRECTABLE,allWaters,inrec->inRecIndexName());
 
@@ -1602,7 +1602,7 @@ QList<Salt*> Database::salts(Recipe const* parent)
 {
    QList<Salt*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::SALTINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->key());
 
    getElements(ret,filter,Brewtarget::SALTINRECTABLE,allSalts,inrec->inRecIndexName());
 
@@ -1613,7 +1613,7 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 {
    QList<Yeast*> ret;
    TableSchema* inrec = dbDefn->table(Brewtarget::YEASTINRECTABLE);
-   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->_key);
+   QString filter = QString("%1 = %2").arg(inrec->recipeIndexName()).arg(parent->key());
 
    getElements(ret,filter,Brewtarget::YEASTINRECTABLE,allYeasts,inrec->inRecIndexName());
 
@@ -1645,8 +1645,8 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
       TableSchema* tbl = dbDefn->table(Brewtarget::BREWNOTETABLE);
 
       sqlUpdate( Brewtarget::BREWNOTETABLE,
-               QString("%1=%2").arg(tbl->recipeIndexName()).arg(parent->_key),
-               QString("%1=%2").arg(tbl->keyName()).arg(tmp->_key) );
+               QString("%1=%2").arg(tbl->recipeIndexName()).arg(parent->key()),
+               QString("%1=%2").arg(tbl->keyName()).arg(tmp->key()) );
 
    }
    catch (QString e) {
@@ -1835,8 +1835,8 @@ Mash* Database::newMash(Mash* other, bool displace)
          if( displace ) {
             TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
             sqlUpdate( Brewtarget::RECTABLE,
-                       QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(tmp->_key),
-                       QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(other->_key));
+                       QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(tmp->key()),
+                       QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(other->key()));
          }
       }
    }
@@ -1870,8 +1870,8 @@ Mash* Database::newMash(Recipe* parent, bool transact)
       // Connect tmp to parent, removing any existing mash in parent.
       TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
       sqlUpdate( Brewtarget::RECTABLE,
-                 QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(tmp->_key),
-                 QString("%1=%2").arg(tbl->keyName()).arg(parent->_key));
+                 QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId)).arg(tmp->key()),
+                 QString("%1=%2").arg(tbl->keyName()).arg(parent->key()));
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -1908,7 +1908,7 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
                         .arg(tbl->propertyToColumn(PropertyNames::NamedEntity::deleted))
                         .arg(Brewtarget::dbFalse())
                         .arg(tbl->foreignKeyToColumn())
-                        .arg(mash->_key);
+                        .arg(mash->key());
 
    sqlDatabase().transaction();
 
@@ -1922,8 +1922,8 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
 
       // we need to set the mash_id first
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
-                 QString("%1=%2 ").arg(tbl->foreignKeyToColumn()).arg(mash->_key),
-                 QString("%1=%2").arg(tbl->keyName()).arg(tmp->_key)
+                 QString("%1=%2 ").arg(tbl->foreignKeyToColumn()).arg(mash->key()),
+                 QString("%1=%2").arg(tbl->keyName()).arg(tmp->key())
                );
 
       // Just sets the step number within the mash to the next available number.
@@ -1931,7 +1931,7 @@ MashStep* Database::newMashStep(Mash* mash, bool connected)
       // should be more widely supported than isnull
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
                  coalesce,
-                 QString("%1=%2").arg(tbl->keyName()).arg(tmp->_key));
+                 QString("%1=%2").arg(tbl->keyName()).arg(tmp->key()));
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -2025,11 +2025,9 @@ Recipe* Database::newRecipe(QString name)
    return tmp;
 }
 
-Recipe* Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude, bool notify)
+Recipe* Database::copyRecipeExcept(Recipe *other, NamedEntity *except)
 {
    Recipe *tmp;
-   TableSchema *tbl = dbDefn->table(Brewtarget::RECTABLE);
-
    sqlDatabase().transaction();
 
    try {
@@ -2037,49 +2035,32 @@ Recipe* Database::spawnWithExclusion(Recipe *other, NamedEntity *exclude, bool n
 
       // the cast will return nullptr if the NamedEntity cannot be cast. The
       // addToRecipe will do the right thing and simply copy it all.
-      addToRecipe( tmp, other->fermentables(), qobject_cast<Fermentable*>(exclude), false);
-      addToRecipe( tmp, other->hops(),         qobject_cast<Hop*>(exclude),         false);
-      addToRecipe( tmp, other->miscs(),        qobject_cast<Misc*>(exclude),        false);
-      addToRecipe( tmp, other->yeasts(),       qobject_cast<Yeast*>(exclude),       false);
+      addToRecipe( tmp, other->fermentables(), qobject_cast<Fermentable*>(except), false);
+      addToRecipe( tmp, other->hops(),         qobject_cast<Hop*>(except),         false);
+      addToRecipe( tmp, other->miscs(),        qobject_cast<Misc*>(except),        false);
+      addToRecipe( tmp, other->yeasts(),       qobject_cast<Yeast*>(except),       false);
 
-      // copy style/mash/equipment
-      if ( qobject_cast<Equipment*>(exclude) != nullptr ) {
+      // if the exception cannot be cast to a equipment/mash/style, then copy
+      // the equipment/mash/style to the clone
+      if ( qobject_cast<Equipment*>(except) == nullptr ) {
          addToRecipe(tmp, other->equipment(), false, false);
       }
-      if ( qobject_cast<Mash*>(exclude) != nullptr ) {
+      if ( qobject_cast<Mash*>(except) == nullptr ) {
          addToRecipe(tmp, other->mash(), false, false);
       }
-      if ( qobject_cast<Style*>(exclude) != nullptr ) {
+      if ( qobject_cast<Style*>(except) == nullptr ) {
          addToRecipe(tmp, other->style(), false, false);
       }
 
-      // set display to false on the ancestor and link the two together
-      QSqlQuery q(sqlDatabase());
-      other->setDisplay(false);
-      // UPDATE recipe SET ancestor_id = [other.key] where id = [tmp.key]
-      QString setAncestor = QString("UPDATE %1 SET %2 = %3 WHERE %4 = %5")
-                               .arg(tbl->tableName())
-                               .arg(tbl->foreignKeyToColumn(PropertyNames::Recipe::ancestorId))
-                               .arg(other->key())
-                               .arg(tbl->keyName())
-                               .arg(tmp->key());
-      if ( ! q.exec(setAncestor) ) {
-         throw QString("Could not create ancestoral tree: %1 threw %2")
-                  .arg(q.lastQuery())
-                  .arg(q.lastError().text());
-      }
+      setAncestor( tmp, other, false );
    }
    catch (QString e) {
       qCritical() << Q_FUNC_INFO << e;
+      sqlDatabase().rollback();
       abort();
    }
 
-   if ( notify ) {
-      emit changed( metaProperty("recipes"), QVariant());
-      emit createdSignal(tmp);
-      emit spawned(other,tmp);
-   }
-
+   sqlDatabase().commit();
    return tmp;
 }
 
@@ -2100,7 +2081,7 @@ bool Database::wantsVersion(Recipe* rec)
                               .arg( tbl->keyName() )
                               .arg( tbl->tableName() )
                               .arg( tbl->foreignKeyToColumn(kpropRecipeId) )
-                              .arg( rec->_key );
+                              .arg( rec->key() );
    try {
       qDebug() << Q_FUNC_INFO << queryExistence;
       if ( ! q.exec(queryExistence) ) {
@@ -2360,35 +2341,34 @@ Yeast* Database::newYeast(Yeast* other, bool add_inventory)
    return tmp;
 }
 
-// newWhatever handles the allWhatever hash, so I can copy the ingredient and
-// insert into the hash in a single step. I don't think these can be templated
-// because we change the names
-NamedEntity* Database::clone( NamedEntity* donor, Recipe* rec )
+NamedEntity* Database::clone( Recipe *rec, NamedEntity *donor, QString propName, QVariant value )
 {
    if ( qobject_cast<Equipment*>(donor) != nullptr ) {
-      Equipment* tmp = newEquipment(qobject_cast<Equipment*>(donor));
+      Equipment* tmp = replicant(donor, &allEquipments, propName, value);
       addToRecipe(rec, tmp, true);
       return tmp;
    }
 
    if ( qobject_cast<Fermentable*>(donor) != nullptr ) {
-      Fermentable* tmp = newFermentable(qobject_cast<Fermentable*>(donor));
-      addToRecipe(rec, tmp, true);
+      Fermentable* tmp = replicant(donor, &allFermentables, propName, value);
+      addToRecipe( rec, tmp, true );
       return tmp;
    }
 
    if ( qobject_cast<Hop*>(donor) != nullptr ) {
-      Hop* tmp = newHop(qobject_cast<Hop*>(donor));
-      addToRecipe(rec, tmp, true);
+      Hop* tmp = replicant(donor, &allHops, propName, value);
+      addToRecipe( rec, tmp, true );
       return tmp;
    }
 
    if ( qobject_cast<Mash*>(donor) != nullptr ) {
-      Mash* tmp = newMash(qobject_cast<Mash*>(donor));
+      Mash* tmp = replicant(donor, &allMashs, propName, value);
       addToRecipe(rec, tmp, true);
       return tmp;
    }
 
+   // What does this actually do? It gets the last mashstep from the recipe?
+   // Huh?
    if ( qobject_cast<MashStep*>(donor) != nullptr ) {
       MashStep* whiskey = qobject_cast<MashStep*>(donor);
       MashStep* tmp = rec->mash()->mashSteps().at( whiskey->stepNumber() - 1);
@@ -2396,36 +2376,45 @@ NamedEntity* Database::clone( NamedEntity* donor, Recipe* rec )
    }
 
    if ( qobject_cast<Misc*>(donor) != nullptr ) {
-      Misc* tmp = newMisc(qobject_cast<Misc*>(donor));
+      Misc* tmp = replicant(donor, &allMiscs, propName, value);
       addToRecipe(rec, tmp, true);
       return tmp;
    }
 
    if ( qobject_cast<Salt*>(donor) != nullptr ) {
-      Salt* tmp = newSalt(qobject_cast<Salt*>(donor));
+      Salt* tmp = replicant(donor, &allSalts, propName, value);
       addToRecipe(rec, tmp, true);
       return tmp;
    }
 
    if ( qobject_cast<Style*>(donor) != nullptr ) {
-      Style* tmp = newStyle(qobject_cast<Style*>(donor));
+      Style* tmp = replicant(donor, &allStyles, propName, value);
       addToRecipe(rec, tmp, true);
       return tmp;
    }
 
    if ( qobject_cast<Water*>(donor) != nullptr ) {
-      Water* tmp = newWater(qobject_cast<Water*>(donor));
+      Water* tmp = replicant(donor, &allWaters, propName, value);
       addToRecipe(rec, tmp, true);
       return tmp;
    }
 
    if ( qobject_cast<Yeast*>(donor) != nullptr ) {
-      Yeast* tmp = newYeast(qobject_cast<Yeast*>(donor));
+      Yeast* tmp = replicant(donor, &allYeasts, propName, value);
       addToRecipe(rec, tmp, true);
       return tmp;
    }
 
    return nullptr;
+}
+
+// newWhatever handles the allWhatever hash, so I can copy the ingredient and
+// insert into the hash in a single step. I don't think these can be templated
+// because we change the names
+NamedEntity* Database::clone( NamedEntity* donor, Recipe* rec )
+{
+   abort();
+
 }
 
 int Database::insertElement(NamedEntity * ins)
@@ -2477,7 +2466,7 @@ int Database::insertElement(NamedEntity * ins)
       qCritical() << QString("%1 %2 %3").arg(Q_FUNC_INFO).arg(e).arg( q.lastError().text());
       abort();
    }
-   ins->_key = key;
+   ins->m_key = key;
 
    return key;
 }
@@ -2610,7 +2599,7 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
                         .arg(tbl->propertyToColumn(PropertyNames::NamedEntity::deleted))
                         .arg(Brewtarget::dbFalse())
                         .arg(tbl->foreignKeyToColumn())
-                        .arg(parent->_key);
+                        .arg(parent->key());
    int key;
 
    sqlDatabase().transaction();
@@ -2620,8 +2609,8 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
       ins->setCacheOnly(false);
 
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
-                 QString("%1=%2 ").arg(tbl->foreignKeyToColumn()).arg(parent->_key),
-                 QString("%1=%2").arg(tbl->keyName()).arg(ins->_key)
+                 QString("%1=%2 ").arg(tbl->foreignKeyToColumn()).arg(parent->key()),
+                 QString("%1=%2").arg(tbl->keyName()).arg(ins->key())
                );
 
       // Just sets the step number within the mash to the next available number.
@@ -2629,7 +2618,7 @@ int Database::insertMashStep(MashStep* ins, Mash* parent)
       // should be more widely supported than isnull
       sqlUpdate( Brewtarget::MASHSTEPTABLE,
                  coalesce,
-                 QString("%1=%2").arg(tbl->keyName()).arg(ins->_key));
+                 QString("%1=%2").arg(tbl->keyName()).arg(ins->key()));
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -2750,7 +2739,7 @@ int Database::insertBrewNote(BrewNote* ins, Recipe* parent) {
       key = insertElement(ins);
       ins->setCacheOnly(false);
 
-      QString const setClause = QString("%1=%2").arg(tbl->foreignKeyToColumn()).arg(parent->_key);
+      QString const setClause = QString("%1=%2").arg(tbl->foreignKeyToColumn()).arg(parent->key());
       QString const whereClause = QString("%1=%2").arg(tbl->keyName()).arg(key);
 
       sqlUpdate(Brewtarget::BREWNOTETABLE, setClause, whereClause);
@@ -2843,8 +2832,8 @@ template<class T> T* Database::addNamedEntityToRecipe(
       QString select = QString("SELECT %5 from %1 WHERE %2=%3 AND %5=%4")
                            .arg(inrec->tableName())
                            .arg(inrec->inRecIndexName())
-                           .arg(ing->_key)
-                           .arg(reinterpret_cast<NamedEntity*>(rec)->_key)
+                           .arg(ing->key())
+                           .arg(reinterpret_cast<NamedEntity*>(rec)->key())
                            .arg(inrec->recipeIndexName());
       qDebug() << Q_FUNC_INFO << "NamedEntity in recipe search:" << select;
       if (! q.exec(select) ) {
@@ -2891,9 +2880,9 @@ template<class T> T* Database::addNamedEntityToRecipe(
 
       q.prepare(insert);
       q.bindValue(":ingredient", newIng->key());
-      q.bindValue(":recipe", rec->_key);
+      q.bindValue(":recipe", rec->key());
 
-      qDebug() << QString("%1 Link ingredient to recipe: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(newIng->key()).arg(rec->_key);
+      qDebug() << QString("%1 Link ingredient to recipe: %2 with args %3, %4").arg(Q_FUNC_INFO).arg(insert).arg(newIng->key()).arg(rec->key());
 
       if ( ! q.exec() ) {
          throw QString("%2 : %1.").arg(q.lastQuery()).arg(q.lastError().text());
@@ -3083,33 +3072,37 @@ void Database::setInventory(NamedEntity* ins, QVariant value, int invKey, bool n
 // idea -- copy everything but what's being modified, clone what's being
 // modified and add the clone to the copy.  This is named to echo
 // updateEntry()
-void Database::modifyEntry(NamedEntity* object, QString propName, QVariant value, bool notify )
+bool Database::modifyEntry(NamedEntity* object, QString propName, QVariant value, bool notify )
 {
    // Yog-Sothoth is the gate. Yog-Sothoth is the key and guardian of the
    // gate. Past, present, future, all are one in Yog-Sothoth
    Recipe *owner, *spawn;
    NamedEntity* neClone;
+   bool noclone = true;
 
    owner = getParentRecipe(object);
 
    // if the ingredient is in a recipe and that recipe needs a version
    if ( owner && wantsVersion(owner) ) {
       // create the copy of the recipe, excluding the thing
-      spawn = spawnWithExclusion(owner, object, false);
-      // Copy the ingredient we want to change. This is the magix
-      neClone = clone(object,spawn);
+      spawn = copyRecipeExcept(owner, object);
+      // Copy the ingredient we want to change and change it. This is REALLY
+      // important magic.
+      neClone = clone(spawn,object,propName,value);
+      noclone = false;
+
+      emit createdSignal(spawn);
+      emit spawned(owner,spawn);
    }
    else {
       // we don't want a version, or the ingredient isn't in a recipe
       neClone = object;
    }
+
+   qInfo() << Q_FUNC_INFO << "propName =" << propName << "value =" << value.toString();
    updateEntry( neClone, propName, value, notify );
 
-   if ( owner && wantsVersion(owner) ) {
-      emit changed( metaProperty("recipes"), QVariant() );
-      emit createdSignal(spawn);
-      emit spawned(owner,spawn);
-   }
+   return noclone;
 }
 
 void Database::updateEntry( NamedEntity* object, QString propName, QVariant value, bool notify, bool transact )
@@ -3424,7 +3417,7 @@ Equipment* Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy, bool t
       // Update equipment_id
       sqlUpdate(Brewtarget::RECTABLE,
                 QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropEquipmentId)).arg(newEquip->key()),
-                QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
+                QString("%1=%2").arg(tbl->keyName()).arg(rec->key()));
 
    }
    catch (QString e ) {
@@ -3615,11 +3608,14 @@ QList<Hop*> Database::addToRecipe( Recipe* rec, QList<Hop*>hops, Hop* exclude, b
 
 Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
 {
-   Mash* newMash = m;
-   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
+   if ( m == nullptr ) 
+      return nullptr;
 
    if ( rec->locked() )
       return nullptr;
+
+   Mash* newMash = m;
+   TableSchema* tbl = dbDefn->table(Brewtarget::RECTABLE);
 
    if ( transact )
       sqlDatabase().transaction();
@@ -3635,7 +3631,7 @@ Mash * Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy, bool transact )
       // Update mash_id
       sqlUpdate(Brewtarget::RECTABLE,
                QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropMashId) ).arg(newMash->key()),
-               QString("%1=%2").arg(tbl->keyName()).arg(rec->_key));
+               QString("%1=%2").arg(tbl->keyName()).arg(rec->key()));
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -3773,7 +3769,7 @@ Style * Database::addToRecipe( Recipe* rec, Style* s, bool noCopy, bool transact
 
       sqlUpdate(Brewtarget::RECTABLE,
                 QString("%1=%2").arg(tbl->foreignKeyToColumn(kpropStyleId)).arg(newStyle->key()),
-                QString("%1=%2").arg(tbl->keyName()).arg(spawn->_key));
+                QString("%1=%2").arg(tbl->keyName()).arg(spawn->key()));
    }
    catch (QString e) {
       qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
@@ -3894,7 +3890,7 @@ QSqlRecord Database::fetchOne(TableSchema* tbl, int key)
    return record;
 }
 
-template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* keyHash, bool displayed )
+template<class T> T* Database::replicant(NamedEntity const* object, QHash<int,T*>* keyHash, QString propName, QVariant value)
 {
    int newKey;
    T* newOne;
@@ -3914,10 +3910,9 @@ template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* k
       foreach (QString prop, tbl->allProperties() ) {
          QVariant val = oldRecord.value(tbl->propertyToColumn(prop));
 
-         // we allow the caller to over ride the display() value
-         if ( prop == PropertyNames::NamedEntity::display) {
-            qInfo() << Q_FUNC_INFO << Brewtarget::dbBoolean(displayed);
-            val = Brewtarget::dbBoolean(displayed);
+         // What has risen may sink, and what has sunk may rise.
+         if ( prop == propName ) {
+            val = value;
          }
          insert.bindValue(QString(":%1").arg(prop), val);
       }
@@ -3925,7 +3920,7 @@ template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* k
       // For debugging, it's useful to know what the SQL parameters were
       auto boundValues = insert.boundValues();
       for (auto ii : boundValues.keys()) {
-         qInfo() << Q_FUNC_INFO << ii << "=" << boundValues.value(ii);
+         qDebug() << Q_FUNC_INFO << ii << "=" << boundValues.value(ii);
       }
 
       if (! insert.exec() )
@@ -3949,6 +3944,60 @@ template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* k
    return newOne;
 }
 
+template<class T> T* Database::copy( NamedEntity const* object, QHash<int,T*>* keyHash, bool displayed )
+{
+   int newKey;
+   T* newOne;
+
+   Brewtarget::DBTable t = dbDefn->classNameToTable(object->metaObject()->className());
+   TableSchema* tbl = dbDefn->table(t);
+
+   QSqlQuery q(sqlDatabase());
+
+   try {
+      QSqlRecord oldRecord = this->fetchOne(tbl,object->key());
+
+      QString insert_string = tbl->generateInsertProperties();
+      QSqlQuery insert = QSqlQuery( sqlDatabase() );
+      insert.prepare(insert_string);
+
+      foreach (QString prop, tbl->allProperties() ) {
+         QVariant val = oldRecord.value(tbl->propertyToColumn(prop));
+
+         // we allow the caller to over ride the display() value
+         if ( prop == PropertyNames::NamedEntity::display) {
+            qDebug() << Q_FUNC_INFO << Brewtarget::dbBoolean(displayed);
+            val = Brewtarget::dbBoolean(displayed);
+         }
+         insert.bindValue(QString(":%1").arg(prop), val);
+      }
+
+      // For debugging, it's useful to know what the SQL parameters were
+      auto boundValues = insert.boundValues();
+      for (auto ii : boundValues.keys()) {
+         qDebug() << Q_FUNC_INFO << ii << "=" << boundValues.value(ii);
+      }
+
+      if (! insert.exec() )
+         throw QString("could not execute %1 : %2").arg(insert.lastQuery()).arg(insert.lastError().text());
+
+      newKey = insert.lastInsertId().toInt();
+      // I was never a fan of using the old record. So get the record we just
+      // created and don't be clever
+      QSqlRecord newRecord = this->fetchOne(tbl,newKey);
+
+      newOne = new T(tbl, newRecord, newKey);
+      keyHash->insert( newKey, newOne );
+   }
+   catch (QString e) {
+      qCritical() << QString("%1 %2").arg(Q_FUNC_INFO).arg(e);
+      q.finish();
+      abort();
+   }
+   q.finish();
+
+   return newOne;
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )

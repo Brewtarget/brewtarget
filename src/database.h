@@ -129,7 +129,8 @@ public:
 
    int numberOfRecipes() const;
 
-   void modifyEntry( NamedEntity* object, QString propName, QVariant value, bool notify = true );
+   // boolean return, because upstream needs to make some choices
+   bool modifyEntry( NamedEntity* object, QString propName, QVariant value, bool notify = true );
    void updateEntry( NamedEntity* object, QString propName, QVariant value, bool notify = true, bool transact = false );
 
    //! \brief Get the contents of the cell specified by table/key/col_name
@@ -183,7 +184,7 @@ public:
 
       // this is weird, but I want the sqlrecord
       T* tmp = new T(tbl, rec);
-      all->insert(tmp->_key,tmp);
+      all->insert(tmp->key(),tmp);
 
       return tmp;
    }
@@ -505,9 +506,10 @@ public:
    void setAncestor(Recipe* descendant, Recipe* ancestor, bool transact = true);
 
    Recipe* breed(Recipe* parent);
-   Recipe* spawnWithExclusion(Recipe *other, NamedEntity* exclude, bool notify = true);
+   Recipe* copyRecipeExcept(Recipe *other, NamedEntity* except);
 
    NamedEntity* clone( NamedEntity* donor, Recipe* rec );
+   NamedEntity* clone( Recipe* rec, NamedEntity *donor, QString propName, QVariant value);
 
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done.
@@ -719,6 +721,21 @@ private:
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
    template<class T> T* copy( NamedEntity const* object, QHash<int,T*>* keyHash, bool displayed = true );
+
+   /*!
+    * \brief Create a deep copy of the \b object, except for \b propName which
+    * gets \b value.
+    * \em T must be a subclass of \em NamedEntity.
+    * \returns a pointer to the new copy. You must manually emit the changed()
+    * signal after a copy() call. Also, does not insert things magically into
+    * allHop or allInstructions etc. hashes. This just simply duplicates a
+    * row in a table, unless you provide \em keyHash.
+    * \param object is the thing you want to copy.
+    * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
+    * \param propName the property that will be replaced
+    * \param value that new value for \b propName
+    */
+   template<class T> T* replicant(NamedEntity const* object, QHash<int,T*>* keyHash, QString propName, QVariant value);
 
    // Do an sql update.
    void sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );

@@ -30,6 +30,7 @@
 #include "database.h"
 #include "TableSchemaConst.h"
 #include "YeastSchema.h"
+#include "PhysicalConstants.h"
 
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
@@ -138,27 +139,16 @@ Yeast::Yeast(Yeast & other) : NamedEntity(other),
 
 //============================="GET" METHODS====================================
 QString Yeast::laboratory() const { return m_laboratory; }
-
 QString Yeast::productID() const { return m_productID; }
-
 QString Yeast::notes() const { return m_notes; }
-
 QString Yeast::bestFor() const { return m_bestFor; }
-
 const QString Yeast::typeString() const { return m_typeString; }
-
 const QString Yeast::formString() const { return m_formString; }
-
 const QString Yeast::flocculationString() const { return m_flocculationString; }
-
 double Yeast::amount() const { return m_amount; }
-
 double Yeast::minTemperature_c() const { return m_minTemperature_c; }
-
 double Yeast::maxTemperature_c() const { return m_maxTemperature_c; }
-
 double Yeast::attenuation_pct() const { return m_attenuation_pct; }
-
 int Yeast::inventory() {
    if ( m_inventory < 0 ) {
       m_inventory = getInventory().toInt();
@@ -167,21 +157,13 @@ int Yeast::inventory() {
 }
 
 int Yeast::inventoryId() const { return m_inventory_id; }
-
 int Yeast::timesCultured() const { return m_timesCultured; }
-
 int Yeast::maxReuse() const { return m_maxReuse; }
-
 bool Yeast::addToSecondary() const { return m_addToSecondary; }
-
 bool Yeast::amountIsWeight() const { return m_amountIsWeight; }
-
 Yeast::Form Yeast::form() const { return  m_form; }
-
 Yeast::Flocculation Yeast::flocculation() const { return m_flocculation; }
-
 Yeast::Type Yeast::type() const { return m_type; }
-
 const QString Yeast::typeStringTr() const
 {
    static QStringList typesTr = QStringList() << QObject::tr("Ale")
@@ -231,31 +213,41 @@ bool Yeast::cacheOnly() const { return m_cacheOnly; }
 //============================="SET" METHODS====================================
 void Yeast::setType( Yeast::Type t )
 {
-   m_type = t;
-   m_typeString = types.at(t);
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Yeast::type, m_typeString);
+   // a wise person once said always makes sure things are in range before you
+   // use them
+   if ( types.at(t) == nullptr ) {
+      qWarning() << Q_FUNC_INFO << "invalid yeast type:" << t;
+      return;
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::type, types.at(t)) ) {
+      m_type = t;
+      m_typeString = types.at(t);
    }
 }
 
 void Yeast::setForm( Yeast::Form f )
 {
-   m_form = f;
-   m_formString = forms.at(f);
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Yeast::form, m_formString);
+   if ( forms.at(f) == nullptr ) {
+      qWarning() << Q_FUNC_INFO << "invalid yeast form:" << f;
+      return;
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::form, forms.at(f)) ) {
+      m_form = f;
+      m_formString = forms.at(f);
    }
 }
 
 void Yeast::setAmount( double var )
 {
-   if( var < 0.0 )
+   if( var < 0.0 ) {
       qWarning() << QString("Yeast: amount < 0: %1").arg(var);
-   else {
+      return;
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::amount, var) ) {
       m_amount = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Yeast::amount, var);
-      }
    }
 }
 
@@ -263,12 +255,12 @@ void Yeast::setInventoryQuanta( int var )
 {
    if( var < 0.0 ) {
       qWarning() << QString("Yeast: inventory < 0: %1").arg(var);
+      return;
    }
-   else {
-      m_inventory = var;
-      if ( ! m_cacheOnly ) {
-         setInventory(var,m_inventory_id);
-      }
+
+   m_inventory = var;
+   if ( ! m_cacheOnly ) {
+      setInventory(var,m_inventory_id);
    }
 }
 
@@ -282,49 +274,46 @@ void Yeast::setInventoryId( int key )
 
 void Yeast::setAmountIsWeight( bool var )
 {
-   m_amountIsWeight = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Yeast::amountIsWeight, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::amountIsWeight, var) ) {
+      m_amountIsWeight = var;
    }
 }
 
 void Yeast::setLaboratory( const QString& var )
 {
-   m_laboratory = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Yeast::laboratory, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::laboratory, var) ) {
+      m_laboratory = var;
    }
 }
 
 void Yeast::setProductID( const QString& var )
 {
-   m_productID = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Yeast::productID, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::productID, var) ) {
+      m_productID = var;
    }
 }
 
 void Yeast::setMinTemperature_c( double var )
 {
-   if( var < -273.15 )
+   if( var < PhysicalConstants::absoluteZero ) {
+      qWarning() << Q_FUNC_INFO << "temperature below absolute zero:" << var;
       return;
-   else {
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::minTemperature_c, var) ) {
       m_minTemperature_c = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Yeast::minTemperature_c, var);
-      }
    }
 }
 
 void Yeast::setMaxTemperature_c( double var )
 {
-   if( var < -273.15 )
+   if( var < PhysicalConstants::absoluteZero ) {
+      qWarning() << Q_FUNC_INFO << "temperature below absolute zero:" << var;
       return;
-   else {
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::maxTemperature_c, var) ) {
       m_maxTemperature_c = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Yeast::maxTemperature_c, var);
-      }
    }
 }
 
@@ -332,73 +321,71 @@ void Yeast::setMaxTemperature_c( double var )
 // coredumps happen otherwise
 void Yeast::setFlocculation( Yeast::Flocculation f)
 {
-   if ( flocculations.at(f) != nullptr ) {
+   if ( flocculations.at(f) == nullptr ) {
+      qWarning() << Q_FUNC_INFO << "invalid flocculation type:" << f;
+      return;
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::flocculation, flocculations.at(f)) ) {
       m_flocculation = f;
       m_flocculationString = flocculations.at(f);
-
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Yeast::flocculation, flocculations.at(f));
-      }
    }
 }
 
 void Yeast::setAttenuation_pct( double var )
 {
-   if( var < 0.0 || var > 100.0 )
+   if( var < 0.0 || var > 100.0 ) {
+      qWarning() << Q_FUNC_INFO << "invalid attenuation:" << var;
       return;
-   else {
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::attenuation_pct, var) ) {
       m_attenuation_pct = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Yeast::attenuation_pct, var);
-      }
    }
 }
 
 void Yeast::setNotes( const QString& var )
 {
-   m_notes = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Yeast::notes, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::notes, var) ) {
+      m_notes = var;
    }
 }
 
 void Yeast::setBestFor( const QString& var )
 {
-   m_bestFor = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Yeast::bestFor, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::bestFor, var) ) {
+      m_bestFor = var;
    }
 }
 
 void Yeast::setTimesCultured( int var )
 {
-   if( var < 0 )
+   if( var < 0 ) {
+      qWarning() << Q_FUNC_INFO << "invalid times cultured:" << var;
       return;
-   else {
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::timesCultured, var) ) {
       m_timesCultured = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Yeast::timesCultured, var);
-      }
    }
 }
 
 void Yeast::setMaxReuse( int var )
 {
-   if( var < 0 )
+   if( var < 0 ) {
+      qWarning() << Q_FUNC_INFO << "invalid max reuse:" << var;
       return;
-   else {
+   }
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::maxReuse, var) ) {
       m_maxReuse = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Yeast::maxReuse, var);
-      }
    }
 }
 
 void Yeast::setAddToSecondary( bool var )
 {
-   m_addToSecondary = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Yeast::addToSecondary, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::addToSecondary, var) ) {
+      m_addToSecondary = var;
    }
 }
 

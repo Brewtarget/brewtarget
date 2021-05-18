@@ -181,74 +181,74 @@ bool Misc::cacheOnly() const { return m_cacheOnly; }
 //============================"SET" METHODS=====================================
 void Misc::setType( Type t )
 {
-   m_type = t;
-   m_typeString = types.at(t);
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Misc::type, m_typeString );
+   if ( m_cacheOnly || setEasy( PropertyNames::Misc::type, types.at(t) ) ) {
+      m_type = t;
+      m_typeString = types.at(t);
    }
 }
 
 void Misc::setUse( Use u )
 {
-   m_use = u;
-   m_useString = uses.at(u);
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Misc::use, m_useString );
+   if ( m_cacheOnly || setEasy( PropertyNames::Misc::use, uses.at(u) ) ) {
+      m_use = u;
+      m_useString = uses.at(u);
    }
 }
 
 void Misc::setUseFor( const QString& var )
 {
-   m_useFor = var;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Misc::useFor, var );
+   if ( m_cacheOnly || setEasy( PropertyNames::Misc::useFor, var ) ) {
+      m_useFor = var;
    }
 }
 
 void Misc::setNotes( const QString& var )
 {
-   m_notes = var;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Misc::notes, var );
+   if ( m_cacheOnly || setEasy( PropertyNames::Misc::notes, var ) ) {
+      m_notes = var;
    }
 }
 
 void Misc::setAmountType( AmountType t )
 {
-   m_amountIsWeight = t == AmountType_Weight;
-   if ( ! m_cacheOnly ) {
-      setAmountIsWeight(m_amountIsWeight);
+   bool is_a_weight = t == AmountType_Weight;
+   if ( m_cacheOnly ) {
+      m_amountIsWeight = is_a_weight;
+   }
+   else {
+      setAmountIsWeight(is_a_weight);
    }
 }
 
 void Misc::setAmountIsWeight( bool var )
 {
-   m_amountIsWeight = var;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Misc::amountIsWeight, var );
+   if ( m_cacheOnly || setEasy( PropertyNames::Misc::amountIsWeight, var ) ) {
+      m_amountIsWeight = var;
    }
 }
 
 void Misc::setAmount( double var )
 {
-   if( var < 0.0 )
+   if( var < 0.0 ) {
       qWarning() << QString("Misc: amount < 0: %1").arg(var);
-   else {
+      return;
+   }
+
+   if ( m_cacheOnly || setEasy( PropertyNames::Misc::amount, var ) ) {
       m_amount = var;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Misc::amount, var );
-      }
    }
 }
 
 void Misc::setInventoryAmount( double var )
 {
-   if( var < 0.0 )
+   if( var < 0.0 ) {
       qWarning() << QString("Misc: inventory < 0: %1").arg(var);
-   else {
-      m_inventory = var;
-      if ( ! m_cacheOnly )
-         setInventory(var,m_inventory_id);
+      return;
+   }
+
+   m_inventory = var;
+   if ( ! m_cacheOnly ) {
+      setInventory(var,m_inventory_id);
    }
 }
 
@@ -261,13 +261,12 @@ void Misc::setInventoryId( int key )
 
 void Misc::setTime( double var )
 {
-   if( var < 0.0 )
+   if( var < 0.0 ) {
       qWarning() << QString("Misc: time < 0: %1").arg(var);
-   else {
+      return;
+   }
+   if ( m_cacheOnly || setEasy( PropertyNames::Misc::time, var ) ) {
       m_time = var;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Misc::time, var );
-      }
    }
 }
 

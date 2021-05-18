@@ -1579,7 +1579,12 @@ void BtTreeModel::versionedRecipe(Recipe* ancestor, Recipe* descendant)
    // ancestor
    ndx = findElement(descendant);
 
+   // do not mess with this order. We have to signal the data is in the tree
+   // first (dataChanged), then put it in the right folder (folderChanged) and
+   // finally tell MainWindow something happened (recipeSpawn).
+   // Any other order doesn't work, or dumps core
    emit dataChanged(ndx,ndx);
+   folderChanged(descendant);
    emit recipeSpawn(descendant);
 }
 

@@ -97,9 +97,8 @@ Salt::Salt(TableSchema* table, QSqlRecord rec, int t_key)
 //================================"SET" METHODS=================================
 void Salt::setAmount( double var )
 {
-   m_amount = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Salt::amount, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Salt::amount, var) ) {
+      m_amount = var;
    }
 }
 
@@ -109,9 +108,8 @@ void Salt::setAddTo( Salt::WhenToAdd var )
       return;
    }
 
-   m_add_to = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Salt::addTo, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Salt::addTo, var) ) {
+      m_add_to = var;
    }
 }
 
@@ -123,38 +121,36 @@ void Salt::setType(Salt::Types type)
       return;
    }
 
-   m_type = type;
-   m_is_acid = (type > NAHCO3);
-   m_amount_is_weight = ! (type == LACTIC || type == H3PO4);
-
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Salt::type, type);
-      setEasy(PropertyNames::Salt::isAcid, m_is_acid);
-      setEasy(PropertyNames::Salt::amountIsWeight, m_amount_is_weight);
+   bool anAcid = (type > NAHCO3);
+   bool isWeight = ! (type == LACTIC || type == H3PO4);
+   if ( m_cacheOnly || 
+        setEasy(PropertyNames::Salt::type, type) ||
+        setEasy(PropertyNames::Salt::isAcid, anAcid) ||
+        setEasy(PropertyNames::Salt::amountIsWeight, isWeight) ) {
+      m_is_acid = anAcid;
+      m_amount_is_weight = isWeight;
+      m_type = type;
    }
 }
 
 void Salt::setAmountIsWeight( bool var )
 {
-   m_amount_is_weight = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Salt::amountIsWeight, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Salt::amountIsWeight, var) ) {
+      m_amount_is_weight = var;
    }
 }
 
 void Salt::setIsAcid( bool var )
 {
-   m_is_acid = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Salt::isAcid, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Salt::isAcid, var) ) {
+      m_is_acid = var;
    }
 }
 
 void Salt::setPercentAcid(double var)
 {
-   m_percent_acid = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Salt::percentAcid, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Salt::percentAcid, var) ) {
+      m_percent_acid = var;
    }
 }
 void Salt::setCacheOnly(bool cache) { m_cacheOnly = cache; }

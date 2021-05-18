@@ -35,6 +35,8 @@ namespace PhysicalConstants{
    
    //! \brief How many liters of water get absorbed by 1 kg of grain.
    const double grainAbsorption_Lkg = 1.085;
+
+   const double absoluteZero = -273.15;
 }
 
 #endif

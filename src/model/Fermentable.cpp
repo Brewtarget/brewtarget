@@ -271,9 +271,8 @@ bool Fermentable::isValidType( const QString& str )
 // Sets
 void Fermentable::setType( Type t )
 {
-   m_type = t;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Fermentable::type, types.at(t));
+   if ( m_cacheOnly || setEasy(PropertyNames::Fermentable::type, types.at(t)) ) {
+      m_type = t;
    }
 }
 
@@ -289,57 +288,50 @@ void Fermentable::setAdditionTime( Fermentable::AdditionTime t )
 
 void Fermentable::setAddAfterBoil( bool b )
 {
-   m_isAfterBoil = b;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Fermentable::addAfterBoil, b);
+   if ( m_cacheOnly || setEasy(PropertyNames::Fermentable::addAfterBoil, b) ) {
+      m_isAfterBoil = b;
    }
 }
 
 void Fermentable::setOrigin( const QString& str )
 {
-   m_origin = str;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Fermentable::origin, str);
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::origin, str) ) {
+      m_origin = str;
    }
 }
 
 void Fermentable::setSupplier( const QString& str)
 {
-   m_supplier = str;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Fermentable::supplier, str);
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::supplier, str) ) {
+      m_supplier = str;
    }
 }
 
 void Fermentable::setNotes( const QString& str )
 {
-   m_notes = str;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Fermentable::notes, str);
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::notes, str) ) {
+      m_notes = str;
    }
 }
 
 void Fermentable::setRecommendMash( bool b )
 {
-   m_recommendMash = b;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Fermentable::recommendMash, b);
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::recommendMash, b) ) {
+      m_recommendMash = b;
    }
 }
 
 void Fermentable::setIsMashed(bool var)
 {
-   m_isMashed = var;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Fermentable::isMashed, var);
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::isMashed, var) ) {
+      m_isMashed = var;
    }
 }
 
 void Fermentable::setIbuGalPerLb( double num )
 {
-   m_ibuGalPerLb = num;
-   if ( ! m_cacheOnly ) {
-      setEasy( PropertyNames::Fermentable::ibuGalPerLb, num);
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::ibuGalPerLb, num) ) {
+      m_ibuGalPerLb = num;
    }
 }
 
@@ -356,47 +348,42 @@ double Fermentable::equivSucrose_kg() const
 
 void Fermentable::setAmount_kg( double num )
 {
-   if( num < 0.0 )
-   {
+   if( num < 0.0 ) {
       qWarning() << QString("Fermentable: negative amount: %1").arg(num);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::amount_kg, num) ) {
+      qInfo() << Q_FUNC_INFO << "updating cache:" << num;
       m_amountKg = num;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Fermentable::amount_kg, num);
-      }
    }
 }
 
+// changes to inventory amounts do NOT create a version
 void Fermentable::setInventoryAmount( double num )
 {
    if( num < 0.0 ) {
       qWarning() << QString("Fermentable: negative inventory: %1").arg(num);
       return;
    }
-   else
-   {
-      m_inventory = num;
-      if ( ! m_cacheOnly ) {
-         setInventory(num,m_inventory_id);
-      }
+
+   m_inventory = num;
+   if ( ! m_cacheOnly ) {
+      setInventory(num,m_inventory_id);
    }
 }
 
+// I will regret this, but I don't think this happens at any point other than
+// load time, so no versions
 void Fermentable::setInventoryId( int key )
 {
    if( key < 1 ) {
       qWarning() << QString("Fermentable: bad inventory id: %1").arg(key);
       return;
    }
-   else
-   {
-      m_inventory_id = key;
-      if ( ! m_cacheOnly ) {
-         setEasy(kpropInventoryId,key);
-      }
+   m_inventory_id = key;
+   if ( ! m_cacheOnly ) {
+      setEasy(kpropInventoryId,key);
    }
 }
 
@@ -415,61 +402,47 @@ int Fermentable::inventoryId()
 
 void Fermentable::setYield_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 )
-   {
-      m_yieldPct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Fermentable::yield_pct, num);
+   if( num >= 0.0 && num <= 100.0 ) {
+      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::yield_pct, num) ) {
+         m_yieldPct = num;
       }
    }
-   else
-   {
+   else {
       qWarning() << QString("Fermentable: 0 < yield < 100: %1").arg(num);
    }
 }
 
 void Fermentable::setColor_srm( double num )
 {
-   if( num < 0.0 )
-   {
+   if( num < 0.0 ) {
       qWarning() << QString("Fermentable: negative color: %1").arg(num);
       return;
    }
-   else
-   {
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::color_srm, num) ) {
       m_colorSrm = num;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Fermentable::color_srm, num);
-      }
    }
 }
 
 void Fermentable::setCoarseFineDiff_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 )
-   {
-      m_coarseFineDiff = num;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Fermentable::coarseFineDiff_pct, num);
+   if( num >= 0.0 && num <= 100.0 ) {
+      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::coarseFineDiff_pct, num) ) {
+         m_coarseFineDiff = num;
       }
    }
-   else
-   {
+   else {
       qWarning() << QString("Fermentable: 0 < coarsefinediff < 100: %1").arg(num);
    }
 }
 
 void Fermentable::setMoisture_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 )
-   {
-      m_moisturePct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Fermentable::moisture_pct, num);
+   if( num >= 0.0 && num <= 100.0 ) {
+      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::moisture_pct, num) ) {
+         m_moisturePct = num;
       }
    }
-   else
-   {
+   else {
       qWarning() << QString("Fermentable: 0 < moisture < 100: %1").arg(num);
    }
 }
@@ -481,41 +454,31 @@ void Fermentable::setDiastaticPower_lintner( double num )
       qWarning() << QString("Fermentable: negative DP: %1").arg(num);
       return;
    }
-   else
-   {
+   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::diastaticPower_lintner, num) ) {
       m_diastaticPower = num;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Fermentable::diastaticPower_lintner, num);
-      }
    }
 }
 
 void Fermentable::setProtein_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 )
-   {
-      m_proteinPct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Fermentable::protein_pct, num);
+   if( num >= 0.0 && num <= 100.0 ) {
+      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::protein_pct, num) ) {
+         m_proteinPct = num;
       }
    }
-   else
-   {
+   else {
       qWarning() << QString("Fermentable: 0 < protein < 100: %1").arg(num);
    }
 }
 
 void Fermentable::setMaxInBatch_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 )
-   {
-      m_maxInBatchPct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy( PropertyNames::Fermentable::maxInBatch_pct, num);
+   if( num >= 0.0 && num <= 100.0 ) {
+      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::maxInBatch_pct, num) ) {
+         m_maxInBatchPct = num;
       }
    }
-   else
-   {
+   else {
       qWarning() << QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num);
    }
 }

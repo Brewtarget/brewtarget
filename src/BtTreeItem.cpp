@@ -203,7 +203,8 @@ QVariant BtTreeItem::dataRecipe( int column )
       case RECIPEANCCOUNT:
          if ( recipe )
             // the kid is always in the list, damn it
-            return QVariant( recipe->ancestors().size() - 1);
+            // return QVariant( recipe->ancestors().size() - 1);
+            return QVariant( QString("%1 (key %2)").arg(recipe->ancestors().size() - 1).arg(recipe->key()));
          break;
       case RECIPEBREWDATECOL:
          if ( recipe )

@@ -69,33 +69,29 @@ Instruction::Instruction(TableSchema* table, QSqlRecord rec, int t_key)
 // Setters ====================================================================
 void Instruction::setDirections(const QString& dir)
 {
-   m_directions = dir;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Instruction::directions,  dir);
+   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::directions,  dir) ) {
+      m_directions = dir;
    }
 }
 
 void Instruction::setHasTimer(bool has)
 {
-   m_hasTimer = has;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Instruction::hasTimer,  has);
+   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::hasTimer,  has) ) {
+      m_hasTimer = has;
    }
 }
 
 void Instruction::setTimerValue(const QString& timerVal)
 {
-   m_timerValue = timerVal;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Instruction::timerValue,  timerVal);
+   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::timerValue,  timerVal) ) {
+      m_timerValue = timerVal;
    }
 }
 
 void Instruction::setCompleted(bool comp)
 {
-   m_completed = comp;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Instruction::completed,  comp);
+   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::completed,  comp) ) {
+      m_completed = comp;
    }
 }
 
@@ -109,9 +105,8 @@ void Instruction::setReagent(const QString& reagent)
 
 void Instruction::setInterval(double time)
 {
-   m_interval = time;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Instruction::interval,  time);
+   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::interval,  time) ) {
+      m_interval = time;
    }
 }
 
