@@ -3099,7 +3099,6 @@ bool Database::modifyEntry(NamedEntity* object, QString propName, QVariant value
       neClone = object;
    }
 
-   qInfo() << Q_FUNC_INFO << "propName =" << propName << "value =" << value.toString();
    updateEntry( neClone, propName, value, notify );
 
    return noclone;
