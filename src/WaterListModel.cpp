@@ -25,8 +25,8 @@
 WaterListModel::WaterListModel(QWidget* parent)
    : QAbstractListModel(parent), m_recipe(nullptr)
 {
-   connect( &(Database::instance()), &Database::newWaterSignal, this, &WaterListModel::addWater );
-   connect( &(Database::instance()), SIGNAL(deletedSignal(Water*)), this, SLOT(removeWater(Water*)) );
+   connect( &(Database::instance()), qOverload<Water*>(&Database::createdSignal), this, &WaterListModel::addWater );
+   connect( &(Database::instance()), qOverload<Water*>(&Database::deletedSignal), this, &WaterListModel::removeWater);
    repopulateList();
 }
 

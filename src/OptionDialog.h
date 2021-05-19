@@ -86,6 +86,9 @@ public:
    void sqliteVisible(bool canSee);
    void postgresVisible(bool canSee);
 
+signals:
+   void showAllAncestors(bool showem);
+
 public slots:
    //! \brief Show the dialog.
    void show();
@@ -109,6 +112,9 @@ public slots:
    void testRequired();
    //! \brief handle the dialogs for saving passwords
    void savePassword(bool state);
+
+   //! \brief does the version options
+   void versioningChanged(bool state);
 
    //! \brief enables/disables controls in Loggingtab based on checkboxes.
    void setLoggingControlsState(bool state);
@@ -134,9 +140,32 @@ private:
    void showChanges();
    //
    void changeColors();
-   QButtonGroup *colorGroup, *ibuGroup;
    QStringList ndxToLangCode;
    QVector<QIcon> langIcons;
+
+   void configure_unitCombos();
+   void configure_formulaCombos();
+   void configure_languages();
+   void configure_logging();
+   void connect_signals();
+
+   bool saveDatabaseConfig();
+   bool saveDefaultUnits();
+   void saveLoggingSettings();
+   void saveVersioningSettings();
+   bool transferDatabase();
+   void saveSqliteConfig();
+   void saveFormulae();
+
+   bool saveWeightUnits();
+   bool saveTemperatureUnits();
+   bool saveVolumeUnits();
+   bool saveGravityUnits();
+   bool saveDateFormat();
+   bool saveColorUnits();
+   bool saveDiastaticUnits();
+
+   void signalAncestors();
 };
 
 #endif   /* _OPTIONDIALOG_H */

@@ -127,6 +127,10 @@ public:
                                    QString const& password="brewtarget");
    bool loadSuccessful();
 
+   int numberOfRecipes() const;
+
+   // boolean return, because upstream needs to make some choices
+   bool modifyEntry( NamedEntity* object, QString propName, QVariant value, bool notify = true );
    void updateEntry( NamedEntity* object, QString propName, QVariant value, bool notify = true, bool transact = false );
 
    //! \brief Get the contents of the cell specified by table/key/col_name
@@ -180,7 +184,7 @@ public:
 
       // this is weird, but I want the sqlrecord
       T* tmp = new T(tbl, rec);
-      all->insert(tmp->_key,tmp);
+      all->insert(tmp->key(),tmp);
 
       return tmp;
    }
@@ -204,7 +208,7 @@ public:
    Fermentable* newFermentable(Fermentable* other = nullptr, bool add_inventory = false);
    Hop* newHop(Hop* other = nullptr, bool add_inventory = false);
    //! \returns a copy of the given recipe.
-   Recipe* newRecipe(Recipe* other);
+   Recipe* newRecipe(Recipe* other, bool ancestor = false);
    /*! \returns a copy of the given mash. Displaces the mash currently in the
     * parent recipe unless \b displace is false.
     */
@@ -279,11 +283,13 @@ public:
    // signal corresponding to the appropriate QList
    // of ingredients in rec. If noCopy is true, then don't copy, and set
    // the ingredient's display parameter to 0 (don't display in lists).
-   void addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false, bool transact = true );
+   Equipment* addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false, bool transact = true );
    Hop * addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false, bool transact = true);
    Fermentable * addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false, bool transact = true);
    //! Add a mash, displacing any current mash.
    Mash * addToRecipe( Recipe* rec, Mash* m, bool noCopy = false, bool transact = true );
+   //! a no-op to make later code prettier
+   MashStep* addToRecipe( Recipe* rec, MashStep* m) { return m; }
    Misc * addToRecipe( Recipe* rec, Misc* m, bool noCopy = false, bool transact = true);
    //! Add a style, displacing any current style.
    Style * addToRecipe( Recipe* rec, Style* s, bool noCopy = false, bool transact = true );
@@ -298,6 +304,12 @@ public:
    QList<Hop*> addToRecipe(Recipe* rec, QList<Hop*> hops, bool transact = true);
    QList<Misc*> addToRecipe(Recipe* rec, QList<Misc*> miscs, bool transact = true);
    QList<Yeast*> addToRecipe(Recipe* rec, QList<Yeast*> yeasts, bool transact = true);
+
+   //! \brief bulk add to a recipe, with exclusions
+   QList<Fermentable*> addToRecipe(Recipe *rec, QList<Fermentable*> ferms, Fermentable* exclude, bool transact = true );
+   QList<Hop*> addToRecipe(Recipe *rec, QList<Hop*> hops, Hop* exclude, bool transact = true );
+   QList<Misc*> addToRecipe(Recipe *rec, QList<Misc*> miscs, Misc* exclude, bool transact = true );
+   QList<Yeast*> addToRecipe(Recipe *rec, QList<Yeast*> yeasts, Yeast* exclude, bool transact = true );
 
    /**
    * \brief  This function is intended to be called by an ingredient that has not already cached its parent's key
@@ -384,6 +396,15 @@ public:
    //  for them.)
    Recipe* getParentRecipe( BrewNote const* note );
 
+   //! And lets not even get started on mash steps, am I right?
+   Recipe* getParentRecipe( MashStep const* step );
+
+   //! These three items don't have inrec tables
+   Recipe* getParentRecipe(Equipment const* kit );
+   Recipe* getParentRecipe(Style const *style);
+   Recipe* getParentRecipe(Mash const *mash);
+   Recipe* getRecipeFromForeignKey(QString keyName, int key);
+
    //! Interchange the step orders of the two steps. Must be in same mash.
    void swapMashStepOrder(MashStep* m1, MashStep* m2);
    //! Interchange the instruction orders. Must be in same recipe.
@@ -438,8 +459,10 @@ public:
     */
    template<class S> QList<S *> getAll();
 
+   //! \b returns a list of all ancestors of a recipe
+   QList<int> ancestoralIds(Recipe const* descendant);
    //! \b returns a list of the brew notes in a recipe.
-   QList<BrewNote*> brewNotes(Recipe const* parent);
+   QList<BrewNote*> brewNotes(Recipe const* parent,bool recurse = true);
    //! Return a list of all the fermentables in a recipe.
    QList<Fermentable*> fermentables(Recipe const* parent);
    //! Return a list of all the hops in a recipe.
@@ -479,6 +502,14 @@ public:
    void convertFromXml();
 
    bool isConverted();
+   bool wantsVersion(Recipe* rec);
+   void setAncestor(Recipe* descendant, Recipe* ancestor, bool transact = true);
+
+   Recipe* breed(Recipe* parent);
+   Recipe* copyRecipeExcept(Recipe *other, NamedEntity* except);
+
+   NamedEntity* clone( NamedEntity* donor, Recipe* rec );
+   NamedEntity* clone( Recipe* rec, NamedEntity *donor, QString propName, QVariant value);
 
    //! \brief Figures out what databases we are copying to and from, opens what
    //   needs opens and then calls the appropriate workhorse to get it done.
@@ -490,18 +521,18 @@ public:
 
 signals:
    void changed(QMetaProperty prop, QVariant value);
-   void newEquipmentSignal(Equipment*);
-   void newFermentableSignal(Fermentable*);
-   void newHopSignal(Hop*);
-   void newMashSignal(Mash*);
-   void newMiscSignal(Misc*);
-   void newRecipeSignal(Recipe*);
-   void newStyleSignal(Style*);
-   void newWaterSignal(Water*);
-   void newSaltSignal(Salt*);
-   void newYeastSignal(Yeast*);
-   // This is still experimental. Or at least mental
-   void newBrewNoteSignal(BrewNote*);
+
+   void createdSignal(BrewNote*);
+   void createdSignal(Equipment*);
+   void createdSignal(Fermentable*);
+   void createdSignal(Hop*);
+   void createdSignal(Mash*);
+   void createdSignal(Misc*);
+   void createdSignal(Recipe*);
+   void createdSignal(Style*);
+   void createdSignal(Water*);
+   void createdSignal(Salt*);
+   void createdSignal(Yeast*);
 
    void deletedSignal(Equipment*);
    void deletedSignal(Fermentable*);
@@ -522,6 +553,9 @@ signals:
 
    // Sigh
    void changedInventory(Brewtarget::DBTable,int,QVariant);
+
+   // emits a signal when we create a version
+   void spawned(Recipe* ancestor, Recipe* descendant);
 
 private slots:
    //! Load database from file.
@@ -673,6 +707,8 @@ private:
       bool transact = true
    );
 
+   //! fetches one row from the given table. We do this a lot, so do it once.
+   QSqlRecord fetchOne(TableSchema* tbl, int key);
    /*!
     * \brief Create a deep copy of the \b object.
     * \em T must be a subclass of \em NamedEntity.
@@ -685,6 +721,21 @@ private:
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
    template<class T> T* copy( NamedEntity const* object, QHash<int,T*>* keyHash, bool displayed = true );
+
+   /*!
+    * \brief Create a deep copy of the \b object, except for \b propName which
+    * gets \b value.
+    * \em T must be a subclass of \em NamedEntity.
+    * \returns a pointer to the new copy. You must manually emit the changed()
+    * signal after a copy() call. Also, does not insert things magically into
+    * allHop or allInstructions etc. hashes. This just simply duplicates a
+    * row in a table, unless you provide \em keyHash.
+    * \param object is the thing you want to copy.
+    * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
+    * \param propName the property that will be replaced
+    * \param value that new value for \b propName
+    */
+   template<class T> T* replicant(NamedEntity const* object, QHash<int,T*>* keyHash, QString propName, QVariant value);
 
    // Do an sql update.
    void sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );

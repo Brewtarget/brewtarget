@@ -37,13 +37,13 @@ static const char* kVersion = "version";
 // sometimes I just want to create a thing with a name and nothing else
 NamedEntity::NamedEntity(Brewtarget::DBTable table, QString t_name, bool t_display)
    : QObject(nullptr),
-     _key(-1),
-     _table(table),
+     m_key(-1),
+     m_table(table),
      parentKey(0),
-     _folder(QString()),
-     _name(t_name),
-     _display(t_display),
-     _deleted(QVariant())
+     m_folder(QString()),
+     m_name(t_name),
+     m_display(t_display),
+     m_deleted(QVariant())
 {
 }
 
@@ -51,31 +51,31 @@ NamedEntity::NamedEntity(Brewtarget::DBTable table, QString t_name, bool t_displ
 NamedEntity::NamedEntity(TableSchema* table, QSqlRecord rec, int t_key )
    : QObject(nullptr),
      parentKey(0),
-     _deleted(QVariant())
+     m_deleted(QVariant())
 {
    if ( t_key == -1 ) {
-      _key = rec.value( table->keyName() ).toInt();
+      m_key = rec.value( table->keyName() ).toInt();
    }
    else {
-      _key = t_key;
+      m_key = t_key;
    }
       
-   _folder  = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::folder)  ).toString();
-   _name    = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::name)    ).toString();
-   _display = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::display) ).toBool();
-   _table   = table->dbTable();
+   m_folder  = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::folder)  ).toString();
+   m_name    = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::name)    ).toString();
+   m_display = rec.value( table->propertyToColumn(PropertyNames::NamedEntity::display) ).toBool();
+   m_table   = table->dbTable();
 }
 
 // and finally sometimes we create a thing from other things
 NamedEntity::NamedEntity(NamedEntity const& other)
    : QObject(nullptr),
-     _key(other._key),
-     _table(other._table),
+     m_key(other.m_key),
+     m_table(other.m_table),
      parentKey(other.parentKey),
-     _folder(other._folder),
-     _name(QString()),
-     _display(other._display),
-     _deleted(other._deleted)
+     m_folder(other.m_folder),
+     m_name(QString()),
+     m_display(other.m_display),
+     m_deleted(other.m_deleted)
 {
    return;
 }
@@ -109,20 +109,20 @@ bool NamedEntity::operator==(NamedEntity const & other) const {
    }
 
    //
-   // For the base class attributes, we deliberately don't compare _key, parentKey, table or _folder.  If we've read
+   // For the base class attributes, we deliberately don't compare m_key, parentKey, table or m_folder.  If we've read
    // in an object from a file and want to  see if it's the same as one in the database, then the DB-related info and
-   // folder classification are not a helpful part of that comparison.  Similarly, we do not compare _display and
-   // _deleted as they are more related to the UI than whether, in essence, two objects are the same.
+   // folder classification are not a helpful part of that comparison.  Similarly, we do not compare m_display and
+   // m_deleted as they are more related to the UI than whether, in essence, two objects are the same.
    //
-   if (this->_name != other._name) {
-//      qDebug() << Q_FUNC_INFO << "No name match (" << this->_name << "/" << other._name << ")";
+   if (this->m_name != other.m_name) {
+//      qDebug() << Q_FUNC_INFO << "No name match (" << this->m_name << "/" << other.m_name << ")";
       //
       // If the names don't match, let's check it's not for a trivial reason.  Eg, if you have one Hop called
       // "Tettnang" and another called "Tettnang (1)" we wouldn't say they are different just because of the names.
       // So we want to strip off any number in brackets at the ends of the names and then compare again.
       //
       QRegExp const & duplicateNameNumberMatcher = NamedEntity::getDuplicateNameNumberMatcher();
-      QString names[2] {this->_name, other._name};
+      QString names[2] {this->m_name, other.m_name};
       for (auto ii = 0; ii < 2; ++ii) {
          int positionOfMatch = duplicateNameNumberMatcher.indexIn(names[ii]);
          if (positionOfMatch > -1) {
@@ -144,59 +144,58 @@ bool NamedEntity::operator!=(NamedEntity const & other) const {
    return !(*this == other);
 }
 
-bool NamedEntity::operator<(const NamedEntity & other) const { return (this->_name < other._name); }
-bool NamedEntity::operator>(const NamedEntity & other) const { return (this->_name > other._name); }
+bool NamedEntity::operator<(const NamedEntity & other) const { return (this->m_name < other.m_name); }
+bool NamedEntity::operator>(const NamedEntity & other) const { return (this->m_name > other.m_name); }
 
 bool NamedEntity::deleted() const
 {
-   return _deleted.toBool();
+   return m_deleted.toBool();
 }
 
 bool NamedEntity::display() const
 {
-   return _display.toBool();
+   return m_display.toBool();
 }
 
 // Sigh. New databases, more complexity
 void NamedEntity::setDeleted(const bool var, bool cachedOnly)
 {
-   _deleted = var;
-   if ( ! cachedOnly )
-      setEasy(PropertyNames::NamedEntity::deleted, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   if ( cachedOnly || setEasy(PropertyNames::NamedEntity::deleted, Brewtarget::dbBoolean(var)) ) {
+      m_deleted = var;
+   }
 }
 
 void NamedEntity::setDisplay(bool var, bool cachedOnly)
 {
-   _display = var;
-   if ( ! cachedOnly )
-      setEasy(PropertyNames::NamedEntity::display, var ? Brewtarget::dbTrue() : Brewtarget::dbFalse());
+   if ( cachedOnly || setEasy(PropertyNames::NamedEntity::display, Brewtarget::dbBoolean(var)) ) {
+      m_display = var;
+   }
 }
 
 QString NamedEntity::folder() const
 {
-   return _folder;
+   return m_folder;
 }
 
 void NamedEntity::setFolder(const QString var, bool signal, bool cachedOnly)
 {
-   _folder = var;
-   if ( ! cachedOnly )
-      // set( kFolder, kFolder, var );
-      setEasy( PropertyNames::NamedEntity::folder, var );
-   // not sure if I should only signal when not caching?
+   if ( cachedOnly || setEasy( PropertyNames::NamedEntity::folder, var ) ) {
+      m_folder = var;
+   }
+
    if ( signal )
       emit changedFolder(var);
 }
 
 QString NamedEntity::name() const
 {
-   return _name;
+   return m_name;
 }
 
 void NamedEntity::setName(const QString var, bool cachedOnly)
 {
 
-   _name = var;
+   m_name = var;
    if ( ! cachedOnly ) {
       setEasy( PropertyNames::NamedEntity::name, var );
       emit changedName(var);
@@ -205,12 +204,12 @@ void NamedEntity::setName(const QString var, bool cachedOnly)
 
 int NamedEntity::key() const
 {
-   return _key;
+   return m_key;
 }
 
 Brewtarget::DBTable NamedEntity::table() const
 {
-   return _table;
+   return m_table;
 }
 
 int NamedEntity::version() const
@@ -346,15 +345,28 @@ QString NamedEntity::text(QDate const& val)
    return val.toString(Qt::ISODate);
 }
 
-void NamedEntity::setEasy(QString prop_name, QVariant value, bool notify)
+// Loathsomeness waits and dreams in the deep, and decay spreads over the tottering cities of men.
+bool NamedEntity::setEasy(QString prop_name, QVariant value, bool notify, bool updateEntry)
 {
-   Database::instance().updateEntry(this,prop_name,value,notify);
+   QString className = this->metaObject()->className();
+
+   // you can change the recipe and the mash without trying to version
+   if ( className == QStringLiteral("Recipe") ||
+        className == QStringLiteral("Mash")   ||
+        className == QStringLiteral("BrewNote") ||
+        updateEntry ) {
+      Database::instance().updateEntry(this,prop_name,value,notify);
+      return true;
+   }
+   else {
+      return Database::instance().modifyEntry(this, prop_name, value);
+   }
 }
 
 
 QVariant NamedEntity::get( const QString& col_name ) const
 {
-   return Database::instance().get( _table, _key, col_name );
+   return Database::instance().get( m_table, m_key, col_name );
 }
 
 void NamedEntity::setInventory( const QVariant& value, int invKey, bool notify )
@@ -365,13 +377,13 @@ void NamedEntity::setInventory( const QVariant& value, int invKey, bool notify )
 QVariant NamedEntity::getInventory() const
 {
    QVariant val = 0.0;
-   val = Database::instance().getInventoryAmt(_table, _key);
+   val = Database::instance().getInventoryAmt(m_table, m_key);
    return val;
 }
 
 void NamedEntity::setParent(NamedEntity const & parentNamedEntity)
 {
-   this->parentKey = parentNamedEntity._key;
+   this->parentKey = parentNamedEntity.m_key;
    return;
 }
 

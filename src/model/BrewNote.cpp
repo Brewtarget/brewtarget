@@ -655,10 +655,7 @@ double BrewNote::projFermPoints() const { return m_projFermPoints; }
 double BrewNote::projAtten() const { return m_projAtten; }
 double BrewNote::boilOff_l() const { return m_boilOff_l; }
 
-int BrewNote::key() const
-{
-   return _key;
-}
+// int BrewNote::key() const { return m_key; }
 
 // calculators -- these kind of act as both setters and getters.  Likely bad
 // form

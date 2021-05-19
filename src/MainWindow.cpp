@@ -126,6 +126,7 @@
 #include "RelationalUndoableUpdate.h"
 #include "UndoableAddOrRemove.h"
 #include "BtHorizontalTabs.h"
+#include "AncestorDialog.h"
 
 #if defined(Q_OS_WIN)
    #include <windows.h>
@@ -296,28 +297,38 @@ void MainWindow::init() {
    this->setupShortCuts();
    // Once more with the context menus too
    this->setupContextMenu();
+   // do all the work for checkboxes (just one right now)
+   this->setUpStateChanges();
 
    // This sets up things that might have been 'remembered' (ie stored in the config file) from a previous run of the
    // program - eg window size, which is stored in MainWindow::closeEvent().
    // Breaks the naming convention, doesn't it?
    this->restoreSavedState();
 
-   // Connect slots to triggered() signals
+   // Connect menu item slots to triggered() signals
    this->setupTriggers();
-   // Connect slots to clicked() signals
+   // Connect pushbutton slots to clicked() signals
    this->setupClicks();
-   // connect slots to activate() signals
+   // connect combobox slots to activate() signals
    this->setupActivate();
-   // connect signal slots for the text editors
+   // connect signal slots for the line edits
    this->setupTextEdit();
    // connect the remaining labels
    this->setupLabels();
    // set up the drag/drop parts
    this->setupDrops();
 
+   // I do not like this connection here.
+   connect( ancestorDialog, &AncestorDialog::ancestoryChanged, treeView_recipe->model(), &BtTreeModel::versionedRecipe);
+   connect( optionDialog, &OptionDialog::showAllAncestors, treeView_recipe->model(), &BtTreeModel::catchAncestors);
+   connect( treeView_recipe, &BtTreeView::recipeSpawn, this, &MainWindow::versionedRecipe );
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.
-   connect( &(Database::instance()), SIGNAL( deletedSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
+   connect( &(Database::instance()), qOverload<BrewNote*>(&Database::deletedSignal), this, &MainWindow::closeBrewNote);
+
+   // setup the pretty tool tip. It doesn't really belong anywhere, so here it
+   // is
+   label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
 
    qDebug() << Q_FUNC_INFO << "MainWindow initialisation complete";
    return;
@@ -398,6 +409,11 @@ void MainWindow::setupShortCuts()
    actionRedo->setShortcut(QKeySequence::Redo);
 }
 
+void MainWindow::setUpStateChanges() 
+{
+   connect( checkBox_locked, &QCheckBox::stateChanged, this, &MainWindow::lockRecipe );
+}
+
 // Any manipulation of CSS for the MainWindow should be in here
 void MainWindow::setupCSS()
 {
@@ -417,6 +433,13 @@ void MainWindow::setupCSS()
 
    // The bold style sheet doesn't change, so set it here once.
    lineEdit_boilSg->setStyleSheet(boldSS);
+
+   // Disabled fields should change color, but not become unreadable. Mucking
+   // with the css seems the most reasonable way to do that.
+   QString tabDisabled = QString("QWidget:disabled { color: #000000; background: #F0F0F0 }");
+   tab_recipe->setStyleSheet(tabDisabled);
+   tabWidget_ingredients->setStyleSheet(tabDisabled);
+
 }
 
 // Most dialogs are initialized in here. That should include any initial
@@ -456,6 +479,8 @@ void MainWindow::setupDialogs()
 
    waterDialog = new WaterDialog(this);
    waterEditor = new WaterEditor(this);
+
+   ancestorDialog = new AncestorDialog(this);
 
    // Set up the fileSaver dialog.
    fileSaver = new QFileDialog(this, tr("Save"), QDir::homePath(), tr("BeerXML files (*.xml)") );
@@ -662,20 +687,20 @@ void MainWindow::restoreSavedState()
    }
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
-   if (Brewtarget::hasOption("recipeKey"))
-   {
-      int key = Brewtarget::option("recipeKey").toInt();
+   int key = -1;
+   if (Brewtarget::hasOption("recipeKey")) {
+      key = Brewtarget::option("recipeKey").toInt();
+   }
+   else if ( Database::instance().numberOfRecipes() > 0 ) {
+      key = 0;
+   }
+
+   if ( key > -1 ) {
       recipeObs = Database::instance().recipe( key );
       QModelIndex rIdx = treeView_recipe->findElement(recipeObs);
 
       setRecipe(recipeObs);
       setTreeSelection(rIdx);
-   }
-   else
-   {
-      QList<Recipe*> recs = Database::instance().recipes();
-      if( recs.size() > 0 )
-         setRecipe( recs[0] );
    }
 
    //UI restore state
@@ -701,7 +726,7 @@ void MainWindow::restoreSavedState()
       mashStepTableWidget->horizontalHeader()->restoreState(Brewtarget::option("MainWindow/mashStepTableWidget_headerState").toByteArray());
 }
 
-// anything with a SIGNAL of triggered() should go in here.
+// menu items with a SIGNAL of triggered() should go in here.
 void MainWindow::setupTriggers()
 {
    // Connect actions defined in *.ui files to methods in code
@@ -737,13 +762,14 @@ void MainWindow::setupTriggers()
    connect( actionTimers, &QAction::triggered, timerMainDialog, &QWidget::show );                                       // > Tools > Timers
    connect( actionDeleteSelected, &QAction::triggered, this, &MainWindow::deleteSelected );
    connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
+   connect( actionAncestors, &QAction::triggered, this, &MainWindow::setAncestor);                                      // > Tools > Ancestors
+   connect( action_brewit, &QAction::triggered, this, &MainWindow::brewItHelper );
 
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
       actionBackup_Database->setEnabled(false);                                                                         // > File > Database > Backup
       actionRestore_Database->setEnabled(false);                                                                        // > File > Database > Restore
-      label_Brewtarget->setToolTip( recipeFormatter->getLabelToolTip());
    }
    else {
       connect( actionBackup_Database, &QAction::triggered, this, &MainWindow::backup );                                 // > File > Database > Backup
@@ -794,7 +820,7 @@ void MainWindow::setupTriggers()
    });
 }
 
-// anything with a SIGNAL of clicked() should go in here.
+// pushbuttons with a SIGNAL of clicked() should go in here.
 void MainWindow::setupClicks()
 {
    connect( equipmentButton, &QAbstractButton::clicked, this, &MainWindow::showEquipmentEditor);
@@ -822,11 +848,10 @@ void MainWindow::setupClicks()
    connect( pushButton_mashUp, &QAbstractButton::clicked, this, &MainWindow::moveSelectedMashStepUp );
    connect( pushButton_mashDown, &QAbstractButton::clicked, this, &MainWindow::moveSelectedMashStepDown );
    connect( pushButton_mashRemove, &QAbstractButton::clicked, this, &MainWindow::removeMash );
-   connect( pushButton_brewIt, &QAbstractButton::clicked, this, &MainWindow::brewItHelper );
    return;
 }
 
-// anything with a SIGNAL of activated() should go in here.
+// comboBoxes with a SIGNAL of activated() should go in here.
 void MainWindow::setupActivate()
 {
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
@@ -834,7 +859,7 @@ void MainWindow::setupActivate()
    connect( mashComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeMash()) );
 }
 
-// anything with either an editingFinished() or a textModified() should go in
+// lineEdits with either an editingFinished() or a textModified() should go in
 // here
 void MainWindow::setupTextEdit()
 {
@@ -883,17 +908,19 @@ void MainWindow::deleteSelected()
    if (!active)
       return;
 
+   QModelIndex start = active->selectionModel()->selectedRows().first();
    active->deleteSelected(active->selectionModel()->selectedRows());
 
-   // This should be fixed to find the first nonfolder object in the tree
-   QModelIndex first = active->first();
-   if ( first.isValid() )
-   {
-      if (active->type(first) == BtTreeItem::RECIPE)
-         setRecipe(treeView_recipe->recipe(first));
-      setTreeSelection(first);
+   if ( ! start.isValid() ) {
+      start = active->first();
    }
 
+
+   if ( start.isValid() ) {
+      if (active->type(start) == BtTreeItem::RECIPE)
+         setRecipe(treeView_recipe->recipe(start));
+      setTreeSelection(start);
+   }
 }
 
 void MainWindow::treeActivated(const QModelIndex &index)
@@ -1014,10 +1041,26 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
    // THERE
 
    Recipe* parent  = Database::instance().getParentRecipe(bNote);
-   // I think this means a brew note for a different recipe has been selected.
-   // We need to select that recipe, which will clear the current tabs
-   if (  parent != recipeObs )
-      setRecipe(parent);
+   QModelIndex pNdx = treeView_recipe->parent(index);
+
+   // this gets complex. Versioning means we can't just clear the open
+   // brewnote tabs out.
+   if ( parent != this->recipeObs ) {
+      if ( ! this->recipeObs->isMyAncestor(parent) ) {
+         setRecipe(parent);
+      }
+      else if ( treeView_recipe->ancestorsAreShowing(pNdx) ) {
+         tabWidget_recipeView->setCurrentIndex(0);
+         // Start closing from the right (highest index) down. Anything else dumps
+         // core in the most unpleasant of fashions
+         int tabs = tabWidget_recipeView->count() - 1;
+         for (int i = tabs; i >= 0; --i) {
+            if (tabWidget_recipeView->widget(i)->objectName() == "BrewNoteWidget")
+               tabWidget_recipeView->removeTab(i);
+         }
+         setRecipe(parent);
+      }
+   }
 
    ni = findBrewNoteWidget(bNote);
    if ( ! ni )
@@ -1063,6 +1106,22 @@ void MainWindow::setBrewNote(BrewNote* bNote)
    tabWidget_recipeView->setCurrentWidget(ni);
 }
 
+void MainWindow::setAncestor()
+{
+   Recipe* rec;
+   if ( this->recipeObs ) {
+      rec = this->recipeObs;
+      
+   }
+   else {
+      QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
+      rec = treeView_recipe->recipe(indexes[0]);
+   }
+
+   ancestorDialog->setAncestor(rec);
+   ancestorDialog->show();
+}
+
 // Can handle null recipes.
 void MainWindow::setRecipe(Recipe* recipe)
 {
@@ -1092,8 +1151,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    // Start closing from the right (highest index) down. Anything else dumps
    // core in the most unpleasant of fashions
    tabs = tabWidget_recipeView->count() - 1;
-   for (int i = tabs; i >= 0; --i)
-   {
+   for (int i = tabs; i >= 0; --i) {
       if (tabWidget_recipeView->widget(i)->objectName() == "BrewNoteWidget")
          tabWidget_recipeView->removeTab(i);
    }
@@ -1117,6 +1175,22 @@ void MainWindow::setRecipe(Recipe* recipe)
    mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
+   // Set the locked flag as required
+   checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
+   lockRecipe( recipe->locked() ? Qt::Checked : Qt::Unchecked );
+
+   // Here's the fun part. If the recipe is locked and display is false, then
+   // you have said "show versions" and we will not all the recipe to be
+   // unlocked. Hmmm. Skeptical Mik is skeptical
+   if ( recipe->locked() && ! recipe->display() ) {
+      checkBox_locked->setEnabled( false );
+   }
+   else {
+      checkBox_locked->setEnabled( true );
+   }
+
+   checkBox_locked->setCheckState( recipe->locked() ? Qt::Checked : Qt::Unchecked );
+   lockRecipe(recipe->locked() ? Qt::Checked : Qt::Unchecked );
    // changes in how the data is loaded means we may not have fired all the signals we should have
    // this makes sure the signals are fired. This is likely a 5kg hammer driving a finishing nail.
    recipe->recalcAll();
@@ -1126,6 +1200,70 @@ void MainWindow::setRecipe(Recipe* recipe)
    // called.
    connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    showChanges();
+}
+
+// When a recipe is locked, many fields need to be disabled.
+void MainWindow::lockRecipe(int state)
+{
+   if ( this->recipeObs == nullptr )
+      return;
+
+   // If I am locking a recipe (lock == true ), I want to disable fields
+   // (enable == false). If I am unlocking (lock == false), I want to enable
+   // fields (enable == true). This just makes that easy
+   bool lockIt = state == Qt::Checked;
+   bool enabled = ! lockIt;
+
+   // Lock/unlock the recipe, then disable/enable the fields. I am leaving the
+   // name field as editable. I may regret that, but if you are defining an
+   // inheritance tree, you may want to remove strings from the ancestoral
+   // names
+   this->recipeObs->setLocked(lockIt);
+
+   // I could disable tab_recipe, but would not prevent you from unlocking the
+   // recipe because that field would also be disabled
+   qWidget_styleBox->setEnabled(enabled);
+   qWidget_equipmentBox->setEnabled(enabled);
+   lineEdit_batchSize->setEnabled(enabled);
+   lineEdit_boilSize->setEnabled(enabled);
+   lineEdit_efficiency->setEnabled(enabled);
+   lineEdit_boilTime->setEnabled(enabled);
+
+   // locked recipes cannot be deleted
+   actionDeleteSelected->setEnabled(enabled);
+   treeView_recipe->enableDelete(enabled);
+
+   treeView_recipe->setDragDropMode( lockIt ? QAbstractItemView::NoDragDrop : QAbstractItemView::DragDrop);
+   tabWidget_ingredients->setAcceptDrops( enabled );
+
+   // Onto the tables. Four lines each to disable edits, drag/drop and deletes
+   fermentableTable->setEnabled(enabled);
+   pushButton_addFerm->setEnabled(enabled);
+   pushButton_removeFerm->setEnabled(enabled);
+   pushButton_editFerm->setEnabled(enabled);
+
+   hopTable->setEnabled(enabled);
+   pushButton_addHop->setEnabled(enabled);
+   pushButton_removeHop->setEnabled(enabled);
+   pushButton_editHop->setEnabled(enabled);
+
+   miscTable->setEnabled(enabled);
+   pushButton_addMisc->setEnabled(enabled);
+   pushButton_removeMisc->setEnabled(enabled);
+   pushButton_editMisc->setEnabled(enabled);
+
+   yeastTable->setEnabled(enabled);
+   pushButton_addYeast->setEnabled(enabled);
+   pushButton_removeYeast->setEnabled(enabled);
+   pushButton_editYeast->setEnabled(enabled);
+
+   fermDialog->pushButton_addToRecipe->setEnabled(enabled);
+   hopDialog->pushButton_addToRecipe->setEnabled(enabled);
+   miscDialog->pushButton_addToRecipe->setEnabled(enabled);
+   yeastDialog->pushButton_addToRecipe->setEnabled(enabled);
+   // mashes still need dealing with
+   //
+
 }
 
 void MainWindow::changed(QMetaProperty prop, QVariant value)
@@ -3067,6 +3205,13 @@ void MainWindow::fixBrewNote()
 void MainWindow::updateStatus(const QString status) {
    if( statusBar() )
       statusBar()->showMessage(status, 3000);
+}
+
+void MainWindow::versionedRecipe(Recipe* descendant)
+{
+   QModelIndex ndx = treeView_recipe->findElement(descendant);
+   setRecipe(descendant);
+   treeView_recipe->setCurrentIndex(ndx);
 }
 
 void MainWindow::closeBrewNote(BrewNote* b)

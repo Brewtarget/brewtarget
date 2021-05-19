@@ -68,6 +68,8 @@ public:
    enum RECIPEITEM {
       //! Recipe name
       RECIPENAMECOL,
+      //! Recipe ancestors
+      RECIPEANCCOUNT,
       //! Recipe brewdate
       RECIPEBREWDATECOL,
       //! Recipe style
@@ -274,6 +276,10 @@ public:
 
    //! \brief returns the name.
    QString name();
+   //! \brief flag this node to override display() or not
+   void setShowMe(bool val);
+   //! \brief does the node want to be shown regardless of display()
+   bool showMe() const;
 
 private:
    /*!  Keep a pointer to the parent tree item. */
@@ -285,6 +291,8 @@ private:
    int _type;
    /*! the data associated with this item */
    QObject* _thing;
+   //! \b overrides the display()
+   bool m_showMe;
 
    /*! helper functions to get the information from the item */
    QVariant dataRecipe(int column);

@@ -61,16 +61,20 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
 
 bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelIndex &left, const QModelIndex &right) const
 {
-   // This is a little awkward.
+   // We don't want to sort brewnotes with the recipes, so only do this if
+   // both sides are brewnotes
    if ( model->type(left) == BtTreeItem::BREWNOTE ||
         model->type(right) == BtTreeItem::BREWNOTE ) {
       BrewNote *leftBn = model->brewNote(left);
       BrewNote *rightBn = model->brewNote(right);
 
-      return leftBn->brewDate() < rightBn->brewDate();
+      if ( leftBn && rightBn )
+         return leftBn->brewDate() < rightBn->brewDate();
+      else
+         return false;
    }
 
-   // As the models get more complex, so does the sort algorithm
+   // Try to sort folders first.
    if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::RECIPE)
    {
       BtFolder* leftFolder = model->folder(left);
@@ -94,6 +98,12 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
 
    Recipe* leftRecipe  = model->recipe(left);
    Recipe* rightRecipe = model->recipe(right);
+
+   // Yog-Sothoth knows the gate
+   // This reads soo much better
+   if ( model->showChild(left) && model->showChild(right) ) {
+      return leftRecipe->key() > rightRecipe->key();
+   }
 
    switch(left.column())
    {
@@ -415,14 +425,27 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
 
    // We shouldn't get here, but if we cannot find the row in the parent,
    // don't display the item.
-   if ( ! child.isValid() )
+   if ( ! child.isValid() ) {
       return false;
+   }
 
-   if ( model->isFolder(child) )
+   if ( model->isFolder(child) ) {
       return true;
+   }
 
    NamedEntity* thing = model->thing(child);
 
-   return thing->display();
+   if ( treeMask == BtTreeModel::RECIPEMASK && thing ) {
+
+      // we are showing the child (context menu -> show snapshots ) OR
+      // we are meant to display this thing.
+      return model->showChild(child) || thing->display();
+   }
+
+   if ( thing )
+      return thing->display();
+   else
+      return true;
 
 }
+

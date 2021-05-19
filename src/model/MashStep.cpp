@@ -24,6 +24,7 @@
 
 #include "brewtarget.h"
 #include "database.h"
+#include "PhysicalConstants.h"
 #include "MashStepSchema.h"
 #include "model/Mash.h"
 #include "TableSchemaConst.h"
@@ -90,109 +91,93 @@ MashStep::MashStep(TableSchema* table, QSqlRecord rec, int t_key)
 }
 
 //================================"SET" METHODS=================================
+//
+// This is a little special. Since I've declared that modifying the initial
+// infusion temp does not version, we have to work harder.
 void MashStep::setInfuseTemp_c(double var )
 {
-   m_infuseTemp_c = var;
-   if ( ! m_cacheOnly ) {
+   if (  m_cacheOnly ) {
+      m_infuseTemp_c = var;
+   }
+   else if ( m_stepNumber == 1 ) {
+      setEasy(PropertyNames::MashStep::infuseTemp_c, var, true, true);
+   }
+   else {
       setEasy(PropertyNames::MashStep::infuseTemp_c, var);
    }
 }
 
 void MashStep::setType( Type t )
 {
-   m_type = t;
-   m_typeStr = types.at(t);
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::MashStep::type, m_typeStr);
+   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::type, m_typeStr) ) {
+      m_type = t;
+      m_typeStr = types.at(t);
    }
 }
 
 void MashStep::setInfuseAmount_l( double var )
 {
-   if( var < 0.0 )
-   {
-      qWarning() << QString("%1 number cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
+   if( var < 0.0 ) {
+      qWarning() << Q_FUNC_INFO << "number cannot be negative:" << var;
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::infuseAmount_l, var) ) {
       m_infuseAmount_l = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::MashStep::infuseAmount_l, var);
-      }
    }
 }
 
 void MashStep::setStepTemp_c( double var )
 {
-   if( var < -273.15 )
-   {
-      qWarning() << QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var);
+   if( var < PhysicalConstants::absoluteZero ) {
+      qWarning() << Q_FUNC_INFO << "temp below absolute zero:" << var;
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::stepTemp_c, var) ) {
       m_stepTemp_c = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::MashStep::stepTemp_c, var);
-      }
    }
 }
 
 void MashStep::setStepTime_min( double var )
 {
-   if( var < 0.0 )
-   {
-      qWarning() << QString("%1: step time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
+   if( var < 0.0 ) {
+      qWarning() << Q_FUNC_INFO << "step time cannot be negative:" << var;
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::stepTime_min, var) ) {
       m_stepTime_min = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::MashStep::stepTime_min, var);
-      }
    }
 }
 
 void MashStep::setRampTime_min( double var )
 {
-   if( var < 0.0 )
-   {
-      qWarning() << QString("%1: ramp time cannot be negative: %2").arg(Q_FUNC_INFO).arg(var);
-
+   if( var < 0.0 ) {
+      qWarning() << Q_FUNC_INFO << "ramp time cannot be negative:" << var;
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::rampTime_min, var) ) {
       m_rampTime_min = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::MashStep::rampTime_min, var);
-      }
    }
 }
 
 void MashStep::setEndTemp_c( double var )
 {
-   if( var < -273.15 )
-   {
-      qWarning() << QString("%1: temp below absolute zero: %2").arg(Q_FUNC_INFO).arg(var);
+   if( var < PhysicalConstants::absoluteZero ) {
+      qWarning() << Q_FUNC_INFO << "temp below absolute zero:" << var;
       return;
    }
-   else
-   {
+   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::endTemp_c, var) ) {
       m_endTemp_c = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::MashStep::endTemp_c, var);
-      }
    }
 }
 
 void MashStep::setDecoctionAmount_l(double var )
 {
-   m_decoctionAmount_l = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::MashStep::decoctionAmount_l, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::decoctionAmount_l, var) ) {
+      m_decoctionAmount_l = var;
    }
 }
 

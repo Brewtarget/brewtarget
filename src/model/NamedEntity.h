@@ -241,9 +241,9 @@ protected:
    virtual bool isEqualTo(NamedEntity const & other) const = 0;
 
    //! The key of this entity in its table.
-   int _key;
+   int m_key;
    //! The table where this entity is stored.
-   Brewtarget::DBTable _table;
+   Brewtarget::DBTable m_table;
    // This is 0 if there is no parent (or parent is not yet known)
    int parentKey;
 
@@ -260,7 +260,7 @@ protected:
    void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    void set( const QString& prop_name, const QString& col_name, const QVariant& value, bool notify = true );
    */
-   void setEasy( QString prop_name, QVariant value, bool notify = true );
+   bool setEasy( QString prop_name, QVariant value, bool notify = true, bool updateEntry = false );
 
    /*!
     * \param col_name - The database column of the attribute we want to get.
@@ -274,10 +274,10 @@ protected:
    QVariantMap getColumnValueMap() const;
 
 private:
-  mutable QString _folder;
-  mutable QString _name;
-  mutable QVariant _display;
-  mutable QVariant _deleted;
+  mutable QString m_folder;
+  mutable QString m_name;
+  mutable QVariant m_display;
+  mutable QVariant m_deleted;
 
 };
 

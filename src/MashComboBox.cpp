@@ -28,8 +28,8 @@ MashComboBox::MashComboBox(QWidget* parent)
    : QComboBox(parent)
 {
    setCurrentIndex(-1);
-   connect( &(Database::instance()), SIGNAL(newMashSignal(Mash*)), this, SLOT(addMash(Mash*)) );
-   connect( &(Database::instance()), SIGNAL(deletedSignal(Mash*)), this, SLOT(removeMash(Mash*)) );
+   connect( &(Database::instance()), qOverload<Mash*>(&Database::createdSignal),     this, &MashComboBox::addMash);
+   connect( &(Database::instance()), qOverload<Mash*>(&Database::deletedSignal), this, &MashComboBox::removeMash);
    repopulateList();
 }
 
@@ -38,7 +38,7 @@ void MashComboBox::addMash(Mash* m)
    if( m && !mashObs.contains(m) && m->display() && !m->deleted() )
    {
       mashObs.append(m);
-      connect( m, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( m, &NamedEntity::changed, this, &MashComboBox::changed);
    }
 
    addItem( m->name() );

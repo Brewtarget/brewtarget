@@ -45,6 +45,7 @@ namespace PropertyNames::MashStep { static char const * const type = "type"; /* 
 class MashStep : public NamedEntity
 {
    Q_OBJECT
+   Q_CLASSINFO("signal", "mashsteps");
 
    // this seems to be a class with a lot of friends
    friend class Database;

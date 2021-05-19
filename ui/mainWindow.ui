@@ -259,7 +259,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>849</width>
+           <width>850</width>
            <height>458</height>
           </rect>
          </property>
@@ -357,37 +357,6 @@
                  <layout class="QVBoxLayout" name="verticalLayout_left">
                   <item>
                    <layout class="QGridLayout" name="gridLayout_fields">
-                    <item row="7" column="1">
-                     <widget class="BtTimeEdit" name="lineEdit_boilTime">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>100</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>100</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="contextMenuPolicy">
-                       <enum>Qt::DefaultContextMenu</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                      </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">boilTime_min</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="9" column="1">
                      <widget class="QLabel" name="label_calories">
                       <property name="font">
@@ -401,146 +370,6 @@
                       </property>
                       <property name="text">
                        <string>1.0</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1">
-                     <widget class="BtVolumeEdit" name="lineEdit_batchSize">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>100</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>100</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="toolTip">
-                       <string>Target batch size</string>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                      </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">batchSize_l</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="0">
-                     <widget class="BtVolumeLabel" name="label_targetBatchSize">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="contextMenuPolicy">
-                       <enum>Qt::CustomContextMenu</enum>
-                      </property>
-                      <property name="text">
-                       <string>Target Batch Si&amp;ze</string>
-                      </property>
-                      <property name="buddy">
-                       <cstring>lineEdit_batchSize</cstring>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="equipmentLabel">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>E&amp;quipment</string>
-                      </property>
-                      <property name="buddy">
-                       <cstring>equipmentButton</cstring>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1">
-                     <layout class="QHBoxLayout" name="horizontalLayout_11">
-                      <item>
-                       <widget class="StyleButton" name="styleButton">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>0</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>360</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="text">
-                         <string/>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="CustomComboBox" name="styleComboBox">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>30</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">combobox-popup: 0;</string>
-                        </property>
-                        <property name="maxVisibleItems">
-                         <number>15</number>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="styleLabel">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>&amp;Style</string>
-                      </property>
-                      <property name="buddy">
-                       <cstring>styleButton</cstring>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="9" column="0">
-                     <widget class="QLabel" name="label_caloriesper">
-                      <property name="text">
-                       <string>Calories/12oz</string>
                       </property>
                      </widget>
                     </item>
@@ -578,6 +407,85 @@
                       </property>
                      </widget>
                     </item>
+                    <item row="7" column="0">
+                     <widget class="BtTimeLabel" name="label_boiltime">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::CustomContextMenu</enum>
+                      </property>
+                      <property name="text">
+                       <string>&amp;Boil Time</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>lineEdit_boilTime</cstring>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="equipmentLabel">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>E&amp;quipment</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>qWidget_equipmentBox</cstring>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="1">
+                     <widget class="BtTimeEdit" name="lineEdit_boilTime">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::DefaultContextMenu</enum>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">boilTime_min</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="8" column="0">
+                     <widget class="BtDensityLabel" name="label_boilSg">
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::CustomContextMenu</enum>
+                      </property>
+                      <property name="text">
+                       <string>Boil SG</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>lineEdit_boilSg</cstring>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="6" column="1">
                      <widget class="BtGenericEdit" name="lineEdit_efficiency">
                       <property name="sizePolicy">
@@ -612,8 +520,8 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="6" column="0">
-                     <widget class="QLabel" name="efficiencyLabel">
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="styleLabel">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -621,11 +529,52 @@
                        </sizepolicy>
                       </property>
                       <property name="text">
-                       <string>&amp;Efficiency (%)</string>
+                       <string>&amp;Style</string>
                       </property>
                       <property name="buddy">
-                       <cstring>lineEdit_efficiency</cstring>
+                       <cstring>qWidget_styleBox</cstring>
                       </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QWidget" name="qWidget_equipmentBox" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_2">
+                       <property name="topMargin">
+                        <number>1</number>
+                       </property>
+                       <item>
+                        <widget class="EquipmentButton" name="equipmentButton">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="CustomComboBox" name="equipmentComboBox">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>30</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
                      </widget>
                     </item>
                     <item row="5" column="0">
@@ -647,21 +596,18 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="8" column="0">
-                     <widget class="BtDensityLabel" name="label_boilSg">
-                      <property name="contextMenuPolicy">
-                       <enum>Qt::CustomContextMenu</enum>
+                    <item row="10" column="0">
+                     <widget class="QCheckBox" name="checkBox_locked">
+                      <property name="layoutDirection">
+                       <enum>Qt::RightToLeft</enum>
                       </property>
                       <property name="text">
-                       <string>Boil SG</string>
-                      </property>
-                      <property name="buddy">
-                       <cstring>lineEdit_boilSg</cstring>
+                       <string>Recipe Locked</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="7" column="0">
-                     <widget class="BtTimeLabel" name="label_boiltime">
+                    <item row="4" column="0">
+                     <widget class="BtVolumeLabel" name="label_targetBatchSize">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -672,11 +618,118 @@
                        <enum>Qt::CustomContextMenu</enum>
                       </property>
                       <property name="text">
-                       <string>&amp;Boil Time</string>
+                       <string>Target Batch Si&amp;ze</string>
                       </property>
                       <property name="buddy">
-                       <cstring>lineEdit_boilTime</cstring>
+                       <cstring>lineEdit_batchSize</cstring>
                       </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="BtVolumeEdit" name="lineEdit_batchSize">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Target batch size</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">batchSize_l</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="QLabel" name="efficiencyLabel">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>&amp;Efficiency (%)</string>
+                      </property>
+                      <property name="buddy">
+                       <cstring>lineEdit_efficiency</cstring>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="9" column="0">
+                     <widget class="QLabel" name="label_caloriesper">
+                      <property name="text">
+                       <string>Calories/12oz</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QWidget" name="qWidget_styleBox" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_11">
+                       <item>
+                        <widget class="StyleButton" name="styleButton">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>360</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="CustomComboBox" name="styleComboBox">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>30</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">combobox-popup: 0;</string>
+                         </property>
+                         <property name="maxVisibleItems">
+                          <number>15</number>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
                      </widget>
                     </item>
                     <item row="5" column="1">
@@ -707,55 +760,6 @@
                       </property>
                       <property name="editField" stdset="0">
                        <string notr="true">boilSize_l</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <layout class="QHBoxLayout" name="horizontalLayout_2">
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <widget class="EquipmentButton" name="equipmentButton">
-                        <property name="minimumSize">
-                         <size>
-                          <width>0</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="CustomComboBox" name="equipmentComboBox">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>30</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                    <item row="10" column="0">
-                     <widget class="QPushButton" name="pushButton_brewIt">
-                      <property name="toolTip">
-                       <string>Record what happened on brew day</string>
-                      </property>
-                      <property name="text">
-                       <string>Brew It!</string>
                       </property>
                      </widget>
                     </item>
@@ -1110,8 +1114,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>849</width>
-           <height>328</height>
+           <width>850</width>
+           <height>330</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1663,7 +1667,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>24</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1757,6 +1761,7 @@
     <addaction name="actionAlcohol_Percentage_Tool"/>
     <addaction name="actionStrikeWater_Calculator"/>
     <addaction name="actionWater_Chemistry"/>
+    <addaction name="actionAncestors"/>
     <addaction name="actionTimers"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
@@ -1808,6 +1813,7 @@
    <addaction name="actionPitch_Rate_Calculator"/>
    <addaction name="actionRefractometer_Tools"/>
    <addaction name="separator"/>
+   <addaction name="action_brewit"/>
   </widget>
   <action name="actionAbout_BrewTarget">
    <property name="icon">
@@ -2210,6 +2216,10 @@
    </property>
   </action>
   <action name="actionStrikeWater_Calculator">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallWater.svg</normaloff>:/images/smallWater.svg</iconset>
+   </property>
    <property name="text">
     <string>Strike &amp;Water Calculator</string>
    </property>
@@ -2224,6 +2234,10 @@
    </property>
   </action>
   <action name="actionHydrometer_Temp_Adjustment">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/hydrometer.svg</normaloff>:/images/hydrometer.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;Hydrometer Temp Adjustment</string>
    </property>
@@ -2261,6 +2275,10 @@
    </property>
   </action>
   <action name="actionWater_Chemistry">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/testtube.svg</normaloff>:/images/testtube.svg</iconset>
+   </property>
    <property name="text">
     <string>Water &amp;Chemistry</string>
    </property>
@@ -2273,6 +2291,20 @@
   <action name="actionRedo">
    <property name="text">
     <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionAncestors">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/merge.png</normaloff>:/images/merge.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ancestors</string>
+   </property>
+  </action>
+  <action name="action_brewit">
+   <property name="text">
+    <string>Brew it</string>
    </property>
   </action>
  </widget>
@@ -2488,12 +2520,12 @@
    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>536</x>
-     <y>245</y>
+     <x>466</x>
+     <y>309</y>
     </hint>
     <hint type="destinationlabel">
-     <x>640</x>
-     <y>245</y>
+     <x>572</x>
+     <y>309</y>
     </hint>
    </hints>
   </connection>
@@ -2504,12 +2536,12 @@
    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>536</x>
-     <y>337</y>
+     <x>466</x>
+     <y>403</y>
     </hint>
     <hint type="destinationlabel">
-     <x>640</x>
-     <y>337</y>
+     <x>572</x>
+     <y>403</y>
     </hint>
    </hints>
   </connection>
@@ -2520,12 +2552,12 @@
    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>455</x>
-     <y>302</y>
+     <x>466</x>
+     <y>373</y>
     </hint>
     <hint type="destinationlabel">
-     <x>588</x>
-     <y>306</y>
+     <x>572</x>
+     <y>373</y>
     </hint>
    </hints>
   </connection>
@@ -2536,12 +2568,12 @@
    <slot>lineChanged(Unit::unitDisplay,Unit::unitScale)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>536</x>
-     <y>199</y>
+     <x>466</x>
+     <y>277</y>
     </hint>
     <hint type="destinationlabel">
-     <x>640</x>
-     <y>199</y>
+     <x>572</x>
+     <y>277</y>
     </hint>
    </hints>
   </connection>

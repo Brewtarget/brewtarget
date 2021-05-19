@@ -61,6 +61,7 @@ class Brewtarget : public QObject
 {
    Q_OBJECT
    Q_ENUMS(DBTypes)
+   Q_ENUMS(delOptions);
 
    friend class OptionDialog;
    friend class IbuMethods;
@@ -166,6 +167,11 @@ public:
       ALLDB      // Keep this one the last one, or bad things will happen
    };
 
+   //! \brief the user can select what delete means
+   enum delOptions {
+      ANCESTOR,   // delete the recipe and all its ancestors
+      DESCENDANT  // delete only the recipe (orphan and delete)
+   };
    //! \return the data directory
    static QDir getDataDir();
    //! \return the doc directory

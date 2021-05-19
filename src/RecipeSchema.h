@@ -49,6 +49,7 @@ static const QString kcolRecipePrimSugName("priming_sugar_name");
 static const QString kcolRecipeCarbTemp("carbonationtemp_c");
 static const QString kcolRecipePrimSugEquiv("priming_sugar_equiv");
 static const QString kcolRecipeKegPrimFact("keg_priming_factor");
+static const QString kcolRecipeLocked("locked");
 
 // Some of the foreign keys
 static const QString kcolRecipeEquipmentId("equipment_id");

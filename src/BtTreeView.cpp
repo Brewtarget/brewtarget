@@ -82,6 +82,8 @@ BtTreeModel* BtTreeView::model()
    return _model;
 }
 
+BtTreeFilterProxyModel* BtTreeView::filter() { return _filter; }
+
 bool BtTreeView::removeRow(const QModelIndex &index)
 {
    QModelIndex modelIndex = _filter->mapToSource(index);
@@ -381,6 +383,74 @@ void BtTreeView::newNamedEntity() {
 
 }
 
+void BtTreeView::showAncestors()
+{
+   if ( _type == BtTreeModel::RECIPEMASK ) {
+      QModelIndexList ndxs = selectionModel()->selectedRows();
+
+      // I hear a noise at the door, as of some immense slippery body
+      // lumbering against it
+      foreach( QModelIndex selected, ndxs ) {
+         _model->showAncestors(_filter->mapToSource(selected));
+      }
+   }
+}
+
+void BtTreeView::hideAncestors()
+{
+   if ( _type == BtTreeModel::RECIPEMASK ) {
+      QModelIndexList ndxs = selectionModel()->selectedRows();
+
+      // I hear a noise at the door, as of some immense slippery body
+      // lumbering against it
+      foreach( QModelIndex selected, ndxs ) {
+         // make sure we add the ancestors to the exclusion list
+         _model->hideAncestors(_filter->mapToSource(selected));
+      }
+   }
+}
+
+void BtTreeView::orphanRecipe()
+{
+   if ( _type == BtTreeModel::RECIPEMASK ) {
+      QModelIndexList ndxs = selectionModel()->selectedRows();
+
+      // I hear a noise at the door, as of some immense slippery body
+      // lumbering against it
+      foreach( QModelIndex selected, ndxs ) {
+         // make sure we add the ancestors to the exclusion list
+         _model->orphanRecipe(_filter->mapToSource(selected));
+      }
+   }
+}
+
+void BtTreeView::spawnRecipe()
+{
+   if ( _type == BtTreeModel::RECIPEMASK ) {
+      QModelIndexList ndxs = selectionModel()->selectedRows();
+
+      foreach( QModelIndex selected, ndxs ) {
+         // make sure we add the ancestors to the exclusion list
+         _model->spawnRecipe(_filter->mapToSource(selected));
+      }
+   }
+}
+
+bool BtTreeView::ancestorsAreShowing(QModelIndex ndx)
+{
+   if ( _type == BtTreeModel::RECIPEMASK ) {
+      QModelIndex translated = _filter->mapToSource(ndx);
+      return _model->showChild(translated);
+   }
+
+   return false;
+}
+void BtTreeView::enableDelete(bool enable)       { m_deleteAction->setEnabled(enable); }
+void BtTreeView::enableShowAncestor(bool enable) { m_showAncestorAction->setEnabled(enable); }
+void BtTreeView::enableHideAncestor(bool enable) { m_hideAncestorAction->setEnabled(enable); }
+void BtTreeView::enableOrphan(bool enable)       { m_orphanAction->setEnabled(enable); }
+void BtTreeView::enableSpawn(bool enable)        { m_spawnAction->setEnabled(enable); }
+
 void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 {
    QMenu* _newMenu = new QMenu(this);
@@ -388,12 +458,12 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 
    _contextMenu = new QMenu(this);
    subMenu = new QMenu(this);
+   m_versionMenu = new QMenu(this);
 
    _editor = editor;
 
    _newMenu->setTitle(tr("New"));
    _contextMenu->addMenu(_newMenu);
-   _contextMenu->addSeparator();
 
    switch(_type)
    {
@@ -401,6 +471,15 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
       case BtTreeModel::RECIPEMASK:
          _newMenu->addAction(tr("Recipe"), editor, SLOT(newRecipe()));
 
+         // version menu
+         m_versionMenu->setTitle("Snapshots");
+         m_showAncestorAction = m_versionMenu->addAction( tr("Show Snapshots"), this, SLOT(showAncestors()));
+         m_hideAncestorAction = m_versionMenu->addAction( tr("Hide Snapshots"), this, SLOT(hideAncestors()));
+         m_orphanAction = m_versionMenu->addAction( tr("Detach Recipe"), this, SLOT(orphanRecipe()));
+         m_spawnAction  = m_versionMenu->addAction( tr("Snapshot Recipe"), this, SLOT(spawnRecipe()));
+         _contextMenu->addMenu(m_versionMenu);
+
+         _contextMenu->addSeparator();
          _contextMenu->addAction(tr("Brew It!"), top, SLOT(brewItHelper()));
          _contextMenu->addSeparator();
 
@@ -435,11 +514,12 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
          qWarning() << QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type);
    }
 
+   _contextMenu->addSeparator();
    _newMenu->addAction(tr("Folder"), top, SLOT(newFolder()));
    // Copy
    _contextMenu->addAction(tr("Copy"), top, SLOT(copySelected()));
-   // Delete
-   _contextMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
+   // m_deleteAction makes it easier to find this later to disable it
+   m_deleteAction = _contextMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
    // export and import
    _contextMenu->addSeparator();
    _exportMenu->setTitle(tr("Export"));
@@ -454,6 +534,29 @@ QMenu* BtTreeView::contextMenu(QModelIndex selected)
 {
    if ( type(selected) == BtTreeItem::BREWNOTE )
       return subMenu;
+
+   if ( type(selected) == BtTreeItem::RECIPE ) {
+      Recipe *rec = recipe(selected);
+      QModelIndex translated = _filter->mapToSource(selected);
+
+      // you can not delete a locked recipe
+      enableDelete( ! rec->locked() );
+
+      // if we have ancestors and are showing them but are not an actual
+      // ancestor, then enable hide
+      enableHideAncestor(rec->hasAncestors() && _model->showChild(translated) && rec->display());
+
+      // if we have ancestors and are not showing them, enable showAncestors
+      enableShowAncestor(rec->hasAncestors() && ! _model->showChild(translated));
+
+      // if we have ancestors and are not locked, then we are a leaf node and
+      // allow orphaning
+      enableOrphan(rec->hasAncestors() && ! rec->locked() );
+
+      // if display is true, we can spawn it. This should mean we cannot spawn
+      // ancestors directly, which is what I want.
+      enableSpawn( rec->display() );
+   }
 
    return _contextMenu;
 }
@@ -645,11 +748,15 @@ void BtTreeView::expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fId
    if ( kindaThing & _type && fIdx.isValid() && ! isExpanded(_filter->mapFromSource(fIdx) ))
       setExpanded(_filter->mapFromSource(fIdx),true);
 }
+
+void BtTreeView::versionedRecipe(Recipe* descendant) { emit recipeSpawn(descendant); }
+
 // Bad form likely
 
 RecipeTreeView::RecipeTreeView(QWidget *parent)
    : BtTreeView(parent, BtTreeModel::RECIPEMASK)
 {
+   connect( _model, &BtTreeModel::recipeSpawn, this, &BtTreeView::versionedRecipe );
 }
 
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)

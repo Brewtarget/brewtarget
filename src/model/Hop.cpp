@@ -159,6 +159,13 @@ Hop::Hop( Hop & other )
 }
 
 //============================="SET" METHODS====================================
+//
+// setEasy returns false when we clone. The logic you see repeated through
+// here is basically a short cut. If cacheOnly is true or we didn't clone,
+// then update the cached values. If cacheOnly is false and we did clone, then
+// don't update the cache because this didn't change
+// Boolean short circuit makes sure we don't call setEasy() if cacheOnly is
+// set.
 void Hop::setAlpha_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
@@ -168,9 +175,8 @@ void Hop::setAlpha_pct( double num )
    }
    else
    {
-      m_alpha_pct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::alpha_pct, num);
+      if ( m_cacheOnly || setEasy(PropertyNames::Hop::alpha_pct, num) ) {
+         m_alpha_pct = num;
       }
    }
 }
@@ -184,9 +190,11 @@ void Hop::setAmount_kg( double num )
    }
    else
    {
-      m_amount_kg = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::amount_kg,num);
+      if ( m_cacheOnly ) {
+         m_amount_kg = num;
+      }
+      else if ( setEasy(PropertyNames::Hop::amount_kg,num) ) {
+         m_amount_kg = num;
       }
    }
 }
@@ -218,169 +226,135 @@ void Hop::setInventoryId( int key )
 void Hop::setUse(Use u)
 {
    if ( u < uses.size()) {
-      m_use = u;
-      m_useStr = uses.at(u);
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::use, uses.at(u));
+      if ( m_cacheOnly || setEasy(PropertyNames::Hop::use, uses.at(u)) ) {
+         m_use = u;
+         m_useStr = uses.at(u);
       }
    }
 }
 
 void Hop::setTime_min( double num )
 {
-   if( num < 0.0 )
-   {
+   if( num < 0.0 ) {
       qWarning() << QString("Hop: time < 0: %1").arg(num);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::time_min, num) ) {
       m_time_min = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::time_min, num);
-      }
    }
 }
 
 void Hop::setNotes( const QString& str )
 {
-   m_notes = str;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Hop::notes, str);
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::notes, str) ) {
+      m_notes = str;
    }
 }
 
 void Hop::setType(Type t)
 {
-  if ( t < types.size() ) {
-     m_type = t;
-     m_typeStr = types.at(t);
-     if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Hop::type, m_typeStr);
-     }
-  }
+   if ( t < types.size() ) {
+      if ( m_cacheOnly || setEasy(PropertyNames::Hop::type, m_typeStr) ) {
+         m_type = t;
+         m_typeStr = types.at(t);
+      }
+   }
 }
 
 void Hop::setForm( Form f )
 {
    if ( f < forms.size() ) {
       m_form = f;
-      m_formStr = forms.at(f);
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::form, m_formStr);
+      if ( m_cacheOnly || setEasy(PropertyNames::Hop::form, m_formStr) ) {
+         m_formStr = forms.at(f);
       }
    }
 }
 
 void Hop::setBeta_pct( double num )
 {
-   if( num < 0.0 || num > 100.0 )
-   {
+   if( num < 0.0 || num > 100.0 ) {
       qWarning() << QString("Hop: 0 < beta < 100: %1").arg(num);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::beta_pct, num) ) {
       m_beta_pct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::beta_pct, num);
-      }
    }
 }
 
 void Hop::setHsi_pct( double num )
 {
-   if( num < 0.0 || num > 100.0 )
-   {
+   if( num < 0.0 || num > 100.0 ) {
       qWarning() << QString("Hop: 0 < hsi < 100: %1").arg(num);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::hsi_pct, num) ) {
       m_hsi_pct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::hsi_pct, num);
-      }
    }
 }
 
 void Hop::setOrigin( const QString& str )
 {
-   m_origin = str;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Hop::origin, str);
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::origin, str) ) {
+      m_origin = str;
    }
 }
 
 void Hop::setSubstitutes( const QString& str )
 {
-   m_substitutes = str;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Hop::substitutes, str);
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::substitutes, str) ) {
+      m_substitutes = str;
    }
 }
 
 void Hop::setHumulene_pct( double num )
 {
-   if( num < 0.0 || num > 100.0 )
-   {
+   if( num < 0.0 || num > 100.0 ) {
       qWarning() << QString("Hop: 0 < humulene < 100: %1").arg(num);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::humulene_pct,num) ) {
       m_humulene_pct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::humulene_pct,num);
-      }
    }
 }
 
 void Hop::setCaryophyllene_pct( double num )
 {
-   if( num < 0.0 || num > 100.0 )
-   {
+   if( num < 0.0 || num > 100.0 ) {
       qWarning() << QString("Hop: 0 < cary < 100: %1").arg(num);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::caryophyllene_pct, num) ) {
       m_caryophyllene_pct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::caryophyllene_pct, num);
-      }
    }
 }
 
 void Hop::setCohumulone_pct( double num )
 {
-   if( num < 0.0 || num > 100.0 )
-   {
+   if( num < 0.0 || num > 100.0 ) {
       qWarning() << QString("Hop: 0 < cohumulone < 100: %1").arg(num);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::cohumulone_pct, num) ) {
       m_cohumulone_pct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::cohumulone_pct, num);
-      }
    }
 }
 
 void Hop::setMyrcene_pct( double num )
 {
-   if( num < 0.0 || num > 100.0 )
-   {
+   if( num < 0.0 || num > 100.0 ) {
       qWarning() << QString("Hop: 0 < myrcene < 100: %1").arg(num);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Hop::myrcene_pct, num) ) {
       m_myrcene_pct = num;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Hop::myrcene_pct, num);
-      }
    }
 }
 

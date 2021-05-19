@@ -114,81 +114,71 @@ Water::Water(TableSchema* table, QSqlRecord rec, int t_key)
 //================================"SET" METHODS=================================
 void Water::setAmount( double var )
 {
-   m_amount = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::amount, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::amount, var) ) {
+      m_amount = var;
    }
 }
 
 void Water::setCalcium_ppm( double var )
 {
-   m_calcium_ppm = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::calcium_ppm, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::calcium_ppm, var) ) {
+      m_calcium_ppm = var;
    }
 }
 
 void Water::setBicarbonate_ppm( double var )
 {
-   m_bicarbonate_ppm = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::bicarbonate_ppm, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::bicarbonate_ppm, var) ) {
+      m_bicarbonate_ppm = var;
    }
 }
 
 void Water::setChloride_ppm( double var )
 {
-   m_chloride_ppm = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::chloride_ppm, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::chloride_ppm, var) ) {
+      m_chloride_ppm = var;
    }
 }
 
 void Water::setSodium_ppm( double var )
 {
-   m_sodium_ppm = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::sodium_ppm, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::sodium_ppm, var) ) {
+      m_sodium_ppm = var;
    }
 }
 
 void Water::setMagnesium_ppm( double var )
 {
-   m_magnesium_ppm = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::magnesium_ppm, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::magnesium_ppm, var) ) {
+      m_magnesium_ppm = var;
    }
 }
 
 void Water::setPh( double var )
 {
-   m_ph = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::ph, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::ph, var) ) {
+      m_ph = var;
    }
 }
 
 void Water::setAlkalinity(double var)
 {
-   m_alkalinity = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::alkalinity, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::alkalinity, var) ) {
+      m_alkalinity = var;
    }
 }
 
 void Water::setSulfate_ppm( double var )
 {
-   m_sulfate_ppm = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::sulfate_ppm, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::sulfate_ppm, var) ) {
+      m_sulfate_ppm = var;
    }
 }
 
 void Water::setNotes( const QString &var )
 {
-   m_notes = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::notes, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::notes, var) ) {
+      m_notes = var;
    }
 }
 
@@ -200,33 +190,29 @@ void Water::setType(Types type)
       return;
    }
 
-   m_type = type;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::type, type);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::type, type) ) {
+      m_type = type;
    }
 }
 
 void Water::setMashRO( double var )
 {
-   m_mash_ro = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::mashRO, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::mashRO, var) ) {
+      m_mash_ro = var;
    }
 }
 
 void Water::setSpargeRO( double var )
 {
-   m_sparge_ro = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::spargeRO, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::spargeRO, var) ) {
+      m_sparge_ro = var;
    }
 }
 
 void Water::setAlkalinityAsHCO3(bool var)
 {
-   m_alkalinity_as_hco3 = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Water::alkalinityAsHCO3, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Water::alkalinityAsHCO3, var) ) {
+      m_alkalinity_as_hco3 = var;
    }
 }
 

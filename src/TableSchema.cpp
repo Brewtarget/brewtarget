@@ -1085,6 +1085,7 @@ void TableSchema::defineRecipeTable()
    m_properties[PropertyNames::Recipe::kegPrimingFactor] = new PropertySchema( PropertyNames::Recipe::kegPrimingFactor, kcolRecipeKegPrimFact,  kxmlPropKegPrimFact,  QString("real"), QVariant(1.0));
    m_properties[PropertyNames::Recipe::tasteNotes]  = new PropertySchema( PropertyNames::Recipe::tasteNotes,  kcolRecipeTasteNotes,   kxmlPropTasteNotes,   QString("text"), QString("''"));
    m_properties[PropertyNames::Recipe::tasteRating] = new PropertySchema( PropertyNames::Recipe::tasteRating, kcolRecipeTasteRating,  kxmlPropTasteRating,  QString("real"), QVariant(20.0));
+   m_properties[PropertyNames::Recipe::locked]     = new PropertySchema( PropertyNames::Recipe::locked,     kcolRecipeLocked,            QString(),            QString("boolean"), QVariant(false));
 
    m_properties[PropertyNames::NamedEntity::display]     = new PropertySchema( PropertyNames::NamedEntity::display,     kcolDisplay,            QString(),            QString("boolean"), QVariant(true));
    m_properties[PropertyNames::NamedEntity::deleted]     = new PropertySchema( PropertyNames::NamedEntity::deleted,     kcolDeleted,            QString(),            QString("boolean"), QVariant(false));

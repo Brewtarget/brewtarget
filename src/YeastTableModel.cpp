@@ -107,8 +107,8 @@ void YeastTableModel::observeDatabase(bool val)
       observeRecipe(nullptr);
 
       removeAll();
-      connect( &(Database::instance()), &Database::newYeastSignal, this, &YeastTableModel::addYeast );
-      connect( &(Database::instance()), SIGNAL(deletedSignal(Yeast*)), this, SLOT(removeYeast(Yeast*)) );
+      connect( &(Database::instance()), qOverload<Yeast*>(&Database::createdSignal), this, &YeastTableModel::addYeast );
+      connect( &(Database::instance()), qOverload<Yeast*>(&Database::deletedSignal), this, &YeastTableModel::removeYeast);
       addYeasts( Database::instance().yeasts() );
    }
    else

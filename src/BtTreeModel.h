@@ -192,6 +192,21 @@ public:
    Qt::DropActions supportedDropActions() const;
    QStringList mimeTypes() const;
 
+   //! \b show the versions of the recipe at index
+   void showAncestors(QModelIndex ndx);
+   //! \b show the child of the recipe at index
+   bool showChild(QModelIndex ndx) const;
+   //! \b hide the ancestors
+   void hideAncestors(QModelIndex ndx);
+   //! \b orphan a recipe
+   void orphanRecipe(QModelIndex ndx);
+   //! \b spawns a recipe
+   void spawnRecipe(QModelIndex ndx);
+
+public slots:
+   void versionedRecipe(Recipe* ancestor, Recipe* descendant);
+   void catchAncestors(bool showem);
+
 private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
@@ -224,6 +239,7 @@ private slots:
 
 signals:
    void expandFolder(BtTreeModel::TypeMasks kindofThing, QModelIndex fIdx);
+   void recipeSpawn(Recipe* descendant);
 
 private:
    //! \brief Loads the tree.
@@ -239,6 +255,7 @@ private:
    //! and brewNotes
    void observeElement(NamedEntity*);
 
+   void folderChanged(NamedEntity* test);
    //! \brief returns the \c section header from a recipe
    QVariant recipeHeader(int section) const;
    //! \brief returns the \c section header from an equipment
@@ -269,12 +286,17 @@ private:
    QModelIndex createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath);
 
    //! \brief convenience function to add brewnotes to a recipe as a subtree
-   void addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent);
+   void addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent, bool recurse = true);
+   //! \b flip the switch to show descendants
+   void setShowChild(QModelIndex child, bool val);
+   //! \b link to recipes (this will get reverted later)
+   void makeAncestors(NamedEntity* ancestor, NamedEntity* descendant);
+   void addAncestoralTree(Recipe* rec, int i, BtTreeItem* parent);
 
    BtTreeItem* rootItem;
    BtTreeView *parentTree;
    TypeMasks treeMask;
-   int _type;
+   int _type, m_maxColumns;
    QString _mimeType;
 
 };

@@ -65,8 +65,8 @@ void WaterTableModel::observeDatabase(bool val)
    {
       observeRecipe(nullptr);
       removeAll();
-      connect( &(Database::instance()), &Database::newWaterSignal, this, &WaterTableModel::addWater );
-      connect( &(Database::instance()), SIGNAL(deletedSignal(Water*)), this, SLOT(removeWater(Water*)) );
+      connect( &(Database::instance()), qOverload<Water*>(&Database::createdSignal), this, &WaterTableModel::addWater );
+      connect( &(Database::instance()), qOverload<Water*>(&Database::deletedSignal), this, &WaterTableModel::removeWater);
       addWaters( Database::instance().waters() );
    }
    else

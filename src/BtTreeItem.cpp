@@ -51,7 +51,7 @@ bool operator==(BtTreeItem& lhs, BtTreeItem& rhs)
 }
 
 BtTreeItem::BtTreeItem(int _type, BtTreeItem *parent)
-   : parentItem(parent), _thing(nullptr)
+   : parentItem(parent), _thing(nullptr), m_showMe(false)
 {
    setType(_type);
 }
@@ -194,18 +194,22 @@ bool BtTreeItem::removeChildren(int position, int count)
 QVariant BtTreeItem::dataRecipe( int column )
 {
    Recipe* recipe = qobject_cast<Recipe*>(_thing);
-   switch(column)
-   {
-        case RECIPENAMECOL:
+   switch(column) {
+      case RECIPENAMECOL:
          if (! _thing)
             return QVariant(QObject::tr("Recipes"));
-        else
+         else
             return QVariant(recipe->name());
-        case RECIPEBREWDATECOL:
+      case RECIPEANCCOUNT:
+         if ( recipe )
+            // the kid is always in the list, damn it
+            return QVariant( recipe->ancestors().size() - 1);
+         break;
+      case RECIPEBREWDATECOL:
          if ( recipe )
             return Brewtarget::displayDateUserFormated(recipe->date());
          break;
-        case RECIPESTYLECOL:
+      case RECIPESTYLECOL:
          if ( recipe && recipe->style() )
             return QVariant(recipe->style()->name());
          break;
@@ -527,3 +531,7 @@ QString BtTreeItem::name()
    tmp = qobject_cast<NamedEntity*>(_thing);
    return tmp->name();
 }
+
+bool BtTreeItem::showMe() const { return m_showMe; }
+void BtTreeItem::setShowMe(bool val) { m_showMe = val; }
+

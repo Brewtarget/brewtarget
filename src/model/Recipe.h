@@ -71,6 +71,9 @@ namespace PropertyNames::Recipe { static char const * const color_srm = "color_s
 namespace PropertyNames::Recipe { static char const * const postBoilVolume_l = "postBoilVolume_l"; /* previously kpropPostBoilVol */ }
 namespace PropertyNames::Recipe { static char const * const finalVolume_l = "finalVolume_l"; /* previously kpropFinVol */ }
 
+namespace PropertyNames::Recipe { static char const * const ancestorId = "ancestor_id"; }
+namespace PropertyNames::Recipe { static char const * const locked = "locked"; }
+
 namespace PropertyNames::Recipe { static char const * const recipeType = "recipeType"; }
 namespace PropertyNames::Recipe { static char const * const style = "style"; }
 namespace PropertyNames::Recipe { static char const * const equipment  = "equipment"; }
@@ -188,6 +191,8 @@ public:
    Q_PROPERTY( double primingSugarEquiv READ primingSugarEquiv WRITE setPrimingSugarEquiv /*NOTIFY changed*/ /*changedPrimingSugarEquiv*/ )
    //! \brief The factor required to convert the amount of sugar required for bottles to keg (usually about 0.5).
    Q_PROPERTY( double kegPrimingFactor READ kegPrimingFactor WRITE setKegPrimingFactor /*NOTIFY changed*/ /*changedKegPrimingFactor*/ )
+   //! \brief Whether the recipe is locked against changes
+   Q_PROPERTY( bool locked READ locked WRITE setLocked /*NOTIFY changed*/ /*changed*/ )
 
    // Calculated stored properties.
    //! \brief The calculated OG.
@@ -252,6 +257,8 @@ public:
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ /*NOTIFY changed*/ STORED false )
    //! \brief The salts.
    Q_PROPERTY( QList<Salt*> salts READ salts /*WRITE*/ /*NOTIFY changed*/ STORED false )
+   //! \brief The ancestors.
+   Q_PROPERTY( QList<Recipe*> ancestors READ ancestors /*WRITE*/ /*NOTIFY changed*/ STORED false )
 
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
@@ -339,6 +346,11 @@ public:
     */
    QString nextAddToBoil(double& time);
 
+   //! \brief convenience method to set ancestors
+   void setAncestor(Recipe* ancestor);
+   //! \brief run the queries to load your ancestors
+   void loadAncestors();
+
    // Getters
    Type recipeType() const;
    QString type() const;
@@ -370,6 +382,7 @@ public:
    double primingSugarEquiv() const;
    double kegPrimingFactor() const;
    bool cacheOnly() const;
+   bool locked() const;
 
    // Calculated getters.
    double points();
@@ -398,7 +411,9 @@ public:
    QList<Yeast*> yeasts() const;
    QList<Water*> waters() const;
    QList<Salt*>  salts() const;
-   QList<BrewNote*> brewNotes() const;
+   QList<BrewNote*> brewNotes(bool recurse = true) const;
+   // can't be a const, because it references self
+   QList<Recipe*> ancestors();
 
    Mash* mash() const;
    Equipment* equipment() const;
@@ -418,6 +433,9 @@ public:
    bool hasBoilFermentable();
    bool hasBoilExtract();
    static bool isFermentableSugar(Fermentable*);
+   bool hasAncestors();
+   bool isMyAncestor(Recipe* maybe);
+   bool hasDescendants();
    PreInstruction addExtracts(double timeRemaining) const;
 
    // Helpers
@@ -466,6 +484,8 @@ public:
    void setPrimingSugarEquiv( double var );
    void setKegPrimingFactor( double var );
    void setCacheOnly( bool cache );
+   void setLocked(bool isLocked);
+   void setHasDescendants(bool spawned);
 
    NamedEntity * getParent();
    virtual int insertInDatabase();
@@ -546,10 +566,15 @@ private:
    double m_fg_fermentable;
 
    bool m_cacheOnly;
+   bool m_locked;
    // True when constructed, indicates whether recalcAll has been called.
    bool m_uninitializedCalcs;
    QMutex m_uninitializedCalcsMutex;
    QMutex m_recalcMutex;
+
+   // version things
+   QList<Recipe*> m_ancestors;
+   bool m_hasDescendants;
 
    // Batch size without losses.
    double batchSizeNoLosses_l();

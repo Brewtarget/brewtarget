@@ -86,57 +86,47 @@ Mash::Mash(TableSchema* table, QSqlRecord rec, int t_key)
 
 void Mash::setGrainTemp_c( double var )
 {
-   m_grainTemp_c = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Mash::grainTemp_c, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Mash::grainTemp_c, var) ) {
+      m_grainTemp_c = var;
    }
 }
 
 void Mash::setNotes( const QString& var )
 {
-   m_notes = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Mash::notes, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Mash::notes, var) ) {
+      m_notes = var;
    }
 }
 
 void Mash::setTunTemp_c( double var )
 {
-   m_tunTemp_c = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Mash::tunTemp_c, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Mash::tunTemp_c, var) ) {
+      m_tunTemp_c = var;
    }
 }
 
 void Mash::setSpargeTemp_c( double var )
 {
-   m_spargeTemp_c = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Mash::spargeTemp_c, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Mash::spargeTemp_c, var) ) {
+      m_spargeTemp_c = var;
    }
 }
 
 void Mash::setEquipAdjust( bool var )
 {
-   m_equipAdjust = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Mash::equipAdjust, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Mash::equipAdjust, var) ) {
+      m_equipAdjust = var;
    }
 }
 
 void Mash::setPh( double var )
 {
-   if( var < 0.0 || var > 14.0 )
-   {
+   if( var < 0.0 || var > 14.0 ) {
       qWarning() << QString("Mash: 0 < pH < 14: %1").arg(var);
       return;
    }
-   else
-   {
+   if ( m_cacheOnly || setEasy(PropertyNames::Mash::ph, var) ) {
       m_ph = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Mash::ph, var);
-      }
    }
 }
 
@@ -147,28 +137,21 @@ void Mash::setTunWeight_kg( double var )
       qWarning() << QString("Mash: tun weight < 0: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Mash::tunWeight_kg, var) ) {
       m_tunWeight_kg = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Mash::tunWeight_kg, var);
-      }
    }
 }
 
 void Mash::setTunSpecificHeat_calGC( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Mash: sp heat < 0: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Mash::tunSpecificHeat_calGC, var) ) {
       m_tunSpecificHeat_calGC = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Mash::tunSpecificHeat_calGC, var);
-      }
    }
 }
 

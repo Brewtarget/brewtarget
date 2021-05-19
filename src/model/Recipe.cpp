@@ -141,13 +141,16 @@ Recipe::Recipe(QString name, bool cache)
    m_style_id(0),
    m_og(1.0),
    m_fg(1.0),
-   m_cacheOnly(cache)
+   m_cacheOnly(cache),
+   m_locked(false),
+   m_hasDescendants(false)
 {
 }
 
 Recipe::Recipe(TableSchema* table, QSqlRecord rec, int t_key)
    : NamedEntity(table, rec, t_key),
-   m_cacheOnly(false)
+   m_cacheOnly(false),
+   m_hasDescendants(false)
 {
    m_type = rec.value( table->propertyToColumn( PropertyNames::Recipe::type)).toString();
    m_brewer = rec.value( table->propertyToColumn( PropertyNames::Recipe::brewer)).toString();
@@ -178,6 +181,8 @@ Recipe::Recipe(TableSchema* table, QSqlRecord rec, int t_key)
    m_style_id = rec.value( table->propertyToColumn( PropertyNames::Recipe::style_id)).toInt();
    m_og = rec.value( table->propertyToColumn( PropertyNames::Recipe::og)).toDouble();
    m_fg = rec.value( table->propertyToColumn( PropertyNames::Recipe::fg)).toDouble();
+
+   m_locked = rec.value( table->propertyToColumn( PropertyNames::Recipe::locked)).toBool();
 }
 
 Recipe::Recipe( Recipe const& other ) : NamedEntity(other),
@@ -210,7 +215,9 @@ Recipe::Recipe( Recipe const& other ) : NamedEntity(other),
    m_style_id(other.m_style_id),
    m_og(other.m_og),
    m_fg(other.m_fg),
-   m_cacheOnly(other.m_cacheOnly)
+   m_cacheOnly(other.m_cacheOnly),
+   m_locked(other.m_locked),
+   m_hasDescendants(false)
 {
    setObjectName("Recipe");
 }
@@ -1365,6 +1372,14 @@ void Recipe::setKegPrimingFactor( double var )
    }
 }
 
+void Recipe::setLocked(bool isLocked )
+{
+   m_locked = isLocked;
+   if ( ! m_cacheOnly ) {
+      setEasy(PropertyNames::Recipe::locked, isLocked);
+   }
+}
+
 void Recipe::setCacheOnly( bool cache ) { m_cacheOnly = cache; }
 
 //==========================Calculated Getters============================
@@ -1512,13 +1527,61 @@ Mash* Recipe::mash() const { return Database::instance().mash( this ); }
 Equipment* Recipe::equipment() const { return Database::instance().equipment(this); }
 
 QList<Instruction*> Recipe::instructions() const { return Database::instance().instructions(this); }
-QList<BrewNote*> Recipe::brewNotes() const { return Database::instance().brewNotes(this); }
+QList<BrewNote*> Recipe::brewNotes(bool recurse) const { return Database::instance().brewNotes(this,recurse); }
 QList<Hop*> Recipe::hops() const { return Database::instance().hops(this); }
 QList<Fermentable*> Recipe::fermentables() const { return Database::instance().fermentables(this); }
 QList<Misc*> Recipe::miscs() const { return Database::instance().miscs(this); }
 QList<Yeast*> Recipe::yeasts() const { return Database::instance().yeasts(this); }
 QList<Water*> Recipe::waters() const { return Database::instance().waters(this); }
 QList<Salt*> Recipe::salts() const { return Database::instance().salts(this); }
+QList<Recipe*> Recipe::ancestors()
+{
+   if ( m_ancestors.size() == 0 ) {
+      loadAncestors();
+   }
+
+   return m_ancestors;
+}
+
+// this looks like ancestors(), but this over writes m_ancestors, not append.
+// I may collapse these later.
+void Recipe::loadAncestors()
+{
+   QList<Recipe*> tmp;
+   foreach( int ancestor, Database::instance().ancestoralIds(this) ) {
+      Recipe* anc = Database::instance().recipe(ancestor);
+      anc->setHasDescendants(true);
+      tmp.append(anc);
+   }
+   m_ancestors = tmp;
+}
+
+bool Recipe::hasAncestors()
+{
+   return ancestors().size() > 1;
+}
+
+bool Recipe::isMyAncestor(Recipe* maybe)
+{
+   if ( m_ancestors.size() == 0 ) {
+      loadAncestors();
+   }
+   return m_ancestors.contains(maybe);
+}
+
+bool Recipe::hasDescendants() { return m_hasDescendants; }
+void Recipe::setHasDescendants(bool spawned) { m_hasDescendants = spawned; }
+void Recipe::setAncestor( Recipe* ancestor )
+{
+   if ( ancestor == nullptr ) {
+      return;
+   }
+
+   // Marking an ancestor does three thigns -- it sets the ancestor's display
+   // to false, locks the ancestor and then sets the ancestor_id
+   Database::instance().setAncestor(this,ancestor);
+   loadAncestors();
+}
 
 //==============================Getters===================================
 Recipe::Type Recipe::recipeType() const {
@@ -1551,6 +1614,7 @@ double Recipe::kegPrimingFactor() const { return m_kegPrimingFactor; }
 int Recipe::fermentationStages() const { return m_fermentationStages; }
 QDate Recipe::date() const { return m_date; }
 bool Recipe::cacheOnly() const { return m_cacheOnly; }
+bool Recipe::locked() const { return m_locked; }
 
 //=============================Adders and Removers========================================
 

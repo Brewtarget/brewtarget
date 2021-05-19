@@ -103,8 +103,8 @@ void HopTableModel::observeDatabase(bool val)
    {
       observeRecipe(nullptr);
       removeAll();
-      connect( &(Database::instance()), &Database::newHopSignal, this, &HopTableModel::addHop );
-      connect( &(Database::instance()), SIGNAL(deletedSignal(Hop*)), this, SLOT(removeHop(Hop*)) );
+      connect( &(Database::instance()), qOverload<Hop*>(&Database::createdSignal), this, &HopTableModel::addHop );
+      connect( &(Database::instance()), qOverload<Hop*>(&Database::deletedSignal), this, &HopTableModel::removeHop);
       addHops( Database::instance().hops() );
    }
    else
@@ -127,32 +127,30 @@ void HopTableModel::addHop(Hop* hop)
    int size = hopObs.size();
    beginInsertRows( QModelIndex(), size, size );
    hopObs.append(hop);
-   connect( hop, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   //reset(); // Tell everybody that the table has changed.
+   connect( hop, &NamedEntity::changed, this, &HopTableModel::changed);
    endInsertRows();
 }
 
 void HopTableModel::addHops(QList<Hop*> hops)
 {
-   QList<Hop*>::iterator i;
    QList<Hop*> tmp;
 
-   for( i = hops.begin(); i != hops.end(); i++ )
-   {
-      if( recObs == nullptr && ( (*i)->deleted() || !(*i)->display() ) )
+   foreach( Hop* hop, hops ) {
+      if( recObs == nullptr && ( hop->deleted() || !hop->display() ) )
          continue;
-      if( !hopObs.contains(*i) )
-         tmp.append(*i);
+      if( !hopObs.contains(hop) )
+         tmp.append(hop);
    }
 
    int size = hopObs.size();
    if (size+tmp.size())
    {
       beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-      hopObs.append(tmp);
 
-      for( i = tmp.begin(); i != tmp.end(); i++ )
-         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      hopObs.append(tmp);
+      foreach( Hop* hop, tmp ) {
+         connect( hop, &NamedEntity::changed, this, &HopTableModel::changed);
+      }
 
       endInsertRows();
    }

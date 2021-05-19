@@ -132,162 +132,143 @@ QString Equipment::classNameStr()
 }
 
 //============================"SET" METHODS=====================================
-
+// The logic through here is similar to what's in Hop. When either cacheOnly
+// is true or setEasy return true (we didn't clone), then update the cached
+// value. Unfortunately, the additional signals don't allow quite the
+// compactness.
 void Equipment::setBoilSize_l( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: boil size negative: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly ) {
       m_boilSize_l = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::boilSize_l, var);
-         emit changedBoilSize_l(var);
-      }
+   }
+   else if ( setEasy(PropertyNames::Equipment::boilSize_l, var) ) {
+      m_boilSize_l = var;
+      emit changedBoilSize_l(var);
    }
 }
 
 void Equipment::setBatchSize_l( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: batch size negative: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly ) {
       m_batchSize_l = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::batchSize_l, var);
-         doCalculations();
-      }
+   }
+   else if ( setEasy(PropertyNames::Equipment::batchSize_l, var) ) {
+      m_batchSize_l = var;
+      doCalculations();
    }
 }
 
 void Equipment::setTunVolume_l( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: tun volume negative: %1").arg(var);
       return;
    }
-   else
-   {
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::tunVolume_l, var) ) {
       m_tunVolume_l = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::tunVolume_l, var);
-      }
    }
 }
 
 void Equipment::setTunWeight_kg( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: tun weight negative: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::tunWeight_kg, var) ) {
       m_tunWeight_kg = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::tunWeight_kg, var);
-      }
    }
 }
 
 void Equipment::setTunSpecificHeat_calGC( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: tun sp heat negative: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::tunSpecificHeat_calGC, var) ) {
       m_tunSpecificHeat_calGC = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::tunSpecificHeat_calGC, var);
-      }
    }
 }
 
 void Equipment::setTopUpWater_l( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: top up water negative: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly ) {
       m_topUpWater_l = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::topUpWater_l,var);
-         doCalculations();
-      }
+   }
+   else if ( setEasy(PropertyNames::Equipment::topUpWater_l,var) ) {
+      m_topUpWater_l = var;
+      doCalculations();
    }
 }
 
 void Equipment::setTrubChillerLoss_l( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: trub chiller loss negative: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly ) {
       m_trubChillerLoss_l = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::trubChillerLoss_l, var);
-         doCalculations();
-      }
+   }
+   else if ( setEasy(PropertyNames::Equipment::trubChillerLoss_l, var) ) {
+      m_trubChillerLoss_l = var;
+      doCalculations();
    }
 }
 
 void Equipment::setEvapRate_pctHr( double var )
 {
-   if( var < 0.0 || var > 100.0)
-   {
+   // NOTE: we never use evapRate_pctHr, but we do use evapRate_lHr. So keep them
+   // synced
+   if( var < 0.0 || var > 100.0) {
       qWarning() << QString("Equipment: 0 < evap rate < 100: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly ||
+        setEasy(PropertyNames::Equipment::evapRate_pctHr, var) ||
+        setEasy(PropertyNames::Equipment::evapRate_lHr, var/100.0 * batchSize_l() ) ) {
       m_evapRate_pctHr = var;
       m_evapRate_lHr = var/100.0 * m_batchSize_l;
-
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::evapRate_pctHr, var);
-         setEasy(PropertyNames::Equipment::evapRate_lHr, var/100.0 * batchSize_l() ); // We always use this one, so set it.
-      }
-      // Right now, I am claiming this needs to happen regardless m_cacheOnly.
-      // I could be wrong
-      doCalculations();
    }
+   // Right now, I am claiming this needs to happen regardless m_cacheOnly.
+   // I could be wrong
+   doCalculations();
 }
 
 void Equipment::setEvapRate_lHr( double var )
 {
-   if( var < 0.0 )
-   {
+   // NOTE: We never use evapRate_pctHr, but we maintain here anyway.
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: evap rate negative: %1").arg(var);
       return;
    }
-   else
-   {
+   if ( m_cacheOnly || 
+        setEasy(PropertyNames::Equipment::evapRate_lHr, var) || 
+        setEasy(PropertyNames::Equipment::evapRate_pctHr, var/batchSize_l() * 100.0)) {
       m_evapRate_lHr = var;
       m_evapRate_pctHr = var/batchSize_l() * 100.0;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::evapRate_lHr, var);
-         setEasy(PropertyNames::Equipment::evapRate_pctHr, var/batchSize_l() * 100.0 ); // We don't use it, but keep it current.
-      }
-      doCalculations();
    }
+   doCalculations();
 }
 
 void Equipment::setBoilTime_min( double var )
@@ -297,23 +278,24 @@ void Equipment::setBoilTime_min( double var )
       qWarning() << QString("Equipment: boil time negative: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly ) {
       m_boilTime_min = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::boilTime_min, var);
-         emit changedBoilTime_min(var);
-      }
-      doCalculations();
    }
+   else if ( setEasy(PropertyNames::Equipment::boilTime_min, var) ) {
+      m_boilTime_min = var;
+      emit changedBoilTime_min(var);
+   }
+   doCalculations();
+
 }
 
 void Equipment::setCalcBoilVolume( bool var )
 {
-   m_calcBoilVolume = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Equipment::calcBoilVolume, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::calcBoilVolume, var) ) {
+      m_calcBoilVolume = var;
    }
+
    if ( var ) {
       doCalculations();
    }
@@ -321,89 +303,67 @@ void Equipment::setCalcBoilVolume( bool var )
 
 void Equipment::setLauterDeadspace_l( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: deadspace negative: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::lauterDeadspace_l, var) ) {
       m_lauterDeadspace_l = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::lauterDeadspace_l, var);
-      }
    }
 }
 
 void Equipment::setTopUpKettle_l( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: top up kettle negative: %1").arg(var);
       return;
    }
-   else
-   {
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::topUpKettle_l, var) ) {
       m_topUpKettle_l = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::topUpKettle_l, var);
-      }
    }
 }
 
 void Equipment::setHopUtilization_pct( double var )
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: 0 < hop utilization: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::hopUtilization_pct, var) ) {
       m_hopUtilization_pct = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::hopUtilization_pct, var);
-      }
    }
 }
 
 void Equipment::setNotes( const QString &var )
 {
-   m_notes = var;
-   if ( ! m_cacheOnly ) {
-      setEasy(PropertyNames::Equipment::notes, var);
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::notes, var) ) {
+      m_notes = var;
    }
 }
 
 void Equipment::setGrainAbsorption_LKg(double var)
 {
-   if( var < 0.0 )
-   {
+   if( var < 0.0 ) {
       qWarning() << QString("Equipment: absorption < 0: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::grainAbsorption_LKg, var) ) {
       m_grainAbsorption_LKg = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::grainAbsorption_LKg, var);
-      }
    }
 }
 
 void Equipment::setBoilingPoint_c(double var)
 {
-   if ( var < 0.0 )
-   {
+   if ( var < 0.0 ) {
       qWarning() << QString("Equipment: boiling point of water < 0: %1").arg(var);
       return;
    }
-   else
-   {
+
+   if ( m_cacheOnly || setEasy(PropertyNames::Equipment::boilingPoint_c, var) ) {
       m_boilingPoint_c = var;
-      if ( ! m_cacheOnly ) {
-         setEasy(PropertyNames::Equipment::boilingPoint_c, var);
-      }
    }
 }
 

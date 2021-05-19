@@ -96,8 +96,8 @@ void FermentableTableModel::observeDatabase(bool val)
       observeRecipe(nullptr);
 
       removeAll();
-      connect( &(Database::instance()), &Database::newFermentableSignal, this, &FermentableTableModel::addFermentable );
-      connect( &(Database::instance()), SIGNAL(deletedSignal(Fermentable*)), this, SLOT(removeFermentable(Fermentable*)) );
+      connect( &(Database::instance()), qOverload<Fermentable*>(&Database::createdSignal), this, &FermentableTableModel::addFermentable );
+      connect( &(Database::instance()), qOverload<Fermentable*>(&Database::deletedSignal), this, &FermentableTableModel::removeFermentable);
       addFermentables( Database::instance().fermentables() );
    }
    else

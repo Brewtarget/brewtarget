@@ -54,7 +54,10 @@ public:
    //! \brief The standard contructor
    BtTreeView(QWidget *parent = nullptr, BtTreeModel::TypeMasks mask = BtTreeModel::RECIPEMASK);
    //! \brief returns the model associated with this tree
-   BtTreeModel* model();
+   BtTreeModel* model();\
+   //! \b returns the filter associated with this model
+   BtTreeFilterProxyModel* filter();
+
    //! \brief returns the context menu associated with the \c selected item
    QMenu* contextMenu(QModelIndex selected);
 
@@ -102,6 +105,19 @@ public:
    //! \brief gets the type of the item at \c index.
    int type(const QModelIndex &index);
 
+   //! \brief returns true if the recipe at ndx is showing its ancestors
+   bool ancestorsAreShowing(QModelIndex ndx);
+   //! \brief enables or disables the delete action when a recipe is unlocked/locked
+   void enableDelete(bool enable);
+   //! \brief enables or disables showing ancestors
+   void enableShowAncestor(bool enable);
+   //! \brief enables or disables hiding ancestors
+   void enableHideAncestor(bool enable);
+   //! \brief make a recipe its own ancestor
+   void enableOrphan(bool enable);
+   //! \brief do we breed, or not
+   void enableSpawn(bool enable);
+
    //! \brief returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
    bool multiSelected();
 
@@ -142,12 +158,28 @@ public slots:
 
 private slots:
    void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);
+   void versionedRecipe(Recipe* descendant);
+
+   void showAncestors();
+   void hideAncestors();
+   void orphanRecipe();
+   void spawnRecipe();
+
+signals:
+   void recipeSpawn(Recipe* descendant);
 
 private:
    BtTreeModel* _model;
    BtTreeFilterProxyModel* _filter;
    BtTreeModel::TypeMasks _type;
-   QMenu* _contextMenu, *subMenu;
+   QMenu *_contextMenu, 
+         *subMenu,
+         *m_versionMenu;
+   QAction *m_deleteAction, 
+           *m_showAncestorAction,
+           *m_hideAncestorAction,
+           *m_orphanAction,
+           *m_spawnAction;
    QPoint dragStart;
    QWidget* _editor;
 
