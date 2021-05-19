@@ -1,6 +1,7 @@
 /*
  * OptionDialog.cpp is part of Brewtarget, and is Copyright the following
- * authors 2009-2014
+ * authors 2009-2021
+ * - Matt Young <mfsy@yahoo.com>
  * - Mik Firestone <mikfire@gmail.com>
  * - Philip Greggory Lee <rocketman768@gmail.com>
  * - Rob Taylor <robtaylor@floopily.org>
@@ -22,19 +23,7 @@
 #include "OptionDialog.h"
 #include "brewtarget.h"
 #include "BtLineEdit.h"
-#include "UnitSystems.h"
-#include "USWeightUnitSystem.h"
-#include "SIWeightUnitSystem.h"
-#include "ImperialVolumeUnitSystem.h"
-#include "USVolumeUnitSystem.h"
-#include "SIVolumeUnitSystem.h"
-#include "FahrenheitTempUnitSystem.h"
-#include "EbcColorUnitSystem.h"
-#include "SrmColorUnitSystem.h"
-#include "PlatoDensityUnitSystem.h"
-#include "SgDensityUnitSystem.h"
-#include "DiastaticPowerUnitSystem.h"
-#include "CelsiusTempUnitSystem.h"
+#include "UnitSystem.h"
 #include "database.h"
 #include <QMessageBox>
 #include <QFileDialog>
@@ -968,15 +957,15 @@ bool OptionDialog::saveWeightUnits()
       case SI:
       default:
          Brewtarget::weightUnitSystem = SI;
-         Brewtarget::thingToUnitSystem.insert(Unit::Mass, UnitSystems::siWeightUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Mass, &UnitSystems::siWeightUnitSystem);
          break;
       case USCustomary:
          Brewtarget::weightUnitSystem  = USCustomary;
-         Brewtarget::thingToUnitSystem.insert(Unit::Mass, UnitSystems::usWeightUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Mass, &UnitSystems::usWeightUnitSystem);
          break;
       case Imperial:
          Brewtarget::weightUnitSystem  = Imperial;
-         Brewtarget::thingToUnitSystem.insert(Unit::Mass, UnitSystems::usWeightUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Mass, &UnitSystems::usWeightUnitSystem);
          break;
    }
 
@@ -991,11 +980,11 @@ bool OptionDialog::saveTemperatureUnits()
       case Celsius:
       default:
          Brewtarget::tempScale = Celsius;
-         Brewtarget::thingToUnitSystem.insert(Unit::Temp,UnitSystems::celsiusTempUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Temp,&UnitSystems::celsiusTempUnitSystem);
          break;
       case Fahrenheit:
          Brewtarget::tempScale = Fahrenheit;
-         Brewtarget::thingToUnitSystem.insert(Unit::Temp,UnitSystems::fahrenheitTempUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Temp,&UnitSystems::fahrenheitTempUnitSystem);
          break;
    }
 
@@ -1010,15 +999,15 @@ bool OptionDialog::saveVolumeUnits()
       case SI:
       default:
          Brewtarget::volumeUnitSystem = SI;
-         Brewtarget::thingToUnitSystem.insert(Unit::Volume,UnitSystems::siVolumeUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Volume,&UnitSystems::siVolumeUnitSystem);
          break;
       case USCustomary:
          Brewtarget::volumeUnitSystem = USCustomary;
-         Brewtarget::thingToUnitSystem.insert(Unit::Volume,UnitSystems::usVolumeUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Volume,&UnitSystems::usVolumeUnitSystem);
          break;
       case Imperial:
          Brewtarget::volumeUnitSystem = Imperial;
-         Brewtarget::thingToUnitSystem.insert(Unit::Volume,UnitSystems::imperialVolumeUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Volume,&UnitSystems::imperialVolumeUnitSystem);
          break;
    }
    return okay;
@@ -1032,11 +1021,11 @@ bool OptionDialog::saveGravityUnits()
       case Brewtarget::SG:
       default:
          Brewtarget::densityUnit = Brewtarget::SG;
-         Brewtarget::thingToUnitSystem.insert(Unit::Density, UnitSystems::sgDensityUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Density, &UnitSystems::sgDensityUnitSystem);
          break;
       case Brewtarget::PLATO:
          Brewtarget::densityUnit = Brewtarget::PLATO;
-         Brewtarget::thingToUnitSystem.insert(Unit::Density, UnitSystems::platoDensityUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Density, &UnitSystems::platoDensityUnitSystem);
          break;
    }
    return okay;
@@ -1068,11 +1057,11 @@ bool OptionDialog::saveColorUnits()
    {
       case Brewtarget::SRM:
       default:
-         Brewtarget::thingToUnitSystem.insert(Unit::Color,UnitSystems::srmColorUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Color,&UnitSystems::srmColorUnitSystem);
          Brewtarget::colorUnit = Brewtarget::SRM;
          break;
       case Brewtarget::EBC:
-         Brewtarget::thingToUnitSystem.insert(Unit::Color,UnitSystems::ebcColorUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::Color,&UnitSystems::ebcColorUnitSystem);
          Brewtarget::colorUnit = Brewtarget::EBC;
          break;
    }
@@ -1086,11 +1075,11 @@ bool OptionDialog::saveDiastaticUnits()
    {
       case Brewtarget::LINTNER:
       default:
-         Brewtarget::thingToUnitSystem.insert(Unit::DiastaticPower,UnitSystems::lintnerDiastaticPowerUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::DiastaticPower,&UnitSystems::lintnerDiastaticPowerUnitSystem);
          Brewtarget::diastaticPowerUnit = Brewtarget::LINTNER;
          break;
       case Brewtarget::WK:
-         Brewtarget::thingToUnitSystem.insert(Unit::DiastaticPower,UnitSystems::wkDiastaticPowerUnitSystem());
+         Brewtarget::thingToUnitSystem.insert(Unit::DiastaticPower,&UnitSystems::wkDiastaticPowerUnitSystem);
          Brewtarget::diastaticPowerUnit = Brewtarget::WK;
          break;
    }

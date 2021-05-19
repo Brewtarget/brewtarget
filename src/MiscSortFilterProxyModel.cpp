@@ -23,7 +23,7 @@
 #include "MiscTableModel.h"
 #include "model/Misc.h"
 #include "brewtarget.h"
-#include "unit.h"
+#include "Unit.h"
 
 MiscSortFilterProxyModel::MiscSortFilterProxyModel(QObject *parent, bool filt)
 : QSortFilterProxyModel(parent)
@@ -45,14 +45,14 @@ bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
    switch( left.column() )
    {
    case MISCINVENTORYCOL:
-         if (Brewtarget::qStringToSI(leftMisc.toString(), Units::kilograms) == 0.0 && this->sortOrder() == Qt::AscendingOrder)
+         if (Brewtarget::qStringToSI(leftMisc.toString(), &Units::kilograms) == 0.0 && this->sortOrder() == Qt::AscendingOrder)
             return false;
          else
-            return Brewtarget::qStringToSI(leftMisc.toString(), Units::kilograms) < Brewtarget::qStringToSI(rightMisc.toString(), Units::kilograms);
+            return Brewtarget::qStringToSI(leftMisc.toString(), &Units::kilograms) < Brewtarget::qStringToSI(rightMisc.toString(), &Units::kilograms);
    case MISCAMOUNTCOL:
-         return Brewtarget::qStringToSI(leftMisc.toString(), Units::kilograms) < Brewtarget::qStringToSI(rightMisc.toString(), Units::kilograms);
+         return Brewtarget::qStringToSI(leftMisc.toString(), &Units::kilograms) < Brewtarget::qStringToSI(rightMisc.toString(), &Units::kilograms);
    case MISCTIMECOL:
-      return Brewtarget::qStringToSI(leftMisc.toString(), Units::minutes) < Brewtarget::qStringToSI(rightMisc.toString(), Units::minutes);
+      return Brewtarget::qStringToSI(leftMisc.toString(), &Units::minutes) < Brewtarget::qStringToSI(rightMisc.toString(), &Units::minutes);
     default:
       return leftMisc.toString() < rightMisc.toString();
    }

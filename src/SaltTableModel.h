@@ -34,7 +34,7 @@ class SaltItemDelegate;
 #include <QTableView>
 #include "model/Salt.h"
 
-#include "unit.h"
+#include "Unit.h"
 // Forward declarations.
 class Recipe;
 class WaterDialog;

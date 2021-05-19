@@ -25,7 +25,7 @@
 #include "model/Style.h"
 #include "StyleListModel.h"
 #include "StyleSortFilterProxyModel.h"
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 
 StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)

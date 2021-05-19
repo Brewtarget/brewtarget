@@ -38,7 +38,7 @@
 #include "WaterDialog.h"
 #include "SaltTableModel.h"
 #include "model/Salt.h"
-#include "unit.h"
+#include "Unit.h"
 #include "model/Recipe.h"
 #include "model/Mash.h"
 #include "model/MashStep.h"
@@ -418,7 +418,7 @@ QVariant SaltTableModel::data( const QModelIndex& index, int role ) const
    else
       row = saltObs[index.row()];
 
-   Unit* rightUnit = row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms): static_cast<Unit*>(Units::liters);
+   Unit const * rightUnit = row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms): static_cast<Unit const *>(&Units::liters);
    switch( index.column() ) {
       case SALTNAMECOL:
          if ( role == Qt::DisplayRole )
@@ -497,7 +497,7 @@ bool SaltTableModel::setData( const QModelIndex& index, const QVariant& value, i
 
    row = saltObs[index.row()];
 
-   Unit* unit = row->amountIsWeight() ? static_cast<Unit*>(Units::kilograms): static_cast<Unit*>(Units::liters);
+   Unit const * unit = row->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms): static_cast<Unit const *>(&Units::liters);
    Unit::unitDisplay dspUnit = displayUnit(index.column());
    Unit::unitScale   dspScl  = displayScale(index.column());
 

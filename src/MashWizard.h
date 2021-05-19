@@ -26,7 +26,7 @@ class MashWizard;
 #include "ui_mashWizard.h"
 #include <QDialog>
 #include "model/Recipe.h"
-#include "unit.h"
+#include "Unit.h"
 
 /*!
  * \class MashWizard
@@ -49,8 +49,8 @@ public slots:
 
 private:
    Recipe* recObs;
-   Unit *weightUnit;
-   Unit *volumeUnit;
+   Unit const *weightUnit;
+   Unit const *volumeUnit;
 
    //!brief just need a holder for the three buttons
    QButtonGroup* bGroup;

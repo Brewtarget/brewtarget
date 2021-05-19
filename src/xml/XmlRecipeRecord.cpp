@@ -24,6 +24,43 @@
 #include "model/Yeast.h"
 #include "model/Water.h"
 
+namespace {
+   //
+   // To keep us on our toes, the various ingredients you might add to a recipe have different ways of specifying how
+   // much to add and when to add them.  We'll use template specialisation to ensure we call the right member
+   // functions.
+   //
+   template<typename CNE>
+   void setAmountsEtc(CNE & ingredient, NamedParameterBundle const & npb);
+   template<> void setAmountsEtc(Hop & hop, NamedParameterBundle const & npb) {
+      hop.setAmount_kg(npb(PropertyNames::Hop::amount_kg).toDouble());
+      hop.setTime_min( npb(PropertyNames::Hop::time_min).toDouble());
+      return;
+   }
+   template<> void setAmountsEtc(Fermentable & fermentable, NamedParameterBundle const & npb) {
+      fermentable.setAmount_kg(npb(PropertyNames::Fermentable::amount_kg).toDouble());
+      return;
+   }
+   template<> void setAmountsEtc(Misc & misc, NamedParameterBundle const & npb) {
+      misc.setAmount(        npb(PropertyNames::Misc::amount).toDouble());
+      misc.setAmountIsWeight(npb(PropertyNames::Misc::amountIsWeight).toBool());
+      misc.setTime(          npb(PropertyNames::Misc::time).toDouble());
+      return;
+   }
+   template<> void setAmountsEtc(Yeast & yeast, NamedParameterBundle const & npb) {
+      yeast.setAmount(        npb(PropertyNames::Yeast::amount).toDouble());
+      yeast.setAmountIsWeight(npb(PropertyNames::Yeast::amountIsWeight).toBool());
+      return;
+   }
+   template<> void setAmountsEtc(Water & water, NamedParameterBundle const & npb) {
+      water.setAmount(        npb(PropertyNames::Water::amount).toDouble());
+      return;
+   }
+
+}
+
+
+
 template<typename CNE>
 void XmlRecipeRecord::addChildren() {
    //
@@ -56,7 +93,28 @@ void XmlRecipeRecord::addChildren() {
       Q_ASSERT(ii->second->getNamedEntity()->metaObject()->className() == QString(childClassName.constData()));
 
       // Actually add the Hop/Yeast/etc to the Recipe
-      recipe->add<CNE>(static_cast<CNE *>(ii->second->getNamedEntity()));
+      CNE * added = recipe->add<CNE>(static_cast<CNE *>(ii->second->getNamedEntity()));
+
+      //
+      // For historical reasons (specifically that early versions of Brewtarget stored data in BeerXML files, not a
+      // database), the amount of each Hop/Fermentable/etc in a Recipe is stored, not in the Recipe object but in the
+      // Hop/Fermentable/etc in question.  The same is true for addition times for Hops.
+      //
+      // When we add something to a Recipe, typically a copy is made so that we have a Hop/Fermentable/etc that is not
+      // shared with any other Recipes and thus there is no ambiguity about storing the amount in it.
+      //
+      // However, when we read in from BeerXML, we try to avoid creating unnecessary duplicates of things.  If there's
+      // a Fuggle hop in the file and we already have a Fuggle hop in the database, then we don't create another one
+      // for the sake of it.  This is the right thing to do if we're reading in Hops outside the context of a Recipe.
+      // But if the hop in the BeerXML file was inside a Recipe record, then we we need to make sure we captured the
+      // "how much and when to add" info inside that hop record.
+      //
+      // So, now that we added the Hop/Fermentable/etc to the Recipe, and we have the actual object associated with the
+      // Recipe, we need to set the "how much and when to add" info based on the fields we retained from XML record.
+      //
+      Q_ASSERT(added != nullptr);
+      setAmountsEtc(*added, ii->second->getNamedParameterBundle());
+
    }
    return;
 }

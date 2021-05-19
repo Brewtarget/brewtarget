@@ -34,7 +34,7 @@
 #include "EquipmentEditor.h"
 #include "EquipmentListModel.h"
 #include "config.h"
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
@@ -59,8 +59,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
 
    this->tabWidget_editor->tabBar()->setStyle( new BtHorizontalTabs );
    // Set grain absorption label based on units.
-   Unit* weightUnit = nullptr;
-   Unit* volumeUnit = nullptr;
+   Unit const * weightUnit = nullptr;
+   Unit const * volumeUnit = nullptr;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
 
@@ -169,8 +169,8 @@ void EquipmentEditor::save()
       return;
    }
 
-   Unit* weightUnit = nullptr;
-   Unit* volumeUnit = nullptr;
+   Unit const * weightUnit = nullptr;
+   Unit const * volumeUnit = nullptr;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    bool ok = false;
 
@@ -284,8 +284,8 @@ void EquipmentEditor::resetAbsorption()
       return;
 
    // Get weight and volume units for grain absorption.
-   Unit* weightUnit = nullptr;
-   Unit* volumeUnit = nullptr;
+   Unit const * weightUnit = nullptr;
+   Unit const * volumeUnit = nullptr;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    double gaCustomUnits = PhysicalConstants::grainAbsorption_Lkg * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
 
@@ -307,8 +307,8 @@ void EquipmentEditor::showChanges()
    }
 
    // Get weight and volume units for grain absorption.
-   Unit* weightUnit = nullptr;
-   Unit* volumeUnit = nullptr;
+   Unit const * weightUnit = nullptr;
+   Unit const * volumeUnit = nullptr;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
 

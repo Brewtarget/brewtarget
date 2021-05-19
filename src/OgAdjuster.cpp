@@ -20,7 +20,7 @@
 #include "OgAdjuster.h"
 #include "model/Equipment.h"
 #include "brewtarget.h"
-#include "unit.h"
+#include "Unit.h"
 #include "Algorithms.h"
 #include "model/Recipe.h"
 

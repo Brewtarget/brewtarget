@@ -19,21 +19,21 @@
 
 #include <cmath>
 #include "PrimingDialog.h"
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 
 PrimingDialog::PrimingDialog(QWidget* parent) : QDialog(parent)
 {
    setupUi(this);
-   
+
    sugarGroup = new QButtonGroup(this);
    sugarGroup->setExclusive(true); // Can select only one.
-   
+
    sugarGroup->addButton(radioButton_glucMono);
    sugarGroup->addButton(radioButton_gluc);
    sugarGroup->addButton(radioButton_sucrose);
    sugarGroup->addButton(radioButton_dme);
-   
+
    connect( pushButton_calculate, &QAbstractButton::clicked, this, &PrimingDialog::calculate );
 }
 
@@ -44,31 +44,31 @@ PrimingDialog::~PrimingDialog()
 void PrimingDialog::calculate()
 {
    QAbstractButton* button;
-   
+
    double beer_l;
    double temp_c;
    double desiredVols;
-   
+
    double addedVols;
    double residualVols;
-   
+
    double co2_l;
    double co2_mol;
-   
+
    double sugar_mol;
    double sugar_g;
-   
+
    beer_l = lineEdit_beerVol->toSI();
    temp_c = lineEdit_temp->toSI();
    desiredVols = lineEdit_vols->toSI();
-   
+
    residualVols = 1.57 * pow( 0.97, temp_c ); // Amount of CO2 still in suspension.
    addedVols = desiredVols - residualVols;
    co2_l = addedVols * beer_l; // Liters of CO2 we need to generate (at 273 K and 1 atm).
    co2_mol = co2_l / 22.4; // Mols of CO2 we need.
-   
+
    button = sugarGroup->checkedButton();
-   
+
    if( button == radioButton_glucMono )
    {
       sugar_mol = co2_mol / 2;

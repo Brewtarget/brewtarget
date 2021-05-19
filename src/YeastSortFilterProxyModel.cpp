@@ -35,7 +35,7 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
 {
     QVariant leftYeast = sourceModel()->data(left);
     QVariant rightYeast = sourceModel()->data(right);
-    Unit* unit = Units::liters;
+    Unit const * unit = &Units::liters;
     double lAmt, rAmt;
 
     switch( left.column() )

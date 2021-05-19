@@ -28,7 +28,7 @@
 #include "BtHorizontalTabs.h"
 #include "database.h"
 #include "config.h"
-#include "unit.h"
+#include "Unit.h"
 #include "brewtarget.h"
 
 HopEditor::HopEditor( QWidget* parent )

@@ -23,7 +23,7 @@
 
 #include "model/Mash.h"
 #include "brewtarget.h"
-#include "unit.h"
+#include "Unit.h"
 #include "model/Equipment.h"
 #include "model/Recipe.h"
 #include "database.h"

@@ -447,9 +447,8 @@ double WaterDialog::calculateGristpH()
    double pHAdjustment = 0.0;
 
    if ( m_rec && m_rec->fermentables().size() ) {
-      PlatoUnit* convert = new PlatoUnit;
 
-      double platoRatio = 1/convert->fromSI(m_rec->og());
+      double platoRatio = 1/Units::plato.fromSI(m_rec->og());
       double color = m_rec->color_srm();
       double colorFromGrain = 0.0;
 

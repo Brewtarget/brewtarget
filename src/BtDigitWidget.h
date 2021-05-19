@@ -16,18 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #ifndef BTDIGITWIDGET_H
 #define BTDIGITWIDGET_H
-
-class BtDigitWidget;
 
 #include <QLabel>
 #include <QWidget>
 #include <QString>
-#include "unit.h"
+#include "Unit.h"
 #include "UnitSystem.h"
-#include "UnitSystems.h"
 
 /*!
  * \class BtDigitWidget
@@ -48,11 +44,11 @@ class BtDigitWidget : public QLabel
 public:
    enum ColorType{ NONE, LOW, GOOD, HIGH, BLACK };
 
-   BtDigitWidget(QWidget* parent = 0, Unit::UnitType type = Unit::None, Unit* units = nullptr );
+   BtDigitWidget(QWidget* parent = 0, Unit::UnitType type = Unit::None, Unit const * units = nullptr );
 
    //! \brief Displays the given \c num with precision \c prec.
    void display( double num, int prec = 0 );
-   //! \brief Display a QString. 
+   //! \brief Display a QString.
    void display(QString str);
 
    //! \brief Set the lower limit of the "good" range.
@@ -101,7 +97,7 @@ private:
    Unit::UnitType m_type;
    Unit::unitDisplay m_forceUnit;
    Unit::unitScale m_forceScale;
-   Unit* m_units;
+   Unit const * m_units;
    QWidget* m_parent;
 
    unsigned int m_rgblow;
