@@ -908,17 +908,19 @@ void MainWindow::deleteSelected()
    if (!active)
       return;
 
+   QModelIndex start = active->selectionModel()->selectedRows().first();
    active->deleteSelected(active->selectionModel()->selectedRows());
 
-   // This should be fixed to find the first nonfolder object in the tree
-   QModelIndex first = active->first();
-   if ( first.isValid() )
-   {
-      if (active->type(first) == BtTreeItem::RECIPE)
-         setRecipe(treeView_recipe->recipe(first));
-      setTreeSelection(first);
+   if ( ! start.isValid() ) {
+      start = active->first();
    }
 
+
+   if ( start.isValid() ) {
+      if (active->type(start) == BtTreeItem::RECIPE)
+         setRecipe(treeView_recipe->recipe(start));
+      setTreeSelection(start);
+   }
 }
 
 void MainWindow::treeActivated(const QModelIndex &index)
