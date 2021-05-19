@@ -205,6 +205,7 @@ public:
 
 public slots:
    void versionedRecipe(Recipe* ancestor, Recipe* descendant);
+   void catchAncestors(bool showem);
 
 private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
@@ -290,6 +291,7 @@ private:
    void setShowChild(QModelIndex child, bool val);
    //! \b link to recipes (this will get reverted later)
    void makeAncestors(NamedEntity* ancestor, NamedEntity* descendant);
+   void addAncestoralTree(Recipe* rec, int i, BtTreeItem* parent);
 
    BtTreeItem* rootItem;
    BtTreeView *parentTree;

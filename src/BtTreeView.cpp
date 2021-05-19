@@ -391,7 +391,6 @@ void BtTreeView::showAncestors()
       // I hear a noise at the door, as of some immense slippery body
       // lumbering against it
       foreach( QModelIndex selected, ndxs ) {
-         // make sure we add the ancestors to the exclusion list
          _model->showAncestors(_filter->mapToSource(selected));
       }
    }

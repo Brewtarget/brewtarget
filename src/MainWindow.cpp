@@ -320,6 +320,7 @@ void MainWindow::init() {
 
    // I do not like this connection here.
    connect( ancestorDialog, &AncestorDialog::ancestoryChanged, treeView_recipe->model(), &BtTreeModel::versionedRecipe);
+   connect( optionDialog, &OptionDialog::showAllAncestors, treeView_recipe->model(), &BtTreeModel::catchAncestors);
    connect( treeView_recipe, &BtTreeView::recipeSpawn, this, &MainWindow::versionedRecipe );
    // No connections from the database yet? Oh FSM, that probably means I'm
    // doing it wrong again.

@@ -436,8 +436,9 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
    NamedEntity* thing = model->thing(child);
 
    if ( treeMask == BtTreeModel::RECIPEMASK && thing ) {
-      // this looks weird, but it says the right thing. showChild over rides
-      // display
+
+      // we are showing the child (context menu -> show snapshots ) OR
+      // we are meant to display this thing.
       return model->showChild(child) || thing->display();
    }
 

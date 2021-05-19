@@ -518,6 +518,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="checkBox_alwaysShowSnaps">
+         <property name="text">
+          <string>Always show snapshots</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

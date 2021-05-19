@@ -629,10 +629,46 @@ void BtTreeModel::loadTreeModel()
       }
 
       // If we have brewnotes, set them up here.
-      if ( treeMask & RECIPEMASK )
-         addBrewNoteSubTree(qobject_cast<Recipe*>(elem),i,local);
-
+      if ( treeMask & RECIPEMASK ) {
+         Recipe *holdmebeer = qobject_cast<Recipe*>(elem);
+         if ( Brewtarget::option("showsnapshots", false).toBool() && holdmebeer->hasAncestors() ) {
+            setShowChild(ndxLocal,true);
+            addAncestoralTree(holdmebeer, i, local);
+            addBrewNoteSubTree(holdmebeer,i,local,false);
+         }
+         else {
+            addBrewNoteSubTree(holdmebeer,i,local);
+         }
+      }
       observeElement(elem);
+   }
+}
+
+void BtTreeModel::addAncestoralTree(Recipe* rec, int i, BtTreeItem* parent)
+{
+   BtTreeItem* temp = parent->child(i);
+   int j = 0;
+
+   foreach( Recipe* stor, rec->ancestors() ) {
+      // a recipe's ancestor list always has itself in it. Skip that entry
+      if ( stor == rec ) {
+         continue;
+      }
+      // insert the ancestor. This is most of magic. One day, I understood it.
+      // Now I simply copy/paste it
+      if ( ! insertRow(j, createIndex(i,0,temp), stor, BtTreeItem::RECIPE) ) {
+         qWarning() << "Ancestor insert failed in loadTreeModel()";
+         continue;
+      }
+      // we need to find the index of what we just inserted
+      QModelIndex cIndex = findElement(stor,temp);
+      // and set showChild on it
+      setShowChild(cIndex,true);
+
+      // finally, add this ancestors brewnotes but do not recurse
+      addBrewNoteSubTree(stor,j,temp,false);
+      observeElement(stor);
+      ++j;
    }
 }
 
@@ -1684,3 +1720,21 @@ void BtTreeModel::hideAncestors(QModelIndex ndx)
    }
 }
 
+// more cleverness must happen. Wonder if I can figure it out.
+void BtTreeModel::catchAncestors(bool showem)
+{
+   QModelIndex ndxLocal;
+   BtTreeItem* local = nullptr;
+   QList<NamedEntity*> elems = elements();
+
+   foreach( NamedEntity* elem, elems ) {
+      Recipe *rec = qobject_cast<Recipe*>(elem);
+
+      local = rootItem->child(0);
+      ndxLocal = findElement(elem, local);
+
+      if ( rec->hasAncestors() ) {
+         showem ? showAncestors(ndxLocal) : hideAncestors(ndxLocal);
+      }
+   }
+}

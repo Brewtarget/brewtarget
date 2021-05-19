@@ -58,7 +58,6 @@ protected:
 
 private:
    BtTreeModel::TypeMasks treeMask;
-   QList<Recipe*> ancestor_override;
 
    bool lessThanRecipe(BtTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
    bool lessThanEquip(BtTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
