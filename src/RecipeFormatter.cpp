@@ -33,9 +33,13 @@
 #include "Unit.h"
 #include "brewtarget.h"
 #include "MainWindow.h"
+#include <QDebug>
 #include <QClipboard>
 #include <QObject>
 #include <QPrinter>
+#include <QPrintPreviewDialog>
+#include <QPaintEngine>
+#include <QpaintDevice>
 #include <QPrintDialog>
 #include <QTextDocument>
 #include <QPushButton>
@@ -47,14 +51,16 @@ RecipeFormatter::RecipeFormatter(QObject* parent)
 {
    textSeparator = nullptr;
    rec = nullptr;
-
+   _parent = parent;
    //===Construct a print-preview dialog.===
+
    docDialog = new QDialog(Brewtarget::mainWindow());
    docDialog->setWindowTitle("Print Preview");
    if( docDialog->layout() == nullptr )
       docDialog->setLayout(new QVBoxLayout);
    doc = new QTextBrowser(docDialog);
    docDialog->layout()->addWidget(doc);
+
    /*
    // Add a print button at the bottom.
    QHBoxLayout* buttonBox = new QHBoxLayout(docDialog);
@@ -1580,7 +1586,7 @@ bool RecipeFormatter::loadComplete(bool ok)
    return ok;
 }
 
-void RecipeFormatter::print(QPrinter* mainPrinter,
+void RecipeFormatter::print(QPrinter* mainPrinter, QWidget * parent,
       int action, QFile* outFile)
 {
    if( rec == nullptr )
@@ -1603,8 +1609,38 @@ void RecipeFormatter::print(QPrinter* mainPrinter,
    }
 
    doc->setHtml(getHTMLFormat());
-   if ( action == PREVIEW )
-      docDialog->show();
+   if ( action == PREVIEW ) {
+      mainPrinter->setPageSize(QPageSize(QPageSize::A4));
+      mainPrinter->setPageOrientation(QPageLayout::Portrait);
+      //mainPrinter->setPageMargins(QMarginsF(20,20,20,20),QPageLayout::Millimeter);
+      mainPrinter->setFullPage(false);
+      mainPrinter->setOutputFormat(QPrinter::PdfFormat);
+      mainPrinter->setOutputFileName("c:/temp/savefile.pdf");
+
+      qDebug() << Q_FUNC_INFO << QString("Executing Preview");
+      QPrintPreviewDialog preview(mainPrinter, parent, Qt::Window);
+      connect(&preview, &QPrintPreviewDialog::paintRequested, this, &RecipeFormatter::printDocument);
+      preview.exec();
+
+      //docDialog->show();
+   }
+}
+void RecipeFormatter::printDocument(QPrinter * printer)
+{
+   /*
+   QPainter painter;
+   if ( ! painter.begin(printer) ) {
+      qWarning() << Q_FUNC_INFO << "Failed to begin painting, check printer settings";
+      return;
+   }
+   painter.setFont(QFont("Times New Roman", 12));
+   painter.drawText(20, 100, "THIS IS MORE TEXT");
+   painter.drawText(20, 20, QString("SOME TEXT"));
+   if ( ! painter.end() ) {
+      qWarning() << Q_FUNC_INFO << "Failed to flush painting to printer, check settings.";
+   }
+   */
+   doc->print(printer);
 }
 
 QList<Hop*> RecipeFormatter::sortHopsByTime(Recipe* rec)
