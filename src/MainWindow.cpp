@@ -780,15 +780,15 @@ void MainWindow::setupTriggers()
    connect(actionRecipePrint, &QAction::triggered, [this]() {
       print([this](QPrinter* printer) {
          recipeFormatter->print(
-               printer,  RecipeFormatter::PRINT);
+               printer,  this, RecipeFormatter::PRINT);
       });
    });
    connect(actionRecipePreview, &QAction::triggered, [this]() {
-      recipeFormatter->print(printer, RecipeFormatter::PREVIEW);
+      recipeFormatter->print(printer, this, RecipeFormatter::PREVIEW);
    });
    connect(actionRecipeHTML, &QAction::triggered, this, [this]() {
       exportHTML([this](QFile* file) {
-         recipeFormatter->print(printer, RecipeFormatter::HTML, file);
+         recipeFormatter->print(printer, this, RecipeFormatter::HTML, file);
       });
    });
    connect(actionRecipeBBCode, &QAction::triggered, [this]() {

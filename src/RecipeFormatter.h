@@ -78,13 +78,15 @@ public:
    QString wrapText( const QString &text, int wrapLength );
 
    //! Send a printable version to the printer.
-   void print(QPrinter *mainPrinter, int action = PRINT, QFile* outFile=nullptr);
+   void print(QPrinter *mainPrinter, QWidget *parent, int action = PRINT, QFile* outFile=nullptr);
 
 public slots:
    //! Put the plaintext view onto the clipboard.
    void toTextClipboard();
+   void printDocument(QPrinter * printer);
 
 private:
+   QObject* _parent;
    QString getTextSeparator();
 
    QString buildHTMLHeader();
