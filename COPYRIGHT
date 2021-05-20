@@ -21,6 +21,10 @@ Files: images/flag* images/bubbles.svg images/convert.svg
 Copyright: 2012, Philip G. Lee <rocketman768@gmail.com>
 License: WTFPL-2
 
+Files: images/grain2glass.svg
+Copyright: 2021-2028, Mik Firestone <mikfire@gmail.com>
+License: WTFPL-2
+
 Files: images/edit-copy.png images/document-print-preview.png
        images/merge.png images/preferences-other.png
        images/printer.png images/server-database.png

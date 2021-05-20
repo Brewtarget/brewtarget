@@ -259,8 +259,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>850</width>
-           <height>458</height>
+           <width>849</width>
+           <height>462</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1114,8 +1114,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>850</width>
-           <height>330</height>
+           <width>849</width>
+           <height>324</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1667,7 +1667,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2303,8 +2303,15 @@
    </property>
   </action>
   <action name="action_brewit">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/grain2glass.svg</normaloff>:/images/grain2glass.svg</iconset>
+   </property>
    <property name="text">
-    <string>Brew it</string>
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>Brew It!</string>
    </property>
   </action>
  </widget>
