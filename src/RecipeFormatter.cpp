@@ -37,9 +37,6 @@
 #include <QClipboard>
 #include <QObject>
 #include <QPrinter>
-#include <QPrintPreviewDialog>
-#include <QPaintEngine>
-#include <QpaintDevice>
 #include <QPrintDialog>
 #include <QTextDocument>
 #include <QPushButton>
@@ -51,16 +48,14 @@ RecipeFormatter::RecipeFormatter(QObject* parent)
 {
    textSeparator = nullptr;
    rec = nullptr;
-   _parent = parent;
-   //===Construct a print-preview dialog.===
 
+   //===Construct a print-preview dialog.===
    docDialog = new QDialog(Brewtarget::mainWindow());
    docDialog->setWindowTitle("Print Preview");
    if( docDialog->layout() == nullptr )
       docDialog->setLayout(new QVBoxLayout);
    doc = new QTextBrowser(docDialog);
    docDialog->layout()->addWidget(doc);
-
    /*
    // Add a print button at the bottom.
    QHBoxLayout* buttonBox = new QHBoxLayout(docDialog);
@@ -1586,7 +1581,7 @@ bool RecipeFormatter::loadComplete(bool ok)
    return ok;
 }
 
-void RecipeFormatter::print(QPrinter* mainPrinter, QWidget * parent,
+void RecipeFormatter::print(QPrinter* mainPrinter,
       int action, QFile* outFile)
 {
    if( rec == nullptr )
@@ -1609,9 +1604,8 @@ void RecipeFormatter::print(QPrinter* mainPrinter, QWidget * parent,
    }
 
    doc->setHtml(getHTMLFormat());
-   if ( action == PREVIEW ) {
+   if ( action == PREVIEW )
       docDialog->show();
-   }
 }
 
 QList<Hop*> RecipeFormatter::sortHopsByTime(Recipe* rec)
