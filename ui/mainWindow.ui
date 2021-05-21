@@ -1728,6 +1728,7 @@
     <addaction name="separator"/>
     <addaction name="menuBrewday"/>
     <addaction name="menuRecipe"/>
+    <addaction name="actionPrint" />
     <addaction name="separator"/>
     <addaction name="menuInventory"/>
     <addaction name="separator"/>
@@ -1906,6 +1907,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print and preview</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionExit">

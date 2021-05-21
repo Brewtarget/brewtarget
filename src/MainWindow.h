@@ -69,6 +69,7 @@ class BrewDayScrollWidget;
 class HtmlViewer;
 class ScaleRecipeTool;
 class RecipeFormatter;
+class PrintAndPreviewDialog;
 class OgAdjuster;
 class ConverterTool;
 class HydrometerTool;
@@ -382,6 +383,7 @@ private:
    QDialog* brewDayDialog;
    ScaleRecipeTool* recipeScaler;
    RecipeFormatter* recipeFormatter;
+   PrintAndPreviewDialog* printAndPreviewDialog;
    OgAdjuster* ogAdjuster;
    ConverterTool* converterTool;
    HydrometerTool* hydrometerTool;

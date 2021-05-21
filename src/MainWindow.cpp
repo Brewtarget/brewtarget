@@ -98,6 +98,7 @@
 #include "TimerMainDialog.h"
 #include "RecipeFormatter.h"
 #include "PrimingDialog.h"
+#include "PrintAndPreviewDialog.h"
 #include "StrikeWaterDialog.h"
 #include "RefractoDialog.h"
 #include "MashDesigner.h"
@@ -465,6 +466,7 @@ void MainWindow::setupDialogs()
    optionDialog = new OptionDialog(this);
    recipeScaler = new ScaleRecipeTool(this);
    recipeFormatter = new RecipeFormatter(this);
+   printAndPreviewDialog = new PrintAndPreviewDialog(this);
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
    hydrometerTool = new HydrometerTool(this);
@@ -764,7 +766,7 @@ void MainWindow::setupTriggers()
    connect( actionWater_Chemistry, &QAction::triggered, this, &MainWindow::popChemistry);                               // > Tools > Water Chemistry
    connect( actionAncestors, &QAction::triggered, this, &MainWindow::setAncestor);                                      // > Tools > Ancestors
    connect( action_brewit, &QAction::triggered, this, &MainWindow::brewItHelper );
-
+   connect( actionPrint, &QAction::triggered, printAndPreviewDialog, &QWidget::show);
    // postgresql cannot backup or restore yet. I would like to find some way
    // around this, but for now just disable
    if ( Brewtarget::dbType() == Brewtarget::PGSQL ) {
