@@ -147,6 +147,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PitchDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
+    ${SRCDIR}/PrintAndPreviewDialog.cpp
     ${SRCDIR}/PrimingDialog.cpp
     ${SRCDIR}/PropertySchema.cpp
     ${SRCDIR}/QueuedMethod.cpp
@@ -224,6 +225,7 @@ SET( brewtarget_UIS
     ${UIDIR}/pitchDialog.ui
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/recipeExtrasWidget.ui
+    ${UIDIR}/BtPrintAndPreview.ui
 )
 
 #
@@ -308,6 +310,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/OgAdjuster.h
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
+    ${SRCDIR}/PrintAndPreviewDialog.h
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/PropertySchema.h
     ${SRCDIR}/QueuedMethod.h

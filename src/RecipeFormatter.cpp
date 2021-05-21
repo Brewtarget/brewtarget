@@ -1610,37 +1610,8 @@ void RecipeFormatter::print(QPrinter* mainPrinter, QWidget * parent,
 
    doc->setHtml(getHTMLFormat());
    if ( action == PREVIEW ) {
-      mainPrinter->setPageSize(QPageSize(QPageSize::A4));
-      mainPrinter->setPageOrientation(QPageLayout::Portrait);
-      //mainPrinter->setPageMargins(QMarginsF(20,20,20,20),QPageLayout::Millimeter);
-      mainPrinter->setFullPage(false);
-      mainPrinter->setOutputFormat(QPrinter::PdfFormat);
-      mainPrinter->setOutputFileName("c:/temp/savefile.pdf");
-
-      qDebug() << Q_FUNC_INFO << QString("Executing Preview");
-      QPrintPreviewDialog preview(mainPrinter, parent, Qt::Window);
-      connect(&preview, &QPrintPreviewDialog::paintRequested, this, &RecipeFormatter::printDocument);
-      preview.exec();
-
-      //docDialog->show();
+      docDialog->show();
    }
-}
-void RecipeFormatter::printDocument(QPrinter * printer)
-{
-   /*
-   QPainter painter;
-   if ( ! painter.begin(printer) ) {
-      qWarning() << Q_FUNC_INFO << "Failed to begin painting, check printer settings";
-      return;
-   }
-   painter.setFont(QFont("Times New Roman", 12));
-   painter.drawText(20, 100, "THIS IS MORE TEXT");
-   painter.drawText(20, 20, QString("SOME TEXT"));
-   if ( ! painter.end() ) {
-      qWarning() << Q_FUNC_INFO << "Failed to flush painting to printer, check settings.";
-   }
-   */
-   doc->print(printer);
 }
 
 QList<Hop*> RecipeFormatter::sortHopsByTime(Recipe* rec)
