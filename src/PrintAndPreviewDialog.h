@@ -24,7 +24,15 @@
 #include <QPrintPreviewWidget>
 #include <QPrinter>
 #include <QWidget>
-
+#include <QMap>
+#include <QString>
+#include <QPageSize>
+#include <QTextBrowser>
+#include "MainWindow.h"
+#include "RecipeFormatter.h"
+#include "model/Recipe.h"
+#include "BrewDayWidget.h" //THE Brewday-printout NEEDS TO MOVE TO IT'S OWN CLASS
+#include "database.h"
 
 /*!
  * \class PrintAndPreviewDialog
@@ -36,15 +44,40 @@ class PrintAndPreviewDialog : public QDialog, private Ui::BtPrintAndPreview
 {
    Q_OBJECT
 public:
-   PrintAndPreviewDialog( QWidget *parent );
+   PrintAndPreviewDialog( MainWindow *parent );
    virtual ~PrintAndPreviewDialog() {}
 
    QPrintPreviewWidget* previewWidget;
 private:
+   enum _outputSelection {
+      PAPER,
+      PDF,
+      HTML
+   };
+
+   void setupConnections();
+   void setupPreviewWidget();
+   void setPrintingControls();
+   void collectPrinterInfo();
+   void CollectSupportedPageSizes();
+   void showPrintDialog();
+   void collectRecipe();
+
+   MainWindow *_parent;
+   Recipe *selectedRecipe;
+   RecipeFormatter* recipeFormatter;
+   QTextBrowser* doc;
    QPrinter * _printer = nullptr;
+   _outputSelection outputSelection = PAPER;
+   QMap<QString, QPageSize> PageSizeMap;
 
 public slots:
    void printDocument(QPrinter * printer);
+   void outputRadioButtonsClicked();
+   void orientationRadioButtonsClicked();
+   void selectedPrinterChanged(int index);
+   void selectedPaperChanged(int index);
+   void resetAndClose(bool checked);
 
 };
 #endif /* _PRINTANDPREVIEW_H */
