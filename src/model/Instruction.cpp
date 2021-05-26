@@ -69,29 +69,45 @@ Instruction::Instruction(TableSchema* table, QSqlRecord rec, int t_key)
 // Setters ====================================================================
 void Instruction::setDirections(const QString& dir)
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::directions,  dir) ) {
+   if ( m_cacheOnly ) {
       m_directions = dir;
+   }
+   else if ( setEasy(PropertyNames::Instruction::directions,  dir) ) {
+      m_directions = dir;
+      signalCacheChange(PropertyNames::Instruction::directions,  dir);
    }
 }
 
 void Instruction::setHasTimer(bool has)
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::hasTimer,  has) ) {
+   if ( m_cacheOnly ) {
       m_hasTimer = has;
+   }
+   else if ( setEasy(PropertyNames::Instruction::hasTimer,  has) ) {
+      m_hasTimer = has;
+      signalCacheChange(PropertyNames::Instruction::hasTimer,  has);
    }
 }
 
 void Instruction::setTimerValue(const QString& timerVal)
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::timerValue,  timerVal) ) {
+   if ( m_cacheOnly ) {
       m_timerValue = timerVal;
+   }
+   else if ( setEasy(PropertyNames::Instruction::timerValue,  timerVal) ) {
+      m_timerValue = timerVal;
+      signalCacheChange(PropertyNames::Instruction::timerValue,  timerVal);
    }
 }
 
 void Instruction::setCompleted(bool comp)
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::completed,  comp) ) {
+   if ( m_cacheOnly ) {
       m_completed = comp;
+   }
+   else if ( setEasy(PropertyNames::Instruction::completed,  comp) ) {
+      m_completed = comp;
+      signalCacheChange(PropertyNames::Instruction::completed,  comp);
    }
 }
 
@@ -105,8 +121,12 @@ void Instruction::setReagent(const QString& reagent)
 
 void Instruction::setInterval(double time)
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Instruction::interval,  time) ) {
+   if ( m_cacheOnly ) {
       m_interval = time;
+   }
+   else if ( setEasy(PropertyNames::Instruction::interval,  time) ) {
+      m_interval = time;
+      signalCacheChange(PropertyNames::Instruction::interval,  time);
    }
 }
 

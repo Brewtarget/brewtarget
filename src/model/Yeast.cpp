@@ -216,45 +216,59 @@ void Yeast::setType( Yeast::Type t )
    // a wise person once said always makes sure things are in range before you
    // use them
    if ( types.at(t) == nullptr ) {
-      qWarning() << Q_FUNC_INFO << "invalid yeast type:" << t;
+      qWarning() << "invalid yeast type:" << t;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::type, types.at(t)) ) {
+   if ( m_cacheOnly ) {
       m_type = t;
       m_typeString = types.at(t);
+   }
+   else if ( setEasy(PropertyNames::Yeast::type, types.at(t)) ) {
+      m_type = t;
+      m_typeString = types.at(t);
+      signalCacheChange(PropertyNames::Yeast::type, types.at(t));
    }
 }
 
 void Yeast::setForm( Yeast::Form f )
 {
    if ( forms.at(f) == nullptr ) {
-      qWarning() << Q_FUNC_INFO << "invalid yeast form:" << f;
+      qWarning() << "invalid yeast form:" << f;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::form, forms.at(f)) ) {
+   if ( m_cacheOnly ) {
       m_form = f;
       m_formString = forms.at(f);
+   }
+   else if ( setEasy(PropertyNames::Yeast::form, forms.at(f)) ) {
+      m_form = f;
+      m_formString = forms.at(f);
+      signalCacheChange(PropertyNames::Yeast::form, forms.at(f));
    }
 }
 
 void Yeast::setAmount( double var )
 {
    if( var < 0.0 ) {
-      qWarning() << QString("Yeast: amount < 0: %1").arg(var);
+      qWarning() << "Yeast: amount < 0:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::amount, var) ) {
+   if ( m_cacheOnly ) {
       m_amount = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::amount, var) ) {
+      m_amount = var;
+      signalCacheChange(PropertyNames::Yeast::amount, var);
    }
 }
 
 void Yeast::setInventoryQuanta( int var )
 {
    if( var < 0.0 ) {
-      qWarning() << QString("Yeast: inventory < 0: %1").arg(var);
+      qWarning() << "Yeast: inventory < 0:" << var;
       return;
    }
 
@@ -274,46 +288,66 @@ void Yeast::setInventoryId( int key )
 
 void Yeast::setAmountIsWeight( bool var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::amountIsWeight, var) ) {
+   if ( m_cacheOnly ) {
       m_amountIsWeight = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::amountIsWeight, var) ) {
+      m_amountIsWeight = var;
+      signalCacheChange(PropertyNames::Yeast::amountIsWeight, var);
    }
 }
 
 void Yeast::setLaboratory( const QString& var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::laboratory, var) ) {
+   if ( m_cacheOnly ) {
       m_laboratory = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::laboratory, var) ) {
+      m_laboratory = var;
+      signalCacheChange(PropertyNames::Yeast::laboratory, var);
    }
 }
 
 void Yeast::setProductID( const QString& var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::productID, var) ) {
+   if ( m_cacheOnly ) {
       m_productID = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::productID, var) ) {
+      m_productID = var;
+      signalCacheChange(PropertyNames::Yeast::productID, var);
    }
 }
 
 void Yeast::setMinTemperature_c( double var )
 {
    if( var < PhysicalConstants::absoluteZero ) {
-      qWarning() << Q_FUNC_INFO << "temperature below absolute zero:" << var;
+      qWarning() << "Minimum temperature below absolute zero:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::minTemperature_c, var) ) {
+   if ( m_cacheOnly ) {
       m_minTemperature_c = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::minTemperature_c, var) ) {
+      m_minTemperature_c = var;
+      signalCacheChange(PropertyNames::Yeast::minTemperature_c, var);
    }
 }
 
 void Yeast::setMaxTemperature_c( double var )
 {
    if( var < PhysicalConstants::absoluteZero ) {
-      qWarning() << Q_FUNC_INFO << "temperature below absolute zero:" << var;
+      qWarning() << "Max temperature below absolute zero:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::maxTemperature_c, var) ) {
+   if ( m_cacheOnly ) {
       m_maxTemperature_c = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::maxTemperature_c, var) ) {
+      m_maxTemperature_c = var;
+      signalCacheChange(PropertyNames::Yeast::maxTemperature_c, var);
    }
 }
 
@@ -322,70 +356,99 @@ void Yeast::setMaxTemperature_c( double var )
 void Yeast::setFlocculation( Yeast::Flocculation f)
 {
    if ( flocculations.at(f) == nullptr ) {
-      qWarning() << Q_FUNC_INFO << "invalid flocculation type:" << f;
+      qWarning() << "invalid flocculation type:" << f;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::flocculation, flocculations.at(f)) ) {
+   if ( m_cacheOnly ) {
       m_flocculation = f;
       m_flocculationString = flocculations.at(f);
+   }
+   else if ( setEasy(PropertyNames::Yeast::flocculation, flocculations.at(f)) ) {
+      m_flocculation = f;
+      m_flocculationString = flocculations.at(f);
+      signalCacheChange(PropertyNames::Yeast::flocculation, flocculations.at(f));
    }
 }
 
 void Yeast::setAttenuation_pct( double var )
 {
    if( var < 0.0 || var > 100.0 ) {
-      qWarning() << Q_FUNC_INFO << "invalid attenuation:" << var;
+      qWarning() << "invalid attenuation:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::attenuation_pct, var) ) {
+   if ( m_cacheOnly ) {
       m_attenuation_pct = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::attenuation_pct, var) ) {
+      m_attenuation_pct = var;
+      signalCacheChange(PropertyNames::Yeast::attenuation_pct, var);
    }
 }
 
 void Yeast::setNotes( const QString& var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::notes, var) ) {
+   if ( m_cacheOnly ) {
       m_notes = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::notes, var) ) {
+      m_notes = var;
+      signalCacheChange(PropertyNames::Yeast::notes, var);
    }
 }
 
 void Yeast::setBestFor( const QString& var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::bestFor, var) ) {
+   if ( m_cacheOnly ) {
       m_bestFor = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::bestFor, var) ) {
+      m_bestFor = var;
+      signalCacheChange(PropertyNames::Yeast::bestFor, var);
    }
 }
 
 void Yeast::setTimesCultured( int var )
 {
    if( var < 0 ) {
-      qWarning() << Q_FUNC_INFO << "invalid times cultured:" << var;
+      qWarning() << "invalid times cultured:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::timesCultured, var) ) {
+   if ( m_cacheOnly ) {
       m_timesCultured = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::timesCultured, var) ) {
+      m_timesCultured = var;
+      signalCacheChange(PropertyNames::Yeast::timesCultured, var);
    }
 }
 
 void Yeast::setMaxReuse( int var )
 {
    if( var < 0 ) {
-      qWarning() << Q_FUNC_INFO << "invalid max reuse:" << var;
+      qWarning() << "invalid max reuse:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::maxReuse, var) ) {
+   if ( m_cacheOnly ) {
       m_maxReuse = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::maxReuse, var) ) {
+      m_maxReuse = var;
+      signalCacheChange(PropertyNames::Yeast::maxReuse, var);
    }
 }
 
 void Yeast::setAddToSecondary( bool var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Yeast::addToSecondary, var) ) {
+   if ( m_cacheOnly ) {
       m_addToSecondary = var;
+   }
+   else if ( setEasy(PropertyNames::Yeast::addToSecondary, var) ) {
+      m_addToSecondary = var;
+      signalCacheChange(PropertyNames::Yeast::addToSecondary, var);
    }
 }
 

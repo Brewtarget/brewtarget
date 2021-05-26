@@ -271,8 +271,12 @@ bool Fermentable::isValidType( const QString& str )
 // Sets
 void Fermentable::setType( Type t )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Fermentable::type, types.at(t)) ) {
+   if ( m_cacheOnly ) {
       m_type = t;
+   }
+   else if ( setEasy(PropertyNames::Fermentable::type, types.at(t)) ) {
+      m_type = t;
+      signalCacheChange(PropertyNames::Fermentable::type, types.at(t));
    }
 }
 
@@ -288,50 +292,78 @@ void Fermentable::setAdditionTime( Fermentable::AdditionTime t )
 
 void Fermentable::setAddAfterBoil( bool b )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Fermentable::addAfterBoil, b) ) {
+   if ( m_cacheOnly ) {
       m_isAfterBoil = b;
+   }
+   else if ( setEasy(PropertyNames::Fermentable::addAfterBoil, b) ) {
+      m_isAfterBoil = b;
+      signalCacheChange(PropertyNames::Fermentable::addAfterBoil, b);
    }
 }
 
 void Fermentable::setOrigin( const QString& str )
 {
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::origin, str) ) {
+   if ( m_cacheOnly ) {
       m_origin = str;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::origin, str) ) {
+      m_origin = str;
+      signalCacheChange( PropertyNames::Fermentable::origin, str);
    }
 }
 
 void Fermentable::setSupplier( const QString& str)
 {
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::supplier, str) ) {
+   if ( m_cacheOnly ) {
       m_supplier = str;
+   }
+   else if ( setEasy(PropertyNames::Fermentable::supplier, str) ) {
+      m_supplier = str;
+      signalCacheChange(PropertyNames::Fermentable::supplier, str);
    }
 }
 
 void Fermentable::setNotes( const QString& str )
 {
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::notes, str) ) {
+   if ( m_cacheOnly ) {
       m_notes = str;
+   }
+   else if ( setEasy(PropertyNames::Fermentable::notes, str) ) {
+      m_notes = str;
+      signalCacheChange(PropertyNames::Fermentable::notes, str);
    }
 }
 
 void Fermentable::setRecommendMash( bool b )
 {
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::recommendMash, b) ) {
+   if ( m_cacheOnly ) {
       m_recommendMash = b;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::recommendMash, b) ) {
+      m_recommendMash = b;
+      signalCacheChange( PropertyNames::Fermentable::recommendMash, b);
    }
 }
 
 void Fermentable::setIsMashed(bool var)
 {
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::isMashed, var) ) {
+   if ( m_cacheOnly ) {
       m_isMashed = var;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::isMashed, var) ) {
+      m_isMashed = var;
+      signalCacheChange( PropertyNames::Fermentable::isMashed, var);
    }
 }
 
 void Fermentable::setIbuGalPerLb( double num )
 {
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::ibuGalPerLb, num) ) {
+   if ( m_cacheOnly ) {
       m_ibuGalPerLb = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::ibuGalPerLb, num) ) {
+      m_ibuGalPerLb = num;
+      signalCacheChange( PropertyNames::Fermentable::ibuGalPerLb, num);
    }
 }
 
@@ -349,13 +381,16 @@ double Fermentable::equivSucrose_kg() const
 void Fermentable::setAmount_kg( double num )
 {
    if( num < 0.0 ) {
-      qWarning() << QString("Fermentable: negative amount: %1").arg(num);
+      qWarning() << "Fermentable: negative amount:" << num;
       return;
    }
 
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::amount_kg, num) ) {
-      qInfo() << Q_FUNC_INFO << "updating cache:" << num;
+   if ( m_cacheOnly ) {
       m_amountKg = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::amount_kg, num) ) {
+      m_amountKg = num;
+      signalCacheChange( PropertyNames::Fermentable::amount_kg, num);
    }
 }
 
@@ -363,7 +398,7 @@ void Fermentable::setAmount_kg( double num )
 void Fermentable::setInventoryAmount( double num )
 {
    if( num < 0.0 ) {
-      qWarning() << QString("Fermentable: negative inventory: %1").arg(num);
+      qWarning() << "Fermentable: negative inventory:" << num;
       return;
    }
 
@@ -378,7 +413,7 @@ void Fermentable::setInventoryAmount( double num )
 void Fermentable::setInventoryId( int key )
 {
    if( key < 1 ) {
-      qWarning() << QString("Fermentable: bad inventory id: %1").arg(key);
+      qWarning() << "Fermentable: bad inventory id:" << key;
       return;
    }
    m_inventory_id = key;
@@ -402,84 +437,106 @@ int Fermentable::inventoryId()
 
 void Fermentable::setYield_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 ) {
-      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::yield_pct, num) ) {
-         m_yieldPct = num;
-      }
+   if ( num < 0.0 || num > 100.0 ) {
+      qWarning() << "Fermentable: 0 < yield < 100:" << num;
+      return;
    }
-   else {
-      qWarning() << QString("Fermentable: 0 < yield < 100: %1").arg(num);
+
+   if ( m_cacheOnly ) {
+      m_yieldPct = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::yield_pct, num) ) {
+      m_yieldPct = num;
+      signalCacheChange( PropertyNames::Fermentable::yield_pct, num);
    }
 }
 
 void Fermentable::setColor_srm( double num )
 {
    if( num < 0.0 ) {
-      qWarning() << QString("Fermentable: negative color: %1").arg(num);
+      qWarning() << "Fermentable: negative color:" << num;
       return;
    }
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::color_srm, num) ) {
+   if ( m_cacheOnly ) {
       m_colorSrm = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::color_srm, num) ) {
+      m_colorSrm = num;
+      signalCacheChange( PropertyNames::Fermentable::color_srm, num);
    }
 }
 
 void Fermentable::setCoarseFineDiff_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 ) {
-      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::coarseFineDiff_pct, num) ) {
-         m_coarseFineDiff = num;
-      }
+   if ( num < 0.0 || num > 100.0 ) {
+      qWarning() << "Fermentable: 0 < coarsefinediff < 100:" << num;
+      return;
    }
-   else {
-      qWarning() << QString("Fermentable: 0 < coarsefinediff < 100: %1").arg(num);
+   if ( m_cacheOnly ) {
+      m_coarseFineDiff = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::coarseFineDiff_pct, num) ) {
+      m_coarseFineDiff = num;
+      signalCacheChange( PropertyNames::Fermentable::coarseFineDiff_pct, num);
    }
 }
 
 void Fermentable::setMoisture_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 ) {
-      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::moisture_pct, num) ) {
-         m_moisturePct = num;
-      }
+   if ( num < 0.0 || num > 100.0 ) {
+      qWarning() << "Fermentable: 0 < moisture < 100:" << num;
+      return;
    }
-   else {
-      qWarning() << QString("Fermentable: 0 < moisture < 100: %1").arg(num);
+   if ( m_cacheOnly ) {
+      m_moisturePct = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::moisture_pct, num) ) {
+      m_moisturePct = num;
+      signalCacheChange( PropertyNames::Fermentable::moisture_pct, num);
    }
 }
 
 void Fermentable::setDiastaticPower_lintner( double num )
 {
-   if( num < 0.0 )
-   {
-      qWarning() << QString("Fermentable: negative DP: %1").arg(num);
+   if( num < 0.0 ) {
+      qWarning() << "Fermentable: negative DP:" << num;
       return;
    }
-   if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::diastaticPower_lintner, num) ) {
+   if ( m_cacheOnly ) {
       m_diastaticPower = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::diastaticPower_lintner, num) ) {
+      m_diastaticPower = num;
+      signalCacheChange( PropertyNames::Fermentable::diastaticPower_lintner, num);
    }
 }
 
 void Fermentable::setProtein_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 ) {
-      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::protein_pct, num) ) {
-         m_proteinPct = num;
-      }
+   if ( num < 0.0 || num > 100.0 ) {
+      qWarning() << "Fermentable: 0 < protein < 100:" << num;
+      return;
    }
-   else {
-      qWarning() << QString("Fermentable: 0 < protein < 100: %1").arg(num);
+   if ( m_cacheOnly ) {
+      m_proteinPct = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::protein_pct, num) ) {
+      m_proteinPct = num;
+      signalCacheChange( PropertyNames::Fermentable::protein_pct, num);
    }
 }
 
 void Fermentable::setMaxInBatch_pct( double num )
 {
-   if( num >= 0.0 && num <= 100.0 ) {
-      if ( m_cacheOnly || setEasy( PropertyNames::Fermentable::maxInBatch_pct, num) ) {
-         m_maxInBatchPct = num;
-      }
-   }
-   else {
+   if ( num < 0.0 || num > 100.0 ) {
       qWarning() << QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num);
+   }
+   if ( m_cacheOnly ) {
+      m_maxInBatchPct = num;
+   }
+   else if ( setEasy( PropertyNames::Fermentable::maxInBatch_pct, num) ) {
+      m_maxInBatchPct = num;
+      signalCacheChange( PropertyNames::Fermentable::maxInBatch_pct, num);
    }
 }
 

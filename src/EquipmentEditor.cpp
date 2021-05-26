@@ -221,27 +221,48 @@ void EquipmentEditor::save()
          return;
    }
 
-   obsEquip->setName( lineEdit_name->text(), obsEquip->cacheOnly() );
+   // this is one idea for handling how clones work. It is a very brute force
+   // idea, and I am really not sold on it yet?
+   QString name           = lineEdit_name->text();
+   double boil_size       = lineEdit_boilSize->toSI();
+   double batch_size      = lineEdit_batchSize->toSI();
+   double tun_volume      = lineEdit_tunVolume->toSI();
+   double tun_weight      = lineEdit_tunWeight->toSI() ;
+   double tun_spec_heat   = lineEdit_tunSpecificHeat->toSI();
+   double boil_time       = lineEdit_boilTime->toSI();
+   double evap_rate_lhr   = lineEdit_evaporationRate->toSI();
+   double evap_rate_pct   = evap_rate_lhr/batch_size * 100.0;
+   double top_up_kettle   = lineEdit_topUpKettle->toSI();
+   double top_up_water    = lineEdit_topUpWater->toSI();
+   double trub_chill_loss = lineEdit_trubChillerLoss->toSI();
+   double lauter_deadspc  = lineEdit_lauterDeadspace->toSI();
+   double boiling_pnt     = lineEdit_boilingPoint->toSI();
+   double hop_utilization = lineEdit_hopUtilization->toSI();
+   QString notes          = textEdit_notes->toPlainText();
+   bool calc_boil_vol     = checkBox_calcBoilVolume->checkState() == Qt::Checked;
 
-   obsEquip->setBoilSize_l( lineEdit_boilSize->toSI() );
-   obsEquip->setBatchSize_l( lineEdit_batchSize->toSI() );
-   obsEquip->setTunVolume_l( lineEdit_tunVolume->toSI() );
+   obsEquip->setName( name, obsEquip->cacheOnly() );
 
-   obsEquip->setTunWeight_kg( lineEdit_tunWeight->toSI() );
+   obsEquip->setBoilSize_l(boil_size);
+   obsEquip->setBatchSize_l(batch_size);
+   obsEquip->setTunVolume_l(tun_volume);
 
-   obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->toSI() );
-   obsEquip->setBoilTime_min( lineEdit_boilTime->toSI());
-   obsEquip->setEvapRate_lHr(  lineEdit_evaporationRate->toSI() );
-   obsEquip->setTopUpKettle_l( lineEdit_topUpKettle->toSI() );
-   obsEquip->setTopUpWater_l(  lineEdit_topUpWater->toSI() );
-   obsEquip->setTrubChillerLoss_l( lineEdit_trubChillerLoss->toSI() );
-   obsEquip->setLauterDeadspace_l( lineEdit_lauterDeadspace->toSI() );
+   obsEquip->setTunWeight_kg(tun_weight);
+   obsEquip->setTunSpecificHeat_calGC(tun_spec_heat);
+   obsEquip->setBoilTime_min(boil_time);
+
+   obsEquip->setEvapRate_lHr(evap_rate_lhr);
+   obsEquip->setEvapRate_pctHr(evap_rate_pct);
+   obsEquip->setTopUpKettle_l(top_up_kettle);
+   obsEquip->setTopUpWater_l(top_up_water);
+   obsEquip->setTrubChillerLoss_l(trub_chill_loss);
+   obsEquip->setLauterDeadspace_l(lauter_deadspc);
    obsEquip->setGrainAbsorption_LKg( ga_LKg );
-   obsEquip->setBoilingPoint_c( lineEdit_boilingPoint->toSI() );
-   obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->toSI() );
+   obsEquip->setBoilingPoint_c(boiling_pnt);
+   obsEquip->setHopUtilization_pct(hop_utilization);
 
-   obsEquip->setNotes(textEdit_notes->toPlainText());
-   obsEquip->setCalcBoilVolume(checkBox_calcBoilVolume->checkState() == Qt::Checked);
+   obsEquip->setNotes(notes);
+   obsEquip->setCalcBoilVolume(calc_boil_vol);
 
    if ( obsEquip->cacheOnly() ) {
       obsEquip->insertInDatabase();
