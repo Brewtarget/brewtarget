@@ -100,84 +100,126 @@ void MashStep::setInfuseTemp_c(double var )
       m_infuseTemp_c = var;
    }
    else if ( m_stepNumber == 1 ) {
+      m_infuseTemp_c = var;
       setEasy(PropertyNames::MashStep::infuseTemp_c, var, true, true);
    }
-   else {
-      setEasy(PropertyNames::MashStep::infuseTemp_c, var);
+   else if ( setEasy(PropertyNames::MashStep::infuseTemp_c, var) ) {
+      m_infuseTemp_c = var;
+      signalCacheChange(PropertyNames::MashStep::infuseTemp_c,var);
+
    }
 }
 
 void MashStep::setType( Type t )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::type, m_typeStr) ) {
+   if ( t >= types.size() ) {
+      qWarning() << "MashStep: invalid type:" << t;
+      return;
+   }
+
+   if ( m_cacheOnly ) {
       m_type = t;
       m_typeStr = types.at(t);
+   }
+   else if ( setEasy(PropertyNames::MashStep::type, m_typeStr) ) {
+      m_type = t;
+      m_typeStr = types.at(t);
+      signalCacheChange(PropertyNames::MashStep::type, m_typeStr);
    }
 }
 
 void MashStep::setInfuseAmount_l( double var )
 {
    if( var < 0.0 ) {
-      qWarning() << Q_FUNC_INFO << "number cannot be negative:" << var;
+      qWarning() << "Infuse amount cannot be negative:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::infuseAmount_l, var) ) {
+   if ( m_cacheOnly ) {
       m_infuseAmount_l = var;
+   }
+   else if ( setEasy(PropertyNames::MashStep::infuseAmount_l, var) ) {
+      m_infuseAmount_l = var;
+      signalCacheChange(PropertyNames::MashStep::infuseAmount_l, var);
    }
 }
 
 void MashStep::setStepTemp_c( double var )
 {
    if( var < PhysicalConstants::absoluteZero ) {
-      qWarning() << Q_FUNC_INFO << "temp below absolute zero:" << var;
+      qWarning() << "Step temp below absolute zero:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::stepTemp_c, var) ) {
+   if ( m_cacheOnly ) {
       m_stepTemp_c = var;
+   }
+   else if ( setEasy(PropertyNames::MashStep::stepTemp_c, var) ) {
+      m_stepTemp_c = var;
+      signalCacheChange(PropertyNames::MashStep::stepTemp_c, var);
    }
 }
 
 void MashStep::setStepTime_min( double var )
 {
    if( var < 0.0 ) {
-      qWarning() << Q_FUNC_INFO << "step time cannot be negative:" << var;
+      qWarning() << "step time cannot be negative:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::stepTime_min, var) ) {
+   if ( m_cacheOnly ) {
       m_stepTime_min = var;
+   }
+   else if ( setEasy(PropertyNames::MashStep::stepTime_min, var) ) {
+      m_stepTime_min = var;
+      signalCacheChange(PropertyNames::MashStep::stepTime_min, var);
    }
 }
 
 void MashStep::setRampTime_min( double var )
 {
    if( var < 0.0 ) {
-      qWarning() << Q_FUNC_INFO << "ramp time cannot be negative:" << var;
+      qWarning() << "ramp time cannot be negative:" << var;
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::rampTime_min, var) ) {
+   if ( m_cacheOnly ) {
       m_rampTime_min = var;
+   }
+   else if ( setEasy(PropertyNames::MashStep::rampTime_min, var) ) {
+      m_rampTime_min = var;
+      signalCacheChange(PropertyNames::MashStep::rampTime_min, var);
    }
 }
 
 void MashStep::setEndTemp_c( double var )
 {
    if( var < PhysicalConstants::absoluteZero ) {
-      qWarning() << Q_FUNC_INFO << "temp below absolute zero:" << var;
+      qWarning() << "End temp below absolute zero:" << var;
       return;
    }
-   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::endTemp_c, var) ) {
+   if ( m_cacheOnly ) {
       m_endTemp_c = var;
+   }
+   else if ( setEasy(PropertyNames::MashStep::endTemp_c, var) ) {
+      m_endTemp_c = var;
+      signalCacheChange(PropertyNames::MashStep::endTemp_c, var);
    }
 }
 
 void MashStep::setDecoctionAmount_l(double var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::MashStep::decoctionAmount_l, var) ) {
+   if ( var < 0.0 ) {
+      qWarning() << "Decoction amount cannot be negative";
+      return;
+   }
+
+   if ( m_cacheOnly ) {
       m_decoctionAmount_l = var;
+   }
+   else if ( setEasy(PropertyNames::MashStep::decoctionAmount_l, var) ) {
+      m_decoctionAmount_l = var;
+      signalCacheChange(PropertyNames::MashStep::decoctionAmount_l, var);
    }
 }
 

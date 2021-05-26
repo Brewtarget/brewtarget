@@ -29,6 +29,7 @@
 #include <QDomNode>
 #include <QMetaProperty>
 
+#include "NamedEntity.h"
 #include "brewtarget.h"
 #include "database.h"
 
@@ -363,6 +364,12 @@ bool NamedEntity::setEasy(QString prop_name, QVariant value, bool notify, bool u
    }
 }
 
+void NamedEntity::signalCacheChange(QString propName, QVariant value)
+{
+   int idx = this->metaObject()->indexOfProperty(propName.toUtf8().data());
+   QMetaProperty mProp = this->metaObject()->property(idx);
+   emit changed(mProp,value);
+}
 
 QVariant NamedEntity::get( const QString& col_name ) const
 {

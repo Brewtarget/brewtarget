@@ -399,11 +399,9 @@ public:
    //! And lets not even get started on mash steps, am I right?
    Recipe* getParentRecipe( MashStep const* step );
 
-   //! These three items don't have inrec tables
-   Recipe* getParentRecipe(Equipment const* kit );
-   Recipe* getParentRecipe(Style const *style);
-   Recipe* getParentRecipe(Mash const *mash);
-   Recipe* getRecipeFromForeignKey(QString keyName, int key);
+   //! For things without in_recipe tables
+   QString findRecipeFromForeignKey(TableSchema* tbl, NamedEntity const *obj);
+   QString findRecipeFromInRec(TableSchema* tbl, TableSchema* inrec, NamedEntity const *obj);
 
    //! Interchange the step orders of the two steps. Must be in same mash.
    void swapMashStepOrder(MashStep* m1, MashStep* m2);

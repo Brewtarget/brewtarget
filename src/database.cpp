@@ -64,6 +64,7 @@
 #include "model/Mash.h"
 #include "model/MashStep.h"
 #include "model/Misc.h"
+#include "model/NamedEntity.h"
 #include "model/Recipe.h"
 #include "model/Style.h"
 #include "model/Water.h"
@@ -1059,73 +1060,64 @@ void Database::removeFrom( Mash* mash, MashStep* step )
 }
 
 
-// Somethings don't have _in_recipe tables. Equipment, Mash and Style don't do
-// in_recipe table.
-Recipe* Database::getParentRecipe(Equipment const * kit)
-{
-   return getRecipeFromForeignKey(kpropEquipmentId,kit->key());
-}
-
-Recipe* Database::getParentRecipe(Mash const * mash)
-{
-   return getRecipeFromForeignKey(kpropMashId,mash->key());
-}
-
-Recipe* Database::getParentRecipe(Style const * style)
-{
-   return getRecipeFromForeignKey(kpropStyleId,style->key());
-}
-
-// this lets me do those quickly
-Recipe* Database::getRecipeFromForeignKey(QString keyName, int key)
+// equipment, style and mashes don't have in_recipe tables. This does those.
+QString Database::findRecipeFromForeignKey(TableSchema* tbl, NamedEntity const *obj)
 {
    TableSchema* recTable = this->dbDefn->table( Brewtarget::RECTABLE );
-   QSqlQuery q(sqlDatabase());
    QString fKey;
 
-   QString select = QString("SELECT %1 FROM %2 WHERE %3 = %4")
+   if ( obj->table() == Brewtarget::EQUIPTABLE ) fKey = kpropEquipmentId;
+   if ( obj->table() == Brewtarget::MASHTABLE )  fKey = kpropMashId;
+   if ( obj->table() == Brewtarget::STYLETABLE)  fKey = kpropStyleId;
+
+   if ( ! fKey.isEmpty() ) {
+      return QString("SELECT %1 AS id FROM %2 WHERE %3 = %4")
                         .arg(recTable->keyName())
                         .arg(recTable->tableName())
-                        .arg(keyName)
-                        .arg(key);
+                        .arg(recTable->foreignKeyToColumn(fKey))
+                        .arg(obj->key());
+   }
+   else {
+      qInfo() << Q_FUNC_INFO << "couldn't find a key for" << obj->name();
+   }
+   return QString();
+}
 
-   Recipe* parent = nullptr;
-   if (! q.exec(select) ) {
-      throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
-         .arg(q.lastQuery()).arg(q.lastError().text());
-   }
-   if ( q.next() ) {
-      int pKey = q.record().value(recTable->keyName()).toInt();
-      parent = this->allRecipes[pKey];
-   }
-   return parent;
+QString Database::findRecipeFromInRec(TableSchema* tbl, TableSchema* inrec, NamedEntity const *obj)
+{
+   return QString("SELECT %1 AS id FROM %2 WHERE %3=%4")
+             .arg(inrec->recipeIndexName())
+             .arg(inrec->tableName())
+             .arg(inrec->inRecIndexName())
+             .arg(obj->key());
 }
 
 // this handles all things with in_recipe tables (fermentables, hops, miscs, waters and yeasts)
-Recipe* Database::getParentRecipe(NamedEntity const * ing) {
-
-   QMetaObject const * meta = ing->metaObject();
-   TableSchema* table = this->dbDefn->table( this->dbDefn->classNameToTable(meta->className()) );
+Recipe* Database::getParentRecipe(NamedEntity const * ing)
+{
+   TableSchema* table = this->dbDefn->table( ing->table() );
    TableSchema* inrec = this->dbDefn->table( table->inRecTable() );
+   QString select;
+
+   if ( inrec == nullptr ) {
+      select = findRecipeFromForeignKey(table, ing);
+   }
+   else {
+      select = findRecipeFromInRec(table, inrec, ing);
+   }
+   
    Recipe * parent = nullptr;
 
    QSqlQuery q(sqlDatabase());
-   if ( inrec == nullptr ) {
-      return parent;
-   }
-   
-   QString select = QString("SELECT %4 from %1 WHERE %2=%3")
-                        .arg(inrec->tableName())
-                        .arg(inrec->inRecIndexName())
-                        .arg(ing->key())
-                        .arg(inrec->recipeIndexName());
    qDebug() << Q_FUNC_INFO << "NamedEntity in recipe search:" << select;
+
    if (! q.exec(select) ) {
       throw QString("Couldn't execute ingredient in recipe search: Query: %1 error: %2")
-         .arg(q.lastQuery()).arg(q.lastError().text());
+               .arg(q.lastQuery())
+               .arg(q.lastError().text());
    }
    if ( q.next() ) {
-      int key = q.record().value(inrec->recipeIndexName()).toInt();
+      int key = q.record().value("id").toInt();
       parent = this->allRecipes[key];
    }
 
@@ -3099,7 +3091,7 @@ bool Database::modifyEntry(NamedEntity* object, QString propName, QVariant value
       neClone = object;
    }
 
-   updateEntry( neClone, propName, value, notify );
+   updateEntry( neClone, propName, value, false );
 
    return noclone;
 }

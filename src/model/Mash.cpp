@@ -86,36 +86,56 @@ Mash::Mash(TableSchema* table, QSqlRecord rec, int t_key)
 
 void Mash::setGrainTemp_c( double var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Mash::grainTemp_c, var) ) {
+   if ( m_cacheOnly ) {
       m_grainTemp_c = var;
+   }
+   else if ( setEasy(PropertyNames::Mash::grainTemp_c, var) ) {
+      m_grainTemp_c = var;
+      signalCacheChange(PropertyNames::Mash::grainTemp_c, var);
    }
 }
 
 void Mash::setNotes( const QString& var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Mash::notes, var) ) {
+   if ( m_cacheOnly ) {
       m_notes = var;
+   }
+   else if ( setEasy(PropertyNames::Mash::notes, var) ) {
+      m_notes = var;
+      signalCacheChange(PropertyNames::Mash::notes, var);
    }
 }
 
 void Mash::setTunTemp_c( double var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Mash::tunTemp_c, var) ) {
+   if ( m_cacheOnly ) {
       m_tunTemp_c = var;
+   }
+   else if ( setEasy(PropertyNames::Mash::tunTemp_c, var) ) {
+      m_tunTemp_c = var;
+      signalCacheChange(PropertyNames::Mash::tunTemp_c, var);
    }
 }
 
 void Mash::setSpargeTemp_c( double var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Mash::spargeTemp_c, var) ) {
+   if ( m_cacheOnly ) {
       m_spargeTemp_c = var;
+   }
+   else if ( setEasy(PropertyNames::Mash::spargeTemp_c, var) ) {
+      m_spargeTemp_c = var;
+      signalCacheChange(PropertyNames::Mash::spargeTemp_c, var);
    }
 }
 
 void Mash::setEquipAdjust( bool var )
 {
-   if ( m_cacheOnly || setEasy(PropertyNames::Mash::equipAdjust, var) ) {
+   if ( m_cacheOnly ) {
       m_equipAdjust = var;
+   }
+   else if ( setEasy(PropertyNames::Mash::equipAdjust, var) ) {
+      m_equipAdjust = var;
+      signalCacheChange(PropertyNames::Mash::equipAdjust, var);
    }
 }
 
@@ -125,8 +145,12 @@ void Mash::setPh( double var )
       qWarning() << QString("Mash: 0 < pH < 14: %1").arg(var);
       return;
    }
-   if ( m_cacheOnly || setEasy(PropertyNames::Mash::ph, var) ) {
+   if ( m_cacheOnly ) {
       m_ph = var;
+   }
+   else if ( setEasy(PropertyNames::Mash::ph, var) ) {
+      m_ph = var;
+      signalCacheChange(PropertyNames::Mash::ph, var);
    }
 }
 
@@ -138,8 +162,12 @@ void Mash::setTunWeight_kg( double var )
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Mash::tunWeight_kg, var) ) {
+   if ( m_cacheOnly ) {
       m_tunWeight_kg = var;
+   }
+   else if ( setEasy(PropertyNames::Mash::tunWeight_kg, var) ) {
+      m_tunWeight_kg = var;
+      signalCacheChange(PropertyNames::Mash::tunWeight_kg, var);
    }
 }
 
@@ -150,8 +178,12 @@ void Mash::setTunSpecificHeat_calGC( double var )
       return;
    }
 
-   if ( m_cacheOnly || setEasy(PropertyNames::Mash::tunSpecificHeat_calGC, var) ) {
+   if ( m_cacheOnly ) {
       m_tunSpecificHeat_calGC = var;
+   }
+   else if ( setEasy(PropertyNames::Mash::tunSpecificHeat_calGC, var) ) {
+      m_tunSpecificHeat_calGC = var;
+      signalCacheChange(PropertyNames::Mash::tunSpecificHeat_calGC, var);
    }
 }
 

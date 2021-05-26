@@ -272,6 +272,7 @@ protected:
    QVariant getInventory() const;
 
    QVariantMap getColumnValueMap() const;
+   void signalCacheChange(QString propName, QVariant value);
 
 private:
   mutable QString m_folder;
