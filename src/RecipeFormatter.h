@@ -32,6 +32,7 @@ class RecipeFormatter;
 #include <QDialog>
 #include <QFile>
 #include "model/Recipe.h"
+#include "PrintAndPreviewDialog.h"
 
 /*!
  * \class RecipeFormatter
@@ -42,6 +43,8 @@ class RecipeFormatter;
 class RecipeFormatter : public QObject
 {
    Q_OBJECT
+
+   friend class PrintAndPreviewDialog;
 public:
 
    enum { PRINT, PREVIEW, HTML, NUMACTIONS };
@@ -94,12 +97,14 @@ private:
    QString buildFermentableTableTxt();
    QString buildHopsTableHtml();
    QString buildHopsTableTxt();
+   QList<QStringList> buildHopsList();
    QString buildYeastTableHtml();
    QString buildYeastTableTxt();
    QString buildMashTableHtml();
    QString buildMashTableTxt();
    QString buildMiscTableHtml();
    QString buildMiscTableTxt();
+   QList<QStringList> buildMiscList();
    QString buildNotesHtml();
    QString buildInstructionTableHtml();
    QString buildInstructionTableTxt();

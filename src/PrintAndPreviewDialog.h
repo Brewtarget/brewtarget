@@ -33,6 +33,9 @@
 #include "model/Recipe.h"
 #include "BrewDayWidget.h" //THE Brewday-printout NEEDS TO MOVE TO IT'S OWN CLASS
 #include "database.h"
+#include "btpage/BtPage.h"
+#include "btpage/PageImage.h"
+
 
 /*!
  * \class PrintAndPreviewDialog
@@ -46,6 +49,8 @@ class PrintAndPreviewDialog : public QDialog, private Ui::BtPrintAndPreview
 public:
    PrintAndPreviewDialog( MainWindow *parent );
    virtual ~PrintAndPreviewDialog() {}
+
+   virtual void showEvent(QShowEvent *e);
 
    QPrintPreviewWidget* previewWidget;
 private:
@@ -63,10 +68,20 @@ private:
    void showPrintDialog();
    void collectRecipe();
 
+   /* \!brief
+    * renderPageTable will draw a table of the contents in data parameter onto the painter object.
+    * Paramters:
+    *  painter, QPainter pointer to draw on.
+    *  startingPoint, QPoint with X & Y coordinates to start the draw from.
+    *  header, the header for the data
+    *  data, QList<StringList> containing the rows and columns of data to render onto the page.
+    *  maxwidth, defailts to -1 witch will fill the page width.
+    */
+   void renderPageTable(QPainter * painter, QPoint startingPoint, PageTable *tableObject, int maxwidth);
+
    MainWindow *_parent;
    Recipe *selectedRecipe;
    RecipeFormatter* recipeFormatter;
-   QTextBrowser* doc;
    QPrinter * _printer = nullptr;
    _outputSelection outputSelection = PAPER;
    QMap<QString, QPageSize> PageSizeMap;
@@ -78,6 +93,5 @@ public slots:
    void selectedPrinterChanged(int index);
    void selectedPaperChanged(int index);
    void resetAndClose(bool checked);
-
 };
 #endif /* _PRINTANDPREVIEW_H */
