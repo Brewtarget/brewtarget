@@ -619,6 +619,7 @@ QString RecipeFormatter::getToolTip(Water* water)
    return header + body;
 
 }
+
 void RecipeFormatter::toTextClipboard()
 {
    QApplication::clipboard()->setText(getTextFormat());
@@ -1051,6 +1052,46 @@ QString RecipeFormatter::buildHopsTableTxt()
    return ret;
 }
 
+/*
+ * \!brief
+ * RecipeFormatter::buildHopsList()
+ * This will return a List of strings where the first row is the headers for each column.
+ * \return QList<QStringList> of Hops.
+*/
+QList<QStringList> RecipeFormatter::buildHopsList()
+{
+   QList<QStringList> ret;
+
+   if( rec == nullptr )
+      return QList<QStringList>();
+
+   QList<Hop*> hops = sortHopsByTime(rec);
+   if( hops.count() > 0 )
+   {
+      QStringList row;
+
+      //Add the Headers for each column.
+      row << tr("Name") << tr("Alpha") << tr("Amount") << tr("Use") << tr("Time") << tr("Form") << tr("IBU");
+      ret.append(row);
+
+      //Generate the Rows for each hop.
+      foreach(Hop* hop, hops)
+      {
+         row.clear();
+         row << hop->name()
+             << QString("%1%").arg(Brewtarget::displayAmount(hop->alpha_pct(), nullptr, 1))
+             << Brewtarget::displayAmount(hop->amount_kg(), "hopTable", "amount_kg", &Units::kilograms)
+             << hop->useStringTr()
+             << Brewtarget::displayAmount(hop->time_min(), "hopTable", PropertyNames::Hop::time_min, &Units::minutes)
+             << hop->formStringTr()
+             << QString("%1").arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), nullptr, 1));
+
+         ret.append(row);
+      }
+   }
+   return ret;
+}
+
 QString RecipeFormatter::buildMiscTableHtml()
 {
    if( rec == nullptr )
@@ -1137,6 +1178,45 @@ QString RecipeFormatter::buildMiscTableTxt()
 
       for( i = 0; i < size+1; ++i )
          ret += names.at(i) + types.at(i) + uses.at(i) + amounts.at(i) + times.at(i) + "\n";
+   }
+   return ret;
+}
+
+/* \!brief
+ * buildMiscList
+ * collects all the miscs from the recipe an returns a list.
+ * \return QList<QStringList>
+ */
+QList<QStringList> RecipeFormatter::buildMiscList()
+{
+   QList<QStringList> ret;
+   Unit const * kindOf;
+   QList<Misc*> miscs = (rec != nullptr) ? rec->miscs() : QList<Misc*>();
+   //Return empty list if there is no data.
+   if( rec == nullptr || miscs.size() == 0 )
+      return QList<QStringList>();
+
+   QStringList row;
+   //Adding Columnheaders
+   row.append(tr("Name"));
+   row.append(tr("Type"));
+   row.append(tr("Use"));
+   row.append(tr("Amount"));
+   row.append(tr("Time"));
+   ret.append(row);
+   row.clear();
+
+   //Adding Tabledata
+   foreach(Misc *misc, miscs)
+   {
+      kindOf = misc->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters);
+      row.append(misc->name());
+      row.append(misc->typeStringTr());
+      row.append(misc->useStringTr());
+      row.append(Brewtarget::displayAmount(misc->amount(), "miscTableModel", "amount_kg", kindOf, 3));
+      row.append(Brewtarget::displayAmount(misc->time(), "miscTableModel", PropertyNames::Misc::time, &Units::minutes));
+      ret.append(row);
+      row.clear();
    }
    return ret;
 }

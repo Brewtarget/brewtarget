@@ -89,6 +89,12 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtTreeItem.cpp
     ${SRCDIR}/BtTreeModel.cpp
     ${SRCDIR}/BtTreeView.cpp
+    ${SRCDIR}/btpage/BtPage.cpp
+    ${SRCDIR}/btpage/PageChildObject.cpp
+    ${SRCDIR}/btpage/PageImage.cpp
+    ${SRCDIR}/btpage/PageTable.cpp
+    ${SRCDIR}/btpage/PageTableColumn.cpp
+    ${SRCDIR}/btpage/PageText.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/CustomComboBox.cpp
@@ -348,6 +354,12 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
+    ${SRCDIR}/btpage/BtPage.h
+    ${SRCDIR}/btpage/PageChildObject.h
+    ${SRCDIR}/btpage/PageImage.h
+    ${SRCDIR}/btpage/PageTable.h
+    ${SRCDIR}/btpage/PageTableColumn.h
+    ${SRCDIR}/btpage/PageText.h
 )
 
 SET( FILES_TO_TRANSLATE

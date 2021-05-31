@@ -24,25 +24,32 @@
 #include <QMessageBox>
 #include <QPrinterInfo>
 #include <QList>
+#include <QSizePolicy>
+
 
 
 
 PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
-   : QDialog(parent), _parent(parent)
+   : QDialog(parent)
 {
    setupUi(this);
+
+   _parent = parent;
 
    _printer = new QPrinter();
    previewWidget = new QPrintPreviewWidget( _printer , this);
    recipeFormatter = new RecipeFormatter(this);
-   doc = new QTextBrowser(this);
 
    collectRecipe();
    collectPrinterInfo();
    setupConnections();
    setPrintingControls();
    setupPreviewWidget();
+}
 
+void PrintAndPreviewDialog::showEvent(QShowEvent *e) {
+   setVisible(true);
+   previewWidget->updatePreview();
 }
 
 void PrintAndPreviewDialog::collectRecipe() {
@@ -113,7 +120,7 @@ void PrintAndPreviewDialog::selectedPaperChanged(int index) {
    QString key(comboBox_PaperFormatSelector->currentText());
    QPageSize page(PageSizeMap.value(key));
    _printer->setPageSize(page);
-   previewWidget->updatePreview();
+   //previewWidget->updatePreview();
 }
 
 void PrintAndPreviewDialog::selectedPrinterChanged(int index) {
@@ -157,17 +164,32 @@ void PrintAndPreviewDialog::setupPreviewWidget() {
 }
 
 void PrintAndPreviewDialog::printDocument(QPrinter * printer){
-   /*QPainter painter(printer);
-   painter.setFont(QFont("Arial", 32, QFont::Bold));
-   painter.drawText(20,60,QString("PAGE 1, PAGE 1, PAGE 1, PAGE 1"));
-   printer->newPage();
-   painter.setFont(QFont("Arial", 32, QFont::Bold));
-   painter.drawText(20,60,QString("PAGE 2, PAGE 2, PAGE 2, PAGE 2"));
-   painter.end();
-   */
-  recipeFormatter->setRecipe(selectedRecipe);
-  doc->setVisible(false);
-  doc->setHtml(recipeFormatter->getHTMLFormat());
-  doc->print(printer);
+   if ( _parent->currentRecipe() == nullptr) return;
+   recipeFormatter->setRecipe(_parent->currentRecipe());
 
+   // Create the HopsTable
+   PageTable *hopsTable = new PageTable (QString("Hops"), recipeFormatter->buildHopsList());
+   hopsTable->setColumnAlignment(1, Qt::AlignRight);
+   hopsTable->position = QPoint(20, 80);
+
+   // Create the MiscTable
+   PageTable *miscTable = new PageTable ("Misc", recipeFormatter->buildMiscList());
+   miscTable->position = QPoint(20, 300);
+
+   BtPage page(printer);
+   PageText *recipeName = new PageText {
+      _parent->currentRecipe()->name(),
+      QFont("Arial", 18, QFont::Bold)
+   };
+   recipeName->position = QPoint(20,30);
+
+   PageImage *img = new PageImage(QPoint(300, 30), QImage("qrc:/image/title.svg"));
+
+   //Adding all tables and Texts to the page.
+   page.addChildObject(recipeName);
+   page.addChildObject(hopsTable);
+   page.addChildObject(miscTable);
+   page.addChildObject(img);
+   //Render the Page onto the painter/printer for preview/printing.
+   page.renderPage();
 }
