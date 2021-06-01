@@ -23,6 +23,8 @@
 #include <QStringList>
 #include <QList>
 #include <QPrinter>
+#include <QRect>
+#include <QMargins>
 #include "PageTable.h"
 #include "PageText.h"
 #include "PageChildObject.h"
@@ -38,11 +40,15 @@ namespace BtPage
       auto addChildObject(T *obj, QPoint position = QPoint()) -> decltype(obj)
       {
          if ( ! position.isNull() ) obj->position = position;
+         obj->setParent(this);
          _children.append(obj);
          return obj;
       }
 
       void renderPage();
+
+      QRect getPageSize();
+      QMargins getPageMargins();
 
    private:
       QPrinter *_printer;

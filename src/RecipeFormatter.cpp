@@ -1526,6 +1526,11 @@ QString RecipeFormatter::buildMashTableTxt()
    return ret;
 }
 
+/* \!brief
+ * buildMashList
+ * collects all the mashsteps from the recipe an returns a list.
+ * \return QList<QStringList>
+ */
 QList<QStringList> RecipeFormatter::buildMashList()
 {
    QList<QStringList> ret = QList<QStringList>();

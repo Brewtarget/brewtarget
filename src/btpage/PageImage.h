@@ -41,6 +41,7 @@ namespace BtPage
          position = pos;
       };
 
+
       PageImage(int x, int y, char *filepath) : PageImage(QPoint(x, y), QImage()) {}
 
       void setImage(QImage image);

@@ -23,15 +23,21 @@
 #include <QObject>
 #include <QFont>
 #include <QRect>
+#include "BtPage.h"
+
 
 namespace BtPage
 {
    enum struct PlacingFlags
    {
-      BELOW = 0X01,
-      ABOVE = 0X02,
-      RIGHTOF = 0X04,
-      LEFTOF = 0X08
+      BELOW = 1,
+      ABOVE = 2,
+      RIGHTOF = 4,
+      LEFTOF = 8,
+      LEFT = 16,
+      RIGHT = 32,
+      TOP = 64,
+      BOTTOM = 128
    };
 
    inline PlacingFlags operator|(PlacingFlags a, PlacingFlags b)
@@ -81,9 +87,28 @@ namespace BtPage
 
          position = QPoint(x, y);
       }
+      /* \!brief
+      Place a PageChildObject on a page relational to the page.
+      PlacingFlags can be stacked together for placement.
+      The object has to be placed on a page object before calling this as the page sizes are needed for the caclulations.
+      i.e.
+      Page * myPage = new Page(QPrinter);
+      PageImage * myObject = myPage.addChildObject( new PageImage(.....));
+      myobject->placeRelationalTo(&other object, PlacingFlags::TOP | PlacingFlags::RIGHT);
 
+      Valid flags for this is:
+         - PlacingFlags::LEFT
+         - PlacingFlags::RIGHT
+         - PlacingFlags::TOP
+         - PlacingFlags::BOTTOM
+         all other Flags will be ignored.
+      */
+      void placeOnPage(PlacingFlags place, int xPadding = 0, int yPadding = 0);
       void setBoundingbox(QRect rect);
       void setBoundingBox(int x, int y, int width, int height);
+      void setParent(Page * parent) { _parent = parent; }
+   private:
+      Page * _parent;
    };
 }
 #endif /* _PAGEOBJECT_H */
