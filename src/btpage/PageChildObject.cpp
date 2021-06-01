@@ -18,3 +18,16 @@
  */
 
 #include "PageChildObject.h"
+namespace BtPage
+{
+
+   void PageChildObject::setBoundingbox(QRect rect)
+   {
+      boundingBox = rect;
+   }
+
+   void PageChildObject::setBoundingBox(int x, int y, int width, int height)
+   {
+      setBoundingbox(QRect(x, y, width, height));
+   }
+}

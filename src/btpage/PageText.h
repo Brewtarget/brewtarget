@@ -22,26 +22,25 @@
 #include <QPainter>
 #include <QString>
 #include <QRectF>
-
-/* \!brief
-* class PageText
-*
-* Page text object that needs to have a Value (text) and a Font (Will default to Application Font if not set.)
-*/
-class PageText : public PageChildObject
+namespace BtPage
 {
+   /* \!brief
+   * class PageText
+   *
+   * Page text object that needs to have a Value (text) and a Font (Will default to Application Font if not set.)
+   */
+   class PageText : public PageChildObject
+   {
 
-public:
-   PageText() {};
-   ~PageText() {};
-   PageText(QString value, QFont font);
-   QString Value;
-   QTextOption Options;
-   const QRectF *boundingRectangle = nullptr;
+   public:
+      PageText(QString value, QFont font);
+      QString Value;
+      QTextOption Options;
+      const QRectF *boundingRectangle = nullptr;
 
-   //Enforced by PageChildObject
-   void render(QPainter *painter);
-   int count();
-};
-
+      //Enforced by PageChildObject
+      void render(QPainter *painter);
+      int count();
+   };
+}
 #endif /* _PAGETEXT_H */

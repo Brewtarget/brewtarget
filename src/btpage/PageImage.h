@@ -19,28 +19,39 @@
 #ifndef _PAGEIMAGE_H
 #define _PAGEIMAGE_H
 #include <QImage>
+#include <QPainter>
+#include <QRect>
+#include <QPoint>
+
 #include "PageChildObject.h"
 
-/* \!brief
+namespace BtPage
+{
+   /* \!brief
  * Class PageImage
  * Class to handle image printout on the BtPage object.
  */
-class PageImage : public PageChildObject
-{
-public:
-   PageImage() {};
-   PageImage(QPoint pos, QImage image) {
-      setImage(image);
-      position = pos;
+   class PageImage : public PageChildObject
+   {
+   public:
+      PageImage(){};
+      PageImage(QPoint pos, QImage image)
+      {
+         setImage(image);
+         position = pos;
+      };
+
+      PageImage(int x, int y, char *filepath) : PageImage(QPoint(x, y), QImage()) {}
+
+      void setImage(QImage image);
+      void setImageSize(int width, int height);
+      void render(QPainter *painter);
+
+      QImage image();
+
+   private:
+      QImage *_image = nullptr;
+      int _width = -1, _height = -1;
    };
-
-   void setImage(QImage image);
-   void render(QPainter *painter);
-
-   QImage image();
-
-private:
-   QImage _image;
-};
-
+}
 #endif /* _PAGEIMAGE */

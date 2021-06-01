@@ -16,21 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BtPage.h"
-
-BtPage::BtPage(QPrinter *printer) {
-   _printer = printer;
-}
-
-void BtPage::renderPage() {
-   QPainter *painter = new QPainter(_printer);
-   foreach(PageChildObject *child, _children) {
-      child->render(painter);
-   }
-   painter->end();
-}
-
-void BtPage::addChildObject(PageChildObject *obj)
+namespace BtPage
 {
-   _children.append(obj);
+
+   Page::Page(QPrinter *printer)
+   {
+      _printer = printer;
+   }
+
+   void Page::renderPage()
+   {
+      QPainter *painter = new QPainter(_printer);
+      foreach (PageChildObject *child, _children)
+      {
+         child->render(painter);
+      }
+      painter->end();
+   }
 }
