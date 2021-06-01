@@ -18,24 +18,29 @@
  */
 
 #include "PageText.h"
+namespace BtPage
+{
 
+   PageText::PageText(QString value, QFont font)
+   {
+      Value = value;
+      Font = font;
+   }
 
-PageText::PageText(QString value, QFont font) {
-   Value = value;
-   Font = font;
-}
+   void PageText::render(QPainter *painter)
+   {
+      QFont old = painter->font();
+      painter->setFont(Font);
+      QFontMetrics fm(Font);
+      if (boundingRectangle == nullptr)
+         boundingRectangle = new QRectF(position.x(), position.y(), fm.horizontalAdvance(Value), fm.height());
+      painter->drawText(*boundingRectangle, Value, Options);
+      painter->drawRect(*boundingRectangle);
+      painter->setFont(old);
+   }
 
-void PageText::render(QPainter * painter) {
-   QFont old = painter->font();
-   painter->setFont(Font);
-   QFontMetrics fm(Font);
-   if (boundingRectangle == nullptr)
-      boundingRectangle = new QRectF(position.x(), position.y(), fm.horizontalAdvance(Value), fm.height());
-   painter->drawText(*boundingRectangle, Value, Options);
-   painter->drawRect(*boundingRectangle);
-   painter->setFont(old);
-}
-
-int PageText::count() {
-   return Value.count();
+   int PageText::count()
+   {
+      return Value.count();
+   }
 }

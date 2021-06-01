@@ -19,36 +19,37 @@
 #ifndef _PAGETABLE_H
 #define _PAGETABLE_H
 
+#include "PageChildObject.h"
+#include "PageText.h"
+#include "PageTableColumn.h"
 #include <QFont>
 #include <QString>
 #include <QStringList>
 #include <QList>
 #include <QPainter>
 
-#include "PageChildObject.h"
-#include "PageText.h"
-#include "PageTableColumn.h"
-
-/* \!brief
-* class PageTable
-* This is meant to represent a table to render/print onto a Paper or PDF.
-*/
-class PageTable : public PageChildObject
+namespace BtPage
 {
-public:
-   PageText *tableHeader;
-   QList<PageTableColumn *> columnHeaders;
-   QList<QList<PageText>> tableData;
-   int columnPadding = 20;
-   int rowPadding = 2;
-   QFont columnHeadersFont;
+   /* \!brief
+   * class PageTable
+   * This is meant to represent a table to render/print onto a Paper or PDF.
+   */
+   class PageTable : public PageChildObject
+   {
+   public:
+      PageTable(PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont = nullptr, QPoint pos = QPoint(), QRect rect = QRect());
+      PageTable(QString title, QList<QStringList> tabledata, QPoint pos = QPoint(), QRect rect = QRect());
 
-   PageTable(PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont = nullptr);
-   PageTable(QString title, QList<QStringList> tabledata);
+      PageText *tableHeader;
+      QList<PageTableColumn *> columnHeaders;
+      QList<QList<PageText>> tableData;
+      int columnPadding = 20;
+      int rowPadding = 2;
+      QFont columnHeadersFont;
 
-   //Enforced by PageChildObject
-   void render(QPainter *painter);
-   void setColumnAlignment(int colindex, Qt::AlignmentFlag a);
-};
-
+      //Enforced by PageChildObject
+      void render(QPainter *painter);
+      void setColumnAlignment(int colindex, Qt::AlignmentFlag a);
+   };
+}
 #endif /* _PAGETABLE_H */

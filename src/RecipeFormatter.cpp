@@ -954,6 +954,54 @@ QString RecipeFormatter::buildFermentableTableTxt()
    return ret;
 }
 
+/*
+ * \!brief
+ * RecipeFormatter::buildFermentableList()
+ * This will return a List of strings where the first row is the headers for each column.
+ * \return QList<QStringList> of Fermentables.
+*/
+QList<QStringList> RecipeFormatter::buildFermentableList()
+{
+   QList<QStringList> ret = QList<QStringList>();
+
+   if( rec == nullptr )
+      return ret;
+
+   QList<Fermentable*> ferms = sortFermentablesByWeight(rec);
+
+   if( ferms.size() > 0 )
+   {
+      QStringList row;
+
+      row.append(tr("Name"));
+      row.append(tr("Type"));
+      row.append(tr("Amount"));
+      row.append(tr("Mashed"));
+      row.append(tr("Late"));
+      row.append(tr("Yield"));
+      row.append(tr("Color"));
+      ret.append(row);
+      row.clear();
+
+      foreach( Fermentable * ferm, ferms)
+      {
+         row.append( ferm->name() );
+         row.append( ferm->typeStringTr() );
+         row.append(Brewtarget::displayAmount(ferm->amount_kg(), "fermentableTable", "amount_kg", &Units::kilograms));
+         row.append( ferm->isMashed() ? tr("Yes") : tr("No"));
+         row.append( ferm->addAfterBoil() ? tr("Yes") : tr("No"));
+         row.append( QString("%1%").arg(Brewtarget::displayAmount(ferm->yield_pct(), nullptr, 0) ) );
+         row.append( QString("%1").arg(Brewtarget::displayAmount(ferm->color_srm(), "fermentableTable", "color_srm", &Units::srm, 1)));
+         ret.append(row);
+         row.clear();
+      }
+      //Do we really need the Total amount of grain?
+      //I could return a Tuple from this function to get this value an print it onto paper/pdf, but is it worth it?
+      //ret += QString("%1 %2\n").arg(tr("Total grain:")).arg(Brewtarget::displayAmount(rec->grains_kg(), "fermentableTable", "amount_kg", &Units::kilograms));
+   }
+   return ret;
+}
+
 QString RecipeFormatter::buildHopsTableHtml()
 {
    if( rec == nullptr )
@@ -1309,6 +1357,47 @@ QString RecipeFormatter::buildYeastTableTxt()
    return ret;
 }
 
+/* \!brief
+ * buildYeastList
+ * collects all the yeasts from the recipe an returns a list.
+ * \return QList<QStringList>
+ */
+QList<QStringList> RecipeFormatter::buildYeastList()
+{
+   QList<QStringList> ret;
+   Unit const * kindOf;
+
+   if( rec == nullptr )
+      return ret;
+
+   QList<Yeast*> yeasts = rec->yeasts();
+   if( yeasts.size() > 0 )
+   {
+      QStringList row;
+
+      row.append(tr("Name"));
+      row.append(tr("Type"));
+      row.append(tr("Form"));
+      row.append(tr("Amount"));
+      row.append(tr("Stage"));
+      ret.append(row);
+      row.clear();
+
+      foreach( Yeast *y, yeasts )
+      {
+         kindOf = y->amountIsWeight() ? static_cast<Unit const *>(&Units::kilograms) : static_cast<Unit const *>(&Units::liters);
+         row.append(y->name());
+         row.append(y->typeStringTr());
+         row.append(y->formStringTr());
+         row.append(Brewtarget::displayAmount( y->amount(), "yeastTableModel", "amount_kg", kindOf, 2));
+         row.append(y->addToSecondary() ? tr("Secondary") : tr("Primary"));
+         ret.append(row);
+         row.clear();
+      }
+   }
+   return ret;
+}
+
 QString RecipeFormatter::buildMashTableHtml()
 {
    if( rec == nullptr || rec->mash() == nullptr )
@@ -1433,6 +1522,61 @@ QString RecipeFormatter::buildMashTableTxt()
 
       for( i = 0; i < size+1; ++i )
          ret += names.at(i) + types.at(i) + amounts.at(i) + temps.at(i) + targets.at(i) + times.at(i) + "\n";
+   }
+   return ret;
+}
+
+QList<QStringList> RecipeFormatter::buildMashList()
+{
+   QList<QStringList> ret = QList<QStringList>();
+
+   if( rec == nullptr )
+      return ret;
+
+   Mash* mash = rec->mash();
+   if (! mash)
+      return ret;
+
+   QList<MashStep*> mashSteps;
+   if( mash )
+      mashSteps = mash->mashSteps();
+   if( mashSteps.size() > 0 )
+   {
+      QStringList row;
+
+      row.append(tr("Name"));
+      row.append(tr("Type"));
+      row.append(tr("Amount"));
+      row.append(tr("Temp"));
+      row.append(tr("Target"));
+      row.append(tr("Time"));
+      ret.append(row);
+      row.clear();
+
+      foreach( MashStep * s, mashSteps)
+      {
+         row.append(s->name());
+         row.append(s->typeStringTr());
+         if( s->isInfusion() )
+         {
+            row.append(Brewtarget::displayAmount(s->infuseAmount_l(), "mashStepTableModel", "amount", &Units::liters));
+            row.append(Brewtarget::displayAmount(s->infuseTemp_c(),   "mashStepTableModel", PropertyNames::MashStep::infuseTemp_c, &Units::celsius));
+         }
+         else if( s->isDecoction() )
+         {
+            row.append(Brewtarget::displayAmount(s->decoctionAmount_l(), "mashStepTableModel", "amount", &Units::liters));
+            row.append("---");
+         }
+         else
+         {
+            row.append( "---" );
+            row.append("---");
+         }
+         row.append(Brewtarget::displayAmount(s->stepTemp_c(), "mashStepTableModel", PropertyNames::MashStep::stepTemp_c, &Units::celsius));
+         row.append(Brewtarget::displayAmount(s->stepTime_min(), "mashStepTableModel", PropertyNames::Misc::time, &Units::minutes, 0));
+         ret.append(row);
+         row.clear();
+      }
    }
    return ret;
 }

@@ -22,14 +22,15 @@
 #include <QFont>
 #include "PageText.h"
 
-
-class PageTableColumn
+namespace BtPage
 {
-public:
-   int ColumnWidth;
-   PageText Text;
+   class PageTableColumn
+   {
+   public:
+      int ColumnWidth;
+      PageText Text;
 
-   void setAlignment(Qt::AlignmentFlag a);
-};
-
+      void setAlignment(Qt::AlignmentFlag a);
+   };
+}
 #endif /* _PAGETABLECOLUMN_H */

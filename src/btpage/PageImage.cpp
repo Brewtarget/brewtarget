@@ -18,16 +18,37 @@
  */
 
 #include "PageImage.h"
+
 #include <QPainter>
+namespace BtPage
+{
+   void PageImage::setImage(QImage image)
+   {
+      _image = new QImage(image);
+      setBoundingbox(_image->rect());
+   }
 
-void PageImage::setImage(QImage image){
-   _image = image;
-}
+   QImage PageImage::image()
+   {
+      return *_image;
+   }
 
-QImage PageImage::image() {
-   return _image;
-}
+   void PageImage::setImageSize(int width, int height)
+   {
+      _width = width;
+      _height = height;
+      setBoundingbox(QRect(position.x(), position.y(), width, height));
+   }
 
-void PageImage::render(QPainter *painter) {
-   painter->drawImage(position, _image);
+   void PageImage::render(QPainter *painter)
+   {
+      if (_width >= 0 and _height >= 0)
+      {
+         painter->drawImage(QRect(position, QSize(_width, _height)), *_image);
+      }
+      else
+      {
+         painter->drawImage(position, *_image);
+      }
+   }
 }

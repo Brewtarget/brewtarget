@@ -31,6 +31,8 @@ class RecipeFormatter;
 #include <QTextBrowser>
 #include <QDialog>
 #include <QFile>
+#include <QList>
+#include <QStringList>
 #include "model/Recipe.h"
 #include "PrintAndPreviewDialog.h"
 
@@ -95,13 +97,16 @@ private:
    QString buildStatTableTxt();
    QString buildFermentableTableHtml();
    QString buildFermentableTableTxt();
+   QList<QStringList> buildFermentableList();
    QString buildHopsTableHtml();
    QString buildHopsTableTxt();
    QList<QStringList> buildHopsList();
    QString buildYeastTableHtml();
    QString buildYeastTableTxt();
+   QList<QStringList> buildYeastList();
    QString buildMashTableHtml();
    QString buildMashTableTxt();
+   QList<QStringList> buildMashList();
    QString buildMiscTableHtml();
    QString buildMiscTableTxt();
    QList<QStringList> buildMiscList();

@@ -163,33 +163,71 @@ void PrintAndPreviewDialog::setupPreviewWidget() {
    previewWidget->show();
 }
 
-void PrintAndPreviewDialog::printDocument(QPrinter * printer){
-   if ( _parent->currentRecipe() == nullptr) return;
+void PrintAndPreviewDialog::printDocument(QPrinter * printer)
+{
+   if ( _parent->currentRecipe() == nullptr)
+      return;
+
    recipeFormatter->setRecipe(_parent->currentRecipe());
+   using namespace BtPage;
+   //Setting up a blank page for drawing.
+   Page page(printer);
+   // adding the Recipe name as a title.
+   page.addChildObject(
+      new PageText (
+         _parent->currentRecipe()->name(),
+         QFont("Arial", 18, QFont::Bold)
+      ),
+      QPoint(20,30)
+      );
+
+   //Adding the Brewtarget logo.
+   PageImage *img = page.addChildObject<PageImage>(
+      new PageImage (
+         QPoint(380, 30),
+         QImage(":/images/title.svg")
+      ));
+   img->setImageSize(280, 60);
 
    // Create the HopsTable
-   PageTable *hopsTable = new PageTable (QString("Hops"), recipeFormatter->buildHopsList());
+   PageTable *hopsTable = page.addChildObject(
+      new PageTable (
+         QString("Hops"),                    /* table header text */
+         recipeFormatter->buildHopsList(),   /* Table data including column headers.*/
+         QPoint(20, 80)                      /* position of text/table*/
+                                             /*boundingbox rectangle*/
+      ));
    hopsTable->setColumnAlignment(1, Qt::AlignRight);
-   hopsTable->position = QPoint(20, 80);
 
    // Create the MiscTable
-   PageTable *miscTable = new PageTable ("Misc", recipeFormatter->buildMiscList());
-   miscTable->position = QPoint(20, 300);
+   PageTable *miscTable = page.addChildObject(
+      new PageTable (
+         QString("Misc"),                    /* table header text */
+         recipeFormatter->buildMiscList()    /* Table data including column headers.*/
+                                             /* position of text/table*/
+                                             /*boundingbox rectangle*/
+      ));
+   miscTable->placeRelationalTo(hopsTable, PlacingFlags::BELOW, 0, 30);
 
-   BtPage page(printer);
-   PageText *recipeName = new PageText {
-      _parent->currentRecipe()->name(),
-      QFont("Arial", 18, QFont::Bold)
-   };
-   recipeName->position = QPoint(20,30);
+   // Create the Yeast Table
+   PageTable *yeastTable = page.addChildObject(
+      new PageTable (
+         QString("Yeast"),                   /* table header text */
+         recipeFormatter->buildYeastList()   /* Table data including column headers.*/
+                                             /* position of text/table*/
+                                             /*boundingbox rectangle*/
+      ));
+   yeastTable->placeRelationalTo(miscTable, PlacingFlags::BELOW, 0, 30);
 
-   PageImage *img = new PageImage(QPoint(300, 30), QImage("qrc:/image/title.svg"));
+   PageTable *fermTable = page.addChildObject(
+      new PageTable (
+         QString("Fermentables"),                  /* table header text */
+         recipeFormatter->buildFermentableList()   /* Table data including column headers.*/
+                                                   /* position of text/table*/
+                                                   /*boundingbox rectangle*/
+      ));
+   fermTable->placeRelationalTo(yeastTable, PlacingFlags::BELOW, 0, 30);
 
-   //Adding all tables and Texts to the page.
-   page.addChildObject(recipeName);
-   page.addChildObject(hopsTable);
-   page.addChildObject(miscTable);
-   page.addChildObject(img);
    //Render the Page onto the painter/printer for preview/printing.
    page.renderPage();
 }

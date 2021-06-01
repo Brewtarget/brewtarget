@@ -25,18 +25,28 @@
 #include <QPrinter>
 #include "PageTable.h"
 #include "PageText.h"
+#include "PageChildObject.h"
 
-class BtPage
+namespace BtPage
 {
-public:
-   BtPage(QPrinter *printer);
+   class Page
+   {
+   public:
+      Page(QPrinter *printer);
 
-   void addChildObject(PageChildObject *obj);
-   void renderPage();
+      template <class T>
+      auto addChildObject(T *obj, QPoint position = QPoint()) -> decltype(obj)
+      {
+         if ( ! position.isNull() ) obj->position = position;
+         _children.append(obj);
+         return obj;
+      }
 
-private:
-   QPrinter *_printer;
-   QList<PageChildObject*> _children;
-};
+      void renderPage();
 
+   private:
+      QPrinter *_printer;
+      QList<PageChildObject *> _children;
+   };
+}
 #endif /* _BTPAGE_H */

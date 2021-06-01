@@ -21,16 +21,69 @@
 #include <QPoint>
 #include <QPainter>
 #include <QObject>
+#include <QFont>
+#include <QRect>
 
-class PageChildObject
+namespace BtPage
 {
-public:
-   QPoint position;
-   QFont Font;
+   enum struct PlacingFlags
+   {
+      BELOW = 0X01,
+      ABOVE = 0X02,
+      RIGHTOF = 0X04,
+      LEFTOF = 0X08
+   };
 
-   //All sub classes from PageChildObject should know how to render them selves.
-   virtual void render(QPainter * painter) = 0;
+   inline PlacingFlags operator|(PlacingFlags a, PlacingFlags b)
+   {
+      return static_cast<PlacingFlags>(static_cast<int>(a) | static_cast<int>(b));
+   }
 
-};
+   inline bool operator&(PlacingFlags a, PlacingFlags b)
+   {
+      return (static_cast<int>(a) & static_cast<int>(b));
+   }
 
+   class PageChildObject
+   {
+   public:
+      QPoint position;
+      QFont Font;
+      QRect boundingBox;
+
+      //All sub classes from PageChildObject should know how to render them selves.
+      virtual void render(QPainter *painter) = 0;
+
+      //Do I really need a template? or is it sufficient widht passing in the PageChildObject pointer?
+      /* \!brief
+      Place a PageChildObject on a page relational to another PageChildObject.
+      PlacingFlags can be stacked together for placement.
+      for example
+      myobject->placeRelationalTo(&other object, PlacingFlags::LEFTOF | PlacingFlags::ABOVE, 30, 30);
+      Valid flags for this is:
+         - PlacingFlags::BELOW
+         - PlacingFlags::ABOVE
+         - PlacingFlags::RIGHTOF
+         - PlacingFlags::LEFTOF
+      */
+      template <class T>
+      void placeRelationalTo(T *obj, PlacingFlags place, int xPadding = 0, int yPadding = 0)
+      {
+         PageChildObject *other = (PageChildObject*)obj;
+         int x, y;
+         x = other->position.x();
+         y = other->position.y();
+
+         y = (place & PlacingFlags::ABOVE) ? y - boundingBox.height() - yPadding : y;
+         y = (place & PlacingFlags::BELOW) ? y + other->boundingBox.height() + yPadding : y;
+         x = (place & PlacingFlags::LEFTOF) ? x - boundingBox.width() - xPadding : x;
+         x = (place & PlacingFlags::RIGHTOF) ? x + other->boundingBox.width() + xPadding : x;
+
+         position = QPoint(x, y);
+      }
+
+      void setBoundingbox(QRect rect);
+      void setBoundingBox(int x, int y, int width, int height);
+   };
+}
 #endif /* _PAGEOBJECT_H */
