@@ -21,6 +21,25 @@
 namespace BtPage
 {
 
+   void PageChildObject::placeOnPage(PlacingFlags place, int xPadding, int yPadding)
+   {
+      if (_parent == nullptr) return;
+
+      QMargins margins = _parent->getPageMargins();
+      QRect pageSize = _parent->getPageSize();
+
+      int x = position.x();
+      int y = position.y();
+
+      x = (place & PlacingFlags::RIGHT) ? pageSize.right() - margins.right() - boundingBox.right() - xPadding : x;
+      x = (place & PlacingFlags::LEFT) ? margins.left() + xPadding : x;
+      y = (place & PlacingFlags::TOP) ? margins.top() + yPadding : y;
+      y = (place & PlacingFlags::BOTTOM) ? pageSize.height() - margins.bottom() - boundingBox.height() - yPadding : y;
+
+      position.setX(x);
+      position.setY(y);
+   }
+
    void PageChildObject::setBoundingbox(QRect rect)
    {
       boundingBox = rect;

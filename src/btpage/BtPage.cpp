@@ -35,4 +35,22 @@ namespace BtPage
       }
       painter->end();
    }
+   QRect Page::getPageSize()
+   {
+      return _printer->paperRect();
+   }
+
+   QMargins Page::getPageMargins()
+   {
+      QMargins margins;
+      qreal left, right, top, bottom;
+
+      _printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::Unit::DevicePixel);
+      margins.setLeft(left);
+      margins.setRight(right);
+      margins.setTop(top);
+      margins.setBottom(bottom);
+
+      return margins;
+   }
 }
