@@ -846,6 +846,60 @@ QString RecipeFormatter::buildStatTableTxt()
    return ret;
 }
 
+/*
+ * \!brief
+ * RecipeFormatter::buildStatList()
+ * This will return a List of strings where the first row is the headers for each column.
+ * \return QList<QStringList> of Stats for the recipe.
+*/
+QList<QStringList> RecipeFormatter::buildStatList()
+{
+   QList<QStringList> ret = QList<QStringList>();
+
+   if( rec == nullptr )
+      return ret;
+
+   QStringList row;
+
+   row.append(tr("Batch Size"));
+   row.append(QString("%1").arg(Brewtarget::displayAmount(rec->finalVolume_l(), "tab_recipe", "finalVolume_l", &Units::liters)));
+   row.append(tr("Boil Size"));
+   row.append(QString("%1").arg(Brewtarget::displayAmount(rec->boilVolume_l(), "tab_recipe", "boilVolume_l", &Units::liters)));
+   ret.append(row);
+   row.clear();
+   row.append(tr("Boil Time"));
+   row.append(QString("%1").arg((rec->equipment() == nullptr)?
+                         Brewtarget::displayAmount(0, "tab_recipe", "boilTime_min", &Units::minutes)
+                       : Brewtarget::displayAmount( (rec->equipment())->boilTime_min(), "tab_recipe", "boilTime_min", &Units::minutes)));
+   row.append(tr("Efficiency"));
+   row.append(QString("%1%").arg(rec->efficiency_pct(), 0, 'f', 0));
+   ret.append(row);
+   row.clear();
+   row.append(tr("OG"));
+   row.append(QString("%1").arg(Brewtarget::displayAmount(rec->og(), "tab_recipe", "og", &Units::sp_grav, 3)));
+   row.append(tr("FG"));
+   row.append(QString("%1").arg(Brewtarget::displayAmount(rec->fg(), "tab_recipe", "fg", &Units::sp_grav, 3)));
+   ret.append(row);
+   row.clear();
+   row.append(tr("ABV"));
+   row.append(QString("%1%").arg(Brewtarget::displayAmount(rec->ABV_pct(), nullptr, 1)));
+   row.append(tr("Bitterness"));
+   row.append(QString("%1 %2 (%3)").arg(Brewtarget::displayAmount(rec->IBU(), nullptr, 1))
+                              .arg(tr("IBU"))
+                              .arg(Brewtarget::ibuFormulaName()));
+   ret.append(row);
+   row.clear();
+   row.append(tr("Color"));
+   row.append(QString("%1 (%2)").arg(Brewtarget::displayAmount(rec->color_srm(),"tab_recipe", "color_srm", &Units::srm, 1))
+                           .arg(Brewtarget::colorFormulaName()));
+   row.append(QString(""));
+   row.append(QString(""));
+   ret.append(row);
+   row.clear();
+
+   return ret;
+}
+
 QString RecipeFormatter::buildFermentableTableHtml()
 {
    if( rec == nullptr )

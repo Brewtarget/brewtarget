@@ -95,6 +95,7 @@ private:
    QString buildHTMLHeader();
    QString buildStatTableHtml();
    QString buildStatTableTxt();
+   QList<QStringList> buildStatList();
    QString buildFermentableTableHtml();
    QString buildFermentableTableTxt();
    QList<QStringList> buildFermentableList();
