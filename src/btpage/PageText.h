@@ -22,12 +22,15 @@
 #include <QPainter>
 #include <QString>
 #include <QRectF>
-namespace BtPage
+#include <QTextOption>
+#include <QFont>
+
+namespace nBtPage
 {
    /* \!brief
    * class PageText
    *
-   * Page text object that needs to have a Value (text) and a Font (Will default to Application Font if not set.)
+   * BtPage text object that needs to have a Value (text) and a Font (Will default to Application Font if not set.)
    */
    class PageText : public PageChildObject
    {
@@ -36,11 +39,13 @@ namespace BtPage
       PageText(QString value, QFont font);
       QString Value;
       QTextOption Options;
-      const QRectF *boundingRectangle = nullptr;
+
+      int count();
 
       //Enforced by PageChildObject
       void render(QPainter *painter);
-      int count();
+      QSize getSize();
+      void calculateBoundingBox(QPainter *painter);
    };
 }
 #endif /* _PAGETEXT_H */

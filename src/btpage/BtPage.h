@@ -29,26 +29,23 @@
 #include "PageText.h"
 #include "PageChildObject.h"
 
-namespace BtPage
+namespace nBtPage
 {
-   class Page
+   class BtPage
    {
    public:
-      Page(QPrinter *printer);
+      ~BtPage() {};
+      BtPage(QPrinter *printer);
 
       template <class T>
       auto addChildObject(T *obj, QPoint position = QPoint()) -> decltype(obj)
       {
-         if ( ! position.isNull() ) obj->position = position;
-         obj->setParent(this);
+         if ( ! position.isNull() ) obj->setPosition(position);
          _children.append(obj);
          return obj;
       }
 
       void renderPage();
-
-      QRect getPageSize();
-      QMargins getPageMargins();
 
    private:
       QPrinter *_printer;

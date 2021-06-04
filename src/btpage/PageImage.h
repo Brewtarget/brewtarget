@@ -25,7 +25,7 @@
 
 #include "PageChildObject.h"
 
-namespace BtPage
+namespace nBtPage
 {
    /* \!brief
  * Class PageImage
@@ -37,21 +37,24 @@ namespace BtPage
       PageImage(){};
       PageImage(QPoint pos, QImage image)
       {
+         setPosition(pos);
          setImage(image);
-         position = pos;
       };
-
-
-      PageImage(int x, int y, char *filepath) : PageImage(QPoint(x, y), QImage()) {}
 
       void setImage(QImage image);
       void setImageSize(int width, int height);
+      void getDPI(int &xdpi, int &ydpi);
+      void setDPI(int xdpi, int ydpi);
+      void setDPI(int dpi) { setDPI(dpi, dpi); }
+
+      //Virtual members implementation
       void render(QPainter *painter);
+      QSize getSize();
 
       QImage image();
 
    private:
-      QImage *_image = nullptr;
+      QImage _image;
       int _width = -1, _height = -1;
    };
 }

@@ -28,7 +28,7 @@
 #include <QList>
 #include <QPainter>
 
-namespace BtPage
+namespace nBtPage
 {
    /* \!brief
    * class PageTable
@@ -43,13 +43,20 @@ namespace BtPage
       PageText *tableHeader;
       QList<PageTableColumn *> columnHeaders;
       QList<QList<PageText>> tableData;
-      int columnPadding = 20;
+      int columnPadding = 10;
       int rowPadding = 2;
       QFont columnHeadersFont;
 
+      void setColumnAlignment(int colindex, Qt::AlignmentFlag a);
+
       //Enforced by PageChildObject
       void render(QPainter *painter);
-      void setColumnAlignment(int colindex, Qt::AlignmentFlag a);
+      QSize getSize();
+      void calculateBoundingBox(QPainter *painter);
+   private:
+      int tableHeight = -1;
+      int tableWidth = -1;
+      bool prepareTable();
    };
 }
 #endif /* _PAGETABLE_H */

@@ -22,7 +22,7 @@
 #include <QFont>
 #include "PageText.h"
 
-namespace BtPage
+namespace nBtPage
 {
    class PageTableColumn
    {

@@ -20,35 +20,55 @@
 #include "PageImage.h"
 
 #include <QPainter>
-namespace BtPage
+namespace nBtPage
 {
    void PageImage::setImage(QImage image)
    {
-      _image = new QImage(image);
-      setBoundingbox(_image->rect());
+      _image = QImage(image);
+      _width = _image.width();
+      _height = _image.height();
+      setBoundingBox(_image.rect());
+   }
+
+   void PageImage::getDPI(int &xdpi, int &ydpi)
+   {
+      xdpi = _image.dotsPerMeterX() / 39.37;
+      ydpi = _image.dotsPerMeterY() / 39.37;
+   }
+
+   void PageImage::setDPI(int xdpi, int ydpi)
+   {
+      _image.setDotsPerMeterX(int(xdpi * 39.37));
+      _image.setDotsPerMeterY(int(ydpi * 39.37));
    }
 
    QImage PageImage::image()
    {
-      return *_image;
+      return _image;
    }
 
    void PageImage::setImageSize(int width, int height)
    {
-      _width = width;
-      _height = height;
-      setBoundingbox(QRect(position.x(), position.y(), width, height));
+      setImage(_image.scaled(width, height, Qt::AspectRatioMode::KeepAspectRatio));
    }
 
    void PageImage::render(QPainter *painter)
    {
-      if (_width >= 0 and _height >= 0)
+      painter->drawImage(position(), _image);
+
+      if ( ! boundingBox->isEmpty() )
       {
-         painter->drawImage(QRect(position, QSize(_width, _height)), *_image);
+         painter->drawRect(*boundingBox);
       }
-      else
-      {
-         painter->drawImage(position, *_image);
-      }
+   }
+
+   QSize PageImage::getSize()
+   {
+      return QSize(_image.width(), _image.height());
+   }
+
+   void PageImage::calculateBoundingBox(QPainter *painter)
+   {
+      setBoundingBox(position, _image.width(), _image.height());
    }
 }

@@ -18,13 +18,15 @@
  */
 
 #include "PageText.h"
-namespace BtPage
+namespace nBtPage
 {
 
    PageText::PageText(QString value, QFont font)
    {
       Value = value;
       Font = font;
+      QFontMetrics fm(Font);
+      setBoundingBox( 0 , 0, fm.horizontalAdvance(Value), fm.height());
    }
 
    void PageText::render(QPainter *painter)
@@ -32,15 +34,26 @@ namespace BtPage
       QFont old = painter->font();
       painter->setFont(Font);
       QFontMetrics fm(Font);
-      if (boundingRectangle == nullptr)
-         boundingRectangle = new QRectF(position.x(), position.y(), fm.horizontalAdvance(Value), fm.height());
-      painter->drawText(*boundingRectangle, Value, Options);
-      painter->drawRect(*boundingRectangle);
+      setBoundingBox(position().x(), position().y(), fm.horizontalAdvance(Value), fm.height());
+      painter->drawText(*boundingBox, Value, Options);
       painter->setFont(old);
    }
 
    int PageText::count()
    {
       return Value.count();
+   }
+
+   QSize PageText::getSize()
+   {
+      QFontMetrics fm(Font);
+      return QSize(fm.horizontalAdvance(Value), fm.height());
+   }
+
+   void PageText::calculateBoundingBox(QPainter *painter)
+   {
+      QFontMetrics fm(Font);
+      setBoundingBox(fm.boundingRect(Value));
+      boundingBox->moveTopLeft(position());
    }
 }

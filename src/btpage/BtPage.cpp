@@ -18,39 +18,32 @@
  */
 
 #include "BtPage.h"
-namespace BtPage
+namespace nBtPage
 {
 
-   Page::Page(QPrinter *printer)
+   BtPage::BtPage(QPrinter *printer)
    {
       _printer = printer;
+      /*
+      This is only until the Template file system is in place.
+      My though here is to have the template govern the settings for the page including units and such.
+      also need to add scaling between page sizes at that poing! but thats for later!
+      */
+      QPageLayout layout = _printer->pageLayout();
+      layout.setUnits(QPageLayout::Point);
+      _printer->setPageLayout(layout);
    }
 
-   void Page::renderPage()
+   void BtPage::renderPage()
    {
       QPainter *painter = new QPainter(_printer);
+      QRectF r = _printer->pageLayout().fullRect();
+      painter->setWindow(0,0, r.width(), r.height());
+
       foreach (PageChildObject *child, _children)
       {
          child->render(painter);
       }
       painter->end();
-   }
-   QRect Page::getPageSize()
-   {
-      return _printer->paperRect();
-   }
-
-   QMargins Page::getPageMargins()
-   {
-      QMargins margins;
-      qreal left, right, top, bottom;
-
-      _printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::Unit::DevicePixel);
-      margins.setLeft(left);
-      margins.setRight(right);
-      margins.setTop(top);
-      margins.setBottom(bottom);
-
-      return margins;
    }
 }
