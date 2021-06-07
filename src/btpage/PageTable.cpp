@@ -20,7 +20,6 @@
 #include <QTextOption>
 namespace nBtPage
 {
-
    PageTable::PageTable(PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont, QPoint pos, QRect rect)
    {
       setPosition(pos);
@@ -40,12 +39,13 @@ namespace nBtPage
          {
             columnHeaders.append(
                new PageTableColumn {
-                fm_colHeaders.horizontalAdvance(st), //set the initial Column width to the number of characters.
-                PageText
-                  (
-                     st,
-                     (columnHeaderFont != nullptr) ? *columnHeaderFont : tableDataFont
-                  )});
+                  //set the initial Column width to the fonts horizontal advance as a startingpoint for calculating column widths below.
+                  fm_colHeaders.horizontalAdvance(st),
+                  PageText
+                     (
+                        st,
+                        (columnHeaderFont != nullptr) ? *columnHeaderFont : tableDataFont
+                     )});
          }
       }
       else
@@ -61,11 +61,10 @@ namespace nBtPage
          //Clear out any data in the current_data to make sure we have an emtpy list for the for_loop below.
          current_row.clear();
          /*
-      we do this forloop like this because I need to know what index I'm at to compare the width
-      Comparing the width between the texts as they would take space on the paper and storing the larger value.
-      Any padding between the columns is done in the rendering method.
-      We also populate the tableData at the same time.
-      */
+         Comparing the width between the texts as they would take space on the paper and storing the larger value.
+         Any padding between the columns is done in the rendering method.
+         We also populate the tableData at the same time.
+         */
 
          for (int col = 0; col < row.count(); col++)
          {
@@ -79,96 +78,55 @@ namespace nBtPage
          tableHeight += fm.height() + rowPadding;
       }
 
-      // Set the bounding box for the table if it is empty IF the user whant this or another table to follow this table on the printout.
-      // We calculate this with the font heights and with the Column widths from above. always adding the padding.
-      if ( boundingBox->isEmpty() )
+      // Storing the tableWidth to the object for later reference.
+      tableWidth = 0;
+      foreach (PageTableColumn *col, columnHeaders)
       {
-         tableWidth = 0;
-
-         foreach (PageTableColumn *col, columnHeaders)
-         {
-            tableWidth += col->ColumnWidth + columnPadding;
-         }
-
-         setBoundingBox(position().x(), position().y(), tableWidth, tableHeight);
+         tableWidth += col->ColumnWidth + columnPadding;
       }
+      setBoundingBox(position(), tableWidth, tableHeight);
    }
 
    PageTable::PageTable(QString title, QList<QStringList> tabledata, QPoint pos, QRect rect) : PageTable(
                                                                                                    //Create the Table header for the document
                                                                                                    new PageText{
                                                                                                        title,
-                                                                                                       QFont("Arial", 12, QFont::Bold)},
+                                                                                                       QFont("Arial", 10, QFont::Bold)},
                                                                                                    // Send in the data including the columnheaders, the first row is assumed to be column headers.
                                                                                                    tabledata,
                                                                                                    // set the default Font for the hopsTable. i.e. the contents Font.
-                                                                                                   QFont("Arial", 10),
+                                                                                                   QFont("Arial", 8),
                                                                                                    // set the Columnheaders font.
-                                                                                                   new QFont("Arial", 10, QFont::Bold),
+                                                                                                   new QFont("Arial", 8, QFont::Bold),
                                                                                                    pos,
                                                                                                    rect)
    {
    }
 
-   void PageTable::setColumnAlignment(int colindex, Qt::AlignmentFlag a)
+   void PageTable::setColumnAlignment(int colindex, Qt::AlignmentFlag aFlag)
    {
       if (columnHeaders.isEmpty())
          return;
-      columnHeaders.at(colindex)->setAlignment(a);
+      columnHeaders.at(colindex)->setAlignment(aFlag);
    }
 
-   //This inherits from the PageChildObject abstract class.
-   //This should render itself onto a painter object according to the data within it.
-   //Although the position has tp be set in order to not paint in the 0,0 coordinates.
    void PageTable::render(QPainter *painter)
-   {
-      if ( ! prepareTable() )
-      {
-         tableHeader->render(painter);
-         return;
-      }
-
-      tableHeader->render(painter);
-
-      //Move our curent drawposition
-      foreach (PageTableColumn *col, columnHeaders)
-      {
-         col->Text.render(painter);
-      }
-
-      foreach (QList<PageText> row, tableData)
-      {
-         foreach(PageText currentText, row)
-         {
-            currentText.render(painter);
-         }
-      }
-   }
-
-   QSize PageTable::getSize()
-   {
-      return QSize(boundingBox->width(), boundingBox->height());
-   }
-
-   void PageTable::calculateBoundingBox(QPainter *painter) {
-      setBoundingBox(position, tableWidth, tableHeight);
-   }
-
-   bool PageTable::prepareTable()
    {
       if (tableData.size() == 0)
       {
          tableHeader->Value = QString("No %1 in this Recipe").arg(tableHeader->Value.toLower());
          tableHeader->setPosition(position());
-         return false;
+         tableHeader->render(painter);
+         return;
       }
 
       QPoint currentPosition = position();
 
       //Draw the Header text onto the document.
       tableHeader->setPosition(position());
-
+      tableHeader->render(painter);
       //Move our curent drawposition
+
       QFontMetrics fm(tableHeader->Font);
       currentPosition.setY(currentPosition.y() + fm.height() + rowPadding);
 
@@ -177,6 +135,7 @@ namespace nBtPage
       foreach (PageTableColumn *col, columnHeaders)
       {
          col->Text.setPosition(QPoint(x, currentPosition.y()));
+         col->Text.render(painter);
          x += col->ColumnWidth + columnPadding;
       }
       QFontMetrics fm_colHeaders = QFontMetrics(columnHeadersFont);
@@ -191,12 +150,26 @@ namespace nBtPage
          for (int col_index = 0; col_index < row.count(); col_index++)
          {
             PageText currentText = row.at(col_index);
-            currentText.setBoundingBox(columnHeaders.at(col_index)->Text.position().x(), currentPosition.y(), columnHeaders.at(col_index)->ColumnWidth, fmtable.height());
+            int xcur = columnHeaders.at(col_index)->Text.position().x();
+            int ycur = currentPosition.y();
+            int wcur = columnHeaders.at(col_index)->ColumnWidth;
+            int hcur = fmtable.height();
+            currentText.setBoundingBox(xcur, ycur, wcur, hcur);
             currentText.Options = QTextOption(columnHeaders.at(col_index)->Text.Options);
+            currentText.render(painter);
          }
          currentPosition.setY(currentPosition.y() + font_height + rowPadding);
       }
 
-      return true;
+   }
+
+   QSize PageTable::getSize()
+   {
+      QRect r = getBoundingBox();
+      return QSize(r.width(), r.height());
+   }
+
+   void PageTable::calculateBoundingBox() {
+      setBoundingBox(position(), tableWidth, tableHeight);
    }
 }

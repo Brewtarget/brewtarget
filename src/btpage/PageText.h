@@ -45,7 +45,7 @@ namespace nBtPage
       //Enforced by PageChildObject
       void render(QPainter *painter);
       QSize getSize();
-      void calculateBoundingBox(QPainter *painter);
+      void calculateBoundingBox();
    };
 }
 #endif /* _PAGETEXT_H */

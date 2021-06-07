@@ -50,6 +50,7 @@ namespace nBtPage
       //Virtual members implementation
       void render(QPainter *painter);
       QSize getSize();
+      void calculateBoundingBox();
 
       QImage image();
 

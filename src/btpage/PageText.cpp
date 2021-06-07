@@ -34,8 +34,8 @@ namespace nBtPage
       QFont old = painter->font();
       painter->setFont(Font);
       QFontMetrics fm(Font);
-      setBoundingBox(position().x(), position().y(), fm.horizontalAdvance(Value), fm.height());
-      painter->drawText(*boundingBox, Value, Options);
+
+      painter->drawText(getBoundingBox(), Value, Options);
       painter->setFont(old);
    }
 
@@ -50,10 +50,10 @@ namespace nBtPage
       return QSize(fm.horizontalAdvance(Value), fm.height());
    }
 
-   void PageText::calculateBoundingBox(QPainter *painter)
+   void PageText::calculateBoundingBox()
    {
       QFontMetrics fm(Font);
       setBoundingBox(fm.boundingRect(Value));
-      boundingBox->moveTopLeft(position());
+      moveBoundingBox(position());
    }
 }

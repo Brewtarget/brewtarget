@@ -27,23 +27,23 @@ namespace nBtPage
 
    void PageChildObject::placeOnPage(QPrinter *printer, PlacingFlags place, int xPadding, int yPadding)
    {
-      QRectF pageFullRect = printer->pageLayout().fullRect();
+      QRectF pagePaintRect = printer->pageLayout().paintRect();
       QMarginsF margins = printer->pageLayout().margins();
-      int x = _position.x();
-      int y = _position.y();
-      x = (place & PlacingFlags::RIGHT) ? pageFullRect.width() - boundingBox->width() - margins.right() - xPadding : x;
-      x = (place & PlacingFlags::LEFT) ? margins.left() + xPadding : x;
-      y = (place & PlacingFlags::TOP) ? margins.top() + yPadding : y;
-      y = (place & PlacingFlags::BOTTOM) ? pageFullRect.height() - boundingBox->height() - margins.bottom() - yPadding : y;
+      int x = _position.x() - margins.left() + xPadding;
+      int y = _position.y() - margins.top() + yPadding;
+      x = (place & PlacingFlags::RIGHT) ? pagePaintRect.width() - _boundingBox.width() : x;
+      x = (place & PlacingFlags::LEFT) ? 0 : x;
+      y = (place & PlacingFlags::TOP) ? 0 : y;
+      y = (place & PlacingFlags::BOTTOM) ? pagePaintRect.height() - _boundingBox.height() - margins.bottom() : y;
 
       _position.setX(x);
       _position.setY(y);
-      boundingBox->moveTopLeft(_position);
+      _boundingBox.moveTopLeft(_position);
    }
 
    void PageChildObject::setBoundingBox(QRect rect)
    {
-      boundingBox = new QRect(rect);
+      _boundingBox = rect;
    }
 
    void PageChildObject::setBoundingBox(int x, int y, int width, int height)
@@ -59,9 +59,8 @@ namespace nBtPage
    void PageChildObject::setPosition(QPoint point)
    {
       _position = QPoint(point);
-      if ( boundingBox != nullptr )
-         boundingBox = new QRect();
-      if ( ! boundingBox->isNull() &&  ! point.isNull())
-         setBoundingBox(_position.x(), _position.y(), boundingBox->width(), boundingBox->height());
+      if ( _boundingBox.isEmpty() )
+         _boundingBox = QRect();
+      setBoundingBox(_position.x(), _position.y(), _boundingBox.width(), _boundingBox.height());
    }
 }
