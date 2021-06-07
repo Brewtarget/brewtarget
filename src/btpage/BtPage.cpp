@@ -24,6 +24,8 @@ namespace nBtPage
    BtPage::BtPage(QPrinter *printer)
    {
       _printer = printer;
+      _printer->setResolution(QPrinter::HighResolution);
+
       /*
       This is only until the Template file system is in place.
       My though here is to have the template govern the settings for the page including units and such.
@@ -31,6 +33,17 @@ namespace nBtPage
       */
       QPageLayout layout = _printer->pageLayout();
       layout.setUnits(QPageLayout::Point);
+      QMarginsF margins = layout.margins();
+
+      int lDpiX = _printer->logicalDpiX();
+      int lDpiY = _printer->logicalDpiY();
+
+      int margin = 20;
+      margins.setBottom( margin );
+      margins.setTop( margin );
+      margins.setLeft( margin );
+      margins.setRight( margin );
+      layout.setMargins(margins);
       _printer->setPageLayout(layout);
    }
 
@@ -38,10 +51,13 @@ namespace nBtPage
    {
       QPainter *painter = new QPainter(_printer);
       QRectF r = _printer->pageLayout().fullRect();
-      painter->setWindow(0,0, r.width(), r.height());
-
+      QMarginsF margins = _printer->pageLayout().margins();
+      painter->setWindow(margins.left(), margins.right(), r.width(), r.height());
+      painter->setViewport(0, 0, _printer->width(), _printer->height());
+      painter->translate(margins.left(), margins.top());
       foreach (PageChildObject *child, _children)
       {
+         child->calculateBoundingBox();
          child->render(painter);
       }
       painter->end();

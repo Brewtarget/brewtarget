@@ -24,7 +24,7 @@ namespace nBtPage
 {
    void PageImage::setImage(QImage image)
    {
-      _image = QImage(image);
+      _image = image;
       _width = _image.width();
       _height = _image.height();
       setBoundingBox(_image.rect());
@@ -54,12 +54,7 @@ namespace nBtPage
 
    void PageImage::render(QPainter *painter)
    {
-      painter->drawImage(position(), _image);
-
-      if ( ! boundingBox->isEmpty() )
-      {
-         painter->drawRect(*boundingBox);
-      }
+      painter->drawImage(_position, _image);
    }
 
    QSize PageImage::getSize()
@@ -67,8 +62,8 @@ namespace nBtPage
       return QSize(_image.width(), _image.height());
    }
 
-   void PageImage::calculateBoundingBox(QPainter *painter)
+   void PageImage::calculateBoundingBox()
    {
-      setBoundingBox(position, _image.width(), _image.height());
+      setBoundingBox(position(), _image.width(), _image.height());
    }
 }

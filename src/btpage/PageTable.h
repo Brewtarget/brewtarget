@@ -37,7 +37,28 @@ namespace nBtPage
    class PageTable : public PageChildObject
    {
    public:
+      /**
+       * @brief PageTable Contructor
+       * @author Mattias Måhl <mattias@kejsarsten.com>
+       *
+       * @param th Table header
+       * @param td Table data including columnheaders as the first item in the QList
+       * @param tableDataFont Font to be used for the Table data
+       * @param columnheaderFont Font to be used for the Columnheaders, if nullptr it will default to tableDataFont
+       * @param pos Location for the table on the page
+       * @param rect QRect bounding box for the table, if set it will override the automatic sizing of the table.
+       */
       PageTable(PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont = nullptr, QPoint pos = QPoint(), QRect rect = QRect());
+
+      /**
+       * @brief Constuctor PageTable
+       * This is a wrapper contructor for the PageTable setting the fonts to a standars value.
+       * the standardvalue is hardcoded but may be a subject for future change to be included in the options.
+       * @param title Table Header
+       * @param tabledata list of lists with the first row being the column headers
+       * @param pos Position of the table on the printout
+       * @param rect Bounding box for the table, this overrides the automatic sizing of the table.
+       */
       PageTable(QString title, QList<QStringList> tabledata, QPoint pos = QPoint(), QRect rect = QRect());
 
       PageText *tableHeader;
@@ -47,16 +68,38 @@ namespace nBtPage
       int rowPadding = 2;
       QFont columnHeadersFont;
 
-      void setColumnAlignment(int colindex, Qt::AlignmentFlag a);
+      /**
+       * @brief setColumnAlignment
+       * this will set the text alignment for the column at a specific column index.
+       *
+       * @param colindex
+       * @param aFlag
+       */
+      void setColumnAlignment(int colindex, Qt::AlignmentFlag aFlag);
 
       //Enforced by PageChildObject
+      /**
+       * @brief Renders the object to the supplied Painter.
+       *
+       * @param painter QPaintDevice to render the object to.
+       */
       void render(QPainter *painter);
+
+      /**
+       * @brief Get the Size object
+       *
+       * @return QSize
+       */
       QSize getSize();
-      void calculateBoundingBox(QPainter *painter);
+
+      /**
+       * @brief Calculates the bounding box for the object and updates the boundingBox member.
+       *
+       */
+      void calculateBoundingBox();
    private:
       int tableHeight = -1;
       int tableWidth = -1;
-      bool prepareTable();
    };
 }
 #endif /* _PAGETABLE_H */
