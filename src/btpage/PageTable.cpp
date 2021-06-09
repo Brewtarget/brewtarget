@@ -17,34 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PageTable.h"
+#include "BtPage.h"
 #include <QTextOption>
 namespace nBtPage
 {
-   PageTable::PageTable(PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont, QPoint pos, QRect rect)
+   PageTable::PageTable(BtPage *parent, PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont, QPoint pos, QRect rect)
    {
+      this->parent = parent;
       setPosition(pos);
       setBoundingBox(rect);
       tableHeader = th;
-      Font = tableDataFont;
-      columnHeadersFont = (columnHeaderFont != nullptr) ? *columnHeaderFont : tableDataFont;
+      Font = QFont(tableDataFont, parent->printer);
+      columnHeadersFont = (columnHeaderFont != nullptr) ? QFont(*columnHeaderFont, parent->printer) : Font;
+
+      //recalculate the column- and Rowpadding to printers DPI.
+      columnPadding *= (parent->printer->logicalDpiX() / 25.4);
+      rowPadding    *= (parent->printer->logicalDpiY() / 25.4);
+
+      //Get the Font mterics to calculate the row height and text lenght and so on.
+      QFontMetrics fm( Font, parent->printer );
+      QFontMetrics fm_colHeaders( columnHeadersFont, parent->printer );
 
       // Check to see if the data is empty, if so save an empty list.
       // Pop off the first row as it contains all the headers for the columns.
-      QFontMetrics fm(Font);
-      QFontMetrics fm_colHeaders(columnHeadersFont);
-
-      if (!td.isEmpty())
+      if ( ! td.isEmpty() )
       {
          foreach (QString st, td.takeFirst())
          {
-            columnHeaders.append(
-               new PageTableColumn {
+            columnHeaders.append(new PageTableColumn {
                   //set the initial Column width to the fonts horizontal advance as a startingpoint for calculating column widths below.
                   fm_colHeaders.horizontalAdvance(st),
                   PageText
                      (
+                        parent,
                         st,
-                        (columnHeaderFont != nullptr) ? *columnHeaderFont : tableDataFont
+                        columnHeadersFont
                      )});
          }
       }
@@ -52,6 +59,7 @@ namespace nBtPage
       {
          columnHeaders = QList<PageTableColumn *>();
       }
+
       // Search and see if there is any text in the table that is larger than the Columnheader, if so ajust it accordingly.
       // Maybe there is a better way to do this, but this will have to do for now.
       QList<PageText> current_row;
@@ -70,8 +78,10 @@ namespace nBtPage
          {
             columnHeaders.at(col)->ColumnWidth = (columnHeaders.at(col)->ColumnWidth < fm.horizontalAdvance(row.at(col))) ? fm.horizontalAdvance(row.at(col)) : columnHeaders.at(col)->ColumnWidth;
             current_row.append(PageText{
-                row.at(col),
-                tableDataFont});
+               parent,
+               row.at(col),
+               QFont(tableDataFont, parent->printer)
+               });
          }
 
          tableData.append(current_row);
@@ -87,11 +97,13 @@ namespace nBtPage
       setBoundingBox(position(), tableWidth, tableHeight);
    }
 
-   PageTable::PageTable(QString title, QList<QStringList> tabledata, QPoint pos, QRect rect) : PageTable(
+   PageTable::PageTable(BtPage *parent, QString title, QList<QStringList> tabledata, QPoint pos, QRect rect) : PageTable(
+                                                                                                   parent,
                                                                                                    //Create the Table header for the document
                                                                                                    new PageText{
-                                                                                                       title,
-                                                                                                       QFont("Arial", 10, QFont::Bold)},
+                                                                                                      parent,
+                                                                                                      title,
+                                                                                                      QFont("Arial", 10, QFont::Bold)},
                                                                                                    // Send in the data including the columnheaders, the first row is assumed to be column headers.
                                                                                                    tabledata,
                                                                                                    // set the default Font for the hopsTable. i.e. the contents Font.
@@ -124,10 +136,10 @@ namespace nBtPage
 
       //Draw the Header text onto the document.
       tableHeader->setPosition(position());
+      tableHeader->calculateBoundingBox();
       tableHeader->render(painter);
-      //Move our curent drawposition
 
-      QFontMetrics fm(tableHeader->Font);
+      QFontMetrics fm(tableHeader->Font, parent->printer);
       currentPosition.setY(currentPosition.y() + fm.height() + rowPadding);
 
       //Set the colum positions and draw the Column headers onto the painter.
@@ -135,6 +147,7 @@ namespace nBtPage
       foreach (PageTableColumn *col, columnHeaders)
       {
          col->Text.setPosition(QPoint(x, currentPosition.y()));
+         col->Text.calculateBoundingBox();
          col->Text.render(painter);
          x += col->ColumnWidth + columnPadding;
       }
@@ -154,6 +167,7 @@ namespace nBtPage
             int ycur = currentPosition.y();
             int wcur = columnHeaders.at(col_index)->ColumnWidth;
             int hcur = fmtable.height();
+            currentText.setPosition(QPoint(xcur, ycur));
             currentText.setBoundingBox(xcur, ycur, wcur, hcur);
             currentText.Options = QTextOption(columnHeaders.at(col_index)->Text.Options);
             currentText.render(painter);

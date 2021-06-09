@@ -36,7 +36,7 @@ namespace nBtPage
    {
 
    public:
-      PageText(QString value, QFont font);
+      PageText(BtPage *parent, QString value, QFont font);
       QString Value;
       QTextOption Options;
 

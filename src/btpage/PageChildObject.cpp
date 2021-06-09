@@ -21,6 +21,7 @@
 #include <QPagedPaintDevice>
 #include <QRectF>
 #include <QMargins>
+#include "BtPage.h"
 
 namespace nBtPage
 {
@@ -42,8 +43,14 @@ namespace nBtPage
    void PageChildObject::setPosition(QPoint point)
    {
       _position = QPoint(point);
-      if ( _boundingBox.isEmpty() )
-         _boundingBox = QRect();
-      setBoundingBox(_position.x(), _position.y(), _boundingBox.width(), _boundingBox.height());
+      moveBoundingBox(point);
+   }
+
+   void PageChildObject::setPositionMM(int x, int y)
+   {
+      //Convert MM to pixel on the page.
+      x *= (parent->printer->logicalDpiX() / 25.4);
+      y *= (parent->printer->logicalDpiY() / 25.4);
+      setPosition(QPoint(x, y));
    }
 }

@@ -30,8 +30,6 @@ namespace nBtPage
    void BtPage::renderPage()
    {
       painter.begin(printer);
-      painter.setFont(QFont("Arial", 18));
-      painter.drawText(QPoint(100,100), "THIS IS SOME TEXT!");
       foreach (PageChildObject *child, _children)
       {
          child->calculateBoundingBox();

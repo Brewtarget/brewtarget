@@ -32,6 +32,18 @@
 
 namespace nBtPage
 {
+   /**
+    * @brief BtPage handles all object that goes on a page for printout to PDF or Paper.
+    * @authors
+    *    @mattiasmaahl
+    *
+    * It handles some placing functions to set a position for an object on the page.
+    * My goal is to have a platform/model that will enable future development to allow for
+    * using template/Specifications file that designs the output on screen.
+    * I'm trying to keep everything simple for the developer using the object by keeping
+    * to a simple interface where you create an instance of BtPage, add PageChildOjects to
+    * it and then render it to preview it on screen.
+    */
    class BtPage
    {
    public:
@@ -41,15 +53,26 @@ namespace nBtPage
       ~BtPage() {};
       BtPage(QPrinter *printer);
 
+      /**
+       * @brief Add an object to the page
+       * @authors @mattiasmaahl
+       * @tparam T PageChildObject or derived.
+       * @param obj Object to store on the page.
+       * @param position Where to render it, value in pixels. depends on your printer resulution in the end.
+       * @return the created object of supplied type.
+       */
       template <class T>
       auto addChildObject(T *obj, QPoint position = QPoint()) -> decltype(obj)
       {
          if ( ! position.isNull() ) obj->setPosition(position);
-         obj->parent = this;
          _children.append(obj);
          return obj;
       }
 
+      /**
+       * @brief Renders page and all objects created using addChildOject(...)
+       * @authors @mattiasmaahl
+       */
       void renderPage();
 
       /**
@@ -64,6 +87,9 @@ namespace nBtPage
        *   - PlacingFlags::RIGHTOF
        *   - PlacingFlags::LEFTOF
        *
+       * @authors
+       *    @mattiasmaahl
+
        * @param targetObj Object to move on the page
        * @param sourceObj Object to place target in relation to.
        * @param place Placingflag (BELOW, ABOVE, RIGHTOF, LEFTOF
@@ -76,19 +102,21 @@ namespace nBtPage
          PageChildObject *other = (PageChildObject*)sourceObj;
          PageChildObject *target = (PageChildObject*)targetObj;
          int x, y;
-         x = other->position().x();
-         y = other->position().y();
+         x = other->position().x() + xOffset;
+         y = other->position().y() + yOffset;
 
-         y = (place & PlacingFlags::ABOVE) ? y - target->getBoundingBox().height() - yOffset : y;
-         y = (place & PlacingFlags::BELOW) ? y + other->getBoundingBox().height() + yOffset : y;
-         x = (place & PlacingFlags::LEFTOF) ? x - target->getBoundingBox().width() - xOffset : x;
-         x = (place & PlacingFlags::RIGHTOF) ? x + other->getBoundingBox().width() + xOffset : x;
+         y = (place & PlacingFlags::ABOVE) ? y - target->getBoundingBox().height() : y;
+         y = (place & PlacingFlags::BELOW) ? y + other->getBoundingBox().height() : y;
+         x = (place & PlacingFlags::LEFTOF) ? x - target->getBoundingBox().width() : x;
+         x = (place & PlacingFlags::RIGHTOF) ? x + other->getBoundingBox().width() : x;
 
          target->setPosition(QPoint(x, y));
       }
 
       /**
        * @brief
+       * This is a wrapper function to easier place object relational to another object giving the the Offsets in Millimeter.
+       *
        * Place 'target' PageChildObject on a page relational to another PageChildObject.
        * PlacingFlags can be stacked together for placement.
        * for example
@@ -98,6 +126,8 @@ namespace nBtPage
        *   - PlacingFlags::ABOVE
        *   - PlacingFlags::RIGHTOF
        *   - PlacingFlags::LEFTOF
+       *
+       * @author @mattiasmaahl
        *
        * @param targetObj Object to move on the page
        * @param sourceObj Object to place target in relation to.
@@ -112,18 +142,7 @@ namespace nBtPage
          yOffset *= (printer->logicalDpiY() / 25.4);
          xOffset *= (printer->logicalDpiX() / 25.4);
 
-         PageChildObject *other = (PageChildObject*)sourceObj;
-         PageChildObject *target = (PageChildObject*)targetObj;
-         int x, y;
-         x = other->position().x();
-         y = other->position().y();
-
-         y = (place & PlacingFlags::ABOVE) ? y - target->getBoundingBox().height() - yOffset : y;
-         y = (place & PlacingFlags::BELOW) ? y + other->getBoundingBox().height() + yOffset : y;
-         x = (place & PlacingFlags::LEFTOF) ? x - target->getBoundingBox().width() - xOffset : x;
-         x = (place & PlacingFlags::RIGHTOF) ? x + other->getBoundingBox().width() + xOffset : x;
-
-         target->setPosition(QPoint(x, y));
+         placeRelationalTo(targetObj, sourceObj, place, xOffset, yOffset);
       }
 
       /**
@@ -145,6 +164,8 @@ namespace nBtPage
        *    - PlacingFlags::HCENTER
        *    all other Flags will be ignored.
        *
+       * @author @mattiasmaahl
+       *
        * @param targetObj Object to move on the page.
        * @param place Placing flag for placment.
        * @param xOffset Offset from the placement in the x-axix
@@ -156,7 +177,6 @@ namespace nBtPage
          PageChildObject *tO = (PageChildObject*)targetObj;
 
          QRectF pagePaintRect = printer->pageLayout().paintRectPixels(printer->logicalDpiX());
-         QMarginsF margins = printer->pageLayout().marginsPixels(printer->logicalDpiX());
          int x = tO->position().x() + xOffset;
          int y = tO->position().y() + yOffset;
          x = (place & PlacingFlags::RIGHT) ? pagePaintRect.width() - tO->getBoundingBox().width() : x;
