@@ -24,93 +24,23 @@
 #include <QFont>
 #include <QRect>
 #include <QPrinter>
-
+#include "BtEnumFlags.h"
 
 namespace nBtPage
 {
-   enum struct PlacingFlags
-   {
-      BELOW = 1,
-      ABOVE = 2,
-      RIGHTOF = 4,
-      LEFTOF = 8,
-      LEFT = 16,
-      RIGHT = 32,
-      TOP = 64,
-      BOTTOM = 128
-   };
-
-   inline PlacingFlags operator|(PlacingFlags a, PlacingFlags b)
-   {
-      return static_cast<PlacingFlags>(static_cast<int>(a) | static_cast<int>(b));
-   }
-
-   inline bool operator&(PlacingFlags a, PlacingFlags b)
-   {
-      return (static_cast<int>(a) & static_cast<int>(b));
-   }
+   class BtPage;
 
    class PageChildObject
    {
    public:
       QFont Font;
+      BtPage *parent;
 
       //All sub classes from PageChildObject should know how to render them selves.
       virtual void render(QPainter *painter) = 0;
       virtual QSize getSize() = 0;
       virtual void calculateBoundingBox() = 0;
 
-      //Do I really need a template? or is it sufficient widht passing in the PageChildObject pointer?
-      /* \!brief
-      Place a PageChildObject on a page relational to another PageChildObject.
-      PlacingFlags can be stacked together for placement.
-      for example
-      myobject->placeRelationalTo(&other object, PlacingFlags::LEFTOF | PlacingFlags::ABOVE, 30, 30);
-      Valid flags for this is:
-         - PlacingFlags::BELOW
-         - PlacingFlags::ABOVE
-         - PlacingFlags::RIGHTOF
-         - PlacingFlags::LEFTOF
-      */
-      template <class T>
-      void placeRelationalTo(T *obj, PlacingFlags place, int xPadding = 0, int yPadding = 0)
-      {
-         PageChildObject *other = (PageChildObject*)obj;
-         int x, y;
-         x = other->position().x();
-         y = other->position().y();
-
-         y = (place & PlacingFlags::ABOVE) ? y - _boundingBox.height() - yPadding : y;
-         y = (place & PlacingFlags::BELOW) ? y + other->getBoundingBox().height() + yPadding : y;
-         x = (place & PlacingFlags::LEFTOF) ? x - _boundingBox.width() - xPadding : x;
-         x = (place & PlacingFlags::RIGHTOF) ? x + other->getBoundingBox().width() + xPadding : x;
-
-         setPosition(QPoint(x, y));
-      }
-
-      /**
-       * @brief
-       * Place a PageChildObject on a page relational to the page.
-       * PlacingFlags can be stacked together for placement.
-       * The object has to be placed on a page object before calling this as the page sizes are needed for the caclulations.
-       * i.e.
-       * BtPage * myPage = new BtPage(QPrinter);
-       * PageImage * myObject = myPage.addChildObject( new PageImage(.....));
-       * myobject->placeRelationalTo(&other object, PlacingFlags::TOP | PlacingFlags::RIGHT);
-       *
-       * Valid flags for this is:
-       *    - PlacingFlags::LEFT
-       *    - PlacingFlags::RIGHT
-       *    - PlacingFlags::TOP
-       *    - PlacingFlags::BOTTOM
-       *    all other Flags will be ignored.
-       *
-       * @param printer
-       * @param place
-       * @param xPadding
-       * @param yPadding
-       */
-      void placeOnPage(QPrinter *printer, PlacingFlags place, int xPadding = 0, int yPadding = 0);
       void setBoundingBox(QRect rect);
       void setBoundingBox(int x, int y, int width, int height);
       void setBoundingBox(QPoint p, int width, int height);

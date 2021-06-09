@@ -32,9 +32,9 @@ namespace nBtPage
    void PageText::render(QPainter *painter)
    {
       QFont old = painter->font();
+      int size = QFontMetrics(Font).fontDpi();
       painter->setFont(Font);
-      QFontMetrics fm(Font);
-
+      int size2 = painter->fontMetrics().fontDpi();
       painter->drawText(getBoundingBox(), Value, Options);
       painter->setFont(old);
    }

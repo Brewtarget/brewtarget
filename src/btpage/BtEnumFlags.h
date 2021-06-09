@@ -1,5 +1,5 @@
 /*
- * page.cpp is part of Brewtarget, and is Copyright the following
+ * BtPage.h is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
  *
@@ -16,27 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef _BTENUMFLAGS_H
+#define _BTENUMFLAGS_H
 
-#include "BtPage.h"
 namespace nBtPage
 {
-
-   BtPage::BtPage(QPrinter *printer) :
-      painter(printer)
+   enum struct PlacingFlags
    {
-      this->printer = printer;
+      BELOW = 1,
+      ABOVE = 2,
+      RIGHTOF = 4,
+      LEFTOF = 8,
+      LEFT = 16,
+      RIGHT = 32,
+      TOP = 64,
+      BOTTOM = 128,
+      VCENTER = 256,
+      HCENTER = 512
+   };
+
+   inline PlacingFlags operator|(PlacingFlags a, PlacingFlags b)
+   {
+      return static_cast<PlacingFlags>(static_cast<int>(a) | static_cast<int>(b));
    }
 
-   void BtPage::renderPage()
+   inline bool operator&(PlacingFlags a, PlacingFlags b)
    {
-      painter.begin(printer);
-      painter.setFont(QFont("Arial", 18));
-      painter.drawText(QPoint(100,100), "THIS IS SOME TEXT!");
-      foreach (PageChildObject *child, _children)
-      {
-         child->calculateBoundingBox();
-         child->render(&painter);
-      }
-      painter.end();
+      return (static_cast<int>(a) & static_cast<int>(b));
    }
 }
+
+
+#endif /* _BTENUMFLAGS_H */

@@ -24,23 +24,6 @@
 
 namespace nBtPage
 {
-
-   void PageChildObject::placeOnPage(QPrinter *printer, PlacingFlags place, int xPadding, int yPadding)
-   {
-      QRectF pagePaintRect = printer->pageLayout().paintRect();
-      QMarginsF margins = printer->pageLayout().margins();
-      int x = _position.x() - margins.left() + xPadding;
-      int y = _position.y() - margins.top() + yPadding;
-      x = (place & PlacingFlags::RIGHT) ? pagePaintRect.width() - _boundingBox.width() : x;
-      x = (place & PlacingFlags::LEFT) ? 0 : x;
-      y = (place & PlacingFlags::TOP) ? 0 : y;
-      y = (place & PlacingFlags::BOTTOM) ? pagePaintRect.height() - _boundingBox.height() - margins.bottom() : y;
-
-      _position.setX(x);
-      _position.setY(y);
-      _boundingBox.moveTopLeft(_position);
-   }
-
    void PageChildObject::setBoundingBox(QRect rect)
    {
       _boundingBox = rect;
