@@ -97,7 +97,7 @@ namespace nBtPage
                                                                                                    // set the default Font for the hopsTable. i.e. the contents Font.
                                                                                                    QFont("Arial", 8),
                                                                                                    // set the Columnheaders font.
-                                                                                                   new QFont("Arial", 8, QFont::Bold),
+                                                                                                   new QFont("Arial", 10, QFont::Bold),
                                                                                                    pos,
                                                                                                    rect)
    {

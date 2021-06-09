@@ -52,6 +52,16 @@ namespace nBtPage
       setImage(_image.scaled(width, height, Qt::AspectRatioMode::KeepAspectRatio));
    }
 
+   void PageImage::setImageSizeMM(int width, int height)
+   {
+      setDPI(parent->printer->logicalDpiX(), parent->printer->logicalDpiY());
+      int dpmmX = _image.dotsPerMeterX() / 1000;
+      int dpmmY = _image.dotsPerMeterY() / 1000;
+      int cWidth = width * dpmmX;
+      int cHeight = height * dpmmY;
+      setImageSize(cWidth, cHeight);
+   }
+
    void PageImage::render(QPainter *painter)
    {
       painter->drawImage(_position, _image);

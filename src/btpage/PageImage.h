@@ -22,8 +22,9 @@
 #include <QPainter>
 #include <QRect>
 #include <QPoint>
-
+#include "BtPage.h"
 #include "PageChildObject.h"
+
 
 namespace nBtPage
 {
@@ -43,6 +44,7 @@ namespace nBtPage
 
       void setImage(QImage image);
       void setImageSize(int width, int height);
+      void setImageSizeMM(int width, int height);
       void getDPI(int &xdpi, int &ydpi);
       void setDPI(int xdpi, int ydpi);
       void setDPI(int dpi) { setDPI(dpi, dpi); }
