@@ -44,9 +44,12 @@ namespace nBtPage
       void setBoundingBox(QRect rect);
       void setBoundingBox(int x, int y, int width, int height);
       void setBoundingBox(QPoint p, int width, int height);
-      QRect getBoundingBox() { return _boundingBox; }
+      QRect getBoundingBox() {
+         return _boundingBox;
+      }
       void moveBoundingBox(QPoint point) { _boundingBox.moveTopLeft(point); }
       void setPosition(QPoint point);
+      void setPositionMM(int x, int y);
       QPoint position() { return _position; }
 
    protected:

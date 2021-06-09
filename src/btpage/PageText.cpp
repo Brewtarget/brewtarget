@@ -18,25 +18,22 @@
  */
 
 #include "PageText.h"
+#include "BtPage.h"
 namespace nBtPage
 {
 
-   PageText::PageText(QString value, QFont font)
+   PageText::PageText(BtPage *parent, QString value, QFont font)
    {
+      this->parent = parent;
       Value = value;
-      Font = font;
-      QFontMetrics fm(Font);
-      setBoundingBox( 0 , 0, fm.horizontalAdvance(Value), fm.height());
+      Font = QFont( font, parent->printer );
+      calculateBoundingBox();
    }
 
    void PageText::render(QPainter *painter)
    {
-      QFont old = painter->font();
-      int size = QFontMetrics(Font).fontDpi();
       painter->setFont(Font);
-      int size2 = painter->fontMetrics().fontDpi();
       painter->drawText(getBoundingBox(), Value, Options);
-      painter->setFont(old);
    }
 
    int PageText::count()

@@ -30,6 +30,7 @@
 
 namespace nBtPage
 {
+   class BtPage;
    /* \!brief
    * class PageTable
    * This is meant to represent a table to render/print onto a Paper or PDF.
@@ -48,7 +49,7 @@ namespace nBtPage
        * @param pos Location for the table on the page
        * @param rect QRect bounding box for the table, if set it will override the automatic sizing of the table.
        */
-      PageTable(PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont = nullptr, QPoint pos = QPoint(), QRect rect = QRect());
+      PageTable(BtPage *parent, PageText *th, QList<QStringList> td, QFont tableDataFont, QFont *columnHeaderFont = nullptr, QPoint pos = QPoint(), QRect rect = QRect());
 
       /**
        * @brief Constuctor PageTable
@@ -59,13 +60,16 @@ namespace nBtPage
        * @param pos Position of the table on the printout
        * @param rect Bounding box for the table, this overrides the automatic sizing of the table.
        */
-      PageTable(QString title, QList<QStringList> tabledata, QPoint pos = QPoint(), QRect rect = QRect());
+      PageTable(BtPage *parent, QString title, QList<QStringList> tabledata, QPoint pos = QPoint(), QRect rect = QRect());
 
       PageText *tableHeader;
       QList<PageTableColumn *> columnHeaders;
       QList<QList<PageText>> tableData;
+
+      // set these in Millimeters, will be recalculated to dpi in constructor.
       int columnPadding = 10;
       int rowPadding = 2;
+
       QFont columnHeadersFont;
 
       /**

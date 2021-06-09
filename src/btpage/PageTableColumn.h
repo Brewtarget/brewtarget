@@ -24,6 +24,8 @@
 
 namespace nBtPage
 {
+   class BtPage;
+
    class PageTableColumn
    {
    public:

@@ -189,6 +189,7 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    // adding the Recipe name as a title.
    PageText *recipeText = page.addChildObject(
       new PageText (
+         &page,
          _parent->currentRecipe()->name(),
          QFont("Arial", 18, QFont::Bold)
       ),
@@ -197,70 +198,76 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
 
    PageText *brewerText = page.addChildObject(
       new PageText (
+         &page,
          _parent->currentRecipe()->brewer(),
          QFont("Arial", 10)
       ));
-   page.placeRelationalToMM(brewerText, recipeText, PlacingFlags::BELOW, 10, 0);
+   page.placeRelationalToMM(brewerText, recipeText, PlacingFlags::BELOW, 2, 0);
 
    //Adding the Brewtarget logo.
-   PageImage *img = page.addChildObject<PageImage>(
+   PageImage *img = page.addChildObject(
       new PageImage (
+         &page,
          QPoint(),
          QImage(":/images/title.svg")
       ));
    img->setImageSizeMM(100, 20);
    page.placeOnPage(img, PlacingFlags::TOP | PlacingFlags::RIGHT);
 
-   /*
    //Statistics table with beer data.
    PageTable *statTable = page.addChildObject(
       new PageTable (
+         &page,
          QString("Beer details"),
-         recipeFormatter->buildStatList(),
-         QPoint(40, 85)
+         recipeFormatter->buildStatList()
       ));
    statTable->rowPadding=0;
    statTable->columnHeaders.at(1)->ColumnWidth=200;
+   statTable->setPositionMM(10, 20);
 
    PageTable *fermTable = page.addChildObject(
       new PageTable (
+         &page,
          QString("Fermentables"),
          recipeFormatter->buildFermentableList()
       ));
-   page.placeRelationalTo(fermTable, statTable, PlacingFlags::BELOW, 0, 20);
+   page.placeRelationalToMM(fermTable, statTable, PlacingFlags::BELOW, 0, 5);
 
    // Create the HopsTable
    PageTable *hopsTable = page.addChildObject(
       new PageTable (
+         &page,
          QString("Hops"),
          recipeFormatter->buildHopsList()
       ));
    hopsTable->setColumnAlignment(1, Qt::AlignRight);
-   page.placeRelationalTo(hopsTable, fermTable, PlacingFlags::BELOW, 0, 20);
+   page.placeRelationalToMM(hopsTable, fermTable, PlacingFlags::BELOW, 0, 5);
 
    // Create the MiscTable
    PageTable *miscTable = page.addChildObject(
       new PageTable (
+         &page,
          QString("Misc"),
          recipeFormatter->buildMiscList()
       ));
-   page.placeRelationalTo(miscTable, hopsTable, PlacingFlags::BELOW, 0, 20);
+   page.placeRelationalToMM(miscTable, hopsTable, PlacingFlags::BELOW, 0, 5);
 
    // Create the Yeast Table
    PageTable *yeastTable = page.addChildObject(
       new PageTable (
+         &page,
          QString("Yeast"),
          recipeFormatter->buildYeastList()
       ));
-   page.placeRelationalTo(yeastTable, miscTable, PlacingFlags::BELOW, 0, 20);
+   page.placeRelationalToMM(yeastTable, miscTable, PlacingFlags::BELOW, 0, 5);
 
    PageTable *mashTable = page.addChildObject(
       new PageTable (
+         &page,
          QString("Mash"),
          recipeFormatter->buildMashList()
       ));
-   page.placeRelationalTo(mashTable, yeastTable, PlacingFlags::BELOW, 0, 20);
+   page.placeRelationalToMM(mashTable, yeastTable, PlacingFlags::BELOW, 0, 5);
    //Render the Page onto the painter/printer for preview/printing.
-   */
    page.renderPage();
 }

@@ -36,8 +36,9 @@ namespace nBtPage
    {
    public:
       PageImage(){};
-      PageImage(QPoint pos, QImage image)
+      PageImage(BtPage *parent, QPoint pos, QImage image)
       {
+         this->parent = parent;
          setPosition(pos);
          setImage(image);
       };
