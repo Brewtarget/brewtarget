@@ -24,6 +24,7 @@
 #include <QRectF>
 #include <QTextOption>
 #include <QFont>
+#include <QDebug>
 
 namespace nBtPage
 {
@@ -32,7 +33,8 @@ namespace nBtPage
    *
    * BtPage text object that needs to have a Value (text) and a Font (Will default to Application Font if not set.)
    */
-   class PageText : public PageChildObject
+   class PageText
+      : public PageChildObject
    {
 
    public:
@@ -45,7 +47,7 @@ namespace nBtPage
       //Enforced by PageChildObject
       void render(QPainter *painter);
       QSize getSize();
-      void calculateBoundingBox();
+      void calculateBoundingBox( double scalex = 0.0, double scaley = 0.0 );
    };
 }
 #endif /* _PAGETEXT_H */

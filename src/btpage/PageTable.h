@@ -35,7 +35,8 @@ namespace nBtPage
    * class PageTable
    * This is meant to represent a table to render/print onto a Paper or PDF.
    */
-   class PageTable : public PageChildObject
+   class PageTable
+      : public PageChildObject
    {
    public:
       /**
@@ -100,7 +101,7 @@ namespace nBtPage
        * @brief Calculates the bounding box for the object and updates the boundingBox member.
        *
        */
-      void calculateBoundingBox();
+      void calculateBoundingBox( double scalex = 0.0, double scaley = 0.0 );
    private:
       int tableHeight = -1;
       int tableWidth = -1;

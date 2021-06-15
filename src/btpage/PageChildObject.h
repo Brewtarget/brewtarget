@@ -21,6 +21,7 @@
 #include <QPoint>
 #include <QPainter>
 #include <QObject>
+#include <QDebug>
 #include <QFont>
 #include <QRect>
 #include <QPrinter>
@@ -33,13 +34,17 @@ namespace nBtPage
    class PageChildObject
    {
    public:
-      QFont Font;
-      BtPage *parent;
 
       //All sub classes from PageChildObject should know how to render them selves.
       virtual void render(QPainter *painter) = 0;
       virtual QSize getSize() = 0;
-      virtual void calculateBoundingBox() = 0;
+      virtual void calculateBoundingBox( double scalex = 0.0, double scaley = 0.0 ) = 0;
+
+      QFont Font;
+      BtPage *parent;
+      //poor mans singularly linked list for outputting to multiple pages.
+      PageChildObject *nextSection = nullptr;
+      bool needPageBrake = false;
 
       void setBoundingBox(QRect rect);
       void setBoundingBox(int x, int y, int width, int height);

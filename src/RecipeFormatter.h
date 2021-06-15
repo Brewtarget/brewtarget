@@ -123,6 +123,8 @@ private:
    QString buildSaltTableTxt();
    */
    QString buildBrewNotesHtml();
+   QString buildNotesString();
+   QString buildTasteNotesString();
    QString buildBrewNotesTxt();
    QString buildHTMLFooter();
 

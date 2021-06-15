@@ -100,17 +100,27 @@ namespace nBtPage
       void placeRelationalTo(T *targetObj, S *sourceObj, PlacingFlags place, int xOffset = 0 /* pixels */, int yOffset = 0 /* pixels */)
       {
          PageChildObject *other = (PageChildObject*)sourceObj;
+         //If the source object goes beyond the page and is doing a page brake, we need call our selves with that child to get to the last in the list.
+         //this way we get the bottom coordinates from the last part of the object, thus placing ourselves to the right coordinates.
+         if (other->needPageBrake && other->nextSection != nullptr) {
+            placeRelationalTo( targetObj, other->nextSection, place, xOffset, yOffset );
+            //after this we return so we done brake everuthing after.
+            return;
+         }
+
          PageChildObject *target = (PageChildObject*)targetObj;
          int x, y;
          x = other->position().x() + xOffset;
          y = other->position().y() + yOffset;
-
+         other->calculateBoundingBox();
+         target->calculateBoundingBox();
          y = (place & PlacingFlags::ABOVE) ? y - target->getBoundingBox().height() : y;
          y = (place & PlacingFlags::BELOW) ? y + other->getBoundingBox().height() : y;
          x = (place & PlacingFlags::LEFTOF) ? x - target->getBoundingBox().width() : x;
          x = (place & PlacingFlags::RIGHTOF) ? x + other->getBoundingBox().width() : x;
 
          target->setPosition(QPoint(x, y));
+         target->calculateBoundingBox();
       }
 
       /**

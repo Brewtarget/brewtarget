@@ -846,11 +846,11 @@ QString RecipeFormatter::buildStatTableTxt()
    return ret;
 }
 
-/*
- * \!brief
+/**
+ * @brief
  * RecipeFormatter::buildStatList()
  * This will return a List of strings where the first row is the headers for each column.
- * \return QList<QStringList> of Stats for the recipe.
+ * @return QList<QStringList> of Stats for the recipe.
 */
 QList<QStringList> RecipeFormatter::buildStatList()
 {
@@ -1008,11 +1008,11 @@ QString RecipeFormatter::buildFermentableTableTxt()
    return ret;
 }
 
-/*
- * \!brief
+/**
+ * @brief
  * RecipeFormatter::buildFermentableList()
  * This will return a List of strings where the first row is the headers for each column.
- * \return QList<QStringList> of Fermentables.
+ * @return QList<QStringList> of Fermentables.
 */
 QList<QStringList> RecipeFormatter::buildFermentableList()
 {
@@ -1154,11 +1154,11 @@ QString RecipeFormatter::buildHopsTableTxt()
    return ret;
 }
 
-/*
- * \!brief
+/**
+ * @brief
  * RecipeFormatter::buildHopsList()
  * This will return a List of strings where the first row is the headers for each column.
- * \return QList<QStringList> of Hops.
+ * @return QList<QStringList> of Hops.
 */
 QList<QStringList> RecipeFormatter::buildHopsList()
 {
@@ -1284,10 +1284,11 @@ QString RecipeFormatter::buildMiscTableTxt()
    return ret;
 }
 
-/* \!brief
+/**
+ * @brief
  * buildMiscList
  * collects all the miscs from the recipe an returns a list.
- * \return QList<QStringList>
+ * @return QList<QStringList>
  */
 QList<QStringList> RecipeFormatter::buildMiscList()
 {
@@ -1411,10 +1412,11 @@ QString RecipeFormatter::buildYeastTableTxt()
    return ret;
 }
 
-/* \!brief
+/**
+ * @brief
  * buildYeastList
  * collects all the yeasts from the recipe an returns a list.
- * \return QList<QStringList>
+ * @return QList<QStringList>
  */
 QList<QStringList> RecipeFormatter::buildYeastList()
 {
@@ -1580,10 +1582,11 @@ QString RecipeFormatter::buildMashTableTxt()
    return ret;
 }
 
-/* \!brief
+/**
+ * @brief
  * buildMashList
  * collects all the mashsteps from the recipe an returns a list.
- * \return QList<QStringList>
+ * @return QList<QStringList>
  */
 QList<QStringList> RecipeFormatter::buildMashList()
 {
@@ -1653,6 +1656,44 @@ QString RecipeFormatter::buildNotesHtml()
    notes += rec->notes().toHtmlEscaped();
 
    return notes;
+}
+
+/**
+ * @brief
+ * buildNotesString
+ * Returns the notes for the recipe as a continous string.
+ *
+ * @return QString
+ */
+QString RecipeFormatter::buildNotesString()
+{
+   QString notes;
+
+   if ( rec == nullptr || rec->notes() == "" )
+      return "";
+
+   // NOTE: (heh) Using the QTextDocument.toHtml() method doesn't really work
+   // here. So we cheat and use some newer functionality
+   return rec->notes();
+}
+
+/**
+ * @brief
+ * buildNotesString
+ * Returns the notes for the recipe as a continous string.
+ *
+ * @return QString
+ */
+QString RecipeFormatter::buildTasteNotesString()
+{
+   QString notes;
+
+   if ( rec == nullptr || rec->notes() == "" )
+      return "";
+
+   // NOTE: (heh) Using the QTextDocument.toHtml() method doesn't really work
+   // here. So we cheat and use some newer functionality
+   return rec->tasteNotes();
 }
 
 QString RecipeFormatter::buildInstructionTableHtml()

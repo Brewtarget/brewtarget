@@ -72,7 +72,7 @@ namespace nBtPage
       return QSize(_image.width(), _image.height());
    }
 
-   void PageImage::calculateBoundingBox()
+   void PageImage::calculateBoundingBox( double scalex, double scaley )
    {
       setBoundingBox(position(), _image.width(), _image.height());
    }
