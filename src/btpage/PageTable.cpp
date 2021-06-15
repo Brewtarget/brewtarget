@@ -27,6 +27,7 @@ namespace nBtPage
       setPosition(pos);
       setBoundingBox(rect);
       tableHeader = th;
+      qDebug() << Q_FUNC_INFO << "Tableheader Value" << tableHeader->Value;
       Font = QFont(tableDataFont, parent->printer);
       columnHeadersFont = (columnHeaderFont != nullptr) ? QFont(*columnHeaderFont, parent->printer) : Font;
 
@@ -37,11 +38,13 @@ namespace nBtPage
       //Get the Font mterics to calculate the row height and text lenght and so on.
       QFontMetrics fm( Font, parent->printer );
       QFontMetrics fm_colHeaders( columnHeadersFont, parent->printer );
-
+      QFontMetrics fm_tableheader(tableHeader->Font, parent->printer);
+      tableHeight = fm_tableheader.height() + rowPadding;
       // Check to see if the data is empty, if so save an empty list.
       // Pop off the first row as it contains all the headers for the columns.
       if ( ! td.isEmpty() )
       {
+         tableHeight += fm_colHeaders.height();
          foreach (QString st, td.takeFirst())
          {
             columnHeaders.append(new PageTableColumn {
@@ -57,13 +60,14 @@ namespace nBtPage
       }
       else
       {
+         tableHeader->Value = QString("No %1 in this Recipe").arg(tableHeader->Value.toLower());
+         tableWidth = (int)qMax(fm_tableheader.horizontalAdvance(tableHeader->Value)*1.05, (double)tableWidth);
          columnHeaders = QList<PageTableColumn *>();
       }
 
       // Search and see if there is any text in the table that is larger than the Columnheader, if so ajust it accordingly.
       // Maybe there is a better way to do this, but this will have to do for now.
       QList<PageText> current_row;
-      tableHeight = fm_colHeaders.height() + rowPadding;
       foreach (QStringList row, td)
       {
          //Clear out any data in the current_data to make sure we have an emtpy list for the for_loop below.
@@ -87,14 +91,14 @@ namespace nBtPage
          tableData.append(current_row);
          tableHeight += fm.height() + rowPadding;
       }
-
       // Storing the tableWidth to the object for later reference.
       tableWidth = 0;
       foreach (PageTableColumn *col, columnHeaders)
       {
          tableWidth += col->ColumnWidth + columnPadding;
       }
-      setBoundingBox(position(), tableWidth, tableHeight);
+      tableWidth = (int)qMax(fm_tableheader.horizontalAdvance(tableHeader->Value)*1.05, (double)tableWidth);
+      calculateBoundingBox();
    }
 
    PageTable::PageTable(BtPage *parent, QString title, QList<QStringList> tabledata, QPoint pos, QRect rect) : PageTable(
@@ -126,8 +130,8 @@ namespace nBtPage
    {
       if (tableData.size() == 0)
       {
-         tableHeader->Value = QString("No %1 in this Recipe").arg(tableHeader->Value.toLower());
          tableHeader->setPosition(position());
+         tableHeader->calculateBoundingBox();
          tableHeader->render(painter);
          return;
       }
@@ -183,7 +187,7 @@ namespace nBtPage
       return QSize(r.width(), r.height());
    }
 
-   void PageTable::calculateBoundingBox() {
+   void PageTable::calculateBoundingBox( double scalex, double scaley ) {
       setBoundingBox(position(), tableWidth, tableHeight);
    }
 }

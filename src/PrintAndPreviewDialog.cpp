@@ -177,6 +177,13 @@ void PrintAndPreviewDialog::setupPreviewWidget() {
    previewWidget->show();
 }
 
+/**
+ * @brief Slot: printDocument
+ * prints out the document to the preview window.
+ * to print hardcopy or PDF file use previewWidget->print()
+ *
+ * @param printer PagedPaintingDevice (QT) Printer to use for printout.
+ */
 void PrintAndPreviewDialog::printDocument(QPrinter * printer)
 {
    if ( _parent->currentRecipe() == nullptr)
@@ -185,7 +192,11 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    using namespace nBtPage;
    //Setting up a blank page for drawing.
    BtPage page(printer);
-
+   /*
+   all of the below code to generate the printout will be subject to change and refactoring when I get around to
+   making the template editor for printouts where you can save your templates and use them or share them
+   with other BT users.
+   */
    // adding the Recipe name as a title.
    PageText *recipeText = page.addChildObject(
       new PageText (
@@ -195,7 +206,7 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
       ),
       QPoint(0,0)
       );
-
+   // adding Brewers name
    PageText *brewerText = page.addChildObject(
       new PageText (
          &page,
@@ -218,9 +229,10 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    PageTable *statTable = page.addChildObject(
       new PageTable (
          &page,
-         QString("Beer details"),
+         QString(tr("Beer details")),
          recipeFormatter->buildStatList()
       ));
+   statTable->columnHeadersFont = statTable->Font;
    statTable->rowPadding=0;
    statTable->columnHeaders.at(1)->ColumnWidth=200;
    statTable->setPositionMM(10, 20);
@@ -228,7 +240,7 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    PageTable *fermTable = page.addChildObject(
       new PageTable (
          &page,
-         QString("Fermentables"),
+         QString(tr("Fermentables")),
          recipeFormatter->buildFermentableList()
       ));
    page.placeRelationalToMM(fermTable, statTable, PlacingFlags::BELOW, 0, 5);
@@ -237,7 +249,7 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    PageTable *hopsTable = page.addChildObject(
       new PageTable (
          &page,
-         QString("Hops"),
+         QString(tr("Hops")),
          recipeFormatter->buildHopsList()
       ));
    hopsTable->setColumnAlignment(1, Qt::AlignRight);
@@ -247,7 +259,7 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    PageTable *miscTable = page.addChildObject(
       new PageTable (
          &page,
-         QString("Misc"),
+         QString(tr("Misc")),
          recipeFormatter->buildMiscList()
       ));
    page.placeRelationalToMM(miscTable, hopsTable, PlacingFlags::BELOW, 0, 5);
@@ -256,7 +268,7 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    PageTable *yeastTable = page.addChildObject(
       new PageTable (
          &page,
-         QString("Yeast"),
+         QString(tr("Yeast")),
          recipeFormatter->buildYeastList()
       ));
    page.placeRelationalToMM(yeastTable, miscTable, PlacingFlags::BELOW, 0, 5);
@@ -264,10 +276,42 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    PageTable *mashTable = page.addChildObject(
       new PageTable (
          &page,
-         QString("Mash"),
+         QString(tr("Mash")),
          recipeFormatter->buildMashList()
       ));
    page.placeRelationalToMM(mashTable, yeastTable, PlacingFlags::BELOW, 0, 5);
+
+   PageText *notesHeader = page.addChildObject(
+      new PageText (
+         &page,
+         QString(tr("Notes")),
+         QFont("Arial", 12, QFont::Bold)
+      ));
+   page.placeRelationalToMM(notesHeader, mashTable, PlacingFlags::BELOW, 0, 5);
+
+   PageText *notesText = page.addChildObject(
+      new PageText (
+         &page,
+         recipeFormatter->buildNotesString(),
+         QFont("Arial", 10)
+      ));
+   page.placeRelationalToMM(notesText, notesHeader, PlacingFlags::BELOW);
+
+   PageText *tasteNotesHeader = page.addChildObject(
+      new PageText (
+         &page,
+         QString(tr("Taste notes")),
+         QFont("Arial", 12, QFont::Bold)
+      ));
+   page.placeRelationalToMM(tasteNotesHeader, notesText, PlacingFlags::BELOW, 0, 5);
+
+   PageText *tasteNotesHeaderText = page.addChildObject(
+      new PageText (
+         &page,
+         recipeFormatter->buildTasteNotesString(),
+         QFont("Arial", 10)
+      ));
+   page.placeRelationalToMM(tasteNotesHeaderText, tasteNotesHeader, PlacingFlags::BELOW);
    //Render the Page onto the painter/printer for preview/printing.
    page.renderPage();
 }

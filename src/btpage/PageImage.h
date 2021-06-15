@@ -32,7 +32,8 @@ namespace nBtPage
  * Class PageImage
  * Class to handle image printout on the BtPage object.
  */
-   class PageImage : public PageChildObject
+   class PageImage
+      : public PageChildObject
    {
    public:
       PageImage(){};
@@ -53,7 +54,7 @@ namespace nBtPage
       //Virtual members implementation
       void render(QPainter *painter);
       QSize getSize();
-      void calculateBoundingBox();
+      void calculateBoundingBox( double scalex = 0.0, double scaley = 0.0 );
 
       QImage image();
 

@@ -1,5 +1,5 @@
 /*
- * page.cpp is part of Brewtarget, and is Copyright the following
+ * BtPage.cpp is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
  *
@@ -29,11 +29,14 @@ namespace nBtPage
 
    void BtPage::renderPage()
    {
-      painter.begin(printer);
       foreach (PageChildObject *child, _children)
       {
-         child->calculateBoundingBox();
          child->render(&painter);
+         if ( child->needPageBrake ) {
+            //We're obviously dealing with a large text, let's create a new page and continue rendering the text.
+            printer->newPage();
+            child->nextSection->render( &painter );
+         }
       }
       painter.end();
    }
