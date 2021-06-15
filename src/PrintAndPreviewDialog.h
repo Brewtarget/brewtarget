@@ -62,12 +62,13 @@ private:
    };
 
    void setupConnections();
-   void setupPreviewWidget();
+   void setupPreviewWidgets();
    void setPrintingControls();
    void collectPrinterInfo();
    void CollectSupportedPageSizes();
    void showPrintDialog();
    void collectRecipe();
+   void handlePrinting();
 
    MainWindow *_parent;
    Recipe *selectedRecipe;
@@ -75,6 +76,7 @@ private:
    QPrinter * _printer = nullptr;
    _outputSelection outputSelection = PAPER;
    QMap<QString, QPageSize> PageSizeMap;
+   QTextBrowser *htmlDocument;
 
 public slots:
    void printDocument(QPrinter * printer);
