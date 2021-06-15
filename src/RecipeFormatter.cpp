@@ -194,7 +194,7 @@ QString RecipeFormatter::getHTMLFormat( QList<Recipe*> recipes ) {
    return hDoc;
 }
 
-QString RecipeFormatter::getHTMLFormat()
+QString RecipeFormatter::getHTMLFormat((bool generateBrewInstructions)
 {
    QString pDoc;
 
@@ -206,7 +206,7 @@ QString RecipeFormatter::getHTMLFormat()
    pDoc += buildYeastTableHtml();
    pDoc += buildMashTableHtml();
    pDoc += buildNotesHtml();
-   pDoc += buildInstructionTableHtml();
+   pDoc += (generateBrewInstructions) ? buildInstructionTableHtml() : "";
    pDoc += buildBrewNotesHtml();
 
    pDoc += buildHTMLFooter();
@@ -1897,7 +1897,6 @@ QString RecipeFormatter::getLabelToolTip() {
 
    return header + body;
 }
-
 
 bool RecipeFormatter::loadComplete(bool ok)
 {

@@ -52,12 +52,13 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
 
    previewWidget = new QPrintPreviewWidget( _printer , this);
    recipeFormatter = new RecipeFormatter(this);
+   htmlDocument = new QTextBrowser(this);
 
    collectRecipe();
    collectPrinterInfo();
    setupConnections();
    setPrintingControls();
-   setupPreviewWidget();
+   setupPreviewWidgets();
 }
 
 void PrintAndPreviewDialog::showEvent(QShowEvent *e) {
@@ -117,10 +118,51 @@ void PrintAndPreviewDialog::setupConnections() {
 
    //This will Printout the document and close the dialog
    connect(Button_Print, &QPushButton::clicked, [this]() {
-      previewWidget->print();
-      setVisible(false);
+      handlePrinting();
    });
 
+}
+
+void PrintAndPreviewDialog::handlePrinting() {
+   //make it short if we are printing to paper.
+   if (radioButton_OutputPaper->isChecked())
+   {
+      previewWidget->print();
+   }
+   // if we are not sending to printer we need to save a file.
+   QString fileDialogFilter = (radioButton_OutputPDF->isChecked()) ? "PDF (*.pdf)" : "HTML (*.html)";
+   QString filename = QFileDialog::getSaveFileName(
+      this,
+      (radioButton_OutputPDF->isChecked()) ? "Save PDF" : "Save HTML",
+      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+      fileDialogFilter
+      );
+   qDebug() << Q_FUNC_INFO << "Filename to save: " << filename;
+   if (radioButton_OutputPDF->isChecked())
+   {
+      _printer->setOutputFormat(QPrinter::PdfFormat);
+      _printer->setOutputFileName(filename);
+      previewWidget->print();
+   }
+   else
+   {
+      QFile file = QFile(filename);
+      if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+      {
+         qWarning() << Q_FUNC_INFO << tr("File %1 filname << could not be saved").arg(filename);
+         QMessageBox msgbox(this);
+         msgbox.setWindowTitle(tr("Error saving file"));
+         msgbox.setText(tr("Could not open the file %1 for writing! please try again with a new filename or diretory").arg(filename));
+         msgbox.exec();
+         return;
+      }
+      QTextStream ts(&file);
+      ts << htmlDocument->document()->toHtml();
+      file.close();
+   }
+
+   //Closing down the dialog.
+   setVisible(false);
 }
 
 void PrintAndPreviewDialog::resetAndClose(bool checked) {
@@ -166,15 +208,43 @@ void PrintAndPreviewDialog::setPrintingControls() {
    groupBox_Orientation->setEnabled        ( ! radioButton_OutputHTML->isChecked() );
    groupBox_PrinterSettings->setEnabled    ( ! radioButton_OutputHTML->isChecked() );
 
+   //Only set this as "print" if we are printing to paper, else it is set to "save as"
    Button_Print->setText((radioButton_OutputPaper->isChecked()) ? "Print" : "Save as");
+
+   //setting up printer accordingly
+   if (radioButton_OutputPaper->isChecked())
+   {
+      _printer->setOutputFormat(QPrinter::OutputFormat::NativeFormat);
+      _printer->setPrinterName(comboBox_PrinterSelector->currentText());
+   }
+   else if (radioButton_OutputPDF->isChecked())
+   {
+      _printer->setOutputFormat(QPrinter::OutputFormat::PdfFormat);
+   }
+   else if (radioButton_OutputHTML->isChecked())
+   {
+      QString hdoc = recipeFormatter->getHTMLFormat();
+      htmlDocument->setHtml(hdoc);
+   }
+
+   //setting up views correctly.
+   (radioButton_OutputHTML->isChecked()) ? htmlDocument->show() : htmlDocument->hide();
+   (radioButton_OutputPaper->isChecked() || radioButton_OutputPDF->isChecked()) ? previewWidget->show() : previewWidget->hide();
+
 }
 
-void PrintAndPreviewDialog::setupPreviewWidget() {
-
+void PrintAndPreviewDialog::setupPreviewWidgets()
+{
+   //Setting up the Document preview for Paper and PDF
    PrintAndPreviewDialog::verticalLayout_PrintPreviewWidget->addWidget ( previewWidget );
    previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
    previewWidget->setZoomMode(QPrintPreviewWidget::FitInView);
    previewWidget->show();
+
+   //setting up the Document preview for HTML, we're hiding this to begin with.
+   verticalLayout_PrintPreviewWidget->addWidget( htmlDocument );
+   htmlDocument->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+   htmlDocument->hide();
 }
 
 /**
