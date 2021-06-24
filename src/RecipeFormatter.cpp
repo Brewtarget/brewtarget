@@ -194,7 +194,7 @@ QString RecipeFormatter::getHTMLFormat( QList<Recipe*> recipes ) {
    return hDoc;
 }
 
-QString RecipeFormatter::getHTMLFormat((bool generateBrewInstructions)
+QString RecipeFormatter::getHTMLFormat(bool generateBrewInstructions)
 {
    QString pDoc;
 
@@ -1696,12 +1696,19 @@ QString RecipeFormatter::buildTasteNotesString()
    return rec->tasteNotes();
 }
 
+/**
+ * @brief returns HTML generated text with the instructions on how to brew this beverage.
+ *
+ * @return QString
+ */
 QString RecipeFormatter::buildInstructionTableHtml()
 {
    if( rec == nullptr )
       return "";
-
-   QString itable;
+   BrewDayFormatter *brewDayFormatter(nullptr);
+   brewDayFormatter->setRecipe(rec);
+   return brewDayFormatter->buildInstructionHTML();
+   /*QString itable;
    int i, size;
    QList<Instruction*> instructions = rec->instructions();
    size = instructions.size();
@@ -1720,7 +1727,7 @@ QString RecipeFormatter::buildInstructionTableHtml()
 
    itable += "</ol>";
 
-   return itable;
+   return itable;*/
 }
 
 QString RecipeFormatter::buildInstructionTableTxt()

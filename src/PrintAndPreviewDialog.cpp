@@ -25,9 +25,7 @@
 #include <QPrinterInfo>
 #include <QList>
 #include <QSizePolicy>
-
-
-
+#include "btpage/BtPage.h"
 
 PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
    : QDialog(parent)
@@ -52,7 +50,11 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
 
    previewWidget = new QPrintPreviewWidget( _printer , this);
    recipeFormatter = new RecipeFormatter(this);
+   brewDayFormatter = new BrewDayFormatter(this);
    htmlDocument = new QTextBrowser(this);
+
+   checkBox_Recipe->setChecked(true);
+   checkBox_Recipe->setEnabled(false);
 
    collectRecipe();
    collectPrinterInfo();
@@ -63,12 +65,19 @@ PrintAndPreviewDialog::PrintAndPreviewDialog ( MainWindow *parent)
 
 void PrintAndPreviewDialog::showEvent(QShowEvent *e) {
    setVisible(true);
+   collectRecipe();
+
+   int index = comboBox_PaperFormatSelector->findText(_printer->pageLayout().pageSize().name());
+   comboBox_PaperFormatSelector->setCurrentIndex(index);
+   comboBox_PaperFormatSelector->repaint();
    previewWidget->updatePreview();
 }
 
 void PrintAndPreviewDialog::collectRecipe() {
    selectedRecipe = _parent->currentRecipe();
    recipeFormatter->setRecipe(selectedRecipe);
+   brewDayFormatter->setRecipe(selectedRecipe);
+   label_CurrentRecipe->setText((selectedRecipe != nullptr) ? selectedRecipe->name() : "NULL");
 }
 
 void PrintAndPreviewDialog::collectPrinterInfo() {
@@ -121,8 +130,43 @@ void PrintAndPreviewDialog::setupConnections() {
       handlePrinting();
    });
 
+   //Connect the Recipe and BrewInstructions checkboxes to update the preview when toggled
+   connect(checkBox_Recipe, &QCheckBox::toggled, this, &PrintAndPreviewDialog::checkBoxRecipe_toggle);
+   connect(checkBox_BrewdayInstructions, &QCheckBox::toggled, this, &PrintAndPreviewDialog::checkBoxBrewday_toggle);
+
 }
 
+/**
+ * @brief handles the Recipe checkbox toggle
+ *
+ * @param checked
+ */
+void PrintAndPreviewDialog::checkBoxRecipe_toggle(bool checked)
+{
+   updatePreview();
+}
+
+/**
+ * @brief handles the breDay checkbox toggle action
+ *
+ * @param checked
+ */
+void PrintAndPreviewDialog::checkBoxBrewday_toggle(bool checked)
+{
+   //first off, we always need to have something to export/print, so if brewday instructions is unchecked the recipe will automatically be selected.
+   checkBox_Recipe->setChecked( (checkBox_BrewdayInstructions->isChecked()) ? checkBox_Recipe->isChecked() : true );
+
+   // We enable the Recipe checkbox only if the brewday checkbox is checked.
+   checkBox_Recipe->setEnabled( checkBox_BrewdayInstructions->isChecked() );
+
+   //update the view accordingly
+   updatePreview();
+}
+
+/**
+ * @brief Handles the printing. sends to the selected output format.
+ *
+ */
 void PrintAndPreviewDialog::handlePrinting() {
    //make it short if we are printing to paper.
    if (radioButton_OutputPaper->isChecked())
@@ -165,6 +209,33 @@ void PrintAndPreviewDialog::handlePrinting() {
    setVisible(false);
 }
 
+/**
+ * @brief updates the current view with the changed data. depanding on selected output.
+ *
+ * @param checked
+ */
+void PrintAndPreviewDialog::updatePreview() {
+   if ( ! radioButton_OutputHTML->isChecked())
+   {
+      previewWidget->updatePreview();
+   }
+   else
+   {
+      bool chkRec = checkBox_Recipe->isChecked();
+      bool chkBDI = checkBox_BrewdayInstructions->isChecked();
+      QString pDoc = "";
+      if (chkRec) {
+         pDoc = recipeFormatter->getHTMLFormat(checkBox_BrewdayInstructions->isChecked());
+      }
+      if ( chkBDI && !chkRec ) {
+         pDoc = brewDayFormatter->buildHTML();
+      }
+      htmlDocument->setHtml(pDoc);
+      (radioButton_OutputHTML->isChecked()) ? htmlDocument->show() : htmlDocument->hide();
+      (radioButton_OutputPaper->isChecked() || radioButton_OutputPDF->isChecked()) ? previewWidget->show() : previewWidget->hide();
+   }
+}
+
 void PrintAndPreviewDialog::resetAndClose(bool checked) {
    setVisible(false);
 }
@@ -186,7 +257,6 @@ void PrintAndPreviewDialog::selectedPrinterChanged(int index) {
 }
 
 void PrintAndPreviewDialog::outputRadioButtonsClicked() {
-   outputSelection = (radioButton_OutputPaper->isChecked()) ? PAPER : ((radioButton_OutputPDF->isChecked()) ? PDF : HTML);
    setPrintingControls();
 }
 
@@ -221,15 +291,9 @@ void PrintAndPreviewDialog::setPrintingControls() {
    {
       _printer->setOutputFormat(QPrinter::OutputFormat::PdfFormat);
    }
-   else if (radioButton_OutputHTML->isChecked())
-   {
-      QString hdoc = recipeFormatter->getHTMLFormat();
-      htmlDocument->setHtml(hdoc);
-   }
 
    //setting up views correctly.
-   (radioButton_OutputHTML->isChecked()) ? htmlDocument->show() : htmlDocument->hide();
-   (radioButton_OutputPaper->isChecked() || radioButton_OutputPDF->isChecked()) ? previewWidget->show() : previewWidget->hide();
+   updatePreview();
 
 }
 
@@ -267,33 +331,30 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
    making the template editor for printouts where you can save your templates and use them or share them
    with other BT users.
    */
-   // adding the Recipe name as a title.
-   PageText *recipeText = page.addChildObject(
-      new PageText (
-         &page,
-         _parent->currentRecipe()->name(),
-         QFont("Arial", 18, QFont::Bold)
-      ),
-      QPoint(0,0)
-      );
-   // adding Brewers name
-   PageText *brewerText = page.addChildObject(
-      new PageText (
-         &page,
-         _parent->currentRecipe()->brewer(),
-         QFont("Arial", 10)
-      ));
-   page.placeRelationalToMM(brewerText, recipeText, PlacingFlags::BELOW, 2, 0);
+   if ( checkBox_Recipe->isChecked())
+   {
+      renderHeader(page);
+      renderRecipe(page);
+   }
+   if ( checkBox_Recipe->isChecked() && checkBox_BrewdayInstructions->isChecked())
+      page.addChildObject(new PageBreak(&page));
+   if (checkBox_BrewdayInstructions->isChecked())
+   {
+      renderHeader(page);
+      renderBrewdayInstructions(page);
+   }
+   //Render the Page onto the painter/printer for preview/printing.
+   page.renderPage();
+}
 
-   //Adding the Brewtarget logo.
-   PageImage *img = page.addChildObject(
-      new PageImage (
-         &page,
-         QPoint(),
-         QImage(":/images/title.svg")
-      ));
-   img->setImageSizeMM(100, 20);
-   page.placeOnPage(img, PlacingFlags::TOP | PlacingFlags::RIGHT);
+/**
+ * @brief Reders the Recipe data onto the page object.
+ * @author Mattias Måhl
+ * @param page BtPage object to render content to.
+ */
+void PrintAndPreviewDialog::renderRecipe(nBtPage::BtPage &page)
+{
+   using namespace nBtPage;
 
    //Statistics table with beer data.
    PageTable *statTable = page.addChildObject(
@@ -382,6 +443,66 @@ void PrintAndPreviewDialog::printDocument(QPrinter * printer)
          QFont("Arial", 10)
       ));
    page.placeRelationalToMM(tasteNotesHeaderText, tasteNotesHeader, PlacingFlags::BELOW);
-   //Render the Page onto the painter/printer for preview/printing.
-   page.renderPage();
+}
+
+/**
+ * @brief Renders the instructions for the recipe on the page supplied in arguments.
+ * @author Mattias Måhl
+ * @param page BtPage object to render content to.
+ */
+void PrintAndPreviewDialog::renderBrewdayInstructions(nBtPage::BtPage &page)
+{
+   brewDayFormatter->setRecipe(_parent->currentRecipe());
+   using namespace nBtPage;
+   PageTable *statsTable = page.addChildObject(new PageTable (
+      &page,
+      _parent->currentRecipe()->name(),
+      brewDayFormatter->buildTitleList()
+   ));
+   statsTable->setPositionMM(10,20);
+
+   PageTable *instructionsTable = page.addChildObject(new PageTable (
+      &page,
+      QString("Instructions"),
+      brewDayFormatter->buildInstructionList()
+   ));
+   page.placeRelationalToMM(instructionsTable, statsTable, PlacingFlags::BELOW, 0, 5);
+
+}
+
+/**
+ * @brief Reders the Recipe data onto the page object.
+ * @author Mattias Måhl
+ * @param page BtPage object to render content to.
+ */
+void PrintAndPreviewDialog::renderHeader(nBtPage::BtPage &page)
+{
+   using namespace nBtPage;
+   // adding the Recipe name as a title.
+   PageText *recipeText = page.addChildObject(
+      new PageText (
+         &page,
+         _parent->currentRecipe()->name(),
+         QFont("Arial", 18, QFont::Bold)
+      ),
+      QPoint(0,0)
+      );
+   // adding Brewers name
+   PageText *brewerText = page.addChildObject(
+      new PageText (
+         &page,
+         _parent->currentRecipe()->brewer(),
+         QFont("Arial", 10)
+      ));
+   page.placeRelationalToMM(brewerText, recipeText, PlacingFlags::BELOW, 2, 0);
+
+   //Adding the Brewtarget logo.
+   PageImage *img = page.addChildObject(
+      new PageImage (
+         &page,
+         QPoint(),
+         QImage(":/images/title.svg")
+      ));
+   img->setImageSizeMM(100, 20);
+   page.placeOnPage(img, PlacingFlags::TOP | PlacingFlags::RIGHT);
 }

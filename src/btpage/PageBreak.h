@@ -1,5 +1,5 @@
 /*
- * PageTableColumn.h is part of Brewtarget, and is Copyright the following
+ * PageBreak.h is part of Brewtarget, and is Copyright the following
  * authors 2021
  * - Mattias Måhl <mattias@kejsarsten.com>
  *
@@ -16,24 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _PAGETABLECOLUMN_H
-#define _PAGETABLECOLUMN_H
-#include <QString>
-#include <QFont>
-#include "PageText.h"
-#include "PageTableStyle.h"
+
+#ifndef _PAGEBREAK_H
+#define _PAGEBREAK_H
+#include "PageChildObject.h"
+
+
 
 namespace nBtPage
 {
    class BtPage;
-
-   class PageTableColumn
+   /**
+    * @brief class to handle adding in extra pagebrakes in the generation of prinouts
+    *
+    */
+   class PageBreak : public PageChildObject
    {
    public:
-      int ColumnWidth;
-      PageText Text;
+      /**
+       * @brief Construct a new Page Break object
+       *
+       * @param parent
+       */
+      PageBreak(BtPage *parent) {
+         this->parent = parent;
+      }
 
-      void setAlignment(Qt::AlignmentFlag a);
+      /**
+       * @brief adds a new page to the printer.
+       *
+       * @param painter
+       */
+      void render(QPainter *painter);
+
+      QSize getSize() { return QSize(); }
+      void calculateBoundingBox( double scalex = 0.0, double scaley = 0.0 ) {}
    };
 }
-#endif /* _PAGETABLECOLUMN_H */
+
+#endif /* _PAGEBREAK_H */

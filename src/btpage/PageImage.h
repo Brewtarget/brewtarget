@@ -25,7 +25,6 @@
 #include "BtPage.h"
 #include "PageChildObject.h"
 
-
 namespace nBtPage
 {
    /* \!brief
